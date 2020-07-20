@@ -1,0 +1,46 @@
+{
+  "name": "ordering-internal",
+  "version": "1.0.0",
+  "description": "Ordering Internal Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx webpack --mode=production",
+    "build-dev": "npx webpack --mode=development",
+    "serve": "npx webpack-dev-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^3.6.0",
+    "html-webpack-plugin": "^4.3.0",
+    "postcss-loader": "^3.0.0",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.2",
+    "standard": "^14.3.4",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.10.4",
+    "bootstrap": "^5.0.0-alpha1",
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.19",
+    "popper.js": "^1.16.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.2.2",
+    "react-dom": "^16.13.1",
+    "react-hook-form": "^6.0.6",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.1.1"
+  }
+}
