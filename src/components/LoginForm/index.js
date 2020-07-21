@@ -8,7 +8,7 @@ import { pickBy } from 'lodash'
 export const LoginForm = (props) => {
   const {
     ordering,
-    ComponentUI,
+    UIComponent,
     handleButtonLoginClick,
     handleSuccessLogin,
     useLoginByEmail,
@@ -78,8 +78,8 @@ export const LoginForm = (props) => {
 
   return (
     <>
-      {ComponentUI && (
-        <ComponentUI
+      {UIComponent && (
+        <UIComponent
           {...props}
           loading={loading}
           error={error}
@@ -101,28 +101,28 @@ LoginForm.propTypes = {
    */
   ordering: PropTypes.object.isRequired,
   /**
-   * Component UI for Login Form
+   * UI Component, this must be containt all graphic elements and use parent props
    */
-  ComponentUI: PropTypes.elementType,
+  UIComponent: PropTypes.elementType,
   /**
    * Function to change default login behavior
    */
   handleButtonLoginClick: PropTypes.func,
   /**
    * Function to get login success event
-   * @param {Object} user User logged
+   * @param {Object} user User with session data
    */
   handleSuccessLogin: PropTypes.func,
   /**
-   * Enable login by email
+   * Enable/Disable login by email
    */
   useLoginByEmail: PropTypes.bool,
   /**
-   * Enable login by cellphone
+   * Enable/Disable login by cellphone
    */
   useLoginByCellphone: PropTypes.bool,
   /**
-   * Tab selected by default
+   * Selected tab by default
    * You can choose between 'email' or 'cellphone'
    */
   defaultLoginTab: PropTypes.string,
