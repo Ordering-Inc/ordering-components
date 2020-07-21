@@ -21,6 +21,10 @@
     "css-loader": "^3.6.0",
     "html-webpack-plugin": "^4.3.0",
     "postcss-loader": "^3.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hook-form": "^6.0.8",
+    "react-router-dom": "^5.2.0",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
     "standard": "^14.3.4",
@@ -31,16 +35,16 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.4",
-    "bootstrap": "^5.0.0-alpha1",
-    "classnames": "^2.2.6",
     "lodash": "^4.17.19",
-    "popper.js": "^1.16.1",
-    "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-bootstrap": "^1.2.2",
-    "react-dom": "^16.13.1",
-    "react-hook-form": "^6.0.6",
-    "react-router-dom": "^5.2.0",
-    "styled-components": "^5.1.1"
+    "prop-types": "^15.7.2"
+  },
+  "peerDependencies": {
+    "react": ">=16.13.1",
+    "react-dom": ">=16.13.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/standard/eslintrc.json"
+    ]
   }
 }

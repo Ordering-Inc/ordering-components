@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './index-example.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
@@ -12,7 +12,7 @@ module.exports = {
     compress: true,
     port: 8200,
     open: true,
-    historyApiFallback: true,
+    historyApiFallback: true
   },
   module: {
     rules: [
@@ -25,16 +25,16 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
           {
-            loader: 'style-loader', // inject CSS to page
+            loader: 'style-loader' // inject CSS to page
           },
           {
-            loader: 'css-loader', // translates CSS into CommonJS modules
+            loader: 'css-loader' // translates CSS into CommonJS modules
           },
           {
             loader: 'postcss-loader', // Run postcss actions
@@ -42,7 +42,7 @@ module.exports = {
               plugins: function () { // postcss plugins, can be exported to postcss.config.js
                 return [
                   require('autoprefixer')
-                ];
+                ]
               }
             }
           },
@@ -50,13 +50,13 @@ module.exports = {
             loader: 'sass-loader' // compiles Sass to CSS
           }
         ]
-      },
+      }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Ordering UI',
       template: './index.html'
-    }),
+    })
   ]
 }

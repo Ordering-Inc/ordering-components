@@ -6,17 +6,16 @@ import { pickBy } from 'lodash'
  * Component to manage login behavior without UI component
  */
 export const LoginForm = (props) => {
-
   const {
     ordering,
     ComponentUI,
     handleButtonLoginClick,
     handleSuccessLogin,
     useLoginByEmail,
-    useLoginByCellphone } = props
+    useLoginByCellphone
+  } = props
 
   let { defaultLoginTab } = props
-  
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState({ error: false, result: null })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
@@ -38,10 +37,9 @@ export const LoginForm = (props) => {
   const handleLoginClick = async () => {
     try {
       const _credentials = pickBy(credentials, (value, key) => {
-        return loginTab === 'email' && key !== 'cellphone'
-                  || loginTab === 'cellphone' && key !== 'email'
+        return (loginTab === 'email' && key !== 'cellphone') ||
+                  (loginTab === 'cellphone' && key !== 'email')
       })
-      console.log(_credentials)
       setLoading(true)
       const response = await ordering.users.auth(_credentials)
       setLoading(false)
@@ -79,20 +77,20 @@ export const LoginForm = (props) => {
   }
 
   return (
-      <React.Fragment>
-        { ComponentUI && (
-            <ComponentUI {...props} 
-              loading={loading}
-              error={error}
-              loginTab={loginTab}
-              credentials={credentials}
-              hanldeChangeInput={hanldeChangeInput}
-              handleButtonLoginClick={ handleButtonLoginClick || handleLoginClick }
-              hanldeChangeTab={hanldeChangeTab}
-            />
-          )
-        }
-      </React.Fragment>
+    <>
+      {ComponentUI && (
+        <ComponentUI
+          {...props}
+          loading={loading}
+          error={error}
+          loginTab={loginTab}
+          credentials={credentials}
+          hanldeChangeInput={hanldeChangeInput}
+          handleButtonLoginClick={handleButtonLoginClick || handleLoginClick}
+          hanldeChangeTab={hanldeChangeTab}
+        />
+      )}
+    </>
   )
 }
 
