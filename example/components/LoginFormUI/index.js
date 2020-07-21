@@ -3,8 +3,7 @@ import { useForm } from 'react-hook-form'
 
 export const LoginFormUI = (props) => {
   const {
-    loading,
-    error,
+    formState,
     handleButtonLoginClick,
     handleContinueAsGuest,
     useLoginByEmail,
@@ -113,9 +112,9 @@ export const LoginFormUI = (props) => {
               {errors.password && <i style={{ color: '#c10000' }}>{errors.password.message}</i>}
             </div>
             <div>
-              {loading && <p>Loading...</p>}
-              {error.error && <p>{error.result}</p>}
-              {!loading && <button type='submit'>Login</button>}
+              {formState.loading && <p>Loading...</p>}
+              {!formState.loading && formState.result && formState.result.error && <p style={{ color: '#c10000' }}>{formState.result.result}</p>}
+              {!formState.loading && <button type='submit'>Login</button>}
             </div>
           </form>
         )

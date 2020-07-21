@@ -16,8 +16,7 @@ export const LoginForm = (props) => {
   } = props
 
   let { defaultLoginTab } = props
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState({ error: false, result: null })
+  const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
 
   if (!useLoginByEmail && !useLoginByCellphone) {
@@ -40,20 +39,25 @@ export const LoginForm = (props) => {
         return (loginTab === 'email' && key !== 'cellphone') ||
                   (loginTab === 'cellphone' && key !== 'email')
       })
-      setLoading(true)
+      setFormState({ ...formState, loading: true })
       const response = await ordering.users.auth(_credentials)
-      setLoading(false)
+      setFormState({
+        result: response.content,
+        loading: false
+      })
       if (!response.content.error) {
-        setError({ error: false, result: null })
-
         if (handleSuccessLogin) {
           handleSuccessLogin(response.content.result)
         }
-      } else {
-        setError(response.content)
       }
     } catch (err) {
-      setLoading(false)
+      setFormState({
+        result: {
+          error: true,
+          result: err.message
+        },
+        loading: false
+      })
     }
   }
 
@@ -81,8 +85,7 @@ export const LoginForm = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          loading={loading}
-          error={error}
+          formState={formState}
           loginTab={loginTab}
           credentials={credentials}
           hanldeChangeInput={hanldeChangeInput}

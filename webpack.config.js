@@ -55,7 +55,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Ordering UI',
+      title: 'Ordering Components',
       template: './index.html'
     })
   ]
