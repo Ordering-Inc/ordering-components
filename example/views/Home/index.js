@@ -14,6 +14,9 @@ export const Home = () => (
       <li>
         <Link to='/signup'>Signup Component</Link>
       </li>
+      <li>
+        <Link to='/forgot_password'>Forgot password</Link>
+      </li>
     </ul>
   </>
 )

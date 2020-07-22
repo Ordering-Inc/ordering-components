@@ -7,9 +7,10 @@ import {
 
 import { Ordering } from './ordering-api-sdk.min'
 
-import { Home } from './views/Home/index.js'
-import { Login } from './views/Login/index.js'
+import { Home } from './views/Home'
+import { Login } from './views/Login'
 import { Signup } from './views/Signup'
+import { ForgotPassword } from './views/ForgotPassword'
 
 const ordering = new Ordering()
 
@@ -25,6 +26,9 @@ export default function App () {
           </Route>
           <Route path='/signup'>
             <Signup ordering={ordering} />
+          </Route>
+          <Route path='/forgot_password'>
+            <ForgotPassword ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
