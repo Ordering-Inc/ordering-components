@@ -11,6 +11,7 @@ import { Home } from './views/Home'
 import { Login } from './views/Login'
 import { Signup } from './views/Signup'
 import { ForgotPassword } from './views/ForgotPassword'
+import { FacebookLogin } from './views/FacebookLogin'
 
 const ordering = new Ordering()
 
@@ -29,6 +30,9 @@ export default function App () {
           </Route>
           <Route path='/forgot_password'>
             <ForgotPassword ordering={ordering} />
+          </Route>
+          <Route path='/facebook_login'>
+            <FacebookLogin ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />

@@ -17,6 +17,9 @@ export const Home = () => (
       <li>
         <Link to='/forgot_password'>Forgot password</Link>
       </li>
+      <li>
+        <Link to='/facebook_login'>Facebook login</Link>
+      </li>
     </ul>
   </>
 )
