@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { pickBy } from 'lodash'
+import { useSession } from '../../contexts/SessionContext'
 
 /**
  * Component to manage login behavior without UI component
@@ -12,7 +13,8 @@ export const LoginForm = (props) => {
     handleButtonLoginClick,
     handleSuccessLogin,
     useLoginByEmail,
-    useLoginByCellphone
+    useLoginByCellphone,
+    useDefualtSessionManager
   } = props
 
   let { defaultLoginTab } = props
@@ -28,6 +30,7 @@ export const LoginForm = (props) => {
   }
 
   const [loginTab, setLoginTab] = useState(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email'))
+  const [, dispatchSession] = useSession()
 
   /**
    * Default fuction for login workflow
@@ -46,6 +49,13 @@ export const LoginForm = (props) => {
         loading: false
       })
       if (!response.content.error) {
+        if (useDefualtSessionManager) {
+          dispatchSession({
+            type: 'login',
+            user: response.content.result,
+            token: response.content.result.session.access_token
+          })
+        }
         if (handleSuccessLogin) {
           handleSuccessLogin(response.content.result)
         }
@@ -117,6 +127,11 @@ LoginForm.propTypes = {
    */
   handleSuccessLogin: PropTypes.func,
   /**
+   * Enable/Disable default session manager
+   * Save user and token with default session manager
+   */
+  useDefualtSessionManager: PropTypes.bool,
+  /**
    * Enable/Disable login by email
    */
   useLoginByEmail: PropTypes.bool,
@@ -174,6 +189,7 @@ LoginForm.propTypes = {
 LoginForm.defaultProps = {
   defaultLoginTab: 'email',
   useLoginByEmail: true,
+  useDefualtSessionManager: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

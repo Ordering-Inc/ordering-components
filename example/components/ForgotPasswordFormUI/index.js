@@ -6,7 +6,7 @@ export const ForgotPasswordFormUI = (props) => {
     formState,
     formData,
     defaultEmail,
-    handleButtonForgotPassowrdClick,
+    handleButtonForgotPasswordClick,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -20,7 +20,7 @@ export const ForgotPasswordFormUI = (props) => {
 
   const { handleSubmit, register, errors } = useForm()
   const onSubmit = values => {
-    handleButtonForgotPassowrdClick(formData)
+    handleButtonForgotPasswordClick(formData)
   }
 
   return (

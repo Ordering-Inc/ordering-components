@@ -9,8 +9,8 @@ export const ForgotPasswordForm = (props) => {
     ordering,
     UIComponent,
     defaultEmail,
-    handleButtonForgotPassowrdClick,
-    handleSuccessForgotPassoword
+    handleButtonForgotPasswordClick,
+    handleSuccessForgotPassword
   } = props
 
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
@@ -28,8 +28,8 @@ export const ForgotPasswordForm = (props) => {
         loading: false
       })
       if (!response.content.error) {
-        if (handleSuccessForgotPassoword) {
-          handleSuccessForgotPassoword(formData.email)
+        if (handleSuccessForgotPassword) {
+          handleSuccessForgotPassword(formData.email)
         }
       }
     } catch (err) {
@@ -62,7 +62,7 @@ export const ForgotPasswordForm = (props) => {
           formState={formState}
           formData={formData}
           hanldeChangeInput={hanldeChangeInput}
-          handleButtonForgotPassowrdClick={handleButtonForgotPassowrdClick || handleForgotPasswordClick}
+          handleButtonForgotPasswordClick={handleButtonForgotPasswordClick || handleForgotPasswordClick}
         />
       )}
     </>
@@ -82,12 +82,12 @@ ForgotPasswordForm.propTypes = {
   /**
    * Function to change default forgot password behavior
    */
-  handleButtonForgotPassowrdClick: PropTypes.func,
+  handleButtonForgotPasswordClick: PropTypes.func,
   /**
    * Function to get forgot password success event
    * @param {string} email Email to which it was sent
    */
-  handleSuccessForgotPassoword: PropTypes.func,
+  handleSuccessForgotPassword: PropTypes.func,
   /**
    * Default email to forgot password form
    */

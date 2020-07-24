@@ -1,25 +1,32 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export const Home = () => (
-  <>
-    <h1>Examples</h1>
-    <ul>
-      <li>
-        <Link to='/'>Home</Link>
-      </li>
-      <li>
-        <Link to='/login'>Login Component</Link>
-      </li>
-      <li>
-        <Link to='/signup'>Signup Component</Link>
-      </li>
-      <li>
-        <Link to='/forgot_password'>Forgot password</Link>
-      </li>
-      <li>
-        <Link to='/facebook_login'>Facebook login</Link>
-      </li>
-    </ul>
-  </>
-)
+export const Home = () => {
+  return (
+    <>
+      <h1>
+        Examples
+      </h1>
+      <ul>
+        <li>
+          <Link to='/'>Home</Link>
+        </li>
+        <li>
+          <Link to='/login'>Login Component</Link>
+        </li>
+        <li>
+          <Link to='/signup'>Signup Component</Link>
+        </li>
+        <li>
+          <Link to='/forgot_password'>Forgot password</Link>
+        </li>
+        <li>
+          <Link to='/facebook_login'>Facebook login</Link>
+        </li>
+        <li>
+          <Link to='/session_manager'>Session manager</Link>
+        </li>
+      </ul>
+    </>
+  )
+}

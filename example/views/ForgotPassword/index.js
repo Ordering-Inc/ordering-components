@@ -21,12 +21,12 @@ export const ForgotPassword = ({ ordering }) => {
      * Uncomment to test
      * @param {Object} formData All input values
      */
-    // handleButtonForgotPassowrdClick: (formData) => console.log('Your own forgot password workflow', formData),
+    // handleButtonForgotPasswordClick: (formData) => console.log('Your own forgot password workflow', formData),
     /**
      * Function to get forgot password success event
      * @param {string} email Email to which it was sent
      */
-    handleSuccessForgotPassoword: (email) => console.log('Forgot password with email', email),
+    handleSuccessForgotPassword: (email) => console.log('Forgot password with email', email),
     /**
      * Default email to forgot password form
      */
