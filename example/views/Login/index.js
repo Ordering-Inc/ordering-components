@@ -65,9 +65,9 @@ export const Login = ({ ordering }) => {
      */
     afterElements: [<p key>Test Element After</p>],
     /**
-   * Url to signup page
-   * Url to create element link to signup page
-   */
+     * Url to signup page
+     * Url to create element link to signup page
+     */
     linkToSignup: '/signup',
     /**
      * Url to forgot password page

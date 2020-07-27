@@ -1,5 +1,11 @@
 import React, { createContext, useContext, useReducer } from 'react'
 
+export const SESSION_ACTIONS = {
+  LOGIN: 'login',
+  LOGOUT: 'logout',
+  CHANGE_USER: 'change_user'
+}
+
 /**
  * Create SessionContext
  * This context will manage the session internally and provide an easy interface
@@ -19,7 +25,7 @@ const defaultInitialState = {
  */
 const defaultReducer = (state, action) => {
   switch (action.type) {
-    case 'login':
+    case SESSION_ACTIONS.LOGIN:
       window.localStorage.setItem('token', action.token)
       window.localStorage.setItem('user', JSON.stringify(action.user))
       return {
@@ -28,7 +34,7 @@ const defaultReducer = (state, action) => {
         user: action.user,
         token: action.token
       }
-    case 'logout':
+    case SESSION_ACTIONS.LOGOUT:
       window.localStorage.removeItem('token')
       window.localStorage.removeItem('user')
       return {
@@ -36,6 +42,12 @@ const defaultReducer = (state, action) => {
         auth: false,
         user: null,
         token: null
+      }
+    case SESSION_ACTIONS.CHANGE_USER:
+      window.localStorage.setItem('user', JSON.stringify(action.user))
+      return {
+        ...state,
+        user: action.user
       }
 
     default:

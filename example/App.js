@@ -13,6 +13,7 @@ import { Signup } from './views/Signup'
 import { ForgotPassword } from './views/ForgotPassword'
 import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
+import { Profile } from './views/UserProfile'
 
 const ordering = new Ordering()
 
@@ -37,6 +38,9 @@ export default function App () {
           </Route>
           <Route path='/session_manager'>
             <SessionManager ordering={ordering} />
+          </Route>
+          <Route path='/profile'>
+            <Profile ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
