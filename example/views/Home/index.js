@@ -27,7 +27,10 @@ export const Home = () => {
           <Link to='/session_manager'>Session manager</Link>
         </li>
         <li>
-          <Link to='/profile'>User Profile</Link>
+          <Link to='/profile'>User profile</Link>
+        </li>
+        <li>
+          <Link to='/active_orders'>Active orders</Link>
         </li>
       </ul>
     </>

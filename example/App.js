@@ -14,6 +14,7 @@ import { ForgotPassword } from './views/ForgotPassword'
 import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
+import { ActiveOrders } from './views/ActiveOrders'
 
 const ordering = new Ordering()
 
@@ -41,6 +42,9 @@ export default function App () {
           </Route>
           <Route path='/profile'>
             <Profile ordering={ordering} />
+          </Route>
+          <Route path='/active_orders'>
+            <ActiveOrders ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
