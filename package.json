@@ -6,7 +6,9 @@
   "scripts": {
     "build": "npx webpack --mode=production",
     "build-dev": "npx webpack --mode=development",
-    "serve": "npx webpack-dev-server"
+    "serve": "npx webpack-dev-server",
+    "lint": "standard",
+    "test": "cypress open"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +21,8 @@
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
+    "cypress": "^4.11.0",
+    "eslint-plugin-cypress": "^2.11.1",
     "html-webpack-plugin": "^4.3.0",
     "postcss-loader": "^3.0.0",
     "react": "^16.13.1",
@@ -44,7 +48,21 @@
   },
   "eslintConfig": {
     "extends": [
-      "./node_modules/standard/eslintrc.json"
+      "./node_modules/standard/eslintrc.json",
+      "plugin:cypress/recommended"
+    ]
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "before",
+      "after",
+      "beforeEach",
+      "afterEach",
+      "it",
+      "cy",
+      "context",
+      "assert"
     ]
   }
 }

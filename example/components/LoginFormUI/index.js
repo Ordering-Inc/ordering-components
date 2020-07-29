@@ -113,7 +113,7 @@ export const LoginFormUI = (props) => {
             </div>
             <div>
               {formState.loading && <p>Loading...</p>}
-              {!formState.loading && formState.result && formState.result.error && <p style={{ color: '#c10000' }}>{formState.result.result}</p>}
+              {!formState.loading && formState.result?.error && <p style={{ color: '#c10000' }}>Errors: {formState.result.result}</p>}
               {!formState.loading && <button type='submit'>Login</button>}
             </div>
           </form>
