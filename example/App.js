@@ -16,7 +16,10 @@ import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 
-const ordering = new Ordering()
+const ordering = new Ordering({
+  // url: 'http://localhost:8080',
+  // project: 'development'
+})
 
 export default function App () {
   return (
