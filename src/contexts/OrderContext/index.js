@@ -61,7 +61,7 @@ const defaultReducer = (state, action) => {
       if (state.order.products.length === 0) {
         newState.order = {
           ...newState.order,
-          type: action.order_type
+          type: action.orderType
         }
         window.localStorage.setItem('order', JSON.stringify(newState.order))
         return newState
@@ -70,7 +70,7 @@ const defaultReducer = (state, action) => {
       return {
         ...state,
         changing: true,
-        changes: { type: action.order_type }
+        changes: { type: action.orderType }
       }
     }
     /**
