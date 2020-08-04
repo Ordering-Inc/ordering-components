@@ -52,11 +52,6 @@ export const OrderContectExample = ({ ordering }) => {
     <>
       <p>Cart products: {order.products.length}</p>
       <OrderTypeControl {...orderTypeControlProps} />
-      {/* <button onClick={() => changeOrderType(1)} disabled={loading}>Delivery {order.type === 1 && '(Selected)'}</button>
-      <button onClick={() => changeOrderType(2)} disabled={loading}>Pickup {order.type === 2 && '(Selected)'}</button>
-      <button onClick={() => changeOrderType(3)} disabled={loading}>Eat in {order.type === 3 && '(Selected)'}</button>
-      <button onClick={() => changeOrderType(4)} disabled={loading}>Drive thru {order.type === 4 && '(Selected)'}</button>
-      <button onClick={() => changeOrderType(5)} disabled={loading}>Curbside {order.type === 5 && '(Selected)'}</button> */}
     </>
   )
 }
