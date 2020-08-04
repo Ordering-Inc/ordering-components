@@ -5,8 +5,6 @@ import {
   Route
 } from 'react-router-dom'
 
-import { Ordering } from './ordering-api-sdk.min'
-
 import { Home } from './views/Home'
 import { Login } from './views/Login'
 import { Signup } from './views/Signup'
@@ -15,13 +13,9 @@ import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
+import { OrderContectExample } from './views/OrderContectExample'
 
-const ordering = new Ordering({
-  // url: 'http://localhost:8080',
-  // project: 'development'
-})
-
-export default function App () {
+export default function App ({ ordering }) {
   return (
     <Router>
       <>
@@ -48,6 +42,9 @@ export default function App () {
           </Route>
           <Route path='/active_orders'>
             <ActiveOrders ordering={ordering} />
+          </Route>
+          <Route path='/order_context'>
+            <OrderContectExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />

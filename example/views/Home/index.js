@@ -30,6 +30,9 @@ export const Home = () => {
           <Link to='/profile'>User profile</Link>
         </li>
         <li>
+          <Link to='/order_context'>Order context</Link>
+        </li>
+        <li>
           <Link to='/active_orders'>Active orders</Link>
         </li>
       </ul>
