@@ -35,6 +35,9 @@ export const Home = () => {
         <li>
           <Link to='/active_orders'>Active orders</Link>
         </li>
+        <li>
+          <Link to='/places'>Places</Link>
+        </li>
       </ul>
     </>
   )

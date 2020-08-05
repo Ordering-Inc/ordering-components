@@ -5,6 +5,7 @@ export const ORDER_ACTIONS = {
   CANCEL_CHANGES: 'cancel_changes',
   APPLY_CHANGES: 'apply_changes',
   CHANGE_BUSINESS: 'change_business',
+  CHANGE_ADDRESS: 'change_address',
   ADD_PRODUCT: 'add_product',
   REMOVE_PRODUCT: 'remove_product',
   LOADING: 'loading',
@@ -85,6 +86,26 @@ const defaultReducer = (state, action) => {
         order: {
           ...state.order,
           business: action.business,
+          products: []
+        }
+      }
+
+      window.localStorage.setItem('order', JSON.stringify(newState.order))
+
+      return newState
+    }
+    /**
+     * Change de order business
+     */
+    case ORDER_ACTIONS.CHANGE_ADDRESS: {
+      if (!action.address?.address || !action.address?.location) {
+        throw new Error('The Address must content `address` and `location` attrubutes.')
+      }
+      const newState = {
+        ...state,
+        order: {
+          ...state.order,
+          address: action.address,
           products: []
         }
       }
