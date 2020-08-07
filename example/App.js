@@ -14,6 +14,7 @@ import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 import { OrderContectExample } from './views/OrderContectExample'
+import { BusinessListing } from './views/BusinessListing'
 
 export default function App ({ ordering }) {
   return (
@@ -45,6 +46,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/order_context'>
             <OrderContectExample ordering={ordering} />
+          </Route>
+          <Route path='/business_listing'>
+            <BusinessListing ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />

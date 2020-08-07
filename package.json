@@ -8,7 +8,8 @@
     "build-dev": "npx webpack --mode=development",
     "serve": "npx webpack-dev-server",
     "lint": "standard",
-    "test": "cypress open"
+    "test": "standard && cypress open",
+    "open": "./node_modules/.bin/cypress open"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +22,7 @@
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.6.0",
-    "cypress": "^4.11.0",
+    "cypress": "^4.12.1",
     "eslint-plugin-cypress": "^2.11.1",
     "html-webpack-plugin": "^4.3.0",
     "postcss-loader": "^3.0.0",
@@ -29,6 +30,7 @@
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.0.8",
     "react-router-dom": "^5.2.0",
+    "react-styleguidist": "^11.0.8",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
     "standard": "^14.3.4",
@@ -64,7 +66,8 @@
       "it",
       "cy",
       "context",
-      "assert"
+      "assert",
+      "fetch"
     ]
   }
 }
