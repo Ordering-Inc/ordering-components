@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder, ORDER_ACTIONS } from '../../contexts/OrderContext'
 
+/**
+ * Component to control a address list
+ * @param {object} props Props of AddressList component
+ */
 export const AddressList = (props) => {
   const {
     ordering,
@@ -27,6 +31,9 @@ export const AddressList = (props) => {
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [, dispatchOrder] = useOrder()
 
+  /**
+   * Function to load addresses from API
+   */
   const loadAddresses = async () => {
     try {
       setAddressList({ ...addressList, loading: true })
@@ -45,13 +52,17 @@ export const AddressList = (props) => {
     loadAddresses()
   }, [])
 
+  /**
+   * Function to make an address as default address
+   * @param {object} address Address to make as default
+   */
   const handleSetDefault = async (address) => {
     if (handleClickSetDefault) {
       return handleClickSetDefault(address)
     }
     try {
       setActionStatus({ ...actionStatus, loading: true })
-      const { content } = await ordering.users(userId).addresses(address.id).update({ default: true }, { accessToken })
+      const { content } = await ordering.users(userId).addresses(address.id).save({ default: true }, { accessToken })
       setActionStatus({
         loading: false,
         error: content.error ? content.result : null
