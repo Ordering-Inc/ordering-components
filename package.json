@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx webpack --mode=production",
     "build-dev": "npx webpack --mode=development",
-    "serve": "npx webpack-dev-server",
+    "serve": "npx webpack-dev-server --host=0.0.0.0",
     "lint": "standard",
     "test": "cypress open"
   },
