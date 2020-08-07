@@ -12,7 +12,8 @@ export const AddressList = (props) => {
     ordering,
     UIComponent,
     changeOrderAddressWithDefault,
-    handleClickSetDefault
+    handleClickSetDefault,
+    handleClickDelete
   } = props
 
   const [{ user, token }] = useSession()
@@ -84,6 +85,31 @@ export const AddressList = (props) => {
       setActionStatus({ ...actionStatus, loading: false, error: [err.message] })
     }
   }
+  /**
+   * Function to delete an address
+   * @param {object} address Address to delete
+   */
+  const handleDelete = async (address) => {
+    if (handleClickDelete) {
+      return handleClickDelete(address)
+    }
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      const { content } = await ordering.users(userId).addresses(address.id).delete({ accessToken })
+      setActionStatus({
+        loading: false,
+        error: content.error ? content.result : null
+      })
+      if (!content.error) {
+        const addresses = addressList.addresses.filter(_address => {
+          return _address.id !== address.id
+        })
+        setAddressList({ ...addressList, addresses })
+      }
+    } catch (err) {
+      setActionStatus({ ...actionStatus, loading: false, error: [err.message] })
+    }
+  }
 
   return (
     <>
@@ -96,6 +122,7 @@ export const AddressList = (props) => {
           addressList={addressList}
           actionStatus={actionStatus}
           handleSetDefault={handleSetDefault}
+          handleDelete={handleDelete}
         />
       )}
     </>
@@ -122,6 +149,11 @@ AddressList.propTypes = {
    * @param {object} address Address to make to as default
    */
   handleClickSetDefault: PropTypes.func,
+  /**
+   * Custom delete address
+   * @param {object} address Address to make to as default
+   */
+  handleClickDelete: PropTypes.func,
   /**
    * User id to get address from this user
    * If you don't provide one it is used by the current session by default

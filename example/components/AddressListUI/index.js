@@ -5,7 +5,8 @@ export const AddressListUI = (props) => {
     addressList,
     actionStatus,
     handleClickAddress,
-    handleSetDefault
+    handleSetDefault,
+    handleDelete
   } = props
 
   return (
@@ -17,7 +18,12 @@ export const AddressListUI = (props) => {
             {address.id}. {address.address} {address.default ? ' (Default)' : ''}
             <button type='button' onClick={() => handleClickAddress(address)} disabled={actionStatus.loading}>Click</button>
             {
-              !address.default && <button type='button' onClick={() => handleSetDefault(address)} disabled={actionStatus.loading}>Default</button>
+              !address.default && (
+                <>
+                  <button type='button' onClick={() => handleSetDefault(address)} disabled={actionStatus.loading}>Default</button>
+                  <button type='button' onClick={() => handleDelete(address)} disabled={actionStatus.loading}>Delete</button>
+                </>
+              )
             }
           </div>
         ))
