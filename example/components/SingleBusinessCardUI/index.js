@@ -6,10 +6,11 @@ export const SingleBusinessCardUI = (props) => {
 
   return (
     <>
-      <div>
+      <div className='single-business-card'>
         <br />
         {/* <span>{props.status}</span> */}
         <h1>{props.name}</h1>
+        <p>{`${props.today.lapses[0].open.hour}: ${props.today.lapses[0].open.minute} - ${props.today.lapses[0].close.hour}: ${props.today.lapses[0].close.minute}`}</p>
         <p>Minimun order: ${props.minimum}.00</p>
         <p>Delivery Fee: ${props.delivery_price}.00</p>
         <p>Description: {props.description}</p>
@@ -19,6 +20,7 @@ export const SingleBusinessCardUI = (props) => {
         ) : (
           <p>Pickup time: {props.pickup_time}</p>
         )}
+        <p>Reviews: {props.reviews.total}</p>
         <hr />
       </div>
     </>

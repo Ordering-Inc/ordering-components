@@ -24,4 +24,8 @@ context('Businesses List', () => {
     cy.get('p').contains('Loading businesses...')
     cy.wait('@postLogin').its('status').should('eq', 200)
   })
+
+  it('Check Single business card component', () => {
+    cy.get('.single-business-card').should('exist')
+  })
 })
