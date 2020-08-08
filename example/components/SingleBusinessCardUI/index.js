@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useBusiness } from '../../../src/contexts/BusinessContext'
 
 export const SingleBusinessCardUI = ({
+  currentTime,
   logo,
   name,
   timetoOpen,
@@ -16,12 +17,31 @@ export const SingleBusinessCardUI = ({
   reviews
 }) => {
   const [{ filterValues }] = useBusiness()
+  const [isBusinessClose, setIsBusinessClose] = useState(false)
+
+  const formatDate = (time) => {
+    const formatHour = time.hour < 10 ? `0${time.hour}` : time.hour
+    const formatMinute = time.minute < 10 ? `0${time.minute}` : time.minute
+    return `${formatHour}:${formatMinute}`
+  }
+
+  const formatTimeToClose = formatDate(timeToclose)
+
+  useEffect(() => {
+    const currentHour = currentTime.split(':')[0]
+    const currentMinute = currentTime.split(':')[1]
+    const hour = formatTimeToClose.split(':')[0]
+    const minute = formatTimeToClose.split(':')[1]
+
+    const result = currentHour > hour || (currentHour === hour && currentMinute >= minute)
+    setIsBusinessClose(result)
+  }, [currentTime])
 
   return (
     <>
       <div className='single-business-card'>
         <br />
-        {/* <span>{props.status}</span> */}
+        <span>{isBusinessClose && 'Close'}</span>
         <img
           src={logo}
           alt='logo'
@@ -29,7 +49,7 @@ export const SingleBusinessCardUI = ({
           height='70'
         />
         <h1>{name}</h1>
-        <p>{`${timetoOpen} - ${timeToclose}`}</p>
+        <p>{`${formatDate(timetoOpen)} - ${formatDate(timeToclose)}`}</p>
         <p>Minimun order: ${minimum}.00</p>
         <p>Delivery Fee: ${deliveryPrice}.00</p>
         <p>Description: {description}</p>
@@ -47,10 +67,11 @@ export const SingleBusinessCardUI = ({
 }
 
 SingleBusinessCardUI.propTypes = {
+  currentTime: PropTypes.string,
   logo: PropTypes.string,
   name: PropTypes.string,
-  timetoOpen: PropTypes.string,
-  timeToclose: PropTypes.string,
+  timetoOpen: PropTypes.object,
+  timeToclose: PropTypes.object,
   minimum: PropTypes.number,
   deliveryPrice: PropTypes.number,
   description: PropTypes.string,

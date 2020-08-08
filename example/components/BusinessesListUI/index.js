@@ -28,6 +28,7 @@ export const BusinessesListUI = (props) => {
 
   const { loading, error, businesses, filterValues } = businessesList
   const [optionsToshow, setOptionsToShow] = useState(SORT_BY_OPTIONS)
+  const [currentTime, setCurrentTime] = useState('')
 
   const handlerLoadMoreBusinesses = () => {
     props.onLoadBusinesses(true)
@@ -35,12 +36,6 @@ export const BusinessesListUI = (props) => {
 
   const handlerFilterValues = (value) => {
     props.onFilterValues(value)
-  }
-
-  const formatDate = (hour, minute) => {
-    const formatHour = hour < 10 ? `0${hour}` : hour
-    const formatMinute = minute < 10 ? `0${minute}` : minute
-    return `${formatHour}:${formatMinute}`
   }
 
   const formatNumber = (num) => {
@@ -51,6 +46,15 @@ export const BusinessesListUI = (props) => {
     const propToDelete = filterValues.business_type === 'delivery_time' ? 'pickup_time' : 'delivery_time'
     setOptionsToShow(SORT_BY_OPTIONS.filter(option => option.value !== propToDelete))
   }, [filterValues])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentHour = new Date().getHours()
+      const currentMinute = new Date().getMinutes()
+      setCurrentTime(`${currentHour}:${currentMinute}`)
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <>
@@ -106,11 +110,13 @@ export const BusinessesListUI = (props) => {
           {businesses && businesses.length > 0 ? (
             businesses.map(business => (
               <SingleBusinessCardUI
+                currentTime={currentTime}
                 key={business.id}
                 logo={business.logo}
                 name={business.name}
-                timetoOpen={formatDate(business.today.lapses[0].open.hour, business.today.lapses[0].open.minute)}
-                timeToclose={formatDate(business.today.lapses[0].close.hour, business.today.lapses[0].close.minute)}
+                timetoOpen={business.today.lapses[0].open}
+                // timeToclose={business.today.lapses[0].close}
+                timeToclose={{ hour: 17, minute: 26 }}
                 minimum={business.minimum}
                 deliveryPrice={business.delivery_price}
                 description={business.description}
