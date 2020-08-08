@@ -1,5 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { range } from 'lodash'
+import { SingleBusinessCardUI } from '../../components/SingleBusinessCardUI'
+
+const CATEGORIES = [null, 'Food', 'Alcohol', 'Groceries', 'Laundry']
+const SORT_BY_OPTIONS = [
+  { key: 'Distance', value: 'distance' },
+  { key: 'Rating', value: 'reviews' },
+  { key: 'Newest', value: 'createdAt' },
+  { key: 'A to Z', value: 'alpha' },
+  { key: 'Minimum Order', value: 'minimum' },
+  { key: 'Pickup time', value: 'pickup_time' },
+  { key: 'Delivery time', value: 'delivery_time' }
+]
+const BUSINESSES_TYPE = [{ key: 'Delivery', value: 'delivery_time' }, { key: 'Pick up', value: 'pickup_time' }]
 
 export const BusinessesListUI = (props) => {
   const {
@@ -13,14 +26,24 @@ export const BusinessesListUI = (props) => {
     afterElements
   } = props
 
+  const { loading, error, businesses, filterValues } = businessesList
+  const [optionsToshow, setOptionsToShow] = useState(SORT_BY_OPTIONS)
+
   const handlerLoadMoreBusinesses = () => {
     props.onLoadBusinesses(true)
   }
 
+  const handlerFilterValues = (value) => {
+    props.onFilterValues(value)
+  }
+
+  useEffect(() => {
+    const propToDelete = filterValues.business_type === 'delivery_time' ? 'pickup_time' : 'delivery_time'
+    setOptionsToShow(SORT_BY_OPTIONS.filter(option => option.value !== propToDelete))
+  }, [filterValues])
+
   return (
     <>
-      <h1>Businesses List</h1>
-
       {beforeElements.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
@@ -31,20 +54,51 @@ export const BusinessesListUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      {!businessesList.loading && !businessesList.error ? (
+      <div>
+        {!loading && businesses.length > 0 ? (
+          <h1>{businesses.length} Businesses</h1>
+        ) : (
+          <h1>Businesses</h1>
+        )}
+
         <div>
-          {businessesList.businesses && businessesList.businesses.length > 0 ? (
-            businessesList.businesses.map(business => (
-              <div key={business.id}>
-                <br />
-                <h1>{business.name}</h1>
-                <p>Minimun order: ${business.minimum}.00</p>
-                <p>Delivery Fee: ${business.delivery_price}.00</p>
-                <p>Description: {business.description}</p>
-                <p>Distance: {business.distance}</p>
-                <p>Delivery time: {business.delivery_time}</p>
-                <hr />
-              </div>
+          {BUSINESSES_TYPE.map(type => (
+            <button key={type.key} onClick={(e) => handlerFilterValues({ key: 'business_type', value: type.value })}>
+              {type.key}
+            </button>
+          ))}
+        </div>
+      </div>
+      <hr />
+
+      <div>
+        {CATEGORIES.map(category => (
+          <button key={category} type='button' onClick={(e) => handlerFilterValues({ key: 'category', value: category })}>
+            {category}
+            {!category && 'All'}
+          </button>
+        ))}
+      </div>
+
+      <div>
+        <input type='text' onChange={(e) => handlerFilterValues({ key: 'search', value: e.target.value })} />
+        <select defaultValue='Sort by' onChange={(e) => handlerFilterValues({ key: 'sort_by', value: e.target.value })}>
+          <option value='Sort by' disabled>Sort by</option>
+          {optionsToshow.map(option => (
+            <option key={option.key} value={option.value}>{option.key}</option>
+          ))}
+        </select>
+      </div>
+      <hr />
+
+      {!loading && !error ? (
+        <div>
+          {businesses && businesses.length > 0 ? (
+            businesses.map(business => (
+              <SingleBusinessCardUI
+                key={business.id}
+                {...business}
+              />
             ))
           ) : (
             <p>No have businesses 😥</p>
@@ -52,8 +106,8 @@ export const BusinessesListUI = (props) => {
         </div>
       ) : (
         <div>
-          {businessesList.error && businessesList.error.length > 0 ? (
-            businessesList.error.map((e, i) => (
+          {error && error.length > 0 ? (
+            error.map((e, i) => (
               <p key={i}>ERROR: [{e}]</p>
             ))
           ) : (

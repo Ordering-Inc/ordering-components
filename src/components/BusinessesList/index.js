@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { object } from 'prop-types'
+import { useBusiness, BUSINESS_ACTIONS } from '../../contexts/BusinessContext'
 
 const API = 'https://apiv4.ordering.co/v400/en/demo/business'
 const SEARCH_OPTIONS = {
@@ -13,12 +14,11 @@ const SEARCH_OPTIONS = {
  */
 export const BusinessesList = (props) => {
   const {
-    businesses,
     UIComponent,
     paginationSettings
   } = props
 
-  const [businessesList, setBusinessesList] = useState({ loading: true, error: null, businesses: [] })
+  const [businessesList, dispatchBusiness] = useBusiness()
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
@@ -27,27 +27,30 @@ export const BusinessesList = (props) => {
   const getBusinesses = async (page) => {
     const { type, location, time } = SEARCH_OPTIONS
     /**
-     * options for pagination
+     * In this moment, the API receive all params from search values
      */
-
-    // const options = {
-    //   // accessToken: accessToken,
-    //   query: {
-    //     // orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
-    //     page,
-    //     page_size: paginationSettings.pageSize
-    //   }
+    // const params = {
+    //   page,
+    //   ...businessesList.filterValues
     // }
     return await fetch(`${API}?type=${type}&location=${location}&time=${time}`).then(res => res.json())
   }
 
   const loadBusinesses = async (isLoad = false) => {
+    dispatchBusiness({
+      type: BUSINESS_ACTIONS.LOADING,
+      loading: true
+    })
     try {
       const res = await getBusinesses(pagination.currentPage + 1)
-      setBusinessesList({
-        loading: false,
-        error: res.error,
-        businesses: isLoad ? businessesList.businesses.concat(res.result) : res.result
+      dispatchBusiness({
+        type: BUSINESS_ACTIONS.FETCH_BUSINESSES,
+        data: {
+          loading: false,
+          error: res.error,
+          isConcatArray: isLoad,
+          businesses: res.result
+        }
       })
       if (!res.error) {
         setPagination({
@@ -60,7 +63,14 @@ export const BusinessesList = (props) => {
         })
       }
     } catch (error) {
-      setBusinessesList({ ...businessesList, loading: false, error: [error.message] })
+      dispatchBusiness({
+        type: BUSINESS_ACTIONS.LOADING,
+        loading: false
+      })
+      dispatchBusiness({
+        type: BUSINESS_ACTIONS.ERROR,
+        error: [error.message]
+      })
     }
   }
 
@@ -68,16 +78,16 @@ export const BusinessesList = (props) => {
     loadBusinesses(param)
   }
 
+  const onFilterValues = params => {
+    dispatchBusiness({
+      type: BUSINESS_ACTIONS.SET_FILTER_VALUES,
+      filterValues: { ...businessesList.filterValues, [params.key]: params.value }
+    })
+  }
+
   useEffect(() => {
-    console.log(businessesList)
-    if (businesses) {
-      console.log('1')
-      setBusinessesList({ ...businessesList, businesses })
-    } else {
-      console.log('2')
-      loadBusinesses()
-    }
-  }, [])
+    loadBusinesses()
+  }, [businessesList.filterValues])
 
   return (
     <>
@@ -87,6 +97,7 @@ export const BusinessesList = (props) => {
           businessesList={businessesList}
           pagination={pagination}
           onLoadBusinesses={onLoadMoreBusinesses}
+          onFilterValues={onFilterValues}
         />
       )}
     </>
@@ -121,22 +132,22 @@ BusinessesList.propTypes = {
     controlType: PropTypes.oneOf(['infinity', 'pages'])
   }),
   /**
-   * Components types before login form
+   * Components types before businesses list
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Components types after login form
+   * Components types after businesses list
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Elements before login form
+   * Elements before businesses list
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: PropTypes.arrayOf(PropTypes.element),
   /**
-   * Elements after login form
+   * Elements after businesses list
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: PropTypes.arrayOf(PropTypes.element)
