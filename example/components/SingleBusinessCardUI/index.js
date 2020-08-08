@@ -1,7 +1,20 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useBusiness } from '../../../src/contexts/BusinessContext'
 
-export const SingleBusinessCardUI = (props) => {
+export const SingleBusinessCardUI = ({
+  logo,
+  name,
+  timetoOpen,
+  timeToclose,
+  minimum,
+  deliveryPrice,
+  description,
+  distance,
+  deliveryTime,
+  pickupTime,
+  reviews
+}) => {
   const [{ filterValues }] = useBusiness()
 
   return (
@@ -9,20 +22,40 @@ export const SingleBusinessCardUI = (props) => {
       <div className='single-business-card'>
         <br />
         {/* <span>{props.status}</span> */}
-        <h1>{props.name}</h1>
-        <p>{`${props.today.lapses[0].open.hour}: ${props.today.lapses[0].open.minute} - ${props.today.lapses[0].close.hour}: ${props.today.lapses[0].close.minute}`}</p>
-        <p>Minimun order: ${props.minimum}.00</p>
-        <p>Delivery Fee: ${props.delivery_price}.00</p>
-        <p>Description: {props.description}</p>
-        <p>Distance: {props.distance}</p>
+        <img
+          src={logo}
+          alt='logo'
+          width='70'
+          height='70'
+        />
+        <h1>{name}</h1>
+        <p>{`${timetoOpen} - ${timeToclose}`}</p>
+        <p>Minimun order: ${minimum}.00</p>
+        <p>Delivery Fee: ${deliveryPrice}.00</p>
+        <p>Description: {description}</p>
+        <p>Distance: {distance} KM</p>
         {filterValues.business_type === 'delivery_time' ? (
-          <p>Delivery time: {props.delivery_time}</p>
+          <p>Delivery time: {deliveryTime}</p>
         ) : (
-          <p>Pickup time: {props.pickup_time}</p>
+          <p>Pickup time: {pickupTime}</p>
         )}
-        <p>Reviews: {props.reviews.total}</p>
+        <p>Reviews: {reviews.total}</p>
         <hr />
       </div>
     </>
   )
+}
+
+SingleBusinessCardUI.propTypes = {
+  logo: PropTypes.string,
+  name: PropTypes.string,
+  timetoOpen: PropTypes.string,
+  timeToclose: PropTypes.string,
+  minimum: PropTypes.number,
+  deliveryPrice: PropTypes.number,
+  description: PropTypes.string,
+  distance: PropTypes.number,
+  deliveryTime: PropTypes.string,
+  pickupTime: PropTypes.string,
+  reviews: PropTypes.number
 }

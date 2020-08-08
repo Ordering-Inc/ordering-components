@@ -37,6 +37,16 @@ export const BusinessesListUI = (props) => {
     props.onFilterValues(value)
   }
 
+  const formatDate = (hour, minute) => {
+    const formatHour = hour < 10 ? `0${hour}` : hour
+    const formatMinute = minute < 10 ? `0${minute}` : minute
+    return `${formatHour}:${formatMinute}`
+  }
+
+  const formatNumber = (num) => {
+    return Math.round(num * 1e2) / 1e2
+  }
+
   useEffect(() => {
     const propToDelete = filterValues.business_type === 'delivery_time' ? 'pickup_time' : 'delivery_time'
     setOptionsToShow(SORT_BY_OPTIONS.filter(option => option.value !== propToDelete))
@@ -97,7 +107,17 @@ export const BusinessesListUI = (props) => {
             businesses.map(business => (
               <SingleBusinessCardUI
                 key={business.id}
-                {...business}
+                logo={business.logo}
+                name={business.name}
+                timetoOpen={formatDate(business.today.lapses[0].open.hour, business.today.lapses[0].open.minute)}
+                timeToclose={formatDate(business.today.lapses[0].close.hour, business.today.lapses[0].close.minute)}
+                minimum={business.minimum}
+                deliveryPrice={business.delivery_price}
+                description={business.description}
+                distance={formatNumber(business.distance)}
+                deliveryTime={business.delivery_time}
+                pickupTime={business.pickup_time}
+                reviews={business.reviews.total}
               />
             ))
           ) : (
