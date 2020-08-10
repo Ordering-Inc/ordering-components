@@ -32,6 +32,9 @@ export const Home = () => {
         <li>
           <Link to='/active_orders'>Active orders</Link>
         </li>
+        <li>
+          <Link to='/product_list'>Product list</Link>
+        </li>
       </ul>
     </>
   )
