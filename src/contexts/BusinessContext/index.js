@@ -14,7 +14,7 @@ export const BUSINESS_ACTIONS = {
 export const BusinessContext = createContext()
 
 const defaultInitialState = {
-  filterValues: { search: '', sort_by: '', category: '', business_type: 'delivery_time' },
+  filterValues: { search: '', sortBy: '', category: '', businessType: 'delivery_time' },
   businesses: [],
   loading: false,
   error: null

@@ -24,6 +24,10 @@ export const BusinessesList = (props) => {
     pageSize: paginationSettings.pageSize ?? 10
   })
 
+  /**
+   * Method to get all businesses based on params and filter values
+   * @param {Number} page
+   */
   const getBusinesses = async (page) => {
     const { type, location, time } = SEARCH_OPTIONS
     /**
@@ -33,9 +37,13 @@ export const BusinessesList = (props) => {
     //   page,
     //   ...businessesList.filterValues
     // }
-    return await fetch(`${API}?type=${type}&location=${location}&time=${time}`).then(res => res.json())
+    return await window.fetch(`${API}?type=${type}&location=${location}&time=${time}`).then(res => res.json())
   }
 
+  /**
+   * Method to load getBusiness method and manage business context
+   * @param {Boolean} isLoad
+   */
   const loadBusinesses = async (isLoad = false) => {
     dispatchBusiness({
       type: BUSINESS_ACTIONS.LOADING,
@@ -74,10 +82,18 @@ export const BusinessesList = (props) => {
     }
   }
 
+  /**
+   * Method to handle/set page for pagination
+   * @param {Number} param
+   */
   const onLoadMoreBusinesses = param => {
     loadBusinesses(param)
   }
 
+  /**
+   * Method to set filter values to business context, used for get businesses from API
+   * @param {Object} params
+   */
   const onFilterValues = params => {
     dispatchBusiness({
       type: BUSINESS_ACTIONS.SET_FILTER_VALUES,

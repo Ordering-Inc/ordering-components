@@ -115,8 +115,7 @@ export const BusinessesListUI = (props) => {
                 logo={business.logo}
                 name={business.name}
                 timetoOpen={business.today.lapses[0].open}
-                // timeToclose={business.today.lapses[0].close}
-                timeToclose={{ hour: 17, minute: 26 }}
+                timeToclose={business.today.lapses[0].close}
                 minimum={business.minimum}
                 deliveryPrice={business.delivery_price}
                 description={business.description}
