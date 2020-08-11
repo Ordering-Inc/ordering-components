@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes, { object, number } from 'prop-types'
 
 import { useSession } from '../../contexts/SessionContext'
+import { random } from 'lodash'
 
 export const ProductsListing = (props) => {
   const {
@@ -9,15 +10,15 @@ export const ProductsListing = (props) => {
     UIComponent,
     businessId,
     categories,
-    products,
     orderBy,
     orderDirection,
     useDefaultSessionManager,
     paginationSettings
   } = props
 
-  const [category, setCategory] = useState(categories[0]);
-//   const [products, setProducts] = useState({products:[], loading: false});
+  const [category, setCategory] = useState(categories[0])
+  const [productList, setProducts] = useState({category_id: 0, products:[], loading: false, error: null})
+  const [categoryList, setCategories] = useState({business_id: 0, categories:[], loading: false, error: null})
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
@@ -65,37 +66,67 @@ export const ProductsListing = (props) => {
 //         setProducts({ ...products, loading: false, error: [err.message] })
 //     }
 //   }
+  const initCategory = () => {
+    setCategories({ business_id: businessId, ...categoryList, loading: true, error: null })
+    try {
+      let all = [];
+      for (let c = 1; c < categories.length; c++) {
+        let products = []
+        for (let i = 0; i < 100; i++) {
+          let product = {
+            id: i + 1,
+            name: `Product ${categories[c].id}__${i + 1}`,
+            description: `Product description for test components --- ${categories[c].id}__description__${i + 1}`,
+            image: `https://picsum.photos/200?random=${categories[c].id * (i + 1)}`
+          }
+          products.push(product)
+          all.push(product)
+        }
+        categories[c].products = products
+      }
+      categories[0].products = all
+      setCategories({ business_id: businessId, categories, loading: true, error: null })
+    } catch (err) {
+      setCategories({ business_id: businessId, ...categoryList, loading: false, error: err })
+    }
+  }
+
+  const loadProducts = (category) => {
+    setProducts({ ...productList, loading: true, error: null });
+    try {
+      let ary = []
+      for (let c = 0; c < categories.length; c++) {
+        for (let i = 0; i < 100; i++) {
+          let tmp = {
+            id: i + 1,
+            name: `Product ${categories[c].id}__${i + 1}`,
+            description: `Product description for test components --- ${categories[c].id}__description__${i + 1}`,
+            image: `https://picsum.photos/200?lock=${categories[c].id * i + 1}`
+          }
+          ary.push(tmp)
+        }
+        setProducts({
+          loading: false,
+          category_id: categories[c].id,
+          products: ary,
+          error: null
+        })
+      }
+    } catch (err) {
+      setProducts({ ...productList, loading: false, error: err });
+    }
+  }
 
   useEffect(() => {
-    // loadProducts()
+    initCategory()
   }, [])
-
-//   const loadMoreOrders = async () => {
-//     setOrderList({ ...orderList, loading: true })
-//     try {
-//       const response = await getOrders(pagination.currentPage + 1)
-//       setOrderList({
-//         loading: false,
-//         orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
-//         error: response.content.error ? response.content.result : null
-//       })
-//       if (!response.content.error) {
-//         setPagination({
-//           currentPage: response.content.pagination.current_page,
-//           pageSize: response.content.pagination.page_size,
-//           totalPages: response.content.pagination.total_pages,
-//           total: response.content.pagination.total,
-//           from: response.content.pagination.from,
-//           to: response.content.pagination.to
-//         })
-//       }
-//     } catch (err) {
-//       setOrderList({ ...orderList, loading: false, error: [err.message] })
-//     }
-//   }
 
   const onClickedCategory = (category) => {
       setCategory(category);
+  }
+
+  const onSearchProduct = (inp_value) => {
+    console.log(inp_value);
   }
 
   return (
@@ -106,7 +137,8 @@ export const ProductsListing = (props) => {
           categories={categories}
           category={category}
           onClickedCategory={onClickedCategory}
-          products={products}
+          onSearchProduct={onSearchProduct}
+          productList={productList}
           pagination={pagination}
         //   loadMoreOrders={loadMoreOrders}
         />
@@ -129,26 +161,26 @@ ProductsListing.propTypes = {
    * Enable/Disable default session manager
    * Save user and token with default session manager
    */
-  useDefualtSessionManager: PropTypes.bool,
+  useDefaultSessionManager: PropTypes.bool,
   /**
    * Access token to update user
-   * Is required when `useDefualtSessionManager` is false
+   * Is required when `useDefaultSessionManager` is false
    */
   accessToken: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'string') {
       return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`object\`.`)
     }
-    if (props[propName] === undefined && !props.useDefualtSessionManager) {
-      return new Error(`Invalid prop \`${propName}\` is required when \`useDefualtSessionManager\` is false.`)
+    if (props[propName] === undefined && !props.useDefaultSessionManager) {
+      return new Error(`Invalid prop \`${propName}\` is required when \`useDefaultSessionManager\` is false.`)
     }
   },
   /**
    * Array of orders
    * This is used of first option to show list
    */
+  onSearchProduct: PropTypes.func,
   categories: PropTypes.arrayOf(object),
   onClickedCategory: PropTypes.func,
-  products: PropTypes.arrayOf(object),
   /**
    * Order orders by some attribute. Default by `id`.
    */

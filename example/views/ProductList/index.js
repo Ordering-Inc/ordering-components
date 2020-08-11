@@ -2,6 +2,7 @@ import React from 'react'
 import { ProductsListing } from '../../../src/components/ProductsListing'
 import { ProductsListingUI } from '../../components/ProductsListingUI'
 import { TestComponent } from '../../components/TestComponent'
+import { ary, random } from 'lodash'
 
 export const ProductList = ({ ordering }) => {
   const props = {
@@ -20,26 +21,12 @@ export const ProductList = ({ ordering }) => {
      */
     businessId: 41,
     categories: [
-        {id:1, name:'Category 1', image:''},
-        {id:2, name:'Category 2', image:''},
-        {id:3, name:'Category 3', image:''},
-        {id:4, name:'Category 4', image:''},
-        {id:5, name:'Category 5', image:''},
-    ],
-    products: [
-        {id:1, name:'Product 1', description:'Product 1 Description', image:'https://loremflickr.com/200/200?lock=1'},
-        {id:2, name:'Product 2', description:'Product 2 Description', image:'https://loremflickr.com/200/200?lock=2'},
-        {id:3, name:'Product 3', description:'Product 3 Description', image:'https://loremflickr.com/200/200?lock=3'},
-        {id:4, name:'Product 4', description:'Product 4 Description', image:'https://lorempixel.com/200/200?lock=4'},
-        {id:5, name:'Product 5', description:'Product 5 Description', image:'https://lorempixel.com/200/200?lock=5'},
-        {id:6, name:'Product 6', description:'Product 6 Description', image:'https://lorempixel.com/200/200?lock=6'},
-        {id:7, name:'Product 7', description:'Product 7 Description', image:'https://lorempixel.com/200/200?lock=7'},
-        {id:7, name:'Product 7', description:'Product 7 Description', image:'https://lorempixel.com/200/200?lock=7'},
-        {id:7, name:'Product 7', description:'Product 7 Description', image:'https://lorempixel.com/200/200?lock=7'},
-        {id:7, name:'Product 7', description:'Product 7 Description', image:'https://lorempixel.com/200/200?lock=7'},
-        {id:7, name:'Product 7', description:'Product 7 Description', image:'https://lorempixel.com/200/200?lock=7'},
-        {id:7, name:'Product 7', description:'Product 7 Description', image:'https://lorempixel.com/200/200?lock=7'},
-        {id:7, name:'Product 7', description:'Product 7 Description', image:'https://lorempixel.com/200/200?lock=7'},
+        { id:0, name:'All', image:'', products: [] },
+        { id:1, name:'Category 1', image:'', products: [] },
+        { id:2, name:'Category 2', image:'', products: [] },
+        { id:3, name:'Category 3', image:'', products: [] },
+        { id:4, name:'Category 4', image:'', products: [] },
+        { id:5, name:'Category 5', image:'', products: [] },
     ],
     /**
      * Order orders by some attribute. Default by `id`.
