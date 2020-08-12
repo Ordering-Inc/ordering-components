@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export const ProductComponentUI = (props) => {
+export const ProductComponentUI = (props, ref) => {
   const {
+    onShare,
+    onClose,
     productName,
     productLogo,
     productCount,
@@ -17,13 +19,23 @@ export const ProductComponentUI = (props) => {
     onClickedButtonAdd
   } = props
 
-  const ingredientList = ingredients.map((item, index) =>
-    <div key={item.id}>
-      <label>
-        <input type="checkbox" checked={item.isChecked} onChange={() => onChangedIngredient(index)} /> {item.name}
-      </label>
-    </div>
-  );
+  const ingredientList = () => {
+    let iElementList = [];
+    if (typeof ingredients != 'undefined') {
+      for (let idx = 0; idx < ingredients.length; idx++) {
+        let item = ingredients[idx];
+        let element = (
+          <div key={item.id}>
+            <label>
+              <input type="checkbox" checked={item.isChecked} onChange={() => onChangedIngredient(idx)} /> {item.name}
+            </label>
+          </div>
+        )
+        iElementList.push(element);
+      }
+    }
+    return iElementList;
+  }
 
   const subOptionItemList = (index, option) => {
     let subOptionElementList = [];
@@ -54,33 +66,41 @@ export const ProductComponentUI = (props) => {
     return subOptionElementList;
   }
 
-  const optionList = options.map((item, index) => {
-    if (item.isDisplay) {
-      return (
-        <div key={item.id}>
-          <div>{item.name}</div>
-          {subOptionItemList(index, item)}
-        </div>
-      )
+  const optionList = () => {
+    let oElementList = [];
+    if (typeof options != 'undefined') {
+      for (let oIdx = 0; oIdx < options.length; oIdx++) {
+        let item = options[oIdx];
+        if (item.isDisplay) {
+          let element = (
+            <div key={item.id}>
+              <div>{item.name}</div>
+              {subOptionItemList(oIdx, item)}
+            </div>
+          )
+          oElementList.push(element);
+        }
+      }
     }
-  });
+    return oElementList;
+  }
 
   return (
     <>
       <div>
         {productName}
         {' '}
-        <button>share</button> {' '} <button>close</button>
+        <button onClick={onShare}>share</button> {' '} <button onClick={onClose}>close</button>
       </div>
       <div>Photo Gallery</div>
       <img src={productLogo} style={{ "width": "320px", "height": "240px" }} />
-      {ingredients.length > 0 && <div>
+      {typeof ingredients != 'undefined' && ingredients.length > 0 && <div>
         <div>Ingredients</div>
-        {ingredientList}
+        {ingredientList()}
       </div>}
-      {optionList}
+      {optionList()}
       <div>Special Instructions</div>
-      <textarea value={note} onChange={onChangedNote}/>
+      <textarea value={note} onChange={onChangedNote} />
       <div>
         <button onClick={onClickedButtonMinus}>-</button>
         {' '}{productCount}{' '}

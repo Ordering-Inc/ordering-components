@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { pickBy } from 'lodash'
-import { useSession } from '../../contexts/SessionContext'
+import { useProduct, PRODUCT_ACTIONS } from '../../contexts/ProductContext'
 
 /**
  * Component to manage login behavior without UI component
@@ -12,10 +11,11 @@ export const ProductComponent = (props) => {
     UIComponent
   } = props
 
+  const [{ ingredients }, dispatchIngredients] = useProduct();
+  const [{ options }, dispatchOptions] = useProduct();
+
   const [productCount, setProductCount] = useState(1);
   const [productPrice, setProductPrice] = useState(product.price);
-  const [ingredients, setIngredients] = useState([]);
-  const [options, setOptions] = useState([]);
   const [note, setNote] = useState('');
 
   const initIngredients = () => {
@@ -23,7 +23,11 @@ export const ProductComponent = (props) => {
     for (let idx = 0; idx < ingredientList.length; idx++) {
       ingredientList[idx]['isChecked'] = true;
     }
-    setIngredients(ingredientList);
+
+    dispatchIngredients({
+      type: PRODUCT_ACTIONS.CHANGE_INGREDIENTS,
+      ingredients: ingredientList
+    })
   }
 
   const isCheckedRespectOption = (options, respectId) => {
@@ -40,7 +44,7 @@ export const ProductComponent = (props) => {
   }
 
   const initOptions = () => {
-    console.log('===== Init options =====');
+    // console.log('===== Init options =====');
     let optionList = [];
     let extras = product.extras;
     for (let eIdx = 0; eIdx < extras.length; eIdx++) {
@@ -66,23 +70,41 @@ export const ProductComponent = (props) => {
         subOptionList[sIdx]['isChecked'] = false;
       }
     }
-    setOptions(optionList);
+    dispatchOptions({
+      type: PRODUCT_ACTIONS.CHANGE_OPTIONS,
+      options: optionList
+    })
   }
 
   useEffect(() => {
-    console.log('===== use effect =====');
+    // console.log('===== use effect =====');
     initIngredients();
     initOptions();
   }, []);
 
+  const onShare = () => {
+    if(props.onShare) {
+      props.onShare(product);
+    }
+  }
+
+  const onClose = () => {
+    if(props.onClose) {
+      props.onClose();
+    }
+  }
+  
   const onChangedIngredient = (index) => {
-    console.log('===== On changed ingredient =====');
+    // console.log('===== On changed ingredient =====');
     ingredients[index].isChecked = !ingredients[index].isChecked;
-    setIngredients(ingredients);
+    dispatchIngredients({
+      type: PRODUCT_ACTIONS.CHANGE_INGREDIENTS,
+      ingredients: ingredients
+    })
   }
 
   const onChangedOption = (optionIndex, subOptionIndex, optionType) => {
-    console.log("===== On changed option =====");
+    // console.log("===== On changed option =====");
     if (optionType) { // radio button
       for (let sIdx = 0; sIdx < options[optionIndex].suboptions.length; sIdx++) {
         options[optionIndex].suboptions[sIdx].isChecked = false;
@@ -109,7 +131,10 @@ export const ProductComponent = (props) => {
     }
 
     calculatePrice(productCount, options);
-    setOptions(options);
+    dispatchOptions({
+      type: PRODUCT_ACTIONS.CHANGE_OPTIONS,
+      options: options
+    })
   }
 
   const calculatePrice = (pCount, optionList) => {
@@ -133,13 +158,13 @@ export const ProductComponent = (props) => {
   }
 
   const onClickedButtonPlus = () => {
-    console.log('===== on click button plus =====');
+    // console.log('===== on click button plus =====');
     setProductCount(productCount + 1);
     calculatePrice(productCount + 1, options);
   }
 
   const onClickedButtonMinus = () => {
-    console.log('===== on click button minues =====');
+    // console.log('===== on click button minues =====');
     if (productCount > 1) {
       setProductCount(productCount - 1);
       calculatePrice(productCount - 1, options);
@@ -152,7 +177,7 @@ export const ProductComponent = (props) => {
       product['options'] = options;
       product['note'] = note;
       product['quantity'] = productCount;
-      props.onClickedButtonAdd(product);
+      props.onAdd(product);
     }
   }
 
@@ -161,6 +186,8 @@ export const ProductComponent = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          onShare={onShare}
+          onClose={onClose}
           productName={product.name}
           productLogo={product.images}
           productCount={productCount}
@@ -191,6 +218,8 @@ ProductComponent.propTypes = {
    * extraIndex, respectId
    * respectId is 'respect_to' field
    */
+  onShare: PropTypes.func,
+  onClose: PropTypes.func,
   productName: PropTypes.string,
   productLogo: PropTypes.string,
   productCount: PropTypes.number,

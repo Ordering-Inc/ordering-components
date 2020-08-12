@@ -302,12 +302,22 @@ export const ProductDetail = () => {
     afterElements: [<p key>Test Element After</p>],
   }
 
-  const onClickedButtonAdd = (product) => {
+  const onAdd = (product) => {
     console.log('===== On clicked button add =====');
     console.log(product);
   }
 
+  const onShare = (product) => {
+    console.log('===== On clicked button share =====');
+  }
+
+  const onClose = () => {
+    console.log('===== On clicked button close =====');
+  }
+
   return <ProductComponent {...props}
-    onClickedButtonAdd={onClickedButtonAdd}
+    onAdd={onAdd}
+    onShare={onShare}
+    onClose={onClose}
   />
 }
