@@ -70,7 +70,7 @@ export const AddressFormUI = (props) => {
           <>
             <form onSubmit={handleSubmit(onSubmit)}>
               <GoogleAutocompleteInput
-                apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+                apiKey=''
                 name='address'
                 placeholder='Address'
                 onChangeAddress={handleChangeAddress}
@@ -83,7 +83,7 @@ export const AddressFormUI = (props) => {
               {errors.address && <i style={{ color: '#c10000' }}>{errors.address.message}</i>}
               {!state.selectedFromAutocomplete && <i style={{ color: '#c10000' }}>Select address from autocomplete.</i>}
               <GoogleGpsButton
-                apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+                apiKey=''
                 onAddress={handleChangeAddress}
               />
               {
