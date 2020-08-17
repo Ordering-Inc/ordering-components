@@ -41,6 +41,9 @@ export const Home = () => {
         <li>
           <Link to='/config_manager'>Configs examples</Link>
         </li>
+        <li>
+          <Link to='/languages_examples'>Languages examples</Link>
+        </li>
       </ul>
     </>
   )

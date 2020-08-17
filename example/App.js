@@ -16,6 +16,7 @@ import { ActiveOrders } from './views/ActiveOrders'
 import { ProductList } from './views/ProductList';
 import { OrderContectExample } from './views/OrderContectExample'
 import { ConfigsExample } from './components/ConfigsExample'
+import { LanguagesExample } from './components/LanguagesExample'
 
 export default function App ({ ordering }) {
   return (
@@ -53,6 +54,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/config_manager'>
             <ConfigsExample />
+          </Route>
+          <Route path='/languages_examples'>
+            <LanguagesExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
