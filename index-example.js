@@ -4,11 +4,12 @@ import App from './example/App'
 import { SessionProvider } from './src/contexts/SessionContext'
 import { WebsocketProvider } from './src/contexts/WebsocketContext'
 import { OrderProvider } from './src/contexts/OrderContext'
-import { Ordering } from './example/ordering-api-sdk.min'
+// import { Ordering } from './example/ordering-api-sdk.min'
+import { Ordering } from 'ordering-api-sdk'
 
 const ordering = new Ordering({
-  url: 'http://localhost:8080',
-  project: 'development'
+  // url: 'http://localhost:8080',
+  // project: 'development'
 })
 
 const wrapper = document.getElementById('app')
