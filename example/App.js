@@ -13,8 +13,9 @@ import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
-import { ProductList } from './views/ProductList';
+import { ProductList } from './views/ProductList'
 import { OrderContectExample } from './views/OrderContectExample'
+import { PopupExample } from './views/PopupExample'
 
 export default function App ({ ordering }) {
   return (
@@ -49,6 +50,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/order_context'>
             <OrderContectExample ordering={ordering} />
+          </Route>
+          <Route path='/popup_example'>
+            <PopupExample />
           </Route>
           <Route path='/'>
             <Home />
