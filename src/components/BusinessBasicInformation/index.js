@@ -22,7 +22,7 @@ export const BusinessBasicInformation = (props) => {
    */
   const loadBusiness = async () => {
     const { response } = await getBusiness()
-    setBusiness(response.data?.result[0])
+    setBusiness(response.data?.result[1])
   }
 
   useEffect(() => {
