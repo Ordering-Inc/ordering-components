@@ -8,8 +8,14 @@ export const BusinessTypeFilter = (props) => {
     UIComponent
   } = props
 
+  /**
+   * This property is used to set in state the current value
+   */
   const [typeSelected, setTypeSelected] = useState(defaultBusinessType)
 
+  /**
+   * Handle when select value changes
+   */
   const handleChangeBusinessType = (val) => {
     setTypeSelected(val)
   }
