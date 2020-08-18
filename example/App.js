@@ -15,6 +15,7 @@ import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 import { ProductList } from './views/ProductList';
 import { OrderContectExample } from './views/OrderContectExample'
+import { BusinessSortControlExample } from './views/BusinessSortControlExample'
 
 export default function App ({ ordering }) {
   return (
@@ -49,6 +50,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/order_context'>
             <OrderContectExample ordering={ordering} />
+          </Route>
+          <Route path='/sort_options'>
+            <BusinessSortControlExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
