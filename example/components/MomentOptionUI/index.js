@@ -43,12 +43,12 @@ export const MomentOptionUI = (props) => {
       <h4>Select a Delivery date with time</h4>
 
       <span>Min date:</span>&nbsp;&nbsp;&nbsp;
-      <select onChange={(e) => onDateChange(e.target.value)} value={minSelectDate.key}>
+      <select className='select-min-date' onChange={(e) => onDateChange(e.target.value)} value={minSelectDate.key}>
         {minDatesList.length > 0 && minDatesList.map(date => (
           <option key={date.key} value={date.key}>{date.date}</option>
         ))}
       </select>&nbsp;
-      <select onChange={(e) => onHourChange(e.target.value)} value={minSelectedTime.key}>
+      <select className='select-min-hour' onChange={(e) => onHourChange(e.target.value)} value={minSelectedTime.key}>
         {minHoursList.length > 0 && minHoursList.map(hour => (
           <option key={hour.key} value={hour.key}>{hour.startTime} {hour.endTime}</option>
         ))}
@@ -56,12 +56,12 @@ export const MomentOptionUI = (props) => {
       <br />
 
       <span>Max date:</span>&nbsp;&nbsp;&nbsp;
-      <select onChange={(e) => onDateChange(e.target.value, true)} value={maxSelectDate.key}>
+      <select className='select-max-date' onChange={(e) => onDateChange(e.target.value, true)} value={maxSelectDate.key}>
         {maxDatesList.length > 0 && maxDatesList.map(date => (
           <option key={date.key} value={date.key}>{date.date}</option>
         ))}
       </select>&nbsp;
-      <select onChange={(e) => onHourChange(e.target.value, true)} value={maxSelectedTime.key}>
+      <select className='select-max-hour' onChange={(e) => onHourChange(e.target.value, true)} value={maxSelectedTime.key}>
         {maxHoursList.length > 0 && maxHoursList.map(hour => (
           <option key={hour.key} value={hour.key}>{hour.startTime} {hour.endTime}</option>
         ))}
