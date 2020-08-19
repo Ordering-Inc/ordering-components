@@ -16,6 +16,14 @@ export const MainSearchExample = ({ ordering }) => {
      */
     UIComponent: MainSearchUI,
     /**
+     * useOrderTypeControl is used for enable/disable order type control
+     */
+    useOrderTypeControl: true,
+    /**
+     * searchByAddress is used to validate if use address list and address form or dropdown options
+     */
+    searchByAddress: true,
+    /**
      * Components types before main search
      * Array of type components, the parent props will pass to these components
      */
