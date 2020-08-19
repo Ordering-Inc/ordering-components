@@ -43,6 +43,7 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/languages_examples'>Languages examples</Link>
+          <Link to='/popup_example'>Popups example</Link>
         </li>
       </ul>
     </>

@@ -30,9 +30,7 @@ export const UserProfileForm = (props) => {
   useEffect(() => {
     if (userId || (useSessionUser && refreshSessionUser)) {
       setUserState({ ...userState, loading: true })
-      ordering.users.get((useSessionUser && refreshSessionUser) ? session.user.id : userId, {
-        accessToken: accessToken
-      }).then((response) => {
+      ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get().then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
           dispatchSession({
@@ -63,16 +61,7 @@ export const UserProfileForm = (props) => {
     }
 
     if (useValidationFileds) {
-      ordering.validationFields.get({
-        query: {
-          where: [
-            {
-              attribute: 'validate',
-              value: validationFieldsType
-            }
-          ]
-        }
-      }).then((response) => {
+      ordering.validationFields().toType(validationFieldsType).get().then((response) => {
         const fields = {}
         response.content.result.forEach((field) => {
           fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
@@ -93,7 +82,7 @@ export const UserProfileForm = (props) => {
     }
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users.update(userState.result.result.id, formState.changes, {
+      const response = await ordering.users(userState.result.result.id).save(formState.changes, {
         accessToken: accessToken
       })
       setFormState({
