@@ -19,6 +19,7 @@ import { PlacesExample } from './views/PlacesExample'
 import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
+import { MainSearchExample } from './views/MainSearchExample'
 
 export default function App ({ ordering }) {
   return (
@@ -65,6 +66,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/popup_example'>
             <PopupExample />
+          </Route>
+          <Route path='/main_search'>
+            <MainSearchExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
