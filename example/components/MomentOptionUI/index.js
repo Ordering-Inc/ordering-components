@@ -37,13 +37,13 @@ export const MomentOptionUI = (props) => {
       )}
 
       <h4>Select a Delivery date with time</h4>
-      <select className='select-min-date' onChange={(e) => handleDateChange({ date: e.target.value })}>
+      <select className='select-date' onChange={(e) => handleDateChange({ date: e.target.value })}>
         {datesList.length > 0 && datesList.map(date => (
           <option key={date.key} value={date.date}>{date.date}</option>
         ))}
       </select>&nbsp;
 
-      <select className='select-min-hour' onChange={(e) => handleDateChange({ time: e.target.value })}>
+      <select className='select-hour' onChange={(e) => handleDateChange({ time: e.target.value })}>
         {hoursList.length > 0 && hoursList.map(hour => (
           <option key={hour.key} value={hour.key}>{hour.startTime} {hour.endTime}</option>
         ))}
