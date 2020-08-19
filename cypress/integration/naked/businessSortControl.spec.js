@@ -1,4 +1,4 @@
-context('Login form', () => {
+context('Business sort control', () => {
   beforeEach(() => {
     cy.visit('http://localhost:8200/sort_options')
   })
