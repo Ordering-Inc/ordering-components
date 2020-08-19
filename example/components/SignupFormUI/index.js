@@ -21,7 +21,6 @@ export const SignupFormUI = (props) => {
 
   const { handleSubmit, register, errors } = useForm()
   const onSubmit = (values) => {
-    console.log('Values', values)
     handleButtonSignupClick()
   }
 

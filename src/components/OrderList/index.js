@@ -27,7 +27,6 @@ export const OrderList = (props) => {
 
   const getOrders = async (page) => {
     const options = {
-      accessToken: accessToken,
       query: {
         orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
         page: page,
@@ -43,7 +42,7 @@ export const OrderList = (props) => {
         options.query.where.push({ attribute: 'status', value: orderStatus })
       }
     }
-    return await ordering.orders.all(options)
+    return await ordering.setAccessToken(accessToken).orders().get(options)
   }
 
   const loadOrders = async () => {
