@@ -8,8 +8,14 @@ export const LanguageSelector = (props) => {
     UIComponent
   } = props
 
+  /**
+   * This must be contain the currentLanguage and language selected by user
+   */
   const [languageSelected, setLanguageSelected] = useState(currentLanguage)
 
+  /**
+   * This method is used for change the current language
+   */
   const onChangeLanguage = (code) => {
     setLanguageSelected(code)
   }
@@ -21,7 +27,7 @@ export const LanguageSelector = (props) => {
           {...props}
           currentLanguage={languageSelected}
           languages={languages}
-          onChangeLanguage={onChangeLanguage}
+          handleChangeLanguage={onChangeLanguage}
         />
       )}
     </>

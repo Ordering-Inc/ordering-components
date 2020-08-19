@@ -4,15 +4,12 @@ export const LanguageSelectorUI = (props) => {
   const {
     currentLanguage,
     languages,
+    handleChangeLanguage,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
-
-  const handleChangeLanguage = (code) => {
-    props.onChangeLanguage(code)
-  }
 
   return (
     <>
