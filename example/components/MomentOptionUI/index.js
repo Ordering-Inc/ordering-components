@@ -1,31 +1,27 @@
 import React from 'react'
+import moment from 'moment'
 
 export const MomentOptionUI = (props) => {
   const {
-    minSelectDate,
-    minDatesList,
-    minSelectedTime,
-    minHoursList,
-    maxSelectDate,
-    maxDatesList,
-    maxSelectedTime,
-    maxHoursList,
+    datesList,
+    hoursList,
+    currentDate,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
 
-  const onDateChange = (key, isMaxChange = false) => {
-    props.handleDateChange(key, isMaxChange)
-  }
+  const handleDateChange = ({ date, time, type }) => {
+    const currDate = moment(currentDate).format('YYYY-MM-DD')
+    const currTime = moment(currentDate).format('hh:mm A')
+    const dateSelected = date ?? currDate
+    const timeSelected = hoursList.find(hour => hour.key === time)?.startTime ?? currTime
 
-  const onHourChange = (key, isMaxChange = false) => {
-    props.handleHourChange(key, isMaxChange)
-  }
-
-  const onASAPChange = () => {
-    props.handleASAPChange(true)
+    const dateToSend = type === 'asap'
+      ? currentDate
+      : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD hh:mm A')
+    props.handleCustomChangeDate(dateToSend)
   }
 
   return (
@@ -41,41 +37,25 @@ export const MomentOptionUI = (props) => {
       )}
 
       <h4>Select a Delivery date with time</h4>
-
-      <span>Min date:</span>&nbsp;&nbsp;&nbsp;
-      <select className='select-min-date' onChange={(e) => onDateChange(e.target.value)} value={minSelectDate.key}>
-        {minDatesList.length > 0 && minDatesList.map(date => (
-          <option key={date.key} value={date.key}>{date.date}</option>
+      <select className='select-min-date' onChange={(e) => handleDateChange({ date: e.target.value })}>
+        {datesList.length > 0 && datesList.map(date => (
+          <option key={date.key} value={date.date}>{date.date}</option>
         ))}
       </select>&nbsp;
-      <select className='select-min-hour' onChange={(e) => onHourChange(e.target.value)} value={minSelectedTime.key}>
-        {minHoursList.length > 0 && minHoursList.map(hour => (
+
+      <select className='select-min-hour' onChange={(e) => handleDateChange({ time: e.target.value })}>
+        {hoursList.length > 0 && hoursList.map(hour => (
           <option key={hour.key} value={hour.key}>{hour.startTime} {hour.endTime}</option>
         ))}
       </select>
       <br />
 
-      <span>Max date:</span>&nbsp;&nbsp;&nbsp;
-      <select className='select-max-date' onChange={(e) => onDateChange(e.target.value, true)} value={maxSelectDate.key}>
-        {maxDatesList.length > 0 && maxDatesList.map(date => (
-          <option key={date.key} value={date.key}>{date.date}</option>
-        ))}
-      </select>&nbsp;
-      <select className='select-max-hour' onChange={(e) => onHourChange(e.target.value, true)} value={maxSelectedTime.key}>
-        {maxHoursList.length > 0 && maxHoursList.map(hour => (
-          <option key={hour.key} value={hour.key}>{hour.startTime} {hour.endTime}</option>
-        ))}
-      </select>
-
       <h4>Desired Delivery Time</h4>
-      <button onClick={() => onASAPChange()}>
+      <button onClick={() => handleDateChange({ type: 'asap' })}>
         As soon as possible
-      </button>&nbsp;
+      </button><br /><br />
 
-      <br /><br />
-
-      <span>MixDate: {minSelectDate.date}- [{minSelectedTime.startTime}-{minSelectedTime.endTime}]</span><br />
-      <span>MaxDate: {maxSelectDate.date}- [{maxSelectedTime.startTime}-{maxSelectedTime.endTime}]</span>
+      <span>Current Date: {currentDate}</span>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

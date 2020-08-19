@@ -16,6 +16,18 @@ export const MomentOptionExample = ({ ordering }) => {
      */
     UIComponent: MomentOptionUI,
     /**
+     * currentDate, this must be contains a custom date selected
+     */
+    currentDate: new Date(),
+    /**
+     * minDate, this must be contains a custom date selected
+     */
+    minDate: new Date('2020-08-19 04:00 PM'),
+    /**
+     * maxDate, this must be contains a custom date selected
+     */
+    maxDate: new Date('2020-08-25 04:00 PM'),
+    /**
      * Components types before moment option
      * Array of type components, the parent props will pass to these components
      */
