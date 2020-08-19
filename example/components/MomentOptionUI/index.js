@@ -19,7 +19,7 @@ export const MomentOptionUI = (props) => {
     const timeSelected = hoursList.find(hour => hour.key === time)?.startTime ?? currTime
 
     const dateToSend = type === 'asap'
-      ? currentDate
+      ? moment().format('YYYY-MM-DD hh:mm A')
       : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD hh:mm A')
     props.handleCustomChangeDate(dateToSend)
   }

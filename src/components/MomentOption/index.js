@@ -30,9 +30,10 @@ export const MomentOption = (props) => {
    * Event to handle custom behavior when change date
    */
   const handleCustomChangeDate = (date) => {
-    const diff = moment(date, 'YYYY-MM-DD hh:mm A').diff(moment(), 'days')
-    setCurrentDateSelected(date)
-    setDatesDiff(diff)
+    const currentTime = moment(currentDate).format('YYYY-MM-DD hh:mm A')
+    const diff = moment.duration(moment(date).diff(moment().startOf('day'))).asDays()
+    parseInt(diff) === 0 ? setCurrentDateSelected(currentTime) : setCurrentDateSelected(date)
+    setDatesDiff(parseInt(diff))
   }
 
   /**
@@ -40,9 +41,8 @@ export const MomentOption = (props) => {
    */
   const generateHourList = () => {
     const defaultTime = moment('12:00 AM', 'HH:mm A').format('LTS')
-
-    let startHour = moment(currentDateSelected, 'YYYY-MM-DD HH:mm A').hour()
-    const startMinutes = moment(currentDateSelected, 'YYYY-MM-DD HH:mm A').minutes()
+    let startHour = moment().hour()
+    const startMinutes = moment().minutes()
 
     startHour = startMinutes > 30 ? moment(currentDateSelected, 'YYYY-MM-DD HH:mm A').add(1, 'hour').hour() : startHour
     startHour = datesDiff > 0 ? moment(defaultTime, 'HH:mm A').hour() : startHour
