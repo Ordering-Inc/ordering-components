@@ -22,7 +22,7 @@ export const ForgotPasswordForm = (props) => {
   const handleForgotPasswordClick = async () => {
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users.forgot(formData)
+      const response = await ordering.users().forgotPassword(formData)
       setFormState({
         result: response.content,
         loading: false
