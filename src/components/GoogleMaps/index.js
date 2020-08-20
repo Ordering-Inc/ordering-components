@@ -1,19 +1,33 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
 export const GoogleMaps = (props) => {
   const {
-    UIComponent
+    googleReady
+    // UIComponent
   } = props
 
+  const divRef = useRef()
+
+  useEffect(() => {
+    if (googleReady) {
+      console.log(googleReady)
+      const uluru = { lat: 40.74677350000001, lng: -73.98595739999996 }
+      const map = new window.google.maps.Map(divRef.current, {
+        zoom: 20,
+        center: uluru
+      })
+      const marker = new window.google.maps.Marker({
+        position: uluru,
+        map,
+        title: ''
+      })
+    }
+  }, [googleReady])
+
   return (
-    <>
-      {UIComponent && (
-        <UIComponent
-          {...props}
-        />
-      )}
-    </>
+    googleReady && <div style={{ width: '50%', height: '50%', position: 'absolute' }} id='map' ref={divRef} />
   )
 }
 
@@ -49,4 +63,24 @@ GoogleMaps.defaultProps = {
   afterComponents: [],
   beforeElements: [],
   afterElements: []
+}
+
+export const GoogleMapsMap = WrapperGoogleMaps(GoogleMaps)
+
+GoogleMapsMap.propTypes = {
+  /**
+   * You Google Maps api key
+   * @see apiKey What is Api Key ? https://developers.google.com/maps/gmp-get-started
+   */
+  apiKey: PropTypes.string.isRequired,
+  /**
+   * Function to get address from GPS
+   * @param {object} address New address
+   */
+  onAddress: PropTypes.func,
+  /**
+   * Function to get error from GPS
+   * @param {object} address New address
+   */
+  onError: PropTypes.func
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { GoogleMapsUI } from '../../GoogleMapsUI'
-import { GoogleMaps } from '../../../../src/components/GoogleMaps'
+import { GoogleMapsMap } from '../../../../src/components/GoogleMaps'
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -71,7 +70,8 @@ export const BusinessOptionUI = (props) => {
           <span>{locationData.location.lng}</span>
           <span>{locationData.location.zipcode}</span>
           <span>{locationData.location.zoom}</span>
-          <GoogleMaps UIComponent={GoogleMapsUI} />
+          {/* <GoogleMapsMap apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk' /> */}
+          <GoogleMapsMap apiKey='' />
         </>
       )}
       <hr />
