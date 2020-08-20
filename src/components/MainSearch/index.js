@@ -7,12 +7,22 @@ export const MainSearch = (props) => {
     UIComponent
   } = props
 
+  /**
+   * An array of countries from SDK
+   */
   const [countries, setcountries] = useState([])
 
-  const handleFindBusiness = (e) => {
-    console.log(e)
+  /**
+   * This method get values returned by UIComponent
+   * @param {object} values
+   */
+  const handleFindBusiness = (values) => {
+    console.log(values)
   }
 
+  /**
+   * Method to get countries from SDK
+   */
   const getContries = async () => {
     try {
       const { response } = await ordering.countries().get()
