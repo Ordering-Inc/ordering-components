@@ -1,18 +1,34 @@
-// import React, { useEffect, useState } from 'react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 export const BusinessReviews = (props) => {
   const {
-    // ordering,
+    ordering,
+    reviews,
     UIComponent
   } = props
+
+  const [reviewsToSend, setReviewsToSend] = useState(reviews)
+
+  const getBusiness = async () => {
+    const { response } = await ordering.businesses().select(['reviews']).parameters({ location: '40.7539143,-73.9810162', type: 1 }).get()
+    const reviews = response.data?.result[0]?.reviews?.reviews
+    reviews.sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at)
+    })
+    setReviewsToSend(reviews)
+  }
+
+  useEffect(() => {
+    getBusiness()
+  }, [])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          reviews={reviewsToSend}
         />
       )}
     </>
@@ -29,6 +45,10 @@ BusinessReviews.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Reviews, this array must be containt all info about business reviews
+   */
+  reviews: PropTypes.arrayOf(PropTypes.object),
   /**
    * Components types before business reviews
    * Array of type components, the parent props will pass to these components
@@ -52,6 +72,7 @@ BusinessReviews.propTypes = {
 }
 
 BusinessReviews.defaultProps = {
+  reviews: [],
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
