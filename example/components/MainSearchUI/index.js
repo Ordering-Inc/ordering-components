@@ -81,7 +81,7 @@ export const MainSearchUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <select value={isOrderType} onChange={(e) => handleOrderType(e.target.value)}>
+      <select className='order-type-select' value={isOrderType} onChange={(e) => handleOrderType(e.target.value)}>
         <option value>Delivery</option>
         <option value={false}>Pickup</option>
       </select>
