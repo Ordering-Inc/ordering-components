@@ -53,6 +53,9 @@ export const Home = () => {
         <li>
           <Link to='/moment_option'>Moment option</Link>
         </li>
+        <li>
+          <Link to='/search_options'>Search options</Link>
+        </li>
       </ul>
     </>
   )

@@ -85,7 +85,7 @@ export const MomentOption = (props) => {
     const datesList = []
     const diff = moment(maxDate, 'YYYY-MM-DD hh:mm A').diff(moment(minDate, 'YYYY-MM-DD hh:mm A'), 'days')
 
-    for (let i = 0; i < diff; i++) {
+    for (let i = 0; i <= diff; i++) {
       datesList.push({
         key: `${i}`,
         date: moment(minDate).add(i, 'd').format('YYYY-MM-DD')
@@ -121,7 +121,7 @@ MomentOption.propTypes = {
    * Instace of Ordering Class
    * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
    */
-  ordering: PropTypes.object.isRequired,
+  ordering: PropTypes.object,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
