@@ -50,6 +50,9 @@ export const Home = () => {
         <li>
           <Link to='/popup_example'>Popups example</Link>
         </li>
+        <li>
+          <Link to='/my_orders'>My Orders</Link>
+        </li>
       </ul>
     </>
   )
