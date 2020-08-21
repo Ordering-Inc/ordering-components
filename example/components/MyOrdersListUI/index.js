@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const MyOrdersCardUI = (props) => {
+export const MyOrdersListUI = (props) => {
   const {
     orderType,
     orders,
@@ -25,7 +25,7 @@ export const MyOrdersCardUI = (props) => {
       <h1 style={{ textTransform: 'capitalize' }}>{orderType} orders</h1>
 
       {orders.length > 0 && orders.map(item => (
-        <div key={item.id} style={{ border: '1px solid gray', padding: '20px', width: '200px' }}>
+        <div className='orders' key={item.id} style={{ border: '1px solid gray', padding: '20px', width: '200px' }}>
           {orderType === 'active' && <h2>VIDEO</h2>}
           <img src={item.business.logo} width='100' height='100' /><br />
           <p>{item.name}</p>

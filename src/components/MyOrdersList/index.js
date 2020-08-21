@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../../src/contexts/SessionContext'
+import { useSession } from '../../contexts/SessionContext'
 
-export const MyOrdersCard = (props) => {
+export const MyOrdersList = (props) => {
   const {
     status,
     ordering,
@@ -44,7 +44,7 @@ export const MyOrdersCard = (props) => {
   )
 }
 
-MyOrdersCard.propTypes = {
+MyOrdersList.propTypes = {
   /**
    * Instace of Ordering Class
    * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
@@ -67,28 +67,28 @@ MyOrdersCard.propTypes = {
    */
   orders: PropTypes.arrayOf(PropTypes.object),
   /**
-   * Components types before my orders card
+   * Components types before my orders list
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Components types after my orders card
+   * Components types after my orders list
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Elements before my orders card
+   * Elements before my orders list
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: PropTypes.arrayOf(PropTypes.element),
   /**
-   * Elements after my orders card
+   * Elements after my orders list
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-MyOrdersCard.defaultProps = {
+MyOrdersList.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

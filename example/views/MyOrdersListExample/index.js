@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { MyOrdersCardUI } from '../../components/MyOrdersCardUI'
-import { MyOrdersCard } from '../../../src/components/MyOrdersCard'
+import { MyOrdersListUI } from '../../components/MyOrdersListUI'
+import { MyOrdersList } from '../../../src/components/MyOrdersList'
 import { TestComponent } from '../../components/TestComponent'
 
-export const MyOrdersCardExample = ({ ordering }) => {
+export const MyOrdersListExample = ({ ordering }) => {
   const props = {
     /**
      * Instace of Ordering Class
@@ -14,7 +14,7 @@ export const MyOrdersCardExample = ({ ordering }) => {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
-    UIComponent: MyOrdersCardUI,
+    UIComponent: MyOrdersListUI,
     /**
      * Flag to change order card type [active, past]
      */
@@ -30,26 +30,26 @@ export const MyOrdersCardExample = ({ ordering }) => {
      */
     orders: [],
     /**
-     * Components types before my orders card
+     * Components types before my orders list
      * Array of type components, the parent props will pass to these components
      */
     beforeComponents: [TestComponent],
     /**
-     * Components types after my orders card
+     * Components types after my orders list
      * Array of type components, the parent props will pass to these components
      */
     afterComponents: [TestComponent],
     /**
-     * Elements before my orders card
+     * Elements before my orders list
      * Array of HTML/Components elements, these components will not get the parent props
      */
     beforeElements: [<p key>Test Element Before</p>],
     /**
-     * Elements after my orders card
+     * Elements after my orders list
      * Array of HTML/Components elements, these components will not get the parent props
      */
     afterElements: [<p key>Test Element After</p>]
   }
 
-  return <MyOrdersCard {...props} />
+  return <MyOrdersList {...props} />
 }

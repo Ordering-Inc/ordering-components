@@ -51,7 +51,7 @@ export const Home = () => {
           <Link to='/popup_example'>Popups example</Link>
         </li>
         <li>
-          <Link to='/my_orders_past'>My orders past</Link>
+          <Link to='/my_orders_list'>My orders list</Link>
         </li>
       </ul>
     </>
