@@ -19,7 +19,7 @@ import { PlacesExample } from './views/PlacesExample'
 import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
-import { MyOrdersPastExample } from './views/MyOrdersPastExample'
+import { MyOrdersCardExample } from './views/MyOrdersCardExample'
 
 export default function App ({ ordering }) {
   return (
@@ -68,7 +68,7 @@ export default function App ({ ordering }) {
             <PopupExample />
           </Route>
           <Route path='/my_orders_past'>
-            <MyOrdersPastExample ordering={ordering} />
+            <MyOrdersCardExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
