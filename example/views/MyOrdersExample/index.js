@@ -16,22 +16,22 @@ export const MyOrdersExample = ({ ordering }) => {
      */
     UIComponent: MyOrdersUI,
     /**
-     * Components types before [PUT HERE COMPONENT NAME]
+     * Components types before my orders
      * Array of type components, the parent props will pass to these components
      */
     beforeComponents: [TestComponent],
     /**
-     * Components types after [PUT HERE COMPONENT NAME]
+     * Components types after my orders
      * Array of type components, the parent props will pass to these components
      */
     afterComponents: [TestComponent],
     /**
-     * Elements before [PUT HERE COMPONENT NAME]
+     * Elements before my orders
      * Array of HTML/Components elements, these components will not get the parent props
      */
     beforeElements: [<p key>Test Element Before</p>],
     /**
-     * Elements after [PUT HERE COMPONENT NAME]
+     * Elements after my orders
      * Array of HTML/Components elements, these components will not get the parent props
      */
     afterElements: [<p key>Test Element After</p>]
