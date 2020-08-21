@@ -6,11 +6,24 @@ export const MenuControl = (props) => {
     UIComponent
   } = props
 
+  const [timeSelected, setTimeSelected] = useState(null)
+
+  const scheduleTime = ({ open, close }) => {
+    const checkTime = (val) => val < 10 ? `0${val}` : val
+    return `${checkTime(open?.hour)}:${checkTime(open?.minute)} - ${checkTime(close?.hour)}:${checkTime(close?.minute)}`
+  }
+
+  const onChangeSchedule = (val) => {
+    setTimeSelected(scheduleTime(val))
+  }
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          timeSelected={timeSelected}
+          handleSchedule={onChangeSchedule}
         />
       )}
     </>

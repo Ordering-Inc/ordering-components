@@ -4,16 +4,14 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 
 export const MenuControlUI = (props) => {
   const {
+    timeSelected,
     business,
+    handleSchedule,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
-
-  const handleSchedule = (val) => {
-    console.log(val)
-  }
 
   return (
     <div className='menu-control'>
@@ -34,12 +32,14 @@ export const MenuControlUI = (props) => {
 
       <h3>1. Choose the menu you would like to see: </h3>
 
-      <div style={{ border: '1px solid black', padding: '10px' }}>
+      <div style={{ border: '1px solid black', padding: '10px', width: '480px' }}>
         <p>Everyday Menu ✔️</p>
         {business.schedule?.length > 0 && business.schedule.map((item, i) => (
-          <button key={i} onClick={() => handleSchedule(item)}>{daysOfWeek[i]}</button>
+          <button key={i} onClick={() => handleSchedule(item.lapses[0])}>{daysOfWeek[i]}</button>
         ))}
       </div>
+
+      <span>Time selected: {timeSelected}</span>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
