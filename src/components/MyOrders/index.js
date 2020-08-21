@@ -25,7 +25,7 @@ export const MyOrders = (props) => {
    */
   const getActiveOrders = async () => {
     const { content: { result } } = await ordering.setAccessToken(token).orders().where([
-      { attribute: 'status', value: [1, 2, 5, 6, 10, 11, 12] }
+      { attribute: 'status', value: [0, 3, 4, 7, 8, 9] }
     ]).get()
     setActiveOrders(result)
   }
@@ -34,7 +34,7 @@ export const MyOrders = (props) => {
    */
   const getPreviousOrders = async () => {
     const { content: { result } } = await ordering.setAccessToken(token).orders().where([
-      { attribute: 'status', value: [0, 3, 4, 7, 8, 9] }
+      { attribute: 'status', value: [1, 2, 5, 6, 10, 11, 12] }
     ]).get()
     setPreviousOrders(result)
   }
