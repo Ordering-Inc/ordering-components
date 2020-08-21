@@ -66,12 +66,7 @@ export const BusinessOptionUI = (props) => {
         <>
           <span>{locationData.address}</span>
           <span>{locationData.address_notes}</span>
-          <span>{locationData.location.lag}</span>
-          <span>{locationData.location.lng}</span>
-          <span>{locationData.location.zipcode}</span>
-          <span>{locationData.location.zoom}</span>
-          {/* <GoogleMapsMap apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk' /> */}
-          <GoogleMapsMap apiKey='' />
+          <GoogleMapsMap apiKey='' location={locationData.location} />
         </>
       )}
       <hr />

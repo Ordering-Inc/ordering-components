@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.4",
-    "google-maps-react": "^2.0.6",
     "install": "^0.13.0",
     "lodash": "^4.17.19",
     "ordering-api-sdk": "github:sergioaok/ordering-api-sdk#v0.0.3",

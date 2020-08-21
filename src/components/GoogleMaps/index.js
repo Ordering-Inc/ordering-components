@@ -4,30 +4,30 @@ import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
 export const GoogleMaps = (props) => {
   const {
-    googleReady
-    // UIComponent
+    googleReady,
+    location
   } = props
 
   const divRef = useRef()
 
   useEffect(() => {
     if (googleReady) {
-      console.log(googleReady)
-      const uluru = { lat: 40.74677350000001, lng: -73.98595739999996 }
+      const coordinates = { lat: location.lat, lng: location.lng }
       const map = new window.google.maps.Map(divRef.current, {
-        zoom: 20,
-        center: uluru
+        zoom: location.zoom,
+        center: coordinates
       })
       const marker = new window.google.maps.Marker({
-        position: uluru,
+        position: coordinates,
         map,
         title: ''
       })
+      console.log(marker)
     }
   }, [googleReady])
 
   return (
-    googleReady && <div style={{ width: '50%', height: '50%', position: 'absolute' }} id='map' ref={divRef} />
+    googleReady && <div style={{ width: '70%', height: '50%', position: 'absolute' }} id='map' ref={divRef} />
   )
 }
 
