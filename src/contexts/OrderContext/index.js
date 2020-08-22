@@ -175,6 +175,8 @@ const defaultReducer = (state, action) => {
           state.order.products.push(action.product)
         }
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -186,6 +188,8 @@ const defaultReducer = (state, action) => {
       if (action.productCode) {
         state.order.products = state.order.products.filter(product => product.code !== action.productCode)
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -195,6 +199,8 @@ const defaultReducer = (state, action) => {
      */
     case ORDER_ACTIONS.CLEAR_PRODUCTS:
       state.order.products = []
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -212,6 +218,8 @@ const defaultReducer = (state, action) => {
           return product
         })
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -231,6 +239,8 @@ const defaultReducer = (state, action) => {
           return product
         })
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -267,6 +277,10 @@ export const OrderProvider = ({ ordering, children, ConfirmComponent }) => {
       validateCart(data.changes)
     }
   }, [data.changing])
+
+  useEffect(() => {
+    console.log('CHANGE ORDER')
+  }, [data.order])
 
   /**
    * Check cart when there ir a product or more

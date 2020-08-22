@@ -60,8 +60,8 @@ export const CartUI = (props) => {
       {
         order.products?.length > 0 && <button type='button' onClick={clearProducts}>Clear products</button>
       }
-      {/* Quantity products: {order.quantity}
-      Total: {order.total} */}
+      Quantity products: {order.quantity}
+      Total: {order.total}
     </>
   )
 }
