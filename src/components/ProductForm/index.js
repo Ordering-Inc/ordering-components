@@ -28,22 +28,32 @@ export const ProductForm = (props) => {
   const [errors, setErrors] = useState({})
 
   /**
+   * Edit mode
+   */
+  const editMode = typeof props.productCart.code !== 'undefined'
+
+  /**
    * Order context manager
    */
   const [{ order }, dispatchOrder] = useOrder()
 
   /**
+   * Remove to balances in edit mode
+   */
+  const removeToBalance = editMode ? props.productCart.quantity : 0
+
+  /**
    * Total product in cart
    */
-  const totalBalance = order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+  const totalBalance = (order?.quantity || 0) - removeToBalance
 
   /**
    * Total the current product in cart
    */
-  const productBalance = order?.products?.reduce((sum, _product) => sum + (product && _product.id === product.id ? _product.quantity : 0), 0) || 0
+  const productBalance = (order?.products?.reduce((sum, _product) => sum + (product && _product.id === product.id ? _product.quantity : 0), 0) || 0) - removeToBalance
 
   /**
-   * Order context manager
+   * Config context manager
    */
   const [stateConfig] = useConfig()
 
@@ -55,7 +65,17 @@ export const ProductForm = (props) => {
   /**
    * Max total product in cart by config
    */
-  const maxCartProductInventory = (product?.inventoried ? product?.quantity : undefined) - productBalance || maxCartProductConfig
+  let maxCartProductInventory = (product?.inventoried ? product?.quantity : undefined) - productBalance
+
+  /**
+   * True if product is sold out
+   */
+  const isSoldOut = product?.inventoried && product?.quantity === 0
+
+  /**
+   * Fix if maxCartProductInventory is not valid
+   */
+  maxCartProductInventory = !isNaN(maxCartProductInventory) ? maxCartProductInventory : maxCartProductConfig
 
   /**
    * Max product quantity
@@ -74,18 +94,20 @@ export const ProductForm = (props) => {
         selected: true
       }
     }
-    // const dataProduct = (({ name, images, extras, price }) => ({ name, images, extras, price }))(product)
     const newProductCart = {
       ...productCart,
       id: product.id,
       price: product.price,
+      name: product.name,
+      businessId: props.businessId,
       categoryId: product.category_id,
+      inventoried: product.inventoried,
+      stock: product.quantity,
       ingredients: props.productCart.ingredients || ingredients,
       options: props.productCart.options || {},
       comment: props.productCart.comment || null,
       quantity: props.productCart.quantity || 1,
       code: props.productCart.code || randomString(10)
-      // product: product
     }
     newProductCart.unitTotal = getUnitTotal(newProductCart)
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
@@ -172,6 +194,8 @@ export const ProductForm = (props) => {
     }
     if (!newProductCart.options[`id:${option.id}`]) {
       newProductCart.options[`id:${option.id}`] = {
+        id: option.id,
+        name: option.name,
         suboptions: {}
       }
     }
@@ -250,18 +274,24 @@ export const ProductForm = (props) => {
     const errors = checkErrors()
     if (Object.keys(errors).length === 0) {
       if (useOrderContext) {
-        console.log('Add to cart directly')
-        dispatchOrder({
-          type: ORDER_ACTIONS.ADD_PRODUCT,
-          product: productCart
-        })
+        if (!props.productCart.code) {
+          dispatchOrder({
+            type: ORDER_ACTIONS.ADD_PRODUCT,
+            product: productCart
+          })
+        } else {
+          dispatchOrder({
+            type: ORDER_ACTIONS.UPDATE_PRODUCT,
+            product: productCart
+          })
+        }
       }
-      onSave(productCart)
+      onSave(productCart, !props.productCart.code)
     }
   }
 
   const increment = () => {
-    if (productCart.quantity === maxProductQuantity) {
+    if (maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity) {
       return
     }
     productCart.quantity++
@@ -313,7 +343,7 @@ export const ProductForm = (props) => {
     if (product) {
       initProductCart(product)
     }
-  }, [product])
+  }, [product, props.productCart])
 
   /**
    * Check error when product state changed
@@ -343,6 +373,8 @@ export const ProductForm = (props) => {
             product={product}
             productCart={productCart}
             errors={errors}
+            editMode={editMode}
+            isSoldOut={isSoldOut}
             maxProductQuantity={maxProductQuantity}
             increment={increment}
             decrement={decrement}
@@ -368,9 +400,9 @@ ProductForm.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   * `businessId` is required if `product` prop is not present
+   * `businessId`
    */
-  businessId: PropTypes.number,
+  businessId: PropTypes.number.isRequired,
   /**
    * `categoryId` is required if `product` prop is not present
    */
