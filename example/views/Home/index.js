@@ -42,6 +42,9 @@ export const Home = () => {
           <Link to='/product_list'>Product list</Link>
         </li>
         <li>
+          <Link to='/product_images'>Product images</Link>
+        </li>
+        <li>
           <Link to='/business_type_filter'>Business type filter</Link>
         </li>
         <li>
