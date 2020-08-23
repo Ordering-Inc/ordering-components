@@ -41,6 +41,7 @@
     "@babel/runtime": "^7.10.4",
     "install": "^0.13.0",
     "lodash": "^4.17.19",
+    "ordering-api-sdk": "github:sergioaok/ordering-api-sdk#v0.0.3",
     "prop-types": "^15.7.2",
     "socket.io-client": "^2.3.0"
   },

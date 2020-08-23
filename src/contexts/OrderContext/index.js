@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react'
+import { deepEqual } from '../../utils'
 
 export const ORDER_ACTIONS = {
   CHANGE_TYPE: 'change_type',
   CANCEL_CHANGES: 'cancel_changes',
   APPLY_CHANGES: 'apply_changes',
   CHANGE_BUSINESS: 'change_business',
+  CHANGE_ADDRESS: 'change_address',
   ADD_PRODUCT: 'add_product',
   REMOVE_PRODUCT: 'remove_product',
   LOADING: 'loading',
@@ -94,6 +96,26 @@ const defaultReducer = (state, action) => {
       return newState
     }
     /**
+     * Change de order business
+     */
+    case ORDER_ACTIONS.CHANGE_ADDRESS: {
+      if (!action.address?.address || !action.address?.location) {
+        throw new Error('The Address must content `address` and `location` attrubutes.')
+      }
+      const newState = {
+        ...state,
+        order: {
+          ...state.order,
+          address: action.address,
+          products: []
+        }
+      }
+
+      window.localStorage.setItem('order', JSON.stringify(newState.order))
+
+      return newState
+    }
+    /**
      * Calcel waiting changes
      */
     case ORDER_ACTIONS.CANCEL_CHANGES:
@@ -120,13 +142,34 @@ const defaultReducer = (state, action) => {
       if (!state.order.business?.id || !state.order.business?.slug) {
         throw new Error('You must provide `business` with `id` and `slug` before add a product.')
       }
+      if (!action.product) {
+        throw new Error('You must provide `product` to add to cart.')
+      }
       if (action.product) {
-        state.order.products.map(product => {
-          return product
-        })
+        // state.order.products.map(product => {
+        //   return product
+        // })
+        /**
+         * Search a some equal product to group
+         */
         const index = state.order.products.findIndex(product => {
-          return product.id === action.product.id
+          if (!product.id === action.product.id) {
+            return false
+          }
+          const productCompare1 = {
+            ingredients: product.ingredients,
+            options: product.options,
+            comment: product.comment
+          }
+          const productCompare2 = {
+            ingredients: action.product.ingredients,
+            options: action.product.options,
+            comment: action.product.comment
+          }
+          deepEqual(productCompare1, productCompare2)
+          return deepEqual(productCompare1, productCompare2)
         })
+        console.log(index)
         if (index >= 0) {
           state.order.products[index].quantity += action.product.quantity
         } else {
