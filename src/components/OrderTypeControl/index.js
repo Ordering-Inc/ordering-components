@@ -30,6 +30,10 @@ export const OrderTypeControl = (props) => {
 
 OrderTypeControl.propTypes = {
   /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: PropTypes.elementType,
+  /**
    * Order availables to the control
    */
   orderTypes: PropTypes.arrayOf(number),
@@ -60,5 +64,9 @@ OrderTypeControl.propTypes = {
 }
 
 OrderTypeControl.defaultProps = {
-  orderTypes: [1, 2, 3, 4, 5]
+  orderTypes: [1, 2, 3, 4, 5],
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
 }
