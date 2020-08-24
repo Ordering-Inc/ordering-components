@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Modal from 'react-modal'
 import App from './example/App'
 import { SessionProvider } from './src/contexts/SessionContext'
 import { WebsocketProvider } from './src/contexts/WebsocketContext'
@@ -13,6 +14,7 @@ const ordering = new Ordering({
   // project: 'development'
 })
 
+Modal.setAppElement('#root-modal')
 const wrapper = document.getElementById('app')
 ReactDOM.render(
   <ConfigProvider ordering={ordering}>
