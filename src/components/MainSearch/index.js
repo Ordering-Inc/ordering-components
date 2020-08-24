@@ -1,35 +1,81 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useOrder } from '../../../src/contexts/OrderContext'
 
 export const MainSearch = (props) => {
   const {
     ordering,
     UIComponent
   } = props
+  const [{ order }] = useOrder()
 
   /**
-   * An array of countries from SDK
+   * Object to save all arrays to use
    */
-  const [countries, setcountries] = useState([])
-
+  const [allListValues, setAllListValues] = useState({ countries: [], cities: [], citiesOptions: [] })
   /**
-   * This method get values returned by UIComponent
-   * @param {object} values
+   * Object to save current values about country selection
    */
-  const handleFindBusiness = (values) => {
-    console.log(values)
-  }
-
+  const [countryValues, setCountryValues] = useState({ cityId: null, dropdownOptionId: null, orderType: order.type })
+  /**
+   * Handle form error
+   */
+  const [countryFormErrors, setCountryFormErrors] = useState(false)
   /**
    * Method to get countries from SDK
    */
   const getContries = async () => {
     try {
       const { response } = await ordering.countries().get()
-      setcountries(response?.data?.result)
+      setAllListValues({ ...allListValues, countries: response?.data?.result })
     } catch (error) {
       console.log(error)
     }
+  }
+  /**
+   * Method to handle change values when searchByAddres is false
+   * @param {object} e
+   */
+  const onChangeValue = ({ name, value }) => {
+    switch (name) {
+      case 'country': {
+        const country = allListValues?.countries.find(country => Number(country.id) === Number(value))
+        setAllListValues({ ...allListValues, cities: country?.cities })
+        setCountryValues({
+          ...countryValues,
+          cityId: null
+        })
+        break
+      }
+      case 'cityId': {
+        const city = allListValues.cities.find(city => Number(city.id) === Number(value))
+        setAllListValues({ ...allListValues, citiesOptions: city?.options })
+        setCountryValues({
+          ...countryValues,
+          cityId: value,
+          dropdownOptionId: null
+        })
+        break
+      }
+      case 'dropdownOptionId': {
+        setCountryValues({
+          ...countryValues,
+          dropdownOptionId: value
+        })
+        break
+      }
+    }
+  }
+  /**
+   * Method to valid if all countries values are valid
+   */
+  const onClickFindBusiness = () => {
+    const isCityOption = allListValues.citiesOptions.length > 0 ? !!countryValues.dropdownOptionId : true
+    const isValid = countryValues.cityId && isCityOption
+    if (isValid) {
+      console.log('VALID', countryValues)
+    }
+    setCountryFormErrors(!isValid)
   }
 
   useEffect(() => {
@@ -41,8 +87,11 @@ export const MainSearch = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          countries={countries}
-          onClickFindBusiness={handleFindBusiness}
+          allListValues={allListValues}
+          currentValues={countryValues}
+          isFormErrors={countryFormErrors}
+          handleChangeValue={onChangeValue}
+          handleFindBusiness={onClickFindBusiness}
         />
       )}
     </>
@@ -59,10 +108,6 @@ MainSearch.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
-  /**
-   * useOrderTypeControl is used for enable/disable order type control
-   */
-  useOrderTypeControl: PropTypes.bool,
   /**
    * searchByAddress is used to validate if use address list and address form or dropdown options
    */

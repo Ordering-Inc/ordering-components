@@ -1,14 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { AddressForm } from '../../../src/components/AddressForm'
 import { AddressFormUI } from '../../components/AddressFormUI'
 
+import { useOrder, ORDER_ACTIONS } from '../../../src/contexts/OrderContext'
+import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
+import { OrderTypeControlUI } from '../../components/OrderTypeControlUI'
+
 export const MainSearchUI = (props) => {
+  const { register } = useForm()
+  const [, dispatchOrder] = useOrder()
+
+  useEffect(() => {
+    dispatchOrder({ type: ORDER_ACTIONS.CHANGE_BUSINESS, business: { id: 41, slug: 'mcbonalds' } })
+    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 111, quantity: 1 } })
+    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 1296, quantity: 1 } })
+  }, [])
+
+  const orderTypes = [1, 2, 3, 4, 5]
+
   const {
     ordering,
-    countries,
-    useOrderTypeControl,
+    allListValues,
+    isFormErrors,
     searchByAddress,
+    handleFindBusiness,
+    handleChangeValue,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -31,44 +48,6 @@ export const MainSearchUI = (props) => {
     useValidationFileds: true
   }
 
-  const { register } = useForm()
-  const [cities, setCities] = useState([])
-  const [isOrderType, setIsOrderType] = useState(useOrderTypeControl)
-  const [currentCountry, setCurrentCountry] = useState('')
-  const [currentCity, setCurrentCity] = useState('')
-  const [currentCityOption, setCurrentCityOption] = useState('')
-  const [addressErrors, setAddressErrors] = useState(false)
-
-  const handleOrderType = (val) => {
-    setIsOrderType(val)
-  }
-
-  const handleChangeCountry = (val) => {
-    const country = countries.find(country => Number(country.id) === Number(val))
-    setCurrentCountry(country)
-    setCurrentCity('')
-    setCurrentCityOption('')
-    setCities(country?.cities)
-  }
-
-  const handleChangeCity = (val) => {
-    const city = cities.find(city => Number(city.id) === Number(val))
-    setCurrentCity(city)
-  }
-
-  const handleChangeCityOption = (val) => {
-    setCurrentCityOption(val)
-  }
-
-  const handleSaveAddress = () => {
-    const useCityOption = currentCity?.options?.length > 0 ? currentCityOption : true
-    const isValid = currentCountry?.id && currentCity?.id && useCityOption
-    if (isValid) {
-      props.onClickFindBusiness({ city: currentCity.id, city_option_id: currentCityOption, isOrderType })
-    }
-    setAddressErrors(!isValid)
-  }
-
   return (
     <>
       {beforeElements.map((BeforeElement, i) => (
@@ -80,12 +59,12 @@ export const MainSearchUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
-
-      <select className='order-type-select' value={isOrderType} onChange={(e) => handleOrderType(e.target.value)}>
-        <option value>Delivery</option>
-        <option value={false}>Pickup</option>
-      </select>
+      <OrderTypeControl
+        UIComponent={OrderTypeControlUI}
+        orderTypes={orderTypes}
+      />
       <br />
+      <hr />
       {searchByAddress ? (
         <AddressForm {...addressFormProps} address={null} />
       ) : (
@@ -96,10 +75,10 @@ export const MainSearchUI = (props) => {
             ref={register({
               required: 'Country is required'
             })}
-            onChange={(e) => handleChangeCountry(e.target.value)}
+            onChange={(e) => handleChangeValue(e.target)}
           >
-            <option defaultValue='asd'>select a country</option>
-            {countries?.length && countries.map(country => (
+            <option value={null}>select a country</option>
+            {allListValues?.countries?.length && allListValues?.countries.map(country => (
               <option key={country.id} value={country.id}>{country.name}</option>
             ))}
           </select>
@@ -107,38 +86,38 @@ export const MainSearchUI = (props) => {
 
           <span>Select a city: </span>
           <select
-            name='city'
+            name='cityId'
             ref={register({
               required: 'City is required'
             })}
-            onChange={(e) => handleChangeCity(e.target.value)}
+            onChange={(e) => handleChangeValue(e.target)}
           >
-            <option>select a city</option>
-            {cities?.length && cities.map(city => (
+            <option value={null}>select a city</option>
+            {allListValues.cities?.length && allListValues.cities.map(city => (
               <option key={city.id} value={city.id}>{city.name}</option>
             ))}
           </select><br />
 
-          {currentCity?.options?.length > 0 && currentCity?.options.map(option => (
+          {allListValues.citiesOptions?.length > 0 && allListValues.citiesOptions?.map(option => (
             <div key={option.id}>
               <span>Select a city option: </span>
               <select
-                name='city-option'
+                name='dropdownOptionId'
                 ref={register({
                   required: 'City option is required'
                 })}
-                onChange={(e) => handleChangeCityOption(e.target.value)}
+                onChange={(e) => handleChangeValue(e.target)}
               >
-                <option>select a city option</option>
-                {currentCity?.options?.length && currentCity.options.map(city => (
+                <option value={null}>select a city option</option>
+                {allListValues.citiesOptions?.length && allListValues.citiesOptions.map(city => (
                   <option key={city.id} value={city.city_id}>{city.name}</option>
                 ))}
               </select><br />
             </div>
           ))}
-          {addressErrors && <i style={{ color: '#c10000' }}>This fields are required</i>}
+          {isFormErrors && <i style={{ color: '#c10000' }}>This fields are required</i>}
           <br />
-          <button onClick={() => handleSaveAddress()}>Save</button>
+          <button onClick={() => handleFindBusiness()}>Save</button>
         </div>)}
 
       {afterComponents.map(
