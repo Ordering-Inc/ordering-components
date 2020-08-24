@@ -1,26 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 export const BusinessReviewsUI = (props) => {
   const {
     reviews,
+    handleClickOption,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
-
-  const [reviewsToShow, setReviewsToShow] = useState(reviews)
-
-  const handleClickOption = (val = null) => {
-    const reviewsFiltered = val
-      ? reviews.filter(review => review.total >= val && review.total < val + 1)
-      : reviews
-    setReviewsToShow(reviewsFiltered)
-  }
-
-  useEffect(() => {
-    setReviewsToShow(reviews)
-  }, [reviews])
 
   return (
     <>
@@ -45,8 +33,8 @@ export const BusinessReviewsUI = (props) => {
       <br />
 
       <ul className='list'>
-        {reviewsToShow.length ? (
-          reviewsToShow.map(review => (
+        {reviews.length ? (
+          reviews.map(review => (
             <div style={{ borderBottom: '1px solid black', marginBottom: '10px' }} key={review.id}>
               <li style={{ listStyle: 'none' }}>Comment: <b style={{ color: 'red', fontWeight: 'bold' }}>{review.comment}</b></li>
               <li>Total: {review.total} ⭐️</li>

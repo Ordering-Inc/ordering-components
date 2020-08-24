@@ -8,19 +8,44 @@ export const BusinessReviews = (props) => {
     UIComponent
   } = props
 
-  const [reviewsToSend, setReviewsToSend] = useState(reviews)
+  /**
+   * BusinessRevies, this must be contain a reviews array to send UIComponent
+   */
+  const [businessReviews, setBusinessReviews] = useState(reviews)
 
+  /**
+   * ReviewsList, this must be contain an original array of business reviews
+   */
+  const [reviewsList, setReviewsList] = useState([])
+
+  /**
+   * Method to change filter value for business reviews
+   * @param {Number} val
+   */
+  const onChangeOption = (val = null) => {
+    const reviewsFiltered = val
+      ? reviewsList.filter(review => review.total >= val && review.total < val + 1)
+      : reviewsList
+    setBusinessReviews(reviewsFiltered)
+  }
+
+  /**
+   * Method to get business from SDK
+   */
   const getBusiness = async () => {
     const { response } = await ordering.businesses().select(['reviews']).parameters({ location: '40.7539143,-73.9810162', type: 1 }).get()
-    const reviews = response.data?.result[0]?.reviews?.reviews
+    const list = response.data?.result[0]?.reviews?.reviews
     reviews.sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at)
     })
-    setReviewsToSend(reviews)
+    setReviewsList(list)
+    setBusinessReviews(list)
   }
 
   useEffect(() => {
-    getBusiness()
+    if (!reviews.length) {
+      getBusiness()
+    }
   }, [])
 
   return (
@@ -28,7 +53,8 @@ export const BusinessReviews = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          reviews={reviewsToSend}
+          reviews={businessReviews}
+          handleClickOption={onChangeOption}
         />
       )}
     </>
