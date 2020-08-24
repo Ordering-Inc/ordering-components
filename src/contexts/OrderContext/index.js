@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect, useState } from 'react'
+import { deepEqual } from '../../utils'
 
 export const ORDER_ACTIONS = {
   CHANGE_TYPE: 'change_type',
@@ -7,7 +8,10 @@ export const ORDER_ACTIONS = {
   CHANGE_BUSINESS: 'change_business',
   CHANGE_ADDRESS: 'change_address',
   ADD_PRODUCT: 'add_product',
+  UPDATE_PRODUCT: 'update_product',
+  CHANGE_PRODUCT_QUANTITY: 'change_product_quantity',
   REMOVE_PRODUCT: 'remove_product',
+  CLEAR_PRODUCTS: 'clear_products',
   LOADING: 'loading',
   ERROR: 'error'
 }
@@ -141,12 +145,29 @@ const defaultReducer = (state, action) => {
       if (!state.order.business?.id || !state.order.business?.slug) {
         throw new Error('You must provide `business` with `id` and `slug` before add a product.')
       }
+      if (!action.product) {
+        throw new Error('You must provide `product` to add to cart.')
+      }
       if (action.product) {
-        state.order.products.map(product => {
-          return product
-        })
+        /**
+         * Search a some equal product to group
+         */
         const index = state.order.products.findIndex(product => {
-          return product.id === action.product.id
+          if (!product.id === action.product.id) {
+            return false
+          }
+          const productCompare1 = {
+            ingredients: product.ingredients,
+            options: product.options,
+            comment: product.comment
+          }
+          const productCompare2 = {
+            ingredients: action.product.ingredients,
+            options: action.product.options,
+            comment: action.product.comment
+          }
+          deepEqual(productCompare1, productCompare2)
+          return deepEqual(productCompare1, productCompare2)
         })
         if (index >= 0) {
           state.order.products[index].quantity += action.product.quantity
@@ -154,6 +175,8 @@ const defaultReducer = (state, action) => {
           state.order.products.push(action.product)
         }
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -162,9 +185,62 @@ const defaultReducer = (state, action) => {
      * Remove product from cart
      */
     case ORDER_ACTIONS.REMOVE_PRODUCT:
-      if (action.productId) {
-        state.order.products = state.order.products.filter(product => product.id !== action.productId)
+      if (action.productCode) {
+        state.order.products = state.order.products.filter(product => product.code !== action.productCode)
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+      window.localStorage.setItem('order', JSON.stringify(state.order))
+      return {
+        ...state
+      }
+    /**
+     * Remove all products from cart
+     */
+    case ORDER_ACTIONS.CLEAR_PRODUCTS:
+      state.order.products = []
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+      window.localStorage.setItem('order', JSON.stringify(state.order))
+      return {
+        ...state
+      }
+    /**
+     * Remove product from cart
+     */
+    case ORDER_ACTIONS.CHANGE_PRODUCT_QUANTITY:
+      if (action.productCode && action.quantity) {
+        state.order.products = state.order.products.map(product => {
+          if (product.code === action.productCode) {
+            product.quantity = action.quantity
+            product.total = product.unitTotal * action.quantity
+          }
+          return product
+        })
+      }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+      window.localStorage.setItem('order', JSON.stringify(state.order))
+      return {
+        ...state
+      }
+    /**
+     * Update product cart
+     */
+    case ORDER_ACTIONS.UPDATE_PRODUCT:
+      if (action.product) {
+        state.order.products = state.order.products.map(product => {
+          if (product.code === action.product.code) {
+            product = {
+              ...product,
+              ...action.product
+            }
+          }
+          return product
+        })
+      }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -189,6 +265,10 @@ const defaultReducer = (state, action) => {
  * @param {props} props
  */
 export const OrderProvider = ({ ordering, children, ConfirmComponent }) => {
+  const quantity = defaultInitialState.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+  defaultInitialState.order.quantity = quantity
+  const total = defaultInitialState.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+  defaultInitialState.order.total = total
   const [data, dispatcher] = useReducer(defaultReducer, defaultInitialState)
   const [confirm, serConfirm] = useState()
 
@@ -197,6 +277,10 @@ export const OrderProvider = ({ ordering, children, ConfirmComponent }) => {
       validateCart(data.changes)
     }
   }, [data.changing])
+
+  useEffect(() => {
+    console.log('CHANGE ORDER')
+  }, [data.order])
 
   /**
    * Check cart when there ir a product or more
