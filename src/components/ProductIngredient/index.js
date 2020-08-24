@@ -14,7 +14,7 @@ export const ProductIngredient = (props) => {
   /**
    * Set current state
    */
-  const state = { selected: props.state.selected }
+  const state = { id: ingredient.id, name: ingredient.name, selected: props.state.selected }
 
   /**
    * Run onChange function with new state

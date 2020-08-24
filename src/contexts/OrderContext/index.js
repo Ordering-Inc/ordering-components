@@ -8,7 +8,10 @@ export const ORDER_ACTIONS = {
   CHANGE_BUSINESS: 'change_business',
   CHANGE_ADDRESS: 'change_address',
   ADD_PRODUCT: 'add_product',
+  UPDATE_PRODUCT: 'update_product',
+  CHANGE_PRODUCT_QUANTITY: 'change_product_quantity',
   REMOVE_PRODUCT: 'remove_product',
+  CLEAR_PRODUCTS: 'clear_products',
   LOADING: 'loading',
   ERROR: 'error'
 }
@@ -146,9 +149,6 @@ const defaultReducer = (state, action) => {
         throw new Error('You must provide `product` to add to cart.')
       }
       if (action.product) {
-        // state.order.products.map(product => {
-        //   return product
-        // })
         /**
          * Search a some equal product to group
          */
@@ -169,13 +169,14 @@ const defaultReducer = (state, action) => {
           deepEqual(productCompare1, productCompare2)
           return deepEqual(productCompare1, productCompare2)
         })
-        console.log(index)
         if (index >= 0) {
           state.order.products[index].quantity += action.product.quantity
         } else {
           state.order.products.push(action.product)
         }
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -184,9 +185,62 @@ const defaultReducer = (state, action) => {
      * Remove product from cart
      */
     case ORDER_ACTIONS.REMOVE_PRODUCT:
-      if (action.productId) {
-        state.order.products = state.order.products.filter(product => product.id !== action.productId)
+      if (action.productCode) {
+        state.order.products = state.order.products.filter(product => product.code !== action.productCode)
       }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+      window.localStorage.setItem('order', JSON.stringify(state.order))
+      return {
+        ...state
+      }
+    /**
+     * Remove all products from cart
+     */
+    case ORDER_ACTIONS.CLEAR_PRODUCTS:
+      state.order.products = []
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+      window.localStorage.setItem('order', JSON.stringify(state.order))
+      return {
+        ...state
+      }
+    /**
+     * Remove product from cart
+     */
+    case ORDER_ACTIONS.CHANGE_PRODUCT_QUANTITY:
+      if (action.productCode && action.quantity) {
+        state.order.products = state.order.products.map(product => {
+          if (product.code === action.productCode) {
+            product.quantity = action.quantity
+            product.total = product.unitTotal * action.quantity
+          }
+          return product
+        })
+      }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+      window.localStorage.setItem('order', JSON.stringify(state.order))
+      return {
+        ...state
+      }
+    /**
+     * Update product cart
+     */
+    case ORDER_ACTIONS.UPDATE_PRODUCT:
+      if (action.product) {
+        state.order.products = state.order.products.map(product => {
+          if (product.code === action.product.code) {
+            product = {
+              ...product,
+              ...action.product
+            }
+          }
+          return product
+        })
+      }
+      state.order.quantity = state.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+      state.order.total = state.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
       window.localStorage.setItem('order', JSON.stringify(state.order))
       return {
         ...state
@@ -211,6 +265,10 @@ const defaultReducer = (state, action) => {
  * @param {props} props
  */
 export const OrderProvider = ({ ordering, children, ConfirmComponent }) => {
+  const quantity = defaultInitialState.order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+  defaultInitialState.order.quantity = quantity
+  const total = defaultInitialState.order?.products?.reduce((sum, _product) => sum + _product.total, 0) || 0
+  defaultInitialState.order.total = total
   const [data, dispatcher] = useReducer(defaultReducer, defaultInitialState)
   const [confirm, serConfirm] = useState()
 
@@ -219,6 +277,10 @@ export const OrderProvider = ({ ordering, children, ConfirmComponent }) => {
       validateCart(data.changes)
     }
   }, [data.changing])
+
+  useEffect(() => {
+    console.log('CHANGE ORDER')
+  }, [data.order])
 
   /**
    * Check cart when there ir a product or more

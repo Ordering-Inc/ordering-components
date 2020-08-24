@@ -23,11 +23,13 @@ export const ProductOptionSuboption = (props) => {
   } else if (selected) {
     quantity = 1
   }
+  const position = props.state.position || 'whole'
+  const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
 
   /**
    * Set current state
    */
-  const state = { selected, quantity, position: props.state.position || 'whole' }
+  const state = { id: suboption.id, name: suboption.name, price, selected, quantity, position, total: price * quantity }
 
   /**
    * Run onChange function with new state
@@ -64,7 +66,8 @@ export const ProductOptionSuboption = (props) => {
     changeState({
       ...state,
       selected: state.quantity === 0 ? true : state.selected,
-      quantity: state.quantity + 1
+      quantity: state.quantity + 1,
+      total: state.price * (state.quantity + 1)
     })
   }
 
@@ -78,7 +81,8 @@ export const ProductOptionSuboption = (props) => {
     changeState({
       ...state,
       selected: state.quantity === 1 ? false : state.selected,
-      quantity: state.quantity - 1
+      quantity: state.quantity - 1,
+      total: state.price * (state.quantity - 1)
     })
   }
 
@@ -87,9 +91,12 @@ export const ProductOptionSuboption = (props) => {
    * @param {string} position Position of the suboption
    */
   const changePosition = (position) => {
+    const price = option.with_half_option && suboption.half_price && position !== 'whole' ? suboption.half_price : suboption.price
     changeState({
       ...state,
-      position
+      position,
+      price,
+      total: price * state.quantity
     })
   }
 
