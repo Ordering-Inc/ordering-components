@@ -25,21 +25,25 @@ export const MenuControlUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <h1>Preorder</h1>
+      {Object.keys(business).length > 0 && (
+        <>
+          <h1>Preorder</h1>
 
-      <img src={business.logo} alt='logo' width='80' height='80' />
-      <span style={{ marginLeft: '5px' }}>{business.name}</span>
+          <img src={business.logo} alt='logo' width='80' height='80' />
+          <span style={{ marginLeft: '5px' }}>{business.name}</span>
 
-      <h3>1. Choose the menu you would like to see: </h3>
+          <h3>1. Choose the menu you would like to see: </h3>
 
-      <div style={{ border: '1px solid black', padding: '10px', width: '480px' }}>
-        <p>Everyday Menu ✔️</p>
-        {business.schedule?.length > 0 && business.schedule.map((item, i) => (
-          <button key={i} onClick={() => handleSchedule(item.lapses[0])}>{daysOfWeek[i]}</button>
-        ))}
-      </div>
+          <div style={{ border: '1px solid black', padding: '10px', width: '480px' }}>
+            <p>Everyday Menu ✔️</p>
+            {business.schedule?.length > 0 && business.schedule.map((item, i) => (
+              <button key={i} onClick={() => handleSchedule(item.lapses[0])}>{daysOfWeek[i]}</button>
+            ))}
+          </div>
 
-      <span>Time selected: {timeSelected}</span>
+          <span>Time selected: {timeSelected}</span>
+        </>
+      )}
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
