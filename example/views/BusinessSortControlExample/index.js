@@ -3,8 +3,10 @@ import React from 'react'
 import { BusinessSortControlUI } from '../../components/BusinessSortControlUI'
 import { BusinessSortControl } from '../../../src/components/BusinessSortControl'
 import { TestComponent } from '../../components/TestComponent'
+import { useOrder } from '../../../src/contexts/OrderContext'
 
 export const BusinessSortControlExample = ({ ordering }) => {
+  const [{ order }] = useOrder()
   const props = {
     /**
      * Instace of Ordering Class
@@ -26,7 +28,7 @@ export const BusinessSortControlExample = ({ ordering }) => {
     /**
      * Property to switch delivery or pickup time on sort options select
      */
-    orderType: 'delivery_time',
+    orderType: order.type || 1,
     /**
      * Components types before business sort control
      * Array of type components, the parent props will pass to these components
