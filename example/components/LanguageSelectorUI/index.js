@@ -23,13 +23,19 @@ export const LanguageSelectorUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <select className='languages-select' value={currentLanguage} onChange={(e) => handleChangeLanguage(e.target.value)}>
-        {languages.length && languages.map(language => (
-          <option key={language.code} value={language.code}>{language.name}</option>
-        ))}
-      </select><br /><br />
-
-      <span>LANGUAGE SELECTED: {currentLanguage}</span>
+      {!languages.loading ? (
+        <>
+          <select className='languages-select' value={currentLanguage} onChange={(e) => handleChangeLanguage(e.target.value)}>
+            {languages.languages?.length && languages.languages.map(language => (
+              <option key={language.code} value={language.code}>{language.name}</option>
+            ))}
+          </select>
+          <br /><br />
+          <span>LANGUAGE SELECTED: {currentLanguage}</span>
+        </>
+      ) : (
+        <span>Loading...</span>
+      )}
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

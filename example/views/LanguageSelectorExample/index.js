@@ -18,15 +18,11 @@ export const LanguageSelectorExample = ({ ordering }) => {
     /**
      * currentLanguage, this must be containt current language to show in the app
      */
-    currentLanguage: 'ES',
+    currentLanguage: '',
     /**
      * languages, this array must be containt a list of available languages
      */
-    languages: [
-      { code: 'ES', name: 'Spanish' },
-      { code: 'EN', name: 'English' },
-      { code: 'FR', name: 'French' }
-    ],
+    languages: [],
     /**
      * Components types before language selector
      * Array of type components, the parent props will pass to these components
@@ -48,5 +44,6 @@ export const LanguageSelectorExample = ({ ordering }) => {
      */
     afterElements: [<p key>Test Element After</p>]
   }
+
   return <LanguageSelector {...props} />
 }

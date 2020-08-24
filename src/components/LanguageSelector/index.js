@@ -1,32 +1,66 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+
+import { useLanguage } from '../../../src/contexts/LanguageContext'
 
 export const LanguageSelector = (props) => {
   const {
+    ordering,
     currentLanguage,
     languages,
     UIComponent
   } = props
 
-  /**
-   * This must be contain the currentLanguage and language selected by user
-   */
-  const [languageSelected, setLanguageSelected] = useState(currentLanguage)
+  const [languagesState, setLanguageState] = useState({ loading: true, languages })
+  const [languageState, , setLanguage] = useLanguage()
 
   /**
    * This method is used for change the current language
    */
   const onChangeLanguage = (code) => {
-    setLanguageSelected(code)
+    const language = languages.find(language => language.code === code)
+    setLanguage(language)
   }
+
+  const loadLanguages = async () => {
+    try {
+      setLanguageState({ ...languagesState, loading: true })
+      const { content: { error, result } } = await ordering.languages().get()
+      setLanguageState({
+        ...languagesState,
+        loading: false,
+        languages: error ? [] : result
+      })
+    } catch (err) {
+      setLanguageState({ ...languagesState, loading: false })
+    }
+  }
+
+  useEffect(() => {
+    if (languages.length) {
+      setLanguageState({
+        ...languagesState,
+        loading: false
+      })
+    } else {
+      loadLanguages()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (currentLanguage) {
+      const language = languages.find(language => language.code === currentLanguage)
+      setLanguage(language)
+    }
+  }, [languages])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          currentLanguage={languageSelected}
-          languages={languages}
+          currentLanguage={languageState?.language?.code}
+          languages={languagesState}
           handleChangeLanguage={onChangeLanguage}
         />
       )}
