@@ -36,10 +36,31 @@ export const Home = () => {
           <Link to='/active_orders'>Active orders</Link>
         </li>
         <li>
+          <Link to='/places'>Places</Link>
+        </li>
+        <li>
           <Link to='/product_list'>Product list</Link>
         </li>
         <li>
           <Link to='/language_selector'>Language selector</Link>
+        </li>
+        <li>
+          <Link to='/product_images'>Product images</Link>
+        </li>
+        <li>
+          <Link to='/business_type_filter'>Business type filter</Link>
+        </li>
+        <li>
+          <Link to='/config_manager'>Configs examples</Link>
+        </li>
+        <li>
+          <Link to='/languages_examples'>Languages examples</Link>
+        </li>
+        <li>
+          <Link to='/popup_example'>Popups example</Link>
+        </li>
+        <li>
+          <Link to='/product_option_example'>Product option example</Link>
         </li>
       </ul>
     </>
