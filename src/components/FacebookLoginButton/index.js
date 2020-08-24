@@ -61,7 +61,7 @@ export const FacebookLoginButton = (props) => {
     }
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users.authFacebook(facebookResponse)
+      const response = await ordering.users().authFacebook(facebookResponse)
       setFormState({
         result: response.content,
         loading: false
