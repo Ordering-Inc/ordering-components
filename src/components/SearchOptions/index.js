@@ -1,20 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useOrder, ORDER_ACTIONS } from '../../../src/contexts/OrderContext'
 
 export const SearchOptions = (props) => {
   const {
-    ordering,
     UIComponent
   } = props
 
-  const [{ order }, dispatchOrder] = useOrder()
-
   const [optionSelected, setOptionSelected] = useState(null)
-  const [curAddress, setCurAddress] = useState(null)
 
   /**
-   * Method to handle buttom clicks
+   * Method to handle tabs options
    * @param {String} val
    */
   const onClickOption = (val) => {
@@ -22,53 +17,12 @@ export const SearchOptions = (props) => {
     setOptionSelected(value)
   }
 
-  /**
-   * Object that must be containt moment properties
-   */
-  const momentProps = {
-    minDate: new Date('2020-08-21 04:00 PM'),
-    maxDate: new Date('2020-08-27 04:00 PM'),
-    currentDate: new Date()
-  }
-
-  /**
-   * Object that must be containt address list properties
-   */
-  const addressListProps = {
-    ordering: ordering,
-    handleClickAddress: (address) => {
-      console.log('Address was clicked', address)
-      setCurAddress(address)
-    },
-    changeOrderAddressWithDefault: true
-  }
-
-  /**
-   * Object that must be containt address form properties
-   */
-  const addressFormProps = {
-    ordering: ordering,
-    useValidationFileds: true,
-    address: curAddress
-  }
-
-  useEffect(() => {
-    dispatchOrder({ type: ORDER_ACTIONS.CHANGE_BUSINESS, business: { id: 41, slug: 'mcbonalds' } })
-    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 111, quantity: 1 } })
-    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 1296, quantity: 1 } })
-  }, [])
-
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
           optionSelected={optionSelected}
-          momentProps={momentProps}
-          order={order}
-          addressFormProps={addressFormProps}
-          addressListProps={addressListProps}
-          orderTypes={[1, 2, 3, 4, 5]}
           handleClickOption={onClickOption}
         />
       )}

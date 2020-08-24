@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+import { useOrder, ORDER_ACTIONS } from '../../../src/contexts/OrderContext'
 
 import { MomentOptionUI } from '../MomentOptionUI'
 import { MomentOption } from '../../../src/components/MomentOption'
@@ -13,14 +15,37 @@ import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
 
 export const SearchOptionsUI = (props) => {
   const {
+    ordering,
     optionSelected,
     momentProps,
-    order,
-    addressFormProps,
-    addressListProps,
-    orderTypes,
     handleClickOption
   } = props
+
+  const orderTypes = [1, 2, 3, 4, 5]
+
+  const [curAddress, setCurAddress] = useState(null)
+  const [{ order }, dispatchOrder] = useOrder()
+
+  const addressListProps = {
+    ordering: ordering,
+    handleClickAddress: (address) => {
+      console.log('Address was clicked', address)
+      setCurAddress(address)
+    },
+    changeOrderAddressWithDefault: true
+  }
+
+  const addressFormProps = {
+    ordering: ordering,
+    useValidationFileds: true,
+    address: curAddress
+  }
+
+  useEffect(() => {
+    dispatchOrder({ type: ORDER_ACTIONS.CHANGE_BUSINESS, business: { id: 41, slug: 'mcbonalds' } })
+    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 111, quantity: 1 } })
+    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 1296, quantity: 1 } })
+  }, [])
 
   return (
     <div className='search-options'>
