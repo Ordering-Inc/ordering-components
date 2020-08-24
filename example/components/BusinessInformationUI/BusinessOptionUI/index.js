@@ -10,6 +10,7 @@ export const BusinessOptionUI = (props) => {
     contentData,
     optionToShow,
     locationData,
+    handleClickOption,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -21,14 +22,9 @@ export const BusinessOptionUI = (props) => {
     return `${checkTime(open?.hour)}:${checkTime(open?.minute)} - ${checkTime(close?.hour)}:${checkTime(close?.minute)}`
   }
 
-  const videoUrl = (ytUrl) => {
+  const formatUrlVideo = (ytUrl) => {
     const id = ytUrl.split('/')[3]
     return `https://www.youtube.com/embed/${id}`
-  }
-
-  const handleClickOption = (option) => {
-    const val = option === optionToShow ? null : option
-    props.handleChangeOption(val)
   }
 
   return (
@@ -56,7 +52,7 @@ export const BusinessOptionUI = (props) => {
                 <img src={item.file} alt={`photo-${i}`} width='191' height='128' />
               )}
               {label === 'Video Gallery' && (
-                <iframe src={videoUrl(item.video)} width='444' height='150' />
+                <iframe src={formatUrlVideo(item.video)} width='444' height='150' />
               )}
             </div>
           ))}
@@ -66,7 +62,7 @@ export const BusinessOptionUI = (props) => {
         <>
           <span>{locationData.address}</span>
           <span>{locationData.address_notes}</span>
-          <GoogleMapsMap apiKey='' location={locationData.location} />
+          <GoogleMapsMap apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk' location={locationData.location} />
         </>
       )}
       <hr />

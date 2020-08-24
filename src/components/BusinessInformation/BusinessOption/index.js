@@ -3,14 +3,21 @@ import PropTypes from 'prop-types'
 
 export const BusinessOption = (props) => {
   const {
+    optionToShow,
     UIComponent
   } = props
+
+  const handleClickOption = (option) => {
+    const val = option === optionToShow ? null : option
+    props.handleChangeOption(val)
+  }
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          handleClickOption={handleClickOption}
         />
       )}
     </>
