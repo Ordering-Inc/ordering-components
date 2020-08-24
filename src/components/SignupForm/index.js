@@ -20,7 +20,7 @@ export const SignupForm = (props) => {
 
   if (useChekoutFileds) {
     useEffect(() => {
-      ordering.validationFields.get().then((response) => {
+      ordering.validationFields().get().then((response) => {
         const fields = {}
         response.content.result.forEach((field) => {
           if (field.validate === 'checkout') {

@@ -1,70 +1,67 @@
 import React from 'react'
-import PropTypes, { number } from 'prop-types'
-import { useOrder, ORDER_ACTIONS } from '../../contexts/OrderContext'
+import PropTypes from 'prop-types'
 
-export const OrderTypeControl = (props) => {
+export const ProductImages = (props) => {
   const {
+    hero,
+    gallery,
     UIComponent
   } = props
-  const [{ order }, dispatchOrder] = useOrder()
-
-  const handleChangeOrderType = (orderType) => {
-    dispatchOrder({
-      type: ORDER_ACTIONS.CHANGE_TYPE,
-      orderType
-    })
-  }
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          order={order}
-          handleChangeOrderType={props.handleChangeOrderType || handleChangeOrderType}
+          hero={hero}
+          gallery={gallery}
         />
       )}
     </>
   )
 }
 
-OrderTypeControl.propTypes = {
+ProductImages.propTypes = {
+  /**
+   * Instace of Ordering Class
+   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
+   */
+  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
-   * Order availables to the control
+   * hero, this must be contain the main product image
    */
-  orderTypes: PropTypes.arrayOf(number),
+  hero: PropTypes.string,
   /**
-   * Custom function to control order type changes
+   * gallery, this must be contain the array of product images
    */
-  handleChangeOrderType: PropTypes.func,
+  gallery: PropTypes.arrayOf(PropTypes.string),
   /**
-   * Components types before order type control
+   * Components types before product images
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Components types after order type control
+   * Components types after product images
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Elements before order type control
+   * Elements before product images
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: PropTypes.arrayOf(PropTypes.element),
   /**
-   * Elements after order type control
+   * Elements after product images
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-OrderTypeControl.defaultProps = {
-  orderTypes: [1, 2, 3, 4, 5],
+ProductImages.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
