@@ -47,7 +47,7 @@ export const MomentOption = (props) => {
    * @param {object} param0
    */
   const handleCustomChangeDate = ({ date, time, type }) => {
-    if (!(moment(date, 'YYYY-MM-DD').isValid() || moment(time, 'HH:mm').isValid())) {
+    if ((date || time) && !(moment(date, 'YYYY-MM-DD').isValid() || moment(time, 'HH:mm').isValid())) {
       return
     }
     const currDate = moment(validDate(scheduleSelected)).format('YYYY-MM-DD')
@@ -61,7 +61,6 @@ export const MomentOption = (props) => {
     const dateToSend = type === 'asap'
       ? moment().format('YYYY-MM-DD HH:mm')
       : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD HH:mm')
-
     setScheduleSelected(moment(dateToSend, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm'))
   }
 
