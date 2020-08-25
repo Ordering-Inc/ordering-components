@@ -42,6 +42,9 @@ export const Home = () => {
           <Link to='/product_list'>Product list</Link>
         </li>
         <li>
+          <Link to='/business_type_filter'>Business type filter</Link>
+        </li>
+        <li>
           <Link to='/config_manager'>Configs examples</Link>
         </li>
         <li>
@@ -49,6 +52,15 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/popup_example'>Popups example</Link>
+        </li>
+        <li>
+          <Link to='/product_option_example'>Product option example</Link>
+        </li>
+        <li>
+          <Link to='/product_images'>Product images</Link>
+        </li>
+        <li>
+          <Link to='/moment_option'>Moment option</Link>
         </li>
         <li>
           <Link to='/menu_control'>Menu Control</Link>
