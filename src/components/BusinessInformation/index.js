@@ -20,7 +20,13 @@ export const BusinessInformation = (props) => {
   useEffect(() => {
     const photos = business?.gallery?.filter(item => item.file)
     const videos = business?.gallery?.filter(item => item.video)
-    const location = { location: business?.location, address: business?.address, address_notes: business?.address_notes }
+    const location = {
+      location: business?.location,
+      address: business?.address,
+      address_notes: business?.address_notes,
+      isZoomControl: true,
+      isStreetViewControl: true
+    }
     setPhotos(photos)
     setVideos(videos)
     setLocation(location)

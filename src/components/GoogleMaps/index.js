@@ -5,7 +5,9 @@ import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 export const GoogleMaps = (props) => {
   const {
     googleReady,
-    location
+    location,
+    isZoomControl,
+    isStreetViewControl
   } = props
 
   const divRef = useRef()
@@ -15,7 +17,9 @@ export const GoogleMaps = (props) => {
       const coordinates = { lat: location.lat, lng: location.lng }
       const map = new window.google.maps.Map(divRef.current, {
         zoom: location.zoom,
-        center: coordinates
+        center: coordinates,
+        zoomControl: isZoomControl,
+        streetViewControl: isStreetViewControl
       })
       const marker = new window.google.maps.Marker({
         position: coordinates,
