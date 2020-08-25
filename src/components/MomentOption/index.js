@@ -11,84 +11,116 @@ export const MomentOption = (props) => {
   } = props
 
   /**
-   * Set Current time
+   * Method to valid if a date is same of after current date
+   * @param {String} date
    */
-  const [currentDateSelected, setCurrentDateSelected] = useState(moment(currentDate).format('YYYY-MM-DD hh:mm A'))
+  const validDate = (date) =>
+    moment(date).isSameOrAfter(moment(), 'day')
+      ? moment(date).format('YYYY-MM-DD HH:mm')
+      : moment().format('YYYY-MM-DD HH:mm')
 
   /**
-   * Array that contains a list of available hours
+   * This must be containt schedule selected by user
+   */
+  const [scheduleSelected, setScheduleSelected] = useState(moment(validDate(currentDate)).format('YYYY-MM-DD HH:mm'))
+
+  /**
+   * Arrays for save hours and dates lists
    */
   const [hoursList, setHourList] = useState([])
   const [datesList, setDatesList] = useState([])
 
   /**
-   * Difference between two o more dates
+   * Save the difference between dates
    */
   const [datesDiff, setDatesDiff] = useState(0)
 
   /**
-   * Event to handle custom behavior when change date
+   * Used to calculate current hour
    */
-  const handleCustomChangeDate = (date) => {
-    const currentTime = moment(currentDate).format('YYYY-MM-DD hh:mm A')
-    const diff = moment.duration(moment(date).diff(moment().startOf('day'))).asDays()
-    parseInt(diff) === 0 ? setCurrentDateSelected(currentTime) : setCurrentDateSelected(date)
-    setDatesDiff(parseInt(diff))
+  const getHour = () => {
+    return moment().minutes() > 30 ? moment().hour() + 1 : moment().hour()
   }
 
   /**
-   * Method to generate an array list of available hours
+   * Handler select changes
+   * @param {object} param0
+   */
+  const handleCustomChangeDate = ({ date, time, type }) => {
+    if (!(moment(date, 'YYYY-MM-DD').isValid() || moment(time, 'HH:mm').isValid())) {
+      return
+    }
+    const currDate = moment(validDate(scheduleSelected)).format('YYYY-MM-DD')
+    if (date) {
+      const diff = moment.duration(moment(date).diff(moment().startOf('day'))).asDays()
+      setDatesDiff(parseInt(diff))
+    }
+    const dateSelected = date ?? currDate
+    const timeSelected = time ?? `${getHour()}:00`
+
+    const dateToSend = type === 'asap'
+      ? moment().format('YYYY-MM-DD HH:mm')
+      : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD HH:mm')
+
+    setScheduleSelected(moment(dateToSend, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm'))
+  }
+
+  /**
+   * generate a list of available hours
    */
   const generateHourList = () => {
-    const defaultTime = moment('12:00 AM', 'HH:mm A').format('LTS')
+    const hoursAvailable = []
+    let iterator = 0
+    const defaultTime = moment('12:00 AM', 'h:mm A').format('HH:mm')
+
     let startHour = moment().hour()
     const startMinutes = moment().minutes()
 
-    startHour = startMinutes > 30 ? moment(currentDateSelected, 'YYYY-MM-DD HH:mm A').add(1, 'hour').hour() : startHour
-    startHour = datesDiff > 0 ? moment(defaultTime, 'HH:mm A').hour() : startHour
+    startHour = startMinutes > 30
+      ? moment(moment(scheduleSelected, 'YYYY-MM-DD h:mm').add(1, 'hour').format('HH:mm'), 'HH:mm').hour()
+      : startHour
 
-    let startSelectedTime = moment(`${startHour}:00`, 'hh:mm A').format('LTS')
-    const hoursAvailable = []
-    let count = 0
+    startHour = datesDiff > 0 || moment(validDate(minDate)).isAfter(moment())
+      ? moment(defaultTime, 'HH:mm').hour()
+      : startHour
+
+    let _startTime = moment(`${startHour}:00`, 'HH:mm').format('HH:mm')
 
     for (let i = startHour; i < 24; i++) {
       for (let j = 0; j < 4; j++) {
-        if (!count) {
+        if (!iterator) {
           hoursAvailable.push({
             key: '0',
-            startTime: startSelectedTime,
-            endTime: moment(startSelectedTime, 'hh:mm A').add(30, 'minutes').format('LTS')
+            startTime: _startTime,
+            endTime: moment(_startTime, 'HH:mm').add(14, 'minutes').format('HH:mm')
           })
         } else {
-          const startTime = moment(startSelectedTime, 'hh:mm A').add(15, 'minutes').format('LTS')
-          const endTime = moment(startTime, 'hh:mm A').add(30, 'minutes').format('LTS')
+          const startTime = moment(_startTime, 'HH:mm').add(15, 'minutes').format('HH:mm')
+          const endTime = moment(startTime, 'HH:mm').add(14, 'minutes').format('HH:mm')
           hoursAvailable.push({
             key: `${i}${j}`,
             startTime,
             endTime
           })
-          startSelectedTime = startTime
-          if (moment(endTime, ['hh:mm A']).format('hh:mm A') === '12:00 AM') {
-            break
-          }
+          _startTime = startTime
         }
-        count++
+        iterator++
       }
     }
     setHourList(hoursAvailable)
   }
 
   /**
-   * Method to generate an array list of availables dates
+   * Generate a list of available dates
    */
   const generateDatesList = () => {
     const datesList = []
-    const diff = moment(maxDate, 'YYYY-MM-DD hh:mm A').diff(moment(minDate, 'YYYY-MM-DD hh:mm A'), 'days')
+    const diff = moment(validDate(maxDate), 'YYYY-MM-DD HH:mm').diff(moment(validDate(minDate), 'YYYY-MM-DD HH:mm'), 'days')
 
-    for (let i = 0; i <= diff; i++) {
+    for (let i = 0; i < diff + 1; i++) {
       datesList.push({
         key: `${i}`,
-        date: moment(minDate).add(i, 'd').format('YYYY-MM-DD')
+        date: moment(validDate(minDate)).add(i, 'd').format('YYYY-MM-DD')
       })
     }
     setDatesList(datesList)
@@ -97,16 +129,16 @@ export const MomentOption = (props) => {
   useEffect(() => {
     generateHourList()
     generateDatesList()
-  }, [datesDiff, currentDateSelected])
+  }, [datesDiff, scheduleSelected])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          minDate={minDate}
-          maxDate={maxDate}
-          currentDate={currentDateSelected}
+          minDate={validDate(minDate)}
+          maxDate={validDate(maxDate)}
+          currentDate={scheduleSelected}
           datesList={datesList}
           hoursList={hoursList}
           handleCustomChangeDate={handleCustomChangeDate}

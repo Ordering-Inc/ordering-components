@@ -1,28 +1,16 @@
 import React from 'react'
-import moment from 'moment'
 
 export const MomentOptionUI = (props) => {
   const {
     datesList,
     hoursList,
     currentDate,
+    handleCustomChangeDate,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
-
-  const handleDateChange = ({ date, time, type }) => {
-    const currDate = moment(currentDate).format('YYYY-MM-DD')
-    const currTime = moment(currentDate).format('hh:mm A')
-    const dateSelected = date ?? currDate
-    const timeSelected = hoursList.find(hour => hour.key === time)?.startTime ?? currTime
-
-    const dateToSend = type === 'asap'
-      ? moment().format('YYYY-MM-DD hh:mm A')
-      : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD hh:mm A')
-    props.handleCustomChangeDate(dateToSend)
-  }
 
   return (
     <div className='moment-section'>
@@ -37,21 +25,23 @@ export const MomentOptionUI = (props) => {
       )}
 
       <h4>Select a Delivery date with time</h4>
-      <select className='select-date' onChange={(e) => handleDateChange({ date: e.target.value })}>
+      <select className='select-date' onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
+        <option value={null} defaultValue>Select a date</option>
         {datesList.length > 0 && datesList.map(date => (
           <option key={date.key} value={date.date}>{date.date}</option>
         ))}
       </select>&nbsp;
 
-      <select className='select-hour' onChange={(e) => handleDateChange({ time: e.target.value })}>
+      <select className='select-hour' onChange={(e) => handleCustomChangeDate({ time: e.target.value })}>
+        <option>Select a time</option>
         {hoursList.length > 0 && hoursList.map(hour => (
-          <option key={hour.key} value={hour.key}>{hour.startTime} {hour.endTime}</option>
+          <option key={hour.key} value={hour.startTime}>{hour.startTime} to {hour.endTime}</option>
         ))}
       </select>
       <br />
 
       <h4>Desired Delivery Time</h4>
-      <button onClick={() => handleDateChange({ type: 'asap' })}>
+      <button onClick={() => handleCustomChangeDate({ type: 'asap' })}>
         As soon as possible
       </button><br /><br />
 

@@ -22,11 +22,11 @@ export const MomentOptionExample = ({ ordering }) => {
     /**
      * minDate, this must be contains a custom date selected
      */
-    minDate: new Date('2020-08-19 04:00 PM'),
+    minDate: new Date('2020-08-26 00:00'),
     /**
      * maxDate, this must be contains a custom date selected
      */
-    maxDate: new Date('2020-08-25 04:00 PM'),
+    maxDate: new Date('2020-08-30 23:59'),
     /**
      * Components types before moment option
      * Array of type components, the parent props will pass to these components

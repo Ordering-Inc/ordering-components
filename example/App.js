@@ -22,8 +22,8 @@ import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
-import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { SearchOptionsExample } from './views/SearchOptionsExample'
 
 export default function App ({ ordering }) {
   return (
@@ -80,11 +80,11 @@ export default function App ({ ordering }) {
           <Route path='/moment_option'>
             <MomentOptionExample ordering={ordering} />
           </Route>
-          <Route path='/search_options'>
-            <SearchOptionsExample ordering={ordering} />
-          </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/search_options'>
+            <SearchOptionsExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
