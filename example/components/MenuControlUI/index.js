@@ -53,19 +53,22 @@ export const MenuControlUI = (props) => {
 
           <br />
           {scheduleSelected && (
-            <DatePicker
-              selected={startDate}
-              minDate={new Date()}
-              showTimeSelect
-              filterDate={isDisabledDay}
-              timeIntervals={15}
-              minTime={setHours(setMinutes(new Date(), 0), scheduleSelected?.range?.open)}
-              maxTime={setHours(setMinutes(new Date(), 15), scheduleSelected?.range?.close)}
-              timeFormat='HH:mm'
-              dateFormat='MMMM d, yyyy HH:mm'
-              placeholderText='Select a date'
-              onChange={date => handleDate(date)}
-            />
+            <>
+              <h3>2. Select your delivery time: </h3>
+              <DatePicker
+                selected={startDate}
+                minDate={new Date()}
+                showTimeSelect
+                filterDate={isDisabledDay}
+                timeIntervals={15}
+                minTime={setHours(setMinutes(new Date(), 0), scheduleSelected?.range?.open)}
+                maxTime={setHours(setMinutes(new Date(), 15), scheduleSelected?.range?.close)}
+                timeFormat='HH:mm'
+                dateFormat='MMMM d, yyyy HH:mm'
+                placeholderText='Select a date'
+                onChange={date => handleDate(date)}
+              />
+            </>
           )}
         </>
       )}
