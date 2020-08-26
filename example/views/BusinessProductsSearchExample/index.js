@@ -16,21 +16,9 @@ export const BusinessProductsSearchExample = ({ ordering }) => {
      */
     UIComponent: BusinessProductsSearchUI,
     /**
-     * Products, this must be containt an array of products to filter
+     * Method to handle search value
      */
-    products: [],
-    /**
-     * BusinessID, this must be containt a business id to get products from API
-     */
-    businessId: 41,
-    /**
-     * Enable/disable search by name
-     */
-    isSearchByName: true,
-    /**
-     * Enable/disable search by description
-     */
-    isSearchByDescription: true,
+    onChangeSearch: (val) => { console.log(val) },
     /**
      * Components types before Business products search
      * Array of type components, the parent props will pass to these components
