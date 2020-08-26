@@ -29,6 +29,7 @@ export const BusinessFeaturedProductsUI = (props) => {
               {productsList.products && productsList.products.length > 0 ? (
                 productsList.products.map(product => (
                   <div key={product.id} style={{ border: '1px solid gray', width: '300px', padding: '10px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', marginRight: '10px' }}>
+                    {(product.inventoried && !product.quantity) && <span style={{ background: 'black', color: 'white' }}>Sold Out</span>}<br />
                     <img src={product.images} alt={product.name} height='60' width='60' />
                     <span>{product.name}</span>
                     <span>{product.description}</span>

@@ -3,15 +3,23 @@ import PropTypes from 'prop-types'
 
 export const BusinessFeaturedProducts = (props) => {
   const {
+    products,
+    businessId,
     ordering,
     UIComponent
   } = props
 
-  const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })
+  const [productsList, setProductsList] = useState({ products, loading: true, error: false })
 
   const getProducts = async () => {
     try {
-      const { content: { result } } = await ordering.businesses(41).categories(248).products().get()
+      const { content: { result } } = await ordering
+        .businesses(businessId)
+        .parameters({ type: 1 })
+        .where({ attribute: 'featured', value: true })
+        .products()
+        .get()
+
       setProductsList({
         ...productsList,
         loading: false,
@@ -52,6 +60,14 @@ BusinessFeaturedProducts.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Products, this must be containt array of business products
+   */
+  products: PropTypes.arrayOf(PropTypes.object),
+  /**
+   * BusinessId, this must be containt a business id
+   */
+  businessId: PropTypes.number,
   /**
    * Components types before Business featured products
    * Array of type components, the parent props will pass to these components

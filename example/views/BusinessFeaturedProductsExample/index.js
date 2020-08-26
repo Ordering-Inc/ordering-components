@@ -20,6 +20,16 @@ export const BusinessFeaturedProductsExample = ({ ordering }) => {
      */
     products: [],
     /**
+     * BusinessId, this must be containt a business id
+     */
+    businessId: 41,
+    /**
+     * Method to calculate cart quantity products
+     */
+    getCartQuantity: (product) => {
+      console.warn('New card required', product)
+    },
+    /**
      * Components types before Business featured products
      * Array of type components, the parent props will pass to these components
      */
