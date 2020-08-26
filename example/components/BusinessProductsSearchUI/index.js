@@ -22,7 +22,7 @@ export const BusinessProductsSearchUI = (props) => {
       )}
 
       <div className='search-products'>
-        <input style={{ width: '100%' }} type='search' placeholder='Search' onChange={(e) => handleChangeSearch(e.target.value)} />
+        <input style={{ width: '50%' }} type='search' placeholder='Search' onChange={(e) => handleChangeSearch(e.target.value)} />
       </div>
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
