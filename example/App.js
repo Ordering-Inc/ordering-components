@@ -13,7 +13,7 @@ import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
-import { ProductList } from './views/ProductList'
+import { ProductList } from './views/ProductList(NOT)'
 import { OrderContectExample } from './views/OrderContectExample'
 import { ProductImagesExample } from './views/ProductImagesExample'
 import { BusinessTypeFilterExample } from './views/BusinessTypeFilterExample'
@@ -24,6 +24,7 @@ import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
+import { ProductsListExample } from './views/ProductsListExample'
 
 export default function App ({ ordering }) {
   return (
@@ -85,6 +86,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/business_products_categories'>
             <BusinessProductsCategoriesExample ordering={ordering} />
+          </Route>
+          <Route path='/products_list'>
+            <ProductsListExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
