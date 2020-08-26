@@ -8,6 +8,9 @@ export const BusinessProductsCategories = (props) => {
     UIComponent
   } = props
 
+  /**
+   * Save categories array modified
+   */
   const [categoriesFiltered, setCategoriesFiltered] = useState(categories)
 
   useEffect(() => {
