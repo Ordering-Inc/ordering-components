@@ -31,7 +31,7 @@ PaymentOptions.propTypes = {
    * Instace of Ordering Class
    * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
    */
-  ordering: PropTypes.object.isRequired,
+  ordering: PropTypes.object,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -39,7 +39,7 @@ PaymentOptions.propTypes = {
   /**
    * Options, this must be containt an array of payment options
    */
-  options: PropTypes.arrayOf(PropTypes.string),
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
   /**
    * optionDefault, this must be containt one default payment option
    */
