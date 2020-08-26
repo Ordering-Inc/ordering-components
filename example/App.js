@@ -23,6 +23,7 @@ import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
+import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
 
 export default function App ({ ordering }) {
   return (
@@ -81,6 +82,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/business_products_search'>
             <BusinessProductsSearchExample ordering={ordering} />
+          </Route>
+          <Route path='/business_products_categories'>
+            <BusinessProductsCategoriesExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
