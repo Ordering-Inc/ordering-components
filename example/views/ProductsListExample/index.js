@@ -16,6 +16,10 @@ export const ProductsListExample = ({ ordering }) => {
      */
     UIComponent: ProductsListUI,
     /**
+     * flag shows categories with products or only products
+     */
+    isAllCategory: false,
+    /**
      * Components types before products list
      * Array of type components, the parent props will pass to these components
      */
@@ -38,6 +42,7 @@ export const ProductsListExample = ({ ordering }) => {
   }
 
   const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })
+  const [categories, setCategories] = useState([])
 
   const getProducts = async () => {
     try {
@@ -61,9 +66,15 @@ export const ProductsListExample = ({ ordering }) => {
     }
   }
 
+  const getCategories = async () => {
+    const { content: { result } } = await ordering.businesses(41).categories().get()
+    setCategories(result)
+  }
+
   useEffect(() => {
     getProducts()
+    getCategories()
   }, [])
 
-  return <ProductsList {...props} productsList={productsList} />
+  return <ProductsList {...props} productsList={productsList} categories={categories} />
 }

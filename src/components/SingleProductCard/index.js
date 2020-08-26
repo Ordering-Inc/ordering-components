@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-export const ProductsList = (props) => {
+export const SingleProductCard = (props) => {
   const {
     UIComponent
   } = props
@@ -17,7 +17,7 @@ export const ProductsList = (props) => {
   )
 }
 
-ProductsList.propTypes = {
+SingleProductCard.propTypes = {
   /**
    * Instace of Ordering Class
    * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
@@ -28,40 +28,48 @@ ProductsList.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   * productslist, this must be contains an object with products, loading and error data
+   * Check if a product is sold out status
    */
-  productsList: PropTypes.object,
+  isSoldOut: PropTypes.bool,
   /**
-   * categories, this must be contains an array of products categories
+   * Product images
    */
-  categories: PropTypes.arrayOf(PropTypes.object),
+  images: PropTypes.string,
   /**
-   * flag shows categories with products or only products
+   * Product name
    */
-  isAllCategory: PropTypes.bool,
+  name: PropTypes.string,
   /**
-   * Components types before products list
+   * Product description
+   */
+  description: PropTypes.string,
+  /**
+   * Product price
+   */
+  price: PropTypes.number,
+  /**
+   * Components types before [PUT HERE COMPONENT NAME]
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Components types after products list
+   * Components types after [PUT HERE COMPONENT NAME]
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Elements before products list
+   * Elements before [PUT HERE COMPONENT NAME]
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: PropTypes.arrayOf(PropTypes.element),
   /**
-   * Elements after products list
+   * Elements after [PUT HERE COMPONENT NAME]
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-ProductsList.defaultProps = {
+SingleProductCard.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
