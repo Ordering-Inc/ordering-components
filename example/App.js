@@ -25,6 +25,7 @@ import { ProductOptionExample } from './views/ProductOptionExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
 import { ProductsListExample } from './views/ProductsListExample'
+import { ProductsListingExample } from './views/ProductsListingExample'
 
 export default function App ({ ordering }) {
   return (
@@ -89,6 +90,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/products_list'>
             <ProductsListExample ordering={ordering} />
+          </Route>
+          <Route path='/products_listing' exact>
+            <ProductsListingExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
