@@ -5,7 +5,9 @@ import { useOrder } from '../../../src/contexts/OrderContext'
 export const BusinessControllerUI = (props) => {
   const [{ order }] = useOrder()
   const {
+    isBusinessFeatured,
     isBusinessClose,
+    offerToShow,
     business,
     id,
     header,
@@ -42,9 +44,14 @@ export const BusinessControllerUI = (props) => {
       {id ? (
         <div style={{ border: '1px solid gray', width: '300px', padding: '10px 20px' }} className='single-business-card' onClick={() => handleClick(business)}>
           <br />
-          <span style={{ border: '1px solid green', width: '30px', background: 'green', color: 'white' }}>FEATURED</span> <br />
+          {isBusinessFeatured && (
+            <span style={{ border: '1px solid green', width: '30px', background: 'green', color: 'white' }}>FEATURED</span>
+          )}<br />
           {isBusinessClose && (
             <span style={{ border: '1px solid gray', width: '30px', background: 'gray' }}>CLOSE</span>
+          )}<br />
+          {offerToShow && (
+            <span style={{ border: '1px solid gray', width: '30px', background: 'green' }}>{offerToShow}</span>
           )}
           <br />
           <br />

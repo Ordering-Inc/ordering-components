@@ -24,7 +24,6 @@ export const BusinessController = (props) => {
    * This must be containt a boolean to indicate if a business is close or not
    */
   const [isBusinessClose, setIsBusinessClose] = useState(false)
-
   /**
    * Method to get business from SDK
    */
@@ -32,7 +31,14 @@ export const BusinessController = (props) => {
     const { content: { result } } = await ordering.businesses(businessId).select(businessAttributes).get()
     setBusinessObject(result)
   }
-
+  /**
+   * Method to return business offert to show
+   * @param {object} offer
+   */
+  const getBusinessOffert = (offer) => {
+    if (!offer) return null
+    return offer?.rate_type === 1 ? (offer?.rate * 10) / 100 : offer?.rate
+  }
   /**
    * Method to format date
    * @param {object} time
@@ -90,6 +96,8 @@ export const BusinessController = (props) => {
         <UIComponent
           {...props}
           isBusinessClose={isBusinessClose}
+          isBusinessFeatured={businessObject?.featured}
+          offerToShow={getBusinessOffert(businessObject?.offers[0])}
           business={businessObject}
           id={businessObject?.id}
           logo={businessObject?.logo}

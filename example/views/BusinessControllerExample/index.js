@@ -26,7 +26,7 @@ export const BusinessControllerExample = ({ ordering }) => {
     /**
      * businessAttributes, Array of attributes to get business from API
      */
-    businessAttributes: ['id', 'name', 'header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews'],
+    businessAttributes: ['id', 'name', 'header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers'],
     /**
      * onBusinessClick, function to get click event and return business object after default behavior
      */
