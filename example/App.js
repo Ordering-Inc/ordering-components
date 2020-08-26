@@ -22,6 +22,7 @@ import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 
 export default function App ({ ordering }) {
   return (
@@ -77,6 +78,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/business_products_search'>
+            <BusinessProductsSearchExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
