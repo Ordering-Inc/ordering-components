@@ -27,6 +27,7 @@ export const MomentOptionExample = ({ ordering }) => {
      * maxDate, this must be contains a custom date selected
      */
     maxDate: new Date('2020-08-30 23:59'),
+    onChangeMoment: (e) => { console.log(e) },
     /**
      * Components types before moment option
      * Array of type components, the parent props will pass to these components

@@ -2,6 +2,7 @@ import React from 'react'
 
 export const MomentOptionUI = (props) => {
   const {
+    isAsap,
     datesList,
     hoursList,
     currentDate,
@@ -23,22 +24,25 @@ export const MomentOptionUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
+      {!isAsap && (
+        <>
+          <h4>Select a Delivery date with time</h4>
+          <select className='select-date' onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
+            <option value={null} defaultValue>Select a date</option>
+            {datesList.length > 0 && datesList.map(date => (
+              <option key={date.key} value={date.date}>{date.date}</option>
+            ))}
+          </select>&nbsp;
 
-      <h4>Select a Delivery date with time</h4>
-      <select className='select-date' onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
-        <option value={null} defaultValue>Select a date</option>
-        {datesList.length > 0 && datesList.map(date => (
-          <option key={date.key} value={date.date}>{date.date}</option>
-        ))}
-      </select>&nbsp;
-
-      <select className='select-hour' onChange={(e) => handleCustomChangeDate({ time: e.target.value })}>
-        <option>Select a time</option>
-        {hoursList.length > 0 && hoursList.map(hour => (
-          <option key={hour.key} value={hour.startTime}>{hour.startTime} to {hour.endTime}</option>
-        ))}
-      </select>
-      <br />
+          <select className='select-hour' onChange={(e) => handleCustomChangeDate({ time: e.target.value })}>
+            <option>Select a time</option>
+            {hoursList.length > 0 && hoursList.map(hour => (
+              <option key={hour.key} value={hour.startTime}>{hour.startTime} to {hour.endTime}</option>
+            ))}
+          </select>
+          <br />
+        </>
+      )}
 
       <h4>Desired Delivery Time</h4>
       <button onClick={() => handleCustomChangeDate({ type: 'asap' })}>
