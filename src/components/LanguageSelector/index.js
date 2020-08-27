@@ -18,14 +18,18 @@ export const LanguageSelector = (props) => {
    * This method is used for change the current language
    */
   const onChangeLanguage = (code) => {
-    const language = languages.find(language => language.code === code)
+    const language = languagesState.languages.find(language => language.code === code)
     setLanguage(language)
   }
 
   const loadLanguages = async () => {
     try {
       setLanguageState({ ...languagesState, loading: true })
-      const { content: { error, result } } = await ordering.languages().get()
+      const { content: { error, result } } = await ordering
+        .languages()
+        .where([{ attribute: 'enabled', value: true }])
+        .get()
+
       setLanguageState({
         ...languagesState,
         loading: false,
