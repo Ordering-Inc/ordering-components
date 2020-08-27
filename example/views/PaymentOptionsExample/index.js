@@ -24,6 +24,14 @@ export const PaymentOptionsExample = ({ ordering }) => {
      */
     optionDefault: 'stripe',
     /**
+     * businessId, this must be contains business id to fetch business from API
+     */
+    businessId: 41,
+    /**
+     * Get option selected
+     */
+    onChangePayment: (e) => { console.log(e) },
+    /**
      * Components types before Payment options
      * Array of type components, the parent props will pass to these components
      */

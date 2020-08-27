@@ -2,8 +2,8 @@ import React from 'react'
 
 export const PaymentOptionsUI = (props) => {
   const {
+    optionsList,
     optionSelected,
-    options,
     handleChangeOption,
     beforeComponents,
     afterComponents,
@@ -25,18 +25,24 @@ export const PaymentOptionsUI = (props) => {
 
       <div className='payment-options'>
         <h1>Payment Method</h1>
-        <div onChange={(e) => handleChangeOption(e.target.value)}>
-          {options.length > 0 && options.map((option, i) => (
-            <div key={i} style={{ textTransform: 'capitalize' }}>
-              <input
-                type='radio'
-                name='payment_option'
-                value={option}
-                defaultChecked={optionSelected === option}
-              /> {option} <br />
-            </div>
-          ))}
-        </div>
+        {!optionsList.loading && !optionsList.error ? (
+          <div onChange={(e) => handleChangeOption(e.target.value)}>
+            {optionsList.options.length > 0 && optionsList.options.map((option, i) => (
+              <div key={i} style={{ textTransform: 'capitalize' }}>
+                <input
+                  type='radio'
+                  name='payment_option'
+                  value={option}
+                  defaultChecked={optionSelected === option}
+                /> {option} <br />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>
+            {}
+          </div>
+        )}
       </div>
 
       {afterComponents.map(
