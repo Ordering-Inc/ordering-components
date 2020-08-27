@@ -11,6 +11,7 @@ import { ProductsListUI } from '../ProductsListUI'
 
 export const ProductsListingUI = (props) => {
   const {
+    categoryValue,
     categories,
     productsList,
     handlerClickCategory,
@@ -33,6 +34,8 @@ export const ProductsListingUI = (props) => {
       <ProductsList
         UIComponent={ProductsListUI}
         productsList={productsList}
+        categories={categories}
+        isAllCategory={!categoryValue}
       />
     </div>
   )

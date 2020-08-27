@@ -102,6 +102,7 @@ export const ProductsListing = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          categoryValue={!!categoryValue}
           categories={categories}
           productsList={productsList}
           handlerClickCategory={(val) => setCategoryValue(val)}
