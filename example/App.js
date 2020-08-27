@@ -15,6 +15,7 @@ import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 import { ProductList } from './views/ProductList'
 import { OrderContectExample } from './views/OrderContectExample'
+import { BusinessSortControlExample } from './views/BusinessSortControlExample'
 import { ProductImagesExample } from './views/ProductImagesExample'
 import { BusinessTypeFilterExample } from './views/BusinessTypeFilterExample'
 import { PlacesExample } from './views/PlacesExample'
@@ -57,6 +58,9 @@ export default function App ({ ordering }) {
           <Route path='/order_context'>
             <OrderContectExample ordering={ordering} />
           </Route>
+          <Route path='/sort_options'>
+            <BusinessSortControlExample ordering={ordering} />
+            </Route>
           <Route path='/product_images'>
             <ProductImagesExample ordering={ordering} />
           </Route>
