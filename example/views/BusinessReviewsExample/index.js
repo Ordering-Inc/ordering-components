@@ -18,7 +18,11 @@ export const BusinessReviewsExample = ({ ordering }) => {
     /**
      * Reviews, this array must be containt all info about business reviews
      */
-    reviews: [],
+    reviews: null,
+    /**
+     * Id to get business from aPI
+     */
+    businessId: 41,
     /**
      * Components types before business reviews
      * Array of type components, the parent props will pass to these components

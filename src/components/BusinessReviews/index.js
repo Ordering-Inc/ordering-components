@@ -4,46 +4,77 @@ import PropTypes from 'prop-types'
 export const BusinessReviews = (props) => {
   const {
     ordering,
+    businessId,
     reviews,
     UIComponent
   } = props
 
   /**
-   * BusinessRevies, this must be contain a reviews array to send UIComponent
+   * businessReviewsList, this must be contain a reviews, loading and error to send UIComponent
    */
-  const [businessReviews, setBusinessReviews] = useState(reviews)
+  const [businessReviewsList, setBusinessReviewsList] = useState({ reviews: [], loading: true, error: null })
 
   /**
    * ReviewsList, this must be contain an original array of business reviews
    */
-  const [reviewsList, setReviewsList] = useState([])
+  const [reviewsList, setReviewsList] = useState(reviews)
 
   /**
    * Method to change filter value for business reviews
    * @param {Number} val
    */
   const onChangeOption = (val = null) => {
-    const reviewsFiltered = val
+    const reviews = val
       ? reviewsList.filter(review => review.total >= val && review.total < val + 1)
       : reviewsList
-    setBusinessReviews(reviewsFiltered)
+    setBusinessReviewsList({
+      ...businessReviewsList,
+      loading: false,
+      reviews
+    })
   }
 
   /**
    * Method to get business from SDK
    */
   const getBusiness = async () => {
-    const { response } = await ordering.businesses().select(['reviews']).parameters({ location: '40.7539143,-73.9810162', type: 1 }).get()
-    const list = response.data?.result[0]?.reviews?.reviews
-    reviews.sort((a, b) => {
-      return new Date(b.created_at) - new Date(a.created_at)
-    })
-    setReviewsList(list)
-    setBusinessReviews(list)
+    try {
+      const { content: { result } } = await ordering
+        .businesses(businessId)
+        .select(['reviews'])
+        .get()
+
+      const list = result?.reviews?.reviews
+      list.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at)
+      })
+      setReviewsList(list)
+      setBusinessReviewsList({
+        ...businessReviewsList,
+        loading: false,
+        reviews: list
+      })
+    } catch (error) {
+      setBusinessReviewsList({
+        ...businessReviewsList,
+        loading: false,
+        error
+      })
+    }
   }
 
   useEffect(() => {
-    if (!reviews.length) {
+    if (reviews) {
+      reviews.length &&
+      reviews.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at)
+      })
+      setBusinessReviewsList({
+        ...businessReviewsList,
+        loading: false,
+        reviews
+      })
+    } else {
       getBusiness()
     }
   }, [])
@@ -53,7 +84,7 @@ export const BusinessReviews = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          reviews={businessReviews}
+          reviewsList={businessReviewsList}
           handleClickOption={onChangeOption}
         />
       )}
@@ -75,6 +106,10 @@ BusinessReviews.propTypes = {
    * Reviews, this array must be containt all info about business reviews
    */
   reviews: PropTypes.arrayOf(PropTypes.object),
+  /**
+   * Id to get business from aPI
+   */
+  businessId: PropTypes.number,
   /**
    * Components types before business reviews
    * Array of type components, the parent props will pass to these components
