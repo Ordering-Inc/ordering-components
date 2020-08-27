@@ -30,7 +30,7 @@ export const LanguageSelectorExample = ({ ordering }) => {
     /**
      * handlerCustomChangeLanguage, handler change behavior
      */
-    handlerCustomChangeLanguage: (e) => { console.log(e) },
+    handlerCustomChangeLanguage: null,
     /**
      * Components types before language selector
      * Array of type components, the parent props will pass to these components
