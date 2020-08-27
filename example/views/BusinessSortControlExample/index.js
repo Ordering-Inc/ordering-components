@@ -30,6 +30,10 @@ export const BusinessSortControlExample = ({ ordering }) => {
      */
     orderType: order.type || 1,
     /**
+     * onChangeSortOption, get value from UI
+     */
+    onChangeSortOption: (e) => { console.log(e) },
+    /**
      * Components types before business sort control
      * Array of type components, the parent props will pass to these components
      */

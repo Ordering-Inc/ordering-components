@@ -6,6 +6,7 @@ export const BusinessSortControl = (props) => {
     orderType,
     sortOptions,
     defaultSortOption,
+    onChangeSortOption,
     UIComponent
   } = props
 
@@ -23,6 +24,9 @@ export const BusinessSortControl = (props) => {
    */
   const handleChangeSortOption = (val) => {
     setTypeSelected(val)
+    if (onChangeSortOption) {
+      onChangeSortOption(val)
+    }
   }
 
   useEffect(() => {
@@ -66,7 +70,11 @@ BusinessSortControl.propTypes = {
   /**
    * Property to switch delivery or pickup time on sort options select
    */
-  orderType: PropTypes.string,
+  orderType: PropTypes.number,
+  /**
+   * onChangeSortOption, get value from UI
+   */
+  onChangeSortOption: PropTypes.func,
   /**
    * Components types before business sort control
    * Array of type components, the parent props will pass to these components
