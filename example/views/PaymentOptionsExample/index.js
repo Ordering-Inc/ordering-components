@@ -30,7 +30,7 @@ export const PaymentOptionsExample = ({ ordering }) => {
     /**
      * Get option selected
      */
-    onChangePayment: (e) => { console.log(e) },
+    onChangePayment: (e) => { console.log('onChangePayment', e) },
     /**
      * Components types before Payment options
      * Array of type components, the parent props will pass to these components
