@@ -5,23 +5,11 @@ import { useOrder } from '../../../src/contexts/OrderContext'
 export const BusinessControllerUI = (props) => {
   const [{ order }] = useOrder()
   const {
-    isBusinessFeatured,
     isBusinessClose,
-    offerToShow,
+    getBusinessOffer,
     business,
-    id,
-    header,
-    logo,
-    name,
-    timetoOpen,
-    timeToclose,
-    minimum,
-    deliveryPrice,
-    description,
-    distance,
-    deliveryTime,
-    pickupTime,
-    reviews,
+    formatDate,
+    formatNumber,
     handleClick,
     beforeComponents,
     afterComponents,
@@ -41,47 +29,47 @@ export const BusinessControllerUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      {id ? (
+      {business && business.id ? (
         <div style={{ border: '1px solid gray', width: '300px', padding: '10px 20px' }} className='single-business-card' onClick={() => handleClick(business)}>
           <br />
-          {isBusinessFeatured && (
+          {business.featured && (
             <span style={{ border: '1px solid green', width: '30px', background: 'green', color: 'white' }}>FEATURED</span>
           )}<br />
           {isBusinessClose && (
             <span style={{ border: '1px solid gray', width: '30px', background: 'gray' }}>CLOSE</span>
           )}<br />
-          {offerToShow && (
-            <span style={{ border: '1px solid gray', width: '30px', background: 'green' }}>{offerToShow}</span>
+          {getBusinessOffer(business.offers) && (
+            <span style={{ border: '1px solid gray', width: '30px', background: 'green', color: 'white' }}>{getBusinessOffer(business.offers)}</span>
           )}
           <br />
           <br />
           <img
-            src={header}
+            src={business.header}
             alt='logo'
             width='285'
             height='125'
           />
           <img
-            src={logo}
+            src={business.logo}
             alt='logo'
             width='70'
             height='70'
           />
-          <h1>{name}</h1>
-          <p>{timetoOpen} - {timeToclose}</p>
-          <p>Minimun order: ${minimum}.00</p>
-          <p>Delivery Fee: ${deliveryPrice}.00</p>
-          <p>Description: {description}</p>
-          <p>Distance: {distance} KM</p>
+          <h1>{business.name}</h1>
+          <p>{formatDate(business?.today?.lapses[0]?.open)} - {formatDate(business?.today?.lapses[0]?.close)}</p>
+          <p>Minimun order: ${business.minimum}.00</p>
+          <p>Delivery Fee: ${business.deliveryPrice}.00</p>
+          <p>Description: {business.description}</p>
+          <p>Distance: {formatNumber(business.distance) || 0} KM</p>
           {order.type === 1 ? (
-            <p>Delivery time: {deliveryTime}</p>
+            <p>Delivery time: {business.delivery_time}</p>
           ) : (
-            <p>Pickup time: {pickupTime}</p>
+            <p>Pickup time: {business.pickup_time}</p>
           )}
-          {Array(parseInt(reviews)).fill(1).map((el, i) =>
+          {Array(parseInt(business.reviews?.total)).fill(1).map((el, i) =>
             <i key={i}>⭐</i>
           )}
-          &nbsp;{reviews} ratings
+          &nbsp;{business.reviews?.total} ratings
         </div>
       ) : (
         <div style={{ border: '1px solid gray', width: '300px', padding: '10px 20px' }} className='single-business-card'>

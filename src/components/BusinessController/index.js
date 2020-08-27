@@ -35,9 +35,10 @@ export const BusinessController = (props) => {
    * Method to return business offert to show
    * @param {object} offer
    */
-  const getBusinessOffert = (offer) => {
-    if (!offer) return null
-    return offer?.rate_type === 1 ? (offer?.rate * 10) / 100 : offer?.rate
+  const getBusinessOffer = (offers) => {
+    if (!offers || !offers.length) return null
+    const maxOffer = offers.reduce((acc, cur) => (acc.rate > cur.rate) ? acc : cur)
+    return maxOffer?.rate_type === 1 ? `${maxOffer?.rate}%` : `$ ${maxOffer?.rate?.toFixed(2)}`
   }
   /**
    * Method to format date
@@ -96,22 +97,10 @@ export const BusinessController = (props) => {
         <UIComponent
           {...props}
           isBusinessClose={isBusinessClose}
-          isBusinessFeatured={businessObject?.featured}
-          offerToShow={getBusinessOffert(businessObject?.offers[0])}
           business={businessObject}
-          id={businessObject?.id}
-          logo={businessObject?.logo}
-          header={businessObject?.header}
-          name={businessObject?.name}
-          timetoOpen={formatDate(businessObject?.today?.lapses[0]?.open) || '-'}
-          timeToclose={formatDate(businessObject?.today?.lapses[0]?.close) || '-'}
-          minimum={businessObject?.minimum}
-          deliveryPrice={businessObject?.delivery_price}
-          description={businessObject?.description || '-'}
-          distance={formatNumber(businessObject?.distance) || 0}
-          deliveryTime={businessObject?.delivery_time}
-          pickupTime={businessObject?.pickup_time}
-          reviews={businessObject?.reviews?.total}
+          formatDate={formatDate}
+          formatNumber={formatNumber}
+          getBusinessOffer={getBusinessOffer}
           handleClick={handleCustomClick || onBusinessClick}
         />
       )}
