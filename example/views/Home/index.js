@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom'
 export const Home = () => {
   return (
     <>
-      <h1>
-        Examples
-      </h1>
+      <h1>Examples</h1>
       <ul>
         <li>
           <Link to='/'>Home</Link>
@@ -52,6 +50,9 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/product_option_example'>Product option example</Link>
+        </li>
+        <li>
+          <Link to='/businesses_list'>Businesses List</Link>
         </li>
       </ul>
     </>

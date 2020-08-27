@@ -1,5 +1,5 @@
 import React from 'react'
 
-export const TestComponent = () => {
-  return <p>Test component Before/After</p>
+export const TestComponent = (props) => {
+  return <p>Test component Before/After {console.log(props)}</p>
 }

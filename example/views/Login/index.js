@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { LoginFormUI } from '../../components/LoginFormUI'
 import { LoginForm } from '../../../src/components/LoginForm'
 import { TestComponent } from '../../components/TestComponent'
-
 export const Login = ({ ordering }) => {
   const props = {
     /**
@@ -20,7 +19,7 @@ export const Login = ({ ordering }) => {
      * Function to change default login behavior
      * Uncomment to test
      */
-    // handleButtonLoginClick: () => console.log('Your own login workflow')),
+    handleButtonLoginClick: () => console.log('Your own login workflow'),
     /**
      * Function to get login success event
      * @param {Object} user User with session data
