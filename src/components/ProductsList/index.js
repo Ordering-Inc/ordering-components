@@ -11,7 +11,7 @@ export const ProductsList = (props) => {
 
   useEffect(() => {
     setCategoriesFiltered(
-      categories.filter(category => !category.id)
+      categories.filter(category => category.id)
     )
   }, [])
 
