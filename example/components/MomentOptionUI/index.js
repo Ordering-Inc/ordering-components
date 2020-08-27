@@ -45,8 +45,11 @@ export const MomentOptionUI = (props) => {
       )}
 
       <h4>Desired Delivery Time</h4>
+      {isAsap && (
+        <span>✅ ASAP</span>
+      )}&nbsp;
       <button onClick={() => handleCustomChangeDate({ type: 'asap' })}>
-        As soon as possible
+        {isAsap ? 'Select a range' : 'As soon as possible'}
       </button><br /><br />
 
       <span>Current Date: {currentDate}</span>

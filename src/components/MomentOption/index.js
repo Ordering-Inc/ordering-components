@@ -26,7 +26,7 @@ export const MomentOption = (props) => {
   const [scheduleSelected, setScheduleSelected] = useState(moment(validDate(currentDate)).format('YYYY-MM-DD HH:mm'))
 
   /**
-   * 
+   * Flag to know if user select asap time
    */
   const [isAsap, setIsAsap] = useState(null)
 
@@ -57,7 +57,8 @@ export const MomentOption = (props) => {
       return
     }
     if (type === 'asap') {
-      setIsAsap(true)
+      const val = isAsap ? null : true
+      setIsAsap(val)
     }
     const currDate = moment(validDate(scheduleSelected)).format('YYYY-MM-DD')
     if (date) {
@@ -72,7 +73,9 @@ export const MomentOption = (props) => {
       : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD HH:mm')
     setScheduleSelected(moment(dateToSend, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm'))
     if (time || type === 'asap') {
-      onChangeMoment(moment(dateToSend).toDate())
+      if (!isAsap) {
+        onChangeMoment(moment(dateToSend).toDate())
+      }
     }
   }
 
@@ -182,6 +185,9 @@ MomentOption.propTypes = {
    * currentDate, this must be contains a custom date selected
    */
   currentDate: PropTypes.instanceOf(Date),
+  /**
+   * Method to return moment selection
+   */
   onChangeMoment: PropTypes.func,
   /**
    * Components types before [PUT HERE COMPONENT NAME]
