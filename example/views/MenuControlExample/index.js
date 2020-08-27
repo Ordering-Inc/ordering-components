@@ -18,7 +18,14 @@ export const MenuControlExample = ({ ordering }) => {
     /**
      * Business, this must be containt all business information
      */
-    business: {},
+    business: {
+      name: 'McBonals',
+      logo: 'https://res.cloudinary.com/ordering2/image/upload/v1562277711/bk6kvzrnfkvqgav9qi7j.png'
+    },
+    /**
+     * Handle schedule and menu selected by user
+     */
+    handleMenuInfo: (e) => { console.log(e) },
     /**
      * Components types before menu control
      * Array of type components, the parent props will pass to these components
@@ -41,20 +48,16 @@ export const MenuControlExample = ({ ordering }) => {
     afterElements: [<p key>Test Element After</p>]
   }
 
-  const [businessSelected, setBusinessSelected] = useState({})
+  const [menus, setMenus] = useState({})
 
   const getBusiness = async () => {
-    /**
-     * Check if this call is necessary
-     */
-    // const menus = await ordering.businesses(41).menus().get()
-    const { content: { result } } = await ordering.businesses(41).get()
-    setBusinessSelected(result)
+    const { content: { result } } = await ordering.businesses(41).menus().get()
+    setMenus(result)
   }
 
   useEffect(() => {
     getBusiness()
   }, [])
 
-  return <MenuControl {...props} business={businessSelected} />
+  return <MenuControl {...props} business={{ ...props.business, menus }} />
 }

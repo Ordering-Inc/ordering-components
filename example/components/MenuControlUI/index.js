@@ -12,7 +12,6 @@ export const MenuControlUI = (props) => {
     startDate,
     isDisabledDay,
     scheduleSelected,
-    // datesList,
     handleSchedule,
     handleDate,
     beforeComponents,
@@ -33,7 +32,7 @@ export const MenuControlUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      {Object.keys(business).length > 0 && (
+      {business && Object.keys(business).length > 0 && (
         <>
           <h1>Preorder</h1>
 
@@ -42,14 +41,19 @@ export const MenuControlUI = (props) => {
 
           <h3>1. Choose the menu you would like to see: </h3>
 
-          <div style={{ border: '1px solid black', padding: '10px', width: '480px' }}>
-            <p>Everyday Menu ✔️</p>
-            {business.schedule?.length > 0 && business.schedule.map((item, i) => (
-              <button key={i} disabled={!item.enabled} onClick={() => handleSchedule({ time: item.lapses[0], day: i })}>
-                {daysOfWeek[i]}
-              </button>
-            ))}
-          </div>
+          {business?.menus?.length > 0 && business?.menus?.map((menu, i) => (
+            <div
+              key={i}
+              style={{ border: '1px solid black', padding: '10px', width: '480px', marginBottom: '10px' }}
+            >
+              <p>{menu.name}</p>
+              {menu.schedule?.length > 0 && menu.schedule?.map((item, i) => (
+                <button key={i} disabled={!item.enabled} onClick={() => handleSchedule({ lapses: item.lapses[0], day: i, menu })}>
+                  {daysOfWeek[i]}
+                </button>
+              ))}
+            </div>
+          ))}
 
           <br />
           {scheduleSelected && (
@@ -61,8 +65,8 @@ export const MenuControlUI = (props) => {
                 showTimeSelect
                 filterDate={isDisabledDay}
                 timeIntervals={15}
-                minTime={setHours(setMinutes(new Date(), 0), scheduleSelected?.range?.open)}
-                maxTime={setHours(setMinutes(new Date(), 15), scheduleSelected?.range?.close)}
+                minTime={setHours(setMinutes(new Date(), scheduleSelected?.lapses?.open?.minute), scheduleSelected?.lapses?.open?.hour)}
+                maxTime={setHours(setMinutes(new Date(), scheduleSelected?.lapses?.close?.minute), scheduleSelected?.lapses?.close?.hour)}
                 timeFormat='HH:mm'
                 dateFormat='MMMM d, yyyy HH:mm'
                 placeholderText='Select a date'
@@ -70,6 +74,9 @@ export const MenuControlUI = (props) => {
               />
             </>
           )}
+          <br />
+          <br />
+          <button onClick={() => props.onSendMenuInfo()}>Go to Menu</button>
         </>
       )}
 

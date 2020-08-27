@@ -4,7 +4,6 @@ import moment from 'moment'
 
 export const MenuControl = (props) => {
   const {
-    business,
     UIComponent
   } = props
 
@@ -12,6 +11,12 @@ export const MenuControl = (props) => {
    * This must be contain business schedule selected
    */
   const [scheduleSelected, setScheduleSelected] = useState(null)
+
+  /**
+   * Menu selected by user
+   */
+
+  const [menuSelected, setMenuSelected] = useState(null)
 
   /**
    * This must be contain date selected (datepicker)
@@ -31,13 +36,13 @@ export const MenuControl = (props) => {
   /**
    * Have a list of business schedules disabled
    */
-  const disableDays = business?.schedule?.map((item, i) => !item.enabled && i) || []
+  const disableDays = menuSelected?.schedule?.map((item, i) => !item.enabled && i) || []
 
   /**
    * method used on datePicker component to disable days of week
    * @param {string} date
    */
-  const isDisabledday = date => {
+  const isDisabledDay = date => {
     const day = moment(date, 'YYYY-MM-DD').day()
     return disableDays.every(number => number !== day)
   }
@@ -52,18 +57,29 @@ export const MenuControl = (props) => {
   }
 
   /**
+   * Send to parent component Menu info and date selected
+   */
+  const handlerMenuInfo = () => {
+    const isValid = scheduleSelected?.menuId && dateSelected
+    if (isValid) {
+      props.handleMenuInfo({
+        menuId: scheduleSelected?.menuId,
+        date: dateSelected
+      })
+    }
+  }
+
+  /**
    * Method to format schedule selected by user
    * @param {object} param0
    */
-  const formatScheduleTime = ({ time, day }) => {
-    const checkTime = (val) => val < 10 ? `0${val}` : val
+  const formatScheduleTime = ({ lapses, day, menu }) => {
+    setMenuSelected(menu)
     return {
       minDate: moment().day(day).format('YYYY-MM-DD'),
       maxDate: moment().day(6).format('YYYY-MM-DD'),
-      range: {
-        open: `${checkTime(time?.open?.hour)}:${checkTime(time?.open?.minute)}`,
-        close: `${checkTime(time?.close?.hour)}:${checkTime(time?.close?.minute)}`
-      }
+      lapses,
+      menuId: menu.id
     }
   }
 
@@ -97,11 +113,12 @@ export const MenuControl = (props) => {
         <UIComponent
           {...props}
           startDate={startDate}
-          isDisabledDay={isDisabledday}
+          isDisabledDay={isDisabledDay}
           scheduleSelected={scheduleSelected}
-          // datesList={datesList}
-          handleSchedule={val => setScheduleSelected(formatScheduleTime(val))}
+          handleSchedule={(val) => setScheduleSelected(formatScheduleTime(val))}
           handleDate={onDateSelected}
+          onSendMenuInfo={handlerMenuInfo}
+          // datesList={datesList}
         />
       )}
     </>
@@ -122,6 +139,10 @@ MenuControl.propTypes = {
    * Business, this must be containt all business information
    */
   business: PropTypes.object,
+  /**
+   * Handle schedule and menu selected by user
+   */
+  handleMenuInfo: PropTypes.func,
   /**
    * Components types before menu control
    * Array of type components, the parent props will pass to these components
