@@ -20,6 +20,10 @@ export const MainSearchExample = ({ ordering }) => {
      */
     searchByAddress: true,
     /**
+     * Method to find business from API
+     */
+    handlerFindBusiness: (e) => { console.log(e) },
+    /**
      * Components types before main search
      * Array of type components, the parent props will pass to these components
      */

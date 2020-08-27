@@ -4,6 +4,8 @@ import { useOrder } from '../../../src/contexts/OrderContext'
 
 export const MainSearch = (props) => {
   const {
+    searchByAddress,
+    handlerFindBusiness,
     ordering,
     UIComponent
   } = props
@@ -40,7 +42,8 @@ export const MainSearch = (props) => {
     switch (name) {
       case 'country': {
         const country = allListValues?.countries.find(country => Number(country.id) === Number(value))
-        setAllListValues({ ...allListValues, cities: country?.cities })
+        const cities = country?.cities.filter(city => city.options.length)
+        setAllListValues({ ...allListValues, cities })
         setCountryValues({
           ...countryValues,
           cityId: null
@@ -73,13 +76,15 @@ export const MainSearch = (props) => {
     const isCityOption = allListValues.citiesOptions.length > 0 ? !!countryValues.dropdownOptionId : true
     const isValid = countryValues.cityId && isCityOption
     if (isValid) {
-      console.log('VALID', countryValues)
+      handlerFindBusiness(countryValues)
     }
     setCountryFormErrors(!isValid)
   }
 
   useEffect(() => {
-    getContries()
+    if (!searchByAddress) {
+      getContries()
+    }
   }, [])
 
   return (
@@ -112,6 +117,10 @@ MainSearch.propTypes = {
    * searchByAddress is used to validate if use address list and address form or dropdown options
    */
   searchByAddress: PropTypes.bool,
+  /**
+   * Method to find business from API
+   */
+  handlerFindBusiness: PropTypes.func,
   /**
    * Components types before main search
    * Array of type components, the parent props will pass to these components

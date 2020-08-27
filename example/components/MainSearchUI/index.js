@@ -117,8 +117,9 @@ export const MainSearchUI = (props) => {
           ))}
           {isFormErrors && <i style={{ color: '#c10000' }}>This fields are required</i>}
           <br />
-          <button onClick={() => handleFindBusiness()}>Save</button>
         </div>)}
+      <br />
+      <button onClick={() => handleFindBusiness()}>Save</button>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
