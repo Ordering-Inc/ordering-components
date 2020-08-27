@@ -19,6 +19,11 @@ export const LanguageSelector = (props) => {
    */
   const onChangeLanguage = (code) => {
     const language = languagesState.languages.find(language => language.code === code)
+    if (props.handlerCustomChangeLanguage) {
+      props.handlerCustomChangeLanguage(language)
+      return
+    }
+    props.onChangeLanguage(language)
     setLanguage(language)
   }
 
@@ -90,6 +95,14 @@ LanguageSelector.propTypes = {
    * languages, this array must be containt a list of available languages
    */
   languages: PropTypes.arrayOf(PropTypes.object),
+  /**
+   * Return language selected
+   */
+  onChangeLanguage: PropTypes.func,
+  /**
+   * handlerCustomChangeLanguage, handler change behavior
+   */
+  handlerCustomChangeLanguage: PropTypes.func,
   /**
    * Components types before language selector
    * Array of type components, the parent props will pass to these components
