@@ -18,11 +18,7 @@ export const PaymentOptionsExample = ({ ordering }) => {
     /**
      * Options, this must be containt an array of payment options
      */
-    options: ['cash', 'card on delivery', 'stripe', 'stripe direct', 'paypal express', 'stripe connect', 'stripe redirect'],
-    /**
-     * optionDefault, this must be containt one default payment option
-     */
-    optionDefault: 'stripe',
+    options: null,
     /**
      * businessId, this must be contains business id to fetch business from API
      */

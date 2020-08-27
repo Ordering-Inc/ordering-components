@@ -15,11 +15,10 @@ export const PaymentOptions = (props) => {
 
   const getOptions = async () => {
     try {
-      const { content: { result } } = await ordering.business(businessId).get()
-      // HERE filter business options
+      const { content: { result } } = await ordering.businesses(businessId).get()
       setOptionsList({
         loading: false,
-        options: result
+        options: result.paymethods
       })
     } catch (error) {
       setOptionsList({
@@ -72,11 +71,7 @@ PaymentOptions.propTypes = {
   /**
    * Options, this must be containt an array of payment options
    */
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  /**
-   * optionDefault, this must be containt one default payment option
-   */
-  optionDefault: PropTypes.string,
+  options: PropTypes.arrayOf(PropTypes.string),
   /**
    * businessId, this must be contains business id to fetch business from API
    */

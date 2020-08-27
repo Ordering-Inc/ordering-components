@@ -3,7 +3,6 @@ import React from 'react'
 export const PaymentOptionsUI = (props) => {
   const {
     optionsList,
-    optionSelected,
     handleChangeOption,
     beforeComponents,
     afterComponents,
@@ -29,13 +28,16 @@ export const PaymentOptionsUI = (props) => {
           <div onChange={(e) => handleChangeOption(e.target.value)}>
             {optionsList.options && optionsList.options.length > 0 ? (
               optionsList.options.map((option, i) => (
-                <div key={i} style={{ textTransform: 'capitalize' }}>
-                  <input
-                    type='radio'
-                    name='payment_option'
-                    value={option}
-                    defaultChecked={optionSelected === option}
-                  /> {option} <br />
+                <div key={i}>
+                  {option.paymethod.enabled && (
+                    <div key={i} style={{ textTransform: 'capitalize' }}>
+                      <input
+                        type='radio'
+                        name='payment_option'
+                        value={option.paymethod.id}
+                      /> {option.paymethod.name} <br />
+                    </div>
+                  )}
                 </div>
               ))
             ) : (
