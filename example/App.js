@@ -23,6 +23,7 @@ import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { MomentOptionExample } from './views/MomentOptionExample'
 import { DriverTipsExample } from './views/DriverTipsExample'
 
 export default function App ({ ordering }) {
@@ -82,6 +83,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/moment_option'>
+            <MomentOptionExample ordering={ordering} />
           </Route>
           <Route path='/driver_tips'>
             <DriverTipsExample ordering={ordering} />
