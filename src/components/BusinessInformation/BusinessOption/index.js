@@ -12,12 +12,26 @@ export const BusinessOption = (props) => {
     props.handleChangeOption(val)
   }
 
+  const formatUrlVideo = (url) => {
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/
+    const match = url.match(regExp)
+    const id = (match && match[7].length === 11) ? match[7] : false
+    return `https://www.youtube-nocookie.com/embed/${id}`
+  }
+
+  const openingTime = ({ open, close }) => {
+    const checkTime = (val) => val < 10 ? `0${val}` : val
+    return `${checkTime(open?.hour)}:${checkTime(open?.minute)} - ${checkTime(close?.hour)}:${checkTime(close?.minute)}`
+  }
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
           handleClickOption={handleClickOption}
+          formatUrlVideo={formatUrlVideo}
+          openingTime={openingTime}
         />
       )}
     </>

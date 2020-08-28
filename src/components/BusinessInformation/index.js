@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 export const BusinessInformation = (props) => {
   const {
+    googleMapsControls,
     business,
     optionToShow,
     UIComponent
@@ -24,8 +25,7 @@ export const BusinessInformation = (props) => {
       location: business?.location,
       address: business?.address,
       address_notes: business?.address_notes,
-      isZoomControl: true,
-      isStreetViewControl: true
+      googleMapsControls
     }
     setPhotos(photos)
     setVideos(videos)

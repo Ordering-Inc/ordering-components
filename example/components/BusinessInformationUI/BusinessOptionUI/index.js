@@ -10,22 +10,14 @@ export const BusinessOptionUI = (props) => {
     contentData,
     optionToShow,
     locationData,
+    formatUrlVideo,
+    openingTime,
     handleClickOption,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
-
-  const openingTime = ({ open, close }) => {
-    const checkTime = (val) => val < 10 ? `0${val}` : val
-    return `${checkTime(open?.hour)}:${checkTime(open?.minute)} - ${checkTime(close?.hour)}:${checkTime(close?.minute)}`
-  }
-
-  const formatUrlVideo = (ytUrl) => {
-    const id = ytUrl.split('/')[3]
-    return `https://www.youtube.com/embed/${id}`
-  }
 
   return (
     <>
@@ -52,7 +44,7 @@ export const BusinessOptionUI = (props) => {
                 <img src={item.file} alt={`photo-${i}`} width='191' height='128' />
               )}
               {label === 'Video Gallery' && (
-                <iframe src={formatUrlVideo(item.video)} width='444' height='150' />
+                <iframe src={formatUrlVideo(item.video)} width='560' height='315' frameBorder='0' allow='autoplay; encrypted-media' allowFullScreen />
               )}
             </div>
           ))}
@@ -63,10 +55,9 @@ export const BusinessOptionUI = (props) => {
           <span>{locationData.address}</span>
           <span>{locationData.address_notes}</span>
           <GoogleMapsMap
-            apiKey=''
+            apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
             location={locationData.location}
-            isZoomControl={locationData.isZoomControl}
-            isStreetViewControl={locationData.isStreetViewControl}
+            mapControls={locationData.googleMapsControls}
           />
         </>
       )}

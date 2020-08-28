@@ -20,6 +20,19 @@ export const BusinessInformationExample = ({ ordering }) => {
      */
     business: {},
     /**
+     * google maps controls [zoomControl, streetViewControl, fullscreenControl, mapTypeControl, mapTypeId, mapTypeControlOptions]
+     */
+    googleMapsControls: {
+      zoomControl: false,
+      streetViewControl: true,
+      fullscreenControl: false,
+      mapTypeId: 'satellite', // 'roadmap', 'satellite', 'hybrid', 'terrain'
+      mapTypeControl: true,
+      mapTypeControlOptions: {
+        mapTypeIds: ['roadmap', 'satellite']
+      }
+    },
+    /**
      * Components types before business information
      * Array of type components, the parent props will pass to these components
      */

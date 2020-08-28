@@ -6,8 +6,7 @@ export const GoogleMaps = (props) => {
   const {
     googleReady,
     location,
-    isZoomControl,
-    isStreetViewControl
+    mapControls
   } = props
 
   const divRef = useRef()
@@ -18,8 +17,16 @@ export const GoogleMaps = (props) => {
       const map = new window.google.maps.Map(divRef.current, {
         zoom: location.zoom,
         center: coordinates,
-        zoomControl: isZoomControl,
-        streetViewControl: isStreetViewControl
+        zoomControl: mapControls?.zoomControl,
+        streetViewControl: mapControls?.streetViewControl,
+        fullscreenControl: mapControls?.fullscreenControl,
+        mapTypeControl: mapControls?.mapTypeControl,
+        mapTypeId: mapControls?.mapTypeId,
+        mapTypeControlOptions: {
+          style: window.google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: window.google.maps.ControlPosition.TOP_LEFT,
+          ...mapControls?.mapTypeControlOptions
+        }
       })
       const marker = new window.google.maps.Marker({
         position: coordinates,
