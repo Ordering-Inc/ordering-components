@@ -26,6 +26,7 @@ import { ProductOptionExample } from './views/ProductOptionExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { PaymentOptionsExample } from './views/PaymentOptionsExample'
 import { DriverTipsExample } from './views/DriverTipsExample'
+import { CheckoutExample } from './views/CheckoutExample'
 
 export default function App ({ ordering }) {
   return (
@@ -93,6 +94,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/driver_tips'>
             <DriverTipsExample ordering={ordering} />
+          </Route>
+          <Route path='/checkout'>
+            <CheckoutExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
