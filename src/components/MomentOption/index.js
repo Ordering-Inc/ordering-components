@@ -80,7 +80,7 @@ export const MomentOption = (props) => {
       if (!isAsap) {
         const _moment = type === 'asap' ? null : moment(dateToSend).toDate()
         useOrderContext && changeMoment(_moment)
-        onChangeMoment(_moment)
+        onChangeMoment && onChangeMoment(_moment)
       }
     }
   }
