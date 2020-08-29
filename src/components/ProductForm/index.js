@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { randomString } from '../../utils'
-import { useOrder, ORDER_ACTIONS } from '../../contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 
 export const ProductForm = (props) => {
@@ -35,7 +35,7 @@ export const ProductForm = (props) => {
   /**
    * Order context manager
    */
-  const [{ order }, dispatchOrder] = useOrder()
+  const [orderState, { addProduct, updateProduct }] = useOrder()
 
   /**
    * Remove to balances in edit mode
@@ -43,14 +43,19 @@ export const ProductForm = (props) => {
   const removeToBalance = editMode ? props.productCart.quantity : 0
 
   /**
+   * Current cart
+   */
+  const cart = orderState.carts[`businessId:${props.businessId}`]
+
+  /**
    * Total product in cart
    */
-  const totalBalance = (order?.quantity || 0) - removeToBalance
+  const totalBalance = (cart?.quantity || 0) - removeToBalance
 
   /**
    * Total the current product in cart
    */
-  const productBalance = (order?.products?.reduce((sum, _product) => sum + (product && _product.id === product.id ? _product.quantity : 0), 0) || 0) - removeToBalance
+  const productBalance = (cart?.products?.reduce((sum, _product) => sum + (product && _product.id === product.id ? _product.quantity : 0), 0) || 0) - removeToBalance
 
   /**
    * Config context manager
@@ -106,8 +111,7 @@ export const ProductForm = (props) => {
       ingredients: props.productCart.ingredients || ingredients,
       options: props.productCart.options || {},
       comment: props.productCart.comment || null,
-      quantity: props.productCart.quantity || 1,
-      code: props.productCart.code || randomString(10)
+      quantity: props.productCart.quantity || 1
     }
     newProductCart.unitTotal = getUnitTotal(newProductCart)
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
@@ -275,15 +279,9 @@ export const ProductForm = (props) => {
     if (Object.keys(errors).length === 0) {
       if (useOrderContext) {
         if (!props.productCart.code) {
-          dispatchOrder({
-            type: ORDER_ACTIONS.ADD_PRODUCT,
-            product: productCart
-          })
+          addProduct(productCart)
         } else {
-          dispatchOrder({
-            type: ORDER_ACTIONS.UPDATE_PRODUCT,
-            product: productCart
-          })
+          updateProduct(productCart)
         }
       }
       onSave(productCart, !props.productCart.code)

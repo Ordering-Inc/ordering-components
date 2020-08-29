@@ -33,6 +33,9 @@ export const Home = () => {
           <Link to='/order_context'>Order context and order type control</Link>
         </li>
         <li>
+          <Link to='/order_context_advanced'>Order context advanced</Link>
+        </li>
+        <li>
           <Link to='/active_orders'>Active orders</Link>
         </li>
         <li>

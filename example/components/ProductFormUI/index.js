@@ -96,6 +96,10 @@ export const ProductFormUI = (props) => {
           )
         }))
       }
+      <div>
+        Special comment:<br />
+        <textarea rows={4} style={{ width: '100%' }} defaultValue={productCart.comment} />
+      </div>
       Total: {productCart.total}
       {
         productCart && (
