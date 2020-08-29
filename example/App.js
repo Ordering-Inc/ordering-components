@@ -22,8 +22,9 @@ import { PlacesExample } from './views/PlacesExample'
 import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
-import { ProductOptionExample } from './views/ProductOptionExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
+import { ProductOptionExample } from './views/ProductOptionExample'
+import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
 
@@ -88,11 +89,14 @@ export default function App ({ ordering }) {
           <Route path='/popup_example'>
             <PopupExample />
           </Route>
+          <Route path='/moment_option'>
+            <MomentOptionExample ordering={ordering} />
+          </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
           </Route>
-          <Route path='/moment_option'>
-            <MomentOptionExample ordering={ordering} />
+          <Route path='/search_options'>
+            <SearchOptionsExample ordering={ordering} />
           </Route>
           <Route path='/main_search'>
             <MainSearchExample ordering={ordering} />
