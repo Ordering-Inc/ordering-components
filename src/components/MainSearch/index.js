@@ -9,7 +9,7 @@ export const MainSearch = (props) => {
     ordering,
     UIComponent
   } = props
-  const [{ order }] = useOrder()
+  const [orderState] = useOrder()
 
   /**
    * Object to save all arrays to use
@@ -18,7 +18,7 @@ export const MainSearch = (props) => {
   /**
    * Object to save current values about country selection
    */
-  const [countryValues, setCountryValues] = useState({ cityId: null, dropdownOptionId: null, orderType: order.type })
+  const [countryValues, setCountryValues] = useState({ cityId: null, dropdownOptionId: null, orderType: orderState.options?.type || 1 })
   /**
    * Handle form error
    */
@@ -92,6 +92,7 @@ export const MainSearch = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orderState={orderState}
           allListValues={allListValues}
           currentValues={countryValues}
           isFormErrors={countryFormErrors}
