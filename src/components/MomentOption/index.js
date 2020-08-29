@@ -7,6 +7,7 @@ export const MomentOption = (props) => {
     minDate,
     maxDate,
     currentDate,
+    onChangeMoment,
     UIComponent
   } = props
 
@@ -23,6 +24,11 @@ export const MomentOption = (props) => {
    * This must be containt schedule selected by user
    */
   const [scheduleSelected, setScheduleSelected] = useState(moment(validDate(currentDate)).format('YYYY-MM-DD HH:mm'))
+
+  /**
+   * Flag to know if user select asap time
+   */
+  const [isAsap, setIsAsap] = useState(null)
 
   /**
    * Arrays for save hours and dates lists
@@ -50,6 +56,10 @@ export const MomentOption = (props) => {
     if ((date || time) && !(moment(date, 'YYYY-MM-DD').isValid() || moment(time, 'HH:mm').isValid())) {
       return
     }
+    if (type === 'asap') {
+      const val = isAsap ? null : true
+      setIsAsap(val)
+    }
     const currDate = moment(validDate(scheduleSelected)).format('YYYY-MM-DD')
     if (date) {
       const diff = moment.duration(moment(date).diff(moment().startOf('day'))).asDays()
@@ -62,6 +72,11 @@ export const MomentOption = (props) => {
       ? moment().format('YYYY-MM-DD HH:mm')
       : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD HH:mm')
     setScheduleSelected(moment(dateToSend, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm'))
+    if (time || type === 'asap') {
+      if (!isAsap) {
+        onChangeMoment(moment(dateToSend).toDate())
+      }
+    }
   }
 
   /**
@@ -135,6 +150,7 @@ export const MomentOption = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          isAsap={isAsap}
           minDate={validDate(minDate)}
           maxDate={validDate(maxDate)}
           currentDate={scheduleSelected}
@@ -169,6 +185,10 @@ MomentOption.propTypes = {
    * currentDate, this must be contains a custom date selected
    */
   currentDate: PropTypes.instanceOf(Date),
+  /**
+   * Method to return moment selection
+   */
+  onChangeMoment: PropTypes.func,
   /**
    * Components types before [PUT HERE COMPONENT NAME]
    * Array of type components, the parent props will pass to these components
