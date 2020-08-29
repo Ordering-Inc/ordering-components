@@ -15,7 +15,8 @@ import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 import { ProductList } from './views/ProductList'
 import { OrderContectExample } from './views/OrderContectExample'
-import { ProductImagesExample } from './views/ProductImagesExample'
+import { BusinessSortControlExample } from './views/BusinessSortControlExample'
+// import { ProductImagesExample } from './views/ProductImagesExample'
 import { BusinessTypeFilterExample } from './views/BusinessTypeFilterExample'
 import { PlacesExample } from './views/PlacesExample'
 import { ConfigsExample } from './components/ConfigsExample'
@@ -23,6 +24,8 @@ import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
+import { MainSearchExample } from './views/MainSearchExample'
+import { OrderContextExample } from './views/OrderContextExample'
 
 export default function App ({ ordering }) {
   return (
@@ -58,9 +61,18 @@ export default function App ({ ordering }) {
           <Route path='/order_context'>
             <OrderContectExample ordering={ordering} />
           </Route>
+          <Route path='/sort_options'>
+            <BusinessSortControlExample ordering={ordering} />
+            </Route>
           <Route path='/product_images'>
             <ProductImagesExample ordering={ordering} />
           </Route>
+          <Route path='/order_context_advanced'>
+            <OrderContextExample ordering={ordering} />
+          </Route>
+          {/* <Route path='/product_images'>
+            <ProductImagesExample ordering={ordering} />
+          </Route> */}
           <Route path='/business_type_filter'>
             <BusinessTypeFilterExample ordering={ordering} />
           </Route>
@@ -81,6 +93,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/moment_option'>
             <MomentOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/main_search'>
+            <MainSearchExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
