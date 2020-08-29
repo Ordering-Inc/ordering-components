@@ -24,6 +24,7 @@ import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
 import { UserDetailsExample } from './views/UserDetailsExample'
+import { AddressDetailsExample } from './views/AddressDetailsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { PaymentOptionsExample } from './views/PaymentOptionsExample'
 import { DriverTipsExample } from './views/DriverTipsExample'
@@ -89,6 +90,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/user_details'>
             <UserDetailsExample ordering={ordering} />
+          </Route>
+          <Route path='/address_details'>
+            <AddressDetailsExample ordering={ordering} />
           </Route>
           <Route path='/moment_option'>
             <MomentOptionExample ordering={ordering} />
