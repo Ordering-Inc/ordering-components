@@ -6,7 +6,7 @@ import { CartUI } from '../../components/CartUI'
 import { Cart } from '../../../src/components/Cart'
 
 export const OrderContextExample = ({ ordering }) => {
-  const [orderState, { changeAddress, changeType, changeMoment, addProduct, removeProduct, updateProduct, applyCoupon }] = useOrder()
+  const [, { applyCoupon }] = useOrder()
   const [productCart, setProductCart] = useState({})
   const [product, setProduct] = useState()
 
@@ -18,35 +18,6 @@ export const OrderContextExample = ({ ordering }) => {
   useEffect(() => {
     loadProductWithOptions()
   }, [])
-
-  const hanldeChangeAddress = (addressId) => {
-    changeAddress(addressId)
-  }
-
-  const hanldeChangeType = (type) => {
-    changeType(type)
-  }
-
-  const handleAddProduct = (product) => {
-    addProduct(product)
-  }
-
-  const handleRemoveProduct = (product) => {
-    removeProduct(product)
-  }
-
-  const handleUpdateProduct = (product) => {
-    product.quantity += 1
-    updateProduct(product)
-  }
-
-  const handleChangeMoment = () => {
-    changeMoment(new Date(2020, 7, 28, 20, 10, 0))
-  }
-
-  const handleASAP = () => {
-    changeMoment(null)
-  }
 
   const handleAddCoupon = () => {
     applyCoupon({

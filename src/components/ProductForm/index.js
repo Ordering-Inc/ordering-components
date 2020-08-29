@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { randomString } from '../../utils'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 
