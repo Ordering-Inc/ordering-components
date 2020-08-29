@@ -14,7 +14,7 @@ export const MomentOptionUI = (props) => {
   } = props
 
   return (
-    <>
+    <div className='moment-section'>
       {beforeElements.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
@@ -63,6 +63,6 @@ export const MomentOptionUI = (props) => {
           {AfterElement}
         </React.Fragment>
       ))}
-    </>
+    </div>
   )
 }
