@@ -45,6 +45,9 @@ export const Home = () => {
           <Link to='/product_list'>Product list</Link>
         </li>
         <li>
+          <Link to='/sort_options'>Business sort options</Link>
+        </li>
+        <li>
           <Link to='/product_images'>Product images</Link>
         </li>
         <li>
@@ -61,6 +64,9 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/product_option_example'>Product option example</Link>
+        </li>
+        <li>
+          <Link to='/main_search'>Main Search</Link>
         </li>
       </ul>
     </>
