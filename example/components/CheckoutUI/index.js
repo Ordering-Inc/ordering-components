@@ -3,6 +3,9 @@ import React from 'react'
 import { UserDetails } from '../../../src/components/UserDetails'
 import { UserDetailsUI } from '../UserDetailsUI'
 
+import { AddressDetails } from '../../../src/components/AddressDetails'
+import { AddressDetailsUI } from '../AddressDetailsUI'
+
 import { MomentOption } from '../../../src/components/MomentOption'
 import { MomentOptionUI } from '../MomentOptionUI'
 
@@ -38,11 +41,18 @@ export const CheckoutUI = (props) => {
         ordering={ordering}
         UIComponent={UserDetailsUI}
         businessId={41}
-        userId={1}
         useValidationFields
         useDefualtSessionManager
         useSessionUser
         handlerCouponValue={handlerValues}
+      />
+      <hr />
+
+      <AddressDetails
+        ordering={ordering}
+        UIComponent={AddressDetailsUI}
+        businessId={41}
+        apiKey=''
       />
       <hr />
 
