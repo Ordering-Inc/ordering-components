@@ -26,7 +26,7 @@ export const AddressDetailsExample = ({ ordering }) => {
     /**
      * apiKey, google maps api key
      */
-    apiKey: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk',
+    apiKey: '',
     /**
      * Components types before address details
      * Array of type components, the parent props will pass to these components
