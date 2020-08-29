@@ -1,13 +1,16 @@
 import React from 'react'
 
-import { DriverTips } from '../../../src/components/DriverTips'
-import { DriverTipsUI } from '../DriverTipsUI'
+import { UserDetails } from '../../../src/components/UserDetails'
+import { UserDetailsUI } from '../UserDetailsUI'
+
+import { MomentOption } from '../../../src/components/MomentOption'
+import { MomentOptionUI } from '../MomentOptionUI'
 
 import { PaymentOptions } from '../../../src/components/PaymentOptions'
 import { PaymentOptionsUI } from '../PaymentOptionsUI'
 
-import { MomentOption } from '../../../src/components/MomentOption'
-import { MomentOptionUI } from '../MomentOptionUI'
+import { DriverTips } from '../../../src/components/DriverTips'
+import { DriverTipsUI } from '../DriverTipsUI'
 
 export const CheckoutUI = (props) => {
   const {
@@ -30,6 +33,18 @@ export const CheckoutUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
+
+      <UserDetails
+        ordering={ordering}
+        UIComponent={UserDetailsUI}
+        businessId={41}
+        userId={1}
+        useValidationFields
+        useDefualtSessionManager
+        useSessionUser
+        handlerCouponValue={handlerValues}
+      />
+      <hr />
 
       <MomentOption
         ordering={ordering}
