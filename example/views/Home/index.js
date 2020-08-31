@@ -29,8 +29,11 @@ export const Home = () => {
         <li>
           <Link to='/profile'>User profile</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to='/order_context'>Order context and order type control</Link>
+        </li> */}
+        <li>
+          <Link to='/order_context_advanced'>Order context advanced</Link>
         </li>
         <li>
           <Link to='/active_orders'>Active orders</Link>
@@ -40,6 +43,9 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/product_list'>Product list</Link>
+        </li>
+        <li>
+          <Link to='/language_selector'>Language selector</Link>
         </li>
         <li>
           <Link to='/sort_options'>Business sort options</Link>
@@ -60,10 +66,25 @@ export const Home = () => {
           <Link to='/popup_example'>Popups example</Link>
         </li>
         <li>
+          <Link to='/moment_option'>Moment option</Link>
+        </li>
+        <li>
           <Link to='/product_option_example'>Product option example</Link>
         </li>
         <li>
           <Link to='/user_details'>User details</Link>
+        </li>
+        <li>
+          <Link to='/address_details'>Address details</Link>
+        </li>
+        <li>
+          <Link to='/driver_tips'>Driver tips</Link>
+        </li>
+        <li>
+          <Link to='/search_options'>Search options</Link>
+        </li>
+        <li>
+          <Link to='/main_search'>Main Search</Link>
         </li>
       </ul>
     </>
