@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import Modal from 'react-modal'
+import { Popup } from '../../../src/components/Popup'
+import { ModalUI } from '../ModalUI'
 
 export const BusinessBasicInformationUI = (props) => {
   const {
@@ -25,10 +26,6 @@ export const BusinessBasicInformationUI = (props) => {
     setIsOpen(true)
   }
 
-  const afterOpenModal = () => {
-    console.log('some action')
-  }
-
   const closeModal = () => {
     setIsOpen(false)
   }
@@ -46,8 +43,20 @@ export const BusinessBasicInformationUI = (props) => {
       )}
       <div className='bus-basic'>
         <div className='header'>
-          <img src={business.header} alt='header' width='500' height='200' /><br />
-          <img src={business.logo} alt='logo' width='62' height='62' />
+          {
+            business.header && (
+              <>
+                <img src={business.header} alt='header' width='500' height='200' /><br />
+              </>
+            )
+          }
+          {
+            business.logo && (
+              <>
+                <img src={business.logo} alt='logo' width='62' height='62' />
+              </>
+            )
+          }
         </div>
         <div className='information-block'>
           <h1>{business.name}</h1>
@@ -59,13 +68,14 @@ export const BusinessBasicInformationUI = (props) => {
         </div>
       </div>
 
-      <Modal
+      <Popup
         className='modal-info'
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
+        UIComponent={ModalUI}
+        open={modalIsOpen}
+        onAccept={() => closeModal()}
+        onClose={() => closeModal()}
         style={customStyles}
-        contentLabel='Example Modal'
+        title='Example Modal'
       >
         <button onClick={closeModal}>close</button>
         <div>
@@ -81,7 +91,7 @@ export const BusinessBasicInformationUI = (props) => {
           <p>Delivery Time: {business.delivery_time}</p>
           <p>Pickup Time: {business.pickup_time}</p>
         </div>
-      </Modal>
+      </Popup>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

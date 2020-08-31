@@ -13,15 +13,13 @@ import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
-import { ProductDetail } from './views/ProductDetail';
+import { ProductDetail } from './views/ProductDetail'
 import { ProductList } from './views/ProductList(NOT)'
-import { OrderContectExample } from './views/OrderContectExample'
 import { BusinessesListExample } from './views/BusinessesListExample'
 import { BusinessBasicInformationExample } from './views/BusinessBasicInformationExample'
 import { LanguageSelectorExample } from './views/LanguageSelectorExample'
-// import { OrderContectExample } from './views/OrderContectExample'
 import { BusinessSortControlExample } from './views/BusinessSortControlExample'
-// import { ProductImagesExample } from './views/ProductImagesExample'
+import { ProductImagesExample } from './views/ProductImagesExample'
 import { BusinessTypeFilterExample } from './views/BusinessTypeFilterExample'
 import { PlacesExample } from './views/PlacesExample'
 import { ConfigsExample } from './components/ConfigsExample'
@@ -38,8 +36,6 @@ import { BusinessProductsCategoriesExample } from './views/BusinessProductsCateg
 import { ProductsListExample } from './views/ProductsListExample'
 import { ProductsListingExample } from './views/ProductsListingExample'
 import { PaymentOptionsExample } from './views/PaymentOptionsExample'
-import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
-import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
 import { BusinessFeaturedProductsExample } from './views/BusinessFeaturedProductsExample'
 import { BusinessControllerExample } from './views/BusinessControllerExample'
 import { BusinessInformationExample } from './views/BusinessInformationExample'
@@ -84,18 +80,15 @@ export default function App ({ ordering }) {
           <Route path='/product_list'>
             <ProductList ordering={ordering} />
           </Route>
-          {/* <Route path='/order_context'>
-            <OrderContectExample ordering={ordering} />
-          </Route> */}
           <Route path='/language_selector'>
             <LanguageSelectorExample ordering={ordering} />
           </Route>
           <Route path='/sort_options'>
             <BusinessSortControlExample ordering={ordering} />
           </Route>
-          {/* <Route path='/product_images'>
+          <Route path='/product_images'>
             <ProductImagesExample ordering={ordering} />
-          </Route> */}
+          </Route>
           <Route path='/order_context_advanced'>
             <OrderContextExample ordering={ordering} />
           </Route>

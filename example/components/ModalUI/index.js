@@ -1,10 +1,9 @@
 import React from 'react'
 import './style.css'
 
-export const AlertUI = (props) => {
+export const ModalUI = (props) => {
   const {
     title,
-    content,
     onAccept,
     onCancel,
     onClose,
@@ -15,18 +14,6 @@ export const AlertUI = (props) => {
     <div className='popup-dialog'>
       {
         title && <h2>{title}</h2>
-      }
-      {
-        content && typeof content === 'string' && content
-      }
-      {
-        content && typeof content === 'object' && Array.isArray(content) && content
-      }
-      {
-        content && React.isValidElement(content) && content
-      }
-      {
-        content && typeof content === 'function' && String(content).includes('createElement') && <props.content />
       }
       {children}
       {

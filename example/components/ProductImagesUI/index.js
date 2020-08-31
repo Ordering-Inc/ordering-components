@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import Modal from 'react-modal'
+import { Popup } from '../../../src/components/Popup'
+import { ModalUI } from '../ModalUI'
 
 export const ProductImagesUI = (props) => {
   const {
@@ -28,10 +29,6 @@ export const ProductImagesUI = (props) => {
     setImageToOpen(img)
   }
 
-  const afterOpenModal = () => {
-    console.log('some action')
-  }
-
   const closeModal = () => {
     setIsOpen(false)
     setImageToOpen(null)
@@ -50,25 +47,26 @@ export const ProductImagesUI = (props) => {
       )}
 
       <div id='product-image'>
-        <img class='img-hero' src={hero} alt='hero' height='110' width='110' onClick={() => openModal(hero)} />&nbsp;
+        <img className='img-hero' src={hero} alt='hero' height='110' width='110' onClick={() => openModal(hero)} />&nbsp;
         {gallery.length && gallery.map((photo, i) => (
-          <img class='img' key={i} src={photo} alt={`photo-${i}`} height='110' width='110' onClick={() => openModal(photo)} />
+          <img className='img' key={i} src={photo} alt={`photo-${i}`} height='110' width='110' onClick={() => openModal(photo)} />
         ))}
       </div>
 
-      <Modal
+      <Popup
         className='modal-info'
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
         style={customStyles}
-        contentLabel='Product image'
+        UIComponent={ModalUI}
+        open={modalIsOpen}
+        onAccept={() => closeModal()}
+        onClose={() => closeModal()}
+        title='Product image'
       >
         <button onClick={closeModal}>x</button>
         <div className='image-modal' style={{ display: 'flex', justifyContent: 'center' }}>
           <img src={imageToOpen} alt='img' height='510' width='510' />
         </div>
-      </Modal>
+      </Popup>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
