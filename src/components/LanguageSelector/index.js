@@ -13,6 +13,7 @@ export const LanguageSelector = (props) => {
 
   const [languagesState, setLanguageState] = useState({ loading: true, languages })
   const [languageState, , setLanguage] = useLanguage()
+  const [languageSelected, setLanguageSelected] = useState(null)
 
   /**
    * This method is used for change the current language
@@ -21,12 +22,16 @@ export const LanguageSelector = (props) => {
     const language = languagesState.languages.find(language => language.code === code)
     if (props.handlerCustomChangeLanguage) {
       props.handlerCustomChangeLanguage(language)
+      setLanguageSelected(language)
       return
     }
     props.onChangeLanguage(language)
     setLanguage(language)
   }
 
+  /**
+   * this method is used for load languages from API
+   */
   const loadLanguages = async () => {
     try {
       setLanguageState({ ...languagesState, loading: true })
@@ -60,15 +65,24 @@ export const LanguageSelector = (props) => {
     if (currentLanguage) {
       const language = languages.find(language => language.code === currentLanguage)
       setLanguage(language)
+      setLanguageSelected(language)
+    } else if (!languageState?.language?.code || !languageSelected?.code) {
+      const language = languageState?.language?.code
+        ? languageState?.language
+        : languagesState?.languages?.find(language => language.default)
+      if (language) {
+        setLanguage(language)
+        setLanguageSelected(language)
+      }
     }
-  }, [languages])
+  }, [languages, languagesState])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          currentLanguage={languageState?.language?.code}
+          currentLanguage={props.handlerCustomChangeLanguage ? languageSelected?.code : languageState?.language?.code}
           languages={languagesState}
           handleChangeLanguage={onChangeLanguage}
         />
