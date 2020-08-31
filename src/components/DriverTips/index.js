@@ -1,0 +1,92 @@
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { useOrder } from '../../../src/contexts/OrderContext'
+
+export const DriverTips = (props) => {
+  const {
+    UIComponent
+  } = props
+  const [{ order }] = useOrder()
+
+  /**
+   * Save percentage selected by user
+   */
+  const [optionSelected, setOptionSelected] = useState(0)
+  /**
+   * Amount of driver tip, calculate with order.total and optionSelected
+   */
+  const [driverTipAmount, setDriverTipAmount] = useState(0)
+
+  /**
+   * handler when user change driver tip option
+   * @param {number} val
+   */
+  const handlerChangeOption = (val) => {
+    props.handlerChangeDriverOption(val)
+    setOptionSelected(val)
+  }
+
+  useEffect(() => {
+    setDriverTipAmount(`$ ${((order.total * optionSelected) / 100).toFixed(2)}`)
+  }, [optionSelected])
+
+  return (
+    <>
+      {UIComponent && (
+        <UIComponent
+          {...props}
+          driverTipAmount={driverTipAmount}
+          optionSelected={optionSelected}
+          handlerChangeOption={handlerChangeOption}
+        />
+      )}
+    </>
+  )
+}
+
+DriverTips.propTypes = {
+  /**
+   * Instace of Ordering Class
+   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
+   */
+  ordering: PropTypes.object,
+  /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: PropTypes.elementType,
+  /**
+   * driver tips options
+   */
+  driverTipsOptions: PropTypes.arrayOf(PropTypes.number),
+  /**
+   * method to get option selected
+   */
+  handlerChangeDriverOption: PropTypes.func,
+  /**
+   * Components types before driver tips
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
+  /**
+   * Components types after driver tips
+   * Array of type components, the parent props will pass to these components
+   */
+  afterComponents: PropTypes.arrayOf(PropTypes.elementType),
+  /**
+   * Elements before driver tips
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  beforeElements: PropTypes.arrayOf(PropTypes.element),
+  /**
+   * Elements after driver tips
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  afterElements: PropTypes.arrayOf(PropTypes.element)
+}
+
+DriverTips.defaultProps = {
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
+}
