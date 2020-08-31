@@ -289,11 +289,9 @@ export const OrderProvider = ({ ordering, children, ConfirmComponent }) => {
   const validateCart = async (changes) => {
     try {
       dispatcher({ type: ORDER_ACTIONS.LOADING, loading: true })
-      const response = await ordering.businesses.validateCart(data.order.business.id || 41, {
-        query: {
-          type: changes.type || data.order.type,
-          products: data.order.products.map(product => product.id)
-        }
+      const response = await ordering.businesses(data.order.business.id || 41).validateCart({
+        type: changes.type || data.order.type,
+        products: data.order.products.map(product => product.id)
       })
       dispatcher({ type: ORDER_ACTIONS.LOADING, loading: false })
       if (!response.content.error) {

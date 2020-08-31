@@ -1,4 +1,8 @@
 import React from 'react'
+import { useOrder } from '../../../src/contexts/OrderContext'
+
+import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
+import { OrderTypeControlUI } from '../OrderTypeControlUI'
 
 import { UserDetails } from '../../../src/components/UserDetails'
 import { UserDetailsUI } from '../UserDetailsUI'
@@ -25,6 +29,8 @@ export const CheckoutUI = (props) => {
     afterElements
   } = props
 
+  const [{ order }] = useOrder()
+
   return (
     <>
       {beforeElements.map((BeforeElement, i) => (
@@ -36,6 +42,12 @@ export const CheckoutUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
+
+      <OrderTypeControl
+        UIComponent={OrderTypeControlUI}
+        orderTypes={[1, 2, 3, 4, 5]}
+      />
+      <hr />
 
       <UserDetails
         ordering={ordering}
@@ -52,7 +64,7 @@ export const CheckoutUI = (props) => {
         ordering={ordering}
         UIComponent={AddressDetailsUI}
         businessId={41}
-        apiKey=''
+        apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
       />
       <hr />
 
@@ -70,11 +82,12 @@ export const CheckoutUI = (props) => {
         onChangePayment={handlerValues}
       />
       <hr />
-      <DriverTips
-        UIComponent={DriverTipsUI}
-        driverTipsOptions={[0, 10, 15, 20, 25]}
-        handlerChangeDriverOption={handlerValues}
-      />
+      {order.type === 1 &&
+        <DriverTips
+          UIComponent={DriverTipsUI}
+          driverTipsOptions={[0, 10, 15, 20, 25]}
+          handlerChangeDriverOption={handlerValues}
+        />}
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
