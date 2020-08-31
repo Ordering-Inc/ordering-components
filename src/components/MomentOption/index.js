@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const MomentOption = (props) => {
   const {
     minDate,
     maxDate,
     currentDate,
+    useOrderContext,
     onChangeMoment,
     UIComponent
   } = props
+
+  const [, { changeMoment }] = useOrder()
 
   /**
    * Method to valid if a date is same of after current date
@@ -97,7 +101,9 @@ export const MomentOption = (props) => {
 
     if (time || type === 'asap') {
       if (!isAsap) {
-        onChangeMoment(moment(dateToSend).toDate())
+        const _moment = type === 'asap' ? null : moment(dateToSend).toDate()
+        useOrderContext && changeMoment(_moment)
+        onChangeMoment && onChangeMoment(_moment)
       }
     }
   }
@@ -217,6 +223,10 @@ MomentOption.propTypes = {
    */
   currentDate: PropTypes.instanceOf(Date),
   /**
+   * currentDate, this must be contains a custom date selected
+   */
+  useOrderContext: PropTypes.bool,
+  /**
    * Method to return moment selection
    */
   onChangeMoment: PropTypes.func,
@@ -243,6 +253,7 @@ MomentOption.propTypes = {
 }
 
 MomentOption.defaultProps = {
+  useOrderContext: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const SearchOptions = (props) => {
   const {
@@ -7,6 +8,8 @@ export const SearchOptions = (props) => {
   } = props
 
   const [optionSelected, setOptionSelected] = useState(null)
+
+  const [orderState] = useOrder(null)
 
   /**
    * Method to handle tabs options
@@ -22,6 +25,7 @@ export const SearchOptions = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orderState={orderState}
           optionSelected={optionSelected}
           handleClickOption={onClickOption}
         />
