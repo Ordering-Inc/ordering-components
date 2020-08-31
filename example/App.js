@@ -32,6 +32,7 @@ import { MyOrdersListExample } from './views/MyOrdersListExample'
 import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { CheckoutExample } from './views/CheckoutExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
 import { ProductsListExample } from './views/ProductsListExample'
@@ -140,9 +141,6 @@ export default function App ({ ordering }) {
           <Route path='/products_listing' exact>
             <ProductsListingExample ordering={ordering} />
           </Route>
-          <Route path='/payment_options'>
-            <PaymentOptionsExample ordering={ordering} />
-          </Route>
           <Route path='/business_products_search'>
             <BusinessProductsSearchExample ordering={ordering} />
           </Route>
@@ -164,8 +162,14 @@ export default function App ({ ordering }) {
           <Route path='/address_details'>
             <AddressDetailsExample ordering={ordering} />
           </Route>
+          <Route path='/payment_options'>
+            <PaymentOptionsExample ordering={ordering} />
+          </Route>
           <Route path='/driver_tips'>
             <DriverTipsExample ordering={ordering} />
+          </Route>
+          <Route path='/checkout'>
+            <CheckoutExample ordering={ordering} />
           </Route>
           <Route path='/search_options'>
             <SearchOptionsExample ordering={ordering} />

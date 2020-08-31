@@ -105,12 +105,6 @@ export const Home = () => {
           <Link to='/payment_options'>Payment options</Link>
         </li>
         <li>
-          <Link to='/business_products_search'>Business products search</Link>
-        </li>
-        <li>
-          <Link to='/business_products_categories'>Business products categories</Link>
-        </li>
-        <li>
           <Link to='/business_featured_options'>Business featured options</Link>
         </li>
         <li>
@@ -124,6 +118,9 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/address_details'>Address details</Link>
+        </li>
+        <li>
+          <Link to='/checkout'>Checkout</Link>
         </li>
         <li>
           <Link to='/driver_tips'>Driver tips</Link>
