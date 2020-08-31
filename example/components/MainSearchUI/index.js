@@ -1,26 +1,19 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { AddressForm } from '../../../src/components/AddressForm'
 import { AddressFormUI } from '../../components/AddressFormUI'
 
-import { useOrder, ORDER_ACTIONS } from '../../../src/contexts/OrderContext'
 import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
 import { OrderTypeControlUI } from '../../components/OrderTypeControlUI'
 
 export const MainSearchUI = (props) => {
   const { register } = useForm()
-  const [, dispatchOrder] = useOrder()
-
-  useEffect(() => {
-    dispatchOrder({ type: ORDER_ACTIONS.CHANGE_BUSINESS, business: { id: 41, slug: 'mcbonalds' } })
-    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 111, quantity: 1 } })
-    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 1296, quantity: 1 } })
-  }, [])
 
   const orderTypes = [1, 2, 3, 4, 5]
 
   const {
     ordering,
+    orderState,
     allListValues,
     isFormErrors,
     searchByAddress,
@@ -66,7 +59,10 @@ export const MainSearchUI = (props) => {
       <br />
       <hr />
       {searchByAddress ? (
-        <AddressForm {...addressFormProps} address={null} />
+        <>
+          <input type='text' defaultValue={orderState.options.address?.address || ''} readOnly onClick={() => console.log('focus')} />
+          <AddressForm {...addressFormProps} address={null} />
+        </>
       ) : (
         <div>
           <span>Select a country: </span>

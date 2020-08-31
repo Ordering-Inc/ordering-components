@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react'
-
-import { useOrder, ORDER_ACTIONS } from '../../../src/contexts/OrderContext'
+import React, { useState } from 'react'
 
 import { MomentOptionUI } from '../MomentOptionUI'
 import { MomentOption } from '../../../src/components/MomentOption'
@@ -16,6 +14,7 @@ import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
 export const SearchOptionsUI = (props) => {
   const {
     ordering,
+    orderState,
     optionSelected,
     momentProps,
     handleClickOption
@@ -24,7 +23,6 @@ export const SearchOptionsUI = (props) => {
   const orderTypes = [1, 2, 3, 4, 5]
 
   const [curAddress, setCurAddress] = useState(null)
-  const [{ order }, dispatchOrder] = useOrder()
 
   const addressListProps = {
     ordering: ordering,
@@ -41,12 +39,6 @@ export const SearchOptionsUI = (props) => {
     address: curAddress
   }
 
-  useEffect(() => {
-    dispatchOrder({ type: ORDER_ACTIONS.CHANGE_BUSINESS, business: { id: 41, slug: 'mcbonalds' } })
-    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 111, quantity: 1 } })
-    dispatchOrder({ type: ORDER_ACTIONS.ADD_PRODUCT, product: { id: 1296, quantity: 1 } })
-  }, [])
-
   return (
     <div className='search-options'>
       <button onClick={() => handleClickOption('orderType')}>Order type</button>
@@ -55,7 +47,6 @@ export const SearchOptionsUI = (props) => {
 
       {optionSelected === 'orderType' && (
         <div className='order-section'>
-          <p>Cart products: {order.products.length}</p>
           <OrderTypeControl
             orderTypes={orderTypes}
             UIComponent={OrderTypeControlUI}
@@ -70,7 +61,7 @@ export const SearchOptionsUI = (props) => {
 
       {optionSelected === 'address' && (
         <div className='address-section'>
-          <p>Current order address: {order.address?.address} ({order.address?.location?.lat}, {order.address?.location?.lng})</p>
+          <p>Current order address: {orderState.options?.address?.address} ({orderState.options?.address?.location?.lat}, {orderState.options?.address?.location?.lng})</p>
           <AddressForm
             {...addressFormProps}
             UIComponent={AddressFormUI}

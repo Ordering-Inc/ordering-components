@@ -10,8 +10,8 @@ import { ConfigProvider } from './src/contexts/ConfigContext'
 import { LanguageProvider } from './src/contexts/LanguageContext'
 
 const ordering = new Ordering({
-  url: 'http://localhost:8080',
-  project: 'development'
+  url: 'http://apiv4-features.ordering.co',
+  project: 'luisv4'
 })
 
 // Modal.setAppElement('#root-modal')

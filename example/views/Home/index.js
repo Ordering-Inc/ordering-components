@@ -29,9 +29,9 @@ export const Home = () => {
         <li>
           <Link to='/profile'>User profile</Link>
         </li>
-        <li>
+        {/* <li>
           <Link to='/order_context'>Order context and order type control</Link>
-        </li>
+        </li> */}
         <li>
           <Link to='/order_context_advanced'>Order context advanced</Link>
         </li>
