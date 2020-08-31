@@ -29,7 +29,7 @@ export const MomentOptionUI = (props) => {
       {!isAsap && (
         <>
           <h4>Select a Delivery date with time</h4>
-          <select className='select-date' value={currentDate} onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
+          <select className='select-date' value={currentDate || ''} onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
             <option value={null} defaultValue>Select a date</option>
             {datesList.length > 0 && datesList.map(date => (
               <option key={date.key} value={date.date}>{date.date}</option>
