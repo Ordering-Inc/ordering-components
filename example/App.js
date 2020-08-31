@@ -15,6 +15,7 @@ import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 import { ProductList } from './views/ProductList'
 import { OrderContectExample } from './views/OrderContectExample'
+import { BusinessesListExample } from './views/BusinessesListExample'
 import { BusinessBasicInformationExample } from './views/BusinessBasicInformationExample'
 import { LanguageSelectorExample } from './views/LanguageSelectorExample'
 // import { OrderContectExample } from './views/OrderContectExample'
@@ -142,6 +143,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/business_basic_information'>
             <BusinessBasicInformationExample ordering={ordering} />
+          </Route>
+          <Route path='/businesses_list'>
+            <BusinessesListExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
