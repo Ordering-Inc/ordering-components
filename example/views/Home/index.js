@@ -87,7 +87,16 @@ export const Home = () => {
           <Link to='/product_option_example'>Product option example</Link>
         </li>
         <li>
+          <Link to='/business_products_search'>Business products search</Link>
+        </li>
+        <li>
+          <Link to='/business_products_categories'>Business products categories</Link>
+        </li>
+        <li>
           <Link to='/products_list'>Product list</Link>
+        </li>
+        <li>
+          <Link to='/products_listing'>Product listing</Link>
         </li>
         <li>
           <Link to='/payment_options'>Payment options</Link>

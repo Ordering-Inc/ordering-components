@@ -31,7 +31,10 @@ import { MyOrdersListExample } from './views/MyOrdersListExample'
 import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
+import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
 import { ProductsListExample } from './views/ProductsListExample'
+import { ProductsListingExample } from './views/ProductsListingExample'
 import { PaymentOptionsExample } from './views/PaymentOptionsExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
@@ -121,8 +124,17 @@ export default function App ({ ordering }) {
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
           </Route>
+          <Route path='/business_products_search'>
+            <BusinessProductsSearchExample ordering={ordering} />
+          </Route>
+          <Route path='/business_products_categories'>
+            <BusinessProductsCategoriesExample ordering={ordering} />
+          </Route>
           <Route path='/products_list'>
             <ProductsListExample ordering={ordering} />
+          </Route>
+          <Route path='/products_listing' exact>
+            <ProductsListingExample ordering={ordering} />
           </Route>
           <Route path='/payment_options'>
             <PaymentOptionsExample ordering={ordering} />
