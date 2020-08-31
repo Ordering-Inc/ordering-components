@@ -43,7 +43,7 @@ export const LoginForm = (props) => {
                   (loginTab === 'cellphone' && key !== 'email')
       })
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users.auth(_credentials)
+      const response = await ordering.users().auth(_credentials)
       setFormState({
         result: response.content,
         loading: false

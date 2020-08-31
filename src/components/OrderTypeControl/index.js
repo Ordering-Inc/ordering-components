@@ -1,18 +1,15 @@
 import React from 'react'
 import PropTypes, { number } from 'prop-types'
-import { useOrder, ORDER_ACTIONS } from '../../contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const OrderTypeControl = (props) => {
   const {
     UIComponent
   } = props
-  const [{ order }, dispatchOrder] = useOrder()
+  const [orderState, { changeType }] = useOrder()
 
   const handleChangeOrderType = (orderType) => {
-    dispatchOrder({
-      type: ORDER_ACTIONS.CHANGE_TYPE,
-      orderType
-    })
+    changeType(orderType)
   }
 
   return (
@@ -20,7 +17,7 @@ export const OrderTypeControl = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          order={order}
+          orderState={orderState}
           handleChangeOrderType={props.handleChangeOrderType || handleChangeOrderType}
         />
       )}
@@ -29,6 +26,10 @@ export const OrderTypeControl = (props) => {
 }
 
 OrderTypeControl.propTypes = {
+  /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: PropTypes.elementType,
   /**
    * Order availables to the control
    */
@@ -60,5 +61,9 @@ OrderTypeControl.propTypes = {
 }
 
 OrderTypeControl.defaultProps = {
-  orderTypes: [1, 2, 3, 4, 5]
+  orderTypes: [1, 2, 3, 4, 5],
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
 }

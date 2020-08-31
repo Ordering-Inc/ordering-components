@@ -20,7 +20,7 @@ export const SignupForm = (props) => {
 
   if (useChekoutFileds) {
     useEffect(() => {
-      ordering.validationFields.get().then((response) => {
+      ordering.validationFields().get().then((response) => {
         const fields = {}
         response.content.result.forEach((field) => {
           if (field.validate === 'checkout') {
@@ -40,7 +40,7 @@ export const SignupForm = (props) => {
   const handleSignupClick = async () => {
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users.add(signupData)
+      const response = await ordering.users().save(signupData)
       setFormState({
         result: response.content,
         loading: false
