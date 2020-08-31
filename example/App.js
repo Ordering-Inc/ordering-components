@@ -15,11 +15,33 @@ import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 import { ProductList } from './views/ProductList'
 import { OrderContectExample } from './views/OrderContectExample'
+import { BusinessesListExample } from './views/BusinessesListExample'
+import { BusinessBasicInformationExample } from './views/BusinessBasicInformationExample'
+import { LanguageSelectorExample } from './views/LanguageSelectorExample'
+// import { OrderContectExample } from './views/OrderContectExample'
+import { BusinessSortControlExample } from './views/BusinessSortControlExample'
+// import { ProductImagesExample } from './views/ProductImagesExample'
+import { BusinessTypeFilterExample } from './views/BusinessTypeFilterExample'
 import { PlacesExample } from './views/PlacesExample'
 import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { MyOrdersExample } from './views/MyOrdersExample'
+import { MyOrdersListExample } from './views/MyOrdersListExample'
+import { BusinessReviewsExample } from './views/BusinessReviewsExample'
+import { MomentOptionExample } from './views/MomentOptionExample'
+import { ProductOptionExample } from './views/ProductOptionExample'
+import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
+import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
+import { BusinessFeaturedProductsExample } from './views/BusinessFeaturedProductsExample'
+import { BusinessControllerExample } from './views/BusinessControllerExample'
+import { BusinessInformationExample } from './views/BusinessInformationExample'
+import { UserDetailsExample } from './views/UserDetailsExample'
+import { AddressDetailsExample } from './views/AddressDetailsExample'
+import { DriverTipsExample } from './views/DriverTipsExample'
+import { SearchOptionsExample } from './views/SearchOptionsExample'
+import { MainSearchExample } from './views/MainSearchExample'
+import { OrderContextExample } from './views/OrderContextExample'
 
 export default function App ({ ordering }) {
   return (
@@ -52,8 +74,23 @@ export default function App ({ ordering }) {
           <Route path='/product_list'>
             <ProductList ordering={ordering} />
           </Route>
-          <Route path='/order_context'>
+          {/* <Route path='/order_context'>
             <OrderContectExample ordering={ordering} />
+          </Route> */}
+          <Route path='/language_selector'>
+            <LanguageSelectorExample ordering={ordering} />
+          </Route>
+          <Route path='/sort_options'>
+            <BusinessSortControlExample ordering={ordering} />
+          </Route>
+          {/* <Route path='/product_images'>
+            <ProductImagesExample ordering={ordering} />
+          </Route> */}
+          <Route path='/order_context_advanced'>
+            <OrderContextExample ordering={ordering} />
+          </Route>
+          <Route path='/business_type_filter'>
+            <BusinessTypeFilterExample ordering={ordering} />
           </Route>
           <Route path='/places'>
             <PlacesExample ordering={ordering} />
@@ -69,6 +106,54 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/my_orders'>
             <MyOrdersExample ordering={ordering} />
+          </Route>
+          <Route path='/my_orders_list'>
+            <MyOrdersListExample ordering={ordering} />
+          </Route>
+          <Route path='/business_reviews'>
+            <BusinessReviewsExample ordering={ordering} />
+          </Route>
+          <Route path='/moment_option'>
+            <MomentOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/product_option_example'>
+            <ProductOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/business_products_search'>
+            <BusinessProductsSearchExample ordering={ordering} />
+          </Route>
+          <Route path='/business_products_categories'>
+            <BusinessProductsCategoriesExample ordering={ordering} />
+          </Route>
+          <Route path='/business_featured_options'>
+            <BusinessFeaturedProductsExample ordering={ordering} />
+          </Route>
+          <Route path='/business_controller'>
+            <BusinessControllerExample ordering={ordering} />
+          </Route>
+          <Route path='/business_information'>
+            <BusinessInformationExample ordering={ordering} />
+          </Route>
+          <Route path='/user_details'>
+            <UserDetailsExample ordering={ordering} />
+          </Route>
+          <Route path='/address_details'>
+            <AddressDetailsExample ordering={ordering} />
+          </Route>
+          <Route path='/driver_tips'>
+            <DriverTipsExample ordering={ordering} />
+          </Route>
+          <Route path='/search_options'>
+            <SearchOptionsExample ordering={ordering} />
+          </Route>
+          <Route path='/main_search'>
+            <MainSearchExample ordering={ordering} />
+          </Route>
+          <Route path='/business_basic_information'>
+            <BusinessBasicInformationExample ordering={ordering} />
+          </Route>
+          <Route path='/businesses_list'>
+            <BusinessesListExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
