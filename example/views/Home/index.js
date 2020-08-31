@@ -75,6 +75,9 @@ export const Home = () => {
           <Link to='/product_option_example'>Product option example</Link>
         </li>
         <li>
+          <Link to='/business_featured_options'>Business featured options</Link>
+        </li>
+        <li>
           <Link to='/business_controller'>Business Controller</Link>
         </li>
         <li>
@@ -94,6 +97,9 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/main_search'>Main Search</Link>
+        </li>
+        <li>
+          <Link to='/search_options'>Search options</Link>
         </li>
       </ul>
     </>
