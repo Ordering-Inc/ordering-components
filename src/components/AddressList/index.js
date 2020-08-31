@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
-import { useOrder, ORDER_ACTIONS } from '../../contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 /**
  * Component to control a address list
@@ -30,7 +30,7 @@ export const AddressList = (props) => {
 
   const [addressList, setAddressList] = useState({ loading: false, error: null, addresses: [] })
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
-  const [, dispatchOrder] = useOrder()
+  const [, { changeAddress }] = useOrder()
 
   /**
    * Function to load addresses from API
@@ -74,10 +74,7 @@ export const AddressList = (props) => {
           return _address
         })
         if (changeOrderAddressWithDefault) {
-          dispatchOrder({
-            type: ORDER_ACTIONS.CHANGE_ADDRESS,
-            address: content.result
-          })
+          changeAddress(content.result.id)
         }
         setAddressList({ ...addressList })
       }
