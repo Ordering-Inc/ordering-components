@@ -6,6 +6,8 @@ export const MomentOptionUI = (props) => {
     datesList,
     hoursList,
     currentDate,
+    currentHour,
+    getTimeFormat,
     handleCustomChangeDate,
     beforeComponents,
     afterComponents,
@@ -27,19 +29,19 @@ export const MomentOptionUI = (props) => {
       {!isAsap && (
         <>
           <h4>Select a Delivery date with time</h4>
-          <select className='select-date' onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
+          <select className='select-date' value={currentDate || ''} onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
             <option value={null} defaultValue>Select a date</option>
             {datesList.length > 0 && datesList.map(date => (
               <option key={date.key} value={date.date}>{date.date}</option>
             ))}
           </select>&nbsp;
-
-          <select className='select-hour' onChange={(e) => handleCustomChangeDate({ time: e.target.value })}>
-            <option>Select a time</option>
-            {hoursList.length > 0 && hoursList.map(hour => (
-              <option key={hour.key} value={hour.startTime}>{hour.startTime} to {hour.endTime}</option>
-            ))}
-          </select>
+          {currentDate &&
+            <select className='select-hour' value={getTimeFormat(currentHour)} onChange={(e) => handleCustomChangeDate({ time: e.target.value })}>
+              <option>Select a time</option>
+              {hoursList.length > 0 && hoursList.map(hour => (
+                <option key={hour.key} value={hour.startTime}>{hour.startTime} to {hour.endTime}</option>
+              ))}
+            </select>}
           <br />
         </>
       )}
@@ -52,7 +54,7 @@ export const MomentOptionUI = (props) => {
         {isAsap ? 'Select a range' : 'As soon as possible'}
       </button><br /><br />
 
-      <span>Current Date: {currentDate}</span>
+      <span>Current Date: {currentDate} {currentHour}</span>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

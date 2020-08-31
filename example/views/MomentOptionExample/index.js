@@ -18,7 +18,7 @@ export const MomentOptionExample = ({ ordering }) => {
     /**
      * currentDate, this must be contains a custom date selected
      */
-    currentDate: new Date(),
+    currentDate: null,
     /**
      * minDate, this must be contains a custom date selected
      */

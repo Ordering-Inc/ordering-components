@@ -71,6 +71,9 @@ export default function App ({ ordering }) {
           {/* <Route path='/product_images'>
             <ProductImagesExample ordering={ordering} />
           </Route> */}
+          <Route path='/order_context_advanced'>
+            <OrderContextExample ordering={ordering} />
+          </Route>
           <Route path='/business_type_filter'>
             <BusinessTypeFilterExample ordering={ordering} />
           </Route>
