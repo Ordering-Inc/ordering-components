@@ -72,6 +72,9 @@ export const Home = () => {
           <Link to='/popup_example'>Popups example</Link>
         </li>
         <li>
+          <Link to='/my_orders_list'>My orders list</Link>
+        </li>
+        <li>
           <Link to='/business_reviews'>Business reviews</Link>
         </li>
         <li>
