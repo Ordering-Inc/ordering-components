@@ -1,6 +1,6 @@
 import React from 'react'
-import { ProductsListing } from '../../../src/components/ProductsListing'
-import { ProductsListingUI } from '../../components/ProductsListingUI'
+import { ProductsListing } from '../../../src/components/ProductsListing(NOT)'
+import { ProductsListingUI } from '../../components/ProductsListingUI(NOT)'
 import { TestComponent } from '../../components/TestComponent'
 import { ary, random } from 'lodash'
 

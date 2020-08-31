@@ -1,29 +1,63 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const MomentOption = (props) => {
   const {
     minDate,
     maxDate,
     currentDate,
+    useOrderContext,
     onChangeMoment,
     UIComponent
   } = props
+
+  const [, { changeMoment }] = useOrder()
 
   /**
    * Method to valid if a date is same of after current date
    * @param {String} date
    */
-  const validDate = (date) =>
-    moment(date).isSameOrAfter(moment(), 'day')
+  const validDate = (date) => {
+    if (!date) return
+    return moment(date).isSameOrAfter(moment(), 'day')
       ? moment(date).format('YYYY-MM-DD HH:mm')
       : moment().format('YYYY-MM-DD HH:mm')
+  }
+
+  const calculateDiffDay = (start, end) => {
+    const endVal = end ?? moment()
+    return moment.duration(moment(start).diff(moment(endVal).startOf('day'))).asDays()
+  }
+
+  const getTimeFormat = (time) => {
+    const hour = Number(time.split(':')[0])
+    const minute = Number(time.split(':')[1])
+    if (minute >= 0 && minute <= 14) {
+      return moment(`${hour}:00`, 'HH:mm').format('HH:mm')
+    }
+    if (minute >= 15 && minute <= 29) {
+      return moment(`${hour}:15`, 'HH:mm').format('HH:mm')
+    }
+    if (minute >= 30 && minute <= 44) {
+      return moment(`${hour}:30`, 'HH:mm').format('HH:mm')
+    }
+    if (minute >= 45 && minute <= 59) {
+      return moment(`${hour}:45`, 'HH:mm').format('HH:mm')
+    }
+  }
+
+  const currentTimeFormatted = (value) => {
+    const date = value ?? minDate
+    return moment(validDate(date)).hour() >= moment().hour() ? moment(validDate(date)).format('HH:mm') : moment().format('HH:mm')
+  }
 
   /**
    * This must be containt schedule selected by user
    */
-  const [scheduleSelected, setScheduleSelected] = useState(moment(validDate(currentDate)).format('YYYY-MM-DD HH:mm'))
+  const [scheduleSelected, setScheduleSelected] = useState(currentDate ? moment(validDate(currentDate)).format('YYYY-MM-DD HH:mm') : null)
+  // const [scheduleSelected, setScheduleSelected] = useState(null)
 
   /**
    * Flag to know if user select asap time
@@ -42,13 +76,6 @@ export const MomentOption = (props) => {
   const [datesDiff, setDatesDiff] = useState(0)
 
   /**
-   * Used to calculate current hour
-   */
-  const getHour = () => {
-    return moment().minutes() > 30 ? moment().hour() + 1 : moment().hour()
-  }
-
-  /**
    * Handler select changes
    * @param {object} param0
    */
@@ -57,24 +84,26 @@ export const MomentOption = (props) => {
       return
     }
     if (type === 'asap') {
-      const val = isAsap ? null : true
-      setIsAsap(val)
+      setIsAsap(!isAsap)
     }
     const currDate = moment(validDate(scheduleSelected)).format('YYYY-MM-DD')
     if (date) {
-      const diff = moment.duration(moment(date).diff(moment().startOf('day'))).asDays()
-      setDatesDiff(parseInt(diff))
+      setDatesDiff(parseInt(calculateDiffDay(date)))
     }
     const dateSelected = date ?? currDate
-    const timeSelected = time ?? `${getHour()}:00`
+    const timeSelected = time ?? (moment(validDate(scheduleSelected)).hour() >= moment().hour() ? moment(validDate(scheduleSelected)).format('HH:mm') : moment().format('HH:mm'))
 
     const dateToSend = type === 'asap'
       ? moment().format('YYYY-MM-DD HH:mm')
       : moment(`${dateSelected} ${timeSelected}`).format('YYYY-MM-DD HH:mm')
+
     setScheduleSelected(moment(dateToSend, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm'))
+
     if (time || type === 'asap') {
       if (!isAsap) {
-        onChangeMoment(moment(dateToSend).toDate())
+        const _moment = type === 'asap' ? null : moment(dateToSend).toDate()
+        useOrderContext && changeMoment(_moment)
+        onChangeMoment && onChangeMoment(_moment)
       }
     }
   }
@@ -86,21 +115,19 @@ export const MomentOption = (props) => {
     const hoursAvailable = []
     let iterator = 0
     const defaultTime = moment('12:00 AM', 'h:mm A').format('HH:mm')
+    const endHourTime = moment(moment(validDate(maxDate)).add(-1, 'minute').format('HH:mm'), 'HH:mm').format('HH:mm')
 
-    let startHour = moment().hour()
-    const startMinutes = moment().minutes()
+    let startHour = currentTimeFormatted()
 
-    startHour = startMinutes > 30
-      ? moment(moment(scheduleSelected, 'YYYY-MM-DD h:mm').add(1, 'hour').format('HH:mm'), 'HH:mm').hour()
+    startHour = datesDiff > 0 || parseInt(calculateDiffDay(validDate(minDate)))
+      ? defaultTime
       : startHour
 
-    startHour = datesDiff > 0 || moment(validDate(minDate)).isAfter(moment())
-      ? moment(defaultTime, 'HH:mm').hour()
-      : startHour
+    startHour = getTimeFormat(moment(startHour, 'HH:mm').format('HH:mm'))
 
-    let _startTime = moment(`${startHour}:00`, 'HH:mm').format('HH:mm')
+    let _startTime = moment(startHour, 'HH:mm').format('HH:mm')
 
-    for (let i = startHour; i < 24; i++) {
+    for (let i = moment(startHour, 'HH:mm').hour(); i < 24; i++) {
       for (let j = 0; j < 4; j++) {
         if (!iterator) {
           hoursAvailable.push({
@@ -117,6 +144,14 @@ export const MomentOption = (props) => {
             endTime
           })
           _startTime = startTime
+          if (
+            (moment(scheduleSelected).format('YYYY-MM-DD') === moment(validDate(maxDate)).format('YYYY-MM-DD') &&
+              endTime >= endHourTime) ||
+              endTime >= '23:59'
+          ) {
+            setHourList(hoursAvailable)
+            return
+          }
         }
         iterator++
       }
@@ -129,7 +164,7 @@ export const MomentOption = (props) => {
    */
   const generateDatesList = () => {
     const datesList = []
-    const diff = moment(validDate(maxDate), 'YYYY-MM-DD HH:mm').diff(moment(validDate(minDate), 'YYYY-MM-DD HH:mm'), 'days')
+    const diff = parseInt(calculateDiffDay(validDate(maxDate)), validDate(minDate))
 
     for (let i = 0; i < diff + 1; i++) {
       datesList.push({
@@ -153,9 +188,11 @@ export const MomentOption = (props) => {
           isAsap={isAsap}
           minDate={validDate(minDate)}
           maxDate={validDate(maxDate)}
-          currentDate={scheduleSelected}
+          currentDate={scheduleSelected ? moment(scheduleSelected).format('YYYY-MM-DD') : null}
+          currentHour={scheduleSelected ? moment(currentTimeFormatted(scheduleSelected), 'HH:mm').format('HH:mm') : null}
           datesList={datesList}
           hoursList={hoursList}
+          getTimeFormat={getTimeFormat}
           handleCustomChangeDate={handleCustomChangeDate}
         />
       )}
@@ -186,6 +223,10 @@ MomentOption.propTypes = {
    */
   currentDate: PropTypes.instanceOf(Date),
   /**
+   * currentDate, this must be contains a custom date selected
+   */
+  useOrderContext: PropTypes.bool,
+  /**
    * Method to return moment selection
    */
   onChangeMoment: PropTypes.func,
@@ -212,6 +253,7 @@ MomentOption.propTypes = {
 }
 
 MomentOption.defaultProps = {
+  useOrderContext: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
