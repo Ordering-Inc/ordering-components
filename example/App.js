@@ -13,7 +13,7 @@ import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
-import { ProductList } from './views/ProductList'
+import { ProductList } from './views/ProductList(NOT)'
 import { OrderContectExample } from './views/OrderContectExample'
 import { BusinessesListExample } from './views/BusinessesListExample'
 import { BusinessBasicInformationExample } from './views/BusinessBasicInformationExample'
@@ -31,6 +31,7 @@ import { MyOrdersListExample } from './views/MyOrdersListExample'
 import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { ProductsListExample } from './views/ProductsListExample'
 import { PaymentOptionsExample } from './views/PaymentOptionsExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
@@ -119,6 +120,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/products_list'>
+            <ProductsListExample ordering={ordering} />
           </Route>
           <Route path='/payment_options'>
             <PaymentOptionsExample ordering={ordering} />
