@@ -61,6 +61,9 @@ export const LanguageSelector = (props) => {
     }
   }, [])
 
+  /**
+   * Selecting default if exist and there is not one in local storage
+   */
   useEffect(() => {
     if (currentLanguage) {
       const language = languages.find(language => language.code === currentLanguage)
