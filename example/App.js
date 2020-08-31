@@ -14,6 +14,8 @@ import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 import { ProductList } from './views/ProductList'
+import { OrderContectExample } from './views/OrderContectExample'
+import { LanguageSelectorExample } from './views/LanguageSelectorExample'
 // import { OrderContectExample } from './views/OrderContectExample'
 import { BusinessSortControlExample } from './views/BusinessSortControlExample'
 // import { ProductImagesExample } from './views/ProductImagesExample'
@@ -64,11 +66,11 @@ export default function App ({ ordering }) {
           {/* <Route path='/order_context'>
             <OrderContectExample ordering={ordering} />
           </Route> */}
+          <Route path='/language_selector'>
+            <LanguageSelectorExample ordering={ordering} />
+          </Route>
           <Route path='/sort_options'>
             <BusinessSortControlExample ordering={ordering} />
-          </Route>
-          <Route path='/order_context_advanced'>
-            <OrderContextExample ordering={ordering} />
           </Route>
           {/* <Route path='/product_images'>
             <ProductImagesExample ordering={ordering} />
