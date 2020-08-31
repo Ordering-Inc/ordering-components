@@ -11,6 +11,9 @@ export const BusinessFeaturedProducts = (props) => {
 
   const [productsList, setProductsList] = useState({ products, loading: true, error: false })
 
+  /**
+   * Method to get products from API
+   */
   const getProducts = async () => {
     try {
       const { content: { result } } = await ordering
@@ -34,6 +37,14 @@ export const BusinessFeaturedProducts = (props) => {
     }
   }
 
+  /**
+   * handler to get product id from UI
+   * @param {number} val product id
+   */
+  const onClickProduct = (val) => {
+    console.log(val)
+  }
+
   useEffect(() => {
     getProducts()
   }, [])
@@ -44,6 +55,7 @@ export const BusinessFeaturedProducts = (props) => {
         <UIComponent
           {...props}
           productsList={productsList}
+          handlerClickProduct={onClickProduct}
         />
       )}
     </>
@@ -68,6 +80,10 @@ BusinessFeaturedProducts.propTypes = {
    * BusinessId, this must be containt a business id
    */
   businessId: PropTypes.number,
+  /**
+   * handlerClickProduct, method to handle click on product
+   */
+  handlerClickProduct: PropTypes.func,
   /**
    * Components types before Business featured products
    * Array of type components, the parent props will pass to these components
