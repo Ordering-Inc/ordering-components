@@ -75,6 +75,9 @@ export const Home = () => {
           <Link to='/product_option_example'>Product option example</Link>
         </li>
         <li>
+          <Link to='/business_controller'>Business Controller</Link>
+        </li>
+        <li>
           <Link to='/business_information'>Business information</Link>
         </li>
         <li>
