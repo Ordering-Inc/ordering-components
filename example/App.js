@@ -26,6 +26,7 @@ import { PlacesExample } from './views/PlacesExample'
 import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
+import { MyOrdersExample } from './views/MyOrdersExample'
 import { MyOrdersListExample } from './views/MyOrdersListExample'
 import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
@@ -102,6 +103,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/popup_example'>
             <PopupExample />
+          </Route>
+          <Route path='/my_orders'>
+            <MyOrdersExample ordering={ordering} />
           </Route>
           <Route path='/my_orders_list'>
             <MyOrdersListExample ordering={ordering} />
