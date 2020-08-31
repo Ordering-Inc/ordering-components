@@ -27,6 +27,7 @@ import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
 import { BusinessFeaturedProductsExample } from './views/BusinessFeaturedProductsExample'
 import { BusinessControllerExample } from './views/BusinessControllerExample'
 import { BusinessInformationExample } from './views/BusinessInformationExample'
@@ -103,6 +104,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/business_products_categories'>
+            <BusinessProductsCategoriesExample ordering={ordering} />
           </Route>
           <Route path='/business_featured_options'>
             <BusinessFeaturedProductsExample ordering={ordering} />
