@@ -45,6 +45,12 @@ export const Home = () => {
           <Link to='/product_list'>Product list</Link>
         </li>
         <li>
+          <Link to='/business_basic_information'>Business basic information</Link>
+        </li>
+        <li>
+          <Link to='/language_selector'>Language selector</Link>
+        </li>
+        <li>
           <Link to='/sort_options'>Business sort options</Link>
         </li>
         <li>
@@ -70,6 +76,24 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/business_featured_options'>Business featured options</Link>
+        </li>
+        <li>
+          <Link to='/business_controller'>Business Controller</Link>
+        </li>
+        <li>
+          <Link to='/business_information'>Business information</Link>
+        </li>
+        <li>
+          <Link to='/user_details'>User details</Link>
+        </li>
+        <li>
+          <Link to='/address_details'>Address details</Link>
+        </li>
+        <li>
+          <Link to='/driver_tips'>Driver tips</Link>
+        </li>
+        <li>
+          <Link to='/search_options'>Search options</Link>
         </li>
         <li>
           <Link to='/main_search'>Main Search</Link>

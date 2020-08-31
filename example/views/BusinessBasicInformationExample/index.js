@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { MomentOptionUI } from '../../components/MomentOptionUI'
-import { MomentOption } from '../../../src/components/MomentOption'
+import { BusinessBasicInformationUI } from '../../components/BusinessBasicInformationUI'
+import { BusinessBasicInformation } from '../../../src/components/BusinessBasicInformation'
 import { TestComponent } from '../../components/TestComponent'
 
-export const MomentOptionExample = ({ ordering }) => {
+export const BusinessBasicInformationExample = ({ ordering }) => {
   const props = {
     /**
      * Instace of Ordering Class
@@ -14,45 +14,31 @@ export const MomentOptionExample = ({ ordering }) => {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
-    UIComponent: MomentOptionUI,
+    UIComponent: BusinessBasicInformationUI,
     /**
-     * currentDate, this must be contains a custom date selected
+     * Contains business basic information
      */
-    currentDate: null,
+    business: {},
     /**
-     * minDate, this must be contains a custom date selected
-     */
-    minDate: new Date('2020-08-29 18:00'),
-    /**
-     * maxDate, this must be contains a custom date selected
-     */
-    maxDate: new Date('2020-09-05 10:00'),
-    /**
-     * Method to return moment selection
-     */
-    onChangeMoment: (moment) => {
-      console.log(moment)
-    },
-    /**
-     * Components types before moment option
+     * Components types before business basic information
      * Array of type components, the parent props will pass to these components
      */
     beforeComponents: [TestComponent],
     /**
-     * Components types after moment option
+     * Components types after business basic information
      * Array of type components, the parent props will pass to these components
      */
     afterComponents: [TestComponent],
     /**
-     * Elements before moment option
+     * Elements before business basic information
      * Array of HTML/Components elements, these components will not get the parent props
      */
     beforeElements: [<p key>Test Element Before</p>],
     /**
-     * Elements after moment option
+     * Elements after business basic information
      * Array of HTML/Components elements, these components will not get the parent props
      */
     afterElements: [<p key>Test Element After</p>]
   }
-  return <MomentOption {...props} />
+  return <BusinessBasicInformation {...props} />
 }
