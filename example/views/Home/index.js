@@ -135,6 +135,12 @@ export const Home = () => {
           <Link to='/search_options'>Search options</Link>
         </li>
       </ul>
+      <h2>Payments Section</h2>
+      <ul>
+        <li>
+          <Link to='/payment_option_paypal'>Payments Options Paypal</Link>
+        </li>
+      </ul>
     </>
   )
 }
