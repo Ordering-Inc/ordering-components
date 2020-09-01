@@ -10,22 +10,25 @@ export const CmsContent = (props) => {
     UIComponent,
     pageSlug
   } = props
+
   /**
    * Array to save current order
    */
   const [body, setBody] = useState('')
+
   /**
    * Method used to get the page by slug
    */
   const getPage = async (slug) => {
-    const response = await fetch(`https://apiv4.ordering.co/v400/en/demo/pages/${slug}`);
+    const response = await fetch(`https://apiv4.ordering.co/v400/en/demo/pages/${slug}`)
     const data = await response.json()
-    console.log(data)
     setBody(data.result.body)
   }
+
   useEffect(() => {
     getPage(pageSlug)
   }, [])
+
   return (
     <>
       {UIComponent && (
