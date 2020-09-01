@@ -1,6 +1,5 @@
 import React from 'react'
 import DatePicker from 'react-datepicker'
-import { setMinutes, setHours } from 'date-fns'
 import moment from 'moment'
 
 import 'react-datepicker/dist/react-datepicker.css'
@@ -9,6 +8,7 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 
 export const MenuControlUI = (props) => {
   const {
+    menuLapsesList,
     futureDaysToShow,
     business,
     startDate,
@@ -72,11 +72,10 @@ export const MenuControlUI = (props) => {
                 showTimeSelect
                 filterDate={isDisabledDay}
                 timeIntervals={15}
-                minTime={setHours(setMinutes(moment().toDate(), scheduleSelected?.lapses?.open?.minute), scheduleSelected?.lapses?.open?.hour)}
-                maxTime={setHours(setMinutes(moment().toDate(), scheduleSelected?.lapses?.close?.minute), scheduleSelected?.lapses?.close?.hour)}
                 timeFormat='HH:mm'
                 dateFormat='MMMM d, yyyy HH:mm'
                 includeDates={futureDaysToShow()}
+                includeTimes={menuLapsesList()}
                 placeholderText='Select a date'
                 onChange={date => handleDate(date)}
               />

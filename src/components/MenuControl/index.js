@@ -54,7 +54,7 @@ export const MenuControl = (props) => {
    */
   const onDateSelected = (date) => {
     const day = moment(date, 'YYYY-MM-DD').day()
-    const lapses = menuSelected?.schedule[day]?.lapses[0]
+    const lapses = menuSelected?.schedule[day]?.lapses
     setScheduleSelected({
       ...scheduleSelected,
       lapses
@@ -85,7 +85,7 @@ export const MenuControl = (props) => {
     setMenuSelected(menu)
     const today = moment().day()
     return {
-      lapses: menu?.schedule[today]?.lapses[0],
+      lapses: menu?.schedule[today]?.lapses,
       menuId: menu.id
     }
   }
@@ -107,6 +107,26 @@ export const MenuControl = (props) => {
     }
 
     setDatesList(list)
+  }
+
+  /**
+   * Method to calculate times based in schedule lapses range
+   */
+  const menuLapsesList = () => {
+    const timesList = []
+    const lapses = scheduleSelected?.lapses || []
+    for (let i = 0; i < lapses.length; i++) {
+      let start = `${lapses[i]?.open?.hour}:${lapses[i]?.open?.minute}`
+      const end = `${lapses[i]?.close?.hour}:${lapses[i]?.close?.minute}`
+      let diff = Math.round(moment.duration(moment(end, 'HH:mm').diff(moment(start, 'HH:mm'))).asHours())
+      while (diff > 0) {
+        const day = start
+        timesList.push(moment(day, 'HH:mm').toDate())
+        start = moment(day, 'HH:mm').add(15, 'minutes')
+        diff = diff - 0.25
+      }
+    }
+    return timesList
   }
 
   /**
@@ -152,6 +172,7 @@ export const MenuControl = (props) => {
         <UIComponent
           {...props}
           futureDaysToShow={futureDaysToShow}
+          menuLapsesList={menuLapsesList}
           disableDays={disableDays}
           startDate={startDate}
           isDisabledDay={isDisabledDay}
