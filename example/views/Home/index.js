@@ -7,7 +7,7 @@ export const Home = () => {
       <h1>
         Examples
       </h1>
-      <ul>
+      <ol>
         <li>
           <Link to='/'>Home</Link>
         </li>
@@ -134,7 +134,7 @@ export const Home = () => {
         <li>
           <Link to='/search_options'>Search options</Link>
         </li>
-      </ul>
+      </ol>
     </>
   )
 }

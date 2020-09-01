@@ -16,6 +16,10 @@ export const DriverTipsExample = ({ ordering }) => {
      */
     UIComponent: DriverTipsUI,
     /**
+     * Cart business id
+     */
+    businessId: 41,
+    /**
      * driver tips options
      */
     driverTipsOptions: [0, 10, 15, 20, 25],

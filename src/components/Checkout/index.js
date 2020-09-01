@@ -1,16 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const Checkout = (props) => {
   const {
     UIComponent
   } = props
 
+  /**
+   * Order conext
+   */
+  const [orderState] = useOrder()
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          orderState={orderState}
         />
       )}
     </>

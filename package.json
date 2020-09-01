@@ -42,7 +42,7 @@
     "install": "^0.13.0",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
-    "ordering-api-sdk": "github:sergioaok/ordering-api-sdk#v0.0.3",
+    "ordering-api-sdk": "github:sergioaok/ordering-api-sdk#v0.0.4",
     "prop-types": "^15.7.2",
     "socket.io-client": "^2.3.0"
   },
