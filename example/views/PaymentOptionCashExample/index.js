@@ -16,6 +16,22 @@ export const PaymentOptionCashExample = ({ ordering }) => {
      */
     UIComponent: PaymentOptionCashUI,
     /**
+     * Flag to know if use props from context or not
+     */
+    useOrderContext: false,
+    /**
+     * Business id to know where order total come from
+     */
+    businessId: 41,
+    /**
+     * orderTotal, amount of order total
+     */
+    orderTotal: 5,
+    /**
+     * handler value typed on input cash
+     */
+    handlerSubmit: (e) => { console.log(e) },
+    /**
      * Components types before payment option cash
      * Array of type components, the parent props will pass to these components
      */
