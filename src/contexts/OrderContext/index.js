@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useSession } from '../SessionContext'
+import { Popup } from '../../components/Popup'
+import { AlertUI } from '../../../example/components/AlertUI'
 
 /**
  * Create OrderContext
@@ -99,13 +101,12 @@ export const OrderProvider = ({ ordering, children }) => {
       const { error, result } = await response.json()
       setState({ ...state, loading: false })
       if (!error) {
-        applyChanges(changes)
+        return await applyChanges(changes)
       } else {
         setConfirm({
           show: true,
           content: result,
           onConfirm: () => {
-            console.log('onConfirm!!!')
             setConfirm({ show: false })
             applyChanges(changes)
           }
@@ -113,6 +114,7 @@ export const OrderProvider = ({ ordering, children }) => {
       }
     } catch (err) {
       setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -139,8 +141,10 @@ export const OrderProvider = ({ ordering, children }) => {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
+      return !error
     } catch (err) {
       setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -161,8 +165,10 @@ export const OrderProvider = ({ ordering, children }) => {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
+      return !error
     } catch (err) {
       setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -187,8 +193,10 @@ export const OrderProvider = ({ ordering, children }) => {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
+      return !error
     } catch (err) {
       setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -209,8 +217,10 @@ export const OrderProvider = ({ ordering, children }) => {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
+      return !error
     } catch (err) {
       setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -231,8 +241,10 @@ export const OrderProvider = ({ ordering, children }) => {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
+      return !error
     } catch (err) {
       setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -263,8 +275,10 @@ export const OrderProvider = ({ ordering, children }) => {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
+      return !error
     } catch (err) {
       setState({ ...state, loading: false })
+      return false
     }
   }
 
@@ -290,23 +304,23 @@ export const OrderProvider = ({ ordering, children }) => {
 
   return (
     <OrderContext.Provider value={[copyState, functions]}>
-      {
-        confirm.show && (
-          <>
-            <p>{confirm.content}</p>
-            <button type='button' onClick={() => setConfirm({ show: false })}>Cancel</button>
-            <button type='button' onClick={() => confirm.onConfirm()}>Accept</button>
-          </>
-        )
-      }
-      {
-        alert.show && (
-          <>
-            <p>{alert.content}</p>
-            <button type='button' onClick={() => setAlert({ show: false })}>Accept</button>
-          </>
-        )
-      }
+      <Popup
+        UIComponent={AlertUI}
+        open={confirm.show}
+        title='Confirm'
+        onAccept={() => confirm.onConfirm()}
+        onCancel={() => setConfirm({ show: false })}
+        onClose={() => setConfirm({ show: false })}
+        content={confirm.content}
+      />
+      <Popup
+        UIComponent={AlertUI}
+        open={alert.show}
+        title='Error'
+        onAccept={() => setAlert({ show: false })}
+        onClose={() => setAlert({ show: false })}
+        content={alert.content}
+      />
       {children}
     </OrderContext.Provider>
   )

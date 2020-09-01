@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const BusinessController = (props) => {
   const {
@@ -24,6 +25,10 @@ export const BusinessController = (props) => {
    * This must be containt a boolean to indicate if a business is close or not
    */
   const [isBusinessClose, setIsBusinessClose] = useState(false)
+  /**
+   * Order context data
+   */
+  const [orderState] = useOrder()
   /**
    * Method to get business from SDK
    */
@@ -96,6 +101,7 @@ export const BusinessController = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orderState={orderState}
           isBusinessClose={isBusinessClose}
           business={businessObject}
           formatDate={formatDate}

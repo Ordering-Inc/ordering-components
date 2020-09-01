@@ -29,6 +29,7 @@ import { MyOrdersExample } from './views/MyOrdersExample'
 import { MyOrdersListExample } from './views/MyOrdersListExample'
 import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
+import { MenuControlExample } from './views/MenuControlExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
 import { CheckoutExample } from './views/CheckoutExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
@@ -119,6 +120,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/moment_option'>
             <MomentOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/menu_control'>
+            <MenuControlExample ordering={ordering} />
           </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />

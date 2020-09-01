@@ -1,5 +1,4 @@
 import React from 'react'
-import { useOrder } from '../../../src/contexts/OrderContext'
 
 import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
 import { OrderTypeControlUI } from '../OrderTypeControlUI'
@@ -21,6 +20,7 @@ import { DriverTipsUI } from '../DriverTipsUI'
 
 export const CheckoutUI = (props) => {
   const {
+    orderState,
     ordering,
     handlerValues,
     beforeComponents,
@@ -28,8 +28,6 @@ export const CheckoutUI = (props) => {
     beforeElements,
     afterElements
   } = props
-
-  const [{ order }] = useOrder()
 
   return (
     <>
@@ -82,7 +80,7 @@ export const CheckoutUI = (props) => {
         onChangePayment={handlerValues}
       />
       <hr />
-      {order.type === 1 &&
+      {orderState.options.type === 1 &&
         <DriverTips
           UIComponent={DriverTipsUI}
           driverTipsOptions={[0, 10, 15, 20, 25]}
