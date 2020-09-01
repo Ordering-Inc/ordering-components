@@ -20,6 +20,7 @@ import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { GoogleLoginExample } from './views/GoogleLoginExample'
 
 export default function App ({ ordering }) {
   return (
@@ -39,6 +40,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/facebook_login'>
             <FacebookLogin ordering={ordering} />
+          </Route>
+          <Route path='/google_login'>
+            <GoogleLoginExample ordering={ordering} />
           </Route>
           <Route path='/session_manager'>
             <SessionManager ordering={ordering} />
