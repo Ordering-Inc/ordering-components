@@ -139,11 +139,11 @@ export const Home = () => {
         </li>
       </ol>
       <h2>Payments Section</h2>
-      <ul>
+      <ol>
         <li>
           <Link to='/payment_option_paypal'>Payments Options Paypal</Link>
         </li>
-      </ul>
+      </ol>
     </>
   )
 }
