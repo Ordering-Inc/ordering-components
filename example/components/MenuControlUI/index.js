@@ -1,6 +1,7 @@
 import React from 'react'
 import DatePicker from 'react-datepicker'
 import { setMinutes, setHours } from 'date-fns'
+import moment from 'moment'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -8,11 +9,13 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 
 export const MenuControlUI = (props) => {
   const {
+    futureDaysToShow,
     business,
     startDate,
     isDisabledDay,
     scheduleSelected,
-    handleSchedule,
+    menuSelected,
+    handleMenuSelected,
     handleDate,
     beforeComponents,
     afterComponents,
@@ -45,10 +48,14 @@ export const MenuControlUI = (props) => {
             <div
               key={i}
               style={{ border: '1px solid black', padding: '10px', width: '480px', marginBottom: '10px' }}
+              onClick={() => handleMenuSelected(menu)}
             >
-              <p>{menu.name}</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <p>{menu.name}</p>
+                {menu.id === menuSelected && <strong>✅</strong>}
+              </div>
               {menu.schedule?.length > 0 && menu.schedule?.map((item, i) => (
-                <button key={i} disabled={!item.enabled} onClick={() => handleSchedule({ lapses: item.lapses[0], day: i, menu })}>
+                <button key={i} disabled={!item.enabled}>
                   {daysOfWeek[i]}
                 </button>
               ))}
@@ -61,14 +68,15 @@ export const MenuControlUI = (props) => {
               <h3>2. Select your delivery time: </h3>
               <DatePicker
                 selected={startDate}
-                minDate={new Date()}
+                minDate={moment().toDate()}
                 showTimeSelect
                 filterDate={isDisabledDay}
                 timeIntervals={15}
-                minTime={setHours(setMinutes(new Date(), scheduleSelected?.lapses?.open?.minute), scheduleSelected?.lapses?.open?.hour)}
-                maxTime={setHours(setMinutes(new Date(), scheduleSelected?.lapses?.close?.minute), scheduleSelected?.lapses?.close?.hour)}
+                minTime={setHours(setMinutes(moment().toDate(), scheduleSelected?.lapses?.open?.minute), scheduleSelected?.lapses?.open?.hour)}
+                maxTime={setHours(setMinutes(moment().toDate(), scheduleSelected?.lapses?.close?.minute), scheduleSelected?.lapses?.close?.hour)}
                 timeFormat='HH:mm'
                 dateFormat='MMMM d, yyyy HH:mm'
+                includeDates={futureDaysToShow()}
                 placeholderText='Select a date'
                 onChange={date => handleDate(date)}
               />

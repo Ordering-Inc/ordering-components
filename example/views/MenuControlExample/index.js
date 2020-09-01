@@ -16,6 +16,10 @@ export const MenuControlExample = ({ ordering }) => {
      */
     UIComponent: MenuControlUI,
     /**
+     * maxPreoderDays, limit days to show
+     */
+    maxPreoderDays: 7,
+    /**
      * Business, this must be containt all business information
      */
     business: {

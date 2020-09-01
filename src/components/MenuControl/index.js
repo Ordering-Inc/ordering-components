@@ -4,6 +4,7 @@ import moment from 'moment'
 
 export const MenuControl = (props) => {
   const {
+    maxPreoderDays,
     UIComponent
   } = props
 
@@ -52,6 +53,12 @@ export const MenuControl = (props) => {
    * @param {string} date
    */
   const onDateSelected = (date) => {
+    const day = moment(date, 'YYYY-MM-DD').day()
+    const lapses = menuSelected?.schedule[day]?.lapses[0]
+    setScheduleSelected({
+      ...scheduleSelected,
+      lapses
+    })
     setStartDate(date)
     setDateSelected(moment(date).format('YYYY-MM-DD HH:mm'))
   }
@@ -73,12 +80,11 @@ export const MenuControl = (props) => {
    * Method to format schedule selected by user
    * @param {object} param0
    */
-  const formatScheduleTime = ({ lapses, day, menu }) => {
+  const formatScheduleTime = (menu) => {
     setMenuSelected(menu)
+    const today = moment().day()
     return {
-      minDate: moment().day(day).format('YYYY-MM-DD'),
-      maxDate: moment().day(6).format('YYYY-MM-DD'),
-      lapses,
+      lapses: menu?.schedule[today]?.lapses[0],
       menuId: menu.id
     }
   }
@@ -102,6 +108,38 @@ export const MenuControl = (props) => {
     setDatesList(list)
   }
 
+  /**
+   * Method to calculate an array of available dates in base with maxPreorderDays
+   */
+  const futureDaysToShow = () => {
+    let futureDays = maxPreoderDays
+    let today = moment().toDate()
+    const datesToShow = []
+    const isDisabledDays = disableDays.every(d => d === false)
+    if (disableDays.length && !isDisabledDays) {
+      while (futureDays > 0) {
+        const date = today
+        const day = moment(today).day()
+        if (disableDays[day] === false) {
+          datesToShow.push(moment(date).toDate())
+          futureDays--
+        }
+        today = moment(moment(today).add(1, 'd')).toDate()
+      }
+    }
+    if (disableDays.length && isDisabledDays) {
+      for (let i = 1; i <= maxPreoderDays; i++) {
+        datesToShow.push(moment(moment(today).add(i, 'd')).toDate())
+      }
+    }
+    datesToShow.unshift(moment().toDate())
+    return datesToShow
+  }
+
+  useEffect(() => {
+    futureDaysToShow()
+  }, [disableDays])
+
   useEffect(() => {
     generateDatesList()
   }, [])
@@ -112,10 +150,13 @@ export const MenuControl = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          futureDaysToShow={futureDaysToShow}
+          disableDays={disableDays}
           startDate={startDate}
           isDisabledDay={isDisabledDay}
           scheduleSelected={scheduleSelected}
-          handleSchedule={(val) => setScheduleSelected(formatScheduleTime(val))}
+          menuSelected={menuSelected?.id}
+          handleMenuSelected={(val) => setScheduleSelected(formatScheduleTime(val))}
           handleDate={onDateSelected}
           onSendMenuInfo={handlerMenuInfo}
           // datesList={datesList}
@@ -135,6 +176,10 @@ MenuControl.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * maxPreoderDays, limit days to show
+   */
+  maxPreoderDays: PropTypes.number,
   /**
    * Business, this must be containt all business information
    */
