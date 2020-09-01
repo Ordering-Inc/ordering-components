@@ -140,6 +140,9 @@ export const Home = () => {
         <li>
           <Link to='/payment_option_paypal'>Payments Options Paypal</Link>
         </li>
+        <li>
+          <Link to='/payment_option_cash'>Payments Options Cash</Link>
+        </li>
       </ul>
     </>
   )
