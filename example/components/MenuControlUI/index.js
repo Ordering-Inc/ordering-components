@@ -8,6 +8,7 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 
 export const MenuControlUI = (props) => {
   const {
+    dateSelected,
     menuLapsesList,
     futureDaysToShow,
     business,
@@ -37,6 +38,7 @@ export const MenuControlUI = (props) => {
 
       {business && Object.keys(business).length > 0 && (
         <>
+          DATE SELECTED: {dateSelected}
           <h1>Preorder</h1>
 
           <img src={business.logo} alt='logo' width='80' height='80' />

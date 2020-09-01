@@ -282,6 +282,40 @@ export const OrderProvider = ({ ordering, children }) => {
     }
   }
 
+  /**
+   * Apply coupon to cart
+   */
+  const changeDriverTip = async (businessId, driverTipRate) => {
+    if (!businessId) {
+      throw new Error('`businessId` is required.')
+    }
+    if (!driverTipRate && driverTipRate !== 0) {
+      throw new Error('`driverTipRate` is required.')
+    }
+    if (!state.carts[`businessId:${businessId}`] || state.carts[`businessId:${businessId}`]?.driver_tip_rate === driverTipRate) {
+      return
+    }
+    try {
+      setState({ ...state, loading: true })
+      const body = JSON.stringify({
+        business_id: businessId,
+        driver_tip_rate: driverTipRate
+      })
+      const response = await fetch(`${ordering.root}/carts/change_driver_tip`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body })
+      const { error, result } = await response.json()
+      if (!error) {
+        state.carts[`businessId:${result.business_id}`] = result
+      } else {
+        setAlert({ show: true, content: result })
+      }
+      setState({ ...state, loading: false })
+      return !error
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return false
+    }
+  }
+
   useEffect(() => {
     refreshOrderOptions()
   }, [token])
@@ -296,6 +330,7 @@ export const OrderProvider = ({ ordering, children }) => {
     updateProduct,
     clearCart,
     applyCoupon,
+    changeDriverTip,
     setAlert,
     setConfirm
   }
@@ -348,7 +383,8 @@ export const useOrder = () => {
     clearCart: warningMessage,
     applyCoupon: warningMessage,
     setAlert: warningMessage,
-    setConfirm: warningMessage
+    setConfirm: warningMessage,
+    changeDriverTip: warningMessage
   }
   return orderManager || [{}, functionsPlaceholders]
 }

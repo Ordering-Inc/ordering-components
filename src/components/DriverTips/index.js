@@ -5,9 +5,18 @@ import { useOrder } from '../../../src/contexts/OrderContext'
 export const DriverTips = (props) => {
   const {
     UIComponent,
-    businessId
+    businessId,
+    useOrderContext
   } = props
-  const [orderState] = useOrder()
+
+  if (useOrderContext && !businessId) {
+    throw new Error('`businessId` is required when `useOrderContext` is true.')
+  }
+
+  /**
+   * Order context
+   */
+  const [orderState, { changeDriverTip }] = useOrder()
 
   /**
    * Save percentage selected by user
@@ -23,15 +32,20 @@ export const DriverTips = (props) => {
    * @param {number} val
    */
   const handlerChangeOption = (val) => {
+    if (useOrderContext) {
+      changeDriverTip(businessId, parseInt(val))
+    }
     props.handlerChangeDriverOption(parseInt(val))
     setOptionSelected(parseInt(val))
   }
 
-  const cartTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
-
   useEffect(() => {
-    setDriverTipAmount(`$ ${((cartTotal * optionSelected) / 100).toFixed(2)}`)
-  }, [optionSelected])
+    const orderDriverTipRate = orderState.carts[`businessId:${businessId}`]?.driver_tip_rate || 0
+    const orderDriverTip = orderState.carts[`businessId:${businessId}`]?.driver_tip || 0
+
+    setOptionSelected(orderDriverTipRate)
+    setDriverTipAmount(orderDriverTip)
+  }, [orderState])
 
   return (
     <>
@@ -61,6 +75,10 @@ DriverTips.propTypes = {
    * Cart business id
    */
   businessId: PropTypes.number,
+  /**
+   * Switch to use order context
+   */
+  useOrderContext: PropTypes.bool,
   /**
    * driver tips options
    */
@@ -92,6 +110,7 @@ DriverTips.propTypes = {
 }
 
 DriverTips.defaultProps = {
+  useOrderContext: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
