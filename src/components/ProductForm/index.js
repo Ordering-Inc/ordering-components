@@ -273,17 +273,21 @@ export const ProductForm = (props) => {
   /**
    * Handle when click on save product
    */
-  const handleSave = () => {
+  const handleSave = async () => {
     const errors = checkErrors()
     if (Object.keys(errors).length === 0) {
+      let successful = true
       if (useOrderContext) {
+        successful = false
         if (!props.productCart.code) {
-          addProduct(productCart)
+          successful = await addProduct(productCart)
         } else {
-          updateProduct(productCart)
+          successful = await updateProduct(productCart)
         }
       }
-      onSave(productCart, !props.productCart.code)
+      if (successful) {
+        onSave(productCart, !props.productCart.code)
+      }
     }
   }
 
