@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useOrder, ORDER_ACTIONS } from '../../contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 
 export const Cart = (props) => {
@@ -12,7 +12,7 @@ export const Cart = (props) => {
   /**
    * Order context manager
    */
-  const [orderState, dispatchOrder] = useOrder()
+  const [orderState, { updateProduct, removeProduct, clearCart }] = useOrder()
 
   /**
    * Config context manager
@@ -32,42 +32,49 @@ export const Cart = (props) => {
   /**
    * Calc balance by product id
    */
-  const getProductBalance = (productId) => {
-    const productBalance = (orderState.order?.products?.reduce((sum, product) => sum + (product && product.id === productId ? product.quantity : 0), 0) || 0)
-    return productBalance
+  const getProductMax = (product) => {
+    const productMax = (product.inventoried ? product.stock : maxCartProductConfig)
+    const max = product.quantity + productMax - product.balance
+    return max < product.quantity ? product.quantity : max
   }
 
   /**
    * Calc balance by product id
    */
-  const getProductMax = (product) => {
-    const productBalance = getProductBalance(product.id)
+  const offsetDisabled = (product) => {
     const productMax = (product.inventoried ? product.stock : maxCartProductConfig)
-    return product.quantity + productMax - productBalance
+    return productMax - (product.balance - product.quantity)
   }
 
-  /**
-   * Clear all product of the cart
-   */
-  const clearProducts = () => {
-    dispatchOrder({ type: ORDER_ACTIONS.CLEAR_PRODUCTS })
-  }
+  // /**
+  //  * Clear all product of the cart
+  //  */
+  // const clearCart = (uuid) => {
+  //   clearCart(uuid)
+  //   // dispatchOrd⁄er({ type: ORDER_ACTIONS.CLEAR_PRODUCTS })
+  // }
 
-  /**
-   * Remove a product of the cart
-   */
-  const removeProduct = (productCode) => {
-    dispatchOrder({ type: ORDER_ACTIONS.REMOVE_PRODUCT, productCode })
-  }
+  // /**
+  //  * Remove a product of the cart
+  //  */
+  // const removeProduct = (product) => {
+  //   removeProduct(product)
+  //   dispatchOrder({ type: ORDER_ACTIONS.REMOVE_PRODUCT, productCode })
+  // }
 
   /**
    * Change product quantity of the cart
    */
-  const changeQuantity = (productCode, quantity) => {
+  const changeQuantity = (product, quantity) => {
     if (quantity === 0) {
-      removeProduct(productCode)
+      removeProduct(product)
     } else {
-      dispatchOrder({ type: ORDER_ACTIONS.CHANGE_PRODUCT_QUANTITY, productCode, quantity })
+      updateProduct({
+        id: product.id,
+        business_id: product.id,
+        code: product.code,
+        quantity: quantity
+      })
     }
   }
 
@@ -76,11 +83,13 @@ export const Cart = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          order={orderState.order}
-          clearProducts={clearProducts}
+          carts={orderState.carts}
+          orderState={orderState}
+          clearCart={clearCart}
           removeProduct={removeProduct}
           changeQuantity={changeQuantity}
           getProductMax={getProductMax}
+          offsetDisabled={offsetDisabled}
           handleEditProduct={handleEditProduct}
         />
       )}
