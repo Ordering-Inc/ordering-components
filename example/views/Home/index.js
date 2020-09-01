@@ -134,6 +134,9 @@ export const Home = () => {
         <li>
           <Link to='/search_options'>Search options</Link>
         </li>
+        <li>
+          <Link to='/pages'>Pages</Link>
+        </li>
       </ul>
     </>
   )
