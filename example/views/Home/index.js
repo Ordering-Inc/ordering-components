@@ -53,6 +53,9 @@ export const Home = () => {
         <li>
           <Link to='/product_option_example'>Product option example</Link>
         </li>
+        <li>
+          <Link to='/review_orders'>Review my Orders</Link>
+        </li>
       </ul>
     </>
   )

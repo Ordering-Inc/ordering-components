@@ -20,8 +20,9 @@ import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { OrderReviewExample } from "./views/OrderReviewExample"
 
-export default function App ({ ordering }) {
+export default function App({ ordering }) {
   return (
     <Router>
       <>
@@ -69,6 +70,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/product_option_example'>
             <ProductOptionExample ordering={ordering} />
+          </Route>
+          <Route path='/review_orders'>
+            <OrderReviewExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
