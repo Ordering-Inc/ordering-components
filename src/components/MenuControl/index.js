@@ -61,6 +61,7 @@ export const MenuControl = (props) => {
     })
     setStartDate(date)
     setDateSelected(moment(date).format('YYYY-MM-DD HH:mm'))
+    props.handlerSelectDate(moment(date).format('YYYY-MM-DD HH:mm'))
   }
 
   /**
@@ -188,6 +189,10 @@ MenuControl.propTypes = {
    * Handle schedule and menu selected by user
    */
   handleMenuInfo: PropTypes.func,
+  /**
+   * handlerSelectDate, method to returns a day selected
+   */
+  handlerSelectDate: PropTypes.func,
   /**
    * Components types before menu control
    * Array of type components, the parent props will pass to these components

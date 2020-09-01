@@ -31,6 +31,10 @@ export const MenuControlExample = ({ ordering }) => {
      */
     handleMenuInfo: (e) => { console.log(e) },
     /**
+     * handlerSelectDate, method to returns a day selected
+     */
+    handlerSelectDate: (e) => { console.log(e) },
+    /**
      * Components types before menu control
      * Array of type components, the parent props will pass to these components
      */
