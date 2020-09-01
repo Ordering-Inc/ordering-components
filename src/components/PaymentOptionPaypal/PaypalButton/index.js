@@ -82,12 +82,7 @@ export const PaypalButton = props => {
           ? (data, actions) => onApprove(data, actions)
           : (data, actions) => onApprove(data, actions)
       }
-      style={{
-        layout: 'vertical',
-        color: 'gold',
-        shape: 'rect',
-        label: 'paypal'
-      }}
+      style={props.style}
     />
   )
 }

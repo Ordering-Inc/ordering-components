@@ -3,6 +3,10 @@ import { PaypalButton } from '../../../src/components/PaymentOptionPaypal/Paypal
 
 export const PaymentOptionPaypalUI = (props) => {
   const {
+    style,
+    amount,
+    clientID,
+    handlerChangePaypal,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -33,12 +37,13 @@ export const PaymentOptionPaypalUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <div style={{ width: '280px' }}>
+      <div style={{ width: '500px' }}>
         <PaypalButton
-          clientID='AaMgophpAYpdvBlEtunjrZB7jHmmORNX2NzVGeLpOinbIdl6wlmaDbgC7IvyKDgExjet1rxbp4Vv-Wqd'
-          amount='1.00'
+          clientID={clientID}
+          style={style}
+          amount={amount}
           onError={onError}
-          onSuccess={onSuccess}
+          onSuccess={handlerChangePaypal || onSuccess}
           onCancel={onCancel}
         />
       </div>

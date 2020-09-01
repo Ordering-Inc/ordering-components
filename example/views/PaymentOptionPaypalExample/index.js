@@ -16,6 +16,27 @@ export const PaymentOptionPaypalExample = ({ ordering }) => {
      */
     UIComponent: PaymentOptionPaypalUI,
     /**
+     * Amount to charge on paypal method
+     */
+    amount: '1.00',
+    /**
+     * paypal ClientID
+     */
+    clientID: '',
+    /**
+     * style, some properties to show paypal button, check out the docs https://developer.paypal.com/docs/archive/checkout/how-to/customize-button/ for a complete documentation
+     */
+    style: {
+      layout: 'vertical',
+      color: 'gold',
+      shape: 'rect',
+      label: 'paypal'
+    },
+    /**
+     * Method to get success response from paypal button
+     */
+    handlerChangePaypal: null,
+    /**
      * Components types before payment option paypal
      * Array of type components, the parent props will pass to these components
      */

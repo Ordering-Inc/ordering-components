@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 export const PaymentOptionPaypal = (props) => {
   const {
-    ordering,
     UIComponent
   } = props
 
@@ -12,7 +11,6 @@ export const PaymentOptionPaypal = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          payPalKey='AaMgophpAYpdvBlEtunjrZB7jHmmORNX2NzVGeLpOinbIdl6wlmaDbgC7IvyKDgExjet1rxbp4Vv-Wqd'
         />
       )}
     </>
@@ -29,6 +27,22 @@ PaymentOptionPaypal.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Amount to charge on paypal method
+   */
+  amount: PropTypes.string,
+  /**
+   * paypal ClientID
+   */
+  clientID: PropTypes.string,
+  /**
+   * style, some properties to show paypal button, check out the docs https://developer.paypal.com/docs/archive/checkout/how-to/customize-button/ for a complete documentation
+   */
+  style: PropTypes.object,
+  /**
+   * Method to get success response from paypal button
+   */
+  handlerChangePaypal: PropTypes.func,
   /**
    * Components types before payment option paypal
    * Array of type components, the parent props will pass to these components
