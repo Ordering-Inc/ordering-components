@@ -4,9 +4,10 @@ import { useOrder } from '../../../src/contexts/OrderContext'
 
 export const DriverTips = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    businessId
   } = props
-  const [{ order }] = useOrder()
+  const [orderState] = useOrder()
 
   /**
    * Save percentage selected by user
@@ -22,12 +23,14 @@ export const DriverTips = (props) => {
    * @param {number} val
    */
   const handlerChangeOption = (val) => {
-    props.handlerChangeDriverOption(val)
-    setOptionSelected(val)
+    props.handlerChangeDriverOption(parseInt(val))
+    setOptionSelected(parseInt(val))
   }
 
+  const cartTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
+
   useEffect(() => {
-    setDriverTipAmount(`$ ${((order.total * optionSelected) / 100).toFixed(2)}`)
+    setDriverTipAmount(`$ ${((cartTotal * optionSelected) / 100).toFixed(2)}`)
   }, [optionSelected])
 
   return (
@@ -54,6 +57,10 @@ DriverTips.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Cart business id
+   */
+  businessId: PropTypes.number,
   /**
    * driver tips options
    */

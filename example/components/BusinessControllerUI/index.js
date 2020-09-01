@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { useOrder } from '../../../src/contexts/OrderContext'
-
 export const BusinessControllerUI = (props) => {
-  const [{ order }] = useOrder()
   const {
+    orderState,
     isBusinessClose,
     getBusinessOffer,
     business,
@@ -61,7 +59,7 @@ export const BusinessControllerUI = (props) => {
           <p>Delivery Fee: ${business.deliveryPrice}.00</p>
           <p>Description: {business.description}</p>
           <p>Distance: {formatNumber(business.distance) || 0} KM</p>
-          {order.type === 1 ? (
+          {orderState.options.type === 1 ? (
             <p>Delivery time: {business.delivery_time}</p>
           ) : (
             <p>Pickup time: {business.pickup_time}</p>

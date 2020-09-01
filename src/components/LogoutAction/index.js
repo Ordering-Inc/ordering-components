@@ -25,10 +25,7 @@ export const LogoutAction = (props) => {
     try {
       setFormState({ ...formState, loading: true })
       const accessToken = token || data.token
-      const response = await ordering.users().logout({}, {
-        accessToken
-      })
-      console.log(response)
+      const response = await ordering.setAccessToken(accessToken).users().logout()
       setFormState({
         result: response.content,
         loading: false
