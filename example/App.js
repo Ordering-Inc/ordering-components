@@ -46,6 +46,9 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
+import { PaymentOptionPaypalExample } from './views/PaymentOptionPaypalExample'
+import { PaymentOptionCashExample } from './views/PaymentOptionCashExample'
+import { PaymentOptionStripeExample } from './views/PaymentOptionStripeExample'
 
 export default function App ({ ordering }) {
   return (
@@ -179,6 +182,15 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/businesses_list'>
             <BusinessesListExample ordering={ordering} />
+          </Route>
+          <Route path='/payment_option_paypal' exact>
+            <PaymentOptionPaypalExample ordering={ordering} />
+          </Route>
+          <Route path='/payment_option_cash' exact>
+            <PaymentOptionCashExample ordering={ordering} />
+          </Route>
+          <Route path='/payment_option_stripe' exact>
+            <PaymentOptionStripeExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
