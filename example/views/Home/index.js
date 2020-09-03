@@ -24,6 +24,9 @@ export const Home = () => {
           <Link to='/facebook_login'>Facebook login</Link>
         </li>
         <li>
+          <Link to='/apple_login'>Apple Login</Link>
+        </li>
+        <li>
           <Link to='/session_manager'>Session manager</Link>
         </li>
         <li>
@@ -137,6 +140,7 @@ export const Home = () => {
         <li>
           <Link to='/search_options'>Search options</Link>
         </li>
+        
       </ol>
     </>
   )

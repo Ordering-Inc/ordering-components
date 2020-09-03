@@ -46,6 +46,7 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
+import {AppleLoginExample} from "./views/AppleLoginExample"
 
 export default function App ({ ordering }) {
   return (
@@ -65,6 +66,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/facebook_login'>
             <FacebookLogin ordering={ordering} />
+          </Route>
+          <Route path='/apple_login'>
+            <AppleLoginExample ordering={ordering} />
           </Route>
           <Route path='/session_manager'>
             <SessionManager ordering={ordering} />
