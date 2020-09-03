@@ -46,6 +46,7 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
+import { OrderDetailsExample } from './views/OrderDetailsExample'
 
 export default function App ({ ordering }) {
   return (
@@ -179,6 +180,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/businesses_list'>
             <BusinessesListExample ordering={ordering} />
+          </Route>
+          <Route path='/order_details'>
+            <OrderDetailsExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />

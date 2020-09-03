@@ -137,6 +137,9 @@ export const Home = () => {
         <li>
           <Link to='/search_options'>Search options</Link>
         </li>
+        <li>
+          <Link to='/order_details'>Order details</Link>
+        </li>
       </ol>
     </>
   )
