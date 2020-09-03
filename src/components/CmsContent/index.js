@@ -6,23 +6,35 @@ import PropTypes from 'prop-types'
  */
 export const CmsContent = (props) => {
   const {
-    // ordering,
+    ordering,
     UIComponent,
     pageSlug
   } = props
 
   /**
-   * Array to save current order
+   * Array to save the body of the page
    */
-  const [body, setBody] = useState('')
-
+  const [body, setBody] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   /**
    * Method used to get the page by slug
    */
   const getPage = async (slug) => {
-    const response = await fetch(`https://apiv4.ordering.co/v400/en/demo/pages/${slug}`)
-    const data = await response.json()
-    setBody(data.result.body)
+    setLoading(true)
+    try {
+      const { content: { error, result } } = await ordering.pages(slug).get()
+      setLoading(false)
+      if (!error) {
+        setBody(result.body)
+        setError(null)
+      } else {
+        setError(result)
+      }
+    } catch (error) {
+      setLoading(false)
+      setError([error.message])
+    }
   }
 
   useEffect(() => {
@@ -35,6 +47,8 @@ export const CmsContent = (props) => {
         <UIComponent
           {...props}
           body={body}
+          loading={loading}
+          error={error}
         />
       )}
     </>

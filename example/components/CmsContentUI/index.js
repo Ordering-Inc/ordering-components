@@ -3,6 +3,8 @@ import React from 'react'
 export const CmsContentUI = (props) => {
   const {
     body,
+    loading,
+    error,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -10,7 +12,7 @@ export const CmsContentUI = (props) => {
   } = props
   return (
     <>
-      <h1>CMS</h1>
+      <h1>Pages</h1>
       {
         beforeElements.map((BeforeElement, i) => (
           <React.Fragment key={i}>
@@ -21,10 +23,20 @@ export const CmsContentUI = (props) => {
       {
         beforeComponents.map((BeforeComponent, i) => <BeforeComponent key={i} {...props} />)
       }
-      <div dangerouslySetInnerHTML={{
-        __html: body
-      }}
-      />
+      {
+        loading && 'Loading...'
+      }
+      {
+        body && (
+          <div dangerouslySetInnerHTML={{
+            __html: body
+          }}
+          />
+        )
+      }
+      {
+        (!loading && error) && error
+      }
       {
         afterComponents.map((AfterComponent, i) => <AfterComponent key={i} {...props} />)
       }
