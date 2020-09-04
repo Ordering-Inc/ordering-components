@@ -18,7 +18,7 @@ export const GoogleLoginUI = (props) => {
         <BeforeComponent key={i} {...props} />
       ))}
       {<h2>Google Login</h2>}
-      {<button onClick={signIn}>Login</button>}
+      {<div onClick={signIn} id='my-signin2'>Login</div>}
       {afterComponents.map((AfterComponent, i) => (
         <AfterComponent key={i} {...props} />
       ))}
