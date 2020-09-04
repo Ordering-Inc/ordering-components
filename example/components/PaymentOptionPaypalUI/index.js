@@ -14,7 +14,11 @@ export const PaymentOptionPaypalUI = (props) => {
   } = props
 
   const onSuccess = payment => {
-    handlerChangePaypal({ payType: 'Paypal Express', value: payment })
+    handlerChangePaypal({
+      paymethodId: 29,
+      gateway: 'paypal_express',
+      data: payment
+    })
     console.log(payment)
   }
 

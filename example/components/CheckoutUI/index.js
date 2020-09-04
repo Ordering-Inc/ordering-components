@@ -23,10 +23,13 @@ import { CouponControlUI } from '../CouponControlUI'
 
 export const CheckoutUI = (props) => {
   const {
+    isOrderValid,
+    paymentSelected,
     orderState,
     ordering,
     businessDetails,
-    handlerValues,
+    handlerPaymentMethod,
+    handlerClickPlaceOrder,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -54,15 +57,14 @@ export const CheckoutUI = (props) => {
       <MomentOption
         ordering={ordering}
         UIComponent={MomentOptionUI}
-        onChangeMoment={(value) => handlerValues({ field: 'moment', value })}
+        // onChangeMoment={(value) => handlerValues({ field: 'moment', value })}
       />
       <hr />
 
       <AddressDetails
         ordering={ordering}
         UIComponent={AddressDetailsUI}
-        businessId={41}
-        // apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+        businessId={props.businessId}
         apiKey=''
       />
       <hr />
@@ -72,11 +74,10 @@ export const CheckoutUI = (props) => {
           <UserDetails
             ordering={ordering}
             UIComponent={UserDetailsUI}
-            businessId={41}
+            businessId={props.businessId}
             useValidationFields
             useDefualtSessionManager
             useSessionUser
-            handlerCouponValue={handlerValues}
           />
         </div>
         <div style={{ width: '50%' }}>
@@ -112,8 +113,8 @@ export const CheckoutUI = (props) => {
       <PaymentOptions
         ordering={ordering}
         UIComponent={PaymentOptionsUI}
-        businessId={41}
-        onChangePayment={handlerValues}
+        businessId={props.businessId}
+        onChangePayment={handlerPaymentMethod}
       />
       <hr />
 
@@ -121,9 +122,9 @@ export const CheckoutUI = (props) => {
         <>
           <DriverTips
             UIComponent={DriverTipsUI}
-            businessId={41}
+            businessId={props.businessId}
             driverTipsOptions={[0, 10, 15, 20, 25]}
-            handlerChangeDriverOption={(value) => handlerValues({ field: 'driver_tips', value: value / 100 })}
+            // handlerChangeDriverOption={(value) => handlerValues({ field: 'driver_tips', value: value / 100 })}
           />
           <hr />
         </>}
@@ -131,14 +132,11 @@ export const CheckoutUI = (props) => {
       <CouponControl
         ordering={props.ordering}
         UIComponent={CouponControlUI}
-        businessId={41}
-        isDisabled
-        onChangeCouponValue={handlerValues}
+        businessId={props.businessId}
       />
-      <br />
-      <br />
+      <br /><br /><hr />
 
-      <button>
+      <button disabled={!isOrderValid.valid || !paymentSelected} onClick={() => handlerClickPlaceOrder()}>
         Place Order
       </button>
 

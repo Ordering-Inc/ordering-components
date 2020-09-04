@@ -40,7 +40,11 @@ export const PaymentOptionStripeUI = (props) => {
   const closeModal = () => {
     setIsOpen(false)
     if (cardSelected) {
-      props.handlerSelectCard({ payType: props.payType, value: cardSelected })
+      props.handlerSelectCard({
+        paymethodId: props.payType === 'Stripe' ? 22 : 31,
+        gateway: props.payType === 'Stripe' ? 'stripe' : 'stripe_connect',
+        data: cardSelected
+      })
     }
   }
 

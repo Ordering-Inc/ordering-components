@@ -34,7 +34,11 @@ export const PaymentOptionStripeRedirectUI = (props) => {
 
   const handlerStripeRedirect = (srcToken) => {
     if (srcToken) {
-      props.handlerStripeSource({ payType: 'Stripe Redirect', value: srcToken })
+      props.handlerStripeSource({
+        paymethodId: 32,
+        gateway: 'stripe_redirect',
+        data: srcToken
+      })
       setIsOpen(false)
     }
   }

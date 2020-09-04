@@ -1,12 +1,11 @@
 import React from 'react'
-import './style.css'
 
 export const CouponControlUI = (props) => {
   const {
-    isDisabled,
+    couponDefault,
     couponInput,
-    coupon,
     handleButtonApplyClick,
+    handleRemoveCouponClick,
     onChangeInputCoupon,
     beforeComponents,
     afterComponents,
@@ -25,19 +24,30 @@ export const CouponControlUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
-      <input
-        type='text'
-        name='coupon'
-        disabled={!isDisabled}
-        className={`
-          ${coupon && coupon.error ? 'error' : ''}
-          ${coupon && !coupon.loading && !coupon.error && coupon.coupon ? 'success' : ''}
-        `}
-        style={{ width: '50%' }}
-        placeholder='Discount coupon'
-        onChange={(e) => onChangeInputCoupon(e.target.value)}
-      />
-      <button type='button' disabled={!couponInput} onClick={handleButtonApplyClick}>{coupon.loading ? 'Loading...' : 'Apply'}</button>
+
+      {couponDefault && (
+        <>
+          <p>You have the coupon <strong style={{ color: 'red', fontSize: '24px' }}>{couponDefault}</strong> assigned</p>
+          <button onClick={() => handleRemoveCouponClick()}>
+            Remove {couponDefault} coupon
+          </button>
+        </>
+      )}
+
+      {!couponDefault && (
+        <>
+          <input
+            type='text'
+            name='coupon'
+            style={{ width: '50%' }}
+            placeholder='Discount coupon'
+            onChange={(e) => onChangeInputCoupon(e.target.value)}
+          />
+          <button type='button' disabled={!couponInput} onClick={handleButtonApplyClick}>
+            Apply
+          </button>
+        </>
+      )}
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

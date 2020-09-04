@@ -19,10 +19,18 @@ export const CheckoutExample = ({ ordering }) => {
      * Id for get business details from API
      */
     businessId: 41,
+    // /**
+    //  * handler values from other components
+    //  */
+    // handlerValues: (e) => { console.log(e) },
     /**
-     * handler values from other components
+     * Custom method to receive props from checkout page
      */
-    handlerValues: (e) => { console.log(e) },
+    handleCustomClick: (e) => { console.log('handleCustomClick', e) },
+    /**
+     * onPlaceOrderClick, function to get click event and return business object after default behavior
+     */
+    onPlaceOrderClick: (e) => { console.log('onPlaceOrderClick event', e) },
     /**
      * Components types before checkout
      * Array of type components, the parent props will pass to these components

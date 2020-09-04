@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import { useOrder } from '../../contexts/OrderContext'
+
 export const PaymentOptions = (props) => {
   const {
     ordering,
     options,
     businessId,
-    optionDefault,
     UIComponent
   } = props
 
+  const [orderState] = useOrder()
+  const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
+
   const [optionsList, setOptionsList] = useState({ options: [], loading: true, error: null })
-  const [optionSelected, setOptionSelected] = useState(optionDefault)
+  const [optionSelected, setOptionSelected] = useState()
 
   const getOptions = async () => {
     try {
@@ -34,8 +38,14 @@ export const PaymentOptions = (props) => {
   }
 
   useEffect(() => {
-    if (optionSelected === 'Card on delivery') {
-      props.onChangePayment({ payType: optionSelected, value: null })
+    if (optionSelected?.id === 2) {
+      props.onChangePayment({
+        paymethodId: 2,
+        gateway: 'card_delivery',
+        data: null
+      })
+    } else {
+      props.onChangePayment(null)
     }
   }, [optionSelected])
 
@@ -55,6 +65,7 @@ export const PaymentOptions = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orderTotal={orderTotal}
           optionsList={optionsList}
           optionSelected={optionSelected}
           handleClickOption={onClickOption}

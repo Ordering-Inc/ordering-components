@@ -8,7 +8,7 @@ import { AddressForm } from '../../../src/components/AddressForm'
 import { AddressFormUI } from '../../components/AddressFormUI'
 
 export const PlacesExample = ({ ordering }) => {
-  const [{ order }] = useOrder()
+  const [orderState] = useOrder()
   // const [{ user, token }] = useSession()
   const [curAddress, setCurAddress] = useState(null)
 
@@ -96,7 +96,7 @@ export const PlacesExample = ({ ordering }) => {
 
   return (
     <>
-      <p>Current order address: {order.address?.address} ({order.address?.location?.lat}, {order.address?.location?.lng})</p>
+      <p>Current order address: {orderState?.options?.address?.address} ({orderState?.options?.address?.location?.lat}, {orderState?.options?.address?.location?.lng})</p>
       <AddressForm {...addressFormProps} address={curAddress} />
       <AddressList {...addressListProps} />
     </>

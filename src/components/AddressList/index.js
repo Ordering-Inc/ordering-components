@@ -38,7 +38,7 @@ export const AddressList = (props) => {
   const loadAddresses = async () => {
     try {
       setAddressList({ ...addressList, loading: true })
-      const { content } = await ordering.users(userId).addresses().get({ accessToken })
+      const { content } = await ordering.setAccessToken(accessToken).users(userId).addresses().get({ accessToken })
       setAddressList({
         loading: false,
         error: content.error ? content.result : null,

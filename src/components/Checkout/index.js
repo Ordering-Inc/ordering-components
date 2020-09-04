@@ -10,6 +10,7 @@ export const Checkout = (props) => {
   } = props
 
   const [businessDetails, setBusinessDetails] = useState({ business: {}, loading: true, error: null })
+  const [paymentSelected, setpaymentSelected] = useState(null)
 
   const getBusiness = async () => {
     try {
@@ -33,17 +34,36 @@ export const Checkout = (props) => {
     getBusiness()
   }, [])
   /**
-   * Order conext
+   * Order context
    */
   const [orderState] = useOrder()
+
+  const isOrderValid = {
+    valid: orderState?.carts[`businessId:${businessId}`]?.valid || false,
+    valid_address: orderState?.carts[`businessId:${businessId}`]?.valid_address || false,
+    valid_products: orderState?.carts[`businessId:${businessId}`]?.valid_products || false
+  }
+
+  const handlerClickPlaceOrder = () => {
+    if (props.handleCustomClick) {
+      props.handleCustomClick(paymentSelected)
+      return
+    }
+
+    props.onPlaceOrderClick(paymentSelected)
+  }
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          isOrderValid={isOrderValid}
+          paymentSelected={paymentSelected}
           orderState={orderState}
           businessDetails={businessDetails}
+          handlerPaymentMethod={(value) => setpaymentSelected(value)}
+          handlerClickPlaceOrder={handlerClickPlaceOrder}
         />
       )}
     </>
@@ -61,9 +81,17 @@ Checkout.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   * handler values from other components
+   * Custom method to receive props from checkout page
    */
-  handlerValues: PropTypes.func,
+  handleCustomClick: PropTypes.func,
+  /**
+   * onPlaceOrderClick, function to get click event and return business object after default behavior
+   */
+  onPlaceOrderClick: PropTypes.func,
+  // /**
+  //  * handler values from other components
+  //  */
+  // handlerValues: PropTypes.func,
   /**
    * Components types before Checkout
    * Array of type components, the parent props will pass to these components

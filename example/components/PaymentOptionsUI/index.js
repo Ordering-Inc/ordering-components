@@ -49,9 +49,9 @@ export const PaymentOptionsUI = (props) => {
                   key={option.paymethod.id}
                   value={option.paymethod.id}
                   style={{ padding: '5px', marginRight: '5px' }}
-                  onClick={() => handleClickOption(option.paymethod.name)}
+                  onClick={() => handleClickOption(option.paymethod)}
                 >
-                  {option.paymethod.name} {optionSelected === option.paymethod.name && <i>✔️</i>}
+                  {option.paymethod.name} {optionSelected?.id === option.paymethod.id && <i>✔️</i>}
                 </button>
               ))
             ) : (
@@ -71,7 +71,7 @@ export const PaymentOptionsUI = (props) => {
         )}
       </div>
 
-      {optionSelected === 'Cash' && (
+      {optionSelected?.name === 'Cash' && (
         <PaymentOptionCash
           UIComponent={PaymentOptionCashUI}
           useOrderContext
@@ -80,17 +80,17 @@ export const PaymentOptionsUI = (props) => {
         />
       )}
 
-      {(optionSelected === 'Stripe' || optionSelected === 'Stripe Connect') && (
+      {(optionSelected?.name === 'Stripe' || optionSelected?.name === 'Stripe Connect') && (
         <PaymentOptionStripe
           UIComponent={PaymentOptionStripeUI}
           ordering={props.ordering}
           businessId={props.businessId}
-          payType={optionSelected}
+          payType={optionSelected?.name}
           handlerSelectCard={onChangePayment}
         />
       )}
 
-      {optionSelected === 'Stripe Direct' && (
+      {optionSelected?.name === 'Stripe Direct' && (
         <PaymentOptionStripeDirect
           UIComponent={PaymentOptionStripeDirectUI}
           businessId={props.businessId}
@@ -98,16 +98,16 @@ export const PaymentOptionsUI = (props) => {
         />
       )}
 
-      {optionSelected === 'Paypal Express' && (
+      {optionSelected?.name === 'Paypal Express' && (
         <PaymentOptionPaypal
           UIComponent={PaymentOptionPaypalUI}
-          amount='1.00'
-          clientID='AZu6W47rHF0v6YZD6DJabACzuvoHmUlGtr7-Mr9UewXY4U7Cb378PQ9Lrhm-5FG6bxX2_2th2dA7g5Mh'
+          amount={props.orderTotal.toString()}
+          clientID=''
           handlerChangePaypal={onChangePayment}
         />
       )}
 
-      {optionSelected === 'Stripe Redirect' && (
+      {optionSelected?.name === 'Stripe Redirect' && (
         <PaymentOptionStripeRedirect
           UIComponent={PaymentOptionStripeRedirectUI}
           businessId={props.businessId}

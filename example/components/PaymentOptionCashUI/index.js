@@ -20,8 +20,9 @@ export const PaymentOptionCashUI = (props) => {
 
   const handleForm = ({ cash }) => {
     handlerSubmit({
-      payType: 'cash',
-      value: cash
+      paymethodId: 1,
+      gateway: 'cash',
+      data: cash
     })
   }
 
