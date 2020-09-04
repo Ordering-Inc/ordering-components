@@ -23,16 +23,15 @@ export const AddressDetailsUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
-
-      <p className='title'><strong>Address</strong></p><br />
+      <div style={{ display: 'flex' }}>
+        <h3 style={{ margin: '0px 5px 10px 0px' }}>
+          <strong>{userAddress}</strong>
+        </h3>
+        <div>
+          {orderType === 1 && <button>✏️</button>}
+        </div>
+      </div>
       <img src={googleMapsUrl} alt='google-maps-location' width='700' height='260' />
-      <p>{userAddress}</p>
-      {orderType === 1 && (
-        <>
-          <p>Other</p>
-          <button>Change</button>
-        </>
-      )}
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
