@@ -33,6 +33,7 @@ export const CouponControlUI = (props) => {
           ${coupon && coupon.error ? 'error' : ''}
           ${coupon && !coupon.loading && !coupon.error && coupon.coupon ? 'success' : ''}
         `}
+        style={{ width: '50%' }}
         placeholder='Discount coupon'
         onChange={(e) => onChangeInputCoupon(e.target.value)}
       />

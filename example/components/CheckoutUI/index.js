@@ -18,6 +18,9 @@ import { PaymentOptionsUI } from '../PaymentOptionsUI'
 import { DriverTips } from '../../../src/components/DriverTips'
 import { DriverTipsUI } from '../DriverTipsUI'
 
+import { CouponControl } from '../../../src/components/CouponControl'
+import { CouponControlUI } from '../CouponControlUI'
+
 export const CheckoutUI = (props) => {
   const {
     orderState,
@@ -89,6 +92,20 @@ export const CheckoutUI = (props) => {
           driverTipsOptions={[0, 10, 15, 20, 25]}
           handlerChangeDriverOption={(value) => handlerValues({ field: 'driver_tips', value: value / 100 })}
         />}
+
+      <CouponControl
+        ordering={props.ordering}
+        UIComponent={CouponControlUI}
+        businessId={41}
+        isDisabled
+        onChangeCouponValue={handlerValues}
+      />
+      <br />
+      <br />
+
+      <button>
+        Place Order
+      </button>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

@@ -27,7 +27,7 @@ export const CouponControl = (props) => {
       /**
        * Change this fetch with a SDK method
        */
-      const response = await fetch(`https://apiv4.ordering.co/v400/en/demo/business/41/offers/${couponInput}?business_id=${businessId}`)
+      const response = await fetch(`https://apiv4.ordering.co/v400/en/demo/business/${businessId}/offers/${couponInput}?business_id=${businessId}`)
       const data = await response.json()
       setcoupon({
         loading: false,
@@ -35,7 +35,7 @@ export const CouponControl = (props) => {
         coupon: data.result
       })
       if (data?.result?.name) {
-        onChangeCouponValue(data.result)
+        onChangeCouponValue({ field: 'coupon', value: data.result })
       }
     } catch (error) {
       setcoupon({

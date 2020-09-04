@@ -84,7 +84,7 @@ export const UserDetails = (props) => {
     }
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users(userState.result.result.id).save(formState.changes, {
+      const response = await ordering.setAccessToken(accessToken).users(userState.result.result.id).save(formState.changes, {
         accessToken: accessToken
       })
       setFormState({
@@ -180,10 +180,6 @@ UserDetails.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
-  /**
-   * Get coupon value
-   */
-  handlerCouponValue: PropTypes.func,
   /**
    * Use session user to details
    */
