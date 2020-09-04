@@ -35,7 +35,7 @@ export const DriverTips = (props) => {
     if (useOrderContext) {
       changeDriverTip(businessId, parseInt(val))
     }
-    props.handlerChangeDriverOption(parseInt(val))
+    // props.handlerChangeDriverOption(parseInt(val))
     setOptionSelected(parseInt(val))
   }
 

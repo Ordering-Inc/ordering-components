@@ -21,6 +21,9 @@ import { DriverTipsUI } from '../DriverTipsUI'
 import { CouponControl } from '../../../src/components/CouponControl'
 import { CouponControlUI } from '../CouponControlUI'
 
+import { Cart } from '../../../src/components/Cart'
+import { CartUI } from '../../components/CartUI'
+
 export const CheckoutUI = (props) => {
   const {
     isOrderValid,
@@ -36,13 +39,17 @@ export const CheckoutUI = (props) => {
     afterElements
   } = props
 
-  if (!isOrderValid.valid_products) {
-    window.alert('Please check your products!')
-  }
+  /**
+   * uncomment when properties are readys
+   */
 
-  if (!isOrderValid.valid_address) {
-    window.alert('Please check your address!')
-  }
+  // if (!isOrderValid.valid_products) {
+  //   window.alert('Please check your products!')
+  // }
+
+  // if (!isOrderValid.valid_address) {
+  //   window.alert('Please check your address!')
+  // }
 
   return (
     <>
@@ -132,6 +139,7 @@ export const CheckoutUI = (props) => {
             UIComponent={DriverTipsUI}
             businessId={props.businessId}
             driverTipsOptions={[0, 10, 15, 20, 25]}
+            useOrderContext
             // handlerChangeDriverOption={(value) => handlerValues({ field: 'driver_tips', value: value / 100 })}
           />
           <hr />
@@ -141,6 +149,12 @@ export const CheckoutUI = (props) => {
         ordering={props.ordering}
         UIComponent={CouponControlUI}
         businessId={props.businessId}
+      />
+      <br /><br /><hr />
+
+      <strong>Your Order</strong>
+      <Cart
+        UIComponent={CartUI}
       />
       <br /><br /><hr />
 
