@@ -16,9 +16,10 @@ export const PaymentOptions = (props) => {
   const getOptions = async () => {
     try {
       const { content: { result } } = await ordering.businesses(businessId).get()
+      const options = result.paymethods.filter(paym => paym.paymethod.enabled).sort((a, b) => a.paymethod_id - b.paymethod_id)
       setOptionsList({
         loading: false,
-        options: result.paymethods
+        options
       })
     } catch (error) {
       setOptionsList({
@@ -28,10 +29,15 @@ export const PaymentOptions = (props) => {
     }
   }
 
-  const onChangeOption = (val) => {
+  const onClickOption = (val) => {
     setOptionSelected(val)
-    props.onChangePayment(val)
   }
+
+  useEffect(() => {
+    if (optionSelected === 'Card on delivery') {
+      props.onChangePayment({ payType: optionSelected, value: null })
+    }
+  }, [optionSelected])
 
   useEffect(() => {
     if (options) {
@@ -51,7 +57,7 @@ export const PaymentOptions = (props) => {
           {...props}
           optionsList={optionsList}
           optionSelected={optionSelected}
-          handleChangeOption={onChangeOption}
+          handleClickOption={onClickOption}
         />
       )}
     </>

@@ -3,14 +3,14 @@ import React from 'react'
 import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
 import { OrderTypeControlUI } from '../OrderTypeControlUI'
 
-import { UserDetails } from '../../../src/components/UserDetails'
-import { UserDetailsUI } from '../UserDetailsUI'
+import { MomentOption } from '../../../src/components/MomentOption'
+import { MomentOptionUI } from '../MomentOptionUI'
 
 import { AddressDetails } from '../../../src/components/AddressDetails'
 import { AddressDetailsUI } from '../AddressDetailsUI'
 
-import { MomentOption } from '../../../src/components/MomentOption'
-import { MomentOptionUI } from '../MomentOptionUI'
+import { UserDetails } from '../../../src/components/UserDetails'
+import { UserDetailsUI } from '../UserDetailsUI'
 
 import { PaymentOptions } from '../../../src/components/PaymentOptions'
 import { PaymentOptionsUI } from '../PaymentOptionsUI'
@@ -45,6 +45,22 @@ export const CheckoutUI = (props) => {
         UIComponent={OrderTypeControlUI}
         orderTypes={[1, 2, 3, 4, 5]}
       />
+      <hr style={{ marginBottom: '20px' }} />
+
+      <MomentOption
+        ordering={ordering}
+        UIComponent={MomentOptionUI}
+        onChangeMoment={handlerValues}
+      />
+      <hr />
+
+      <AddressDetails
+        ordering={ordering}
+        UIComponent={AddressDetailsUI}
+        businessId={41}
+        // apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+        apiKey=''
+      />
       <hr />
 
       <UserDetails
@@ -58,21 +74,6 @@ export const CheckoutUI = (props) => {
       />
       <hr />
 
-      <AddressDetails
-        ordering={ordering}
-        UIComponent={AddressDetailsUI}
-        businessId={41}
-        apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
-      />
-      <hr />
-
-      <MomentOption
-        ordering={ordering}
-        UIComponent={MomentOptionUI}
-        onChangeMoment={handlerValues}
-      />
-
-      <hr />
       <PaymentOptions
         ordering={ordering}
         UIComponent={PaymentOptionsUI}
@@ -80,9 +81,11 @@ export const CheckoutUI = (props) => {
         onChangePayment={handlerValues}
       />
       <hr />
+
       {orderState.options.type === 1 &&
         <DriverTips
           UIComponent={DriverTipsUI}
+          businessId={41}
           driverTipsOptions={[0, 10, 15, 20, 25]}
           handlerChangeDriverOption={handlerValues}
         />}

@@ -18,6 +18,13 @@ export const PaymentOptionCashUI = (props) => {
 
   const { handleSubmit, register, errors, formState } = useForm()
 
+  const handleForm = ({ cash }) => {
+    handlerSubmit({
+      payType: 'cash',
+      value: cash
+    })
+  }
+
   return (
     <>
       {beforeElements.map((BeforeElement, i) => (
@@ -30,13 +37,12 @@ export const PaymentOptionCashUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <h1>Order Total: {total}</h1>
-
-      <form onSubmit={handleSubmit(handlerSubmit)}>
+      <form onSubmit={handleSubmit(handleForm)}>
+        <label>Don’t have exact amount? Let us know with how much will you pay </label>
         <input
           name='cash'
-          placeholder='Don’t have exact amount? Let us know with how much will you pay'
-          style={{ borderColor: errors.cash && 'red', width: '60%' }}
+          placeholder='$0.00'
+          style={{ borderColor: errors.cash && 'red', borderRadius: '20px', padding: '8px' }}
           ref={
             register({
               required: true,
@@ -44,10 +50,8 @@ export const PaymentOptionCashUI = (props) => {
             })
           }
         />
-        {errors.cash && errors.cash.type === 'required' && <p className='error' style={errorStyle}>This field is required</p>}
-        {errors.cash && errors.cash.type === 'validate' && <p className='error' style={errorStyle}>This value must be greater than order total</p>}
-        <br />
-        <br />
+        {errors.cash && errors.cash.type === 'required' && <p style={errorStyle}>This field is required</p>}
+        {errors.cash && errors.cash.type === 'validate' && <p style={errorStyle}>This value must be greater than order total: {total}</p>}
         <button type='submit' disabled={formState.isSubmitting}>
           Send
         </button>

@@ -40,7 +40,7 @@ export const PaymentOptionStripeUI = (props) => {
   const closeModal = () => {
     setIsOpen(false)
     if (cardSelected) {
-      props.handlerSelectCard(cardSelected)
+      props.handlerSelectCard({ payType: props.payType, value: cardSelected })
     }
   }
 
@@ -57,7 +57,7 @@ export const PaymentOptionStripeUI = (props) => {
       )}
 
       <button onClick={() => setIsOpen(true)} disabled={!token}>
-        Stripe
+        {props.payType || 'Stripe'}
       </button>
       {!token && <strong style={{ color: 'red' }}>Sorry, you need to login to use this method</strong>}
 
@@ -67,10 +67,10 @@ export const PaymentOptionStripeUI = (props) => {
         UIComponent={ModalUI}
         open={modalIsOpen}
         onAccept={() => closeModal()}
-        onClose={() => setIsOpen(false)}
+        onClose={() => closeModal()}
         title='Please choose your card (Required)'
       >
-        <button onClick={() => setIsOpen(false)}>x</button>
+        <button onClick={() => closeModal()}>x</button>
         <div>
           {!cardsList.loading && !cardsList.error ? (
             <>

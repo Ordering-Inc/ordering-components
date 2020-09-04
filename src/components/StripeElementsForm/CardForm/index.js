@@ -31,7 +31,8 @@ export const CardForm = (props) => {
     await fetch('https://apiv4.ordering.co/v400/en/demo/payments/stripe/cards', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${user?.session?.access_token}`
+        Authorization: `Bearer ${user?.session?.access_token}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         business_id: businessId,

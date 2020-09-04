@@ -1,9 +1,17 @@
 import React from 'react'
 
+import { PaymentOptionCash } from '../../../src/components/PaymentOptionCash'
+import { PaymentOptionCashUI } from '../PaymentOptionCashUI'
+
+import { PaymentOptionStripe } from '../../../src/components/PaymentOptionStripe'
+import { PaymentOptionStripeUI } from '../PaymentOptionStripeUI'
+
 export const PaymentOptionsUI = (props) => {
   const {
+    optionSelected,
     optionsList,
-    handleChangeOption,
+    handleClickOption,
+    onChangePayment,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -23,22 +31,19 @@ export const PaymentOptionsUI = (props) => {
       )}
 
       <div className='payment-options'>
-        <h1>Payment Method</h1>
+        <h3>Payment Method</h3>
         {!optionsList.loading && !optionsList.error ? (
-          <div onChange={(e) => handleChangeOption(e.target.value)}>
+          <div style={{ marginBottom: '20px' }}>
             {optionsList.options && optionsList.options.length > 0 ? (
-              optionsList.options.map((option, i) => (
-                <div key={i}>
-                  {option.paymethod.enabled && (
-                    <div key={i} style={{ textTransform: 'capitalize' }}>
-                      <input
-                        type='radio'
-                        name='payment_option'
-                        value={option.paymethod.id}
-                      /> {option.paymethod.name} <br />
-                    </div>
-                  )}
-                </div>
+              optionsList.options.map(option => (
+                <button
+                  key={option.paymethod.id}
+                  value={option.paymethod.id}
+                  style={{ padding: '5px', marginRight: '5px' }}
+                  onClick={() => handleClickOption(option.paymethod.name)}
+                >
+                  {option.paymethod.name} {optionSelected === option.paymethod.name && <i>✔️</i>}
+                </button>
               ))
             ) : (
               <p>❌ Not Found ❌</p>
@@ -56,6 +61,25 @@ export const PaymentOptionsUI = (props) => {
           </div>
         )}
       </div>
+
+      {optionSelected === 'Cash' && (
+        <PaymentOptionCash
+          UIComponent={PaymentOptionCashUI}
+          businessId={props.businessId}
+          orderTotal={10}
+          handlerSubmit={onChangePayment}
+        />
+      )}
+
+      {(optionSelected === 'Stripe' || optionSelected === 'Stripe Connect') && (
+        <PaymentOptionStripe
+          UIComponent={PaymentOptionStripeUI}
+          ordering={props.ordering}
+          businessId={props.businessId}
+          payType={optionSelected}
+          handlerSelectCard={onChangePayment}
+        />
+      )}
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
