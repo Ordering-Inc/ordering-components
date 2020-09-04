@@ -71,6 +71,7 @@ export const PaymentOptionStripeRedirectUI = (props) => {
             <StripeRedirectForm
               UIComponent={StripeRedirectFormUI}
               user={user}
+              currency={props.currency}
               paymentMethods={paymentMethods}
               handlerStripeRedirect={handlerStripeRedirect}
             />

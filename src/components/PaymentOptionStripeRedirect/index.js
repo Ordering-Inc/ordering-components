@@ -54,6 +54,7 @@ export const PaymentOptionStripeRedirect = (props) => {
           {...props}
           stripePK={stripePK}
           modalName={modalName()}
+          currency='eur'
         />
       )}
     </>
