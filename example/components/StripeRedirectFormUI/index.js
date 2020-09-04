@@ -31,7 +31,7 @@ export const StripeRedirectFormUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <form onSubmit={handleSubmit(props.handlerSubmitPaymentMethod)}>
+      <form className='stripe' onSubmit={handleSubmit(props.handlerSubmitPaymentMethod)}>
         <label>Select a payment method</label>
         <select
           style={inputStyle}
