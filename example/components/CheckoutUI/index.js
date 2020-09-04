@@ -87,7 +87,7 @@ export const CheckoutUI = (props) => {
           UIComponent={DriverTipsUI}
           businessId={41}
           driverTipsOptions={[0, 10, 15, 20, 25]}
-          handlerChangeDriverOption={handlerValues}
+          handlerChangeDriverOption={(value) => handlerValues({ field: 'driver_tips', value: value / 100 })}
         />}
 
       {afterComponents.map(
