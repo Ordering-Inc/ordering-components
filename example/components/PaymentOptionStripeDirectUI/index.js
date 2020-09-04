@@ -29,7 +29,7 @@ export const PaymentOptionStripeDirectUI = (props) => {
   const handlerToken = (token) => {
     if (token) {
       setIsOpen(false)
-      props.handlerCreatedCard(token)
+      props.handlerCreatedCard({ payType: 'Stripe Direct', value: token })
     }
   }
 

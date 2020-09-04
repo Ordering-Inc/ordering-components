@@ -50,7 +50,7 @@ export const CheckoutUI = (props) => {
       <MomentOption
         ordering={ordering}
         UIComponent={MomentOptionUI}
-        onChangeMoment={handlerValues}
+        onChangeMoment={(value) => handlerValues({ field: 'moment', value })}
       />
       <hr />
 

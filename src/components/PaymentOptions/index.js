@@ -16,7 +16,7 @@ export const PaymentOptions = (props) => {
   const getOptions = async () => {
     try {
       const { content: { result } } = await ordering.businesses(businessId).get()
-      const options = result.paymethods.filter(paym => paym.paymethod.enabled).sort((a, b) => a.paymethod_id - b.paymethod_id)
+      const options = result.paymethods.filter(paym => paym.paymethod.enabled && paym.paymethod.id !== 5).sort((a, b) => a.paymethod_id - b.paymethod_id)
       setOptionsList({
         loading: false,
         options

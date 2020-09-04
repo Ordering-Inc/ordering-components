@@ -22,7 +22,7 @@ PaymentOptionPaypal.propTypes = {
    * Instace of Ordering Class
    * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
    */
-  ordering: PropTypes.object.isRequired,
+  ordering: PropTypes.object,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -30,11 +30,11 @@ PaymentOptionPaypal.propTypes = {
   /**
    * Amount to charge on paypal method
    */
-  amount: PropTypes.string,
+  amount: PropTypes.string.isRequired,
   /**
    * paypal ClientID
    */
-  clientID: PropTypes.string,
+  clientID: PropTypes.string.isRequired,
   /**
    * style, some properties to show paypal button, check out the docs https://developer.paypal.com/docs/archive/checkout/how-to/customize-button/ for a complete documentation
    */

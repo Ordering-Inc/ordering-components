@@ -54,7 +54,6 @@ export const PaymentOptionStripeRedirect = (props) => {
           {...props}
           stripePK={stripePK}
           modalName={modalName()}
-          currency='eur'
         />
       )}
     </>
@@ -71,6 +70,10 @@ PaymentOptionStripeRedirect.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * currency to use stripe methods
+   */
+  currency: PropTypes.string.isRequired,
   /**
    * paymentMethods, array that must be contains a list of payment methods
    */

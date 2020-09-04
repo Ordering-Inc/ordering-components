@@ -14,6 +14,7 @@ export const PaymentOptionPaypalUI = (props) => {
   } = props
 
   const onSuccess = payment => {
+    handlerChangePaypal({ payType: 'Paypal Express', value: payment })
     console.log(payment)
   }
 
@@ -43,7 +44,7 @@ export const PaymentOptionPaypalUI = (props) => {
           style={style}
           amount={amount}
           onError={onError}
-          onSuccess={handlerChangePaypal || onSuccess}
+          onSuccess={onSuccess}
           onCancel={onCancel}
         />
       </div>
