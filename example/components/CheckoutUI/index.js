@@ -36,6 +36,14 @@ export const CheckoutUI = (props) => {
     afterElements
   } = props
 
+  if (!isOrderValid.valid_products) {
+    window.alert('Please check your products!')
+  }
+
+  if (!isOrderValid.valid_address) {
+    window.alert('Please check your address!')
+  }
+
   return (
     <>
       {beforeElements.map((BeforeElement, i) => (
