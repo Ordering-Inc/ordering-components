@@ -1,12 +1,37 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 
 export const Checkout = (props) => {
   const {
+    ordering,
+    businessId,
     UIComponent
   } = props
 
+  const [businessDetails, setBusinessDetails] = useState({ business: {}, loading: true, error: null })
+
+  const getBusiness = async () => {
+    try {
+      const props = ['id', 'name', 'email', 'cellphone', 'address']
+      const { content: { result } } = await ordering.businesses(businessId).select(props).get()
+      setBusinessDetails({
+        ...businessDetails,
+        loading: false,
+        business: result
+      })
+    } catch (error) {
+      setBusinessDetails({
+        ...businessDetails,
+        loading: false,
+        error
+      })
+    }
+  }
+
+  useEffect(() => {
+    getBusiness()
+  }, [])
   /**
    * Order conext
    */
@@ -18,6 +43,7 @@ export const Checkout = (props) => {
         <UIComponent
           {...props}
           orderState={orderState}
+          businessDetails={businessDetails}
         />
       )}
     </>

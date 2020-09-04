@@ -40,7 +40,7 @@ export const PaymentOptionsUI = (props) => {
       )}
 
       <div className='payment-options'>
-        <h3>Payment Method</h3>
+        <strong>Payment Method</strong><br /><br />
         {!optionsList.loading && !optionsList.error ? (
           <div style={{ marginBottom: '20px' }}>
             {optionsList.options && optionsList.options.length > 0 ? (

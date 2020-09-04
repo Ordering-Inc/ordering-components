@@ -16,6 +16,10 @@ export const CheckoutExample = ({ ordering }) => {
      */
     UIComponent: CheckoutUI,
     /**
+     * Id for get business details from API
+     */
+    businessId: 41,
+    /**
      * handler values from other components
      */
     handlerValues: (e) => { console.log(e) },

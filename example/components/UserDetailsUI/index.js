@@ -38,7 +38,7 @@ export const UserDetailsUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <strong>User Details</strong>&nbsp;
+      <strong>Customer Details</strong>&nbsp;
 
       {((useValidationFields && validationFields.loading) || userState.loading) && <p>Loading form ...</p>}
 
