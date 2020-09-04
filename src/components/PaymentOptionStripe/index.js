@@ -39,7 +39,7 @@ export const PaymentOptionStripe = (props) => {
     // Replace for a sdk method
     try {
       const response = await fetch(
-        `https://apiv4.ordering.co/v400/en/demo/payments/stripe/cards?business_id=${businessId}&user_id=${userId}`,
+        `http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/cards?business_id=${businessId}&user_id=${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -67,7 +67,7 @@ export const PaymentOptionStripe = (props) => {
   const getCredentials = async () => {
     // Replace for a sdk method
     const response = await fetch(
-      'https://apiv4.ordering.co/v400/en/demo/payments/stripe/credentials',
+      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/credentials',
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -84,7 +84,7 @@ export const PaymentOptionStripe = (props) => {
   const getRequirements = async () => {
     // Replace for a sdk method
     const response = await fetch(
-      'https://apiv4.ordering.co/v400/en/demo/payments/stripe/requirements?type=add_card',
+      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/requirements?type=add_card',
       {
         headers: {
           Authorization: `Bearer ${token}`

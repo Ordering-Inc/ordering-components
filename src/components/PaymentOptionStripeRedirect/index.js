@@ -32,7 +32,7 @@ export const PaymentOptionStripeRedirect = (props) => {
   const getCredentials = async () => {
     // Replace for a sdk method
     const response = await fetch(
-      'https://apiv4.ordering.co/v400/en/demo/payments/stripe/credentials',
+      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/credentials',
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -71,13 +71,17 @@ PaymentOptionStripeRedirect.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
+   * Business id
+   */
+  businessId: PropTypes.number.isRequired,
+  /**
    * currency to use stripe methods
    */
   currency: PropTypes.string.isRequired,
   /**
    * paymentMethods, array that must be contains a list of payment methods
    */
-  paymentMethods: PropTypes.arrayOf(PropTypes.object),
+  paymentMethods: PropTypes.arrayOf(PropTypes.object).isRequired,
   /**
    * Method to get stripe source from a stripe redirect form
    */

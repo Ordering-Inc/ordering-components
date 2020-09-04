@@ -70,6 +70,7 @@ export const PaymentOptionStripeRedirectUI = (props) => {
           <Elements stripe={loadStripe(props.stripePK)}>
             <StripeRedirectForm
               UIComponent={StripeRedirectFormUI}
+              businessId={props.businessId}
               user={user}
               currency={props.currency}
               paymentMethods={paymentMethods}

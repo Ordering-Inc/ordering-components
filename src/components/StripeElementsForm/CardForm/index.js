@@ -28,7 +28,7 @@ export const CardForm = (props) => {
    * @param {*string} businessId string to know your business
    */
   const stripeTokenHandler = async ({ setupIntent }, user, businessId) => {
-    await fetch('https://apiv4.ordering.co/v400/en/demo/payments/stripe/cards', {
+    await fetch('http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/cards', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user?.session?.access_token}`,

@@ -3,14 +3,15 @@ import { useStripe } from '@stripe/react-stripe-js'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../../contexts/OrderContext'
 
-const PAYMENTS_URL = 'https://apiv4.ordering.co/v400/en/demo/payments/stripe_redirect/redirect'
-const API_URL = 'https://apiv4.ordering.co'
+const PAYMENTS_URL = 'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe_redirect/redirect'
+const API_URL = 'http://apiv4-features.ordering.co'
 
 export const StripeRedirectForm = (props) => {
   const {
     UIComponent
   } = props
-  const [{ order }] = useOrder()
+  const [orderState] = useOrder()
+  const orderTotal = orderState.carts[`businessId:${props.businessId}`]?.total || 0
   const stripe = useStripe()
 
   const [stripeError, setStripeError] = useState(null)
@@ -18,7 +19,7 @@ export const StripeRedirectForm = (props) => {
   const handlerSubmitPaymentMethod = async ({ name, email, paydata }) => {
     const result = await stripe.createSource({
       type: paydata,
-      amount: order.total,
+      amount: orderTotal * 100,
       currency: props.currency,
       owner: {
         name,

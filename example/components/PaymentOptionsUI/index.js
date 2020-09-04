@@ -74,8 +74,8 @@ export const PaymentOptionsUI = (props) => {
       {optionSelected === 'Cash' && (
         <PaymentOptionCash
           UIComponent={PaymentOptionCashUI}
+          useOrderContext
           businessId={props.businessId}
-          orderTotal={10}
           handlerSubmit={onChangePayment}
         />
       )}
@@ -110,6 +110,7 @@ export const PaymentOptionsUI = (props) => {
       {optionSelected === 'Stripe Redirect' && (
         <PaymentOptionStripeRedirect
           UIComponent={PaymentOptionStripeRedirectUI}
+          businessId={props.businessId}
           ordering={props.ordering}
           currency='eur'
           paymentMethods={[{ name: 'Bancontact', value: 'bancontact' }]}
