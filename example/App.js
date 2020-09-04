@@ -46,6 +46,7 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
+import { ProductShareExample } from './views/ProductShareExample'
 
 export default function App ({ ordering }) {
   return (
@@ -137,6 +138,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/products_listing' exact>
             <ProductsListingExample ordering={ordering} />
+          </Route>
+          <Route path='/product_share'>
+            <ProductShareExample ordering={ordering} />
           </Route>
           <Route path='/business_products_search'>
             <BusinessProductsSearchExample ordering={ordering} />
