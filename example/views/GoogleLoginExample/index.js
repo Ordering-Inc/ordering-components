@@ -4,11 +4,6 @@ import { GoogleLoginButton } from '../../../src/components/GoogleLoginButton'
 import { TestComponent } from '../../components/TestComponent'
 
 export const GoogleLoginExample = ({ ordering }) => {
-  const responseGoogle = (response) => {
-    console.log(response)
-    console.log(response.profileObj)
-  }
-
   const props = {
     /**
      * Instace of Ordering Class
@@ -19,26 +14,35 @@ export const GoogleLoginExample = ({ ordering }) => {
      * UI Component, this must be containt all graphic elements and use parent props
      */
     UIComponent: GoogleLoginUI,
-
-    responseGoogle: (response) => { responseGoogle(response) },
-
+    /**
+     * handling response of google
+     * @param {Object} result google response when the result is success
+     */
     onSuccess: (res) => console.log('success', res),
-
+    /**
+     * handling response of google
+     * @param {Object} result google response when the result is error
+     */
     onFailure: (err) => console.log('error', err),
-
+    /**
+     * handling response of google
+     * google response when the user is logging
+     */
     onRequest: () => console.log('requesting'),
-
     /**
      * Function to get login with google success event
      * @param {object} user User logged
      */
-    handleSuccessGoogleLogin: (user) => console.log('Success login Google with user', user),
-
+    handleSuccessGoogleLogin: (user) =>
+      console.log('Success login Google with user', user),
     /**
      * property to get response code if type "code"
      */
     responseType: '',
-
+    /**
+     * Components types before Facebook login button
+     * Array of type components, the parent props will pass to these components
+     */
     beforeComponents: [TestComponent],
     /**
      * Components types after Facebook login button

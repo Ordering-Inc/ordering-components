@@ -2,7 +2,7 @@ import React from 'react'
 
 export const GoogleLoginUI = (props) => {
   const {
-    Login,
+    signIn,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -18,7 +18,7 @@ export const GoogleLoginUI = (props) => {
         <BeforeComponent key={i} {...props} />
       ))}
       {<h2>Google Login</h2>}
-      {<Login />}
+      {<button onClick={signIn}>Login</button>}
       {afterComponents.map((AfterComponent, i) => (
         <AfterComponent key={i} {...props} />
       ))}
