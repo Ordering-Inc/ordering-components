@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useOrder } from '../../../src/contexts/OrderContext'
-import { useSession } from '../../../src/contexts/SessionContext'
+import { useOrder } from '../../contexts/OrderContext'
+import { useSession } from '../../contexts/SessionContext'
 
 export const AddressDetails = (props) => {
   const {

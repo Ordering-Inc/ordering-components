@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useSession } from '../SessionContext'
 import { Popup } from '../../components/Popup'
-import { AlertUI } from '../../../example/components/AlertUI'
+// import { AlertUI } from '../../../example/components/AlertUI'
 
 /**
  * Create OrderContext
@@ -340,7 +340,7 @@ export const OrderProvider = ({ ordering, children }) => {
   return (
     <OrderContext.Provider value={[copyState, functions]}>
       <Popup
-        UIComponent={AlertUI}
+        // UIComponent={AlertUI}
         open={confirm.show}
         title='Confirm'
         onAccept={() => confirm.onConfirm()}
@@ -349,7 +349,7 @@ export const OrderProvider = ({ ordering, children }) => {
         content={confirm.content}
       />
       <Popup
-        UIComponent={AlertUI}
+        // UIComponent={AlertUI}
         open={alert.show}
         title='Error'
         onAccept={() => setAlert({ show: false })}
