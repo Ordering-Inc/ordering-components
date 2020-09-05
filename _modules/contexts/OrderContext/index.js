@@ -15,8 +15,6 @@ var _SessionContext = require("../SessionContext");
 
 var _Popup = require("../../components/Popup");
 
-var _AlertUI = require("../../../example/components/AlertUI");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -48,6 +46,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+// import { AlertUI } from '../../../example/components/AlertUI'
 
 /**
  * Create OrderContext
@@ -963,8 +963,8 @@ var OrderProvider = function OrderProvider(_ref) {
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
     value: [copyState, functions]
-  }, /*#__PURE__*/_react.default.createElement(_Popup.Popup, {
-    UIComponent: _AlertUI.AlertUI,
+  }, /*#__PURE__*/_react.default.createElement(_Popup.Popup // UIComponent={AlertUI}
+  , {
     open: confirm.show,
     title: "Confirm",
     onAccept: function onAccept() {
@@ -981,8 +981,8 @@ var OrderProvider = function OrderProvider(_ref) {
       });
     },
     content: confirm.content
-  }), /*#__PURE__*/_react.default.createElement(_Popup.Popup, {
-    UIComponent: _AlertUI.AlertUI,
+  }), /*#__PURE__*/_react.default.createElement(_Popup.Popup // UIComponent={AlertUI}
+  , {
     open: alert.show,
     title: "Error",
     onAccept: function onAccept() {
