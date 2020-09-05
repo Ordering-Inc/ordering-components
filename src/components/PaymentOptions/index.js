@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 
 import { useOrder } from '../../contexts/OrderContext'
 
+/**
+ * Component to manage payment options behavior without UI component
+ */
 export const PaymentOptions = (props) => {
   const {
     ordering,
@@ -17,7 +20,10 @@ export const PaymentOptions = (props) => {
   const [optionsList, setOptionsList] = useState({ options: [], loading: true, error: null })
   const [optionSelected, setOptionSelected] = useState()
 
-  const getOptions = async () => {
+  /**
+   * Method to get payment options from API
+   */
+  const getPaymentOptions = async () => {
     try {
       const { content: { result } } = await ordering.businesses(businessId).get()
       const options = result.paymethods.filter(paym => paym.paymethod.enabled && paym.paymethod.id !== 5).sort((a, b) => a.paymethod_id - b.paymethod_id)
@@ -33,6 +39,10 @@ export const PaymentOptions = (props) => {
     }
   }
 
+  /**
+   * Method to set payment option selected by user
+   * @param {Object} val object with information of payment method selected
+   */
   const onClickOption = (val) => {
     setOptionSelected(val)
   }
@@ -56,7 +66,7 @@ export const PaymentOptions = (props) => {
         options
       })
     } else {
-      getOptions()
+      getPaymentOptions()
     }
   }, [])
 

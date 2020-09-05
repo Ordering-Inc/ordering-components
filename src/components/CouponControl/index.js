@@ -31,7 +31,9 @@ export const CouponControl = (props) => {
    * method to manage remove coupon assigned
    */
   const handleRemoveCouponClick = () => {
-    // Put here method to remove coupon from context
+    /**
+     * Put here method to remove coupon from context
+     */
   }
 
   return (

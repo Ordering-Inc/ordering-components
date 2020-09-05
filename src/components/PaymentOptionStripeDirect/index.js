@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 
+/**
+ * Component to manage payment option stripe direct behavior without UI component
+ */
 export const PaymentOptionStripeDirect = (props) => {
   const {
     UIComponent

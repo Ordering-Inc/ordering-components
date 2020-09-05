@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 
 import { useSession } from '../../contexts/SessionContext'
 
+/**
+ * Component to manage payment option stripe redirect behavior without UI component
+ */
 export const PaymentOptionStripeRedirect = (props) => {
   const {
     paymentMethods,
@@ -16,6 +19,9 @@ export const PaymentOptionStripeRedirect = (props) => {
    */
   const [stripePK, setStripePK] = useState(null)
 
+  /**
+   * Method to get modal name to show
+   */
   const modalName = () => {
     let name = ''
     paymentMethods.map((paym, i) => {

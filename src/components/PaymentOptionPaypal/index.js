@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+/**
+ * Component to manage payment option paypal express behavior without UI component
+ */
 export const PaymentOptionPaypal = (props) => {
   const {
     UIComponent

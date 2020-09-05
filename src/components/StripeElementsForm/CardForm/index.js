@@ -8,6 +8,9 @@ import {
 
 import { useSession } from '../../../contexts/SessionContext'
 
+/**
+ * Component to manage card form for stripe elements form behavior without UI component
+ */
 export const CardForm = (props) => {
   const {
     UIComponent

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 
+/**
+ * Component to manage payment option stripe behavior without UI component
+ */
 export const PaymentOptionStripe = (props) => {
   const {
     businessId,

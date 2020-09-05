@@ -6,6 +6,9 @@ import { useOrder } from '../../../contexts/OrderContext'
 const PAYMENTS_URL = 'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe_redirect/redirect'
 const API_URL = 'http://apiv4-features.ordering.co'
 
+/**
+ * Component to manage stripe redirect form behavior without UI component
+ */
 export const StripeRedirectForm = (props) => {
   const {
     UIComponent
@@ -16,6 +19,10 @@ export const StripeRedirectForm = (props) => {
 
   const [stripeError, setStripeError] = useState(null)
 
+  /**
+   * Method to handle all workflow about stripe redirect page
+   * @param {Object} param0 object with name, email and paydata from stripe form
+   */
   const handlerSubmitPaymentMethod = async ({ name, email, paydata }) => {
     const result = await stripe.createSource({
       type: paydata,

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 
+/**
+ * Component to manage Checkout page behavior without UI component
+ */
 export const Checkout = (props) => {
   const {
     ordering,
@@ -9,9 +12,29 @@ export const Checkout = (props) => {
     UIComponent
   } = props
 
+  /**
+   * Order context
+   */
+  const [orderState] = useOrder()
+  /**
+   * Object to save an object with business information
+   */
   const [businessDetails, setBusinessDetails] = useState({ business: {}, loading: true, error: null })
+  /**
+   * This must be contains an object with info about paymente selected
+   */
   const [paymentSelected, setpaymentSelected] = useState(null)
-
+  /**
+   * Object with validate values about the order
+   */
+  const isOrderValid = {
+    valid: orderState?.carts[`businessId:${businessId}`]?.valid || false,
+    valid_address: orderState?.carts[`businessId:${businessId}`]?.valid_address || false,
+    valid_products: orderState?.carts[`businessId:${businessId}`]?.valid_products || false
+  }
+  /**
+   * Method to get business from API
+   */
   const getBusiness = async () => {
     try {
       const props = ['id', 'name', 'email', 'cellphone', 'address']
@@ -29,21 +52,9 @@ export const Checkout = (props) => {
       })
     }
   }
-
-  useEffect(() => {
-    getBusiness()
-  }, [])
   /**
-   * Order context
+   * Method to handle click on Place order
    */
-  const [orderState] = useOrder()
-
-  const isOrderValid = {
-    valid: orderState?.carts[`businessId:${businessId}`]?.valid || false,
-    valid_address: orderState?.carts[`businessId:${businessId}`]?.valid_address || false,
-    valid_products: orderState?.carts[`businessId:${businessId}`]?.valid_products || false
-  }
-
   const handlerClickPlaceOrder = () => {
     if (props.handleCustomClick) {
       props.handleCustomClick(paymentSelected)
@@ -52,6 +63,10 @@ export const Checkout = (props) => {
 
     props.onPlaceOrderClick(paymentSelected)
   }
+
+  useEffect(() => {
+    getBusiness()
+  }, [])
 
   return (
     <>

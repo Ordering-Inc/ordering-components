@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 
+/**
+ * Component to manage paypal button without UI component
+ */
 export const PaypalButton = props => {
   const [sdkReady, setSdkReady] = useState(false)
 
+  /**
+   * Method to create script for paypal sdk
+   */
   const addPaypalSdk = () => {
     const script = document.createElement('script')
     script.type = 'text/javascript'
@@ -58,12 +64,18 @@ export const PaypalButton = props => {
       })
   }
 
+  /**
+   * Loading definition
+   */
   if (!sdkReady && window.paypal === undefined) {
     return (
       <div>Loading...</div>
     )
   }
 
+  /**
+   * Assign paypal button to an instance of react dom
+   */
   const Button = window.paypal.Buttons.driver('react', {
     React,
     ReactDOM

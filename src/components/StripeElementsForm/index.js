@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+/**
+ * Component to manage stripe elements form behavior without UI component
+ */
 export const StripeElementsForm = (props) => {
   const {
     UIComponent

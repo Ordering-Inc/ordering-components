@@ -24,6 +24,16 @@ import { CouponControlUI } from '../CouponControlUI'
 import { Cart } from '../../../src/components/Cart'
 import { CartUI } from '../../components/CartUI'
 
+const styleButtonOrder = {
+  padding: '10px 20px',
+  color: 'white',
+  borderRadius: '5px',
+  background: '#4caf50',
+  width: '50%',
+  fontSize: '18px',
+  cursor: 'pointer'
+}
+
 export const CheckoutUI = (props) => {
   const {
     isOrderValid,
@@ -40,7 +50,7 @@ export const CheckoutUI = (props) => {
   } = props
 
   /**
-   * uncomment when properties are readys
+   * uncomment when properties are readys on orderContext
    */
 
   // if (!isOrderValid.valid_products) {
@@ -80,7 +90,7 @@ export const CheckoutUI = (props) => {
         ordering={ordering}
         UIComponent={AddressDetailsUI}
         businessId={props.businessId}
-        apiKey=''
+        apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
       />
       <hr />
 
@@ -158,7 +168,11 @@ export const CheckoutUI = (props) => {
       />
       <br /><br /><hr />
 
-      <button disabled={!isOrderValid.valid || !paymentSelected} onClick={() => handlerClickPlaceOrder()}>
+      <button
+        disabled={!isOrderValid.valid || !paymentSelected}
+        style={styleButtonOrder}
+        onClick={() => handlerClickPlaceOrder()}
+      >
         Place Order
       </button>
 

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../../src/contexts/OrderContext'
 
+/**
+ * Component to manage driver tips behavior without UI component
+ */
 export const DriverTips = (props) => {
   const {
     UIComponent,

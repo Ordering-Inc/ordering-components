@@ -21,11 +21,10 @@ export const UserDetails = (props) => {
   } = props
 
   const [session, dispatchSession] = useSession()
+  const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
-
-  const [isEdit, setIsEdit] = useState(false)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
