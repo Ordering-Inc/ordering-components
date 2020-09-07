@@ -2,7 +2,7 @@
   "name": "ordering-components",
   "version": "0.0.1",
   "description": "Ordering Internal Dashboard",
-  "main": "_/modules/index.js",
+  "main": "./_/modules/index.js",
   "scripts": {
     "clean": "shx rm -rf _bundles _modules",
     "build": "npm run clean && babel ./src --out-dir ./_modules && webpack --config webpack.prod.js",
