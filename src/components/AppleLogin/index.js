@@ -33,8 +33,7 @@ export const AppleLogin = (props) => {
       clientId: 'co.ordering.logintest',
       redirectURI: 'https://example-app.com/redirect',
       responseType: 'code',
-      responseMode: 'query',
-      usePopup: true
+      responseMode: 'query'
     })
 
     handleLoginApple()
