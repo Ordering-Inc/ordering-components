@@ -149,6 +149,9 @@ export const Home = () => {
         <li>
           <Link to='/payment_option_stripe'>Payments Options Stripe</Link>
         </li>
+        <li>
+          <Link to='/payment_option_stripe_direct'>Payments Options Stripe Direct</Link>
+        </li>
       </ol>
     </>
   )

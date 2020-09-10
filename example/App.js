@@ -49,6 +49,7 @@ import { OrderContextExample } from './views/OrderContextExample'
 import { PaymentOptionPaypalExample } from './views/PaymentOptionPaypalExample'
 import { PaymentOptionCashExample } from './views/PaymentOptionCashExample'
 import { PaymentOptionStripeExample } from './views/PaymentOptionStripeExample'
+import { PaymentOptionStripeDirectExample } from './views/PaymentOptionStripeDirectExample'
 
 export default function App ({ ordering }) {
   return (
@@ -191,6 +192,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/payment_option_stripe' exact>
             <PaymentOptionStripeExample ordering={ordering} />
+          </Route>
+          <Route path='/payment_option_stripe_direct' exact>
+            <PaymentOptionStripeDirectExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
