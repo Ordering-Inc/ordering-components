@@ -17,7 +17,7 @@ export const AddressList = (props) => {
   } = props
 
   const [{ user, token }] = useSession()
-  const userId = props.userId || user.id
+  const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
   if (!userId) {

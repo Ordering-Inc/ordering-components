@@ -10,8 +10,10 @@ import { AddressForm } from '../../../src/components/AddressForm'
 
 import { OrderTypeControlUI } from '../../components/OrderTypeControlUI'
 import { OrderTypeControl } from '../../../src/components/OrderTypeControl'
+import { useSession } from '../../../src/contexts/SessionContext'
 
 export const SearchOptionsUI = (props) => {
+  const [{ auth }] = useSession()
   const {
     ordering,
     orderState,
@@ -61,15 +63,23 @@ export const SearchOptionsUI = (props) => {
 
       {optionSelected === 'address' && (
         <div className='address-section'>
-          <p>Current order address: {orderState.options?.address?.address} ({orderState.options?.address?.location?.lat}, {orderState.options?.address?.location?.lng})</p>
+          {
+            orderState.options?.address?.address && (
+              <p>Current order address: {orderState.options?.address?.address} ({orderState.options?.address?.location?.lat}, {orderState.options?.address?.location?.lng})</p>
+            )
+          }
           <AddressForm
             {...addressFormProps}
             UIComponent={AddressFormUI}
           />
-          <AddressList
-            {...addressListProps}
-            UIComponent={AddressListUI}
-          />
+          {
+            auth && (
+              <AddressList
+                {...addressListProps}
+                UIComponent={AddressListUI}
+              />
+            )
+          }
         </div>)}
     </div>
   )
