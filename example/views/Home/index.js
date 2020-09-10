@@ -146,6 +146,9 @@ export const Home = () => {
         <li>
           <Link to='/payment_option_cash'>Payments Options Cash</Link>
         </li>
+        <li>
+          <Link to='/payment_option_stripe'>Payments Options Stripe</Link>
+        </li>
       </ol>
     </>
   )
