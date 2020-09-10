@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 
+/**
+ * Component to manage driver tips behavior without UI component
+ */
 export const DriverTips = (props) => {
   const {
     UIComponent,
@@ -35,7 +38,7 @@ export const DriverTips = (props) => {
     if (useOrderContext) {
       changeDriverTip(businessId, parseInt(val))
     }
-    props.handlerChangeDriverOption(parseInt(val))
+    // props.handlerChangeDriverOption(parseInt(val))
     setOptionSelected(parseInt(val))
   }
 

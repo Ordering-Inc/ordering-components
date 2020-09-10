@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 
+/**
+ * Component to manage payment option stripe direct behavior without UI component
+ */
 export const PaymentOptionStripeDirect = (props) => {
   const {
     UIComponent
@@ -23,7 +26,7 @@ export const PaymentOptionStripeDirect = (props) => {
   const getCredentials = async () => {
     // Replace for a sdk method
     const response = await fetch(
-      'https://apiv4.ordering.co/v400/en/demo/payments/stripe/credentials',
+      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/credentials',
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -40,7 +43,7 @@ export const PaymentOptionStripeDirect = (props) => {
   const getRequirements = async () => {
     // Replace for a sdk method
     const response = await fetch(
-      'https://apiv4.ordering.co/v400/en/demo/payments/stripe/requirements?type=add_card',
+      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/requirements?type=add_card',
       {
         headers: {
           Authorization: `Bearer ${token}`

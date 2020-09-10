@@ -34,7 +34,11 @@ export const PaymentOptionStripeRedirectUI = (props) => {
 
   const handlerStripeRedirect = (srcToken) => {
     if (srcToken) {
-      props.handlerStripeSource(srcToken)
+      props.handlerStripeSource({
+        paymethodId: 32,
+        gateway: 'stripe_redirect',
+        data: srcToken
+      })
       setIsOpen(false)
     }
   }
@@ -70,6 +74,7 @@ export const PaymentOptionStripeRedirectUI = (props) => {
           <Elements stripe={loadStripe(props.stripePK)}>
             <StripeRedirectForm
               UIComponent={StripeRedirectFormUI}
+              businessId={props.businessId}
               user={user}
               currency={props.currency}
               paymentMethods={paymentMethods}

@@ -39,10 +39,6 @@ export const UserDetailsExample = ({ ordering }) => {
      */
     accessToken: 'TOKEN',
     /**
-     * Get coupon value
-     */
-    handlerCouponValue: (e) => { console.log(e) },
-    /**
      * Components types before user details
      * Array of type components, the parent props will pass to these components
      */

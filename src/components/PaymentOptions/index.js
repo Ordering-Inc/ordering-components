@@ -1,24 +1,35 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import { useOrder } from '../../contexts/OrderContext'
+
+/**
+ * Component to manage payment options behavior without UI component
+ */
 export const PaymentOptions = (props) => {
   const {
     ordering,
     options,
     businessId,
-    optionDefault,
     UIComponent
   } = props
 
-  const [optionsList, setOptionsList] = useState({ options: [], loading: true, error: null })
-  const [optionSelected, setOptionSelected] = useState(optionDefault)
+  const [orderState] = useOrder()
+  const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
 
-  const getOptions = async () => {
+  const [optionsList, setOptionsList] = useState({ options: [], loading: true, error: null })
+  const [optionSelected, setOptionSelected] = useState()
+
+  /**
+   * Method to get payment options from API
+   */
+  const getPaymentOptions = async () => {
     try {
       const { content: { result } } = await ordering.businesses(businessId).get()
+      const options = result.paymethods.filter(paym => paym.paymethod.enabled && paym.paymethod.id !== 5).sort((a, b) => a.paymethod_id - b.paymethod_id)
       setOptionsList({
         loading: false,
-        options: result.paymethods
+        options
       })
     } catch (error) {
       setOptionsList({
@@ -28,10 +39,25 @@ export const PaymentOptions = (props) => {
     }
   }
 
-  const onChangeOption = (val) => {
+  /**
+   * Method to set payment option selected by user
+   * @param {Object} val object with information of payment method selected
+   */
+  const onClickOption = (val) => {
     setOptionSelected(val)
-    props.onChangePayment(val)
   }
+
+  useEffect(() => {
+    if (optionSelected?.id === 2) {
+      props.onChangePayment({
+        paymethodId: 2,
+        gateway: 'card_delivery',
+        data: null
+      })
+    } else {
+      props.onChangePayment(null)
+    }
+  }, [optionSelected])
 
   useEffect(() => {
     if (options) {
@@ -40,7 +66,7 @@ export const PaymentOptions = (props) => {
         options
       })
     } else {
-      getOptions()
+      getPaymentOptions()
     }
   }, [])
 
@@ -49,9 +75,10 @@ export const PaymentOptions = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orderTotal={orderTotal}
           optionsList={optionsList}
           optionSelected={optionSelected}
-          handleChangeOption={onChangeOption}
+          handleClickOption={onClickOption}
         />
       )}
     </>

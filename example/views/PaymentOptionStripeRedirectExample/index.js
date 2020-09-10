@@ -16,6 +16,14 @@ export const PaymentOptionStripeRedirectExample = ({ ordering }) => {
      */
     UIComponent: PaymentOptionStripeRedirectUI,
     /**
+     * Business id
+     */
+    businessId: 41,
+    /**
+     * currency to use stripe methods
+     */
+    currency: 'eur',
+    /**
      * paymentMethods, array that must be contains a list of payment methods
      */
     paymentMethods: [

@@ -21,11 +21,10 @@ export const UserDetails = (props) => {
   } = props
 
   const [session, dispatchSession] = useSession()
+  const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
-
-  const [isEdit, setIsEdit] = useState(false)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
@@ -84,7 +83,7 @@ export const UserDetails = (props) => {
     }
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users(userState.result.result.id).save(formState.changes, {
+      const response = await ordering.setAccessToken(accessToken).users(userState.result.result.id).save(formState.changes, {
         accessToken: accessToken
       })
       setFormState({
@@ -180,10 +179,6 @@ UserDetails.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
-  /**
-   * Get coupon value
-   */
-  handlerCouponValue: PropTypes.func,
   /**
    * Use session user to details
    */

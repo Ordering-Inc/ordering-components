@@ -12,6 +12,11 @@ export const DriverTipsUI = (props) => {
     afterElements
   } = props
 
+  const selectOption = {
+    background: 'red',
+    color: 'white'
+  }
+
   return (
     <>
       {beforeElements.map((BeforeElement, i) => (
@@ -30,13 +35,9 @@ export const DriverTipsUI = (props) => {
       <div className='tips-list' style={{ display: 'flex' }}>
         {driverTipsOptions?.length > 0 && driverTipsOptions.map((option, i) => (
           <div key={i} style={{ textTransform: 'capitalize', marginRight: '10px' }}>
-            <input
-              type='radio'
-              name='driver_tip'
-              value={option}
-              checked={optionSelected === option}
-              onChange={(e) => handlerChangeOption(e.target.value)}
-            /> {option}%
+            <button style={option === optionSelected ? selectOption : {}} onClick={() => handlerChangeOption(option)}>
+              {option}%
+            </button>
           </div>
         ))}
       </div>
