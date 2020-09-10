@@ -32,7 +32,7 @@ export const MenuControl = (props) => {
   /**
    * Array that must be contain a list of dates
    */
-  const [datesList, setDatesList] = useState([])
+  const [, setDatesList] = useState([])
 
   /**
    * Have a list of business schedules disabled
@@ -72,7 +72,7 @@ export const MenuControl = (props) => {
     if (isValid) {
       props.handleMenuInfo({
         menuId: scheduleSelected?.menuId,
-        date: dateSelected
+        date: new Date(dateSelected)
       })
     }
   }
@@ -167,7 +167,6 @@ export const MenuControl = (props) => {
 
   return (
     <>
-      DATE SELECTED: {dateSelected}
       {UIComponent && (
         <UIComponent
           {...props}
@@ -181,7 +180,7 @@ export const MenuControl = (props) => {
           handleMenuSelected={(val) => setScheduleSelected(formatScheduleTime(val))}
           handleDate={onDateSelected}
           onSendMenuInfo={handlerMenuInfo}
-          // datesList={datesList}
+          dateSelected={dateSelected}
         />
       )}
     </>

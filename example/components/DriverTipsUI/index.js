@@ -27,15 +27,16 @@ export const DriverTipsUI = (props) => {
       <span>Driver tip: </span>
       <span>{driverTipAmount}</span><br /><br />
 
-      <div className='tips-list' style={{ display: 'flex' }} onChange={(e) => handlerChangeOption(e.target.value)}>
+      <div className='tips-list' style={{ display: 'flex' }}>
         {driverTipsOptions?.length > 0 && driverTipsOptions.map((option, i) => (
           <div key={i} style={{ textTransform: 'capitalize', marginRight: '10px' }}>
             <input
               type='radio'
               name='driver_tip'
               value={option}
-              defaultChecked={optionSelected === option}
-            />{option}%
+              checked={optionSelected === option}
+              onChange={(e) => handlerChangeOption(e.target.value)}
+            /> {option}%
           </div>
         ))}
       </div>
