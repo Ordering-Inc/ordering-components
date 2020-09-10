@@ -33,7 +33,7 @@ export const CardFormUI = (props) => {
   } = props
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className='stripe' onSubmit={handleSubmit}>
       <div className='form-row'>
         <label htmlFor='card-element'>
           Credit or debit card

@@ -50,6 +50,7 @@ import { PaymentOptionPaypalExample } from './views/PaymentOptionPaypalExample'
 import { PaymentOptionCashExample } from './views/PaymentOptionCashExample'
 import { PaymentOptionStripeExample } from './views/PaymentOptionStripeExample'
 import { PaymentOptionStripeDirectExample } from './views/PaymentOptionStripeDirectExample'
+import { PaymentOptionStripeRedirectExample } from './views/PaymentOptionStripeRedirectExample'
 
 export default function App ({ ordering }) {
   return (
@@ -195,6 +196,9 @@ export default function App ({ ordering }) {
           </Route>
           <Route path='/payment_option_stripe_direct' exact>
             <PaymentOptionStripeDirectExample ordering={ordering} />
+          </Route>
+          <Route path='/payment_option_stripe_redirect' exact>
+            <PaymentOptionStripeRedirectExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
