@@ -7,16 +7,22 @@ import {
 } from '@stripe/react-stripe-js'
 
 import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
 
 /**
  * Component to manage card form for stripe elements form behavior without UI component
  */
 export const CardForm = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    requirements,
+    toSave,
+    handleSource,
+    onNewCard
   } = props
 
   const [{ user }] = useSession()
+  const [ordering] = useApi()
 
   const stripe = useStripe()
   const elements = useElements()
@@ -30,8 +36,8 @@ export const CardForm = (props) => {
    * @param {*object} user object with user info from session provider
    * @param {*string} businessId string to know your business
    */
-  const stripeTokenHandler = async ({ setupIntent }, user, businessId) => {
-    await fetch('http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/cards', {
+  const stripeTokenHandler = async (tokenId, user, businessId) => {
+    const result = await fetch(`${ordering.root}/payments/stripe/cards`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user?.session?.access_token}`,
@@ -40,10 +46,13 @@ export const CardForm = (props) => {
       body: JSON.stringify({
         business_id: businessId,
         gateway: 'stripe',
-        token_id: setupIntent?.payment_method,
+        token_id: tokenId,
         user_id: user?.id
       })
     })
+    const response = await result.json()
+    console.log(response)
+    onNewCard && onNewCard(response.result)
   }
 
   /**
@@ -66,32 +75,65 @@ export const CardForm = (props) => {
     setLoading(true)
     event.preventDefault()
     const card = elements.getElement(CardElement)
-    /**
-     * This methos is deprecated, in case this fails try to use this method: stripe.confirmCardPayment
-     * Check docs: https://stripe.com/docs/js/payment_intents/confirm_card_payment
-     */
-    const result = await stripe.handleCardSetup(
-      props.clientSecret,
-      card,
-      {
-        payment_method_data: {
-          billing_details: {
-            name: `${user.name} ${user.lastname}`,
-            email: user.email,
-            address: user.address
+
+    if (!requirements) {
+      const result = await stripe.createPaymentMethod({
+        type: 'card',
+        card: card,
+        billing_details: {
+          name: `${user.name} ${user.lastname}`,
+          email: user.email,
+          address: user.address
+        }
+      })
+      if (result.error) {
+        setLoading(false)
+        setError(result.error.message)
+      } else {
+        setLoading(false)
+        setError(null)
+        handleSource && handleSource({
+          id: result?.paymentMethod.id,
+          type: 'card',
+          card: {
+            brand: result?.paymentMethod.card.brand,
+            last4: result?.paymentMethod.card.last4
+          }
+        })
+        // props.handlerToken(result?.paymentMethod)
+      }
+    } else {
+      const result = await stripe.confirmCardSetup(
+        requirements,
+        {
+          payment_method: {
+            card,
+            billing_details: {
+              name: `${user.name} ${user.lastname}`,
+              email: user.email,
+              address: user.address
+            }
           }
         }
+      )
+      console.log(result)
+      if (result.error) {
+        setLoading(false)
+        setError(result.error.message)
+      } else {
+        setLoading(false)
+        setError(null)
+        // handleSource && handleSource({
+        //   id: result?.setupIntent.payment_method,
+        //   type: 'paymethod'
+        //   // card: {
+        //   //   brand: result?.paymentMethod.card.brand,
+        //   //   last4: result?.paymentMethod.card.last4
+        //   // }
+        // })
+        // props.handlerToken(result?.setupIntent?.payment_method)
+        toSave && stripeTokenHandler(result.setupIntent.payment_method, user, props.businessId)
       }
-    )
-
-    if (result.error) {
-      setLoading(false)
-      setError(result.error.message)
-    } else {
-      setLoading(false)
-      setError(null)
-      props.handlerToken(result?.setupIntent?.payment_method)
-      stripeTokenHandler(result, user, props.businessId)
     }
   }
 
@@ -120,7 +162,15 @@ CardForm.propTypes = {
    */
   clientSecret: PropTypes.string,
   /**
+   * Autosave cart
+   */
+  autosave: PropTypes.bool,
+  /**
    * method used for handle card token created
    */
   handlerToken: PropTypes.func
+}
+
+CardForm.defaultProps = {
+  autosave: true
 }

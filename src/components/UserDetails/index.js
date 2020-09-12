@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession, SESSION_ACTIONS } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to manage user details behavior without UI component
  */
 export const UserDetails = (props) => {
   const {
-    ordering,
     UIComponent,
     useSessionUser,
     refreshSessionUser,
@@ -25,6 +25,7 @@ export const UserDetails = (props) => {
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
+  const [ordering] = useApi()
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
@@ -170,11 +171,6 @@ export const UserDetails = (props) => {
 }
 
 UserDetails.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

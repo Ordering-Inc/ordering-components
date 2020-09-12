@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to manage payment option stripe behavior without UI component
@@ -8,11 +9,12 @@ import { useSession } from '../../contexts/SessionContext'
 export const PaymentOptionStripe = (props) => {
   const {
     businessId,
-    userId,
     UIComponent
   } = props
 
-  const [{ token }] = useSession()
+  const [{ token, user }] = useSession()
+
+  const [ordering] = useApi()
 
   /**
    * Contains and object to save cards, handle loading and error
@@ -21,28 +23,19 @@ export const PaymentOptionStripe = (props) => {
   /**
    * save stripe public key
    */
-  const [stripePK, setStripePK] = useState(null)
-  /**
-   * Save client id used in stripe
-   */
-  const [requirements, setRequirements] = useState(null)
-  /**
-   * Save payment method id, used for call getCards method again
-   */
-  const [createdCard, setCreatedCard] = useState()
+  const [publicKey, setPublicKey] = useState(props.publicKey)
+
+  const [cardSelected, setCardSelected] = useState(null)
 
   /**
    * method to get cards from API
    */
   const getCards = async () => {
-    setCardsList({
-      ...cardsList,
-      loading: true
-    })
+    setCardsList({ ...cardsList, loading: true })
     // Replace for a sdk method
     try {
       const response = await fetch(
-        `http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/cards?business_id=${businessId}&user_id=${userId}`,
+        `${ordering.root}/payments/stripe/cards?business_id=${businessId}&user_id=${user.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -50,6 +43,10 @@ export const PaymentOptionStripe = (props) => {
         }
       )
       const { result } = await response.json()
+      const defaultCart = result.find(card => card.default)
+      if (defaultCart) {
+        setCardSelected(defaultCart)
+      }
       setCardsList({
         ...cardsList,
         loading: false,
@@ -65,12 +62,45 @@ export const PaymentOptionStripe = (props) => {
   }
 
   /**
+   * method to get cards from API
+   */
+  const deleteCard = async (card) => {
+    // Replace for a sdk method
+    try {
+      const body = JSON.stringify({
+        business_id: -1,
+        card_id: card.id,
+        user_id: user.id
+      })
+      const response = await fetch(
+        `${ordering.root}/payments/stripe/cards`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body
+        }
+      )
+      const { error } = await response.json()
+      if (!error) {
+        cardsList.cards = cardsList.cards.filter(_card => _card.id !== card.id)
+        setCardsList({
+          ...cardsList
+        })
+      }
+    } catch (error) {
+    }
+  }
+
+  /**
    * Method to get stripe credentials from API
    */
   const getCredentials = async () => {
     // Replace for a sdk method
     const response = await fetch(
-      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/credentials',
+      `${ordering.root}/payments/stripe/credentials`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -78,33 +108,38 @@ export const PaymentOptionStripe = (props) => {
       }
     )
     const { result: { publishable } } = await response.json()
-    setStripePK(publishable)
+    setPublicKey(publishable)
   }
 
-  /**
-   * Method to get client id for create stripe payment method
-   */
-  const getRequirements = async () => {
-    // Replace for a sdk method
-    const response = await fetch(
-      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/requirements?type=add_card',
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+  const handleCardClick = (card) => {
+    setCardSelected({
+      id: card.id,
+      type: 'card',
+      card: {
+        brand: card.brand,
+        last4: card.last4
       }
-    )
-    const { result } = await response.json()
-    setRequirements(result)
+    })
   }
 
-  useEffect(() => {
-    getCards()
-  }, [createdCard])
+  const handleNewCard = (card) => {
+    cardsList.cards.push(card)
+    setCardsList({
+      ...cardsList
+    })
+    handleCardClick(card)
+  }
+
+  // useEffect(() => {
+  //   getCards()
+  // }, [createdCard])
 
   useEffect(() => {
-    getCredentials()
-    getRequirements()
+    // getRequirements()
+    getCards()
+    if (!props.publicKey) {
+      getCredentials()
+    }
   }, [])
 
   return (
@@ -112,10 +147,13 @@ export const PaymentOptionStripe = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          cardSelected={cardSelected}
           cardsList={cardsList}
-          stripeKey={stripePK}
-          clientSecret={requirements}
-          handlerCreateCard={(val) => setCreatedCard(val)}
+          handleCardClick={handleCardClick}
+          publicKey={publicKey}
+          handleNewCard={handleNewCard}
+          deleteCard={deleteCard}
+          // handlerCreateCard={(val) => setCreatedCard(val)}
         />
       )}
     </>
@@ -123,11 +161,6 @@ export const PaymentOptionStripe = (props) => {
 }
 
 PaymentOptionStripe.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

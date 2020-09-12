@@ -2,39 +2,59 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { useOrder } from '../../contexts/OrderContext'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to manage payment options behavior without UI component
  */
 export const PaymentOptions = (props) => {
   const {
-    ordering,
-    options,
+    paymethods,
     businessId,
+    onPaymentChange,
     UIComponent
   } = props
 
   const [orderState] = useOrder()
   const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
 
-  const [optionsList, setOptionsList] = useState({ options: [], loading: true, error: null })
-  const [optionSelected, setOptionSelected] = useState()
+  const [paymethodsList, setPaymethodsList] = useState({ paymethods: [], loading: true, error: null })
+  const [paymethodSelected, setPaymethodsSelected] = useState(null)
+  const [paymethodData, setPaymethodData] = useState({})
+
+  const [ordering] = useApi()
+
+  const parsePaymethods = (paymethods) => {
+    const _paymethods = paymethods.filter(credentials => !['paypal_express', 'authorize'].includes(credentials.paymethod.gateway)).map(credentials => {
+      const { data, sandbox } = credentials
+      const paymethod = credentials.paymethod
+      paymethod.sandbox = sandbox
+      paymethod.credentials = data
+      return paymethod
+    })
+    return _paymethods
+  }
 
   /**
    * Method to get payment options from API
    */
   const getPaymentOptions = async () => {
     try {
-      const { content: { result } } = await ordering.businesses(businessId).get()
-      const options = result.paymethods.filter(paym => paym.paymethod.enabled && paym.paymethod.id !== 5).sort((a, b) => a.paymethod_id - b.paymethod_id)
-      setOptionsList({
-        loading: false,
-        options
+      // setPaymethodsList({ ...paymethodsList, loading: true })
+      const { content: { error, result } } = await ordering.businesses(businessId).get()
+      if (!error) {
+        paymethodsList.paymethods = parsePaymethods(result.paymethods)
+      }
+      setPaymethodsList({
+        ...paymethodsList,
+        error: error ? result : null,
+        loading: false
       })
     } catch (error) {
-      setOptionsList({
+      setPaymethodsList({
+        ...paymethodsList,
         loading: false,
-        error
+        error: [error.message]
       })
     }
   }
@@ -43,27 +63,38 @@ export const PaymentOptions = (props) => {
    * Method to set payment option selected by user
    * @param {Object} val object with information of payment method selected
    */
-  const onClickOption = (val) => {
-    setOptionSelected(val)
+  const handlePaymethodClick = (paymethod) => {
+    setPaymethodsSelected(paymethod)
+    setPaymethodData({})
+  }
+
+  const handlePaymethodDataChange = (data) => {
+    setPaymethodData(data)
+    onPaymentChange && onPaymentChange({
+      paymethodId: paymethodSelected.id,
+      gateway: paymethodSelected.gateway,
+      paymethod: paymethodSelected,
+      data
+    })
   }
 
   useEffect(() => {
-    if (optionSelected?.id === 2) {
-      props.onChangePayment({
-        paymethodId: 2,
-        gateway: 'card_delivery',
-        data: null
+    if (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected?.gateway)) {
+      onPaymentChange && onPaymentChange({
+        paymethodId: paymethodSelected.id,
+        gateway: paymethodSelected.gateway,
+        paymethod: paymethodSelected,
+        data: {}
       })
-    } else {
-      props.onChangePayment(null)
     }
-  }, [optionSelected])
+  }, [paymethodSelected])
 
   useEffect(() => {
-    if (options) {
-      setOptionsList({
+    if (paymethods) {
+      setPaymethodsList({
+        ...paymethodsList,
         loading: false,
-        options
+        paymethods: parsePaymethods(paymethods)
       })
     } else {
       getPaymentOptions()
@@ -76,9 +107,11 @@ export const PaymentOptions = (props) => {
         <UIComponent
           {...props}
           orderTotal={orderTotal}
-          optionsList={optionsList}
-          optionSelected={optionSelected}
-          handleClickOption={onClickOption}
+          paymethodsList={paymethodsList}
+          paymethodSelected={paymethodSelected}
+          paymethodData={paymethodData}
+          handlePaymethodClick={handlePaymethodClick}
+          handlePaymethodDataChange={handlePaymethodDataChange}
         />
       )}
     </>
@@ -87,18 +120,13 @@ export const PaymentOptions = (props) => {
 
 PaymentOptions.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object,
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
    * Options, this must be containt an array of payment options
    */
-  options: PropTypes.arrayOf(PropTypes.string),
+  paymethods: PropTypes.array,
   /**
    * businessId, this must be contains business id to fetch business from API
    */
@@ -106,7 +134,7 @@ PaymentOptions.propTypes = {
   /**
    * Get option selected
    */
-  onChangePayment: PropTypes.func,
+  onPaymentChange: PropTypes.func,
   /**
    * Components types before Payment Options
    * Array of type components, the parent props will pass to these components

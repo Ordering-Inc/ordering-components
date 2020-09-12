@@ -8,7 +8,12 @@ import { StripeElementsFormUI } from '../StripeElementsFormUI'
 
 export const PaymentOptionStripeUI = (props) => {
   const {
+    deleteCard,
+    cardSelected,
     cardsList,
+    handleSelectCard,
+    handleCardClick,
+    handleNewCard,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -17,9 +22,7 @@ export const PaymentOptionStripeUI = (props) => {
 
   const [{ token }] = useSession()
 
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [modalCardIsOpen, setCardIsOpen] = useState(false)
-  const [cardSelected, setCardSelected] = useState(null)
+  const [addCartOpen, setAddCardOpen] = useState(false)
 
   const customStyles = {
     content: {
@@ -30,22 +33,9 @@ export const PaymentOptionStripeUI = (props) => {
     }
   }
 
-  const handlerToken = (token) => {
-    if (token) {
-      setCardIsOpen(false)
-      props.handlerCreateCard(token)
-    }
-  }
-
-  const closeModal = () => {
-    setIsOpen(false)
-    if (cardSelected) {
-      props.handlerSelectCard({
-        paymethodId: props.payType === 'Stripe' ? 22 : 31,
-        gateway: props.payType === 'Stripe' ? 'stripe' : 'stripe_connect',
-        data: cardSelected
-      })
-    }
+  const _handleNewCard = (card) => {
+    setAddCardOpen(false)
+    handleNewCard(card)
   }
 
   return (
@@ -60,74 +50,67 @@ export const PaymentOptionStripeUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <button onClick={() => setIsOpen(true)} disabled={!token}>
-        {props.payType || 'Stripe'}
-      </button>
       {!token && <strong style={{ color: 'red' }}>Sorry, you need to login to use this method</strong>}
 
-      <Popup
-        className='modal-info'
-        style={customStyles}
-        UIComponent={ModalUI}
-        open={modalIsOpen}
-        onAccept={() => closeModal()}
-        onClose={() => closeModal()}
-        title='Please choose your card (Required)'
-      >
-        <button onClick={() => closeModal()}>x</button>
-        <div>
-          {!cardsList.loading && !cardsList.error ? (
-            <>
-              {cardsList.cards && cardsList.cards.length > 0 ? (
-                cardsList.cards.map((card, i) => (
-                  <div key={i} style={{ padding: '5px' }}>
-                    <input
-                      type='radio'
-                      name='card'
-                      value={card.id}
-                      style={{ marginLeft: '5px' }}
-                      checked={card.id === cardSelected}
-                      onChange={(e) => setCardSelected(e.target.value)}
-                    />
-                    <span>{`XXXX-XXXX-XXXX-${card.last4}`} ({card.brand})</span>
-                  </div>
-                ))
-              ) : (
-                <p>❌ Not Found ❌</p>
-              )}
-            </>
-          ) : (
-            <>
-              {cardsList.error && cardsList.error.length > 0 ? (
-                cardsList.error.map((e, i) => (
-                  <p key={i}>ERROR: [{e}]</p>
-                ))
-              ) : (
-                <p>Loading...</p>
-              )}
-            </>
-          )}
-        </div>
-        <button style={{ margin: '10px 0px' }} onClick={() => setCardIsOpen(true)}>Add card</button>
-      </Popup>
+      {token && (
+        <>
+          <div>
+            {!cardsList.loading && !cardsList.error ? (
+              <>
+                {cardsList.cards && cardsList.cards.length > 0 ? (
+                  cardsList.cards.map((card, i) => (
+                    <div key={i} style={{ padding: '5px' }} onClick={() => handleCardClick(card)}>
+                      <input
+                        type='radio'
+                        name='card'
+                        value={card.id}
+                        style={{ marginLeft: '5px' }}
+                        checked={card.id === cardSelected?.id}
+                        readOnly
+                      />
+                      <span>{`XXXX-XXXX-XXXX-${card.last4}`} ({card.brand})</span>
+                      <button onClick={() => deleteCard(card)}>Delete</button>
+                    </div>
+                  ))
+                ) : (
+                  <p>❌ Not Found ❌</p>
+                )}
+              </>
+            ) : (
+              <>
+                {cardsList.error && cardsList.error.length > 0 ? (
+                  cardsList.error.map((e, i) => (
+                    <p key={i}>ERROR: [{e}]</p>
+                  ))
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </>
+            )}
+          </div>
+          {handleSelectCard && <button style={{ margin: '10px 0px' }} onClick={() => handleSelectCard(cardSelected)} disabled={!cardSelected}>Accept</button>}
+          <button style={{ margin: '10px 0px' }} onClick={() => setAddCardOpen(true)}>Add card</button>
+        </>
+      )}
 
       <Popup
         className='modal-info'
         style={customStyles}
         UIComponent={ModalUI}
-        open={modalCardIsOpen}
-        onAccept={() => setCardIsOpen(false)}
-        onClose={() => setCardIsOpen(false)}
+        open={addCartOpen}
+        onCancel={() => setAddCardOpen(false)}
+        onClose={() => setAddCardOpen(false)}
         title='Add card'
       >
-        <button onClick={() => setCardIsOpen(false)}>x</button>
+        <button onClick={() => setAddCardOpen(false)}>x</button>
         <div>
           <StripeElementsForm
             UIComponent={StripeElementsFormUI}
             businessId={props.businessId}
-            stripePK={props.stripeKey}
-            clientSecret={props.clientSecret}
-            handlerToken={handlerToken}
+            publicKey={props.publicKey}
+            toSave
+            // clientSecret={props.clientSecret}
+            onNewCard={_handleNewCard}
           />
         </div>
       </Popup>

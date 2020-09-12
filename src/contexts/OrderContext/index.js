@@ -304,7 +304,7 @@ export const OrderProvider = ({ children }) => {
     if (!couponData.business_id) {
       throw new Error('`business_id` is required.')
     }
-    if (!couponData.coupon) {
+    if (typeof couponData.coupon === 'undefined') {
       throw new Error('`coupon` is required.')
     }
     if (state.carts[`businessId:${couponData.business_id}`]?.coupon === couponData.coupon) {

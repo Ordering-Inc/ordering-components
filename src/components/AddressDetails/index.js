@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
-import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to manage address details behavior without UI component
@@ -9,7 +9,6 @@ import { useSession } from '../../contexts/SessionContext'
 export const AddressDetails = (props) => {
   const {
     apiKey,
-    ordering,
     UIComponent
   } = props
   const [orderState] = useOrder()
@@ -18,6 +17,7 @@ export const AddressDetails = (props) => {
    * This must be contains an object with business location
    */
   const [location, setLocation] = useState(null)
+  const [ordering] = useApi()
   /**
    * Method to format google url for business location
    */
@@ -58,11 +58,6 @@ export const AddressDetails = (props) => {
 }
 
 AddressDetails.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

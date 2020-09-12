@@ -9,20 +9,24 @@ import { CardFormUI } from './CardFormUI'
 
 export const StripeElementsFormUI = (props) => {
   const {
-    stripePK,
-    handlerToken,
-    clientSecret,
-    businessId
+    publicKey,
+    handleSource,
+    businessId,
+    requirements,
+    onNewCard,
+    toSave
   } = props
 
   return (
     <>
-      {stripePK ? (
-        <Elements stripe={loadStripe(stripePK)}>
+      {publicKey ? (
+        <Elements stripe={loadStripe(publicKey)}>
           <CardForm
             UIComponent={CardFormUI}
-            handlerToken={handlerToken}
-            clientSecret={clientSecret}
+            handleSource={handleSource}
+            onNewCard={onNewCard}
+            toSave={toSave}
+            requirements={requirements}
             businessId={businessId}
           />
         </Elements>

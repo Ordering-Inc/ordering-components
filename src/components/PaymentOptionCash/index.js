@@ -1,26 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useOrder } from '../../contexts/OrderContext'
+// import { useOrder } from '../../contexts/OrderContext'
 
 /**
  * Component to manage payment option cash behavior without UI component
  */
 export const PaymentOptionCash = (props) => {
   const {
-    useOrderContext,
-    businessId,
-    UIComponent
+    // useOrderContext,
+    // businessId,
+    UIComponent,
+    orderTotal
   } = props
 
-  const [orderState] = useOrder()
-  const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
+  // const [orderState] = useOrder()
+  // const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          total={useOrderContext ? orderTotal : props.orderTotal}
+          total={orderTotal}
         />
       )}
     </>
@@ -28,11 +29,6 @@ export const PaymentOptionCash = (props) => {
 }
 
 PaymentOptionCash.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

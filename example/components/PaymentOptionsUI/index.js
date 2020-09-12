@@ -6,26 +6,26 @@ import { PaymentOptionCashUI } from '../PaymentOptionCashUI'
 import { PaymentOptionStripe } from '../../../src/components/PaymentOptionStripe'
 import { PaymentOptionStripeUI } from '../PaymentOptionStripeUI'
 
-import { PaymentOptionStripeDirect } from '../../../src/components/PaymentOptionStripeDirect'
-import { PaymentOptionStripeDirectUI } from '../PaymentOptionStripeDirectUI'
-
-import { PaymentOptionPaypal } from '../../../src/components/PaymentOptionPaypal'
-import { PaymentOptionPaypalUI } from '../PaymentOptionPaypalUI'
-
-import { PaymentOptionStripeRedirect } from '../../../src/components/PaymentOptionStripeRedirect'
-import { PaymentOptionStripeRedirectUI } from '../PaymentOptionStripeRedirectUI'
+import { Popup } from '../../../src/components/Popup'
+import { ModalUI } from '../ModalUI'
+import { StripeElementsForm } from '../../../src/components/StripeElementsForm'
+import { StripeElementsFormUI } from '../StripeElementsFormUI'
 
 export const PaymentOptionsUI = (props) => {
   const {
-    optionSelected,
-    optionsList,
-    handleClickOption,
-    onChangePayment,
+    orderTotal,
+    paymethodSelected,
+    paymethodData,
+    paymethodsList,
+    handlePaymethodClick,
+    handlePaymethodDataChange,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
+
+  // console.log(paymethodSelected)
 
   return (
     <>
@@ -41,17 +41,17 @@ export const PaymentOptionsUI = (props) => {
 
       <div className='payment-options'>
         <strong>Payment Method</strong><br /><br />
-        {!optionsList.loading && !optionsList.error ? (
+        {!paymethodsList.loading && !paymethodsList.error ? (
           <div style={{ marginBottom: '20px' }}>
-            {optionsList.options && optionsList.options.length > 0 ? (
-              optionsList.options.map(option => (
+            {paymethodsList.paymethods.length > 0 ? (
+              paymethodsList.paymethods.sort((a, b) => a.id - b.id).map(paymethod => (
                 <button
-                  key={option.paymethod.id}
-                  value={option.paymethod.id}
+                  key={paymethod.id}
+                  value={paymethod.id}
                   style={{ padding: '5px', marginRight: '5px' }}
-                  onClick={() => handleClickOption(option.paymethod)}
+                  onClick={() => handlePaymethodClick(paymethod)}
                 >
-                  {option.paymethod.name} {optionSelected?.id === option.paymethod.id && <i>✔️</i>}
+                  {paymethod.name} {paymethodSelected?.id === paymethod.id && <i>✔️</i>}
                 </button>
               ))
             ) : (
@@ -60,8 +60,8 @@ export const PaymentOptionsUI = (props) => {
           </div>
         ) : (
           <div>
-            {optionsList.error && optionsList.error.length > 0 ? (
-              optionsList.error.map((e, i) => (
+            {paymethodsList.error && paymethodsList.error.length > 0 ? (
+              paymethodsList.error.map((e, i) => (
                 <p key={i}>ERROR: [{e}]</p>
               ))
             ) : (
@@ -71,52 +71,61 @@ export const PaymentOptionsUI = (props) => {
         )}
       </div>
 
-      {optionSelected?.name === 'Cash' && (
+      {paymethodSelected?.gateway === 'cash' && (
         <PaymentOptionCash
           UIComponent={PaymentOptionCashUI}
-          useOrderContext
+          paymethod={paymethodSelected}
+          orderTotal={orderTotal}
           businessId={props.businessId}
-          handlerSubmit={onChangePayment}
+          onChangeData={handlePaymethodDataChange}
         />
       )}
 
-      {(optionSelected?.name === 'Stripe' || optionSelected?.name === 'Stripe Connect') && (
-        <PaymentOptionStripe
-          UIComponent={PaymentOptionStripeUI}
-          ordering={props.ordering}
-          businessId={props.businessId}
-          payType={optionSelected?.name}
-          handlerSelectCard={onChangePayment}
-        />
-      )}
+      {/* Stripe direct */}
+      <Popup
+        className='modal-info'
+        UIComponent={ModalUI}
+        open={paymethodSelected?.gateway === 'stripe_direct' && !paymethodData.id}
+        onCancel={() => handlePaymethodClick(null)}
+        onClose={() => handlePaymethodClick(null)}
+        title='Add card'
+      >
+        <button onClick={() => handlePaymethodClick(null)}>x</button>
+        {paymethodSelected?.gateway === 'stripe_direct' && (
+          <div>
+            <StripeElementsForm
+              UIComponent={StripeElementsFormUI}
+              businessId={props.businessId}
+              publicKey={paymethodSelected.credentials.publishable}
+              handleSource={handlePaymethodDataChange}
+            />
+          </div>
+        )}
+      </Popup>
 
-      {optionSelected?.name === 'Stripe Direct' && (
-        <PaymentOptionStripeDirect
-          UIComponent={PaymentOptionStripeDirectUI}
-          businessId={props.businessId}
-          handlerCreatedCard={onChangePayment}
-        />
-      )}
-
-      {optionSelected?.name === 'Paypal Express' && (
-        <PaymentOptionPaypal
-          UIComponent={PaymentOptionPaypalUI}
-          amount={props.orderTotal.toString()}
-          clientID=''
-          handlerChangePaypal={onChangePayment}
-        />
-      )}
-
-      {optionSelected?.name === 'Stripe Redirect' && (
-        <PaymentOptionStripeRedirect
-          UIComponent={PaymentOptionStripeRedirectUI}
-          businessId={props.businessId}
-          ordering={props.ordering}
-          currency='eur'
-          paymentMethods={[{ name: 'Bancontact', value: 'bancontact' }]}
-          handlerStripeSource={onChangePayment}
-        />
-      )}
+      {/* Stripe */}
+      <Popup
+        className='modal-info'
+        UIComponent={ModalUI}
+        open={['stripe', 'stripe_connect'].includes(paymethodSelected?.gateway) && !paymethodData.id}
+        onCancel={() => handlePaymethodClick(null)}
+        onClose={() => handlePaymethodClick(null)}
+        title='Select a card'
+      >
+        <button onClick={() => handlePaymethodClick(null)}>x</button>
+        {['stripe', 'stripe_connect'].includes(paymethodSelected?.gateway) && (
+          <div>
+            <PaymentOptionStripe
+              UIComponent={PaymentOptionStripeUI}
+              paymethod={paymethodSelected}
+              businessId={props.businessId}
+              publicKey={paymethodSelected.credentials.publishable}
+              payType={paymethodsList?.name}
+              handleSelectCard={handlePaymethodDataChange}
+            />
+          </div>
+        )}
+      </Popup>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

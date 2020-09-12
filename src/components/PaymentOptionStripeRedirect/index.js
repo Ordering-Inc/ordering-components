@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to manage payment option stripe redirect behavior without UI component
@@ -13,6 +14,7 @@ export const PaymentOptionStripeRedirect = (props) => {
   } = props
 
   const [{ token }] = useSession()
+  const [ordering] = useApi()
 
   /**
    * save stripe public key
@@ -38,7 +40,7 @@ export const PaymentOptionStripeRedirect = (props) => {
   const getCredentials = async () => {
     // Replace for a sdk method
     const response = await fetch(
-      'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe/credentials',
+      `${ordering.root}/payments/stripe/credentials`,
       {
         headers: {
           Authorization: `Bearer ${token}`

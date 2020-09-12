@@ -1,17 +1,46 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
+import { useSession } from '../../contexts/SessionContext'
 
 /**
  * Component to manage stripe elements form behavior without UI component
  */
 export const StripeElementsForm = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    toSave
   } = props
+
+  const [ordering] = useApi()
+  const [{ token }] = useSession()
+  const [requirements, setRequirements] = useState()
+
+  /**
+   * Method to get client id for create stripe payment method
+   */
+  const getRequirements = async () => {
+    // Replace for a sdk method
+    const response = await fetch(
+      `${ordering.root}/payments/stripe/requirements?type=add_card`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+    const { result } = await response.json()
+    setRequirements(result)
+  }
+
+  useEffect(() => {
+    token && toSave && getRequirements()
+  }, [])
 
   return (
     <UIComponent
       {...props}
+      requirements={requirements}
     />
   )
 }
@@ -26,9 +55,13 @@ StripeElementsForm.propTypes = {
    */
   businessId: PropTypes.number,
   /**
+   * Create card to save or pay
+   */
+  toSave: PropTypes.bool,
+  /**
    * save stripe public key to use stripe form
    */
-  stripePK: PropTypes.string,
+  publicKey: PropTypes.string,
   /**
    * Save client secret id used in stripe for create a payment method
    */
@@ -36,5 +69,5 @@ StripeElementsForm.propTypes = {
   /**
    * method used for handle card token created
    */
-  handlerToken: PropTypes.func
+  handleSource: PropTypes.func
 }

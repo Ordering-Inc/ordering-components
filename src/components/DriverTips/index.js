@@ -34,12 +34,14 @@ export const DriverTips = (props) => {
    * handler when user change driver tip option
    * @param {number} val
    */
-  const handlerChangeOption = (val) => {
+  const handlerChangeOption = (driverTip) => {
+    driverTip = parseInt(driverTip)
     if (useOrderContext) {
-      changeDriverTip(businessId, parseInt(val))
+      changeDriverTip(businessId, driverTip)
+    } else {
+      setOptionSelected(driverTip)
     }
-    // props.handlerChangeDriverOption(parseInt(val))
-    setOptionSelected(parseInt(val))
+    props.handlerChangeDriverOption && props.handlerChangeDriverOption(driverTip)
   }
 
   useEffect(() => {

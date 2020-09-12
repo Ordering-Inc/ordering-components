@@ -36,30 +36,17 @@ const styleButtonOrder = {
 
 export const CheckoutUI = (props) => {
   const {
-    isOrderValid,
-    paymentSelected,
-    orderState,
-    ordering,
+    cart,
+    orderOptions,
     businessDetails,
-    handlerPaymentMethod,
+    paymethodSelected,
+    handlePaymethodChange,
     handlerClickPlaceOrder,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
-
-  /**
-   * uncomment when properties are readys on orderContext
-   */
-
-  // if (!isOrderValid.valid_products) {
-  //   window.alert('Please check your products!')
-  // }
-
-  // if (!isOrderValid.valid_address) {
-  //   window.alert('Please check your address!')
-  // }
 
   return (
     <>
@@ -80,14 +67,12 @@ export const CheckoutUI = (props) => {
       <hr style={{ marginBottom: '20px' }} />
 
       <MomentOption
-        ordering={ordering}
         UIComponent={MomentOptionUI}
         // onChangeMoment={(value) => handlerValues({ field: 'moment', value })}
       />
       <hr />
 
       <AddressDetails
-        ordering={ordering}
         UIComponent={AddressDetailsUI}
         businessId={props.businessId}
         apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
@@ -97,7 +82,6 @@ export const CheckoutUI = (props) => {
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%' }}>
           <UserDetails
-            ordering={ordering}
             UIComponent={UserDetailsUI}
             businessId={props.businessId}
             useValidationFields
@@ -135,15 +119,22 @@ export const CheckoutUI = (props) => {
       </div>
       <hr />
 
-      <PaymentOptions
-        ordering={ordering}
-        UIComponent={PaymentOptionsUI}
-        businessId={props.businessId}
-        onChangePayment={handlerPaymentMethod}
-      />
+      {
+        businessDetails.business && (
+          <PaymentOptions
+            UIComponent={PaymentOptionsUI}
+            businessId={props.businessId}
+            paymethods={businessDetails.business.paymethods}
+            onPaymentChange={handlePaymethodChange}
+          />
+        )
+      }
+      {
+        ['stripe_direct', 'stripe', 'stripe_connect'].includes(paymethodSelected?.paymethod.gateway) && <p>Card: **** **** **** {paymethodSelected.data.card.last4} ({paymethodSelected.data.card.brand})</p>
+      }
       <hr />
 
-      {orderState.options.type === 1 &&
+      {orderOptions.type === 1 &&
         <>
           <DriverTips
             UIComponent={DriverTipsUI}
@@ -168,8 +159,26 @@ export const CheckoutUI = (props) => {
       />
       <br /><br /><hr />
 
+      {
+        cart && !cart.valid_schedule && (
+          <p style={{ backgroundColor: '#FFFF00', color: '#FF0000' }}>Business is closed now!</p>
+        )
+      }
+
+      {
+        cart && !cart.valid_address && (
+          <p style={{ backgroundColor: '#FFFF00', color: '#FF0000' }}>Address is invalid!</p>
+        )
+      }
+
+      {
+        cart && !cart.valid_products && (
+          <p style={{ backgroundColor: '#FFFF00', color: '#FF0000' }}>No valid products!</p>
+        )
+      }
+
       <button
-        disabled={!isOrderValid.valid || !paymentSelected}
+        disabled={!cart?.valid || !paymethodSelected}
         style={styleButtonOrder}
         onClick={() => handlerClickPlaceOrder()}
       >
