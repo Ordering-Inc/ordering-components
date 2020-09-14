@@ -5,6 +5,7 @@ export const BusinessTypeFilter = (props) => {
   const {
     businessTypes,
     defaultBusinessType,
+    onChangeBusinessType,
     UIComponent
   } = props
 
@@ -17,6 +18,7 @@ export const BusinessTypeFilter = (props) => {
    * Handle when select value changes
    */
   const handleChangeBusinessType = (val) => {
+    onChangeBusinessType(val)
     setTypeSelected(val)
   }
 
@@ -27,7 +29,7 @@ export const BusinessTypeFilter = (props) => {
           {...props}
           businessTypes={businessTypes}
           currentTypeSelected={typeSelected}
-          onChangeBusinessType={handleChangeBusinessType}
+          handleChangeBusinessType={handleChangeBusinessType}
         />
       )}
     </>
@@ -52,6 +54,10 @@ BusinessTypeFilter.propTypes = {
    * Default business type to show
    */
   defaultBusinessType: PropTypes.string,
+  /**
+   * onChangeBusinessType, method to get value selected
+   */
+  onChangeBusinessType: PropTypes.func,
   /**
    * Components types before business type filter
    * Array of type components, the parent props will pass to these components

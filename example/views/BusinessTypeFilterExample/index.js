@@ -24,6 +24,10 @@ export const BusinessTypeFilterExample = ({ ordering }) => {
      */
     defaultBusinessType: 'Food',
     /**
+     * onChangeBusinessType, method to get value selected
+     */
+    onChangeBusinessType: (e) => { console.log(e) },
+    /**
      * Components types before business type filter
      * Array of type components, the parent props will pass to these components
      */
