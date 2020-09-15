@@ -123,15 +123,6 @@ export const CardForm = (props) => {
       } else {
         setLoading(false)
         setError(null)
-        // handleSource && handleSource({
-        //   id: result?.setupIntent.payment_method,
-        //   type: 'paymethod'
-        //   // card: {
-        //   //   brand: result?.paymentMethod.card.brand,
-        //   //   last4: result?.paymentMethod.card.last4
-        //   // }
-        // })
-        // props.handlerToken(result?.setupIntent?.payment_method)
         toSave && stripeTokenHandler(result.setupIntent.payment_method, user, props.businessId)
       }
     }

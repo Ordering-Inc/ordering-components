@@ -34,18 +34,18 @@ export const PaymentOptionStripe = (props) => {
     setCardsList({ ...cardsList, loading: true })
     // Replace for a sdk method
     try {
-      const response = await fetch(
-        `${ordering.root}/payments/stripe/cards?business_id=${businessId}&user_id=${user.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      )
+      const response = await fetch(`${ordering.root}/payments/stripe/cards?business_id=${businessId}&user_id=${user.id}`, { headers: { Authorization: `Bearer ${token}` } })
       const { result } = await response.json()
       const defaultCart = result.find(card => card.default)
       if (defaultCart) {
-        setCardSelected(defaultCart)
+        setCardSelected({
+          id: defaultCart.id,
+          type: 'card',
+          card: {
+            brand: defaultCart.brand,
+            last4: defaultCart.last4
+          }
+        })
       }
       setCardsList({
         ...cardsList,
@@ -72,17 +72,7 @@ export const PaymentOptionStripe = (props) => {
         card_id: card.id,
         user_id: user.id
       })
-      const response = await fetch(
-        `${ordering.root}/payments/stripe/cards`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body
-        }
-      )
+      const response = await fetch(`${ordering.root}/payments/stripe/cards`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body })
       const { error } = await response.json()
       if (!error) {
         cardsList.cards = cardsList.cards.filter(_card => _card.id !== card.id)
@@ -99,14 +89,7 @@ export const PaymentOptionStripe = (props) => {
    */
   const getCredentials = async () => {
     // Replace for a sdk method
-    const response = await fetch(
-      `${ordering.root}/payments/stripe/credentials`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    )
+    const response = await fetch(`${ordering.root}/payments/stripe/credentials`, { headers: { Authorization: `Bearer ${token}` } })
     const { result: { publishable } } = await response.json()
     setPublicKey(publishable)
   }

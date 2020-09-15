@@ -170,7 +170,7 @@ export default function App ({ ordering }) {
           <Route path='/driver_tips'>
             <DriverTipsExample ordering={ordering} />
           </Route>
-          <Route path='/checkout'>
+          <Route path='/checkout/:cartUuid?'>
             <CheckoutExample ordering={ordering} />
           </Route>
           <Route path='/search_options'>

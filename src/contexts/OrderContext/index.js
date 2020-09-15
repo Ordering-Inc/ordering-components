@@ -16,7 +16,7 @@ export const OrderContext = createContext()
  * @param {props} props
  */
 export const OrderProvider = ({ children }) => {
-  const [confirm, setConfirm] = useState({ show: false })
+  const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
 
@@ -26,7 +26,7 @@ export const OrderProvider = ({ children }) => {
       type: 1
     },
     carts: {},
-    confirm,
+    confirmAlert,
     alert
   })
 
@@ -365,6 +365,57 @@ export const OrderProvider = ({ children }) => {
     }
   }
 
+  /**
+   * Place cart
+   */
+  const placeCart = async (cardId, data) => {
+    try {
+      setState({ ...state, loading: true })
+      data.paymethod_data = JSON.stringify(data.paymethod_data)
+      const body = JSON.stringify(data)
+      const response = await fetch(`${ordering.root}/carts/${cardId}/place`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const { error, result, cart } = await response.json()
+      if (!error) {
+        state.carts[`businessId:${result.business_id}`] = result
+      } else {
+        state.carts[`businessId:${cart.business_id}`] = cart
+      }
+      setState({ ...state, loading: false })
+      return { error, result }
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return {
+        error: true,
+        result: [err.message]
+      }
+    }
+  }
+
+  /**
+   * Confirm cart
+   */
+  const confirmCart = async (cardId, data) => {
+    try {
+      setState({ ...state, loading: true })
+      const body = JSON.stringify(data)
+      const response = await fetch(`${ordering.root}/carts/${cardId}/confirm`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const { error, result, cart } = await response.json()
+      if (!error) {
+        state.carts[`businessId:${result.business_id}`] = result
+      } else {
+        state.carts[`businessId:${cart.business_id}`] = cart
+      }
+      setState({ ...state, loading: false })
+      return { error, result }
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return {
+        error: true,
+        result: [err.message]
+      }
+    }
+  }
+
   useEffect(() => {
     if (session.auth) {
       refreshOrderOptions()
@@ -392,6 +443,8 @@ export const OrderProvider = ({ children }) => {
     clearCart,
     applyCoupon,
     changeDriverTip,
+    placeCart,
+    confirmCart,
     setAlert,
     setConfirm
   }
@@ -402,12 +455,12 @@ export const OrderProvider = ({ children }) => {
     <OrderContext.Provider value={[copyState, functions]}>
       <Popup
         UIComponent={AlertUI}
-        open={confirm.show}
+        open={confirmAlert.show}
         title='Confirm'
-        onAccept={() => confirm.onConfirm()}
+        onAccept={() => confirmAlert.onConfirm()}
         onCancel={() => setConfirm({ show: false })}
         onClose={() => setConfirm({ show: false })}
-        content={confirm.content}
+        content={confirmAlert.content}
       />
       <Popup
         UIComponent={AlertUI}
@@ -443,6 +496,8 @@ export const useOrder = () => {
     updateProduct: warningMessage,
     clearCart: warningMessage,
     applyCoupon: warningMessage,
+    placeCart: warningMessage,
+    confirmCart: warningMessage,
     setAlert: warningMessage,
     setConfirm: warningMessage,
     changeDriverTip: warningMessage

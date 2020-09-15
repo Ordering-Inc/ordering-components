@@ -1,70 +1,27 @@
-import React, { useState } from 'react'
-import { useStripe } from '@stripe/react-stripe-js'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useOrder } from '../../../contexts/OrderContext'
-
-const PAYMENTS_URL = 'http://apiv4-features.ordering.co/v400/en/luisv4/payments/stripe_redirect/redirect'
-const API_URL = 'http://apiv4-features.ordering.co'
 
 /**
  * Component to manage stripe redirect form behavior without UI component
  */
 export const StripeRedirectForm = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    handleStripeRedirect
   } = props
-  const [orderState] = useOrder()
-  const orderTotal = orderState.carts[`businessId:${props.businessId}`]?.total || 0
-  const stripe = useStripe()
-
-  const [stripeError, setStripeError] = useState(null)
 
   /**
    * Method to handle all workflow about stripe redirect page
    * @param {Object} param0 object with name, email and paydata from stripe form
    */
-  const handlerSubmitPaymentMethod = async ({ name, email, paydata }) => {
-    const result = await stripe.createSource({
-      type: paydata,
-      amount: orderTotal * 100,
-      currency: props.currency,
+  const handleSubmitPaymentMethod = async ({ type, name, email }) => {
+    handleStripeRedirect && handleStripeRedirect({
+      type,
       owner: {
         name,
         email
-      },
-      redirect: {
-        return_url: PAYMENTS_URL
       }
     })
-    if (!result.error) {
-      const redirectPopup = window.open('', '_blank', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,clearcache=yes')
-      redirectPopup.location.href = result.source.redirect.url
-
-      const checkdata = setInterval(function () {
-        redirectPopup.postMessage('data', API_URL)
-      }, 100)
-
-      let timeout = null
-
-      const handleMessage = (e) => {
-        if (e.data.result) {
-          redirectPopup.postMessage('close', API_URL)
-          window.removeEventListener('message', handleMessage)
-          clearInterval(checkdata)
-          clearTimeout(timeout)
-          timeout = setTimeout(function () {
-            if (e.data.result.redirect_status === 'failed' || e.data.result.redirect_status === 'canceled') {
-              setStripeError('Error stripe redirect')
-            } else {
-              props.handlerStripeRedirect(e.data.result.source)
-            }
-          }, 500)
-        }
-      }
-      window.addEventListener('message', handleMessage, false)
-    } else {
-      setStripeError(result.error.message)
-    }
   }
 
   return (
@@ -72,9 +29,7 @@ export const StripeRedirectForm = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          stripeError={stripeError}
-          handlerSubmitPaymentMethod={handlerSubmitPaymentMethod}
-          handlerChangeSelect={(val) => setStripeError(val)}
+          handleSubmitPaymentMethod={handleSubmitPaymentMethod}
         />
       )}
     </>

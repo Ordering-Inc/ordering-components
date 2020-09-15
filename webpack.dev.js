@@ -9,7 +9,8 @@ module.exports = merge(common, {
   entry: './index-example.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/'
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),

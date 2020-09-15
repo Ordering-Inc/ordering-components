@@ -37,6 +37,7 @@ const styleButtonOrder = {
 export const CheckoutUI = (props) => {
   const {
     cart,
+    placing,
     orderOptions,
     businessDetails,
     paymethodSelected,
@@ -129,8 +130,11 @@ export const CheckoutUI = (props) => {
           />
         )
       }
+      {paymethodSelected?.paymethod?.gateway}
       {
-        ['stripe_direct', 'stripe', 'stripe_connect'].includes(paymethodSelected?.paymethod.gateway) && <p>Card: **** **** **** {paymethodSelected.data.card.last4} ({paymethodSelected.data.card.brand})</p>
+        ['stripe_direct', 'stripe', 'stripe_connect'].includes(paymethodSelected?.paymethod?.gateway) && paymethodSelected.data?.card && (
+          <p>Card: **** **** **** {paymethodSelected.data?.card?.last4} ({paymethodSelected.data?.card?.brand})</p>
+        )
       }
       <hr />
 
@@ -178,11 +182,11 @@ export const CheckoutUI = (props) => {
       }
 
       <button
-        disabled={!cart?.valid || !paymethodSelected}
+        disabled={!cart?.valid || !paymethodSelected || placing}
         style={styleButtonOrder}
         onClick={() => handlerClickPlaceOrder()}
       >
-        Place Order
+        {placing ? 'Placing...' : 'Place Order'}
       </button>
 
       {afterComponents.map(

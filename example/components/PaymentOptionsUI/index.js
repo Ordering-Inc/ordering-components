@@ -10,6 +10,9 @@ import { Popup } from '../../../src/components/Popup'
 import { ModalUI } from '../ModalUI'
 import { StripeElementsForm } from '../../../src/components/StripeElementsForm'
 import { StripeElementsFormUI } from '../StripeElementsFormUI'
+import { StripeRedirectForm } from '../../../src/components/PaymentOptionStripeRedirect/StripeRedirectForm'
+import { StripeRedirectFormUI } from '../StripeRedirectFormUI'
+import { useSession } from '../../../src/contexts/SessionContext'
 
 export const PaymentOptionsUI = (props) => {
   const {
@@ -24,6 +27,8 @@ export const PaymentOptionsUI = (props) => {
     beforeElements,
     afterElements
   } = props
+
+  const [{ user }] = useSession()
 
   // console.log(paymethodSelected)
 
@@ -125,6 +130,31 @@ export const PaymentOptionsUI = (props) => {
             />
           </div>
         )}
+      </Popup>
+
+      {/* Stripe Redirect */}
+      <Popup
+        className='modal-info'
+        // style={customStyles}
+        UIComponent={ModalUI}
+        open={['stripe_redirect'].includes(paymethodSelected?.gateway) && !paymethodData.type}
+        onAccept={() => handlePaymethodClick(null)}
+        onClose={() => handlePaymethodClick(null)}
+        title='Stripe Redirect'
+      >
+        <button onClick={() => handlePaymethodClick(null)}>x</button>
+        <div>
+          {/* <Elements stripe={loadStripe(props.stripePK)}> */}
+          <StripeRedirectForm
+            UIComponent={StripeRedirectFormUI}
+            businessId={props.businessId}
+            user={user}
+            currency={props.currency}
+            paymethods={[{ name: 'Bancontact', value: 'bancontact' }]}
+            handleStripeRedirect={handlePaymethodDataChange}
+          />
+          {/* </Elements> */}
+        </div>
       </Popup>
 
       {afterComponents.map(

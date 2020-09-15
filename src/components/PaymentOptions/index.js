@@ -65,17 +65,21 @@ export const PaymentOptions = (props) => {
    */
   const handlePaymethodClick = (paymethod) => {
     setPaymethodsSelected(paymethod)
-    setPaymethodData({})
+    handlePaymethodDataChange({})
   }
 
   const handlePaymethodDataChange = (data) => {
     setPaymethodData(data)
-    onPaymentChange && onPaymentChange({
-      paymethodId: paymethodSelected.id,
-      gateway: paymethodSelected.gateway,
-      paymethod: paymethodSelected,
-      data
-    })
+    if (paymethodSelected) {
+      onPaymentChange && onPaymentChange({
+        paymethodId: paymethodSelected.id,
+        gateway: paymethodSelected.gateway,
+        paymethod: paymethodSelected,
+        data
+      })
+    } else {
+      onPaymentChange && onPaymentChange(null)
+    }
   }
 
   useEffect(() => {
@@ -86,6 +90,8 @@ export const PaymentOptions = (props) => {
         paymethod: paymethodSelected,
         data: {}
       })
+    } else if (paymethodSelected === null && onPaymentChange) {
+      onPaymentChange(null)
     }
   }, [paymethodSelected])
 

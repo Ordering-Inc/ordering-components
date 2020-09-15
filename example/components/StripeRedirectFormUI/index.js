@@ -9,8 +9,8 @@ const inputStyle = {
 export const StripeRedirectFormUI = (props) => {
   const {
     user,
-    stripeError,
-    paymentMethods,
+    paymethods,
+    handleSubmitPaymentMethod,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -31,24 +31,23 @@ export const StripeRedirectFormUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <form className='stripe' onSubmit={handleSubmit(props.handlerSubmitPaymentMethod)}>
+      <form className='stripe' onSubmit={handleSubmit(handleSubmitPaymentMethod)}>
         <label>Select a payment method</label>
         <select
           style={inputStyle}
-          name='paydata'
+          name='type'
           ref={
             register({
               required: true
             })
           }
-          onChange={() => props.handlerChangeSelect(null)}
         >
           <option value=''>Select a payment method</option>
-          {paymentMethods?.length > 0 && paymentMethods.map((paym, i) => (
-            <option key={i} value={paym.value}>{paym.name}</option>
+          {paymethods?.length > 0 && paymethods.map((paymethod, i) => (
+            <option key={i} value={paymethod.value}>{paymethod.name}</option>
           ))}
         </select>
-        {errors.paydata && errors.paydata.type === 'required' && <p style={{ color: 'red', margin: '0px' }}>This field is required</p>}
+        {errors.type && errors.type.type === 'required' && <p style={{ color: 'red', margin: '0px' }}>This field is required</p>}
         <br />
 
         <label>Account holder</label>
@@ -81,7 +80,6 @@ export const StripeRedirectFormUI = (props) => {
         />
         {errors.email && errors.email.type === 'required' && <p style={{ color: 'red', margin: '0px' }}>This field is required</p>}
         <br />
-        {stripeError && <strong style={{ color: 'red' }}>{stripeError}</strong>}
         <button type='submit' disabled={formState.isSubmitting}>
           {formState.isSubmitting ? 'Loading...' : 'OK'}
         </button>

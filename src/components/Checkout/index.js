@@ -9,15 +9,21 @@ import { useApi } from '../../contexts/ApiContext'
 export const Checkout = (props) => {
   const {
     businessId,
+    actionsBeforePlace,
+    handleCustomClick,
+    onPlaceOrderClick,
     UIComponent
   } = props
 
   const [ordering] = useApi()
 
+  const [placing, setPlacing] = useState(false)
+  const [errors, setErrors] = useState(null)
+
   /**
    * Order context
    */
-  const [orderState] = useOrder()
+  const [orderState, { placeCart, confirmCart }] = useOrder()
   /**
    * Object to save an object with business information
    */
@@ -50,10 +56,17 @@ export const Checkout = (props) => {
       })
     }
   }
+
   /**
    * Method to handle click on Place order
    */
-  const handlerClickPlaceOrder = () => {
+  const handlerClickPlaceOrder = async () => {
+    let paymethodData = paymethodSelected.data
+    if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
+      paymethodData = {
+        source_id: paymethodSelected.data.id
+      }
+    }
     const data = {
       paymethod_id: paymethodSelected.paymethodId,
       paymethod_data: paymethodSelected.data,
@@ -61,16 +74,41 @@ export const Checkout = (props) => {
       offer_id: cart.offer_id,
       amount: cart.total
     }
-    if (props.handleCustomClick) {
-      props.handleCustomClick(data, paymethodSelected)
+    if (handleCustomClick) {
+      handleCustomClick(data, paymethodSelected, cart)
+      return
+    }
+    setPlacing(true)
+    const result = await placeCart(cart.uuid, {
+      paymethod_id: paymethodSelected.paymethodId,
+      paymethod_data: paymethodData,
+      delivery_zone_id: cart.delivery_zone_id,
+      offer_id: cart.offer_id,
+      amount: cart.total
+    })
+
+    console.log(result)
+    if (result.error) {
+      setErrors(result.result)
       return
     }
 
-    props.onPlaceOrderClick(data, paymethodSelected)
+    let cartResult = result.result
+
+    if (cartResult?.paymethod_data?.status === 2 && actionsBeforePlace) {
+      const toConfirm = await actionsBeforePlace(paymethodSelected, result.result)
+      if (toConfirm) {
+        const confirmResponse = await confirmCart(cart.uuid)
+        console.log(confirmResponse)
+        cartResult = confirmResponse.result
+      }
+    }
+    setPlacing(false)
+    onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cartResult)
   }
 
-  const handlePaymethodChange = (paymehod) => {
-    setPaymethodSelected(paymehod)
+  const handlePaymethodChange = (paymethod) => {
+    setPaymethodSelected(paymethod)
   }
 
   useEffect(() => {
@@ -83,6 +121,8 @@ export const Checkout = (props) => {
         <UIComponent
           {...props}
           cart={cart}
+          placing={placing}
+          errors={errors}
           orderOptions={orderState.options}
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
