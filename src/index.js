@@ -56,6 +56,8 @@ import { LanguageContext, LanguageProvider, useLanguage } from './contexts/Langu
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
 import { SessionContext, SessionProvider, useSession } from './contexts/SessionContext'
 import { WebsocketContext, WebsocketProvider, useWebsocket } from './contexts/WebsocketContext'
+import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
+import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
 
 export {
   AddressDetails,
@@ -127,5 +129,10 @@ export {
   useSession,
   WebsocketContext,
   WebsocketProvider,
-  useWebsocket
+  useWebsocket,
+  ApiContext,
+  ApiProvider,
+  useApi,
+  OrderingContext,
+  OrderingProvider
 }

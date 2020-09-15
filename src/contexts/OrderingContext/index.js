@@ -10,7 +10,7 @@ import { ApiProvider } from '../ApiContext'
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
  */
-const OrderingContext = createContext()
+export const OrderingContext = createContext()
 
 /**
  * Custom provider to languages manager
