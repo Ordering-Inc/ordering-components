@@ -13,8 +13,6 @@ var _SessionContext = require("../SessionContext");
 
 var _Popup = require("../../components/Popup");
 
-var _AlertUI = require("../../../example/components/AlertUI");
-
 var _ApiContext = require("../ApiContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -1215,8 +1213,8 @@ var OrderProvider = function OrderProvider(_ref) {
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
     value: [copyState, functions]
-  }, /*#__PURE__*/_react.default.createElement(_Popup.Popup, {
-    UIComponent: _AlertUI.AlertUI,
+  }, /*#__PURE__*/_react.default.createElement(_Popup.Popup // UIComponent={AlertUI}
+  , {
     open: confirmAlert.show,
     title: "Confirm",
     onAccept: function onAccept() {
@@ -1233,8 +1231,8 @@ var OrderProvider = function OrderProvider(_ref) {
       });
     },
     content: confirmAlert.content
-  }), /*#__PURE__*/_react.default.createElement(_Popup.Popup, {
-    UIComponent: _AlertUI.AlertUI,
+  }), /*#__PURE__*/_react.default.createElement(_Popup.Popup // UIComponent={AlertUI}
+  , {
     open: alert.show,
     title: "Error",
     onAccept: function onAccept() {
