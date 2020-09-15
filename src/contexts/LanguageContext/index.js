@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
+import { useApi } from '../ApiContext'
 
 /**
  * Create LanguageContext
@@ -11,12 +12,14 @@ export const LanguageContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const LanguageProvider = ({ ordering, children }) => {
+export const LanguageProvider = ({ children }) => {
   const [state, setState] = useState({
     loading: true,
     language: JSON.parse(window.localStorage.getItem('language')),
     dictionary: {}
   })
+
+  const [ordering] = useApi()
 
   const refreshTranslations = async () => {
     try {

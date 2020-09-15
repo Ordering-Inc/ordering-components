@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
+import { useApi } from '../ApiContext'
 
 /**
  * Create ConfigContext
@@ -11,8 +12,10 @@ export const ConfigContext = createContext()
  * This provider has a reducer for manage configs state
  * @param {props} props
  */
-export const ConfigProvider = ({ ordering, children }) => {
+export const ConfigProvider = ({ children }) => {
   const [state, setState] = useState({ loading: true, configs: {} })
+
+  const [ordering] = useApi()
 
   const refreshConfigs = async () => {
     try {

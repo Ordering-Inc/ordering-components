@@ -4,7 +4,7 @@ export const BusinessTypeFilterUI = (props) => {
   const {
     businessTypes,
     currentTypeSelected,
-    onChangeBusinessType,
+    handleChangeBusinessType,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -23,7 +23,7 @@ export const BusinessTypeFilterUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <select className='select-list' value={currentTypeSelected} onChange={(e) => onChangeBusinessType(e.target.value)}>
+      <select className='select-list' value={currentTypeSelected} onChange={(e) => handleChangeBusinessType(e.target.value)}>
         {businessTypes.map((type, i) => (
           <option key={i} value={type}> {type} </option>
         ))}
@@ -31,7 +31,7 @@ export const BusinessTypeFilterUI = (props) => {
 
       <div className='filter-list'>
         {businessTypes.map((type, i) => (
-          <button key={i} onClick={() => onChangeBusinessType(type)} disabled={currentTypeSelected === type}>
+          <button key={i} onClick={() => handleChangeBusinessType(type)} disabled={currentTypeSelected === type}>
             {type}
           </button>
         ))}
