@@ -7,22 +7,23 @@ import { TestComponent } from '../../components/TestComponent'
 export const BusinessTypeFilterExample = ({ ordering }) => {
   const props = {
     /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
-    /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
     UIComponent: BusinessTypeFilterUI,
     /**
      * Array that contains business types to filter
      */
-    businessTypes: ['All', 'Food', 'Alcohol', 'Groceries', 'Laundry'],
+    businessTypes: [
+      { key: 'All', value: 0 },
+      { key: 'Food', value: 'food' },
+      { key: 'Alcohol', value: 'alcohol' },
+      { key: 'Groceries', value: 'groceries' },
+      { key: 'Laundry', value: 'laundry' }
+    ],
     /**
      * Default business type to show
      */
-    defaultBusinessType: 'Food',
+    defaultBusinessType: 'food',
     /**
      * onChangeBusinessType, method to get value selected
      */

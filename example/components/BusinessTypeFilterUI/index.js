@@ -25,14 +25,14 @@ export const BusinessTypeFilterUI = (props) => {
 
       <select className='select-list' value={currentTypeSelected} onChange={(e) => handleChangeBusinessType(e.target.value)}>
         {businessTypes.map((type, i) => (
-          <option key={i} value={type}> {type} </option>
+          <option key={i} value={type.value}> {type.key} </option>
         ))}
       </select><br /><br />
 
       <div className='filter-list'>
         {businessTypes.map((type, i) => (
-          <button key={i} onClick={() => handleChangeBusinessType(type)} disabled={currentTypeSelected === type}>
-            {type}
+          <button key={i} onClick={() => handleChangeBusinessType(type.value)} disabled={currentTypeSelected === type.value}>
+            {type.key}
           </button>
         ))}
       </div><br />

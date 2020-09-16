@@ -38,18 +38,13 @@ export const BusinessTypeFilter = (props) => {
 
 BusinessTypeFilter.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
    * Array that contains business types to filter
    */
-  businessTypes: PropTypes.arrayOf(PropTypes.string),
+  businessTypes: PropTypes.arrayOf(PropTypes.object),
   /**
    * Default business type to show
    */
