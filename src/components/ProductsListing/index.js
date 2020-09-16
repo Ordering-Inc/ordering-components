@@ -59,8 +59,8 @@ export const ProductsListing = (props) => {
       })
       const { content: { result } } = await ordering
         .businesses(businessId)
-        .parameters({ type: 1 })
         .products()
+        .parameters({ type: 1 })
         .get()
 
       const productsFiltered = searchValue || categoryValue
