@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 export const BusinessProductsCategories = (props) => {
@@ -8,25 +8,12 @@ export const BusinessProductsCategories = (props) => {
     UIComponent
   } = props
 
-  /**
-   * Save categories array modified
-   */
-  const [categoriesFiltered, setCategoriesFiltered] = useState(categories)
-
-  useEffect(() => {
-    categories.unshift({
-      id: 0,
-      name: 'All'
-    })
-    setCategoriesFiltered(categories)
-  }, [categories])
-
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          categories={categoriesFiltered}
+          categories={categories}
           handlerClickCategory={onClickCategory}
         />
       )}
