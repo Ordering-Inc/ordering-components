@@ -127,9 +127,9 @@ var ProductsListing = function ProductsListing(props) {
                 loading: true
               }));
               _context.next = 4;
-              return ordering.businesses(businessId).parameters({
+              return ordering.businesses(businessId).products().parameters({
                 type: 1
-              }).products().get();
+              }).get();
 
             case 4:
               _yield$ordering$busin = _context.sent;
