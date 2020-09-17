@@ -57,14 +57,11 @@ export const ProductsListing = (props) => {
         ...productsList,
         loading: true
       })
-      // const { content: { result } } = await ordering
-      //   .businesses(businessId)
-      //   .products()
-      //   .parameters({ type: 1 })
-      //   .get()
-
-      const response = await fetch('http://apiv4.ordering.co/v400/en/demo/business/41/products?type=1')
-      const { result } = await response.json()
+      const { content: { result } } = await ordering
+        .businesses(businessId)
+        .products()
+        .parameters({ type: 1 })
+        .get()
 
       const productsFiltered = searchValue || categoryValue
         ? result.filter(product => isMatchSearch(product.name, product.description) && isMatchCategory(product.category_id))
