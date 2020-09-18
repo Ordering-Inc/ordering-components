@@ -31,6 +31,7 @@ import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { MenuControlExample } from './views/MenuControlExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { GoogleLoginExample } from './views/GoogleLoginExample'
 import { OrderReviewExample } from "./views/OrderReviewExample"
 import { CheckoutExample } from './views/CheckoutExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
@@ -74,6 +75,9 @@ export default function App () {
           </Route>
           <Route path='/facebook_login'>
             <FacebookLogin />
+          </Route>
+          <Route path='/google_login'>
+            <GoogleLoginExample ordering={ordering} />
           </Route>
           <Route path='/session_manager'>
             <SessionManager />

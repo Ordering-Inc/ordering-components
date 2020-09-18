@@ -51,6 +51,7 @@
     "moment": "^2.27.0",
     "ordering-api-sdk": "github:sergioaok/ordering-api-sdk#v0.0.4",
     "prop-types": "^15.7.2",
+    "react-google-login": "^5.1.21",
     "socket.io-client": "^2.3.0"
   },
   "peerDependencies": {
