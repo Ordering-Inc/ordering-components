@@ -4,13 +4,8 @@ import { AppleLoginUI } from '../../components/AppleLoginUI'
 import { AppleLogin } from '../../../src/components/AppleLogin'
 import { TestComponent } from '../../components/TestComponent'
 
-export const AppleLoginExample = ({ ordering }) => {
+export const AppleLoginExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

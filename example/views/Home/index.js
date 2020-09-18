@@ -101,6 +101,7 @@ export const Home = () => {
         <li>
           <Link to='/review_orders'>Review my Orders</Link>
         </li>
+        <li>
           <Link to='/business_products_search'>Business products search</Link>
         </li>
         <li>
@@ -154,7 +155,6 @@ export const Home = () => {
         <li>
           <Link to='/pages'>Pages</Link>
         </li>
-      </ul>
       </ol>
       <h2>Payments Section</h2>
       <ol>

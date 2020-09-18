@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
 
 export const GoogleLoginButton = (props) => {
   const {
-    ordering,
     UIComponent,
     onSuccess,
     onFailure,
@@ -11,6 +11,8 @@ export const GoogleLoginButton = (props) => {
     responseType,
     handleSuccessGoogleLogin
   } = props
+
+  const [ordering] = useApi()
   const [loaded, setLoaded] = useState(false)
   const [unmounted, setUnmounted] = useState(false)
 

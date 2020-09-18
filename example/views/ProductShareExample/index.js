@@ -1,32 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react'
 
-import { ProductShare } from "../../../src/components/ProductShare";
-import { ProductShareUI } from "../../components/ProductShareUI";
+import { ProductShare } from '../../../src/components/ProductShare'
+import { ProductShareUI } from '../../components/ProductShareUI'
 import { TestComponent } from '../../components/TestComponent'
+import { useApi } from '../../../src/contexts/ApiContext'
 
-export const ProductShareExample = ({ ordering }) => {
-  const [bussinessName, setBussinessName] = useState("");
-  const [categoryID, setCategoryID] = useState(undefined);
-  const [productID, setProductID] = useState(undefined);
+export const ProductShareExample = () => {
+  const [ordering] = useApi()
+  const [bussinessName, setBussinessName] = useState('')
+  const [categoryID, setCategoryID] = useState(undefined)
+  const [productID, setProductID] = useState(undefined)
 
   useEffect(() => {
-    product();
-  }, []);
+    product()
+  }, [])
 
   const product = async () => {
-    const { response } = await ordering.businesses(47).get();
-    const productShown = response.data.result;
-    setBussinessName(productShown.name.toLowerCase());
-    setCategoryID(productShown.categories[0].id);
+    const { response } = await ordering.businesses(47).get()
+    const productShown = response.data.result
+    setBussinessName(productShown.name.toLowerCase())
+    setCategoryID(productShown.categories[0].id)
     setProductID(productShown.categories[0].products[0].id)
-  };
+  }
 
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
@@ -72,7 +69,7 @@ export const ProductShareExample = ({ ordering }) => {
      * Array of HTML/Components elements, these components will not get the parent props
      */
     afterElements: [<p key>Test Element After</p>]
-  };
+  }
 
-  return <ProductShare {...props} />;
-};
+  return <ProductShare {...props} />
+}

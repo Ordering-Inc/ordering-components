@@ -13,8 +13,8 @@ import { FacebookLogin } from './views/FacebookLogin'
 import { SessionManager } from './views/SessionManager'
 import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
-import { ProductDetail } from './views/ProductDetail'
-import { ProductList } from './views/ProductList(NOT)'
+// import { ProductDetail } from './views/ProductDetail'
+// import { ProductList } from './views/ProductList(NOT)'
 import { BusinessesListExample } from './views/BusinessesListExample'
 import { BusinessBasicInformationExample } from './views/BusinessBasicInformationExample'
 import { LanguageSelectorExample } from './views/LanguageSelectorExample'
@@ -32,7 +32,7 @@ import { MomentOptionExample } from './views/MomentOptionExample'
 import { MenuControlExample } from './views/MenuControlExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
 import { GoogleLoginExample } from './views/GoogleLoginExample'
-import { OrderReviewExample } from "./views/OrderReviewExample"
+import { OrderReviewExample } from './views/OrderReviewExample'
 import { CheckoutExample } from './views/CheckoutExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
@@ -48,7 +48,7 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
-import {AppleLoginExample} from "./views/AppleLoginExample"
+import { AppleLoginExample } from './views/AppleLoginExample'
 import { ProductShareExample } from './views/ProductShareExample'
 import { OrderDetailsExample } from './views/OrderDetailsExample'
 import { CmsContentExample } from './views/CmsContentExample'
@@ -78,10 +78,10 @@ export default function App () {
             <FacebookLogin />
           </Route>
           <Route path='/google_login'>
-            <GoogleLoginExample ordering={ordering} />
+            <GoogleLoginExample />
           </Route>
           <Route path='/apple_login'>
-            <AppleLoginExample ordering={ordering} />
+            <AppleLoginExample />
           </Route>
           <Route path='/session_manager'>
             <SessionManager />
@@ -156,7 +156,7 @@ export default function App () {
             <ProductsListingExample />
           </Route>
           <Route path='/product_share'>
-            <ProductShareExample ordering={ordering} />
+            <ProductShareExample />
           </Route>
           <Route path='/business_products_search'>
             <BusinessProductsSearchExample />
@@ -216,13 +216,13 @@ export default function App () {
             <PaymentOptionStripeRedirectExample />
           </Route>
           <Route path='/review_orders'>
-            <OrderReviewExample ordering={ordering} />
+            <OrderReviewExample />
           </Route>
           <Route path='/pages'>
-            <CmsContentExample ordering={ordering} />
+            <CmsContentExample />
           </Route>
           <Route path='/order_details'>
-            <OrderDetailsExample ordering={ordering} />
+            <OrderDetailsExample />
           </Route>
           <Route path='/'>
             <Home />
