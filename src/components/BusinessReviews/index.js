@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
 
 export const BusinessReviews = (props) => {
   const {
-    ordering,
     businessId,
     reviews,
     UIComponent
   } = props
+
+  const [ordering] = useApi()
 
   /**
    * businessReviewsList, this must be contain a reviews, loading and error to send UIComponent
@@ -93,11 +95,6 @@ export const BusinessReviews = (props) => {
 }
 
 BusinessReviews.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

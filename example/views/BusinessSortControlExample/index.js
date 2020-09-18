@@ -5,14 +5,9 @@ import { BusinessSortControl } from '../../../src/components/BusinessSortControl
 import { TestComponent } from '../../components/TestComponent'
 import { useOrder } from '../../../src/contexts/OrderContext'
 
-export const BusinessSortControlExample = ({ ordering }) => {
-  const [{ order }] = useOrder()
+export const BusinessSortControlExample = () => {
+  const [{ options }] = useOrder()
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
@@ -28,7 +23,7 @@ export const BusinessSortControlExample = ({ ordering }) => {
     /**
      * Property to switch delivery or pickup time on sort options select
      */
-    orderType: order.type || 1,
+    orderType: options.type || 1,
     /**
      * onChangeSortOption, get value from UI
      */

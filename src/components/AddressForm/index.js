@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const AddressForm = (props) => {
   const {
-    ordering,
     UIComponent,
     addressId,
     address,
-    useValidationFileds
+    useValidationFileds,
+    onSaveAddress
   } = props
 
+  const [ordering] = useApi()
   const [validationFields, setValidationFields] = useState({ loading: useValidationFileds, fields: {} })
   const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {}, dddd: address })
   const [formState, setFormState] = useState({ loading: false, changes: {}, error: null })
-  const [{ user, token }] = useSession()
+  const [{ auth, user, token }] = useSession()
+  const [, { changeAddress }] = useOrder()
 
-  const userId = props.userId || user.id
+  const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
-  if (!userId) {
-    throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
-  }
+  // if (!userId) {
+  //   throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
+  // }
 
-  if (!accessToken) {
-    throw new Error('`accessToken` must provide from props or use SessionProviver to wrappe the app.')
-  }
+  // if (!accessToken) {
+  //   throw new Error('`accessToken` must provide from props or use SessionProviver to wrappe the app.')
+  // }
 
   /**
    * Load the validation fields
@@ -111,7 +115,6 @@ export const AddressForm = (props) => {
    * @param {object} changes object with changes
    */
   const updateChanges = (changes) => {
-    console.log(changes)
     setFormState({
       ...formState,
       changes: {
@@ -148,6 +151,11 @@ export const AddressForm = (props) => {
    * Update if address id exist or create if not
    */
   const saveAddress = async () => {
+    if (!auth) {
+      changeAddress(formState.changes)
+      onSaveAddress && onSaveAddress(formState.changes)
+      return
+    }
     setFormState({ ...formState, loading: true })
     try {
       const { content } = await ordering.users(userId).addresses(addressState.address?.id).save(formState.changes, { accessToken })
@@ -196,11 +204,6 @@ export const AddressForm = (props) => {
 
 AddressForm.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
@@ -221,6 +224,10 @@ AddressForm.propTypes = {
    * Address id to edit and load from Ordering API
    */
   addressId: PropTypes.number,
+  /**
+   * Address id to edit and load from Ordering API
+   */
+  onSaveAddress: PropTypes.number,
   /**
    * Components types before address form
    * Array of type components, the parent props will pass to these components

@@ -4,13 +4,8 @@ import { SearchOptionsUI } from '../../components/SearchOptionsUI'
 import { SearchOptions } from '../../../src/components/SearchOptions'
 import { TestComponent } from '../../components/TestComponent'
 
-export const SearchOptionsExample = ({ ordering }) => {
+export const SearchOptionsExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

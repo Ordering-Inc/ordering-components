@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useOrder } from '../../../src/contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
 
+/**
+ * Component to manage driver tips behavior without UI component
+ */
 export const DriverTips = (props) => {
   const {
     UIComponent,
@@ -31,12 +34,14 @@ export const DriverTips = (props) => {
    * handler when user change driver tip option
    * @param {number} val
    */
-  const handlerChangeOption = (val) => {
+  const handlerChangeOption = (driverTip) => {
+    driverTip = parseInt(driverTip)
     if (useOrderContext) {
-      changeDriverTip(businessId, parseInt(val))
+      changeDriverTip(businessId, driverTip)
+    } else {
+      setOptionSelected(driverTip)
     }
-    props.handlerChangeDriverOption(parseInt(val))
-    setOptionSelected(parseInt(val))
+    props.handlerChangeDriverOption && props.handlerChangeDriverOption(driverTip)
   }
 
   useEffect(() => {
@@ -62,11 +67,6 @@ export const DriverTips = (props) => {
 }
 
 DriverTips.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

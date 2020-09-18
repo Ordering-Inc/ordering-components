@@ -5,13 +5,8 @@ import { SignupFormUI } from '../../components/SignupFormUI'
 import { SignupForm } from '../../../src/components/SignupForm'
 import { TestComponent } from '../../components/TestComponent'
 
-export const Signup = ({ ordering }) => {
+export const Signup = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

@@ -9,16 +9,11 @@ import { useSession } from '../../../src/contexts/SessionContext'
 import { LogoutAction } from '../../../src/components/LogoutAction'
 import { LogoutButtonUI } from '../../components/LogoutButtonUI'
 
-export const SessionManager = ({ ordering }) => {
+export const SessionManager = () => {
   const sessionManager = useSession()
   const [{ auth }] = sessionManager
 
   const loginProps = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
@@ -99,11 +94,6 @@ export const SessionManager = ({ ordering }) => {
   }
 
   const logoutProps = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

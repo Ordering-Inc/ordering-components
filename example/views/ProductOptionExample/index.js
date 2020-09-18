@@ -3,8 +3,10 @@ import { ProductForm } from '../../../src/components/ProductForm'
 import { ProductFormUI } from '../../components/ProductFormUI'
 import { Cart } from '../../../src/components/Cart'
 import { CartUI } from '../../components/CartUI'
+import { useApi } from '../../../src/contexts/ApiContext'
 
-export const ProductOptionExample = ({ ordering }) => {
+export const ProductOptionExample = () => {
+  const [ordering] = useApi()
   const [productCart, setProductCart] = useState({})
   const [product, setProduct] = useState()
   const loadProductWithOptions = async () => {
@@ -17,11 +19,6 @@ export const ProductOptionExample = ({ ordering }) => {
   }, [])
 
   const productFormProps = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

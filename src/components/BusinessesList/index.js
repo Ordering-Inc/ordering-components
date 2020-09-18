@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { object } from 'prop-types'
 import { useBusiness, BUSINESS_ACTIONS } from '../../contexts/BusinessContext'
+// import { useApi } from '../../contexts/ApiContext'
 
 const API = 'https://apiv4.ordering.co/v400/en/demo/business'
 const SEARCH_OPTIONS = {
@@ -18,7 +19,8 @@ export const BusinessesList = (props) => {
     paginationSettings
   } = props
 
-  const [businessesList, dispatchBusiness] = useBusiness()
+  // const [ordering] = useApi()
+  const [businessesList, dispatchBusiness] = useBusiness({ loading: false, error: null, businesses: [], filterValues: {} })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
@@ -121,11 +123,6 @@ export const BusinessesList = (props) => {
 }
 
 BusinessesList.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

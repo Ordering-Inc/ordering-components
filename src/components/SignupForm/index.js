@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
 // import { pickBy } from 'lodash'
 
 /**
@@ -7,13 +8,13 @@ import PropTypes from 'prop-types'
  */
 export const SignupForm = (props) => {
   const {
-    ordering,
     UIComponent,
     useChekoutFileds,
     handleButtonSignupClick,
     handleSuccessSignup
   } = props
 
+  const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [signupData, setSignupData] = useState({ email: '', cellphone: '', password: '' })
   const [validationFields, setValidationFields] = useState({ loading: useChekoutFileds })
@@ -113,11 +114,6 @@ export const SignupForm = (props) => {
 }
 
 SignupForm.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
