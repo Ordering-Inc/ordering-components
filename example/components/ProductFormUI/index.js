@@ -8,6 +8,8 @@ import { ProductOptionSuboption } from '../../../src/components/ProductOptionSub
 
 export const ProductFormUI = (props) => {
   const {
+    editMode,
+    isSoldOut,
     product,
     productCart,
     increment,
@@ -94,20 +96,28 @@ export const ProductFormUI = (props) => {
           )
         }))
       }
+      <div>
+        Special comment:<br />
+        <textarea rows={4} style={{ width: '100%' }} defaultValue={productCart.comment} />
+      </div>
       Total: {productCart.total}
       {
         productCart && (
           <>
             <button type='button' onClick={decrement} disabled={productCart.quantity === 1}>-</button>
             {productCart.quantity}
-            <button type='button' onClick={increment} disabled={productCart.quantity === maxProductQuantity}>+</button>
+            <button type='button' onClick={increment} disabled={maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity}>+</button>
           </>
         )
       }
       {
-        productCart && <button type='button' onClick={handleSave}>Add or Save</button>
+        productCart && !isSoldOut && <button type='button' onClick={handleSave} disabled={maxProductQuantity === 0}>{editMode ? 'Save' : 'Add'}</button>
+      }
+      {
+        isSoldOut && <button type='button' disabled>Sold out</button>
       }
       <p>Max: {maxProductQuantity}</p>
+      <p>Sold out: {isSoldOut ? 'Yes' : 'No'}</p>
     </>
   )
 }

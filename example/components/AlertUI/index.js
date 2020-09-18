@@ -7,7 +7,8 @@ export const AlertUI = (props) => {
     content,
     onAccept,
     onCancel,
-    onClose
+    onClose,
+    children
   } = props
 
   return (
@@ -27,17 +28,18 @@ export const AlertUI = (props) => {
       {
         content && typeof content === 'function' && String(content).includes('createElement') && <props.content />
       }
+      {children}
       {
         (onCancel || onAccept || onClose) && (
           <div>
             {
-              onCancel && <button onClick={() => onAccept()}>Accept</button>
+              onAccept && <button onClick={() => onAccept()}>Accept</button>
             }
             {
               onCancel && <button onClick={() => onCancel()}>Cancel</button>
             }
             {
-              onCancel && <button onClick={() => onClose()}>Close</button>
+              onClose && <button onClick={() => onClose()}>Close</button>
             }
           </div>
         )

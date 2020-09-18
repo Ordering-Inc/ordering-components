@@ -4,13 +4,8 @@ import { TestComponent } from '../../components/TestComponent'
 import { FacebookLoginButtonUI } from '../../components/FacebookLoginButtonUI'
 import { FacebookLoginButton } from '../../../src/components/FacebookLoginButton'
 
-export const FacebookLogin = ({ ordering }) => {
+export const FacebookLogin = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
