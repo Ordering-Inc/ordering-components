@@ -27,7 +27,7 @@ export const WebsocketProvider = ({ url = 'https://socket.ordering.co', project 
 
   useEffect(() => {
     return () => {
-      socket.close()
+      socket && socket.close()
     }
   })
   return (

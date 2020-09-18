@@ -1,12 +1,8 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 
-import { CouponControl } from '../../../src/components/CouponControl'
-import { CouponControlUI } from '../CouponControlUI'
-
 export const UserDetailsUI = (props) => {
   const {
-    businessId,
     isEdit,
     formState,
     userState,
@@ -15,7 +11,6 @@ export const UserDetailsUI = (props) => {
     handleButtonUpdateClick,
     isRequiredField,
     handleChangeInput,
-    handlerCouponValue,
     onEditUserClick,
     beforeComponents,
     afterComponents,
@@ -43,7 +38,7 @@ export const UserDetailsUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <strong>User Details</strong>&nbsp;
+      <strong>Customer Details</strong>&nbsp;
 
       {((useValidationFields && validationFields.loading) || userState.loading) && <p>Loading form ...</p>}
 
@@ -65,7 +60,7 @@ export const UserDetailsUI = (props) => {
                   name={_input.name}
                   type={_input.type}
                   placeholder={_input.placeholder}
-                  style={{ borderColor: errors[_input.name] ? '#c10000' : null }}
+                  style={{ borderColor: errors[_input.name] ? '#c10000' : null, width: '50%', marginBottom: '10px' }}
                   onChange={handleChangeInput}
                   defaultValue={userState.result.result[_input.name]}
                   disabled={!isEdit}
@@ -76,13 +71,6 @@ export const UserDetailsUI = (props) => {
                 {errors[_input.name] && <i style={{ color: '#c10000' }}>{errors[_input.name].message}</i>}
               </div>
             ))}
-            <CouponControl
-              ordering={props.ordering}
-              UIComponent={CouponControlUI}
-              businessId={businessId}
-              isDisabled={isEdit}
-              onChangeCouponValue={handlerCouponValue}
-            />
             <div>
               {formState.loading && <p>Loading...</p>}
               {!formState.loading && formState.result && formState.result.error && <p style={{ color: '#c10000' }}>{formState.result.result}</p>}

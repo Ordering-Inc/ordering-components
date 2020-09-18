@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to control a address list
@@ -9,15 +10,15 @@ import { useOrder } from '../../contexts/OrderContext'
  */
 export const AddressList = (props) => {
   const {
-    ordering,
     UIComponent,
     changeOrderAddressWithDefault,
     handleClickSetDefault,
     handleClickDelete
   } = props
 
+  const [ordering] = useApi()
   const [{ user, token }] = useSession()
-  const userId = props.userId || user.id
+  const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
   if (!userId) {
@@ -38,7 +39,7 @@ export const AddressList = (props) => {
   const loadAddresses = async () => {
     try {
       setAddressList({ ...addressList, loading: true })
-      const { content } = await ordering.users(userId).addresses().get({ accessToken })
+      const { content } = await ordering.setAccessToken(accessToken).users(userId).addresses().get({ accessToken })
       setAddressList({
         loading: false,
         error: content.error ? content.result : null,
@@ -127,11 +128,6 @@ export const AddressList = (props) => {
 }
 
 AddressList.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

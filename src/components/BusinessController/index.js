@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { useOrder } from '../../contexts/OrderContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const BusinessController = (props) => {
   const {
     business,
-    ordering,
     businessId,
     businessAttributes,
     onBusinessClick,
     handleCustomClick,
     UIComponent
   } = props
+
+  const [ordering] = useApi()
 
   /**
    * This must be containt business object data
@@ -24,6 +27,10 @@ export const BusinessController = (props) => {
    * This must be containt a boolean to indicate if a business is close or not
    */
   const [isBusinessClose, setIsBusinessClose] = useState(false)
+  /**
+   * Order context data
+   */
+  const [orderState] = useOrder()
   /**
    * Method to get business from SDK
    */
@@ -96,6 +103,7 @@ export const BusinessController = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orderState={orderState}
           isBusinessClose={isBusinessClose}
           business={businessObject}
           formatDate={formatDate}
@@ -109,11 +117,6 @@ export const BusinessController = (props) => {
 }
 
 BusinessController.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

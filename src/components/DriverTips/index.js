@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useOrder } from '../../../src/contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
 
+/**
+ * Component to manage driver tips behavior without UI component
+ */
 export const DriverTips = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    businessId,
+    useOrderContext
   } = props
-  const [{ order }] = useOrder()
+
+  if (useOrderContext && !businessId) {
+    throw new Error('`businessId` is required when `useOrderContext` is true.')
+  }
+
+  /**
+   * Order context
+   */
+  const [orderState, { changeDriverTip }] = useOrder()
 
   /**
    * Save percentage selected by user
@@ -21,14 +34,23 @@ export const DriverTips = (props) => {
    * handler when user change driver tip option
    * @param {number} val
    */
-  const handlerChangeOption = (val) => {
-    props.handlerChangeDriverOption(val)
-    setOptionSelected(val)
+  const handlerChangeOption = (driverTip) => {
+    driverTip = parseInt(driverTip)
+    if (useOrderContext) {
+      changeDriverTip(businessId, driverTip)
+    } else {
+      setOptionSelected(driverTip)
+    }
+    props.handlerChangeDriverOption && props.handlerChangeDriverOption(driverTip)
   }
 
   useEffect(() => {
-    setDriverTipAmount(`$ ${((order.total * optionSelected) / 100).toFixed(2)}`)
-  }, [optionSelected])
+    const orderDriverTipRate = orderState.carts[`businessId:${businessId}`]?.driver_tip_rate || 0
+    const orderDriverTip = orderState.carts[`businessId:${businessId}`]?.driver_tip || 0
+
+    setOptionSelected(orderDriverTipRate)
+    setDriverTipAmount(orderDriverTip)
+  }, [orderState])
 
   return (
     <>
@@ -46,14 +68,17 @@ export const DriverTips = (props) => {
 
 DriverTips.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object,
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Cart business id
+   */
+  businessId: PropTypes.number,
+  /**
+   * Switch to use order context
+   */
+  useOrderContext: PropTypes.bool,
   /**
    * driver tips options
    */
@@ -85,6 +110,7 @@ DriverTips.propTypes = {
 }
 
 DriverTips.defaultProps = {
+  useOrderContext: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

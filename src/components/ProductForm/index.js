@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const ProductForm = (props) => {
   const {
-    ordering,
     UIComponent,
     useOrderContext,
     onSave
   } = props
 
+  const [ordering] = useApi()
   /**
    * Original product state
    */
@@ -391,11 +392,6 @@ export const ProductForm = (props) => {
 }
 
 ProductForm.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

@@ -4,13 +4,8 @@ import { BusinessTypeFilterUI } from '../../components/BusinessTypeFilterUI'
 import { BusinessTypeFilter } from '../../../src/components/BusinessTypeFilter'
 import { TestComponent } from '../../components/TestComponent'
 
-export const BusinessTypeFilterExample = ({ ordering }) => {
+export const BusinessTypeFilterExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
@@ -23,6 +18,10 @@ export const BusinessTypeFilterExample = ({ ordering }) => {
      * Default business type to show
      */
     defaultBusinessType: 'Food',
+    /**
+     * onChangeBusinessType, method to get value selected
+     */
+    onChangeBusinessType: (e) => { console.log(e) },
     /**
      * Components types before business type filter
      * Array of type components, the parent props will pass to these components

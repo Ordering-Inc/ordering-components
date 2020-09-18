@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { useOrder } from '../../contexts/OrderContext'
 
+/**
+ * Component to manage moment option behavior without UI component
+ */
 export const MomentOption = (props) => {
   const {
     minDate,
@@ -26,11 +29,19 @@ export const MomentOption = (props) => {
       : moment().format('YYYY-MM-DD HH:mm')
   }
 
+  /**
+   * Method to calculate diferrence between 2 dates
+   * @param {moment} start
+   * @param {moment} end
+   */
   const calculateDiffDay = (start, end) => {
     const endVal = end ?? moment()
     return moment.duration(moment(start).diff(moment(endVal).startOf('day'))).asDays()
   }
 
+  /**
+   * Method to get time depending on the start time
+   */
   const getTimeFormat = (time) => {
     const hour = Number(time.split(':')[0])
     const minute = Number(time.split(':')[1])
@@ -48,6 +59,10 @@ export const MomentOption = (props) => {
     }
   }
 
+  /**
+   * Method to get current time formatted
+   * @param {moment} value
+   */
   const currentTimeFormatted = (value) => {
     const date = value ?? minDate
     return moment(validDate(date)).hour() >= moment().hour() ? moment(validDate(date)).format('HH:mm') : moment().format('HH:mm')
@@ -201,11 +216,6 @@ export const MomentOption = (props) => {
 }
 
 MomentOption.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

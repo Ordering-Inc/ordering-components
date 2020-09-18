@@ -3,13 +3,8 @@ import { UserDetails } from '../../../src/components/UserDetails'
 import { UserDetailsUI } from '../../components/UserDetailsUI'
 import { TestComponent } from '../../components/TestComponent'
 
-export const UserDetailsExample = ({ ordering }) => {
+export const UserDetailsExample = () => {
   const userProps = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
@@ -38,10 +33,6 @@ export const UserDetailsExample = ({ ordering }) => {
      * Is required when `useDefualtSessionManager` is false
      */
     accessToken: 'TOKEN',
-    /**
-     * Get coupon value
-     */
-    handlerCouponValue: (e) => { console.log(e) },
     /**
      * Components types before user details
      * Array of type components, the parent props will pass to these components
