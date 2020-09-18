@@ -47,6 +47,7 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
+import { ProductShareExample } from './views/ProductShareExample'
 import { OrderDetailsExample } from './views/OrderDetailsExample'
 import { CmsContentExample } from './views/CmsContentExample'
 import { PaymentOptionPaypalExample } from './views/PaymentOptionPaypalExample'
@@ -145,6 +146,9 @@ export default function App () {
           </Route>
           <Route path='/products_listing' exact>
             <ProductsListingExample />
+          </Route>
+          <Route path='/product_share'>
+            <ProductShareExample ordering={ordering} />
           </Route>
           <Route path='/business_products_search'>
             <BusinessProductsSearchExample />
