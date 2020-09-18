@@ -3,13 +3,8 @@ import { UserProfileForm } from '../../../src/components/UserProfileForm'
 import { UserProfileUI } from '../../components/UserProfileUI'
 import { TestComponent } from '../../components/TestComponent'
 
-export const Profile = ({ ordering }) => {
+export const Profile = () => {
   const profileProps = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { useLanguage } from '../../../src/contexts/LanguageContext'
+import { useLanguage } from '../../contexts/LanguageContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const LanguageSelector = (props) => {
   const {
-    ordering,
     currentLanguage,
     languages,
     UIComponent
   } = props
 
+  const [ordering] = useApi()
   const [languagesState, setLanguageState] = useState({ loading: true, languages })
   const [languageState, , setLanguage] = useLanguage()
   const [languageSelected, setLanguageSelected] = useState(null)
@@ -51,7 +52,7 @@ export const LanguageSelector = (props) => {
   }
 
   useEffect(() => {
-    if (languages.length) {
+    if (languages?.length > 0) {
       setLanguageState({
         ...languagesState,
         loading: false
@@ -95,11 +96,6 @@ export const LanguageSelector = (props) => {
 }
 
 LanguageSelector.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

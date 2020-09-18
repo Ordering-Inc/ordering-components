@@ -12,7 +12,6 @@ export const MainSearchUI = (props) => {
   const orderTypes = [1, 2, 3, 4, 5]
 
   const {
-    ordering,
     orderState,
     allListValues,
     isFormErrors,
@@ -26,11 +25,6 @@ export const MainSearchUI = (props) => {
   } = props
 
   const addressFormProps = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

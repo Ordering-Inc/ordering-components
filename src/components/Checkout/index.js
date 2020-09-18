@@ -1,23 +1,133 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
+import { useApi } from '../../contexts/ApiContext'
 
+/**
+ * Component to manage Checkout page behavior without UI component
+ */
 export const Checkout = (props) => {
   const {
+    businessId,
+    actionsBeforePlace,
+    handleCustomClick,
+    onPlaceOrderClick,
     UIComponent
   } = props
 
+  const [ordering] = useApi()
+
+  const [placing, setPlacing] = useState(false)
+  const [errors, setErrors] = useState(null)
+
   /**
-   * Order conext
+   * Order context
    */
-  const [orderState] = useOrder()
+  const [orderState, { placeCart, confirmCart }] = useOrder()
+  /**
+   * Object to save an object with business information
+   */
+  const [businessDetails, setBusinessDetails] = useState({ business: null, loading: true, error: null })
+  /**
+   * This must be contains an object with info about paymente selected
+   */
+  const [paymethodSelected, setPaymethodSelected] = useState(null)
+  /**
+   * Current cart
+   */
+  const cart = orderState.carts[`businessId:${businessId}`]
+  /**
+   * Method to get business from API
+   */
+  const getBusiness = async () => {
+    try {
+      const props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods']
+      const { content: { result } } = await ordering.businesses(businessId).select(props).get()
+      setBusinessDetails({
+        ...businessDetails,
+        loading: false,
+        business: result
+      })
+    } catch (error) {
+      setBusinessDetails({
+        ...businessDetails,
+        loading: false,
+        error
+      })
+    }
+  }
+
+  /**
+   * Method to handle click on Place order
+   */
+  const handlerClickPlaceOrder = async () => {
+    let paymethodData = paymethodSelected.data
+    if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
+      paymethodData = {
+        source_id: paymethodSelected.data.id
+      }
+    }
+    const data = {
+      paymethod_id: paymethodSelected.paymethodId,
+      paymethod_data: paymethodSelected.data,
+      delivery_zone_id: cart.delivery_zone_id,
+      offer_id: cart.offer_id,
+      amount: cart.total
+    }
+    if (handleCustomClick) {
+      handleCustomClick(data, paymethodSelected, cart)
+      return
+    }
+    setPlacing(true)
+    const result = await placeCart(cart.uuid, {
+      paymethod_id: paymethodSelected.paymethodId,
+      paymethod_data: paymethodData,
+      delivery_zone_id: cart.delivery_zone_id,
+      offer_id: cart.offer_id,
+      amount: cart.total
+    })
+
+    console.log(result)
+    if (result.error) {
+      setErrors(result.result)
+      return
+    }
+
+    let cartResult = result.result
+
+    if (cartResult?.paymethod_data?.status === 2 && actionsBeforePlace) {
+      const toConfirm = await actionsBeforePlace(paymethodSelected, result.result)
+      if (toConfirm) {
+        const confirmResponse = await confirmCart(cart.uuid)
+        console.log(confirmResponse)
+        cartResult = confirmResponse.result
+      }
+    }
+    setPlacing(false)
+    onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cartResult)
+  }
+
+  const handlePaymethodChange = (paymethod) => {
+    setPaymethodSelected(paymethod)
+  }
+
+  useEffect(() => {
+    getBusiness()
+  }, [])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          orderState={orderState}
+          cart={cart}
+          placing={placing}
+          errors={errors}
+          orderOptions={orderState.options}
+          paymethodSelected={paymethodSelected}
+          businessDetails={businessDetails}
+          handlePaymethodChange={handlePaymethodChange}
+          handlerClickPlaceOrder={handlerClickPlaceOrder}
         />
       )}
     </>
@@ -26,18 +136,21 @@ export const Checkout = (props) => {
 
 Checkout.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
-   * handler values from other components
+   * Custom method to receive props from checkout page
    */
-  handlerValues: PropTypes.func,
+  handleCustomClick: PropTypes.func,
+  /**
+   * onPlaceOrderClick, function to get click event and return business object after default behavior
+   */
+  onPlaceOrderClick: PropTypes.func,
+  // /**
+  //  * handler values from other components
+  //  */
+  // handlerValues: PropTypes.func,
   /**
    * Components types before Checkout
    * Array of type components, the parent props will pass to these components

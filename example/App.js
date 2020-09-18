@@ -31,6 +31,7 @@ import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { MenuControlExample } from './views/MenuControlExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { OrderReviewExample } from "./views/OrderReviewExample"
 import { CheckoutExample } from './views/CheckoutExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
@@ -47,8 +48,14 @@ import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
 import { OrderDetailsExample } from './views/OrderDetailsExample'
+import { CmsContentExample } from './views/CmsContentExample'
+import { PaymentOptionPaypalExample } from './views/PaymentOptionPaypalExample'
+import { PaymentOptionCashExample } from './views/PaymentOptionCashExample'
+import { PaymentOptionStripeExample } from './views/PaymentOptionStripeExample'
+import { PaymentOptionStripeDirectExample } from './views/PaymentOptionStripeDirectExample'
+import { PaymentOptionStripeRedirectExample } from './views/PaymentOptionStripeRedirectExample'
 
-export default function App ({ ordering }) {
+export default function App () {
   return (
     <Router>
       <>
@@ -56,130 +63,151 @@ export default function App ({ ordering }) {
             renders the first one that matches the current URL. */}
         <Switch>
           <Route path='/login'>
-            <Login ordering={ordering} />
+            <Login />
           </Route>
           <Route path='/signup'>
-            <Signup ordering={ordering} />
+            <Signup />
           </Route>
           <Route path='/forgot_password'>
-            <ForgotPassword ordering={ordering} />
+            <ForgotPassword />
           </Route>
           <Route path='/facebook_login'>
-            <FacebookLogin ordering={ordering} />
+            <FacebookLogin />
           </Route>
           <Route path='/session_manager'>
-            <SessionManager ordering={ordering} />
+            <SessionManager />
           </Route>
           <Route path='/profile'>
-            <Profile ordering={ordering} />
+            <Profile />
           </Route>
           <Route path='/active_orders'>
-            <ActiveOrders ordering={ordering} />
+            <ActiveOrders />
           </Route>
-          <Route path='/product_component'>
-            <ProductDetail ordering={ordering} />
-          </Route>
-          <Route path='/product_list'>
-            <ProductList ordering={ordering} />
-          </Route>
+          {/* <Route path='/product_component'>
+            <ProductDetail />
+          </Route> */}
+          {/* <Route path='/product_list'>
+            <ProductList />
+          </Route> */}
           <Route path='/language_selector'>
-            <LanguageSelectorExample ordering={ordering} />
+            <LanguageSelectorExample />
           </Route>
           <Route path='/sort_options'>
-            <BusinessSortControlExample ordering={ordering} />
+            <BusinessSortControlExample />
           </Route>
           <Route path='/product_images'>
-            <ProductImagesExample ordering={ordering} />
+            <ProductImagesExample />
           </Route>
           <Route path='/order_context_advanced'>
-            <OrderContextExample ordering={ordering} />
+            <OrderContextExample />
           </Route>
           <Route path='/business_type_filter'>
-            <BusinessTypeFilterExample ordering={ordering} />
+            <BusinessTypeFilterExample />
           </Route>
           <Route path='/places'>
-            <PlacesExample ordering={ordering} />
+            <PlacesExample />
           </Route>
           <Route path='/config_manager'>
             <ConfigsExample />
           </Route>
           <Route path='/languages_examples'>
-            <LanguagesExample ordering={ordering} />
+            <LanguagesExample />
           </Route>
           <Route path='/popup_example'>
             <PopupExample />
           </Route>
           <Route path='/my_orders'>
-            <MyOrdersExample ordering={ordering} />
+            <MyOrdersExample />
           </Route>
           <Route path='/my_orders_list'>
-            <MyOrdersListExample ordering={ordering} />
+            <MyOrdersListExample />
           </Route>
           <Route path='/business_reviews'>
-            <BusinessReviewsExample ordering={ordering} />
+            <BusinessReviewsExample />
           </Route>
           <Route path='/moment_option'>
-            <MomentOptionExample ordering={ordering} />
+            <MomentOptionExample />
           </Route>
           <Route path='/menu_control'>
-            <MenuControlExample ordering={ordering} />
+            <MenuControlExample />
           </Route>
           <Route path='/product_option_example'>
-            <ProductOptionExample ordering={ordering} />
+            <ProductOptionExample />
           </Route>
           <Route path='/business_products_search'>
-            <BusinessProductsSearchExample ordering={ordering} />
+            <BusinessProductsSearchExample />
           </Route>
           <Route path='/business_products_categories'>
-            <BusinessProductsCategoriesExample ordering={ordering} />
+            <BusinessProductsCategoriesExample />
           </Route>
           <Route path='/products_list'>
-            <ProductsListExample ordering={ordering} />
+            <ProductsListExample />
           </Route>
           <Route path='/products_listing' exact>
-            <ProductsListingExample ordering={ordering} />
+            <ProductsListingExample />
           </Route>
           <Route path='/business_products_search'>
-            <BusinessProductsSearchExample ordering={ordering} />
+            <BusinessProductsSearchExample />
           </Route>
           <Route path='/business_products_categories'>
-            <BusinessProductsCategoriesExample ordering={ordering} />
+            <BusinessProductsCategoriesExample />
           </Route>
           <Route path='/business_featured_options'>
-            <BusinessFeaturedProductsExample ordering={ordering} />
+            <BusinessFeaturedProductsExample />
           </Route>
           <Route path='/business_controller'>
-            <BusinessControllerExample ordering={ordering} />
+            <BusinessControllerExample />
           </Route>
           <Route path='/business_information'>
-            <BusinessInformationExample ordering={ordering} />
+            <BusinessInformationExample />
           </Route>
           <Route path='/user_details'>
-            <UserDetailsExample ordering={ordering} />
+            <UserDetailsExample />
           </Route>
           <Route path='/address_details'>
-            <AddressDetailsExample ordering={ordering} />
+            <AddressDetailsExample />
           </Route>
           <Route path='/payment_options'>
-            <PaymentOptionsExample ordering={ordering} />
+            <PaymentOptionsExample />
           </Route>
           <Route path='/driver_tips'>
-            <DriverTipsExample ordering={ordering} />
+            <DriverTipsExample />
           </Route>
-          <Route path='/checkout'>
-            <CheckoutExample ordering={ordering} />
+          <Route path='/checkout/:cartUuid?'>
+            <CheckoutExample />
           </Route>
           <Route path='/search_options'>
-            <SearchOptionsExample ordering={ordering} />
+            <SearchOptionsExample />
           </Route>
           <Route path='/main_search'>
-            <MainSearchExample ordering={ordering} />
+            <MainSearchExample />
           </Route>
           <Route path='/business_basic_information'>
-            <BusinessBasicInformationExample ordering={ordering} />
+            <BusinessBasicInformationExample />
           </Route>
           <Route path='/businesses_list'>
-            <BusinessesListExample ordering={ordering} />
+            <BusinessesListExample />
+          </Route>
+          <Route path='/payment_option_paypal' exact>
+            <PaymentOptionPaypalExample />
+          </Route>
+          <Route path='/payment_option_cash' exact>
+            <PaymentOptionCashExample />
+          </Route>
+          <Route path='/payment_option_stripe' exact>
+            <PaymentOptionStripeExample />
+          </Route>
+          <Route path='/payment_option_stripe_direct' exact>
+            <PaymentOptionStripeDirectExample />
+          </Route>
+          <Route path='/payment_option_stripe_redirect' exact>
+            <PaymentOptionStripeRedirectExample />
+          </Route>
+          <Route path='/review_orders'>
+            <OrderReviewExample ordering={ordering} />
+          </Route>
+          <Route path='/pages'>
+            <CmsContentExample ordering={ordering} />
           </Route>
           <Route path='/order_details'>
             <OrderDetailsExample ordering={ordering} />

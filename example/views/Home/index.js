@@ -93,6 +93,8 @@ export const Home = () => {
           <Link to='/product_option_example'>Product option example</Link>
         </li>
         <li>
+          <Link to='/review_orders'>Review my Orders</Link>
+        </li>
           <Link to='/business_products_search'>Business products search</Link>
         </li>
         <li>
@@ -139,6 +141,28 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/order_details'>Order details</Link>
+        </li>
+        <li>
+          <Link to='/pages'>Pages</Link>
+        </li>
+      </ul>
+      </ol>
+      <h2>Payments Section</h2>
+      <ol>
+        <li>
+          <Link to='/payment_option_paypal'>Payments Options Paypal</Link>
+        </li>
+        <li>
+          <Link to='/payment_option_cash'>Payments Options Cash</Link>
+        </li>
+        <li>
+          <Link to='/payment_option_stripe'>Payments Options Stripe</Link>
+        </li>
+        <li>
+          <Link to='/payment_option_stripe_direct'>Payments Options Stripe Direct</Link>
+        </li>
+        <li>
+          <Link to='/payment_option_stripe_redirect'>Payments Options Stripe Redirect</Link>
         </li>
       </ol>
     </>
