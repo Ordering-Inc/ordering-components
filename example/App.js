@@ -47,6 +47,7 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
+import { OrderDetailsExample } from './views/OrderDetailsExample'
 import { CmsContentExample } from './views/CmsContentExample'
 import { PaymentOptionPaypalExample } from './views/PaymentOptionPaypalExample'
 import { PaymentOptionCashExample } from './views/PaymentOptionCashExample'
@@ -207,6 +208,9 @@ export default function App () {
           </Route>
           <Route path='/pages'>
             <CmsContentExample ordering={ordering} />
+          </Route>
+          <Route path='/order_details'>
+            <OrderDetailsExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
