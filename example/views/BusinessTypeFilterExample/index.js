@@ -13,11 +13,17 @@ export const BusinessTypeFilterExample = () => {
     /**
      * Array that contains business types to filter
      */
-    businessTypes: ['All', 'Food', 'Alcohol', 'Groceries', 'Laundry'],
+    businessTypes: [
+      { key: 'All', value: 0 },
+      { key: 'Food', value: 'food' },
+      { key: 'Alcohol', value: 'alcohol' },
+      { key: 'Groceries', value: 'groceries' },
+      { key: 'Laundry', value: 'laundry' }
+    ],
     /**
      * Default business type to show
      */
-    defaultBusinessType: 'Food',
+    defaultBusinessType: 'food',
     /**
      * onChangeBusinessType, method to get value selected
      */

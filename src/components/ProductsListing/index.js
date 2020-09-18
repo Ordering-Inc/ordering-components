@@ -11,6 +11,7 @@ export const ProductsListing = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const [orderState] = useOrder()
 
   /**
    * This must be contains search value from UI
@@ -61,8 +62,8 @@ export const ProductsListing = (props) => {
       })
       const { content: { result } } = await ordering
         .businesses(businessId)
-        .parameters({ type: 1 })
         .products()
+        .parameters({ type: orderState.options?.type || 1 })
         .get()
 
       const productsFiltered = searchValue || categoryValue

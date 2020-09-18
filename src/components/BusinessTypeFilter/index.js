@@ -44,7 +44,7 @@ BusinessTypeFilter.propTypes = {
   /**
    * Array that contains business types to filter
    */
-  businessTypes: PropTypes.arrayOf(PropTypes.string),
+  businessTypes: PropTypes.arrayOf(PropTypes.object),
   /**
    * Default business type to show
    */
