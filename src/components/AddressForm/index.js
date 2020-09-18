@@ -170,6 +170,7 @@ export const AddressForm = (props) => {
           ...addressState,
           address: content.result
         })
+        onSaveAddress && onSaveAddress(content.result)
       }
     } catch (err) {
       setFormState({
@@ -227,7 +228,7 @@ AddressForm.propTypes = {
   /**
    * Address id to edit and load from Ordering API
    */
-  onSaveAddress: PropTypes.number,
+  onSaveAddress: PropTypes.func,
   /**
    * Components types before address form
    * Array of type components, the parent props will pass to these components
