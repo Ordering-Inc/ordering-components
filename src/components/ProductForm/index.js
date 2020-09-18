@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { randomString } from '../../utils'
-import { useOrder, ORDER_ACTIONS } from '../../contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const ProductForm = (props) => {
   const {
-    ordering,
     UIComponent,
     useOrderContext,
     onSave
   } = props
 
+  const [ordering] = useApi()
   /**
    * Original product state
    */
@@ -28,22 +28,37 @@ export const ProductForm = (props) => {
   const [errors, setErrors] = useState({})
 
   /**
+   * Edit mode
+   */
+  const editMode = typeof props.productCart.code !== 'undefined'
+
+  /**
    * Order context manager
    */
-  const [{ order }, dispatchOrder] = useOrder()
+  const [orderState, { addProduct, updateProduct }] = useOrder()
+
+  /**
+   * Remove to balances in edit mode
+   */
+  const removeToBalance = editMode ? props.productCart.quantity : 0
+
+  /**
+   * Current cart
+   */
+  const cart = orderState.carts[`businessId:${props.businessId}`]
 
   /**
    * Total product in cart
    */
-  const totalBalance = order?.products?.reduce((sum, _product) => sum + _product.quantity, 0) || 0
+  const totalBalance = (cart?.quantity || 0) - removeToBalance
 
   /**
    * Total the current product in cart
    */
-  const productBalance = order?.products?.reduce((sum, _product) => sum + (product && _product.id === product.id ? _product.quantity : 0), 0) || 0
+  const productBalance = (cart?.products?.reduce((sum, _product) => sum + (product && _product.id === product.id ? _product.quantity : 0), 0) || 0) - removeToBalance
 
   /**
-   * Order context manager
+   * Config context manager
    */
   const [stateConfig] = useConfig()
 
@@ -55,7 +70,17 @@ export const ProductForm = (props) => {
   /**
    * Max total product in cart by config
    */
-  const maxCartProductInventory = (product?.inventoried ? product?.quantity : undefined) - productBalance || maxCartProductConfig
+  let maxCartProductInventory = (product?.inventoried ? product?.quantity : undefined) - productBalance
+
+  /**
+   * True if product is sold out
+   */
+  const isSoldOut = product?.inventoried && product?.quantity === 0
+
+  /**
+   * Fix if maxCartProductInventory is not valid
+   */
+  maxCartProductInventory = !isNaN(maxCartProductInventory) ? maxCartProductInventory : maxCartProductConfig
 
   /**
    * Max product quantity
@@ -74,18 +99,19 @@ export const ProductForm = (props) => {
         selected: true
       }
     }
-    // const dataProduct = (({ name, images, extras, price }) => ({ name, images, extras, price }))(product)
     const newProductCart = {
       ...productCart,
       id: product.id,
       price: product.price,
+      name: product.name,
+      businessId: props.businessId,
       categoryId: product.category_id,
+      inventoried: product.inventoried,
+      stock: product.quantity,
       ingredients: props.productCart.ingredients || ingredients,
       options: props.productCart.options || {},
       comment: props.productCart.comment || null,
-      quantity: props.productCart.quantity || 1,
-      code: props.productCart.code || randomString(10)
-      // product: product
+      quantity: props.productCart.quantity || 1
     }
     newProductCart.unitTotal = getUnitTotal(newProductCart)
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
@@ -172,6 +198,8 @@ export const ProductForm = (props) => {
     }
     if (!newProductCart.options[`id:${option.id}`]) {
       newProductCart.options[`id:${option.id}`] = {
+        id: option.id,
+        name: option.name,
         suboptions: {}
       }
     }
@@ -246,22 +274,26 @@ export const ProductForm = (props) => {
   /**
    * Handle when click on save product
    */
-  const handleSave = () => {
+  const handleSave = async () => {
     const errors = checkErrors()
     if (Object.keys(errors).length === 0) {
+      let successful = true
       if (useOrderContext) {
-        console.log('Add to cart directly')
-        dispatchOrder({
-          type: ORDER_ACTIONS.ADD_PRODUCT,
-          product: productCart
-        })
+        successful = false
+        if (!props.productCart.code) {
+          successful = await addProduct(productCart)
+        } else {
+          successful = await updateProduct(productCart)
+        }
       }
-      onSave(productCart)
+      if (successful) {
+        onSave(productCart, !props.productCart.code)
+      }
     }
   }
 
   const increment = () => {
-    if (productCart.quantity === maxProductQuantity) {
+    if (maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity) {
       return
     }
     productCart.quantity++
@@ -313,7 +345,7 @@ export const ProductForm = (props) => {
     if (product) {
       initProductCart(product)
     }
-  }, [product])
+  }, [product, props.productCart])
 
   /**
    * Check error when product state changed
@@ -343,6 +375,8 @@ export const ProductForm = (props) => {
             product={product}
             productCart={productCart}
             errors={errors}
+            editMode={editMode}
+            isSoldOut={isSoldOut}
             maxProductQuantity={maxProductQuantity}
             increment={increment}
             decrement={decrement}
@@ -359,18 +393,13 @@ export const ProductForm = (props) => {
 
 ProductForm.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
-   * `businessId` is required if `product` prop is not present
+   * `businessId`
    */
-  businessId: PropTypes.number,
+  businessId: PropTypes.number.isRequired,
   /**
    * `categoryId` is required if `product` prop is not present
    */

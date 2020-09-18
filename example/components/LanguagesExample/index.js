@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../../../src/contexts/LanguageContext'
+import { useApi } from '../../../src/contexts/ApiContext'
 
 export const LanguagesExample = (props) => {
-  const { ordering } = props
+  const [ordering] = useApi()
   const [languagesState, setLanguageState] = useState({ loading: true, languages: [] })
   const [languageState, t, setLanguage, refreshTranslations] = useLanguage()
 

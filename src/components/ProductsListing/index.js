@@ -1,146 +1,114 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes, { object, number } from 'prop-types'
-
-import { useSession } from '../../contexts/SessionContext'
-import { random } from 'lodash'
+import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
 
 export const ProductsListing = (props) => {
   const {
-    ordering,
-    UIComponent,
+    isSearchByName,
+    isSearchByDescription,
     businessId,
-    categories,
-    orderBy,
-    orderDirection,
-    useDefaultSessionManager,
-    paginationSettings
+    UIComponent
   } = props
 
-  const [category, setCategory] = useState(categories[0])
-  const [productList, setProducts] = useState({category_id: 0, products:[], loading: false, error: null})
-  const [categoryList, setCategories] = useState({business_id: 0, categories:[], loading: false, error: null})
-  const [pagination, setPagination] = useState({
-    currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
-    pageSize: paginationSettings.pageSize ?? 10
-  })
-  const [session] = useSession()
+  const [ordering] = useApi()
 
-  const accessToken = useDefaultSessionManager ? session.token : props.accessToken
+  /**
+   * This must be contains search value from UI
+   */
+  const [searchValue, setSearchValue] = useState(null)
+  /**
+   * This must be contains category selected by user
+   */
+  const [categoryValue, setCategoryValue] = useState(null)
+  /**
+   * Object to save products, loading and error values
+   */
+  const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })
 
-//   const getProducts = async (page) => {
-//     const options = {
-//       accessToken: accessToken,
-//       query: {
-//         orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
-//         page: page,
-//         page_size: paginationSettings.pageSize
-//       }
-//     }
-//     if (category) {
-//       options.query.where = []
-//       options.query.where.push({ attribute: 'category_id', value: category.id })
-//     }
-//     return await ordering.products.all(options)
-//   }
+  /**
+   * List of business categories
+   */
+  const [categories, setCategories] = useState([])
 
-//   const loadProducts = async () => {
-//     setProducts({ ...products, loading: true })
-//     try {
-//       const response = await getProducts(pagination.currentPage + 1)
-//       setProducts({
-//         loading: false,
-//         orders: response.content.error ? [] : response.content.result,
-//         error: response.content.error ? response.content.result : null
-//       })
-//       if (!response.content.error) {
-//         setPagination({
-//           currentPage: response.content.pagination.current_page,
-//           pageSize: response.content.pagination.page_size,
-//           totalPages: response.content.pagination.total_pages,
-//           total: response.content.pagination.total,
-//           from: response.content.pagination.from,
-//           to: response.content.pagination.to
-//         })
-//       }
-//     } catch (err) {
-//         setProducts({ ...products, loading: false, error: [err.message] })
-//     }
-//   }
-  const initCategory = () => {
-    setCategories({ business_id: businessId, ...categoryList, loading: true, error: null })
+  /**
+   * Method to check if a product match with search value
+   * @param {string} name
+   * @param {*string} description
+   */
+  const isMatchSearch = (name, description) => {
+    if (!searchValue) return true
+    return (name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName) ||
+      (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
+  }
+
+  /**
+   * Method to check if a product match with search value
+   * @param {number} category
+   */
+  const isMatchCategory = (categoryId) => {
+    if (!categoryValue) return true
+    return Number(categoryId) === Number(categoryValue)
+  }
+
+  /**
+   * Method to get products from API
+   */
+  const getProducts = async () => {
     try {
-      let all = [];
-      for (let c = 1; c < categories.length; c++) {
-        let products = []
-        for (let i = 0; i < 100; i++) {
-          let product = {
-            id: i + 1,
-            name: `Product ${categories[c].id}__${i + 1}`,
-            description: `Product description for test components --- ${categories[c].id}__description__${i + 1}`,
-            image: `https://picsum.photos/200?random=${categories[c].id * (i + 1)}`
-          }
-          products.push(product)
-          all.push(product)
-        }
-        categories[c].products = products
-      }
-      categories[0].products = all
-      setCategories({ business_id: businessId, categories, loading: true, error: null })
-    } catch (err) {
-      setCategories({ business_id: businessId, ...categoryList, loading: false, error: err })
+      setProductsList({
+        ...productsList,
+        loading: true
+      })
+      const { content: { result } } = await ordering
+        .businesses(businessId)
+        .parameters({ type: 1 })
+        .products()
+        .get()
+
+      const productsFiltered = searchValue || categoryValue
+        ? result.filter(product => isMatchSearch(product.name, product.description) && isMatchCategory(product.category_id))
+        : result
+
+      setProductsList({
+        ...productsList,
+        loading: false,
+        products: productsFiltered
+      })
+    } catch (error) {
+      setProductsList({
+        ...productsList,
+        loading: false,
+        error
+      })
     }
   }
 
-  const loadProducts = (category) => {
-    setProducts({ ...productList, loading: true, error: null });
-    try {
-      let ary = []
-      for (let c = 0; c < categories.length; c++) {
-        for (let i = 0; i < 100; i++) {
-          let tmp = {
-            id: i + 1,
-            name: `Product ${categories[c].id}__${i + 1}`,
-            description: `Product description for test components --- ${categories[c].id}__description__${i + 1}`,
-            image: `https://picsum.photos/200?lock=${categories[c].id * i + 1}`
-          }
-          ary.push(tmp)
-        }
-        setProducts({
-          loading: false,
-          category_id: categories[c].id,
-          products: ary,
-          error: null
-        })
-      }
-    } catch (err) {
-      setProducts({ ...productList, loading: false, error: err });
-    }
+  /**
+   * Method to get categories from api used business id
+   */
+  const getCategories = async () => {
+    const { content: { result } } = await ordering.businesses(businessId).categories().get()
+    setCategories(result)
   }
 
   useEffect(() => {
-    initCategory()
+    getProducts()
+  }, [searchValue, categoryValue])
+
+  useEffect(() => {
+    getCategories()
   }, [])
-
-  const onClickedCategory = (category) => {
-      setCategory(category);
-  }
-
-  const onSearchProduct = (inp_value) => {
-    console.log(inp_value);
-  }
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          categoryValue={!!categoryValue}
           categories={categories}
-          category={category}
-          onClickedCategory={onClickedCategory}
-          onSearchProduct={onSearchProduct}
-          productList={productList}
-          pagination={pagination}
-        //   loadMoreOrders={loadMoreOrders}
+          productsList={productsList}
+          handlerClickCategory={(val) => setCategoryValue(val)}
+          handlerChangeSearch={(val) => setSearchValue(val)}
         />
       )}
     </>
@@ -149,84 +117,46 @@ export const ProductsListing = (props) => {
 
 ProductsListing.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
-   * Enable/Disable default session manager
-   * Save user and token with default session manager
+   * Businessid, this must be contains an business id for get data from API
    */
-  useDefaultSessionManager: PropTypes.bool,
+  businessId: PropTypes.number,
   /**
-   * Access token to update user
-   * Is required when `useDefaultSessionManager` is false
+   * Enable/disable search by name
    */
-  accessToken: (props, propName) => {
-    if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`object\`.`)
-    }
-    if (props[propName] === undefined && !props.useDefaultSessionManager) {
-      return new Error(`Invalid prop \`${propName}\` is required when \`useDefaultSessionManager\` is false.`)
-    }
-  },
+  isSearchByName: PropTypes.bool,
   /**
-   * Array of orders
-   * This is used of first option to show list
+   * Enable/disable search by description
    */
-  onSearchProduct: PropTypes.func,
-  categories: PropTypes.arrayOf(object),
-  onClickedCategory: PropTypes.func,
+  isSearchByDescription: PropTypes.bool,
   /**
-   * Order orders by some attribute. Default by `id`.
-   */
-  orderBy: PropTypes.string,
-  /**
-   * Order direction ascendent (asc) or descendent (desc). Default is `desc`.
-   */
-  orderDirection: PropTypes.oneOf(['asc', 'desc']),
-  /**
-   * Pagination settings
-   * You can set the pageSize, initialPage and controlType can be by pages or infinity
-   */
-  paginationSettings: PropTypes.exact({
-    /**
-     * initialPage only work with control type `pages`
-     */
-    initialPage: PropTypes.number,
-    pageSize: PropTypes.number,
-    controlType: PropTypes.oneOf(['infinity', 'pages'])
-  }),
-  /**
-   * Components types before Facebook login button
+   * Components types before products listing
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Components types after Facebook login button
+   * Components types after products listing
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Elements before Facebook login button
+   * Elements before products listing
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: PropTypes.arrayOf(PropTypes.element),
   /**
-   * Elements after Facebook login button
+   * Elements after products listing
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
 ProductsListing.defaultProps = {
-  orderBy: 'id',
-  orderDirection: 'desc',
-  paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },
+  isSearchByName: true,
+  isSearchByDescription: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
