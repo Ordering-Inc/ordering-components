@@ -4,13 +4,8 @@ import { PaymentOptionStripeRedirectUI } from '../../components/PaymentOptionStr
 import { PaymentOptionStripeRedirect } from '../../../src/components/PaymentOptionStripeRedirect'
 import { TestComponent } from '../../components/TestComponent'
 
-export const PaymentOptionStripeRedirectExample = ({ ordering }) => {
+export const PaymentOptionStripeRedirectExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

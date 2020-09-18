@@ -20,7 +20,7 @@ export const BusinessesList = (props) => {
   } = props
 
   // const [ordering] = useApi()
-  const [businessesList, dispatchBusiness] = useBusiness()
+  const [businessesList, dispatchBusiness] = useBusiness({ loading: false, error: null, businesses: [], filterValues: {} })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10

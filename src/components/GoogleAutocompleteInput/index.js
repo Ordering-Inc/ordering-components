@@ -39,7 +39,15 @@ const AutocompleteInput = (props) => {
       const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, options)
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace()
-        onChangeAddress({
+        let postalCode = null
+        for (const component of place.address_components) {
+          const addressType = component.types[0]
+          if (addressType === 'postal_code') {
+            postalCode = component.short_name
+            break
+          }
+        }
+        const address = {
           address: place.formatted_address,
           location: {
             lat: place.geometry.location.lat(),
@@ -50,7 +58,11 @@ const AutocompleteInput = (props) => {
             library: 'google',
             place_id: place.place_id
           }
-        })
+        }
+        if (postalCode) {
+          address.zipcode = postalCode
+        }
+        onChangeAddress(address)
       })
     }
   }, [googleReady])
@@ -97,7 +109,7 @@ AutocompleteInput.propTypes = {
 
 AutocompleteInput.defaultProps = {
   types: [],
-  fields: ['place_id', 'formatted_address', 'geometry', 'utc_offset_minutes'],
+  fields: ['place_id', 'formatted_address', 'geometry', 'utc_offset_minutes', 'address_components'],
   countryCode: '*'
 }
 

@@ -3,14 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { BusinessInformationUI } from '../../components/BusinessInformationUI'
 import { BusinessInformation } from '../../../src/components/BusinessInformation'
 import { TestComponent } from '../../components/TestComponent'
+import { useApi } from '../../../src/contexts/ApiContext'
 
-export const BusinessInformationExample = ({ ordering }) => {
+export const BusinessInformationExample = () => {
+  const [ordering] = useApi()
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

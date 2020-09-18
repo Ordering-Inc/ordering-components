@@ -8,15 +8,17 @@ import { TestComponent } from '../../components/TestComponent'
 import { useSession } from '../../../src/contexts/SessionContext'
 import { useOrder } from '../../../src/contexts/OrderContext'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
+import { useApi } from '../../../src/contexts/ApiContext'
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search)
 }
 
-export const CheckoutExample = ({ ordering }) => {
+export const CheckoutExample = () => {
   const { cartUuid } = useParams()
   const query = useQuery()
   const history = useHistory()
+  const [ordering] = useApi()
 
   const actionsBeforePlace = async (paymethod, cart) => {
     switch (paymethod.gateway) {
@@ -81,11 +83,6 @@ export const CheckoutExample = ({ ordering }) => {
   }, [token, cartUuid])
 
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

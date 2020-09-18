@@ -4,8 +4,10 @@ import { ProductForm } from '../../../src/components/ProductForm'
 import { ProductFormUI } from '../../components/ProductFormUI'
 import { CartUI } from '../../components/CartUI'
 import { Cart } from '../../../src/components/Cart'
+import { useApi } from '../../../src/contexts/ApiContext'
 
-export const OrderContextExample = ({ ordering }) => {
+export const OrderContextExample = () => {
+  const [ordering] = useApi()
   const [, { applyCoupon }] = useOrder()
   const [productCart, setProductCart] = useState({})
   const [product, setProduct] = useState()
@@ -27,11 +29,6 @@ export const OrderContextExample = ({ ordering }) => {
   }
 
   const productFormProps = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

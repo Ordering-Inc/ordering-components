@@ -4,13 +4,8 @@ import { MomentOptionUI } from '../../components/MomentOptionUI'
 import { MomentOption } from '../../../src/components/MomentOption'
 import { TestComponent } from '../../components/TestComponent'
 
-export const MomentOptionExample = ({ ordering }) => {
+export const MomentOptionExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

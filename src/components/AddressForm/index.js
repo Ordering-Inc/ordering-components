@@ -13,11 +13,11 @@ export const AddressForm = (props) => {
     onSaveAddress
   } = props
 
+  const [ordering] = useApi()
   const [validationFields, setValidationFields] = useState({ loading: useValidationFileds, fields: {} })
   const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {}, dddd: address })
   const [formState, setFormState] = useState({ loading: false, changes: {}, error: null })
   const [{ auth, user, token }] = useSession()
-  const [ordering] = useApi()
   const [, { changeAddress }] = useOrder()
 
   const userId = props.userId || user?.id

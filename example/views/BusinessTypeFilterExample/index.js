@@ -4,7 +4,7 @@ import { BusinessTypeFilterUI } from '../../components/BusinessTypeFilterUI'
 import { BusinessTypeFilter } from '../../../src/components/BusinessTypeFilter'
 import { TestComponent } from '../../components/TestComponent'
 
-export const BusinessTypeFilterExample = ({ ordering }) => {
+export const BusinessTypeFilterExample = () => {
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props

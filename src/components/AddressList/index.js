@@ -16,10 +16,10 @@ export const AddressList = (props) => {
     handleClickDelete
   } = props
 
+  const [ordering] = useApi()
   const [{ user, token }] = useSession()
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
-  const [ordering] = useApi()
 
   if (!userId) {
     throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')

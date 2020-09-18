@@ -19,7 +19,7 @@ export const OrderingContext = createContext()
  */
 export const OrderingProvider = ({ settings, children }) => {
   return (
-    <OrderingContext.Provider value={1}>
+    <OrderingContext.Provider>
       <ApiProvider settings={Object.assign(settings.api, { project: settings.project })}>
         <ConfigProvider>
           <LanguageProvider>

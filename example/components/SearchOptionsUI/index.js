@@ -15,7 +15,6 @@ import { useSession } from '../../../src/contexts/SessionContext'
 export const SearchOptionsUI = (props) => {
   const [{ auth }] = useSession()
   const {
-    ordering,
     orderState,
     optionSelected,
     momentProps,
@@ -27,7 +26,6 @@ export const SearchOptionsUI = (props) => {
   const [curAddress, setCurAddress] = useState(null)
 
   const addressListProps = {
-    ordering: ordering,
     handleClickAddress: (address) => {
       console.log('Address was clicked', address)
       setCurAddress(address)
@@ -36,7 +34,6 @@ export const SearchOptionsUI = (props) => {
   }
 
   const addressFormProps = {
-    ordering: ordering,
     useValidationFileds: true,
     address: curAddress
   }

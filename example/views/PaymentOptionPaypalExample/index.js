@@ -4,13 +4,8 @@ import { PaymentOptionPaypalUI } from '../../components/PaymentOptionPaypalUI'
 import { PaymentOptionPaypal } from '../../../src/components/PaymentOptionPaypal'
 import { TestComponent } from '../../components/TestComponent'
 
-export const PaymentOptionPaypalExample = ({ ordering }) => {
+export const PaymentOptionPaypalExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

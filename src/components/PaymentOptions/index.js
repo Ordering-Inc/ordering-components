@@ -15,14 +15,13 @@ export const PaymentOptions = (props) => {
     UIComponent
   } = props
 
+  const [ordering] = useApi()
   const [orderState] = useOrder()
   const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
 
   const [paymethodsList, setPaymethodsList] = useState({ paymethods: [], loading: true, error: null })
   const [paymethodSelected, setPaymethodsSelected] = useState(null)
   const [paymethodData, setPaymethodData] = useState({})
-
-  const [ordering] = useApi()
 
   const parsePaymethods = (paymethods) => {
     const _paymethods = paymethods.filter(credentials => !['paypal_express', 'authorize'].includes(credentials.paymethod.gateway)).map(credentials => {

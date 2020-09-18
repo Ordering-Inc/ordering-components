@@ -5,7 +5,7 @@ import { BusinessSortControl } from '../../../src/components/BusinessSortControl
 import { TestComponent } from '../../components/TestComponent'
 import { useOrder } from '../../../src/contexts/OrderContext'
 
-export const BusinessSortControlExample = ({ ordering }) => {
+export const BusinessSortControlExample = () => {
   const [{ options }] = useOrder()
   const props = {
     /**

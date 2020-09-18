@@ -52,6 +52,7 @@ export const LanguageProvider = ({ children }) => {
   }
 
   const setLanguage = async (language) => {
+    if (!language || language.id === state.language?.id) return
     const _language = { id: language.id, code: language.code, rtl: language.rtl }
     window.localStorage.setItem('language', JSON.stringify(_language))
     setState({ ...state, language: _language })

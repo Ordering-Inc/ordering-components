@@ -7,14 +7,9 @@ import PropTypes from 'prop-types'
  */
 export const PaymentOptionCash = (props) => {
   const {
-    // useOrderContext,
-    // businessId,
     UIComponent,
     orderTotal
   } = props
-
-  // const [orderState] = useOrder()
-  // const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
 
   return (
     <>

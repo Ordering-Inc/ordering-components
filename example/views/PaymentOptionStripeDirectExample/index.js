@@ -4,13 +4,8 @@ import { PaymentOptionStripeDirectUI } from '../../components/PaymentOptionStrip
 import { PaymentOptionStripeDirect } from '../../../src/components/PaymentOptionStripeDirect'
 import { TestComponent } from '../../components/TestComponent'
 
-export const PaymentOptionStripeDirectExample = ({ ordering }) => {
+export const PaymentOptionStripeDirectExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

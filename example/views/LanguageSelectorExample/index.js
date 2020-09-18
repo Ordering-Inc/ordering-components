@@ -4,13 +4,8 @@ import { LanguageSelectorUI } from '../../components/LanguageSelectorUI'
 import { LanguageSelector } from '../../../src/components/LanguageSelector'
 import { TestComponent } from '../../components/TestComponent'
 
-export const LanguageSelectorExample = ({ ordering }) => {
+export const LanguageSelectorExample = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { pickBy } from 'lodash'
 import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to manage login behavior without UI component
  */
 export const LoginForm = (props) => {
   const {
-    ordering,
     UIComponent,
     handleButtonLoginClick,
     handleSuccessLogin,
@@ -17,6 +17,7 @@ export const LoginForm = (props) => {
     useDefualtSessionManager
   } = props
 
+  const [ordering] = useApi()
   let { defaultLoginTab } = props
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
@@ -108,11 +109,6 @@ export const LoginForm = (props) => {
 }
 
 LoginForm.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
