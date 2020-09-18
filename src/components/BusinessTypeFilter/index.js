@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 export const BusinessTypeFilter = (props) => {
   const {
     businessTypes,
+    onChangeBusinessType,
     defaultBusinessType,
     UIComponent
   } = props
@@ -16,8 +17,9 @@ export const BusinessTypeFilter = (props) => {
   /**
    * Handle when select value changes
    */
-  const handleChangeBusinessType = (val) => {
-    setTypeSelected(val)
+  const handleChangeBusinessType = (businessType) => {
+    setTypeSelected(businessType)
+    onChangeBusinessType(businessType)
   }
 
   return (
@@ -27,7 +29,7 @@ export const BusinessTypeFilter = (props) => {
           {...props}
           businessTypes={businessTypes}
           currentTypeSelected={typeSelected}
-          onChangeBusinessType={handleChangeBusinessType}
+          handleChangeBusinessType={handleChangeBusinessType}
         />
       )}
     </>
@@ -35,11 +37,6 @@ export const BusinessTypeFilter = (props) => {
 }
 
 BusinessTypeFilter.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

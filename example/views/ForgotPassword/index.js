@@ -5,13 +5,8 @@ import { ForgotPasswordFormUI } from '../../components/ForgotPasswordFormUI'
 import { ForgotPasswordForm } from '../../../src/components/ForgotPasswordForm'
 import { TestComponent } from '../../components/TestComponent'
 
-export const ForgotPassword = ({ ordering }) => {
+export const ForgotPassword = () => {
   const props = {
-    /**
-     * Instace of Ordering Class
-     * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-     */
-    ordering: ordering,
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */

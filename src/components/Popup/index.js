@@ -83,10 +83,6 @@ export const Popup = (props) => {
 }
 
 Popup.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
   UIComponent: PropTypes.elementType,
   /**
    * Show or hide popup

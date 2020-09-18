@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
 
 /**
  * Component to manage Facebook login behavior without UI component
  */
 export const FacebookLoginButton = (props) => {
   const {
-    ordering,
     UIComponent,
     appId,
     debug,
@@ -18,6 +18,7 @@ export const FacebookLoginButton = (props) => {
     handleSuccessFacebookLogout
   } = props
 
+  const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [facebookStatus, setFacebookStatus] = useState({ ready: false, logged: false })
 
@@ -132,11 +133,6 @@ export const FacebookLoginButton = (props) => {
 }
 
 FacebookLoginButton.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

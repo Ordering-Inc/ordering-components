@@ -43,7 +43,7 @@ export const BusinessesListUI = (props) => {
   }
 
   useEffect(() => {
-    const propToDelete = filterValues.business_type === 'delivery_time' ? 'pickup_time' : 'delivery_time'
+    const propToDelete = filterValues?.business_type === 'delivery_time' ? 'pickup_time' : 'delivery_time'
     setOptionsToShow(SORT_BY_OPTIONS.filter(option => option.value !== propToDelete))
   }, [filterValues])
 
@@ -69,7 +69,7 @@ export const BusinessesListUI = (props) => {
       )}
 
       <div>
-        {!loading && businesses.length > 0 ? (
+        {!loading && businesses && businesses.length > 0 ? (
           <h1>{businesses.length} Businesses</h1>
         ) : (
           <h1>Businesses</h1>

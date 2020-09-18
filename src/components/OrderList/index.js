@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import PropTypes, { object, number } from 'prop-types'
 
 import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const OrderList = (props) => {
   const {
-    ordering,
     UIComponent,
     orders,
     orderIds,
@@ -16,6 +16,7 @@ export const OrderList = (props) => {
     paginationSettings
   } = props
 
+  const [ordering] = useApi()
   const [orderList, setOrderList] = useState({ loading: false, error: null, orders: [] })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
@@ -152,11 +153,6 @@ export const OrderList = (props) => {
 }
 
 OrderList.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

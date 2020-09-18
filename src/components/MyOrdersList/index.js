@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const MyOrdersList = (props) => {
   const {
     status,
-    ordering,
     UIComponent
   } = props
+
+  const [ordering] = useApi()
 
   /**
    * Get token from context
@@ -45,11 +47,6 @@ export const MyOrdersList = (props) => {
 }
 
 MyOrdersList.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

@@ -34,7 +34,6 @@ export const AddressFormUI = (props) => {
   ]
 
   const handleChangeAddress = (address) => {
-    console.log(address)
     setState({
       ...state,
       selectedFromAutocomplete: true
@@ -70,7 +69,7 @@ export const AddressFormUI = (props) => {
           <>
             <form onSubmit={handleSubmit(onSubmit)}>
               <GoogleAutocompleteInput
-                apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+                apiKey=''
                 name='address'
                 placeholder='Address'
                 onChangeAddress={handleChangeAddress}
@@ -83,7 +82,7 @@ export const AddressFormUI = (props) => {
               {errors.address && <i style={{ color: '#c10000' }}>{errors.address.message}</i>}
               {!state.selectedFromAutocomplete && <i style={{ color: '#c10000' }}>Select address from autocomplete.</i>}
               <GoogleGpsButton
-                apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+                apiKey=''
                 onAddress={handleChangeAddress}
               />
               {
@@ -98,7 +97,7 @@ export const AddressFormUI = (props) => {
                             placeholder={_input.placeholder}
                             style={{ borderColor: errors[_input.name] ? '#c10000' : null }}
                             onChange={hanldeChangeInput}
-                            defaultValue={addressState.address[_input.name] || ''}
+                            defaultValue={formState.changes[_input.name] || addressState.address[_input.name] || ''}
                             ref={register({
                               required: isRequiredField(_input.name) ? _input.requiredMessage : null
                             })}

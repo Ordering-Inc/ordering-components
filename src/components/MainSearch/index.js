@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useOrder } from '../../../src/contexts/OrderContext'
+import { useOrder } from '../../contexts/OrderContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const MainSearch = (props) => {
   const {
     searchByAddress,
     handlerFindBusiness,
-    ordering,
     UIComponent
   } = props
+
+  const [ordering] = useApi()
   const [orderState] = useOrder()
 
   /**
@@ -105,11 +107,6 @@ export const MainSearch = (props) => {
 }
 
 MainSearch.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
