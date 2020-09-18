@@ -26,9 +26,13 @@ export const OrderReviewExample = () => {
      */
     UIComponent: OrderReviewUI,
     /**
-     * Getting a list of orders that can be reviewed
+     * Getting the order that can be review
      */
     order,
+    /**
+     * Response of ordering that contains de review
+     */
+    onSaveReview: (rew) => console.log(rew),
     /**
      * Components types before login form
      * Array of type components, the parent props will pass to these components

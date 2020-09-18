@@ -1,20 +1,21 @@
 import React from 'react'
+import { useForm } from 'react-hook-form'
 
 export const OrderReviewUI = (props) => {
   const {
-    handleQuality,
-    handlePunctiality,
-    handleService,
-    handlePackage,
-    handleComment,
     handleSendReview,
-    comment,
     order,
+    handleChangeInput,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
+
+  const { handleSubmit, register, errors } = useForm()
+  const onSubmit = values => {
+    handleSendReview()
+  }
   return (
     <>
       {
@@ -29,9 +30,8 @@ export const OrderReviewUI = (props) => {
       }
       {
         order && (
-          <form onSubmit={handleSendReview}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <h3>Write a Review of Order #{order.id}</h3>
-
             {
               <div
                 style={{
@@ -44,7 +44,7 @@ export const OrderReviewUI = (props) => {
               >
                 <p style={{ padding: '5px' }}>Reviews:</p>
                 <label htmlFor='Quality'>Quality of Product:</label>
-                <select id='Quality' onChange={(e) => handleQuality(e.target.value)}>
+                <select id='Quality' name='quality' onChange={(e) => handleChangeInput(e)}>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -52,7 +52,7 @@ export const OrderReviewUI = (props) => {
                   <option>5</option>
                 </select>
                 <label>Punctiality:</label>
-                <select onChange={(e) => handlePunctiality(e.target.value)}>
+                <select name='punctiality' onChange={(e) => handleChangeInput(e)}>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -60,7 +60,7 @@ export const OrderReviewUI = (props) => {
                   <option>5</option>
                 </select>
                 <label>Service:</label>
-                <select onChange={(e) => handleService(e.target.value)}>
+                <select name='service' onChange={(e) => handleChangeInput(e)}>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -68,7 +68,7 @@ export const OrderReviewUI = (props) => {
                   <option>5</option>
                 </select>
                 <label>Product Packaging:</label>
-                <select onChange={(e) => handlePackage(e.target.value)}>
+                <select name='packaging' onChange={(e) => handleChangeInput(e)}>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -83,11 +83,16 @@ export const OrderReviewUI = (props) => {
               >
                 <label htmlFor='Comments'>Comments:</label>
                 <input
+                  name='comments'
                   placeholder='Comments'
                   id='Comments'
-                  onChange={(e) => handleComment(e.target.value)}
-                  value={comment}
+                  onChange={(e) => handleChangeInput(e)}
+                  style={{ borderColor: errors.comments ? '#c10000' : null }}
+                  ref={register({
+                    required: 'The field comments is required'
+                  })}
                 />
+                {errors?.comments && <i style={{ color: '#c10000' }}>{errors?.comments?.message || 'error'}</i>}
                 <div style={{ padding: '10px' }}>
                   <button type='submit'>SEND REVIEW</button>
                 </div>
