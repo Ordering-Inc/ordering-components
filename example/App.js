@@ -31,6 +31,7 @@ import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
 import { MenuControlExample } from './views/MenuControlExample'
 import { ProductOptionExample } from './views/ProductOptionExample'
+import { OrderReviewExample } from "./views/OrderReviewExample"
 import { CheckoutExample } from './views/CheckoutExample'
 import { BusinessProductsSearchExample } from './views/BusinessProductsSearchExample'
 import { BusinessProductsCategoriesExample } from './views/BusinessProductsCategoriesExample'
@@ -199,6 +200,9 @@ export default function App () {
           </Route>
           <Route path='/payment_option_stripe_redirect' exact>
             <PaymentOptionStripeRedirectExample />
+          </Route>
+          <Route path='/review_orders'>
+            <OrderReviewExample ordering={ordering} />
           </Route>
           <Route path='/'>
             <Home />
