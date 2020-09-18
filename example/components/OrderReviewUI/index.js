@@ -5,7 +5,10 @@ export const OrderReviewUI = (props) => {
   const {
     handleSendReview,
     order,
+    handleRating,
     handleChangeInput,
+    formState,
+    stars,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -16,6 +19,8 @@ export const OrderReviewUI = (props) => {
   const onSubmit = values => {
     handleSendReview()
   }
+  const scores = [1, 2, 3, 4, 5]
+  console.log(errors)
   return (
     <>
       {
@@ -44,37 +49,30 @@ export const OrderReviewUI = (props) => {
               >
                 <p style={{ padding: '5px' }}>Reviews:</p>
                 <label htmlFor='Quality'>Quality of Product:</label>
-                <select id='Quality' name='quality' onChange={(e) => handleChangeInput(e)}>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
+                <div name='quality' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
+                  {scores.map(score => (
+                    <span key={score} style={{ border: stars.quality === score ? '1px solid red' : '' }} title='quality' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  ))}
+                  {errors?.quality && <i style={{ color: '#c10000' }}>{errors?.quality?.message || 'error'}</i>}
+                </div>
                 <label>Punctiality:</label>
-                <select name='punctiality' onChange={(e) => handleChangeInput(e)}>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
+                <div name='punctiality' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
+                  {scores.map(score => (
+                    <span key={score} style={{ border: stars.punctiality === score ? '1px solid red' : '' }} title='punctiality' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  ))}
+                </div>
                 <label>Service:</label>
-                <select name='service' onChange={(e) => handleChangeInput(e)}>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
+                <div name='service' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
+                  {scores.map(score => (
+                    <span key={score} style={{ border: stars.service === score ? '1px solid red' : '' }} title='service' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  ))}
+                </div>
                 <label>Product Packaging:</label>
-                <select name='packaging' onChange={(e) => handleChangeInput(e)}>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
+                <div name='packaging' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
+                  {scores.map(score => (
+                    <span key={score} style={{ border: stars.packaging === score ? '1px solid red' : '' }} title='packaging' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  ))}
+                </div>
               </div>
             }
             {
@@ -96,6 +94,7 @@ export const OrderReviewUI = (props) => {
                 <div style={{ padding: '10px' }}>
                   <button type='submit'>SEND REVIEW</button>
                 </div>
+                {formState.result?.error && <p>An error has ocurred when tried send the review</p>}
               </div>
             }
 

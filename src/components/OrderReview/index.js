@@ -10,7 +10,6 @@ export const OrderReview = (props) => {
   const [session] = useSession()
   const [stars, setStars] = useState({ quality: 1, punctiality: 1, service: 1, packaging: 1, comments: '' })
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
-
   /**
    * Function that load and send the review order to ordering
    */
@@ -35,7 +34,7 @@ export const OrderReview = (props) => {
         },
         body: JSON.stringify(body)
       })
-      onSaveReview('saveResult', response)
+      onSaveReview(response.content)
       setFormState({ loading: false, result: response.content })
     } catch (err) {
       setFormState({
@@ -48,13 +47,23 @@ export const OrderReview = (props) => {
     }
   }
   /**
-   * Update credential data
+   * Rating the product
+   * @param {EventTarget} e Related HTML event
+   */
+  const handleRating = (e) => {
+    setStars({
+      ...stars,
+      [e.target.title]: parseInt(e.target.id)
+    })
+  }
+  /**
+   * Rating the product with comments
    * @param {EventTarget} e Related HTML event
    */
   const handleChangeInput = (e) => {
     setStars({
       ...stars,
-      [e.target.name]: e.target.value
+      comments: e.target.value
     })
   }
   return (
@@ -64,8 +73,10 @@ export const OrderReview = (props) => {
           {...props}
           stars={stars}
           order={order}
+          formState={formState}
           handleSendReview={handleSendReview}
           handleChangeInput={handleChangeInput}
+          handleRating={handleRating}
         />
       )}
     </>

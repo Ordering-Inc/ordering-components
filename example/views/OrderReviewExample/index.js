@@ -32,7 +32,7 @@ export const OrderReviewExample = () => {
     /**
      * Response of ordering that contains de review
      */
-    onSaveReview: (rew) => console.log(rew),
+    onSaveReview: (review) => console.log(review),
     /**
      * Components types before login form
      * Array of type components, the parent props will pass to these components
