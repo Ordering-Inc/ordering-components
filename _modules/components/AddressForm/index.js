@@ -323,6 +323,7 @@ var AddressForm = function AddressForm(props) {
                 setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
                   address: content.result
                 }));
+                onSaveAddress && onSaveAddress(content.result);
               }
 
               _context3.next = 17;
@@ -393,7 +394,7 @@ AddressForm.propTypes = {
   /**
    * Address id to edit and load from Ordering API
    */
-  onSaveAddress: _propTypes.default.number,
+  onSaveAddress: _propTypes.default.func,
 
   /**
    * Components types before address form
