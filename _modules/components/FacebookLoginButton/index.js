@@ -133,7 +133,9 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
                 loading: true
               }));
               _context.next = 7;
-              return ordering.users().authFacebook(facebookResponse);
+              return ordering.users().authFacebook({
+                access_token: facebookResponse.authResponse.accessToken
+              });
 
             case 7:
               response = _context.sent;
