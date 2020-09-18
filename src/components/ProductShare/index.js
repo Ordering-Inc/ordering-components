@@ -1,29 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 export const ProductShare = (props) => {
-  const { UIComponent } = props
+  const { UIComponent, url, addthisSrc } = props
   const [show, setShow] = useState(false)
 
-  const shareButton = () => {
-    // ID for the addThis
-    const ID = 'ra-5f510bec3e657e9d'
-    // url for the widget of addThis
-    const js = '//s7.addthis.com/js/300/addthis_widget.js#pubid=' + ID
-
+  useEffect(() => {
+    if (window.document.getElementById('addthis_widget')) {
+      return
+    }
+    addthisScript()
+  }, [])
+  const addthisScript = () => {
     const script = document.createElement('script')
     script.async = true
-    script.src = js
+    script.src = addthisSrc
+    script.id = 'addthis_widget'
     document.body.appendChild(script)
-
+  }
+  const shareButton = () => {
     // toggle the show of the share buttons
     setShow(!show)
   }
-
   return (
     <>
       {UIComponent && (
-        <UIComponent {...props} shareButton={shareButton} show={show} />
+        <UIComponent {...props} shareButton={shareButton} show={show} url={url} />
       )}
     </>
   )
