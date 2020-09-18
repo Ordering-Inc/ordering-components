@@ -9,7 +9,9 @@ export const GoogleLoginButton = (props) => {
     onFailure,
     onRequest,
     responseType,
-    handleSuccessGoogleLogin
+    handleSuccessGoogleLogin,
+    initParams,
+    buttonStyle
   } = props
 
   const [ordering] = useApi()
@@ -51,13 +53,7 @@ export const GoogleLoginButton = (props) => {
       const GoogleAuth = window.gapi.auth2.getAuthInstance()
       if (!GoogleAuth) {
         window.gapi.auth2
-          .init({
-            apiKey: 'AIzaSyB-aDD3TIBR5tBCNM-lb1u0jadsaY-LIjs',
-            client_id:
-              '813628525689-v00sl2nrfdg1rnj79pqh994rvkkq0glt.apps.googleusercontent.com',
-            cookiepolicy: 'single_host_origin',
-            scope: 'profile'
-          })
+          .init(initParams)
           .then(
             async (res) => {
               if (!unmounted) {
@@ -82,11 +78,7 @@ export const GoogleLoginButton = (props) => {
     })
     window.gapi.load('signin2', () => {
       window.gapi.signin2.render('my-signin2', {
-        scope: 'profile email',
-        width: 240,
-        height: 50,
-        longtitle: true,
-        theme: 'dark',
+        ...buttonStyle,
         onsuccess: onSuccess,
         onfailure: onFailure
       })
