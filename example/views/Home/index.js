@@ -24,6 +24,9 @@ export const Home = () => {
           <Link to='/facebook_login'>Facebook login</Link>
         </li>
         <li>
+          <Link to='/apple_login'>Apple Login</Link>
+        </li>
+        <li>
           <Link to='/google_login'>Google Login</Link>
         </li>
         <li>

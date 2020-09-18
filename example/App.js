@@ -48,6 +48,7 @@ import { DriverTipsExample } from './views/DriverTipsExample'
 import { SearchOptionsExample } from './views/SearchOptionsExample'
 import { MainSearchExample } from './views/MainSearchExample'
 import { OrderContextExample } from './views/OrderContextExample'
+import {AppleLoginExample} from "./views/AppleLoginExample"
 import { ProductShareExample } from './views/ProductShareExample'
 import { OrderDetailsExample } from './views/OrderDetailsExample'
 import { CmsContentExample } from './views/CmsContentExample'
@@ -78,6 +79,9 @@ export default function App () {
           </Route>
           <Route path='/google_login'>
             <GoogleLoginExample ordering={ordering} />
+          </Route>
+          <Route path='/apple_login'>
+            <AppleLoginExample ordering={ordering} />
           </Route>
           <Route path='/session_manager'>
             <SessionManager />
