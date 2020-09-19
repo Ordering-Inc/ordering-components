@@ -118,6 +118,7 @@ export const AddressList = (props) => {
         <UIComponent
           {...props}
           addressList={addressList}
+          setAddressList={setAddressList}
           actionStatus={actionStatus}
           handleSetDefault={handleSetDefault}
           handleDelete={handleDelete}
