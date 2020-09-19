@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
 
 /**
@@ -16,6 +16,8 @@ export const Popup = (props) => {
 
   const modalRef = useRef()
 
+  const [bodyOverflowBackup] = useState(document.body.style.overflow)
+
   /**
    * Use onClose function when esc key was pressed
    * @param {Event} e Event when keydown
@@ -32,10 +34,36 @@ export const Popup = (props) => {
     closeOnBackdrop && e.target.classList.contains('popup') && onClose && onClose()
   }
 
+  /**
+   * Check backdrop on close or unmount
+   */
+  const checkRemoveBackdrop = () => {
+    const modals = document.querySelectorAll('.popup')
+    /**
+     * Focus next popup when close a popup
+     */
+    if (!open && modals.length > 1) {
+      modals.length > 1 && modals[modals.length - 1].focus()
+    }
+    /**
+     * Remove backdrop when close popup and modals quantity is 0
+     * Remove backdrop when unmount and modals quantity is 1
+     */
+    if (modals.length === (open ? 1 : 0)) {
+      const backdrop = document.querySelector('.popup-backdrop')
+      if (backdrop) {
+        backdrop.remove()
+      }
+      document.body.style.overflow = bodyOverflowBackup
+    }
+  }
+
   useEffect(() => {
-    if (!open) return
+    if (!open) {
+      checkRemoveBackdrop()
+      return
+    }
     let backdrop = document.querySelector('.popup-backdrop')
-    const bodyOverflowBackup = document.body.style.overflow
     if (!backdrop) {
       backdrop = document.createElement('div')
       backdrop.className = 'popup-backdrop' + (backdropClassName ? ` ${backdropClassName}` : '')
@@ -43,19 +71,14 @@ export const Popup = (props) => {
       document.body.style.overflow = 'hidden'
     }
     modalRef.current.focus()
+  }, [open])
 
+  useEffect(() => {
     /**
      * Remove backdrop and enable scroll
      */
-    return () => {
-      const modals = document.querySelectorAll('.popup')
-      modals.length > 0 && modals[modals.length - 1].focus()
-      if (modals.length === 0) {
-        document.querySelector('.popup-backdrop').remove()
-        document.body.style.overflow = bodyOverflowBackup
-      }
-    }
-  }, [open])
+    return checkRemoveBackdrop
+  }, [])
 
   const popupStyles = {
     position: 'fixed',
