@@ -307,6 +307,7 @@ var AddressList = function AddressList(props) {
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, actionStatus.error && /*#__PURE__*/_react.default.createElement("p", null, "Alert Error: ", actionStatus.error), UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     addressList: addressList,
+    setAddressList: setAddressList,
     actionStatus: actionStatus,
     handleSetDefault: handleSetDefault,
     handleDelete: handleDelete
