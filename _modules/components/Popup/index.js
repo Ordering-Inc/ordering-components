@@ -58,7 +58,7 @@ var Popup = function Popup(props) {
 
 
   var handleClick = function handleClick(e) {
-    closeOnBackdrop && e.target.classList.contains('popup') && onClose && onClose();
+    closeOnBackdrop && e.target.classList.contains('popup-component') && onClose && onClose();
   };
   /**
    * Check backdrop on close or unmount
@@ -66,7 +66,7 @@ var Popup = function Popup(props) {
 
 
   var checkRemoveBackdrop = function checkRemoveBackdrop() {
-    var modals = document.querySelectorAll('.popup');
+    var modals = document.querySelectorAll('.popup-component');
     /**
      * Focus next popup when close a popup
      */
@@ -80,8 +80,10 @@ var Popup = function Popup(props) {
      */
 
 
-    if (modals.length === (open ? 1 : 0)) {
-      var backdrop = document.querySelector('.popup-backdrop');
+    var isFirst = typeof modals[0] === 'undefined' || modals[0] === (modalRef === null || modalRef === void 0 ? void 0 : modalRef.current);
+
+    if (isFirst) {
+      var backdrop = document.querySelector('.popup-component-backdrop');
 
       if (backdrop) {
         backdrop.remove();
@@ -101,7 +103,7 @@ var Popup = function Popup(props) {
 
     if (!backdrop) {
       backdrop = document.createElement('div');
-      backdrop.className = 'popup-backdrop' + (backdropClassName ? " ".concat(backdropClassName) : '');
+      backdrop.className = 'popup-component-backdrop popup-backdrop' + (backdropClassName ? " ".concat(backdropClassName) : '');
       document.body.append(backdrop);
       document.body.style.overflow = 'hidden';
     }
@@ -113,7 +115,7 @@ var Popup = function Popup(props) {
      * Remove backdrop and enable scroll
      */
     return checkRemoveBackdrop;
-  }, []);
+  }, [open]);
   var popupStyles = {
     position: 'fixed',
     top: 0,
@@ -124,7 +126,7 @@ var Popup = function Popup(props) {
     outline: 'none'
   };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && /*#__PURE__*/_react.default.createElement("div", {
-    className: "popup",
+    className: "popup-component",
     style: popupStyles,
     onClick: handleClick,
     onKeyDown: handleKeyDown,
