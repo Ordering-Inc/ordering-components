@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import PropTypes, { string } from 'prop-types'
 
 /**
@@ -31,14 +31,14 @@ export const Popup = (props) => {
    * @param {Event} e Event when click in backdrop
    */
   const handleClick = (e) => {
-    closeOnBackdrop && e.target.classList.contains('popup') && onClose && onClose()
+    closeOnBackdrop && e.target.classList.contains('popup-component') && onClose && onClose()
   }
 
   /**
    * Check backdrop on close or unmount
    */
   const checkRemoveBackdrop = () => {
-    const modals = document.querySelectorAll('.popup')
+    const modals = document.querySelectorAll('.popup-component')
     /**
      * Focus next popup when close a popup
      */
@@ -49,8 +49,9 @@ export const Popup = (props) => {
      * Remove backdrop when close popup and modals quantity is 0
      * Remove backdrop when unmount and modals quantity is 1
      */
-    if (modals.length === (open ? 1 : 0)) {
-      const backdrop = document.querySelector('.popup-backdrop')
+    const isFirst = typeof modals[0] === 'undefined' || modals[0] === modalRef?.current
+    if (isFirst) {
+      const backdrop = document.querySelector('.popup-component-backdrop')
       if (backdrop) {
         backdrop.remove()
       }
@@ -66,7 +67,7 @@ export const Popup = (props) => {
     let backdrop = document.querySelector('.popup-backdrop')
     if (!backdrop) {
       backdrop = document.createElement('div')
-      backdrop.className = 'popup-backdrop' + (backdropClassName ? ` ${backdropClassName}` : '')
+      backdrop.className = 'popup-component-backdrop popup-backdrop' + (backdropClassName ? ` ${backdropClassName}` : '')
       document.body.append(backdrop)
       document.body.style.overflow = 'hidden'
     }
@@ -78,7 +79,7 @@ export const Popup = (props) => {
      * Remove backdrop and enable scroll
      */
     return checkRemoveBackdrop
-  }, [])
+  }, [open])
 
   const popupStyles = {
     position: 'fixed',
@@ -94,7 +95,7 @@ export const Popup = (props) => {
     <>
       {
         open && (
-          <div className='popup' style={popupStyles} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={-1} ref={modalRef} autoFocus>
+          <div className='popup-component' style={popupStyles} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={-1} ref={modalRef} autoFocus>
             {
               UIComponent && <UIComponent {...props} />
             }
