@@ -43,6 +43,7 @@ import { ProductOption } from './components/ProductOption'
 import { ProductOptionSuboption } from './components/ProductOptionSuboption'
 import { ProductsList } from './components/ProductsList'
 import { ProductsListing } from './components/ProductsListing'
+import { Messages } from './components/Messages'
 import { SearchOptions } from './components/SearchOptions'
 import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
@@ -96,6 +97,7 @@ export {
   MyOrdersList,
   OrderList,
   OrderTypeControl,
+  Messages,
   PaymentOptions,
   Popup,
   ProductComponent,

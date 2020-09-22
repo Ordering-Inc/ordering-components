@@ -57,6 +57,7 @@ import { PaymentOptionCashExample } from './views/PaymentOptionCashExample'
 import { PaymentOptionStripeExample } from './views/PaymentOptionStripeExample'
 import { PaymentOptionStripeDirectExample } from './views/PaymentOptionStripeDirectExample'
 import { PaymentOptionStripeRedirectExample } from './views/PaymentOptionStripeRedirectExample'
+import { MessagesExample } from './views/MessagesExample'
 
 export default function App () {
   return (
@@ -199,6 +200,9 @@ export default function App () {
           </Route>
           <Route path='/businesses_list'>
             <BusinessesListExample />
+          </Route>
+          <Route path='/messages'>
+            <MessagesExample />
           </Route>
           <Route path='/payment_option_paypal' exact>
             <PaymentOptionPaypalExample />
