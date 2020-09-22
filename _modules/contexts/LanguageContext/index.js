@@ -249,7 +249,8 @@ var LanguageProvider = function LanguageProvider(_ref) {
   }, [state.language]);
 
   var t = function t(key) {
-    return state.dictionary[key] || key;
+    var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    return state.dictionary[key] || fallback || key;
   };
 
   return /*#__PURE__*/_react.default.createElement(LanguageContext.Provider, {
@@ -266,7 +267,8 @@ exports.LanguageProvider = LanguageProvider;
 var useLanguage = function useLanguage() {
   var languageManager = (0, _react.useContext)(LanguageContext);
   return languageManager || [{}, function (key) {
-    return key;
+    var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    return fallback || key;
   }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
     return _regenerator.default.wrap(function _callee5$(_context5) {
       while (1) {

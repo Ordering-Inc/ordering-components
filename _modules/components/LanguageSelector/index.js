@@ -91,7 +91,7 @@ var LanguageSelector = function LanguageSelector(props) {
       return;
     }
 
-    props.onChangeLanguage(language);
+    props.onChangeLanguage && props.onChangeLanguage(language);
     setLanguage(language);
   };
   /**
