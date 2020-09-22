@@ -42,6 +42,7 @@ export const LanguagesExample = (props) => {
         }
       </select>
       <p>Word `About` translation: {t('ABOUT')}</p>
+      <p>Translation with fallback: {t('ABOUT_THIS', 'About this')}</p>
       <p>Direction: {languageState.language.rtl ? 'RTL' : 'LTR'}</p>
       <br />
       <button type='button' onClick={() => refreshTranslations()} disabled={languageState.loading}>Refresh translations</button>

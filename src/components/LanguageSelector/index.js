@@ -26,7 +26,7 @@ export const LanguageSelector = (props) => {
       setLanguageSelected(language)
       return
     }
-    props.onChangeLanguage(language)
+    props.onChangeLanguage && props.onChangeLanguage(language)
     setLanguage(language)
   }
 

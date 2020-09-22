@@ -69,8 +69,8 @@ export const LanguageProvider = ({ children }) => {
     initLanguage()
   }, [state.language])
 
-  const t = (key) => {
-    return state.dictionary[key] || key
+  const t = (key, fallback = null) => {
+    return state.dictionary[key] || fallback || key
   }
 
   return (
@@ -85,5 +85,5 @@ export const LanguageProvider = ({ children }) => {
  */
 export const useLanguage = () => {
   const languageManager = useContext(LanguageContext)
-  return languageManager || [{}, (key) => key, async () => {}, async () => {}]
+  return languageManager || [{}, (key, fallback = null) => fallback || key, async () => {}, async () => {}]
 }
