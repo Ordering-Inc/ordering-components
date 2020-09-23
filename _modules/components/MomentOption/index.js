@@ -48,6 +48,7 @@ var MomentOption = function MomentOption(props) {
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
+      orderStatus = _useOrder2[0],
       changeMoment = _useOrder2[1].changeMoment;
   /**
    * Method to valid if a date is same of after current date
@@ -75,9 +76,14 @@ var MomentOption = function MomentOption(props) {
    */
 
 
-  var getTimeFormat = function getTimeFormat(time) {
+  var getTimeFormat = function getTimeFormat(time, today) {
     var hour = Number(time.split(':')[0]);
-    var minute = Number(time.split(':')[1]);
+    var minute = Number(time.split(':')[1]) + (today ? 15 : 0);
+
+    if (minute > 59) {
+      hour++;
+      minute = minute - 59;
+    }
 
     if (minute >= 0 && minute <= 14) {
       return (0, _moment2.default)("".concat(hour, ":00"), 'HH:mm').format('HH:mm');
@@ -102,25 +108,30 @@ var MomentOption = function MomentOption(props) {
 
 
   var currentTimeFormatted = function currentTimeFormatted(value) {
-    var date = value !== null && value !== void 0 ? value : minDate;
-    return (0, _moment2.default)(validDate(date)).hour() >= (0, _moment2.default)().hour() ? (0, _moment2.default)(validDate(date)).format('HH:mm') : (0, _moment2.default)().format('HH:mm');
+    var _ref;
+
+    var date = (_ref = value !== null && value !== void 0 ? value : scheduleSelected) !== null && _ref !== void 0 ? _ref : minDate;
+    var current = (0, _moment2.default)(validDate(date));
+    var now = (0, _moment2.default)();
+    return current.day() !== now.day() || current.hour() >= now.hour() ? current.format('HH:mm') : now.format('HH:mm');
   };
   /**
    * This must be containt schedule selected by user
    */
 
 
-  var _useState = (0, _react.useState)(currentDate ? (0, _moment2.default)(validDate(currentDate)).format('YYYY-MM-DD HH:mm') : null),
+  var _currentDate = useOrderContext ? orderStatus.options.moment : currentDate;
+
+  var _useState = (0, _react.useState)(_currentDate ? (0, _moment2.default)(validDate(_currentDate)).format('YYYY-MM-DD HH:mm') : null),
       _useState2 = _slicedToArray(_useState, 2),
       scheduleSelected = _useState2[0],
-      setScheduleSelected = _useState2[1]; // const [scheduleSelected, setScheduleSelected] = useState(null)
-
+      setScheduleSelected = _useState2[1];
   /**
    * Flag to know if user select asap time
    */
 
 
-  var _useState3 = (0, _react.useState)(null),
+  var _useState3 = (0, _react.useState)(false),
       _useState4 = _slicedToArray(_useState3, 2),
       isAsap = _useState4[0],
       setIsAsap = _useState4[1];
@@ -138,58 +149,74 @@ var MomentOption = function MomentOption(props) {
       _useState8 = _slicedToArray(_useState7, 2),
       datesList = _useState8[0],
       setDatesList = _useState8[1];
-  /**
-   * Save the difference between dates
-   */
 
-
-  var _useState9 = (0, _react.useState)(0),
+  var _useState9 = (0, _react.useState)(null),
       _useState10 = _slicedToArray(_useState9, 2),
-      datesDiff = _useState10[0],
-      setDatesDiff = _useState10[1];
-  /**
-   * Handler select changes
-   * @param {object} param0
-   */
+      dateSelected = _useState10[0],
+      setDateSelected = _useState10[1];
 
+  var _useState11 = (0, _react.useState)(null),
+      _useState12 = _slicedToArray(_useState11, 2),
+      timeSelected = _useState12[0],
+      setTimeSelected = _useState12[1];
 
-  var handleCustomChangeDate = function handleCustomChangeDate(_ref) {
-    var date = _ref.date,
-        time = _ref.time,
-        type = _ref.type;
-
-    if ((date || time) && !((0, _moment2.default)(date, 'YYYY-MM-DD').isValid() || (0, _moment2.default)(time, 'HH:mm').isValid())) {
-      return;
-    }
-
-    if (type === 'asap') {
-      setIsAsap(!isAsap);
-    }
-
-    var currDate = (0, _moment2.default)(validDate(scheduleSelected)).format('YYYY-MM-DD');
-
-    if (date) {
-      setDatesDiff(parseInt(calculateDiffDay(date)));
-    }
-
-    var dateSelected = date !== null && date !== void 0 ? date : currDate;
-    var timeSelected = time !== null && time !== void 0 ? time : (0, _moment2.default)(validDate(scheduleSelected)).hour() >= (0, _moment2.default)().hour() ? (0, _moment2.default)(validDate(scheduleSelected)).format('HH:mm') : (0, _moment2.default)().format('HH:mm');
-    var dateToSend = type === 'asap' ? (0, _moment2.default)().format('YYYY-MM-DD HH:mm') : (0, _moment2.default)("".concat(dateSelected, " ").concat(timeSelected)).format('YYYY-MM-DD HH:mm');
-    setScheduleSelected((0, _moment2.default)(dateToSend, 'YYYY-MM-DD HH:mm').format('YYYY-MM-DD HH:mm'));
-
-    if (time || type === 'asap') {
-      if (!isAsap) {
-        var _moment = type === 'asap' ? null : (0, _moment2.default)(dateToSend).toDate();
-
-        useOrderContext && changeMoment(_moment);
-        onChangeMoment && onChangeMoment(_moment);
-      }
-    }
+  var handleChangeDate = function handleChangeDate(date) {
+    if (!date || date === dateSelected) return;
+    setDateSelected(date);
+    setTimeSelected(null);
+    setIsAsap(false);
   };
+
+  var handleChangeTime = function handleChangeTime(time) {
+    if (!time || time === timeSelected) return;
+
+    var _moment = (0, _moment2.default)("".concat(dateSelected, " ").concat(time), 'YYYY-MM-DD HH:mm').toDate();
+
+    if (!useOrderContext) {
+      setTimeSelected(time);
+      setIsAsap(false);
+    } else {
+      changeMoment(_moment);
+    }
+
+    onChangeMoment && onChangeMoment(_moment);
+  };
+
+  var handleAsap = function handleAsap() {
+    if (isAsap) return;
+
+    if (useOrderContext) {
+      changeMoment(null);
+    } else {
+      setIsAsap(true);
+    }
+
+    onChangeMoment && onChangeMoment(null);
+  };
+
+  (0, _react.useEffect)(function () {
+    var _orderStatus$options;
+
+    if (useOrderContext && ((_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.moment)) {
+      var _currentDate2 = _moment2.default.utc(validDate(orderStatus.options.moment)).local();
+
+      setScheduleSelected(_currentDate2.format('YYYY-MM-DD HH:mm'));
+      setDateSelected(_currentDate2.format('YYYY-MM-DD'));
+      setTimeSelected(_currentDate2.format('HH:mm'));
+      setIsAsap(false);
+    } else {
+      setIsAsap(true);
+    }
+  }, [orderStatus]);
+  (0, _react.useEffect)(function () {
+    if (isAsap) {
+      setDateSelected(datesList[0]);
+      setTimeSelected(null);
+    }
+  }, [isAsap]);
   /**
    * generate a list of available hours
    */
-
 
   var generateHourList = function generateHourList() {
     var hoursAvailable = [];
@@ -197,8 +224,9 @@ var MomentOption = function MomentOption(props) {
     var defaultTime = (0, _moment2.default)('12:00 AM', 'h:mm A').format('HH:mm');
     var endHourTime = (0, _moment2.default)((0, _moment2.default)(validDate(maxDate)).add(-1, 'minute').format('HH:mm'), 'HH:mm').format('HH:mm');
     var startHour = currentTimeFormatted();
-    startHour = datesDiff > 0 || parseInt(calculateDiffDay(validDate(minDate))) ? defaultTime : startHour;
-    startHour = getTimeFormat((0, _moment2.default)(startHour, 'HH:mm').format('HH:mm'));
+    var today = (0, _moment2.default)(dateSelected, 'YYYY-MM-DD').date() === (0, _moment2.default)().date();
+    startHour = !today || parseInt(calculateDiffDay(validDate(minDate))) ? defaultTime : startHour;
+    startHour = getTimeFormat((0, _moment2.default)(startHour, 'HH:mm').format('HH:mm'), today);
 
     var _startTime = (0, _moment2.default)(startHour, 'HH:mm').format('HH:mm');
 
@@ -206,7 +234,6 @@ var MomentOption = function MomentOption(props) {
       for (var j = 0; j < 4; j++) {
         if (!iterator) {
           hoursAvailable.push({
-            key: '0',
             startTime: _startTime,
             endTime: (0, _moment2.default)(_startTime, 'HH:mm').add(14, 'minutes').format('HH:mm')
           });
@@ -214,7 +241,6 @@ var MomentOption = function MomentOption(props) {
           var startTime = (0, _moment2.default)(_startTime, 'HH:mm').add(15, 'minutes').format('HH:mm');
           var endTime = (0, _moment2.default)(startTime, 'HH:mm').add(14, 'minutes').format('HH:mm');
           hoursAvailable.push({
-            key: "".concat(i).concat(j),
             startTime: startTime,
             endTime: endTime
           });
@@ -242,29 +268,27 @@ var MomentOption = function MomentOption(props) {
     var diff = parseInt(calculateDiffDay(validDate(maxDate)), validDate(minDate));
 
     for (var i = 0; i < diff + 1; i++) {
-      datesList.push({
-        key: "".concat(i),
-        date: (0, _moment2.default)(validDate(minDate)).add(i, 'd').format('YYYY-MM-DD')
-      });
+      datesList.push((0, _moment2.default)(validDate(minDate)).add(i, 'd').format('YYYY-MM-DD'));
     }
 
     setDatesList(datesList);
   };
 
   (0, _react.useEffect)(function () {
-    generateHourList();
     generateDatesList();
-  }, [datesDiff, scheduleSelected]);
+    generateHourList();
+  }, [dateSelected]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     isAsap: isAsap,
     minDate: validDate(minDate),
     maxDate: validDate(maxDate),
-    currentDate: scheduleSelected ? (0, _moment2.default)(scheduleSelected).format('YYYY-MM-DD') : null,
-    currentHour: scheduleSelected ? (0, _moment2.default)(currentTimeFormatted(scheduleSelected), 'HH:mm').format('HH:mm') : null,
+    dateSelected: dateSelected,
+    timeSelected: timeSelected,
+    handleChangeDate: handleChangeDate,
+    handleChangeTime: handleChangeTime,
     datesList: datesList,
     hoursList: hoursList,
-    getTimeFormat: getTimeFormat,
-    handleCustomChangeDate: handleCustomChangeDate
+    handleAsap: handleAsap
   })));
 };
 
