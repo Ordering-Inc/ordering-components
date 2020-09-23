@@ -327,6 +327,12 @@ Object.defineProperty(exports, "WrapperGoogleMaps", {
     return _WrapperGoogleMaps.WrapperGoogleMaps;
   }
 });
+Object.defineProperty(exports, "OrderDetails", {
+  enumerable: true,
+  get: function get() {
+    return _OrderDetails.OrderDetails;
+  }
+});
 Object.defineProperty(exports, "ConfigContext", {
   enumerable: true,
   get: function get() {
@@ -553,6 +559,8 @@ var _UserDetails = require("./components/UserDetails");
 var _UserProfileForm = require("./components/UserProfileForm");
 
 var _WrapperGoogleMaps = require("./components/WrapperGoogleMaps");
+
+var _OrderDetails = require("./components/OrderDetails");
 
 var _ConfigContext = require("./contexts/ConfigContext");
 

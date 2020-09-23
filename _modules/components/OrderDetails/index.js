@@ -1,5 +1,7 @@
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -7,15 +9,27 @@ exports.OrderDetails = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _SessionContext = require("../../contexts/SessionContext");
 
+var _ApiContext = require("../../contexts/ApiContext");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -34,12 +48,34 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
-  var order = props.order,
+  var orderId = props.orderId,
       UIComponent = props.UIComponent;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
+
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+
+  var _useState = (0, _react.useState)({
+    order: {},
+    loading: false,
+    error: null
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      orderState = _useState2[0],
+      setOrderState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
+    status: null,
+    loading: false,
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      messageErrors = _useState4[0],
+      setMessageErrors = _useState4[1];
   /**
    * Method to format a price number
    * @param {Number} price
@@ -57,13 +93,18 @@ var OrderDetails = function OrderDetails(props) {
 
   var sendMessage = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(spot) {
+      var _orderState$order, _orderState$order2, _yield$fetch, status;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _context.next = 3;
-              return fetch("https://apiv4.ordering.co/v400/en/demo/orders/".concat(order === null || order === void 0 ? void 0 : order.id, "/messages"), {
+              setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
+                loading: true
+              }));
+              _context.next = 4;
+              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : _orderState$order.id, "/messages"), {
                 method: 'post',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -72,39 +113,125 @@ var OrderDetails = function OrderDetails(props) {
                 body: JSON.stringify({
                   can_see: '0,2,3',
                   comment: "I am on the parking number: ".concat(spot),
-                  order_id: order === null || order === void 0 ? void 0 : order.id,
+                  order_id: (_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.id,
                   type: 2
                 })
               });
 
-            case 3:
-              _context.next = 8;
+            case 4:
+              _yield$fetch = _context.sent;
+              status = _yield$fetch.status;
+              setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
+                loading: false,
+                status: status
+              }));
+              _context.next = 12;
               break;
 
-            case 5:
-              _context.prev = 5;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](0);
-              console.log(_context.t0);
 
-            case 8:
+              if (_context.t0 instanceof TypeError) {
+                setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
+                  loading: false,
+                  error: ['Failed to fetch']
+                }));
+              } else {
+                setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
+                  loading: false,
+                  error: [_context.t0.message]
+                }));
+              }
+
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 5]]);
+      }, _callee, null, [[0, 9]]);
     }));
 
     return function sendMessage(_x) {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * handler send message with spot info
+   * @param {number} param0
+   */
+
 
   var handlerSubmitSpotNumber = function handlerSubmitSpotNumber(_ref2) {
     var spot = _ref2.spot;
     sendMessage(spot);
   };
+  /**
+   * Method to get order from API
+   */
 
+
+  var getOrder = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return ordering.setAccessToken(token).orders(orderId).get();
+
+            case 4:
+              _yield$ordering$setAc = _context2.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              error = _yield$ordering$setAc2.error;
+              result = _yield$ordering$setAc2.result;
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                order: !error ? result : {},
+                error: error && result
+              }));
+              _context2.next = 14;
+              break;
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](0);
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                error: [_context2.t0.message]
+              }));
+
+            case 14:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 11]]);
+    }));
+
+    return function getOrder() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  (0, _react.useEffect)(function () {
+    if (props.order) {
+      setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+        order: props.order
+      }));
+    } else {
+      getOrder();
+    }
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    order: orderState,
+    messageErrors: messageErrors,
     formatPrice: formatPrice,
     handlerSubmit: handlerSubmitSpotNumber
   })));
@@ -113,15 +240,14 @@ var OrderDetails = function OrderDetails(props) {
 exports.OrderDetails = OrderDetails;
 OrderDetails.propTypes = {
   /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: _propTypes.default.object,
-
-  /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
+
+  /**
+   * This must be contains orderId to fetch
+   */
+  orderId: _propTypes.default.number,
 
   /**
    * Order, this must be contains an object with all order info
