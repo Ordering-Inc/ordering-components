@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const OrderDetails = (props) => {
   const {
-    order,
+    orderId,
     UIComponent
   } = props
 
   const [{ token }] = useSession()
+  const [ordering] = useApi()
+  const [orderState, setOrderState] = useState({ order: {}, loading: false, error: null })
+  const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
 
   /**
    * Method to format a price number
@@ -22,7 +26,11 @@ export const OrderDetails = (props) => {
    */
   const sendMessage = async (spot) => {
     try {
-      await fetch(`https://apiv4.ordering.co/v400/en/demo/orders/${order?.id}/messages`, {
+      setMessageErrors({
+        ...messageErrors,
+        loading: true
+      })
+      const { status } = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages`, {
         method: 'post',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -31,24 +39,83 @@ export const OrderDetails = (props) => {
         body: JSON.stringify({
           can_see: '0,2,3',
           comment: `I am on the parking number: ${spot}`,
-          order_id: order?.id,
+          order_id: orderState.order?.id,
           type: 2
         })
       })
-    } catch (error) {
-      console.log(error)
+      setMessageErrors({
+        ...messageErrors,
+        loading: false,
+        status
+      })
+    } catch (e) {
+      if (e instanceof TypeError) {
+        setMessageErrors({
+          ...messageErrors,
+          loading: false,
+          error: ['Failed to fetch']
+        })
+      } else {
+        setMessageErrors({
+          ...messageErrors,
+          loading: false,
+          error: [e]
+        })
+      }
     }
   }
 
+  /**
+   * handler send message with spot info
+   * @param {number} param0
+   */
   const handlerSubmitSpotNumber = ({ spot }) => {
     sendMessage(spot)
   }
+
+  /**
+   * Method to get order from API
+   */
+  const getOrder = async () => {
+    try {
+      setOrderState({
+        ...orderState,
+        loading: true
+      })
+      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get()
+      setOrderState({
+        ...orderState,
+        loading: false,
+        order: !error ? result : {},
+        error: error && result
+      })
+    } catch (e) {
+      setOrderState({
+        ...orderState,
+        loading: false,
+        error: [e]
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (props.order) {
+      setOrderState({
+        ...orderState,
+        order: props.order
+      })
+    } else {
+      getOrder()
+    }
+  }, [])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          order={orderState}
+          messageErrors={messageErrors}
           formatPrice={formatPrice}
           handlerSubmit={handlerSubmitSpotNumber}
         />
@@ -67,6 +134,10 @@ OrderDetails.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * This must be contains orderId to fetch
+   */
+  orderId: PropTypes.number,
   /**
    * Order, this must be contains an object with all order info
    */
