@@ -84,7 +84,7 @@ var OrderProvider = function OrderProvider(_ref) {
       ordering = _useApi2[0];
 
   var _useState5 = (0, _react.useState)({
-    loading: false,
+    loading: true,
     options: {
       type: 1
     },
@@ -113,9 +113,13 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: true
-              }));
+
+              if (!state.loading) {
+                setState(_objectSpread(_objectSpread({}, state), {}, {
+                  loading: true
+                }));
+              }
+
               _context.next = 4;
               return fetch("".concat(ordering.root, "/order_options"), {
                 method: 'GET',
@@ -1186,6 +1190,7 @@ var OrderProvider = function OrderProvider(_ref) {
     } else {
       var options = JSON.parse(localStorage.getItem('options'));
       setState(_objectSpread(_objectSpread({}, state), {}, {
+        loading: false,
         options: {
           type: (options === null || options === void 0 ? void 0 : options.type) || 1,
           moment: (options === null || options === void 0 ? void 0 : options.type) || null,
