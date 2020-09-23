@@ -51,6 +51,7 @@ import { SingleProductCard } from './components/SingleProductCard'
 import { UserDetails } from './components/UserDetails'
 import { UserProfileForm } from './components/UserProfileForm'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
+import { OrderDetails } from './components/OrderDetails'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -114,6 +115,7 @@ export {
   UserDetails,
   UserProfileForm,
   WrapperGoogleMaps,
+  OrderDetails,
   // Contexts
   ConfigContext,
   ConfigProvider,
