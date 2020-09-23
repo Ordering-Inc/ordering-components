@@ -21,7 +21,7 @@ export const OrderProvider = ({ children }) => {
   const [ordering] = useApi()
 
   const [state, setState] = useState({
-    loading: false,
+    loading: true,
     options: {
       type: 1
     },
@@ -37,7 +37,9 @@ export const OrderProvider = ({ children }) => {
    */
   const refreshOrderOptions = async () => {
     try {
-      setState({ ...state, loading: true })
+      if (!state.loading) {
+        setState({ ...state, loading: true })
+      }
       const response = await fetch(`${ordering.root}/order_options`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` } })
       const { error, result } = await response.json()
       if (!error) {
@@ -423,6 +425,7 @@ export const OrderProvider = ({ children }) => {
       const options = JSON.parse(localStorage.getItem('options'))
       setState({
         ...state,
+        loading: false,
         options: {
           type: options?.type || 1,
           moment: options?.type || null,
