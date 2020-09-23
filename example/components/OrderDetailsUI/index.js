@@ -50,7 +50,7 @@ export const OrderDetailsUI = (props) => {
 
       {error && error.length > 0 &&
         error.map((e, i) => (
-          <p key={i}>ERROR: [{e.message || e}]</p>
+          <p key={i}>ERROR: [e]</p>
         ))}
 
       {!loading && Object.keys(order).length === 0 && (
@@ -76,7 +76,7 @@ export const OrderDetailsUI = (props) => {
           </form>
           {messageErrors.error && messageErrors.error.length > 0 &&
             messageErrors.error.map((e, i) => (
-              <p key={i}>ERROR: [{e.message || e}]</p>
+              <p key={i}>ERROR: [e]</p>
             ))}
           <br />
           <br />

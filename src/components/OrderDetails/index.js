@@ -59,7 +59,7 @@ export const OrderDetails = (props) => {
         setMessageErrors({
           ...messageErrors,
           loading: false,
-          error: [e]
+          error: [e.message]
         })
       }
     }
@@ -93,7 +93,7 @@ export const OrderDetails = (props) => {
       setOrderState({
         ...orderState,
         loading: false,
-        error: [e]
+        error: [e.message]
       })
     }
   }
@@ -125,11 +125,6 @@ export const OrderDetails = (props) => {
 }
 
 OrderDetails.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  ordering: PropTypes.object,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
