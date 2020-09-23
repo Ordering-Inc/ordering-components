@@ -5,10 +5,9 @@ export const MomentOptionUI = (props) => {
     isAsap,
     datesList,
     hoursList,
-    currentDate,
-    currentHour,
-    getTimeFormat,
-    handleCustomChangeDate,
+    dateSelected,
+    timeSelected,
+    handleAsap,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -26,20 +25,21 @@ export const MomentOptionUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
-      {!isAsap && (
+      Current datetime: {dateSelected} {timeSelected}
+      {(
         <>
           <h4>Select a Delivery date with time</h4>
-          <select className='select-date' value={currentDate || ''} onChange={(e) => handleCustomChangeDate({ date: e.target.value })}>
-            <option value={null} defaultValue>Select a date</option>
-            {datesList.length > 0 && datesList.map(date => (
-              <option key={date.key} value={date.date}>{date.date}</option>
+          <select className='select-date' value={dateSelected || ''} onChange={(e) => props.handleChangeDate(e.target.value)}>
+            <option value='' disabled>Select a date</option>
+            {datesList.length > 0 && datesList.map((date, i) => (
+              <option key={i} value={date}>{date}</option>
             ))}
           </select>&nbsp;
-          {currentDate &&
-            <select className='select-hour' value={getTimeFormat(currentHour)} onChange={(e) => handleCustomChangeDate({ time: e.target.value })}>
-              <option>Select a time</option>
-              {hoursList.length > 0 && hoursList.map(hour => (
-                <option key={hour.key} value={hour.startTime}>{hour.startTime} to {hour.endTime}</option>
+          {dateSelected &&
+            <select className='select-hour' value={timeSelected || ''} onChange={(e) => props.handleChangeTime(e.target.value)}>
+              <option value='' disabled>Select a time</option>
+              {hoursList.length > 0 && hoursList.map((hour, i) => (
+                <option key={i} value={hour.startTime}>{hour.startTime} to {hour.endTime}</option>
               ))}
             </select>}
           <br />
@@ -50,11 +50,9 @@ export const MomentOptionUI = (props) => {
       {isAsap && (
         <span>✅ ASAP</span>
       )}&nbsp;
-      <button onClick={() => handleCustomChangeDate({ type: 'asap' })}>
+      <button onClick={() => handleAsap()}>
         {isAsap ? 'Select a range' : 'As soon as possible'}
       </button><br /><br />
-
-      <span>Current Date: {currentDate} {currentHour}</span>
 
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
