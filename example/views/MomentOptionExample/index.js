@@ -17,11 +17,11 @@ export const MomentOptionExample = () => {
     /**
      * minDate, this must be contains a custom date selected
      */
-    minDate: new Date('2020-08-29 18:00'),
+    // minDate: new Date('2020-08-29 18:00'),
     /**
      * maxDate, this must be contains a custom date selected
      */
-    maxDate: new Date('2020-09-05 10:00'),
+    maxDate: new Date('2020-09-30 10:00'),
     /**
      * Method to return moment selection
      */
