@@ -5,7 +5,7 @@ export const OrderReviewUI = (props) => {
   const {
     handleSendReview,
     order,
-    handleRating,
+    handleChangeRating,
     handleChangeInput,
     formState,
     stars,
@@ -19,8 +19,6 @@ export const OrderReviewUI = (props) => {
   const onSubmit = values => {
     handleSendReview()
   }
-  const scores = [1, 2, 3, 4, 5]
-  console.log(errors)
   return (
     <>
       {
@@ -50,27 +48,39 @@ export const OrderReviewUI = (props) => {
                 <p style={{ padding: '5px' }}>Reviews:</p>
                 <label htmlFor='Quality'>Quality of Product:</label>
                 <div name='quality' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
-                  {scores.map(score => (
-                    <span key={score} style={{ border: stars.quality === score ? '1px solid red' : '' }} title='quality' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  {[...Array(5)].map((score, i) => (
+                    <label key={i}>
+                      <input type='radio' name='quality' value={i + 1} onClick={(e) => handleChangeRating(e)} style={{ display: 'none' }} />
+                      <span style={{ border: stars.quality === (i + 1) ? '1px solid red' : '' }}>{i + 1}</span>
+                    </label>
                   ))}
                   {errors?.quality && <i style={{ color: '#c10000' }}>{errors?.quality?.message || 'error'}</i>}
                 </div>
                 <label>Punctiality:</label>
                 <div name='punctiality' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
-                  {scores.map(score => (
-                    <span key={score} style={{ border: stars.punctiality === score ? '1px solid red' : '' }} title='punctiality' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  {[...Array(5)].map((score, i) => (
+                    <label key={i}>
+                      <input type='radio' name='punctiality' value={i + 1} onClick={(e) => handleChangeRating(e)} style={{ display: 'none' }} />
+                      <span style={{ border: stars.punctiality === (i + 1) ? '1px solid red' : '' }}>{i + 1}</span>
+                    </label>
                   ))}
                 </div>
                 <label>Service:</label>
                 <div name='service' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
-                  {scores.map(score => (
-                    <span key={score} style={{ border: stars.service === score ? '1px solid red' : '' }} title='service' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  {[...Array(5)].map((score, i) => (
+                    <label key={i}>
+                      <input type='radio' name='service' value={i + 1} onClick={(e) => handleChangeRating(e)} style={{ display: 'none' }} />
+                      <span style={{ border: stars.service === (i + 1) ? '1px solid red' : '' }}>{i + 1}</span>
+                    </label>
                   ))}
                 </div>
                 <label>Product Packaging:</label>
                 <div name='packaging' style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
-                  {scores.map(score => (
-                    <span key={score} style={{ border: stars.packaging === score ? '1px solid red' : '' }} title='packaging' id={score} onClick={(e) => handleRating(e)}>{score}</span>
+                  {[...Array(5)].map((score, i) => (
+                    <label key={i}>
+                      <input type='radio' name='packaging' value={i + 1} onClick={(e) => handleChangeRating(e)} style={{ display: 'none' }} />
+                      <span style={{ border: stars.packaging === (i + 1) ? '1px solid red' : '' }}>{i + 1}</span>
+                    </label>
                   ))}
                 </div>
               </div>
@@ -83,7 +93,6 @@ export const OrderReviewUI = (props) => {
                 <input
                   name='comments'
                   placeholder='Comments'
-                  id='Comments'
                   onChange={(e) => handleChangeInput(e)}
                   style={{ borderColor: errors.comments ? '#c10000' : null }}
                   ref={register({

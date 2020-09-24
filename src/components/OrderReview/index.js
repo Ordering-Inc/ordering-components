@@ -50,10 +50,10 @@ export const OrderReview = (props) => {
    * Rating the product
    * @param {EventTarget} e Related HTML event
    */
-  const handleRating = (e) => {
+  const handleChangeRating = (e) => {
     setStars({
       ...stars,
-      [e.target.title]: parseInt(e.target.id)
+      [e.target.name]: parseInt(e.target.value)
     })
   }
   /**
@@ -76,7 +76,7 @@ export const OrderReview = (props) => {
           formState={formState}
           handleSendReview={handleSendReview}
           handleChangeInput={handleChangeInput}
-          handleRating={handleRating}
+          handleChangeRating={handleChangeRating}
         />
       )}
     </>
