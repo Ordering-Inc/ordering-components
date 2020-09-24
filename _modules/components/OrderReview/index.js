@@ -25,6 +25,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -43,7 +49,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderReview = function OrderReview(props) {
   var UIComponent = props.UIComponent,
-      order = props.order;
+      order = props.order,
+      onSaveReview = props.onSaveReview;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -53,101 +60,53 @@ var OrderReview = function OrderReview(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       session = _useSession2[0];
 
-  var _useState = (0, _react.useState)(1),
+  var _useState = (0, _react.useState)({
+    quality: 1,
+    punctiality: 1,
+    service: 1,
+    packaging: 1,
+    comments: ''
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      quality = _useState2[0],
-      setQuality = _useState2[1];
+      stars = _useState2[0],
+      setStars = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(1),
+  var _useState3 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
       _useState4 = _slicedToArray(_useState3, 2),
-      punctiality = _useState4[0],
-      setPunctiality = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(1),
-      _useState6 = _slicedToArray(_useState5, 2),
-      service = _useState6[0],
-      setService = _useState6[1];
-
-  var _useState7 = (0, _react.useState)(1),
-      _useState8 = _slicedToArray(_useState7, 2),
-      packaging = _useState8[0],
-      setPackagaing = _useState8[1];
-
-  var _useState9 = (0, _react.useState)(''),
-      _useState10 = _slicedToArray(_useState9, 2),
-      comment = _useState10[0],
-      setComment = _useState10[1];
+      formState = _useState4[0],
+      setFormState = _useState4[1];
   /**
-   * function that saves the state of quality
-   */
-
-
-  var handleQuality = function handleQuality(value) {
-    setQuality(value);
-  };
-  /**
-   * function that saves the state of punctiality
-   */
-
-
-  var handlePunctiality = function handlePunctiality(value) {
-    setPunctiality(value);
-  };
-  /**
-   * function that saves the state of service
-   */
-
-
-  var handleService = function handleService(value) {
-    setService(value);
-  };
-  /**
-   * function that saves the state of product packaging
-   */
-
-
-  var handlePackage = function handlePackage(value) {
-    setPackagaing(value);
-  };
-  /**
-   * function that saves the state of the comments
-   */
-
-
-  var handleComment = function handleComment(value) {
-    setComment(value);
-  }; // /**
-  //  * function that saves the order that will be reviewed
-  //  */
-  // const handleOrder = (order) => {
-  //   setBusinessId(order.business_id)
-  //   setOrderId(order.id)
-  // }
-
-  /**
-   * function that post the review
+   * Function that load and send the review order to ordering
    */
 
 
   var handleSendReview = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(e) {
-      var body;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var body, response;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              e.preventDefault();
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: true
+              }));
+              _context.prev = 1;
               body = {
                 order_id: order.id,
-                quality: quality,
-                delivery: punctiality,
-                service: service,
-                package: packaging,
-                comment: comment,
+                quality: stars.quality,
+                delivery: stars.punctiality,
+                service: stars.service,
+                package: stars.packaging,
+                comment: stars.comments,
                 user_id: session.user.id,
                 business_id: order.business_id
               };
-              _context.next = 4;
+              _context.next = 5;
               return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
                 method: 'POST',
                 headers: {
@@ -157,29 +116,67 @@ var OrderReview = function OrderReview(props) {
                 body: JSON.stringify(body)
               });
 
-            case 4:
+            case 5:
+              response = _context.sent;
+              onSaveReview(response.content);
+              setFormState({
+                loading: false,
+                result: response.content
+              });
+              _context.next = 13;
+              break;
+
+            case 10:
+              _context.prev = 10;
+              _context.t0 = _context["catch"](1);
+              setFormState({
+                result: {
+                  error: true,
+                  result: _context.t0.message
+                },
+                loading: false
+              });
+
+            case 13:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[1, 10]]);
     }));
 
-    return function handleSendReview(_x) {
+    return function handleSendReview() {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * Rating the product
+   * @param {EventTarget} e Related HTML event
+   */
+
+
+  var handleChangeRating = function handleChangeRating(e) {
+    setStars(_objectSpread(_objectSpread({}, stars), {}, _defineProperty({}, e.target.name, parseInt(e.target.value))));
+  };
+  /**
+   * Rating the product with comments
+   * @param {EventTarget} e Related HTML event
+   */
+
+
+  var handleChangeInput = function handleChangeInput(e) {
+    setStars(_objectSpread(_objectSpread({}, stars), {}, {
+      comments: e.target.value
+    }));
+  };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    handleQuality: handleQuality,
-    handlePunctiality: handlePunctiality,
-    handleService: handleService,
-    handlePackage: handlePackage,
-    handleComment: handleComment,
-    handleSendReview: handleSendReview // handleOrder={handleOrder}
-    ,
-    comment: comment,
-    order: order
+    stars: stars,
+    order: order,
+    formState: formState,
+    handleSendReview: handleSendReview,
+    handleChangeInput: handleChangeInput,
+    handleChangeRating: handleChangeRating
   })));
 };
 
@@ -191,39 +188,14 @@ OrderReview.propTypes = {
   UIComponent: _propTypes.default.elementType,
 
   /**
-  * Getting a order that can be reviewed
-   */
+   * Getting the order that can be review
+  */
   order: _propTypes.default.object,
 
   /**
-   * function that saves the orders that can be reviewed
+    * Response of ordering that contains de review
    */
-  fetchOrders: _propTypes.default.func,
-
-  /**
-   * function that saves the state of quality
-   */
-  handleQuality: _propTypes.default.func,
-
-  /**
-   * function that saves the state of punctiality
-   */
-  handlePunctiality: _propTypes.default.func,
-
-  /**
-   * function that saves the state of service
-   */
-  handleService: _propTypes.default.func,
-
-  /**
-   * function that saves the state of product packaging
-   */
-  handlePackage: _propTypes.default.func,
-
-  /**
-   * function that saves the state of the comments
-   */
-  handleOrder: _propTypes.default.func,
+  onSaveReview: _propTypes.default.func,
 
   /**
    * function that saves the order that will be reviewed
@@ -231,7 +203,7 @@ OrderReview.propTypes = {
   handleSendReview: _propTypes.default.func
 };
 OrderReview.defaultProps = {
-  order: [],
+  order: {},
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
