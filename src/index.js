@@ -52,6 +52,7 @@ import { UserDetails } from './components/UserDetails'
 import { UserProfileForm } from './components/UserProfileForm'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
 import { OrderDetails } from './components/OrderDetails'
+import { OrderReview } from './components/OrderReview'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -116,6 +117,7 @@ export {
   UserProfileForm,
   WrapperGoogleMaps,
   OrderDetails,
+  OrderReview,
   // Contexts
   ConfigContext,
   ConfigProvider,
