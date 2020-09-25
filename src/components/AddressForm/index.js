@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 export const AddressForm = (props) => {
   const {
@@ -18,6 +19,7 @@ export const AddressForm = (props) => {
   const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {}, dddd: address })
   const [formState, setFormState] = useState({ loading: false, changes: {}, error: null })
   const [{ auth, user, token }] = useSession()
+  const requestsState = {}
   const [, { changeAddress }] = useOrder()
 
   const userId = props.userId || user?.id
@@ -37,7 +39,10 @@ export const AddressForm = (props) => {
   const loadValidationFields = async () => {
     try {
       setValidationFields({ ...validationFields, loading: true })
+      const source = CancelToken.source()
+      requestsState.validation = source
       const { content } = await ordering.validationFields().get({
+        cancelToken: source.token,
         query: {
           where: [
             {
@@ -59,7 +64,9 @@ export const AddressForm = (props) => {
         fields
       })
     } catch (err) {
-      setValidationFields({ ...validationFields, loading: false })
+      if (err.constructor.name !== 'Cancel') {
+        setValidationFields({ ...validationFields, loading: false })
+      }
     }
   }
 
@@ -71,36 +78,24 @@ export const AddressForm = (props) => {
   const loadAddress = async (userId, addressId) => {
     try {
       setAddressState({ ...addressState, loading: true })
-      const { content } = await ordering.users(userId).addresses(addressId).get({ accessToken })
+      const source = CancelToken.source()
+      requestsState.address = source
+      const { content } = await ordering.users(userId).addresses(addressId).get({ accessToken, cancelToken: source.token })
       setAddressState({
         loading: false,
         error: content.error ? content.result : null,
         address: content.error ? {} : content.result
       })
     } catch (err) {
-      setAddressState({
-        loading: false,
-        error: [err.message],
-        address: {}
-      })
+      if (err.constructor.name !== 'Cancel') {
+        setAddressState({
+          loading: false,
+          error: [err.message],
+          address: {}
+        })
+      }
     }
   }
-
-  useEffect(() => {
-    setAddressState({
-      ...addressState,
-      address: address || {}
-    })
-  }, [address])
-
-  useEffect(() => {
-    if (useValidationFileds) {
-      loadValidationFields()
-    }
-    if (addressId && !address) {
-      loadAddress(userId, addressId)
-    }
-  }, [])
 
   /**
    * Update address data
@@ -181,6 +176,33 @@ export const AddressForm = (props) => {
       })
     }
   }
+
+  useEffect(() => {
+    setAddressState({
+      ...addressState,
+      address: address || {}
+    })
+  }, [address])
+
+  useEffect(() => {
+    if (useValidationFileds) {
+      loadValidationFields()
+    }
+    if (addressId && !address) {
+      loadAddress(userId, addressId)
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (requestsState.validation) {
+        requestsState.validation.cancel()
+      }
+      if (requestsState.address) {
+        requestsState.address.cancel()
+      }
+    }
+  }, [])
 
   return (
     <>

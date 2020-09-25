@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to control a address list
@@ -32,6 +33,7 @@ export const AddressList = (props) => {
   const [addressList, setAddressList] = useState({ loading: false, error: null, addresses: [] })
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [, { changeAddress }] = useOrder()
+  const requestsState = {}
 
   /**
    * Function to load addresses from API
@@ -39,19 +41,28 @@ export const AddressList = (props) => {
   const loadAddresses = async () => {
     try {
       setAddressList({ ...addressList, loading: true })
-      const { content } = await ordering.setAccessToken(accessToken).users(userId).addresses().get({ accessToken })
+      const source = CancelToken.source()
+      requestsState.list = source
+      const { content } = await ordering.setAccessToken(accessToken).users(userId).addresses().get({ cancelToken: source.token })
       setAddressList({
         loading: false,
         error: content.error ? content.result : null,
         addresses: content.error ? [] : content.result
       })
     } catch (err) {
-      setAddressList({ ...addressList, loading: false, error: [err.message] })
+      if (err.constructor.name !== 'Cancel') {
+        setAddressList({ ...addressList, loading: false, error: [err.message] })
+      }
     }
   }
 
   useEffect(() => {
     loadAddresses()
+    return () => {
+      if (requestsState.list) {
+        requestsState.list.cancel()
+      }
+    }
   }, [])
 
   /**
