@@ -14,6 +14,17 @@ export const AppleLoginExample = () => {
      * Components types before business information
      * Array of type components, the parent props will pass to these components
      */
+    initParams: {
+      clientId: 'co.ordering.logintest',
+      redirectURI: 'https://example-app.com/redirect',
+      responseType: 'code',
+      responseMode: 'query',
+      usePopup: false // or false defaults to false
+    },
+    onSuccess: (data) => console.log(data),
+
+    onFailure: (err) => console.log(err),
+
     beforeComponents: [TestComponent],
     /**
      * Components types after business information

@@ -5,7 +5,8 @@ export const AppleLoginUI = (props) => {
     beforeElements,
     beforeComponents,
     afterComponents,
-    afterElements
+    afterElements,
+    initLoginApple
   } = props
   return (
     <>
@@ -20,7 +21,11 @@ export const AppleLoginUI = (props) => {
         beforeComponents.map((BeforeComponent, i) => <BeforeComponent key={i} {...props} />)
       }
       {<h2>AppleLogin</h2>}
-      {<div id='appleid-signin' data-color='black' data-border='true' data-type='sign in' data-height='30' data-width='140' />}
+      {
+        <div>
+          <img src='https://appleid.cdn-apple.com/appleid/button' onClick={() => initLoginApple()} />
+        </div>
+      }
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
       )}
