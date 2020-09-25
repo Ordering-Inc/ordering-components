@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 export const LanguageSelector = (props) => {
   const {
@@ -15,6 +16,7 @@ export const LanguageSelector = (props) => {
   const [languagesState, setLanguageState] = useState({ loading: true, languages })
   const [languageState, , setLanguage] = useLanguage()
   const [languageSelected, setLanguageSelected] = useState(null)
+  const requestsState = {}
 
   /**
    * This method is used for change the current language
@@ -36,10 +38,12 @@ export const LanguageSelector = (props) => {
   const loadLanguages = async () => {
     try {
       setLanguageState({ ...languagesState, loading: true })
+      const source = CancelToken.source()
+      requestsState.languages = source
       const { content: { error, result } } = await ordering
         .languages()
         .where([{ attribute: 'enabled', value: true }])
-        .get()
+        .get({ cancelToken: source.token })
 
       setLanguageState({
         ...languagesState,
@@ -47,7 +51,9 @@ export const LanguageSelector = (props) => {
         languages: error ? [] : result
       })
     } catch (err) {
-      setLanguageState({ ...languagesState, loading: false })
+      if (err.constructor.name !== 'Cancel') {
+        setLanguageState({ ...languagesState, loading: false })
+      }
     }
   }
 
@@ -59,6 +65,11 @@ export const LanguageSelector = (props) => {
       })
     } else {
       loadLanguages()
+    }
+    return () => {
+      if (requestsState.languages) {
+        requestsState.languages.cancel()
+      }
     }
   }, [])
 
