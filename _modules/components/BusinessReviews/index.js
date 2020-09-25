@@ -15,6 +15,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -53,10 +55,11 @@ var BusinessReviews = function BusinessReviews(props) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var requestsState = {};
   /**
    * businessReviewsList, this must be contain a reviews, loading and error to send UIComponent
    */
-
 
   var _useState = (0, _react.useState)({
     reviews: [],
@@ -98,17 +101,21 @@ var BusinessReviews = function BusinessReviews(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _result$reviews, _yield$ordering$busin, result, list;
+      var _result$reviews, source, _yield$ordering$busin, result, list;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _context.next = 3;
-              return ordering.businesses(businessId).select(['reviews']).get();
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.reviews = source;
+              _context.next = 5;
+              return ordering.businesses(businessId).select(['reviews']).get({
+                cancelToken: source.token
+              });
 
-            case 3:
+            case 5:
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
               list = result === null || result === void 0 ? void 0 : (_result$reviews = result.reviews) === null || _result$reviews === void 0 ? void 0 : _result$reviews.reviews;
@@ -120,23 +127,26 @@ var BusinessReviews = function BusinessReviews(props) {
                 loading: false,
                 reviews: list
               }));
-              _context.next = 14;
+              _context.next = 16;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](0);
-              setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
-                loading: false,
-                error: _context.t0
-              }));
 
-            case 14:
+              if (_context.t0.constructor.name !== 'Cancel') {
+                setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
+                  loading: false,
+                  error: [_context.t0.message]
+                }));
+              }
+
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
     return function getBusiness() {
@@ -156,6 +166,12 @@ var BusinessReviews = function BusinessReviews(props) {
     } else {
       getBusiness();
     }
+
+    return function () {
+      if (requestsState.reviews) {
+        requestsState.reviews.cancel();
+      }
+    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     reviewsList: businessReviewsList,

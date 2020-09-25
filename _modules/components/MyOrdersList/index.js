@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -65,36 +67,48 @@ var MyOrdersList = function MyOrdersList(props) {
       _useState2 = _slicedToArray(_useState, 2),
       orders = _useState2[0],
       setOrders = _useState2[1];
+
+  var requestsState = {};
   /**
    * Method to get orders from API
    */
 
-
   var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$setAc, result;
+      var source, _yield$ordering$setAc, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              _context.prev = 0;
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.orders = source;
+              _context.next = 5;
               return ordering.setAccessToken(token).orders().where([{
                 attribute: 'status',
                 value: status
-              }]).get();
+              }]).get({
+                cancelToken: source.token
+              });
 
-            case 2:
+            case 5:
               _yield$ordering$setAc = _context.sent;
               result = _yield$ordering$setAc.content.result;
               setOrders(result);
+              _context.next = 12;
+              break;
 
-            case 5:
+            case 10:
+              _context.prev = 10;
+              _context.t0 = _context["catch"](0);
+
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 10]]);
     }));
 
     return function getOrders() {
@@ -104,6 +118,11 @@ var MyOrdersList = function MyOrdersList(props) {
 
   (0, _react.useEffect)(function () {
     getOrders();
+    return function () {
+      if (requestsState.orders) {
+        requestsState.orders.cancel();
+      }
+    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orders: orders

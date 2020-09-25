@@ -15,6 +15,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -85,10 +87,11 @@ var OrderList = function OrderList(props) {
       session = _useSession2[0];
 
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
+  var requestsState = {};
 
   var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(page) {
-      var options;
+      var options, source;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -119,13 +122,16 @@ var OrderList = function OrderList(props) {
                 }
               }
 
-              _context.next = 4;
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.orders = source;
+              options.cancelToken = source.token;
+              _context.next = 7;
               return ordering.setAccessToken(accessToken).orders().get(options);
 
-            case 4:
+            case 7:
               return _context.abrupt("return", _context.sent);
 
-            case 5:
+            case 8:
             case "end":
               return _context.stop();
           }
@@ -177,10 +183,13 @@ var OrderList = function OrderList(props) {
             case 9:
               _context2.prev = 9;
               _context2.t0 = _context2["catch"](1);
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: false,
-                error: [_context2.t0.message]
-              }));
+
+              if (_context2.t0.constructor.name !== 'Cancel') {
+                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                  loading: false,
+                  error: [_context2.t0.message]
+                }));
+              }
 
             case 12:
             case "end":
@@ -203,6 +212,12 @@ var OrderList = function OrderList(props) {
     } else {
       loadOrders();
     }
+
+    return function () {
+      if (requestsState.orders) {
+        requestsState.orders.cancel();
+      }
+    };
   }, []);
 
   var loadMoreOrders = /*#__PURE__*/function () {
@@ -244,10 +259,13 @@ var OrderList = function OrderList(props) {
             case 9:
               _context3.prev = 9;
               _context3.t0 = _context3["catch"](1);
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: false,
-                error: [_context3.t0.message]
-              }));
+
+              if (_context3.t0.constructor.name !== 'Cancel') {
+                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                  loading: false,
+                  error: [_context3.t0.message]
+                }));
+              }
 
             case 12:
             case "end":
@@ -301,10 +319,13 @@ var OrderList = function OrderList(props) {
             case 9:
               _context4.prev = 9;
               _context4.t0 = _context4["catch"](1);
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: false,
-                error: [_context4.t0.message]
-              }));
+
+              if (_context4.t0.constructor.name !== 'Cancel') {
+                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                  loading: false,
+                  error: [_context4.t0.message]
+                }));
+              }
 
             case 12:
             case "end":

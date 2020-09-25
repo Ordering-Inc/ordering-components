@@ -11,9 +11,11 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
+
+var _orderingApiSdk = require("ordering-api-sdk");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -40,7 +42,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var BusinessBasicInformation = function BusinessBasicInformation(props) {
-  var UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent,
+      businessParams = props.businessParams;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -50,29 +53,33 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
       _useState2 = _slicedToArray(_useState, 2),
       business = _useState2[0],
       setBusiness = _useState2[1];
+
+  var requestsState = {};
   /**
    * Method to get business from SDK
    */
 
-
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var params;
+      var source;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              params = ['header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews'];
-              _context.next = 3;
-              return ordering.businesses().select(params).parameters({
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.business = source;
+              _context.next = 4;
+              return ordering.businesses().select(businessParams).parameters({
                 location: '40.7539143,-73.9810162',
                 type: 1
-              }).get();
-
-            case 3:
-              return _context.abrupt("return", _context.sent);
+              }).get({
+                cancelToken: source.token
+              });
 
             case 4:
+              return _context.abrupt("return", _context.sent);
+
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -91,28 +98,33 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
 
   var loadBusiness = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _response$data;
-
-      var _yield$getBusiness, response;
+      var _response$data, _yield$getBusiness, response;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.next = 2;
+              _context2.prev = 0;
+              _context2.next = 3;
               return getBusiness();
 
-            case 2:
+            case 3:
               _yield$getBusiness = _context2.sent;
               response = _yield$getBusiness.response;
               setBusiness((_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.result[1]);
+              _context2.next = 10;
+              break;
 
-            case 5:
+            case 8:
+              _context2.prev = 8;
+              _context2.t0 = _context2["catch"](0);
+
+            case 10:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2);
+      }, _callee2, null, [[0, 8]]);
     }));
 
     return function loadBusiness() {
@@ -122,6 +134,11 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
 
   (0, _react.useEffect)(function () {
     loadBusiness();
+    return function () {
+      if (requestsState.business) {
+        requestsState.business.cancel();
+      }
+    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     business: business
@@ -139,6 +156,7 @@ BusinessBasicInformation.propTypes = {
    * Contain basic information for a business
    */
   business: _propTypes.default.object,
+  businessParams: _propTypes.default.arrayOf(_propTypes.string),
 
   /**
    * Components types before Business basic information
@@ -166,6 +184,7 @@ BusinessBasicInformation.propTypes = {
 };
 BusinessBasicInformation.defaultProps = {
   business: {},
+  businessParams: ['header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews'],
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

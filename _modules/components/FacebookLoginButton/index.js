@@ -81,6 +81,7 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
       facebookStatus = _useState4[0],
       setFacebookStatus = _useState4[1];
 
+  var wasUnmounted = false;
   (0, _react.useEffect)(function () {
     window.fbAsyncInit = function () {
       window.FB.init({
@@ -89,12 +90,12 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
         xfbml: false,
         version: version
       });
-      setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
+      !wasUnmounted && setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
         ready: true
       }));
       window.FB.getLoginStatus(function (response) {
         if (response.status === 'connected') {
-          setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
+          !wasUnmounted && setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
             logged: true
           }));
         }
@@ -111,6 +112,11 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
     js.defer = true;
     js.src = "https://".concat(domain, "/").concat(language, "/sdk").concat(debug ? '/debug' : '', ".js");
     window.document.body.appendChild(js);
+  }, []);
+  (0, _react.useEffect)(function () {
+    return function () {
+      wasUnmounted = true;
+    };
   }, []);
   /**
    * Default fuction for login/signup with Facebook workflow

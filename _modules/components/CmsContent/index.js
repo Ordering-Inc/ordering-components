@@ -13,6 +13,10 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _ApiContext = require("../../contexts/ApiContext");
+
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -41,9 +45,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var CmsContent = function CmsContent(props) {
-  var ordering = props.ordering,
-      UIComponent = props.UIComponent,
-      pageSlug = props.pageSlug;
+  var UIComponent = props.UIComponent,
+      pageSlug = props.pageSlug,
+      onNotFound = props.onNotFound;
   /**
    * Array to save the body of the page
    */
@@ -62,14 +66,19 @@ var CmsContent = function CmsContent(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       error = _useState6[0],
       setError = _useState6[1];
+
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+
+  var requestsState = {};
   /**
    * Method used to get the page by slug
    */
 
-
   var getPage = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(slug) {
-      var _yield$ordering$pages, _yield$ordering$pages2, _error, result;
+      var source, _yield$ordering$pages, _yield$ordering$pages2, _error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -77,10 +86,14 @@ var CmsContent = function CmsContent(props) {
             case 0:
               setLoading(true);
               _context.prev = 1;
-              _context.next = 4;
-              return ordering.pages(slug).get();
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.page = source;
+              _context.next = 6;
+              return ordering.pages(slug).get({
+                cancelToken: source.token
+              });
 
-            case 4:
+            case 6:
               _yield$ordering$pages = _context.sent;
               _yield$ordering$pages2 = _yield$ordering$pages.content;
               _error = _yield$ordering$pages2.error;
@@ -92,23 +105,27 @@ var CmsContent = function CmsContent(props) {
                 setError(null);
               } else {
                 setError(result);
+                onNotFound && onNotFound(pageSlug);
               }
 
-              _context.next = 16;
+              _context.next = 17;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 14:
+              _context.prev = 14;
               _context.t0 = _context["catch"](1);
-              setLoading(false);
-              setError([_context.t0.message]);
 
-            case 16:
+              if (_context.t0.constructor.name !== 'Cancel') {
+                setLoading(false);
+                setError([error.message]);
+              }
+
+            case 17:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 12]]);
+      }, _callee, null, [[1, 14]]);
     }));
 
     return function getPage(_x) {
@@ -118,6 +135,11 @@ var CmsContent = function CmsContent(props) {
 
   (0, _react.useEffect)(function () {
     getPage(pageSlug);
+    return function () {
+      if (requestsState.page) {
+        requestsState.page.cancel();
+      }
+    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     body: body,
@@ -128,12 +150,6 @@ var CmsContent = function CmsContent(props) {
 
 exports.CmsContent = CmsContent;
 CmsContent.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  // ordering: PropTypes.object.isRequired,
-
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

@@ -23,6 +23,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -45,26 +51,20 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
       onFailure = props.onFailure,
       onRequest = props.onRequest,
       responseType = props.responseType,
-      handleSuccessGoogleLogin = props.handleSuccessGoogleLogin;
-
-  var _useApi = (0, _ApiContext.useApi)(),
-      _useApi2 = _slicedToArray(_useApi, 1),
-      ordering = _useApi2[0];
+      handleSuccessGoogleLogin = props.handleSuccessGoogleLogin,
+      initParams = props.initParams,
+      buttonStyle = props.buttonStyle; // const [ordering] = useApi()
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       loaded = _useState2[0],
       setLoaded = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(false),
-      _useState4 = _slicedToArray(_useState3, 2),
-      unmounted = _useState4[0],
-      setUnmounted = _useState4[1];
-
+  var wasUnmounted = false;
   (0, _react.useEffect)(function () {
     insertGapiScript();
     return function () {
-      setUnmounted(true);
+      wasUnmounted = true;
       var element = document.getElementById('google-login');
 
       if (element) {
@@ -96,23 +96,17 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
 
   var initializeGoogleSignIn = function initializeGoogleSignIn() {
     window.gapi.load('auth2', function () {
-      console.log(window.gapi.auth2);
       var GoogleAuth = window.gapi.auth2.getAuthInstance();
 
       if (!GoogleAuth) {
-        window.gapi.auth2.init({
-          apiKey: 'AIzaSyB-aDD3TIBR5tBCNM-lb1u0jadsaY-LIjs',
-          client_id: '813628525689-v00sl2nrfdg1rnj79pqh994rvkkq0glt.apps.googleusercontent.com',
-          cookiepolicy: 'single_host_origin',
-          scope: 'profile'
-        }).then( /*#__PURE__*/function () {
+        window.gapi.auth2.init(initParams).then( /*#__PURE__*/function () {
           var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(res) {
             var signedIn;
             return _regenerator.default.wrap(function _callee$(_context) {
               while (1) {
                 switch (_context.prev = _context.next) {
                   case 0:
-                    if (!unmounted) {
+                    if (!wasUnmounted) {
                       setLoaded(true);
                       signedIn = res.isSignedIn.get();
 
@@ -132,27 +126,25 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
           return function (_x) {
             return _ref.apply(this, arguments);
           };
-        }(), function (err) {
+        }(), function () {
           setLoaded(true);
-          console.log(err);
-        });
+        }).catch(function () {});
       } else if (GoogleAuth.isSignedIn.get()) {
-        setLoaded(true);
-        handleSigninSuccess(GoogleAuth.currentUser.get());
-      } else if (!unmounted) {
-        setLoaded(true);
+        if (!wasUnmounted) {
+          setLoaded(true);
+          handleSigninSuccess(GoogleAuth.currentUser.get());
+        }
+      } else if (!wasUnmounted) {
+        wasUnmounted && setLoaded(true);
       }
     });
     window.gapi.load('signin2', function () {
-      window.gapi.signin2.render('my-signin2', {
-        scope: 'profile email',
-        width: 240,
-        height: 50,
-        longtitle: true,
-        theme: 'dark',
-        onsuccess: onSuccess,
-        onfailure: onFailure
-      });
+      if (!wasUnmounted) {
+        window.gapi.signin2.render('my-signin2', _objectSpread(_objectSpread({}, buttonStyle), {}, {
+          onsuccess: onSuccess,
+          onfailure: onFailure
+        }));
+      }
     });
   };
   /**
@@ -168,22 +160,16 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
 
     if (loaded) {
       var GoogleAuth = window.gapi.auth2.getAuthInstance();
-      var options = {
-        apiKey: 'AIzaSyB-aDD3TIBR5tBCNM-lb1u0jadsaY-LIjs',
-        client_id: '813628525689-v00sl2nrfdg1rnj79pqh994rvkkq0glt.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_origin',
-        scope: 'profile'
-      };
       onRequest();
 
       if (responseType === 'code') {
-        GoogleAuth.grantOfflineAccess(options).then(function (res) {
+        GoogleAuth.grantOfflineAccess(initParams).then(function (res) {
           return onSuccess(res);
         }, function (err) {
           return onFailure(err);
         });
       } else {
-        GoogleAuth.signIn(options).then(function (res) {
+        GoogleAuth.signIn(initParams).then(function (res) {
           return handleSigninSuccess(res);
         }, function (err) {
           return onFailure(err);
@@ -199,7 +185,7 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
 
   var handleSigninSuccess = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(res) {
-      var basicProfile, authResponse, response;
+      var basicProfile, authResponse;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -217,18 +203,12 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
                 name: basicProfile.getName(),
                 givenName: basicProfile.getGivenName(),
                 familyName: basicProfile.getFamilyName()
-              };
-              console.log('responseGoogle', res);
-              _context2.next = 10;
-              return ordering.users().auth(res);
+              }; // const response = await ordering.users().auth(res)
 
-            case 10:
-              response = _context2.sent;
-              console.log('responseApi', response);
               handleSuccessGoogleLogin(basicProfile);
               onSuccess(res);
 
-            case 14:
+            case 9:
             case "end":
               return _context2.stop();
           }

@@ -19,6 +19,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -100,14 +102,15 @@ var AddressList = function AddressList(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       changeAddress = _useOrder2[1].changeAddress;
+
+  var requestsState = {};
   /**
    * Function to load addresses from API
    */
 
-
   var loadAddresses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$setAc, content;
+      var source, _yield$ordering$setAc, content;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -117,12 +120,14 @@ var AddressList = function AddressList(props) {
               setAddressList(_objectSpread(_objectSpread({}, addressList), {}, {
                 loading: true
               }));
-              _context.next = 4;
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.list = source;
+              _context.next = 6;
               return ordering.setAccessToken(accessToken).users(userId).addresses().get({
-                accessToken: accessToken
+                cancelToken: source.token
               });
 
-            case 4:
+            case 6:
               _yield$ordering$setAc = _context.sent;
               content = _yield$ordering$setAc.content;
               setAddressList({
@@ -130,23 +135,26 @@ var AddressList = function AddressList(props) {
                 error: content.error ? content.result : null,
                 addresses: content.error ? [] : content.result
               });
-              _context.next = 12;
+              _context.next = 14;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
-              setAddressList(_objectSpread(_objectSpread({}, addressList), {}, {
-                loading: false,
-                error: [_context.t0.message]
-              }));
 
-            case 12:
+              if (_context.t0.constructor.name !== 'Cancel') {
+                setAddressList(_objectSpread(_objectSpread({}, addressList), {}, {
+                  loading: false,
+                  error: [_context.t0.message]
+                }));
+              }
+
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
     return function loadAddresses() {
@@ -156,6 +164,11 @@ var AddressList = function AddressList(props) {
 
   (0, _react.useEffect)(function () {
     loadAddresses();
+    return function () {
+      if (requestsState.list) {
+        requestsState.list.cancel();
+      }
+    };
   }, []);
   /**
    * Function to make an address as default address

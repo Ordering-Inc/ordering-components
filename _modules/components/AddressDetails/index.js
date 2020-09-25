@@ -17,6 +17,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -53,10 +55,11 @@ var AddressDetails = function AddressDetails(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
       orderState = _useOrder2[0];
+
+  var requestsState = {};
   /**
    * This must be contains an object with business location
    */
-
 
   var _useState = (0, _react.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
@@ -84,26 +87,37 @@ var AddressDetails = function AddressDetails(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$busin, result;
+      var source, _yield$ordering$busin, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return ordering.businesses(props.businessId).select(['location']).get();
+              _context.prev = 0;
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.business = source;
+              _context.next = 5;
+              return ordering.businesses(props.businessId).select(['location']).get({
+                cancelToken: source.token
+              });
 
-            case 2:
+            case 5:
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
               setLocation(result.location);
+              _context.next = 12;
+              break;
 
-            case 5:
+            case 10:
+              _context.prev = 10;
+              _context.t0 = _context["catch"](0);
+
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 10]]);
     }));
 
     return function getBusiness() {
@@ -117,6 +131,12 @@ var AddressDetails = function AddressDetails(props) {
     } else {
       getBusiness();
     }
+
+    return function () {
+      if (requestsState.business) {
+        requestsState.business.cancel();
+      }
+    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     googleMapsUrl: formatUrl(location),

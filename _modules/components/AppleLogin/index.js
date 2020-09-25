@@ -19,14 +19,33 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var AppleLogin = function AppleLogin(props) {
-  var UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent,
+      initParams = props.initParams,
+      onSuccess = props.onSuccess,
+      onFailure = props.onFailure;
   (0, _react.useEffect)(function () {
+    if (window.document.getElementById('apple-login')) {
+      return;
+    }
+
+    document.addEventListener('AppleIDSignInOnSuccess', function (data) {
+      onSuccess(data);
+    });
+    document.addEventListener('AppleIDSignInOnFailure', function (error) {
+      onFailure(error);
+    });
     createScriptApple();
+    return function () {
+      document.removeEventListener('AppleIDSignInOnSuccess');
+      document.removeEventListener('AppleIDSignInOnFailure');
+    };
   }, []);
   /**
    * loading script of de Apple login sdk
@@ -38,11 +57,6 @@ var AppleLogin = function AppleLogin(props) {
     js.src = 'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js';
     js.async = true;
     js.defer = true;
-
-    js.onload = function () {
-      initLoginApple();
-    };
-
     window.document.body.appendChild(js);
     console.log(window.AppleID);
   };
@@ -52,12 +66,7 @@ var AppleLogin = function AppleLogin(props) {
 
 
   var initLoginApple = function initLoginApple() {
-    window.AppleID.auth.init({
-      clientId: 'co.ordering.logintest',
-      redirectURI: 'https://example-app.com/redirect',
-      responseType: 'code',
-      responseMode: 'query'
-    });
+    window.AppleID.auth.init(initParams);
     handleLoginApple();
     console.log(window.AppleID);
   };
@@ -101,7 +110,9 @@ var AppleLogin = function AppleLogin(props) {
     };
   }();
 
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    initLoginApple: initLoginApple
+  })));
 };
 
 exports.AppleLogin = AppleLogin;

@@ -15,6 +15,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -99,13 +101,20 @@ var UserProfileForm = function UserProfileForm(props) {
       validationFields = _useState6[0],
       setValidationFields = _useState6[1];
 
+  var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
     if (userId || useSessionUser && refreshSessionUser) {
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
         loading: true
       }));
-      ordering.setAccessToken(accessToken).users(useSessionUser && refreshSessionUser ? session.user.id : userId).get().then(function (response) {
+
+      var source = _orderingApiSdk.CancelToken.source();
+
+      requestsState.user = source;
+      ordering.setAccessToken(accessToken).users(useSessionUser && refreshSessionUser ? session.user.id : userId).get({
+        cancelToken: source.token
+      }).then(function (response) {
         setUserState({
           loading: false,
           result: response.content
@@ -118,13 +127,15 @@ var UserProfileForm = function UserProfileForm(props) {
           });
         }
       }).catch(function (err) {
-        setUserState({
-          loading: false,
-          result: {
-            error: true,
-            result: err.message
-          }
-        });
+        if (err.constructor.name !== 'Cancel') {
+          setUserState({
+            loading: false,
+            result: {
+              error: true,
+              result: err.message
+            }
+          });
+        }
       });
     } else {
       setUserState({
@@ -137,7 +148,12 @@ var UserProfileForm = function UserProfileForm(props) {
     }
 
     if (useValidationFileds) {
-      ordering.validationFields().toType(validationFieldsType).get().then(function (response) {
+      var _source = _orderingApiSdk.CancelToken.source();
+
+      requestsState.validation = _source;
+      ordering.validationFields().toType(validationFieldsType).get({
+        cancelToken: _source.token
+      }).then(function (response) {
         var fields = {};
         response.content.result.forEach(function (field) {
           fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
@@ -146,12 +162,24 @@ var UserProfileForm = function UserProfileForm(props) {
           loading: false,
           fields: fields
         });
-      }).catch(function () {
-        setValidationFields({
-          loading: false
-        });
+      }).catch(function (err) {
+        if (err.constructor.name !== 'Cancel') {
+          setValidationFields({
+            loading: false
+          });
+        }
       });
     }
+
+    return function () {
+      if (requestsState.user) {
+        requestsState.user.cancel();
+      }
+
+      if (requestsState.validation) {
+        requestsState.validation.cancel();
+      }
+    };
   }, []);
   /**
    * Default fuction for user profile workflow
@@ -441,6 +469,7 @@ UserProfileForm.defaultProps = {
   useValidationFileds: false,
   validationFieldsType: 'checkout',
   useDefualtSessionManager: true,
+  refreshSessionUser: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

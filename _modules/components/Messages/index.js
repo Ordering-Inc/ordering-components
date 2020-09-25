@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SignupForm = void 0;
+exports.Messages = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,9 +13,9 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _ApiContext = require("../../contexts/ApiContext");
+var _SessionContext = require("../../contexts/SessionContext");
 
-var _orderingApiSdk = require("ordering-api-sdk");
+var _ApiContext = require("../../contexts/ApiContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -24,6 +24,14 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -47,297 +55,295 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Component to manage signup behavior without UI component
- */
-var SignupForm = function SignupForm(props) {
+var Messages = function Messages(props) {
   var UIComponent = props.UIComponent,
-      useChekoutFileds = props.useChekoutFileds,
-      handleButtonSignupClick = props.handleButtonSignupClick,
-      handleSuccessSignup = props.handleSuccessSignup;
+      orderId = props.orderId,
+      customHandleSend = props.customHandleSend;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
+
+  var accessToken = props.accessToken || token;
+
   var _useState = (0, _react.useState)({
-    loading: false,
-    result: {
-      error: false
-    }
+    business: true,
+    administrator: true,
+    driver: true
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      formState = _useState2[0],
-      setFormState = _useState2[1];
+      canRead = _useState2[0],
+      setCanRead = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({
-    email: '',
-    cellphone: '',
-    password: ''
-  }),
+  var _useState3 = (0, _react.useState)(''),
       _useState4 = _slicedToArray(_useState3, 2),
-      signupData = _useState4[0],
-      setSignupData = _useState4[1];
-
-  var requestsState = {};
+      message = _useState4[0],
+      setMessage = _useState4[1];
 
   var _useState5 = (0, _react.useState)({
-    loading: useChekoutFileds,
-    fields: {}
+    loading: false,
+    error: null,
+    messages: []
   }),
       _useState6 = _slicedToArray(_useState5, 2),
-      validationFields = _useState6[0],
-      setValidationFields = _useState6[1];
+      messages = _useState6[0],
+      setMessages = _useState6[1];
 
-  var loadValidationFields = /*#__PURE__*/function () {
+  var _useState7 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      sendMessage = _useState8[0],
+      setSendMessages = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      image = _useState10[0],
+      setImage = _useState10[1];
+  /**
+   * Method to send message
+   */
+
+
+  var handleSend = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$valid, _yield$ordering$valid2, error, result, fields;
+      var _canRead, body, response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
-              source = _orderingApiSdk.CancelToken.source();
-              requestsState.validation = source;
-              _context.next = 5;
-              return ordering.validationFields().get({
-                cancelToken: source.token
+              if (!customHandleSend) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt("return", customHandleSend(message));
+
+            case 2:
+              console.log("send Message: ".concat(message), canRead);
+              _context.prev = 3;
+              setSendMessages({
+                loading: true,
+                error: null
+              });
+              _canRead = [3];
+
+              if (canRead.administrator) {
+                _canRead.push(0);
+              }
+
+              if (canRead.business) {
+                _canRead.push(2);
+              }
+
+              if (canRead.driver) {
+                _canRead.push(4);
+              }
+
+              body = {
+                comment: message,
+                type: 2,
+                can_see: _canRead.join(',')
+              };
+
+              if (image) {
+                body.type = 3;
+                body.file = image;
+              }
+
+              _context.next = 13;
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(accessToken)
+                },
+                body: JSON.stringify(body)
               });
 
-            case 5:
-              _yield$ordering$valid = _context.sent;
-              _yield$ordering$valid2 = _yield$ordering$valid.content;
-              error = _yield$ordering$valid2.error;
-              result = _yield$ordering$valid2.result;
-              fields = {};
+            case 13:
+              response = _context.sent;
+              _context.next = 16;
+              return response.json();
+
+            case 16:
+              _yield$response$json = _context.sent;
+              error = _yield$response$json.error;
+              result = _yield$response$json.result;
+              setSendMessages({
+                loading: false,
+                error: null
+              });
 
               if (!error) {
-                result.forEach(function (field) {
-                  if (field.validate === 'checkout') {
-                    fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
-                  }
+                console.log('success:', result);
+                setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+                  messages: [].concat(_toConsumableArray(messages.messages), [result])
+                }));
+              } else {
+                console.log('error', result);
+                setSendMessages({
+                  loading: false,
+                  error: result
                 });
               }
 
-              setValidationFields({
-                loading: false,
-                fields: fields
-              });
-              _context.next = 17;
+              _context.next = 27;
               break;
 
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
+            case 23:
+              _context.prev = 23;
+              _context.t0 = _context["catch"](3);
+              setSendMessages({
+                loading: false,
+                error: [_context.t0.Messages]
+              });
+              console.log('error', _context.t0);
 
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setValidationFields({
-                  loading: false
-                });
-              }
-
-            case 17:
+            case 27:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 14]]);
+      }, _callee, null, [[3, 23]]);
     }));
 
-    return function loadValidationFields() {
+    return function handleSend() {
       return _ref.apply(this, arguments);
     };
   }();
   /**
-   * Default fuction for signup workflow
+   * Method to Load message for first time
    */
 
 
-  var handleSignupClick = /*#__PURE__*/function () {
+  var loadMessages = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var source, response;
+      var response, _yield$response$json2, error, result;
+
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: true
               }));
-              source = _orderingApiSdk.CancelToken.source();
-              requestsState.signup = source;
-              _context2.next = 6;
-              return ordering.users().save(signupData, {
-                cancelToken: source.token
-              });
-
-            case 6:
-              response = _context2.sent;
-              setFormState({
-                result: response.content,
-                loading: false
-              });
-
-              if (!response.content.error) {
-                if (handleSuccessSignup) {
-                  handleSuccessSignup(response.content.result);
+              _context2.next = 4;
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(accessToken)
                 }
+              });
+
+            case 4:
+              response = _context2.sent;
+              _context2.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json2 = _context2.sent;
+              error = _yield$response$json2.error;
+              result = _yield$response$json2.result;
+
+              if (!error) {
+                setMessages({
+                  messages: result,
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+                  loading: false,
+                  error: result
+                }));
               }
 
-              _context2.next = 14;
+              _context2.next = 16;
               break;
 
-            case 11:
-              _context2.prev = 11;
+            case 13:
+              _context2.prev = 13;
               _context2.t0 = _context2["catch"](0);
+              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+                loading: false,
+                error: [_context2.t0.Messages]
+              }));
 
-              if (_context2.t0.constructor.name !== 'Cancel') {
-                setFormState({
-                  result: {
-                    error: true,
-                    result: _context2.t0.message
-                  },
-                  loading: false
-                });
-              }
-
-            case 14:
+            case 16:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee2, null, [[0, 13]]);
     }));
 
-    return function handleSignupClick() {
+    return function loadMessages() {
       return _ref2.apply(this, arguments);
     };
   }();
-  /**
-   * Update credential data
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var hanldeChangeInput = function hanldeChangeInput(e) {
-    setSignupData(_objectSpread(_objectSpread({}, signupData), {}, _defineProperty({}, e.target.name, e.target.value)));
-  };
-  /**
-   * Check if field should be show
-   * @param {string} fieldName Field name
-   */
-
-
-  var showField = function showField(fieldName) {
-    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3, _validationFields$fie4;
-
-    return !useChekoutFileds || !validationFields.loading && !((_validationFields$fie = validationFields.fields) === null || _validationFields$fie === void 0 ? void 0 : _validationFields$fie[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : (_validationFields$fie4 = _validationFields$fie3[fieldName]) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.enabled);
-  };
-  /**
-   * Check if field is required
-   * @param {string} fieldName Field name
-   */
-
-
-  var isRequiredField = function isRequiredField(fieldName) {
-    var _validationFields$fie5, _validationFields$fie6, _validationFields$fie7, _validationFields$fie8, _validationFields$fie9;
-
-    return fieldName === 'password' || useChekoutFileds && !validationFields.loading && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5[fieldName]) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : (_validationFields$fie7 = _validationFields$fie6[fieldName]) === null || _validationFields$fie7 === void 0 ? void 0 : _validationFields$fie7.enabled) && ((_validationFields$fie8 = validationFields.fields) === null || _validationFields$fie8 === void 0 ? void 0 : (_validationFields$fie9 = _validationFields$fie8[fieldName]) === null || _validationFields$fie9 === void 0 ? void 0 : _validationFields$fie9.required);
-  };
 
   (0, _react.useEffect)(function () {
-    if (useChekoutFileds) {
-      loadValidationFields();
-    }
-
-    return function () {
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
-      }
-
-      if (requestsState.signup) {
-        requestsState.signup.cancel();
-      }
-    };
+    loadMessages();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    formState: formState,
-    validationFields: validationFields,
-    signupData: signupData,
-    showField: showField,
-    isRequiredField: isRequiredField,
-    hanldeChangeInput: hanldeChangeInput,
-    handleButtonSignupClick: handleButtonSignupClick || handleSignupClick
+    messages: messages,
+    image: image,
+    canRead: canRead,
+    handleSend: handleSend,
+    setMessage: setMessage,
+    setCanRead: setCanRead,
+    sendMessage: sendMessage,
+    setImage: setImage
   })));
 };
 
-exports.SignupForm = SignupForm;
-SignupForm.propTypes = {
+exports.Messages = Messages;
+Messages.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Function to change default signup behavior
+   * Custom Send messageS
+   * @param {object} message Message to send
    */
-  handleButtonSignupClick: _propTypes.default.func,
+  handleClickSetDefault: _propTypes.default.func,
 
   /**
-   * Function to get signup success event
-   * @param {Object} user User with session data
-   */
-  handleSuccessSignup: _propTypes.default.func,
-
-  /**
-   * Function to continue as guest behavior
-   */
-  handleContinueAsGuest: _propTypes.default.func,
-
-  /**
-   * Enable to get checkout fields to show/hide fields from Ordering API
-   */
-  useChekoutFileds: _propTypes.default.bool,
-
-  /**
-   * Components types before signup form
+   * Components types before [PUT HERE COMPONENT NAME]
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after signup form
+   * Components types after [PUT HERE COMPONENT NAME]
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before signup form
+   * Elements before [PUT HERE COMPONENT NAME]
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after signup form
+   * Elements after [PUT HERE COMPONENT NAME]
    * Array of HTML/Components elements, these components will not get the parent props
    */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Url to login page
-   * Url to create element link to login page
-   */
-  linkToLogin: _propTypes.default.string,
-
-  /**
-   * Element to custom link to login
-   * You can provide de link element as react router Link or your custom Anchor to login page
-   */
-  elementLinkToLogin: _propTypes.default.element
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-SignupForm.defaultProps = {
-  useChekoutFileds: false,
+Messages.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

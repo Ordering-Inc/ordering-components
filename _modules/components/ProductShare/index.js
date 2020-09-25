@@ -32,29 +32,40 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ProductShare = function ProductShare(props) {
-  var UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent,
+      url = props.url,
+      addthisSrc = props.addthisSrc;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       show = _useState2[0],
       setShow = _useState2[1];
 
-  var shareButton = function shareButton() {
-    // ID for the addThis
-    var ID = 'ra-5f510bec3e657e9d'; // url for the widget of addThis
+  (0, _react.useEffect)(function () {
+    if (window.document.getElementById('addthis_widget')) {
+      return;
+    }
 
-    var js = '//s7.addthis.com/js/300/addthis_widget.js#pubid=' + ID;
+    addthisScript();
+  }, []);
+
+  var addthisScript = function addthisScript() {
     var script = document.createElement('script');
     script.async = true;
-    script.src = js;
-    document.body.appendChild(script); // toggle the show of the share buttons
+    script.src = addthisSrc;
+    script.id = 'addthis_widget';
+    document.body.appendChild(script);
+  };
 
+  var shareButton = function shareButton() {
+    // toggle the show of the share buttons
     setShow(!show);
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     shareButton: shareButton,
-    show: show
+    show: show,
+    url: url
   })));
 };
 
