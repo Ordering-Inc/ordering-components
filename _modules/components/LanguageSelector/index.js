@@ -17,6 +17,8 @@ var _LanguageContext = require("../../contexts/LanguageContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _orderingApiSdk = require("ordering-api-sdk");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -75,10 +77,11 @@ var LanguageSelector = function LanguageSelector(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       languageSelected = _useState4[0],
       setLanguageSelected = _useState4[1];
+
+  var requestsState = {};
   /**
    * This method is used for change the current language
    */
-
 
   var onChangeLanguage = function onChangeLanguage(code) {
     var language = languagesState.languages.find(function (language) {
@@ -101,7 +104,7 @@ var LanguageSelector = function LanguageSelector(props) {
 
   var loadLanguages = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$langu, _yield$ordering$langu2, error, result;
+      var source, _yield$ordering$langu, _yield$ordering$langu2, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -111,13 +114,17 @@ var LanguageSelector = function LanguageSelector(props) {
               setLanguageState(_objectSpread(_objectSpread({}, languagesState), {}, {
                 loading: true
               }));
-              _context.next = 4;
+              source = _orderingApiSdk.CancelToken.source();
+              requestsState.languages = source;
+              _context.next = 6;
               return ordering.languages().where([{
                 attribute: 'enabled',
                 value: true
-              }]).get();
+              }]).get({
+                cancelToken: source.token
+              });
 
-            case 4:
+            case 6:
               _yield$ordering$langu = _context.sent;
               _yield$ordering$langu2 = _yield$ordering$langu.content;
               error = _yield$ordering$langu2.error;
@@ -126,22 +133,25 @@ var LanguageSelector = function LanguageSelector(props) {
                 loading: false,
                 languages: error ? [] : result
               }));
-              _context.next = 14;
+              _context.next = 16;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](0);
-              setLanguageState(_objectSpread(_objectSpread({}, languagesState), {}, {
-                loading: false
-              }));
 
-            case 14:
+              if (_context.t0.constructor.name !== 'Cancel') {
+                setLanguageState(_objectSpread(_objectSpread({}, languagesState), {}, {
+                  loading: false
+                }));
+              }
+
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
     return function loadLanguages() {
@@ -157,6 +167,12 @@ var LanguageSelector = function LanguageSelector(props) {
     } else {
       loadLanguages();
     }
+
+    return function () {
+      if (requestsState.languages) {
+        requestsState.languages.cancel();
+      }
+    };
   }, []);
   /**
    * Selecting default if exist and there is not one in local storage
