@@ -30,15 +30,10 @@ export const ProductShareUI = (props) => {
           color: '#fff'
         }}
       >
-        <div
-          className='addthis_inline_share_toolbox'
-          style={{
-            visibility: show ? 'initial' : 'hidden',
-            width: '10px',
-            padding: '20px'
-          }}
-          data-url={url}
-        />
+        {<div
+          className='addthis_inline_share_toolbox ' style={{ visibility: show ? 'initial' : 'hidden' }} data-url={url}
+        />}
+
       </button>
       {afterComponents.map((AfterComponent, i) => (
         <AfterComponent key={i} {...props} />
