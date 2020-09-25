@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to manage login behavior without UI component
  */
 export const CmsContent = (props) => {
   const {
-    ordering,
     UIComponent,
-    pageSlug
+    pageSlug,
+    onNotFound
   } = props
 
   /**
@@ -17,28 +19,40 @@ export const CmsContent = (props) => {
   const [body, setBody] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [ordering] = useApi()
+  const requestsState = {}
   /**
    * Method used to get the page by slug
    */
   const getPage = async (slug) => {
     setLoading(true)
     try {
-      const { content: { error, result } } = await ordering.pages(slug).get()
+      const source = CancelToken.source()
+      requestsState.page = source
+      const { content: { error, result } } = await ordering.pages(slug).get({ cancelToken: source.token })
       setLoading(false)
       if (!error) {
         setBody(result.body)
         setError(null)
       } else {
         setError(result)
+        onNotFound && onNotFound(pageSlug)
       }
-    } catch (error) {
-      setLoading(false)
-      setError([error.message])
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setLoading(false)
+        setError([error.message])
+      }
     }
   }
 
   useEffect(() => {
     getPage(pageSlug)
+    return () => {
+      if (requestsState.page) {
+        requestsState.page.cancel()
+      }
+    }
   }, [])
 
   return (
@@ -56,11 +70,6 @@ export const CmsContent = (props) => {
 }
 
 CmsContent.propTypes = {
-  /**
-   * Instace of Ordering Class
-   * @see See (Ordering API SDK)[https://github.com/sergioaok/ordering-api-sdk]
-   */
-  // ordering: PropTypes.object.isRequired,
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 export const BusinessReviews = (props) => {
   const {
@@ -10,6 +11,7 @@ export const BusinessReviews = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const requestsState = {}
 
   /**
    * businessReviewsList, this must be contain a reviews, loading and error to send UIComponent
@@ -41,10 +43,12 @@ export const BusinessReviews = (props) => {
    */
   const getBusiness = async () => {
     try {
+      const source = CancelToken.source()
+      requestsState.reviews = source
       const { content: { result } } = await ordering
         .businesses(businessId)
         .select(['reviews'])
-        .get()
+        .get({ cancelToken: source.token })
 
       const list = result?.reviews?.reviews
       list.sort((a, b) => {
@@ -56,12 +60,14 @@ export const BusinessReviews = (props) => {
         loading: false,
         reviews: list
       })
-    } catch (error) {
-      setBusinessReviewsList({
-        ...businessReviewsList,
-        loading: false,
-        error
-      })
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setBusinessReviewsList({
+          ...businessReviewsList,
+          loading: false,
+          error: [err.message]
+        })
+      }
     }
   }
 
@@ -78,6 +84,11 @@ export const BusinessReviews = (props) => {
       })
     } else {
       getBusiness()
+    }
+    return () => {
+      if (requestsState.reviews) {
+        requestsState.reviews.cancel()
+      }
     }
   }, [])
 

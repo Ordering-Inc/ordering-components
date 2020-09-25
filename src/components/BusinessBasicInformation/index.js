@@ -1,33 +1,45 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { string } from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 export const BusinessBasicInformation = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    businessParams
   } = props
 
   const [ordering] = useApi()
   const [business, setBusiness] = useState([])
+  const requestsState = {}
 
   /**
    * Method to get business from SDK
    */
   const getBusiness = async () => {
-    const params = ['header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews']
-    return await ordering.businesses().select(params).parameters({ location: '40.7539143,-73.9810162', type: 1 }).get()
+    const source = CancelToken.source()
+    requestsState.business = source
+    return await ordering.businesses().select(businessParams).parameters({ location: '40.7539143,-73.9810162', type: 1 }).get({ cancelToken: source.token })
   }
 
   /**
    * Method to call business get method
    */
   const loadBusiness = async () => {
-    const { response } = await getBusiness()
-    setBusiness(response.data?.result[1])
+    try {
+      const { response } = await getBusiness()
+      setBusiness(response.data?.result[1])
+    } catch (err) {
+    }
   }
 
   useEffect(() => {
     loadBusiness()
+    return () => {
+      if (requestsState.business) {
+        requestsState.business.cancel()
+      }
+    }
   }, [])
 
   return (
@@ -51,6 +63,7 @@ BusinessBasicInformation.propTypes = {
    * Contain basic information for a business
    */
   business: PropTypes.object,
+  businessParams: PropTypes.arrayOf(string),
   /**
    * Components types before Business basic information
    * Array of type components, the parent props will pass to these components
@@ -75,6 +88,7 @@ BusinessBasicInformation.propTypes = {
 
 BusinessBasicInformation.defaultProps = {
   business: {},
+  businessParams: ['header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews'],
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

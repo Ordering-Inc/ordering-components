@@ -60,13 +60,15 @@ export const SignupForm = (props) => {
         }
       }
     } catch (err) {
-      setFormState({
-        result: {
-          error: true,
-          result: err.message
-        },
-        loading: false
-      })
+      if (err.constructor.name !== 'Cancel') {
+        setFormState({
+          result: {
+            error: true,
+            result: err.message
+          },
+          loading: false
+        })
+      }
     }
   }
 

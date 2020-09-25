@@ -14,14 +14,14 @@ export const GoogleLoginButton = (props) => {
     buttonStyle
   } = props
 
-  const [ordering] = useApi()
+  // const [ordering] = useApi()
   const [loaded, setLoaded] = useState(false)
-  const [unmounted, setUnmounted] = useState(false)
+  let wasUnmounted = false
 
   useEffect(() => {
     insertGapiScript()
     return () => {
-      setUnmounted(true)
+      wasUnmounted = true
       const element = document.getElementById('google-login')
       if (element) {
         element.parentNode.removeChild(element)
@@ -49,14 +49,13 @@ export const GoogleLoginButton = (props) => {
    */
   const initializeGoogleSignIn = () => {
     window.gapi.load('auth2', () => {
-      console.log(window.gapi.auth2)
       const GoogleAuth = window.gapi.auth2.getAuthInstance()
       if (!GoogleAuth) {
         window.gapi.auth2
           .init(initParams)
           .then(
             async (res) => {
-              if (!unmounted) {
+              if (!wasUnmounted) {
                 setLoaded(true)
                 const signedIn = res.isSignedIn.get()
                 if (signedIn) {
@@ -64,24 +63,27 @@ export const GoogleLoginButton = (props) => {
                 }
               }
             },
-            (err) => {
+            () => {
               setLoaded(true)
-              console.log(err)
             }
-          )
+          ).catch(() => {})
       } else if (GoogleAuth.isSignedIn.get()) {
-        setLoaded(true)
-        handleSigninSuccess(GoogleAuth.currentUser.get())
-      } else if (!unmounted) {
-        setLoaded(true)
+        if (!wasUnmounted) {
+          setLoaded(true)
+          handleSigninSuccess(GoogleAuth.currentUser.get())
+        }
+      } else if (!wasUnmounted) {
+        wasUnmounted && setLoaded(true)
       }
     })
     window.gapi.load('signin2', () => {
-      window.gapi.signin2.render('my-signin2', {
-        ...buttonStyle,
-        onsuccess: onSuccess,
-        onfailure: onFailure
-      })
+      if (!wasUnmounted) {
+        window.gapi.signin2.render('my-signin2', {
+          ...buttonStyle,
+          onsuccess: onSuccess,
+          onfailure: onFailure
+        })
+      }
     })
   }
 
@@ -95,21 +97,14 @@ export const GoogleLoginButton = (props) => {
     }
     if (loaded) {
       const GoogleAuth = window.gapi.auth2.getAuthInstance()
-      const options = {
-        apiKey: 'AIzaSyB-aDD3TIBR5tBCNM-lb1u0jadsaY-LIjs',
-        client_id:
-          '813628525689-v00sl2nrfdg1rnj79pqh994rvkkq0glt.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_origin',
-        scope: 'profile'
-      }
       onRequest()
       if (responseType === 'code') {
-        GoogleAuth.grantOfflineAccess(options).then(
+        GoogleAuth.grantOfflineAccess(initParams).then(
           (res) => onSuccess(res),
           (err) => onFailure(err)
         )
       } else {
-        GoogleAuth.signIn(options).then(
+        GoogleAuth.signIn(initParams).then(
           (res) => handleSigninSuccess(res),
           (err) => onFailure(err)
         )
@@ -136,9 +131,7 @@ export const GoogleLoginButton = (props) => {
       givenName: basicProfile.getGivenName(),
       familyName: basicProfile.getFamilyName()
     }
-    console.log('responseGoogle', res)
-    const response = await ordering.users().auth(res)
-    console.log('responseApi', response)
+    // const response = await ordering.users().auth(res)
     handleSuccessGoogleLogin(basicProfile)
     onSuccess(res)
   }
