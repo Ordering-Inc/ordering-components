@@ -31,9 +31,29 @@ export const GoogleLoginExample = () => {
     handleSuccessGoogleLogin: (user) =>
       console.log('Success login Google with user', user),
     /**
-     * property to get response code if type "code"
+     * Property to get response code if type "code"
      */
     responseType: '',
+    /**
+     * Params for the init of google login
+     */
+    initParams: {
+      apiKey: 'AIzaSyB-aDD3TIBR5tBCNM-lb1u0jadsaY-LIjs',
+      client_id:
+              '813628525689-v00sl2nrfdg1rnj79pqh994rvkkq0glt.apps.googleusercontent.com',
+      cookiepolicy: 'single_host_origin',
+      scope: 'profile'
+    },
+    /**
+     * Style of the button
+     */
+    buttonStyle: {
+      scope: 'profile email',
+      width: 240,
+      height: 50,
+      longtitle: true,
+      theme: 'dark'
+    },
     /**
      * Components types before Facebook login button
      * Array of type components, the parent props will pass to these components
