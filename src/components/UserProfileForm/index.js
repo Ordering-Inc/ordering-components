@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession, SESSION_ACTIONS } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to manage user profile behavior without UI component
@@ -25,13 +26,16 @@ export const UserProfileForm = (props) => {
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [validationFields, setValidationFields] = useState({ loading: useValidationFileds })
+  const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
     if (userId || (useSessionUser && refreshSessionUser)) {
       setUserState({ ...userState, loading: true })
-      ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get().then((response) => {
+      const source = CancelToken.source()
+      requestsState.user = source
+      ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source.token }).then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
           dispatchSession({
@@ -43,13 +47,15 @@ export const UserProfileForm = (props) => {
           })
         }
       }).catch((err) => {
-        setUserState({
-          loading: false,
-          result: {
-            error: true,
-            result: err.message
-          }
-        })
+        if (err.constructor.name !== 'Cancel') {
+          setUserState({
+            loading: false,
+            result: {
+              error: true,
+              result: err.message
+            }
+          })
+        }
       })
     } else {
       setUserState({
@@ -62,15 +68,28 @@ export const UserProfileForm = (props) => {
     }
 
     if (useValidationFileds) {
-      ordering.validationFields().toType(validationFieldsType).get().then((response) => {
+      const source = CancelToken.source()
+      requestsState.validation = source
+      ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source.token }).then((response) => {
         const fields = {}
         response.content.result.forEach((field) => {
           fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
         })
         setValidationFields({ loading: false, fields })
-      }).catch(() => {
-        setValidationFields({ loading: false })
+      }).catch((err) => {
+        if (err.constructor.name !== 'Cancel') {
+          setValidationFields({ loading: false })
+        }
       })
+    }
+
+    return () => {
+      if (requestsState.user) {
+        requestsState.user.cancel()
+      }
+      if (requestsState.validation) {
+        requestsState.validation.cancel()
+      }
     }
   }, [])
 
@@ -322,6 +341,7 @@ UserProfileForm.defaultProps = {
   useValidationFileds: false,
   validationFieldsType: 'checkout',
   useDefualtSessionManager: true,
+  refreshSessionUser: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

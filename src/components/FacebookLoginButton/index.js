@@ -21,6 +21,7 @@ export const FacebookLoginButton = (props) => {
   const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [facebookStatus, setFacebookStatus] = useState({ ready: false, logged: false })
+  let wasUnmounted = false
 
   useEffect(() => {
     window.fbAsyncInit = () => {
@@ -30,10 +31,10 @@ export const FacebookLoginButton = (props) => {
         xfbml: false,
         version: version
       })
-      setFacebookStatus({ ...facebookStatus, ready: true })
+      !wasUnmounted && setFacebookStatus({ ...facebookStatus, ready: true })
       window.FB.getLoginStatus((response) => {
         if (response.status === 'connected') {
-          setFacebookStatus({ ...facebookStatus, logged: true })
+          !wasUnmounted && setFacebookStatus({ ...facebookStatus, logged: true })
         }
       })
     }
@@ -49,6 +50,12 @@ export const FacebookLoginButton = (props) => {
     js.src = `https://${domain}/${language}/sdk${debug ? '/debug' : ''}.js`
 
     window.document.body.appendChild(js)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      wasUnmounted = true
+    }
   }, [])
 
   /**

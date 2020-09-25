@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import { SignupFormUI } from '../../components/SignupFormUI'
@@ -28,7 +28,7 @@ export const Signup = () => {
     /**
      * Enable to get checkout fields to show/hide fields from Ordering API
      */
-    useChekoutFileds: false,
+    useChekoutFileds: true,
     /**
      * Components types before signup form
      * Array of type components, the parent props will pass to these components

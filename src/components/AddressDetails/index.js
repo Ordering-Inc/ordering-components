@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to manage address details behavior without UI component
@@ -12,6 +13,7 @@ export const AddressDetails = (props) => {
     UIComponent
   } = props
   const [orderState] = useOrder()
+  const requestsState = {}
 
   /**
    * This must be contains an object with business location
@@ -31,8 +33,13 @@ export const AddressDetails = (props) => {
    * Method to get business location from API
    */
   const getBusiness = async () => {
-    const { content: { result } } = await ordering.businesses(props.businessId).select(['location']).get()
-    setLocation(result.location)
+    try {
+      const source = CancelToken.source()
+      requestsState.business = source
+      const { content: { result } } = await ordering.businesses(props.businessId).select(['location']).get({ cancelToken: source.token })
+      setLocation(result.location)
+    } catch (err) {
+    }
   }
 
   useEffect(() => {
@@ -40,6 +47,11 @@ export const AddressDetails = (props) => {
       setLocation(props.location)
     } else {
       getBusiness()
+    }
+    return () => {
+      if (requestsState.business) {
+        requestsState.business.cancel()
+      }
     }
   }, [])
 

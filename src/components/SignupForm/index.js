@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
-// import { pickBy } from 'lodash'
+import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to manage signup behavior without UI component
@@ -17,22 +17,28 @@ export const SignupForm = (props) => {
   const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [signupData, setSignupData] = useState({ email: '', cellphone: '', password: '' })
-  const [validationFields, setValidationFields] = useState({ loading: useChekoutFileds })
+  const requestsState = {}
+  const [validationFields, setValidationFields] = useState({ loading: useChekoutFileds, fields: {} })
 
-  if (useChekoutFileds) {
-    useEffect(() => {
-      ordering.validationFields().get().then((response) => {
-        const fields = {}
-        response.content.result.forEach((field) => {
+  const loadValidationFields = async () => {
+    try {
+      const source = CancelToken.source()
+      requestsState.validation = source
+      const { content: { error, result } } = await ordering.validationFields().get({ cancelToken: source.token })
+      const fields = {}
+      if (!error) {
+        result.forEach((field) => {
           if (field.validate === 'checkout') {
             fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
           }
         })
-        setValidationFields({ loading: false, fields })
-      }).catch(() => {
+      }
+      setValidationFields({ loading: false, fields })
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
         setValidationFields({ loading: false })
-      })
-    }, [])
+      }
+    }
   }
 
   /**
@@ -41,7 +47,9 @@ export const SignupForm = (props) => {
   const handleSignupClick = async () => {
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users().save(signupData)
+      const source = CancelToken.source()
+      requestsState.signup = source
+      const response = await ordering.users().save(signupData, { cancelToken: source.token })
       setFormState({
         result: response.content,
         loading: false
@@ -52,13 +60,15 @@ export const SignupForm = (props) => {
         }
       }
     } catch (err) {
-      setFormState({
-        result: {
-          error: true,
-          result: err.message
-        },
-        loading: false
-      })
+      if (err.constructor.name !== 'Cancel') {
+        setFormState({
+          result: {
+            error: true,
+            result: err.message
+          },
+          loading: false
+        })
+      }
     }
   }
 
@@ -79,8 +89,8 @@ export const SignupForm = (props) => {
    */
   const showField = (fieldName) => {
     return !useChekoutFileds ||
-              (!validationFields.loading && !validationFields.fields[fieldName]) ||
-              (!validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled)
+              (!validationFields.loading && !validationFields.fields?.[fieldName]) ||
+              (!validationFields.loading && validationFields.fields?.[fieldName] && validationFields.fields?.[fieldName]?.enabled)
   }
 
   /**
@@ -90,10 +100,24 @@ export const SignupForm = (props) => {
   const isRequiredField = (fieldName) => {
     return fieldName === 'password' || (useChekoutFileds &&
             !validationFields.loading &&
-            validationFields.fields[fieldName] &&
-            validationFields.fields[fieldName].enabled &&
-            validationFields.fields[fieldName].required)
+            validationFields.fields?.[fieldName] &&
+            validationFields.fields?.[fieldName]?.enabled &&
+            validationFields.fields?.[fieldName]?.required)
   }
+
+  useEffect(() => {
+    if (useChekoutFileds) {
+      loadValidationFields()
+    }
+    return () => {
+      if (requestsState.validation) {
+        requestsState.validation.cancel()
+      }
+      if (requestsState.signup) {
+        requestsState.signup.cancel()
+      }
+    }
+  }, [])
 
   return (
     <>

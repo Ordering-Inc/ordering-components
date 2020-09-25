@@ -3,6 +3,7 @@ import PropTypes, { object, number } from 'prop-types'
 
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { CancelToken } from 'ordering-api-sdk'
 
 export const OrderList = (props) => {
   const {
@@ -25,6 +26,7 @@ export const OrderList = (props) => {
   const [session] = useSession()
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
+  const requestsState = {}
 
   const getOrders = async (page) => {
     const options = {
@@ -43,6 +45,9 @@ export const OrderList = (props) => {
         options.query.where.push({ attribute: 'status', value: orderStatus })
       }
     }
+    const source = CancelToken.source()
+    requestsState.orders = source
+    options.cancelToken = source.token
     return await ordering.setAccessToken(accessToken).orders().get(options)
   }
 
@@ -66,7 +71,9 @@ export const OrderList = (props) => {
         })
       }
     } catch (err) {
-      setOrderList({ ...orderList, loading: false, error: [err.message] })
+      if (err.constructor.name !== 'Cancel') {
+        setOrderList({ ...orderList, loading: false, error: [err.message] })
+      }
     }
   }
 
@@ -78,6 +85,11 @@ export const OrderList = (props) => {
       })
     } else {
       loadOrders()
+    }
+    return () => {
+      if (requestsState.orders) {
+        requestsState.orders.cancel()
+      }
     }
   }, [])
 
@@ -101,7 +113,9 @@ export const OrderList = (props) => {
         })
       }
     } catch (err) {
-      setOrderList({ ...orderList, loading: false, error: [err.message] })
+      if (err.constructor.name !== 'Cancel') {
+        setOrderList({ ...orderList, loading: false, error: [err.message] })
+      }
     }
   }
 
@@ -125,7 +139,9 @@ export const OrderList = (props) => {
         })
       }
     } catch (err) {
-      setOrderList({ ...orderList, loading: false, error: [err.message] })
+      if (err.constructor.name !== 'Cancel') {
+        setOrderList({ ...orderList, loading: false, error: [err.message] })
+      }
     }
   }
 

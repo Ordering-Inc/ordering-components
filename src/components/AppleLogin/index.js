@@ -2,10 +2,24 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 export const AppleLogin = (props) => {
-  const { UIComponent } = props
+  const { UIComponent, initParams, onSuccess, onFailure } = props
 
   useEffect(() => {
+    if (window.document.getElementById('apple-login')) {
+      return
+    }
+    document.addEventListener('AppleIDSignInOnSuccess', (data) => {
+      onSuccess(data)
+    })
+    document.addEventListener('AppleIDSignInOnFailure', (error) => {
+      onFailure(error)
+    })
     createScriptApple()
+
+    return () => {
+      document.removeEventListener('AppleIDSignInOnSuccess')
+      document.removeEventListener('AppleIDSignInOnFailure')
+    }
   }, [])
 
   /**
@@ -18,9 +32,7 @@ export const AppleLogin = (props) => {
       'https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js'
     js.async = true
     js.defer = true
-    js.onload = () => {
-      initLoginApple()
-    }
+
     window.document.body.appendChild(js)
     console.log(window.AppleID)
   }
@@ -29,12 +41,7 @@ export const AppleLogin = (props) => {
    * start Login Apple
    */
   const initLoginApple = () => {
-    window.AppleID.auth.init({
-      clientId: 'co.ordering.logintest',
-      redirectURI: 'https://example-app.com/redirect',
-      responseType: 'code',
-      responseMode: 'query'
-    })
+    window.AppleID.auth.init(initParams)
 
     handleLoginApple()
     console.log(window.AppleID)
@@ -52,7 +59,7 @@ export const AppleLogin = (props) => {
     }
   }
 
-  return <>{UIComponent && <UIComponent {...props} />}</>
+  return <>{UIComponent && <UIComponent {...props} initLoginApple={initLoginApple} />}</>
 }
 
 AppleLogin.propTypes = {
