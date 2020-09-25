@@ -155,6 +155,9 @@ export const Home = () => {
         <li>
           <Link to='/pages'>Pages</Link>
         </li>
+        <li>
+          <Link to='/messages'>Messages</Link>
+        </li>
       </ol>
       <h2>Payments Section</h2>
       <ol>
