@@ -465,6 +465,30 @@ Object.defineProperty(exports, "OrderingProvider", {
     return _OrderingContext.OrderingProvider;
   }
 });
+Object.defineProperty(exports, "PaymentOptionCash", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionCash.PaymentOptionCash;
+  }
+});
+Object.defineProperty(exports, "PaymentOptionStripe", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionStripe.PaymentOptionStripe;
+  }
+});
+Object.defineProperty(exports, "PaymentOptionStripeDirect", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionStripeDirect.PaymentOptionStripeDirect;
+  }
+});
+Object.defineProperty(exports, "PaymentOptionStripeRedirect", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionStripeRedirect.PaymentOptionStripeRedirect;
+  }
+});
 
 var _AddressDetails = require("./components/AddressDetails");
 
@@ -591,3 +615,11 @@ var _WebsocketContext = require("./contexts/WebsocketContext");
 var _ApiContext = require("./contexts/ApiContext");
 
 var _OrderingContext = require("./contexts/OrderingContext");
+
+var _PaymentOptionCash = require("./components/PaymentOptionCash");
+
+var _PaymentOptionStripe = require("./components/PaymentOptionStripe");
+
+var _PaymentOptionStripeDirect = require("./components/PaymentOptionStripeDirect");
+
+var _PaymentOptionStripeRedirect = require("./components/PaymentOptionStripeRedirect");

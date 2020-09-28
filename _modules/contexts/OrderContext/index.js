@@ -15,6 +15,8 @@ var _Popup = require("../../components/Popup");
 
 var _ApiContext = require("../ApiContext");
 
+var _WebsocketContext = require("../WebsocketContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -82,6 +84,8 @@ var OrderProvider = function OrderProvider(_ref) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var socket = (0, _WebsocketContext.useWebsocket)();
 
   var _useState5 = (0, _react.useState)({
     loading: true,
@@ -767,14 +771,15 @@ var OrderProvider = function OrderProvider(_ref) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
-              _context10.prev = 0;
+              console.log(product);
+              _context10.prev = 1;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
               body = JSON.stringify({
                 product: JSON.stringify(product)
               });
-              _context10.next = 5;
+              _context10.next = 6;
               return fetch("".concat(ordering.root, "/carts/update_product"), {
                 method: 'POST',
                 headers: {
@@ -784,12 +789,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 body: body
               });
 
-            case 5:
+            case 6:
               response = _context10.sent;
-              _context10.next = 8;
+              _context10.next = 9;
               return response.json();
 
-            case 8:
+            case 9:
               _yield$response$json7 = _context10.sent;
               error = _yield$response$json7.error;
               result = _yield$response$json7.result;
@@ -808,20 +813,20 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context10.abrupt("return", !error);
 
-            case 16:
-              _context10.prev = 16;
-              _context10.t0 = _context10["catch"](0);
+            case 17:
+              _context10.prev = 17;
+              _context10.t0 = _context10["catch"](1);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context10.abrupt("return", false);
 
-            case 20:
+            case 21:
             case "end":
               return _context10.stop();
           }
         }
-      }, _callee10, null, [[0, 16]]);
+      }, _callee10, null, [[1, 17]]);
     }));
 
     return function updateProduct(_x9) {
@@ -1199,6 +1204,31 @@ var OrderProvider = function OrderProvider(_ref) {
       }));
     }
   }, [session]);
+  /**
+   * Update carts from sockets
+   */
+
+  (0, _react.useEffect)(function () {
+    var handleCartUpdate = function handleCartUpdate(cart) {
+      state.carts["businessId:".concat(cart.business_id)] = _objectSpread(_objectSpread({}, state.carts["businessId:".concat(cart.business_id)]), cart);
+      setState(_objectSpread({}, state));
+    };
+
+    socket.on('carts_update', handleCartUpdate);
+    return function () {
+      socket.off('carts_update', handleCartUpdate);
+    };
+  }, [state, socket]);
+  /**
+   * Join to carts room
+   */
+
+  (0, _react.useEffect)(function () {
+    socket.join("carts_".concat(session.user.id));
+    return function () {
+      socket.leave("carts_".concat(session.user.id));
+    };
+  }, [socket]);
   var functions = {
     refreshOrderOptions: refreshOrderOptions,
     changeAddress: changeAddress,

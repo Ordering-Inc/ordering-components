@@ -176,7 +176,7 @@ var ProductForm = function ProductForm(props) {
       };
     }
 
-    var newProductCart = _objectSpread(_objectSpread({}, productCart), {}, {
+    var newProductCart = _objectSpread(_objectSpread({}, props.productCart), {}, {
       id: product.id,
       price: product.price,
       name: product.name,
