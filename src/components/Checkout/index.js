@@ -113,7 +113,7 @@ export const Checkout = (props) => {
 
   useEffect(() => {
     getBusiness()
-  }, [])
+  }, [businessId])
 
   return (
     <>
