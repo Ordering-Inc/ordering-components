@@ -229,7 +229,10 @@ var Messages = function Messages(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              _context2.next = 3;
+              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
               return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
                 method: 'GET',
                 headers: {
@@ -238,12 +241,12 @@ var Messages = function Messages(props) {
                 }
               });
 
-            case 3:
+            case 4:
               response = _context2.sent;
-              _context2.next = 6;
+              _context2.next = 7;
               return response.json();
 
-            case 6:
+            case 7:
               _yield$response$json2 = _context2.sent;
               error = _yield$response$json2.error;
               result = _yield$response$json2.result;
@@ -261,23 +264,23 @@ var Messages = function Messages(props) {
                 }));
               }
 
-              _context2.next = 15;
+              _context2.next = 16;
               break;
 
-            case 12:
-              _context2.prev = 12;
+            case 13:
+              _context2.prev = 13;
               _context2.t0 = _context2["catch"](0);
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: false,
                 error: [_context2.t0.Messages]
               }));
 
-            case 15:
+            case 16:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 12]]);
+      }, _callee2, null, [[0, 13]]);
     }));
 
     return function loadMessages() {
@@ -287,7 +290,7 @@ var Messages = function Messages(props) {
 
   (0, _react.useEffect)(function () {
     loadMessages();
-  }, []);
+  }, [orderId]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
 
