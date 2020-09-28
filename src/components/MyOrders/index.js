@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 import { CancelToken } from 'ordering-api-sdk'
 
 export const MyOrders = (props) => {
@@ -11,19 +12,20 @@ export const MyOrders = (props) => {
 
   const [ordering] = useApi()
   const requestsState = {}
+  const socket = useWebsocket()
 
   /**
    * Get token session
    */
-  const [{ token }] = useSession()
+  const [{ user, token }] = useSession()
   /**
    * Array to save active orders
    */
-  const [activeOrders, setActiveOrders] = useState([])
+  const [activeOrdersStatus, setActiveOrdersStatus] = useState({ loading: true, orders: [] })
   /**
    * Array to save previous orders
    */
-  const [previousOrders, setPreviousOrders] = useState([])
+  const [previousOrdersStatus, setPreviousOrdersStatus] = useState({ loading: true, orders: [] })
   /**
    * Method to get active orders from API
    */
@@ -34,7 +36,10 @@ export const MyOrders = (props) => {
       const { content: { result } } = await ordering.setAccessToken(token).orders().where([
         { attribute: 'status', value: [0, 3, 4, 7, 8, 9] }
       ]).get({ cancelToken: source.token })
-      setActiveOrders(result)
+      setActiveOrdersStatus({
+        loading: false,
+        orders: result
+      })
     } catch (err) {
     }
   }
@@ -48,7 +53,10 @@ export const MyOrders = (props) => {
       const { content: { result } } = await ordering.setAccessToken(token).orders().where([
         { attribute: 'status', value: [1, 2, 5, 6, 10, 11, 12] }
       ]).get({ cancelToken: source.token })
-      setPreviousOrders(result)
+      setPreviousOrdersStatus({
+        loading: false,
+        orders: result
+      })
     } catch (err) {
     }
   }
@@ -66,13 +74,32 @@ export const MyOrders = (props) => {
     }
   }, [])
 
+  // useEffect(() => {
+  //   if (orderState.loading) return
+  //   const handleUpdateOrder = (order) => {
+  //     if (order.id !== orderState.order.id) return
+  //     delete order.total
+  //     delete order.subtotal
+  //     setOrderState({
+  //       ...orderState,
+  //       order: Object.assign(orderState.order, order)
+  //     })
+  //   }
+  //   socket.join(`orders_${user.id}`)
+  //   socket.on('update_order', handleUpdateOrder)
+  //   return () => {
+  //     socket.leave(`orders_${user.id}`)
+  //     socket.off('update_order', handleUpdateOrder)
+  //   }
+  // }, [orderState.order, socket])
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          activeOrders={activeOrders}
-          previousOrders={previousOrders}
+          activeOrders={activeOrdersStatus.orders}
+          previousOrders={previousOrdersStatus.orders}
         />
       )}
     </>

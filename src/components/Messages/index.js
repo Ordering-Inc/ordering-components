@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const Messages = (props) => {
   const {
@@ -11,14 +12,15 @@ export const Messages = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [{ token }] = useSession()
+  const [{ user, token }] = useSession()
   const accessToken = props.accessToken || token
 
   const [canRead, setCanRead] = useState({ business: true, administrator: true, driver: true })
   const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
+  const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
   const [image, setImage] = useState(null)
+  const socket = useWebsocket()
   /**
    * Method to send message
    */
@@ -26,7 +28,6 @@ export const Messages = (props) => {
     if (customHandleSend) {
       return customHandleSend(message)
     }
-    console.log(`send Message: ${message}`, canRead)
     try {
       setSendMessages({ loading: true, error: null })
       const _canRead = [3]
@@ -50,9 +51,8 @@ export const Messages = (props) => {
       }
       const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }, body: JSON.stringify(body) })
       const { error, result } = await response.json()
-      setSendMessages({ loading: false, error: null })
       if (!error) {
-        console.log('success:', result)
+        setMessage('')
         setMessages({
           ...messages,
           messages: [
@@ -60,13 +60,10 @@ export const Messages = (props) => {
             result
           ]
         })
-      } else {
-        console.log('error', result)
-        setSendMessages({ loading: false, error: result })
       }
+      setSendMessages({ loading: false, error: error ? result : null })
     } catch (error) {
       setSendMessages({ loading: false, error: [error.Messages] })
-      console.log('error', error)
     }
   }
   /**
@@ -74,7 +71,7 @@ export const Messages = (props) => {
    */
   const loadMessages = async () => {
     try {
-      setMessages({ ...messages, loading: true })
+      // setMessages({ ...messages, loading: true })
       const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
       const { error, result } = await response.json()
       if (!error) {
@@ -98,6 +95,30 @@ export const Messages = (props) => {
   useEffect(() => {
     loadMessages()
   }, [])
+
+  useEffect(() => {
+    if (messages.loading) return
+    const handleNewMessage = (message) => {
+      const found = messages.messages.find(_message => _message.id === message.id)
+      if (!found) {
+        setMessages({
+          ...messages,
+          messages: [...messages.messages, message]
+        })
+      }
+    }
+    socket.on('message', handleNewMessage)
+    return () => {
+      socket.off('message', handleNewMessage)
+    }
+  }, [messages, socket])
+
+  useEffect(() => {
+    socket.join(`messages_orders_${user.id}`)
+    return () => {
+      socket.leave(`messages_orders_${user.id}`)
+    }
+  }, [socket])
 
   return (
     <>

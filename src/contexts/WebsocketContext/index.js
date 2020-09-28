@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useSession } from '../SessionContext'
 import { Socket } from './socket'
 
@@ -8,20 +8,22 @@ import { Socket } from './socket'
  */
 export const WebsocketContext = createContext()
 
-let socket = null
+// let socket = null
 
 /**
  * Custom provider to session manager
  * This provider has a reducer for manage session state
  * @param {props} props
  */
-export const WebsocketProvider = ({ url = 'https://socket.ordering.co', project = 'demo', children }) => {
+export const WebsocketProvider = ({ settings, children }) => {
   const [session] = useSession()
+  const [socket, setSocket] = useState()
 
   useEffect(() => {
-    if (session.auth) {
-      socket = new Socket({ url, project, accessToken: session.token })
-      socket.connect()
+    if (session.auth && settings.url && settings.project) {
+      const _socket = new Socket({ ...settings, accessToken: session.token })
+      _socket.connect()
+      setSocket(_socket)
     }
   }, [session])
 
@@ -29,7 +31,7 @@ export const WebsocketProvider = ({ url = 'https://socket.ordering.co', project 
     return () => {
       socket && socket.close()
     }
-  })
+  }, [])
   return (
     <WebsocketContext.Provider value={socket}>
       {children}
@@ -42,5 +44,5 @@ export const WebsocketProvider = ({ url = 'https://socket.ordering.co', project 
  */
 export const useWebsocket = () => {
   const sockerManager = useContext(WebsocketContext)
-  return sockerManager || new Socket()
+  return sockerManager || new Socket({})
 }

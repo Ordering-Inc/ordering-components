@@ -4,6 +4,7 @@ import PropTypes, { object, number } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { CancelToken } from 'ordering-api-sdk'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const OrderList = (props) => {
   const {
@@ -18,12 +19,13 @@ export const OrderList = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [orderList, setOrderList] = useState({ loading: false, error: null, orders: [] })
+  const [orderList, setOrderList] = useState({ loading: !orders, error: null, orders: [] })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
   })
   const [session] = useSession()
+  const socket = useWebsocket()
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -52,7 +54,7 @@ export const OrderList = (props) => {
   }
 
   const loadOrders = async () => {
-    setOrderList({ ...orderList, loading: true })
+    // setOrderList({ ...orderList, loading: true })
     try {
       const response = await getOrders(pagination.currentPage + 1)
       setOrderList({
@@ -92,6 +94,52 @@ export const OrderList = (props) => {
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (orderList.loading) return
+    const handleUpdateOrder = (order) => {
+      const found = orderList.orders.find(_order => _order.id === order.id)
+      let orders = []
+      if (found) {
+        orders = orderList.orders.filter(_order => {
+          if (_order.id === order.id) {
+            delete order.total
+            delete order.subtotal
+            Object.assign(_order, order)
+          }
+          const valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status))
+          if (!valid) {
+            pagination.total--
+            setPagination({
+              ...pagination
+            })
+          }
+          return valid
+        })
+      } else {
+        orders = [...orderList.orders, order]
+        pagination.total++
+        setPagination({
+          ...pagination
+        })
+      }
+      setOrderList({
+        ...orderList,
+        orders
+      })
+    }
+    socket.on('update_order', handleUpdateOrder)
+    return () => {
+      socket.off('update_order', handleUpdateOrder)
+    }
+  }, [orderList.orders, pagination, socket])
+
+  useEffect(() => {
+    socket.join(`orders_${session.user.id}`)
+    return () => {
+      socket.leave(`orders_${session.user.id}`)
+    }
+  }, [socket])
 
   const loadMoreOrders = async () => {
     setOrderList({ ...orderList, loading: true })
@@ -154,14 +202,6 @@ export const OrderList = (props) => {
           pagination={pagination}
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
-          // formState={formState}
-          // userState={userState}
-          // validationFields={validationFields}
-          // showField={showField}
-          // isRequiredField={isRequiredField}
-          // hanldeChangeInput={hanldeChangeInput}
-          // handlechangeImage={handlechangeImage}
-          // handleButtonUpdateClick={handleUpdateClick}
         />
       )}
     </>
