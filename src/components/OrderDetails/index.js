@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const OrderDetails = (props) => {
   const {
@@ -9,10 +10,11 @@ export const OrderDetails = (props) => {
     UIComponent
   } = props
 
-  const [{ token }] = useSession()
+  const [{ user, token }] = useSession()
   const [ordering] = useApi()
-  const [orderState, setOrderState] = useState({ order: {}, loading: false, error: null })
+  const [orderState, setOrderState] = useState({ order: {}, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
+  const socket = useWebsocket()
 
   /**
    * Method to format a price number
@@ -49,19 +51,11 @@ export const OrderDetails = (props) => {
         status
       })
     } catch (e) {
-      if (e instanceof TypeError) {
-        setMessageErrors({
-          ...messageErrors,
-          loading: false,
-          error: ['Failed to fetch']
-        })
-      } else {
-        setMessageErrors({
-          ...messageErrors,
-          loading: false,
-          error: [e.message]
-        })
-      }
+      setMessageErrors({
+        ...messageErrors,
+        loading: false,
+        error: [e.message]
+      })
     }
   }
 
@@ -78,10 +72,6 @@ export const OrderDetails = (props) => {
    */
   const getOrder = async () => {
     try {
-      setOrderState({
-        ...orderState,
-        loading: true
-      })
       const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get()
       setOrderState({
         ...orderState,
@@ -108,6 +98,25 @@ export const OrderDetails = (props) => {
       getOrder()
     }
   }, [])
+
+  useEffect(() => {
+    if (orderState.loading) return
+    const handleUpdateOrder = (order) => {
+      if (order.id !== orderState.order.id) return
+      delete order.total
+      delete order.subtotal
+      setOrderState({
+        ...orderState,
+        order: Object.assign(orderState.order, order)
+      })
+    }
+    socket.join(`orders_${user.id}`)
+    socket.on('update_order', handleUpdateOrder)
+    return () => {
+      socket.leave(`orders_${user.id}`)
+      socket.off('update_order', handleUpdateOrder)
+    }
+  }, [orderState.order, socket])
 
   return (
     <>

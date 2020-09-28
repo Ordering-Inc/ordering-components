@@ -22,6 +22,10 @@ export class Socket {
           this.on(item.event, item.func)
         } else if (item.action === 'join') {
           this.join(item.room)
+        } else if (item.action === 'leave') {
+          this.leave(item.room)
+        } else if (item.action === 'off') {
+          this.off(item.room)
         }
       }
     })
@@ -35,7 +39,6 @@ export class Socket {
 
   join (room) {
     if (this.socket?.connected) {
-      console.log(`join to ${this.project}_${room}`)
       this.socket.emit('join', `${this.project}_${room}`)
     } else {
       this.queue.push({ action: 'join', room })
@@ -43,12 +46,29 @@ export class Socket {
     return this
   }
 
+  leave (room) {
+    if (this.socket?.connected) {
+      this.socket.emit('leave', `${this.project}_${room}`)
+    } else {
+      this.queue.push({ action: 'leave', room })
+    }
+    return this
+  }
+
   on (event, func = () => {}) {
     if (this.socket?.connected) {
-      console.log(`listen event ${event}`)
       this.socket.on(event, func)
     } else {
       this.queue.push({ action: 'on', event, func })
+    }
+    return this
+  }
+
+  off (event, func = () => {}) {
+    if (this.socket?.connected) {
+      this.socket.off(event, func)
+    } else {
+      this.queue.push({ action: 'off', event, func })
     }
     return this
   }
