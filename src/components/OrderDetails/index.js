@@ -141,7 +141,10 @@ OrderDetails.propTypes = {
   /**
    * This must be contains orderId to fetch
    */
-  orderId: PropTypes.number,
+  orderId: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   /**
    * Order, this must be contains an object with all order info
    */

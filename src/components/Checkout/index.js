@@ -87,7 +87,6 @@ export const Checkout = (props) => {
       amount: cart.total
     })
 
-    console.log(result)
     if (result.error) {
       setErrors(result.result)
       return
@@ -99,7 +98,6 @@ export const Checkout = (props) => {
       const toConfirm = await actionsBeforePlace(paymethodSelected, result.result)
       if (toConfirm) {
         const confirmResponse = await confirmCart(cart.uuid)
-        console.log(confirmResponse)
         cartResult = confirmResponse.result
       }
     }
@@ -114,6 +112,22 @@ export const Checkout = (props) => {
   useEffect(() => {
     getBusiness()
   }, [businessId])
+
+  /**
+   * Update carts from sockets
+   */
+  useEffect(() => {
+    if (cart && cart.status === 1) {
+      const data = {
+        paymethod_id: paymethodSelected.paymethodId,
+        paymethod_data: paymethodSelected.data,
+        delivery_zone_id: cart.delivery_zone_id,
+        offer_id: cart.offer_id,
+        amount: cart.total
+      }
+      onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart)
+    }
+  }, [cart])
 
   return (
     <>

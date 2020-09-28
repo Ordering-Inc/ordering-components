@@ -225,7 +225,7 @@ export default function App () {
           <Route path='/pages'>
             <CmsContentExample />
           </Route>
-          <Route path='/order_details'>
+          <Route path='/order_details/:orderId'>
             <OrderDetailsExample />
           </Route>
           <Route path='/'>
