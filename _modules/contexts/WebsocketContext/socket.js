@@ -48,6 +48,10 @@ var Socket = /*#__PURE__*/function () {
             _this.on(item.event, item.func);
           } else if (item.action === 'join') {
             _this.join(item.room);
+          } else if (item.action === 'leave') {
+            _this.leave(item.room);
+          } else if (item.action === 'off') {
+            _this.off(item.room);
           }
         }
       });
@@ -67,7 +71,6 @@ var Socket = /*#__PURE__*/function () {
       var _this$socket2;
 
       if ((_this$socket2 = this.socket) === null || _this$socket2 === void 0 ? void 0 : _this$socket2.connected) {
-        console.log("join to ".concat(this.project, "_").concat(room));
         this.socket.emit('join', "".concat(this.project, "_").concat(room));
       } else {
         this.queue.push({
@@ -79,18 +82,52 @@ var Socket = /*#__PURE__*/function () {
       return this;
     }
   }, {
+    key: "leave",
+    value: function leave(room) {
+      var _this$socket3;
+
+      if ((_this$socket3 = this.socket) === null || _this$socket3 === void 0 ? void 0 : _this$socket3.connected) {
+        this.socket.emit('leave', "".concat(this.project, "_").concat(room));
+      } else {
+        this.queue.push({
+          action: 'leave',
+          room: room
+        });
+      }
+
+      return this;
+    }
+  }, {
     key: "on",
     value: function on(event) {
-      var _this$socket3;
+      var _this$socket4;
 
       var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
-      if ((_this$socket3 = this.socket) === null || _this$socket3 === void 0 ? void 0 : _this$socket3.connected) {
-        console.log("listen event ".concat(event));
+      if ((_this$socket4 = this.socket) === null || _this$socket4 === void 0 ? void 0 : _this$socket4.connected) {
         this.socket.on(event, func);
       } else {
         this.queue.push({
           action: 'on',
+          event: event,
+          func: func
+        });
+      }
+
+      return this;
+    }
+  }, {
+    key: "off",
+    value: function off(event) {
+      var _this$socket5;
+
+      var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+
+      if ((_this$socket5 = this.socket) === null || _this$socket5 === void 0 ? void 0 : _this$socket5.connected) {
+        this.socket.off(event, func);
+      } else {
+        this.queue.push({
+          action: 'off',
           event: event,
           func: func
         });

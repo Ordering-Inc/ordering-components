@@ -17,6 +17,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _orderingApiSdk = require("ordering-api-sdk");
 
+var _WebsocketContext = require("../../contexts/WebsocketContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -26,6 +28,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -66,7 +76,7 @@ var OrderList = function OrderList(props) {
       ordering = _useApi2[0];
 
   var _useState = (0, _react.useState)({
-    loading: false,
+    loading: !orders,
     error: null,
     orders: []
   }),
@@ -86,6 +96,7 @@ var OrderList = function OrderList(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       session = _useSession2[0];
 
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
 
@@ -151,14 +162,11 @@ var OrderList = function OrderList(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: true
-              }));
-              _context2.prev = 1;
-              _context2.next = 4;
+              _context2.prev = 0;
+              _context2.next = 3;
               return getOrders(pagination.currentPage + 1);
 
-            case 4:
+            case 3:
               response = _context2.sent;
               setOrderList({
                 loading: false,
@@ -177,12 +185,12 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 12;
+              _context2.next = 11;
               break;
 
-            case 9:
-              _context2.prev = 9;
-              _context2.t0 = _context2["catch"](1);
+            case 8:
+              _context2.prev = 8;
+              _context2.t0 = _context2["catch"](0);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -191,12 +199,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 12:
+            case 11:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 9]]);
+      }, _callee2, null, [[0, 8]]);
     }));
 
     return function loadOrders() {
@@ -219,6 +227,54 @@ var OrderList = function OrderList(props) {
       }
     };
   }, []);
+  (0, _react.useEffect)(function () {
+    if (orderList.loading) return;
+
+    var handleUpdateOrder = function handleUpdateOrder(order) {
+      var found = orderList.orders.find(function (_order) {
+        return _order.id === order.id;
+      });
+      var orders = [];
+
+      if (found) {
+        orders = orderList.orders.filter(function (_order) {
+          if (_order.id === order.id) {
+            delete order.total;
+            delete order.subtotal;
+            Object.assign(_order, order);
+          }
+
+          var valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status));
+
+          if (!valid) {
+            pagination.total--;
+            setPagination(_objectSpread({}, pagination));
+          }
+
+          return valid;
+        });
+      } else {
+        orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+        pagination.total++;
+        setPagination(_objectSpread({}, pagination));
+      }
+
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        orders: orders
+      }));
+    };
+
+    socket.on('update_order', handleUpdateOrder);
+    return function () {
+      socket.off('update_order', handleUpdateOrder);
+    };
+  }, [orderList.orders, pagination, socket]);
+  (0, _react.useEffect)(function () {
+    socket.join("orders_".concat(session.user.id));
+    return function () {
+      socket.leave("orders_".concat(session.user.id));
+    };
+  }, [socket]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
@@ -344,15 +400,7 @@ var OrderList = function OrderList(props) {
     orderList: orderList,
     pagination: pagination,
     loadMoreOrders: loadMoreOrders,
-    goToPage: goToPage // formState={formState}
-    // userState={userState}
-    // validationFields={validationFields}
-    // showField={showField}
-    // isRequiredField={isRequiredField}
-    // hanldeChangeInput={hanldeChangeInput}
-    // handlechangeImage={handlechangeImage}
-    // handleButtonUpdateClick={handleUpdateClick}
-
+    goToPage: goToPage
   })));
 };
 

@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _WebsocketContext = require("../../contexts/WebsocketContext");
+
 var _orderingApiSdk = require("ordering-api-sdk");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -51,31 +53,40 @@ var MyOrders = function MyOrders(props) {
       ordering = _useApi2[0];
 
   var requestsState = {};
+  var socket = (0, _WebsocketContext.useWebsocket)();
   /**
    * Get token session
    */
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token;
   /**
    * Array to save active orders
    */
 
 
-  var _useState = (0, _react.useState)([]),
+  var _useState = (0, _react.useState)({
+    loading: true,
+    orders: []
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      activeOrders = _useState2[0],
-      setActiveOrders = _useState2[1];
+      activeOrdersStatus = _useState2[0],
+      setActiveOrdersStatus = _useState2[1];
   /**
    * Array to save previous orders
    */
 
 
-  var _useState3 = (0, _react.useState)([]),
+  var _useState3 = (0, _react.useState)({
+    loading: true,
+    orders: []
+  }),
       _useState4 = _slicedToArray(_useState3, 2),
-      previousOrders = _useState4[0],
-      setPreviousOrders = _useState4[1];
+      previousOrdersStatus = _useState4[0],
+      setPreviousOrdersStatus = _useState4[1];
   /**
    * Method to get active orders from API
    */
@@ -103,7 +114,10 @@ var MyOrders = function MyOrders(props) {
             case 5:
               _yield$ordering$setAc = _context.sent;
               result = _yield$ordering$setAc.content.result;
-              setActiveOrders(result);
+              setActiveOrdersStatus({
+                loading: false,
+                orders: result
+              });
               _context.next = 12;
               break;
 
@@ -150,7 +164,10 @@ var MyOrders = function MyOrders(props) {
             case 5:
               _yield$ordering$setAc2 = _context2.sent;
               result = _yield$ordering$setAc2.content.result;
-              setPreviousOrders(result);
+              setPreviousOrdersStatus({
+                loading: false,
+                orders: result
+              });
               _context2.next = 12;
               break;
 
@@ -183,10 +200,28 @@ var MyOrders = function MyOrders(props) {
         requestsState.activeOrders.cancel();
       }
     };
-  }, []);
+  }, []); // useEffect(() => {
+  //   if (orderState.loading) return
+  //   const handleUpdateOrder = (order) => {
+  //     if (order.id !== orderState.order.id) return
+  //     delete order.total
+  //     delete order.subtotal
+  //     setOrderState({
+  //       ...orderState,
+  //       order: Object.assign(orderState.order, order)
+  //     })
+  //   }
+  //   socket.join(`orders_${user.id}`)
+  //   socket.on('update_order', handleUpdateOrder)
+  //   return () => {
+  //     socket.leave(`orders_${user.id}`)
+  //     socket.off('update_order', handleUpdateOrder)
+  //   }
+  // }, [orderState.order, socket])
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    activeOrders: activeOrders,
-    previousOrders: previousOrders
+    activeOrders: activeOrdersStatus.orders,
+    previousOrders: previousOrdersStatus.orders
   })));
 };
 

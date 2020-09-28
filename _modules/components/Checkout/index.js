@@ -267,7 +267,7 @@ var Checkout = function Checkout(props) {
 
   (0, _react.useEffect)(function () {
     getBusiness();
-  }, []);
+  }, [businessId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,

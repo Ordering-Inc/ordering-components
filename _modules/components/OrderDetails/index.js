@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _WebsocketContext = require("../../contexts/WebsocketContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -53,7 +55,9 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -61,7 +65,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useState = (0, _react.useState)({
     order: {},
-    loading: false,
+    loading: !props.order,
     error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
@@ -76,11 +80,12 @@ var OrderDetails = function OrderDetails(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       messageErrors = _useState4[0],
       setMessageErrors = _useState4[1];
+
+  var socket = (0, _WebsocketContext.useWebsocket)();
   /**
    * Method to format a price number
    * @param {Number} price
    */
-
 
   var formatPrice = function formatPrice(price) {
     return "$ ".concat(price.toFixed(2));
@@ -131,18 +136,10 @@ var OrderDetails = function OrderDetails(props) {
             case 9:
               _context.prev = 9;
               _context.t0 = _context["catch"](0);
-
-              if (_context.t0 instanceof TypeError) {
-                setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
-                  loading: false,
-                  error: ['Failed to fetch']
-                }));
-              } else {
-                setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
-                  loading: false,
-                  error: [_context.t0.message]
-                }));
-              }
+              setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
 
             case 12:
             case "end":
@@ -180,13 +177,10 @@ var OrderDetails = function OrderDetails(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                loading: true
-              }));
-              _context2.next = 4;
+              _context2.next = 3;
               return ordering.setAccessToken(token).orders(orderId).get();
 
-            case 4:
+            case 3:
               _yield$ordering$setAc = _context2.sent;
               _yield$ordering$setAc2 = _yield$ordering$setAc.content;
               error = _yield$ordering$setAc2.error;
@@ -196,23 +190,23 @@ var OrderDetails = function OrderDetails(props) {
                 order: !error ? result : {},
                 error: error && result
               }));
-              _context2.next = 14;
+              _context2.next = 13;
               break;
 
-            case 11:
-              _context2.prev = 11;
+            case 10:
+              _context2.prev = 10;
               _context2.t0 = _context2["catch"](0);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 14:
+            case 13:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee2, null, [[0, 10]]);
     }));
 
     return function getOrder() {
@@ -229,6 +223,25 @@ var OrderDetails = function OrderDetails(props) {
       getOrder();
     }
   }, []);
+  (0, _react.useEffect)(function () {
+    if (orderState.loading) return;
+
+    var handleUpdateOrder = function handleUpdateOrder(order) {
+      if (order.id !== orderState.order.id) return;
+      delete order.total;
+      delete order.subtotal;
+      setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+        order: Object.assign(orderState.order, order)
+      }));
+    };
+
+    socket.join("orders_".concat(user.id));
+    socket.on('update_order', handleUpdateOrder);
+    return function () {
+      socket.leave("orders_".concat(user.id));
+      socket.off('update_order', handleUpdateOrder);
+    };
+  }, [orderState.order, socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     order: orderState,
     messageErrors: messageErrors,

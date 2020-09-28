@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _WebsocketContext = require("../../contexts/WebsocketContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -66,7 +68,9 @@ var Messages = function Messages(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token;
 
   var accessToken = props.accessToken || token;
 
@@ -85,7 +89,7 @@ var Messages = function Messages(props) {
       setMessage = _useState4[1];
 
   var _useState5 = (0, _react.useState)({
-    loading: false,
+    loading: true,
     error: null,
     messages: []
   }),
@@ -105,10 +109,11 @@ var Messages = function Messages(props) {
       _useState10 = _slicedToArray(_useState9, 2),
       image = _useState10[0],
       setImage = _useState10[1];
+
+  var socket = (0, _WebsocketContext.useWebsocket)();
   /**
    * Method to send message
    */
-
 
   var handleSend = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -126,8 +131,7 @@ var Messages = function Messages(props) {
               return _context.abrupt("return", customHandleSend(message));
 
             case 2:
-              console.log("send Message: ".concat(message), canRead);
-              _context.prev = 3;
+              _context.prev = 2;
               setSendMessages({
                 loading: true,
                 error: null
@@ -157,7 +161,7 @@ var Messages = function Messages(props) {
                 body.file = image;
               }
 
-              _context.next = 13;
+              _context.next = 12;
               return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
                 method: 'POST',
                 headers: {
@@ -167,51 +171,44 @@ var Messages = function Messages(props) {
                 body: JSON.stringify(body)
               });
 
-            case 13:
+            case 12:
               response = _context.sent;
-              _context.next = 16;
+              _context.next = 15;
               return response.json();
 
-            case 16:
+            case 15:
               _yield$response$json = _context.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
-              setSendMessages({
-                loading: false,
-                error: null
-              });
 
               if (!error) {
-                console.log('success:', result);
+                setMessage('');
                 setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                   messages: [].concat(_toConsumableArray(messages.messages), [result])
                 }));
-              } else {
-                console.log('error', result);
-                setSendMessages({
-                  loading: false,
-                  error: result
-                });
               }
 
-              _context.next = 27;
+              setSendMessages({
+                loading: false,
+                error: error ? result : null
+              });
+              _context.next = 25;
               break;
 
-            case 23:
-              _context.prev = 23;
-              _context.t0 = _context["catch"](3);
+            case 22:
+              _context.prev = 22;
+              _context.t0 = _context["catch"](2);
               setSendMessages({
                 loading: false,
                 error: [_context.t0.Messages]
               });
-              console.log('error', _context.t0);
 
-            case 27:
+            case 25:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 23]]);
+      }, _callee, null, [[2, 22]]);
     }));
 
     return function handleSend() {
@@ -232,10 +229,7 @@ var Messages = function Messages(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
-                loading: true
-              }));
-              _context2.next = 4;
+              _context2.next = 3;
               return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
                 method: 'GET',
                 headers: {
@@ -244,12 +238,12 @@ var Messages = function Messages(props) {
                 }
               });
 
-            case 4:
+            case 3:
               response = _context2.sent;
-              _context2.next = 7;
+              _context2.next = 6;
               return response.json();
 
-            case 7:
+            case 6:
               _yield$response$json2 = _context2.sent;
               error = _yield$response$json2.error;
               result = _yield$response$json2.result;
@@ -267,23 +261,23 @@ var Messages = function Messages(props) {
                 }));
               }
 
-              _context2.next = 16;
+              _context2.next = 15;
               break;
 
-            case 13:
-              _context2.prev = 13;
+            case 12:
+              _context2.prev = 12;
               _context2.t0 = _context2["catch"](0);
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: false,
                 error: [_context2.t0.Messages]
               }));
 
-            case 16:
+            case 15:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 13]]);
+      }, _callee2, null, [[0, 12]]);
     }));
 
     return function loadMessages() {
@@ -294,6 +288,32 @@ var Messages = function Messages(props) {
   (0, _react.useEffect)(function () {
     loadMessages();
   }, []);
+  (0, _react.useEffect)(function () {
+    if (messages.loading) return;
+
+    var handleNewMessage = function handleNewMessage(message) {
+      var found = messages.messages.find(function (_message) {
+        return _message.id === message.id;
+      });
+
+      if (!found) {
+        setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+          messages: [].concat(_toConsumableArray(messages.messages), [message])
+        }));
+      }
+    };
+
+    socket.on('message', handleNewMessage);
+    return function () {
+      socket.off('message', handleNewMessage);
+    };
+  }, [messages, socket]);
+  (0, _react.useEffect)(function () {
+    socket.join("messages_orders_".concat(user.id));
+    return function () {
+      socket.leave("messages_orders_".concat(user.id));
+    };
+  }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     messages: messages,
     image: image,
