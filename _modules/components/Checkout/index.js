@@ -207,48 +207,46 @@ var Checkout = function Checkout(props) {
 
             case 9:
               result = _context2.sent;
-              console.log(result);
 
               if (!result.error) {
-                _context2.next = 14;
+                _context2.next = 13;
                 break;
               }
 
               setErrors(result.result);
               return _context2.abrupt("return");
 
-            case 14:
+            case 13:
               cartResult = result.result;
 
               if (!(((_cartResult = cartResult) === null || _cartResult === void 0 ? void 0 : (_cartResult$paymethod = _cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-                _context2.next = 25;
+                _context2.next = 23;
                 break;
               }
 
-              _context2.next = 18;
+              _context2.next = 17;
               return actionsBeforePlace(paymethodSelected, result.result);
 
-            case 18:
+            case 17:
               toConfirm = _context2.sent;
 
               if (!toConfirm) {
-                _context2.next = 25;
+                _context2.next = 23;
                 break;
               }
 
-              _context2.next = 22;
+              _context2.next = 21;
               return confirmCart(cart.uuid);
 
-            case 22:
+            case 21:
               confirmResponse = _context2.sent;
-              console.log(confirmResponse);
               cartResult = confirmResponse.result;
 
-            case 25:
+            case 23:
               setPlacing(false);
               onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cartResult);
 
-            case 27:
+            case 25:
             case "end":
               return _context2.stop();
           }
@@ -268,6 +266,22 @@ var Checkout = function Checkout(props) {
   (0, _react.useEffect)(function () {
     getBusiness();
   }, [businessId]);
+  /**
+   * Update carts from sockets
+   */
+
+  (0, _react.useEffect)(function () {
+    if (cart && cart.status === 1) {
+      var data = {
+        paymethod_id: paymethodSelected.paymethodId,
+        paymethod_data: paymethodSelected.data,
+        delivery_zone_id: cart.delivery_zone_id,
+        offer_id: cart.offer_id,
+        amount: cart.total
+      };
+      onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart);
+    }
+  }, [cart]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,

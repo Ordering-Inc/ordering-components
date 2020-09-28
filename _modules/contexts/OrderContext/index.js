@@ -771,15 +771,14 @@ var OrderProvider = function OrderProvider(_ref) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
-              console.log(product);
-              _context10.prev = 1;
+              _context10.prev = 0;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
               body = JSON.stringify({
                 product: JSON.stringify(product)
               });
-              _context10.next = 6;
+              _context10.next = 5;
               return fetch("".concat(ordering.root, "/carts/update_product"), {
                 method: 'POST',
                 headers: {
@@ -789,12 +788,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 body: body
               });
 
-            case 6:
+            case 5:
               response = _context10.sent;
-              _context10.next = 9;
+              _context10.next = 8;
               return response.json();
 
-            case 9:
+            case 8:
               _yield$response$json7 = _context10.sent;
               error = _yield$response$json7.error;
               result = _yield$response$json7.result;
@@ -813,20 +812,20 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context10.abrupt("return", !error);
 
-            case 17:
-              _context10.prev = 17;
-              _context10.t0 = _context10["catch"](1);
+            case 16:
+              _context10.prev = 16;
+              _context10.t0 = _context10["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context10.abrupt("return", false);
 
-            case 21:
+            case 20:
             case "end":
               return _context10.stop();
           }
         }
-      }, _callee10, null, [[1, 17]]);
+      }, _callee10, null, [[0, 16]]);
     }));
 
     return function updateProduct(_x9) {
