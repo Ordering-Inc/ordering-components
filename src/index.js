@@ -61,6 +61,10 @@ import { SessionContext, SessionProvider, useSession } from './contexts/SessionC
 import { WebsocketContext, WebsocketProvider, useWebsocket } from './contexts/WebsocketContext'
 import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
+import { PaymentOptionCash } from './components/PaymentOptionCash'
+import { PaymentOptionStripe } from './components/PaymentOptionStripe'
+import { PaymentOptionStripeDirect } from './components/PaymentOptionStripeDirect'
+import { PaymentOptionStripeRedirect } from './components/PaymentOptionStripeRedirect'
 
 export {
   AddressDetails,
@@ -120,6 +124,10 @@ export {
   WrapperGoogleMaps,
   OrderDetails,
   OrderReview,
+  PaymentOptionCash,
+  PaymentOptionStripe,
+  PaymentOptionStripeDirect,
+  PaymentOptionStripeRedirect,
   // Contexts
   ConfigContext,
   ConfigProvider,

@@ -3,6 +3,7 @@ import { useSession } from '../SessionContext'
 import { Popup } from '../../components/Popup'
 // import { AlertUI } from '../../../example/components/AlertUI'
 import { useApi } from '../ApiContext'
+import { useWebsocket } from '../WebsocketContext'
 
 /**
  * Create OrderContext
@@ -19,6 +20,7 @@ export const OrderProvider = ({ children }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
+  const socket = useWebsocket()
 
   const [state, setState] = useState({
     loading: true,
@@ -279,6 +281,7 @@ export const OrderProvider = ({ children }) => {
    * Update product to cart
    */
   const updateProduct = async (product) => {
+    console.log(product)
     try {
       setState({ ...state, loading: true })
       const body = JSON.stringify({
@@ -434,6 +437,33 @@ export const OrderProvider = ({ children }) => {
       })
     }
   }, [session])
+
+  /**
+   * Update carts from sockets
+   */
+  useEffect(() => {
+    const handleCartUpdate = (cart) => {
+      state.carts[`businessId:${cart.business_id}`] = {
+        ...state.carts[`businessId:${cart.business_id}`],
+        ...cart
+      }
+      setState({ ...state })
+    }
+    socket.on('carts_update', handleCartUpdate)
+    return () => {
+      socket.off('carts_update', handleCartUpdate)
+    }
+  }, [state, socket])
+
+  /**
+   * Join to carts room
+   */
+  useEffect(() => {
+    socket.join(`carts_${session.user.id}`)
+    return () => {
+      socket.leave(`carts_${session.user.id}`)
+    }
+  }, [socket])
 
   const functions = {
     refreshOrderOptions,
