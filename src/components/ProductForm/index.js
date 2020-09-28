@@ -100,7 +100,7 @@ export const ProductForm = (props) => {
       }
     }
     const newProductCart = {
-      ...productCart,
+      ...props.productCart,
       id: product.id,
       price: product.price,
       name: product.name,
