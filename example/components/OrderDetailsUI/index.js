@@ -82,7 +82,7 @@ export const OrderDetailsUI = (props) => {
           <br />
           <div className='order-card'>
             <div style={{ background: 'green', padding: '10px', color: 'white', textAlign: 'center' }}>
-              <h3>Order Number #{order.id}</h3>
+              <h3>Order Number #{order.uuid || order.id}</h3>
             </div>
             <h2>Status: <span style={{ fontWeight: 'lighter' }}>{statusName[order?.status]}</span></h2>
             <div style={{ display: 'flex', justifyContent: 'space-around' }}>

@@ -3,8 +3,10 @@ import React from 'react'
 import { OrderDetailsUI } from '../../components/OrderDetailsUI'
 import { OrderDetails } from '../../../src/components/OrderDetails'
 import { TestComponent } from '../../components/TestComponent'
+import { useParams } from 'react-router-dom'
 
 export const OrderDetailsExample = ({ ordering }) => {
+  const { orderId } = useParams()
   const props = {
     /**
      * Instace of Ordering Class
@@ -18,7 +20,7 @@ export const OrderDetailsExample = ({ ordering }) => {
     /**
      * This must be contains orderId to fetch
      */
-    orderId: 48,
+    orderId: orderId || '7c56d0aa-1093-4c03-8530-eea3b05ce8d3',
     /**
      * Order, this must be contains an object with all order info
      */

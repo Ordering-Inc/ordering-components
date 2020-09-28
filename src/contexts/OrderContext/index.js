@@ -281,7 +281,6 @@ export const OrderProvider = ({ children }) => {
    * Update product to cart
    */
   const updateProduct = async (product) => {
-    console.log(product)
     try {
       setState({ ...state, loading: true })
       const body = JSON.stringify({

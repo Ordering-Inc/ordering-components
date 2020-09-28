@@ -63,6 +63,7 @@ export const CheckoutExample = () => {
     if (result.status === 1 && result.order?.uuid) {
       alert(`REDIRECT TO /orders/${result.order.uuid}`)
       setCartState({ ...cartState, loading: false })
+      history.push(`/order_details/${result.order.uuid}`)
     } else if (result.status === 2 && result.paymethod_data.gateway === 'stripe_redirect' && query.get('payment_intent')) {
       console.log('Confirm order')
       // const result = await confirmCart(cartUuid)
@@ -107,6 +108,7 @@ export const CheckoutExample = () => {
       console.log('onPlaceOrderClick event', data, paymethod, cart)
       if (cart.order?.uuid) {
         alert(`REDIRECT TO /orders/${cart.order.uuid}`)
+        history.push(`/order_details/${cart.order.uuid}`)
       }
     },
     /**
