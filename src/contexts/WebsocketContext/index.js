@@ -22,16 +22,19 @@ export const WebsocketProvider = ({ settings, children }) => {
   useEffect(() => {
     if (session.auth && settings.url && settings.project) {
       const _socket = new Socket({ ...settings, accessToken: session.token })
-      _socket.connect()
       setSocket(_socket)
+    }
+    if (!session.auth) {
+      socket && socket.close()
     }
   }, [session])
 
   useEffect(() => {
+    socket && socket.connect()
     return () => {
       socket && socket.close()
     }
-  }, [])
+  }, [socket])
   return (
     <WebsocketContext.Provider value={socket}>
       {children}

@@ -458,6 +458,7 @@ export const OrderProvider = ({ children }) => {
    * Join to carts room
    */
   useEffect(() => {
+    if (!session.auth) return
     socket.join(`carts_${session.user.id}`)
     return () => {
       socket.leave(`carts_${session.user.id}`)
