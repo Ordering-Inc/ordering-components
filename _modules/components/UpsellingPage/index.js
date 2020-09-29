@@ -35,7 +35,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var UpsellingPage = function UpsellingPage(props) {
   var UIComponent = props.UIComponent,
-      onSave = props.onSave;
+      onSave = props.onSave,
+      upsellingProducts = props.upsellingProducts;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
@@ -80,7 +81,8 @@ var UpsellingPage = function UpsellingPage(props) {
   }();
 
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    handleAddProductUpselling: handleAddProductUpselling
+    handleAddProductUpselling: handleAddProductUpselling,
+    upsellingProducts: upsellingProducts
   }));
 };
 
