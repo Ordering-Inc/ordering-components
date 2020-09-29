@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 
 export const UpsellingPage = (props) => {
-  const { UIComponent, onSave } = props
+  const { UIComponent, onSave, upsellingProducts } = props
   const [orderState, { addProduct }] = useOrder()
 
   /**
@@ -21,7 +21,7 @@ export const UpsellingPage = (props) => {
   }
 
   return (
-    <UIComponent {...props} handleAddProductUpselling={handleAddProductUpselling} />
+    <UIComponent {...props} handleAddProductUpselling={handleAddProductUpselling} upsellingProducts={upsellingProducts} />
   )
 }
 
