@@ -65,6 +65,9 @@ import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
 import { PaymentOptionStripeDirect } from './components/PaymentOptionStripeDirect'
 import { PaymentOptionStripeRedirect } from './components/PaymentOptionStripeRedirect'
+import { StripeElementsForm } from './components/StripeElementsForm'
+import { CardForm } from './components/StripeElementsForm/CardForm'
+import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/StripeRedirectForm'
 
 export {
   AddressDetails,
@@ -128,6 +131,9 @@ export {
   PaymentOptionStripe,
   PaymentOptionStripeDirect,
   PaymentOptionStripeRedirect,
+  StripeElementsForm,
+  CardForm,
+  StripeRedirectForm,
   // Contexts
   ConfigContext,
   ConfigProvider,
