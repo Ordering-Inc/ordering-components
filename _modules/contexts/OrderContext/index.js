@@ -365,7 +365,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 27;
+                _context5.next = 26;
                 break;
               }
 
@@ -392,22 +392,19 @@ var OrderProvider = function OrderProvider(_ref) {
               _yield$response$json2 = _context5.sent;
               error = _yield$response$json2.error;
               result = _yield$response$json2.result;
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
 
               if (error) {
-                _context5.next = 18;
+                _context5.next = 17;
                 break;
               }
 
-              _context5.next = 15;
+              _context5.next = 14;
               return applyChanges(changes);
 
-            case 15:
+            case 14:
               return _context5.abrupt("return", _context5.sent);
 
-            case 18:
+            case 17:
               setConfirm({
                 show: true,
                 content: result,
@@ -419,23 +416,23 @@ var OrderProvider = function OrderProvider(_ref) {
                 }
               });
 
-            case 19:
-              _context5.next = 25;
+            case 18:
+              _context5.next = 24;
               break;
 
-            case 21:
-              _context5.prev = 21;
+            case 20:
+              _context5.prev = 20;
               _context5.t0 = _context5["catch"](1);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context5.abrupt("return", false);
 
-            case 25:
-              _context5.next = 31;
+            case 24:
+              _context5.next = 30;
               break;
 
-            case 27:
+            case 26:
               options = _objectSpread(_objectSpread({}, state.options), changes);
               localStorage.setItem('options', JSON.stringify(options));
               setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -443,12 +440,12 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context5.abrupt("return", true);
 
-            case 31:
+            case 30:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[1, 21]]);
+      }, _callee5, null, [[1, 20]]);
     }));
 
     return function updateOrderOptions(_x4) {
