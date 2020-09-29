@@ -68,16 +68,19 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
         accessToken: session.token
       }));
 
-      _socket.connect();
-
       setSocket(_socket);
+    }
+
+    if (!session.auth) {
+      socket && socket.close();
     }
   }, [session]);
   (0, _react.useEffect)(function () {
+    socket && socket.connect();
     return function () {
       socket && socket.close();
     };
-  }, []);
+  }, [socket]);
   return /*#__PURE__*/_react.default.createElement(WebsocketContext.Provider, {
     value: socket
   }, children);

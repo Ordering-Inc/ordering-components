@@ -1223,6 +1223,7 @@ var OrderProvider = function OrderProvider(_ref) {
    */
 
   (0, _react.useEffect)(function () {
+    if (!session.auth) return;
     socket.join("carts_".concat(session.user.id));
     return function () {
       socket.leave("carts_".concat(session.user.id));
