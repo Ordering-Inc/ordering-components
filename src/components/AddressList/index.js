@@ -75,7 +75,7 @@ export const AddressList = (props) => {
     }
     try {
       setActionStatus({ ...actionStatus, loading: true })
-      const { content } = await ordering.users(userId).addresses(address.id).save({ default: true }, { accessToken })
+      const { content } = await ordering.setAccessToken(accessToken).users(userId).addresses(address.id).save({ default: true })
       setActionStatus({
         loading: false,
         error: content.error ? content.result : null
