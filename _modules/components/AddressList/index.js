@@ -177,7 +177,7 @@ var AddressList = function AddressList(props) {
 
   var handleSetDefault = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(address) {
-      var _yield$ordering$users, content;
+      var _yield$ordering$setAc2, content;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -196,15 +196,13 @@ var AddressList = function AddressList(props) {
                 loading: true
               }));
               _context2.next = 6;
-              return ordering.users(userId).addresses(address.id).save({
+              return ordering.setAccessToken(accessToken).users(userId).addresses(address.id).save({
                 default: true
-              }, {
-                accessToken: accessToken
               });
 
             case 6:
-              _yield$ordering$users = _context2.sent;
-              content = _yield$ordering$users.content;
+              _yield$ordering$setAc2 = _context2.sent;
+              content = _yield$ordering$setAc2.content;
               setActionStatus({
                 loading: false,
                 error: content.error ? content.result : null
@@ -254,7 +252,7 @@ var AddressList = function AddressList(props) {
 
   var handleDelete = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(address) {
-      var _yield$ordering$users2, content, addresses;
+      var _yield$ordering$users, content, addresses;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -278,8 +276,8 @@ var AddressList = function AddressList(props) {
               });
 
             case 6:
-              _yield$ordering$users2 = _context3.sent;
-              content = _yield$ordering$users2.content;
+              _yield$ordering$users = _context3.sent;
+              content = _yield$ordering$users.content;
               setActionStatus({
                 loading: false,
                 error: content.error ? content.result : null
