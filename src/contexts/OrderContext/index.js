@@ -140,7 +140,6 @@ export const OrderProvider = ({ children }) => {
         setState({ ...state, loading: true })
         const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
         const { error, result } = await response.json()
-        setState({ ...state, loading: false })
         if (!error) {
           return await applyChanges(changes)
         } else {
