@@ -68,6 +68,7 @@ import { PaymentOptionStripeRedirect } from './components/PaymentOptionStripeRed
 import { StripeElementsForm } from './components/StripeElementsForm'
 import { CardForm } from './components/StripeElementsForm/CardForm'
 import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/StripeRedirectForm'
+import { UpsellingPage } from './components/UpsellingPage'
 
 export {
   AddressDetails,
@@ -134,6 +135,7 @@ export {
   StripeElementsForm,
   CardForm,
   StripeRedirectForm,
+  UpsellingPage,
   // Contexts
   ConfigContext,
   ConfigProvider,
