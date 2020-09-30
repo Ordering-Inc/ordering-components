@@ -3,30 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { UpsellingPage } from '../../../src/components/UpsellingPage'
 import { UpsellingPageUI } from '../../components/UpsellingPageUI'
 import { useApi } from '../../../src/contexts/ApiContext'
-import { useOrder } from '../../../src/contexts/OrderContext'
 
 export const UpsellingPageExample = () => {
   const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })
   const [ordering] = useApi()
-  const [upsellingProducts, setUpsellingProducts] = useState([])
-  const [cartProducts, setCartProducts] = useState([])
-  const [orderState] = useOrder()
 
   useEffect(() => {
     getProducts()
-    handleProductsOfCart()
   }, [])
-
-  /**
-   * products of the cart
-   */
-  const handleProductsOfCart = () => {
-    setCartProducts(Object.values(orderState.carts).map(cart => {
-      return cart?.products.map(product => {
-        return product
-      })
-    }))
-  }
 
   const props = {
 
@@ -35,9 +19,9 @@ export const UpsellingPageExample = () => {
      */
     UIComponent: UpsellingPageUI,
     /**
-     * upselling products that do not repeat in the cart
+     *  Products of the current business is required!
      */
-    upsellingProducts: upsellingProducts,
+    products: productsList.products,
     /**
      * Function to save event
      */
@@ -63,9 +47,6 @@ export const UpsellingPageExample = () => {
         loading: false,
         products: result
       })
-      setUpsellingProducts(result.filter(product => product.upselling && cartProducts.map(cartProduct => {
-        return product.id !== cartProduct.id
-      })))
     } catch (error) {
       setProductsList({
         ...productsList,
