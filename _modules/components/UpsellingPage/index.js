@@ -1,5 +1,7 @@
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -7,11 +9,15 @@ exports.UpsellingPage = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _OrderContext = require("../../contexts/OrderContext");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36,12 +42,47 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var UpsellingPage = function UpsellingPage(props) {
   var UIComponent = props.UIComponent,
       onSave = props.onSave,
-      upsellingProducts = props.upsellingProducts;
+      products = props.products;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       orderState = _useOrder2[0],
       addProduct = _useOrder2[1].addProduct;
+
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      upsellingProducts = _useState2[0],
+      setUpsellingProducts = _useState2[1];
+
+  (0, _react.useEffect)(function () {
+    handleProductsOfCart();
+  }, [products]);
+  /**
+   * products of the cart
+   */
+
+  var handleProductsOfCart = function handleProductsOfCart() {
+    var cartProducts = Object.values(orderState.carts).map(function (cart) {
+      return cart === null || cart === void 0 ? void 0 : cart.products.map(function (product) {
+        return product;
+      });
+    });
+    getUpsellingProducts(cartProducts);
+  };
+  /**
+   *
+   * filt products if they are already in the cart
+   * @param {array} cartProducts
+   */
+
+
+  var getUpsellingProducts = function getUpsellingProducts(cartProducts) {
+    setUpsellingProducts(products.filter(function (product) {
+      return product.upselling && cartProducts.map(function (cartProduct) {
+        return product.id !== cartProduct.id;
+      });
+    }));
+  };
   /**
    * adding product to the cart from upselling
    * @param {object} product Product object
@@ -60,14 +101,12 @@ var UpsellingPage = function UpsellingPage(props) {
 
             case 2:
               successful = _context.sent;
-              console.log(orderState);
-              console.log(successful);
 
               if (successful) {
                 onSave(product);
               }
 
-            case 6:
+            case 4:
             case "end":
               return _context.stop();
           }
@@ -101,5 +140,13 @@ UpsellingPage.propTypes = {
   /**
    * Function to save event
    */
-  onSave: _propTypes.default.func
+  onSave: _propTypes.default.func,
+
+  /**
+   *  Products of the current business is required!
+   */
+  products: _propTypes.default.array.isRequired
+};
+UpsellingPage.defaultProps = {
+  upsellingProducts: []
 };
