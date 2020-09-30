@@ -55,21 +55,6 @@ UpsellingPage.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
-  UIComponent: PropTypes.elementType,
-  /**
-    * upselling products that do not repeat in the cart
-   */
-  upsellingProducts: PropTypes.array,
-  /**
-   * Function to save event
-   */
-  onSave: PropTypes.func,
-  /**
-   *  Products of the current business is required!
-   */
-  products: PropTypes.array.isRequired
-}
+  UIComponent: PropTypes.elementType
 
-UpsellingPage.defaultProps = {
-  upsellingProducts: []
 }
