@@ -11,6 +11,12 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireWildcard(require("prop-types"));
 
+var _reactDom = _interopRequireDefault(require("react-dom"));
+
+var _orderingApiSdk = require("ordering-api-sdk");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -39,9 +45,20 @@ var Popup = function Popup(props) {
       onClose = props.onClose;
   var modalRef = (0, _react.useRef)();
 
-  var _useState = (0, _react.useState)(document.body.style.overflow),
-      _useState2 = _slicedToArray(_useState, 1),
-      bodyOverflowBackup = _useState2[0];
+  var _useState = (0, _react.useState)(),
+      _useState2 = _slicedToArray(_useState, 2),
+      root = _useState2[0],
+      setRoot = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(),
+      _useState4 = _slicedToArray(_useState3, 2),
+      defaultOverflow = _useState4[0],
+      setDefaultOverflow = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isFirst = _useState6[0],
+      setIsFirst = _useState6[1];
   /**
    * Use onClose function when esc key was pressed
    * @param {Event} e Event when keydown
@@ -80,42 +97,40 @@ var Popup = function Popup(props) {
      */
 
 
-    var isFirst = typeof modals[0] === 'undefined' || modals[0] === (modalRef === null || modalRef === void 0 ? void 0 : modalRef.current);
-
     if (isFirst) {
-      var backdrop = document.querySelector('.popup-component-backdrop');
+      var modalRoot = window.document.getElementById('app-modals');
 
-      if (backdrop) {
-        backdrop.remove();
+      if (modalRoot) {
+        modalRoot.remove();
       }
 
-      document.body.style.overflow = bodyOverflowBackup;
+      window.document.body.style.overflow = defaultOverflow;
     }
   };
 
   (0, _react.useEffect)(function () {
-    if (!open) {
-      checkRemoveBackdrop();
-      return;
+    if (open) {
+      var modalRoot = window.document.getElementById('app-modals');
+
+      if (!modalRoot) {
+        modalRoot = window.document.createElement('div');
+        modalRoot.id = 'app-modals';
+        modalRoot.className = 'popup-component-backdrop popup-backdrop' + (backdropClassName ? " ".concat(backdropClassName) : '');
+        document.body.append(modalRoot);
+        setRoot(modalRoot);
+        setIsFirst(true);
+        setDefaultOverflow(window.document.body.style.overflow);
+      } else {
+        setRoot(modalRoot);
+      }
     }
-
-    var backdrop = document.querySelector('.popup-backdrop');
-
-    if (!backdrop) {
-      backdrop = document.createElement('div');
-      backdrop.className = 'popup-component-backdrop popup-backdrop' + (backdropClassName ? " ".concat(backdropClassName) : '');
-      document.body.append(backdrop);
-      document.body.style.overflow = 'hidden';
-    }
-
-    modalRef.current.focus();
-  }, [open]);
-  (0, _react.useEffect)(function () {
     /**
-     * Remove backdrop and enable scroll
+     * Remove backdrop
      */
+
+
     return checkRemoveBackdrop;
-  }, [open]);
+  }, [open, isFirst, defaultOverflow]);
   var popupStyles = {
     position: 'fixed',
     top: 0,
@@ -125,7 +140,7 @@ var Popup = function Popup(props) {
     zIndex: 1001,
     outline: 'none'
   };
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && /*#__PURE__*/_react.default.createElement("div", {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && root && /*#__PURE__*/_reactDom.default.createPortal( /*#__PURE__*/_react.default.createElement("div", {
     className: "popup-component",
     style: popupStyles,
     onClick: handleClick,
@@ -133,7 +148,7 @@ var Popup = function Popup(props) {
     tabIndex: -1,
     ref: modalRef,
     autoFocus: true
-  }, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props)));
+  }, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props)), root));
 };
 
 exports.Popup = Popup;
