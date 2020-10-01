@@ -54,6 +54,7 @@ import { UserProfileForm } from './components/UserProfileForm'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
 import { OrderDetails } from './components/OrderDetails'
 import { OrderReview } from './components/OrderReview'
+import { CmsContent } from './components/CmsContent'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -134,6 +135,7 @@ export {
   StripeElementsForm,
   CardForm,
   StripeRedirectForm,
+  CmsContent,
   // Contexts
   ConfigContext,
   ConfigProvider,

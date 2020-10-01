@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
 import ReactDOM from 'react-dom'
-import { Model } from 'ordering-api-sdk'
 
 /**
  * Component to manage login behavior without UI component
@@ -89,7 +88,7 @@ export const Popup = (props) => {
     left: 0,
     bottom: 0,
     right: 0,
-    zIndex: 1001,
+    zIndex: 2001,
     outline: 'none'
   }
 
