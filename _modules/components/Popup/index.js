@@ -13,8 +13,6 @@ var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
-var _orderingApiSdk = require("ordering-api-sdk");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -137,7 +135,7 @@ var Popup = function Popup(props) {
     left: 0,
     bottom: 0,
     right: 0,
-    zIndex: 1001,
+    zIndex: 2001,
     outline: 'none'
   };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && root && /*#__PURE__*/_reactDom.default.createPortal( /*#__PURE__*/_react.default.createElement("div", {

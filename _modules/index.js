@@ -345,6 +345,12 @@ Object.defineProperty(exports, "OrderReview", {
     return _OrderReview.OrderReview;
   }
 });
+Object.defineProperty(exports, "CmsContent", {
+  enumerable: true,
+  get: function get() {
+    return _CmsContent.CmsContent;
+  }
+});
 Object.defineProperty(exports, "ConfigContext", {
   enumerable: true,
   get: function get() {
@@ -619,6 +625,8 @@ var _WrapperGoogleMaps = require("./components/WrapperGoogleMaps");
 var _OrderDetails = require("./components/OrderDetails");
 
 var _OrderReview = require("./components/OrderReview");
+
+var _CmsContent = require("./components/CmsContent");
 
 var _ConfigContext = require("./contexts/ConfigContext");
 
