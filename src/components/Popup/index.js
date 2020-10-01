@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import PropTypes, { string } from 'prop-types'
+import ReactDOM from 'react-dom'
+import { Model } from 'ordering-api-sdk'
 
 /**
  * Component to manage login behavior without UI component
@@ -16,7 +18,9 @@ export const Popup = (props) => {
 
   const modalRef = useRef()
 
-  const [bodyOverflowBackup] = useState(document.body.style.overflow)
+  const [root, setRoot] = useState()
+  const [defaultOverflow, setDefaultOverflow] = useState()
+  const [isFirst, setIsFirst] = useState(false)
 
   /**
    * Use onClose function when esc key was pressed
@@ -49,37 +53,35 @@ export const Popup = (props) => {
      * Remove backdrop when close popup and modals quantity is 0
      * Remove backdrop when unmount and modals quantity is 1
      */
-    const isFirst = typeof modals[0] === 'undefined' || modals[0] === modalRef?.current
     if (isFirst) {
-      const backdrop = document.querySelector('.popup-component-backdrop')
-      if (backdrop) {
-        backdrop.remove()
+      const modalRoot = window.document.getElementById('app-modals')
+      if (modalRoot) {
+        modalRoot.remove()
       }
-      document.body.style.overflow = bodyOverflowBackup
+      window.document.body.style.overflow = defaultOverflow
     }
   }
 
   useEffect(() => {
-    if (!open) {
-      checkRemoveBackdrop()
-      return
+    if (open) {
+      let modalRoot = window.document.getElementById('app-modals')
+      if (!modalRoot) {
+        modalRoot = window.document.createElement('div')
+        modalRoot.id = 'app-modals'
+        modalRoot.className = 'popup-component-backdrop popup-backdrop' + (backdropClassName ? ` ${backdropClassName}` : '')
+        document.body.append(modalRoot)
+        setRoot(modalRoot)
+        setIsFirst(true)
+        setDefaultOverflow(window.document.body.style.overflow)
+      } else {
+        setRoot(modalRoot)
+      }
     }
-    let backdrop = document.querySelector('.popup-backdrop')
-    if (!backdrop) {
-      backdrop = document.createElement('div')
-      backdrop.className = 'popup-component-backdrop popup-backdrop' + (backdropClassName ? ` ${backdropClassName}` : '')
-      document.body.append(backdrop)
-      document.body.style.overflow = 'hidden'
-    }
-    modalRef.current.focus()
-  }, [open])
-
-  useEffect(() => {
     /**
-     * Remove backdrop and enable scroll
+     * Remove backdrop
      */
     return checkRemoveBackdrop
-  }, [open])
+  }, [open, isFirst, defaultOverflow])
 
   const popupStyles = {
     position: 'fixed',
@@ -94,12 +96,13 @@ export const Popup = (props) => {
   return (
     <>
       {
-        open && (
+        open && root && ReactDOM.createPortal(
           <div className='popup-component' style={popupStyles} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={-1} ref={modalRef} autoFocus>
             {
               UIComponent && <UIComponent {...props} />
             }
-          </div>
+          </div>,
+          root
         )
       }
     </>

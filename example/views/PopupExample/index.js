@@ -8,7 +8,6 @@ export const PopupExample = () => {
   const [modals, setModals] = useState({ showModal1: true, showModal2: true, showModal3: true, showModal4: true })
 
   const openModal = (modal) => {
-    console.log('Open modal: ', modal)
     setModals({
       ...modals,
       [modal]: true
@@ -16,11 +15,11 @@ export const PopupExample = () => {
   }
 
   const closeModal = (modal) => {
-    console.log('Close modal: ', modal)
-    setModals({
+    const newState = {
       ...modals,
       [modal]: false
-    })
+    }
+    setModals({ ...newState })
   }
 
   const popup1Props = {
