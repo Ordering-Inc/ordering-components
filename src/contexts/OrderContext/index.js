@@ -134,69 +134,71 @@ export const OrderProvider = ({ children }) => {
    * Update order option data
    * @param {object} changes Changes to update order options
    */
-  const updateOrderOptions = async (changes) => {
-    if (session.auth) {
-      try {
-        setState({ ...state, loading: true })
-        const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
-        const { error, result } = await response.json()
-        if (!error) {
-          return await applyChanges(changes)
-        } else {
-          setConfirm({
-            show: true,
-            content: result,
-            onConfirm: () => {
-              setConfirm({ show: false })
-              applyChanges(changes)
-            }
-          })
-        }
-      } catch (err) {
-        setState({ ...state, loading: false })
-        return false
-      }
-    } else {
-      const options = {
-        ...state.options,
-        ...changes
-      }
-      localStorage.setItem('options', JSON.stringify(options))
-      setState({
-        ...state,
-        options
-      })
-      return true
-    }
-  }
+  // const _updateOrderOptions = async (changes) => {
+  //   if (session.auth) {
+  //     try {
+  //       setState({ ...state, loading: true })
+  //       const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
+  //       const { error, result } = await response.json()
+  //       if (!error) {
+  //         return await applyChanges(changes)
+  //       } else {
+  //         setConfirm({
+  //           show: true,
+  //           content: result,
+  //           onConfirm: () => {
+  //             setConfirm({ show: false })
+  //             applyChanges(changes)
+  //           }
+  //         })
+  //       }
+  //     } catch (err) {
+  //       setState({ ...state, loading: false })
+  //       return false
+  //     }
+  //   } else {
+  //     const options = {
+  //       ...state.options,
+  //       ...changes
+  //     }
+  //     localStorage.setItem('options', JSON.stringify(options))
+  //     setState({
+  //       ...state,
+  //       options
+  //     })
+  //     return true
+  //   }
+  // }
 
   /**
    * Update order option data
    * @param {object} changes Changes to update order options
    */
-  const applyChanges = async (changes) => {
-    try {
-      setState({ ...state, loading: true })
-      const response = await fetch(`${ordering.root}/order_options`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
-      const { error, result } = await response.json()
-      if (!error) {
-        const { carts, ...options } = result
-        state.carts = {}
-        carts.forEach(cart => {
-          state.carts[`businessId:${cart.business_id}`] = cart
-        })
-        state.options = {
-          ...state.options,
-          ...options
+  const updateOrderOptions = async (changes) => {
+    if (session.auth) {
+      try {
+        setState({ ...state, loading: true })
+        const response = await fetch(`${ordering.root}/order_options`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
+        const { error, result } = await response.json()
+        if (!error) {
+          const { carts, ...options } = result
+          state.carts = {}
+          carts.forEach(cart => {
+            state.carts[`businessId:${cart.business_id}`] = cart
+          })
+          state.options = {
+            ...state.options,
+            ...options
+          }
+        } else {
+          setAlert({ show: true, content: result })
         }
-      } else {
-        setAlert({ show: true, content: result })
+        setState({ ...state, loading: false })
+        return !error
+      } catch (err) {
+        setState({ ...state, loading: false })
+        return false
       }
-      setState({ ...state, loading: false })
-      return !error
-    } catch (err) {
-      setState({ ...state, loading: false })
-      return false
     }
   }
 
