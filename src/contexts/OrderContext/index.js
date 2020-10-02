@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useSession } from '../SessionContext'
-import { Popup } from '../../components/Popup'
-// import { AlertUI } from '../../../example/components/AlertUI'
 import { useApi } from '../ApiContext'
 import { useWebsocket } from '../WebsocketContext'
+import { useLanguage } from '../LanguageContext'
 
 /**
  * Create OrderContext
@@ -16,10 +15,11 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ children }) => {
+export const OrderProvider = ({ Alert, children }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
+  const [, t] = useLanguage()
   const socket = useWebsocket()
 
   const [state, setState] = useState({
@@ -487,23 +487,25 @@ export const OrderProvider = ({ children }) => {
 
   return (
     <OrderContext.Provider value={[copyState, functions]}>
-      <Popup
-        // UIComponent={AlertUI}
+      {/* <Alert
         open={confirmAlert.show}
         title='Confirm'
         onAccept={() => confirmAlert.onConfirm()}
         onCancel={() => setConfirm({ show: false })}
         onClose={() => setConfirm({ show: false })}
         content={confirmAlert.content}
-      />
-      <Popup
-        // UIComponent={AlertUI}
-        open={alert.show}
-        title='Error'
-        onAccept={() => setAlert({ show: false })}
-        onClose={() => setAlert({ show: false })}
-        content={alert.content}
-      />
+      /> */}
+      {
+        Alert && (
+          <Alert
+            open={alert.show}
+            title={t('CART_ERROR')}
+            onAccept={() => setAlert({ show: false })}
+            onClose={() => setAlert({ show: false })}
+            content={alert.content}
+          />
+        )
+      }
       {children}
     </OrderContext.Provider>
   )
