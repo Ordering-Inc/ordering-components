@@ -11,11 +11,11 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _SessionContext = require("../SessionContext");
 
-var _Popup = require("../../components/Popup");
-
 var _ApiContext = require("../ApiContext");
 
 var _WebsocketContext = require("../WebsocketContext");
+
+var _LanguageContext = require("../LanguageContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -65,7 +65,8 @@ var OrderContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderContext = OrderContext;
 
 var OrderProvider = function OrderProvider(_ref) {
-  var children = _ref.children;
+  var Alert = _ref.Alert,
+      children = _ref.children;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -84,6 +85,10 @@ var OrderProvider = function OrderProvider(_ref) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
 
@@ -1188,28 +1193,9 @@ var OrderProvider = function OrderProvider(_ref) {
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
     value: [copyState, functions]
-  }, /*#__PURE__*/_react.default.createElement(_Popup.Popup // UIComponent={AlertUI}
-  , {
-    open: confirmAlert.show,
-    title: "Confirm",
-    onAccept: function onAccept() {
-      return confirmAlert.onConfirm();
-    },
-    onCancel: function onCancel() {
-      return setConfirm({
-        show: false
-      });
-    },
-    onClose: function onClose() {
-      return setConfirm({
-        show: false
-      });
-    },
-    content: confirmAlert.content
-  }), /*#__PURE__*/_react.default.createElement(_Popup.Popup // UIComponent={AlertUI}
-  , {
+  }, Alert && /*#__PURE__*/_react.default.createElement(Alert, {
     open: alert.show,
-    title: "Error",
+    title: t('CART_ERROR'),
     onAccept: function onAccept() {
       return setAlert({
         show: false
