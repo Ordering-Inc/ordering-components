@@ -354,18 +354,58 @@ var OrderProvider = function OrderProvider(_ref) {
    * Update order option data
    * @param {object} changes Changes to update order options
    */
+  // const _updateOrderOptions = async (changes) => {
+  //   if (session.auth) {
+  //     try {
+  //       setState({ ...state, loading: true })
+  //       const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
+  //       const { error, result } = await response.json()
+  //       if (!error) {
+  //         return await applyChanges(changes)
+  //       } else {
+  //         setConfirm({
+  //           show: true,
+  //           content: result,
+  //           onConfirm: () => {
+  //             setConfirm({ show: false })
+  //             applyChanges(changes)
+  //           }
+  //         })
+  //       }
+  //     } catch (err) {
+  //       setState({ ...state, loading: false })
+  //       return false
+  //     }
+  //   } else {
+  //     const options = {
+  //       ...state.options,
+  //       ...changes
+  //     }
+  //     localStorage.setItem('options', JSON.stringify(options))
+  //     setState({
+  //       ...state,
+  //       options
+  //     })
+  //     return true
+  //   }
+  // }
+
+  /**
+   * Update order option data
+   * @param {object} changes Changes to update order options
+   */
 
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(changes) {
-      var response, _yield$response$json2, error, result, options;
+      var response, _yield$response$json2, error, result, carts, options;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 26;
+                _context5.next = 20;
                 break;
               }
 
@@ -374,8 +414,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: true
               }));
               _context5.next = 5;
-              return fetch("".concat(ordering.root, "/order_options/verify_changes"), {
-                method: 'POST',
+              return fetch("".concat(ordering.root, "/order_options"), {
+                method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: "Bearer ".concat(session.token)
@@ -392,103 +432,6 @@ var OrderProvider = function OrderProvider(_ref) {
               _yield$response$json2 = _context5.sent;
               error = _yield$response$json2.error;
               result = _yield$response$json2.result;
-
-              if (error) {
-                _context5.next = 17;
-                break;
-              }
-
-              _context5.next = 14;
-              return applyChanges(changes);
-
-            case 14:
-              return _context5.abrupt("return", _context5.sent);
-
-            case 17:
-              setConfirm({
-                show: true,
-                content: result,
-                onConfirm: function onConfirm() {
-                  setConfirm({
-                    show: false
-                  });
-                  applyChanges(changes);
-                }
-              });
-
-            case 18:
-              _context5.next = 24;
-              break;
-
-            case 20:
-              _context5.prev = 20;
-              _context5.t0 = _context5["catch"](1);
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              return _context5.abrupt("return", false);
-
-            case 24:
-              _context5.next = 30;
-              break;
-
-            case 26:
-              options = _objectSpread(_objectSpread({}, state.options), changes);
-              localStorage.setItem('options', JSON.stringify(options));
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                options: options
-              }));
-              return _context5.abrupt("return", true);
-
-            case 30:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5, null, [[1, 20]]);
-    }));
-
-    return function updateOrderOptions(_x4) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  /**
-   * Update order option data
-   * @param {object} changes Changes to update order options
-   */
-
-
-  var applyChanges = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(changes) {
-      var response, _yield$response$json3, error, result, carts, options;
-
-      return _regenerator.default.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              _context6.prev = 0;
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: true
-              }));
-              _context6.next = 4;
-              return fetch("".concat(ordering.root, "/order_options"), {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(session.token)
-                },
-                body: JSON.stringify(changes)
-              });
-
-            case 4:
-              response = _context6.sent;
-              _context6.next = 7;
-              return response.json();
-
-            case 7:
-              _yield$response$json3 = _context6.sent;
-              error = _yield$response$json3.error;
-              result = _yield$response$json3.result;
 
               if (!error) {
                 carts = result.carts, options = _objectWithoutProperties(result, ["carts"]);
@@ -507,26 +450,26 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              return _context6.abrupt("return", !error);
+              return _context5.abrupt("return", !error);
 
-            case 15:
-              _context6.prev = 15;
-              _context6.t0 = _context6["catch"](0);
+            case 16:
+              _context5.prev = 16;
+              _context5.t0 = _context5["catch"](1);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              return _context6.abrupt("return", false);
+              return _context5.abrupt("return", false);
 
-            case 19:
+            case 20:
             case "end":
-              return _context6.stop();
+              return _context5.stop();
           }
         }
-      }, _callee6, null, [[0, 15]]);
+      }, _callee5, null, [[1, 16]]);
     }));
 
-    return function applyChanges(_x5) {
-      return _ref7.apply(this, arguments);
+    return function updateOrderOptions(_x4) {
+      return _ref6.apply(this, arguments);
     };
   }();
   /**
@@ -535,6 +478,80 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var addProduct = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(product) {
+      var body, response, _yield$response$json3, error, result;
+
+      return _regenerator.default.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.prev = 0;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              body = JSON.stringify({
+                product: JSON.stringify(product)
+              });
+              _context6.next = 5;
+              return fetch("".concat(ordering.root, "/carts/add_product"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(session.token)
+                },
+                body: body
+              });
+
+            case 5:
+              response = _context6.sent;
+              _context6.next = 8;
+              return response.json();
+
+            case 8:
+              _yield$response$json3 = _context6.sent;
+              error = _yield$response$json3.error;
+              result = _yield$response$json3.result;
+
+              if (!error) {
+                state.carts["businessId:".concat(result.business_id)] = result;
+              } else {
+                setAlert({
+                  show: true,
+                  content: result
+                });
+              }
+
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context6.abrupt("return", !error);
+
+            case 16:
+              _context6.prev = 16;
+              _context6.t0 = _context6["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context6.abrupt("return", false);
+
+            case 20:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[0, 16]]);
+    }));
+
+    return function addProduct(_x5) {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+  /**
+   * Remove product to cart
+   */
+
+
+  var removeProduct = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(product) {
       var body, response, _yield$response$json4, error, result;
 
@@ -547,10 +564,14 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: true
               }));
               body = JSON.stringify({
-                product: JSON.stringify(product)
+                product: JSON.stringify({
+                  id: product.id,
+                  code: product.code,
+                  business_id: product.business_id
+                })
               });
               _context7.next = 5;
-              return fetch("".concat(ordering.root, "/carts/add_product"), {
+              return fetch("".concat(ordering.root, "/carts/remove_product"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -599,17 +620,17 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee7, null, [[0, 16]]);
     }));
 
-    return function addProduct(_x6) {
+    return function removeProduct(_x6) {
       return _ref8.apply(this, arguments);
     };
   }();
   /**
-   * Remove product to cart
+   * Clear products of cart
    */
 
 
-  var removeProduct = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8(product) {
+  var clearCart = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8(uuid) {
       var body, response, _yield$response$json5, error, result;
 
       return _regenerator.default.wrap(function _callee8$(_context8) {
@@ -621,14 +642,10 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: true
               }));
               body = JSON.stringify({
-                product: JSON.stringify({
-                  id: product.id,
-                  code: product.code,
-                  business_id: product.business_id
-                })
+                uuid: uuid
               });
               _context8.next = 5;
-              return fetch("".concat(ordering.root, "/carts/remove_product"), {
+              return fetch("".concat(ordering.root, "/carts/clear"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -677,17 +694,17 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee8, null, [[0, 16]]);
     }));
 
-    return function removeProduct(_x7) {
+    return function clearCart(_x7) {
       return _ref9.apply(this, arguments);
     };
   }();
   /**
-   * Clear products of cart
+   * Update product to cart
    */
 
 
-  var clearCart = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(uuid) {
+  var updateProduct = /*#__PURE__*/function () {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(product) {
       var body, response, _yield$response$json6, error, result;
 
       return _regenerator.default.wrap(function _callee9$(_context9) {
@@ -699,10 +716,10 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: true
               }));
               body = JSON.stringify({
-                uuid: uuid
+                product: JSON.stringify(product)
               });
               _context9.next = 5;
-              return fetch("".concat(ordering.root, "/carts/clear"), {
+              return fetch("".concat(ordering.root, "/carts/update_product"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -751,32 +768,59 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee9, null, [[0, 16]]);
     }));
 
-    return function clearCart(_x8) {
+    return function updateProduct(_x8) {
       return _ref10.apply(this, arguments);
     };
   }();
   /**
-   * Update product to cart
+   * Apply coupon to cart
    */
 
 
-  var updateProduct = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(product) {
+  var applyCoupon = /*#__PURE__*/function () {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(couponData) {
+      var _state$carts$;
+
       var body, response, _yield$response$json7, error, result;
 
       return _regenerator.default.wrap(function _callee10$(_context10) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
-              _context10.prev = 0;
+              if (couponData.business_id) {
+                _context10.next = 2;
+                break;
+              }
+
+              throw new Error('`business_id` is required.');
+
+            case 2:
+              if (!(typeof couponData.coupon === 'undefined')) {
+                _context10.next = 4;
+                break;
+              }
+
+              throw new Error('`coupon` is required.');
+
+            case 4:
+              if (!(((_state$carts$ = state.carts["businessId:".concat(couponData.business_id)]) === null || _state$carts$ === void 0 ? void 0 : _state$carts$.coupon) === couponData.coupon)) {
+                _context10.next = 6;
+                break;
+              }
+
+              return _context10.abrupt("return");
+
+            case 6:
+              _context10.prev = 6;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
               body = JSON.stringify({
-                product: JSON.stringify(product)
+                business_id: couponData.business_id,
+                coupon: couponData.coupon
               });
-              _context10.next = 5;
-              return fetch("".concat(ordering.root, "/carts/update_product"), {
+              _context10.next = 11;
+              return fetch("".concat(ordering.root, "/carts/apply_coupon"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -785,12 +829,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 body: body
               });
 
-            case 5:
+            case 11:
               response = _context10.sent;
-              _context10.next = 8;
+              _context10.next = 14;
               return response.json();
 
-            case 8:
+            case 14:
               _yield$response$json7 = _context10.sent;
               error = _yield$response$json7.error;
               result = _yield$response$json7.result;
@@ -809,23 +853,23 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context10.abrupt("return", !error);
 
-            case 16:
-              _context10.prev = 16;
-              _context10.t0 = _context10["catch"](0);
+            case 22:
+              _context10.prev = 22;
+              _context10.t0 = _context10["catch"](6);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context10.abrupt("return", false);
 
-            case 20:
+            case 26:
             case "end":
               return _context10.stop();
           }
         }
-      }, _callee10, null, [[0, 16]]);
+      }, _callee10, null, [[6, 22]]);
     }));
 
-    return function updateProduct(_x9) {
+    return function applyCoupon(_x9) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -834,9 +878,9 @@ var OrderProvider = function OrderProvider(_ref) {
    */
 
 
-  var applyCoupon = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(couponData) {
-      var _state$carts$;
+  var changeDriverTip = /*#__PURE__*/function () {
+    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(businessId, driverTipRate) {
+      var _state$carts$2;
 
       var body, response, _yield$response$json8, error, result;
 
@@ -844,23 +888,23 @@ var OrderProvider = function OrderProvider(_ref) {
         while (1) {
           switch (_context11.prev = _context11.next) {
             case 0:
-              if (couponData.business_id) {
+              if (businessId) {
                 _context11.next = 2;
                 break;
               }
 
-              throw new Error('`business_id` is required.');
+              throw new Error('`businessId` is required.');
 
             case 2:
-              if (!(typeof couponData.coupon === 'undefined')) {
+              if (!(!driverTipRate && driverTipRate !== 0)) {
                 _context11.next = 4;
                 break;
               }
 
-              throw new Error('`coupon` is required.');
+              throw new Error('`driverTipRate` is required.');
 
             case 4:
-              if (!(((_state$carts$ = state.carts["businessId:".concat(couponData.business_id)]) === null || _state$carts$ === void 0 ? void 0 : _state$carts$.coupon) === couponData.coupon)) {
+              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts$2 = state.carts["businessId:".concat(businessId)]) === null || _state$carts$2 === void 0 ? void 0 : _state$carts$2.driver_tip_rate) === driverTipRate)) {
                 _context11.next = 6;
                 break;
               }
@@ -873,11 +917,11 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: true
               }));
               body = JSON.stringify({
-                business_id: couponData.business_id,
-                coupon: couponData.coupon
+                business_id: businessId,
+                driver_tip_rate: driverTipRate
               });
               _context11.next = 11;
-              return fetch("".concat(ordering.root, "/carts/apply_coupon"), {
+              return fetch("".concat(ordering.root, "/carts/change_driver_tip"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -926,109 +970,8 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[6, 22]]);
     }));
 
-    return function applyCoupon(_x10) {
+    return function changeDriverTip(_x10, _x11) {
       return _ref12.apply(this, arguments);
-    };
-  }();
-  /**
-   * Apply coupon to cart
-   */
-
-
-  var changeDriverTip = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12(businessId, driverTipRate) {
-      var _state$carts$2;
-
-      var body, response, _yield$response$json9, error, result;
-
-      return _regenerator.default.wrap(function _callee12$(_context12) {
-        while (1) {
-          switch (_context12.prev = _context12.next) {
-            case 0:
-              if (businessId) {
-                _context12.next = 2;
-                break;
-              }
-
-              throw new Error('`businessId` is required.');
-
-            case 2:
-              if (!(!driverTipRate && driverTipRate !== 0)) {
-                _context12.next = 4;
-                break;
-              }
-
-              throw new Error('`driverTipRate` is required.');
-
-            case 4:
-              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts$2 = state.carts["businessId:".concat(businessId)]) === null || _state$carts$2 === void 0 ? void 0 : _state$carts$2.driver_tip_rate) === driverTipRate)) {
-                _context12.next = 6;
-                break;
-              }
-
-              return _context12.abrupt("return");
-
-            case 6:
-              _context12.prev = 6;
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: true
-              }));
-              body = JSON.stringify({
-                business_id: businessId,
-                driver_tip_rate: driverTipRate
-              });
-              _context12.next = 11;
-              return fetch("".concat(ordering.root, "/carts/change_driver_tip"), {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(session.token)
-                },
-                body: body
-              });
-
-            case 11:
-              response = _context12.sent;
-              _context12.next = 14;
-              return response.json();
-
-            case 14:
-              _yield$response$json9 = _context12.sent;
-              error = _yield$response$json9.error;
-              result = _yield$response$json9.result;
-
-              if (!error) {
-                state.carts["businessId:".concat(result.business_id)] = result;
-              } else {
-                setAlert({
-                  show: true,
-                  content: result
-                });
-              }
-
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              return _context12.abrupt("return", !error);
-
-            case 22:
-              _context12.prev = 22;
-              _context12.t0 = _context12["catch"](6);
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              return _context12.abrupt("return", false);
-
-            case 26:
-            case "end":
-              return _context12.stop();
-          }
-        }
-      }, _callee12, null, [[6, 22]]);
-    }));
-
-    return function changeDriverTip(_x11, _x12) {
-      return _ref13.apply(this, arguments);
     };
   }();
   /**
@@ -1037,6 +980,83 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var placeCart = /*#__PURE__*/function () {
+    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12(cardId, data) {
+      var body, response, _yield$response$json9, error, result, cart;
+
+      return _regenerator.default.wrap(function _callee12$(_context12) {
+        while (1) {
+          switch (_context12.prev = _context12.next) {
+            case 0:
+              _context12.prev = 0;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              data.paymethod_data = JSON.stringify(data.paymethod_data);
+              body = JSON.stringify(data);
+              _context12.next = 6;
+              return fetch("".concat(ordering.root, "/carts/").concat(cardId, "/place"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(session.token)
+                },
+                body: body
+              });
+
+            case 6:
+              response = _context12.sent;
+              _context12.next = 9;
+              return response.json();
+
+            case 9:
+              _yield$response$json9 = _context12.sent;
+              error = _yield$response$json9.error;
+              result = _yield$response$json9.result;
+              cart = _yield$response$json9.cart;
+
+              if (!error) {
+                state.carts["businessId:".concat(result.business_id)] = result;
+              } else {
+                state.carts["businessId:".concat(cart.business_id)] = cart;
+              }
+
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context12.abrupt("return", {
+                error: error,
+                result: result
+              });
+
+            case 18:
+              _context12.prev = 18;
+              _context12.t0 = _context12["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context12.abrupt("return", {
+                error: true,
+                result: [_context12.t0.message]
+              });
+
+            case 22:
+            case "end":
+              return _context12.stop();
+          }
+        }
+      }, _callee12, null, [[0, 18]]);
+    }));
+
+    return function placeCart(_x12, _x13) {
+      return _ref13.apply(this, arguments);
+    };
+  }();
+  /**
+   * Confirm cart
+   */
+
+
+  var confirmCart = /*#__PURE__*/function () {
     var _ref14 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee13(cardId, data) {
       var body, response, _yield$response$json10, error, result, cart;
 
@@ -1048,10 +1068,9 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              data.paymethod_data = JSON.stringify(data.paymethod_data);
               body = JSON.stringify(data);
-              _context13.next = 6;
-              return fetch("".concat(ordering.root, "/carts/").concat(cardId, "/place"), {
+              _context13.next = 5;
+              return fetch("".concat(ordering.root, "/carts/").concat(cardId, "/confirm"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -1060,12 +1079,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 body: body
               });
 
-            case 6:
+            case 5:
               response = _context13.sent;
-              _context13.next = 9;
+              _context13.next = 8;
               return response.json();
 
-            case 9:
+            case 8:
               _yield$response$json10 = _context13.sent;
               error = _yield$response$json10.error;
               result = _yield$response$json10.result;
@@ -1085,8 +1104,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: result
               });
 
-            case 18:
-              _context13.prev = 18;
+            case 17:
+              _context13.prev = 17;
               _context13.t0 = _context13["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1096,92 +1115,16 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context13.t0.message]
               });
 
-            case 22:
+            case 21:
             case "end":
               return _context13.stop();
           }
         }
-      }, _callee13, null, [[0, 18]]);
+      }, _callee13, null, [[0, 17]]);
     }));
 
-    return function placeCart(_x13, _x14) {
+    return function confirmCart(_x14, _x15) {
       return _ref14.apply(this, arguments);
-    };
-  }();
-  /**
-   * Confirm cart
-   */
-
-
-  var confirmCart = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee14(cardId, data) {
-      var body, response, _yield$response$json11, error, result, cart;
-
-      return _regenerator.default.wrap(function _callee14$(_context14) {
-        while (1) {
-          switch (_context14.prev = _context14.next) {
-            case 0:
-              _context14.prev = 0;
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: true
-              }));
-              body = JSON.stringify(data);
-              _context14.next = 5;
-              return fetch("".concat(ordering.root, "/carts/").concat(cardId, "/confirm"), {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(session.token)
-                },
-                body: body
-              });
-
-            case 5:
-              response = _context14.sent;
-              _context14.next = 8;
-              return response.json();
-
-            case 8:
-              _yield$response$json11 = _context14.sent;
-              error = _yield$response$json11.error;
-              result = _yield$response$json11.result;
-              cart = _yield$response$json11.cart;
-
-              if (!error) {
-                state.carts["businessId:".concat(result.business_id)] = result;
-              } else {
-                state.carts["businessId:".concat(cart.business_id)] = cart;
-              }
-
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              return _context14.abrupt("return", {
-                error: error,
-                result: result
-              });
-
-            case 17:
-              _context14.prev = 17;
-              _context14.t0 = _context14["catch"](0);
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              return _context14.abrupt("return", {
-                error: true,
-                result: [_context14.t0.message]
-              });
-
-            case 21:
-            case "end":
-              return _context14.stop();
-          }
-        }
-      }, _callee14, null, [[0, 17]]);
-    }));
-
-    return function confirmCart(_x15, _x16) {
-      return _ref15.apply(this, arguments);
     };
   }();
 
