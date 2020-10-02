@@ -39,7 +39,8 @@ var OrderingContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderingContext = OrderingContext;
 
 var OrderingProvider = function OrderingProvider(_ref) {
-  var settings = _ref.settings,
+  var Alert = _ref.Alert,
+      settings = _ref.settings,
       children = _ref.children;
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
@@ -49,7 +50,9 @@ var OrderingProvider = function OrderingProvider(_ref) {
     settings: Object.assign(settings.socket, {
       project: settings.project
     })
-  }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, null, children)))))));
+  }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
+    Alert: Alert
+  }, children)))))));
 };
 
 exports.OrderingProvider = OrderingProvider;
