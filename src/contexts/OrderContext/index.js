@@ -19,7 +19,7 @@ export const OrderProvider = ({ Alert, children }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
-  const [, t] = useLanguage()
+  const [languageState, t] = useLanguage()
   const socket = useWebsocket()
 
   const [state, setState] = useState({
@@ -423,7 +423,9 @@ export const OrderProvider = ({ Alert, children }) => {
 
   useEffect(() => {
     if (session.auth) {
-      refreshOrderOptions()
+      if (!languageState.loading) {
+        refreshOrderOptions()
+      }
     } else {
       const options = JSON.parse(localStorage.getItem('options'))
       setState({
@@ -436,7 +438,7 @@ export const OrderProvider = ({ Alert, children }) => {
         }
       })
     }
-  }, [session])
+  }, [session, languageState])
 
   /**
    * Update carts from sockets

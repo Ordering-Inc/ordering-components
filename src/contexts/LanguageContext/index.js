@@ -19,12 +19,11 @@ export const LanguageProvider = ({ children }) => {
     dictionary: {}
   })
 
-  const [ordering] = useApi()
+  const [ordering, apiHelper] = useApi()
 
   const refreshTranslations = async () => {
     try {
       !state.loading && setState({ ...state, loading: true })
-      ordering.language = state.language.code
       const { content: { error, result } } = await ordering.translations().asDictionary().get()
       setState({
         ...state,
@@ -38,7 +37,6 @@ export const LanguageProvider = ({ children }) => {
 
   const loadDefaultLanguege = async () => {
     try {
-      ordering.language = state.language.code
       const { content: { error, result } } = await ordering.languages().where([{ attribute: 'default', value: true }]).get()
       if (!error) {
         const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
@@ -55,18 +53,28 @@ export const LanguageProvider = ({ children }) => {
     if (!language || language.id === state.language?.id) return
     const _language = { id: language.id, code: language.code, rtl: language.rtl }
     window.localStorage.setItem('language', JSON.stringify(_language))
-    setState({ ...state, language: _language })
+    setState({ ...state, loading: true, language: _language })
   }
 
-  const initLanguage = async () => {
-    if (!state.language) {
-      await loadDefaultLanguege()
-    }
-    await refreshTranslations()
-  }
-
+  /**
+   * Refresh translation when change language from ordering
+   */
   useEffect(() => {
-    initLanguage()
+    if (state.language.code === ordering.language) {
+      refreshTranslations()
+    }
+  }, [state.language.code, ordering])
+
+  /**
+   * Load default language and change ordering language
+   */
+  useEffect(() => {
+    if (!state.language) {
+      loadDefaultLanguege()
+    } else {
+      apiHelper.setLanguage(state.language.code)
+    }
+    // initLanguage()
   }, [state.language])
 
   const t = (key, fallback = null) => {

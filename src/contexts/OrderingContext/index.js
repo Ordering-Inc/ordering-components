@@ -21,8 +21,8 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
   return (
     <OrderingContext.Provider>
       <ApiProvider settings={Object.assign(settings.api, { project: settings.project })}>
-        <ConfigProvider>
-          <LanguageProvider>
+        <LanguageProvider>
+          <ConfigProvider>
             <SessionProvider>
               <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
                 <OrderProvider Alert={Alert}>
@@ -30,8 +30,8 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
                 </OrderProvider>
               </WebsocketProvider>
             </SessionProvider>
-          </LanguageProvider>
-        </ConfigProvider>
+          </ConfigProvider>
+        </LanguageProvider>
       </ApiProvider>
     </OrderingContext.Provider>
   )
