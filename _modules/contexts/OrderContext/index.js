@@ -88,6 +88,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      languageState = _useLanguage2[0],
       t = _useLanguage2[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
@@ -1135,7 +1136,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
   (0, _react.useEffect)(function () {
     if (session.auth) {
-      refreshOrderOptions();
+      if (!languageState.loading) {
+        refreshOrderOptions();
+      }
     } else {
       var options = JSON.parse(localStorage.getItem('options'));
       setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -1147,7 +1150,7 @@ var OrderProvider = function OrderProvider(_ref) {
         }
       }));
     }
-  }, [session]);
+  }, [session, languageState]);
   /**
    * Update carts from sockets
    */

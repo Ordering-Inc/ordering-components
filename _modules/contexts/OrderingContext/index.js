@@ -46,7 +46,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
     settings: Object.assign(settings.api, {
       project: settings.project
     })
-  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, null, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
+  }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, null, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, null, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     settings: Object.assign(settings.socket, {
       project: settings.project
     })

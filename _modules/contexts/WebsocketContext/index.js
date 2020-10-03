@@ -76,7 +76,13 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
     }
   }, [session]);
   (0, _react.useEffect)(function () {
-    socket && socket.connect();
+    if (socket) {
+      socket.connect(); // Get client socket ID
+      // socket.socket.on('connect', () => {
+      //   // console.log('SOCKET CONECCTED', socket.socket.id)
+      // })
+    }
+
     return function () {
       socket && socket.close();
     };

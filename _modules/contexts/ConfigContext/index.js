@@ -13,6 +13,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _ApiContext = require("../ApiContext");
 
+var _LanguageContext = require("../LanguageContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -64,6 +66,10 @@ var ConfigProvider = function ConfigProvider(_ref) {
       _useState2 = _slicedToArray(_useState, 2),
       state = _useState2[0],
       setState = _useState2[1];
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 1),
+      languageState = _useLanguage2[0];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -117,8 +123,10 @@ var ConfigProvider = function ConfigProvider(_ref) {
   }();
 
   (0, _react.useEffect)(function () {
-    refreshConfigs();
-  }, []);
+    if (!languageState.loading) {
+      refreshConfigs();
+    }
+  }, [languageState]);
   return /*#__PURE__*/_react.default.createElement(ConfigContext.Provider, {
     value: [state, refreshConfigs]
   }, children);

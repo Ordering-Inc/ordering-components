@@ -67,8 +67,9 @@ var LanguageProvider = function LanguageProvider(_ref) {
       setState = _useState2[1];
 
   var _useApi = (0, _ApiContext.useApi)(),
-      _useApi2 = _slicedToArray(_useApi, 1),
-      ordering = _useApi2[0];
+      _useApi2 = _slicedToArray(_useApi, 2),
+      ordering = _useApi2[0],
+      apiHelper = _useApi2[1];
 
   var refreshTranslations = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -82,11 +83,10 @@ var LanguageProvider = function LanguageProvider(_ref) {
               !state.loading && setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              ordering.language = state.language.code;
-              _context.next = 5;
+              _context.next = 4;
               return ordering.translations().asDictionary().get();
 
-            case 5:
+            case 4:
               _yield$ordering$trans = _context.sent;
               _yield$ordering$trans2 = _yield$ordering$trans.content;
               error = _yield$ordering$trans2.error;
@@ -95,22 +95,22 @@ var LanguageProvider = function LanguageProvider(_ref) {
                 loading: false,
                 dictionary: error ? {} : result
               }));
-              _context.next = 15;
+              _context.next = 14;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 15:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 12]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
     return function refreshTranslations() {
@@ -127,14 +127,13 @@ var LanguageProvider = function LanguageProvider(_ref) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              ordering.language = state.language.code;
-              _context2.next = 4;
+              _context2.next = 3;
               return ordering.languages().where([{
                 attribute: 'default',
                 value: true
               }]).get();
 
-            case 4:
+            case 3:
               _yield$ordering$langu = _context2.sent;
               _yield$ordering$langu2 = _yield$ordering$langu.content;
               error = _yield$ordering$langu2.error;
@@ -152,19 +151,19 @@ var LanguageProvider = function LanguageProvider(_ref) {
                 }));
               }
 
-              _context2.next = 13;
+              _context2.next = 12;
               break;
 
-            case 11:
-              _context2.prev = 11;
+            case 10:
+              _context2.prev = 10;
               _context2.t0 = _context2["catch"](0);
 
-            case 13:
+            case 12:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee2, null, [[0, 10]]);
     }));
 
     return function loadDefaultLanguege() {
@@ -197,6 +196,7 @@ var LanguageProvider = function LanguageProvider(_ref) {
               };
               window.localStorage.setItem('language', JSON.stringify(_language));
               setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true,
                 language: _language
               }));
 
@@ -212,40 +212,27 @@ var LanguageProvider = function LanguageProvider(_ref) {
       return _ref4.apply(this, arguments);
     };
   }();
+  /**
+   * Refresh translation when change language from ordering
+   */
 
-  var initLanguage = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
-      return _regenerator.default.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              if (state.language) {
-                _context4.next = 3;
-                break;
-              }
-
-              _context4.next = 3;
-              return loadDefaultLanguege();
-
-            case 3:
-              _context4.next = 5;
-              return refreshTranslations();
-
-            case 5:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4);
-    }));
-
-    return function initLanguage() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
 
   (0, _react.useEffect)(function () {
-    initLanguage();
+    if (state.language.code === ordering.language) {
+      refreshTranslations();
+    }
+  }, [state.language.code, ordering]);
+  /**
+   * Load default language and change ordering language
+   */
+
+  (0, _react.useEffect)(function () {
+    if (!state.language) {
+      loadDefaultLanguege();
+    } else {
+      apiHelper.setLanguage(state.language.code);
+    } // initLanguage()
+
   }, [state.language]);
 
   var t = function t(key) {
@@ -269,7 +256,17 @@ var useLanguage = function useLanguage() {
   return languageManager || [{}, function (key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     return fallback || key;
-  }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+  }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
+    return _regenerator.default.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  })), /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
     return _regenerator.default.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
@@ -279,16 +276,6 @@ var useLanguage = function useLanguage() {
         }
       }
     }, _callee5);
-  })), /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
-    return _regenerator.default.wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-          case "end":
-            return _context6.stop();
-        }
-      }
-    }, _callee6);
   }))];
 };
 
