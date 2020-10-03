@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { Ordering } from 'ordering-api-sdk'
 
 /**
@@ -12,10 +12,29 @@ export const ApiContext = createContext()
  * @param {props} props
  */
 export const ApiProvider = ({ settings, children }) => {
-  const ordering = new Ordering(settings)
+  const [ordering, setOrdering] = useState(new Ordering(settings))
+  const [language, setLanguage] = useState(settings.language)
+
+  const _setLanguage = (languageCode) => {
+    if (languageCode === language) return
+    setLanguage(languageCode)
+  }
+
+  useEffect(() => {
+    if (ordering.language === language) return
+    const _ordering = new Ordering({
+      ...settings,
+      language
+    })
+    setOrdering(_ordering)
+  }, [language])
+
+  const functions = {
+    setLanguage: _setLanguage
+  }
 
   return (
-    <ApiContext.Provider value={[ordering]}>
+    <ApiContext.Provider value={[ordering, functions]}>
       {children}
     </ApiContext.Provider>
   )

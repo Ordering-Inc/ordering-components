@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useApi } from '../ApiContext'
+import { useLanguage } from '../LanguageContext'
 
 /**
  * Create ConfigContext
@@ -14,7 +15,7 @@ export const ConfigContext = createContext()
  */
 export const ConfigProvider = ({ children }) => {
   const [state, setState] = useState({ loading: true, configs: {} })
-
+  const [languageState] = useLanguage()
   const [ordering] = useApi()
 
   const refreshConfigs = async () => {
@@ -32,8 +33,10 @@ export const ConfigProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    refreshConfigs()
-  }, [])
+    if (!languageState.loading) {
+      refreshConfigs()
+    }
+  }, [languageState])
 
   return (
     <ConfigContext.Provider value={[state, refreshConfigs]}>

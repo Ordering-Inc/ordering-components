@@ -30,7 +30,13 @@ export const WebsocketProvider = ({ settings, children }) => {
   }, [session])
 
   useEffect(() => {
-    socket && socket.connect()
+    if (socket) {
+      socket.connect()
+      // Get client socket ID
+      // socket.socket.on('connect', () => {
+      //   // console.log('SOCKET CONECCTED', socket.socket.id)
+      // })
+    }
     return () => {
       socket && socket.close()
     }
