@@ -57,6 +57,11 @@ var Socket = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "getId",
+    value: function getId() {
+      return this.socket.id;
+    }
+  }, {
     key: "close",
     value: function close() {
       var _this$socket;

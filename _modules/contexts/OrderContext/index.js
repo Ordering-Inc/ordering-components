@@ -424,6 +424,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: JSON.stringify(changes)
@@ -503,6 +504,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -581,6 +583,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -655,6 +658,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -729,6 +733,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -830,6 +835,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -931,6 +937,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -1004,6 +1011,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -1021,7 +1029,11 @@ var OrderProvider = function OrderProvider(_ref) {
               cart = _yield$response$json9.cart;
 
               if (!error) {
-                state.carts["businessId:".concat(result.business_id)] = result;
+                if (result.status !== 1) {
+                  state.carts["businessId:".concat(result.business_id)] = result;
+                } else {
+                  delete state.carts["businessId:".concat(result.business_id)];
+                }
               } else {
                 state.carts["businessId:".concat(cart.business_id)] = cart;
               }
@@ -1080,6 +1092,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                   Authorization: "Bearer ".concat(session.token)
                 },
                 body: body
@@ -1097,7 +1110,11 @@ var OrderProvider = function OrderProvider(_ref) {
               cart = _yield$response$json10.cart;
 
               if (!error) {
-                state.carts["businessId:".concat(result.business_id)] = result;
+                if (result.status !== 1) {
+                  state.carts["businessId:".concat(result.business_id)] = result;
+                } else {
+                  delete state.carts["businessId:".concat(result.business_id)];
+                }
               } else {
                 state.carts["businessId:".concat(cart.business_id)] = cart;
               }
