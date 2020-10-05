@@ -178,7 +178,7 @@ export const OrderProvider = ({ Alert, children }) => {
     if (session.auth) {
       try {
         setState({ ...state, loading: true })
-        const response = await fetch(`${ordering.root}/order_options`, { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
+        const response = await fetch(`${ordering.root}/order_options`, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
         const { error, result } = await response.json()
         if (!error) {
           const { carts, ...options } = result
@@ -211,7 +211,7 @@ export const OrderProvider = ({ Alert, children }) => {
       const body = JSON.stringify({
         product: JSON.stringify(product)
       })
-      const response = await fetch(`${ordering.root}/carts/add_product`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/add_product`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -239,7 +239,7 @@ export const OrderProvider = ({ Alert, children }) => {
           business_id: product.business_id
         })
       })
-      const response = await fetch(`${ordering.root}/carts/remove_product`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/remove_product`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -263,7 +263,7 @@ export const OrderProvider = ({ Alert, children }) => {
       const body = JSON.stringify({
         uuid
       })
-      const response = await fetch(`${ordering.root}/carts/clear`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/clear`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -287,7 +287,7 @@ export const OrderProvider = ({ Alert, children }) => {
       const body = JSON.stringify({
         product: JSON.stringify(product)
       })
-      const response = await fetch(`${ordering.root}/carts/update_product`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/update_product`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -321,7 +321,7 @@ export const OrderProvider = ({ Alert, children }) => {
         business_id: couponData.business_id,
         coupon: couponData.coupon
       })
-      const response = await fetch(`${ordering.root}/carts/apply_coupon`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/apply_coupon`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -355,7 +355,7 @@ export const OrderProvider = ({ Alert, children }) => {
         business_id: businessId,
         driver_tip_rate: driverTipRate
       })
-      const response = await fetch(`${ordering.root}/carts/change_driver_tip`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/change_driver_tip`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -378,10 +378,14 @@ export const OrderProvider = ({ Alert, children }) => {
       setState({ ...state, loading: true })
       data.paymethod_data = JSON.stringify(data.paymethod_data)
       const body = JSON.stringify(data)
-      const response = await fetch(`${ordering.root}/carts/${cardId}/place`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/${cardId}/place`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result, cart } = await response.json()
       if (!error) {
-        state.carts[`businessId:${result.business_id}`] = result
+        if (result.status !== 1) {
+          state.carts[`businessId:${result.business_id}`] = result
+        } else {
+          delete state.carts[`businessId:${result.business_id}`]
+        }
       } else {
         state.carts[`businessId:${cart.business_id}`] = cart
       }
@@ -403,10 +407,14 @@ export const OrderProvider = ({ Alert, children }) => {
     try {
       setState({ ...state, loading: true })
       const body = JSON.stringify(data)
-      const response = await fetch(`${ordering.root}/carts/${cardId}/confirm`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/${cardId}/confirm`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result, cart } = await response.json()
       if (!error) {
-        state.carts[`businessId:${result.business_id}`] = result
+        if (result.status !== 1) {
+          state.carts[`businessId:${result.business_id}`] = result
+        } else {
+          delete state.carts[`businessId:${result.business_id}`]
+        }
       } else {
         state.carts[`businessId:${cart.business_id}`] = cart
       }

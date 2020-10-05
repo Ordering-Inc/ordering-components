@@ -31,6 +31,10 @@ export class Socket {
     })
   }
 
+  getId () {
+    return this.socket.id
+  }
+
   close () {
     if (this.socket?.connected) {
       this.socket.close()
