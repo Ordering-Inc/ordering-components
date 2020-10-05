@@ -1157,7 +1157,14 @@ var OrderProvider = function OrderProvider(_ref) {
 
   (0, _react.useEffect)(function () {
     var handleCartUpdate = function handleCartUpdate(cart) {
-      state.carts["businessId:".concat(cart.business_id)] = _objectSpread(_objectSpread({}, state.carts["businessId:".concat(cart.business_id)]), cart);
+      if (cart.status === 1) {
+        if (state.carts["businessId:".concat(cart.business_id)]) {
+          delete state.carts["businessId:".concat(cart.business_id)];
+        }
+      } else {
+        state.carts["businessId:".concat(cart.business_id)] = _objectSpread(_objectSpread({}, state.carts["businessId:".concat(cart.business_id)]), cart);
+      }
+
       setState(_objectSpread({}, state));
     };
 
