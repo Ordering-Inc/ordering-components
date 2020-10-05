@@ -55,6 +55,8 @@ var LanguageContext = /*#__PURE__*/(0, _react.createContext)();
 exports.LanguageContext = LanguageContext;
 
 var LanguageProvider = function LanguageProvider(_ref) {
+  var _state$language4;
+
   var children = _ref.children;
 
   var _useState = (0, _react.useState)({
@@ -218,10 +220,12 @@ var LanguageProvider = function LanguageProvider(_ref) {
 
 
   (0, _react.useEffect)(function () {
-    if (state.language.code === ordering.language) {
+    var _state$language2, _state$language3;
+
+    if (((_state$language2 = state.language) === null || _state$language2 === void 0 ? void 0 : _state$language2.code) && ((_state$language3 = state.language) === null || _state$language3 === void 0 ? void 0 : _state$language3.code) === ordering.language) {
       refreshTranslations();
     }
-  }, [state.language.code, ordering]);
+  }, [(_state$language4 = state.language) === null || _state$language4 === void 0 ? void 0 : _state$language4.code, ordering]);
   /**
    * Load default language and change ordering language
    */
@@ -231,8 +235,7 @@ var LanguageProvider = function LanguageProvider(_ref) {
       loadDefaultLanguege();
     } else {
       apiHelper.setLanguage(state.language.code);
-    } // initLanguage()
-
+    }
   }, [state.language]);
 
   var t = function t(key) {
