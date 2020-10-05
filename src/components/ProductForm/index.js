@@ -48,9 +48,14 @@ export const ProductForm = (props) => {
   const cart = orderState.carts[`businessId:${props.businessId}`]
 
   /**
+   * Product in cart
+   */
+  const productInCart = cart?.products?.find(prod => prod.id === product.id)
+
+  /**
    * Total product in cart
    */
-  const totalBalance = (cart?.quantity || 0) - removeToBalance
+  const totalBalance = (productInCart?.quantity || 0) - removeToBalance
 
   /**
    * Total the current product in cart
