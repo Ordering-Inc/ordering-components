@@ -445,9 +445,15 @@ export const OrderProvider = ({ Alert, children }) => {
    */
   useEffect(() => {
     const handleCartUpdate = (cart) => {
-      state.carts[`businessId:${cart.business_id}`] = {
-        ...state.carts[`businessId:${cart.business_id}`],
-        ...cart
+      if (cart.status === 1) {
+        if (state.carts[`businessId:${cart.business_id}`]) {
+          delete state.carts[`businessId:${cart.business_id}`]
+        }
+      } else {
+        state.carts[`businessId:${cart.business_id}`] = {
+          ...state.carts[`businessId:${cart.business_id}`],
+          ...cart
+        }
       }
       setState({ ...state })
     }
