@@ -60,10 +60,10 @@ export const LanguageProvider = ({ children }) => {
    * Refresh translation when change language from ordering
    */
   useEffect(() => {
-    if (state.language.code === ordering.language) {
+    if (state.language?.code && state.language?.code === ordering.language) {
       refreshTranslations()
     }
-  }, [state.language.code, ordering])
+  }, [state.language?.code, ordering])
 
   /**
    * Load default language and change ordering language
@@ -74,7 +74,6 @@ export const LanguageProvider = ({ children }) => {
     } else {
       apiHelper.setLanguage(state.language.code)
     }
-    // initLanguage()
   }, [state.language])
 
   const t = (key, fallback = null) => {
