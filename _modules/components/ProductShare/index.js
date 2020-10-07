@@ -33,25 +33,24 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ProductShare = function ProductShare(props) {
   var UIComponent = props.UIComponent,
-      url = props.url,
-      addtoanySrc = props.addtoanySrc;
+      slug = props.slug,
+      categoryId = props.categoryId,
+      productId = props.productId;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
-      show = _useState2[0],
-      setShow = _useState2[1];
+      showShareButton = _useState2[0],
+      setShowShareButton = _useState2[1];
+
+  var urlToShare = "https://orderingweb.ordering.co/".concat(slug, "?category=").concat(categoryId, "&product=").concat(productId);
 
   var addToAnyScript = function addToAnyScript() {
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = addtoanySrc;
+    script.src = 'https://static.addtoany.com/menu/page.js';
     script.async = true;
     script.id = 'addthis_widget';
     document.body.appendChild(script);
-  };
-
-  var shareButton = function shareButton() {
-    setShow(!show);
   };
 
   (0, _react.useEffect)(function () {
@@ -62,9 +61,11 @@ var ProductShare = function ProductShare(props) {
     addToAnyScript();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    shareButton: shareButton,
-    show: show,
-    url: url
+    shareButton: function shareButton() {
+      return setShowShareButton(!showShareButton);
+    },
+    showShareButton: showShareButton,
+    urlToShare: urlToShare
   })));
 };
 
