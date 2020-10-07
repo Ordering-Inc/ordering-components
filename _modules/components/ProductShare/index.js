@@ -77,14 +77,19 @@ ProductShare.propTypes = {
   UIComponent: _propTypes.default.elementType,
 
   /**
-   *  function that create the script for share
+   * Business slug
    */
-  shareButton: _propTypes.default.func,
+  slug: _propTypes.default.string.isRequired,
 
   /**
-   * Example url to display the name, description and image properly in any social red
+   * product category id
    */
-  url: _propTypes.default.string.isRequired,
+  categoryId: _propTypes.default.number.isRequired,
+
+  /**
+   * product id
+   */
+  productId: _propTypes.default.number.isRequired,
 
   /**
    * Components types before business type filter
