@@ -1,28 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { ProductShare } from '../../../src/components/ProductShare'
 import { ProductShareUI } from '../../components/ProductShareUI'
 import { TestComponent } from '../../components/TestComponent'
-import { useApi } from '../../../src/contexts/ApiContext'
 
 export const ProductShareExample = () => {
-  const [ordering] = useApi()
-  const [bussinessName, setBussinessName] = useState('')
-  const [categoryID, setCategoryID] = useState(undefined)
-  const [productID, setProductID] = useState(undefined)
-
-  useEffect(() => {
-    getProduct()
-  }, [])
-
-  const getProduct = async () => {
-    const { response } = await ordering.businesses(41).get()
-    const productShown = response.data.result
-    setBussinessName(productShown.name.toLowerCase())
-    setCategoryID(productShown.categories[0].id)
-    setProductID(productShown.categories[0].products[0].id)
-  }
-
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
@@ -32,17 +14,17 @@ export const ProductShareExample = () => {
     /**
      * Current product business name
      */
-    slug: bussinessName,
+    slug: 'mcbonalds',
 
     /**
      * product category id
      */
-    categoryID,
+    categoryId: 248,
 
     /**
      * product id
      */
-    productID,
+    productId: 1292,
     /**
      * Components types before product share
      * Array of type components, the parent props will pass to these components
