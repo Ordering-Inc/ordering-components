@@ -37,6 +37,7 @@ import { PaymentOptions } from './components/PaymentOptions'
 import { Popup } from './components/Popup'
 import { ProductComponent } from './components/ProductComponent'
 import { ProductForm } from './components/ProductForm'
+import { ProductShare } from './components/ProductShare'
 import { ProductImages } from './components/ProductImages'
 import { ProductIngredient } from './components/ProductIngredient'
 import { ProductOption } from './components/ProductOption'
@@ -112,6 +113,7 @@ export {
   Popup,
   ProductComponent,
   ProductForm,
+  ProductShare,
   ProductImages,
   ProductIngredient,
   ProductOption,
