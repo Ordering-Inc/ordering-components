@@ -3,8 +3,8 @@ import React from 'react'
 export const ProductShareUI = (props) => {
   const {
     shareButton,
-    show,
-    url,
+    showShareButton,
+    urlToShare,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -26,8 +26,8 @@ export const ProductShareUI = (props) => {
       </button>
       <div
         className='a2a_kit a2a_kit_size_32 a2a_floating_style a2a_vertical_style'
-        data-a2a-url={url}
-        style={{ visibility: show ? 'initial' : 'hidden', left: '0px', top: '110px' }}
+        data-a2a-url={urlToShare}
+        style={{ visibility: showShareButton ? 'initial' : 'hidden', left: '0px', top: '110px' }}
       >
         <a className='a2a_button_facebook' />
         <a className='a2a_button_twitter' />
