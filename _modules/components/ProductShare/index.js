@@ -42,7 +42,7 @@ var ProductShare = function ProductShare(props) {
       showShareButton = _useState2[0],
       setShowShareButton = _useState2[1];
 
-  var urlToShare = "https://orderingweb.ordering.co/".concat(slug, "?category=").concat(categoryId, "&product=").concat(productId);
+  var urlToShare = "".concat(window.location.origin, "/store/").concat(slug, "?category=").concat(categoryId, "&product=").concat(productId);
 
   var addToAnyScript = function addToAnyScript() {
     var script = document.createElement('script');
