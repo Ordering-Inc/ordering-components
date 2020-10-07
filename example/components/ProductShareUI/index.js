@@ -21,20 +21,21 @@ export const ProductShareUI = (props) => {
       ))}
       <button
         onClick={() => shareButton()}
-        style={{
-          borderRadius: '50%',
-          outline: '0',
-          border: '0',
-          width: '2.5em',
-          height: '2.5em',
-          color: '#fff'
-        }}
       >
-        {<div
-          className='addthis_inline_share_toolbox ' style={{ visibility: show ? 'initial' : 'hidden' }} data-url={url}
-        />}
-
+        share
       </button>
+      <div
+        className='a2a_kit a2a_kit_size_32 a2a_floating_style a2a_vertical_style'
+        data-a2a-url={url}
+        style={{ visibility: show ? 'initial' : 'hidden', left: '0px', top: '110px' }}
+      >
+        <a className='a2a_button_facebook' />
+        <a className='a2a_button_twitter' />
+        <a className='a2a_button_email' />
+        <a className='a2a_button_whatsapp' />
+        <a className='a2a_dd' href='https://www.addtoany.com/share' />
+      </div>
+
       {afterComponents.map((AfterComponent, i) => (
         <AfterComponent key={i} {...props} />
       ))}

@@ -10,13 +10,12 @@ export const ProductShareExample = () => {
   const [bussinessName, setBussinessName] = useState('')
   const [categoryID, setCategoryID] = useState(undefined)
   const [productID, setProductID] = useState(undefined)
-  // ID for the addThis
-  const addthisID = 'ra-5f510bec3e657e9d'
+
   useEffect(() => {
-    product()
+    getProduct()
   }, [])
 
-  const product = async () => {
+  const getProduct = async () => {
     const { response } = await ordering.businesses(41).get()
     const productShown = response.data.result
     setBussinessName(productShown.name.toLowerCase())
@@ -33,45 +32,44 @@ export const ProductShareExample = () => {
     /**
      * Current product business name
      */
-    bussinessName: bussinessName,
+    bussinessName,
 
     /**
      * product category id
      */
-    categoryID: categoryID,
+    categoryID,
 
     /**
      * product id
      */
-    productID: productID,
+    productID,
 
     /**
      * Example url to display the name, description and image properly in any social red
      */
     url: `https://orderingweb.ordering.co/${bussinessName}?category=${categoryID}&product=${productID}`,
 
-    // ID for the addThis
-    addthisID: addthisID,
-
-    // url for the widget of addThis
-    addthisSrc: '//s7.addthis.com/js/300/addthis_widget.js#pubid=' + addthisID,
     /**
-     * Components types before moment option
+     * url for the widget of addToAny
+     */
+    addtoanySrc: 'https://static.addtoany.com/menu/page.js',
+    /**
+     * Components types before product share
      * Array of type components, the parent props will pass to these components
      */
     beforeComponents: [TestComponent],
     /**
-     * Components types after moment option
+     * Components types after product share
      * Array of type components, the parent props will pass to these components
      */
     afterComponents: [TestComponent],
     /**
-     * Elements before moment option
+     * Elements before product share
      * Array of HTML/Components elements, these components will not get the parent props
      */
     beforeElements: [<p key>Test Element Before</p>],
     /**
-     * Elements after moment option
+     * Elements after product share
      * Array of HTML/Components elements, these components will not get the parent props
      */
     afterElements: [<p key>Test Element After</p>]
