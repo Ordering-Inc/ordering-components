@@ -48,13 +48,17 @@ ProductShare.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   *  function that create the script for share
+   * Business slug
    */
-  shareButton: PropTypes.func,
+  slug: PropTypes.string.isRequired,
   /**
-   * Example url to display the name, description and image properly in any social red
+   * product category id
    */
-  url: PropTypes.string.isRequired,
+  categoryId: PropTypes.number.isRequired,
+  /**
+   * product id
+   */
+  productId: PropTypes.number.isRequired,
   /**
    * Components types before business type filter
    * Array of type components, the parent props will pass to these components
