@@ -10,7 +10,7 @@ export const ProductShare = (props) => {
   } = props
 
   const [showShareButton, setShowShareButton] = useState(false)
-  const urlToShare = `https://orderingweb.ordering.co/${slug}?category=${categoryId}&product=${productId}`
+  const urlToShare = `${window.location.origin}/store/${slug}?category=${categoryId}&product=${productId}`
 
   const addToAnyScript = () => {
     const script = document.createElement('script')
