@@ -2,20 +2,23 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 export const ProductShare = (props) => {
-  const { UIComponent, url, addtoanySrc } = props
-  const [show, setShow] = useState(false)
+  const {
+    UIComponent,
+    slug,
+    categoryId,
+    productId
+  } = props
+
+  const [showShareButton, setShowShareButton] = useState(false)
+  const urlToShare = `https://orderingweb.ordering.co/${slug}?category=${categoryId}&product=${productId}`
 
   const addToAnyScript = () => {
     const script = document.createElement('script')
     script.type = 'text/javascript'
-    script.src = addtoanySrc
+    script.src = 'https://static.addtoany.com/menu/page.js'
     script.async = true
     script.id = 'addthis_widget'
     document.body.appendChild(script)
-  }
-
-  const shareButton = () => {
-    setShow(!show)
   }
 
   useEffect(() => {
@@ -30,9 +33,9 @@ export const ProductShare = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          shareButton={shareButton}
-          show={show}
-          url={url}
+          shareButton={() => setShowShareButton(!showShareButton)}
+          showShareButton={showShareButton}
+          urlToShare={urlToShare}
         />
       )}
     </>

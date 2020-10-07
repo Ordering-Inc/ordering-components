@@ -32,7 +32,7 @@ export const ProductShareExample = () => {
     /**
      * Current product business name
      */
-    bussinessName,
+    slug: bussinessName,
 
     /**
      * product category id
@@ -43,16 +43,6 @@ export const ProductShareExample = () => {
      * product id
      */
     productID,
-
-    /**
-     * Example url to display the name, description and image properly in any social red
-     */
-    url: `https://orderingweb.ordering.co/${bussinessName}?category=${categoryID}&product=${productID}`,
-
-    /**
-     * url for the widget of addToAny
-     */
-    addtoanySrc: 'https://static.addtoany.com/menu/page.js',
     /**
      * Components types before product share
      * Array of type components, the parent props will pass to these components
