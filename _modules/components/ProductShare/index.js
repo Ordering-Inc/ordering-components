@@ -34,34 +34,33 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ProductShare = function ProductShare(props) {
   var UIComponent = props.UIComponent,
       url = props.url,
-      addthisSrc = props.addthisSrc;
+      addtoanySrc = props.addtoanySrc;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       show = _useState2[0],
       setShow = _useState2[1];
 
-  (0, _react.useEffect)(function () {
-    if (window.document.getElementById('addthis_widget')) {
-      return;
-    }
-
-    addthisScript();
-  }, []);
-
-  var addthisScript = function addthisScript() {
+  var addToAnyScript = function addToAnyScript() {
     var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = addtoanySrc;
     script.async = true;
-    script.src = addthisSrc;
     script.id = 'addthis_widget';
     document.body.appendChild(script);
   };
 
   var shareButton = function shareButton() {
-    // toggle the show of the share buttons
     setShow(!show);
   };
 
+  (0, _react.useEffect)(function () {
+    if (window.document.getElementById('addthis_widget')) {
+      return;
+    }
+
+    addToAnyScript();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     shareButton: shareButton,
     show: show,
