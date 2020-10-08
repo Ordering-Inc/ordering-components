@@ -37,6 +37,12 @@ export const LanguageSelectorUI = (props) => {
         <span>Loading...</span>
       )}
 
+      {!languages.loading && languages.error && languages.error.length > 0 && (
+        languages.error.map((e, i) => (
+          <p key={i}>ERROR: [{e}]</p>
+        ))
+      )}
+
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
       )}

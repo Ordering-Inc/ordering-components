@@ -13,7 +13,7 @@ export const LanguageSelector = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [languagesState, setLanguageState] = useState({ loading: true, languages })
+  const [languagesState, setLanguageState] = useState({ loading: true, languages, error: null })
   const [languageState, , setLanguage] = useLanguage()
   const [languageSelected, setLanguageSelected] = useState(null)
   const requestsState = {}
@@ -52,7 +52,7 @@ export const LanguageSelector = (props) => {
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
-        setLanguageState({ ...languagesState, loading: false })
+        setLanguageState({ ...languagesState, loading: false, error: [err] })
       }
     }
   }
