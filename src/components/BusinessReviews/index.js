@@ -28,7 +28,7 @@ export const BusinessReviews = (props) => {
    * @param {Number} val
    */
   const onChangeOption = (val = null) => {
-    const reviews = val
+    const reviews = val !== 'all'
       ? reviewsList.filter(review => review.total >= val && review.total < val + 1)
       : reviewsList
     setBusinessReviewsList({

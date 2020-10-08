@@ -26,6 +26,7 @@ export const BusinessReviewsUI = (props) => {
         <>
           <div className='actions'>
             <button onClick={() => handleClickOption(null)}>Date</button>
+            <button onClick={() => handleClickOption('all')}>All</button>
             <button onClick={() => handleClickOption(4)}>4+⭐️</button>
             <button onClick={() => handleClickOption(3)}>3+⭐️</button>
             <button onClick={() => handleClickOption(2)}>2+⭐️</button>
