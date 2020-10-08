@@ -62,7 +62,8 @@ var LanguageSelector = function LanguageSelector(props) {
 
   var _useState = (0, _react.useState)({
     loading: true,
-    languages: languages
+    languages: languages,
+    error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
       languagesState = _useState2[0],
@@ -142,7 +143,8 @@ var LanguageSelector = function LanguageSelector(props) {
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setLanguageState(_objectSpread(_objectSpread({}, languagesState), {}, {
-                  loading: false
+                  loading: false,
+                  error: [_context.t0]
                 }));
               }
 

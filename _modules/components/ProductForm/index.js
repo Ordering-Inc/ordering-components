@@ -50,7 +50,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ProductForm = function ProductForm(props) {
-  var _cart$products;
+  var _cart$products, _cart$products2;
 
   var UIComponent = props.UIComponent,
       useOrderContext = props.useOrderContext,
@@ -117,15 +117,22 @@ var ProductForm = function ProductForm(props) {
 
   var cart = orderState.carts["businessId:".concat(props.businessId)];
   /**
+   * Product in cart
+   */
+
+  var productInCart = cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.find(function (prod) {
+    return prod.id === product.id;
+  });
+  /**
    * Total product in cart
    */
 
-  var totalBalance = ((cart === null || cart === void 0 ? void 0 : cart.quantity) || 0) - removeToBalance;
+  var totalBalance = ((productInCart === null || productInCart === void 0 ? void 0 : productInCart.quantity) || 0) - removeToBalance;
   /**
    * Total the current product in cart
    */
 
-  var productBalance = ((cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.reduce(function (sum, _product) {
+  var productBalance = ((cart === null || cart === void 0 ? void 0 : (_cart$products2 = cart.products) === null || _cart$products2 === void 0 ? void 0 : _cart$products2.reduce(function (sum, _product) {
     return sum + (product && _product.id === product.id ? _product.quantity : 0);
   }, 0)) || 0) - removeToBalance;
   /**

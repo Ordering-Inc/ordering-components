@@ -25,6 +25,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -43,16 +49,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var BusinessBasicInformation = function BusinessBasicInformation(props) {
   var UIComponent = props.UIComponent,
+      business = props.business,
+      businessId = props.businessId,
       businessParams = props.businessParams;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState = (0, _react.useState)([]),
+  var _useState = (0, _react.useState)({
+    business: {},
+    loading: false,
+    error: null
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      business = _useState2[0],
-      setBusiness = _useState2[1];
+      businessState = _useState2[0],
+      setBusinessState = _useState2[1];
 
   var requestsState = {};
   /**
@@ -60,7 +72,7 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
    */
 
   var getBusiness = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(id) {
       var source;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -69,7 +81,7 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
               source = _orderingApiSdk.CancelToken.source();
               requestsState.business = source;
               _context.next = 4;
-              return ordering.businesses().select(businessParams).parameters({
+              return ordering.businesses(id).select(businessParams).parameters({
                 location: '40.7539143,-73.9810162',
                 type: 1
               }).get({
@@ -87,7 +99,7 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
       }, _callee);
     }));
 
-    return function getBusiness() {
+    return function getBusiness(_x) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -98,33 +110,43 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
 
   var loadBusiness = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _response$data, _yield$getBusiness, response;
+      var _yield$getBusiness, result;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              _context2.next = 3;
-              return getBusiness();
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return getBusiness(businessId);
 
-            case 3:
+            case 4:
               _yield$getBusiness = _context2.sent;
-              response = _yield$getBusiness.response;
-              setBusiness((_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.result[1]);
-              _context2.next = 10;
+              result = _yield$getBusiness.content.result;
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: false,
+                business: result
+              }));
+              _context2.next = 12;
               break;
 
-            case 8:
-              _context2.prev = 8;
+            case 9:
+              _context2.prev = 9;
               _context2.t0 = _context2["catch"](0);
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: false,
+                error: [_context2.t0]
+              }));
 
-            case 10:
+            case 12:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 8]]);
+      }, _callee2, null, [[0, 9]]);
     }));
 
     return function loadBusiness() {
@@ -133,7 +155,14 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    loadBusiness();
+    if (business) {
+      setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+        business: business
+      }));
+    } else {
+      loadBusiness();
+    }
+
     return function () {
       if (requestsState.business) {
         requestsState.business.cancel();
@@ -141,7 +170,7 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
     };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    business: business
+    businessState: businessState
   })));
 };
 
@@ -183,7 +212,6 @@ BusinessBasicInformation.propTypes = {
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
 BusinessBasicInformation.defaultProps = {
-  business: {},
   businessParams: ['header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews'],
   beforeComponents: [],
   afterComponents: [],
