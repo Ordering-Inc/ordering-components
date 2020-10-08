@@ -64,7 +64,7 @@ var OrderDetails = function OrderDetails(props) {
       ordering = _useApi2[0];
 
   var _useState = (0, _react.useState)({
-    order: {},
+    order: null,
     loading: !props.order,
     error: null
   }),
@@ -170,7 +170,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result;
+      var _yield$ordering$setAc, result, order;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -182,31 +182,29 @@ var OrderDetails = function OrderDetails(props) {
 
             case 3:
               _yield$ordering$setAc = _context2.sent;
-              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
-              error = _yield$ordering$setAc2.error;
-              result = _yield$ordering$setAc2.result;
+              result = _yield$ordering$setAc.content.result;
+              order = Array.isArray(result) ? null : result;
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                order: !error ? result : {},
-                error: error && result
+                order: order
               }));
-              _context2.next = 13;
+              _context2.next = 12;
               break;
 
-            case 10:
-              _context2.prev = 10;
+            case 9:
+              _context2.prev = 9;
               _context2.t0 = _context2["catch"](0);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 13:
+            case 12:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 10]]);
+      }, _callee2, null, [[0, 9]]);
     }));
 
     return function getOrder() {
