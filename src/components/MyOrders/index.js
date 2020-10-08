@@ -39,8 +39,7 @@ export const MyOrders = (props) => {
       setActiveOrdersStatus({
         ...activeOrdersStatus,
         loading: false,
-        orders: result,
-        error: false
+        orders: result
       })
     } catch (err) {
       setActiveOrdersStatus({
@@ -63,8 +62,7 @@ export const MyOrders = (props) => {
       setPreviousOrdersStatus({
         ...previousOrdersStatus,
         loading: false,
-        orders: result,
-        error: false
+        orders: result
       })
     } catch (err) {
       setPreviousOrdersStatus({
