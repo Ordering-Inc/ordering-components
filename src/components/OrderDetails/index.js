@@ -12,7 +12,7 @@ export const OrderDetails = (props) => {
 
   const [{ user, token }] = useSession()
   const [ordering] = useApi()
-  const [orderState, setOrderState] = useState({ order: {}, loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const socket = useWebsocket()
 
@@ -72,12 +72,12 @@ export const OrderDetails = (props) => {
    */
   const getOrder = async () => {
     try {
-      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get()
+      const { content: { result } } = await ordering.setAccessToken(token).orders(orderId).get()
+      const order = Array.isArray(result) ? null : result
       setOrderState({
         ...orderState,
         loading: false,
-        order: !error ? result : {},
-        error: error && result
+        order
       })
     } catch (e) {
       setOrderState({
