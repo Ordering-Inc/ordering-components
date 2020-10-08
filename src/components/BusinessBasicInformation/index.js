@@ -6,20 +6,25 @@ import { CancelToken } from 'ordering-api-sdk'
 export const BusinessBasicInformation = (props) => {
   const {
     UIComponent,
+    business,
+    businessId,
     businessParams
   } = props
 
   const [ordering] = useApi()
-  const [business, setBusiness] = useState([])
+  const [businessState, setBusinessState] = useState({ business: {}, loading: false, error: null })
   const requestsState = {}
 
   /**
    * Method to get business from SDK
    */
-  const getBusiness = async () => {
+  const getBusiness = async (id) => {
     const source = CancelToken.source()
     requestsState.business = source
-    return await ordering.businesses().select(businessParams).parameters({ location: '40.7539143,-73.9810162', type: 1 }).get({ cancelToken: source.token })
+    return await ordering.businesses(id)
+      .select(businessParams)
+      .parameters({ location: '40.7539143,-73.9810162', type: 1 })
+      .get({ cancelToken: source.token })
   }
 
   /**
@@ -27,14 +32,34 @@ export const BusinessBasicInformation = (props) => {
    */
   const loadBusiness = async () => {
     try {
-      const { response } = await getBusiness()
-      setBusiness(response.data?.result[1])
+      setBusinessState({
+        ...businessState,
+        loading: true
+      })
+      const { content: { result } } = await getBusiness(businessId)
+      setBusinessState({
+        ...businessState,
+        loading: false,
+        business: result
+      })
     } catch (err) {
+      setBusinessState({
+        ...businessState,
+        loading: false,
+        error: [err]
+      })
     }
   }
 
   useEffect(() => {
-    loadBusiness()
+    if (business) {
+      setBusinessState({
+        ...businessState,
+        business
+      })
+    } else {
+      loadBusiness()
+    }
     return () => {
       if (requestsState.business) {
         requestsState.business.cancel()
@@ -47,7 +72,7 @@ export const BusinessBasicInformation = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          business={business}
+          businessState={businessState}
         />
       )}
     </>
@@ -87,7 +112,6 @@ BusinessBasicInformation.propTypes = {
 }
 
 BusinessBasicInformation.defaultProps = {
-  business: {},
   businessParams: ['header', 'logo', 'name', 'today', 'delivery_price', 'minimum', 'description', 'distance', 'delivery_time', 'pickup_time', 'reviews'],
   beforeComponents: [],
   afterComponents: [],
