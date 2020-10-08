@@ -2,7 +2,7 @@ import React from 'react'
 
 export const ProductShareUI = (props) => {
   const {
-    shareButton,
+    updateShowValue,
     showShareButton,
     urlToShare,
     beforeComponents,
@@ -20,7 +20,7 @@ export const ProductShareUI = (props) => {
         <BeforeComponent key={i} {...props} />
       ))}
       <button
-        onClick={() => shareButton()}
+        onClick={() => updateShowValue(!showShareButton)}
       >
         share
       </button>
