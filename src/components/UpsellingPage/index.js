@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { useOrder } from '../../contexts/OrderContext'
-import { useApi } from '../../../src/contexts/ApiContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const UpsellingPage = (props) => {
   const { UIComponent, onSave, businessId, products } = props
