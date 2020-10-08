@@ -58,6 +58,7 @@ import { PaymentOptionStripeExample } from './views/PaymentOptionStripeExample'
 import { PaymentOptionStripeDirectExample } from './views/PaymentOptionStripeDirectExample'
 import { PaymentOptionStripeRedirectExample } from './views/PaymentOptionStripeRedirectExample'
 import { MessagesExample } from './views/MessagesExample'
+import {UpsellingPageExample} from './views/UpsellingPageExample'
 
 export default function App () {
   return (
@@ -227,6 +228,9 @@ export default function App () {
           </Route>
           <Route path='/order_details/:orderId'>
             <OrderDetailsExample />
+          </Route>
+          <Route path='/upselling'>
+            <UpsellingPageExample />
           </Route>
           <Route path='/'>
             <Home />
