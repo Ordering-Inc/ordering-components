@@ -33,7 +33,7 @@ export const ProductShare = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          shareButton={() => setShowShareButton(!showShareButton)}
+          updateShowValue={(val) => setShowShareButton(val)}
           showShareButton={showShareButton}
           urlToShare={urlToShare}
         />
