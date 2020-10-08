@@ -333,6 +333,12 @@ Object.defineProperty(exports, "UserProfileForm", {
     return _UserProfileForm.UserProfileForm;
   }
 });
+Object.defineProperty(exports, "UpsellingPage", {
+  enumerable: true,
+  get: function get() {
+    return _UpsellingPage.UpsellingPage;
+  }
+});
 Object.defineProperty(exports, "WrapperGoogleMaps", {
   enumerable: true,
   get: function get() {
@@ -627,6 +633,8 @@ var _SingleProductCard = require("./components/SingleProductCard");
 var _UserDetails = require("./components/UserDetails");
 
 var _UserProfileForm = require("./components/UserProfileForm");
+
+var _UpsellingPage = require("./components/UpsellingPage");
 
 var _WrapperGoogleMaps = require("./components/WrapperGoogleMaps");
 
