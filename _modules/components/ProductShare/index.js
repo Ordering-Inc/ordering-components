@@ -61,8 +61,8 @@ var ProductShare = function ProductShare(props) {
     addToAnyScript();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    shareButton: function shareButton() {
-      return setShowShareButton(!showShareButton);
+    updateShowValue: function updateShowValue(val) {
+      return setShowShareButton(val);
     },
     showShareButton: showShareButton,
     urlToShare: urlToShare
