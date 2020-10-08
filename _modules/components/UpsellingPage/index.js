@@ -15,7 +15,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _OrderContext = require("../../contexts/OrderContext");
 
-var _ApiContext = require("../../../src/contexts/ApiContext");
+var _ApiContext = require("../../contexts/ApiContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
