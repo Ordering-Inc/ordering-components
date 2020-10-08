@@ -158,6 +158,9 @@ export const Home = () => {
         <li>
           <Link to='/messages'>Messages</Link>
         </li>
+        <li>
+          <Link to='/upselling'>Upselling</Link>
+        </li>
       </ol>
       <h2>Payments Section</h2>
       <ol>
