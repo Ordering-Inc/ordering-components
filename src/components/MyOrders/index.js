@@ -21,11 +21,11 @@ export const MyOrders = (props) => {
   /**
    * Array to save active orders
    */
-  const [activeOrdersStatus, setActiveOrdersStatus] = useState({ loading: true, orders: [] })
+  const [activeOrdersStatus, setActiveOrdersStatus] = useState({ loading: true, orders: [], error: null })
   /**
    * Array to save previous orders
    */
-  const [previousOrdersStatus, setPreviousOrdersStatus] = useState({ loading: true, orders: [] })
+  const [previousOrdersStatus, setPreviousOrdersStatus] = useState({ loading: true, orders: [], error: null })
   /**
    * Method to get active orders from API
    */
@@ -37,10 +37,16 @@ export const MyOrders = (props) => {
         { attribute: 'status', value: [0, 3, 4, 7, 8, 9] }
       ]).get({ cancelToken: source.token })
       setActiveOrdersStatus({
+        ...activeOrdersStatus,
         loading: false,
         orders: result
       })
     } catch (err) {
+      setActiveOrdersStatus({
+        ...activeOrdersStatus,
+        loading: false,
+        error: err.message
+      })
     }
   }
   /**
@@ -54,10 +60,16 @@ export const MyOrders = (props) => {
         { attribute: 'status', value: [1, 2, 5, 6, 10, 11, 12] }
       ]).get({ cancelToken: source.token })
       setPreviousOrdersStatus({
+        ...previousOrdersStatus,
         loading: false,
         orders: result
       })
     } catch (err) {
+      setPreviousOrdersStatus({
+        ...previousOrdersStatus,
+        loading: false,
+        error: err.message
+      })
     }
   }
 
@@ -98,8 +110,8 @@ export const MyOrders = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          activeOrders={activeOrdersStatus.orders}
-          previousOrders={previousOrdersStatus.orders}
+          activeOrders={activeOrdersStatus}
+          previousOrders={previousOrdersStatus}
         />
       )}
     </>
