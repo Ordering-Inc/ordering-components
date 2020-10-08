@@ -13,7 +13,11 @@ export const BusinessBasicInformationExample = () => {
     /**
      * Contains business basic information
      */
-    business: {},
+    business: null,
+    /**
+     * Contains businessId to fetch business from API
+     */
+    businessId: 41,
     /**
      * Components types before business basic information
      * Array of type components, the parent props will pass to these components
