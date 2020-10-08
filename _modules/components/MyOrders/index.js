@@ -29,6 +29,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -70,7 +76,8 @@ var MyOrders = function MyOrders(props) {
 
   var _useState = (0, _react.useState)({
     loading: true,
-    orders: []
+    orders: [],
+    error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
       activeOrdersStatus = _useState2[0],
@@ -82,7 +89,8 @@ var MyOrders = function MyOrders(props) {
 
   var _useState3 = (0, _react.useState)({
     loading: true,
-    orders: []
+    orders: [],
+    error: null
   }),
       _useState4 = _slicedToArray(_useState3, 2),
       previousOrdersStatus = _useState4[0],
@@ -114,18 +122,22 @@ var MyOrders = function MyOrders(props) {
             case 5:
               _yield$ordering$setAc = _context.sent;
               result = _yield$ordering$setAc.content.result;
-              setActiveOrdersStatus({
+              setActiveOrdersStatus(_objectSpread(_objectSpread({}, activeOrdersStatus), {}, {
                 loading: false,
                 orders: result
-              });
-              _context.next = 12;
+              }));
+              _context.next = 13;
               break;
 
             case 10:
               _context.prev = 10;
               _context.t0 = _context["catch"](0);
+              setActiveOrdersStatus(_objectSpread(_objectSpread({}, activeOrdersStatus), {}, {
+                loading: false,
+                error: _context.t0.message
+              }));
 
-            case 12:
+            case 13:
             case "end":
               return _context.stop();
           }
@@ -164,18 +176,22 @@ var MyOrders = function MyOrders(props) {
             case 5:
               _yield$ordering$setAc2 = _context2.sent;
               result = _yield$ordering$setAc2.content.result;
-              setPreviousOrdersStatus({
+              setPreviousOrdersStatus(_objectSpread(_objectSpread({}, previousOrdersStatus), {}, {
                 loading: false,
                 orders: result
-              });
-              _context2.next = 12;
+              }));
+              _context2.next = 13;
               break;
 
             case 10:
               _context2.prev = 10;
               _context2.t0 = _context2["catch"](0);
+              setPreviousOrdersStatus(_objectSpread(_objectSpread({}, previousOrdersStatus), {}, {
+                loading: false,
+                error: _context2.t0.message
+              }));
 
-            case 12:
+            case 13:
             case "end":
               return _context2.stop();
           }
@@ -220,8 +236,8 @@ var MyOrders = function MyOrders(props) {
   // }, [orderState.order, socket])
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    activeOrders: activeOrdersStatus.orders,
-    previousOrders: previousOrdersStatus.orders
+    activeOrders: activeOrdersStatus,
+    previousOrders: previousOrdersStatus
   })));
 };
 
