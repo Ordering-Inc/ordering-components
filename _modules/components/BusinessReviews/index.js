@@ -86,7 +86,7 @@ var BusinessReviews = function BusinessReviews(props) {
 
   var onChangeOption = function onChangeOption() {
     var val = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    var reviews = val ? reviewsList.filter(function (review) {
+    var reviews = val !== 'all' ? reviewsList.filter(function (review) {
       return review.total >= val && review.total < val + 1;
     }) : reviewsList;
     setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
