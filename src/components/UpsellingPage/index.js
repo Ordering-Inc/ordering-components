@@ -12,8 +12,8 @@ export const UpsellingPage = (props) => {
   const [upsellingProducts, setUpsellingProducts] = useState([])
 
   useEffect(() => {
-    if (products.length || businessId) {
-      if (products.length) {
+    if (products || businessId) {
+      if (products) {
         handleProductsOfCart(products)
       } else {
         getProducts()
