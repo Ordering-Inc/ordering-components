@@ -77,8 +77,8 @@ var UpsellingPage = function UpsellingPage(props) {
       setUpsellingProducts = _useState4[1];
 
   (0, _react.useEffect)(function () {
-    if (products.length || businessId) {
-      if (products.length) {
+    if (products || businessId) {
+      if (products) {
         handleProductsOfCart(products);
       } else {
         getProducts();
