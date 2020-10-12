@@ -109,7 +109,6 @@ export const BusinessList = (props) => {
    */
   useEffect(() => {
     const request = requestsState.businesses
-    console.log(request)
     return () => {
       request && request.cancel()
     }
