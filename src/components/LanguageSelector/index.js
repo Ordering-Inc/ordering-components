@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 export const LanguageSelector = (props) => {
   const {
@@ -38,12 +37,12 @@ export const LanguageSelector = (props) => {
   const loadLanguages = async () => {
     try {
       setLanguageState({ ...languagesState, loading: true })
-      const source = CancelToken.source()
+      const source = {}
       requestsState.languages = source
       const { content: { error, result } } = await ordering
         .languages()
         .where([{ attribute: 'enabled', value: true }])
-        .get({ cancelToken: source.token })
+        .get({ cancelToken: source })
 
       setLanguageState({
         ...languagesState,

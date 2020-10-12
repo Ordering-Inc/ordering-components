@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-import { useWebsocket } from '../../contexts/WebsocketContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 export const MyOrders = (props) => {
   const {
@@ -12,12 +10,11 @@ export const MyOrders = (props) => {
 
   const [ordering] = useApi()
   const requestsState = {}
-  const socket = useWebsocket()
 
   /**
    * Get token session
    */
-  const [{ user, token }] = useSession()
+  const [{ token }] = useSession()
   /**
    * Array to save active orders
    */
@@ -31,11 +28,11 @@ export const MyOrders = (props) => {
    */
   const getActiveOrders = async () => {
     try {
-      const source = CancelToken.source()
+      const source = {}
       requestsState.activeOrders = source
       const { content: { result } } = await ordering.setAccessToken(token).orders().where([
         { attribute: 'status', value: [0, 3, 4, 7, 8, 9] }
-      ]).get({ cancelToken: source.token })
+      ]).get({ cancelToken: source })
       setActiveOrdersStatus({
         ...activeOrdersStatus,
         loading: false,
@@ -54,11 +51,11 @@ export const MyOrders = (props) => {
    */
   const getPreviousOrders = async () => {
     try {
-      const source = CancelToken.source()
+      const source = {}
       requestsState.previousOrders = source
       const { content: { result } } = await ordering.setAccessToken(token).orders().where([
         { attribute: 'status', value: [1, 2, 5, 6, 10, 11, 12] }
-      ]).get({ cancelToken: source.token })
+      ]).get({ cancelToken: source })
       setPreviousOrdersStatus({
         ...previousOrdersStatus,
         loading: false,

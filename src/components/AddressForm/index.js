@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 export const AddressForm = (props) => {
   const {
@@ -16,7 +15,7 @@ export const AddressForm = (props) => {
 
   const [ordering] = useApi()
   const [validationFields, setValidationFields] = useState({ loading: useValidationFileds, fields: {} })
-  const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {}, dddd: address })
+  const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {} })
   const [formState, setFormState] = useState({ loading: false, changes: {}, error: null })
   const [{ auth, user, token }] = useSession()
   const requestsState = {}
@@ -39,10 +38,10 @@ export const AddressForm = (props) => {
   const loadValidationFields = async () => {
     try {
       setValidationFields({ ...validationFields, loading: true })
-      const source = CancelToken.source()
+      const source = {}
       requestsState.validation = source
       const { content } = await ordering.validationFields().get({
-        cancelToken: source.token,
+        cancelToken: source,
         query: {
           where: [
             {
@@ -78,9 +77,9 @@ export const AddressForm = (props) => {
   const loadAddress = async (userId, addressId) => {
     try {
       setAddressState({ ...addressState, loading: true })
-      const source = CancelToken.source()
+      const source = {}
       requestsState.address = source
-      const { content } = await ordering.users(userId).addresses(addressId).get({ accessToken, cancelToken: source.token })
+      const { content } = await ordering.users(userId).addresses(addressId).get({ accessToken, cancelToken: source })
       setAddressState({
         loading: false,
         error: content.error ? content.result : null,

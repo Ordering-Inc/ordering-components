@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to manage signup behavior without UI component
@@ -22,9 +21,9 @@ export const SignupForm = (props) => {
 
   const loadValidationFields = async () => {
     try {
-      const source = CancelToken.source()
+      const source = {}
       requestsState.validation = source
-      const { content: { error, result } } = await ordering.validationFields().get({ cancelToken: source.token })
+      const { content: { error, result } } = await ordering.validationFields().get({ cancelToken: source })
       const fields = {}
       if (!error) {
         result.forEach((field) => {
@@ -47,9 +46,9 @@ export const SignupForm = (props) => {
   const handleSignupClick = async () => {
     try {
       setFormState({ ...formState, loading: true })
-      const source = CancelToken.source()
+      const source = {}
       requestsState.signup = source
-      const response = await ordering.users().save(signupData, { cancelToken: source.token })
+      const response = await ordering.users().save(signupData, { cancelToken: source })
       setFormState({
         result: response.content,
         loading: false
