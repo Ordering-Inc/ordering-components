@@ -39,6 +39,12 @@ Object.defineProperty(exports, "BusinessController", {
     return _BusinessController.BusinessController;
   }
 });
+Object.defineProperty(exports, "BusinessList", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessList.BusinessList;
+  }
+});
 Object.defineProperty(exports, "BusinessesList", {
   enumerable: true,
   get: function get() {
@@ -537,6 +543,8 @@ var _BaseComponent = require("./components/BaseComponent");
 var _BusinessBasicInformation = require("./components/BusinessBasicInformation");
 
 var _BusinessController = require("./components/BusinessController");
+
+var _BusinessList = require("./components/BusinessList");
 
 var _BusinessesList = require("./components/BusinessesList");
 

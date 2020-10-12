@@ -19,8 +19,6 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _orderingApiSdk = require("ordering-api-sdk");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -120,11 +118,11 @@ var AddressList = function AddressList(props) {
               setAddressList(_objectSpread(_objectSpread({}, addressList), {}, {
                 loading: true
               }));
-              source = _orderingApiSdk.CancelToken.source();
+              source = {};
               requestsState.list = source;
               _context.next = 6;
               return ordering.setAccessToken(accessToken).users(userId).addresses().get({
-                cancelToken: source.token
+                cancelToken: source
               });
 
             case 6:

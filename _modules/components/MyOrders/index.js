@@ -17,10 +17,6 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _WebsocketContext = require("../../contexts/WebsocketContext");
-
-var _orderingApiSdk = require("ordering-api-sdk");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -59,16 +55,13 @@ var MyOrders = function MyOrders(props) {
       ordering = _useApi2[0];
 
   var requestsState = {};
-  var socket = (0, _WebsocketContext.useWebsocket)();
   /**
    * Get token session
    */
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      _useSession2$ = _useSession2[0],
-      user = _useSession2$.user,
-      token = _useSession2$.token;
+      token = _useSession2[0].token;
   /**
    * Array to save active orders
    */
@@ -109,14 +102,14 @@ var MyOrders = function MyOrders(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              source = _orderingApiSdk.CancelToken.source();
+              source = {};
               requestsState.activeOrders = source;
               _context.next = 5;
               return ordering.setAccessToken(token).orders().where([{
                 attribute: 'status',
                 value: [0, 3, 4, 7, 8, 9]
               }]).get({
-                cancelToken: source.token
+                cancelToken: source
               });
 
             case 5:
@@ -163,14 +156,14 @@ var MyOrders = function MyOrders(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              source = _orderingApiSdk.CancelToken.source();
+              source = {};
               requestsState.previousOrders = source;
               _context2.next = 5;
               return ordering.setAccessToken(token).orders().where([{
                 attribute: 'status',
                 value: [1, 2, 5, 6, 10, 11, 12]
               }]).get({
-                cancelToken: source.token
+                cancelToken: source
               });
 
             case 5:

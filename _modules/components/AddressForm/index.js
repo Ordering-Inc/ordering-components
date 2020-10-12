@@ -19,8 +19,6 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _OrderContext = require("../../contexts/OrderContext");
 
-var _orderingApiSdk = require("ordering-api-sdk");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -73,8 +71,7 @@ var AddressForm = function AddressForm(props) {
   var _useState3 = (0, _react.useState)({
     loading: false,
     error: null,
-    address: address || {},
-    dddd: address
+    address: address || {}
   }),
       _useState4 = _slicedToArray(_useState3, 2),
       addressState = _useState4[0],
@@ -126,11 +123,11 @@ var AddressForm = function AddressForm(props) {
               setValidationFields(_objectSpread(_objectSpread({}, validationFields), {}, {
                 loading: true
               }));
-              source = _orderingApiSdk.CancelToken.source();
+              source = {};
               requestsState.validation = source;
               _context.next = 6;
               return ordering.validationFields().get({
-                cancelToken: source.token,
+                cancelToken: source,
                 query: {
                   where: [{
                     attribute: 'validate',
@@ -198,12 +195,12 @@ var AddressForm = function AddressForm(props) {
               setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
                 loading: true
               }));
-              source = _orderingApiSdk.CancelToken.source();
+              source = {};
               requestsState.address = source;
               _context2.next = 6;
               return ordering.users(userId).addresses(addressId).get({
                 accessToken: accessToken,
-                cancelToken: source.token
+                cancelToken: source
               });
 
             case 6:
