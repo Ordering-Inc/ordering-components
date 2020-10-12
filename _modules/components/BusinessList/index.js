@@ -236,15 +236,7 @@ var BusinessList = function BusinessList(props) {
     };
   }, [requestsState.businesses]);
   /**
-   * Listening filter changes
-   */
-
-  (0, _react.useEffect)(function () {
-    if (!businessTypeSelected && !searchValue) return;
-    getBusinesses(true);
-  }, [businessTypeSelected, searchValue]);
-  /**
-   * Listening order option
+   * Listening order option and filter changes
    */
 
   (0, _react.useEffect)(function () {
@@ -252,7 +244,7 @@ var BusinessList = function BusinessList(props) {
 
     if (orderState.loading || !((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : (_orderState$options7$ = _orderState$options7.address) === null || _orderState$options7$ === void 0 ? void 0 : _orderState$options7$.location)) return;
     getBusinesses(true);
-  }, [JSON.stringify(orderState.options)]);
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue]);
   /**
    * Default behavior business click
    * @param {object} business Business clicked
