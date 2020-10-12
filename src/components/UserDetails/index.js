@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession, SESSION_ACTIONS } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to manage user details behavior without UI component
@@ -34,9 +33,9 @@ export const UserDetails = (props) => {
   useEffect(() => {
     if (userId || (useSessionUser && refreshSessionUser)) {
       setUserState({ ...userState, loading: true })
-      const source = CancelToken.source()
+      const source = {}
       requestsState.user = source
-      ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source.token }).then((response) => {
+      ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source }).then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
           dispatchSession({
@@ -69,9 +68,9 @@ export const UserDetails = (props) => {
     }
 
     if (useValidationFields) {
-      const source = CancelToken.source()
+      const source = {}
       requestsState.validation = source
-      ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source.token }).then((response) => {
+      ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source }).then((response) => {
         const fields = {}
         response.content.result.forEach((field) => {
           fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field

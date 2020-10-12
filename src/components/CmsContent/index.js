@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to manage login behavior without UI component
@@ -27,9 +26,9 @@ export const CmsContent = (props) => {
   const getPage = async (slug) => {
     setLoading(true)
     try {
-      const source = CancelToken.source()
+      const source = {}
       requestsState.page = source
-      const { content: { error, result } } = await ordering.pages(slug).get({ cancelToken: source.token })
+      const { content: { error, result } } = await ordering.pages(slug).get({ cancelToken: source })
       setLoading(false)
       if (!error) {
         setBody(result.body)

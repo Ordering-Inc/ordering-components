@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 export const BusinessBasicInformation = (props) => {
   const {
@@ -19,12 +18,12 @@ export const BusinessBasicInformation = (props) => {
    * Method to get business from SDK
    */
   const getBusiness = async (id) => {
-    const source = CancelToken.source()
+    const source = {}
     requestsState.business = source
     return await ordering.businesses(id)
       .select(businessParams)
       .parameters({ location: '40.7539143,-73.9810162', type: 1 })
-      .get({ cancelToken: source.token })
+      .get({ cancelToken: source })
   }
 
   /**
