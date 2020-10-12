@@ -50,7 +50,7 @@ export const ProductForm = (props) => {
   /**
    * Product in cart
    */
-  const productInCart = cart?.products?.find(prod => prod.id === product.id)
+  const productInCart = product && cart?.products?.find(prod => prod.id === product.id)
 
   /**
    * Total product in cart
