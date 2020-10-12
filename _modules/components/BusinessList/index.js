@@ -231,7 +231,6 @@ var BusinessList = function BusinessList(props) {
 
   (0, _react.useEffect)(function () {
     var request = requestsState.businesses;
-    console.log(request);
     return function () {
       request && request.cancel();
     };
