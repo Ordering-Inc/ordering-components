@@ -15,8 +15,6 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _orderingApiSdk = require("ordering-api-sdk");
-
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -133,9 +131,9 @@ var OrderList = function OrderList(props) {
                 }
               }
 
-              source = _orderingApiSdk.CancelToken.source();
+              source = {};
               requestsState.orders = source;
-              options.cancelToken = source.token;
+              options.cancelToken = source;
               _context.next = 7;
               return ordering.setAccessToken(accessToken).orders().get(options);
 

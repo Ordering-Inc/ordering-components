@@ -15,8 +15,6 @@ var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _orderingApiSdk = require("ordering-api-sdk");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -78,14 +76,14 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              source = _orderingApiSdk.CancelToken.source();
+              source = {};
               requestsState.business = source;
               _context.next = 4;
               return ordering.businesses(id).select(businessParams).parameters({
                 location: '40.7539143,-73.9810162',
                 type: 1
               }).get({
-                cancelToken: source.token
+                cancelToken: source
               });
 
             case 4:
