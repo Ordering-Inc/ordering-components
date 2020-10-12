@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 /**
  * Component to control a address list
@@ -41,9 +40,9 @@ export const AddressList = (props) => {
   const loadAddresses = async () => {
     try {
       setAddressList({ ...addressList, loading: true })
-      const source = CancelToken.source()
+      const source = {}
       requestsState.list = source
-      const { content } = await ordering.setAccessToken(accessToken).users(userId).addresses().get({ cancelToken: source.token })
+      const { content } = await ordering.setAccessToken(accessToken).users(userId).addresses().get({ cancelToken: source })
       setAddressList({
         loading: false,
         error: content.error ? content.result : null,

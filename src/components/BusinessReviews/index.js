@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 export const BusinessReviews = (props) => {
   const {
@@ -43,12 +42,12 @@ export const BusinessReviews = (props) => {
    */
   const getBusiness = async () => {
     try {
-      const source = CancelToken.source()
+      const source = {}
       requestsState.reviews = source
       const { content: { result } } = await ordering
         .businesses(businessId)
         .select(['reviews'])
-        .get({ cancelToken: source.token })
+        .get({ cancelToken: source })
 
       const list = result?.reviews?.reviews
       list.sort((a, b) => {

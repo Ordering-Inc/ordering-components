@@ -3,7 +3,6 @@ import PropTypes, { object, number } from 'prop-types'
 
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const OrderList = (props) => {
@@ -47,9 +46,9 @@ export const OrderList = (props) => {
         options.query.where.push({ attribute: 'status', value: orderStatus })
       }
     }
-    const source = CancelToken.source()
+    const source = {}
     requestsState.orders = source
-    options.cancelToken = source.token
+    options.cancelToken = source
     return await ordering.setAccessToken(accessToken).orders().get(options)
   }
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-import { CancelToken } from 'ordering-api-sdk'
 
 export const MyOrdersList = (props) => {
   const {
@@ -27,11 +26,11 @@ export const MyOrdersList = (props) => {
    */
   const getOrders = async () => {
     try {
-      const source = CancelToken.source()
+      const source = {}
       requestsState.orders = source
       const { content: { result } } = await ordering.setAccessToken(token).orders().where([
         { attribute: 'status', value: status }
-      ]).get({ cancelToken: source.token })
+      ]).get({ cancelToken: source })
       setOrders(result)
     } catch (err) {
     }
