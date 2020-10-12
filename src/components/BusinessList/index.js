@@ -115,20 +115,12 @@ export const BusinessList = (props) => {
   }, [requestsState.businesses])
 
   /**
-   * Listening filter changes
-   */
-  useEffect(() => {
-    if (!businessTypeSelected && !searchValue) return
-    getBusinesses(true)
-  }, [businessTypeSelected, searchValue])
-
-  /**
-   * Listening order option
+   * Listening order option and filter changes
    */
   useEffect(() => {
     if (orderState.loading || !orderState.options?.address?.location) return
     getBusinesses(true)
-  }, [JSON.stringify(orderState.options)])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue])
 
   /**
    * Default behavior business click
