@@ -120,9 +120,9 @@ var ProductForm = function ProductForm(props) {
    * Product in cart
    */
 
-  var productInCart = cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.find(function (prod) {
+  var productInCart = product && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.find(function (prod) {
     return prod.id === product.id;
-  });
+  }));
   /**
    * Total product in cart
    */
