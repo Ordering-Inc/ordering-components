@@ -2,6 +2,7 @@ import { AddressDetails } from './components/AddressDetails'
 import { AddressForm } from './components/AddressForm'
 import { AddressList } from './components/AddressList'
 import { BaseComponent } from './components/BaseComponent'
+import { BusinessAndProductList } from './components/BusinessAndProductList'
 import { BusinessBasicInformation } from './components/BusinessBasicInformation'
 import { BusinessController } from './components/BusinessController'
 import { BusinessList } from './components/BusinessList'
@@ -78,6 +79,7 @@ export {
   AddressForm,
   AddressList,
   BaseComponent,
+  BusinessAndProductList,
   BusinessBasicInformation,
   BusinessController,
   BusinessList,
