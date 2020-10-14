@@ -5,16 +5,20 @@ import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 
 export const UpsellingPage = (props) => {
-  const { UIComponent, onSave, businessId, products } = props
-  const [orderState, { addProduct }] = useOrder()
-  const [productsList, setProductsList] = useState({ products: [], loading: false, error: false })
+  const { UIComponent, onSave, businessId, products, cartProducts } = props
+  const [{ addProduct }] = useOrder()
+  const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })
   const [ordering] = useApi()
   const [upsellingProducts, setUpsellingProducts] = useState([])
 
   useEffect(() => {
-    if (products || businessId) {
-      if (products) {
-        handleProductsOfCart(products)
+    if (products?.length || businessId) {
+      if (products?.length) {
+        getUpsellingProducts(products)
+        setProductsList({
+          ...productsList,
+          loading: false
+        })
       } else {
         getProducts()
       }
@@ -26,28 +30,22 @@ export const UpsellingPage = (props) => {
       })
     }
   }, [])
-
   /**
    * getting products if array of product is not defined
    */
   const getProducts = async () => {
     try {
-      setProductsList({
-        ...productsList,
-        loading: true
-      })
       const { content: { result } } = await ordering
         .businesses(businessId)
         .products()
         .parameters({ type: 1 })
         .get()
-
+      getUpsellingProducts(result)
       setProductsList({
         ...productsList,
         loading: false,
         products: result
       })
-      handleProductsOfCart(result)
     } catch (error) {
       setProductsList({
         ...productsList,
@@ -56,44 +54,37 @@ export const UpsellingPage = (props) => {
       })
     }
   }
-
   /**
    *
    * filt products if they are already in the cart
    * @param {array} cartProducts
    */
-  const getUpsellingProducts = (cartProducts, result) => {
-    setUpsellingProducts(result.filter(product => product.upselling && cartProducts.map(cartProduct => {
-      return product.id !== cartProduct.id
-    })))
+  const getUpsellingProducts = (result) => {
+    if (cartProducts?.length) {
+      const repeatProducts = cartProducts.map(cartProduct => result.find(product => product.id === cartProduct.id))
+      setUpsellingProducts(result.filter(product => product.upselling && !repeatProducts.find(repeatProduct => repeatProduct.id === product.id)))
+    } else {
+      setUpsellingProducts(result.filter(product => product.upselling))
+    }
   }
-  /**
-   * products of the cart
-   */
-  const handleProductsOfCart = (result) => {
-    const cartProducts = Object.values(orderState.carts).map(cart => {
-      return cart?.products.map(product => {
-        return product
-      })
-    })
-    getUpsellingProducts(cartProducts, result)
-  }
-
   /**
    * adding product to the cart from upselling
    * @param {object} product Product object
    */
   const handleAddProductUpselling = async (product) => {
     const successful = await addProduct(product)
-    console.log(orderState)
-    console.log(successful)
     if (successful) {
       onSave(product)
     }
   }
 
   return (
-    <UIComponent {...props} handleAddProductUpselling={handleAddProductUpselling} upsellingProducts={upsellingProducts} productsList={productsList} />
+    <UIComponent
+      {...props}
+      handleAddProductUpselling={handleAddProductUpselling}
+      upsellingProducts={upsellingProducts}
+      productsList={productsList}
+    />
   )
 }
 
