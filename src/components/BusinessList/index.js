@@ -138,7 +138,8 @@ export const BusinessList = (props) => {
     if (businessType !== businessTypeSelected) {
       setBusinessesList({
         ...businessesList,
-        businesses: []
+        businesses: [],
+        loading: true
       })
       setBusinessTypeSelected(businessType)
     }
@@ -151,7 +152,8 @@ export const BusinessList = (props) => {
   const handleChangeSearch = (search) => {
     setBusinessesList({
       ...businessesList,
-      businesses: []
+      businesses: [],
+      loading: true
     })
     setSearchValue(search)
   }
