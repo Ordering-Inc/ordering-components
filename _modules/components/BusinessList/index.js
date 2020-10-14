@@ -262,7 +262,8 @@ var BusinessList = function BusinessList(props) {
   var handleChangeBusinessType = function handleChangeBusinessType(businessType) {
     if (businessType !== businessTypeSelected) {
       setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-        businesses: []
+        businesses: [],
+        loading: true
       }));
       setBusinessTypeSelected(businessType);
     }
@@ -275,7 +276,8 @@ var BusinessList = function BusinessList(props) {
 
   var handleChangeSearch = function handleChangeSearch(search) {
     setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-      businesses: []
+      businesses: [],
+      loading: true
     }));
     setSearchValue(search);
   };
