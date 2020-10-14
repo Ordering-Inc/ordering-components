@@ -10,6 +10,10 @@ export const UpsellingPageExample = () => {
      */
     UIComponent: UpsellingPageUI,
     /**
+     * list of products that are already in the cart (filts by id)
+     */
+    cartProducts: [{ id: 1319 }, { id: 1298 }],
+    /**
      * list of business products
      */
     products: [],
