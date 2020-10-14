@@ -51,16 +51,16 @@ var UpsellingPage = function UpsellingPage(props) {
   var UIComponent = props.UIComponent,
       onSave = props.onSave,
       businessId = props.businessId,
-      products = props.products;
+      products = props.products,
+      cartProducts = props.cartProducts;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 2),
-      orderState = _useOrder2[0],
-      addProduct = _useOrder2[1].addProduct;
+      _useOrder2 = _slicedToArray(_useOrder, 1),
+      addProduct = _useOrder2[0].addProduct;
 
   var _useState = (0, _react.useState)({
     products: [],
-    loading: false,
+    loading: true,
     error: false
   }),
       _useState2 = _slicedToArray(_useState, 2),
@@ -77,9 +77,12 @@ var UpsellingPage = function UpsellingPage(props) {
       setUpsellingProducts = _useState4[1];
 
   (0, _react.useEffect)(function () {
-    if (products || businessId) {
-      if (products) {
-        handleProductsOfCart(products);
+    if ((products === null || products === void 0 ? void 0 : products.length) || businessId) {
+      if (products === null || products === void 0 ? void 0 : products.length) {
+        getUpsellingProducts(products);
+        setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
+          loading: false
+        }));
       } else {
         getProducts();
       }
@@ -103,39 +106,36 @@ var UpsellingPage = function UpsellingPage(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
-                loading: true
-              }));
-              _context.next = 4;
+              _context.next = 3;
               return ordering.businesses(businessId).products().parameters({
                 type: 1
               }).get();
 
-            case 4:
+            case 3:
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
+              getUpsellingProducts(result);
               setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
                 loading: false,
                 products: result
               }));
-              handleProductsOfCart(result);
-              _context.next = 13;
+              _context.next = 12;
               break;
 
-            case 10:
-              _context.prev = 10;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](0);
               setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
                 loading: false,
                 error: _context.t0
               }));
 
-            case 13:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 10]]);
+      }, _callee, null, [[0, 9]]);
     }));
 
     return function getProducts() {
@@ -149,25 +149,23 @@ var UpsellingPage = function UpsellingPage(props) {
    */
 
 
-  var getUpsellingProducts = function getUpsellingProducts(cartProducts, result) {
-    setUpsellingProducts(result.filter(function (product) {
-      return product.upselling && cartProducts.map(function (cartProduct) {
-        return product.id !== cartProduct.id;
+  var getUpsellingProducts = function getUpsellingProducts(result) {
+    if (cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.length) {
+      var repeatProducts = cartProducts.map(function (cartProduct) {
+        return result.find(function (product) {
+          return product.id === cartProduct.id;
+        });
       });
-    }));
-  };
-  /**
-   * products of the cart
-   */
-
-
-  var handleProductsOfCart = function handleProductsOfCart(result) {
-    var cartProducts = Object.values(orderState.carts).map(function (cart) {
-      return cart === null || cart === void 0 ? void 0 : cart.products.map(function (product) {
-        return product;
-      });
-    });
-    getUpsellingProducts(cartProducts, result);
+      setUpsellingProducts(result.filter(function (product) {
+        return product.upselling && !repeatProducts.find(function (repeatProduct) {
+          return repeatProduct.id === product.id;
+        });
+      }));
+    } else {
+      setUpsellingProducts(result.filter(function (product) {
+        return product.upselling;
+      }));
+    }
   };
   /**
    * adding product to the cart from upselling
@@ -187,14 +185,12 @@ var UpsellingPage = function UpsellingPage(props) {
 
             case 2:
               successful = _context2.sent;
-              console.log(orderState);
-              console.log(successful);
 
               if (successful) {
                 onSave(product);
               }
 
-            case 6:
+            case 4:
             case "end":
               return _context2.stop();
           }
