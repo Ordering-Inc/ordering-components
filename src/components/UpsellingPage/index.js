@@ -6,7 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 
 export const UpsellingPage = (props) => {
   const { UIComponent, onSave, businessId, products, cartProducts } = props
-  const [orderState, { addProduct }] = useOrder()
+  const [{ addProduct }] = useOrder()
   const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })
   const [ordering] = useApi()
   const [upsellingProducts, setUpsellingProducts] = useState([])
@@ -73,15 +73,18 @@ export const UpsellingPage = (props) => {
    */
   const handleAddProductUpselling = async (product) => {
     const successful = await addProduct(product)
-    console.log(orderState)
-    console.log(successful)
     if (successful) {
       onSave(product)
     }
   }
 
   return (
-    <UIComponent {...props} handleAddProductUpselling={handleAddProductUpselling} upsellingProducts={upsellingProducts} productsList={productsList} />
+    <UIComponent
+      {...props}
+      handleAddProductUpselling={handleAddProductUpselling}
+      upsellingProducts={upsellingProducts}
+      productsList={productsList}
+    />
   )
 }
 
