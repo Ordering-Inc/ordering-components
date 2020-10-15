@@ -15,7 +15,7 @@ export const ProductForm = (props) => {
   /**
    * Original product state
    */
-  const [product, setProduct] = useState(props.product)
+  const [product, setProduct] = useState({ product: props.product, loading: false, error: null })
 
   /**
    * Product cart state
@@ -50,7 +50,7 @@ export const ProductForm = (props) => {
   /**
    * Product in cart
    */
-  const productInCart = product && cart?.products?.find(prod => prod.id === product.id)
+  const productInCart = product.product && cart?.products?.find(prod => prod.id === product.product.id)
 
   /**
    * Total product in cart
@@ -60,7 +60,7 @@ export const ProductForm = (props) => {
   /**
    * Total the current product in cart
    */
-  const productBalance = (cart?.products?.reduce((sum, _product) => sum + (product && _product.id === product.id ? _product.quantity : 0), 0) || 0) - removeToBalance
+  const productBalance = (cart?.products?.reduce((sum, _product) => sum + (product.product && _product.id === product.product.id ? _product.quantity : 0), 0) || 0) - removeToBalance
 
   /**
    * Config context manager
@@ -75,12 +75,12 @@ export const ProductForm = (props) => {
   /**
    * Max total product in cart by config
    */
-  let maxCartProductInventory = (product?.inventoried ? product?.quantity : undefined) - productBalance
+  let maxCartProductInventory = (product.product?.inventoried ? product.product?.quantity : undefined) - productBalance
 
   /**
    * True if product is sold out
    */
-  const isSoldOut = product?.inventoried && product?.quantity === 0
+  const isSoldOut = product.product?.inventoried && product.product?.quantity === 0
 
   /**
    * Fix if maxCartProductInventory is not valid
@@ -129,8 +129,8 @@ export const ProductForm = (props) => {
    */
   const getUnitTotal = (productCart) => {
     let subtotal = 0
-    for (let i = 0; i < product.extras.length; i++) {
-      const extra = product.extras[i]
+    for (let i = 0; i < product.product?.extras.length; i++) {
+      const extra = product.product?.extras[i]
       for (let j = 0; j < extra.options.length; j++) {
         const option = extra.options[j]
         for (let k = 0; k < option.suboptions.length; k++) {
@@ -144,15 +144,33 @@ export const ProductForm = (props) => {
         }
       }
     }
-    return product.price + subtotal
+    return product.product?.price + subtotal
   }
 
   /**
    * Load product from API
    */
   const loadProductWithOptions = async () => {
-    const { content: { result } } = await ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).get()
-    setProduct(result)
+    try {
+      setProduct({ ...product, loading: true })
+      const { content: { result } } = await ordering
+        .businesses(props.businessId)
+        .categories(props.categoryId)
+        .products(props.productId)
+        .get()
+
+      setProduct({
+        ...product,
+        loading: false,
+        product: result
+      })
+    } catch (err) {
+      setProduct({
+        ...product,
+        loading: false,
+        error: [err.message]
+      })
+    }
   }
 
   /**
@@ -161,7 +179,7 @@ export const ProductForm = (props) => {
    * @param {number} suboptionId Suboption id
    */
   const removeRelatedOptions = (productCart, suboptionId) => {
-    product.extras.forEach(_extra => {
+    product.product.extras.forEach(_extra => {
       _extra.options.forEach(_option => {
         if (_option.respect_to === suboptionId) {
           const suboptions = productCart.options[`id:${_option.id}`]?.suboptions
@@ -240,14 +258,27 @@ export const ProductForm = (props) => {
   }
 
   /**
+   * Change product state with new comment state
+   * @param {object} e Product comment
+   */
+  const handleChangeCommentState = (e) => {
+    const comment = e.target.value
+    productCart.comment = comment
+    setProductCart({
+      ...productCart,
+      comment: productCart.comment
+    })
+  }
+
+  /**
    * Check options to get errors
    */
   const checkErrors = () => {
     const errors = {}
-    if (!product) {
+    if (!product.product) {
       return errors
     }
-    product.extras.forEach(extra => {
+    product.product.extras.forEach(extra => {
       extra.options.map(option => {
         const suboptions = productCart.options[`id:${option.id}`]?.suboptions
         const quantity = suboptions ? Object.keys(suboptions) : 0
@@ -347,10 +378,10 @@ export const ProductForm = (props) => {
    * Init product cart when product changed
    */
   useEffect(() => {
-    if (product) {
-      initProductCart(product)
+    if (product.product) {
+      initProductCart(product.product)
     }
-  }, [product, props.productCart])
+  }, [product.product, props.productCart])
 
   /**
    * Check error when product state changed
@@ -377,7 +408,7 @@ export const ProductForm = (props) => {
         UIComponent && (
           <UIComponent
             {...props}
-            product={product}
+            productObject={product}
             productCart={productCart}
             errors={errors}
             editMode={editMode}
@@ -389,6 +420,7 @@ export const ProductForm = (props) => {
             showOption={showOption}
             handleChangeIngredientState={handleChangeIngredientState}
             handleChangeSuboptionState={handleChangeSuboptionState}
+            handleChangeCommentState={handleChangeCommentState}
           />
         )
       }
