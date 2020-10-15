@@ -50,7 +50,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ProductForm = function ProductForm(props) {
-  var _cart$products, _cart$products2;
+  var _cart$products, _cart$products2, _product$product, _product$product2, _product$product3, _product$product4;
 
   var UIComponent = props.UIComponent,
       useOrderContext = props.useOrderContext,
@@ -64,7 +64,11 @@ var ProductForm = function ProductForm(props) {
    */
 
 
-  var _useState = (0, _react.useState)(props.product),
+  var _useState = (0, _react.useState)({
+    product: props.product,
+    loading: false,
+    error: null
+  }),
       _useState2 = _slicedToArray(_useState, 2),
       product = _useState2[0],
       setProduct = _useState2[1];
@@ -120,8 +124,8 @@ var ProductForm = function ProductForm(props) {
    * Product in cart
    */
 
-  var productInCart = product && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.find(function (prod) {
-    return prod.id === product.id;
+  var productInCart = product.product && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.find(function (prod) {
+    return prod.id === product.product.id;
   }));
   /**
    * Total product in cart
@@ -133,7 +137,7 @@ var ProductForm = function ProductForm(props) {
    */
 
   var productBalance = ((cart === null || cart === void 0 ? void 0 : (_cart$products2 = cart.products) === null || _cart$products2 === void 0 ? void 0 : _cart$products2.reduce(function (sum, _product) {
-    return sum + (product && _product.id === product.id ? _product.quantity : 0);
+    return sum + (product.product && _product.id === product.product.id ? _product.quantity : 0);
   }, 0)) || 0) - removeToBalance;
   /**
    * Config context manager
@@ -152,12 +156,12 @@ var ProductForm = function ProductForm(props) {
    * Max total product in cart by config
    */
 
-  var maxCartProductInventory = ((product === null || product === void 0 ? void 0 : product.inventoried) ? product === null || product === void 0 ? void 0 : product.quantity : undefined) - productBalance;
+  var maxCartProductInventory = (((_product$product = product.product) === null || _product$product === void 0 ? void 0 : _product$product.inventoried) ? (_product$product2 = product.product) === null || _product$product2 === void 0 ? void 0 : _product$product2.quantity : undefined) - productBalance;
   /**
    * True if product is sold out
    */
 
-  var isSoldOut = (product === null || product === void 0 ? void 0 : product.inventoried) && (product === null || product === void 0 ? void 0 : product.quantity) === 0;
+  var isSoldOut = ((_product$product3 = product.product) === null || _product$product3 === void 0 ? void 0 : _product$product3.inventoried) && ((_product$product4 = product.product) === null || _product$product4 === void 0 ? void 0 : _product$product4.quantity) === 0;
   /**
    * Fix if maxCartProductInventory is not valid
    */
@@ -208,10 +212,14 @@ var ProductForm = function ProductForm(props) {
 
 
   var getUnitTotal = function getUnitTotal(productCart) {
+    var _product$product7;
+
     var subtotal = 0;
 
-    for (var i = 0; i < product.extras.length; i++) {
-      var extra = product.extras[i];
+    for (var i = 0; i < ((_product$product5 = product.product) === null || _product$product5 === void 0 ? void 0 : _product$product5.extras.length); i++) {
+      var _product$product5, _product$product6;
+
+      var extra = (_product$product6 = product.product) === null || _product$product6 === void 0 ? void 0 : _product$product6.extras[i];
 
       for (var j = 0; j < extra.options.length; j++) {
         var option = extra.options[j];
@@ -231,7 +239,7 @@ var ProductForm = function ProductForm(props) {
       }
     }
 
-    return product.price + subtotal;
+    return ((_product$product7 = product.product) === null || _product$product7 === void 0 ? void 0 : _product$product7.price) + subtotal;
   };
   /**
    * Load product from API
@@ -246,20 +254,37 @@ var ProductForm = function ProductForm(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              _context.prev = 0;
+              setProduct(_objectSpread(_objectSpread({}, product), {}, {
+                loading: true
+              }));
+              _context.next = 4;
               return ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).get();
 
-            case 2:
+            case 4:
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
-              setProduct(result);
+              setProduct(_objectSpread(_objectSpread({}, product), {}, {
+                loading: false,
+                product: result
+              }));
+              _context.next = 12;
+              break;
 
-            case 5:
+            case 9:
+              _context.prev = 9;
+              _context.t0 = _context["catch"](0);
+              setProduct(_objectSpread(_objectSpread({}, product), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
+
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 9]]);
     }));
 
     return function loadProductWithOptions() {
@@ -274,7 +299,7 @@ var ProductForm = function ProductForm(props) {
 
 
   var removeRelatedOptions = function removeRelatedOptions(productCart, suboptionId) {
-    product.extras.forEach(function (_extra) {
+    product.product.extras.forEach(function (_extra) {
       _extra.options.forEach(function (_option) {
         if (_option.respect_to === suboptionId) {
           var _productCart$options$3;
@@ -368,6 +393,19 @@ var ProductForm = function ProductForm(props) {
     }
   };
   /**
+   * Change product state with new comment state
+   * @param {object} e Product comment
+   */
+
+
+  var handleChangeCommentState = function handleChangeCommentState(e) {
+    var comment = e.target.value;
+    productCart.comment = comment;
+    setProductCart(_objectSpread(_objectSpread({}, productCart), {}, {
+      comment: productCart.comment
+    }));
+  };
+  /**
    * Check options to get errors
    */
 
@@ -375,11 +413,11 @@ var ProductForm = function ProductForm(props) {
   var checkErrors = function checkErrors() {
     var errors = {};
 
-    if (!product) {
+    if (!product.product) {
       return errors;
     }
 
-    product.extras.forEach(function (extra) {
+    product.product.extras.forEach(function (extra) {
       extra.options.map(function (option) {
         var _productCart$options$4;
 
@@ -539,10 +577,10 @@ var ProductForm = function ProductForm(props) {
 
 
   (0, _react.useEffect)(function () {
-    if (product) {
-      initProductCart(product);
+    if (product.product) {
+      initProductCart(product.product);
     }
-  }, [product, props.productCart]);
+  }, [product.product, props.productCart]);
   /**
    * Check error when product state changed
    */
@@ -564,7 +602,7 @@ var ProductForm = function ProductForm(props) {
     }
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    product: product,
+    productObject: product,
     productCart: productCart,
     errors: errors,
     editMode: editMode,
@@ -575,7 +613,8 @@ var ProductForm = function ProductForm(props) {
     handleSave: handleSave,
     showOption: showOption,
     handleChangeIngredientState: handleChangeIngredientState,
-    handleChangeSuboptionState: handleChangeSuboptionState
+    handleChangeSuboptionState: handleChangeSuboptionState,
+    handleChangeCommentState: handleChangeCommentState
   })));
 };
 
