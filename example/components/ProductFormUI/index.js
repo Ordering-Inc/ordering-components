@@ -10,7 +10,7 @@ export const ProductFormUI = (props) => {
   const {
     editMode,
     isSoldOut,
-    product,
+    productObject,
     productCart,
     increment,
     decrement,
@@ -19,8 +19,11 @@ export const ProductFormUI = (props) => {
     errors,
     handleSave,
     handleChangeIngredientState,
-    handleChangeSuboptionState
+    handleChangeSuboptionState,
+    handleChangeCommentState
   } = props
+
+  const { product, loading, error } = productObject
 
   const productSuboptionProps = {
     /**
@@ -98,7 +101,12 @@ export const ProductFormUI = (props) => {
       }
       <div>
         Special comment:<br />
-        <textarea rows={4} style={{ width: '100%' }} defaultValue={productCart.comment} />
+        <textarea
+          rows={4}
+          style={{ width: '100%' }}
+          defaultValue={productCart.comment}
+          onChange={handleChangeCommentState}
+        />
       </div>
       Total: {productCart.total}
       {
