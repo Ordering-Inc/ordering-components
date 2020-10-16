@@ -53,11 +53,13 @@ export const UpsellingPage = (props) => {
     if (cartProducts?.length) {
       const repeatProducts = cartProducts.map(cartProduct => result.find(product => product.id === cartProduct.id))
       setUpsellingProducts({
+        ...upsellingProducts,
         loading: false,
         products: result.filter(product => !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
       })
     } else {
       setUpsellingProducts({
+        ...upsellingProducts,
         loading: false,
         products: result
       })
