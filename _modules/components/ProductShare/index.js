@@ -60,10 +60,17 @@ var ProductShare = function ProductShare(props) {
 
     addToAnyScript();
   }, []);
+
+  var changeShowCharedButton = function changeShowCharedButton(show) {
+    setShowShareButton(show);
+
+    if (show && window.a2a) {
+      window.a2a.init();
+    }
+  };
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    updateShowValue: function updateShowValue(val) {
-      return setShowShareButton(val);
-    },
+    updateShowValue: changeShowCharedButton,
     showShareButton: showShareButton,
     urlToShare: urlToShare
   })));
