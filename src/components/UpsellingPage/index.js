@@ -7,24 +7,18 @@ import { useApi } from '../../contexts/ApiContext'
 export const UpsellingPage = (props) => {
   const { UIComponent, onSave, businessId, products, cartProducts } = props
   const [{ addProduct }] = useOrder()
-  const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })
+  const [upsellingProducts, setUpsellingProducts] = useState({ products: [], loading: true, error: false })
   const [ordering] = useApi()
-  const [upsellingProducts, setUpsellingProducts] = useState([])
-
   useEffect(() => {
     if (products?.length || businessId) {
       if (products?.length) {
         getUpsellingProducts(products)
-        setProductsList({
-          ...productsList,
-          loading: false
-        })
       } else {
         getProducts()
       }
     } else {
-      setProductsList({
-        ...productsList,
+      setUpsellingProducts({
+        ...upsellingProducts,
         error: true,
         message: 'BusinessId is required when products is not defined'
       })
@@ -38,17 +32,13 @@ export const UpsellingPage = (props) => {
       const { content: { result } } = await ordering
         .businesses(businessId)
         .products()
+        .where([{ attribute: 'upselling', value: true }])
         .parameters({ type: 1 })
         .get()
       getUpsellingProducts(result)
-      setProductsList({
-        ...productsList,
-        loading: false,
-        products: result
-      })
     } catch (error) {
-      setProductsList({
-        ...productsList,
+      setUpsellingProducts({
+        ...upsellingProducts,
         loading: false,
         error
       })
@@ -62,9 +52,15 @@ export const UpsellingPage = (props) => {
   const getUpsellingProducts = (result) => {
     if (cartProducts?.length) {
       const repeatProducts = cartProducts.map(cartProduct => result.find(product => product.id === cartProduct.id))
-      setUpsellingProducts(result.filter(product => product.upselling && !repeatProducts.find(repeatProduct => repeatProduct.id === product.id)))
+      setUpsellingProducts({
+        loading: false,
+        products: result.filter(product => !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
+      })
     } else {
-      setUpsellingProducts(result.filter(product => product.upselling))
+      setUpsellingProducts({
+        loading: false,
+        products: result
+      })
     }
   }
   /**
@@ -83,7 +79,6 @@ export const UpsellingPage = (props) => {
       {...props}
       handleAddProductUpselling={handleAddProductUpselling}
       upsellingProducts={upsellingProducts}
-      productsList={productsList}
     />
   )
 }
