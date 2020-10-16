@@ -17,6 +17,8 @@ var _WebsocketContext = require("../WebsocketContext");
 
 var _OrderContext = require("../OrderContext");
 
+var _BusinessContext = require("../BusinessContext");
+
 var _LanguageContext = require("../LanguageContext");
 
 var _ApiContext = require("../ApiContext");
@@ -52,7 +54,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     Alert: Alert
-  }, children)))))));
+  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

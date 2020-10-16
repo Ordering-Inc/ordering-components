@@ -64,30 +64,22 @@ var UpsellingPage = function UpsellingPage(props) {
     error: false
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      productsList = _useState2[0],
-      setProductsList = _useState2[1];
+      upsellingProducts = _useState2[0],
+      setUpsellingProducts = _useState2[1];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState3 = (0, _react.useState)([]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      upsellingProducts = _useState4[0],
-      setUpsellingProducts = _useState4[1];
-
   (0, _react.useEffect)(function () {
     if ((products === null || products === void 0 ? void 0 : products.length) || businessId) {
       if (products === null || products === void 0 ? void 0 : products.length) {
         getUpsellingProducts(products);
-        setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
-          loading: false
-        }));
       } else {
         getProducts();
       }
     } else {
-      setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
+      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
         error: true,
         message: 'BusinessId is required when products is not defined'
       }));
@@ -107,7 +99,10 @@ var UpsellingPage = function UpsellingPage(props) {
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return ordering.businesses(businessId).products().parameters({
+              return ordering.businesses(businessId).products().where([{
+                attribute: 'upselling',
+                value: true
+              }]).parameters({
                 type: 1
               }).get();
 
@@ -115,27 +110,23 @@ var UpsellingPage = function UpsellingPage(props) {
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
               getUpsellingProducts(result);
-              setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
-                loading: false,
-                products: result
-              }));
-              _context.next = 12;
+              _context.next = 11;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 8:
+              _context.prev = 8;
               _context.t0 = _context["catch"](0);
-              setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
+              setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
                 loading: false,
                 error: _context.t0
               }));
 
-            case 12:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 8]]);
     }));
 
     return function getProducts() {
@@ -156,15 +147,19 @@ var UpsellingPage = function UpsellingPage(props) {
           return product.id === cartProduct.id;
         });
       });
-      setUpsellingProducts(result.filter(function (product) {
-        return product.upselling && !repeatProducts.find(function (repeatProduct) {
-          return repeatProduct.id === product.id;
-        });
-      }));
+      setUpsellingProducts({
+        loading: false,
+        products: result.filter(function (product) {
+          return !repeatProducts.find(function (repeatProduct) {
+            return repeatProduct.id === product.id;
+          });
+        })
+      });
     } else {
-      setUpsellingProducts(result.filter(function (product) {
-        return product.upselling;
-      }));
+      setUpsellingProducts({
+        loading: false,
+        products: result
+      });
     }
   };
   /**
@@ -205,8 +200,7 @@ var UpsellingPage = function UpsellingPage(props) {
 
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     handleAddProductUpselling: handleAddProductUpselling,
-    upsellingProducts: upsellingProducts,
-    productsList: productsList
+    upsellingProducts: upsellingProducts
   }));
 };
 

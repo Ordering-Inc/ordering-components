@@ -429,6 +429,24 @@ Object.defineProperty(exports, "useOrder", {
     return _OrderContext.useOrder;
   }
 });
+Object.defineProperty(exports, "BusinessContext", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessContext.BusinessContext;
+  }
+});
+Object.defineProperty(exports, "BusinessProvider", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessContext.BusinessProvider;
+  }
+});
+Object.defineProperty(exports, "useBusiness", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessContext.useBusiness;
+  }
+});
 Object.defineProperty(exports, "SessionContext", {
   enumerable: true,
   get: function get() {
@@ -665,6 +683,8 @@ var _ConfigContext = require("./contexts/ConfigContext");
 var _LanguageContext = require("./contexts/LanguageContext");
 
 var _OrderContext = require("./contexts/OrderContext");
+
+var _BusinessContext = require("./contexts/BusinessContext");
 
 var _SessionContext = require("./contexts/SessionContext");
 
