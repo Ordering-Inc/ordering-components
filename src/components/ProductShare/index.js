@@ -28,12 +28,19 @@ export const ProductShare = (props) => {
     addToAnyScript()
   }, [])
 
+  const changeShowCharedButton = (show) => {
+    setShowShareButton(show)
+    if (show && window.a2a) {
+      window.a2a.init()
+    }
+  }
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          updateShowValue={(val) => setShowShareButton(val)}
+          updateShowValue={changeShowCharedButton}
           showShareButton={showShareButton}
           urlToShare={urlToShare}
         />
