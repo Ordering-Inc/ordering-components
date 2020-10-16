@@ -199,9 +199,9 @@ export default function App () {
           <Route path='/business_basic_information'>
             <BusinessBasicInformationExample />
           </Route>
-          <Route path='/businesses_list'>
+          {/* <Route path='/businesses_list'>
             <BusinessesListExample />
-          </Route>
+          </Route> */}
           <Route path='/messages'>
             <MessagesExample />
           </Route>

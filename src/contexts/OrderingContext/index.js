@@ -3,6 +3,7 @@ import { ConfigProvider } from '../ConfigContext'
 import { SessionProvider } from '../SessionContext'
 import { WebsocketProvider } from '../WebsocketContext'
 import { OrderProvider } from '../OrderContext'
+import { BusinessProvider } from '../BusinessContext'
 import { LanguageProvider } from '../LanguageContext'
 import { ApiProvider } from '../ApiContext'
 
@@ -26,7 +27,9 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
             <SessionProvider>
               <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
                 <OrderProvider Alert={Alert}>
-                  {children}
+                  <BusinessProvider>
+                    {children}
+                  </BusinessProvider>
                 </OrderProvider>
               </WebsocketProvider>
             </SessionProvider>
