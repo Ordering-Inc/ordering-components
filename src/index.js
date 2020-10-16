@@ -62,6 +62,7 @@ import { CmsContent } from './components/CmsContent'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
+import { BusinessContext, BusinessProvider, useBusiness } from './contexts/BusinessContext'
 import { SessionContext, SessionProvider, useSession } from './contexts/SessionContext'
 import { WebsocketContext, WebsocketProvider, useWebsocket } from './contexts/WebsocketContext'
 import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
@@ -154,6 +155,9 @@ export {
   OrderContext,
   OrderProvider,
   useOrder,
+  BusinessContext,
+  BusinessProvider,
+  useBusiness,
   SessionContext,
   SessionProvider,
   useSession,
