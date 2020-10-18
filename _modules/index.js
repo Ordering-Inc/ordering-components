@@ -501,6 +501,24 @@ Object.defineProperty(exports, "useApi", {
     return _ApiContext.useApi;
   }
 });
+Object.defineProperty(exports, "EventContext", {
+  enumerable: true,
+  get: function get() {
+    return _EventContext.EventContext;
+  }
+});
+Object.defineProperty(exports, "EventProvider", {
+  enumerable: true,
+  get: function get() {
+    return _EventContext.EventProvider;
+  }
+});
+Object.defineProperty(exports, "useEvent", {
+  enumerable: true,
+  get: function get() {
+    return _EventContext.useEvent;
+  }
+});
 Object.defineProperty(exports, "OrderingContext", {
   enumerable: true,
   get: function get() {
@@ -691,6 +709,8 @@ var _SessionContext = require("./contexts/SessionContext");
 var _WebsocketContext = require("./contexts/WebsocketContext");
 
 var _ApiContext = require("./contexts/ApiContext");
+
+var _EventContext = require("./contexts/EventContext");
 
 var _OrderingContext = require("./contexts/OrderingContext");
 

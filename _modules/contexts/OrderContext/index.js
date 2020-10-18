@@ -17,6 +17,8 @@ var _WebsocketContext = require("../WebsocketContext");
 
 var _LanguageContext = require("../LanguageContext");
 
+var _EventContext = require("../EventContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -92,6 +94,10 @@ var OrderProvider = function OrderProvider(_ref) {
       t = _useLanguage2[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
   var _useState5 = (0, _react.useState)({
     loading: true,
@@ -496,6 +502,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
+                events.emit('cart_product_added', product, result);
+                events.emit('cart_updated', result);
               } else {
                 setAlert({
                   show: true,
@@ -567,6 +575,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
+                events.emit('cart_product_removed', product, result);
+                events.emit('cart_updated', result);
               } else {
                 setAlert({
                   show: true,
@@ -709,6 +719,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
+                events.emit('cart_product_updated', product, result);
+                events.emit('cart_updated', result);
               } else {
                 setAlert({
                   show: true,
@@ -803,6 +815,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
+                events.emit('cart_updated', result);
               } else {
                 setAlert({
                   show: true,
@@ -897,6 +910,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
+                events.emit('cart_updated', result);
               } else {
                 setAlert({
                   show: true,
@@ -964,11 +978,13 @@ var OrderProvider = function OrderProvider(_ref) {
               if (!error) {
                 if (result.status !== 1) {
                   state.carts["businessId:".concat(result.business_id)] = result;
+                  events.emit('cart_updated', result);
                 } else {
                   delete state.carts["businessId:".concat(result.business_id)];
                 }
               } else {
                 state.carts["businessId:".concat(cart.business_id)] = cart;
+                events.emit('cart_updated', cart);
               }
 
               setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -1038,11 +1054,13 @@ var OrderProvider = function OrderProvider(_ref) {
               if (!error) {
                 if (result.status !== 1) {
                   state.carts["businessId:".concat(result.business_id)] = result;
+                  events.emit('cart_updated', result);
                 } else {
                   delete state.carts["businessId:".concat(result.business_id)];
                 }
               } else if (cart) {
                 state.carts["businessId:".concat(cart.business_id)] = cart;
+                events.emit('cart_updated', cart);
               }
 
               setState(_objectSpread(_objectSpread({}, state), {}, {
