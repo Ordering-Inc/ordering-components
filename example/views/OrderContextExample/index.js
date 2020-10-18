@@ -5,12 +5,14 @@ import { ProductFormUI } from '../../components/ProductFormUI'
 import { CartUI } from '../../components/CartUI'
 import { Cart } from '../../../src/components/Cart'
 import { useApi } from '../../../src/contexts/ApiContext'
+import { useEvent } from '../../../src/contexts/EventContext'
 
 export const OrderContextExample = () => {
   const [ordering] = useApi()
   const [, { applyCoupon }] = useOrder()
   const [productCart, setProductCart] = useState({})
   const [product, setProduct] = useState()
+  const [events] = useEvent()
 
   const loadProductWithOptions = async () => {
     const { content: { result } } = await ordering.businesses(41).categories(251).products(1309).get()
@@ -19,6 +21,13 @@ export const OrderContextExample = () => {
 
   useEffect(() => {
     loadProductWithOptions()
+    const handleCartProductAdded = (product, cart) => {
+      console.log(product, cart)
+    }
+    events.on('cart_product_added', handleCartProductAdded)
+    return () => {
+      events.off('cart_product_added', handleCartProductAdded)
+    }
   }, [])
 
   const handleAddCoupon = () => {

@@ -161,6 +161,9 @@ export const Home = () => {
         <li>
           <Link to='/upselling'>Upselling</Link>
         </li>
+        <li>
+          <Link to='/events'>Events</Link>
+        </li>
       </ol>
       <h2>Payments Section</h2>
       <ol>
