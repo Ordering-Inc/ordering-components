@@ -3,6 +3,7 @@ import { useSession } from '../SessionContext'
 import { useApi } from '../ApiContext'
 import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
+import { useEvent } from '../EventContext'
 
 /**
  * Create OrderContext
@@ -21,6 +22,7 @@ export const OrderProvider = ({ Alert, children }) => {
   const [ordering] = useApi()
   const [languageState, t] = useLanguage()
   const socket = useWebsocket()
+  const [events] = useEvent()
 
   const [state, setState] = useState({
     loading: true,
@@ -212,6 +214,8 @@ export const OrderProvider = ({ Alert, children }) => {
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_product_added', product, result)
+        events.emit('cart_updated', result)
       } else {
         setAlert({ show: true, content: result })
       }
@@ -239,6 +243,8 @@ export const OrderProvider = ({ Alert, children }) => {
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().removeProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_product_removed', product, result)
+        events.emit('cart_updated', result)
       } else {
         setAlert({ show: true, content: result })
       }
@@ -286,6 +292,8 @@ export const OrderProvider = ({ Alert, children }) => {
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_product_updated', product, result)
+        events.emit('cart_updated', result)
       } else {
         setAlert({ show: true, content: result })
       }
@@ -319,6 +327,7 @@ export const OrderProvider = ({ Alert, children }) => {
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_updated', result)
       } else {
         setAlert({ show: true, content: result })
       }
@@ -352,6 +361,7 @@ export const OrderProvider = ({ Alert, children }) => {
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changeDriverTip(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_updated', result)
       } else {
         setAlert({ show: true, content: result })
       }
@@ -374,11 +384,13 @@ export const OrderProvider = ({ Alert, children }) => {
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result
+          events.emit('cart_updated', result)
         } else {
           delete state.carts[`businessId:${result.business_id}`]
         }
       } else {
         state.carts[`businessId:${cart.business_id}`] = cart
+        events.emit('cart_updated', cart)
       }
       setState({ ...state, loading: false })
       return { error, result }
@@ -403,11 +415,13 @@ export const OrderProvider = ({ Alert, children }) => {
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result
+          events.emit('cart_updated', result)
         } else {
           delete state.carts[`businessId:${result.business_id}`]
         }
       } else if (cart) {
         state.carts[`businessId:${cart.business_id}`] = cart
+        events.emit('cart_updated', cart)
       }
       setState({ ...state, loading: false })
       return { error, result }

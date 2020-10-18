@@ -15,7 +15,7 @@ import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 // import { ProductDetail } from './views/ProductDetail'
 // import { ProductList } from './views/ProductList(NOT)'
-import { BusinessesListExample } from './views/BusinessesListExample'
+// import { BusinessesListExample } from './views/BusinessesListExample'
 import { BusinessBasicInformationExample } from './views/BusinessBasicInformationExample'
 import { LanguageSelectorExample } from './views/LanguageSelectorExample'
 import { BusinessSortControlExample } from './views/BusinessSortControlExample'
@@ -58,7 +58,8 @@ import { PaymentOptionStripeExample } from './views/PaymentOptionStripeExample'
 import { PaymentOptionStripeDirectExample } from './views/PaymentOptionStripeDirectExample'
 import { PaymentOptionStripeRedirectExample } from './views/PaymentOptionStripeRedirectExample'
 import { MessagesExample } from './views/MessagesExample'
-import {UpsellingPageExample} from './views/UpsellingPageExample'
+import { UpsellingPageExample } from './views/UpsellingPageExample'
+import { EventsExample } from './views/EventsExample'
 
 export default function App () {
   return (
@@ -231,6 +232,9 @@ export default function App () {
           </Route>
           <Route path='/upselling'>
             <UpsellingPageExample />
+          </Route>
+          <Route path='/events'>
+            <EventsExample />
           </Route>
           <Route path='/'>
             <Home />

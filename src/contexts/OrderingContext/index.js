@@ -6,6 +6,7 @@ import { OrderProvider } from '../OrderContext'
 import { BusinessProvider } from '../BusinessContext'
 import { LanguageProvider } from '../LanguageContext'
 import { ApiProvider } from '../ApiContext'
+import { EventProvider } from '../EventContext'
 
 /**
  * Create OrderingContext
@@ -21,21 +22,23 @@ export const OrderingContext = createContext()
 export const OrderingProvider = ({ Alert, settings, children }) => {
   return (
     <OrderingContext.Provider>
-      <ApiProvider settings={Object.assign(settings.api, { project: settings.project })}>
-        <LanguageProvider>
-          <ConfigProvider>
-            <SessionProvider>
-              <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
-                <OrderProvider Alert={Alert}>
-                  <BusinessProvider>
-                    {children}
-                  </BusinessProvider>
-                </OrderProvider>
-              </WebsocketProvider>
-            </SessionProvider>
-          </ConfigProvider>
-        </LanguageProvider>
-      </ApiProvider>
+      <EventProvider>
+        <ApiProvider settings={Object.assign(settings.api, { project: settings.project })}>
+          <LanguageProvider>
+            <ConfigProvider>
+              <SessionProvider>
+                <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
+                  <OrderProvider Alert={Alert}>
+                    <BusinessProvider>
+                      {children}
+                    </BusinessProvider>
+                  </OrderProvider>
+                </WebsocketProvider>
+              </SessionProvider>
+            </ConfigProvider>
+          </LanguageProvider>
+        </ApiProvider>
+      </EventProvider>
     </OrderingContext.Provider>
   )
 }
