@@ -141,25 +141,26 @@ var UpsellingPage = function UpsellingPage(props) {
 
 
   var getUpsellingProducts = function getUpsellingProducts(result) {
-    if (cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.length) {
-      var repeatProducts = cartProducts.map(function (cartProduct) {
-        return result.find(function (product) {
-          return product.id === cartProduct.id;
-        });
+    var repeatProducts = cartProducts.filter(function (cartProduct) {
+      return result.find(function (product) {
+        return product.id === cartProduct.id;
       });
-      setUpsellingProducts({
+    });
+
+    if (repeatProducts.length) {
+      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
         loading: false,
         products: result.filter(function (product) {
           return !repeatProducts.find(function (repeatProduct) {
             return repeatProduct.id === product.id;
           });
         })
-      });
+      }));
     } else {
-      setUpsellingProducts({
+      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
         loading: false,
         products: result
-      });
+      }));
     }
   };
   /**
