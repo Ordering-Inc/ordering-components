@@ -139,7 +139,7 @@ var MomentOption = function MomentOption(props) {
       datesList = _useState8[0],
       setDatesList = _useState8[1];
 
-  var _useState9 = (0, _react.useState)(null),
+  var _useState9 = (0, _react.useState)((0, _moment2.default)(validDate(_currentDate)).format('YYYY-MM-DD')),
       _useState10 = _slicedToArray(_useState9, 2),
       dateSelected = _useState10[0],
       setDateSelected = _useState10[1];
@@ -184,18 +184,27 @@ var MomentOption = function MomentOption(props) {
   };
 
   (0, _react.useEffect)(function () {
-    var _orderStatus$options;
+    if (orderStatus.loading) return;
 
-    if (useOrderContext && ((_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.moment)) {
-      var _currentDate2 = _moment2.default.utc(validDate(orderStatus.options.moment)).local();
+    if (useOrderContext) {
+      var _orderStatus$options;
 
-      setScheduleSelected(_currentDate2.format('YYYY-MM-DD HH:mm'));
-      setDateSelected(_currentDate2.format('YYYY-MM-DD'));
-      setTimeSelected(_currentDate2.format('HH:mm'));
-      setIsAsap(false);
+      if ((_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.moment) {
+        var _currentDate2 = _moment2.default.utc(validDate(orderStatus.options.moment)).local();
+
+        setScheduleSelected(_currentDate2.format('YYYY-MM-DD HH:mm'));
+        setDateSelected(_currentDate2.format('YYYY-MM-DD'));
+        setTimeSelected(_currentDate2.format('HH:mm'));
+        isAsap && setIsAsap(false);
+      } else {
+        dateSelected !== (0, _moment2.default)().format('YYYY-MM-DD') && setDateSelected((0, _moment2.default)().format('YYYY-MM-DD'));
+        timeSelected !== null && setTimeSelected(null);
+        scheduleSelected !== null && setScheduleSelected(null);
+        !isAsap && setIsAsap(true);
+      }
     } else {
       scheduleSelected !== null && setScheduleSelected(null);
-      setIsAsap(true);
+      !isAsap && setIsAsap(true);
     }
   }, [orderStatus]);
   (0, _react.useEffect)(function () {
