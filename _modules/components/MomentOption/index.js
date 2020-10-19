@@ -229,11 +229,11 @@ var MomentOption = function MomentOption(props) {
     };
   }, [scheduleSelected]);
   (0, _react.useEffect)(function () {
-    if (isAsap) {
+    if (isAsap && datesList[0]) {
       setDateSelected(datesList[0]);
       setTimeSelected(null);
     }
-  }, [isAsap]);
+  }, [isAsap, datesList]);
   /**
    * generate a list of available hours
    */
