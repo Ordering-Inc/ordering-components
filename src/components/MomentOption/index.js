@@ -91,7 +91,7 @@ export const MomentOption = (props) => {
   const [hoursList, setHourList] = useState([])
   const [datesList, setDatesList] = useState([])
 
-  const [dateSelected, setDateSelected] = useState(null)
+  const [dateSelected, setDateSelected] = useState(moment(validDate(_currentDate)).format('YYYY-MM-DD'))
   const [timeSelected, setTimeSelected] = useState(null)
 
   const handleChangeDate = (date) => {
@@ -124,15 +124,23 @@ export const MomentOption = (props) => {
   }
 
   useEffect(() => {
-    if (useOrderContext && orderStatus.options?.moment) {
-      const _currentDate = moment.utc(validDate(orderStatus.options.moment)).local()
-      setScheduleSelected(_currentDate.format('YYYY-MM-DD HH:mm'))
-      setDateSelected(_currentDate.format('YYYY-MM-DD'))
-      setTimeSelected(_currentDate.format('HH:mm'))
-      setIsAsap(false)
+    if (orderStatus.loading) return
+    if (useOrderContext) {
+      if (orderStatus.options?.moment) {
+        const _currentDate = moment.utc(validDate(orderStatus.options.moment)).local()
+        setScheduleSelected(_currentDate.format('YYYY-MM-DD HH:mm'))
+        setDateSelected(_currentDate.format('YYYY-MM-DD'))
+        setTimeSelected(_currentDate.format('HH:mm'))
+        isAsap && setIsAsap(false)
+      } else {
+        dateSelected !== moment().format('YYYY-MM-DD') && setDateSelected(moment().format('YYYY-MM-DD'))
+        timeSelected !== null && setTimeSelected(null)
+        scheduleSelected !== null && setScheduleSelected(null)
+        !isAsap && setIsAsap(true)
+      }
     } else {
       scheduleSelected !== null && setScheduleSelected(null)
-      setIsAsap(true)
+      !isAsap && setIsAsap(true)
     }
   }, [orderStatus])
 
