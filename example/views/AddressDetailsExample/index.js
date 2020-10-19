@@ -23,6 +23,10 @@ export const AddressDetailsExample = () => {
      */
     apiKey: '',
     /**
+     * size of google Map
+     */
+    mapSize: 15,
+    /**
      * Components types before address details
      * Array of type components, the parent props will pass to these components
      */

@@ -9,7 +9,8 @@ import { useApi } from '../../contexts/ApiContext'
 export const AddressDetails = (props) => {
   const {
     apiKey,
-    UIComponent
+    UIComponent,
+    mapSize
   } = props
   const [orderState] = useOrder()
   const requestsState = {}
@@ -25,7 +26,7 @@ export const AddressDetails = (props) => {
   const formatUrl = (location) => {
     const orderLocation = orderState?.options?.address?.location
     return orderState.options.type === 1
-      ? `https://maps.googleapis.com/maps/api/staticmap?size=500x190&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=15&scale=2&maptype=roadmap&&markers=icon:https://res.cloudinary.com/ditpjbrmz/image/upload/f_auto,q_auto,w_45,q_auto:best,q_auto:best/v1564675872/marker-customer_kvxric.png%7Ccolor:white%7C${orderLocation?.lat},${orderLocation?.lng}&key=${apiKey}`
+      ? `https://maps.googleapis.com/maps/api/staticmap?size=500x190&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=${mapSize || 15}&scale=2&maptype=roadmap&&markers=icon:https://res.cloudinary.com/ditpjbrmz/image/upload/f_auto,q_auto,w_45,q_auto:best,q_auto:best/v1564675872/marker-customer_kvxric.png%7Ccolor:white%7C${orderLocation?.lat},${orderLocation?.lng}&key=${apiKey}`
       : `https://maps.googleapis.com/maps/api/staticmap?size=500x190&scale=2&maptype=roadmap&markers=icon:https://res.cloudinary.com/ditpjbrmz/image/upload/f_auto,q_auto,w_45,q_auto:best,q_auto:best/v1564675872/marker-customer_kvxric.png%7Ccolor:white%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:https://res.cloudinary.com/ordering2/image/upload/f_auto,q_auto,w_45,h_45,q_auto:best,q_auto:best,r_max,bo_3px_solid_gray/v1562277711/bk6kvzrnfkvqgav9qi7j.png%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${apiKey}`
   }
   /**
