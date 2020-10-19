@@ -120,7 +120,7 @@ var MomentOption = function MomentOption(props) {
    */
 
 
-  var _useState3 = (0, _react.useState)(scheduleSelected),
+  var _useState3 = (0, _react.useState)(!scheduleSelected),
       _useState4 = _slicedToArray(_useState3, 2),
       isAsap = _useState4[0],
       setIsAsap = _useState4[1];
@@ -250,7 +250,7 @@ var MomentOption = function MomentOption(props) {
         /**
          * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
          */
-        if (isToday && hour === now.getHours() && minute < now.getMinutes()) continue;
+        if (isToday && hour === now.getHours() && minute <= now.getMinutes()) continue;
         /**
          * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
          */
