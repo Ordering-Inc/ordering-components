@@ -83,7 +83,7 @@ export const MomentOption = (props) => {
   /**
    * Flag to know if user select asap time
    */
-  const [isAsap, setIsAsap] = useState(scheduleSelected)
+  const [isAsap, setIsAsap] = useState(!scheduleSelected)
 
   /**
    * Arrays for save hours and dates lists
@@ -184,7 +184,7 @@ export const MomentOption = (props) => {
         /**
          * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
          */
-        if (isToday && hour === now.getHours() && minute < now.getMinutes()) continue
+        if (isToday && hour === now.getHours() && minute <= now.getMinutes()) continue
         /**
          * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
          */
