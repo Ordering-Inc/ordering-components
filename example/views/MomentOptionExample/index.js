@@ -21,7 +21,7 @@ export const MomentOptionExample = () => {
     /**
      * maxDate, this must be contains a custom date selected
      */
-    maxDate: new Date('2020-09-30 10:00'),
+    maxDate: new Date('2020-10-25 09:59'),
     /**
      * Method to return moment selection
      */
