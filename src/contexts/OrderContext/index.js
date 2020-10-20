@@ -449,10 +449,10 @@ export const OrderProvider = ({ Alert, children }) => {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
-      return !error
+      return { error, result }
     } catch (err) {
       setState({ ...state, loading: false })
-      return false
+      return { error: true, result: [err.message] }
     }
   }
 
