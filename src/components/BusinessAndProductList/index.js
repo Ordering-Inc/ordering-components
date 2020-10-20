@@ -98,10 +98,11 @@ export const BusinessAndProductList = (props) => {
       page_size: pagination.pageSize
     }
 
-    const where = []
+    let where = null
     if (searchValue) {
+      const conditions = []
       if (isSearchByName) {
-        where.push(
+        conditions.push(
           {
             attribute: 'name',
             value: {
@@ -112,7 +113,7 @@ export const BusinessAndProductList = (props) => {
         )
       }
       if (isSearchByDescription) {
-        where.push(
+        conditions.push(
           {
             attribute: 'description',
             value: {
@@ -121,6 +122,10 @@ export const BusinessAndProductList = (props) => {
             }
           }
         )
+      }
+      where = {
+        contidions: conditions,
+        conector: 'OR'
       }
     }
 
@@ -131,7 +136,8 @@ export const BusinessAndProductList = (props) => {
       const source = {}
       requestsState.products = source
       setRequestsState({ ...requestsState })
-      const { content: { error, result, pagination } } = await functionFetch.parameters(parameters).where(where).get({ cancelToken: source })
+      const productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters)
+      const { content: { error, result, pagination } } = await productEndpoint.get({ cancelToken: source })
       if (!error) {
         const newcategoryState = {
           pagination: {
