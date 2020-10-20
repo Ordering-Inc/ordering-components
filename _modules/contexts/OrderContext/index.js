@@ -1138,7 +1138,10 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              return _context14.abrupt("return", !error);
+              return _context14.abrupt("return", {
+                error: error,
+                result: result
+              });
 
             case 13:
               _context14.prev = 13;
@@ -1146,7 +1149,10 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              return _context14.abrupt("return", false);
+              return _context14.abrupt("return", {
+                error: true,
+                result: [_context14.t0.message]
+              });
 
             case 17:
             case "end":
