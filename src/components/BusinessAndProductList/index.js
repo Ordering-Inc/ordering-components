@@ -124,7 +124,7 @@ export const BusinessAndProductList = (props) => {
         )
       }
       where = {
-        contidions: conditions,
+        conditions,
         conector: 'OR'
       }
     }
