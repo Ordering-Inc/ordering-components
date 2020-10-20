@@ -170,7 +170,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
       var _businessState$busine, _orderState$options;
 
-      var _categoryState, _businessState$busine2, _businessState$busine3, productsFiltered, _businessState$busine4, _productsFiltered, categoryKey, categoryState, pagination, parameters, functionFetch, source, _yield$functionFetch$, _yield$functionFetch$2, error, result, _pagination, newcategoryState;
+      var _categoryState, _businessState$busine2, _businessState$busine3, productsFiltered, _businessState$busine4, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, functionFetch, source, _yield$functionFetch$, _yield$functionFetch$2, error, result, _pagination, newcategoryState;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -205,7 +205,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               return _context.abrupt("return");
 
             case 5:
-              categoryKey = categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
+              categoryKey = searchValue ? 'search' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
               categoryState = categoriesState[categoryKey] || categoryStateDefault;
               pagination = categoryState.pagination;
 
@@ -228,17 +228,41 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 page: newFetch ? 1 : pagination.currentPage + 1,
                 page_size: pagination.pageSize
               };
-              _context.prev = 13;
+              where = [];
+
+              if (searchValue) {
+                if (isSearchByName) {
+                  where.push({
+                    attribute: 'name',
+                    value: {
+                      condition: 'ilike',
+                      value: "%".concat(encodeURI(searchValue), "%")
+                    }
+                  });
+                }
+
+                if (isSearchByDescription) {
+                  where.push({
+                    attribute: 'description',
+                    value: {
+                      condition: 'ilike',
+                      value: "%".concat(encodeURI(searchValue), "%")
+                    }
+                  });
+                }
+              }
+
+              _context.prev = 15;
               functionFetch = categorySelected.id ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products();
               source = {};
               requestsState.products = source;
               setRequestsState(_objectSpread({}, requestsState));
-              _context.next = 20;
-              return functionFetch.parameters(parameters).get({
+              _context.next = 22;
+              return functionFetch.parameters(parameters).where(where).get({
                 cancelToken: source
               });
 
-            case 20:
+            case 22:
               _yield$functionFetch$ = _context.sent;
               _yield$functionFetch$2 = _yield$functionFetch$.content;
               error = _yield$functionFetch$2.error;
@@ -262,23 +286,23 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 setErrors(result);
               }
 
-              _context.next = 31;
+              _context.next = 33;
               break;
 
-            case 28:
-              _context.prev = 28;
-              _context.t0 = _context["catch"](13);
+            case 30:
+              _context.prev = 30;
+              _context.t0 = _context["catch"](15);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setErrors([_context.t0.message]);
               }
 
-            case 31:
+            case 33:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[13, 28]]);
+      }, _callee, null, [[15, 30]]);
     }));
 
     return function getProducts(_x) {
@@ -422,7 +446,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (!orderState.loading && !businessState.loading) {
       getProducts();
     }
-  }, [orderState, categorySelected, businessState, searchValue]);
+  }, [orderState, categorySelected, businessState]);
+  (0, _react.useEffect)(function () {
+    getProducts(!!searchValue);
+  }, [searchValue]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness();
