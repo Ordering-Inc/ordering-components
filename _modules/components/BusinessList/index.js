@@ -173,13 +173,13 @@ var BusinessList = function BusinessList(props) {
 
                 conditions.push({
                   conector: 'OR',
-                  contidions: searchConditions
+                  conditions: searchConditions
                 });
               }
 
               if (conditions.length) {
                 where = {
-                  contidions: conditions,
+                  conditions: conditions,
                   conector: 'AND'
                 };
               }

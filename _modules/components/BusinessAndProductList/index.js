@@ -254,7 +254,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 }
 
                 where = {
-                  contidions: conditions,
+                  conditions: conditions,
                   conector: 'OR'
                 };
               }
