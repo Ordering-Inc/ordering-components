@@ -81,7 +81,7 @@ export const BusinessAndProductList = (props) => {
       return
     }
 
-    const categoryKey = categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
+    const categoryKey = searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
 
     const pagination = categoryState.pagination
@@ -98,12 +98,40 @@ export const BusinessAndProductList = (props) => {
       page_size: pagination.pageSize
     }
 
+    const where = []
+    if (searchValue) {
+      if (isSearchByName) {
+        where.push(
+          {
+            attribute: 'name',
+            value: {
+              condition: 'ilike',
+              value: `%${encodeURI(searchValue)}%`
+            }
+          }
+        )
+      }
+      if (isSearchByDescription) {
+        where.push(
+          {
+            attribute: 'description',
+            value: {
+              condition: 'ilike',
+              value: `%${encodeURI(searchValue)}%`
+            }
+          }
+        )
+      }
+    }
+
     try {
-      const functionFetch = categorySelected.id ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products()
+      const functionFetch = categorySelected.id
+        ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
+        : ordering.businesses(businessState.business.id).products()
       const source = {}
       requestsState.products = source
       setRequestsState({ ...requestsState })
-      const { content: { error, result, pagination } } = await functionFetch.parameters(parameters).get({ cancelToken: source })
+      const { content: { error, result, pagination } } = await functionFetch.parameters(parameters).where(where).get({ cancelToken: source })
       if (!error) {
         const newcategoryState = {
           pagination: {
@@ -213,7 +241,11 @@ export const BusinessAndProductList = (props) => {
     if (!orderState.loading && !businessState.loading) {
       getProducts()
     }
-  }, [orderState, categorySelected, businessState, searchValue])
+  }, [orderState, categorySelected, businessState])
+
+  useEffect(() => {
+    getProducts(!!searchValue)
+  }, [searchValue])
 
   useEffect(() => {
     if (!orderState.loading && orderOptions && !languageState.loading) {
