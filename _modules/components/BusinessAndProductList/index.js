@@ -238,7 +238,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
-                      value: "%".concat(encodeURI(searchValue), "%")
+                      value: encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -248,7 +248,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
-                      value: "%".concat(encodeURI(searchValue), "%")
+                      value: encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }

@@ -156,7 +156,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
-                      value: "%".concat(encodeURI(searchValue), "%")
+                      value: encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -166,7 +166,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
-                      value: "%".concat(encodeURI(searchValue), "%")
+                      value: encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
