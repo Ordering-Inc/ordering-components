@@ -57,7 +57,7 @@ export const BusinessList = (props) => {
               attribute: 'name',
               value: {
                 condition: 'ilike',
-                value: `%${encodeURI(searchValue)}%`
+                value: encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -68,7 +68,7 @@ export const BusinessList = (props) => {
               attribute: 'description',
               value: {
                 condition: 'ilike',
-                value: `%${encodeURI(searchValue)}%`
+                value: encodeURI(`%${searchValue}%`)
               }
             }
           )
