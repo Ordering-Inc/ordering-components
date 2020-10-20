@@ -170,7 +170,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
       var _businessState$busine, _orderState$options;
 
-      var _categoryState, _businessState$busine2, _businessState$busine3, productsFiltered, _businessState$busine4, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, functionFetch, source, _yield$functionFetch$, _yield$functionFetch$2, error, result, _pagination, newcategoryState;
+      var _categoryState, _businessState$busine2, _businessState$busine3, productsFiltered, _businessState$busine4, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, conditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -228,11 +228,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 page: newFetch ? 1 : pagination.currentPage + 1,
                 page_size: pagination.pageSize
               };
-              where = [];
+              where = null;
 
               if (searchValue) {
+                conditions = [];
+
                 if (isSearchByName) {
-                  where.push({
+                  conditions.push({
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
@@ -242,7 +244,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 }
 
                 if (isSearchByDescription) {
-                  where.push({
+                  conditions.push({
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
@@ -250,6 +252,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     }
                   });
                 }
+
+                where = {
+                  contidions: conditions,
+                  conector: 'OR'
+                };
               }
 
               _context.prev = 15;
@@ -257,17 +264,18 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               source = {};
               requestsState.products = source;
               setRequestsState(_objectSpread({}, requestsState));
-              _context.next = 22;
-              return functionFetch.parameters(parameters).where(where).get({
+              productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
+              _context.next = 23;
+              return productEndpoint.get({
                 cancelToken: source
               });
 
-            case 22:
-              _yield$functionFetch$ = _context.sent;
-              _yield$functionFetch$2 = _yield$functionFetch$.content;
-              error = _yield$functionFetch$2.error;
-              result = _yield$functionFetch$2.result;
-              _pagination = _yield$functionFetch$2.pagination;
+            case 23:
+              _yield$productEndpoin = _context.sent;
+              _yield$productEndpoin2 = _yield$productEndpoin.content;
+              error = _yield$productEndpoin2.error;
+              result = _yield$productEndpoin2.result;
+              _pagination = _yield$productEndpoin2.pagination;
 
               if (!error) {
                 newcategoryState = {
@@ -286,23 +294,23 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 setErrors(result);
               }
 
-              _context.next = 33;
+              _context.next = 34;
               break;
 
-            case 30:
-              _context.prev = 30;
+            case 31:
+              _context.prev = 31;
               _context.t0 = _context["catch"](15);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setErrors([_context.t0.message]);
               }
 
-            case 33:
+            case 34:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[15, 30]]);
+      }, _callee, null, [[15, 31]]);
     }));
 
     return function getProducts(_x) {

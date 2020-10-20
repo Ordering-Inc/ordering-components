@@ -113,7 +113,7 @@ var BusinessList = function BusinessList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, _orderState$options6$, _parts$, _parts$2, parts, dateParts, timeParts, _moment, where, source, _yield$ordering$busin, _yield$ordering$busin2, result, pagination, nextPageItems, remainingItems;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, _orderState$options6$, _parts$, _parts$2, parts, dateParts, timeParts, _moment, where, conditions, searchConditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -138,18 +138,21 @@ var BusinessList = function BusinessList(props) {
                 parameters.timestamp = _moment;
               }
 
-              where = [];
+              where = null;
+              conditions = [];
 
               if (businessTypeSelected) {
-                where.push({
+                conditions.push({
                   attribute: businessTypeSelected,
                   value: true
                 });
               }
 
               if (searchValue) {
+                searchConditions = [];
+
                 if (isSearchByName) {
-                  where.push({
+                  searchConditions.push({
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
@@ -159,7 +162,7 @@ var BusinessList = function BusinessList(props) {
                 }
 
                 if (isSearchByDescription) {
-                  where.push({
+                  searchConditions.push({
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
@@ -167,21 +170,34 @@ var BusinessList = function BusinessList(props) {
                     }
                   });
                 }
+
+                conditions.push({
+                  conector: 'OR',
+                  contidions: searchConditions
+                });
+              }
+
+              if (conditions.length) {
+                where = {
+                  contidions: conditions,
+                  conector: 'AND'
+                };
               }
 
               source = {};
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
-              _context.next = 12;
-              return ordering.businesses().select(propsToFetch).parameters(parameters).where(where).get({
+              fetchEndpoint = where ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters);
+              _context.next = 15;
+              return fetchEndpoint.get({
                 cancelToken: source
               });
 
-            case 12:
-              _yield$ordering$busin = _context.sent;
-              _yield$ordering$busin2 = _yield$ordering$busin.content;
-              result = _yield$ordering$busin2.result;
-              pagination = _yield$ordering$busin2.pagination;
+            case 15:
+              _yield$fetchEndpoint$ = _context.sent;
+              _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
+              result = _yield$fetchEndpoint$2.result;
+              pagination = _yield$fetchEndpoint$2.pagination;
               businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false
@@ -198,11 +214,11 @@ var BusinessList = function BusinessList(props) {
                 totalPages: pagination.total_pages,
                 nextPageItems: nextPageItems
               }));
-              _context.next = 26;
+              _context.next = 29;
               break;
 
-            case 23:
-              _context.prev = 23;
+            case 26:
+              _context.prev = 26;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -212,12 +228,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 26:
+            case 29:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 23]]);
+      }, _callee, null, [[0, 26]]);
     }));
 
     return function getBusinesses(_x) {
