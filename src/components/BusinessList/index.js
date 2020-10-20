@@ -43,14 +43,16 @@ export const BusinessList = (props) => {
         parameters.timestamp = moment
       }
 
-      const where = []
+      let where = null
+      const conditions = []
       if (businessTypeSelected) {
-        where.push({ attribute: businessTypeSelected, value: true })
+        conditions.push({ attribute: businessTypeSelected, value: true })
       }
 
       if (searchValue) {
+        const searchConditions = []
         if (isSearchByName) {
-          where.push(
+          searchConditions.push(
             {
               attribute: 'name',
               value: {
@@ -61,7 +63,7 @@ export const BusinessList = (props) => {
           )
         }
         if (isSearchByDescription) {
-          where.push(
+          searchConditions.push(
             {
               attribute: 'description',
               value: {
@@ -71,12 +73,26 @@ export const BusinessList = (props) => {
             }
           )
         }
+        conditions.push({
+          conector: 'OR',
+          contidions: searchConditions
+        })
+      }
+
+      if (conditions.length) {
+        where = {
+          contidions: conditions,
+          conector: 'AND'
+        }
       }
 
       const source = {}
       requestsState.businesses = source
       setRequestsState({ ...requestsState })
-      const { content: { result, pagination } } = await ordering.businesses().select(propsToFetch).parameters(parameters).where(where).get({ cancelToken: source })
+      const fetchEndpoint = where
+        ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
+        : ordering.businesses().select(propsToFetch).parameters(parameters)
+      const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
       businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
       setBusinessesList({
         ...businessesList,
