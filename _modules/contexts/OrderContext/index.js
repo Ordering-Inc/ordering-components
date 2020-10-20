@@ -1095,6 +1095,71 @@ var OrderProvider = function OrderProvider(_ref) {
       return _ref14.apply(this, arguments);
     };
   }();
+  /**
+   * Reorder an order and get cart
+   */
+
+
+  var reorder = /*#__PURE__*/function () {
+    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee14(orderId) {
+      var _yield$ordering$setAc19, _yield$ordering$setAc20, error, result;
+
+      return _regenerator.default.wrap(function _callee14$(_context14) {
+        while (1) {
+          switch (_context14.prev = _context14.next) {
+            case 0:
+              _context14.prev = 0;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              _context14.next = 4;
+              return ordering.setAccessToken(session.token).orders(orderId).reorder({
+                headers: {
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+                }
+              });
+
+            case 4:
+              _yield$ordering$setAc19 = _context14.sent;
+              _yield$ordering$setAc20 = _yield$ordering$setAc19.content;
+              error = _yield$ordering$setAc20.error;
+              result = _yield$ordering$setAc20.result;
+
+              if (!error) {
+                state.carts["businessId:".concat(result.business_id)] = result;
+                events.emit('cart_added', result);
+              } else {
+                setAlert({
+                  show: true,
+                  content: result
+                });
+              }
+
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context14.abrupt("return", !error);
+
+            case 13:
+              _context14.prev = 13;
+              _context14.t0 = _context14["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context14.abrupt("return", false);
+
+            case 17:
+            case "end":
+              return _context14.stop();
+          }
+        }
+      }, _callee14, null, [[0, 13]]);
+    }));
+
+    return function reorder(_x16) {
+      return _ref15.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
     if (session.auth) {
@@ -1159,6 +1224,7 @@ var OrderProvider = function OrderProvider(_ref) {
     changeDriverTip: changeDriverTip,
     placeCart: placeCart,
     confirmCart: confirmCart,
+    reorder: reorder,
     setAlert: setAlert,
     setConfirm: setConfirm
   };
@@ -1167,7 +1233,7 @@ var OrderProvider = function OrderProvider(_ref) {
     value: [copyState, functions]
   }, Alert && /*#__PURE__*/_react.default.createElement(Alert, {
     open: alert.show,
-    title: t('CART_ERROR'),
+    title: t('CART_ERROR', 'Cart error'),
     onAccept: function onAccept() {
       return setAlert({
         show: false
@@ -1213,7 +1279,8 @@ var useOrder = function useOrder() {
     confirmCart: warningMessage,
     setAlert: warningMessage,
     setConfirm: warningMessage,
-    changeDriverTip: warningMessage
+    changeDriverTip: warningMessage,
+    reorder: warningMessage
   };
   return orderManager || [{}, functionsPlaceholders];
 };
