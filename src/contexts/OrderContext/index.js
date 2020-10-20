@@ -435,6 +435,27 @@ export const OrderProvider = ({ Alert, children }) => {
     }
   }
 
+  /**
+   * Reorder an order and get cart
+   */
+  const reorder = async (orderId) => {
+    try {
+      setState({ ...state, loading: true })
+      const { content: { error, result } } = await ordering.setAccessToken(session.token).orders(orderId).reorder({ headers: { 'X-Socket-Id-X': socket?.getId() } })
+      if (!error) {
+        state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_added', result)
+      } else {
+        setAlert({ show: true, content: result })
+      }
+      setState({ ...state, loading: false })
+      return !error
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return false
+    }
+  }
+
   useEffect(() => {
     if (session.auth) {
       if (!languageState.loading) {
@@ -501,6 +522,7 @@ export const OrderProvider = ({ Alert, children }) => {
     changeDriverTip,
     placeCart,
     confirmCart,
+    reorder,
     setAlert,
     setConfirm
   }
@@ -513,7 +535,7 @@ export const OrderProvider = ({ Alert, children }) => {
         Alert && (
           <Alert
             open={alert.show}
-            title={t('CART_ERROR')}
+            title={t('CART_ERROR', 'Cart error')}
             onAccept={() => setAlert({ show: false })}
             onClose={() => setAlert({ show: false })}
             content={alert.content}
@@ -550,7 +572,8 @@ export const useOrder = () => {
     confirmCart: warningMessage,
     setAlert: warningMessage,
     setConfirm: warningMessage,
-    changeDriverTip: warningMessage
+    changeDriverTip: warningMessage,
+    reorder: warningMessage
   }
   return orderManager || [{}, functionsPlaceholders]
 }
