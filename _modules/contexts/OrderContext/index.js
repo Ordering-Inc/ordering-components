@@ -1049,7 +1049,6 @@ var OrderProvider = function OrderProvider(_ref) {
               error = _yield$ordering$setAc18.error;
               result = _yield$ordering$setAc18.result;
               cart = _yield$ordering$setAc18.cart;
-              console.log(error, result, cart);
 
               if (!error) {
                 if (result.status !== 1) {
@@ -1071,10 +1070,9 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: result
               });
 
-            case 16:
-              _context13.prev = 16;
+            case 15:
+              _context13.prev = 15;
               _context13.t0 = _context13["catch"](0);
-              console.log(_context13.t0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
@@ -1083,12 +1081,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context13.t0.message]
               });
 
-            case 21:
+            case 19:
             case "end":
               return _context13.stop();
           }
         }
-      }, _callee13, null, [[0, 16]]);
+      }, _callee13, null, [[0, 15]]);
     }));
 
     return function confirmCart(_x14, _x15) {
@@ -1205,9 +1203,14 @@ var OrderProvider = function OrderProvider(_ref) {
       var carts = _ref16.carts,
           options = _objectWithoutProperties(_ref16, ["carts"]);
 
+      var newCarts = {};
+      carts.forEach(function (cart) {
+        newCarts["businessId:".concat(cart.business_id)] = cart;
+      });
+
       var newState = _objectSpread(_objectSpread({}, state), {}, {
         options: _objectSpread(_objectSpread({}, state.options), options),
-        carts: _objectSpread(_objectSpread({}, state.carts), carts)
+        carts: _objectSpread(_objectSpread({}, state.carts), newCarts)
       });
 
       setState(_objectSpread({}, newState));
