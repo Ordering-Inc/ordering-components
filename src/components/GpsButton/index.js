@@ -8,6 +8,7 @@ import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
  */
 export const GpsButton = (props) => {
   const {
+    IconButton,
     googleReady,
     onData,
     onError,
@@ -65,7 +66,11 @@ export const GpsButton = (props) => {
   }
 
   return (
-    navigator.geolocation && <button type='button' onClick={handleGPS} disabled={(isGoogleButton && !googleReady) || loading}>GPS</button>
+    navigator.geolocation && (
+      <button type='button' onClick={handleGPS} disabled={(isGoogleButton && !googleReady) || loading}>
+        {IconButton ? <IconButton /> : 'GPS'}
+      </button>
+    )
   )
 }
 
