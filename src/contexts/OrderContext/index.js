@@ -492,9 +492,25 @@ export const OrderProvider = ({ Alert, children }) => {
       }
       setState({ ...state })
     }
+    const handleOrderOptionUpdate = ({ carts, ...options }) => {
+      const newState = {
+        ...state,
+        options: {
+          ...state.options,
+          ...options
+        },
+        carts: {
+          ...state.carts,
+          ...carts
+        }
+      }
+      setState({ ...newState })
+    }
     socket.on('carts_update', handleCartUpdate)
+    socket.on('order_options_update', handleOrderOptionUpdate)
     return () => {
       socket.off('carts_update', handleCartUpdate)
+      socket.off('order_options_update', handleOrderOptionUpdate)
     }
   }, [state, socket])
 
@@ -504,8 +520,10 @@ export const OrderProvider = ({ Alert, children }) => {
   useEffect(() => {
     if (!session.auth) return
     socket.join(`carts_${session.user.id}`)
+    socket.join(`orderoptions_${session.user.id}`)
     return () => {
       socket.leave(`carts_${session.user.id}`)
+      socket.leave(`orderoptions_${session.user.id}`)
     }
   }, [socket])
 
