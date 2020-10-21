@@ -1201,9 +1201,23 @@ var OrderProvider = function OrderProvider(_ref) {
       setState(_objectSpread({}, state));
     };
 
+    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref16) {
+      var carts = _ref16.carts,
+          options = _objectWithoutProperties(_ref16, ["carts"]);
+
+      var newState = _objectSpread(_objectSpread({}, state), {}, {
+        options: _objectSpread(_objectSpread({}, state.options), options),
+        carts: _objectSpread(_objectSpread({}, state.carts), carts)
+      });
+
+      setState(_objectSpread({}, newState));
+    };
+
     socket.on('carts_update', handleCartUpdate);
+    socket.on('order_options_update', handleOrderOptionUpdate);
     return function () {
       socket.off('carts_update', handleCartUpdate);
+      socket.off('order_options_update', handleOrderOptionUpdate);
     };
   }, [state, socket]);
   /**
@@ -1213,8 +1227,10 @@ var OrderProvider = function OrderProvider(_ref) {
   (0, _react.useEffect)(function () {
     if (!session.auth) return;
     socket.join("carts_".concat(session.user.id));
+    socket.join("orderoptions_".concat(session.user.id));
     return function () {
       socket.leave("carts_".concat(session.user.id));
+      socket.leave("orderoptions_".concat(session.user.id));
     };
   }, [socket]);
   var functions = {
