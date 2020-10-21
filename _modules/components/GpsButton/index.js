@@ -36,7 +36,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * @param {object} props Props of GpsButton component
  */
 var GpsButton = function GpsButton(props) {
-  var googleReady = props.googleReady,
+  var IconButton = props.IconButton,
+      googleReady = props.googleReady,
       onData = props.onData,
       onError = props.onError,
       onAddress = props.onAddress;
@@ -104,7 +105,7 @@ var GpsButton = function GpsButton(props) {
     type: "button",
     onClick: handleGPS,
     disabled: isGoogleButton && !googleReady || loading
-  }, "GPS");
+  }, IconButton ? /*#__PURE__*/_react.default.createElement(IconButton, null) : 'GPS');
 };
 
 exports.GpsButton = GpsButton;
