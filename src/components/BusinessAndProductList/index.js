@@ -85,7 +85,7 @@ export const BusinessAndProductList = (props) => {
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
 
     const pagination = categoryState.pagination
-    if (pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) {
+    if (!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) {
       setCategoryState({ ...categoryState, loading: false })
       return
     }
@@ -156,9 +156,9 @@ export const BusinessAndProductList = (props) => {
         setErrors(result)
       }
     } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setErrors([err.message])
-      }
+      // if (err.constructor.name !== 'Cancel') {
+      setErrors([err.message])
+      // }
     }
   }
 
@@ -233,31 +233,35 @@ export const BusinessAndProductList = (props) => {
         loading: false
       })
     } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setBusinessState({
-          ...businessState,
-          loading: false,
-          error: [err.message]
-        })
-      }
+      // if (err.constructor.name !== 'Cancel') {
+      setBusinessState({
+        ...businessState,
+        loading: false,
+        error: [err.message]
+      })
+      // }
     }
   }
 
   useEffect(() => {
-    if (!orderState.loading && !businessState.loading) {
-      getProducts()
+    if (!businessState.loading) {
+      getProducts(true)
     }
-  }, [orderState, categorySelected, businessState])
+  }, [businessState])
 
   useEffect(() => {
     getProducts(!!searchValue)
   }, [searchValue])
 
   useEffect(() => {
+    getProducts(!!searchValue)
+  }, [categorySelected.id])
+
+  useEffect(() => {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness()
     }
-  }, [orderOptions, languageState])
+  }, [orderOptions, languageState.loading])
 
   useEffect(() => {
     if (!orderState.loading) {
@@ -267,7 +271,7 @@ export const BusinessAndProductList = (props) => {
         location: orderState?.options?.address?.location
       })
     }
-  }, [JSON.stringify(orderState?.options)])
+  }, [orderState?.options?.type, orderState?.options?.moment, JSON.stringify(orderState?.options?.address?.location)])
 
   /**
    * Cancel business request
