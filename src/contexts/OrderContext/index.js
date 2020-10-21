@@ -411,7 +411,6 @@ export const OrderProvider = ({ Alert, children }) => {
       setState({ ...state, loading: true })
       const body = data
       const { content: { error, result, cart } } = await ordering.setAccessToken(session.token).carts(cardId).confirm(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
-      console.log(error, result, cart)
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result
@@ -426,7 +425,6 @@ export const OrderProvider = ({ Alert, children }) => {
       setState({ ...state, loading: false })
       return { error, result }
     } catch (err) {
-      console.log(err)
       setState({ ...state, loading: false })
       return {
         error: true,
@@ -493,6 +491,10 @@ export const OrderProvider = ({ Alert, children }) => {
       setState({ ...state })
     }
     const handleOrderOptionUpdate = ({ carts, ...options }) => {
+      const newCarts = {}
+      carts.forEach(cart => {
+        newCarts[`businessId:${cart.business_id}`] = cart
+      })
       const newState = {
         ...state,
         options: {
@@ -501,7 +503,7 @@ export const OrderProvider = ({ Alert, children }) => {
         },
         carts: {
           ...state.carts,
-          ...carts
+          ...newCarts
         }
       }
       setState({ ...newState })
