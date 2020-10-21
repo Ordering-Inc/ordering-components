@@ -147,7 +147,7 @@ export const BusinessAndProductList = (props) => {
             totalPages: pagination.total_pages
           },
           loading: false,
-          products: [...categoryState.products, ...result]
+          products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
