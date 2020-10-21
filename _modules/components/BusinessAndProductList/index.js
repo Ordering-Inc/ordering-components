@@ -285,7 +285,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     totalPages: _pagination.total_pages
                   }),
                   loading: false,
-                  products: [].concat(_toConsumableArray(categoryState.products), _toConsumableArray(result))
+                  products: newFetch ? _toConsumableArray(result) : [].concat(_toConsumableArray(categoryState.products), _toConsumableArray(result))
                 };
                 categoriesState[categoryKey] = newcategoryState;
                 setCategoryState(_objectSpread({}, newcategoryState));
