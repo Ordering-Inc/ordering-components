@@ -58,7 +58,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _businessState$busine5;
+  var _businessState$busine5, _orderState$options14, _orderState$options15, _orderState$options16, _orderState$options17;
 
   var isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
@@ -209,7 +209,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               categoryState = categoriesState[categoryKey] || categoryStateDefault;
               pagination = categoryState.pagination;
 
-              if (!(pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages)) {
+              if (!(!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages)) {
                 _context.next = 11;
                 break;
               }
@@ -300,10 +300,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             case 31:
               _context.prev = 31;
               _context.t0 = _context["catch"](15);
-
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setErrors([_context.t0.message]);
-              }
+              // if (err.constructor.name !== 'Cancel') {
+              setErrors([_context.t0.message]); // }
 
             case 34:
             case "end":
@@ -429,13 +427,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             case 14:
               _context3.prev = 14;
               _context3.t0 = _context3["catch"](0);
-
-              if (_context3.t0.constructor.name !== 'Cancel') {
-                setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
-                  loading: false,
-                  error: [_context3.t0.message]
-                }));
-              }
+              // if (err.constructor.name !== 'Cancel') {
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: false,
+                error: [_context3.t0.message]
+              })); // }
 
             case 17:
             case "end":
@@ -451,18 +447,21 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (!orderState.loading && !businessState.loading) {
-      getProducts();
+    if (!businessState.loading) {
+      getProducts(true);
     }
-  }, [orderState, categorySelected, businessState]);
+  }, [businessState]);
   (0, _react.useEffect)(function () {
     getProducts(!!searchValue);
   }, [searchValue]);
   (0, _react.useEffect)(function () {
+    getProducts(!!searchValue);
+  }, [categorySelected.id]);
+  (0, _react.useEffect)(function () {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness();
     }
-  }, [orderOptions, languageState]);
+  }, [orderOptions, languageState.loading]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading) {
       var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13;
@@ -473,7 +472,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         location: orderState === null || orderState === void 0 ? void 0 : (_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : (_orderState$options13 = _orderState$options12.address) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.location
       });
     }
-  }, [JSON.stringify(orderState === null || orderState === void 0 ? void 0 : orderState.options)]);
+  }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options14 = orderState.options) === null || _orderState$options14 === void 0 ? void 0 : _orderState$options14.type, orderState === null || orderState === void 0 ? void 0 : (_orderState$options15 = orderState.options) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.moment, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : (_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : (_orderState$options17 = _orderState$options16.address) === null || _orderState$options17 === void 0 ? void 0 : _orderState$options17.location)]);
   /**
    * Cancel business request
    */
