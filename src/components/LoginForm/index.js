@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { pickBy } from 'lodash'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
@@ -39,10 +38,10 @@ export const LoginForm = (props) => {
    */
   const handleLoginClick = async () => {
     try {
-      const _credentials = pickBy(credentials, (value, key) => {
-        return (loginTab === 'email' && key !== 'cellphone') ||
-                  (loginTab === 'cellphone' && key !== 'email')
-      })
+      const _credentials = {
+        [loginTab]: credentials[loginTab],
+        password: credentials.password
+      }
       setFormState({ ...formState, loading: true })
       const response = await ordering.users().auth(_credentials)
       setFormState({

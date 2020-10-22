@@ -7,7 +7,7 @@ export const WrapperGoogleMaps = (Child) => (props) => {
   } = props
 
   if (!apiKey) {
-    throw new Error('Prop `apiKey` is required to use Google Maps components.')
+    console.warn('Prop `apiKey` is required to use Google Maps components.')
   }
 
   const [googleReady, setGoogleReady] = useState(false)
