@@ -13,7 +13,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _moment2 = _interopRequireDefault(require("moment"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _OrderContext = require("../../contexts/OrderContext");
 
@@ -383,7 +383,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options8, source, parameters, _orderState$options9, parts, dateParts, timeParts, _moment, _yield$ordering$busin2, result;
+      var _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options8, source, parameters, _orderState$options9, parts, dateParts, timeParts, moment, _yield$ordering$busin2, result;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -401,12 +401,12 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 location: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : _orderState$options4$.location) ? "".concat((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : (_orderState$options5$2 = _orderState$options5$.location) === null || _orderState$options5$2 === void 0 ? void 0 : _orderState$options5$2.lat, ",").concat((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lng) : null
               };
 
-              if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.moment) && (0, _moment2.default)((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
+              if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.moment) && (0, _dayjs.default)((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
                 parts = (_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment.split(' ');
                 dateParts = parts[0].split('-');
                 timeParts = parts[1].split(':');
-                _moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000;
-                parameters.timestamp = _moment;
+                moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000;
+                parameters.timestamp = moment;
               }
 
               _context3.next = 9;

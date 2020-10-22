@@ -11,7 +11,11 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _moment2 = _interopRequireDefault(require("moment"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
+
+var _isSameOrAfter = _interopRequireDefault(require("dayjs/plugin/isSameOrAfter"));
+
+var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 
 var _OrderContext = require("../../contexts/OrderContext");
 
@@ -35,10 +39,17 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+_dayjs.default.extend(_isSameOrAfter.default);
+
+_dayjs.default.extend(_utc.default);
 /**
  * Component to manage moment option behavior without UI component
  */
+
+
 var MomentOption = function MomentOption(props) {
+  var _orderStatus$options;
+
   var minDate = props.minDate,
       maxDate = props.maxDate,
       currentDate = props.currentDate,
@@ -58,7 +69,10 @@ var MomentOption = function MomentOption(props) {
 
   var validDate = function validDate(date) {
     if (!date) return;
-    return (0, _moment2.default)(date).isSameOrAfter((0, _moment2.default)(), 'day') ? (0, _moment2.default)(date).format('YYYY-MM-DD HH:mm') : (0, _moment2.default)().format('YYYY-MM-DD HH:mm');
+
+    var _date = (0, _dayjs.default)(date, 'YYYY-MM-DD HH:mm').isSameOrAfter((0, _dayjs.default)(), 'day') ? (0, _dayjs.default)(date).format('YYYY-MM-DD HH:mm') : (0, _dayjs.default)().format('YYYY-MM-DD HH:mm');
+
+    return _date;
   };
   /**
    * Method to calculate diferrence between 2 dates
@@ -68,50 +82,18 @@ var MomentOption = function MomentOption(props) {
 
 
   var calculateDiffDay = function calculateDiffDay(start, end) {
-    var endVal = end !== null && end !== void 0 ? end : (0, _moment2.default)();
-    return _moment2.default.duration((0, _moment2.default)(start).diff((0, _moment2.default)(endVal).startOf('day'))).asDays();
-  }; // /**
-  //  * Method to get time depending on the start time
-  //  */
-  // const getTimeFormat = (time, today) => {
-  //   let hour = Number(time.split(':')[0])
-  //   let minute = Number(time.split(':')[1]) + (today ? 15 : 0)
-  //   if (minute > 59) {
-  //     hour++
-  //     minute = minute - 59
-  //   }
-  //   if (minute >= 0 && minute <= 14) {
-  //     return moment(`${hour}:00`, 'HH:mm').format('HH:mm')
-  //   }
-  //   if (minute >= 15 && minute <= 29) {
-  //     return moment(`${hour}:15`, 'HH:mm').format('HH:mm')
-  //   }
-  //   if (minute >= 30 && minute <= 44) {
-  //     return moment(`${hour}:30`, 'HH:mm').format('HH:mm')
-  //   }
-  //   if (minute >= 45 && minute <= 59) {
-  //     return moment(`${hour}:45`, 'HH:mm').format('HH:mm')
-  //   }
-  // }
-  // /**
-  //  * Method to get current time formatted
-  //  * @param {moment} value
-  //  */
-  // const currentTimeFormatted = (value) => {
-  //   const date = value ?? scheduleSelected ?? minDate
-  //   const current = moment(validDate(date))
-  //   const now = moment()
-  //   return (current.day() !== now.day() || current.hour() >= now.hour()) ? current.format('HH:mm') : now.format('HH:mm')
-  // }
-
+    var endVal = end !== null && end !== void 0 ? end : (0, _dayjs.default)();
+    var days = (0, _dayjs.default)(start).diff((0, _dayjs.default)(endVal), 'day');
+    return days;
+  };
   /**
    * This must be containt schedule selected by user
    */
 
 
-  var _currentDate = useOrderContext ? orderStatus.options.moment : currentDate;
+  var _currentDate = useOrderContext ? (_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.moment : currentDate;
 
-  var _useState = (0, _react.useState)(_currentDate ? (0, _moment2.default)(validDate(_currentDate)).format('YYYY-MM-DD HH:mm') : null),
+  var _useState = (0, _react.useState)(_currentDate ? (0, _dayjs.default)(validDate(_currentDate)).format('YYYY-MM-DD HH:mm') : null),
       _useState2 = _slicedToArray(_useState, 2),
       scheduleSelected = _useState2[0],
       setScheduleSelected = _useState2[1];
@@ -139,7 +121,7 @@ var MomentOption = function MomentOption(props) {
       datesList = _useState8[0],
       setDatesList = _useState8[1];
 
-  var _useState9 = (0, _react.useState)((0, _moment2.default)(validDate(_currentDate)).format('YYYY-MM-DD')),
+  var _useState9 = (0, _react.useState)((0, _dayjs.default)(validDate(_currentDate)).format('YYYY-MM-DD')),
       _useState10 = _slicedToArray(_useState9, 2),
       dateSelected = _useState10[0],
       setDateSelected = _useState10[1];
@@ -159,7 +141,7 @@ var MomentOption = function MomentOption(props) {
   var handleChangeTime = function handleChangeTime(time) {
     if (!time || time === timeSelected) return;
 
-    var _moment = (0, _moment2.default)("".concat(dateSelected, " ").concat(time), 'YYYY-MM-DD HH:mm').toDate();
+    var _moment = (0, _dayjs.default)("".concat(dateSelected, " ").concat(time), 'YYYY-MM-DD HH:mm').toDate();
 
     if (!useOrderContext) {
       setTimeSelected(time);
@@ -187,17 +169,17 @@ var MomentOption = function MomentOption(props) {
     if (orderStatus.loading) return;
 
     if (useOrderContext) {
-      var _orderStatus$options;
+      var _orderStatus$options2;
 
-      if ((_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.moment) {
-        var _currentDate2 = _moment2.default.utc(validDate(orderStatus.options.moment)).local();
+      if ((_orderStatus$options2 = orderStatus.options) === null || _orderStatus$options2 === void 0 ? void 0 : _orderStatus$options2.moment) {
+        var _currentDate2 = _dayjs.default.utc(validDate(orderStatus.options.moment)).local();
 
         setScheduleSelected(_currentDate2.format('YYYY-MM-DD HH:mm'));
         setDateSelected(_currentDate2.format('YYYY-MM-DD'));
         setTimeSelected(_currentDate2.format('HH:mm'));
         isAsap && setIsAsap(false);
       } else {
-        dateSelected !== (0, _moment2.default)().format('YYYY-MM-DD') && setDateSelected((0, _moment2.default)().format('YYYY-MM-DD'));
+        dateSelected !== (0, _dayjs.default)().format('YYYY-MM-DD') && setDateSelected((0, _dayjs.default)().format('YYYY-MM-DD'));
         timeSelected !== null && setTimeSelected(null);
         scheduleSelected !== null && setScheduleSelected(null);
         !isAsap && setIsAsap(true);
@@ -212,8 +194,8 @@ var MomentOption = function MomentOption(props) {
       return;
     }
 
-    var selected = (0, _moment2.default)(scheduleSelected, 'YYYY-MM-DD HH:mm');
-    var now = (0, _moment2.default)();
+    var selected = (0, _dayjs.default)(scheduleSelected, 'YYYY-MM-DD HH:mm');
+    var now = (0, _dayjs.default)();
     var secondsDiff = selected.diff(now, 'seconds');
 
     if (secondsDiff <= 0) {
@@ -240,8 +222,8 @@ var MomentOption = function MomentOption(props) {
 
   var generateHourList = function generateHourList() {
     var hoursAvailable = [];
-    var isToday = dateSelected === (0, _moment2.default)().format('YYYY-MM-DD');
-    var isLastDate = dateSelected === (0, _moment2.default)(maxDate).format('YYYY-MM-DD');
+    var isToday = dateSelected === (0, _dayjs.default)().format('YYYY-MM-DD');
+    var isLastDate = dateSelected === (0, _dayjs.default)(maxDate).format('YYYY-MM-DD');
     var now = new Date();
 
     for (var hour = 0; hour < 24; hour++) {
@@ -291,7 +273,7 @@ var MomentOption = function MomentOption(props) {
     var diff = parseInt(calculateDiffDay(validDate(maxDate)), validDate(minDate));
 
     for (var i = 0; i < diff + 1; i++) {
-      datesList.push((0, _moment2.default)(validDate(minDate)).add(i, 'd').format('YYYY-MM-DD'));
+      datesList.push((0, _dayjs.default)(validDate(minDate)).add(i, 'd').format('YYYY-MM-DD'));
     }
 
     setDatesList(datesList);

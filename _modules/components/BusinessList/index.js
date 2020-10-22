@@ -13,7 +13,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireWildcard(require("prop-types"));
 
-var _moment2 = _interopRequireDefault(require("moment"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
@@ -113,7 +113,7 @@ var BusinessList = function BusinessList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, _orderState$options6$, _parts$, _parts$2, parts, dateParts, timeParts, _moment, where, conditions, searchConditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, _orderState$options6$, _parts$, _parts$2, parts, dateParts, timeParts, moment, where, conditions, searchConditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -130,12 +130,12 @@ var BusinessList = function BusinessList(props) {
                 page_size: paginationProps.pageSize
               };
 
-              if (((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment) && (0, _moment2.default)((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
+              if (((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment) && (0, _dayjs.default)((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
                 parts = orderState === null || orderState === void 0 ? void 0 : (_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.moment) === null || _orderState$options6$ === void 0 ? void 0 : _orderState$options6$.split(' ');
                 dateParts = (_parts$ = parts[0]) === null || _parts$ === void 0 ? void 0 : _parts$.split('-');
                 timeParts = (_parts$2 = parts[1]) === null || _parts$2 === void 0 ? void 0 : _parts$2.split(':');
-                _moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000;
-                parameters.timestamp = _moment;
+                moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000;
+                parameters.timestamp = moment;
               }
 
               where = null;

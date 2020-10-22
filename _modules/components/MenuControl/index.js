@@ -11,7 +11,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _moment = _interopRequireDefault(require("moment"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -101,7 +101,7 @@ var MenuControl = function MenuControl(props) {
    */
 
   var isDisabledDay = function isDisabledDay(date) {
-    var day = (0, _moment.default)(date, 'YYYY-MM-DD').day();
+    var day = (0, _dayjs.default)(date, 'YYYY-MM-DD').day();
     return disableDays.every(function (number) {
       return number !== day;
     });
@@ -115,14 +115,14 @@ var MenuControl = function MenuControl(props) {
   var onDateSelected = function onDateSelected(date) {
     var _menuSelected$schedul2;
 
-    var day = (0, _moment.default)(date, 'YYYY-MM-DD').day();
+    var day = (0, _dayjs.default)(date, 'YYYY-MM-DD').day();
     var lapses = menuSelected === null || menuSelected === void 0 ? void 0 : (_menuSelected$schedul2 = menuSelected.schedule[day]) === null || _menuSelected$schedul2 === void 0 ? void 0 : _menuSelected$schedul2.lapses;
     setScheduleSelected(_objectSpread(_objectSpread({}, scheduleSelected), {}, {
       lapses: lapses
     }));
     setStartDate(date);
-    setDateSelected((0, _moment.default)(date).format('YYYY-MM-DD HH:mm'));
-    props.handlerSelectDate((0, _moment.default)(date).format('YYYY-MM-DD HH:mm'));
+    setDateSelected((0, _dayjs.default)(date).format('YYYY-MM-DD HH:mm'));
+    props.handlerSelectDate((0, _dayjs.default)(date).format('YYYY-MM-DD HH:mm'));
   };
   /**
    * Send to parent component Menu info and date selected
@@ -149,7 +149,7 @@ var MenuControl = function MenuControl(props) {
     var _menu$schedule$today;
 
     setMenuSelected(menu);
-    var today = (0, _moment.default)().day();
+    var today = (0, _dayjs.default)().day();
     return {
       lapses: menu === null || menu === void 0 ? void 0 : (_menu$schedule$today = menu.schedule[today]) === null || _menu$schedule$today === void 0 ? void 0 : _menu$schedule$today.lapses,
       menuId: menu.id
@@ -163,16 +163,16 @@ var MenuControl = function MenuControl(props) {
   var generateDatesList = function generateDatesList() {
     var list = [];
 
-    var _start = (0, _moment.default)().format('YYYY-MM-DD');
+    var _start = (0, _dayjs.default)().format('YYYY-MM-DD');
 
-    var _end = (0, _moment.default)().day(30).format('YYYY-MM-DD');
+    var _end = (0, _dayjs.default)().day(30).format('YYYY-MM-DD');
 
-    var diff = (0, _moment.default)(_end, 'YYYY-MM-DD HH:mm').diff((0, _moment.default)(_start, 'YYYY-MM-DD HH:mm'), 'days');
+    var diff = (0, _dayjs.default)(_end, 'YYYY-MM-DD HH:mm').diff((0, _dayjs.default)(_start, 'YYYY-MM-DD HH:mm'), 'days');
 
     for (var i = 0; i <= diff; i++) {
       list.push({
         key: "".concat(i),
-        date: (0, _moment.default)(_start).add(i, 'd').format('YYYY-MM-DD')
+        date: (0, _dayjs.default)(_start).add(i, 'd').format('YYYY-MM-DD')
       });
     }
 
@@ -192,12 +192,12 @@ var MenuControl = function MenuControl(props) {
 
       var start = "".concat((_lapses$i = lapses[i]) === null || _lapses$i === void 0 ? void 0 : (_lapses$i$open = _lapses$i.open) === null || _lapses$i$open === void 0 ? void 0 : _lapses$i$open.hour, ":").concat((_lapses$i2 = lapses[i]) === null || _lapses$i2 === void 0 ? void 0 : (_lapses$i2$open = _lapses$i2.open) === null || _lapses$i2$open === void 0 ? void 0 : _lapses$i2$open.minute);
       var end = "".concat((_lapses$i3 = lapses[i]) === null || _lapses$i3 === void 0 ? void 0 : (_lapses$i3$close = _lapses$i3.close) === null || _lapses$i3$close === void 0 ? void 0 : _lapses$i3$close.hour, ":").concat((_lapses$i4 = lapses[i]) === null || _lapses$i4 === void 0 ? void 0 : (_lapses$i4$close = _lapses$i4.close) === null || _lapses$i4$close === void 0 ? void 0 : _lapses$i4$close.minute);
-      var diff = Math.round(_moment.default.duration((0, _moment.default)(end, 'HH:mm').diff((0, _moment.default)(start, 'HH:mm'))).asHours());
+      var diff = (0, _dayjs.default)(end, 'HH:mm').diff((0, _dayjs.default)(start, 'HH:mm'), 'hour', true);
 
       while (diff > 0) {
         var day = start;
-        timesList.push((0, _moment.default)(day, 'HH:mm').toDate());
-        start = (0, _moment.default)(day, 'HH:mm').add(15, 'minutes');
+        timesList.push((0, _dayjs.default)(day, 'HH:mm').toDate());
+        start = (0, _dayjs.default)(day, 'HH:mm').add(15, 'minutes');
         diff = diff - 0.25;
       }
     }
@@ -211,7 +211,7 @@ var MenuControl = function MenuControl(props) {
 
   var futureDaysToShow = function futureDaysToShow() {
     var futureDays = maxPreoderDays;
-    var today = (0, _moment.default)().toDate();
+    var today = (0, _dayjs.default)().toDate();
     var datesToShow = [];
     var isDisabledDays = disableDays.every(function (d) {
       return d === false;
@@ -220,24 +220,24 @@ var MenuControl = function MenuControl(props) {
     if (disableDays.length && !isDisabledDays) {
       while (futureDays > 0) {
         var date = today;
-        var day = (0, _moment.default)(today).day();
+        var day = (0, _dayjs.default)(today).day();
 
         if (disableDays[day] === false) {
-          datesToShow.push((0, _moment.default)(date).toDate());
+          datesToShow.push((0, _dayjs.default)(date).toDate());
           futureDays--;
         }
 
-        today = (0, _moment.default)((0, _moment.default)(today).add(1, 'd')).toDate();
+        today = (0, _dayjs.default)((0, _dayjs.default)(today).add(1, 'd')).toDate();
       }
     }
 
     if (disableDays.length && isDisabledDays) {
       for (var i = 1; i <= maxPreoderDays; i++) {
-        datesToShow.push((0, _moment.default)((0, _moment.default)(today).add(i, 'd')).toDate());
+        datesToShow.push((0, _dayjs.default)((0, _dayjs.default)(today).add(i, 'd')).toDate());
       }
     }
 
-    datesToShow.unshift((0, _moment.default)().toDate());
+    datesToShow.unshift((0, _dayjs.default)().toDate());
     return datesToShow;
   };
 
