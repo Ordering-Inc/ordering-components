@@ -13,8 +13,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _lodash = require("lodash");
-
 var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
@@ -109,16 +107,14 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _credentials, response;
+      var _credentials2, _credentials, response;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _credentials = (0, _lodash.pickBy)(credentials, function (value, key) {
-                return loginTab === 'email' && key !== 'cellphone' || loginTab === 'cellphone' && key !== 'email';
-              });
+              _credentials = (_credentials2 = {}, _defineProperty(_credentials2, loginTab, credentials[loginTab]), _defineProperty(_credentials2, "password", credentials.password), _credentials2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));

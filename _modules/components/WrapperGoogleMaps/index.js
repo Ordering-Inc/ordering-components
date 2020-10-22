@@ -36,7 +36,7 @@ var WrapperGoogleMaps = function WrapperGoogleMaps(Child) {
     var apiKey = props.apiKey;
 
     if (!apiKey) {
-      throw new Error('Prop `apiKey` is required to use Google Maps components.');
+      console.warn('Prop `apiKey` is required to use Google Maps components.');
     }
 
     var _useState = (0, _react.useState)(false),
