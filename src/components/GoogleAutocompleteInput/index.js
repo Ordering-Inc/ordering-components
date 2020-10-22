@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes, { string } from 'prop-types'
-import { pickBy } from 'lodash'
 import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
 /**
@@ -19,8 +18,12 @@ const AutocompleteInput = (props) => {
 
   const inputRef = useRef()
 
-  const inputProps = pickBy(props, (value, key) => {
-    return ['googleReady', 'apiKey', 'onChangeAddress', 'countryCode', 'childRef'].indexOf(key) === -1
+  const inputProps = {}
+
+  Object.entries(props).forEach(([key, value]) => {
+    if (['googleReady', 'apiKey', 'onChangeAddress', 'countryCode', 'childRef', 'types', 'fields'].indexOf(key) === -1) {
+      inputProps[key] = value
+    }
   })
 
   const options = {
