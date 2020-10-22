@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 
@@ -35,7 +35,7 @@ export const BusinessList = (props) => {
         page_size: paginationProps.pageSize
       }
 
-      if (orderState.options?.moment && moment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
+      if (orderState.options?.moment && dayjs(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
         const parts = orderState?.options?.moment?.split(' ')
         const dateParts = parts[0]?.split('-')
         const timeParts = parts[1]?.split(':')

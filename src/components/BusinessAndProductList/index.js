@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
@@ -215,7 +215,7 @@ export const BusinessAndProductList = (props) => {
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : null
       }
-      if (orderState.options?.moment && moment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
+      if (orderState.options?.moment && dayjs(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
         const parts = orderState.options?.moment.split(' ')
         const dateParts = parts[0].split('-')
         const timeParts = parts[1].split(':')
