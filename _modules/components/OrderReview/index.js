@@ -61,10 +61,10 @@ var OrderReview = function OrderReview(props) {
       session = _useSession2[0];
 
   var _useState = (0, _react.useState)({
-    quality: 1,
-    punctiality: 1,
-    service: 1,
-    packaging: 1,
+    quality: 0,
+    punctiality: 0,
+    service: 0,
+    packaging: 0,
     comments: ''
   }),
       _useState2 = _slicedToArray(_useState, 2),
