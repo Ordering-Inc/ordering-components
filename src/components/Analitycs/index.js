@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useEvent } from '../../contexts/EventContext'
+import PropTypes from 'prop-types'
 
 // import PropTypes from 'prop-types'
 
@@ -43,6 +44,11 @@ export const Analytics = (props) => {
       js.onload = null
     }
   }, [trackId])
+
+  /**
+   * Method to handle Pageview send to analytics
+   * @param {String} pageName
+   */
   const handlechangeView = (pageName) => {
     console.log('Data', pageName)
     window.ga('set', 'page', pageName)
@@ -67,6 +73,11 @@ export const Analytics = (props) => {
 }
 
 Analytics.propTypes = {
+  /**
+   * Your Google Analytics trackId
+   * @see trackId What is trackID ? https://developers.google.com/analytics/devguides/collection/analyticsjs
+   */
+  trackId: PropTypes.string.isRequired
 }
 
 Analytics.defaultProps = {}
