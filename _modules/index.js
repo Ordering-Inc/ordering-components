@@ -159,6 +159,12 @@ Object.defineProperty(exports, "GoogleMaps", {
     return _GoogleMaps.GoogleMaps;
   }
 });
+Object.defineProperty(exports, "GoogleMapsMap", {
+  enumerable: true,
+  get: function get() {
+    return _GoogleMaps.GoogleMapsMap;
+  }
+});
 Object.defineProperty(exports, "GpsButton", {
   enumerable: true,
   get: function get() {

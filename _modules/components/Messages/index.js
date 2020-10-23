@@ -182,7 +182,6 @@ var Messages = function Messages(props) {
               result = _yield$response$json.result;
 
               if (!error) {
-                setMessage('');
                 setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                   messages: [].concat(_toConsumableArray(messages.messages), [result])
                 }));
@@ -322,6 +321,7 @@ var Messages = function Messages(props) {
     image: image,
     canRead: canRead,
     handleSend: handleSend,
+    message: message,
     setMessage: setMessage,
     setCanRead: setCanRead,
     sendMessage: sendMessage,
