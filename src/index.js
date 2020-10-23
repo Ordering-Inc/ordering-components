@@ -23,7 +23,7 @@ import { ExamineClick } from './components/ExamineClick'
 import { FacebookLoginButton } from './components/FacebookLoginButton'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
 import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
-import { GoogleMaps } from './components/GoogleMaps'
+import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
 import { GpsButton, GoogleGpsButton } from './components/GpsButton'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
@@ -103,6 +103,7 @@ export {
   ForgotPasswordForm,
   GoogleAutocompleteInput,
   GoogleMaps,
+  GoogleMapsMap,
   GpsButton,
   GoogleGpsButton,
   LanguageSelector,
