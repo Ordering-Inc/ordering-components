@@ -52,7 +52,6 @@ export const Messages = (props) => {
       const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }, body: JSON.stringify(body) })
       const { error, result } = await response.json()
       if (!error) {
-        setMessage('')
         setMessages({
           ...messages,
           messages: [
@@ -129,6 +128,7 @@ export const Messages = (props) => {
           image={image}
           canRead={canRead}
           handleSend={handleSend}
+          message={message}
           setMessage={setMessage}
           setCanRead={setCanRead}
           sendMessage={sendMessage}
