@@ -579,6 +579,12 @@ Object.defineProperty(exports, "StripeRedirectForm", {
     return _StripeRedirectForm.StripeRedirectForm;
   }
 });
+Object.defineProperty(exports, "FloatingButton", {
+  enumerable: true,
+  get: function get() {
+    return _FloatingButton.FloatingButton;
+  }
+});
 
 var _AddressDetails = require("./components/AddressDetails");
 
@@ -733,3 +739,5 @@ var _StripeElementsForm = require("./components/StripeElementsForm");
 var _CardForm = require("./components/StripeElementsForm/CardForm");
 
 var _StripeRedirectForm = require("./components/PaymentOptionStripeRedirect/StripeRedirectForm");
+
+var _FloatingButton = require("./components/FloatingButton");
