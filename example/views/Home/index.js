@@ -164,6 +164,9 @@ export const Home = () => {
         <li>
           <Link to='/events'>Events</Link>
         </li>
+        <li>
+          <Link to='/floating_button'>Floating Button</Link>
+        </li>
       </ol>
       <h2>Payments Section</h2>
       <ol>

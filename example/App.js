@@ -60,6 +60,7 @@ import { PaymentOptionStripeRedirectExample } from './views/PaymentOptionStripeR
 import { MessagesExample } from './views/MessagesExample'
 import { UpsellingPageExample } from './views/UpsellingPageExample'
 import { EventsExample } from './views/EventsExample'
+import { FloatingButtonExample } from './views/FloatingButtonExample'
 
 export default function App () {
   return (
@@ -235,6 +236,9 @@ export default function App () {
           </Route>
           <Route path='/events'>
             <EventsExample />
+          </Route>
+          <Route path='/floating_button'>
+            <FloatingButtonExample />
           </Route>
           <Route path='/'>
             <Home />
