@@ -15,6 +15,10 @@ var _ApiContext = require("../ApiContext");
 
 var _LanguageContext = require("../LanguageContext");
 
+var _dayjs = _interopRequireDefault(require("dayjs"));
+
+var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -43,10 +47,13 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+_dayjs.default.extend(_utc.default);
 /**
  * Create ConfigContext
  * This context will manage the current configs internally and provide an easy interface
  */
+
+
 var ConfigContext = /*#__PURE__*/(0, _react.createContext)();
 /**
  * Custom provider to configs manager
@@ -68,8 +75,9 @@ var ConfigProvider = function ConfigProvider(_ref) {
       setState = _useState2[1];
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 1),
-      languageState = _useLanguage2[0];
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      languageState = _useLanguage2[0],
+      t = _useLanguage2[1];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -122,13 +130,135 @@ var ConfigProvider = function ConfigProvider(_ref) {
     };
   }();
 
+  var parsePrice = function parsePrice(value) {
+    var _state$configs$format, _state$configs$format2, _state$configs$format3, _state$configs$format4, _state$configs$format5;
+
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var formatNumber = {
+      decimal: (options === null || options === void 0 ? void 0 : options.decimal) || ((_state$configs$format = state.configs.format_number_decimal_length) === null || _state$configs$format === void 0 ? void 0 : _state$configs$format.value) || 2,
+      separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_state$configs$format2 = state.configs.format_number_decimal_separator) === null || _state$configs$format2 === void 0 ? void 0 : _state$configs$format2.value) || ',',
+      thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_state$configs$format3 = state.configs.format_number_thousand_separator) === null || _state$configs$format3 === void 0 ? void 0 : _state$configs$format3.value) || '.',
+      currency: (options === null || options === void 0 ? void 0 : options.currency) || ((_state$configs$format4 = state.configs.format_number_currency) === null || _state$configs$format4 === void 0 ? void 0 : _state$configs$format4.value) || '$',
+      currencyPosition: (options === null || options === void 0 ? void 0 : options.currencyPosition) || ((_state$configs$format5 = state.configs.format_number_currency_position) === null || _state$configs$format5 === void 0 ? void 0 : _state$configs$format5.value) || 'left'
+    };
+    var number = parseNumber(value, formatNumber);
+
+    if (formatNumber.currencyPosition === 'left') {
+      number = formatNumber.currency + ' ' + number;
+    } else {
+      number = number + ' ' + formatNumber.currency;
+    }
+
+    return number;
+  };
+
+  var parseNumber = function parseNumber(value) {
+    var _state$configs$format6, _state$configs$format7, _state$configs$format8;
+
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    value = parseFloat(value) || 0;
+    var formatNumber = {
+      decimal: (options === null || options === void 0 ? void 0 : options.decimal) || ((_state$configs$format6 = state.configs.format_number_decimal_length) === null || _state$configs$format6 === void 0 ? void 0 : _state$configs$format6.value) || 2,
+      separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_state$configs$format7 = state.configs.format_number_decimal_separator) === null || _state$configs$format7 === void 0 ? void 0 : _state$configs$format7.value) || ',',
+      thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_state$configs$format8 = state.configs.format_number_thousand_separator) === null || _state$configs$format8 === void 0 ? void 0 : _state$configs$format8.value) || '.'
+    };
+    var number = value.toFixed(formatNumber.decimal);
+    number = number.toString();
+
+    if (number.indexOf('.')) {
+      number = number.replace('.', formatNumber.separator);
+    } else if (number.indexOf(',')) {
+      number = number.replace(',', formatNumber.separator);
+    }
+
+    var numberParts = number.split(formatNumber.separator);
+    numberParts[0] = numberParts[0].replace(/(.)(?=(\d{3})+$)/g, '$1' + formatNumber.thousand);
+    number = numberParts.join(formatNumber.separator);
+    return number;
+  };
+
+  var parseDate = function parseDate(date) {
+    var _state$configs$format9;
+
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_state$configs$format9 = state.configs.format_time) === null || _state$configs$format9 === void 0 ? void 0 : _state$configs$format9.value) || '24';
+    var formatDate = {
+      inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
+      outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
+      utc: typeof (options === null || options === void 0 ? void 0 : options.utc) === 'boolean' ? options === null || options === void 0 ? void 0 : options.utc : true
+    };
+
+    if (!(0, _dayjs.default)(date, formatDate.inputFormat).isValid()) {
+      return t('INVALID_FORMAT', 'invalid format');
+    }
+
+    var _date = formatDate.utc ? _dayjs.default.utc(date, formatDate.inputFormat).local() : (0, _dayjs.default)(date, formatDate.inputFormat);
+
+    return _date.format(formatDate.outputFormat);
+  };
+
+  var parseTime = function parseTime(time) {
+    var _state$configs$format10;
+
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    if (!time) return '00:00';
+
+    var _formatTime = (options === null || options === void 0 ? void 0 : options.formatTime) || ((_state$configs$format10 = state.configs.format_time) === null || _state$configs$format10 === void 0 ? void 0 : _state$configs$format10.value) || '24';
+
+    var formatTime = {
+      inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['HH:mm', 'hh:mm A', 'hh:mm'],
+      outputFormat: (options === null || options === void 0 ? void 0 : options.outputFormat) || (_formatTime === '24' ? 'HH:mm' : 'hh:mm A'),
+      utc: typeof (options === null || options === void 0 ? void 0 : options.utc) === 'boolean' ? options === null || options === void 0 ? void 0 : options.utc : true
+    };
+
+    if (!(0, _dayjs.default)(time, formatTime.inputFormat).isValid()) {
+      return t('INVALID_FORMAT', 'invalid format');
+    }
+
+    var _date = formatTime.utc ? _dayjs.default.utc(time, formatTime.inputFormat).local() : (0, _dayjs.default)(time, formatTime.inputFormat);
+
+    return _date.format(formatTime.outputFormat);
+  };
+
+  var parseDistance = function parseDistance(distance) {
+    var _state$configs$distan, _state$configs$distan2;
+
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    distance = parseFloat(distance) || 0;
+    var unit = (options === null || options === void 0 ? void 0 : options.unit) || 'KM';
+
+    if (((_state$configs$distan = state.configs.distance_unit_km) === null || _state$configs$distan === void 0 ? void 0 : _state$configs$distan.value) === '1') {
+      unit = 'KM';
+    }
+
+    if ((_state$configs$distan2 = state.configs.distance_unit) === null || _state$configs$distan2 === void 0 ? void 0 : _state$configs$distan2.value) {
+      var _state$configs$distan3;
+
+      unit = (_state$configs$distan3 = state.configs.distance_unit) === null || _state$configs$distan3 === void 0 ? void 0 : _state$configs$distan3.value;
+    }
+
+    if (unit.toUpperCase() === 'MI') {
+      return parseNumber(distance * 1.621371, options) + ' ' + t('MI', 'mi');
+    } else {
+      return parseNumber(distance, options) + ' ' + t('KM', 'km');
+    }
+  };
+
+  var functions = {
+    refreshConfigs: refreshConfigs,
+    parsePrice: parsePrice,
+    parseNumber: parseNumber,
+    parseDate: parseDate,
+    parseTime: parseTime,
+    parseDistance: parseDistance
+  };
   (0, _react.useEffect)(function () {
     if (!languageState.loading) {
       refreshConfigs();
     }
   }, [languageState]);
   return /*#__PURE__*/_react.default.createElement(ConfigContext.Provider, {
-    value: [state, refreshConfigs]
+    value: [state, functions]
   }, children);
 };
 /**
