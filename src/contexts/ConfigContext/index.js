@@ -4,6 +4,8 @@ import { useLanguage } from '../LanguageContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
+dayjs.extend(utc)
+
 /**
  * Create ConfigContext
  * This context will manage the current configs internally and provide an easy interface
@@ -73,60 +75,46 @@ export const ConfigProvider = ({ children }) => {
 
   const parseDate = (date, options = {}) => {
     const formatTime = options?.formatTime || state.configs.format_time?.value || '24'
-    console.log(formatTime)
     const formatDate = {
       inputFormat: options?.inputFormat || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
       outputFormat: options?.outputFormat || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
-      utc: true
+      utc: typeof options?.utc === 'boolean' ? options?.utc : true
     }
     if (!dayjs(date, formatDate.inputFormat).isValid()) {
       return t('INVALID_FORMAT', 'invalid format')
     }
-    dayjs.extend(utc)
-    if (options && typeof options === 'object' && options.hasOwnProperty('utc')) {
-      formatTime.utc = options.utc
-    }
-    const _date = dayjs.utc(date, formatDate.inputFormat)
-    if (!formatDate.utc) {
-      _date.local()
-    }
+    const _date = formatDate.utc ? dayjs.utc(date, formatDate.inputFormat).local() : dayjs(date, formatDate.inputFormat)
     return _date.format(formatDate.outputFormat)
   }
 
   const parseTime = (time, options = {}) => {
     if (!time) return '00:00'
-    const format24 = options?.format24 || state.configs.format_time?.value || '24'
+    const _formatTime = options?.formatTime || state.configs.format_time?.value || '24'
     const formatTime = {
       inputFormat: options?.inputFormat || ['HH:mm', 'hh:mm A', 'hh:mm'],
-      outputFormat: options?.outputFormat || (format24 === '24' ? 'HH:mm' : 'hh:mm A'),
-      utc: true
+      outputFormat: options?.outputFormat || (_formatTime === '24' ? 'HH:mm' : 'hh:mm A'),
+      utc: typeof options?.utc === 'boolean' ? options?.utc : true
     }
     if (!dayjs(time, formatTime.inputFormat).isValid()) {
       return t('INVALID_FORMAT', 'invalid format')
     }
-    dayjs.extend(utc)
-    if (options && typeof options === 'object' && options.hasOwnProperty('utc')) {
-      formatTime.utc = options.utc
-    }
-    const _date = dayjs.utc(time, formatTime.inputFormat)
-    if (!formatTime.utc) {
-      _date.local()
-    }
+    const _date = formatTime.utc ? dayjs.utc(time, formatTime.inputFormat).local() : dayjs(time, formatTime.inputFormat)
     return _date.format(formatTime.outputFormat)
   }
 
   const parseDistance = (distance, options = {}) => {
     distance = parseFloat(distance) || 0
-    let unitKm = true
-    if (options && typeof options === 'object' && options.hasOwnProperty('unitKm')) {
-      unitKm = options.unitKm
-    } else if (state.configs?.distance_unit_km) {
-      unitKm = state.configs.distance_unit_km?.value === '1'
+    let unit = options?.unit || 'KM'
+    if (state.configs.distance_unit_km?.value === '1') {
+      unit = 'KM'
     }
-    if (unitKm) {
-      return distance.toFixed(2) + ' ' + t('BUSINESS_LIST_OPTIONS_KM', 'KM')
+    if (state.configs.distance_unit?.value) {
+      unit = state.configs.distance_unit?.value
+    }
+    if (unit.toUpperCase() === 'MI') {
+      return parseNumber(distance * 1.621371, options) + ' ' + t('MI', 'mi')
     } else {
-      return (distance * 0.621371).toFixed(2) + ' ' + t('BUSINESS_LIST_OPTIONS_MILES', 'MILES')
+      return parseNumber(distance, options) + ' ' + t('KM', 'km')
     }
   }
 

@@ -27,7 +27,7 @@ export const ConfigsExample = (props) => {
   const handleDateOptions = (e) => {
     setDateOptions({
       ...dateOptions,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.name === 'utc' ? e.target.value === '1' : e.target.value
     })
   }
   const handlekmOptions = (e) => {
