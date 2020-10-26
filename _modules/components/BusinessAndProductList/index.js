@@ -458,10 +458,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     getProducts(!!searchValue);
   }, [categorySelected.id]);
   (0, _react.useEffect)(function () {
+    getProducts();
+  }, [slug]);
+  (0, _react.useEffect)(function () {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness();
     }
-  }, [orderOptions, languageState.loading]);
+  }, [orderOptions, languageState.loading, slug]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading) {
       var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13;
