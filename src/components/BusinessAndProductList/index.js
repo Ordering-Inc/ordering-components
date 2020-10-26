@@ -258,10 +258,14 @@ export const BusinessAndProductList = (props) => {
   }, [categorySelected.id])
 
   useEffect(() => {
+    getProducts()
+  }, [slug])
+
+  useEffect(() => {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness()
     }
-  }, [orderOptions, languageState.loading])
+  }, [orderOptions, languageState.loading, slug])
 
   useEffect(() => {
     if (!orderState.loading) {
