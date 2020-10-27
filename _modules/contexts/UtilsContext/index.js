@@ -100,7 +100,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
       // ordinal Function (number) => return number + output
       relativeTime: {
         // relative time format strings, keep %s %d as the same
-        future: t('in_V2', 'in %s'),
+        future: t('RELATIVE_TIME_IN', 'in %s'),
         // e.g. in 2 hours, %s been replaced with 2hours
         past: t('RELATIVE_TIME_AGO', '%s ago'),
         s: t('RELATIVE_TIME_FEW_SECONDS ', 'a few seconds'),
@@ -110,7 +110,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
         hh: t('RELATIVE_TIME_HOURS', '%d hours'),
         // e.g. 2 hours, %d been replaced with 2
         d: t('RELATIVE_TIME_DAY', 'a day'),
-        dd: t('DAYS', '%d days'),
+        dd: t('RELATIVE_TIME_DAYS', '%d days'),
         M: t('RELATIVE_TIME_MONTH', 'a month'),
         MM: t('RELATIVE_TIME_MONTHS', '%d months'),
         y: t('RELATIVE_TIME_YEAR', 'a year'),
@@ -121,7 +121,6 @@ var UtilsProviders = function UtilsProviders(_ref) {
         return hour > 12 ? t('PM', 'PM') : t('AM', 'AM');
       }
     };
-    console.log(localeObject);
 
     _dayjs.default.locale('auto', localeObject);
 
@@ -244,7 +243,6 @@ var UtilsProviders = function UtilsProviders(_ref) {
 
   var getTimeAgo = function getTimeAgo(dateTime, options) {
     if (!dateTime) return 'NN';
-    console.log((0, _dayjs.default)());
     var dateOptions = {
       inputFormat: (options === null || options === void 0 ? void 0 : options.inputFormat) || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
       utc: typeof (options === null || options === void 0 ? void 0 : options.utc) === 'boolean' ? options === null || options === void 0 ? void 0 : options.utc : true
@@ -286,7 +284,6 @@ var UtilsProviders = function UtilsProviders(_ref) {
   };
   (0, _react.useEffect)(function () {
     if (!languageState.loading) {
-      console.log('language change');
       refreshLocalObject();
     }
   }, [languageState]);
