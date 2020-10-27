@@ -67,7 +67,7 @@ export const UtilsProviders = ({ children }) => {
       ordinal: n => `${n}º`, // ordinal Function (number) => return number + output
       relativeTime: {
         // relative time format strings, keep %s %d as the same
-        future: t('in_V2', 'in %s'), // e.g. in 2 hours, %s been replaced with 2hours
+        future: t('RELATIVE_TIME_IN', 'in %s'), // e.g. in 2 hours, %s been replaced with 2hours
         past: t('RELATIVE_TIME_AGO', '%s ago'),
         s: t('RELATIVE_TIME_FEW_SECONDS ', 'a few seconds'),
         m: t('RELATIVE_TIME_MINUTES', 'a minute'),
@@ -75,7 +75,7 @@ export const UtilsProviders = ({ children }) => {
         h: t('RELATIVE_TIME_HOUR', 'an hour'),
         hh: t('RELATIVE_TIME_HOURS', '%d hours'), // e.g. 2 hours, %d been replaced with 2
         d: t('RELATIVE_TIME_DAY', 'a day'),
-        dd: t('DAYS', '%d days'),
+        dd: t('RELATIVE_TIME_DAYS', '%d days'),
         M: t('RELATIVE_TIME_MONTH', 'a month'),
         MM: t('RELATIVE_TIME_MONTHS', '%d months'),
         y: t('RELATIVE_TIME_YEAR', 'a year'),
@@ -86,7 +86,6 @@ export const UtilsProviders = ({ children }) => {
         return hour > 12 ? t('PM', 'PM') : t('AM', 'AM')
       }
     }
-    console.log(localeObject)
     dayjs.locale('auto', localeObject)
     dayjs.updateLocale('auto', localeObject)
   }
@@ -174,7 +173,6 @@ export const UtilsProviders = ({ children }) => {
 
   const getTimeAgo = (dateTime, options) => {
     if (!dateTime) return 'NN'
-    console.log(dayjs())
     const dateOptions = {
       inputFormat: options?.inputFormat || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
       utc: typeof options?.utc === 'boolean' ? options?.utc : true
@@ -210,7 +208,6 @@ export const UtilsProviders = ({ children }) => {
 
   useEffect(() => {
     if (!languageState.loading) {
-      console.log('language change')
       refreshLocalObject()
     }
   }, [languageState])
