@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { useConfig } from '../../../src/contexts/ConfigContext'
+import { useUtils } from '../../../src/contexts/UtilsContext'
 
 export const ConfigsExample = (props) => {
-  const [{ loading, configs }, { refreshConfigs, parsePrice, parseDate, parseDistance}] = useConfig()
+  const [{ loading, configs }, { refreshConfigs }] = useConfig()
+  const [{ parsePrice, parseDate, parseDistance, getTimeAgo }] = useUtils()
   const [numberParsed, setNumberParsed] = useState()
   const [formatDate, setFormatDate] = useState()
   const [numberOptions, setNumberOptions] = useState({})
   const [dateOptions, setDateOptions] = useState({})
   const [distance, setDistance] = useState()
   const [distanceOptions, setDistanceOptions] = useState({})
+  const [timeAgoOptions, setTimeAgoOptions] = useState({})
+  const [timeAgo, setTimeAgo] = useState()
   const hanldeChangeInput = (e) => {
     setNumberParsed(parsePrice(e.target.value, numberOptions))
   }
@@ -17,6 +21,9 @@ export const ConfigsExample = (props) => {
   }
   const hanldeChangeDistance = (e) => {
     setDistance(parseDistance(e.target.value, distanceOptions))
+  }
+  const handleTimeAgo = (e) => {
+    setTimeAgo(getTimeAgo(e.target.value, timeAgoOptions))
   }
   const handleNumberOptions = (e) => {
     setNumberOptions({
@@ -30,12 +37,19 @@ export const ConfigsExample = (props) => {
       [e.target.name]: e.target.name === 'utc' ? e.target.value === '1' : e.target.value
     })
   }
+  const handleAgoOptions = (e) => {
+    setTimeAgoOptions({
+      ...timeAgoOptions,
+      [e.target.name]: e.target.name === 'utc' ? e.target.value === '1' : e.target.value
+    })
+  }
   const handlekmOptions = (e) => {
     setDistanceOptions({
       ...distanceOptions,
-      [e.target.name]: e.target.checked
+      [e.target.name]: e.target.checked ? 'KM' : 'MI'
     })
   }
+
   return (
     <>
       <h1>Configs</h1>
@@ -86,8 +100,19 @@ export const ConfigsExample = (props) => {
       </form>
       <input type='text' onChange={hanldeChangeInputDate} /> <strong>Formated date : </strong> {formatDate}
       <h2>Parse Distance Example</h2>
-      <input type='checkbox' name='unitKm' defaultChecked='true' onChange={handlekmOptions} />
+      <input type='checkbox' name='unit' defaultChecked='true' onChange={handlekmOptions} />
       <input type='number' onChange={hanldeChangeDistance} /> <strong>Distance : </strong> {distance}
+      <h2>GeT time Ago Example</h2>
+      <label>UTC</label>
+      <select name='utc' onChange={handleAgoOptions}>
+        <option value='1'>TRUE</option>
+        <option value='0'>FALSE</option>
+      </select>
+      <label> Time Format</label>
+      <input type='text' name='inputFormat' onChange={handleAgoOptions} />
+      <br />
+      <input type='text' onChange={handleTimeAgo} /> <strong>Formated date : </strong> {timeAgo}
+
     </>
   )
 }
