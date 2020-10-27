@@ -67,6 +67,7 @@ import { SessionContext, SessionProvider, useSession } from './contexts/SessionC
 import { WebsocketContext, WebsocketProvider, useWebsocket } from './contexts/WebsocketContext'
 import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
 import { EventContext, EventProvider, useEvent } from './contexts/EventContext'
+import { UtilsContext, UtilsProviders, useUtils } from './contexts/UtilsContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
@@ -175,5 +176,8 @@ export {
   OrderingProvider,
   EventContext,
   EventProvider,
-  useEvent
+  useEvent,
+  UtilsContext,
+  UtilsProviders,
+  useUtils
 }
