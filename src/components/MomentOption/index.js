@@ -95,10 +95,9 @@ export const MomentOption = (props) => {
   }
 
   useEffect(() => {
-    if (orderStatus.loading) return
     if (useOrderContext) {
       if (orderStatus.options?.moment) {
-        const _currentDate = dayjs.utc(validDate(orderStatus.options.moment)).local()
+        const _currentDate = dayjs.utc(validDate(orderStatus.options?.moment)).local()
         setScheduleSelected(_currentDate.format('YYYY-MM-DD HH:mm'))
         setDateSelected(_currentDate.format('YYYY-MM-DD'))
         setTimeSelected(_currentDate.format('HH:mm'))
@@ -113,7 +112,7 @@ export const MomentOption = (props) => {
       scheduleSelected !== null && setScheduleSelected(null)
       !isAsap && setIsAsap(true)
     }
-  }, [orderStatus])
+  }, [orderStatus.options?.moment])
 
   useEffect(() => {
     if (!scheduleSelected) {
