@@ -48,7 +48,7 @@ _dayjs.default.extend(_utc.default);
 
 
 var MomentOption = function MomentOption(props) {
-  var _orderStatus$options;
+  var _orderStatus$options, _orderStatus$options4;
 
   var minDate = props.minDate,
       maxDate = props.maxDate,
@@ -166,13 +166,13 @@ var MomentOption = function MomentOption(props) {
   };
 
   (0, _react.useEffect)(function () {
-    if (orderStatus.loading) return;
-
     if (useOrderContext) {
       var _orderStatus$options2;
 
       if ((_orderStatus$options2 = orderStatus.options) === null || _orderStatus$options2 === void 0 ? void 0 : _orderStatus$options2.moment) {
-        var _currentDate2 = _dayjs.default.utc(validDate(orderStatus.options.moment)).local();
+        var _orderStatus$options3;
+
+        var _currentDate2 = _dayjs.default.utc(validDate((_orderStatus$options3 = orderStatus.options) === null || _orderStatus$options3 === void 0 ? void 0 : _orderStatus$options3.moment)).local();
 
         setScheduleSelected(_currentDate2.format('YYYY-MM-DD HH:mm'));
         setDateSelected(_currentDate2.format('YYYY-MM-DD'));
@@ -188,7 +188,7 @@ var MomentOption = function MomentOption(props) {
       scheduleSelected !== null && setScheduleSelected(null);
       !isAsap && setIsAsap(true);
     }
-  }, [orderStatus]);
+  }, [(_orderStatus$options4 = orderStatus.options) === null || _orderStatus$options4 === void 0 ? void 0 : _orderStatus$options4.moment]);
   (0, _react.useEffect)(function () {
     if (!scheduleSelected) {
       return;
