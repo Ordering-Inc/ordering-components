@@ -15,6 +15,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
+var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
+
 var _OrderContext = require("../../contexts/OrderContext");
 
 var _LanguageContext = require("../../contexts/LanguageContext");
@@ -56,6 +58,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+_dayjs.default.extend(_utc.default);
 
 var BusinessAndProductList = function BusinessAndProductList(props) {
   var _businessState$busine5, _orderState$options14, _orderState$options15, _orderState$options16, _orderState$options17;
@@ -381,9 +385,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     }
   }, [JSON.stringify((_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id)]);
 
+  var isValidMoment = function isValidMoment(date, format) {
+    return (0, _dayjs.default)(date, format).format(format) === date;
+  };
+
   var getBusiness = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options8, source, parameters, _orderState$options9, parts, dateParts, timeParts, moment, _yield$ordering$busin2, result;
+      var _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options8, source, parameters, _orderState$options9, moment, _yield$ordering$busin2, result;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -401,11 +409,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 location: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : _orderState$options4$.location) ? "".concat((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : (_orderState$options5$2 = _orderState$options5$.location) === null || _orderState$options5$2 === void 0 ? void 0 : _orderState$options5$2.lat, ",").concat((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lng) : null
               };
 
-              if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.moment) && (0, _dayjs.default)((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
-                parts = (_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment.split(' ');
-                dateParts = parts[0].split('-');
-                timeParts = parts[1].split(':');
-                moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000;
+              if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.moment) && isValidMoment((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment, 'YYYY-MM-DD HH:mm:ss')) {
+                moment = _dayjs.default.utc((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }
 
