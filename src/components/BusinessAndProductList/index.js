@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+
+dayjs.extend(utc)
 
 export const BusinessAndProductList = (props) => {
   const {
@@ -203,6 +206,8 @@ export const BusinessAndProductList = (props) => {
     }
   }, [JSON.stringify(businessState.business?.id)])
 
+  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
+
   const getBusiness = async () => {
     try {
       setBusinessState({ ...businessState, loading: true })
@@ -215,11 +220,8 @@ export const BusinessAndProductList = (props) => {
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : null
       }
-      if (orderState.options?.moment && dayjs(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
-        const parts = orderState.options?.moment.split(' ')
-        const dateParts = parts[0].split('-')
-        const timeParts = parts[1].split(':')
-        const moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000
+      if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+        const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
         parameters.timestamp = moment
       }
       const { content: { result } } = await ordering
