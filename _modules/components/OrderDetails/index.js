@@ -65,6 +65,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useState = (0, _react.useState)({
     order: null,
+    header: '',
     loading: !props.order,
     error: null
   }),
@@ -82,6 +83,9 @@ var OrderDetails = function OrderDetails(props) {
       setMessageErrors = _useState4[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
+  var parameters = {
+    params: 'header'
+  };
   /**
    * Method to format a price number
    * @param {Number} price
@@ -170,7 +174,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _yield$ordering$setAc, result, order;
+      var _yield$ordering$setAc, result, order, businessResult, header;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -184,27 +188,34 @@ var OrderDetails = function OrderDetails(props) {
               _yield$ordering$setAc = _context2.sent;
               result = _yield$ordering$setAc.content.result;
               order = Array.isArray(result) ? null : result;
+              _context2.next = 8;
+              return ordering.setAccessToken(token).businesses(order.business_id).parameters(parameters).get();
+
+            case 8:
+              businessResult = _context2.sent;
+              header = businessResult.response.data;
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                order: order
+                order: order,
+                header: header
               }));
-              _context2.next = 12;
+              _context2.next = 16;
               break;
 
-            case 9:
-              _context2.prev = 9;
+            case 13:
+              _context2.prev = 13;
               _context2.t0 = _context2["catch"](0);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 12:
+            case 16:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 9]]);
+      }, _callee2, null, [[0, 13]]);
     }));
 
     return function getOrder() {
