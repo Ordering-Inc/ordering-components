@@ -12,12 +12,24 @@ export const LanguageContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const LanguageProvider = ({ children }) => {
+export const LanguageProvider = ({ children, strategy }) => {
   const [state, setState] = useState({
     loading: true,
-    language: JSON.parse(window.localStorage.getItem('language')),
     dictionary: {}
   })
+
+  /**
+   * Load language from localstorage and set state or load default language
+   */
+  const setLanguageFromLocalStorage = async () => {
+    const language = await strategy.getItem('language', true)
+    if (!language) {
+      loadDefaultLanguage()
+    } else {
+      setState({ ...state, language })
+      apiHelper.setLanguage(language?.code)
+    }
+  }
 
   const [ordering, apiHelper] = useApi()
 
@@ -35,12 +47,12 @@ export const LanguageProvider = ({ children }) => {
     }
   }
 
-  const loadDefaultLanguege = async () => {
+  const loadDefaultLanguage = async () => {
     try {
       const { content: { error, result } } = await ordering.languages().where([{ attribute: 'default', value: true }]).get()
       if (!error) {
         const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
-        window.localStorage.setItem('language', JSON.stringify(language))
+        await strategy.setItem('language', language, true)
         setState({
           ...state,
           language
@@ -52,7 +64,7 @@ export const LanguageProvider = ({ children }) => {
   const setLanguage = async (language) => {
     if (!language || language.id === state.language?.id) return
     const _language = { id: language.id, code: language.code, rtl: language.rtl }
-    window.localStorage.setItem('language', JSON.stringify(_language))
+    await strategy.setItem('language', _language, true)
     setState({ ...state, loading: true, language: _language })
   }
 
@@ -65,15 +77,12 @@ export const LanguageProvider = ({ children }) => {
     }
   }, [state.language?.code, ordering])
 
-  /**
-   * Load default language and change ordering language
-   */
   useEffect(() => {
-    if (!state.language) {
-      loadDefaultLanguege()
-    } else {
-      apiHelper.setLanguage(state.language.code)
-    }
+    setLanguageFromLocalStorage()
+  }, [])
+
+  useEffect(() => {
+    apiHelper.setLanguage(state?.language?.code)
   }, [state.language])
 
   const t = (key, fallback = null) => {

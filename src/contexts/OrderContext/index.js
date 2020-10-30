@@ -4,6 +4,7 @@ import { useApi } from '../ApiContext'
 import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
+import dayjs from 'dayjs'
 
 /**
  * Create OrderContext
@@ -16,7 +17,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children }) => {
+export const OrderProvider = ({ Alert, children, strategy }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -57,7 +58,7 @@ export const OrderProvider = ({ Alert, children }) => {
         }
       }
       setState({ ...state, loading: false })
-      const localOptions = JSON.parse(window.localStorage.getItem('options'))
+      const localOptions = await strategy.getItem('options', true)
       if (localOptions) {
         if (localOptions.address) {
           const conditions = [
@@ -78,7 +79,7 @@ export const OrderProvider = ({ Alert, children }) => {
           }
         }
         updateOrderOptions(localOptions)
-        window.localStorage.removeItem('options')
+        await strategy.removeItem('options')
       }
     } catch (err) {
       setState({ ...state, loading: false })
@@ -94,7 +95,7 @@ export const OrderProvider = ({ Alert, children }) => {
         ...state.options,
         address: addressId
       }
-      window.localStorage.setItem('options', JSON.stringify(options))
+      await strategy.setItem('options', options, true)
       setState({
         ...state,
         options
@@ -112,6 +113,11 @@ export const OrderProvider = ({ Alert, children }) => {
    * Change order type
    */
   const changeType = async (type) => {
+    const options = {
+      ...state.options,
+      type
+    }
+    await strategy.setItem('options', options, true)
     if (state.options.type === type) {
       return
     }
@@ -123,7 +129,12 @@ export const OrderProvider = ({ Alert, children }) => {
    * Change order moment
    */
   const changeMoment = async (moment) => {
+    const options = {
+      ...state.options,
+      moment: dayjs(moment).format('YYYY-MM-DD HH:mm:ss')
+    }
     moment = !moment ? null : Math.floor(moment.getTime() / 1000)
+    await strategy.setItem('options', options, true)
     if (state.options.moment === moment) {
       return
     }
@@ -162,7 +173,7 @@ export const OrderProvider = ({ Alert, children }) => {
   //       ...state.options,
   //       ...changes
   //     }
-  //     localStorage.setItem('options', JSON.stringify(options))
+  //     strategy.setItem('options', options, true)
   //     setState({
   //       ...state,
   //       options
@@ -454,20 +465,27 @@ export const OrderProvider = ({ Alert, children }) => {
     }
   }
 
+  const [optionsLocalStorage, setOptionsLocalStorage] = useState(null)
+
+  const getOptionFromLocalStorage = async () => {
+    const options = await strategy.getItem('options', true)
+    setOptionsLocalStorage(options)
+  }
+
   useEffect(() => {
     if (session.auth) {
       if (!languageState.loading) {
         refreshOrderOptions()
       }
     } else {
-      const options = JSON.parse(localStorage.getItem('options'))
+      getOptionFromLocalStorage()
       setState({
         ...state,
         loading: false,
         options: {
-          type: options?.type || 1,
-          moment: options?.type || null,
-          address: options?.address || {}
+          type: optionsLocalStorage?.type || 1,
+          moment: optionsLocalStorage?.moment || null,
+          address: optionsLocalStorage?.address || {}
         }
       })
     }

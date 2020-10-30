@@ -8,6 +8,7 @@ import { LanguageProvider } from '../LanguageContext'
 import { ApiProvider } from '../ApiContext'
 import { EventProvider } from '../EventContext'
 import { UtilsProviders } from '../UtilsContext'
+import { WebStrategy } from '../../webStrategy'
 
 /**
  * Create OrderingContext
@@ -21,16 +22,17 @@ export const OrderingContext = createContext()
  * @param {props} props
  */
 export const OrderingProvider = ({ Alert, settings, children }) => {
+  const webStrategy = new WebStrategy()
   return (
     <OrderingContext.Provider>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project })}>
-          <LanguageProvider>
+          <LanguageProvider strategy={webStrategy}>
             <ConfigProvider>
               <UtilsProviders>
-                <SessionProvider>
+                <SessionProvider strategy={webStrategy}>
                   <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
-                    <OrderProvider Alert={Alert}>
+                    <OrderProvider strategy={webStrategy} Alert={Alert}>
                       <BusinessProvider>
                         {children}
                       </BusinessProvider>
