@@ -473,6 +473,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   }
 
   useEffect(() => {
+    if (session.loading) return
     if (session.auth) {
       if (!languageState.loading) {
         refreshOrderOptions()
@@ -538,14 +539,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    * Join to carts room
    */
   useEffect(() => {
-    if (!session.auth) return
-    socket.join(`carts_${session.user.id}`)
-    socket.join(`orderoptions_${session.user.id}`)
+    if (!session.auth || session.loading) return
+    socket.join(`carts_${session?.user?.id}`)
+    socket.join(`orderoptions_${session?.user?.id}`)
     return () => {
-      socket.leave(`carts_${session.user.id}`)
-      socket.leave(`orderoptions_${session.user.id}`)
+      socket.leave(`carts_${session?.user?.id}`)
+      socket.leave(`orderoptions_${session?.user?.id}`)
     }
-  }, [socket])
+  }, [socket, session])
 
   const functions = {
     refreshOrderOptions,

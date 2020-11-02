@@ -30,8 +30,7 @@ export const UserProfileForm = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if (userId || (useSessionUser && refreshSessionUser)) {
-      console.log('sessionState', session)
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
@@ -92,7 +91,7 @@ export const UserProfileForm = (props) => {
         requestsState.validation.cancel()
       }
     }
-  }, [])
+  }, [session.loading])
 
   /**
    * Default fuction for user profile workflow

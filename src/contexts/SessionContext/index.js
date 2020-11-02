@@ -15,15 +15,19 @@ export const SessionProvider = ({ children, strategy }) => {
   const [state, setState] = useState({
     auth: null,
     token: null,
-    user: null
+    user: null,
+    loading: false
   })
 
   const getValuesFromLocalStorage = async () => {
+    setState({
+      ...state,
+      loading: true
+    })
     const auth = await strategy.getItem('token')
     const token = await strategy.getItem('token')
     const user = await strategy.getItem('user', true)
-    console.log('initial values', auth, token, user)
-    setState({ auth, token, user })
+    setState({ auth, token, user, loading: false })
   }
 
   const login = async (values) => {
@@ -65,8 +69,6 @@ export const SessionProvider = ({ children, strategy }) => {
     logout,
     changeUser
   }
-
-  // const copyState = JSON.parse(JSON.stringify(state))
 
   return (
     <SessionContext.Provider value={[state, functions]}>

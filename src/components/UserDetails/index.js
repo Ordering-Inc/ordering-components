@@ -31,7 +31,7 @@ export const UserDetails = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if (userId || (useSessionUser && refreshSessionUser)) {
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
@@ -90,7 +90,7 @@ export const UserDetails = (props) => {
         requestsState.validation.cancel()
       }
     }
-  }, [])
+  }, [session.loading])
 
   /**
    * Default fuction for user details workflow
