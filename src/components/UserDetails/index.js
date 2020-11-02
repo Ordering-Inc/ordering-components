@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSession, SESSION_ACTIONS } from '../../contexts/SessionContext'
+import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
 /**
@@ -20,7 +20,7 @@ export const UserDetails = (props) => {
     handleSuccessUpdate
   } = props
 
-  const [session, dispatchSession] = useSession()
+  const [session, { changeUser }] = useSession()
   const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
@@ -38,8 +38,7 @@ export const UserDetails = (props) => {
       ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source }).then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
-          dispatchSession({
-            type: SESSION_ACTIONS.CHANGE_USER,
+          changeUser({
             user: {
               ...session.user,
               ...response.content.result
@@ -120,8 +119,7 @@ export const UserDetails = (props) => {
             ...response.content
           }
         })
-        dispatchSession({
-          type: SESSION_ACTIONS.CHANGE_USER,
+        changeUser({
           user: {
             ...session.user,
             ...response.content.result

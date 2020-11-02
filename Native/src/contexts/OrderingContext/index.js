@@ -1,6 +1,6 @@
 import React, { createContext } from 'react'
 import { ConfigProvider } from '../../../../src/contexts/ConfigContext'
-// import { SessionProvider } from '../../../../src/contexts/SessionContext'
+import { SessionProvider } from '../../../../src/contexts/SessionContext'
 import { WebsocketProvider } from '../../../../src/contexts/WebsocketContext'
 import { OrderProvider } from '../../../../src/contexts/OrderContext'
 import { BusinessProvider } from '../../../../src/contexts/BusinessContext'
@@ -30,15 +30,15 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
           <LanguageProvider strategy={nativeStrategy}>
             <ConfigProvider>
               <UtilsProviders>
-                {/* <SessionProvider strategy={nativeStrategy}> */}
-                <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
-                  <OrderProvider strategy={nativeStrategy} Alert={Alert}>
-                    <BusinessProvider>
-                      {children}
-                    </BusinessProvider>
-                  </OrderProvider>
-                </WebsocketProvider>
-                {/* </SessionProvider> */}
+                <SessionProvider strategy={nativeStrategy}>
+                  <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
+                    <OrderProvider strategy={nativeStrategy} Alert={Alert}>
+                      <BusinessProvider>
+                        {children}
+                      </BusinessProvider>
+                    </OrderProvider>
+                  </WebsocketProvider>
+                </SessionProvider>
               </UtilsProviders>
             </ConfigProvider>
           </LanguageProvider>
