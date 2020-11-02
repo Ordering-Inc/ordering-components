@@ -77,11 +77,13 @@ export const UpsellingPage = (props) => {
   }
 
   return (
-    <UIComponent
-      {...props}
-      handleAddProductUpselling={handleAddProductUpselling}
-      upsellingProducts={upsellingProducts}
-    />
+    UIComponent && (
+      <UIComponent
+        {...props}
+        handleAddProductUpselling={handleAddProductUpselling}
+        upsellingProducts={upsellingProducts}
+      />
+    )
   )
 }
 
