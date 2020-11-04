@@ -5,6 +5,9 @@ import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 /**
  * Create OrderContext
@@ -129,11 +132,11 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    * Change order moment
    */
   const changeMoment = async (moment) => {
+    moment = !moment ? null : dayjs.utc(moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
     const options = {
       ...state.options,
-      moment: dayjs(moment).format('YYYY-MM-DD HH:mm:ss')
+      moment
     }
-    moment = !moment ? null : Math.floor(moment.getTime() / 1000)
     await strategy.setItem('options', options, true)
     if (state.options.moment === moment) {
       return
