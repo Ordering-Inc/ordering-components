@@ -52,11 +52,11 @@ export const SessionProvider = ({ children, strategy }) => {
     })
   }
 
-  const changeUser = async (value) => {
-    await strategy.setItem('user', value.user, true)
+  const changeUser = async (user) => {
+    await strategy.setItem('user', user, true)
     setState({
       ...state,
-      user: value.user
+      user
     })
   }
 

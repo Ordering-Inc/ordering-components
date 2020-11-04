@@ -37,12 +37,9 @@ export const UserProfileForm = (props) => {
       ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source }).then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
-          console.log('in1', session.user, response.content.result)
           changeUser({
-            user: {
-              ...session.user,
-              ...response.content.result
-            }
+            ...session.user,
+            ...response.content.result
           })
         }
       }).catch((err) => {
@@ -76,7 +73,6 @@ export const UserProfileForm = (props) => {
         })
         setValidationFields({ loading: false, fields })
       }).catch((err) => {
-        console.log(err)
         if (err.constructor.name !== 'Cancel') {
           setValidationFields({ loading: false })
         }
@@ -119,12 +115,9 @@ export const UserProfileForm = (props) => {
             ...response.content
           }
         })
-        console.log('in2', session.user, response.content.result)
         changeUser({
-          user: {
-            ...session.user,
-            ...response.content.result
-          }
+          ...session.user,
+          ...response.content.result
         })
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)

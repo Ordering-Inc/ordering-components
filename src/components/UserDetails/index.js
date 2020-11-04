@@ -39,10 +39,8 @@ export const UserDetails = (props) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
           changeUser({
-            user: {
-              ...session.user,
-              ...response.content.result
-            }
+            ...session.user,
+            ...response.content.result
           })
         }
       }).catch((err) => {
@@ -120,10 +118,8 @@ export const UserDetails = (props) => {
           }
         })
         changeUser({
-          user: {
-            ...session.user,
-            ...response.content.result
-          }
+          ...session.user,
+          ...response.content.result
         })
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)

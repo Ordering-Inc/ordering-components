@@ -59,7 +59,6 @@ export const CheckoutExample = () => {
     setCartState({ ...cartState, loading: true })
     const response = await fetch(`${ordering.root}/carts/${cartId}`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` } })
     const { error, result } = await response.json()
-    // console.log(error, result)
     if (result.status === 1 && result.order?.uuid) {
       alert(`REDIRECT TO /orders/${result.order.uuid}`)
       setCartState({ ...cartState, loading: false })

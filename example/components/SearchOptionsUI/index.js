@@ -27,7 +27,6 @@ export const SearchOptionsUI = (props) => {
 
   const addressListProps = {
     handleClickAddress: (address) => {
-      console.log('Address was clicked', address)
       setCurAddress(address)
     },
     changeOrderAddressWithDefault: true
