@@ -30,8 +30,6 @@ export const PaymentOptionsUI = (props) => {
 
   const [{ user }] = useSession()
 
-  // console.log(paymethodSelected)
-
   return (
     <>
       {beforeElements.map((BeforeElement, i) => (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSession, SESSION_ACTIONS } from '../../contexts/SessionContext'
+import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
 /**
@@ -21,7 +21,7 @@ export const UserProfileForm = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [session, dispatchSession] = useSession()
+  const [session, { changeUser }] = useSession()
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [validationFields, setValidationFields] = useState({ loading: useValidationFileds })
@@ -30,19 +30,16 @@ export const UserProfileForm = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if (userId || (useSessionUser && refreshSessionUser)) {
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
       ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source }).then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
-          dispatchSession({
-            type: SESSION_ACTIONS.CHANGE_USER,
-            user: {
-              ...session.user,
-              ...response.content.result
-            }
+          changeUser({
+            ...session.user,
+            ...response.content.result
           })
         }
       }).catch((err) => {
@@ -76,7 +73,6 @@ export const UserProfileForm = (props) => {
         })
         setValidationFields({ loading: false, fields })
       }).catch((err) => {
-        console.log(err)
         if (err.constructor.name !== 'Cancel') {
           setValidationFields({ loading: false })
         }
@@ -91,7 +87,7 @@ export const UserProfileForm = (props) => {
         requestsState.validation.cancel()
       }
     }
-  }, [])
+  }, [session.loading])
 
   /**
    * Default fuction for user profile workflow
@@ -119,12 +115,9 @@ export const UserProfileForm = (props) => {
             ...response.content
           }
         })
-        dispatchSession({
-          type: SESSION_ACTIONS.CHANGE_USER,
-          user: {
-            ...session.user,
-            ...response.content.result
-          }
+        changeUser({
+          ...session.user,
+          ...response.content.result
         })
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)

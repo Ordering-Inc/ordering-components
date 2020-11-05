@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import { Emitter } from '../../../example/views/EventsExample/Emitter'
+import { Emitter } from '../../components/Emitter'
 
 /**
  * Create EventContext

@@ -17,7 +17,7 @@ export const LogoutAction = (props) => {
   const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
 
-  const [data, dispatchSession] = useSession()
+  const [data, { logout }] = useSession()
 
   /**
    * Default fuction for logout workflow
@@ -33,7 +33,7 @@ export const LogoutAction = (props) => {
       })
       if (!response.content.error) {
         if (useDefualtSessionManager) {
-          dispatchSession({ type: 'logout' })
+          logout()
         }
         if (handleSuccessLogout) {
           handleSuccessLogout()

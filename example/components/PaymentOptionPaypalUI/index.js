@@ -19,7 +19,6 @@ export const PaymentOptionPaypalUI = (props) => {
       gateway: 'paypal_express',
       data: payment
     })
-    console.log(payment)
   }
 
   const onCancel = data => {

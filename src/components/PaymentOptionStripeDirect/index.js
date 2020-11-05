@@ -58,9 +58,10 @@ export const PaymentOptionStripeDirect = (props) => {
   }
 
   useEffect(() => {
+    if (!token) return
     getCredentials()
     getRequirements()
-  }, [])
+  }, [token])
 
   return (
     <>

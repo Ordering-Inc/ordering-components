@@ -39,7 +39,6 @@ export const UserProfileUI = (props) => {
 
   const handleFiles = (files) => {
     if (files.length === 1) {
-      console.log(files[0])
       handlechangeImage(files[0])
     }
   }
