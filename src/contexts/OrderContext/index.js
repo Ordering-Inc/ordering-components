@@ -132,17 +132,17 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    * Change order moment
    */
   const changeMoment = async (moment) => {
-    moment = !moment ? null : dayjs.utc(moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+    const momentFormatted = moment ? dayjs.utc(moment, 'YYYY-MM-DD HH:mm:ss').local().unix() : null
     const options = {
       ...state.options,
-      moment
+      moment: momentFormatted
     }
     await strategy.setItem('options', options, true)
-    if (state.options.moment === moment) {
+    if (state.options.moment === momentFormatted) {
       return
     }
 
-    updateOrderOptions({ moment })
+    updateOrderOptions({ moment: momentFormatted })
   }
 
   /**

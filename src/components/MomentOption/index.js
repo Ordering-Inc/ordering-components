@@ -85,10 +85,9 @@ export const MomentOption = (props) => {
 
   const handleAsap = () => {
     if (isAsap) return
+    setIsAsap(true)
     if (useOrderContext) {
       changeMoment(null)
-    } else {
-      setIsAsap(true)
     }
     onChangeMoment && onChangeMoment(null)
   }
