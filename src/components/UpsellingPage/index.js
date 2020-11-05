@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const UpsellingPage = (props) => {
-  const { UIComponent, onSave, businessId, products, cartProducts } = props
-  const [{ addProduct }] = useOrder()
+  const { UIComponent, businessId, products, cartProducts, onSave } = props
+
   const [upsellingProducts, setUpsellingProducts] = useState({ products: [], loading: true, error: false })
+  const [businessProducts, setBusinessProducts] = useState([])
   const [ordering] = useApi()
+  const [orderState] = useOrder()
   useEffect(() => {
     if (products?.length || businessId) {
       if (products?.length) {
@@ -24,6 +26,13 @@ export const UpsellingPage = (props) => {
       })
     }
   }, [])
+
+  useEffect(() => {
+    if (!upsellingProducts.loading) {
+      getUpsellingProducts(businessProducts)
+    }
+  }, [orderState.loading])
+
   /**
    * getting products if array of product is not defined
    */
@@ -35,6 +44,7 @@ export const UpsellingPage = (props) => {
         .where([{ attribute: 'upselling', value: true }])
         .parameters({ type: 1 })
         .get()
+      setBusinessProducts(result)
       getUpsellingProducts(result)
     } catch (error) {
       setUpsellingProducts({
@@ -65,22 +75,20 @@ export const UpsellingPage = (props) => {
       })
     }
   }
+
   /**
-   * adding product to the cart from upselling
-   * @param {object} product Product object
+   * Function for confirm that the productForm now can be displayed
+   * @param {product} product
    */
-  const handleAddProductUpselling = async (product) => {
-    const successful = await addProduct(product)
-    if (successful) {
-      onSave(product)
-    }
+  const handleFormProduct = (product) => {
+    onSave(product)
   }
 
   return (
     <UIComponent
       {...props}
-      handleAddProductUpselling={handleAddProductUpselling}
       upsellingProducts={upsellingProducts}
+      handleFormProduct={handleFormProduct}
     />
   )
 }
@@ -94,10 +102,6 @@ UpsellingPage.propTypes = {
     * upselling products that do not repeat in the cart
    */
   upsellingProducts: PropTypes.array,
-  /**
-   * Function to save event
-   */
-  onSave: PropTypes.func,
   /**
    * BusinessId is required when products is not defined
    */
