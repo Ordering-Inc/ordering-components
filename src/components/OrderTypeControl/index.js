@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes, { number } from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 
@@ -7,8 +7,10 @@ export const OrderTypeControl = (props) => {
     UIComponent
   } = props
   const [orderState, { changeType }] = useOrder()
+  const [typeSelected, setTypeSelected] = useState(orderState.options.type)
 
   const handleChangeOrderType = (orderType) => {
+    setTypeSelected(orderType)
     changeType(orderType)
   }
 
@@ -17,7 +19,7 @@ export const OrderTypeControl = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          orderState={orderState}
+          typeSelected={typeSelected}
           handleChangeOrderType={props.handleChangeOrderType || handleChangeOrderType}
         />
       )}
