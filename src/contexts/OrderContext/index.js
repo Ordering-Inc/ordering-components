@@ -31,7 +31,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const [state, setState] = useState({
     loading: true,
     options: {
-      type: 1
+      type: 1,
+      moment: null
     },
     carts: {},
     confirmAlert,
@@ -65,7 +66,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (localOptions) {
         if (localOptions.address) {
           const conditions = [
-            { attribute: 'address', value: localOptions.address.address }
+            { attribute: 'address', value: localOptions?.address?.address }
           ]
           const addressesResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get()
           let address = addressesResponse.content.result.find(address => {
@@ -132,7 +133,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    * Change order moment
    */
   const changeMoment = async (moment) => {
-    const momentFormatted = moment ? dayjs.utc(moment, 'YYYY-MM-DD HH:mm:ss').local().unix() : null
+    const momentFormatted = dayjs.utc(moment, 'YYYY-MM-DD HH:mm:ss').local().unix() || 0
+
     const options = {
       ...state.options,
       moment: momentFormatted
