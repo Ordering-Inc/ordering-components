@@ -143,10 +143,10 @@ var MomentOption = function MomentOption(props) {
 
     var _moment = (0, _dayjs.default)("".concat(dateSelected, " ").concat(time), 'YYYY-MM-DD HH:mm').toDate();
 
-    if (!useOrderContext) {
-      setTimeSelected(time);
-      setIsAsap(false);
-    } else {
+    setTimeSelected(time);
+    setIsAsap(false);
+
+    if (useOrderContext) {
       changeMoment(_moment);
     }
 
@@ -155,11 +155,10 @@ var MomentOption = function MomentOption(props) {
 
   var handleAsap = function handleAsap() {
     if (isAsap) return;
+    setIsAsap(true);
 
     if (useOrderContext) {
       changeMoment(null);
-    } else {
-      setIsAsap(true);
     }
 
     onChangeMoment && onChangeMoment(null);

@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.OrderTypeControl = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireWildcard(require("prop-types"));
 
@@ -16,8 +16,6 @@ var _OrderContext = require("../../contexts/OrderContext");
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -41,12 +39,18 @@ var OrderTypeControl = function OrderTypeControl(props) {
       orderState = _useOrder2[0],
       changeType = _useOrder2[1].changeType;
 
+  var _useState = (0, _react.useState)(orderState.options.type),
+      _useState2 = _slicedToArray(_useState, 2),
+      typeSelected = _useState2[0],
+      setTypeSelected = _useState2[1];
+
   var handleChangeOrderType = function handleChangeOrderType(orderType) {
+    setTypeSelected(orderType);
     changeType(orderType);
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    orderState: orderState,
+    typeSelected: typeSelected,
     handleChangeOrderType: props.handleChangeOrderType || handleChangeOrderType
   })));
 };
