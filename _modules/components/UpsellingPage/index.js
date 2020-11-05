@@ -13,9 +13,9 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _OrderContext = require("../../contexts/OrderContext");
-
 var _ApiContext = require("../../contexts/ApiContext");
+
+var _OrderContext = require("../../contexts/OrderContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -49,14 +49,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var UpsellingPage = function UpsellingPage(props) {
   var UIComponent = props.UIComponent,
-      onSave = props.onSave,
       businessId = props.businessId,
       products = props.products,
-      cartProducts = props.cartProducts;
-
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 1),
-      addProduct = _useOrder2[0].addProduct;
+      cartProducts = props.cartProducts,
+      onSave = props.onSave;
 
   var _useState = (0, _react.useState)({
     products: [],
@@ -67,9 +63,18 @@ var UpsellingPage = function UpsellingPage(props) {
       upsellingProducts = _useState2[0],
       setUpsellingProducts = _useState2[1];
 
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      businessProducts = _useState4[0],
+      setBusinessProducts = _useState4[1];
+
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 1),
+      orderState = _useOrder2[0];
 
   (0, _react.useEffect)(function () {
     if ((products === null || products === void 0 ? void 0 : products.length) || businessId) {
@@ -85,6 +90,11 @@ var UpsellingPage = function UpsellingPage(props) {
       }));
     }
   }, []);
+  (0, _react.useEffect)(function () {
+    if (!upsellingProducts.loading) {
+      getUpsellingProducts(businessProducts);
+    }
+  }, [orderState.loading]);
   /**
    * getting products if array of product is not defined
    */
@@ -109,24 +119,25 @@ var UpsellingPage = function UpsellingPage(props) {
             case 3:
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
+              setBusinessProducts(result);
               getUpsellingProducts(result);
-              _context.next = 11;
+              _context.next = 12;
               break;
 
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](0);
               setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
                 loading: false,
                 error: _context.t0
               }));
 
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 8]]);
+      }, _callee, null, [[0, 9]]);
     }));
 
     return function getProducts() {
@@ -164,44 +175,18 @@ var UpsellingPage = function UpsellingPage(props) {
     }
   };
   /**
-   * adding product to the cart from upselling
-   * @param {object} product Product object
+   * Function for confirm that the productForm now can be displayed
+   * @param {product} product
    */
 
 
-  var handleAddProductUpselling = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(product) {
-      var successful;
-      return _regenerator.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.next = 2;
-              return addProduct(product);
-
-            case 2:
-              successful = _context2.sent;
-
-              if (successful) {
-                onSave(product);
-              }
-
-            case 4:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function handleAddProductUpselling(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+  var handleFormProduct = function handleFormProduct(product) {
+    onSave(product);
+  };
 
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    handleAddProductUpselling: handleAddProductUpselling,
-    upsellingProducts: upsellingProducts
+    upsellingProducts: upsellingProducts,
+    handleFormProduct: handleFormProduct
   }));
 };
 
@@ -216,11 +201,6 @@ UpsellingPage.propTypes = {
     * upselling products that do not repeat in the cart
    */
   upsellingProducts: _propTypes.default.array,
-
-  /**
-   * Function to save event
-   */
-  onSave: _propTypes.default.func,
 
   /**
    * BusinessId is required when products is not defined
