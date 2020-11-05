@@ -160,11 +160,19 @@ var OrderList = function OrderList(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.prev = 0;
-              _context2.next = 3;
+              if (session.token) {
+                _context2.next = 2;
+                break;
+              }
+
+              return _context2.abrupt("return");
+
+            case 2:
+              _context2.prev = 2;
+              _context2.next = 5;
               return getOrders(pagination.currentPage + 1);
 
-            case 3:
+            case 5:
               response = _context2.sent;
               setOrderList({
                 loading: false,
@@ -183,12 +191,12 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 11;
+              _context2.next = 13;
               break;
 
-            case 8:
-              _context2.prev = 8;
-              _context2.t0 = _context2["catch"](0);
+            case 10:
+              _context2.prev = 10;
+              _context2.t0 = _context2["catch"](2);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -197,12 +205,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 11:
+            case 13:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 8]]);
+      }, _callee2, null, [[2, 10]]);
     }));
 
     return function loadOrders() {
@@ -224,7 +232,7 @@ var OrderList = function OrderList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, []);
+  }, [session]);
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
 
@@ -268,11 +276,16 @@ var OrderList = function OrderList(props) {
     };
   }, [orderList.orders, pagination, socket]);
   (0, _react.useEffect)(function () {
-    socket.join("orders_".concat(session.user.id));
+    var _session$user;
+
+    if (!session.user) return;
+    socket.join("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id));
     return function () {
-      socket.leave("orders_".concat(session.user.id));
+      var _session$user2;
+
+      socket.leave("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
     };
-  }, [socket]);
+  }, [socket, session]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {

@@ -9,7 +9,7 @@ exports.useEvent = exports.EventProvider = exports.EventContext = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _Emitter = require("../../../example/views/EventsExample/Emitter");
+var _Emitter = require("../../components/Emitter");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 

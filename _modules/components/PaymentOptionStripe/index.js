@@ -293,13 +293,14 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
 
 
   (0, _react.useEffect)(function () {
-    // getRequirements()
+    if (!token) return; // getRequirements()
+
     getCards();
 
     if (!props.publicKey) {
       getCredentials();
     }
-  }, []);
+  }, [token]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cardSelected: cardSelected,
     cardsList: cardsList,

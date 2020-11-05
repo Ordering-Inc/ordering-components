@@ -63,6 +63,8 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
       setSocket = _useState2[1];
 
   (0, _react.useEffect)(function () {
+    if (session.loading) return;
+
     if (session.auth && settings.url && settings.project) {
       var _socket = new _socket2.Socket(_objectSpread(_objectSpread({}, settings), {}, {
         accessToken: session.token

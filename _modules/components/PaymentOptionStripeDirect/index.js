@@ -158,9 +158,10 @@ var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
   }();
 
   (0, _react.useEffect)(function () {
+    if (!token) return;
     getCredentials();
     getRequirements();
-  }, []);
+  }, [token]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     stripeKey: stripePK,
     clientSecret: requirements

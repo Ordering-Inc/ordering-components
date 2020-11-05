@@ -112,10 +112,9 @@ var CardForm = function CardForm(props) {
 
             case 5:
               response = _context.sent;
-              console.log(response);
               onNewCard && onNewCard(response.result);
 
-            case 8:
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -193,7 +192,7 @@ var CardForm = function CardForm(props) {
                 }); // props.handlerToken(result?.paymentMethod)
               }
 
-              _context2.next = 15;
+              _context2.next = 14;
               break;
 
             case 10:
@@ -211,7 +210,6 @@ var CardForm = function CardForm(props) {
 
             case 12:
               _result = _context2.sent;
-              console.log(_result);
 
               if (_result.error) {
                 setLoading(false);
@@ -222,7 +220,7 @@ var CardForm = function CardForm(props) {
                 toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
               }
 
-            case 15:
+            case 14:
             case "end":
               return _context2.stop();
           }

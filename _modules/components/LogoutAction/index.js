@@ -73,7 +73,7 @@ var LogoutAction = function LogoutAction(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
       data = _useSession2[0],
-      dispatchSession = _useSession2[1];
+      logout = _useSession2[1].logout;
   /**
    * Default fuction for logout workflow
    */
@@ -103,9 +103,7 @@ var LogoutAction = function LogoutAction(props) {
 
               if (!response.content.error) {
                 if (useDefualtSessionManager) {
-                  dispatchSession({
-                    type: 'logout'
-                  });
+                  logout();
                 }
 
                 if (handleSuccessLogout) {

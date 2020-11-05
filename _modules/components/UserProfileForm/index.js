@@ -69,7 +69,7 @@ var UserProfileForm = function UserProfileForm(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
       session = _useSession2[0],
-      dispatchSession = _useSession2[1];
+      changeUser = _useSession2[1].changeUser;
 
   var _useState = (0, _react.useState)({
     loading: false,
@@ -102,7 +102,7 @@ var UserProfileForm = function UserProfileForm(props) {
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
-    if (userId || useSessionUser && refreshSessionUser) {
+    if ((userId || useSessionUser && refreshSessionUser) && !session.loading) {
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
         loading: true
       }));
@@ -117,10 +117,7 @@ var UserProfileForm = function UserProfileForm(props) {
         });
 
         if (response.content.result) {
-          dispatchSession({
-            type: _SessionContext.SESSION_ACTIONS.CHANGE_USER,
-            user: _objectSpread(_objectSpread({}, session.user), response.content.result)
-          });
+          changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
         }
       }).catch(function (err) {
         if (err.constructor.name !== 'Cancel') {
@@ -158,8 +155,6 @@ var UserProfileForm = function UserProfileForm(props) {
           fields: fields
         });
       }).catch(function (err) {
-        console.log(err);
-
         if (err.constructor.name !== 'Cancel') {
           setValidationFields({
             loading: false
@@ -177,7 +172,7 @@ var UserProfileForm = function UserProfileForm(props) {
         requestsState.validation.cancel();
       }
     };
-  }, []);
+  }, [session.loading]);
   /**
    * Default fuction for user profile workflow
    */
@@ -218,10 +213,7 @@ var UserProfileForm = function UserProfileForm(props) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   result: _objectSpread(_objectSpread({}, userState.result), response.content)
                 }));
-                dispatchSession({
-                  type: _SessionContext.SESSION_ACTIONS.CHANGE_USER,
-                  user: _objectSpread(_objectSpread({}, session.user), response.content.result)
-                });
+                changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
 
                 if (handleSuccessUpdate) {
                   handleSuccessUpdate(response.content.result);

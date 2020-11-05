@@ -98,7 +98,7 @@ var LoginForm = function LoginForm(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
-      dispatchSession = _useSession2[1];
+      login = _useSession2[1].login;
   /**
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
@@ -130,8 +130,7 @@ var LoginForm = function LoginForm(props) {
 
               if (!response.content.error) {
                 if (useDefualtSessionManager) {
-                  dispatchSession({
-                    type: 'login',
+                  login({
                     user: response.content.result,
                     token: response.content.result.session.access_token
                   });

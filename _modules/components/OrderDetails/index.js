@@ -57,7 +57,8 @@ var OrderDetails = function OrderDetails(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       _useSession2$ = _useSession2[0],
       user = _useSession2$.user,
-      token = _useSession2$.token;
+      token = _useSession2$.token,
+      loading = _useSession2$.loading;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -233,7 +234,7 @@ var OrderDetails = function OrderDetails(props) {
     }
   }, []);
   (0, _react.useEffect)(function () {
-    if (orderState.loading) return;
+    if (orderState.loading || loading) return;
 
     var handleUpdateOrder = function handleUpdateOrder(order) {
       if (order.id !== orderState.order.id) return;
@@ -250,7 +251,7 @@ var OrderDetails = function OrderDetails(props) {
       socket.leave("orders_".concat(user.id));
       socket.off('update_order', handleUpdateOrder);
     };
-  }, [orderState.order, socket]);
+  }, [orderState.order, socket, loading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     order: orderState,
     messageErrors: messageErrors,

@@ -45,7 +45,6 @@ var defaultReducer = function defaultReducer(state, action) {
   switch (action.type) {
     case PRODUCT_ACTIONS.CHANGE_INGREDIENTS:
       {
-        // console.log('===== Change Ingredients =====')
         window.localStorage.setItem('ingredients', JSON.stringify(action.ingredients));
         return _objectSpread(_objectSpread({}, state), {}, {
           ingredients: action.ingredients

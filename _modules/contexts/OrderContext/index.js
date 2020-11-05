@@ -19,6 +19,10 @@ var _LanguageContext = require("../LanguageContext");
 
 var _EventContext = require("../EventContext");
 
+var _dayjs = _interopRequireDefault(require("dayjs"));
+
+var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -53,10 +57,13 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+_dayjs.default.extend(_utc.default);
 /**
  * Create OrderContext
  * This context will manage the current order with options internally and provide an easy interface
  */
+
+
 var OrderContext = /*#__PURE__*/(0, _react.createContext)();
 /**
  * Custom provider to order manager
@@ -68,7 +75,8 @@ exports.OrderContext = OrderContext;
 
 var OrderProvider = function OrderProvider(_ref) {
   var Alert = _ref.Alert,
-      children = _ref.children;
+      children = _ref.children,
+      strategy = _ref.strategy;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -102,7 +110,8 @@ var OrderProvider = function OrderProvider(_ref) {
   var _useState5 = (0, _react.useState)({
     loading: true,
     options: {
-      type: 1
+      type: 1,
+      moment: null
     },
     carts: {},
     confirmAlert: confirmAlert,
@@ -122,7 +131,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, options, localOptions, conditions, addressesResponse, address, addressResponse;
+      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, options, localOptions, _localOptions$address, conditions, addressesResponse, address, addressResponse, _options;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -157,72 +166,91 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              localOptions = JSON.parse(window.localStorage.getItem('options'));
+              _context.next = 12;
+              return strategy.getItem('options', true);
+
+            case 12:
+              localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 26;
+                _context.next = 32;
                 break;
               }
 
-              if (!localOptions.address) {
-                _context.next = 24;
+              if (!(Object.keys(localOptions.address).length > 0)) {
+                _context.next = 26;
                 break;
               }
 
               conditions = [{
                 attribute: 'address',
-                value: localOptions.address.address
+                value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
-              _context.next = 16;
+              _context.next = 18;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get();
 
-            case 16:
+            case 18:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
                 return address.address_notes === localOptions.address.address_notes && address.internal_number === localOptions.address.internal_number;
               });
 
               if (address) {
-                _context.next = 23;
+                _context.next = 25;
                 break;
               }
 
-              _context.next = 21;
+              _context.next = 23;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address);
 
-            case 21:
+            case 23:
               addressResponse = _context.sent;
 
               if (!addressResponse.content.error) {
                 address = addressResponse.content.result;
               }
 
-            case 23:
+            case 25:
               if (address) {
                 localOptions.address_id = address.id;
               }
 
-            case 24:
-              updateOrderOptions(localOptions);
-              window.localStorage.removeItem('options');
-
             case 26:
-              _context.next = 31;
+              _options = {};
+
+              if (localOptions.moment || (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id)) {
+                _options.moment = localOptions.moment ? _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix() : null;
+                _options.type = localOptions.type;
+              }
+
+              if (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id) {
+                _options.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
+              }
+
+              if (Object.keys(_options).length > 0) {
+                updateOrderOptions(_options);
+              }
+
+              _context.next = 32;
+              return strategy.removeItem('options');
+
+            case 32:
+              _context.next = 37;
               break;
 
-            case 28:
-              _context.prev = 28;
+            case 34:
+              _context.prev = 34;
               _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 31:
+            case 37:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 28]]);
+      }, _callee, null, [[0, 34]]);
     }));
 
     return function refreshOrderOptions() {
@@ -242,33 +270,36 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (!(_typeof(addressId) === 'object')) {
-                _context2.next = 5;
+                _context2.next = 6;
                 break;
               }
 
               options = _objectSpread(_objectSpread({}, state.options), {}, {
                 address: addressId
               });
-              window.localStorage.setItem('options', JSON.stringify(options));
+              _context2.next = 4;
+              return strategy.setItem('options', options, true);
+
+            case 4:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 options: options
               }));
               return _context2.abrupt("return");
 
-            case 5:
+            case 6:
               if (!(state.options.address_id === addressId)) {
-                _context2.next = 7;
+                _context2.next = 8;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 7:
+            case 8:
               updateOrderOptions({
                 address_id: addressId
               });
 
-            case 8:
+            case 9:
             case "end":
               return _context2.stop();
           }
@@ -287,23 +318,42 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeType = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(type) {
+      var options;
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
+              options = _objectSpread(_objectSpread({}, state.options), {}, {
+                type: type
+              });
+
               if (!(state.options.type === type)) {
-                _context3.next = 2;
+                _context3.next = 3;
                 break;
               }
 
               return _context3.abrupt("return");
 
-            case 2:
+            case 3:
+              if (session.auth) {
+                _context3.next = 7;
+                break;
+              }
+
+              _context3.next = 6;
+              return strategy.setItem('options', options, true);
+
+            case 6:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                options: options
+              }));
+
+            case 7:
               updateOrderOptions({
                 type: type
               });
 
-            case 3:
+            case 8:
             case "end":
               return _context3.stop();
           }
@@ -322,25 +372,44 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeMoment = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(moment) {
+      var momentUnix, momentFormatted, options;
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              moment = !moment ? null : Math.floor(moment.getTime() / 1000);
+              momentUnix = moment ? moment.getTime() / 1000 : null;
+              momentFormatted = momentUnix ? _dayjs.default.unix(momentUnix).utc().format('YYYY-MM-DD HH:mm:ss') : null;
+              options = _objectSpread(_objectSpread({}, state.options), {}, {
+                moment: momentFormatted
+              });
 
-              if (!(state.options.moment === moment)) {
-                _context4.next = 3;
+              if (!(state.options.moment === momentFormatted)) {
+                _context4.next = 5;
                 break;
               }
 
               return _context4.abrupt("return");
 
-            case 3:
+            case 5:
+              if (session.auth) {
+                _context4.next = 9;
+                break;
+              }
+
+              _context4.next = 8;
+              return strategy.setItem('options', options, true);
+
+            case 8:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                options: options
+              }));
+
+            case 9:
               updateOrderOptions({
-                moment: moment
+                moment: momentUnix
               });
 
-            case 4:
+            case 10:
             case "end":
               return _context4.stop();
           }
@@ -383,7 +452,7 @@ var OrderProvider = function OrderProvider(_ref) {
   //       ...state.options,
   //       ...changes
   //     }
-  //     localStorage.setItem('options', JSON.stringify(options))
+  //     strategy.setItem('options', options, true)
   //     setState({
   //       ...state,
   //       options
@@ -1165,19 +1234,53 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
 
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      optionsLocalStorage = _useState8[0],
+      setOptionsLocalStorage = _useState8[1];
+
+  var getOptionFromLocalStorage = /*#__PURE__*/function () {
+    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee15() {
+      var options;
+      return _regenerator.default.wrap(function _callee15$(_context15) {
+        while (1) {
+          switch (_context15.prev = _context15.next) {
+            case 0:
+              _context15.next = 2;
+              return strategy.getItem('options', true);
+
+            case 2:
+              options = _context15.sent;
+              setOptionsLocalStorage(options);
+
+            case 4:
+            case "end":
+              return _context15.stop();
+          }
+        }
+      }, _callee15);
+    }));
+
+    return function getOptionFromLocalStorage() {
+      return _ref16.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
+    if (session.loading) return;
+
     if (session.auth) {
       if (!languageState.loading) {
         refreshOrderOptions();
       }
     } else {
-      var options = JSON.parse(localStorage.getItem('options'));
+      getOptionFromLocalStorage();
       setState(_objectSpread(_objectSpread({}, state), {}, {
         loading: false,
         options: {
-          type: (options === null || options === void 0 ? void 0 : options.type) || 1,
-          moment: (options === null || options === void 0 ? void 0 : options.type) || null,
-          address: (options === null || options === void 0 ? void 0 : options.address) || {}
+          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || 1,
+          moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
+          address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || {}
         }
       }));
     }
@@ -1199,9 +1302,9 @@ var OrderProvider = function OrderProvider(_ref) {
       setState(_objectSpread({}, state));
     };
 
-    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref16) {
-      var carts = _ref16.carts,
-          options = _objectWithoutProperties(_ref16, ["carts"]);
+    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref17) {
+      var carts = _ref17.carts,
+          options = _objectWithoutProperties(_ref17, ["carts"]);
 
       var newCarts = {};
       carts.forEach(function (cart) {
@@ -1228,14 +1331,18 @@ var OrderProvider = function OrderProvider(_ref) {
    */
 
   (0, _react.useEffect)(function () {
-    if (!session.auth) return;
-    socket.join("carts_".concat(session.user.id));
-    socket.join("orderoptions_".concat(session.user.id));
+    var _session$user, _session$user2;
+
+    if (!session.auth || session.loading) return;
+    socket.join("carts_".concat(session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id));
+    socket.join("orderoptions_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
     return function () {
-      socket.leave("carts_".concat(session.user.id));
-      socket.leave("orderoptions_".concat(session.user.id));
+      var _session$user3, _session$user4;
+
+      socket.leave("carts_".concat(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id));
+      socket.leave("orderoptions_".concat(session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id));
     };
-  }, [socket]);
+  }, [socket, session]);
   var functions = {
     refreshOrderOptions: refreshOrderOptions,
     changeAddress: changeAddress,

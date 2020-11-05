@@ -54,7 +54,6 @@ var GoogleMaps = function GoogleMaps(props) {
         map: map,
         title: ''
       });
-      console.log(marker);
     }
   }, [googleReady]);
   return googleReady && /*#__PURE__*/_react.default.createElement("div", {

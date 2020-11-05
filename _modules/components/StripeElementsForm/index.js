@@ -104,8 +104,9 @@ var StripeElementsForm = function StripeElementsForm(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    token && toSave && getRequirements();
-  }, []);
+    if (!token) return;
+    toSave && getRequirements();
+  }, [token]);
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     requirements: requirements
   }));
