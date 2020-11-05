@@ -139,6 +139,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       ...state.options,
       moment: momentFormatted
     }
+    setState({
+      ...state,
+      options
+    })
     await strategy.setItem('options', options, true)
     if (state.options.moment === momentFormatted) {
       return
