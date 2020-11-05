@@ -118,12 +118,13 @@ export const PaymentOptionStripe = (props) => {
   // }, [createdCard])
 
   useEffect(() => {
+    if (!token) return
     // getRequirements()
     getCards()
     if (!props.publicKey) {
       getCredentials()
     }
-  }, [])
+  }, [token])
 
   return (
     <>

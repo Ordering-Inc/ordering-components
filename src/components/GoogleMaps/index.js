@@ -33,7 +33,6 @@ export const GoogleMaps = (props) => {
         map,
         title: ''
       })
-      console.log(marker)
     }
   }, [googleReady])
 

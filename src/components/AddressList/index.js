@@ -121,9 +121,6 @@ export const AddressList = (props) => {
 
   return (
     <>
-      {
-        actionStatus.error && <p>Alert Error: {actionStatus.error}</p>
-      }
       {UIComponent && (
         <UIComponent
           {...props}

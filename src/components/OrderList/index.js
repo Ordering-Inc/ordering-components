@@ -53,7 +53,7 @@ export const OrderList = (props) => {
   }
 
   const loadOrders = async () => {
-    // setOrderList({ ...orderList, loading: true })
+    if (!session.token) return
     try {
       const response = await getOrders(pagination.currentPage + 1)
       setOrderList({
@@ -92,7 +92,7 @@ export const OrderList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [])
+  }, [session])
 
   useEffect(() => {
     if (orderList.loading) return
@@ -134,11 +134,12 @@ export const OrderList = (props) => {
   }, [orderList.orders, pagination, socket])
 
   useEffect(() => {
-    socket.join(`orders_${session.user.id}`)
+    if (!session.user) return
+    socket.join(`orders_${session?.user?.id}`)
     return () => {
-      socket.leave(`orders_${session.user.id}`)
+      socket.leave(`orders_${session?.user?.id}`)
     }
-  }, [socket])
+  }, [socket, session])
 
   const loadMoreOrders = async () => {
     setOrderList({ ...orderList, loading: true })

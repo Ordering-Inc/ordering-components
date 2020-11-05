@@ -20,6 +20,7 @@ export const WebsocketProvider = ({ settings, children }) => {
   const [socket, setSocket] = useState()
 
   useEffect(() => {
+    if (session.loading) return
     if (session.auth && settings.url && settings.project) {
       const _socket = new Socket({ ...settings, accessToken: session.token })
       setSocket(_socket)

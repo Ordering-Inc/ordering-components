@@ -4,6 +4,10 @@ import { useApi } from '../ApiContext'
 import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 /**
  * Create OrderContext
@@ -16,7 +20,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children }) => {
+export const OrderProvider = ({ Alert, children, strategy }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -27,7 +31,8 @@ export const OrderProvider = ({ Alert, children }) => {
   const [state, setState] = useState({
     loading: true,
     options: {
-      type: 1
+      type: 1,
+      moment: null
     },
     carts: {},
     confirmAlert,
@@ -57,11 +62,11 @@ export const OrderProvider = ({ Alert, children }) => {
         }
       }
       setState({ ...state, loading: false })
-      const localOptions = JSON.parse(window.localStorage.getItem('options'))
+      const localOptions = await strategy.getItem('options', true)
       if (localOptions) {
-        if (localOptions.address) {
+        if (Object.keys(localOptions.address).length > 0) {
           const conditions = [
-            { attribute: 'address', value: localOptions.address.address }
+            { attribute: 'address', value: localOptions?.address?.address }
           ]
           const addressesResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get()
           let address = addressesResponse.content.result.find(address => {
@@ -77,8 +82,18 @@ export const OrderProvider = ({ Alert, children }) => {
             localOptions.address_id = address.id
           }
         }
-        updateOrderOptions(localOptions)
-        window.localStorage.removeItem('options')
+        const options = {}
+        if (localOptions.moment || localOptions?.address_id) {
+          options.moment = localOptions.moment ? dayjs.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix() : null
+          options.type = localOptions.type
+        }
+        if (localOptions?.address_id) {
+          options.address_id = localOptions?.address_id
+        }
+        if (Object.keys(options).length > 0) {
+          updateOrderOptions(options)
+        }
+        await strategy.removeItem('options')
       }
     } catch (err) {
       setState({ ...state, loading: false })
@@ -94,7 +109,7 @@ export const OrderProvider = ({ Alert, children }) => {
         ...state.options,
         address: addressId
       }
-      window.localStorage.setItem('options', JSON.stringify(options))
+      await strategy.setItem('options', options, true)
       setState({
         ...state,
         options
@@ -112,8 +127,20 @@ export const OrderProvider = ({ Alert, children }) => {
    * Change order type
    */
   const changeType = async (type) => {
+    const options = {
+      ...state.options,
+      type
+    }
     if (state.options.type === type) {
       return
+    }
+
+    if (!session.auth) {
+      await strategy.setItem('options', options, true)
+      setState({
+        ...state,
+        options
+      })
     }
 
     updateOrderOptions({ type })
@@ -123,12 +150,26 @@ export const OrderProvider = ({ Alert, children }) => {
    * Change order moment
    */
   const changeMoment = async (moment) => {
-    moment = !moment ? null : Math.floor(moment.getTime() / 1000)
-    if (state.options.moment === moment) {
+    const momentUnix = moment ? moment.getTime() / 1000 : null
+    const momentFormatted = momentUnix ? dayjs.unix(momentUnix).utc().format('YYYY-MM-DD HH:mm:ss') : null
+
+    const options = {
+      ...state.options,
+      moment: momentFormatted
+    }
+    if (state.options.moment === momentFormatted) {
       return
     }
 
-    updateOrderOptions({ moment })
+    if (!session.auth) {
+      await strategy.setItem('options', options, true)
+      setState({
+        ...state,
+        options
+      })
+    }
+
+    updateOrderOptions({ moment: momentUnix })
   }
 
   /**
@@ -162,7 +203,7 @@ export const OrderProvider = ({ Alert, children }) => {
   //       ...state.options,
   //       ...changes
   //     }
-  //     localStorage.setItem('options', JSON.stringify(options))
+  //     strategy.setItem('options', options, true)
   //     setState({
   //       ...state,
   //       options
@@ -179,7 +220,10 @@ export const OrderProvider = ({ Alert, children }) => {
     if (session.auth) {
       try {
         setState({ ...state, loading: true })
-        const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().save(changes, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+        const { content: { error, result } } = await ordering
+          .setAccessToken(session.token)
+          .orderOptions()
+          .save(changes, { headers: { 'X-Socket-Id-X': socket?.getId() } })
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}
@@ -454,20 +498,28 @@ export const OrderProvider = ({ Alert, children }) => {
     }
   }
 
+  const [optionsLocalStorage, setOptionsLocalStorage] = useState(null)
+
+  const getOptionFromLocalStorage = async () => {
+    const options = await strategy.getItem('options', true)
+    setOptionsLocalStorage(options)
+  }
+
   useEffect(() => {
+    if (session.loading) return
     if (session.auth) {
       if (!languageState.loading) {
         refreshOrderOptions()
       }
     } else {
-      const options = JSON.parse(localStorage.getItem('options'))
+      getOptionFromLocalStorage()
       setState({
         ...state,
         loading: false,
         options: {
-          type: options?.type || 1,
-          moment: options?.type || null,
-          address: options?.address || {}
+          type: optionsLocalStorage?.type || 1,
+          moment: optionsLocalStorage?.moment || null,
+          address: optionsLocalStorage?.address || {}
         }
       })
     }
@@ -520,14 +572,14 @@ export const OrderProvider = ({ Alert, children }) => {
    * Join to carts room
    */
   useEffect(() => {
-    if (!session.auth) return
-    socket.join(`carts_${session.user.id}`)
-    socket.join(`orderoptions_${session.user.id}`)
+    if (!session.auth || session.loading) return
+    socket.join(`carts_${session?.user?.id}`)
+    socket.join(`orderoptions_${session?.user?.id}`)
     return () => {
-      socket.leave(`carts_${session.user.id}`)
-      socket.leave(`orderoptions_${session.user.id}`)
+      socket.leave(`carts_${session?.user?.id}`)
+      socket.leave(`orderoptions_${session?.user?.id}`)
     }
-  }, [socket])
+  }, [socket, session])
 
   const functions = {
     refreshOrderOptions,

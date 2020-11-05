@@ -1,14 +1,14 @@
 import React, { createContext } from 'react'
-import { ConfigProvider } from '../ConfigContext'
-import { SessionProvider } from '../SessionContext'
-import { WebsocketProvider } from '../WebsocketContext'
-import { OrderProvider } from '../OrderContext'
-import { BusinessProvider } from '../BusinessContext'
-import { LanguageProvider } from '../LanguageContext'
-import { ApiProvider } from '../ApiContext'
-import { EventProvider } from '../EventContext'
-import { UtilsProviders } from '../UtilsContext'
-import { WebStrategy } from '../../webStrategy'
+import { ConfigProvider } from '../../../../src/contexts/ConfigContext'
+import { SessionProvider } from '../../../../src/contexts/SessionContext'
+import { WebsocketProvider } from '../../../../src/contexts/WebsocketContext'
+import { OrderProvider } from '../../../../src/contexts/OrderContext'
+import { BusinessProvider } from '../../../../src/contexts/BusinessContext'
+import { LanguageProvider } from '../../../../src/contexts/LanguageContext'
+import { ApiProvider } from '../../../../src/contexts/ApiContext'
+import { EventProvider } from '../../../../src/contexts/EventContext'
+import { UtilsProviders } from '../../../../src/contexts/UtilsContext'
+import { NativeStrategy } from '../../NativeStrategy'
 
 /**
  * Create OrderingContext
@@ -22,17 +22,17 @@ export const OrderingContext = createContext()
  * @param {props} props
  */
 export const OrderingProvider = ({ Alert, settings, children }) => {
-  const webStrategy = new WebStrategy()
+  const nativeStrategy = new NativeStrategy()
   return (
     <OrderingContext.Provider>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project })}>
-          <LanguageProvider strategy={webStrategy}>
+          <LanguageProvider strategy={nativeStrategy}>
             <ConfigProvider>
               <UtilsProviders>
-                <SessionProvider strategy={webStrategy}>
+                <SessionProvider strategy={nativeStrategy}>
                   <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
-                    <OrderProvider strategy={webStrategy} Alert={Alert}>
+                    <OrderProvider strategy={nativeStrategy} Alert={Alert}>
                       <BusinessProvider>
                         {children}
                       </BusinessProvider>

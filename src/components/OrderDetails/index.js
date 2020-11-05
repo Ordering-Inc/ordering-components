@@ -10,7 +10,7 @@ export const OrderDetails = (props) => {
     UIComponent
   } = props
 
-  const [{ user, token }] = useSession()
+  const [{ user, token, loading }] = useSession()
   const [ordering] = useApi()
   const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
@@ -100,7 +100,7 @@ export const OrderDetails = (props) => {
   }, [])
 
   useEffect(() => {
-    if (orderState.loading) return
+    if (orderState.loading || loading) return
     const handleUpdateOrder = (order) => {
       if (order.id !== orderState.order.id) return
       delete order.total
@@ -116,7 +116,7 @@ export const OrderDetails = (props) => {
       socket.leave(`orders_${user.id}`)
       socket.off('update_order', handleUpdateOrder)
     }
-  }, [orderState.order, socket])
+  }, [orderState.order, socket, loading])
 
   return (
     <>

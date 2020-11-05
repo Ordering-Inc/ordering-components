@@ -51,7 +51,6 @@ export const CardForm = (props) => {
       })
     })
     const response = await result.json()
-    console.log(response)
     onNewCard && onNewCard(response.result)
   }
 
@@ -116,7 +115,6 @@ export const CardForm = (props) => {
           }
         }
       )
-      console.log(result)
       if (result.error) {
         setLoading(false)
         setError(result.error.message)
