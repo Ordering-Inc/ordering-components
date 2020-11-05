@@ -64,7 +64,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       setState({ ...state, loading: false })
       const localOptions = await strategy.getItem('options', true)
       if (localOptions) {
-        if (localOptions.address) {
+        if (Object.keys(localOptions.address).length > 0) {
           const conditions = [
             { attribute: 'address', value: localOptions?.address?.address }
           ]
@@ -82,7 +82,17 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
             localOptions.address_id = address.id
           }
         }
-        updateOrderOptions(localOptions)
+        const options = {}
+        if (localOptions.moment || localOptions?.address_id) {
+          options.moment = localOptions.moment ? dayjs.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix() : null
+          options.type = localOptions.type
+        }
+        if (localOptions?.address_id) {
+          options.address_id = localOptions?.address_id
+        }
+        if (Object.keys(options).length > 0) {
+          updateOrderOptions(options)
+        }
         await strategy.removeItem('options')
       }
     } catch (err) {
@@ -121,9 +131,16 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       ...state.options,
       type
     }
-    await strategy.setItem('options', options, true)
     if (state.options.type === type) {
       return
+    }
+
+    if (!session.auth) {
+      await strategy.setItem('options', options, true)
+      setState({
+        ...state,
+        options
+      })
     }
 
     updateOrderOptions({ type })
@@ -133,22 +150,26 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    * Change order moment
    */
   const changeMoment = async (moment) => {
-    const momentFormatted = dayjs.utc(moment, 'YYYY-MM-DD HH:mm:ss').local().unix() || 0
+    const momentUnix = moment ? moment.getTime() / 1000 : null
+    const momentFormatted = momentUnix ? dayjs.unix(momentUnix).utc().format('YYYY-MM-DD HH:mm:ss') : null
 
     const options = {
       ...state.options,
       moment: momentFormatted
     }
-    setState({
-      ...state,
-      options
-    })
-    await strategy.setItem('options', options, true)
     if (state.options.moment === momentFormatted) {
       return
     }
 
-    updateOrderOptions({ moment: momentFormatted })
+    if (!session.auth) {
+      await strategy.setItem('options', options, true)
+      setState({
+        ...state,
+        options
+      })
+    }
+
+    updateOrderOptions({ moment: momentUnix })
   }
 
   /**
@@ -199,7 +220,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     if (session.auth) {
       try {
         setState({ ...state, loading: true })
-        const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().save(changes, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+        const { content: { error, result } } = await ordering
+          .setAccessToken(session.token)
+          .orderOptions()
+          .save(changes, { headers: { 'X-Socket-Id-X': socket?.getId() } })
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}

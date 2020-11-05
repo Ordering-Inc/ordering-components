@@ -16,7 +16,7 @@ export const SessionProvider = ({ children, strategy }) => {
     auth: null,
     token: null,
     user: null,
-    loading: false
+    loading: true
   })
 
   const getValuesFromLocalStorage = async () => {
