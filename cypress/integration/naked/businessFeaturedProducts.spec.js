@@ -1,6 +1,6 @@
 context('Business featured products', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/business_featured_options')
+    cy.visit('/business_featured_options')
   })
 
   it('Check UI', () => {
