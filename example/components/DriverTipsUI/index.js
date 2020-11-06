@@ -30,7 +30,7 @@ export const DriverTipsUI = (props) => {
       )}
 
       <span>Driver tip: </span>
-      <span>{driverTipAmount}</span><br /><br />
+      <span className='result'>{driverTipAmount}</span><br /><br />
 
       <div className='tips-list' style={{ display: 'flex' }}>
         {driverTipsOptions?.length > 0 && driverTipsOptions.map((option, i) => (

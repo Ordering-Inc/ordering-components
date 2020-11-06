@@ -1,6 +1,6 @@
 context('Payment option stripe direct', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/payment_option_stripe_direct')
+    cy.visit('/payment_option_stripe_direct')
   })
 
   it('Check UI', () => {
