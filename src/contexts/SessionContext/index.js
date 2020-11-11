@@ -20,12 +20,14 @@ export const SessionProvider = ({ children, strategy }) => {
   })
 
   const setValuesFromLocalStorage = async () => {
+    const { auth, token, user } = await getValuesFromLocalStorage()
     setState({
       ...state,
-      loading: true
+      auth,
+      token,
+      user
     })
-    const { auth, token, user } = await getValuesFromLocalStorage()
-    setState({ auth, token, user, loading: false })
+    state.loading = false
   }
 
   const getValuesFromLocalStorage = async () => {
