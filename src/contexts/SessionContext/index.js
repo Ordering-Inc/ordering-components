@@ -19,15 +19,20 @@ export const SessionProvider = ({ children, strategy }) => {
     loading: true
   })
 
-  const getValuesFromLocalStorage = async () => {
+  const setValuesFromLocalStorage = async () => {
     setState({
       ...state,
       loading: true
     })
+    const { auth, token, user } = await getValuesFromLocalStorage()
+    setState({ auth, token, user, loading: false })
+  }
+
+  const getValuesFromLocalStorage = async () => {
     const auth = await strategy.getItem('token')
     const token = await strategy.getItem('token')
     const user = await strategy.getItem('user', true)
-    setState({ auth, token, user, loading: false })
+    return { auth, token, user }
   }
 
   const login = async (values) => {
@@ -60,8 +65,31 @@ export const SessionProvider = ({ children, strategy }) => {
     })
   }
 
+  const checkLocalStorage = async () => {
+    const { token, user } = await getValuesFromLocalStorage()
+    if (token && !state.token) {
+      console.log('user is login')
+      login({
+        user,
+        token
+      })
+    }
+
+    if (!token && state.token) {
+      console.log('user is logout')
+      logout()
+    }
+  }
+
   useEffect(() => {
-    getValuesFromLocalStorage()
+    const interval = setInterval(() => {
+      checkLocalStorage()
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    setValuesFromLocalStorage()
   }, [])
 
   const functions = {
