@@ -60,7 +60,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Messages = function Messages(props) {
   var UIComponent = props.UIComponent,
       orderId = props.orderId,
-      customHandleSend = props.customHandleSend;
+      customHandleSend = props.customHandleSend,
+      order = props.order;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -289,7 +290,7 @@ var Messages = function Messages(props) {
 
   (0, _react.useEffect)(function () {
     loadMessages();
-  }, [orderId]);
+  }, [orderId, order === null || order === void 0 ? void 0 : order.status]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
 
@@ -309,7 +310,7 @@ var Messages = function Messages(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket]);
+  }, [messages, socket, order === null || order === void 0 ? void 0 : order.status]);
   (0, _react.useEffect)(function () {
     socket.join("messages_orders_".concat(user.id));
     return function () {
