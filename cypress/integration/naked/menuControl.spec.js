@@ -1,6 +1,6 @@
 context('Menu control', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/menu_control')
+    cy.visit('/menu_control')
   })
 
   it('Check UI', () => {

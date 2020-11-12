@@ -1,6 +1,6 @@
 context('business reviews', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/business_reviews')
+    cy.visit('/business_reviews')
   })
 
   it('Check UI', () => {

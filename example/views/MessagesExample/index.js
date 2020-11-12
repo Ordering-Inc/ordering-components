@@ -11,7 +11,11 @@ export const MessagesExample = () => {
      */
     UIComponent: MessagesUI,
     /**
-     * Id of the order to connet messages
+     * order to change status
+     */
+    order: {},
+    /**
+     * Id of the order to connect messages
      */
     orderId: 33,
     /**

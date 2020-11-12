@@ -1,6 +1,6 @@
 context('Order details', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/order_details')
+    cy.visit('/order_details')
   })
 
   it('Check UI', () => {
