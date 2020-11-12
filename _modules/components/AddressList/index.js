@@ -81,7 +81,7 @@ var AddressList = function AddressList(props) {
   }
 
   var _useState = (0, _react.useState)({
-    loading: false,
+    loading: true,
     error: null,
     addresses: []
   }),

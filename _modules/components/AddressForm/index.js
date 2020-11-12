@@ -54,7 +54,8 @@ var AddressForm = function AddressForm(props) {
       addressId = props.addressId,
       address = props.address,
       useValidationFileds = props.useValidationFileds,
-      onSaveAddress = props.onSaveAddress;
+      onSaveAddress = props.onSaveAddress,
+      isSelectedAfterAdd = props.isSelectedAfterAdd;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -323,6 +324,10 @@ var AddressForm = function AddressForm(props) {
                   address: content.result
                 }));
                 onSaveAddress && onSaveAddress(content.result);
+
+                if (isSelectedAfterAdd) {
+                  changeAddress(content.result.id);
+                }
               }
 
               _context3.next = 17;
@@ -393,6 +398,11 @@ AddressForm.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
+
+  /**
+   * Prop to set address after add
+   */
+  isSelectedAfterAdd: _propTypes.default.bool,
 
   /**
    * Enable to get checkout fields to show/hide fields from Ordering API
