@@ -25,9 +25,9 @@ export const SessionProvider = ({ children, strategy }) => {
       ...state,
       auth,
       token,
-      user
+      user,
+      loading: false
     })
-    state.loading = false
   }
 
   const getValuesFromLocalStorage = async () => {
@@ -44,7 +44,8 @@ export const SessionProvider = ({ children, strategy }) => {
       ...state,
       auth: true,
       user: values.user,
-      token: values.token
+      token: values.token,
+      loading: false
     })
   }
 
@@ -55,7 +56,8 @@ export const SessionProvider = ({ children, strategy }) => {
       ...state,
       auth: false,
       user: null,
-      token: null
+      token: null,
+      loading: false
     })
   }
 
@@ -63,14 +65,14 @@ export const SessionProvider = ({ children, strategy }) => {
     await strategy.setItem('user', user, true)
     setState({
       ...state,
-      user
+      user,
+      loading: false
     })
   }
 
   const checkLocalStorage = async () => {
     const { token, user } = await getValuesFromLocalStorage()
     if (token && !state.token) {
-      console.log('user is login')
       login({
         user,
         token
@@ -78,7 +80,6 @@ export const SessionProvider = ({ children, strategy }) => {
     }
 
     if (!token && state.token) {
-      console.log('user is logout')
       logout()
     }
   }
@@ -88,7 +89,7 @@ export const SessionProvider = ({ children, strategy }) => {
       checkLocalStorage()
     }, 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [state])
 
   useEffect(() => {
     setValuesFromLocalStorage()
