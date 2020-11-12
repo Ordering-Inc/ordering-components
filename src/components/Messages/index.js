@@ -8,7 +8,8 @@ export const Messages = (props) => {
   const {
     UIComponent,
     orderId,
-    customHandleSend
+    customHandleSend,
+    order
   } = props
 
   const [ordering] = useApi()
@@ -93,7 +94,7 @@ export const Messages = (props) => {
 
   useEffect(() => {
     loadMessages()
-  }, [orderId])
+  }, [orderId, order?.status])
 
   useEffect(() => {
     if (messages.loading) return
@@ -110,7 +111,7 @@ export const Messages = (props) => {
     return () => {
       socket.off('message', handleNewMessage)
     }
-  }, [messages, socket])
+  }, [messages, socket, order?.status])
 
   useEffect(() => {
     socket.join(`messages_orders_${user.id}`)
