@@ -66,39 +66,30 @@ var SessionProvider = function SessionProvider(_ref) {
       state = _useState2[0],
       setState = _useState2[1];
 
-  var getValuesFromLocalStorage = /*#__PURE__*/function () {
+  var setValuesFromLocalStorage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var auth, token, user;
+      var _yield$getValuesFromL, auth, token, user;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              _context.next = 2;
+              return getValuesFromLocalStorage();
+
+            case 2:
+              _yield$getValuesFromL = _context.sent;
+              auth = _yield$getValuesFromL.auth;
+              token = _yield$getValuesFromL.token;
+              user = _yield$getValuesFromL.user;
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: true
-              }));
-              _context.next = 3;
-              return strategy.getItem('token');
-
-            case 3:
-              auth = _context.sent;
-              _context.next = 6;
-              return strategy.getItem('token');
-
-            case 6:
-              token = _context.sent;
-              _context.next = 9;
-              return strategy.getItem('user', true);
-
-            case 9:
-              user = _context.sent;
-              setState({
                 auth: auth,
                 token: token,
                 user: user,
                 loading: false
-              });
+              }));
 
-            case 11:
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -106,32 +97,40 @@ var SessionProvider = function SessionProvider(_ref) {
       }, _callee);
     }));
 
-    return function getValuesFromLocalStorage() {
+    return function setValuesFromLocalStorage() {
       return _ref2.apply(this, arguments);
     };
   }();
 
-  var login = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
+  var getValuesFromLocalStorage = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var auth, token, user;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.next = 2;
-              return strategy.setItem('token', values.token);
+              return strategy.getItem('token');
 
             case 2:
-              _context2.next = 4;
-              return strategy.setItem('user', values.user, true);
-
-            case 4:
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                auth: true,
-                user: values.user,
-                token: values.token
-              }));
+              auth = _context2.sent;
+              _context2.next = 5;
+              return strategy.getItem('token');
 
             case 5:
+              token = _context2.sent;
+              _context2.next = 8;
+              return strategy.getItem('user', true);
+
+            case 8:
+              user = _context2.sent;
+              return _context2.abrupt("return", {
+                auth: auth,
+                token: token,
+                user: user
+              });
+
+            case 10:
             case "end":
               return _context2.stop();
           }
@@ -139,29 +138,30 @@ var SessionProvider = function SessionProvider(_ref) {
       }, _callee2);
     }));
 
-    return function login(_x) {
+    return function getValuesFromLocalStorage() {
       return _ref3.apply(this, arguments);
     };
   }();
 
-  var logout = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+  var login = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.next = 2;
-              return strategy.removeItem('token');
+              return strategy.setItem('token', values.token);
 
             case 2:
               _context3.next = 4;
-              return strategy.removeItem('user');
+              return strategy.setItem('user', values.user, true);
 
             case 4:
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                auth: false,
-                user: null,
-                token: null
+                auth: true,
+                user: values.user,
+                token: values.token,
+                loading: false
               }));
 
             case 5:
@@ -172,26 +172,33 @@ var SessionProvider = function SessionProvider(_ref) {
       }, _callee3);
     }));
 
-    return function logout() {
+    return function login(_x) {
       return _ref4.apply(this, arguments);
     };
   }();
 
-  var changeUser = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(user) {
+  var logout = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
               _context4.next = 2;
-              return strategy.setItem('user', user, true);
+              return strategy.removeItem('token');
 
             case 2:
+              _context4.next = 4;
+              return strategy.removeItem('user');
+
+            case 4:
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                user: user
+                auth: false,
+                user: null,
+                token: null,
+                loading: false
               }));
 
-            case 3:
+            case 5:
             case "end":
               return _context4.stop();
           }
@@ -199,13 +206,89 @@ var SessionProvider = function SessionProvider(_ref) {
       }, _callee4);
     }));
 
-    return function changeUser(_x2) {
+    return function logout() {
       return _ref5.apply(this, arguments);
     };
   }();
 
+  var changeUser = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(user) {
+      return _regenerator.default.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.next = 2;
+              return strategy.setItem('user', user, true);
+
+            case 2:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                user: user,
+                loading: false
+              }));
+
+            case 3:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    return function changeUser(_x2) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  var checkLocalStorage = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
+      var _yield$getValuesFromL2, token, user;
+
+      return _regenerator.default.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.next = 2;
+              return getValuesFromLocalStorage();
+
+            case 2:
+              _yield$getValuesFromL2 = _context6.sent;
+              token = _yield$getValuesFromL2.token;
+              user = _yield$getValuesFromL2.user;
+
+              if (token && !state.token) {
+                login({
+                  user: user,
+                  token: token
+                });
+              }
+
+              if (!token && state.token) {
+                logout();
+              }
+
+            case 7:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6);
+    }));
+
+    return function checkLocalStorage() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
-    getValuesFromLocalStorage();
+    var interval = setInterval(function () {
+      checkLocalStorage();
+    }, 1000);
+    return function () {
+      return clearInterval(interval);
+    };
+  }, [state]);
+  (0, _react.useEffect)(function () {
+    setValuesFromLocalStorage();
   }, []);
   var functions = {
     login: login,
