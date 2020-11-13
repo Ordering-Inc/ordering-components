@@ -27,7 +27,7 @@ var _EventContext = require("../../../../src/contexts/EventContext");
 
 var _UtilsContext = require("../../../../src/contexts/UtilsContext");
 
-var _NativeStrategy = require("../../NativeStrategy");
+var _NativeStrategy = require("../../nativeStrategy");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
