@@ -175,7 +175,8 @@ export const BusinessAndProductList = (props) => {
         const source = {}
         requestsState.product = source
         const parameters = {
-          type: orderState.options?.type || 1
+          type: orderState.options?.type || 1,
+          moment: orderState.options?.moment || null
         }
 
         const { content: { result } } = await ordering
