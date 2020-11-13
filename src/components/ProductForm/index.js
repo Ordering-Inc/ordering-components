@@ -281,7 +281,7 @@ export const ProductForm = (props) => {
     product.product.extras.forEach(extra => {
       extra.options.map(option => {
         const suboptions = productCart.options[`id:${option.id}`]?.suboptions
-        const quantity = suboptions ? Object.keys(suboptions) : 0
+        const quantity = suboptions ? Object.keys(suboptions).length : 0
         let evaluateRespectTo = false
         if (option.respect_to && productCart.options) {
           const options = productCart.options
