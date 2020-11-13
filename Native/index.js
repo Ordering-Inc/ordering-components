@@ -65,10 +65,10 @@ import { ConfigContext, ConfigProvider, useConfig } from '../src/contexts/Config
 import { EventContext, EventProvider, useEvent } from '../src/contexts/EventContext'
 import { LanguageContext, LanguageProvider, useLanguage } from '../src/contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from '../src/contexts/OrderContext'
-import { OrderingContext, OrderingProvider } from '../src/contexts/OrderingContext'
 import { SessionContext, SessionProvider, useSession } from '../src/contexts/SessionContext'
 import { UtilsContext, UtilsProviders, useUtils } from '../src/contexts/UtilsContext'
 import { WebsocketContext, WebsocketProvider, useWebsocket } from '../src/contexts/WebsocketContext'
+import { OrderingContext, OrderingProvider } from './src/contexts/OrderingContext'
 
 export {
   AddressDetails,
