@@ -198,6 +198,13 @@ export const MomentOption = (props) => {
   }, [dateSelected])
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      generateHourList()
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
     generateDatesList()
   }, [maxDate, minDate])
 
