@@ -138,6 +138,16 @@ export const UserDetails = (props) => {
   }
 
   /**
+   * Check if field should be show
+   * @param {string} fieldName Field name
+   */
+  const showField = (fieldName) => {
+    return !useValidationFields ||
+              (!validationFields.loading && !validationFields.fields[fieldName]) ||
+              (!validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled)
+  }
+
+  /**
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
@@ -168,14 +178,15 @@ export const UserDetails = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          isEdit={isEdit}
           formState={formState}
           userState={userState}
-          isEdit={isEdit}
           validationFields={validationFields}
+          showField={showField}
           isRequiredField={isRequiredField}
           handleChangeInput={handleChangeInput}
-          handleButtonUpdateClick={handleUpdateClick}
           onEditUserClick={() => setIsEdit(!isEdit)}
+          handleButtonUpdateClick={handleUpdateClick}
         />
       )}
     </>
