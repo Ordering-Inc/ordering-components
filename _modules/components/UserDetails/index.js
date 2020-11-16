@@ -253,6 +253,15 @@ var UserDetails = function UserDetails(props) {
     };
   }();
   /**
+   * Check if field should be show
+   * @param {string} fieldName Field name
+   */
+
+
+  var showField = function showField(fieldName) {
+    return !useValidationFields || !validationFields.loading && !validationFields.fields[fieldName] || !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled;
+  };
+  /**
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
@@ -274,16 +283,17 @@ var UserDetails = function UserDetails(props) {
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    isEdit: isEdit,
     formState: formState,
     userState: userState,
-    isEdit: isEdit,
     validationFields: validationFields,
+    showField: showField,
     isRequiredField: isRequiredField,
     handleChangeInput: handleChangeInput,
-    handleButtonUpdateClick: handleUpdateClick,
     onEditUserClick: function onEditUserClick() {
       return setIsEdit(!isEdit);
-    }
+    },
+    handleButtonUpdateClick: handleUpdateClick
   })));
 };
 

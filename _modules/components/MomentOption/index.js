@@ -283,6 +283,14 @@ var MomentOption = function MomentOption(props) {
     generateHourList();
   }, [dateSelected]);
   (0, _react.useEffect)(function () {
+    var interval = setInterval(function () {
+      generateHourList();
+    }, 1000);
+    return function () {
+      return clearInterval(interval);
+    };
+  }, []);
+  (0, _react.useEffect)(function () {
     generateDatesList();
   }, [maxDate, minDate]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

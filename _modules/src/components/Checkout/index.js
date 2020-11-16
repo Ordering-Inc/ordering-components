@@ -55,6 +55,8 @@ var Checkout = function Checkout(props) {
       actionsBeforePlace = props.actionsBeforePlace,
       handleCustomClick = props.handleCustomClick,
       onPlaceOrderClick = props.onPlaceOrderClick,
+      useValidationFields = props.useValidationFields,
+      validationFieldsType = props.validationFieldsType,
       UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -71,9 +73,21 @@ var Checkout = function Checkout(props) {
       errors = _useState4[0],
       setErrors = _useState4[1];
   /**
-   * Order context
+   * Save array of inputs validate to show
    */
 
+
+  var _useState5 = (0, _react.useState)({
+    loading: useValidationFields
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      validationFields = _useState6[0],
+      setValidationFields = _useState6[1];
+
+  var requestsState = {};
+  /**
+   * Order context
+   */
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
@@ -86,23 +100,23 @@ var Checkout = function Checkout(props) {
    */
 
 
-  var _useState5 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
     business: null,
     loading: true,
     error: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      businessDetails = _useState6[0],
-      setBusinessDetails = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      businessDetails = _useState8[0],
+      setBusinessDetails = _useState8[1];
   /**
    * This must be contains an object with info about paymente selected
    */
 
 
-  var _useState7 = (0, _react.useState)(null),
-      _useState8 = _slicedToArray(_useState7, 2),
-      paymethodSelected = _useState8[0],
-      setPaymethodSelected = _useState8[1];
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      paymethodSelected = _useState10[0],
+      setPaymethodSelected = _useState10[1];
   /**
    * Current cart
    */
@@ -264,6 +278,36 @@ var Checkout = function Checkout(props) {
   };
 
   (0, _react.useEffect)(function () {
+    if (useValidationFields) {
+      var source = {};
+      requestsState.validation = source;
+      ordering.validationFields().toType(validationFieldsType).get({
+        cancelToken: source
+      }).then(function (response) {
+        var fields = {};
+        response.content.result.forEach(function (field) {
+          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
+        });
+        setValidationFields({
+          loading: false,
+          fields: fields
+        });
+      }).catch(function (err) {
+        if (err.constructor.name !== 'Cancel') {
+          setValidationFields({
+            loading: false
+          });
+        }
+      });
+    }
+
+    return function () {
+      if (requestsState.validation) {
+        requestsState.validation.cancel();
+      }
+    };
+  }, []);
+  (0, _react.useEffect)(function () {
     getBusiness();
   }, [businessId]);
   /**
@@ -289,6 +333,7 @@ var Checkout = function Checkout(props) {
     orderOptions: orderState.options,
     paymethodSelected: paymethodSelected,
     businessDetails: businessDetails,
+    validationFields: validationFields,
     handlePaymethodChange: handlePaymethodChange,
     handlerClickPlaceOrder: handlerClickPlaceOrder
   })));

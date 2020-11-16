@@ -62,7 +62,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _businessState$busine5, _orderState$options14, _orderState$options15, _orderState$options16, _orderState$options17;
+  var _businessState$busine5, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
 
   var isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
@@ -322,7 +322,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getProduct = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _orderState$options2, source, parameters, _yield$ordering$busin, result, product;
+      var _orderState$options2, _orderState$options3, source, parameters, _yield$ordering$busin, result, product;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -340,7 +340,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               source = {};
               requestsState.product = source;
               parameters = {
-                type: ((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) || 1
+                type: ((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) || 1,
+                moment: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.moment) || null
               };
               _context2.next = 8;
               return ordering.businesses(businessState.business.id).categories(categoryId).products(productId).parameters(parameters).get({
@@ -383,7 +384,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (isInitialRender) {
       getProduct();
     }
-  }, [JSON.stringify((_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id)]);
+  }, [JSON.stringify((_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id), isInitialRender]);
 
   var isValidMoment = function isValidMoment(date, format) {
     return (0, _dayjs.default)(date, format).format(format) === date;
@@ -391,7 +392,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options8, source, parameters, _orderState$options9, moment, _yield$ordering$busin2, result;
+      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -405,12 +406,12 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               requestsState.business = source;
               setRequestsState(_objectSpread({}, requestsState));
               parameters = {
-                type: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1,
-                location: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : _orderState$options4$.location) ? "".concat((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : (_orderState$options5$2 = _orderState$options5$.location) === null || _orderState$options5$2 === void 0 ? void 0 : _orderState$options5$2.lat, ",").concat((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lng) : null
+                type: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type) || 1,
+                location: ((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : _orderState$options5$.location) ? "".concat((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lat, ",").concat((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : (_orderState$options7$ = _orderState$options7.address) === null || _orderState$options7$ === void 0 ? void 0 : (_orderState$options7$2 = _orderState$options7$.location) === null || _orderState$options7$2 === void 0 ? void 0 : _orderState$options7$2.lng) : null
               };
 
-              if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.moment) && isValidMoment((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment, 'YYYY-MM-DD HH:mm:ss')) {
-                moment = _dayjs.default.utc((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+              if (((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment) && isValidMoment((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss')) {
+                moment = _dayjs.default.utc((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }
 
@@ -472,15 +473,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   }, [orderOptions, languageState.loading, slug]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading) {
-      var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13;
+      var _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14;
 
       setOrderOptions({
-        type: orderState === null || orderState === void 0 ? void 0 : (_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type,
-        moment: orderState === null || orderState === void 0 ? void 0 : (_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.moment,
-        location: orderState === null || orderState === void 0 ? void 0 : (_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : (_orderState$options13 = _orderState$options12.address) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.location
+        type: orderState === null || orderState === void 0 ? void 0 : (_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.type,
+        moment: orderState === null || orderState === void 0 ? void 0 : (_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : _orderState$options12.moment,
+        location: orderState === null || orderState === void 0 ? void 0 : (_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 ? void 0 : (_orderState$options14 = _orderState$options13.address) === null || _orderState$options14 === void 0 ? void 0 : _orderState$options14.location
       });
     }
-  }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options14 = orderState.options) === null || _orderState$options14 === void 0 ? void 0 : _orderState$options14.type, orderState === null || orderState === void 0 ? void 0 : (_orderState$options15 = orderState.options) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.moment, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : (_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : (_orderState$options17 = _orderState$options16.address) === null || _orderState$options17 === void 0 ? void 0 : _orderState$options17.location)]);
+  }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options15 = orderState.options) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.type, orderState === null || orderState === void 0 ? void 0 : (_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : _orderState$options16.moment, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : (_orderState$options17 = orderState.options) === null || _orderState$options17 === void 0 ? void 0 : (_orderState$options18 = _orderState$options17.address) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.location)]);
   /**
    * Cancel business request
    */

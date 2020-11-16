@@ -118,7 +118,7 @@ var OrderReview = function OrderReview(props) {
 
             case 5:
               response = _context.sent;
-              onSaveReview(response.content);
+              onSaveReview && onSaveReview(response.content);
               setFormState({
                 loading: false,
                 result: response.content
