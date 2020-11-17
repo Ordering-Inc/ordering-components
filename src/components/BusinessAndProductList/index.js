@@ -30,6 +30,7 @@ export const BusinessAndProductList = (props) => {
   const [orderOptions, setOrderOptions] = useState()
   const [requestsState, setRequestsState] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
+  const [featuredProducts, setFeaturedProducts] = useState(false)
 
   const categoryStateDefault = {
     loading: true,
@@ -59,17 +60,39 @@ export const BusinessAndProductList = (props) => {
       (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
   }
 
+  const isFeaturedSearch = (product) => {
+    if (product.featured) {
+      if (!searchValue) return true
+      return (product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName) ||
+      (product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
+    }
+    return false
+  }
+
   const getProducts = async (newFetch) => {
+    const isFeatured = !!businessState.business.categories?.find(
+      category => category
+    )?.products.filter(
+      product => product.featured
+    ).length
+    setFeaturedProducts(isFeatured)
     if (!businessState?.business?.lazy_load_products_recommended) {
       const categoryState = {
         ...categoryStateDefault,
         loading: false
       }
-      if (categorySelected.id) {
+      if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
         const productsFiltered = businessState.business.categories?.find(
           category => category.id === categorySelected.id
         )?.products.filter(
           product => isMatchSearch(product.name, product.description)
+        )
+        categoryState.products = productsFiltered || []
+      } else if (categorySelected.id === 'featured') {
+        const productsFiltered = businessState.business.categories?.reduce(
+          (products, category) => [...products, ...category.products], []
+        ).filter(
+          product => isFeaturedSearch(product)
         )
         categoryState.products = productsFiltered || []
       } else {
@@ -84,7 +107,7 @@ export const BusinessAndProductList = (props) => {
       return
     }
 
-    const categoryKey = searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
+    const categoryKey = searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : categorySelected.id === 'featured' ? 'featured' : 'all'
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
 
     const pagination = categoryState.pagination
@@ -311,6 +334,7 @@ export const BusinessAndProductList = (props) => {
           categoryState={categoryState}
           businessState={businessState}
           productModal={productModal}
+          featuredProducts={featuredProducts}
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
           getNextProducts={getProducts}
