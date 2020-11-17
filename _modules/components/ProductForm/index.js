@@ -50,7 +50,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ProductForm = function ProductForm(props) {
-  var _cart$products, _cart$products2, _product$product, _product$product2, _product$product3, _product$product4;
+  var _props$productCart, _cart$products, _cart$products2, _product$product, _product$product2, _product$product3, _product$product4;
 
   var UIComponent = props.UIComponent,
       useOrderContext = props.useOrderContext,
@@ -94,11 +94,20 @@ var ProductForm = function ProductForm(props) {
       errors = _useState6[0],
       setErrors = _useState6[1];
   /**
+   * Suboption by default when there is only one
+   */
+
+
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      defaultSubOption = _useState8[0],
+      setDefaultSubOption = _useState8[1];
+  /**
    * Edit mode
    */
 
 
-  var editMode = typeof props.productCart.code !== 'undefined';
+  var editMode = typeof ((_props$productCart = props.productCart) === null || _props$productCart === void 0 ? void 0 : _props$productCart.code) !== 'undefined';
   /**
    * Order context manager
    */
@@ -178,6 +187,8 @@ var ProductForm = function ProductForm(props) {
    */
 
   var initProductCart = function initProductCart(product) {
+    var _props$productCart2, _props$productCart3, _props$productCart4, _props$productCart5;
+
     var ingredients = {};
 
     for (var key in product.ingredients) {
@@ -195,10 +206,10 @@ var ProductForm = function ProductForm(props) {
       categoryId: product.category_id,
       inventoried: product.inventoried,
       stock: product.quantity,
-      ingredients: props.productCart.ingredients || ingredients,
-      options: props.productCart.options || {},
-      comment: props.productCart.comment || null,
-      quantity: props.productCart.quantity || 1
+      ingredients: ((_props$productCart2 = props.productCart) === null || _props$productCart2 === void 0 ? void 0 : _props$productCart2.ingredients) || ingredients,
+      options: ((_props$productCart3 = props.productCart) === null || _props$productCart3 === void 0 ? void 0 : _props$productCart3.options) || {},
+      comment: ((_props$productCart4 = props.productCart) === null || _props$productCart4 === void 0 ? void 0 : _props$productCart4.comment) || null,
+      quantity: ((_props$productCart5 = props.productCart) === null || _props$productCart5 === void 0 ? void 0 : _props$productCart5.quantity) || 1
     });
 
     newProductCart.unitTotal = getUnitTotal(newProductCart);
@@ -461,7 +472,8 @@ var ProductForm = function ProductForm(props) {
 
   var handleSave = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var errors, successful;
+      var errors, successful, _props$productCart6, _props$productCart7;
+
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -482,7 +494,7 @@ var ProductForm = function ProductForm(props) {
 
               successful = false;
 
-              if (props.productCart.code) {
+              if ((_props$productCart6 = props.productCart) === null || _props$productCart6 === void 0 ? void 0 : _props$productCart6.code) {
                 _context2.next = 11;
                 break;
               }
@@ -504,7 +516,7 @@ var ProductForm = function ProductForm(props) {
 
             case 14:
               if (successful) {
-                onSave(productCart, !props.productCart.code);
+                onSave(productCart, !((_props$productCart7 = props.productCart) === null || _props$productCart7 === void 0 ? void 0 : _props$productCart7.code));
               }
 
             case 15:
@@ -588,6 +600,52 @@ var ProductForm = function ProductForm(props) {
   (0, _react.useEffect)(function () {
     checkErrors();
   }, [productCart]);
+  /**
+   * Check if there is an option required with one suboption
+   */
+
+  (0, _react.useEffect)(function () {
+    if ((product === null || product === void 0 ? void 0 : product.product) && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
+      var option = product.product.extras.map(function (extra) {
+        return extra.options.find(function (option) {
+          return option.min === 1 && option.max === 1 && option.suboptions.length === 1;
+        });
+      })[0];
+
+      if (!option) {
+        return;
+      }
+
+      var suboption = option.suboptions[0];
+      var price = option.with_half_option && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+      var state = {
+        id: suboption.id,
+        name: suboption.name,
+        position: suboption.position || 'whole',
+        price: price,
+        quantity: 1,
+        selected: true,
+        total: price
+      };
+      setDefaultSubOption({
+        state: state,
+        suboption: suboption,
+        option: option
+      });
+    }
+  }, [product.product]);
+  /**
+   * Check if defaultSubOption has content to set product Cart
+   */
+
+  (0, _react.useEffect)(function () {
+    if (defaultSubOption) {
+      var state = defaultSubOption.state,
+          suboption = defaultSubOption.suboption,
+          option = defaultSubOption.option;
+      handleChangeSuboptionState(state, suboption, option);
+    }
+  }, [defaultSubOption]);
   /**
    * Load product on component mounted
    */
