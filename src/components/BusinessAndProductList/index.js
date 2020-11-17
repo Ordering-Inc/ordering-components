@@ -190,7 +190,6 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
-        getFeaturedProducts(result)
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
@@ -202,10 +201,6 @@ export const BusinessAndProductList = (props) => {
       setErrors([err.message])
       // }
     }
-  }
-  const getFeaturedProducts = (result) => {
-    const products = result.filter(product => product.featured)
-    setFeaturedProducts(products)
   }
 
   const getProduct = async () => {
