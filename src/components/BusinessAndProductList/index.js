@@ -293,19 +293,23 @@ export const BusinessAndProductList = (props) => {
     if (!businessState.loading) {
       getProducts(true)
     }
-  }, [businessState, sortBy])
+  }, [businessState])
 
   useEffect(() => {
     getProducts(!!searchValue)
-  }, [searchValue, sortBy])
+  }, [searchValue])
 
   useEffect(() => {
     getProducts(!!searchValue)
-  }, [categorySelected.id, sortBy])
+  }, [categorySelected.id])
 
   useEffect(() => {
     getProducts()
   }, [slug])
+
+  useEffect(() => {
+    getProducts(!!searchValue)
+  }, [sortBy])
 
   useEffect(() => {
     if (!orderState.loading && orderOptions && !languageState.loading) {
