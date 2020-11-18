@@ -163,22 +163,19 @@ var OrderProvider = function OrderProvider(_ref) {
                 state.options = _objectSpread(_objectSpread({}, state.options), options);
               }
 
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              _context.next = 12;
+              _context.next = 11;
               return strategy.getItem('options', true);
 
-            case 12:
+            case 11:
               localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 32;
+                _context.next = 33;
                 break;
               }
 
               if (!(Object.keys(localOptions.address).length > 0)) {
-                _context.next = 26;
+                _context.next = 25;
                 break;
               }
 
@@ -186,36 +183,36 @@ var OrderProvider = function OrderProvider(_ref) {
                 attribute: 'address',
                 value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
-              _context.next = 18;
+              _context.next = 17;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get();
 
-            case 18:
+            case 17:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
                 return address.address_notes === localOptions.address.address_notes && address.internal_number === localOptions.address.internal_number;
               });
 
               if (address) {
-                _context.next = 25;
+                _context.next = 24;
                 break;
               }
 
-              _context.next = 23;
+              _context.next = 22;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address);
 
-            case 23:
+            case 22:
               addressResponse = _context.sent;
 
               if (!addressResponse.content.error) {
                 address = addressResponse.content.result;
               }
 
-            case 25:
+            case 24:
               if (address) {
                 localOptions.address_id = address.id;
               }
 
-            case 26:
+            case 25:
               _options = {};
 
               if (localOptions.moment || (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id)) {
@@ -231,26 +228,35 @@ var OrderProvider = function OrderProvider(_ref) {
                 updateOrderOptions(_options);
               }
 
-              _context.next = 32;
+              _context.next = 31;
               return strategy.removeItem('options');
 
-            case 32:
-              _context.next = 37;
+            case 31:
+              _context.next = 34;
               break;
 
+            case 33:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+
             case 34:
-              _context.prev = 34;
+              _context.next = 39;
+              break;
+
+            case 36:
+              _context.prev = 36;
               _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 37:
+            case 39:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 34]]);
+      }, _callee, null, [[0, 36]]);
     }));
 
     return function refreshOrderOptions() {
