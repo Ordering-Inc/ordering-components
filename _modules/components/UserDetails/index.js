@@ -183,7 +183,7 @@ var UserDetails = function UserDetails(props) {
    */
 
   var handleUpdateClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes) {
       var response;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -201,12 +201,17 @@ var UserDetails = function UserDetails(props) {
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.next = 6;
-              return ordering.setAccessToken(accessToken).users(userState.result.result.id).save(formState.changes, {
+
+              if (changes) {
+                formState.changes = _objectSpread(_objectSpread({}, formState.changes), changes);
+              }
+
+              _context.next = 7;
+              return ordering.users(userState.result.result.id).save(formState.changes, {
                 accessToken: accessToken
               });
 
-            case 6:
+            case 7:
               response = _context.sent;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
@@ -226,11 +231,11 @@ var UserDetails = function UserDetails(props) {
                 }
               }
 
-              _context.next = 15;
+              _context.next = 16;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -240,15 +245,15 @@ var UserDetails = function UserDetails(props) {
                 loading: false
               }));
 
-            case 15:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 12]]);
+      }, _callee, null, [[2, 13]]);
     }));
 
-    return function handleUpdateClick() {
+    return function handleUpdateClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -267,9 +272,19 @@ var UserDetails = function UserDetails(props) {
    */
 
 
-  var handleChangeInput = function handleChangeInput(e) {
+  var handleChangeInput = function handleChangeInput(e, isMany) {
+    var currentChanges = {};
+
+    if (isMany) {
+      Object.values(e).map(function (obj) {
+        currentChanges = _objectSpread(_objectSpread({}, currentChanges), {}, _defineProperty({}, obj.name, obj.value));
+      });
+    } else {
+      currentChanges = _defineProperty({}, e.target.name, e.target.value);
+    }
+
     setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-      changes: _objectSpread(_objectSpread({}, formState.changes), {}, _defineProperty({}, e.target.name, e.target.value))
+      changes: _objectSpread(_objectSpread({}, formState.changes), currentChanges)
     }));
   };
   /**

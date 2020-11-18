@@ -174,11 +174,21 @@ var UserProfileForm = function UserProfileForm(props) {
     };
   }, [session.loading]);
   /**
+   * Clean formState
+   */
+
+  var cleanFormState = function cleanFormState() {
+    return setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+      changes: {}
+    }));
+  };
+  /**
    * Default fuction for user profile workflow
    */
 
+
   var handleUpdateClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes) {
       var response;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -196,12 +206,17 @@ var UserProfileForm = function UserProfileForm(props) {
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.next = 6;
+
+              if (changes) {
+                formState.changes = _objectSpread(_objectSpread({}, formState.changes), changes);
+              }
+
+              _context.next = 7;
               return ordering.users(userState.result.result.id).save(formState.changes, {
                 accessToken: accessToken
               });
 
-            case 6:
+            case 7:
               response = _context.sent;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
@@ -220,11 +235,11 @@ var UserProfileForm = function UserProfileForm(props) {
                 }
               }
 
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -234,15 +249,15 @@ var UserProfileForm = function UserProfileForm(props) {
                 loading: false
               }));
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 11]]);
+      }, _callee, null, [[2, 12]]);
     }));
 
-    return function handleUpdateClick() {
+    return function handleUpdateClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -252,9 +267,19 @@ var UserProfileForm = function UserProfileForm(props) {
    */
 
 
-  var hanldeChangeInput = function hanldeChangeInput(e) {
+  var handleChangeInput = function handleChangeInput(e, isMany) {
+    var currentChanges = {};
+
+    if (isMany) {
+      Object.values(e).map(function (obj) {
+        currentChanges = _objectSpread(_objectSpread({}, currentChanges), {}, _defineProperty({}, obj.name, obj.value));
+      });
+    } else {
+      currentChanges = _defineProperty({}, e.target.name, e.target.value);
+    }
+
     setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-      changes: _objectSpread(_objectSpread({}, formState.changes), {}, _defineProperty({}, e.target.name, e.target.value))
+      changes: _objectSpread(_objectSpread({}, formState.changes), currentChanges)
     }));
   };
   /**
@@ -301,10 +326,11 @@ var UserProfileForm = function UserProfileForm(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     userState: userState,
+    cleanFormState: cleanFormState,
     validationFields: validationFields,
     showField: showField,
     isRequiredField: isRequiredField,
-    hanldeChangeInput: hanldeChangeInput,
+    handleChangeInput: handleChangeInput,
     handlechangeImage: handlechangeImage,
     handleButtonUpdateClick: handleUpdateClick
   })));
