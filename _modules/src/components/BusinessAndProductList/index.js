@@ -96,38 +96,43 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       searchValue = _useState4[0],
       setSearchValue = _useState4[1];
 
-  var _useState5 = (0, _react.useState)({
+  var _useState5 = (0, _react.useState)(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      sortByValue = _useState6[0],
+      setSortByValue = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
     business: {},
     loading: true,
     error: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      businessState = _useState6[0],
-      setBusinessState = _useState6[1];
-
-  var _useState7 = (0, _react.useState)({}),
       _useState8 = _slicedToArray(_useState7, 2),
-      categoriesState = _useState8[0],
-      setCategoriesState = _useState8[1];
+      businessState = _useState8[0],
+      setBusinessState = _useState8[1];
 
-  var _useState9 = (0, _react.useState)(),
+  var _useState9 = (0, _react.useState)({}),
       _useState10 = _slicedToArray(_useState9, 2),
-      orderOptions = _useState10[0],
-      setOrderOptions = _useState10[1];
+      categoriesState = _useState10[0],
+      setCategoriesState = _useState10[1];
 
-  var _useState11 = (0, _react.useState)({}),
+  var _useState11 = (0, _react.useState)(),
       _useState12 = _slicedToArray(_useState11, 2),
-      requestsState = _useState12[0],
-      setRequestsState = _useState12[1];
+      orderOptions = _useState12[0],
+      setOrderOptions = _useState12[1];
 
-  var _useState13 = (0, _react.useState)({
+  var _useState13 = (0, _react.useState)({}),
+      _useState14 = _slicedToArray(_useState13, 2),
+      requestsState = _useState14[0],
+      setRequestsState = _useState14[1];
+
+  var _useState15 = (0, _react.useState)({
     product: null,
     loading: false,
     error: null
   }),
-      _useState14 = _slicedToArray(_useState13, 2),
-      productModal = _useState14[0],
-      setProductModal = _useState14[1];
+      _useState16 = _slicedToArray(_useState15, 2),
+      productModal = _useState16[0],
+      setProductModal = _useState16[1];
 
   var categoryStateDefault = {
     loading: true,
@@ -141,15 +146,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     products: []
   };
 
-  var _useState15 = (0, _react.useState)(categoryStateDefault),
-      _useState16 = _slicedToArray(_useState15, 2),
-      categoryState = _useState16[0],
-      setCategoryState = _useState16[1];
-
-  var _useState17 = (0, _react.useState)(null),
+  var _useState17 = (0, _react.useState)(categoryStateDefault),
       _useState18 = _slicedToArray(_useState17, 2),
-      errors = _useState18[0],
-      setErrors = _useState18[1];
+      categoryState = _useState18[0],
+      setCategoryState = _useState18[1];
+
+  var _useState19 = (0, _react.useState)(null),
+      _useState20 = _slicedToArray(_useState19, 2),
+      errors = _useState20[0],
+      setErrors = _useState20[1];
   /**
    * Change category selected
    * @param {Object} category Category object
@@ -165,9 +170,29 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     setSearchValue(search);
   };
 
+  var handleChangeSortBy = function handleChangeSortBy(val) {
+    setSortByValue(val);
+  };
+
   var isMatchSearch = function isMatchSearch(name, description) {
     if (!searchValue) return true;
     return name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
+  };
+
+  var sortProductsArray = function sortProductsArray(option, array) {
+    if (option === 'rank') {
+      return array.sort(function (a, b) {
+        return b.rank - a.rank;
+      });
+    }
+
+    if (option === 'a-z') {
+      return array.sort(function (a, b) {
+        return a.name > b.name ? 1 : b.name > a.name ? -1 : 0;
+      });
+    }
+
+    return array;
   };
 
   var getProducts = /*#__PURE__*/function () {
@@ -181,7 +206,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
           switch (_context.prev = _context.next) {
             case 0:
               if (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.lazy_load_products_recommended) {
-                _context.next = 5;
+                _context.next = 6;
                 break;
               }
 
@@ -205,16 +230,18 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 _categoryState.products = _productsFiltered || [];
               }
 
+              _categoryState.products = sortProductsArray(sortByValue, _categoryState.products);
               setCategoryState(_objectSpread({}, _categoryState));
               return _context.abrupt("return");
 
-            case 5:
+            case 6:
               categoryKey = searchValue ? 'search' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
               categoryState = categoriesState[categoryKey] || categoryStateDefault;
+              categoryState.products = sortProductsArray(sortByValue, categoryState.products);
               pagination = categoryState.pagination;
 
               if (!(!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages)) {
-                _context.next = 11;
+                _context.next = 13;
                 break;
               }
 
@@ -223,7 +250,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }));
               return _context.abrupt("return");
 
-            case 11:
+            case 13:
               setCategoryState(_objectSpread(_objectSpread({}, categoryState), {}, {
                 loading: true
               }));
@@ -263,18 +290,18 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 };
               }
 
-              _context.prev = 15;
+              _context.prev = 17;
               functionFetch = categorySelected.id ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products();
               source = {};
               requestsState.products = source;
               setRequestsState(_objectSpread({}, requestsState));
               productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
-              _context.next = 23;
+              _context.next = 25;
               return productEndpoint.get({
                 cancelToken: source
               });
 
-            case 23:
+            case 25:
               _yield$productEndpoin = _context.sent;
               _yield$productEndpoin2 = _yield$productEndpoin.content;
               error = _yield$productEndpoin2.error;
@@ -291,6 +318,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                   loading: false,
                   products: newFetch ? _toConsumableArray(result) : [].concat(_toConsumableArray(categoryState.products), _toConsumableArray(result))
                 };
+                newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products);
                 categoriesState[categoryKey] = newcategoryState;
                 setCategoryState(_objectSpread({}, newcategoryState));
                 setCategoriesState(_objectSpread({}, categoriesState));
@@ -298,21 +326,21 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 setErrors(result);
               }
 
-              _context.next = 34;
+              _context.next = 36;
               break;
 
-            case 31:
-              _context.prev = 31;
-              _context.t0 = _context["catch"](15);
+            case 33:
+              _context.prev = 33;
+              _context.t0 = _context["catch"](17);
               // if (err.constructor.name !== 'Cancel') {
               setErrors([_context.t0.message]); // }
 
-            case 34:
+            case 36:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[15, 31]]);
+      }, _callee, null, [[17, 33]]);
     }));
 
     return function getProducts(_x) {
@@ -464,6 +492,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     getProducts(!!searchValue);
   }, [categorySelected.id]);
   (0, _react.useEffect)(function () {
+    getProducts(!!searchValue);
+  }, [sortByValue]);
+  (0, _react.useEffect)(function () {
     getProducts();
   }, [slug]);
   (0, _react.useEffect)(function () {
@@ -506,11 +537,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     errors: errors,
     categorySelected: categorySelected,
     searchValue: searchValue,
+    sortByValue: sortByValue,
     categoryState: categoryState,
     businessState: businessState,
     productModal: productModal,
     handleChangeCategory: handleChangeCategory,
     handleChangeSearch: handleChangeSearch,
+    handleChangeSortBy: handleChangeSortBy,
     getNextProducts: getProducts,
     updateProductModal: function updateProductModal(val) {
       return setProductModal(_objectSpread(_objectSpread({}, productModal), {}, {
