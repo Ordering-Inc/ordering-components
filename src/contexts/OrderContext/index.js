@@ -61,7 +61,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           ...options
         }
       }
-      setState({ ...state, loading: false })
       const localOptions = await strategy.getItem('options', true)
       if (localOptions) {
         if (Object.keys(localOptions.address).length > 0) {
@@ -94,6 +93,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           updateOrderOptions(options)
         }
         await strategy.removeItem('options')
+      } else {
+        setState({ ...state, loading: false })
       }
     } catch (err) {
       setState({ ...state, loading: false })
