@@ -35,11 +35,20 @@ export const GpsButton = (props) => {
         const geocoder = new window.google.maps.Geocoder()
         geocoder.geocode({ location }, (results, status) => {
           setLoading(false)
+          let postalCode = null
+          for (const component of results[0].address_components) {
+            const addressType = component.types[0]
+            if (addressType === 'postal_code') {
+              postalCode = component.short_name
+              break
+            }
+          }
           if (status === 'OK') {
             onAddress({
               address: results[0].formatted_address,
               location,
               utc_offset: (new Date()).getTimezoneOffset(),
+              zipcode: postalCode,
               map_data: {
                 library: 'google',
                 place_id: results[0].place_id
