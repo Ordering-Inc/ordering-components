@@ -25,6 +25,7 @@ export const BusinessAndProductList = (props) => {
 
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
   const [searchValue, setSearchValue] = useState(null)
+  const [sortByValue, setSortByValue] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, loading: true, error: null })
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState()
@@ -53,10 +54,26 @@ export const BusinessAndProductList = (props) => {
     setSearchValue(search)
   }
 
+  const handleChangeSortBy = (val) => {
+    setSortByValue(val)
+  }
+
   const isMatchSearch = (name, description) => {
     if (!searchValue) return true
     return (name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName) ||
       (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
+  }
+
+  const sortProductsArray = (option, array) => {
+    if (option === 'rank') {
+      return array.sort((a, b) => b.rank - a.rank)
+    }
+    if (option === 'a-z') {
+      return array.sort((a, b) =>
+        (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
+      )
+    }
+    return array
   }
 
   const getProducts = async (newFetch) => {
@@ -80,12 +97,14 @@ export const BusinessAndProductList = (props) => {
         )
         categoryState.products = productsFiltered || []
       }
+      categoryState.products = sortProductsArray(sortByValue, categoryState.products)
       setCategoryState({ ...categoryState })
       return
     }
 
     const categoryKey = searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
+    categoryState.products = sortProductsArray(sortByValue, categoryState.products)
 
     const pagination = categoryState.pagination
     if (!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) {
@@ -152,6 +171,7 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
+        newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products)
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
@@ -261,6 +281,10 @@ export const BusinessAndProductList = (props) => {
   }, [categorySelected.id])
 
   useEffect(() => {
+    getProducts(!!searchValue)
+  }, [sortByValue])
+
+  useEffect(() => {
     getProducts()
   }, [slug])
 
@@ -308,11 +332,13 @@ export const BusinessAndProductList = (props) => {
           errors={errors}
           categorySelected={categorySelected}
           searchValue={searchValue}
+          sortByValue={sortByValue}
           categoryState={categoryState}
           businessState={businessState}
           productModal={productModal}
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
+          handleChangeSortBy={handleChangeSortBy}
           getNextProducts={getProducts}
           updateProductModal={(val) => setProductModal({ ...productModal, product: val })}
         />
