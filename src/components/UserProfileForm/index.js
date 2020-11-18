@@ -90,14 +90,22 @@ export const UserProfileForm = (props) => {
   }, [session.loading])
 
   /**
+   * Clean formState
+   */
+  const cleanFormState = () => setFormState({ ...formState, changes: {} })
+
+  /**
    * Default fuction for user profile workflow
    */
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = async (changes) => {
     if (handleButtonUpdateClick) {
       return handleButtonUpdateClick(userState.result.result, formState.changes)
     }
     try {
       setFormState({ ...formState, loading: true })
+      if (changes) {
+        formState.changes = { ...formState.changes, ...changes }
+      }
       const response = await ordering.users(userState.result.result.id).save(formState.changes, {
         accessToken: accessToken
       })
@@ -139,13 +147,24 @@ export const UserProfileForm = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
-    setFormState({
-      ...formState,
-      changes: {
-        ...formState.changes,
+  const handleChangeInput = (e, isMany) => {
+    let currentChanges = {}
+    if (isMany) {
+      Object.values(e).map(obj => {
+        currentChanges = {
+          ...currentChanges,
+          [obj.name]: obj.value
+        }
+      })
+    } else {
+      currentChanges = {
         [e.target.name]: e.target.value
       }
+    }
+
+    setFormState({
+      ...formState,
+      changes: { ...formState.changes, ...currentChanges }
     })
   }
 
@@ -197,10 +216,11 @@ export const UserProfileForm = (props) => {
           {...props}
           formState={formState}
           userState={userState}
+          cleanFormState={cleanFormState}
           validationFields={validationFields}
           showField={showField}
           isRequiredField={isRequiredField}
-          hanldeChangeInput={hanldeChangeInput}
+          handleChangeInput={handleChangeInput}
           handlechangeImage={handlechangeImage}
           handleButtonUpdateClick={handleUpdateClick}
         />
