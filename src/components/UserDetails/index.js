@@ -93,13 +93,16 @@ export const UserDetails = (props) => {
   /**
    * Default fuction for user details workflow
    */
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = async (changes) => {
     if (handleButtonUpdateClick) {
       return handleButtonUpdateClick(userState.result.result, formState.changes)
     }
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.setAccessToken(accessToken).users(userState.result.result.id).save(formState.changes, {
+      if (changes) {
+        formState.changes = { ...formState.changes, ...changes }
+      }
+      const response = await ordering.users(userState.result.result.id).save(formState.changes, {
         accessToken: accessToken
       })
       setFormState({
@@ -151,13 +154,24 @@ export const UserDetails = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const handleChangeInput = (e) => {
-    setFormState({
-      ...formState,
-      changes: {
-        ...formState.changes,
+  const handleChangeInput = (e, isMany) => {
+    let currentChanges = {}
+    if (isMany) {
+      Object.values(e).map(obj => {
+        currentChanges = {
+          ...currentChanges,
+          [obj.name]: obj.value
+        }
+      })
+    } else {
+      currentChanges = {
         [e.target.name]: e.target.value
       }
+    }
+
+    setFormState({
+      ...formState,
+      changes: { ...formState.changes, ...currentChanges }
     })
   }
 
