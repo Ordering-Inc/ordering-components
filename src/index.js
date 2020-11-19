@@ -77,6 +77,7 @@ import { StripeElementsForm } from './components/StripeElementsForm'
 import { CardForm } from './components/StripeElementsForm/CardForm'
 import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/StripeRedirectForm'
 import { FloatingButton } from './components/FloatingButton'
+import { InputPhoneNumber } from './components/InputPhoneNumber'
 
 export {
   AddressDetails,
@@ -150,6 +151,7 @@ export {
   StripeRedirectForm,
   CmsContent,
   FloatingButton,
+  InputPhoneNumber,
   // Contexts
   ConfigContext,
   ConfigProvider,
