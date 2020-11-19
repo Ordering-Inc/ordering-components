@@ -125,7 +125,8 @@ export const BusinessAndProductList = (props) => {
       return
     }
 
-    const categoryKey = searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : categorySelected.id === 'featured' ? 'featured' : 'all'
+    const categoryKey = categorySelected.id === 'featured' ? 'featured' : searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
+
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
     categoryState.products = sortProductsArray(sortByValue, categoryState.products)
     const pagination = categoryState.pagination
@@ -167,18 +168,20 @@ export const BusinessAndProductList = (props) => {
           }
         )
       }
-      if (categoryKey === 'featured') {
-        conditions.push(
-          {
-            attribute: 'featured',
-            value: true
-          }
-        )
-      }
-      where = {
-        conditions,
-        conector: 'OR'
-      }
+    }
+
+    if (categorySelected.id === 'featured') {
+      conditions.push(
+        {
+          attribute: 'featured',
+          value: true
+        }
+      )
+    }
+
+    where = {
+      conditions,
+      conector: 'OR'
     }
 
     try {
@@ -191,8 +194,6 @@ export const BusinessAndProductList = (props) => {
       const productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters)
       const { content: { error, result, pagination } } = await productEndpoint.get({ cancelToken: source })
       if (!error) {
-        const conditional = categorySelected.id === 'featured' ? [...result.filter(product => product.featured)] : [...result]
-        const noFetchConditional = categorySelected.id === 'featured' ? [...categoryState.products, ...result.filter(product => product.featured)] : [...categoryState.products, ...result]
         const newcategoryState = {
           pagination: {
             ...categoryState.pagination,
@@ -201,7 +202,7 @@ export const BusinessAndProductList = (props) => {
             totalPages: pagination.total_pages
           },
           loading: false,
-          products: newFetch ? conditional : noFetchConditional
+          products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
         if (!featuredProducts) {
           setFeaturedProducts(!!newcategoryState.products.find(product => product.featured))
