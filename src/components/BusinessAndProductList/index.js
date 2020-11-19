@@ -203,7 +203,9 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: newFetch ? conditional : noFetchConditional
         }
-        setFeaturedProducts(!!newcategoryState.products.find(product => product.featured))
+        if (!featuredProducts) {
+          setFeaturedProducts(!!newcategoryState.products.find(product => product.featured))
+        }
         newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products)
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
