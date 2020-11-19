@@ -603,6 +603,12 @@ Object.defineProperty(exports, "FloatingButton", {
     return _FloatingButton.FloatingButton;
   }
 });
+Object.defineProperty(exports, "InputPhoneNumber", {
+  enumerable: true,
+  get: function get() {
+    return _InputPhoneNumber.InputPhoneNumber;
+  }
+});
 
 var _AddressDetails = require("./components/AddressDetails");
 
@@ -761,3 +767,5 @@ var _CardForm = require("./components/StripeElementsForm/CardForm");
 var _StripeRedirectForm = require("./components/PaymentOptionStripeRedirect/StripeRedirectForm");
 
 var _FloatingButton = require("./components/FloatingButton");
+
+var _InputPhoneNumber = require("./components/InputPhoneNumber");

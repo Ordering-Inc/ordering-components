@@ -67,7 +67,8 @@ var OrderList = function OrderList(props) {
       orderBy = props.orderBy,
       orderDirection = props.orderDirection,
       useDefualtSessionManager = props.useDefualtSessionManager,
-      paginationSettings = props.paginationSettings;
+      paginationSettings = props.paginationSettings,
+      asDashboard = props.asDashboard;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -100,7 +101,7 @@ var OrderList = function OrderList(props) {
 
   var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(page) {
-      var options, source;
+      var options, source, functionFetch;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -134,13 +135,14 @@ var OrderList = function OrderList(props) {
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
-              _context.next = 7;
-              return ordering.setAccessToken(accessToken).orders().get(options);
-
-            case 7:
-              return _context.abrupt("return", _context.sent);
+              functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
+              _context.next = 8;
+              return functionFetch.get(options);
 
             case 8:
+              return _context.abrupt("return", _context.sent);
+
+            case 9:
             case "end":
               return _context.stop();
           }
