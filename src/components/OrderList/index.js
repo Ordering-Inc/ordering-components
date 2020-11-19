@@ -14,7 +14,8 @@ export const OrderList = (props) => {
     orderBy,
     orderDirection,
     useDefualtSessionManager,
-    paginationSettings
+    paginationSettings,
+    asDashboard
   } = props
 
   const [ordering] = useApi()
@@ -49,7 +50,10 @@ export const OrderList = (props) => {
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
-    return await ordering.setAccessToken(accessToken).orders().get(options)
+    const functionFetch = asDashboard
+      ? ordering.setAccessToken(accessToken).orders().asDashboard()
+      : ordering.setAccessToken(accessToken).orders()
+    return await functionFetch.get(options)
   }
 
   const loadOrders = async () => {
