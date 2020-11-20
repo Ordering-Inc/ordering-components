@@ -11,6 +11,8 @@ export const ProductForm = (props) => {
     onSave
   } = props
 
+  const requestsState = {}
+
   const [ordering] = useApi()
   /**
    * Original product state
@@ -158,11 +160,13 @@ export const ProductForm = (props) => {
   const loadProductWithOptions = async () => {
     try {
       setProduct({ ...product, loading: true })
+      const source = {}
+      requestsState.product = source
       const { content: { result } } = await ordering
         .businesses(props.businessId)
         .categories(props.categoryId)
         .products(props.productId)
-        .get()
+        .get({ cancelToken: source })
 
       setProduct({
         ...product,
@@ -443,6 +447,11 @@ export const ProductForm = (props) => {
     }
     if (!props.product && props.businessId && props.categoryId && props.productId) {
       loadProductWithOptions()
+    }
+    return () => {
+      if (requestsState.product) {
+        requestsState.product.cancel()
+      }
     }
   }, [])
 
