@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { useApi } from '../../contexts/ApiContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const UpsellingPage = (props) => {
   const { UIComponent, businessId, products, cartProducts, onSave } = props
@@ -9,6 +10,7 @@ export const UpsellingPage = (props) => {
   const [upsellingProducts, setUpsellingProducts] = useState({ products: [], loading: true, error: false })
   const [businessProducts, setBusinessProducts] = useState([])
   const [ordering] = useApi()
+  const [orderState] = useOrder()
   useEffect(() => {
     if (products?.length || businessId) {
       if (products?.length) {
@@ -29,7 +31,7 @@ export const UpsellingPage = (props) => {
     if (!upsellingProducts.loading) {
       getUpsellingProducts(businessProducts)
     }
-  }, [cartProducts])
+  }, [orderState.loading])
 
   /**
    * getting products if array of product is not defined

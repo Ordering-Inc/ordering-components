@@ -75,10 +75,9 @@ export const MomentOption = (props) => {
   const handleChangeTime = (time) => {
     if (!time || time === timeSelected) return
     const _moment = dayjs(`${dateSelected} ${time}`, 'YYYY-MM-DD HH:mm').toDate()
-    if (!useOrderContext) {
-      setTimeSelected(time)
-      setIsAsap(false)
-    } else {
+    setTimeSelected(time)
+    setIsAsap(false)
+    if (useOrderContext) {
       changeMoment(_moment)
     }
     onChangeMoment && onChangeMoment(_moment)
@@ -86,10 +85,9 @@ export const MomentOption = (props) => {
 
   const handleAsap = () => {
     if (isAsap) return
+    setIsAsap(true)
     if (useOrderContext) {
       changeMoment(null)
-    } else {
-      setIsAsap(true)
     }
     onChangeMoment && onChangeMoment(null)
   }
@@ -198,6 +196,13 @@ export const MomentOption = (props) => {
     if (!dateSelected) return
     generateHourList()
   }, [dateSelected])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      generateHourList()
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     generateDatesList()

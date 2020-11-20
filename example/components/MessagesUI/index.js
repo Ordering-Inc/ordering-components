@@ -30,7 +30,6 @@ export const MessagesUI = (props) => {
     })
   }
   const onChangeImage = e => {
-    console.log(e.target.files)
     const files = Array.from(e.target.files)
     if (files.length > 0) {
       const reader = new FileReader()

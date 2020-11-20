@@ -1,6 +1,6 @@
 context('Businesses Basic information', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/business_basic_information')
+    cy.visit('/business_basic_information')
   })
 
   it('Shows business basic component', () => {

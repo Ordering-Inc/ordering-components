@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const ProductsListing = (props) => {
   const {

@@ -18,7 +18,7 @@ export const CmsContentExample = ({ ordering }) => {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
-    pageSlug: 'test',
+    pageSlug: 'OrderingPages',
     /**
      * Components types before login form
      * Array of type components, the parent props will pass to these components

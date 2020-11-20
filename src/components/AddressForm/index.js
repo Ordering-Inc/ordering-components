@@ -10,7 +10,8 @@ export const AddressForm = (props) => {
     addressId,
     address,
     useValidationFileds,
-    onSaveAddress
+    onSaveAddress,
+    isSelectedAfterAdd
   } = props
 
   const [ordering] = useApi()
@@ -165,6 +166,9 @@ export const AddressForm = (props) => {
           address: content.result
         })
         onSaveAddress && onSaveAddress(content.result)
+        if (isSelectedAfterAdd) {
+          changeAddress(content.result.id)
+        }
       }
     } catch (err) {
       setFormState({
@@ -229,6 +233,10 @@ AddressForm.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Prop to set address after add
+   */
+  isSelectedAfterAdd: PropTypes.bool,
   /**
    * Enable to get checkout fields to show/hide fields from Ordering API
    */

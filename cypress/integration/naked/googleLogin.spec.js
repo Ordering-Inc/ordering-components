@@ -1,7 +1,7 @@
 
 context('google login', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/google_login')
+    cy.visit('/google_login')
   })
 
   it('Check UI', () => {

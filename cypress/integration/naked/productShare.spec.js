@@ -1,6 +1,6 @@
 context('Product share', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/product_share')
+    cy.visit('/product_share')
   })
   it('Check UI', () => {
     cy.get('#app > button').click()

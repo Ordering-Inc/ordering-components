@@ -30,7 +30,7 @@ export const LoginForm = (props) => {
   }
 
   const [loginTab, setLoginTab] = useState(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email'))
-  const [, dispatchSession] = useSession()
+  const [, { login }] = useSession()
 
   /**
    * Default fuction for login workflow
@@ -50,8 +50,7 @@ export const LoginForm = (props) => {
       })
       if (!response.content.error) {
         if (useDefualtSessionManager) {
-          dispatchSession({
-            type: 'login',
+          login({
             user: response.content.result,
             token: response.content.result.session.access_token
           })

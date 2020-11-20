@@ -28,9 +28,11 @@ export const CmsContentUI = (props) => {
       }
       {
         body && (
-          <div dangerouslySetInnerHTML={{
-            __html: body
-          }}
+          <div
+            className='page'
+            dangerouslySetInnerHTML={{
+              __html: body
+            }}
           />
         )
       }
