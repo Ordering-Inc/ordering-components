@@ -55,6 +55,7 @@ var ProductForm = function ProductForm(props) {
   var UIComponent = props.UIComponent,
       useOrderContext = props.useOrderContext,
       onSave = props.onSave;
+  var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -259,7 +260,7 @@ var ProductForm = function ProductForm(props) {
 
   var loadProductWithOptions = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$busin, result;
+      var source, _yield$ordering$busin, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -269,33 +270,37 @@ var ProductForm = function ProductForm(props) {
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: true
               }));
-              _context.next = 4;
-              return ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).get();
+              source = {};
+              requestsState.product = source;
+              _context.next = 6;
+              return ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).get({
+                cancelToken: source
+              });
 
-            case 4:
+            case 6:
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: false,
                 product: result
               }));
-              _context.next = 12;
+              _context.next = 14;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
 
-            case 12:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
     return function loadProductWithOptions() {
@@ -658,6 +663,12 @@ var ProductForm = function ProductForm(props) {
     if (!props.product && props.businessId && props.categoryId && props.productId) {
       loadProductWithOptions();
     }
+
+    return function () {
+      if (requestsState.product) {
+        requestsState.product.cancel();
+      }
+    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     productObject: product,

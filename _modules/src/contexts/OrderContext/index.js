@@ -189,7 +189,7 @@ var OrderProvider = function OrderProvider(_ref) {
             case 17:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
-                return address.address_notes === localOptions.address.address_notes && address.internal_number === localOptions.address.internal_number;
+                return address.location.lat === localOptions.address.location.lat && address.location.lng === localOptions.address.location.lng;
               });
 
               if (address) {

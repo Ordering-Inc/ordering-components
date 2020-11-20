@@ -284,12 +284,16 @@ var MomentOption = function MomentOption(props) {
   }, [dateSelected]);
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
-      generateHourList();
+      var diff = (0, _dayjs.default)(dateSelected).diff((0, _dayjs.default)(currentDate), 'day');
+
+      if (diff === 0) {
+        generateHourList();
+      }
     }, 1000);
     return function () {
       return clearInterval(interval);
     };
-  }, []);
+  }, [dateSelected]);
   (0, _react.useEffect)(function () {
     generateDatesList();
   }, [maxDate, minDate]);
