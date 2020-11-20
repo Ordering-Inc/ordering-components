@@ -3,7 +3,7 @@ import React from 'react'
 export const UpsellingPageUI = (props) => {
   const { upsellingProducts, handleFormProduct } = props
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }} name='product'>
       {
         <>
           {!upsellingProducts.error ? upsellingProducts?.products.map(product => (
