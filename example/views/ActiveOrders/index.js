@@ -2,8 +2,10 @@ import React from 'react'
 import { OrderList } from '../../../src/components/OrderList'
 import { ActiveOrdersUI } from '../../components/ActiveOrdersUI'
 import { TestComponent } from '../../components/TestComponent'
+import { useHistory } from 'react-router-dom'
 
 export const ActiveOrders = () => {
+  const history = useHistory()
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
@@ -13,7 +15,7 @@ export const ActiveOrders = () => {
      * Function to get order that was clicked
      * @param {Object} order Order that was clicked
      */
-    onOrderClick: (order) => console.log('Click order', order),
+    onOrderClick: (order) => history.push(`/order_details/${order.id}`),
     /**
      * Array of orders
      * This is used of first option to show list
@@ -29,7 +31,7 @@ export const ActiveOrders = () => {
      * Get a list of orders by status form Ordering API
      * This can be use together `orderIds` option but not has effect with `orders` option
      */
-    orderStatus: [0],
+    orderStatus: [1, 2, 5, 6, 10, 11, 12],
     /**
      * Order orders by some attribute. Default by `id`.
      */

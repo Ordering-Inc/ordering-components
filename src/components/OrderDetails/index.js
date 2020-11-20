@@ -118,6 +118,20 @@ export const OrderDetails = (props) => {
     }
   }, [orderState.order, socket, loading])
 
+  useEffect(() => {
+    console.log('in', orderState.order?.driver_id)
+    // if (orderState.order?.driver_id) {
+    const handleTrackingDriver = (data) => {
+      console.log(data)
+    }
+    socket.join(`drivers_${orderState.order?.driver_id}`)
+    socket.on('tracking_driver', handleTrackingDriver)
+    return () => {
+      socket.off('tracking_driver', handleTrackingDriver)
+    }
+    // }
+  }, [orderState.order, socket])
+
   return (
     <>
       {UIComponent && (
