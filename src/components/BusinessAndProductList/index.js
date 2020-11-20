@@ -125,7 +125,7 @@ export const BusinessAndProductList = (props) => {
       return
     }
 
-    const categoryKey = categorySelected.id === 'featured' ? 'featured' : searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
+    const categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
 
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
     categoryState.products = sortProductsArray(sortByValue, categoryState.products)
@@ -144,10 +144,10 @@ export const BusinessAndProductList = (props) => {
     }
 
     let where = null
-    const conditions = []
+    const searchConditions = []
     if (searchValue) {
       if (isSearchByName) {
-        conditions.push(
+        searchConditions.push(
           {
             attribute: 'name',
             value: {
@@ -158,7 +158,7 @@ export const BusinessAndProductList = (props) => {
         )
       }
       if (isSearchByDescription) {
-        conditions.push(
+        searchConditions.push(
           {
             attribute: 'description',
             value: {
@@ -170,18 +170,36 @@ export const BusinessAndProductList = (props) => {
       }
     }
 
-    if (categorySelected.id === 'featured') {
-      conditions.push(
-        {
-          attribute: 'featured',
-          value: true
-        }
-      )
+    where = {
+      conditions: searchConditions,
+      conector: 'OR'
     }
 
-    where = {
-      conditions,
-      conector: 'OR'
+    if (categorySelected.id === 'featured') {
+      where = {
+        conditions: [
+          {
+            attribute: 'featured',
+            value: true
+          }
+        ]
+      }
+    }
+
+    if (categorySelected.id === 'featured' && searchValue) {
+      where = {
+        conditions: [
+          {
+            attribute: 'featured',
+            value: true
+          },
+          {
+            conditions: searchConditions,
+            conector: 'OR'
+          }
+        ],
+        conector: 'AND'
+      }
     }
 
     try {
@@ -204,13 +222,12 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
-        if (!featuredProducts) {
-          setFeaturedProducts(!!newcategoryState.products.find(product => product.featured))
-        }
+
         newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products)
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
+        setFeaturedProducts(!!categoriesState.all.products.find(product => product.featured))
       } else {
         setErrors(result)
       }
