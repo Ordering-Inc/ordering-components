@@ -1,6 +1,6 @@
 context('Sign Up Form', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/session_manager')
+    cy.visit('/session_manager')
   })
 
   it('Logout', () => {

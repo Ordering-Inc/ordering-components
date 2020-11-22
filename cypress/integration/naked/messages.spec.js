@@ -1,6 +1,6 @@
 context('Messages', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/messages')
+    cy.visit('/messages')
   })
 
   it('Check UI', () => {
@@ -10,7 +10,7 @@ context('Messages', () => {
   })
 
   it('Send message', () => {
-    cy.visit('http://localhost:8200/login')
+    cy.visit('/login')
     cy.server({ method: 'POST' })
     cy.route('/*/*/*/auth**').as('postLogin')
     cy.get('button').contains('By Email').click()
@@ -18,7 +18,7 @@ context('Messages', () => {
     cy.get('input[name=password]').type('super')
     cy.get('button').contains('Login').click()
     cy.wait('@postLogin').its('status').should('eq', 200)
-    cy.visit('http://localhost:8200/messages')
+    cy.visit('/messages')
     cy.get('textarea').type('test 123')
     cy.get('button').contains('Send').click()
   })

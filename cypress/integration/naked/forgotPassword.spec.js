@@ -1,6 +1,6 @@
 context('Forgot password', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/forgot_password')
+    cy.visit('/forgot_password')
   })
 
   it('Check UI', () => {
