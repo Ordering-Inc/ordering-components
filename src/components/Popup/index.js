@@ -11,11 +11,10 @@ export const Popup = (props) => {
     open,
     backdropClassName,
     closeOnBackdrop,
-    closeWithKeyboard,
     onClose
   } = props
 
-  const modalRef = useRef()
+  const modalRef = useRef(null)
 
   const [root, setRoot] = useState()
   const [defaultOverflow, setDefaultOverflow] = useState()
@@ -26,7 +25,7 @@ export const Popup = (props) => {
    * @param {Event} e Event when keydown
    */
   const handleKeyDown = (e) => {
-    closeWithKeyboard && e.keyCode === 27 && onClose && onClose()
+    e.keyCode === 27 && e.target.classList.contains('popup-component') && onClose && onClose()
   }
 
   /**
@@ -52,6 +51,7 @@ export const Popup = (props) => {
      * Remove backdrop when close popup and modals quantity is 0
      * Remove backdrop when unmount and modals quantity is 1
      */
+
     if (isFirst) {
       const modalRoot = window.document.getElementById('app-modals')
       if (modalRoot) {
@@ -75,6 +75,9 @@ export const Popup = (props) => {
       } else {
         setRoot(modalRoot)
       }
+      if (modalRef.current) {
+        modalRef.current.focus()
+      }
     }
     /**
      * Remove backdrop
@@ -96,7 +99,7 @@ export const Popup = (props) => {
     <>
       {
         open && root && ReactDOM.createPortal(
-          <div className='popup-component' style={popupStyles} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={-1} ref={modalRef} autoFocus>
+          <div className='popup-component' style={popupStyles} onClick={handleClick} onKeyDown={handleKeyDown} tabIndex={-1} autoFocus ref={modalRef}>
             {
               UIComponent && <UIComponent {...props} />
             }

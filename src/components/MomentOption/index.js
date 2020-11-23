@@ -199,10 +199,13 @@ export const MomentOption = (props) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      generateHourList()
+      const diff = dayjs(dateSelected).diff(dayjs(currentDate), 'day')
+      if (diff === 0) {
+        generateHourList()
+      }
     }, 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [dateSelected])
 
   useEffect(() => {
     generateDatesList()

@@ -31,6 +31,7 @@ export const BusinessAndProductList = (props) => {
   const [orderOptions, setOrderOptions] = useState()
   const [requestsState, setRequestsState] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
+  const [featuredProducts, setFeaturedProducts] = useState(false)
 
   const categoryStateDefault = {
     loading: true,
@@ -64,6 +65,15 @@ export const BusinessAndProductList = (props) => {
       (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
   }
 
+  const isFeaturedSearch = (product) => {
+    if (product.featured) {
+      if (!searchValue) return true
+      return (product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName) ||
+      (product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
+    }
+    return false
+  }
+
   const sortProductsArray = (option, array) => {
     if (option === 'rank') {
       return array.sort((a, b) => b.rank - a.rank)
@@ -78,15 +88,28 @@ export const BusinessAndProductList = (props) => {
 
   const getProducts = async (newFetch) => {
     if (!businessState?.business?.lazy_load_products_recommended) {
+      const isFeatured = !!businessState.business.categories?.find(
+        category => category
+      )?.products.filter(
+        product => product.featured
+      ).length
+      setFeaturedProducts(isFeatured)
       const categoryState = {
         ...categoryStateDefault,
         loading: false
       }
-      if (categorySelected.id) {
+      if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
         const productsFiltered = businessState.business.categories?.find(
           category => category.id === categorySelected.id
         )?.products.filter(
           product => isMatchSearch(product.name, product.description)
+        )
+        categoryState.products = productsFiltered || []
+      } else if (categorySelected.id === 'featured') {
+        const productsFiltered = businessState.business.categories?.reduce(
+          (products, category) => [...products, ...category.products], []
+        ).filter(
+          product => isFeaturedSearch(product)
         )
         categoryState.products = productsFiltered || []
       } else {
@@ -102,10 +125,10 @@ export const BusinessAndProductList = (props) => {
       return
     }
 
-    const categoryKey = searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
+    const categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
+
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
     categoryState.products = sortProductsArray(sortByValue, categoryState.products)
-
     const pagination = categoryState.pagination
     if (!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) {
       setCategoryState({ ...categoryState, loading: false })
@@ -121,10 +144,10 @@ export const BusinessAndProductList = (props) => {
     }
 
     let where = null
+    const searchConditions = []
     if (searchValue) {
-      const conditions = []
       if (isSearchByName) {
-        conditions.push(
+        searchConditions.push(
           {
             attribute: 'name',
             value: {
@@ -135,7 +158,7 @@ export const BusinessAndProductList = (props) => {
         )
       }
       if (isSearchByDescription) {
-        conditions.push(
+        searchConditions.push(
           {
             attribute: 'description',
             value: {
@@ -145,14 +168,42 @@ export const BusinessAndProductList = (props) => {
           }
         )
       }
+    }
+
+    where = {
+      conditions: searchConditions,
+      conector: 'OR'
+    }
+
+    if (categorySelected.id === 'featured') {
       where = {
-        conditions,
-        conector: 'OR'
+        conditions: [
+          {
+            attribute: 'featured',
+            value: true
+          }
+        ]
+      }
+    }
+
+    if (categorySelected.id === 'featured' && searchValue) {
+      where = {
+        conditions: [
+          {
+            attribute: 'featured',
+            value: true
+          },
+          {
+            conditions: searchConditions,
+            conector: 'OR'
+          }
+        ],
+        conector: 'AND'
       }
     }
 
     try {
-      const functionFetch = categorySelected.id
+      const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
         ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
         : ordering.businesses(businessState.business.id).products()
       const source = {}
@@ -171,10 +222,12 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
+
         newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products)
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
+        setFeaturedProducts(!!categoriesState.all.products.find(product => product.featured))
       } else {
         setErrors(result)
       }
@@ -336,6 +389,7 @@ export const BusinessAndProductList = (props) => {
           categoryState={categoryState}
           businessState={businessState}
           productModal={productModal}
+          featuredProducts={featuredProducts}
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
           handleChangeSortBy={handleChangeSortBy}
