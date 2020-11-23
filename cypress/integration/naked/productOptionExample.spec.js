@@ -1,14 +1,13 @@
 
-context('Order context example', () => {
+context('product option example', () => {
   beforeEach(() => {
-    cy.visit('/order_context_advanced')
+    cy.visit('/product_option_example')
   })
 
   it('Check UI', () => {
     cy.get('div').contains('Size').should('be.visible')
     cy.get('div').contains('Ingredients').should('be.visible')
     cy.get('div').contains('combo').should('be.visible')
-    cy.get('button').contains('Add coupon').should('be.visible')
     cy.get('textarea').should('be.visible')
   })
 
@@ -18,6 +17,5 @@ context('Order context example', () => {
     cy.get('div').contains('Cheese').click()
     cy.get('div').contains('No').click()
     cy.get('textarea').type('test 123')
-    cy.get('button').contains('Add coupon').click()
   })
 })
