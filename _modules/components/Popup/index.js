@@ -39,9 +39,8 @@ var Popup = function Popup(props) {
       open = props.open,
       backdropClassName = props.backdropClassName,
       closeOnBackdrop = props.closeOnBackdrop,
-      closeWithKeyboard = props.closeWithKeyboard,
       onClose = props.onClose;
-  var modalRef = (0, _react.useRef)();
+  var modalRef = (0, _react.useRef)(null);
 
   var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -64,7 +63,7 @@ var Popup = function Popup(props) {
 
 
   var handleKeyDown = function handleKeyDown(e) {
-    closeWithKeyboard && e.keyCode === 27 && onClose && onClose();
+    e.keyCode === 27 && e.target.classList.contains('popup-component') && onClose && onClose();
   };
   /**
    * Use onClose function when backdrop was clicked
@@ -121,6 +120,10 @@ var Popup = function Popup(props) {
       } else {
         setRoot(modalRoot);
       }
+
+      if (modalRef.current) {
+        modalRef.current.focus();
+      }
     }
     /**
      * Remove backdrop
@@ -144,8 +147,8 @@ var Popup = function Popup(props) {
     onClick: handleClick,
     onKeyDown: handleKeyDown,
     tabIndex: -1,
-    ref: modalRef,
-    autoFocus: true
+    autoFocus: true,
+    ref: modalRef
   }, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props)), root));
 };
 

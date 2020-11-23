@@ -62,7 +62,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _businessState$busine5, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
+  var _businessState$busine8, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
 
   var isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
@@ -134,6 +134,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       productModal = _useState16[0],
       setProductModal = _useState16[1];
 
+  var _useState17 = (0, _react.useState)(false),
+      _useState18 = _slicedToArray(_useState17, 2),
+      featuredProducts = _useState18[0],
+      setFeaturedProducts = _useState18[1];
+
   var categoryStateDefault = {
     loading: true,
     pagination: {
@@ -146,15 +151,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     products: []
   };
 
-  var _useState17 = (0, _react.useState)(categoryStateDefault),
-      _useState18 = _slicedToArray(_useState17, 2),
-      categoryState = _useState18[0],
-      setCategoryState = _useState18[1];
-
-  var _useState19 = (0, _react.useState)(null),
+  var _useState19 = (0, _react.useState)(categoryStateDefault),
       _useState20 = _slicedToArray(_useState19, 2),
-      errors = _useState20[0],
-      setErrors = _useState20[1];
+      categoryState = _useState20[0],
+      setCategoryState = _useState20[1];
+
+  var _useState21 = (0, _react.useState)(null),
+      _useState22 = _slicedToArray(_useState21, 2),
+      errors = _useState22[0],
+      setErrors = _useState22[1];
   /**
    * Change category selected
    * @param {Object} category Category object
@@ -179,6 +184,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     return name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
   };
 
+  var isFeaturedSearch = function isFeaturedSearch(product) {
+    if (product.featured) {
+      if (!searchValue) return true;
+      return product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
+    }
+
+    return false;
+  };
+
   var sortProductsArray = function sortProductsArray(option, array) {
     if (option === 'rank') {
       return array.sort(function (a, b) {
@@ -199,49 +213,62 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
       var _businessState$busine, _orderState$options;
 
-      var _categoryState, _businessState$busine2, _businessState$busine3, productsFiltered, _businessState$busine4, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, conditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
+      var _businessState$busine2, _businessState$busine3, isFeatured, _categoryState, _businessState$busine4, _businessState$busine5, productsFiltered, _businessState$busine6, _productsFiltered, _businessState$busine7, _productsFiltered2, categoryKey, categoryState, pagination, parameters, where, searchConditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               if (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.lazy_load_products_recommended) {
-                _context.next = 6;
+                _context.next = 8;
                 break;
               }
 
+              isFeatured = !!((_businessState$busine2 = businessState.business.categories) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.find(function (category) {
+                return category;
+              })) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.products.filter(function (product) {
+                return product.featured;
+              }).length);
+              setFeaturedProducts(isFeatured);
               _categoryState = _objectSpread(_objectSpread({}, categoryStateDefault), {}, {
                 loading: false
               });
 
-              if (categorySelected.id) {
-                productsFiltered = (_businessState$busine2 = businessState.business.categories) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.find(function (category) {
+              if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
+                productsFiltered = (_businessState$busine4 = businessState.business.categories) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.find(function (category) {
                   return category.id === categorySelected.id;
-                })) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.products.filter(function (product) {
+                })) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.products.filter(function (product) {
                   return isMatchSearch(product.name, product.description);
                 });
                 _categoryState.products = productsFiltered || [];
+              } else if (categorySelected.id === 'featured') {
+                _productsFiltered = (_businessState$busine6 = businessState.business.categories) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.reduce(function (products, category) {
+                  return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
+                }, []).filter(function (product) {
+                  return isFeaturedSearch(product);
+                });
+                _categoryState.products = _productsFiltered || [];
               } else {
-                _productsFiltered = (_businessState$busine4 = businessState.business.categories) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.reduce(function (products, category) {
+                _productsFiltered2 = (_businessState$busine7 = businessState.business.categories) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.reduce(function (products, category) {
                   return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
                 }, []).filter(function (product) {
                   return isMatchSearch(product.name, product.description);
                 });
-                _categoryState.products = _productsFiltered || [];
+                _categoryState.products = _productsFiltered2 || [];
               }
 
               _categoryState.products = sortProductsArray(sortByValue, _categoryState.products);
               setCategoryState(_objectSpread({}, _categoryState));
               return _context.abrupt("return");
 
-            case 6:
-              categoryKey = searchValue ? 'search' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
+            case 8:
+              categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
               categoryState = categoriesState[categoryKey] || categoryStateDefault;
               categoryState.products = sortProductsArray(sortByValue, categoryState.products);
               pagination = categoryState.pagination;
 
               if (!(!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages)) {
-                _context.next = 13;
+                _context.next = 15;
                 break;
               }
 
@@ -250,7 +277,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }));
               return _context.abrupt("return");
 
-            case 13:
+            case 15:
               setCategoryState(_objectSpread(_objectSpread({}, categoryState), {}, {
                 loading: true
               }));
@@ -260,12 +287,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 page_size: pagination.pageSize
               };
               where = null;
+              searchConditions = [];
 
               if (searchValue) {
-                conditions = [];
-
                 if (isSearchByName) {
-                  conditions.push({
+                  searchConditions.push({
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
@@ -275,7 +301,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 }
 
                 if (isSearchByDescription) {
-                  conditions.push({
+                  searchConditions.push({
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
@@ -283,25 +309,47 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     }
                   });
                 }
+              }
 
+              where = {
+                conditions: searchConditions,
+                conector: 'OR'
+              };
+
+              if (categorySelected.id === 'featured') {
                 where = {
-                  conditions: conditions,
-                  conector: 'OR'
+                  conditions: [{
+                    attribute: 'featured',
+                    value: true
+                  }]
                 };
               }
 
-              _context.prev = 17;
-              functionFetch = categorySelected.id ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products();
+              if (categorySelected.id === 'featured' && searchValue) {
+                where = {
+                  conditions: [{
+                    attribute: 'featured',
+                    value: true
+                  }, {
+                    conditions: searchConditions,
+                    conector: 'OR'
+                  }],
+                  conector: 'AND'
+                };
+              }
+
+              _context.prev = 23;
+              functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products();
               source = {};
               requestsState.products = source;
               setRequestsState(_objectSpread({}, requestsState));
               productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
-              _context.next = 25;
+              _context.next = 31;
               return productEndpoint.get({
                 cancelToken: source
               });
 
-            case 25:
+            case 31:
               _yield$productEndpoin = _context.sent;
               _yield$productEndpoin2 = _yield$productEndpoin.content;
               error = _yield$productEndpoin2.error;
@@ -322,25 +370,28 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 categoriesState[categoryKey] = newcategoryState;
                 setCategoryState(_objectSpread({}, newcategoryState));
                 setCategoriesState(_objectSpread({}, categoriesState));
+                setFeaturedProducts(!!categoriesState.all.products.find(function (product) {
+                  return product.featured;
+                }));
               } else {
                 setErrors(result);
               }
 
-              _context.next = 36;
+              _context.next = 42;
               break;
 
-            case 33:
-              _context.prev = 33;
-              _context.t0 = _context["catch"](17);
+            case 39:
+              _context.prev = 39;
+              _context.t0 = _context["catch"](23);
               // if (err.constructor.name !== 'Cancel') {
               setErrors([_context.t0.message]); // }
 
-            case 36:
+            case 42:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[17, 33]]);
+      }, _callee, null, [[23, 39]]);
     }));
 
     return function getProducts(_x) {
@@ -412,7 +463,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (isInitialRender) {
       getProduct();
     }
-  }, [JSON.stringify((_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id), isInitialRender]);
+  }, [JSON.stringify((_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 ? void 0 : _businessState$busine8.id), isInitialRender]);
 
   var isValidMoment = function isValidMoment(date, format) {
     return (0, _dayjs.default)(date, format).format(format) === date;
@@ -541,6 +592,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     categoryState: categoryState,
     businessState: businessState,
     productModal: productModal,
+    featuredProducts: featuredProducts,
     handleChangeCategory: handleChangeCategory,
     handleChangeSearch: handleChangeSearch,
     handleChangeSortBy: handleChangeSortBy,
