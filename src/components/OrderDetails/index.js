@@ -14,6 +14,7 @@ export const OrderDetails = (props) => {
   const [ordering] = useApi()
   const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
+  const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location)
   const socket = useWebsocket()
 
   /**
@@ -110,27 +111,21 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
     }
+    const handleTrackingDriver = ({ location }) => {
+      const test = location ?? { lat: -37.9722342, lng: 144.7729561 }
+      setDriverLocation(test)
+    }
     socket.join(`orders_${user.id}`)
+    socket.join(`drivers_${orderState.order?.driver_id}`)
+    socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
       socket.leave(`orders_${user.id}`)
+      socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
-    }
-  }, [orderState.order, socket, loading])
-
-  useEffect(() => {
-    console.log('in', orderState.order?.driver_id)
-    // if (orderState.order?.driver_id) {
-    const handleTrackingDriver = (data) => {
-      console.log(data)
-    }
-    socket.join(`drivers_${orderState.order?.driver_id}`)
-    socket.on('tracking_driver', handleTrackingDriver)
-    return () => {
       socket.off('tracking_driver', handleTrackingDriver)
     }
-    // }
-  }, [orderState.order, socket])
+  }, [orderState.order, socket, loading])
 
   return (
     <>
@@ -138,6 +133,7 @@ export const OrderDetails = (props) => {
         <UIComponent
           {...props}
           order={orderState}
+          driverLocation={driverLocation}
           messageErrors={messageErrors}
           formatPrice={formatPrice}
           handlerSubmit={handlerSubmitSpotNumber}

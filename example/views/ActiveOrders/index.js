@@ -31,7 +31,7 @@ export const ActiveOrders = () => {
      * Get a list of orders by status form Ordering API
      * This can be use together `orderIds` option but not has effect with `orders` option
      */
-    orderStatus: [1, 2, 5, 6, 10, 11, 12],
+    orderStatus: [1, 2, 5, 6, 10, 11, 12, 9],
     /**
      * Order orders by some attribute. Default by `id`.
      */

@@ -51,6 +51,7 @@
     "dayjs": "^1.9.3",
     "ordering-api-sdk": "github:sergioaok/ordering-api-sdk#development",
     "prop-types": "^15.7.2",
+    "react-google-maps": "^9.4.5",
     "socket.io-client": "^2.3.0"
   },
   "peerDependencies": {

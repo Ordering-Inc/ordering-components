@@ -23,7 +23,7 @@ export const BusinessInformationExample = () => {
       zoomControl: false,
       streetViewControl: true,
       fullscreenControl: false,
-      mapTypeId: 'satellite', // 'roadmap', 'satellite', 'hybrid', 'terrain'
+      mapTypeId: 'roadmap', // 'roadmap', 'satellite', 'hybrid', 'terrain'
       mapTypeControl: true,
       mapTypeControlOptions: {
         mapTypeIds: ['roadmap', 'satellite']

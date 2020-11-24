@@ -15,7 +15,7 @@ export const GoogleMaps = (props) => {
     if (googleReady) {
       const coordinates = { lat: location.lat, lng: location.lng }
       const map = new window.google.maps.Map(divRef.current, {
-        zoom: location.zoom,
+        zoom: location.zoom || mapControls.defaultZoom,
         center: coordinates,
         zoomControl: mapControls?.zoomControl,
         streetViewControl: mapControls?.streetViewControl,
@@ -28,13 +28,14 @@ export const GoogleMaps = (props) => {
           ...mapControls?.mapTypeControlOptions
         }
       })
+      const myLatlng = new window.google.maps.LatLng(coordinates.lat, coordinates.lng)
       const marker = new window.google.maps.Marker({
-        position: coordinates,
+        position: myLatlng,
         map,
         title: ''
       })
     }
-  }, [googleReady])
+  }, [googleReady, location])
 
   return (
     googleReady && <div style={{ width: '70%', height: '50%', position: 'absolute' }} id='map' ref={divRef} />
