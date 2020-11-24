@@ -112,17 +112,17 @@ export const ProductFormUI = (props) => {
       {
         productCart && (
           <>
-            <button type='button' onClick={decrement} disabled={productCart.quantity === 1}>-</button>
+            <button type='button' name='add' onClick={decrement} disabled={productCart.quantity === 1}>-</button>
             {productCart.quantity}
-            <button type='button' onClick={increment} disabled={maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity}>+</button>
+            <button type='button' name='decrease' onClick={increment} disabled={maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity}>+</button>
           </>
         )
       }
       {
-        productCart && !isSoldOut && <button type='button' onClick={handleSave} disabled={maxProductQuantity === 0}>{editMode ? 'Save' : 'Add'}</button>
+        productCart && !isSoldOut && <button type='button' name='save' onClick={handleSave} disabled={maxProductQuantity === 0}>{editMode ? 'Save' : 'Add'}</button>
       }
       {
-        isSoldOut && <button type='button' disabled>Sold out</button>
+        isSoldOut && <button type='button' name='sold' disabled>Sold out</button>
       }
       <p>Max: {maxProductQuantity}</p>
       <p>Sold out: {isSoldOut ? 'Yes' : 'No'}</p>

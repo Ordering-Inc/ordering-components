@@ -12,6 +12,7 @@ export const BusinessOptionUI = (props) => {
     locationData,
     formatUrlVideo,
     openingTime,
+    name,
     handleClickOption,
     beforeComponents,
     afterComponents,
@@ -31,7 +32,7 @@ export const BusinessOptionUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <button onClick={() => handleClickOption(label)}>{label}</button>
+      <button onClick={() => handleClickOption(label)} name={name}>{label}</button>
       <hr />
       {(optionToShow === label && label !== 'Business Location') && (
         <>

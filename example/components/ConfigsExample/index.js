@@ -80,7 +80,7 @@ export const ConfigsExample = (props) => {
         </select>
       </form>
       <br />
-      <input type='number' onChange={hanldeChangeInput} /> <strong>number parsed:</strong> {numberParsed}
+      <input type='number' name='numberParsed' onChange={hanldeChangeInput} /> <strong>number parsed:</strong> {numberParsed}
       <h2>Parse date Example</h2>
       <form>
         <label>Input format</label>
@@ -98,10 +98,10 @@ export const ConfigsExample = (props) => {
           <option value='12'>12</option>
         </select>
       </form>
-      <input type='text' onChange={hanldeChangeInputDate} /> <strong>Formated date : </strong> {formatDate}
+      <input type='text' onChange={hanldeChangeInputDate} name='formatedTime' /> <strong>Formated date : </strong> {formatDate}
       <h2>Parse Distance Example</h2>
       <input type='checkbox' name='unit' defaultChecked='true' onChange={handlekmOptions} />
-      <input type='number' onChange={hanldeChangeDistance} /> <strong>Distance : </strong> {distance}
+      <input type='number' onChange={hanldeChangeDistance} name='distance' /> <strong>Distance : </strong> {distance}
       <h2>GeT time Ago Example</h2>
       <label>UTC</label>
       <select name='utc' onChange={handleAgoOptions}>
@@ -111,7 +111,7 @@ export const ConfigsExample = (props) => {
       <label> Time Format</label>
       <input type='text' name='inputFormat' onChange={handleAgoOptions} />
       <br />
-      <input type='text' onChange={handleTimeAgo} /> <strong>Formated date : </strong> {timeAgo}
+      <input type='text' onChange={handleTimeAgo} name='formatedDate' /> <strong>Formated date : </strong> {timeAgo}
 
     </>
   )
