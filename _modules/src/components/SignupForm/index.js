@@ -218,8 +218,18 @@ var SignupForm = function SignupForm(props) {
    */
 
 
-  var hanldeChangeInput = function hanldeChangeInput(e) {
-    setSignupData(_objectSpread(_objectSpread({}, signupData), {}, _defineProperty({}, e.target.name, e.target.value)));
+  var handleChangeInput = function handleChangeInput(e, isMany) {
+    var currentChanges = {};
+
+    if (isMany) {
+      Object.values(e).map(function (obj) {
+        currentChanges = _objectSpread(_objectSpread({}, currentChanges), {}, _defineProperty({}, obj.name, obj.value));
+      });
+    } else {
+      currentChanges = _defineProperty({}, e.target.name, e.target.value);
+    }
+
+    setSignupData(_objectSpread(_objectSpread({}, signupData), currentChanges));
   };
   /**
    * Check if field should be show
@@ -265,7 +275,7 @@ var SignupForm = function SignupForm(props) {
     signupData: signupData,
     showField: showField,
     isRequiredField: isRequiredField,
-    hanldeChangeInput: hanldeChangeInput,
+    handleChangeInput: handleChangeInput,
     handleButtonSignupClick: handleButtonSignupClick || handleSignupClick
   })));
 };

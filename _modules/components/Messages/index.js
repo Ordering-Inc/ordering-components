@@ -312,9 +312,9 @@ var Messages = function Messages(props) {
     };
   }, [messages, socket, order === null || order === void 0 ? void 0 : order.status]);
   (0, _react.useEffect)(function () {
-    socket.join("messages_orders_".concat(user.id));
+    socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
     return function () {
-      socket.leave("messages_orders_".concat(user.id));
+      socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
     };
   }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

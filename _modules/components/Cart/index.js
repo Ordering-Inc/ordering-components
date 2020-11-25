@@ -1,11 +1,13 @@
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Cart = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
@@ -13,9 +15,21 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
+var _ApiContext = require("../../contexts/ApiContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -33,10 +47,21 @@ var Cart = function Cart(props) {
   var _stateConfig$order;
 
   var UIComponent = props.UIComponent,
-      handleEditProduct = props.handleEditProduct;
+      handleEditProduct = props.handleEditProduct,
+      useValidationFields = props.useValidationFields,
+      validationFieldsType = props.validationFieldsType;
+  var requestsState = {};
+  /**
+   * API context manager
+   */
+
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
   /**
    * Order context manager
    */
+
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
@@ -65,8 +90,20 @@ var Cart = function Cart(props) {
 
   var maxCartProductConfig = (stateConfig.configs.max_product_amount ? parseInt(stateConfig.configs.max_product_amount) : 100) - totalBalance;
   /**
+   * State to save validation fields
+   */
+
+  var _useState = (0, _react.useState)({
+    loading: true,
+    fields: {}
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      validationFields = _useState2[0],
+      setValidationFields = _useState2[1];
+  /**
    * Calc balance by product id
    */
+
 
   var getProductMax = function getProductMax(product) {
     var productMax = product.inventoried ? product.stock : maxCartProductConfig;
@@ -81,21 +118,7 @@ var Cart = function Cart(props) {
   var offsetDisabled = function offsetDisabled(product) {
     var productMax = product.inventoried ? product.stock : maxCartProductConfig;
     return productMax - (product.balance - product.quantity);
-  }; // /**
-  //  * Clear all product of the cart
-  //  */
-  // const clearCart = (uuid) => {
-  //   clearCart(uuid)
-  //   // dispatchOrd⁄er({ type: ORDER_ACTIONS.CLEAR_PRODUCTS })
-  // }
-  // /**
-  //  * Remove a product of the cart
-  //  */
-  // const removeProduct = (product) => {
-  //   removeProduct(product)
-  //   dispatchOrder({ type: ORDER_ACTIONS.REMOVE_PRODUCT, productCode })
-  // }
-
+  };
   /**
    * Change product quantity of the cart
    */
@@ -113,12 +136,45 @@ var Cart = function Cart(props) {
       });
     }
   };
+  /**
+   * Get validation fields from API
+   */
 
+
+  var getValidationFields = function getValidationFields() {
+    var source = {};
+    requestsState.validation = source;
+    ordering.validationFields().toType(validationFieldsType).get({
+      cancelToken: source
+    }).then(function (response) {
+      var fields = {};
+      response.content.result.forEach(function (field) {
+        fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
+      });
+      setValidationFields(_objectSpread(_objectSpread({}, validationFields), {}, {
+        loading: false,
+        fields: fields
+      }));
+    }).catch(function (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setValidationFields(_objectSpread(_objectSpread({}, validationFields), {}, {
+          loading: false
+        }));
+      }
+    });
+  };
+
+  (0, _react.useEffect)(function () {
+    if (useValidationFields) {
+      getValidationFields();
+    }
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     carts: orderState.carts,
     orderState: orderState,
     clearCart: clearCart,
     removeProduct: removeProduct,
+    validationFields: validationFields,
     changeQuantity: changeQuantity,
     getProductMax: getProductMax,
     offsetDisabled: offsetDisabled,
@@ -136,6 +192,19 @@ Cart.propTypes = {
   /**
    * Function to edit product behavior
    */
-  handleEditProduct: _propTypes.default.func
+  handleEditProduct: _propTypes.default.func,
+
+  /**
+   * Boolean to get validation fields from API
+   */
+  useValidationFields: _propTypes.default.bool,
+
+  /**
+   * String filter to fetch validation fields
+   */
+  validationFieldsType: _propTypes.default.string
 };
-Cart.defaultProps = {};
+Cart.defaultProps = {
+  useValidationFields: true,
+  validationFieldsType: 'checkout'
+};
