@@ -35,6 +35,7 @@ export const BusinessInformationUI = (props) => {
           contentData={businessSchedule}
           optionToShow={optionToShow}
           handleChangeOption={onChangeOption}
+          name='time'
         />
       )}
       {businessLocation && Object.keys(businessLocation).length > 0 && (
@@ -44,6 +45,7 @@ export const BusinessInformationUI = (props) => {
           locationData={businessLocation}
           optionToShow={optionToShow}
           handleChangeOption={onChangeOption}
+          name='location'
         />
       )}
       {businessPhotos && businessPhotos.length > 0 && (
@@ -53,6 +55,7 @@ export const BusinessInformationUI = (props) => {
           contentData={businessPhotos}
           optionToShow={optionToShow}
           handleChangeOption={onChangeOption}
+          name='photos'
         />
       )}
       {businessVideos && businessVideos.length > 0 && (
@@ -62,6 +65,7 @@ export const BusinessInformationUI = (props) => {
           contentData={businessVideos}
           optionToShow={optionToShow}
           handleChangeOption={onChangeOption}
+          name='videos'
         />
       )}
 

@@ -114,9 +114,9 @@ export const Messages = (props) => {
   }, [messages, socket, order?.status])
 
   useEffect(() => {
-    socket.join(`messages_orders_${user.id}`)
+    socket.join(`messages_orders_${user?.id}`)
     return () => {
-      socket.leave(`messages_orders_${user.id}`)
+      socket.leave(`messages_orders_${user?.id}`)
     }
   }, [socket])
 
