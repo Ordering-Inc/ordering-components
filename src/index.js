@@ -19,6 +19,7 @@ import { Checkout } from './components/Checkout'
 import { CouponControl } from './components/CouponControl'
 import { DragAndDrop } from './components/DragAndDrop'
 import { DriverTips } from './components/DriverTips'
+import { DriversList } from './components/DriversList'
 import { ExamineClick } from './components/ExamineClick'
 import { FacebookLoginButton } from './components/FacebookLoginButton'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
@@ -102,6 +103,7 @@ export {
   CouponControl,
   DragAndDrop,
   DriverTips,
+  DriversList,
   ExamineClick,
   FacebookLoginButton,
   ForgotPasswordForm,
