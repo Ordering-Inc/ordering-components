@@ -231,16 +231,16 @@ Object.defineProperty(exports, "OrderList", {
     return _OrderList.OrderList;
   }
 });
-Object.defineProperty(exports, "OrderTypeControl", {
-  enumerable: true,
-  get: function get() {
-    return _OrderTypeControl.OrderTypeControl;
-  }
-});
 Object.defineProperty(exports, "OrdersOverview", {
   enumerable: true,
   get: function get() {
     return _OrdersOverview.OrdersOverview;
+  }
+});
+Object.defineProperty(exports, "OrderTypeControl", {
+  enumerable: true,
+  get: function get() {
+    return _OrderTypeControl.OrderTypeControl;
   }
 });
 Object.defineProperty(exports, "PaymentOptions", {

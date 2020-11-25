@@ -231,16 +231,16 @@ Object.defineProperty(exports, "OrderList", {
     return _OrderList.OrderList;
   }
 });
-Object.defineProperty(exports, "OrderTypeControl", {
-  enumerable: true,
-  get: function get() {
-    return _OrderTypeControl.OrderTypeControl;
-  }
-});
 Object.defineProperty(exports, "OrdersOverview", {
   enumerable: true,
   get: function get() {
     return _OrdersOverview.OrdersOverview;
+  }
+});
+Object.defineProperty(exports, "OrderTypeControl", {
+  enumerable: true,
+  get: function get() {
+    return _OrderTypeControl.OrderTypeControl;
   }
 });
 Object.defineProperty(exports, "PaymentOptions", {
@@ -687,6 +687,8 @@ var _MyOrders = require("./components/MyOrders");
 var _MyOrdersList = require("./components/MyOrdersList");
 
 var _OrderList = require("./components/OrderList");
+
+var _OrdersOverview = require("./components/OrdersOverview");
 
 var _OrderTypeControl = require("./components/OrderTypeControl");
 
