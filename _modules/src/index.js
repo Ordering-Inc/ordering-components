@@ -237,6 +237,12 @@ Object.defineProperty(exports, "OrderTypeControl", {
     return _OrderTypeControl.OrderTypeControl;
   }
 });
+Object.defineProperty(exports, "OrdersOverview", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersOverview.OrdersOverview;
+  }
+});
 Object.defineProperty(exports, "PaymentOptions", {
   enumerable: true,
   get: function get() {
