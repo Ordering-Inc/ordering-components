@@ -688,6 +688,8 @@ var _MyOrdersList = require("./components/MyOrdersList");
 
 var _OrderList = require("./components/OrderList");
 
+var _OrdersOverview = require("./components/OrdersOverview");
+
 var _OrderTypeControl = require("./components/OrderTypeControl");
 
 var _PaymentOptions = require("./components/PaymentOptions");
