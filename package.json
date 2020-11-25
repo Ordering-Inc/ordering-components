@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "Ordering Internal Dashboard",
   "main": "./_modules/index.js",
+  "repository": {
+    "url": "git@github.com:sergioaok/ordering-components.git"
+  },
+  "keywords": [
+    "ordering",
+    "ordering-components"
+  ],
   "scripts": {
     "clean": "shx rm -rf _bundles _modules",
     "build": "npm run clean && babel ./src --out-dir ./_modules && webpack --config webpack.prod.js",
