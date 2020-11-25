@@ -34,6 +34,7 @@ import { MomentOption } from './components/MomentOption'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
 import { OrderList } from './components/OrderList'
+import { OrdersOverview } from './components/OrdersOverview'
 import { OrderTypeControl } from './components/OrderTypeControl'
 import { PaymentOptions } from './components/PaymentOptions'
 import { Popup } from './components/Popup'
@@ -118,6 +119,7 @@ export {
   MyOrders,
   MyOrdersList,
   OrderList,
+  OrdersOverview,
   OrderTypeControl,
   Messages,
   PaymentOptions,
