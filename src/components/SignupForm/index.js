@@ -75,10 +75,24 @@ export const SignupForm = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
+  const handleChangeInput = (e, isMany) => {
+    let currentChanges = {}
+    if (isMany) {
+      Object.values(e).map(obj => {
+        currentChanges = {
+          ...currentChanges,
+          [obj.name]: obj.value
+        }
+      })
+    } else {
+      currentChanges = {
+        [e.target.name]: e.target.value
+      }
+    }
+
     setSignupData({
       ...signupData,
-      [e.target.name]: e.target.value
+      ...currentChanges
     })
   }
 
@@ -128,7 +142,7 @@ export const SignupForm = (props) => {
           signupData={signupData}
           showField={showField}
           isRequiredField={isRequiredField}
-          hanldeChangeInput={hanldeChangeInput}
+          handleChangeInput={handleChangeInput}
           handleButtonSignupClick={handleButtonSignupClick || handleSignupClick}
         />
       )}
