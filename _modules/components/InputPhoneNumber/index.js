@@ -60,14 +60,15 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
 
   var getCountryCode = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var response, _yield$response$json, status, countryCode;
+      var _data$country_code;
 
+      var response, data;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return fetch('http://ip-api.com/json/?fields=status,countryCode');
+              return fetch('https://ipapi.co/json/');
 
             case 2:
               response = _context.sent;
@@ -75,15 +76,13 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
               return response.json();
 
             case 5:
-              _yield$response$json = _context.sent;
-              status = _yield$response$json.status;
-              countryCode = _yield$response$json.countryCode;
+              data = _context.sent;
               setCountryData(_objectSpread(_objectSpread({}, countryData), {}, {
                 loading: false,
-                value: status === 'success' ? countryCode : 'US'
+                value: (_data$country_code = data === null || data === void 0 ? void 0 : data.country_code) !== null && _data$country_code !== void 0 ? _data$country_code : 'US'
               }));
 
-            case 9:
+            case 7:
             case "end":
               return _context.stop();
           }
