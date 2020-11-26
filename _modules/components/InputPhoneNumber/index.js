@@ -44,10 +44,11 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var InputPhoneNumber = function InputPhoneNumber(props) {
-  var UIComponent = props.UIComponent;
+  var value = props.value,
+      UIComponent = props.UIComponent;
 
   var _useState = (0, _react.useState)({
-    loading: true,
+    loading: !value,
     value: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
@@ -96,8 +97,10 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    getCountryCode();
-  }, []);
+    if (!value) {
+      getCountryCode();
+    }
+  }, [value]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     countryData: countryData
   })));
@@ -111,32 +114,8 @@ InputPhoneNumber.propTypes = {
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Components types before input phone number
-   * Array of type components, the parent props will pass to these components
+   * default value from parent component
    */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Components types after input phone number
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Elements before input phone number
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Elements after input phone number
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
+  value: _propTypes.default.any
 };
-InputPhoneNumber.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
-};
+InputPhoneNumber.defaultProps = {};
