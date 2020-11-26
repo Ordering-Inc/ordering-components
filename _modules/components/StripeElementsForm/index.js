@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PaymentOptionStripeRedirect = void 0;
+exports.StripeElementsForm = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,9 +13,9 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _SessionContext = require("../../contexts/SessionContext");
-
 var _ApiContext = require("../../contexts/ApiContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -42,55 +42,39 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage payment option stripe redirect behavior without UI component
+ * Component to manage stripe elements form behavior without UI component
  */
-var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
-  var paymentMethods = props.paymentMethods,
-      UIComponent = props.UIComponent;
+var StripeElementsForm = function StripeElementsForm(props) {
+  var UIComponent = props.UIComponent,
+      toSave = props.toSave;
+
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
-  var _useApi = (0, _ApiContext.useApi)(),
-      _useApi2 = _slicedToArray(_useApi, 1),
-      ordering = _useApi2[0];
-  /**
-   * save stripe public key
-   */
-
-
-  var _useState = (0, _react.useState)(null),
+  var _useState = (0, _react.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
-      stripePK = _useState2[0],
-      setStripePK = _useState2[1];
+      requirements = _useState2[0],
+      setRequirements = _useState2[1];
   /**
-   * Method to get modal name to show
+   * Method to get client id for create stripe payment method
    */
 
 
-  var modalName = function modalName() {
-    var name = '';
-    paymentMethods.map(function (paym, i) {
-      i === paymentMethods.length - 1 ? name += "".concat(paym.name) : name += "".concat(paym.name, ", ");
-    });
-    return name;
-  };
-  /**
-   * Method to get stripe credentials from API
-   */
-
-
-  var getCredentials = /*#__PURE__*/function () {
+  var getRequirements = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var response, _yield$response$json, publishable;
+      var response, _yield$response$json, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return fetch("".concat(ordering.root, "/payments/stripe/credentials"), {
+              return fetch("".concat(ordering.root, "/payments/stripe/requirements?type=add_card"), {
                 headers: {
                   Authorization: "Bearer ".concat(token)
                 }
@@ -103,8 +87,8 @@ var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
 
             case 5:
               _yield$response$json = _context.sent;
-              publishable = _yield$response$json.result.publishable;
-              setStripePK(publishable);
+              result = _yield$response$json.result;
+              setRequirements(result);
 
             case 8:
             case "end":
@@ -114,74 +98,49 @@ var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
       }, _callee);
     }));
 
-    return function getCredentials() {
+    return function getRequirements() {
       return _ref.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    getCredentials();
-  }, []);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && stripePK && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    stripePK: stripePK,
-    modalName: modalName()
-  })));
+    if (!token) return;
+    toSave && getRequirements();
+  }, [token]);
+  return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    requirements: requirements
+  }));
 };
 
-exports.PaymentOptionStripeRedirect = PaymentOptionStripeRedirect;
-PaymentOptionStripeRedirect.propTypes = {
+exports.StripeElementsForm = StripeElementsForm;
+StripeElementsForm.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Business id
+   * Business id to get cards from API
    */
-  businessId: _propTypes.default.number.isRequired,
+  businessId: _propTypes.default.number,
 
   /**
-   * currency to use stripe methods
+   * Create card to save or pay
    */
-  currency: _propTypes.default.string.isRequired,
+  toSave: _propTypes.default.bool,
 
   /**
-   * paymentMethods, array that must be contains a list of payment methods
+   * save stripe public key to use stripe form
    */
-  paymentMethods: _propTypes.default.arrayOf(_propTypes.default.object).isRequired,
+  publicKey: _propTypes.default.string,
 
   /**
-   * Method to get stripe source from a stripe redirect form
+   * Save client secret id used in stripe for create a payment method
    */
-  handlerStripeSource: _propTypes.default.func,
+  clientSecret: _propTypes.default.string,
 
   /**
-   * Components types before payment option stripe redirect
-   * Array of type components, the parent props will pass to these components
+   * method used for handle card token created
    */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Components types after payment option stripe redirect
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Elements before payment option stripe redirect
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Elements after payment option stripe redirect
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
-};
-PaymentOptionStripeRedirect.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
+  handleSource: _propTypes.default.func
 };
