@@ -28,7 +28,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var GoogleMaps = function GoogleMaps(props) {
   var googleReady = props.googleReady,
       location = props.location,
-      mapControls = props.mapControls;
+      mapControls = props.mapControls,
+      handleChangePosition = props.handleChangePosition;
   var divRef = (0, _react.useRef)();
   (0, _react.useEffect)(function () {
     if (googleReady) {
@@ -52,7 +53,11 @@ var GoogleMaps = function GoogleMaps(props) {
       var marker = new window.google.maps.Marker({
         position: coordinates,
         map: map,
+        draggable: true,
         title: ''
+      });
+      marker.addListener('mouseup', function (marker) {
+        handleChangePosition(marker.latLng);
       });
     }
   }, [googleReady]);

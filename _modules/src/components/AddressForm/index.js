@@ -248,6 +248,12 @@ var AddressForm = function AddressForm(props) {
   var hanldeChangeInput = function hanldeChangeInput(e) {
     updateChanges(_defineProperty({}, e.target.name, e.target.value));
   };
+
+  var handleChangePosition = function handleChangePosition(mark) {
+    updateChanges({
+      location: mark
+    });
+  };
   /**
    * Update address data
    * @param {object} changes object with changes
@@ -388,7 +394,8 @@ var AddressForm = function AddressForm(props) {
     isRequiredField: isRequiredField,
     saveAddress: saveAddress,
     addressState: addressState,
-    validationFields: validationFields
+    validationFields: validationFields,
+    handleChangePosition: handleChangePosition
   })));
 };
 
