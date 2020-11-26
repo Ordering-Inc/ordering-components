@@ -12,12 +12,13 @@ export const InputPhoneNumber = (props) => {
    * Function to get country code based on user IP
    */
   const getCountryCode = async () => {
-    const response = await fetch('http://ip-api.com/json/?fields=status,countryCode')
-    const { status, countryCode } = await response.json()
+    const response = await fetch('https://ipapi.co/json/')
+    const data = await response.json()
+
     setCountryData({
       ...countryData,
       loading: false,
-      value: status === 'success' ? countryCode : 'US'
+      value: data?.country_code ?? 'US'
     })
   }
 
