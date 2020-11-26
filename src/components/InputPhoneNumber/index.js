@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 
 export const InputPhoneNumber = (props) => {
   const {
+    value,
     UIComponent
   } = props
 
-  const [countryData, setCountryData] = useState({ loading: true, value: null })
+  const [countryData, setCountryData] = useState({ loading: !value, value: null })
 
   /**
    * Function to get country code based on user IP
@@ -14,7 +15,6 @@ export const InputPhoneNumber = (props) => {
   const getCountryCode = async () => {
     const response = await fetch('https://ipapi.co/json/')
     const data = await response.json()
-
     setCountryData({
       ...countryData,
       loading: false,
@@ -23,8 +23,10 @@ export const InputPhoneNumber = (props) => {
   }
 
   useEffect(() => {
-    getCountryCode()
-  }, [])
+    if (!value) {
+      getCountryCode()
+    }
+  }, [value])
 
   return (
     <>
@@ -44,30 +46,9 @@ InputPhoneNumber.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   * Components types before input phone number
-   * Array of type components, the parent props will pass to these components
+   * default value from parent component
    */
-  beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
-  /**
-   * Components types after input phone number
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: PropTypes.arrayOf(PropTypes.elementType),
-  /**
-   * Elements before input phone number
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: PropTypes.arrayOf(PropTypes.element),
-  /**
-   * Elements after input phone number
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: PropTypes.arrayOf(PropTypes.element)
+  value: PropTypes.any
 }
 
-InputPhoneNumber.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
-}
+InputPhoneNumber.defaultProps = {}
