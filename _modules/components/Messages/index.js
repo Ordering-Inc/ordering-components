@@ -61,7 +61,8 @@ var Messages = function Messages(props) {
   var UIComponent = props.UIComponent,
       orderId = props.orderId,
       customHandleSend = props.customHandleSend,
-      order = props.order;
+      order = props.order,
+      asDashboard = props.asDashboard;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -222,7 +223,7 @@ var Messages = function Messages(props) {
 
   var loadMessages = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var response, _yield$response$json2, error, result;
+      var functionFetch, response, _yield$response$json2, error, result;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -232,8 +233,9 @@ var Messages = function Messages(props) {
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: true
               }));
-              _context2.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
+              functionFetch = asDashboard ? "".concat(ordering.root, "/orders/").concat(orderId, "/messages?mode=dashboard") : "".concat(ordering.root, "/orders/").concat(orderId, "/messages");
+              _context2.next = 5;
+              return fetch(functionFetch, {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
@@ -241,12 +243,12 @@ var Messages = function Messages(props) {
                 }
               });
 
-            case 4:
+            case 5:
               response = _context2.sent;
-              _context2.next = 7;
+              _context2.next = 8;
               return response.json();
 
-            case 7:
+            case 8:
               _yield$response$json2 = _context2.sent;
               error = _yield$response$json2.error;
               result = _yield$response$json2.result;
@@ -264,23 +266,23 @@ var Messages = function Messages(props) {
                 }));
               }
 
-              _context2.next = 16;
+              _context2.next = 17;
               break;
 
-            case 13:
-              _context2.prev = 13;
+            case 14:
+              _context2.prev = 14;
               _context2.t0 = _context2["catch"](0);
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: false,
                 error: [_context2.t0.Messages]
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 13]]);
+      }, _callee2, null, [[0, 14]]);
     }));
 
     return function loadMessages() {
@@ -312,9 +314,14 @@ var Messages = function Messages(props) {
     };
   }, [messages, socket, order === null || order === void 0 ? void 0 : order.status]);
   (0, _react.useEffect)(function () {
-    socket.join("messages_orders_".concat(user.id));
+    if (asDashboard) {
+      socket.join("messages_orders_".concat(orderId, "_0"));
+    } else {
+      socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    }
+
     return function () {
-      socket.leave("messages_orders_".concat(user.id));
+      socket.leave('messages_orders');
     };
   }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

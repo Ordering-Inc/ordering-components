@@ -9,7 +9,8 @@ export const Messages = (props) => {
     UIComponent,
     orderId,
     customHandleSend,
-    order
+    order,
+    asDashboard
   } = props
 
   const [ordering] = useApi()
@@ -72,7 +73,10 @@ export const Messages = (props) => {
   const loadMessages = async () => {
     try {
       setMessages({ ...messages, loading: true })
-      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const functionFetch = asDashboard
+        ? `${ordering.root}/orders/${orderId}/messages?mode=dashboard`
+        : `${ordering.root}/orders/${orderId}/messages`
+      const response = await fetch(functionFetch, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({
@@ -114,9 +118,13 @@ export const Messages = (props) => {
   }, [messages, socket, order?.status])
 
   useEffect(() => {
-    socket.join(`messages_orders_${user.id}`)
+    if (asDashboard) {
+      socket.join(`messages_orders_${orderId}_0`)
+    } else {
+      socket.join(`messages_orders_${user?.id}`)
+    }
     return () => {
-      socket.leave(`messages_orders_${user.id}`)
+      socket.leave('messages_orders')
     }
   }, [socket])
 

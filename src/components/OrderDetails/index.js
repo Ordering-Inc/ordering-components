@@ -7,16 +7,15 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 export const OrderDetails = (props) => {
   const {
     orderId,
+    asDashboard,
     UIComponent
   } = props
 
   const [{ user, token, loading }] = useSession()
   const [ordering] = useApi()
-  const [orderState, setOrderState] = useState({ order: null, header: '', loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const socket = useWebsocket()
-
-  const parameters = { params: 'header' }
 
   /**
    * Method to format a price number
@@ -74,15 +73,15 @@ export const OrderDetails = (props) => {
    */
   const getOrder = async () => {
     try {
-      const { content: { result } } = await ordering.setAccessToken(token).orders(orderId).get()
+      const functionFetch = asDashboard
+        ? ordering.setAccessToken(token).orders(orderId).asDashboard()
+        : ordering.setAccessToken(token).orders(orderId)
+      const { content: { result } } = await functionFetch.get()
       const order = Array.isArray(result) ? null : result
-      const businessResult = await ordering.setAccessToken(token).businesses(order.business_id).parameters(parameters).get()
-      const header = businessResult.response.data
       setOrderState({
         ...orderState,
         loading: false,
-        order,
-        header
+        order
       })
     } catch (e) {
       setOrderState({
