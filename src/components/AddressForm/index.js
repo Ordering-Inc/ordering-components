@@ -21,7 +21,6 @@ export const AddressForm = (props) => {
   const [{ auth, user, token }] = useSession()
   const requestsState = {}
   const [, { changeAddress }] = useOrder()
-
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
@@ -103,6 +102,10 @@ export const AddressForm = (props) => {
    */
   const hanldeChangeInput = (e) => {
     updateChanges({ [e.target.name]: e.target.value })
+  }
+
+  const handleChangePosition = (mark) => {
+    updateChanges({ location: mark })
   }
 
   /**
@@ -221,6 +224,7 @@ export const AddressForm = (props) => {
             saveAddress={saveAddress}
             addressState={addressState}
             validationFields={validationFields}
+            handleChangePosition={handleChangePosition}
           />
         )
       }

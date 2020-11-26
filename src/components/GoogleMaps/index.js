@@ -6,7 +6,8 @@ export const GoogleMaps = (props) => {
   const {
     googleReady,
     location,
-    mapControls
+    mapControls,
+    handleChangePosition
   } = props
 
   const divRef = useRef()
@@ -31,7 +32,11 @@ export const GoogleMaps = (props) => {
       const marker = new window.google.maps.Marker({
         position: coordinates,
         map,
+        draggable: true,
         title: ''
+      })
+      marker.addListener('mouseup', marker => {
+        handleChangePosition(marker.latLng)
       })
     }
   }, [googleReady])
