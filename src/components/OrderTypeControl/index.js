@@ -4,10 +4,11 @@ import { useOrder } from '../../contexts/OrderContext'
 
 export const OrderTypeControl = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    defaultValue
   } = props
   const [orderState, { changeType }] = useOrder()
-  const [typeSelected, setTypeSelected] = useState(orderState.options.type)
+  const [typeSelected, setTypeSelected] = useState(defaultValue || orderState.options.type)
 
   const handleChangeOrderType = (orderType) => {
     setTypeSelected(orderType)
