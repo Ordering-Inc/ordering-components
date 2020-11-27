@@ -15,12 +15,15 @@ export const GoogleMaps = (props) => {
   const [googleMap, setGoogleMap] = useState(null)
 
   const setMarkers = (map) => {
+    const bounds = new window.google.maps.LatLngBounds()
     for (let i = 0; i < locations.length; i++) {
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
         map
       })
+      bounds.extend(marker.position)
     }
+    map.fitBounds(bounds)
   }
 
   useEffect(() => {
