@@ -15,6 +15,7 @@ export const OrderDetails = (props) => {
   const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const socket = useWebsocket()
+  const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
 
   /**
    * Method to format a price number
@@ -110,11 +111,19 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
     }
+    const handleTrackingDriver = ({ location }) => {
+      const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
+      setDriverLocation(newLocation)
+    }
     socket.join(`orders_${user.id}`)
+    socket.join(`drivers_${orderState.order?.driver_id}`)
+    socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
       socket.leave(`orders_${user.id}`)
+      socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
+      socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [orderState.order, socket, loading])
 
@@ -124,6 +133,7 @@ export const OrderDetails = (props) => {
         <UIComponent
           {...props}
           order={orderState}
+          driverLocation={driverLocation}
           messageErrors={messageErrors}
           formatPrice={formatPrice}
           handlerSubmit={handlerSubmitSpotNumber}
