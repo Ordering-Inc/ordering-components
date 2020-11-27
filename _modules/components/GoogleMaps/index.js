@@ -25,12 +25,87 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var getMarkerColor = function getMarkerColor(n) {
+  switch (n) {
+    case 1:
+      return 'red';
+
+    case 2:
+      return 'green';
+
+    default:
+      return 'blue';
+  }
+};
+
 var GoogleMaps = function GoogleMaps(props) {
   var googleReady = props.googleReady,
       location = props.location,
+      locations = props.locations,
       mapControls = props.mapControls,
       handleChangePosition = props.handleChangePosition;
   var divRef = (0, _react.useRef)();
+
+  var _useState = (0, _react.useState)(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      googleMap = _useState2[0],
+      setGoogleMap = _useState2[1];
+
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      markers = _useState4[0],
+      setMarkers = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      boundMap = _useState6[0],
+      setBoundMap = _useState6[1];
+
+  var generateMarkers = function generateMarkers(map) {
+    var bounds = new window.google.maps.LatLngBounds();
+
+    var _loop = function _loop(i) {
+      var marker = new window.google.maps.Marker({
+        position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
+        map: map,
+        icon: {
+          url: "http://maps.google.com/mapfiles/ms/icons/".concat(getMarkerColor(i), "-dot.png")
+        }
+      });
+      bounds.extend(marker.position);
+      setMarkers(function (markers) {
+        return [].concat(_toConsumableArray(markers), [marker]);
+      });
+    };
+
+    for (var i = 0; i < locations.length; i++) {
+      _loop(i);
+    }
+
+    map.fitBounds(bounds);
+    setBoundMap(bounds);
+  };
+
   (0, _react.useEffect)(function () {
     if (googleReady) {
       var coordinates = {
@@ -38,7 +113,7 @@ var GoogleMaps = function GoogleMaps(props) {
         lng: location.lng
       };
       var map = new window.google.maps.Map(divRef.current, {
-        zoom: location.zoom,
+        zoom: location.zoom || mapControls.defaultZoom,
         center: coordinates,
         zoomControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.zoomControl,
         streetViewControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.streetViewControl,
@@ -50,17 +125,39 @@ var GoogleMaps = function GoogleMaps(props) {
           position: window.google.maps.ControlPosition.TOP_LEFT
         }, mapControls === null || mapControls === void 0 ? void 0 : mapControls.mapTypeControlOptions)
       });
-      var marker = new window.google.maps.Marker({
-        position: coordinates,
-        map: map,
-        draggable: true,
-        title: ''
-      });
-      marker.addListener('mouseup', function (marker) {
-        handleChangePosition(marker.latLng);
-      });
+      var marker = null;
+
+      if (locations) {
+        setGoogleMap(map);
+        generateMarkers(map);
+      } else {
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(coordinates.lat, coordinates.lng),
+          map: map,
+          draggable: true
+        });
+        marker.addListener('mouseup', function (marker) {
+          handleChangePosition(marker.latLng);
+        });
+      }
     }
   }, [googleReady]);
+  (0, _react.useEffect)(function () {
+    var interval = setInterval(function () {
+      if (googleReady) {
+        var driverLocation = locations[0];
+        var newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng);
+        markers[0].setPosition(newLocation);
+        markers.forEach(function (marker) {
+          return boundMap.extend(marker.position);
+        });
+        googleMap.fitBounds(boundMap);
+      }
+    }, 1000);
+    return function () {
+      return clearInterval(interval);
+    };
+  }, [locations]);
   return googleReady && /*#__PURE__*/_react.default.createElement("div", {
     style: {
       width: '70%',

@@ -50,6 +50,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
+  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri;
+
   var orderId = props.orderId,
       UIComponent = props.UIComponent;
 
@@ -84,6 +86,12 @@ var OrderDetails = function OrderDetails(props) {
       setMessageErrors = _useState4[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
+
+  var _useState5 = (0, _react.useState)(((_props$order = props.order) === null || _props$order === void 0 ? void 0 : (_props$order$driver = _props$order.driver) === null || _props$order$driver === void 0 ? void 0 : _props$order$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      driverLocation = _useState6[0],
+      setDriverLocation = _useState6[1];
+
   var parameters = {
     params: 'header'
   };
@@ -103,7 +111,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var sendMessage = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(spot) {
-      var _orderState$order, _orderState$order2, _yield$fetch, status;
+      var _orderState$order2, _orderState$order3, _yield$fetch, status;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -114,7 +122,7 @@ var OrderDetails = function OrderDetails(props) {
                 loading: true
               }));
               _context.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : _orderState$order.id, "/messages"), {
+              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.id, "/messages"), {
                 method: 'post',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -123,7 +131,7 @@ var OrderDetails = function OrderDetails(props) {
                 body: JSON.stringify({
                   can_see: '0,2,3',
                   comment: "I am on the parking number: ".concat(spot),
-                  order_id: (_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.id,
+                  order_id: (_orderState$order3 = orderState.order) === null || _orderState$order3 === void 0 ? void 0 : _orderState$order3.id,
                   type: 2
                 })
               });
@@ -234,6 +242,8 @@ var OrderDetails = function OrderDetails(props) {
     }
   }, []);
   (0, _react.useEffect)(function () {
+    var _orderState$order4;
+
     if (orderState.loading || loading) return;
 
     var handleUpdateOrder = function handleUpdateOrder(order) {
@@ -245,15 +255,31 @@ var OrderDetails = function OrderDetails(props) {
       }));
     };
 
+    var handleTrackingDriver = function handleTrackingDriver(_ref4) {
+      var location = _ref4.location;
+      var newLocation = location !== null && location !== void 0 ? location : {
+        lat: -37.9722342,
+        lng: 144.7729561
+      };
+      setDriverLocation(newLocation);
+    };
+
     socket.join("orders_".concat(user.id));
+    socket.join("drivers_".concat((_orderState$order4 = orderState.order) === null || _orderState$order4 === void 0 ? void 0 : _orderState$order4.driver_id));
+    socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
+      var _orderState$order5;
+
       socket.leave("orders_".concat(user.id));
+      socket.leave("drivers_".concat((_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.driver_id));
       socket.off('update_order', handleUpdateOrder);
+      socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [orderState.order, socket, loading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     order: orderState,
+    driverLocation: driverLocation,
     messageErrors: messageErrors,
     formatPrice: formatPrice,
     handlerSubmit: handlerSubmitSpotNumber
