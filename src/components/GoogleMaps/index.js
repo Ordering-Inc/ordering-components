@@ -17,7 +17,7 @@ export const GoogleMaps = (props) => {
   const setMarkers = (map) => {
     for (let i = 0; i < locations.length; i++) {
       const marker = new window.google.maps.Marker({
-        position: new window.google.maps.LatLng(locations[i], locations[i]),
+        position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
         map
       })
     }
