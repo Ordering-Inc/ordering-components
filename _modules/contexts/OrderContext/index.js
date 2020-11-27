@@ -170,7 +170,7 @@ var OrderProvider = function OrderProvider(_ref) {
               localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 33;
+                _context.next = 34;
                 break;
               }
 
@@ -215,9 +215,12 @@ var OrderProvider = function OrderProvider(_ref) {
             case 25:
               _options = {};
 
-              if (localOptions.moment || (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id)) {
-                _options.moment = localOptions.moment ? _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix() : null;
+              if (localOptions.type) {
                 _options.type = localOptions.type;
+              }
+
+              if (localOptions.moment) {
+                _options.moment = _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix();
               }
 
               if (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id) {
@@ -226,37 +229,41 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (Object.keys(_options).length > 0) {
                 updateOrderOptions(_options);
+              } else {
+                setState(_objectSpread(_objectSpread({}, state), {}, {
+                  loading: false
+                }));
               }
 
-              _context.next = 31;
+              _context.next = 32;
               return strategy.removeItem('options');
 
-            case 31:
-              _context.next = 34;
+            case 32:
+              _context.next = 35;
               break;
 
-            case 33:
+            case 34:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 34:
-              _context.next = 39;
+            case 35:
+              _context.next = 40;
               break;
 
-            case 36:
-              _context.prev = 36;
+            case 37:
+              _context.prev = 37;
               _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 39:
+            case 40:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 36]]);
+      }, _callee, null, [[0, 37]]);
     }));
 
     return function refreshOrderOptions() {
