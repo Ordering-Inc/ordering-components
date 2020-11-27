@@ -2,6 +2,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
+const getMarkerColor = (n) => {
+  switch (n) {
+    case 1:
+      return 'red'
+    case 2:
+      return 'green'
+    default:
+      return 'blue'
+  }
+}
+
 export const GoogleMaps = (props) => {
   const {
     googleReady,
@@ -13,17 +24,24 @@ export const GoogleMaps = (props) => {
 
   const divRef = useRef()
   const [googleMap, setGoogleMap] = useState(null)
+  const [markers, setMarkers] = useState([])
+  const [boundMap, setBoundMap] = useState(null)
 
-  const setMarkers = (map) => {
+  const generateMarkers = (map) => {
     const bounds = new window.google.maps.LatLngBounds()
     for (let i = 0; i < locations.length; i++) {
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
-        map
+        map,
+        icon: {
+          url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(i)}-dot.png`
+        }
       })
       bounds.extend(marker.position)
+      setMarkers(markers => [...markers, marker])
     }
     map.fitBounds(bounds)
+    setBoundMap(bounds)
   }
 
   useEffect(() => {
@@ -44,11 +62,10 @@ export const GoogleMaps = (props) => {
         }
       })
 
-      setGoogleMap(map)
-
       let marker = null
       if (locations) {
-        setMarkers(map)
+        setGoogleMap(map)
+        generateMarkers(map)
       } else {
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(coordinates.lat, coordinates.lng),
@@ -65,11 +82,15 @@ export const GoogleMaps = (props) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (googleReady) {
-        setMarkers(googleMap)
+        const driverLocation = locations[0]
+        const newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng)
+        markers[0].setPosition(newLocation)
+        markers.forEach(marker => boundMap.extend(marker.position))
+        googleMap.fitBounds(boundMap)
       }
-    }, 2000)
+    }, 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [locations])
 
   return (
     googleReady && <div style={{ width: '70%', height: '50%', position: 'absolute' }} id='map' ref={divRef} />
