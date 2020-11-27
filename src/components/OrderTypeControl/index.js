@@ -8,7 +8,7 @@ export const OrderTypeControl = (props) => {
     defaultValue
   } = props
   const [orderState, { changeType }] = useOrder()
-  const [typeSelected, setTypeSelected] = useState(defaultValue || orderState.options.type)
+  const [typeSelected, setTypeSelected] = useState(defaultValue)
 
   const handleChangeOrderType = (orderType) => {
     setTypeSelected(orderType)
@@ -20,7 +20,7 @@ export const OrderTypeControl = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          typeSelected={typeSelected}
+          typeSelected={typeSelected || orderState.options.type}
           handleChangeOrderType={props.handleChangeOrderType || handleChangeOrderType}
         />
       )}
