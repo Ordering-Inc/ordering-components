@@ -83,15 +83,19 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           }
         }
         const options = {}
-        if (localOptions.moment || localOptions?.address_id) {
-          options.moment = localOptions.moment ? dayjs.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix() : null
+        if (localOptions.type) {
           options.type = localOptions.type
+        }
+        if (localOptions.moment) {
+          options.moment = dayjs.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix()
         }
         if (localOptions?.address_id) {
           options.address_id = localOptions?.address_id
         }
         if (Object.keys(options).length > 0) {
           updateOrderOptions(options)
+        } else {
+          setState({ ...state, loading: false })
         }
         await strategy.removeItem('options')
       } else {
