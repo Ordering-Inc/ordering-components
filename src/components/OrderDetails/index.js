@@ -114,7 +114,7 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
     }
-    socket.join(`orders_${user.id}`)
+    socket.join(`orders`)
     socket.on('update_order', handleUpdateOrder)
     return () => {
       socket.leave(`orders_${user.id}`)

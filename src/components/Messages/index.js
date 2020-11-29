@@ -124,7 +124,11 @@ export const Messages = (props) => {
       socket.join(`messages_orders_${user?.id}`)
     }
     return () => {
-      socket.leave('messages_orders')
+      if (asDashboard) {
+        socket.leave(`messages_orders_${orderId}_0`)
+      } else {
+        socket.leave(`messages_orders_${user?.id}`)
+      }
     }
   }, [socket])
 
