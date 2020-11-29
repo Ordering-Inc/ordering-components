@@ -236,7 +236,7 @@ var OrderDetails = function OrderDetails(props) {
       }));
     };
 
-    socket.join("orders_".concat(user.id));
+    socket.join("orders");
     socket.on('update_order', handleUpdateOrder);
     return function () {
       socket.leave("orders_".concat(user.id));

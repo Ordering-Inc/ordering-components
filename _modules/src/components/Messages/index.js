@@ -321,7 +321,11 @@ var Messages = function Messages(props) {
     }
 
     return function () {
-      socket.leave('messages_orders');
+      if (asDashboard) {
+        socket.leave("messages_orders_".concat(orderId, "_0"));
+      } else {
+        socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      }
     };
   }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
