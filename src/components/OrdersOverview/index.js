@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const OrdersOverview = (props) => {
   const { UIComponent } = props
@@ -9,10 +10,8 @@ export const OrdersOverview = (props) => {
   const [ordering] = useApi()
   const requestsState = {}
 
-  /**
-   * Get token session
-   */
-  const [{ token }] = useSession()
+  const socket = useWebsocket()
+  const [{ token, loading }] = useSession()
 
   /**
    * Object to save pending orders
@@ -73,6 +72,10 @@ export const OrdersOverview = (props) => {
    */
   const getOrdersOverview = async () => {
     try {
+      setOrdersOverviewStatus({
+        ...ordersOverviewStatus,
+        loading: true
+      })
       const source = {}
       requestsState.ordersOverview = source
       const { content: { result } } = await ordering.setAccessToken(token).orders().summary({ cancelToken: source })
@@ -90,6 +93,76 @@ export const OrdersOverview = (props) => {
       })
     }
   }
+  /**
+   * Method to update orders overview for order update
+   * @param {Object} updateData state update data
+   */
+  const updateOrdersOverview = (updateData) => {
+    const pendingState = [0]
+    const inProgressState = [3, 4, 7, 8, 9]
+    const completedState = [1, 11]
+    const cancelledState = [2, 5, 6, 10, 12]
+
+    const _overview = { ...ordersOverviewStatus.overview }
+
+    if (pendingState.includes(updateData.old)) {
+      _overview.pending = _overview.pending - 1
+    } else if (inProgressState.includes(updateData.old)) {
+      _overview.inProgress = _overview.inProgress - 1
+    } else if (completedState.includes(updateData.old)) {
+      _overview.completed = _overview.completed - 1
+    } else if (cancelledState.includes(updateData.old)) {
+      _overview.cancelled = _overview.cancelled - 1
+    }
+
+    if (pendingState.includes(updateData.new)) {
+      _overview.pending = _overview.pending + 1
+    } else if (inProgressState.includes(updateData.new)) {
+      _overview.inProgress = _overview.inProgress + 1
+    } else if (completedState.includes(updateData.new)) {
+      _overview.completed = _overview.completed + 1
+    } else if (cancelledState.includes(updateData.new)) {
+      _overview.cancelled = _overview.cancelled + 1
+    }
+
+    setOrdersOverviewStatus({ ...ordersOverviewStatus, overview: _overview })
+  }
+
+  const isStateUpdate = (data) => {
+    if (Array.isArray(data)) {
+      for (const _data of data) {
+        if (_data.attribute === 'status') return true
+      }
+    } else {
+      if (data === null) return false
+      if (data.attribute === 'status') return true
+    }
+    return false
+  }
+
+  useEffect(() => {
+    if (ordersOverviewStatus.loading || loading) return
+    const handleUpdateOrder = (order) => {
+      const stateUpdateData = order.history.filter(history => isStateUpdate(history.data))
+      const lastStateUpdateData = stateUpdateData[stateUpdateData.length - 1].data
+      const statusChangeState = lastStateUpdateData.filter(data => isStateUpdate(data))
+      updateOrdersOverview(statusChangeState[0])
+    }
+    const handleRegisterOrder = (order) => {
+      const _overview = { ...ordersOverviewStatus.overview }
+      _overview.total += 1
+      _overview.pending += 1
+      setOrdersOverviewStatus({ ...ordersOverviewStatus, overview: _overview })
+    }
+    socket.join('orders')
+    socket.on('update_order', handleUpdateOrder)
+    socket.on('orders_register', handleRegisterOrder)
+    return () => {
+      socket.leave('orders')
+      socket.off('update_order', handleUpdateOrder)
+      socket.off('orders_register', handleRegisterOrder)
+    }
+  }, [ordersOverviewStatus.overview, socket, loading])
 
   useEffect(() => {
     getOrdersOverview()

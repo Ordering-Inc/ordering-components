@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _WebsocketContext = require("../../contexts/WebsocketContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -57,13 +59,13 @@ var OrdersOverview = function OrdersOverview(props) {
       ordering = _useApi2[0];
 
   var requestsState = {};
-  /**
-   * Get token session
-   */
+  var socket = (0, _WebsocketContext.useWebsocket)();
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      token = _useSession2$.token,
+      loading = _useSession2$.loading;
   /**
    * Object to save pending orders
    */
@@ -141,14 +143,17 @@ var OrdersOverview = function OrdersOverview(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
+              setOrdersOverviewStatus(_objectSpread(_objectSpread({}, ordersOverviewStatus), {}, {
+                loading: true
+              }));
               source = {};
               requestsState.ordersOverview = source;
-              _context.next = 5;
+              _context.next = 6;
               return ordering.setAccessToken(token).orders().summary({
                 cancelToken: source
               });
 
-            case 5:
+            case 6:
               _yield$ordering$setAc = _context.sent;
               result = _yield$ordering$setAc.content.result;
               _result = getOrdersStatusQuantity(result);
@@ -156,30 +161,124 @@ var OrdersOverview = function OrdersOverview(props) {
                 overview: _result,
                 loading: false
               }));
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](0);
               setOrdersOverviewStatus(_objectSpread(_objectSpread({}, ordersOverviewStatus), {}, {
                 loading: false,
                 error: _context.t0
               }));
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 12]]);
     }));
 
     return function getOrdersOverview() {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * Method to update orders overview for order update
+   * @param {Object} updateData state update data
+   */
 
+
+  var updateOrdersOverview = function updateOrdersOverview(updateData) {
+    var pendingState = [0];
+    var inProgressState = [3, 4, 7, 8, 9];
+    var completedState = [1, 11];
+    var cancelledState = [2, 5, 6, 10, 12];
+
+    var _overview = _objectSpread({}, ordersOverviewStatus.overview);
+
+    if (pendingState.includes(updateData.old)) {
+      _overview.pending = _overview.pending - 1;
+    } else if (inProgressState.includes(updateData.old)) {
+      _overview.inProgress = _overview.inProgress - 1;
+    } else if (completedState.includes(updateData.old)) {
+      _overview.completed = _overview.completed - 1;
+    } else if (cancelledState.includes(updateData.old)) {
+      _overview.cancelled = _overview.cancelled - 1;
+    }
+
+    if (pendingState.includes(updateData.new)) {
+      _overview.pending = _overview.pending + 1;
+    } else if (inProgressState.includes(updateData.new)) {
+      _overview.inProgress = _overview.inProgress + 1;
+    } else if (completedState.includes(updateData.new)) {
+      _overview.completed = _overview.completed + 1;
+    } else if (cancelledState.includes(updateData.new)) {
+      _overview.cancelled = _overview.cancelled + 1;
+    }
+
+    setOrdersOverviewStatus(_objectSpread(_objectSpread({}, ordersOverviewStatus), {}, {
+      overview: _overview
+    }));
+  };
+
+  var isStateUpdate = function isStateUpdate(data) {
+    if (Array.isArray(data)) {
+      var _iterator2 = _createForOfIteratorHelper(data),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var _data = _step2.value;
+          if (_data.attribute === 'status') return true;
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    } else {
+      if (data === null) return false;
+      if (data.attribute === 'status') return true;
+    }
+
+    return false;
+  };
+
+  (0, _react.useEffect)(function () {
+    if (ordersOverviewStatus.loading || loading) return;
+
+    var handleUpdateOrder = function handleUpdateOrder(order) {
+      var stateUpdateData = order.history.filter(function (history) {
+        return isStateUpdate(history.data);
+      });
+      var lastStateUpdateData = stateUpdateData[stateUpdateData.length - 1].data;
+      var statusChangeState = lastStateUpdateData.filter(function (data) {
+        return isStateUpdate(data);
+      });
+      updateOrdersOverview(statusChangeState[0]);
+    };
+
+    var handleRegisterOrder = function handleRegisterOrder(order) {
+      var _overview = _objectSpread({}, ordersOverviewStatus.overview);
+
+      _overview.total += 1;
+      _overview.pending += 1;
+      setOrdersOverviewStatus(_objectSpread(_objectSpread({}, ordersOverviewStatus), {}, {
+        overview: _overview
+      }));
+    };
+
+    socket.join('orders');
+    socket.on('update_order', handleUpdateOrder);
+    socket.on('orders_register', handleRegisterOrder);
+    return function () {
+      socket.leave('orders');
+      socket.off('update_order', handleUpdateOrder);
+      socket.off('orders_register', handleRegisterOrder);
+    };
+  }, [ordersOverviewStatus.overview, socket, loading]);
   (0, _react.useEffect)(function () {
     getOrdersOverview();
     return function () {
