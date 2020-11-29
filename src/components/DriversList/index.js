@@ -141,7 +141,7 @@ export const DriversList = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          drivers={driversList}
+          driversList={driversList}
           driverActionStatus={driverActionStatus}
           handleAssignDriver={handleAssignDriver}
         />
