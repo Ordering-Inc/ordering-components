@@ -65,7 +65,7 @@ export const UpsellingPage = (props) => {
       setUpsellingProducts({
         ...upsellingProducts,
         loading: false,
-        products: result.filter(product => !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
+        products: result.filter(product => !product.inventoried && !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
       })
     } else {
       setUpsellingProducts({
