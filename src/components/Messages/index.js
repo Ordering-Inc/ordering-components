@@ -17,7 +17,7 @@ export const Messages = (props) => {
   const [{ user, token }] = useSession()
   const accessToken = props.accessToken || token
 
-  const [canRead, setCanRead] = useState({ business: true, administrator: true, driver: true })
+  const [canRead, setCanRead] = useState({ business: true, administrator: true, driver: true, customer: true })
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
@@ -33,7 +33,7 @@ export const Messages = (props) => {
     try {
       setSendMessages({ loading: true, error: null })
       const _canRead = []
-      if (!asDashboard) {
+      if (canRead.customer) {
         _canRead.push(3)
       }
       if (canRead.administrator) {

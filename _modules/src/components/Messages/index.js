@@ -79,7 +79,8 @@ var Messages = function Messages(props) {
   var _useState = (0, _react.useState)({
     business: true,
     administrator: true,
-    driver: true
+    driver: true,
+    customer: true
   }),
       _useState2 = _slicedToArray(_useState, 2),
       canRead = _useState2[0],
@@ -140,7 +141,7 @@ var Messages = function Messages(props) {
               });
               _canRead = [];
 
-              if (!asDashboard) {
+              if (canRead.customer) {
                 _canRead.push(3);
               }
 
