@@ -32,7 +32,10 @@ export const Messages = (props) => {
     }
     try {
       setSendMessages({ loading: true, error: null })
-      const _canRead = [3]
+      const _canRead = []
+      if (!asDashboard) {
+        _canRead.push(3)
+      }
       if (canRead.administrator) {
         _canRead.push(0)
       }
