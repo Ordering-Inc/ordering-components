@@ -144,6 +144,7 @@ export const OrdersOverview = (props) => {
     if (ordersOverviewStatus.loading || loading) return
     const handleUpdateOrder = (order) => {
       const stateUpdateData = order.history.filter(history => isStateUpdate(history.data))
+      if (stateUpdateData.length === 0) return
       const lastStateUpdateData = stateUpdateData[stateUpdateData.length - 1].data
       const statusChangeState = lastStateUpdateData.filter(data => isStateUpdate(data))
       updateOrdersOverview(statusChangeState[0])

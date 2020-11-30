@@ -253,6 +253,7 @@ var OrdersOverview = function OrdersOverview(props) {
       var stateUpdateData = order.history.filter(function (history) {
         return isStateUpdate(history.data);
       });
+      if (stateUpdateData.length === 0) return;
       var lastStateUpdateData = stateUpdateData[stateUpdateData.length - 1].data;
       var statusChangeState = lastStateUpdateData.filter(function (data) {
         return isStateUpdate(data);
