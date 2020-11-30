@@ -11,10 +11,11 @@ export const OrderDetails = (props) => {
     UIComponent
   } = props
 
-  const [{ user, token, loading }] = useSession()
+  const [{ token, loading }] = useSession()
   const [ordering] = useApi()
   const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
+  const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const socket = useWebsocket()
 
   /**
@@ -91,6 +92,25 @@ export const OrderDetails = (props) => {
       })
     }
   }
+  /**
+   * Method to change order status from API
+   * @param {object} order orders id and new status
+   */
+  const handleUpdateOrderStatus = async (order) => {
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      const requestsState = {}
+      const source = {}
+      requestsState.updateOrder = source
+      const { content } = await ordering.setAccessToken(token).orders(order.id).save({ status: order.newStatus }, { cancelToken: source })
+      setActionStatus({
+        loading: false,
+        error: content.error ? content.result : null
+      })
+    } catch (err) {
+      setActionStatus({ ...actionStatus, loading: false, error: [err.message] })
+    }
+  }
 
   useEffect(() => {
     if (props.order) {
@@ -114,10 +134,10 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
     }
-    socket.join(`orders`)
+    socket.join('orders')
     socket.on('update_order', handleUpdateOrder)
     return () => {
-      socket.leave(`orders_${user.id}`)
+      socket.leave('orders')
       socket.off('update_order', handleUpdateOrder)
     }
   }, [orderState.order, socket, loading])
@@ -129,8 +149,10 @@ export const OrderDetails = (props) => {
           {...props}
           order={orderState}
           messageErrors={messageErrors}
+          actionStatus={actionStatus}
           formatPrice={formatPrice}
           handlerSubmit={handlerSubmitSpotNumber}
+          handleUpdateOrderStatus={handleUpdateOrderStatus}
         />
       )}
     </>

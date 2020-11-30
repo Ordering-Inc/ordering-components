@@ -57,7 +57,6 @@ var OrderDetails = function OrderDetails(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       _useSession2$ = _useSession2[0],
-      user = _useSession2$.user,
       token = _useSession2$.token,
       loading = _useSession2$.loading;
 
@@ -82,6 +81,14 @@ var OrderDetails = function OrderDetails(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       messageErrors = _useState4[0],
       setMessageErrors = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      actionStatus = _useState6[0],
+      setActionStatus = _useState6[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
   /**
@@ -214,6 +221,64 @@ var OrderDetails = function OrderDetails(props) {
       return _ref3.apply(this, arguments);
     };
   }();
+  /**
+   * Method to change order status from API
+   * @param {object} order orders id and new status
+   */
+
+
+  var handleUpdateOrderStatus = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(order) {
+      var requestsState, source, _yield$ordering$setAc, content;
+
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: true
+              }));
+              requestsState = {};
+              source = {};
+              requestsState.updateOrder = source;
+              _context3.next = 7;
+              return ordering.setAccessToken(token).orders(order.id).save({
+                status: order.newStatus
+              }, {
+                cancelToken: source
+              });
+
+            case 7:
+              _yield$ordering$setAc = _context3.sent;
+              content = _yield$ordering$setAc.content;
+              setActionStatus({
+                loading: false,
+                error: content.error ? content.result : null
+              });
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](0);
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: false,
+                error: [_context3.t0.message]
+              }));
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 12]]);
+    }));
+
+    return function handleUpdateOrderStatus(_x2) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
     if (props.order) {
@@ -236,18 +301,20 @@ var OrderDetails = function OrderDetails(props) {
       }));
     };
 
-    socket.join("orders");
+    socket.join('orders');
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      socket.leave("orders_".concat(user.id));
+      socket.leave('orders');
       socket.off('update_order', handleUpdateOrder);
     };
   }, [orderState.order, socket, loading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     order: orderState,
     messageErrors: messageErrors,
+    actionStatus: actionStatus,
     formatPrice: formatPrice,
-    handlerSubmit: handlerSubmitSpotNumber
+    handlerSubmit: handlerSubmitSpotNumber,
+    handleUpdateOrderStatus: handleUpdateOrderStatus
   })));
 };
 
