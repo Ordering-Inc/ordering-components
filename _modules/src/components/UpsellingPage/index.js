@@ -162,7 +162,7 @@ var UpsellingPage = function UpsellingPage(props) {
       setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
         loading: false,
         products: result.filter(function (product) {
-          return !repeatProducts.find(function (repeatProduct) {
+          return !product.inventoried && !repeatProducts.find(function (repeatProduct) {
             return repeatProduct.id === product.id;
           });
         })
