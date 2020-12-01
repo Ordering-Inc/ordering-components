@@ -31,6 +31,7 @@ export const FacebookLoginButton = (props) => {
         xfbml: false,
         version: version
       })
+      window.FB.AppEvents.logPageView()
       !wasUnmounted && setFacebookStatus({ ...facebookStatus, ready: true })
       window.FB.getLoginStatus((response) => {
         if (response.status === 'connected') {
@@ -44,12 +45,12 @@ export const FacebookLoginButton = (props) => {
     }
 
     const js = window.document.createElement('script')
+    const fjs = window.document.getElementsByTagName('script')[0]
     js.id = 'facebook-jssdk'
     js.async = true
     js.defer = true
     js.src = `https://${domain}/${language}/sdk${debug ? '/debug' : ''}.js`
-
-    window.document.body.appendChild(js)
+    fjs.parentNode.insertBefore(js, fjs)
   }, [])
 
   useEffect(() => {
