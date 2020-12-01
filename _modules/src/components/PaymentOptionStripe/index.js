@@ -287,18 +287,15 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     cardsList.cards.push(card);
     setCardsList(_objectSpread({}, cardsList));
     handleCardClick(card);
-  }; // useEffect(() => {
-  //   getCards()
-  // }, [createdCard])
-
+  };
 
   (0, _react.useEffect)(function () {
-    if (!token) return; // getRequirements()
+    if (token) {
+      getCards();
 
-    getCards();
-
-    if (!props.publicKey) {
-      getCredentials();
+      if (!props.publicKey) {
+        getCredentials();
+      }
     }
   }, [token]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
@@ -307,8 +304,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     handleCardClick: handleCardClick,
     publicKey: publicKey,
     handleNewCard: handleNewCard,
-    deleteCard: deleteCard // handlerCreateCard={(val) => setCreatedCard(val)}
-
+    deleteCard: deleteCard
   })));
 };
 

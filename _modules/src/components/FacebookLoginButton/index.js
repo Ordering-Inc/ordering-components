@@ -90,6 +90,7 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
         xfbml: false,
         version: version
       });
+      window.FB.AppEvents.logPageView();
       !wasUnmounted && setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
         ready: true
       }));
@@ -107,11 +108,12 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
     }
 
     var js = window.document.createElement('script');
+    var fjs = window.document.getElementsByTagName('script')[0];
     js.id = 'facebook-jssdk';
     js.async = true;
     js.defer = true;
     js.src = "https://".concat(domain, "/").concat(language, "/sdk").concat(debug ? '/debug' : '', ".js");
-    window.document.body.appendChild(js);
+    fjs.parentNode.insertBefore(js, fjs);
   }, []);
   (0, _react.useEffect)(function () {
     return function () {
