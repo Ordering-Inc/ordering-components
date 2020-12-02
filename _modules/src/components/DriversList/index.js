@@ -226,6 +226,8 @@ var DriversList = function DriversList(props) {
           if (_driver.id === driver.id) {
             Object.assign(_driver, driver);
           }
+
+          return true;
         });
       } else {
         _drivers = [].concat(_toConsumableArray(driversList.drivers), [driver]);
@@ -236,15 +238,17 @@ var DriversList = function DriversList(props) {
       }));
     };
 
-    var handleTrackingDriver = function handleTrackingDriver(driver) {
-      var _drivers = [];
-      _drivers = driversList.drivers.filter(function (_driver) {
-        if (_driver.id === driver.id) {
-          Object.assign(_driver, driver);
+    var handleTrackingDriver = function handleTrackingDriver(trackingData) {
+      var drivers = [];
+      drivers = driversList.drivers.filter(function (_driver) {
+        if (_driver.id === trackingData.driver_id) {
+          _driver.location = trackingData.location;
         }
+
+        return true;
       });
       setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
-        drivers: _drivers
+        drivers: drivers
       }));
     };
 

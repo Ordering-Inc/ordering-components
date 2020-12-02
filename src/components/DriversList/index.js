@@ -85,6 +85,7 @@ export const DriversList = (props) => {
           if (_driver.id === driver.id) {
             Object.assign(_driver, driver)
           }
+          return true
         })
       } else {
         _drivers = [...driversList.drivers, driver]
@@ -94,17 +95,15 @@ export const DriversList = (props) => {
         drivers: _drivers
       })
     }
-    const handleTrackingDriver = (driver) => {
-      let _drivers = []
-      _drivers = driversList.drivers.filter(_driver => {
-        if (_driver.id === driver.id) {
-          Object.assign(_driver, driver)
+    const handleTrackingDriver = (trackingData) => {
+      let drivers = []
+      drivers = driversList.drivers.filter(_driver => {
+        if (_driver.id === trackingData.driver_id) {
+          _driver.location = trackingData.location
         }
+        return true
       })
-      setDriversList({
-        ...driversList,
-        drivers: _drivers
-      })
+      setDriversList({ ...driversList, drivers: drivers })
     }
     socket.on('drivers_update', handleUpdateDriver)
     socket.on('tracking_driver', handleTrackingDriver)
