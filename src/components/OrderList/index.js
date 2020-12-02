@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { object, number } from 'prop-types'
-
+import dayjs from 'dayjs'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
@@ -11,11 +11,17 @@ export const OrderList = (props) => {
     orders,
     orderIds,
     orderStatus,
+    pendingOrder,
+    preOrder,
     orderBy,
     orderDirection,
-    useDefualtSessionManager,
     paginationSettings,
-    asDashboard
+    asDashboard,
+    filterValues,
+    searchValue,
+    isSearchByOrderId
+    // isSearchByCustomerEmail,
+    // isSearchByCustomerPhone
   } = props
 
   const [ordering] = useApi()
@@ -26,45 +32,259 @@ export const OrderList = (props) => {
   })
   const [session] = useSession()
   const socket = useWebsocket()
-
-  const accessToken = useDefualtSessionManager ? session.token : props.accessToken
+  const [{ token }] = useSession()
   const requestsState = {}
+  const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
+
+  const sortOrdersArray = (option, array) => {
+    if (option === 'desc') {
+      return array.sort((a, b) => b.id - a.id)
+    }
+    if (option === 'asc') {
+      return array.sort((a, b) => a.id - b.id)
+    }
+    return array
+  }
+
+  /**
+   * Method to change order status from API
+   * @param {object} order orders id and new status
+   */
+  const handleUpdateOrderStatus = async (order) => {
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      const source = {}
+      requestsState.updateOrders = source
+      const { content } = await ordering.setAccessToken(token).orders(order.id).save({ status: order.newStatus }, { cancelToken: source })
+      setActionStatus({
+        loading: false,
+        error: content.error ? content.result : null
+      })
+      if (!content.error) {
+        const orders = orderList.orders.filter(_order => {
+          return _order.id !== order.id
+        })
+        setOrderList({ ...orderList, orders })
+      }
+    } catch (err) {
+      setActionStatus({ loading: false, error: [err.message] })
+    }
+  }
 
   const getOrders = async (page) => {
-    const options = {
-      query: {
-        orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
-        page: page,
-        page_size: paginationSettings.pageSize
+    let options = null
+    let where = []
+    const conditions = []
+    if (!asDashboard) {
+      options = {
+        query: {
+          orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
+          page: page,
+          page_size: paginationSettings.pageSize
+        }
+      }
+    } else {
+      options = {
+        query: {
+          orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy
+        }
       }
     }
-    if (orderIds || orderStatus) {
-      options.query.where = []
-      if (orderIds) {
-        options.query.where.push({ attribute: 'id', value: orderIds })
-      }
+
+    if (orderIds) {
+      conditions.push({ attribute: 'id', value: orderIds })
+    }
+
+    if (filterValues?.status === null || Object.keys(filterValues).length === 0) {
       if (orderStatus) {
-        options.query.where.push({ attribute: 'status', value: orderStatus })
+        conditions.push({ attribute: 'status', value: orderStatus })
+      }
+    } else {
+      if (orderStatus.includes(filterValues.status)) {
+        conditions.push({ attribute: 'status', value: filterValues.status })
+      } else {
+        return
       }
     }
+
+    if (searchValue) {
+      const searchConditions = []
+      if (isSearchByOrderId) {
+        searchConditions.push(
+          {
+            attribute: 'id',
+            value: {
+              condition: 'ilike',
+              value: encodeURI(`%${searchValue}%`)
+            }
+          }
+        )
+      }
+      // if (isSearchByCustomerEmail) {
+      //   searchConditions.push(
+      //     {
+      //       attribute: 'customer',
+      //       conditions: [
+      //         {
+      //           attribute: 'email',
+      //           value: {
+      //             condition: 'ilike',
+      //             value: encodeURI(`%${searchValue}%`)
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   )
+      // }
+
+      // if (isSearchByCustomerPhone) {
+      //   searchConditions.push(
+      //     {
+      //       attribute: 'customer',
+      //       conditions: [
+      //         {
+      //           attribute: 'cellphone',
+      //           value: {
+      //             condition: 'ilike',
+      //             value: encodeURI(`%${searchValue}%`)
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   )
+      // }
+
+      conditions.push({
+        conector: 'OR',
+        conditions: searchConditions
+      })
+    }
+
+    if (Object.keys(filterValues).length) {
+      const filterConditons = []
+      if (filterValues.deliveryFromDatetime !== null) {
+        filterConditons.push(
+          {
+            attribute: 'delivery_datetime',
+            value: {
+              condition: '>=',
+              value: encodeURI(filterValues.deliveryFromDatetime)
+            }
+          }
+        )
+      }
+      if (filterValues.deliveryEndDatetime !== null) {
+        filterConditons.push(
+          {
+            attribute: 'delivery_datetime',
+            value: {
+              condition: '<=',
+              value: filterValues.deliveryEndDatetime
+            }
+          }
+        )
+      }
+      if (filterValues.businessIds.length !== 0) {
+        filterConditons.push(
+          {
+            attribute: 'business_id',
+            value: filterValues.businessIds
+          }
+        )
+      }
+      if (filterValues.driverId !== null) {
+        filterConditons.push(
+          {
+            attribute: 'driver_id',
+            value: filterValues.driverId
+          }
+        )
+      }
+      if (filterValues.deliveryType !== null) {
+        filterConditons.push(
+          {
+            attribute: 'delivery_type',
+            value: filterValues.deliveryType
+          }
+        )
+      }
+      if (filterValues.paymethodId !== null) {
+        filterConditons.push(
+          {
+            attribute: 'paymethod_id',
+            value: filterValues.paymethodId
+          }
+        )
+      }
+
+      if (filterConditons.length) {
+        conditions.push({
+          conector: 'AND',
+          conditions: filterConditons
+        })
+      }
+    }
+
+    if (conditions.length) {
+      where = {
+        conditions,
+        conector: 'AND'
+      }
+    }
+
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
     const functionFetch = asDashboard
-      ? ordering.setAccessToken(accessToken).orders().asDashboard()
-      : ordering.setAccessToken(accessToken).orders()
+      ? ordering.setAccessToken(token).orders().asDashboard().where(where)
+      : ordering.setAccessToken(token).orders().where(where)
     return await functionFetch.get(options)
+  }
+
+  const isPendingOrder = (createdAt, deliveryDatetime) => {
+    const date1 = dayjs(createdAt)
+    const date2 = dayjs(deliveryDatetime)
+    return date1.diff(date2, 'minute') < 60
+  }
+
+  const isPreOrder = (createdAt, deliveryDatetime) => {
+    const date1 = dayjs(createdAt)
+    const date2 = dayjs(deliveryDatetime)
+    return date1.diff(date2, 'minute') > 60
   }
 
   const loadOrders = async () => {
     if (!session.token) return
     try {
+      setOrderList({ ...orderList, loading: true })
       const response = await getOrders(pagination.currentPage + 1)
-      setOrderList({
-        loading: false,
-        orders: response.content.error ? [] : response.content.result,
-        error: response.content.error ? response.content.result : null
-      })
+
+      let filteredResult = []
+      if (pendingOrder) {
+        if (!response.content.error) {
+          filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime))
+        }
+      }
+      if (preOrder) {
+        if (!response.content.error) {
+          filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime))
+        }
+      }
+
+      if (pendingOrder || preOrder) {
+        setOrderList({
+          loading: false,
+          orders: response.content.error ? [] : filteredResult,
+          error: response.content.error ? response.content.result : null
+        })
+      } else {
+        setOrderList({
+          loading: false,
+          orders: response.content.error ? [] : response.content.result,
+          error: response.content.error ? response.content.result : null
+        })
+      }
+
       if (!response.content.error) {
         setPagination({
           currentPage: response.content.pagination.current_page,
@@ -81,6 +301,24 @@ export const OrderList = (props) => {
       }
     }
   }
+
+  /**
+   * Listening search value change
+   */
+  useEffect(() => {
+    if (searchValue === null) return
+    loadOrders()
+  }, [searchValue])
+  /**
+   * Listening filter values change
+   */
+  useEffect(() => {
+    if (orderStatus.includes(filterValues.status) || filterValues.status === null || Object.keys(filterValues).length === 0) {
+      loadOrders()
+    } else {
+      setOrderList({ loading: false, orders: [], error: null })
+    }
+  }, [filterValues])
 
   useEffect(() => {
     if (orders) {
@@ -119,29 +357,84 @@ export const OrderList = (props) => {
           }
           return valid
         })
-      } else {
-        orders = [...orderList.orders, order]
-        pagination.total++
-        setPagination({
-          ...pagination
+        setOrderList({
+          ...orderList,
+          orders
         })
+      } else {
+        const isOrderStatus = orderStatus.includes(parseInt(order.status))
+        if (isOrderStatus) {
+          orders = [...orderList.orders, order]
+          const _orders = sortOrdersArray(orderDirection, orders)
+          pagination.total++
+          setPagination({
+            ...pagination
+          })
+          setOrderList({
+            ...orderList,
+            orders: _orders
+          })
+        }
       }
-      setOrderList({
-        ...orderList,
-        orders
-      })
+    }
+    const handleRegisterOrder = (_order) => {
+      const order = { ..._order, status: 0 }
+      let orders = []
+      if (orderStatus.includes(0)) {
+        if (pendingOrder) {
+          const isPending = isPendingOrder(order.created_at, order.delivery_datetime)
+          if (isPending) {
+            orders = [...orderList.orders, order]
+            const _orders = sortOrdersArray(orderDirection, orders)
+            pagination.total++
+            setPagination({
+              ...pagination
+            })
+            setOrderList({
+              ...orderList,
+              orders: _orders
+            })
+          }
+        }
+        if (preOrder) {
+          const isPre = isPreOrder(order.created_at, order.delivery_datetime)
+          if (isPre) {
+            orders = [...orderList.orders, order]
+            const _orders = sortOrdersArray(orderDirection, orders)
+            pagination.total++
+            setPagination({
+              ...pagination
+            })
+            setOrderList({
+              ...orderList,
+              orders: _orders
+            })
+          }
+        }
+      }
     }
     socket.on('update_order', handleUpdateOrder)
+    socket.on('orders_register', handleRegisterOrder)
     return () => {
       socket.off('update_order', handleUpdateOrder)
+      socket.off('orders_register', handleRegisterOrder)
     }
   }, [orderList.orders, pagination, socket])
 
   useEffect(() => {
     if (!session.user) return
-    socket.join(`orders_${session?.user?.id}`)
+
+    if (asDashboard) {
+      socket.join('orders')
+    } else {
+      socket.join(`orders_${session?.user?.id}`)
+    }
     return () => {
-      socket.leave(`orders_${session?.user?.id}`)
+      if (asDashboard) {
+        socket.leave('orders')
+      } else {
+        socket.leave(`orders_${session?.user?.id}`)
+      }
     }
   }, [socket, session])
 
@@ -204,8 +497,11 @@ export const OrderList = (props) => {
           {...props}
           orderList={orderList}
           pagination={pagination}
+          pendingOrder={pendingOrder}
+          preOrder={preOrder}
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
+          handleUpdateOrderStatus={handleUpdateOrderStatus}
         />
       )}
     </>
@@ -227,18 +523,6 @@ OrderList.propTypes = {
    * Save user and token with default session manager
    */
   useDefualtSessionManager: PropTypes.bool,
-  /**
-   * Access token to update user
-   * Is required when `useDefualtSessionManager` is false
-   */
-  accessToken: (props, propName) => {
-    if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`object\`.`)
-    }
-    if (props[propName] === undefined && !props.useDefualtSessionManager) {
-      return new Error(`Invalid prop \`${propName}\` is required when \`useDefualtSessionManager\` is false.`)
-    }
-  },
   /**
    * Array of orders
    * This is used of first option to show list

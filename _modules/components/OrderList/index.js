@@ -1,5 +1,7 @@
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -10,6 +12,8 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireWildcard(require("prop-types"));
+
+var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _SessionContext = require("../../contexts/SessionContext");
 
@@ -22,8 +26,6 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -64,11 +66,15 @@ var OrderList = function OrderList(props) {
       orders = props.orders,
       orderIds = props.orderIds,
       orderStatus = props.orderStatus,
+      pendingOrder = props.pendingOrder,
+      preOrder = props.preOrder,
       orderBy = props.orderBy,
       orderDirection = props.orderDirection,
-      useDefualtSessionManager = props.useDefualtSessionManager,
       paginationSettings = props.paginationSettings,
-      asDashboard = props.asDashboard;
+      asDashboard = props.asDashboard,
+      filterValues = props.filterValues,
+      searchValue = props.searchValue,
+      isSearchByOrderId = props.isSearchByOrderId;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -96,91 +102,377 @@ var OrderList = function OrderList(props) {
       session = _useSession2[0];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
-  var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
+
+  var _useSession3 = (0, _SessionContext.useSession)(),
+      _useSession4 = _slicedToArray(_useSession3, 1),
+      token = _useSession4[0].token;
+
   var requestsState = {};
 
-  var getOrders = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(page) {
-      var options, source, functionFetch;
+  var _useState5 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      actionStatus = _useState6[0],
+      setActionStatus = _useState6[1];
+
+  var sortOrdersArray = function sortOrdersArray(option, array) {
+    if (option === 'desc') {
+      return array.sort(function (a, b) {
+        return b.id - a.id;
+      });
+    }
+
+    if (option === 'asc') {
+      return array.sort(function (a, b) {
+        return a.id - b.id;
+      });
+    }
+
+    return array;
+  };
+  /**
+   * Method to change order status from API
+   * @param {object} order orders id and new status
+   */
+
+
+  var handleUpdateOrderStatus = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(order) {
+      var source, _yield$ordering$setAc, content, _orders2;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              options = {
-                query: {
-                  orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
-                  page: page,
-                  page_size: paginationSettings.pageSize
-                }
-              };
+              _context.prev = 0;
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: true
+              }));
+              source = {};
+              requestsState.updateOrders = source;
+              _context.next = 6;
+              return ordering.setAccessToken(token).orders(order.id).save({
+                status: order.newStatus
+              }, {
+                cancelToken: source
+              });
 
-              if (orderIds || orderStatus) {
-                options.query.where = [];
+            case 6:
+              _yield$ordering$setAc = _context.sent;
+              content = _yield$ordering$setAc.content;
+              setActionStatus({
+                loading: false,
+                error: content.error ? content.result : null
+              });
 
-                if (orderIds) {
-                  options.query.where.push({
+              if (!content.error) {
+                _orders2 = orderList.orders.filter(function (_order) {
+                  return _order.id !== order.id;
+                });
+                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                  orders: _orders2
+                }));
+              }
+
+              _context.next = 15;
+              break;
+
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](0);
+              setActionStatus({
+                loading: false,
+                error: [_context.t0.message]
+              });
+
+            case 15:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 12]]);
+    }));
+
+    return function handleUpdateOrderStatus(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  var getOrders = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(page) {
+      var options, where, conditions, searchConditions, filterConditons, source, functionFetch;
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              options = null;
+              where = [];
+              conditions = [];
+
+              if (!asDashboard) {
+                options = {
+                  query: {
+                    orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
+                    page: page,
+                    page_size: paginationSettings.pageSize
+                  }
+                };
+              } else {
+                options = {
+                  query: {
+                    orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy
+                  }
+                };
+              }
+
+              if (orderIds) {
+                conditions.push({
+                  attribute: 'id',
+                  value: orderIds
+                });
+              }
+
+              if (!((filterValues === null || filterValues === void 0 ? void 0 : filterValues.status) === null || Object.keys(filterValues).length === 0)) {
+                _context2.next = 9;
+                break;
+              }
+
+              if (orderStatus) {
+                conditions.push({
+                  attribute: 'status',
+                  value: orderStatus
+                });
+              }
+
+              _context2.next = 14;
+              break;
+
+            case 9:
+              if (!orderStatus.includes(filterValues.status)) {
+                _context2.next = 13;
+                break;
+              }
+
+              conditions.push({
+                attribute: 'status',
+                value: filterValues.status
+              });
+              _context2.next = 14;
+              break;
+
+            case 13:
+              return _context2.abrupt("return");
+
+            case 14:
+              if (searchValue) {
+                searchConditions = [];
+
+                if (isSearchByOrderId) {
+                  searchConditions.push({
                     attribute: 'id',
-                    value: orderIds
+                    value: {
+                      condition: 'ilike',
+                      value: encodeURI("%".concat(searchValue, "%"))
+                    }
+                  });
+                } // if (isSearchByCustomerEmail) {
+                //   searchConditions.push(
+                //     {
+                //       attribute: 'customer',
+                //       conditions: [
+                //         {
+                //           attribute: 'email',
+                //           value: {
+                //             condition: 'ilike',
+                //             value: encodeURI(`%${searchValue}%`)
+                //           }
+                //         }
+                //       ]
+                //     }
+                //   )
+                // }
+                // if (isSearchByCustomerPhone) {
+                //   searchConditions.push(
+                //     {
+                //       attribute: 'customer',
+                //       conditions: [
+                //         {
+                //           attribute: 'cellphone',
+                //           value: {
+                //             condition: 'ilike',
+                //             value: encodeURI(`%${searchValue}%`)
+                //           }
+                //         }
+                //       ]
+                //     }
+                //   )
+                // }
+
+
+                conditions.push({
+                  conector: 'OR',
+                  conditions: searchConditions
+                });
+              }
+
+              if (Object.keys(filterValues).length) {
+                filterConditons = [];
+
+                if (filterValues.deliveryFromDatetime !== null) {
+                  filterConditons.push({
+                    attribute: 'delivery_datetime',
+                    value: {
+                      condition: '>=',
+                      value: encodeURI(filterValues.deliveryFromDatetime)
+                    }
                   });
                 }
 
-                if (orderStatus) {
-                  options.query.where.push({
-                    attribute: 'status',
-                    value: orderStatus
+                if (filterValues.deliveryEndDatetime !== null) {
+                  filterConditons.push({
+                    attribute: 'delivery_datetime',
+                    value: {
+                      condition: '<=',
+                      value: filterValues.deliveryEndDatetime
+                    }
                   });
                 }
+
+                if (filterValues.businessIds.length !== 0) {
+                  filterConditons.push({
+                    attribute: 'business_id',
+                    value: filterValues.businessIds
+                  });
+                }
+
+                if (filterValues.driverId !== null) {
+                  filterConditons.push({
+                    attribute: 'driver_id',
+                    value: filterValues.driverId
+                  });
+                }
+
+                if (filterValues.deliveryType !== null) {
+                  filterConditons.push({
+                    attribute: 'delivery_type',
+                    value: filterValues.deliveryType
+                  });
+                }
+
+                if (filterValues.paymethodId !== null) {
+                  filterConditons.push({
+                    attribute: 'paymethod_id',
+                    value: filterValues.paymethodId
+                  });
+                }
+
+                if (filterConditons.length) {
+                  conditions.push({
+                    conector: 'AND',
+                    conditions: filterConditons
+                  });
+                }
+              }
+
+              if (conditions.length) {
+                where = {
+                  conditions: conditions,
+                  conector: 'AND'
+                };
               }
 
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
-              functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 8;
+              functionFetch = asDashboard ? ordering.setAccessToken(token).orders().asDashboard().where(where) : ordering.setAccessToken(token).orders().where(where);
+              _context2.next = 23;
               return functionFetch.get(options);
 
-            case 8:
-              return _context.abrupt("return", _context.sent);
+            case 23:
+              return _context2.abrupt("return", _context2.sent);
 
-            case 9:
+            case 24:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }));
 
-    return function getOrders(_x) {
-      return _ref.apply(this, arguments);
+    return function getOrders(_x2) {
+      return _ref2.apply(this, arguments);
     };
   }();
 
+  var isPendingOrder = function isPendingOrder(createdAt, deliveryDatetime) {
+    var date1 = (0, _dayjs.default)(createdAt);
+    var date2 = (0, _dayjs.default)(deliveryDatetime);
+    return date1.diff(date2, 'minute') < 60;
+  };
+
+  var isPreOrder = function isPreOrder(createdAt, deliveryDatetime) {
+    var date1 = (0, _dayjs.default)(createdAt);
+    var date2 = (0, _dayjs.default)(deliveryDatetime);
+    return date1.diff(date2, 'minute') > 60;
+  };
+
   var loadOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var response;
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var response, filteredResult;
+      return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               if (session.token) {
-                _context2.next = 2;
+                _context3.next = 2;
                 break;
               }
 
-              return _context2.abrupt("return");
+              return _context3.abrupt("return");
 
             case 2:
-              _context2.prev = 2;
-              _context2.next = 5;
+              _context3.prev = 2;
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: true
+              }));
+              _context3.next = 6;
               return getOrders(pagination.currentPage + 1);
 
-            case 5:
-              response = _context2.sent;
-              setOrderList({
-                loading: false,
-                orders: response.content.error ? [] : response.content.result,
-                error: response.content.error ? response.content.result : null
-              });
+            case 6:
+              response = _context3.sent;
+              filteredResult = [];
+
+              if (pendingOrder) {
+                if (!response.content.error) {
+                  filteredResult = response.content.result.filter(function (order) {
+                    return isPendingOrder(order.created_at, order.delivery_datetime);
+                  });
+                }
+              }
+
+              if (preOrder) {
+                if (!response.content.error) {
+                  filteredResult = response.content.result.filter(function (order) {
+                    return isPreOrder(order.created_at, order.delivery_datetime);
+                  });
+                }
+              }
+
+              if (pendingOrder || preOrder) {
+                setOrderList({
+                  loading: false,
+                  orders: response.content.error ? [] : filteredResult,
+                  error: response.content.error ? response.content.result : null
+                });
+              } else {
+                setOrderList({
+                  loading: false,
+                  orders: response.content.error ? [] : response.content.result,
+                  error: response.content.error ? response.content.result : null
+                });
+              }
 
               if (!response.content.error) {
                 setPagination({
@@ -193,33 +485,56 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 13;
+              _context3.next = 17;
               break;
 
-            case 10:
-              _context2.prev = 10;
-              _context2.t0 = _context2["catch"](2);
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](2);
 
-              if (_context2.t0.constructor.name !== 'Cancel') {
+              if (_context3.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                   loading: false,
-                  error: [_context2.t0.message]
+                  error: [_context3.t0.message]
                 }));
               }
 
-            case 13:
+            case 17:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, null, [[2, 10]]);
+      }, _callee3, null, [[2, 14]]);
     }));
 
     return function loadOrders() {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
+  /**
+   * Listening search value change
+   */
 
+
+  (0, _react.useEffect)(function () {
+    if (searchValue === null) return;
+    loadOrders();
+  }, [searchValue]);
+  /**
+   * Listening filter values change
+   */
+
+  (0, _react.useEffect)(function () {
+    if (orderStatus.includes(filterValues.status) || filterValues.status === null || Object.keys(filterValues).length === 0) {
+      loadOrders();
+    } else {
+      setOrderList({
+        loading: false,
+        orders: [],
+        error: null
+      });
+    }
+  }, [filterValues]);
   (0, _react.useEffect)(function () {
     if (orders) {
       setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -261,96 +576,99 @@ var OrderList = function OrderList(props) {
 
           return valid;
         });
+        setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+          orders: orders
+        }));
       } else {
-        orders = [].concat(_toConsumableArray(orderList.orders), [order]);
-        pagination.total++;
-        setPagination(_objectSpread({}, pagination));
-      }
+        var isOrderStatus = orderStatus.includes(parseInt(order.status));
 
-      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-        orders: orders
-      }));
+        if (isOrderStatus) {
+          orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+
+          var _orders = sortOrdersArray(orderDirection, orders);
+
+          pagination.total++;
+          setPagination(_objectSpread({}, pagination));
+          setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+            orders: _orders
+          }));
+        }
+      }
+    };
+
+    var handleRegisterOrder = function handleRegisterOrder(_order) {
+      var order = _objectSpread(_objectSpread({}, _order), {}, {
+        status: 0
+      });
+
+      var orders = [];
+
+      if (orderStatus.includes(0)) {
+        if (pendingOrder) {
+          var isPending = isPendingOrder(order.created_at, order.delivery_datetime);
+
+          if (isPending) {
+            orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+
+            var _orders = sortOrdersArray(orderDirection, orders);
+
+            pagination.total++;
+            setPagination(_objectSpread({}, pagination));
+            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+              orders: _orders
+            }));
+          }
+        }
+
+        if (preOrder) {
+          var isPre = isPreOrder(order.created_at, order.delivery_datetime);
+
+          if (isPre) {
+            orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+
+            var _orders3 = sortOrdersArray(orderDirection, orders);
+
+            pagination.total++;
+            setPagination(_objectSpread({}, pagination));
+            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+              orders: _orders3
+            }));
+          }
+        }
+      }
     };
 
     socket.on('update_order', handleUpdateOrder);
+    socket.on('orders_register', handleRegisterOrder);
     return function () {
       socket.off('update_order', handleUpdateOrder);
+      socket.off('orders_register', handleRegisterOrder);
     };
   }, [orderList.orders, pagination, socket]);
   (0, _react.useEffect)(function () {
-    var _session$user;
-
     if (!session.user) return;
-    socket.join("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id));
-    return function () {
-      var _session$user2;
 
-      socket.leave("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
+    if (asDashboard) {
+      socket.join('orders');
+    } else {
+      var _session$user;
+
+      socket.join("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id));
+    }
+
+    return function () {
+      if (asDashboard) {
+        socket.leave('orders');
+      } else {
+        var _session$user2;
+
+        socket.leave("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
+      }
     };
   }, [socket, session]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var response;
-      return _regenerator.default.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: true
-              }));
-              _context3.prev = 1;
-              _context3.next = 4;
-              return getOrders(pagination.currentPage + 1);
-
-            case 4:
-              response = _context3.sent;
-              setOrderList({
-                loading: false,
-                orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
-                error: response.content.error ? response.content.result : null
-              });
-
-              if (!response.content.error) {
-                setPagination({
-                  currentPage: response.content.pagination.current_page,
-                  pageSize: response.content.pagination.page_size,
-                  totalPages: response.content.pagination.total_pages,
-                  total: response.content.pagination.total,
-                  from: response.content.pagination.from,
-                  to: response.content.pagination.to
-                });
-              }
-
-              _context3.next = 12;
-              break;
-
-            case 9:
-              _context3.prev = 9;
-              _context3.t0 = _context3["catch"](1);
-
-              if (_context3.t0.constructor.name !== 'Cancel') {
-                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                  loading: false,
-                  error: [_context3.t0.message]
-                }));
-              }
-
-            case 12:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3, null, [[1, 9]]);
-    }));
-
-    return function loadMoreOrders() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  var goToPage = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(page) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
       var response;
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
@@ -361,13 +679,13 @@ var OrderList = function OrderList(props) {
               }));
               _context4.prev = 1;
               _context4.next = 4;
-              return getOrders(page);
+              return getOrders(pagination.currentPage + 1);
 
             case 4:
               response = _context4.sent;
               setOrderList({
                 loading: false,
-                orders: response.content.error ? [] : response.content.result,
+                orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
                 error: response.content.error ? response.content.result : null
               });
 
@@ -404,16 +722,79 @@ var OrderList = function OrderList(props) {
       }, _callee4, null, [[1, 9]]);
     }));
 
-    return function goToPage(_x2) {
+    return function loadMoreOrders() {
       return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var goToPage = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(page) {
+      var response;
+      return _regenerator.default.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: true
+              }));
+              _context5.prev = 1;
+              _context5.next = 4;
+              return getOrders(page);
+
+            case 4:
+              response = _context5.sent;
+              setOrderList({
+                loading: false,
+                orders: response.content.error ? [] : response.content.result,
+                error: response.content.error ? response.content.result : null
+              });
+
+              if (!response.content.error) {
+                setPagination({
+                  currentPage: response.content.pagination.current_page,
+                  pageSize: response.content.pagination.page_size,
+                  totalPages: response.content.pagination.total_pages,
+                  total: response.content.pagination.total,
+                  from: response.content.pagination.from,
+                  to: response.content.pagination.to
+                });
+              }
+
+              _context5.next = 12;
+              break;
+
+            case 9:
+              _context5.prev = 9;
+              _context5.t0 = _context5["catch"](1);
+
+              if (_context5.t0.constructor.name !== 'Cancel') {
+                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                  loading: false,
+                  error: [_context5.t0.message]
+                }));
+              }
+
+            case 12:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 9]]);
+    }));
+
+    return function goToPage(_x3) {
+      return _ref5.apply(this, arguments);
     };
   }();
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderList: orderList,
     pagination: pagination,
+    pendingOrder: pendingOrder,
+    preOrder: preOrder,
     loadMoreOrders: loadMoreOrders,
-    goToPage: goToPage
+    goToPage: goToPage,
+    handleUpdateOrderStatus: handleUpdateOrderStatus
   })));
 };
 
@@ -435,20 +816,6 @@ OrderList.propTypes = {
    * Save user and token with default session manager
    */
   useDefualtSessionManager: _propTypes.default.bool,
-
-  /**
-   * Access token to update user
-   * Is required when `useDefualtSessionManager` is false
-   */
-  accessToken: function accessToken(props, propName) {
-    if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `object`."));
-    }
-
-    if (props[propName] === undefined && !props.useDefualtSessionManager) {
-      return new Error("Invalid prop `".concat(propName, "` is required when `useDefualtSessionManager` is false."));
-    }
-  },
 
   /**
    * Array of orders
