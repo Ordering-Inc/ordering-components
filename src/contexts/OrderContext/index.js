@@ -36,7 +36,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     },
     carts: {},
     confirmAlert,
-    alert
+    alert,
+    loaders: {
+      driverTips: false
+    }
   })
 
   const [session] = useSession()
@@ -177,46 +180,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
 
     updateOrderOptions({ moment: momentUnix })
   }
-
-  /**
-   * Update order option data
-   * @param {object} changes Changes to update order options
-   */
-  // const _updateOrderOptions = async (changes) => {
-  //   if (session.auth) {
-  //     try {
-  //       setState({ ...state, loading: true })
-  //       const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
-  //       const { error, result } = await response.json()
-  //       if (!error) {
-  //         return await applyChanges(changes)
-  //       } else {
-  //         setConfirm({
-  //           show: true,
-  //           content: result,
-  //           onConfirm: () => {
-  //             setConfirm({ show: false })
-  //             applyChanges(changes)
-  //           }
-  //         })
-  //       }
-  //     } catch (err) {
-  //       setState({ ...state, loading: false })
-  //       return false
-  //     }
-  //   } else {
-  //     const options = {
-  //       ...state.options,
-  //       ...changes
-  //     }
-  //     strategy.setItem('options', options, true)
-  //     setState({
-  //       ...state,
-  //       options
-  //     })
-  //     return true
-  //   }
-  // }
 
   /**
    * Update order option data
@@ -403,7 +366,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       return
     }
     try {
-      setState({ ...state, loading: true })
+      setState({ ...state, loaders: { ...state.loaders, driverTips: true } })
       const body = {
         business_id: businessId,
         driver_tip_rate: driverTipRate
@@ -415,10 +378,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       } else {
         setAlert({ show: true, content: result })
       }
-      setState({ ...state, loading: false })
+      setState({ ...state, loaders: { ...state.loaders, driverTips: false } })
       return !error
     } catch (err) {
-      setState({ ...state, loading: false })
+      setState({ ...state, loaders: { ...state.loaders, driverTips: false } })
       return false
     }
   }

@@ -69,6 +69,7 @@ export const CheckoutUI = (props) => {
 
       <MomentOption
         UIComponent={MomentOptionUI}
+        maxDate={new Date('2020-12-31')}
         // onChangeMoment={(value) => handlerValues({ field: 'moment', value })}
       />
       <hr />

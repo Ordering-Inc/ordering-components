@@ -1,4 +1,5 @@
 import React from 'react'
+import { useOrder } from '../../../src/contexts/OrderContext'
 
 export const DriverTipsUI = (props) => {
   const {
@@ -16,6 +17,8 @@ export const DriverTipsUI = (props) => {
     background: 'red',
     color: 'white'
   }
+
+  const [orderState] = useOrder()
 
   return (
     <>
@@ -35,7 +38,11 @@ export const DriverTipsUI = (props) => {
       <div className='tips-list' style={{ display: 'flex' }}>
         {driverTipsOptions?.length > 0 && driverTipsOptions.map((option, i) => (
           <div key={i} style={{ textTransform: 'capitalize', marginRight: '10px' }}>
-            <button style={option === optionSelected ? selectOption : {}} onClick={() => handlerChangeOption(option)}>
+            <button
+              disabled={orderState.loaders.driverTips}
+              style={option === optionSelected ? selectOption : {}}
+              onClick={() => handlerChangeOption(option)}
+            >
               {option}%
             </button>
           </div>
