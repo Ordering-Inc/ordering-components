@@ -38,7 +38,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     confirmAlert,
     alert,
     loaders: {
-      driverTips: false
+      driverTips: false,
+      reorder: false
     }
   })
 
@@ -451,7 +452,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    */
   const reorder = async (orderId) => {
     try {
-      setState({ ...state, loading: true })
+      setState({ ...state, loaders: { ...state.loaders, reorder: true } })
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orders(orderId).reorder({ headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -459,10 +460,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       } else {
         setAlert({ show: true, content: result })
       }
-      setState({ ...state, loading: false })
+      setState({ ...state, loaders: { ...state.loaders, reorder: false } })
       return { error, result }
     } catch (err) {
-      setState({ ...state, loading: false })
+      setState({ ...state, loaders: { ...state.loaders, reorder: false } })
       return { error: true, result: [err.message] }
     }
   }
