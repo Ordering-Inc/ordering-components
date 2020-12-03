@@ -119,6 +119,9 @@ export const Home = () => {
           <Link to='/order_context_advanced'>Order context advanced</Link>
         </li>
         <li>
+          <Link to='/orders_overview'>Orders overview</Link>
+        </li>
+        <li>
           <Link to='/order_details'>Order details</Link>
         </li>
         <h2>P</h2>

@@ -38,9 +38,9 @@ export const DriversListUI = (props) => {
                       <span>{driver?.cellphone}</span>
                     </div>
                     <div>
-                      <p>Assigned orders: {driver.assigned_orders_count}</p>
+                      <p>Assigned orders: {driver?.assigned_orders_count}</p>
                       <p>score: {driver?.qualification || 0}</p>
-                      <p>location: {driver.location.lat} {driver.location.lat}</p>
+                      <p>location: {driver?.location?.lat} {driver?.location?.lng}</p>
                     </div>
                   </div>
                 ))

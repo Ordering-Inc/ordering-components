@@ -63,6 +63,7 @@ import { EventsExample } from './views/EventsExample'
 import { FloatingButtonExample } from './views/FloatingButtonExample'
 
 import { DriversListExample } from './views/DriversListExample'
+import { OrdersOverviewExample } from './views/OrdersOverviewExample'
 
 export default function App () {
   return (
@@ -245,6 +246,9 @@ export default function App () {
 
           <Route path='/drivers_list'>
             <DriversListExample />
+          </Route>
+          <Route path='/orders_overview'>
+            <OrdersOverviewExample />
           </Route>
 
           <Route path='/'>

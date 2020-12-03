@@ -1,19 +1,15 @@
 import React from 'react'
 
-import { DriversListUI } from '../../components/DriversListUI'
-import { DriversList } from '../../../src/components/DriversList'
+import { OrdersOverviewUI } from '../../components/OrdersOverviewUI'
+import { OrdersOverview } from '../../../src/components/OrdersOverview'
 import { TestComponent } from '../../components/TestComponent'
 
-export const DriversListExample = () => {
+export const OrdersOverviewExample = () => {
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
-    UIComponent: DriversListUI,
-    /**
-    * Array of drivers props to fetch
-    */
-    propsToFetch: ['id', 'name', 'lastname', 'assigned_orders_count', 'cellphone', 'location', 'photo', 'qualification'],
+    UIComponent: OrdersOverviewUI,
     /**
      * Components types before products list
      * Array of type components, the parent props will pass to these components
@@ -36,5 +32,5 @@ export const DriversListExample = () => {
     afterElements: [<p key>Test Element After</p>]
   }
 
-  return <DriversList {...props} />
+  return <OrdersOverview {...props} />
 }
