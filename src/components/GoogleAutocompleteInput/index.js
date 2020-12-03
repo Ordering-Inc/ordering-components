@@ -70,6 +70,16 @@ const AutocompleteInput = (props) => {
     }
   }, [googleReady])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (inputRef.current.attributes.autocomplete &&
+        inputRef.current.attributes.autocomplete.value === 'new-field'
+      ) clearInterval(interval)
+      inputRef.current.setAttribute('autocomplete', 'new-field')
+    }, 500)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <input
       {...inputProps}
