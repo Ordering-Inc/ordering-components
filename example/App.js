@@ -62,6 +62,8 @@ import { UpsellingPageExample } from './views/UpsellingPageExample'
 import { EventsExample } from './views/EventsExample'
 import { FloatingButtonExample } from './views/FloatingButtonExample'
 
+import { DriversListExample } from './views/DriversListExample'
+
 export default function App () {
   return (
     <Router>
@@ -240,6 +242,11 @@ export default function App () {
           <Route path='/floating_button'>
             <FloatingButtonExample />
           </Route>
+
+          <Route path='/drivers_list'>
+            <DriversListExample />
+          </Route>
+
           <Route path='/'>
             <Home />
           </Route>

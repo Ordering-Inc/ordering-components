@@ -60,6 +60,9 @@ export const Home = () => {
         <li>
           <Link to='/driver_tips'>Driver tips</Link>
         </li>
+        <li>
+          <Link to='drivers_list'>Drivers list</Link>
+        </li>
         <h2>E</h2>
         <li>
           <Link to='/events'>Events</Link>
