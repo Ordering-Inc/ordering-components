@@ -20,7 +20,8 @@ export const GoogleMaps = (props) => {
     locations,
     mapControls,
     setErrors,
-    handleChangeAddressMap
+    handleChangeAddressMap,
+    maxLimitLocation
   } = props
 
   const divRef = useRef()
@@ -94,7 +95,7 @@ export const GoogleMaps = (props) => {
 
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
 
-    if (distance <= 500) {
+    if (distance <= maxLimitLocation) {
       geocodePosition(curPos)
     } else {
       marker.setPosition(center)
@@ -173,6 +174,10 @@ GoogleMaps.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * maxLimitLocation, max value to set position
+   */
+  maxLimitLocation: PropTypes.number,
   /**
    * handleChangeAddressMap, function to set address when pin is moved
    */
