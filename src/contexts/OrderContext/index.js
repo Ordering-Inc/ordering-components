@@ -70,7 +70,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           const addressesResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get()
           let address = addressesResponse.content.result.find(address => {
             return address.location.lat === localOptions.address.location.lat &&
-              address.location.lng === localOptions.address.location.lng
+              address.location.lng === localOptions.address.location.lng &&
+              address.internal_number === localOptions.address.internal_number &&
+              address.zipcode === localOptions.address.zipcode &&
+              address.address_notes === localOptions.address.address_notes
           })
           if (!address) {
             const addressResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address)

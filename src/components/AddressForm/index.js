@@ -104,10 +104,6 @@ export const AddressForm = (props) => {
     updateChanges({ [e.target.name]: e.target.value })
   }
 
-  const handleChangePosition = (mark) => {
-    updateChanges({ location: mark })
-  }
-
   /**
    * Update address data
    * @param {object} changes object with changes
@@ -224,7 +220,6 @@ export const AddressForm = (props) => {
             saveAddress={saveAddress}
             addressState={addressState}
             validationFields={validationFields}
-            handleChangePosition={handleChangePosition}
           />
         )
       }
