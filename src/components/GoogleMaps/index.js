@@ -79,7 +79,7 @@ export const GoogleMaps = (props) => {
         center.lat = address.location.lat
         center.lng = address.location.lng
       } else {
-        setErrors && setErrors('ERROR_MAX_LIMIT_LOCATION')
+        setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS')
       }
     })
   }
@@ -105,7 +105,7 @@ export const GoogleMaps = (props) => {
     } else {
       marker.setPosition(center)
       map.panTo(new window.google.maps.LatLng(center.lat, center.lng))
-      console.log('Coordinate is more than 500 meters away!')
+      setErrors && setErrors('ERROR_MAX_LIMIT_LOCATION')
     }
   }
 
