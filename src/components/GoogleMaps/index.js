@@ -95,6 +95,11 @@ export const GoogleMaps = (props) => {
 
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
 
+    if (!maxLimitLocation) {
+      geocodePosition(curPos)
+      return
+    }
+
     if (distance <= maxLimitLocation) {
       geocodePosition(curPos)
     } else {
