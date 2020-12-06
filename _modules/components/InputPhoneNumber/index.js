@@ -13,6 +13,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _ConfigContext = require("../../contexts/ConfigContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -47,9 +49,14 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
   var value = props.value,
       UIComponent = props.UIComponent;
 
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
+
   var _useState = (0, _react.useState)({
-    loading: !value,
-    value: null
+    loading: value && (value === null || value === void 0 ? void 0 : value.includes('null')),
+    value: null,
+    number: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
       countryData = _useState2[0],
@@ -61,7 +68,7 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
 
   var getCountryCode = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _data$country_code;
+      var _configs$countryDefau, _configs$countryDefau2;
 
       var response, data;
       return _regenerator.default.wrap(function _callee$(_context) {
@@ -80,7 +87,8 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
               data = _context.sent;
               setCountryData(_objectSpread(_objectSpread({}, countryData), {}, {
                 loading: false,
-                value: (_data$country_code = data === null || data === void 0 ? void 0 : data.country_code) !== null && _data$country_code !== void 0 ? _data$country_code : 'US'
+                value: (data === null || data === void 0 ? void 0 : data.country_code) || (configs === null || configs === void 0 ? void 0 : (_configs$countryDefau = configs.countryDefaultCode) === null || _configs$countryDefau === void 0 ? void 0 : _configs$countryDefau.code) || 'US',
+                number: (data === null || data === void 0 ? void 0 : data.country_calling_code) || (configs === null || configs === void 0 ? void 0 : (_configs$countryDefau2 = configs.countryDefaultCode) === null || _configs$countryDefau2 === void 0 ? void 0 : _configs$countryDefau2.calling_number) || '+1'
               }));
 
             case 7:
@@ -97,7 +105,7 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (!value) {
+    if (value && (value === null || value === void 0 ? void 0 : value.includes('null'))) {
       getCountryCode();
     }
   }, [value]);

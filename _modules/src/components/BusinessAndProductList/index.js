@@ -62,7 +62,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _businessState$busine8, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
+  var _businessState$busine12, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
 
   var isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
@@ -213,7 +213,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
       var _businessState$busine, _orderState$options;
 
-      var _businessState$busine2, _businessState$busine3, isFeatured, _categoryState, _businessState$busine4, _businessState$busine5, productsFiltered, _businessState$busine6, _productsFiltered, _businessState$busine7, _productsFiltered2, categoryKey, categoryState, pagination, parameters, where, searchConditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
+      var _businessState$busine2, _businessState$busine3, _businessState$busine4, isFeatured, _categoryState, _businessState$busine5, _businessState$busine6, _businessState$busine7, productsFiltered, _businessState$busine8, _businessState$busine9, _productsFiltered, _businessState$busine10, _businessState$busine11, _productsFiltered2, categoryKey, categoryState, pagination, parameters, where, searchConditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -224,9 +224,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 break;
               }
 
-              isFeatured = !!((_businessState$busine2 = businessState.business.categories) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.find(function (category) {
+              isFeatured = !!(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.categories) === null || _businessState$busine3 === void 0 ? void 0 : (_businessState$busine4 = _businessState$busine3.find(function (category) {
                 return category;
-              })) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.products.filter(function (product) {
+              })) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.products.filter(function (product) {
                 return product.featured;
               }).length);
               setFeaturedProducts(isFeatured);
@@ -235,21 +235,21 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               });
 
               if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
-                productsFiltered = (_businessState$busine4 = businessState.business.categories) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.find(function (category) {
+                productsFiltered = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.categories) === null || _businessState$busine6 === void 0 ? void 0 : (_businessState$busine7 = _businessState$busine6.find(function (category) {
                   return category.id === categorySelected.id;
-                })) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.products.filter(function (product) {
+                })) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.products.filter(function (product) {
                   return isMatchSearch(product.name, product.description);
                 });
                 _categoryState.products = productsFiltered || [];
               } else if (categorySelected.id === 'featured') {
-                _productsFiltered = (_businessState$busine6 = businessState.business.categories) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.reduce(function (products, category) {
+                _productsFiltered = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 ? void 0 : (_businessState$busine9 = _businessState$busine8.categories) === null || _businessState$busine9 === void 0 ? void 0 : _businessState$busine9.reduce(function (products, category) {
                   return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
                 }, []).filter(function (product) {
                   return isFeaturedSearch(product);
                 });
                 _categoryState.products = _productsFiltered || [];
               } else {
-                _productsFiltered2 = (_businessState$busine7 = businessState.business.categories) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.reduce(function (products, category) {
+                _productsFiltered2 = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.categories) === null || _businessState$busine11 === void 0 ? void 0 : _businessState$busine11.reduce(function (products, category) {
                   return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
                 }, []).filter(function (product) {
                   return isMatchSearch(product.name, product.description);
@@ -463,7 +463,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (isInitialRender) {
       getProduct();
     }
-  }, [JSON.stringify((_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 ? void 0 : _businessState$busine8.id), isInitialRender]);
+  }, [JSON.stringify((_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id), isInitialRender]);
 
   var isValidMoment = function isValidMoment(date, format) {
     return (0, _dayjs.default)(date, format).format(format) === date;
