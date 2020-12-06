@@ -9,7 +9,11 @@ export const InputPhoneNumber = (props) => {
   } = props
 
   const [{ configs }] = useConfig()
-  const [countryData, setCountryData] = useState({ loading: value && value?.includes('null'), value: null, number: null })
+  const [countryData, setCountryData] = useState({
+    loading: !value || (value && value?.includes('null')),
+    value: null,
+    number: null
+  })
 
   /**
    * Function to get country code based on user IP
@@ -21,12 +25,14 @@ export const InputPhoneNumber = (props) => {
       ...countryData,
       loading: false,
       value: data?.country_code || configs?.countryDefaultCode?.code || 'US',
-      number: data?.country_calling_code || configs?.countryDefaultCode?.calling_number || '+1'
+      number: value && value?.includes('null')
+        ? data?.country_calling_code || configs?.countryDefaultCode?.calling_number || '+1'
+        : null
     })
   }
 
   useEffect(() => {
-    if (value && value?.includes('null')) {
+    if (!value || (value && value?.includes('null'))) {
       getCountryCode()
     }
   }, [value])
