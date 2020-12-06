@@ -51,6 +51,9 @@ export const Home = () => {
         </li>
         <h2>C</h2>
         <li>
+          <Link to='/check_password'>Check password</Link>
+        </li>
+        <li>
           <Link to='/config_manager'>Configs examples</Link>
         </li>
         <li>
@@ -66,6 +69,9 @@ export const Home = () => {
         <h2>E</h2>
         <li>
           <Link to='/events'>Events</Link>
+        </li>
+        <li>
+          <Link to='/export_csv'>Export CSV</Link>
         </li>
         <h2>F</h2>
         <li>

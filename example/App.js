@@ -64,6 +64,8 @@ import { FloatingButtonExample } from './views/FloatingButtonExample'
 
 import { DriversListExample } from './views/DriversListExample'
 import { OrdersOverviewExample } from './views/OrdersOverviewExample'
+import { CheckPasswordExample } from './views/CheckPasswordExample'
+import { ExportCSVExample } from './views/ExportCSVExample'
 
 export default function App () {
   return (
@@ -249,6 +251,12 @@ export default function App () {
           </Route>
           <Route path='/orders_overview'>
             <OrdersOverviewExample />
+          </Route>
+          <Route path='/check_password'>
+            <CheckPasswordExample />
+          </Route>
+          <Route path='/export_csv'>
+            <ExportCSVExample />
           </Route>
 
           <Route path='/'>
