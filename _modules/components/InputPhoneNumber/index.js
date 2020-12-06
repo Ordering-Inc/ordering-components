@@ -54,7 +54,7 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
       configs = _useConfig2[0].configs;
 
   var _useState = (0, _react.useState)({
-    loading: value && (value === null || value === void 0 ? void 0 : value.includes('null')),
+    loading: !value || value && (value === null || value === void 0 ? void 0 : value.includes('null')),
     value: null,
     number: null
   }),
@@ -88,7 +88,7 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
               setCountryData(_objectSpread(_objectSpread({}, countryData), {}, {
                 loading: false,
                 value: (data === null || data === void 0 ? void 0 : data.country_code) || (configs === null || configs === void 0 ? void 0 : (_configs$countryDefau = configs.countryDefaultCode) === null || _configs$countryDefau === void 0 ? void 0 : _configs$countryDefau.code) || 'US',
-                number: (data === null || data === void 0 ? void 0 : data.country_calling_code) || (configs === null || configs === void 0 ? void 0 : (_configs$countryDefau2 = configs.countryDefaultCode) === null || _configs$countryDefau2 === void 0 ? void 0 : _configs$countryDefau2.calling_number) || '+1'
+                number: value && (value === null || value === void 0 ? void 0 : value.includes('null')) ? (data === null || data === void 0 ? void 0 : data.country_calling_code) || (configs === null || configs === void 0 ? void 0 : (_configs$countryDefau2 = configs.countryDefaultCode) === null || _configs$countryDefau2 === void 0 ? void 0 : _configs$countryDefau2.calling_number) || '+1' : null
               }));
 
             case 7:
@@ -105,7 +105,7 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (value && (value === null || value === void 0 ? void 0 : value.includes('null'))) {
+    if (!value || value && (value === null || value === void 0 ? void 0 : value.includes('null'))) {
       getCountryCode();
     }
   }, [value]);
