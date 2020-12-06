@@ -20,10 +20,9 @@ export const OrdersManage = (props) => {
   const [searchValue, setSearchValue] = useState(null)
   const [ordersStatusGroup, setOrdersStatusGroup] = useState(statusGroup || 'pending')
   const [filterValues, setFilterValues] = useState({})
-  const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
-  const [deleteActionStart, setDeleteActionStart] = useState(false)
   const [updateStatus, setUpdateStatus] = useState(null)
-  const [updateActionStart, setUpdateActionStart] = useState(false)
+  const [changeMulitOrderStatus, setChangeMultiOrderStatus] = useState(false)
+  const [deleteMultiOrderStatus, setDeleteMultiOrderStatus] = useState(false)
 
   /**
    * Object to save drivers
@@ -42,17 +41,12 @@ export const OrdersManage = (props) => {
    */
   const [driverOrdersModal, setDriverOrdersModal] = useState({ id: null, orders: [], loading: true, error: null })
   /**
-   * Object to save selected order ids
-   */
-  const [selectedOrderIds, setSelectedOrderIds] = useState([])
-  /**
    * Change orders filter by statuses selected
    * @param {string} ordersStatusGroup orders status
    */
   const handleOrdersStatusGroupFilter = (statusGroup) => {
     if (statusGroup === ordersStatusGroup) return
     setOrdersStatusGroup(statusGroup)
-    setSelectedOrderIds([])
   }
   /**
    * Change text to search
@@ -75,39 +69,34 @@ export const OrdersManage = (props) => {
   const handleChangeDriverOrdersModal = (driverId) => {
     if (driverId !== driverOrdersModal.id) setDriverOrdersModal({ ...driverOrdersModal, id: driverId })
   }
-  /**
-   * Save ids of orders selected
-   * @param {string} orderId order id
-   */
-  const handleSelectedOrderIds = (orderId) => {
-    const _ids = [...selectedOrderIds]
-    if (!_ids.includes(orderId)) {
-      _ids.push(orderId)
-    } else {
-      for (let i = 0; i < _ids.length; i++) {
-        if (_ids[i] === orderId) {
-          _ids.splice(i, 1)
-          i--
-        }
-      }
-    }
-    setSelectedOrderIds(_ids)
-  }
+
   /**
    * save status for multi orders selected
    * @param {number} status order status
    */
   const handleChangeMultiOrdersStatus = (status) => {
     setUpdateStatus(status)
-    setUpdateActionStart(true)
+    setChangeMultiOrderStatus(true)
   }
+
+  const handleResetChangeMultiOrder = () => {
+    setChangeMultiOrderStatus(false)
+  }
+
   /**
    * Delete orders for orders selected
-   * @param {}
    */
   const handleDeleteMultiOrders = () => {
-    setDeleteActionStart(true)
+    // setDeleteActionStart(true)
+    setDeleteMultiOrderStatus(true)
   }
+  /**
+   * Reset order delete action
+   */
+  const handleResetDeleteMulitOrders = () => {
+    setDeleteMultiOrderStatus(false)
+  }
+
   /**
    * Method to get paymethods from API
    */
@@ -200,74 +189,6 @@ export const OrdersManage = (props) => {
       })
     }
   }
-  /**
-   * Method to change order status from API
-   */
-  const updateOrderStatus = async (orderId) => {
-    try {
-      setActionStatus({ ...actionStatus, loading: true })
-      const source = {}
-      requestsState.updateOrder = source
-      const { content } = await ordering.setAccessToken(token).orders(orderId).save({ status: updateStatus }, { cancelToken: source })
-      if (!content.error) {
-        const _ordersIds = [...selectedOrderIds]
-        _ordersIds.shift()
-        if (_ordersIds.length === 0) {
-          setUpdateActionStart(false)
-        }
-        setSelectedOrderIds(_ordersIds)
-      }
-      setActionStatus({
-        loading: false,
-        error: content.error ? content.result : null
-      })
-    } catch (err) {
-      setActionStatus({ loading: false, error: [err.message] })
-      setUpdateActionStart(false)
-    }
-  }
-  /**
-   * Method to delete order from API
-   */
-  const deleteOrder = async (id) => {
-    try {
-      setActionStatus({ ...actionStatus, loading: true })
-      const source = {}
-      requestsState.deleteOrder = source
-      const { content } = await ordering.setAccessToken(token).orders(id).delete({ cancelToken: source })
-      if (!content.error) {
-        const _ordersIds = [...selectedOrderIds]
-        _ordersIds.shift()
-        if (_ordersIds.length === 0) {
-          setDeleteActionStart(false)
-        }
-        setSelectedOrderIds(_ordersIds)
-      }
-      setActionStatus({
-        loading: false,
-        error: content.error ? content.result : null
-      })
-    } catch (err) {
-      setActionStatus({ loading: false, error: [err.message] })
-      setDeleteActionStart(false)
-    }
-  }
-
-  /**
-   * Listening update action start
-   */
-  useEffect(() => {
-    if (!updateActionStart || selectedOrderIds.length === 0) return
-    updateOrderStatus(selectedOrderIds[0])
-  }, [selectedOrderIds, updateActionStart])
-
-  /**
-   * Listening delete action start
-   */
-  useEffect(() => {
-    if (!deleteActionStart || selectedOrderIds.length === 0) return
-    deleteOrder(selectedOrderIds[0])
-  }, [selectedOrderIds, deleteActionStart])
 
   /**
    * Listening driver change
@@ -339,16 +260,19 @@ export const OrdersManage = (props) => {
           paymethodsList={paymethodsList}
           businessesList={businessesList}
           driverOrders={driverOrdersModal}
-          selectedOrderIds={selectedOrderIds}
           ordersStatusGroup={ordersStatusGroup}
           filterValues={filterValues}
+          deleteMultiOrderStatus={deleteMultiOrderStatus}
+          changeMulitOrderStatus={changeMulitOrderStatus}
+          multiOrderUpdateStatus={updateStatus}
           handleChangeSearch={handleChangeSearch}
           handleChangeFilterValues={handleChangeFilterValues}
           handleOrdersStatusGroupFilter={handleOrdersStatusGroupFilter}
           handleChangeDriverOrdersModal={handleChangeDriverOrdersModal}
-          handleSelectedOrderIds={handleSelectedOrderIds}
           handleChangeMultiOrdersStatus={handleChangeMultiOrdersStatus}
           handleDeleteMultiOrders={handleDeleteMultiOrders}
+          handleResetDeleteMulitOrders={handleResetDeleteMulitOrders}
+          handleResetChangeMultiOrder={handleResetChangeMultiOrder}
         />
       )}
     </>

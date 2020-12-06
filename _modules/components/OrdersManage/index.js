@@ -27,10 +27,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -38,6 +34,10 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -92,90 +92,73 @@ var OrdersManage = function OrdersManage(props) {
       filterValues = _useState6[0],
       setFilterValues = _useState6[1];
 
-  var _useState7 = (0, _react.useState)({
-    loading: false,
-    error: null
-  }),
+  var _useState7 = (0, _react.useState)(null),
       _useState8 = _slicedToArray(_useState7, 2),
-      actionStatus = _useState8[0],
-      setActionStatus = _useState8[1];
+      updateStatus = _useState8[0],
+      setUpdateStatus = _useState8[1];
 
   var _useState9 = (0, _react.useState)(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      deleteActionStart = _useState10[0],
-      setDeleteActionStart = _useState10[1];
+      changeMulitOrderStatus = _useState10[0],
+      setChangeMultiOrderStatus = _useState10[1];
 
-  var _useState11 = (0, _react.useState)(null),
+  var _useState11 = (0, _react.useState)(false),
       _useState12 = _slicedToArray(_useState11, 2),
-      updateStatus = _useState12[0],
-      setUpdateStatus = _useState12[1];
-
-  var _useState13 = (0, _react.useState)(false),
-      _useState14 = _slicedToArray(_useState13, 2),
-      updateActionStart = _useState14[0],
-      setUpdateActionStart = _useState14[1];
+      deleteMultiOrderStatus = _useState12[0],
+      setDeleteMultiOrderStatus = _useState12[1];
   /**
    * Object to save drivers
    */
 
 
-  var _useState15 = (0, _react.useState)({
+  var _useState13 = (0, _react.useState)({
     drivers: [],
     loading: true,
     error: null
   }),
-      _useState16 = _slicedToArray(_useState15, 2),
-      driversList = _useState16[0],
-      setDriversList = _useState16[1];
+      _useState14 = _slicedToArray(_useState13, 2),
+      driversList = _useState14[0],
+      setDriversList = _useState14[1];
   /**
    * Object to save paymethods
    */
 
 
-  var _useState17 = (0, _react.useState)({
+  var _useState15 = (0, _react.useState)({
     paymethods: [],
     loading: true,
     error: null
   }),
-      _useState18 = _slicedToArray(_useState17, 2),
-      paymethodsList = _useState18[0],
-      setPaymethodsList = _useState18[1];
+      _useState16 = _slicedToArray(_useState15, 2),
+      paymethodsList = _useState16[0],
+      setPaymethodsList = _useState16[1];
   /**
    * Object to save businesses
    */
 
 
-  var _useState19 = (0, _react.useState)({
+  var _useState17 = (0, _react.useState)({
     businesses: [],
     loading: true,
     error: null
   }),
-      _useState20 = _slicedToArray(_useState19, 2),
-      businessesList = _useState20[0],
-      setBusinessesList = _useState20[1];
+      _useState18 = _slicedToArray(_useState17, 2),
+      businessesList = _useState18[0],
+      setBusinessesList = _useState18[1];
   /**
    * Object to save driver orders
    */
 
 
-  var _useState21 = (0, _react.useState)({
+  var _useState19 = (0, _react.useState)({
     id: null,
     orders: [],
     loading: true,
     error: null
   }),
-      _useState22 = _slicedToArray(_useState21, 2),
-      driverOrdersModal = _useState22[0],
-      setDriverOrdersModal = _useState22[1];
-  /**
-   * Object to save selected order ids
-   */
-
-
-  var _useState23 = (0, _react.useState)([]),
-      _useState24 = _slicedToArray(_useState23, 2),
-      selectedOrderIds = _useState24[0],
-      setSelectedOrderIds = _useState24[1];
+      _useState20 = _slicedToArray(_useState19, 2),
+      driverOrdersModal = _useState20[0],
+      setDriverOrdersModal = _useState20[1];
   /**
    * Change orders filter by statuses selected
    * @param {string} ordersStatusGroup orders status
@@ -185,7 +168,6 @@ var OrdersManage = function OrdersManage(props) {
   var handleOrdersStatusGroupFilter = function handleOrdersStatusGroupFilter(statusGroup) {
     if (statusGroup === ordersStatusGroup) return;
     setOrdersStatusGroup(statusGroup);
-    setSelectedOrderIds([]);
   };
   /**
    * Change text to search
@@ -217,29 +199,6 @@ var OrdersManage = function OrdersManage(props) {
     }));
   };
   /**
-   * Save ids of orders selected
-   * @param {string} orderId order id
-   */
-
-
-  var handleSelectedOrderIds = function handleSelectedOrderIds(orderId) {
-    var _ids = _toConsumableArray(selectedOrderIds);
-
-    if (!_ids.includes(orderId)) {
-      _ids.push(orderId);
-    } else {
-      for (var i = 0; i < _ids.length; i++) {
-        if (_ids[i] === orderId) {
-          _ids.splice(i, 1);
-
-          i--;
-        }
-      }
-    }
-
-    setSelectedOrderIds(_ids);
-  };
-  /**
    * save status for multi orders selected
    * @param {number} status order status
    */
@@ -247,16 +206,28 @@ var OrdersManage = function OrdersManage(props) {
 
   var handleChangeMultiOrdersStatus = function handleChangeMultiOrdersStatus(status) {
     setUpdateStatus(status);
-    setUpdateActionStart(true);
+    setChangeMultiOrderStatus(true);
+  };
+
+  var handleResetChangeMultiOrder = function handleResetChangeMultiOrder() {
+    setChangeMultiOrderStatus(false);
   };
   /**
    * Delete orders for orders selected
-   * @param {}
    */
 
 
   var handleDeleteMultiOrders = function handleDeleteMultiOrders() {
-    setDeleteActionStart(true);
+    // setDeleteActionStart(true)
+    setDeleteMultiOrderStatus(true);
+  };
+  /**
+   * Reset order delete action
+   */
+
+
+  var handleResetDeleteMulitOrders = function handleResetDeleteMulitOrders() {
+    setDeleteMultiOrderStatus(false);
   };
   /**
    * Method to get paymethods from API
@@ -491,163 +462,9 @@ var OrdersManage = function OrdersManage(props) {
     };
   }();
   /**
-   * Method to change order status from API
-   */
-
-
-  var updateOrderStatus = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(orderId) {
-      var source, _yield$ordering$setAc4, content, _ordersIds;
-
-      return _regenerator.default.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              _context5.prev = 0;
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: true
-              }));
-              source = {};
-              requestsState.updateOrder = source;
-              _context5.next = 6;
-              return ordering.setAccessToken(token).orders(orderId).save({
-                status: updateStatus
-              }, {
-                cancelToken: source
-              });
-
-            case 6:
-              _yield$ordering$setAc4 = _context5.sent;
-              content = _yield$ordering$setAc4.content;
-
-              if (!content.error) {
-                _ordersIds = _toConsumableArray(selectedOrderIds);
-
-                _ordersIds.shift();
-
-                if (_ordersIds.length === 0) {
-                  setUpdateActionStart(false);
-                }
-
-                setSelectedOrderIds(_ordersIds);
-              }
-
-              setActionStatus({
-                loading: false,
-                error: content.error ? content.result : null
-              });
-              _context5.next = 16;
-              break;
-
-            case 12:
-              _context5.prev = 12;
-              _context5.t0 = _context5["catch"](0);
-              setActionStatus({
-                loading: false,
-                error: [_context5.t0.message]
-              });
-              setUpdateActionStart(false);
-
-            case 16:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5, null, [[0, 12]]);
-    }));
-
-    return function updateOrderStatus(_x) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to delete order from API
-   */
-
-
-  var deleteOrder = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(id) {
-      var source, _yield$ordering$setAc5, content, _ordersIds;
-
-      return _regenerator.default.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              _context6.prev = 0;
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: true
-              }));
-              source = {};
-              requestsState.deleteOrder = source;
-              _context6.next = 6;
-              return ordering.setAccessToken(token).orders(id).delete({
-                cancelToken: source
-              });
-
-            case 6:
-              _yield$ordering$setAc5 = _context6.sent;
-              content = _yield$ordering$setAc5.content;
-
-              if (!content.error) {
-                _ordersIds = _toConsumableArray(selectedOrderIds);
-
-                _ordersIds.shift();
-
-                if (_ordersIds.length === 0) {
-                  setDeleteActionStart(false);
-                }
-
-                setSelectedOrderIds(_ordersIds);
-              }
-
-              setActionStatus({
-                loading: false,
-                error: content.error ? content.result : null
-              });
-              _context6.next = 16;
-              break;
-
-            case 12:
-              _context6.prev = 12;
-              _context6.t0 = _context6["catch"](0);
-              setActionStatus({
-                loading: false,
-                error: [_context6.t0.message]
-              });
-              setDeleteActionStart(false);
-
-            case 16:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6, null, [[0, 12]]);
-    }));
-
-    return function deleteOrder(_x2) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  /**
-   * Listening update action start
-   */
-
-
-  (0, _react.useEffect)(function () {
-    if (!updateActionStart || selectedOrderIds.length === 0) return;
-    updateOrderStatus(selectedOrderIds[0]);
-  }, [selectedOrderIds, updateActionStart]);
-  /**
-   * Listening delete action start
-   */
-
-  (0, _react.useEffect)(function () {
-    if (!deleteActionStart || selectedOrderIds.length === 0) return;
-    deleteOrder(selectedOrderIds[0]);
-  }, [selectedOrderIds, deleteActionStart]);
-  /**
    * Listening driver change
    */
+
 
   (0, _react.useEffect)(function () {
     if (driversList.loading || loading) return;
@@ -718,16 +535,19 @@ var OrdersManage = function OrdersManage(props) {
     paymethodsList: paymethodsList,
     businessesList: businessesList,
     driverOrders: driverOrdersModal,
-    selectedOrderIds: selectedOrderIds,
     ordersStatusGroup: ordersStatusGroup,
     filterValues: filterValues,
+    deleteMultiOrderStatus: deleteMultiOrderStatus,
+    changeMulitOrderStatus: changeMulitOrderStatus,
+    multiOrderUpdateStatus: updateStatus,
     handleChangeSearch: handleChangeSearch,
     handleChangeFilterValues: handleChangeFilterValues,
     handleOrdersStatusGroupFilter: handleOrdersStatusGroupFilter,
     handleChangeDriverOrdersModal: handleChangeDriverOrdersModal,
-    handleSelectedOrderIds: handleSelectedOrderIds,
     handleChangeMultiOrdersStatus: handleChangeMultiOrdersStatus,
-    handleDeleteMultiOrders: handleDeleteMultiOrders
+    handleDeleteMultiOrders: handleDeleteMultiOrders,
+    handleResetDeleteMulitOrders: handleResetDeleteMulitOrders,
+    handleResetChangeMultiOrder: handleResetChangeMultiOrder
   })));
 };
 

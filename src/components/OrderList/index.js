@@ -15,13 +15,19 @@ export const OrderList = (props) => {
     preOrder,
     orderBy,
     orderDirection,
+    useDefualtSessionManager,
     paginationSettings,
     asDashboard,
     filterValues,
     searchValue,
-    isSearchByOrderId
-    // isSearchByCustomerEmail,
-    // isSearchByCustomerPhone
+    isSearchByOrderId,
+    isSearchByCustomerEmail,
+    isSearchByCustomerPhone,
+    deleteMultiOrderStatus,
+    handleResetDeleteMulitOrders,
+    changeMulitOrderStatus,
+    multiOrderUpdateStatus,
+    handleResetChangeMultiOrder
   } = props
 
   const [ordering] = useApi()
@@ -32,9 +38,67 @@ export const OrderList = (props) => {
   })
   const [session] = useSession()
   const socket = useWebsocket()
-  const [{ token }] = useSession()
+  const accessToken = useDefualtSessionManager ? session.token : props.accessToken
+
   const requestsState = {}
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
+  const [deleteActionStart, setDeleteActionStart] = useState(false)
+  const [updateActionStart, setUpdateActionStart] = useState(false)
+
+  /**
+   * Object to save selected order ids
+   */
+  const [selectedOrderIds, setSelectedOrderIds] = useState([])
+  /**
+   * Save ids of orders selected
+   * @param {string} orderId order id
+   */
+  const handleSelectedOrderIds = (orderId) => {
+    const _ids = [...selectedOrderIds]
+    if (!_ids.includes(orderId)) {
+      _ids.push(orderId)
+    } else {
+      for (let i = 0; i < _ids.length; i++) {
+        if (_ids[i] === orderId) {
+          _ids.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setSelectedOrderIds(_ids)
+  }
+  /**
+   * Method to delete order from API
+   */
+  const deleteOrder = async (id) => {
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      const source = {}
+      requestsState.deleteOrder = source
+      const { content } = await ordering.setAccessToken(accessToken).orders(id).delete({ cancelToken: source })
+      if (!content.error) {
+        const orders = orderList.orders.filter(_order => {
+          return _order.id !== id
+        })
+        setOrderList({ ...orderList, orders })
+        const _ordersIds = [...selectedOrderIds]
+        _ordersIds.shift()
+        if (_ordersIds.length === 0) {
+          setDeleteActionStart(false)
+          handleResetDeleteMulitOrders()
+        }
+        setSelectedOrderIds(_ordersIds)
+      }
+      setActionStatus({
+        loading: false,
+        error: content.error ? content.result : null
+      })
+    } catch (err) {
+      setActionStatus({ loading: false, error: [err.message] })
+      setDeleteActionStart(false)
+      handleResetDeleteMulitOrders()
+    }
+  }
 
   const sortOrdersArray = (option, array) => {
     if (option === 'desc') {
@@ -55,7 +119,7 @@ export const OrderList = (props) => {
       setActionStatus({ ...actionStatus, loading: true })
       const source = {}
       requestsState.updateOrders = source
-      const { content } = await ordering.setAccessToken(token).orders(order.id).save({ status: order.newStatus }, { cancelToken: source })
+      const { content } = await ordering.setAccessToken(accessToken).orders(order.id).save({ status: order.newStatus }, { cancelToken: source })
       setActionStatus({
         loading: false,
         error: content.error ? content.result : null
@@ -71,6 +135,53 @@ export const OrderList = (props) => {
     }
   }
 
+  /**
+   * Method to change multi orders status from API
+   */
+  const handleChangeMultiOrderStatus = async (orderId) => {
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      //   const source = {}
+      //   requestsState.updateOrder = source
+      //   const { content } = await ordering.setAccessToken(accessToken).orders(orderId).save({ status: updateStatus }, { cancelToken: source })
+
+      const requestOptions = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ status: multiOrderUpdateStatus })
+      }
+      const response = await fetch(`https://apiv4-dev.ordering.co/v400/en/luisv4/orders/${orderId}`, requestOptions)
+      const { result } = await response.json()
+
+      if (parseInt(result.status) === multiOrderUpdateStatus) {
+        const orders = orderList.orders.filter(_order => {
+          return _order.id !== orderId || _order.status === multiOrderUpdateStatus
+        })
+        setOrderList({ ...orderList, orders })
+
+        const _ordersIds = [...selectedOrderIds]
+        _ordersIds.shift()
+        if (_ordersIds.length === 0) {
+          setUpdateActionStart(false)
+          handleResetChangeMultiOrder()
+        }
+        setSelectedOrderIds(_ordersIds)
+      }
+      setActionStatus({ ...actionStatus, loading: false })
+    } catch (err) {
+      setActionStatus({ loading: false, error: [err.message] })
+      setUpdateActionStart(false)
+      handleResetChangeMultiOrder()
+    }
+  }
+
+  /**
+   * Method to get orders from API
+   * @param {number} page page number
+   */
   const getOrders = async (page) => {
     let options = null
     let where = []
@@ -120,40 +231,39 @@ export const OrderList = (props) => {
           }
         )
       }
-      // if (isSearchByCustomerEmail) {
-      //   searchConditions.push(
-      //     {
-      //       attribute: 'customer',
-      //       conditions: [
-      //         {
-      //           attribute: 'email',
-      //           value: {
-      //             condition: 'ilike',
-      //             value: encodeURI(`%${searchValue}%`)
-      //           }
-      //         }
-      //       ]
-      //     }
-      //   )
-      // }
+      if (isSearchByCustomerEmail) {
+        searchConditions.push(
+          {
+            attribute: 'customer',
+            conditions: [
+              {
+                attribute: 'email',
+                value: {
+                  condition: 'ilike',
+                  value: encodeURI(`%${searchValue}%`)
+                }
+              }
+            ]
+          }
+        )
+      }
 
-      // if (isSearchByCustomerPhone) {
-      //   searchConditions.push(
-      //     {
-      //       attribute: 'customer',
-      //       conditions: [
-      //         {
-      //           attribute: 'cellphone',
-      //           value: {
-      //             condition: 'ilike',
-      //             value: encodeURI(`%${searchValue}%`)
-      //           }
-      //         }
-      //       ]
-      //     }
-      //   )
-      // }
-
+      if (isSearchByCustomerPhone) {
+        searchConditions.push(
+          {
+            attribute: 'customer',
+            conditions: [
+              {
+                attribute: 'cellphone',
+                value: {
+                  condition: 'ilike',
+                  value: encodeURI(`%${searchValue}%`)
+                }
+              }
+            ]
+          }
+        )
+      }
       conditions.push({
         conector: 'OR',
         conditions: searchConditions
@@ -236,8 +346,8 @@ export const OrderList = (props) => {
     requestsState.orders = source
     options.cancelToken = source
     const functionFetch = asDashboard
-      ? ordering.setAccessToken(token).orders().asDashboard().where(where)
-      : ordering.setAccessToken(token).orders().where(where)
+      ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where)
+      : ordering.setAccessToken(accessToken).orders().where(where)
     return await functionFetch.get(options)
   }
 
@@ -335,6 +445,41 @@ export const OrderList = (props) => {
       }
     }
   }, [session])
+
+  /**
+   * Listening mulit orders delete action start
+   */
+  useEffect(() => {
+    if (!deleteMultiOrderStatus) return
+    if (selectedOrderIds.length === 0) {
+      handleResetDeleteMulitOrders()
+      return
+    }
+
+    setDeleteActionStart(true)
+  }, [deleteMultiOrderStatus])
+
+  useEffect(() => {
+    if (!deleteActionStart || selectedOrderIds.length === 0) return
+    deleteOrder(selectedOrderIds[0])
+  }, [selectedOrderIds, deleteActionStart])
+
+  /**
+   * Listening multi orders action start to change status
+   */
+  useEffect(() => {
+    if (!updateActionStart || selectedOrderIds.length === 0) return
+    handleChangeMultiOrderStatus(selectedOrderIds[0])
+  }, [selectedOrderIds, updateActionStart])
+
+  useEffect(() => {
+    if (!changeMulitOrderStatus) return
+    if (selectedOrderIds.length === 0) {
+      handleResetChangeMultiOrder()
+      return
+    }
+    setUpdateActionStart(true)
+  }, [changeMulitOrderStatus])
 
   useEffect(() => {
     if (orderList.loading) return
@@ -502,6 +647,8 @@ export const OrderList = (props) => {
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
           handleUpdateOrderStatus={handleUpdateOrderStatus}
+          selectedOrderIds={selectedOrderIds}
+          handleSelectedOrderIds={handleSelectedOrderIds}
         />
       )}
     </>
@@ -513,6 +660,28 @@ OrderList.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * new status to change status for several orders
+   */
+  multiOrderUpdateStatus: PropTypes.number,
+
+  /**
+   * notify to start for several orders delete action
+   */
+  deleteMultiOrderStatus: PropTypes.bool,
+  /**
+   * notify to start for several orders status change action
+   */
+  changeMulitOrderStatus: PropTypes.bool,
+
+  /**
+   * Function to initiate delete action status
+   */
+  handleResetDeleteMulitOrders: PropTypes.func,
+  /**
+   * Function to initiate multi order status change action
+   */
+  handleResetChangeMultiOrder: PropTypes.func,
   /**
    * Function to get order that was clicked
    * @param {Object} order Order that was clicked
