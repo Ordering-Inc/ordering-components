@@ -26,7 +26,7 @@ export const InputPhoneNumber = (props) => {
   }
 
   useEffect(() => {
-    if (value && value?.includes('null')) {
+    if (!value || (value && value?.includes('null'))) {
       getCountryCode()
     }
   }, [value])
