@@ -111,6 +111,12 @@ Object.defineProperty(exports, "Checkout", {
     return _Checkout.Checkout;
   }
 });
+Object.defineProperty(exports, "CheckPassword", {
+  enumerable: true,
+  get: function get() {
+    return _CheckPassword.CheckPassword;
+  }
+});
 Object.defineProperty(exports, "CouponControl", {
   enumerable: true,
   get: function get() {
@@ -675,6 +681,8 @@ var _BusinessTypeFilter = require("./components/BusinessTypeFilter");
 var _Cart = require("./components/Cart");
 
 var _Checkout = require("./components/Checkout");
+
+var _CheckPassword = require("./components/CheckPassword");
 
 var _CouponControl = require("./components/CouponControl");
 

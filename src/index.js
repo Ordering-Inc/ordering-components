@@ -16,6 +16,7 @@ import { BusinessSortControl } from './components/BusinessSortControl'
 import { BusinessTypeFilter } from './components/BusinessTypeFilter'
 import { Cart } from './components/Cart'
 import { Checkout } from './components/Checkout'
+import { CheckPassword } from './components/CheckPassword'
 import { CouponControl } from './components/CouponControl'
 import { DragAndDrop } from './components/DragAndDrop'
 import { DriverTips } from './components/DriverTips'
@@ -103,6 +104,7 @@ export {
   BusinessTypeFilter,
   Cart,
   Checkout,
+  CheckPassword,
   CouponControl,
   DragAndDrop,
   DriverTips,
