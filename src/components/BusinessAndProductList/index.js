@@ -88,7 +88,7 @@ export const BusinessAndProductList = (props) => {
 
   const getProducts = async (newFetch) => {
     if (!businessState?.business?.lazy_load_products_recommended) {
-      const isFeatured = !!businessState.business.categories?.find(
+      const isFeatured = !!businessState?.business?.categories?.find(
         category => category
       )?.products.filter(
         product => product.featured
@@ -99,21 +99,21 @@ export const BusinessAndProductList = (props) => {
         loading: false
       }
       if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
-        const productsFiltered = businessState.business.categories?.find(
+        const productsFiltered = businessState?.business?.categories?.find(
           category => category.id === categorySelected.id
         )?.products.filter(
           product => isMatchSearch(product.name, product.description)
         )
         categoryState.products = productsFiltered || []
       } else if (categorySelected.id === 'featured') {
-        const productsFiltered = businessState.business.categories?.reduce(
+        const productsFiltered = businessState?.business?.categories?.reduce(
           (products, category) => [...products, ...category.products], []
         ).filter(
           product => isFeaturedSearch(product)
         )
         categoryState.products = productsFiltered || []
       } else {
-        const productsFiltered = businessState.business.categories?.reduce(
+        const productsFiltered = businessState?.business?.categories?.reduce(
           (products, category) => [...products, ...category.products], []
         ).filter(
           product => isMatchSearch(product.name, product.description)

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useConfig } from '../../contexts/ConfigContext'
 
 export const InputPhoneNumber = (props) => {
   const {
@@ -7,7 +8,8 @@ export const InputPhoneNumber = (props) => {
     UIComponent
   } = props
 
-  const [countryData, setCountryData] = useState({ loading: !value, value: null })
+  const [{ configs }] = useConfig()
+  const [countryData, setCountryData] = useState({ loading: value && value?.includes('null'), value: null, number: null })
 
   /**
    * Function to get country code based on user IP
@@ -18,12 +20,13 @@ export const InputPhoneNumber = (props) => {
     setCountryData({
       ...countryData,
       loading: false,
-      value: data?.country_code ?? 'US'
+      value: data?.country_code || configs?.countryDefaultCode?.code || 'US',
+      number: data?.country_calling_code || configs?.countryDefaultCode?.calling_number || '+1'
     })
   }
 
   useEffect(() => {
-    if (!value) {
+    if (value && value?.includes('null')) {
       getCountryCode()
     }
   }, [value])
