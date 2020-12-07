@@ -13,7 +13,8 @@ const AutocompleteInput = (props) => {
     types,
     fields,
     countryCode,
-    childRef
+    childRef,
+    id
   } = props
 
   const inputRef = useRef()
@@ -78,12 +79,12 @@ const AutocompleteInput = (props) => {
       inputRef.current.setAttribute('autocomplete', 'new-field')
     }, 100)
     return () => clearInterval(interval)
-  }, [])
+  })
 
   return (
     <input
       {...inputProps}
-      autoComplete=''
+      autoComplete='new-field'
       disabled={!props.googleReady}
       ref={(e) => {
         inputRef.current = e
