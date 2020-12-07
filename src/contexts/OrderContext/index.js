@@ -109,10 +109,28 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     }
   }
 
+  const checkAddress = (address) => {
+    const props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number']
+    const values = []
+    props.forEach(prop => {
+      if (state.options?.address[prop]) {
+        if (prop === 'location') {
+          values.push(address[prop].lat === state.options?.address[prop].lat &&
+            address[prop].lng === state.options?.address[prop].lng)
+        } else {
+          values.push(address[prop] === state.options?.address[prop])
+        }
+      } else {
+        values.push(!address[prop])
+      }
+    })
+    return values.every(value => value)
+  }
+
   /**
    * Change order address
    */
-  const changeAddress = async (addressId) => {
+  const changeAddress = async (addressId, params) => {
     if (typeof addressId === 'object') {
       const options = {
         ...state.options,
@@ -125,7 +143,17 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       })
       return
     }
-    if (state.options.address_id === addressId) {
+
+    if (params && params?.address && !checkAddress(params?.address)) {
+      updateOrderOptions({ address_id: params?.address?.id })
+      return
+    }
+
+    if (params && params?.isEdit) {
+      if (addressId !== state.options.address_id) {
+        return
+      }
+      updateOrderOptions({ address_id: addressId })
       return
     }
 
