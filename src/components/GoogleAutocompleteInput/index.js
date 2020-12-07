@@ -74,9 +74,9 @@ const AutocompleteInput = (props) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (inputRef.current.attributes.autocomplete &&
-        inputRef.current.attributes.autocomplete.value === 'nocomplete'
+        inputRef.current.attributes.autocomplete.value === 'new-field'
       ) clearInterval(interval)
-      inputRef.current.setAttribute('autocomplete', 'nocomplete')
+      inputRef.current.setAttribute('autocomplete', 'new-field')
     }, 100)
     return () => clearInterval(interval)
   })
