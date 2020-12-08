@@ -21,7 +21,7 @@ const AutocompleteInput = (props) => {
   const inputProps = {}
 
   Object.entries(props).forEach(([key, value]) => {
-    if (['googleReady', 'apiKey', 'onChangeAddress', 'setValue', 'countryCode', 'types', 'fields'].indexOf(key) === -1) {
+    if (['googleReady', 'apiKey', 'onChangeAddress', 'setValue', 'childRef', 'countryCode', 'types', 'fields'].indexOf(key) === -1) {
       inputProps[key] = value
     }
   })
