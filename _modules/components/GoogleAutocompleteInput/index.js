@@ -51,7 +51,7 @@ var AutocompleteInput = function AutocompleteInput(props) {
         key = _ref2[0],
         value = _ref2[1];
 
-    if (['googleReady', 'apiKey', 'onChangeAddress', 'setValue', 'countryCode', 'types', 'fields'].indexOf(key) === -1) {
+    if (['googleReady', 'apiKey', 'onChangeAddress', 'setValue', 'childRef', 'countryCode', 'types', 'fields'].indexOf(key) === -1) {
       inputProps[key] = value;
     }
   });
