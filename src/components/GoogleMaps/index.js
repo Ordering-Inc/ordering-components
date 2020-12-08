@@ -56,7 +56,7 @@ export const GoogleMaps = (props) => {
    * function to get all address information with a location
    * @param {google location} pos
    */
-  const geocodePosition = (pos) => {
+  const geocodePosition = (pos, map, marker) => {
     const geocoder = new window.google.maps.Geocoder()
 
     geocoder.geocode({ latLng: pos }, (results) => {
@@ -79,8 +79,10 @@ export const GoogleMaps = (props) => {
         center.lat = address.location.lat
         center.lng = address.location.lng
       } else {
+        marker && marker.setPosition(center)
         setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS')
       }
+      map && map.panTo(new window.google.maps.LatLng(center.lat, center.lng))
     })
   }
 
@@ -96,7 +98,7 @@ export const GoogleMaps = (props) => {
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
 
     if (!maxLimitLocation) {
-      geocodePosition(curPos)
+      geocodePosition(curPos, map, marker)
       return
     }
 
