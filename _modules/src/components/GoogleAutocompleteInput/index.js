@@ -43,8 +43,7 @@ var AutocompleteInput = function AutocompleteInput(props) {
       types = props.types,
       fields = props.fields,
       countryCode = props.countryCode,
-      childRef = props.childRef,
-      setValue = props.setValue;
+      childRef = props.childRef;
   var inputRef = (0, _react.useRef)();
   var inputProps = {};
   Object.entries(props).forEach(function (_ref) {
@@ -125,9 +124,6 @@ var AutocompleteInput = function AutocompleteInput(props) {
   });
   return /*#__PURE__*/_react.default.createElement("input", _extends({}, inputProps, {
     autoComplete: "new-field",
-    onChange: function onChange(e) {
-      return setValue('address', e.target.value);
-    },
     disabled: !props.googleReady,
     ref: function ref(e) {
       inputRef.current = e;
