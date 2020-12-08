@@ -25,6 +25,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -63,7 +65,9 @@ var GoogleMaps = function GoogleMaps(props) {
       location = props.location,
       locations = props.locations,
       mapControls = props.mapControls,
-      handleChangePosition = props.handleChangePosition;
+      setErrors = props.setErrors,
+      handleChangeAddressMap = props.handleChangeAddressMap,
+      maxLimitLocation = props.maxLimitLocation;
   var divRef = (0, _react.useRef)();
 
   var _useState = (0, _react.useState)(null),
@@ -80,6 +84,15 @@ var GoogleMaps = function GoogleMaps(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       boundMap = _useState6[0],
       setBoundMap = _useState6[1];
+
+  var center = {
+    lat: location.lat,
+    lng: location.lng
+  };
+  /**
+   * Function to generate multiple markers
+   * @param {Google map} map
+   */
 
   var generateMarkers = function generateMarkers(map) {
     var bounds = new window.google.maps.LatLngBounds();
@@ -105,16 +118,89 @@ var GoogleMaps = function GoogleMaps(props) {
     map.fitBounds(bounds);
     setBoundMap(bounds);
   };
+  /**
+   * function to get all address information with a location
+   * @param {google location} pos
+   */
+
+
+  var geocodePosition = function geocodePosition(pos, map, marker) {
+    var geocoder = new window.google.maps.Geocoder();
+    geocoder.geocode({
+      latLng: pos
+    }, function (results) {
+      var zipcode = null;
+
+      if (results && results.length > 0) {
+        var _iterator = _createForOfIteratorHelper(results[0].address_components),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var component = _step.value;
+            var addressType = component.types[0];
+
+            if (addressType === 'postal_code') {
+              zipcode = component.short_name;
+              break;
+            }
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        var address = {
+          address: results[0].formatted_address,
+          location: {
+            lat: pos.lat(),
+            lng: pos.lng()
+          },
+          zipcode: zipcode
+        };
+        handleChangeAddressMap(address);
+        center.lat = address.location.lat;
+        center.lng = address.location.lng;
+      } else {
+        marker && marker.setPosition(center);
+        setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS');
+      }
+
+      map && map.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+    });
+  };
+  /**
+   * Function to return distance between two locations
+   * @param {google location} loc1
+   * @param {*google location} loc2
+   */
+
+
+  var validateResult = function validateResult(map, marker, curPos) {
+    var loc1 = new window.google.maps.LatLng(curPos.lat(), curPos.lng());
+    var loc2 = new window.google.maps.LatLng(location.lat, location.lng);
+    var distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2);
+
+    if (!maxLimitLocation) {
+      geocodePosition(curPos, map, marker);
+      return;
+    }
+
+    if (distance <= maxLimitLocation) {
+      geocodePosition(curPos);
+    } else {
+      marker.setPosition(center);
+      map.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+      setErrors && setErrors('ERROR_MAX_LIMIT_LOCATION');
+    }
+  };
 
   (0, _react.useEffect)(function () {
     if (googleReady) {
-      var coordinates = {
-        lat: location.lat,
-        lng: location.lng
-      };
       var map = new window.google.maps.Map(divRef.current, {
         zoom: location.zoom || mapControls.defaultZoom,
-        center: coordinates,
+        center: center,
         zoomControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.zoomControl,
         streetViewControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.streetViewControl,
         fullscreenControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.fullscreenControl,
@@ -126,20 +212,33 @@ var GoogleMaps = function GoogleMaps(props) {
         }, mapControls === null || mapControls === void 0 ? void 0 : mapControls.mapTypeControlOptions)
       });
       var marker = null;
+      setGoogleMap(map);
 
       if (locations) {
-        setGoogleMap(map);
         generateMarkers(map);
       } else {
         marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(coordinates.lat, coordinates.lng),
+          position: new window.google.maps.LatLng(center.lat, center.lng),
           map: map,
           draggable: true
         });
-        marker.addListener('mouseup', function (marker) {
-          handleChangePosition(marker.latLng);
+        window.google.maps.event.addListener(marker, 'dragend', function () {
+          return validateResult(map, marker, marker.getPosition());
+        });
+        window.google.maps.event.addListener(map, 'drag', function () {
+          return marker.setPosition(map.getCenter());
+        });
+        window.google.maps.event.addListener(map, 'dragend', function () {
+          marker.setPosition(map.getCenter());
+          validateResult(map, marker, map.getCenter());
         });
       }
+
+      return function () {
+        window.google.maps.event.clearListeners(marker, 'dragend');
+        window.google.maps.event.clearListeners(map, 'drag');
+        window.google.maps.event.clearListeners(map, 'dragend');
+      };
     }
   }, [googleReady]);
   (0, _react.useEffect)(function () {
@@ -175,6 +274,16 @@ GoogleMaps.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
+
+  /**
+   * maxLimitLocation, max value to set position
+   */
+  maxLimitLocation: _propTypes.default.number,
+
+  /**
+   * handleChangeAddressMap, function to set address when pin is moved
+   */
+  handleChangeAddressMap: _propTypes.default.func,
 
   /**
    * Components types before [PUT HERE COMPONENT NAME]

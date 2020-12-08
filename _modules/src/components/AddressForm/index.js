@@ -101,7 +101,12 @@ var AddressForm = function AddressForm(props) {
       changeAddress = _useOrder2[1].changeAddress;
 
   var userId = props.userId || (user === null || user === void 0 ? void 0 : user.id);
-  var accessToken = props.accessToken || token; // if (!userId) {
+  var accessToken = props.accessToken || token;
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      isEdit = _useState8[0],
+      _setIsEdit = _useState8[1]; // if (!userId) {
   //   throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
   // }
   // if (!accessToken) {
@@ -111,6 +116,7 @@ var AddressForm = function AddressForm(props) {
   /**
    * Load the validation fields
    */
+
 
   var loadValidationFields = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -248,12 +254,6 @@ var AddressForm = function AddressForm(props) {
   var hanldeChangeInput = function hanldeChangeInput(e) {
     updateChanges(_defineProperty({}, e.target.name, e.target.value));
   };
-
-  var handleChangePosition = function handleChangePosition(mark) {
-    updateChanges({
-      location: mark
-    });
-  };
   /**
    * Update address data
    * @param {object} changes object with changes
@@ -332,7 +332,10 @@ var AddressForm = function AddressForm(props) {
                 onSaveAddress && onSaveAddress(content.result);
 
                 if (isSelectedAfterAdd) {
-                  changeAddress(content.result.id);
+                  changeAddress(content.result.id, {
+                    address: isEdit ? null : content.result,
+                    isEdit: isEdit
+                  });
                 }
               }
 
@@ -395,7 +398,9 @@ var AddressForm = function AddressForm(props) {
     saveAddress: saveAddress,
     addressState: addressState,
     validationFields: validationFields,
-    handleChangePosition: handleChangePosition
+    setIsEdit: function setIsEdit(val) {
+      return _setIsEdit(val);
+    }
   })));
 };
 

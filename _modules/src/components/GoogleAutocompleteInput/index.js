@@ -43,7 +43,8 @@ var AutocompleteInput = function AutocompleteInput(props) {
       types = props.types,
       fields = props.fields,
       countryCode = props.countryCode,
-      childRef = props.childRef;
+      childRef = props.childRef,
+      setValue = props.setValue;
   var inputRef = (0, _react.useRef)();
   var inputProps = {};
   Object.entries(props).forEach(function (_ref) {
@@ -51,7 +52,7 @@ var AutocompleteInput = function AutocompleteInput(props) {
         key = _ref2[0],
         value = _ref2[1];
 
-    if (['googleReady', 'apiKey', 'onChangeAddress', 'countryCode', 'childRef', 'types', 'fields'].indexOf(key) === -1) {
+    if (['googleReady', 'apiKey', 'onChangeAddress', 'setValue', 'countryCode', 'types', 'fields'].indexOf(key) === -1) {
       inputProps[key] = value;
     }
   });
@@ -121,9 +122,12 @@ var AutocompleteInput = function AutocompleteInput(props) {
     return function () {
       return clearInterval(interval);
     };
-  }, []);
+  });
   return /*#__PURE__*/_react.default.createElement("input", _extends({}, inputProps, {
-    autoComplete: "",
+    autoComplete: "new-field",
+    onChange: function onChange(e) {
+      return setValue('address', e.target.value);
+    },
     disabled: !props.googleReady,
     ref: function ref(e) {
       inputRef.current = e;

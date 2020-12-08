@@ -189,7 +189,7 @@ var OrderProvider = function OrderProvider(_ref) {
             case 17:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
-                return address.location.lat === localOptions.address.location.lat && address.location.lng === localOptions.address.location.lng;
+                return address.location.lat === localOptions.address.location.lat && address.location.lng === localOptions.address.location.lng && address.internal_number === localOptions.address.internal_number && address.zipcode === localOptions.address.zipcode && address.address_notes === localOptions.address.address_notes;
               });
 
               if (address) {
@@ -270,49 +270,102 @@ var OrderProvider = function OrderProvider(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
+
+  var checkAddress = function checkAddress(address) {
+    var props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number'];
+    var values = [];
+    props.forEach(function (prop) {
+      var _state$options;
+
+      if ((_state$options = state.options) === null || _state$options === void 0 ? void 0 : _state$options.address[prop]) {
+        if (prop === 'location') {
+          var _state$options2, _state$options3;
+
+          values.push(address[prop].lat === ((_state$options2 = state.options) === null || _state$options2 === void 0 ? void 0 : _state$options2.address[prop].lat) && address[prop].lng === ((_state$options3 = state.options) === null || _state$options3 === void 0 ? void 0 : _state$options3.address[prop].lng));
+        } else {
+          var _state$options4;
+
+          values.push(address[prop] === ((_state$options4 = state.options) === null || _state$options4 === void 0 ? void 0 : _state$options4.address[prop]));
+        }
+      } else {
+        values.push(!address[prop]);
+      }
+    });
+    return values.every(function (value) {
+      return value;
+    });
+  };
   /**
    * Change order address
    */
 
 
   var changeAddress = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId) {
-      var options;
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
+      var optionsStorage, options, _params$address;
+
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (!(_typeof(addressId) === 'object')) {
-                _context2.next = 6;
+                _context2.next = 9;
                 break;
               }
 
-              options = _objectSpread(_objectSpread({}, state.options), {}, {
-                address: addressId
+              _context2.next = 3;
+              return strategy.getItem('options', true);
+
+            case 3:
+              optionsStorage = _context2.sent;
+              options = _objectSpread(_objectSpread(_objectSpread({}, state.options), optionsStorage), {}, {
+                address: _objectSpread(_objectSpread({}, optionsStorage === null || optionsStorage === void 0 ? void 0 : optionsStorage.address), addressId)
               });
-              _context2.next = 4;
+              _context2.next = 7;
               return strategy.setItem('options', options, true);
 
-            case 4:
+            case 7:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 options: options
               }));
               return _context2.abrupt("return");
 
-            case 6:
-              if (!(state.options.address_id === addressId)) {
-                _context2.next = 8;
+            case 9:
+              if (!(params && (params === null || params === void 0 ? void 0 : params.address) && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
+                _context2.next = 12;
+                break;
+              }
+
+              updateOrderOptions({
+                address_id: params === null || params === void 0 ? void 0 : (_params$address = params.address) === null || _params$address === void 0 ? void 0 : _params$address.id
+              });
+              return _context2.abrupt("return");
+
+            case 12:
+              if (!(params && (params === null || params === void 0 ? void 0 : params.isEdit))) {
+                _context2.next = 17;
+                break;
+              }
+
+              if (!(addressId !== state.options.address_id)) {
+                _context2.next = 15;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 8:
+            case 15:
+              updateOrderOptions({
+                address_id: addressId
+              });
+              return _context2.abrupt("return");
+
+            case 17:
               updateOrderOptions({
                 address_id: addressId
               });
 
-            case 9:
+            case 18:
             case "end":
               return _context2.stop();
           }
@@ -320,7 +373,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee2);
     }));
 
-    return function changeAddress(_x) {
+    return function changeAddress(_x, _x2) {
       return _ref3.apply(this, arguments);
     };
   }();
@@ -374,7 +427,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee3);
     }));
 
-    return function changeType(_x2) {
+    return function changeType(_x3) {
       return _ref4.apply(this, arguments);
     };
   }();
@@ -430,7 +483,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee4);
     }));
 
-    return function changeMoment(_x3) {
+    return function changeMoment(_x4) {
       return _ref5.apply(this, arguments);
     };
   }();
@@ -545,7 +598,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee5, null, [[1, 14]]);
     }));
 
-    return function updateOrderOptions(_x4) {
+    return function updateOrderOptions(_x5) {
       return _ref6.apply(this, arguments);
     };
   }();
@@ -614,7 +667,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee6, null, [[0, 14]]);
     }));
 
-    return function addProduct(_x5) {
+    return function addProduct(_x6) {
       return _ref7.apply(this, arguments);
     };
   }();
@@ -687,7 +740,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee7, null, [[0, 14]]);
     }));
 
-    return function removeProduct(_x6) {
+    return function removeProduct(_x7) {
       return _ref8.apply(this, arguments);
     };
   }();
@@ -762,7 +815,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee8, null, [[0, 16]]);
     }));
 
-    return function clearCart(_x7) {
+    return function clearCart(_x8) {
       return _ref9.apply(this, arguments);
     };
   }();
@@ -831,7 +884,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee9, null, [[0, 14]]);
     }));
 
-    return function updateProduct(_x8) {
+    return function updateProduct(_x9) {
       return _ref10.apply(this, arguments);
     };
   }();
@@ -926,7 +979,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee10, null, [[6, 20]]);
     }));
 
-    return function applyCoupon(_x9) {
+    return function applyCoupon(_x10) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -1021,7 +1074,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[6, 20]]);
     }));
 
-    return function changeDriverTip(_x10, _x11) {
+    return function changeDriverTip(_x11, _x12) {
       return _ref12.apply(this, arguments);
     };
   }();
@@ -1096,7 +1149,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee12, null, [[0, 15]]);
     }));
 
-    return function placeCart(_x12, _x13) {
+    return function placeCart(_x13, _x14) {
       return _ref13.apply(this, arguments);
     };
   }();
@@ -1171,7 +1224,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee13, null, [[0, 15]]);
     }));
 
-    return function confirmCart(_x14, _x15) {
+    return function confirmCart(_x15, _x16) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1242,7 +1295,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[0, 13]]);
     }));
 
-    return function reorder(_x16) {
+    return function reorder(_x17) {
       return _ref15.apply(this, arguments);
     };
   }();
