@@ -113,7 +113,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     const props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number']
     const values = []
     props.forEach(prop => {
-      if (state.options?.address[prop]) {
+      if (state.options?.address && state.options?.address[prop]) {
         if (prop === 'location') {
           values.push(address[prop].lat === state.options?.address[prop].lat &&
             address[prop].lng === state.options?.address[prop].lng)
