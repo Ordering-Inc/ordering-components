@@ -132,9 +132,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    */
   const changeAddress = async (addressId, params) => {
     if (typeof addressId === 'object') {
+      const optionsStorage = await strategy.getItem('options', true)
       const options = {
         ...state.options,
-        address: addressId
+        ...optionsStorage,
+        address: {
+          ...optionsStorage?.address,
+          ...addressId
+        }
       }
       await strategy.setItem('options', options, true)
       setState({
