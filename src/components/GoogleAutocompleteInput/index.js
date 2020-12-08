@@ -79,21 +79,13 @@ const AutocompleteInput = (props) => {
       inputRef.current.setAttribute('autocomplete', 'new-field')
     }, 100)
     return () => clearInterval(interval)
-<<<<<<< HEAD
   })
-=======
-  }, [])
->>>>>>> e8fcf84323714128bbeb2ee82cc90a742660055b
 
   return (
     <input
       {...inputProps}
-<<<<<<< HEAD
       autoComplete='new-field'
       onChange={(e) => setValue('address', e.target.value)}
-=======
-      autoComplete=''
->>>>>>> e8fcf84323714128bbeb2ee82cc90a742660055b
       disabled={!props.googleReady}
       ref={(e) => {
         inputRef.current = e
