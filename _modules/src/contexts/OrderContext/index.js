@@ -275,17 +275,17 @@ var OrderProvider = function OrderProvider(_ref) {
     var props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number'];
     var values = [];
     props.forEach(function (prop) {
-      var _state$options;
+      var _state$options, _state$options2;
 
-      if ((_state$options = state.options) === null || _state$options === void 0 ? void 0 : _state$options.address[prop]) {
+      if (((_state$options = state.options) === null || _state$options === void 0 ? void 0 : _state$options.address) && ((_state$options2 = state.options) === null || _state$options2 === void 0 ? void 0 : _state$options2.address[prop])) {
         if (prop === 'location') {
-          var _state$options2, _state$options3;
+          var _state$options3, _state$options4;
 
-          values.push(address[prop].lat === ((_state$options2 = state.options) === null || _state$options2 === void 0 ? void 0 : _state$options2.address[prop].lat) && address[prop].lng === ((_state$options3 = state.options) === null || _state$options3 === void 0 ? void 0 : _state$options3.address[prop].lng));
+          values.push(address[prop].lat === ((_state$options3 = state.options) === null || _state$options3 === void 0 ? void 0 : _state$options3.address[prop].lat) && address[prop].lng === ((_state$options4 = state.options) === null || _state$options4 === void 0 ? void 0 : _state$options4.address[prop].lng));
         } else {
-          var _state$options4;
+          var _state$options5;
 
-          values.push(address[prop] === ((_state$options4 = state.options) === null || _state$options4 === void 0 ? void 0 : _state$options4.address[prop]));
+          values.push(address[prop] === ((_state$options5 = state.options) === null || _state$options5 === void 0 ? void 0 : _state$options5.address[prop]));
         }
       } else {
         values.push(!address[prop]);
