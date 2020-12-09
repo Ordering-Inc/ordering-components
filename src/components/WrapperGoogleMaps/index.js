@@ -41,7 +41,7 @@ export const WrapperGoogleMaps = (Child) => (props) => {
     js.id = 'google-maps-sdk'
     js.async = true
     js.defer = true
-    js.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=googleAsyncInit`
+    js.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,geometry&callback=googleAsyncInit`
 
     window.document.body.appendChild(js)
     return () => {
