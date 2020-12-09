@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
 
 export const ResetPassword = (props) => {
   const {
@@ -11,26 +12,13 @@ export const ResetPassword = (props) => {
 
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [resetPasswordData, setResetPasswordData] = useState({ code: code, random: random, password: '' })
-
-  // const requestsState = {}
+  const [ordering] = useApi()
 
   const handleResetPassword = async () => {
     try {
       setFormState({ ...formState, loading: true })
-      // const source = {}
-      // requestsState.reset = source
-      const response = await fetch('https://apiv4.ordering.co/v400/en/demo/users/reset', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          code: resetPasswordData.code,
-          random: resetPasswordData.random,
-          password: resetPasswordData.password
-        })
-      })
-      const result = await response.json()
+      const { response } = await ordering.users().resetPassword(resetPasswordData)
+      const result = response.data
       setFormState({
         result: result,
         loading: false
