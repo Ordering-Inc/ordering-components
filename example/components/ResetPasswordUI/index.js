@@ -28,9 +28,19 @@ export const ResetPasswordUI = (props) => {
         beforeComponents.map((BeforeComponent, i) => <BeforeComponent key={i} {...props} />)
       }
       <div>
-        <input name='password' placeholder='New password' onChange={handleChangeInput} ref={register({ required: 'The password is required', minLength: { value: 8, message: 'The Password must be at least 8 characters.' } })} />
         <input
-          name='confirm-password' placeholder='Confirm password' onChange={handleChangeInput} ref={register({
+          name='password'
+          placeholder='New password'
+          type='password'
+          onChange={handleChangeInput}
+          ref={register({ required: 'The password is required', minLength: { value: 8, message: 'The Password must be at least 8 characters.' } })}
+        />
+        <input
+          name='confirm-password'
+          placeholder='Confirm password'
+          type='password'
+          onChange={handleChangeInput}
+          ref={register({
             required: 'The password confirm is required',
             validate: value =>
               value === password.current || 'The passwords do not match'

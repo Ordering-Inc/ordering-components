@@ -13,11 +13,11 @@ export const ResetPasswordExample = () => {
     /**
      *  Code is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
      */
-    code: 'test' || 'f2b4caea-61c3-5bed-8ce7-d8b9d16e129em',
+    code: 'f2b4caea-61c3-5bed-8ce7-d8b9d16e129em',
     /**
      *  Random is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
      */
-    random: 'test' || 'ea8f75d5-cc83-48ce-96e7-f1c3ff514311',
+    random: 'ea8f75d5-cc83-48ce-96e7-f1c3ff514311',
     /**
      * Function to know that the password has already been changed
      *  @param {Object} result Api response
