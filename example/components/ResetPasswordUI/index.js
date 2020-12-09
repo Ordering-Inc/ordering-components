@@ -59,7 +59,7 @@ export const ResetPasswordUI = (props) => {
           </ul>
         )}
         <ul>
-          {formState.result?.result?.length && formState.result?.result.map(res => (
+          {formState.result?.result?.length > 0 && formState.result?.result?.map(res => (
             <li key={res} style={{ color: 'green' }}>
               {res}
             </li>
