@@ -80,13 +80,13 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
             if (!addressResponse.content.error) {
               address = addressResponse.content.result
             }
-          }
-          if (address) {
+          } else {
+            await ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({ default: true })
             localOptions.address_id = address.id
           }
         }
         const options = {}
-        if (localOptions.type) {
+        if (localOptions.type && localOptions.type !== 1) {
           options.type = localOptions.type
         }
         if (localOptions.moment) {
@@ -282,6 +282,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         setState({ ...state, loading: false })
         return !error
       } catch (err) {
+        setAlert({ show: true, content: [err] })
         setState({ ...state, loading: false })
         return false
       }
