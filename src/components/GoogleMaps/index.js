@@ -26,6 +26,7 @@ export const GoogleMaps = (props) => {
 
   const divRef = useRef()
   const [googleMap, setGoogleMap] = useState(null)
+  const [googleMapMarker, setGoogleMapMarker] = useState(null)
   const [markers, setMarkers] = useState([])
   const [boundMap, setBoundMap] = useState(null)
 
@@ -56,7 +57,7 @@ export const GoogleMaps = (props) => {
    * function to get all address information with a location
    * @param {google location} pos
    */
-  const geocodePosition = (pos, map, marker) => {
+  const geocodePosition = (pos) => {
     const geocoder = new window.google.maps.Geocoder()
 
     geocoder.geocode({ latLng: pos }, (results) => {
@@ -79,10 +80,10 @@ export const GoogleMaps = (props) => {
         center.lat = address.location.lat
         center.lng = address.location.lng
       } else {
-        marker && marker.setPosition(center)
+        googleMapMarker && googleMapMarker.setPosition(center)
         setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS')
       }
-      map && map.panTo(new window.google.maps.LatLng(center.lat, center.lng))
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng))
     })
   }
 
@@ -98,7 +99,7 @@ export const GoogleMaps = (props) => {
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
 
     if (!maxLimitLocation) {
-      geocodePosition(curPos, map, marker)
+      geocodePosition(curPos)
       return
     }
 
@@ -114,7 +115,7 @@ export const GoogleMaps = (props) => {
   useEffect(() => {
     if (googleReady) {
       const map = new window.google.maps.Map(divRef.current, {
-        zoom: location.zoom || mapControls.defaultZoom,
+        zoom: location.zoom ?? mapControls.defaultZoom,
         center,
         zoomControl: mapControls?.zoomControl,
         streetViewControl: mapControls?.streetViewControl,
@@ -137,26 +138,46 @@ export const GoogleMaps = (props) => {
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center.lat, center.lng),
           map,
-          draggable: true
+          draggable: !!mapControls?.isMarkerDraggable
+        })
+        setGoogleMapMarker(marker)
+      }
+    }
+  }, [googleReady])
+
+  useEffect(() => {
+    if (googleReady && googleMap && googleMapMarker) {
+      window.google.maps.event.addListener(googleMapMarker, 'dragend', () => {
+        validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
+      })
+
+      if (mapControls?.isMarkerDraggable) {
+        window.google.maps.event.addListener(googleMap, 'drag', () => {
+          googleMapMarker.setPosition(googleMap.getCenter())
         })
 
-        window.google.maps.event.addListener(marker, 'dragend', () => validateResult(map, marker, marker.getPosition()))
-
-        window.google.maps.event.addListener(map, 'drag', () => marker.setPosition(map.getCenter()))
-
-        window.google.maps.event.addListener(map, 'dragend', () => {
-          marker.setPosition(map.getCenter())
-          validateResult(map, marker, map.getCenter())
+        window.google.maps.event.addListener(googleMap, 'dragend', () => {
+          googleMapMarker.setPosition(googleMap.getCenter())
+          validateResult(googleMap, googleMapMarker, googleMap.getCenter())
         })
       }
 
       return () => {
-        window.google.maps.event.clearListeners(marker, 'dragend')
-        window.google.maps.event.clearListeners(map, 'drag')
-        window.google.maps.event.clearListeners(map, 'dragend')
+        window.google.maps.event.clearListeners(googleMapMarker, 'dragend')
+        window.google.maps.event.clearListeners(googleMap, 'drag')
+        window.google.maps.event.clearListeners(googleMap, 'dragend')
       }
     }
-  }, [googleReady])
+  }, [googleMapMarker, googleMap, location])
+
+  useEffect(() => {
+    if (googleReady) {
+      center.lat = location.lat
+      center.lng = location.lng
+      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center.lat, center.lng))
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng))
+    }
+  }, [location])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -172,7 +193,13 @@ export const GoogleMaps = (props) => {
   }, [locations])
 
   return (
-    googleReady && <div style={{ width: '70%', height: '50%', position: 'absolute' }} id='map' ref={divRef} />
+    googleReady && (
+      <div
+        id='map'
+        ref={divRef}
+        style={{ width: '70%', height: '50%', position: 'absolute' }}
+      />
+    )
   )
 }
 
