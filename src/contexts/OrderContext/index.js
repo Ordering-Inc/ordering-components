@@ -86,7 +86,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           }
         }
         const options = {}
-        if (localOptions.type) {
+        if (localOptions.type && localOptions.type !== 1) {
           options.type = localOptions.type
         }
         if (localOptions.moment) {
@@ -218,46 +218,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    * Update order option data
    * @param {object} changes Changes to update order options
    */
-  // const _updateOrderOptions = async (changes) => {
-  //   if (session.auth) {
-  //     try {
-  //       setState({ ...state, loading: true })
-  //       const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
-  //       const { error, result } = await response.json()
-  //       if (!error) {
-  //         return await applyChanges(changes)
-  //       } else {
-  //         setConfirm({
-  //           show: true,
-  //           content: result,
-  //           onConfirm: () => {
-  //             setConfirm({ show: false })
-  //             applyChanges(changes)
-  //           }
-  //         })
-  //       }
-  //     } catch (err) {
-  //       setState({ ...state, loading: false })
-  //       return false
-  //     }
-  //   } else {
-  //     const options = {
-  //       ...state.options,
-  //       ...changes
-  //     }
-  //     strategy.setItem('options', options, true)
-  //     setState({
-  //       ...state,
-  //       options
-  //     })
-  //     return true
-  //   }
-  // }
-
-  /**
-   * Update order option data
-   * @param {object} changes Changes to update order options
-   */
   const updateOrderOptions = async (changes) => {
     if (session.auth) {
       try {
@@ -282,6 +242,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         setState({ ...state, loading: false })
         return !error
       } catch (err) {
+        setAlert({ show: true, content: [err] })
         setState({ ...state, loading: false })
         return false
       }
