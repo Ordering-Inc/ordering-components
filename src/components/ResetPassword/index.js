@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 export const ResetPassword = (props) => {
   const {
@@ -68,4 +69,46 @@ export const ResetPassword = (props) => {
       )}
     </>
   )
+}
+
+ResetPassword.propTypes = {
+  /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: PropTypes.elementType,
+  /**
+   *  Code is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
+   */
+  code: PropTypes.string.isRequired,
+  /**
+   *  Random is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
+   */
+  random: PropTypes.string.isRequired,
+  /**
+   * Components types before products list
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
+  /**
+   * Components types after products list
+   * Array of type components, the parent props will pass to these components
+   */
+  afterComponents: PropTypes.arrayOf(PropTypes.elementType),
+  /**
+   * Elements before products list
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  beforeElements: PropTypes.arrayOf(PropTypes.element),
+  /**
+   * Elements after products list
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  afterElements: PropTypes.arrayOf(PropTypes.element)
+}
+
+ResetPassword.defaultProps = {
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
 }
