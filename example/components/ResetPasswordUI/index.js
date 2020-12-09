@@ -51,16 +51,16 @@ export const ResetPasswordUI = (props) => {
         </button>
         {Object.values(errors).length > 0 && (
           <ul>
-            {Object.values(errors).map(error => (
-              <li key={error} style={{ color: 'red' }}>
+            {Object.values(errors).map((error, i) => (
+              <li key={error + i} style={{ color: 'red' }}>
                 {error.message}
               </li>
             ))}
           </ul>
         )}
         <ul>
-          {formState.result?.result?.length > 0 && formState.result?.result?.map(res => (
-            <li key={res} style={{ color: 'green' }}>
+          {formState.result?.result?.length > 0 && formState.result?.result?.map((res, i) => (
+            <li key={i} style={{ color: 'green' }}>
               {res}
             </li>
           ))}
