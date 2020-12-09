@@ -151,14 +151,16 @@ export const GoogleMaps = (props) => {
         validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
       })
 
-      window.google.maps.event.addListener(googleMap, 'drag', () => {
-        googleMapMarker.setPosition(googleMap.getCenter())
-      })
+      if (mapControls?.isMarkerDraggable) {
+        window.google.maps.event.addListener(googleMap, 'drag', () => {
+          googleMapMarker.setPosition(googleMap.getCenter())
+        })
 
-      window.google.maps.event.addListener(googleMap, 'dragend', () => {
-        googleMapMarker.setPosition(googleMap.getCenter())
-        validateResult(googleMap, googleMapMarker, googleMap.getCenter())
-      })
+        window.google.maps.event.addListener(googleMap, 'dragend', () => {
+          googleMapMarker.setPosition(googleMap.getCenter())
+          validateResult(googleMap, googleMapMarker, googleMap.getCenter())
+        })
+      }
 
       return () => {
         window.google.maps.event.clearListeners(googleMapMarker, 'dragend')

@@ -80,8 +80,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
             if (!addressResponse.content.error) {
               address = addressResponse.content.result
             }
-          }
-          if (address) {
+          } else {
+            await ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({ default: true })
             localOptions.address_id = address.id
           }
         }
@@ -213,6 +213,46 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
 
     updateOrderOptions({ moment: momentUnix })
   }
+
+  /**
+   * Update order option data
+   * @param {object} changes Changes to update order options
+   */
+  // const _updateOrderOptions = async (changes) => {
+  //   if (session.auth) {
+  //     try {
+  //       setState({ ...state, loading: true })
+  //       const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
+  //       const { error, result } = await response.json()
+  //       if (!error) {
+  //         return await applyChanges(changes)
+  //       } else {
+  //         setConfirm({
+  //           show: true,
+  //           content: result,
+  //           onConfirm: () => {
+  //             setConfirm({ show: false })
+  //             applyChanges(changes)
+  //           }
+  //         })
+  //       }
+  //     } catch (err) {
+  //       setState({ ...state, loading: false })
+  //       return false
+  //     }
+  //   } else {
+  //     const options = {
+  //       ...state.options,
+  //       ...changes
+  //     }
+  //     strategy.setItem('options', options, true)
+  //     setState({
+  //       ...state,
+  //       options
+  //     })
+  //     return true
+  //   }
+  // }
 
   /**
    * Update order option data
