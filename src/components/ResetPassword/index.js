@@ -28,21 +28,15 @@ export const ResetPassword = (props) => {
           random: resetPasswordData.random,
           password: resetPasswordData.password
         })
-
       })
-        .then(response => {
-          console.log(response)
-        })
-        .catch(err => {
-          console.error(err)
-        })
+      const result = await response.json()
       setFormState({
-        result: response.content,
+        result: result,
         loading: false
       })
-      if (!response.content.error) {
+      if (!result.error) {
         if (handleSuccessResetPassword) {
-          handleSuccessResetPassword(response.content.result)
+          handleSuccessResetPassword(result.result)
         }
       }
     } catch (error) {
