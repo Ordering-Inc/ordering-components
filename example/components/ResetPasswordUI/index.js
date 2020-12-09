@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 export const ResetPasswordUI = (props) => {
-  const { handleChangeInput, handleResetPassword, beforeComponents, beforeElements, afterComponents, afterElements } = props
+  const { handleChangeInput, handleResetPassword, formState, beforeComponents, beforeElements, afterComponents, afterElements } = props
 
   const { handleSubmit, register, errors, watch } = useForm()
 
@@ -58,6 +58,13 @@ export const ResetPasswordUI = (props) => {
             ))}
           </ul>
         )}
+        <ul>
+          {formState.result?.result?.length && formState.result?.result.map(res => (
+            <li key={res} style={{ color: 'green' }}>
+              {res}
+            </li>
+          ))}
+        </ul>
       </div>
       {
         afterComponents.map((AfterComponent, i) => <AfterComponent key={i} {...props} />)
