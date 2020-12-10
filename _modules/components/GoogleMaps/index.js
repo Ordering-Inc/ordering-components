@@ -75,15 +75,20 @@ var GoogleMaps = function GoogleMaps(props) {
       googleMap = _useState2[0],
       setGoogleMap = _useState2[1];
 
-  var _useState3 = (0, _react.useState)([]),
+  var _useState3 = (0, _react.useState)(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      markers = _useState4[0],
-      setMarkers = _useState4[1];
+      googleMapMarker = _useState4[0],
+      setGoogleMapMarker = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(null),
+  var _useState5 = (0, _react.useState)([]),
       _useState6 = _slicedToArray(_useState5, 2),
-      boundMap = _useState6[0],
-      setBoundMap = _useState6[1];
+      markers = _useState6[0],
+      setMarkers = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      boundMap = _useState8[0],
+      setBoundMap = _useState8[1];
 
   var center = {
     lat: location.lat,
@@ -124,7 +129,7 @@ var GoogleMaps = function GoogleMaps(props) {
    */
 
 
-  var geocodePosition = function geocodePosition(pos, map, marker) {
+  var geocodePosition = function geocodePosition(pos) {
     var geocoder = new window.google.maps.Geocoder();
     geocoder.geocode({
       latLng: pos
@@ -163,11 +168,11 @@ var GoogleMaps = function GoogleMaps(props) {
         center.lat = address.location.lat;
         center.lng = address.location.lng;
       } else {
-        marker && marker.setPosition(center);
+        googleMapMarker && googleMapMarker.setPosition(center);
         setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS');
       }
 
-      map && map.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng));
     });
   };
   /**
@@ -183,7 +188,7 @@ var GoogleMaps = function GoogleMaps(props) {
     var distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2);
 
     if (!maxLimitLocation) {
-      geocodePosition(curPos, map, marker);
+      geocodePosition(curPos);
       return;
     }
 
@@ -198,8 +203,10 @@ var GoogleMaps = function GoogleMaps(props) {
 
   (0, _react.useEffect)(function () {
     if (googleReady) {
+      var _location$zoom;
+
       var map = new window.google.maps.Map(divRef.current, {
-        zoom: location.zoom || mapControls.defaultZoom,
+        zoom: (_location$zoom = location.zoom) !== null && _location$zoom !== void 0 ? _location$zoom : mapControls.defaultZoom,
         center: center,
         zoomControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.zoomControl,
         streetViewControl: mapControls === null || mapControls === void 0 ? void 0 : mapControls.streetViewControl,
@@ -220,27 +227,43 @@ var GoogleMaps = function GoogleMaps(props) {
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center.lat, center.lng),
           map: map,
-          draggable: true
+          draggable: !!(mapControls === null || mapControls === void 0 ? void 0 : mapControls.isMarkerDraggable)
         });
-        window.google.maps.event.addListener(marker, 'dragend', function () {
-          return validateResult(map, marker, marker.getPosition());
+        setGoogleMapMarker(marker);
+      }
+    }
+  }, [googleReady]);
+  (0, _react.useEffect)(function () {
+    if (googleReady && googleMap && googleMapMarker) {
+      window.google.maps.event.addListener(googleMapMarker, 'dragend', function () {
+        validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition());
+      });
+
+      if (mapControls === null || mapControls === void 0 ? void 0 : mapControls.isMarkerDraggable) {
+        window.google.maps.event.addListener(googleMap, 'drag', function () {
+          googleMapMarker.setPosition(googleMap.getCenter());
         });
-        window.google.maps.event.addListener(map, 'drag', function () {
-          return marker.setPosition(map.getCenter());
-        });
-        window.google.maps.event.addListener(map, 'dragend', function () {
-          marker.setPosition(map.getCenter());
-          validateResult(map, marker, map.getCenter());
+        window.google.maps.event.addListener(googleMap, 'dragend', function () {
+          googleMapMarker.setPosition(googleMap.getCenter());
+          validateResult(googleMap, googleMapMarker, googleMap.getCenter());
         });
       }
 
       return function () {
-        window.google.maps.event.clearListeners(marker, 'dragend');
-        window.google.maps.event.clearListeners(map, 'drag');
-        window.google.maps.event.clearListeners(map, 'dragend');
+        window.google.maps.event.clearListeners(googleMapMarker, 'dragend');
+        window.google.maps.event.clearListeners(googleMap, 'drag');
+        window.google.maps.event.clearListeners(googleMap, 'dragend');
       };
     }
-  }, [googleReady]);
+  }, [googleMapMarker, googleMap, location]);
+  (0, _react.useEffect)(function () {
+    if (googleReady) {
+      center.lat = location.lat;
+      center.lng = location.lng;
+      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center.lat, center.lng));
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+    }
+  }, [location]);
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       if (googleReady) {
@@ -258,13 +281,13 @@ var GoogleMaps = function GoogleMaps(props) {
     };
   }, [locations]);
   return googleReady && /*#__PURE__*/_react.default.createElement("div", {
+    id: "map",
+    ref: divRef,
     style: {
       width: '70%',
       height: '50%',
       position: 'absolute'
-    },
-    id: "map",
-    ref: divRef
+    }
   });
 };
 

@@ -170,12 +170,12 @@ var OrderProvider = function OrderProvider(_ref) {
               localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 34;
+                _context.next = 38;
                 break;
               }
 
               if (!(Object.keys(localOptions.address).length > 0)) {
-                _context.next = 25;
+                _context.next = 29;
                 break;
               }
 
@@ -193,7 +193,7 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
               if (address) {
-                _context.next = 24;
+                _context.next = 26;
                 break;
               }
 
@@ -207,15 +207,22 @@ var OrderProvider = function OrderProvider(_ref) {
                 address = addressResponse.content.result;
               }
 
-            case 24:
-              if (address) {
-                localOptions.address_id = address.id;
-              }
+              _context.next = 29;
+              break;
 
-            case 25:
+            case 26:
+              _context.next = 28;
+              return ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({
+                default: true
+              });
+
+            case 28:
+              localOptions.address_id = address.id;
+
+            case 29:
               _options = {};
 
-              if (localOptions.type) {
+              if (localOptions.type && localOptions.type !== 1) {
                 _options.type = localOptions.type;
               }
 
@@ -235,35 +242,35 @@ var OrderProvider = function OrderProvider(_ref) {
                 }));
               }
 
-              _context.next = 32;
+              _context.next = 36;
               return strategy.removeItem('options');
 
-            case 32:
-              _context.next = 35;
+            case 36:
+              _context.next = 39;
               break;
 
-            case 34:
+            case 38:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 35:
-              _context.next = 40;
+            case 39:
+              _context.next = 44;
               break;
 
-            case 37:
-              _context.prev = 37;
+            case 41:
+              _context.prev = 41;
               _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 40:
+            case 44:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 37]]);
+      }, _callee, null, [[0, 41]]);
     }));
 
     return function refreshOrderOptions() {
@@ -542,7 +549,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 18;
+                _context5.next = 19;
                 break;
               }
 
@@ -585,12 +592,16 @@ var OrderProvider = function OrderProvider(_ref) {
             case 14:
               _context5.prev = 14;
               _context5.t0 = _context5["catch"](1);
+              setAlert({
+                show: true,
+                content: [_context5.t0]
+              });
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context5.abrupt("return", false);
 
-            case 18:
+            case 19:
             case "end":
               return _context5.stop();
           }
