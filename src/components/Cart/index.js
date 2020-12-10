@@ -107,6 +107,11 @@ export const Cart = (props) => {
     if (useValidationFields) {
       getValidationFields()
     }
+    return () => {
+      if (requestsState.validation) {
+        requestsState.validation.cancel()
+      }
+    }
   }, [])
 
   return (
