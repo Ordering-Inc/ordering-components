@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
 
 export const ResetPassword = (props) => {
   const {
@@ -10,39 +12,20 @@ export const ResetPassword = (props) => {
 
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [resetPasswordData, setResetPasswordData] = useState({ code: code, random: random, password: '' })
-
-  // const requestsState = {}
+  const [ordering] = useApi()
 
   const handleResetPassword = async () => {
     try {
       setFormState({ ...formState, loading: true })
-      // const source = {}
-      // requestsState.reset = source
-      const response = await fetch('https://apiv4.ordering.co/v400/en/demo/users/reset', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          code: resetPasswordData.code,
-          random: resetPasswordData.random,
-          password: resetPasswordData.password
-        })
-
-      })
-        .then(response => {
-          console.log(response)
-        })
-        .catch(err => {
-          console.error(err)
-        })
+      const { response } = await ordering.users().resetPassword(resetPasswordData)
+      const result = response.data
       setFormState({
-        result: response.content,
+        result: result,
         loading: false
       })
-      if (!response.content.error) {
+      if (!result.error) {
         if (handleSuccessResetPassword) {
-          handleSuccessResetPassword(response.content.result)
+          handleSuccessResetPassword(result.result)
         }
       }
     } catch (error) {
@@ -74,4 +57,46 @@ export const ResetPassword = (props) => {
       )}
     </>
   )
+}
+
+ResetPassword.propTypes = {
+  /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: PropTypes.elementType,
+  /**
+   *  Code is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
+   */
+  code: PropTypes.string.isRequired,
+  /**
+   *  Random is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
+   */
+  random: PropTypes.string.isRequired,
+  /**
+   * Components types before products list
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
+  /**
+   * Components types after products list
+   * Array of type components, the parent props will pass to these components
+   */
+  afterComponents: PropTypes.arrayOf(PropTypes.elementType),
+  /**
+   * Elements before products list
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  beforeElements: PropTypes.arrayOf(PropTypes.element),
+  /**
+   * Elements after products list
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  afterElements: PropTypes.arrayOf(PropTypes.element)
+}
+
+ResetPassword.defaultProps = {
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
 }

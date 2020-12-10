@@ -24,6 +24,8 @@ export const AddressForm = (props) => {
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
+  const [isEdit, setIsEdit] = useState(false)
+
   // if (!userId) {
   //   throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
   // }
@@ -104,10 +106,6 @@ export const AddressForm = (props) => {
     updateChanges({ [e.target.name]: e.target.value })
   }
 
-  const handleChangePosition = (mark) => {
-    updateChanges({ location: mark })
-  }
-
   /**
    * Update address data
    * @param {object} changes object with changes
@@ -170,7 +168,10 @@ export const AddressForm = (props) => {
         })
         onSaveAddress && onSaveAddress(content.result)
         if (isSelectedAfterAdd) {
-          changeAddress(content.result.id)
+          changeAddress(content.result.id, {
+            address: isEdit ? null : content.result,
+            isEdit
+          })
         }
       }
     } catch (err) {
@@ -224,7 +225,7 @@ export const AddressForm = (props) => {
             saveAddress={saveAddress}
             addressState={addressState}
             validationFields={validationFields}
-            handleChangePosition={handleChangePosition}
+            setIsEdit={(val) => setIsEdit(val)}
           />
         )
       }
