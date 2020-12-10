@@ -168,6 +168,9 @@ export const Home = () => {
         <li>
           <Link to='/review_orders'>Review my Orders</Link>
         </li>
+        <li>
+          <Link to='/reset_password'>Reset Password</Link>
+        </li>
         <h2>S</h2>
         <li>
           <Link to='/signup'>Signup Component</Link>
