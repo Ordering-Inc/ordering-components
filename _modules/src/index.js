@@ -609,6 +609,12 @@ Object.defineProperty(exports, "InputPhoneNumber", {
     return _InputPhoneNumber.InputPhoneNumber;
   }
 });
+Object.defineProperty(exports, "ResetPassword", {
+  enumerable: true,
+  get: function get() {
+    return _ResetPassword.ResetPassword;
+  }
+});
 
 var _AddressDetails = require("./components/AddressDetails");
 
@@ -769,3 +775,5 @@ var _StripeRedirectForm = require("./components/PaymentOptionStripeRedirect/Stri
 var _FloatingButton = require("./components/FloatingButton");
 
 var _InputPhoneNumber = require("./components/InputPhoneNumber");
+
+var _ResetPassword = require("./components/ResetPassword");
