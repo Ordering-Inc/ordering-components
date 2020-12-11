@@ -13,6 +13,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _WrapperGoogleMaps = require("../WrapperGoogleMaps");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -68,6 +70,11 @@ var GoogleMaps = function GoogleMaps(props) {
       setErrors = props.setErrors,
       handleChangeAddressMap = props.handleChangeAddressMap,
       maxLimitLocation = props.maxLimitLocation;
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
+
   var divRef = (0, _react.useRef)();
 
   var _useState = (0, _react.useState)(null),
@@ -238,10 +245,14 @@ var GoogleMaps = function GoogleMaps(props) {
       window.google.maps.event.addListener(googleMapMarker, 'dragend', function () {
         validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition());
       });
+      window.google.maps.event.addListener(googleMapMarker, 'drag', function () {
+        events.emit('map_is_dragging', true);
+      });
 
       if (mapControls === null || mapControls === void 0 ? void 0 : mapControls.isMarkerDraggable) {
         window.google.maps.event.addListener(googleMap, 'drag', function () {
           googleMapMarker.setPosition(googleMap.getCenter());
+          events.emit('map_is_dragging', true);
         });
         window.google.maps.event.addListener(googleMap, 'dragend', function () {
           googleMapMarker.setPosition(googleMap.getCenter());
