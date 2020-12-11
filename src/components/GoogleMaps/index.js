@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
+import { useEvent } from '../../contexts/EventContext'
+
 const getMarkerColor = (n) => {
   switch (n) {
     case 1:
@@ -24,6 +26,7 @@ export const GoogleMaps = (props) => {
     maxLimitLocation
   } = props
 
+  const [events] = useEvent()
   const divRef = useRef()
   const [googleMap, setGoogleMap] = useState(null)
   const [googleMapMarker, setGoogleMapMarker] = useState(null)
@@ -151,9 +154,14 @@ export const GoogleMaps = (props) => {
         validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
       })
 
+      window.google.maps.event.addListener(googleMapMarker, 'drag', () => {
+        events.emit('map_is_dragging', true)
+      })
+
       if (mapControls?.isMarkerDraggable) {
         window.google.maps.event.addListener(googleMap, 'drag', () => {
           googleMapMarker.setPosition(googleMap.getCenter())
+          events.emit('map_is_dragging', true)
         })
 
         window.google.maps.event.addListener(googleMap, 'dragend', () => {
