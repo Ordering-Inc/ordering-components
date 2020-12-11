@@ -168,6 +168,12 @@ var Cart = function Cart(props) {
     if (useValidationFields) {
       getValidationFields();
     }
+
+    return function () {
+      if (requestsState.validation) {
+        requestsState.validation.cancel();
+      }
+    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     carts: orderState.carts,

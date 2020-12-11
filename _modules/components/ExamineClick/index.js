@@ -17,7 +17,8 @@ var ExamineClick = function ExamineClick(_ref) {
   var onFiles = _ref.onFiles,
       children = _ref.children,
       className = _ref.className,
-      style = _ref.style;
+      style = _ref.style,
+      accept = _ref.accept;
   var inputRef = (0, _react.useRef)(null);
 
   var handleClick = function handleClick(e) {
@@ -44,7 +45,8 @@ var ExamineClick = function ExamineClick(_ref) {
     onClick: function onClick(e) {
       return e.stopPropagation();
     },
-    ref: inputRef
+    ref: inputRef,
+    accept: accept
   }), children);
 };
 
