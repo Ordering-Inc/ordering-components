@@ -8,7 +8,7 @@ export const OrderReview = (props) => {
 
   const [ordering] = useApi()
   const [session] = useSession()
-  const [stars, setStars] = useState({ quality: 0, punctiality: 0, service: 0, packaging: 0, comments: '' })
+  const [stars, setStars] = useState({ Quality: 1, Punctiality: 1, Service: 1, Packaging: 1, Comments: '' })
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   /**
    * Function that load and send the review order to ordering
