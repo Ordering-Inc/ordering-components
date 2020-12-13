@@ -24,6 +24,9 @@ export const FacebookLoginButton = (props) => {
   let wasUnmounted = false
 
   useEffect(() => {
+    if (window.document.getElementById('facebook-jssdk')) {
+      return
+    }
     window.fbAsyncInit = () => {
       window.FB.init({
         appId: appId,
@@ -31,17 +34,12 @@ export const FacebookLoginButton = (props) => {
         xfbml: false,
         version: version
       })
-      window.FB.AppEvents.logPageView()
       !wasUnmounted && setFacebookStatus({ ...facebookStatus, ready: true })
       window.FB.getLoginStatus((response) => {
         if (response.status === 'connected') {
           !wasUnmounted && setFacebookStatus({ ...facebookStatus, logged: true })
         }
       })
-    }
-
-    if (window.document.getElementById('facebook-jssdk')) {
-      return
     }
 
     const js = window.document.createElement('script')
