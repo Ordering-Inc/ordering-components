@@ -22,7 +22,6 @@ export const CheckPassword = (props) => {
 
   /**
    * Method to confirm password from API
-   * @param {string} password password to confirm
    */
   const getCheckPassword = async () => {
     try {
