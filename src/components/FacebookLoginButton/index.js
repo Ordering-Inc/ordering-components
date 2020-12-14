@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useApi } from '../../contexts/ApiContext'
+import { useApi } from 'ordering-components'
 
 /**
  * Component to manage Facebook login behavior without UI component
@@ -24,15 +24,13 @@ export const FacebookLoginButton = (props) => {
   let wasUnmounted = false
 
   useEffect(() => {
-    if (window.document.getElementById('facebook-jssdk')) {
-      return
-    }
     window.fbAsyncInit = () => {
       window.FB.init({
         appId: appId,
         cookie: true,
         xfbml: false,
-        version: version
+        version: version,
+        status: true
       })
       !wasUnmounted && setFacebookStatus({ ...facebookStatus, ready: true })
       window.FB.getLoginStatus((response) => {
