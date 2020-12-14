@@ -155,6 +155,18 @@ export const UtilsProviders = ({ children }) => {
     return _date.format(formatTime.outputFormat)
   }
 
+  const parseShortenDistance = (distance) => {
+    if (distance >= 1000000000) {
+      return `${(distance / 1000000000).toFixed(1).replace(/\.0$/, '')} G`
+    }
+    if (distance >= 1000000) {
+      return `${(distance / 1000000).toFixed(1).replace(/\.0$/, '')} M`
+    }
+    if (distance >= 1000) {
+      return `${(distance / 1000).toFixed(1).replace(/\.0$/, '')} K`
+    }
+  }
+
   const parseDistance = (distance, options = {}) => {
     distance = parseFloat(distance) || 0
     let unit = options?.unit || 'KM'
@@ -202,6 +214,7 @@ export const UtilsProviders = ({ children }) => {
     parseDate,
     parseTime,
     parseDistance,
+    parseShortenDistance,
     getTimeAgo,
     getTimeTo
   }
