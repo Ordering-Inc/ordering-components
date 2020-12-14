@@ -32,7 +32,8 @@ export const FacebookLoginButton = (props) => {
         appId: appId,
         cookie: true,
         xfbml: false,
-        version: version
+        version: version,
+        status: true
       })
       !wasUnmounted && setFacebookStatus({ ...facebookStatus, ready: true })
       window.FB.getLoginStatus((response) => {
