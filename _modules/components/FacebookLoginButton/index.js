@@ -83,6 +83,10 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
 
   var wasUnmounted = false;
   (0, _react.useEffect)(function () {
+    if (window.document.getElementById('facebook-jssdk')) {
+      return;
+    }
+
     window.fbAsyncInit = function () {
       window.FB.init({
         appId: appId,
@@ -90,7 +94,6 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
         xfbml: false,
         version: version
       });
-      window.FB.AppEvents.logPageView();
       !wasUnmounted && setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
         ready: true
       }));
@@ -102,10 +105,6 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
         }
       });
     };
-
-    if (window.document.getElementById('facebook-jssdk')) {
-      return;
-    }
 
     var js = window.document.createElement('script');
     var fjs = window.document.getElementsByTagName('script')[0];
