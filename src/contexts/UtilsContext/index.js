@@ -157,13 +157,13 @@ export const UtilsProviders = ({ children }) => {
 
   const parseShortenDistance = (distance) => {
     if (distance >= 1000000000) {
-      return `${(distance / 1000000000).toFixed(1).replace(/\.0$/, '')} G`
+      return `${(distance / 1000000000).toFixed(1).replace(/\.0$/, '')} ${t('G', 'G')}`
     }
     if (distance >= 1000000) {
-      return `${(distance / 1000000).toFixed(1).replace(/\.0$/, '')} M`
+      return `${(distance / 1000000).toFixed(1).replace(/\.0$/, '')} ${t('M', 'M')}`
     }
     if (distance >= 1000) {
-      return `${(distance / 1000).toFixed(1).replace(/\.0$/, '')} K`
+      return `${(distance / 1000).toFixed(1).replace(/\.0$/, '')} ${t('K', 'K')}`
     }
   }
 
