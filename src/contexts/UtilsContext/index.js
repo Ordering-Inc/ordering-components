@@ -155,15 +155,15 @@ export const UtilsProviders = ({ children }) => {
     return _date.format(formatTime.outputFormat)
   }
 
-  const parseShortenDistance = (distance) => {
+  const parseShortenDistance = (distance, options = {}) => {
     if (distance >= 1000000000) {
-      return `${(distance / 1000000000).toFixed(1).replace(/\.0$/, '')} ${t('G', 'G')}`
+      return `${(distance / 1000000000).toFixed(1).replace(/\.0$/, '')}${t('G', 'G')}`
     }
     if (distance >= 1000000) {
-      return `${(distance / 1000000).toFixed(1).replace(/\.0$/, '')} ${t('M', 'M')}`
+      return `${(distance / 1000000).toFixed(1).replace(/\.0$/, '')}${t('M', 'M')}`
     }
     if (distance >= 1000) {
-      return `${(distance / 1000).toFixed(1).replace(/\.0$/, '')} ${t('K', 'K')}`
+      return `${(distance / 1000).toFixed(1).replace(/\.0$/, '')}${t('K', 'K')}`
     }
   }
 
@@ -177,9 +177,16 @@ export const UtilsProviders = ({ children }) => {
       unit = configState.configs.distance_unit?.value
     }
     if (unit.toUpperCase() === 'MI') {
-      return parseNumber(distance * 1.621371, options) + ' ' + t('MI', 'mi')
+      const dist = distance * 1.621371
+      if (dist >= 1000) {
+        return `${parseShortenDistance(dist)} ${t('MI', 'mi')}`
+      }
+      return `${parseNumber(dist, options)} ${t('MI', 'mi')}`
     } else {
-      return parseNumber(distance, options) + ' ' + t('KM', 'km')
+      if (distance >= 1000) {
+        return `${parseShortenDistance(distance)} ${t('KM', 'km')}`
+      }
+      return `${parseNumber(distance, options)} ${t('KM', 'km')}`
     }
   }
 
