@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _ConfigContext = require("../../contexts/ConfigContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -51,6 +53,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage logout behavior without UI component
  */
 var LogoutAction = function LogoutAction(props) {
+  var _configs$facebook_id3;
+
   var UIComponent = props.UIComponent,
       handleSuccessLogout = props.handleSuccessLogout,
       token = props.token,
@@ -74,10 +78,43 @@ var LogoutAction = function LogoutAction(props) {
       _useSession2 = _slicedToArray(_useSession, 2),
       data = _useSession2[0],
       logout = _useSession2[1].logout;
+
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
+
+  (0, _react.useEffect)(function () {
+    var _configs$facebook_id;
+
+    if (configs === null || configs === void 0 ? void 0 : (_configs$facebook_id = configs.facebook_id) === null || _configs$facebook_id === void 0 ? void 0 : _configs$facebook_id.value) {
+      window.fbAsyncInit = function () {
+        var _configs$facebook_id2;
+
+        window.FB.init({
+          appId: configs === null || configs === void 0 ? void 0 : (_configs$facebook_id2 = configs.facebook_id) === null || _configs$facebook_id2 === void 0 ? void 0 : _configs$facebook_id2.value,
+          cookie: true,
+          xfbml: false,
+          version: 'v7.0',
+          status: true
+        });
+      };
+
+      if (window.document.getElementById('facebook-jssdk')) {
+        return;
+      }
+
+      var js = window.document.createElement('script');
+      var fjs = window.document.getElementsByTagName('script')[0];
+      js.id = 'facebook-jssdk';
+      js.async = true;
+      js.defer = true;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }
+  }, [configs === null || configs === void 0 ? void 0 : (_configs$facebook_id3 = configs.facebook_id) === null || _configs$facebook_id3 === void 0 ? void 0 : _configs$facebook_id3.value]);
   /**
    * Default fuction for logout workflow
    */
-
 
   var handleLogoutClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {

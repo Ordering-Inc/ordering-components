@@ -217,6 +217,22 @@ var UtilsProviders = function UtilsProviders(_ref) {
     return _date.format(formatTime.outputFormat);
   };
 
+  var parseShortenDistance = function parseShortenDistance(distance) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    if (distance >= 1000000000) {
+      return "".concat((distance / 1000000000).toFixed(1).replace(/\.0$/, '')).concat(t('G', 'G'));
+    }
+
+    if (distance >= 1000000) {
+      return "".concat((distance / 1000000).toFixed(1).replace(/\.0$/, '')).concat(t('M', 'M'));
+    }
+
+    if (distance >= 1000) {
+      return "".concat((distance / 1000).toFixed(1).replace(/\.0$/, '')).concat(t('K', 'K'));
+    }
+  };
+
   var parseDistance = function parseDistance(distance) {
     var _configState$configs$11, _configState$configs$12;
 
@@ -235,9 +251,19 @@ var UtilsProviders = function UtilsProviders(_ref) {
     }
 
     if (unit.toUpperCase() === 'MI') {
-      return parseNumber(distance * 1.621371, options) + ' ' + t('MI', 'mi');
+      var dist = distance * 1.621371;
+
+      if (dist >= 1000) {
+        return "".concat(parseShortenDistance(dist), " ").concat(t('MI', 'mi'));
+      }
+
+      return "".concat(parseNumber(dist, options), " ").concat(t('MI', 'mi'));
     } else {
-      return parseNumber(distance, options) + ' ' + t('KM', 'km');
+      if (distance >= 1000) {
+        return "".concat(parseShortenDistance(distance), " ").concat(t('KM', 'km'));
+      }
+
+      return "".concat(parseNumber(distance, options), " ").concat(t('KM', 'km'));
     }
   };
 
@@ -279,6 +305,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
     parseDate: parseDate,
     parseTime: parseTime,
     parseDistance: parseDistance,
+    parseShortenDistance: parseShortenDistance,
     getTimeAgo: getTimeAgo,
     getTimeTo: getTimeTo
   };

@@ -92,7 +92,8 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
         appId: appId,
         cookie: true,
         xfbml: false,
-        version: version
+        version: version,
+        status: true
       });
       !wasUnmounted && setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
         ready: true

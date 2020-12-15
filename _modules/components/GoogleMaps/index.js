@@ -171,7 +171,7 @@ var GoogleMaps = function GoogleMaps(props) {
           },
           zipcode: zipcode
         };
-        handleChangeAddressMap(address);
+        handleChangeAddressMap && handleChangeAddressMap(address);
         center.lat = address.location.lat;
         center.lng = address.location.lng;
       } else {
