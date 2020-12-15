@@ -78,7 +78,7 @@ export const GoogleMaps = (props) => {
           location: { lat: pos.lat(), lng: pos.lng() },
           zipcode
         }
-        handleChangeAddressMap(address)
+        handleChangeAddressMap && handleChangeAddressMap(address)
 
         center.lat = address.location.lat
         center.lng = address.location.lng
