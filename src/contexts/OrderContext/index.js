@@ -74,20 +74,23 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           const addressesResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get()
           let address = addressesResponse.content.result.find(address => {
             return address.location.lat === localOptions.address.location.lat &&
-              address.location.lng === localOptions.address.location.lng
+              address.location.lng === localOptions.address.location.lng &&
+              address.internal_number === localOptions.address.internal_number &&
+              address.zipcode === localOptions.address.zipcode &&
+              address.address_notes === localOptions.address.address_notes
           })
           if (!address) {
             const addressResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address)
             if (!addressResponse.content.error) {
               address = addressResponse.content.result
             }
-          }
-          if (address) {
+          } else {
+            await ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({ default: true })
             localOptions.address_id = address.id
           }
         }
         const options = {}
-        if (localOptions.type) {
+        if (localOptions.type && localOptions.type !== 1) {
           options.type = localOptions.type
         }
         if (localOptions.moment) {
@@ -110,14 +113,37 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     }
   }
 
+  const checkAddress = (address) => {
+    const props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number']
+    const values = []
+    props.forEach(prop => {
+      if (state.options?.address && state.options?.address[prop]) {
+        if (prop === 'location') {
+          values.push(address[prop].lat === state.options?.address[prop].lat &&
+            address[prop].lng === state.options?.address[prop].lng)
+        } else {
+          values.push(address[prop] === state.options?.address[prop])
+        }
+      } else {
+        values.push(!address[prop])
+      }
+    })
+    return values.every(value => value)
+  }
+
   /**
    * Change order address
    */
-  const changeAddress = async (addressId) => {
+  const changeAddress = async (addressId, params) => {
     if (typeof addressId === 'object') {
+      const optionsStorage = await strategy.getItem('options', true)
       const options = {
         ...state.options,
-        address: addressId
+        ...optionsStorage,
+        address: {
+          ...optionsStorage?.address,
+          ...addressId
+        }
       }
       await strategy.setItem('options', options, true)
       setState({
@@ -126,7 +152,17 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       })
       return
     }
-    if (state.options.address_id === addressId) {
+
+    if (params && params?.address && !checkAddress(params?.address)) {
+      updateOrderOptions({ address_id: params?.address?.id })
+      return
+    }
+
+    if (params && params?.isEdit) {
+      if (addressId !== state.options.address_id) {
+        return
+      }
+      updateOrderOptions({ address_id: addressId })
       return
     }
 
@@ -210,6 +246,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         setState({ ...state, loading: false })
         return !error
       } catch (err) {
+        setAlert({ show: true, content: [err] })
         setState({ ...state, loading: false })
         return false
       }

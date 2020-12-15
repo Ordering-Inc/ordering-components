@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 
-export const ExamineClick = ({ onFiles, children, className, style }) => {
+export const ExamineClick = ({ onFiles, children, className, style, accept }) => {
   const inputRef = useRef(null)
 
   const handleClick = (e) => {
@@ -20,7 +20,7 @@ export const ExamineClick = ({ onFiles, children, className, style }) => {
       style={style}
       className={className}
     >
-      <input type='file' style={{ display: 'none' }} onChange={handleChange} onClick={e => e.stopPropagation()} ref={inputRef} />
+      <input type='file' style={{ display: 'none' }} onChange={handleChange} onClick={e => e.stopPropagation()} ref={inputRef} accept={accept} />
       {children}
     </div>
   )

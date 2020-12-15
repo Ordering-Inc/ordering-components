@@ -21,7 +21,7 @@ const AutocompleteInput = (props) => {
   const inputProps = {}
 
   Object.entries(props).forEach(([key, value]) => {
-    if (['googleReady', 'apiKey', 'onChangeAddress', 'countryCode', 'childRef', 'types', 'fields'].indexOf(key) === -1) {
+    if (['googleReady', 'apiKey', 'onChangeAddress', 'setValue', 'childRef', 'countryCode', 'types', 'fields'].indexOf(key) === -1) {
       inputProps[key] = value
     }
   })
@@ -70,9 +70,20 @@ const AutocompleteInput = (props) => {
     }
   }, [googleReady])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (inputRef.current.attributes.autocomplete &&
+        inputRef.current.attributes.autocomplete.value === 'new-field'
+      ) clearInterval(interval)
+      inputRef.current.setAttribute('autocomplete', 'new-field')
+    }, 100)
+    return () => clearInterval(interval)
+  })
+
   return (
     <input
       {...inputProps}
+      autoComplete='new-field'
       disabled={!props.googleReady}
       ref={(e) => {
         inputRef.current = e
