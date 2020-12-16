@@ -55,8 +55,7 @@ import { SingleOrderCard } from '../src/components/SingleOrderCard'
 import { SingleProductCard } from '../src/components/SingleProductCard'
 import { StripeElementsForm } from '../src/components/StripeElementsForm'
 import { StripeRedirectForm } from '../src/components/PaymentOptionStripeRedirect/StripeRedirectForm'
-import { UserDetails } from '../src/components/UserDetails'
-// import { UserProfileForm } from '../src/components/UserProfileForm'
+import { UserFormDetails } from '../src/components/UserFormDetails'
 import { UpsellingPage } from '../src/components/UpsellingPage'
 
 import { ApiContext, ApiProvider, useApi } from '../src/contexts/ApiContext'
@@ -127,7 +126,7 @@ export {
   SingleProductCard,
   StripeElementsForm,
   StripeRedirectForm,
-  UserDetails,
+  UserFormDetails,
   UpsellingPage,
   // Contexts
   ApiContext,

@@ -4,9 +4,9 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
 /**
- * Component to manage user profile behavior without UI component
+ * Component to manage user form details behavior without UI component
  */
-export const UserProfileForm = (props) => {
+export const UserFormDetails = (props) => {
   const {
     UIComponent,
     useSessionUser,
@@ -14,7 +14,7 @@ export const UserProfileForm = (props) => {
     useDefualtSessionManager,
     userId,
     user,
-    useValidationFileds,
+    useValidationFields,
     validationFieldsType,
     handleButtonUpdateClick,
     handleSuccessUpdate
@@ -22,9 +22,10 @@ export const UserProfileForm = (props) => {
 
   const [ordering] = useApi()
   const [session, { changeUser }] = useSession()
+  const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
-  const [validationFields, setValidationFields] = useState({ loading: useValidationFileds })
+  const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -63,7 +64,7 @@ export const UserProfileForm = (props) => {
       })
     }
 
-    if (useValidationFileds) {
+    if (useValidationFields) {
       const source = {}
       requestsState.validation = source
       ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source }).then((response) => {
@@ -115,6 +116,7 @@ export const UserProfileForm = (props) => {
         result: response.content,
         loading: false
       })
+      setIsEdit(false)
       if (!response.content.error) {
         setUserState({
           ...userState,
@@ -192,7 +194,7 @@ export const UserProfileForm = (props) => {
    * @param {string} fieldName Field name
    */
   const showField = (fieldName) => {
-    return !useValidationFileds ||
+    return !useValidationFields ||
               (!validationFields.loading && !validationFields.fields[fieldName]) ||
               (!validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled)
   }
@@ -202,7 +204,7 @@ export const UserProfileForm = (props) => {
    * @param {string} fieldName Field name
    */
   const isRequiredField = (fieldName) => {
-    return useValidationFileds &&
+    return useValidationFields &&
             !validationFields.loading &&
             validationFields.fields[fieldName] &&
             validationFields.fields[fieldName].enabled &&
@@ -214,32 +216,34 @@ export const UserProfileForm = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          isEdit={isEdit}
+          cleanFormState={cleanFormState}
           formState={formState}
           userState={userState}
-          cleanFormState={cleanFormState}
           validationFields={validationFields}
           showField={showField}
           isRequiredField={isRequiredField}
           handleChangeInput={handleChangeInput}
-          handlechangeImage={handlechangeImage}
           handleButtonUpdateClick={handleUpdateClick}
+          handlechangeImage={handlechangeImage}
+          onEditUserClick={() => setIsEdit(!isEdit)}
         />
       )}
     </>
   )
 }
 
-UserProfileForm.propTypes = {
+UserFormDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
-   * Use session user to profile
+   * Use session user to details
    */
   useSessionUser: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'boolean') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`boolean\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`boolean\`.`)
     }
     if (props.user === undefined && props.userId === undefined && !props[propName]) {
       return new Error(`Invalid prop \`${propName}\` must be true when \`user\` and \`userId\` is not present.`)
@@ -258,7 +262,7 @@ UserProfileForm.propTypes = {
    */
   userId: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'number') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`number\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`number\`.`)
     }
     if (props.user === undefined && !props.useSessionUser && !props[propName]) {
       return new Error(`Invalid prop \`${propName}\` must be true when \`user\` and \`useSessionUser\` is not present.`)
@@ -273,7 +277,7 @@ UserProfileForm.propTypes = {
    */
   user: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'object') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`object\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`object\`.`)
     }
     if (props.userId === undefined && !props.useSessionUser && !props[propName]) {
       return new Error(`Invalid prop \`${propName}\` must be true when \`useSessionUser\` and \`userId\` is not present.`)
@@ -283,7 +287,7 @@ UserProfileForm.propTypes = {
     }
   },
   /**
-   * Function to change default user profile behavior
+   * Function to change default user details behavior
    * @param {Object} user Current user data
    * @param {Object} changes Current form changes
    */
@@ -296,7 +300,7 @@ UserProfileForm.propTypes = {
   /**
    * Enable to get validation fields to show/hide fields from Ordering API
    */
-  useValidationFileds: PropTypes.bool,
+  useValidationFields: PropTypes.bool,
   /**
    * Type of validation field to apply and get from API
    */
@@ -312,29 +316,29 @@ UserProfileForm.propTypes = {
    */
   accessToken: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`object\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`object\`.`)
     }
     if (props[propName] === undefined && !props.useDefualtSessionManager) {
       return new Error(`Invalid prop \`${propName}\` is required when \`useDefualtSessionManager\` is false.`)
     }
   },
   /**
-   * Components types before user profile form
+   * Components types before user details form
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Components types after user profile form
+   * Components types after user details form
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Elements before user profile form
+   * Elements before user details form
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: PropTypes.arrayOf(PropTypes.element),
   /**
-   * Elements after user profile form
+   * Elements after user details form
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: PropTypes.arrayOf(PropTypes.element),
@@ -350,11 +354,10 @@ UserProfileForm.propTypes = {
   elementLinkToLogin: PropTypes.element
 }
 
-UserProfileForm.defaultProps = {
-  useValidationFileds: false,
+UserFormDetails.defaultProps = {
+  useValidationFields: false,
   validationFieldsType: 'checkout',
   useDefualtSessionManager: true,
-  refreshSessionUser: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

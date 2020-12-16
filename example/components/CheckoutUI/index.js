@@ -9,7 +9,7 @@ import { MomentOptionUI } from '../MomentOptionUI'
 import { AddressDetails } from '../../../src/components/AddressDetails'
 import { AddressDetailsUI } from '../AddressDetailsUI'
 
-import { UserDetails } from '../../../src/components/UserDetails'
+import { UserFormDetails } from '../../../src/components/UserFormDetails'
 import { UserDetailsUI } from '../UserDetailsUI'
 
 import { PaymentOptions } from '../../../src/components/PaymentOptions'
@@ -82,7 +82,7 @@ export const CheckoutUI = (props) => {
 
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%' }}>
-          <UserDetails
+          <UserFormDetails
             UIComponent={UserDetailsUI}
             businessId={props.businessId}
             useValidationFields
