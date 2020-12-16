@@ -27,7 +27,7 @@ export const AddressDetails = (props) => {
     const orderLocation = orderState?.options?.address?.location
     return orderState.options.type === 1
       ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=${mapConfigs?.mapZoom || 15}&scale=2&maptype=roadmap&markers=color:red%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&key=${apiKey}`
-      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=color:red%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:https://res.cloudinary.com/ordering2/image/upload/f_auto,q_auto,w_45,h_45,q_auto:best,q_auto:best,r_max,bo_3px_solid_gray/v1562277711/bk6kvzrnfkvqgav9qi7j.png%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${apiKey}`
+      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=color:blue%7Ccolor:blue%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:https://res.cloudinary.com/ordering2/image/upload/f_auto,q_auto,w_90,h_90,q_auto:best,q_auto:best,r_max,bo_3px_solid_gray/v1562277711/bk6kvzrnfkvqgav9qi7j.png%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${apiKey}`
   }
   /**
    * Method to get business location from API
