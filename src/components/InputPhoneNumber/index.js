@@ -10,7 +10,7 @@ export const InputPhoneNumber = (props) => {
 
   const [{ configs }] = useConfig()
   const [countryData, setCountryData] = useState({
-    loading: !value || (value && value?.includes('null')),
+    loading: value !== null && (!value || (value && value?.includes('null'))),
     value: null,
     number: null
   })
@@ -32,7 +32,7 @@ export const InputPhoneNumber = (props) => {
   }
 
   useEffect(() => {
-    if (!value || (value && value?.includes('null'))) {
+    if (value !== null && (!value || (value && value?.includes('null')))) {
       getCountryCode()
     }
   }, [value])
