@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserProfileForm } from '../../../src/components/UserProfileForm'
+import { UserFormDetails } from '../../../src/components/UserFormDetails'
 import { UserProfileUI } from '../../components/UserProfileUI'
 import { TestComponent } from '../../components/TestComponent'
 
@@ -69,5 +69,5 @@ export const Profile = () => {
     afterElements: [<p key>Test Element After</p>]
   }
 
-  return <UserProfileForm {...profileProps} />
+  return <UserFormDetails {...profileProps} />
 }
