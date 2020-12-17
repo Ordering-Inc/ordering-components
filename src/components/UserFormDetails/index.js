@@ -226,7 +226,7 @@ export const UserFormDetails = (props) => {
           handleChangeInput={handleChangeInput}
           handleButtonUpdateClick={handleUpdateClick}
           handlechangeImage={handlechangeImage}
-          onEditUserClick={() => setIsEdit(!isEdit)}
+          toggleIsEdit={() => setIsEdit(!isEdit)}
         />
       )}
     </>
