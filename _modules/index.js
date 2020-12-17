@@ -339,16 +339,10 @@ Object.defineProperty(exports, "SingleProductCard", {
     return _SingleProductCard.SingleProductCard;
   }
 });
-Object.defineProperty(exports, "UserDetails", {
+Object.defineProperty(exports, "UserFormDetails", {
   enumerable: true,
   get: function get() {
-    return _UserDetails.UserDetails;
-  }
-});
-Object.defineProperty(exports, "UserProfileForm", {
-  enumerable: true,
-  get: function get() {
-    return _UserProfileForm.UserProfileForm;
+    return _UserFormDetails.UserFormDetails;
   }
 });
 Object.defineProperty(exports, "UpsellingPage", {
@@ -724,9 +718,7 @@ var _SingleOrderCard = require("./components/SingleOrderCard");
 
 var _SingleProductCard = require("./components/SingleProductCard");
 
-var _UserDetails = require("./components/UserDetails");
-
-var _UserProfileForm = require("./components/UserProfileForm");
+var _UserFormDetails = require("./components/UserFormDetails");
 
 var _UpsellingPage = require("./components/UpsellingPage");
 

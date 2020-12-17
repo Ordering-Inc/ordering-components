@@ -54,7 +54,7 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
       configs = _useConfig2[0].configs;
 
   var _useState = (0, _react.useState)({
-    loading: !value || value && (value === null || value === void 0 ? void 0 : value.includes('null')),
+    loading: value !== null && (!value || value && (value === null || value === void 0 ? void 0 : value.includes('null'))),
     value: null,
     number: null
   }),
@@ -105,7 +105,7 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (!value || value && (value === null || value === void 0 ? void 0 : value.includes('null'))) {
+    if (value !== null && (!value || value && (value === null || value === void 0 ? void 0 : value.includes('null')))) {
       getCountryCode();
     }
   }, [value]);

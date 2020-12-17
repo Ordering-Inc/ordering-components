@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.UserProfileForm = void 0;
+exports.UserFormDetails = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -48,16 +48,16 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage user profile behavior without UI component
+ * Component to manage user form details behavior without UI component
  */
-var UserProfileForm = function UserProfileForm(props) {
+var UserFormDetails = function UserFormDetails(props) {
   var UIComponent = props.UIComponent,
       useSessionUser = props.useSessionUser,
       refreshSessionUser = props.refreshSessionUser,
       useDefualtSessionManager = props.useDefualtSessionManager,
       userId = props.userId,
       user = props.user,
-      useValidationFileds = props.useValidationFileds,
+      useValidationFields = props.useValidationFields,
       validationFieldsType = props.validationFieldsType,
       handleButtonUpdateClick = props.handleButtonUpdateClick,
       handleSuccessUpdate = props.handleSuccessUpdate;
@@ -71,33 +71,38 @@ var UserProfileForm = function UserProfileForm(props) {
       session = _useSession2[0],
       changeUser = _useSession2[1].changeUser;
 
-  var _useState = (0, _react.useState)({
+  var _useState = (0, _react.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isEdit = _useState2[0],
+      setIsEdit = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
     loading: false,
     result: {
       error: false
     }
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      userState = _useState2[0],
-      setUserState = _useState2[1];
+      _useState4 = _slicedToArray(_useState3, 2),
+      userState = _useState4[0],
+      setUserState = _useState4[1];
 
-  var _useState3 = (0, _react.useState)({
+  var _useState5 = (0, _react.useState)({
     loading: false,
     changes: {},
     result: {
       error: false
     }
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
-
-  var _useState5 = (0, _react.useState)({
-    loading: useValidationFileds
-  }),
       _useState6 = _slicedToArray(_useState5, 2),
-      validationFields = _useState6[0],
-      setValidationFields = _useState6[1];
+      formState = _useState6[0],
+      setFormState = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
+    loading: useValidationFields
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      validationFields = _useState8[0],
+      setValidationFields = _useState8[1];
 
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
@@ -140,7 +145,7 @@ var UserProfileForm = function UserProfileForm(props) {
       });
     }
 
-    if (useValidationFileds) {
+    if (useValidationFields) {
       var _source = {};
       requestsState.validation = _source;
       ordering.validationFields().toType(validationFieldsType).get({
@@ -223,6 +228,7 @@ var UserProfileForm = function UserProfileForm(props) {
                 result: response.content,
                 loading: false
               }));
+              setIsEdit(false);
 
               if (!response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
@@ -235,11 +241,11 @@ var UserProfileForm = function UserProfileForm(props) {
                 }
               }
 
-              _context.next = 15;
+              _context.next = 16;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -249,12 +255,12 @@ var UserProfileForm = function UserProfileForm(props) {
                 loading: false
               }));
 
-            case 15:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 12]]);
+      }, _callee, null, [[2, 13]]);
     }));
 
     return function handleUpdateClick(_x) {
@@ -311,7 +317,7 @@ var UserProfileForm = function UserProfileForm(props) {
 
 
   var showField = function showField(fieldName) {
-    return !useValidationFileds || !validationFields.loading && !validationFields.fields[fieldName] || !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled;
+    return !useValidationFields || !validationFields.loading && !validationFields.fields[fieldName] || !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled;
   };
   /**
    * Check if field is required
@@ -320,35 +326,39 @@ var UserProfileForm = function UserProfileForm(props) {
 
 
   var isRequiredField = function isRequiredField(fieldName) {
-    return useValidationFileds && !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled && validationFields.fields[fieldName].required;
+    return useValidationFields && !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled && validationFields.fields[fieldName].required;
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    isEdit: isEdit,
+    cleanFormState: cleanFormState,
     formState: formState,
     userState: userState,
-    cleanFormState: cleanFormState,
     validationFields: validationFields,
     showField: showField,
     isRequiredField: isRequiredField,
     handleChangeInput: handleChangeInput,
+    handleButtonUpdateClick: handleUpdateClick,
     handlechangeImage: handlechangeImage,
-    handleButtonUpdateClick: handleUpdateClick
+    toggleIsEdit: function toggleIsEdit() {
+      return setIsEdit(!isEdit);
+    }
   })));
 };
 
-exports.UserProfileForm = UserProfileForm;
-UserProfileForm.propTypes = {
+exports.UserFormDetails = UserFormDetails;
+UserFormDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Use session user to profile
+   * Use session user to details
    */
   useSessionUser: function useSessionUser(props, propName) {
     if (props[propName] !== undefined && typeof props[propName] !== 'boolean') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `boolean`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `boolean`."));
     }
 
     if (props.user === undefined && props.userId === undefined && !props[propName]) {
@@ -371,7 +381,7 @@ UserProfileForm.propTypes = {
    */
   userId: function userId(props, propName) {
     if (props[propName] !== undefined && typeof props[propName] !== 'number') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `number`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `number`."));
     }
 
     if (props.user === undefined && !props.useSessionUser && !props[propName]) {
@@ -389,7 +399,7 @@ UserProfileForm.propTypes = {
    */
   user: function user(props, propName) {
     if (props[propName] !== undefined && _typeof(props[propName]) !== 'object') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `object`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `object`."));
     }
 
     if (props.userId === undefined && !props.useSessionUser && !props[propName]) {
@@ -402,7 +412,7 @@ UserProfileForm.propTypes = {
   },
 
   /**
-   * Function to change default user profile behavior
+   * Function to change default user details behavior
    * @param {Object} user Current user data
    * @param {Object} changes Current form changes
    */
@@ -417,7 +427,7 @@ UserProfileForm.propTypes = {
   /**
    * Enable to get validation fields to show/hide fields from Ordering API
    */
-  useValidationFileds: _propTypes.default.bool,
+  useValidationFields: _propTypes.default.bool,
 
   /**
    * Type of validation field to apply and get from API
@@ -436,7 +446,7 @@ UserProfileForm.propTypes = {
    */
   accessToken: function accessToken(props, propName) {
     if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `object`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `object`."));
     }
 
     if (props[propName] === undefined && !props.useDefualtSessionManager) {
@@ -445,25 +455,25 @@ UserProfileForm.propTypes = {
   },
 
   /**
-   * Components types before user profile form
+   * Components types before user details form
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after user profile form
+   * Components types after user details form
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before user profile form
+   * Elements before user details form
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after user profile form
+   * Elements after user details form
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element),
@@ -480,11 +490,10 @@ UserProfileForm.propTypes = {
    */
   elementLinkToLogin: _propTypes.default.element
 };
-UserProfileForm.defaultProps = {
-  useValidationFileds: false,
+UserFormDetails.defaultProps = {
+  useValidationFields: false,
   validationFieldsType: 'checkout',
   useDefualtSessionManager: true,
-  refreshSessionUser: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
