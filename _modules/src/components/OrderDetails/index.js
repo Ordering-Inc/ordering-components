@@ -68,7 +68,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useState = (0, _react.useState)({
     order: null,
-    header: '',
+    businessData: {},
     loading: !props.order,
     error: null
   }),
@@ -92,9 +92,7 @@ var OrderDetails = function OrderDetails(props) {
       driverLocation = _useState6[0],
       setDriverLocation = _useState6[1];
 
-  var parameters = {
-    params: 'header'
-  };
+  var propsToFetch = ['header', 'slug'];
   /**
    * Method to format a price number
    * @param {Number} price
@@ -183,7 +181,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _yield$ordering$setAc, result, order, businessResult, header;
+      var _yield$ordering$setAc, result, order, _yield$ordering$setAc2, content, businessData;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -198,33 +196,34 @@ var OrderDetails = function OrderDetails(props) {
               result = _yield$ordering$setAc.content.result;
               order = Array.isArray(result) ? null : result;
               _context2.next = 8;
-              return ordering.setAccessToken(token).businesses(order.business_id).parameters(parameters).get();
+              return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get();
 
             case 8:
-              businessResult = _context2.sent;
-              header = businessResult.response.data;
+              _yield$ordering$setAc2 = _context2.sent;
+              content = _yield$ordering$setAc2.content;
+              businessData = content.result;
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 order: order,
-                header: header
+                businessData: businessData
               }));
-              _context2.next = 16;
+              _context2.next = 17;
               break;
 
-            case 13:
-              _context2.prev = 13;
+            case 14:
+              _context2.prev = 14;
               _context2.t0 = _context2["catch"](0);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 13]]);
+      }, _callee2, null, [[0, 14]]);
     }));
 
     return function getOrder() {
