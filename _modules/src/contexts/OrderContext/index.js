@@ -131,7 +131,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, options, localOptions, _localOptions$address, conditions, addressesResponse, address, addressResponse, _options;
+      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, options, localOptions, _options, _localOptions$address, conditions, addressesResponse, address, addressResponse;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -174,8 +174,10 @@ var OrderProvider = function OrderProvider(_ref) {
                 break;
               }
 
+              _options = {};
+
               if (!(Object.keys(localOptions.address).length > 0)) {
-                _context.next = 29;
+                _context.next = 30;
                 break;
               }
 
@@ -183,24 +185,24 @@ var OrderProvider = function OrderProvider(_ref) {
                 attribute: 'address',
                 value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
-              _context.next = 17;
+              _context.next = 18;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get();
 
-            case 17:
+            case 18:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
                 return address.location.lat === localOptions.address.location.lat && address.location.lng === localOptions.address.location.lng && address.internal_number === localOptions.address.internal_number && address.zipcode === localOptions.address.zipcode && address.address_notes === localOptions.address.address_notes;
               });
 
               if (address) {
-                _context.next = 26;
+                _context.next = 27;
                 break;
               }
 
-              _context.next = 22;
+              _context.next = 23;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address);
 
-            case 22:
+            case 23:
               addressResponse = _context.sent;
 
               if (!addressResponse.content.error) {
@@ -210,18 +212,16 @@ var OrderProvider = function OrderProvider(_ref) {
               _context.next = 29;
               break;
 
-            case 26:
-              _context.next = 28;
+            case 27:
+              _context.next = 29;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({
                 default: true
               });
 
-            case 28:
-              localOptions.address_id = address.id;
-
             case 29:
-              _options = {};
+              address && (_options.address_id = address.id);
 
+            case 30:
               if (localOptions.type && localOptions.type !== 1) {
                 _options.type = localOptions.type;
               }
@@ -234,7 +234,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 _options.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
               }
 
-              if (Object.keys(_options).length > 0) {
+              if (_options && Object.keys(_options).length > 0) {
                 updateOrderOptions(_options);
               } else {
                 setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -494,46 +494,6 @@ var OrderProvider = function OrderProvider(_ref) {
       return _ref5.apply(this, arguments);
     };
   }();
-  /**
-   * Update order option data
-   * @param {object} changes Changes to update order options
-   */
-  // const _updateOrderOptions = async (changes) => {
-  //   if (session.auth) {
-  //     try {
-  //       setState({ ...state, loading: true })
-  //       const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
-  //       const { error, result } = await response.json()
-  //       if (!error) {
-  //         return await applyChanges(changes)
-  //       } else {
-  //         setConfirm({
-  //           show: true,
-  //           content: result,
-  //           onConfirm: () => {
-  //             setConfirm({ show: false })
-  //             applyChanges(changes)
-  //           }
-  //         })
-  //       }
-  //     } catch (err) {
-  //       setState({ ...state, loading: false })
-  //       return false
-  //     }
-  //   } else {
-  //     const options = {
-  //       ...state.options,
-  //       ...changes
-  //     }
-  //     strategy.setItem('options', options, true)
-  //     setState({
-  //       ...state,
-  //       options
-  //     })
-  //     return true
-  //   }
-  // }
-
   /**
    * Update order option data
    * @param {object} changes Changes to update order options
