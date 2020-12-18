@@ -228,7 +228,6 @@ var UserFormDetails = function UserFormDetails(props) {
                 result: response.content,
                 loading: false
               }));
-              setIsEdit(false);
 
               if (!response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
@@ -241,11 +240,11 @@ var UserFormDetails = function UserFormDetails(props) {
                 }
               }
 
-              _context.next = 16;
+              _context.next = 15;
               break;
 
-            case 13:
-              _context.prev = 13;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -255,12 +254,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false
               }));
 
-            case 16:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 13]]);
+      }, _callee, null, [[2, 12]]);
     }));
 
     return function handleUpdateClick(_x) {

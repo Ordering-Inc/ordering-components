@@ -19,7 +19,8 @@ var ExamineClick = function ExamineClick(_ref) {
       children = _ref.children,
       className = _ref.className,
       style = _ref.style,
-      accept = _ref.accept;
+      accept = _ref.accept,
+      disabled = _ref.disabled;
   var inputRef = (0, _react.useRef)(null);
 
   var handleClick = function handleClick(e) {
@@ -52,7 +53,8 @@ var ExamineClick = function ExamineClick(_ref) {
       inputRef.current = e;
       childRef && childRef(e);
     },
-    accept: accept
+    accept: accept,
+    disabled: disabled
   }), children);
 };
 
