@@ -77,8 +77,8 @@ export const OrderDetails = (props) => {
     try {
       const { content: { result } } = await ordering.setAccessToken(token).orders(orderId).get()
       const order = Array.isArray(result) ? null : result
-      const businessResult = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
-      const businessData = businessResult.response.data
+      const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
+      const businessData = content.result
       setOrderState({
         ...orderState,
         loading: false,
