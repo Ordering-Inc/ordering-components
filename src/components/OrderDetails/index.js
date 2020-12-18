@@ -12,10 +12,12 @@ export const OrderDetails = (props) => {
 
   const [{ user, token, loading }] = useSession()
   const [ordering] = useApi()
-  const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
+
+  const propsToFetch = ['header', 'slug']
 
   /**
    * Method to format a price number
@@ -75,10 +77,13 @@ export const OrderDetails = (props) => {
     try {
       const { content: { result } } = await ordering.setAccessToken(token).orders(orderId).get()
       const order = Array.isArray(result) ? null : result
+      const businessResult = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
+      const businessData = businessResult.response.data
       setOrderState({
         ...orderState,
         loading: false,
-        order
+        order,
+        businessData
       })
     } catch (e) {
       setOrderState({
