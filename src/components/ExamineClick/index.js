@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 
-export const ExamineClick = ({ onFiles, childRef, children, className, style, accept }) => {
+export const ExamineClick = ({ onFiles, childRef, children, className, style, accept, disabled }) => {
   const inputRef = useRef(null)
 
   const handleClick = (e) => {
@@ -32,7 +32,7 @@ export const ExamineClick = ({ onFiles, childRef, children, className, style, ac
           childRef && childRef(e)
         }}
         accept={accept}
-
+        disabled={disabled}
       />
       {children}
     </div>
