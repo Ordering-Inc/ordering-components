@@ -116,7 +116,6 @@ export const UserFormDetails = (props) => {
         result: response.content,
         loading: false
       })
-      setIsEdit(false)
       if (!response.content.error) {
         setUserState({
           ...userState,
