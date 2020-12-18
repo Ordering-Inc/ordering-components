@@ -63,6 +63,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const localOptions = await strategy.getItem('options', true)
       if (localOptions) {
+        const options = {}
         if (Object.keys(localOptions.address).length > 0) {
           const conditions = [
             { attribute: 'address', value: localOptions?.address?.address }
@@ -82,10 +83,9 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
             }
           } else {
             await ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({ default: true })
-            localOptions.address_id = address.id
           }
+          address && (options.address_id = address.id)
         }
-        const options = {}
         if (localOptions.type && localOptions.type !== 1) {
           options.type = localOptions.type
         }
@@ -95,7 +95,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         if (localOptions?.address_id) {
           options.address_id = localOptions?.address_id
         }
-        if (Object.keys(options).length > 0) {
+        if (options && Object.keys(options).length > 0) {
           updateOrderOptions(options)
         } else {
           setState({ ...state, loading: false })
@@ -213,47 +213,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
 
     updateOrderOptions({ moment: momentUnix })
   }
-
-  /**
-   * Update order option data
-   * @param {object} changes Changes to update order options
-   */
-  // const _updateOrderOptions = async (changes) => {
-  //   if (session.auth) {
-  //     try {
-  //       setState({ ...state, loading: true })
-  //       const response = await fetch(`${ordering.root}/order_options/verify_changes`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.token}` }, body: JSON.stringify(changes) })
-  //       const { error, result } = await response.json()
-  //       if (!error) {
-  //         return await applyChanges(changes)
-  //       } else {
-  //         setConfirm({
-  //           show: true,
-  //           content: result,
-  //           onConfirm: () => {
-  //             setConfirm({ show: false })
-  //             applyChanges(changes)
-  //           }
-  //         })
-  //       }
-  //     } catch (err) {
-  //       setState({ ...state, loading: false })
-  //       return false
-  //     }
-  //   } else {
-  //     const options = {
-  //       ...state.options,
-  //       ...changes
-  //     }
-  //     strategy.setItem('options', options, true)
-  //     setState({
-  //       ...state,
-  //       options
-  //     })
-  //     return true
-  //   }
-  // }
-
   /**
    * Update order option data
    * @param {object} changes Changes to update order options
