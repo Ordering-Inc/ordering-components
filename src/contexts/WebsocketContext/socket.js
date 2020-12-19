@@ -32,7 +32,7 @@ export class Socket {
   }
 
   getId () {
-    return this.socket.id
+    return this.socket?.id
   }
 
   close () {
