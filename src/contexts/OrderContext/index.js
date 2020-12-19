@@ -70,6 +70,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           ]
           const addressesResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get()
           let address = addressesResponse.content.result.find(address => {
+            localOptions.address.internal_number = localOptions.address?.internal_number || null
+            localOptions.address.zipcode = localOptions.address?.zipcode || null
+            localOptions.address.address_notes = localOptions.address?.address_notes || null
+
             return address.location.lat === localOptions.address.location.lat &&
               address.location.lng === localOptions.address.location.lng &&
               address.internal_number === localOptions.address.internal_number &&
@@ -77,9 +81,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
               address.address_notes === localOptions.address.address_notes
           })
           if (!address) {
-            const addressResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address)
-            if (!addressResponse.content.error) {
-              address = addressResponse.content.result
+            Object.keys(localOptions.address).forEach(key => localOptions.address[key] === null && delete localOptions.address[key])
+            const { content: { error, result } } = await ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address)
+            if (!error) {
+              address = result
             }
           } else {
             await ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({ default: true })
