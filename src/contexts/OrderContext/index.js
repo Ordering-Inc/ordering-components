@@ -81,8 +81,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
             if (!addressResponse.content.error) {
               address = addressResponse.content.result
             }
-          } else {
-            await ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({ default: true })
           }
           address && (options.address_id = address.id)
         }
