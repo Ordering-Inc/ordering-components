@@ -82,7 +82,8 @@ var OrderList = function OrderList(props) {
       handleResetDeleteMulitOrders = props.handleResetDeleteMulitOrders,
       changeMulitOrderStatus = props.changeMulitOrderStatus,
       multiOrderUpdateStatus = props.multiOrderUpdateStatus,
-      handleResetChangeMultiOrder = props.handleResetChangeMultiOrder;
+      handleResetChangeMultiOrder = props.handleResetChangeMultiOrder,
+      handleRemoveSelectedOrderId = props.handleRemoveSelectedOrderId;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -191,6 +192,7 @@ var OrderList = function OrderList(props) {
               content = _yield$ordering$setAc.content;
 
               if (!content.error) {
+                handleRemoveSelectedOrderId(id);
                 _orders2 = orderList.orders.filter(function (_order) {
                   return _order.id !== id;
                 });
@@ -364,6 +366,7 @@ var OrderList = function OrderList(props) {
               result = _yield$response$json.result;
 
               if (parseInt(result.status) === multiOrderUpdateStatus) {
+                handleRemoveSelectedOrderId(orderId);
                 _orders4 = orderList.orders.filter(function (_order) {
                   return _order.id !== orderId || _order.status === multiOrderUpdateStatus;
                 });
@@ -1101,6 +1104,11 @@ OrderList.propTypes = {
    * Function to initiate multi order status change action
    */
   handleResetChangeMultiOrder: _propTypes.default.func,
+
+  /**
+   * Function to remove order id selected
+   */
+  handleRemoveSelectedOrderId: _propTypes.default.func,
 
   /**
    * Function to get order that was clicked

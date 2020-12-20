@@ -23,6 +23,7 @@ export const OrdersManage = (props) => {
   const [updateStatus, setUpdateStatus] = useState(null)
   const [changeMulitOrderStatus, setChangeMultiOrderStatus] = useState(false)
   const [deleteMultiOrderStatus, setDeleteMultiOrderStatus] = useState(false)
+  const [selectedOrderNumber, setSelectedOrderNumber] = useState(0)
 
   /**
    * Object to save drivers
@@ -40,6 +41,44 @@ export const OrdersManage = (props) => {
    * Object to save driver orders
    */
   const [driverOrdersModal, setDriverOrdersModal] = useState({ id: null, orders: [], loading: true, error: null })
+
+  /**
+   * Object to save selected order ids
+   */
+  const [selectedOrderIds, setSelectedOrderIds] = useState([])
+
+  /**
+   * Save ids of orders selected
+   * @param {string} orderId order id
+   */
+  const handleOrderIds = (orderId) => {
+    const _ids = [...selectedOrderIds]
+    if (!_ids.includes(orderId)) {
+      _ids.push(orderId)
+    } else {
+      for (let i = 0; i < _ids.length; i++) {
+        if (_ids[i] === orderId) {
+          _ids.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setSelectedOrderIds(_ids)
+  }
+  /**
+   * Remove id of order updated or delected
+   * @param {string} orderId order id
+   */
+  const handleRemoveSelectedOrderId = (orderId) => {
+    const _ids = [...selectedOrderIds]
+    for (let i = 0; i < _ids.length; i++) {
+      if (_ids[i] === orderId) {
+        _ids.splice(i, 1)
+        i--
+      }
+    }
+    setSelectedOrderIds(_ids)
+  }
   /**
    * Change orders filter by statuses selected
    * @param {string} ordersStatusGroup orders status
@@ -47,6 +86,7 @@ export const OrdersManage = (props) => {
   const handleOrdersStatusGroupFilter = (statusGroup) => {
     if (statusGroup === ordersStatusGroup) return
     setOrdersStatusGroup(statusGroup)
+    setSelectedOrderIds([])
   }
   /**
    * Change text to search
@@ -191,6 +231,13 @@ export const OrdersManage = (props) => {
   }
 
   /**
+   * Listening selected order id change
+   */
+  useEffect(() => {
+    setSelectedOrderNumber(selectedOrderIds.length)
+  }, [selectedOrderIds])
+
+  /**
    * Listening driver change
    */
   useEffect(() => {
@@ -262,9 +309,12 @@ export const OrdersManage = (props) => {
           driverOrders={driverOrdersModal}
           ordersStatusGroup={ordersStatusGroup}
           filterValues={filterValues}
+          selectedOrderNumber={selectedOrderNumber}
           deleteMultiOrderStatus={deleteMultiOrderStatus}
           changeMulitOrderStatus={changeMulitOrderStatus}
           multiOrderUpdateStatus={updateStatus}
+          handleOrderIds={handleOrderIds}
+          handleRemoveSelectedOrderId={handleRemoveSelectedOrderId}
           handleChangeSearch={handleChangeSearch}
           handleChangeFilterValues={handleChangeFilterValues}
           handleOrdersStatusGroupFilter={handleOrdersStatusGroupFilter}

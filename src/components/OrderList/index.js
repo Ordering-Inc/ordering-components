@@ -27,7 +27,8 @@ export const OrderList = (props) => {
     handleResetDeleteMulitOrders,
     changeMulitOrderStatus,
     multiOrderUpdateStatus,
-    handleResetChangeMultiOrder
+    handleResetChangeMultiOrder,
+    handleRemoveSelectedOrderId
   } = props
 
   const [ordering] = useApi()
@@ -77,6 +78,7 @@ export const OrderList = (props) => {
       requestsState.deleteOrder = source
       const { content } = await ordering.setAccessToken(accessToken).orders(id).delete({ cancelToken: source })
       if (!content.error) {
+        handleRemoveSelectedOrderId(id)
         const orders = orderList.orders.filter(_order => {
           return _order.id !== id
         })
@@ -157,6 +159,7 @@ export const OrderList = (props) => {
       const { result } = await response.json()
 
       if (parseInt(result.status) === multiOrderUpdateStatus) {
+        handleRemoveSelectedOrderId(orderId)
         const orders = orderList.orders.filter(_order => {
           return _order.id !== orderId || _order.status === multiOrderUpdateStatus
         })
@@ -711,6 +714,10 @@ OrderList.propTypes = {
    * Function to initiate multi order status change action
    */
   handleResetChangeMultiOrder: PropTypes.func,
+  /**
+   * Function to remove order id selected
+   */  
+  handleRemoveSelectedOrderId: PropTypes.func,
   /**
    * Function to get order that was clicked
    * @param {Object} order Order that was clicked

@@ -27,14 +27,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -44,6 +36,14 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -106,59 +106,115 @@ var OrdersManage = function OrdersManage(props) {
       _useState12 = _slicedToArray(_useState11, 2),
       deleteMultiOrderStatus = _useState12[0],
       setDeleteMultiOrderStatus = _useState12[1];
+
+  var _useState13 = (0, _react.useState)(0),
+      _useState14 = _slicedToArray(_useState13, 2),
+      selectedOrderNumber = _useState14[0],
+      setSelectedOrderNumber = _useState14[1];
   /**
    * Object to save drivers
    */
 
 
-  var _useState13 = (0, _react.useState)({
+  var _useState15 = (0, _react.useState)({
     drivers: [],
     loading: true,
     error: null
   }),
-      _useState14 = _slicedToArray(_useState13, 2),
-      driversList = _useState14[0],
-      setDriversList = _useState14[1];
+      _useState16 = _slicedToArray(_useState15, 2),
+      driversList = _useState16[0],
+      setDriversList = _useState16[1];
   /**
    * Object to save paymethods
    */
 
 
-  var _useState15 = (0, _react.useState)({
+  var _useState17 = (0, _react.useState)({
     paymethods: [],
     loading: true,
     error: null
   }),
-      _useState16 = _slicedToArray(_useState15, 2),
-      paymethodsList = _useState16[0],
-      setPaymethodsList = _useState16[1];
+      _useState18 = _slicedToArray(_useState17, 2),
+      paymethodsList = _useState18[0],
+      setPaymethodsList = _useState18[1];
   /**
    * Object to save businesses
    */
 
 
-  var _useState17 = (0, _react.useState)({
+  var _useState19 = (0, _react.useState)({
     businesses: [],
     loading: true,
     error: null
   }),
-      _useState18 = _slicedToArray(_useState17, 2),
-      businessesList = _useState18[0],
-      setBusinessesList = _useState18[1];
+      _useState20 = _slicedToArray(_useState19, 2),
+      businessesList = _useState20[0],
+      setBusinessesList = _useState20[1];
   /**
    * Object to save driver orders
    */
 
 
-  var _useState19 = (0, _react.useState)({
+  var _useState21 = (0, _react.useState)({
     id: null,
     orders: [],
     loading: true,
     error: null
   }),
-      _useState20 = _slicedToArray(_useState19, 2),
-      driverOrdersModal = _useState20[0],
-      setDriverOrdersModal = _useState20[1];
+      _useState22 = _slicedToArray(_useState21, 2),
+      driverOrdersModal = _useState22[0],
+      setDriverOrdersModal = _useState22[1];
+  /**
+   * Object to save selected order ids
+   */
+
+
+  var _useState23 = (0, _react.useState)([]),
+      _useState24 = _slicedToArray(_useState23, 2),
+      selectedOrderIds = _useState24[0],
+      setSelectedOrderIds = _useState24[1];
+  /**
+   * Save ids of orders selected
+   * @param {string} orderId order id
+   */
+
+
+  var handleOrderIds = function handleOrderIds(orderId) {
+    var _ids = _toConsumableArray(selectedOrderIds);
+
+    if (!_ids.includes(orderId)) {
+      _ids.push(orderId);
+    } else {
+      for (var i = 0; i < _ids.length; i++) {
+        if (_ids[i] === orderId) {
+          _ids.splice(i, 1);
+
+          i--;
+        }
+      }
+    }
+
+    setSelectedOrderIds(_ids);
+  };
+  /**
+   * Remove id of order updated or delected
+   * @param {string} orderId order id
+   */
+
+
+  var handleRemoveSelectedOrderId = function handleRemoveSelectedOrderId(orderId) {
+    var _ids = _toConsumableArray(selectedOrderIds);
+
+    for (var i = 0; i < _ids.length; i++) {
+      if (_ids[i] === orderId) {
+        _ids.splice(i, 1);
+
+        i--;
+      }
+    }
+
+    setSelectedOrderIds(_ids);
+  };
   /**
    * Change orders filter by statuses selected
    * @param {string} ordersStatusGroup orders status
@@ -168,6 +224,7 @@ var OrdersManage = function OrdersManage(props) {
   var handleOrdersStatusGroupFilter = function handleOrdersStatusGroupFilter(statusGroup) {
     if (statusGroup === ordersStatusGroup) return;
     setOrdersStatusGroup(statusGroup);
+    setSelectedOrderIds([]);
   };
   /**
    * Change text to search
@@ -462,9 +519,16 @@ var OrdersManage = function OrdersManage(props) {
     };
   }();
   /**
-   * Listening driver change
+   * Listening selected order id change
    */
 
+
+  (0, _react.useEffect)(function () {
+    setSelectedOrderNumber(selectedOrderIds.length);
+  }, [selectedOrderIds]);
+  /**
+   * Listening driver change
+   */
 
   (0, _react.useEffect)(function () {
     if (driversList.loading || loading) return;
@@ -537,9 +601,12 @@ var OrdersManage = function OrdersManage(props) {
     driverOrders: driverOrdersModal,
     ordersStatusGroup: ordersStatusGroup,
     filterValues: filterValues,
+    selectedOrderNumber: selectedOrderNumber,
     deleteMultiOrderStatus: deleteMultiOrderStatus,
     changeMulitOrderStatus: changeMulitOrderStatus,
     multiOrderUpdateStatus: updateStatus,
+    handleOrderIds: handleOrderIds,
+    handleRemoveSelectedOrderId: handleRemoveSelectedOrderId,
     handleChangeSearch: handleChangeSearch,
     handleChangeFilterValues: handleChangeFilterValues,
     handleOrdersStatusGroupFilter: handleOrdersStatusGroupFilter,
