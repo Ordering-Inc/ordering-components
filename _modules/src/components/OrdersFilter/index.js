@@ -27,6 +27,14 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -50,16 +58,18 @@ var OrdersFilter = function OrdersFilter(props) {
    */
 
   var _useState = (0, _react.useState)({
-    groupType: null,
+    groupTypes: [],
     dateType: null,
     deliveryFromDatetime: null,
     deliveryEndDatetime: null,
+    isPendingOrder: false,
+    isPreOrder: false,
     businessIds: [],
-    driverId: null,
-    cityId: null,
-    status: null,
-    deliveryType: null,
-    paymethodId: null
+    driverIds: [],
+    cityIds: [],
+    statuses: [],
+    deliveryTypes: [],
+    paymethodIds: []
   }),
       _useState2 = _slicedToArray(_useState, 2),
       filterValues = _useState2[0],
@@ -71,8 +81,22 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangeGroup = function handleChangeGroup(groupType) {
+    var _groupTypes = _toConsumableArray(filterValues.groupTypes);
+
+    if (!_groupTypes.includes(groupType)) {
+      _groupTypes.push(groupType);
+    } else {
+      for (var i = 0; i < _groupTypes.length; i++) {
+        if (_groupTypes[i] === groupType) {
+          _groupTypes.splice(i, 1);
+
+          i--;
+        }
+      }
+    }
+
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      groupType: groupType
+      groupTypes: _groupTypes
     }));
   };
   /**
@@ -176,7 +200,7 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangeBusinesses = function handleChangeBusinesses(businessId) {
-    var _businessIds = filterValues.businessIds;
+    var _businessIds = _toConsumableArray(filterValues.businessIds);
 
     if (!_businessIds.includes(businessId)) {
       _businessIds.push(businessId);
@@ -201,8 +225,22 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangeDriver = function handleChangeDriver(driverId) {
+    var _driverIds = _toConsumableArray(filterValues.driverIds);
+
+    if (!_driverIds.includes(driverId)) {
+      _driverIds.push(driverId);
+    } else {
+      for (var i = 0; i < _driverIds.length; i++) {
+        if (_driverIds[i] === driverId) {
+          _driverIds.splice(i, 1);
+
+          i--;
+        }
+      }
+    }
+
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      driverId: driverId
+      driverIds: _driverIds
     }));
   };
   /**
@@ -212,8 +250,22 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangeCity = function handleChangeCity(cityId) {
+    var _cityIds = _toConsumableArray(filterValues.cityIds);
+
+    if (!_cityIds.includes(cityId)) {
+      _cityIds.push(cityId);
+    } else {
+      for (var i = 0; i < _cityIds.length; i++) {
+        if (_cityIds[i] === cityId) {
+          _cityIds.splice(i, 1);
+
+          i--;
+        }
+      }
+    }
+
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      cityId: cityId
+      cityIds: _cityIds
     }));
   };
   /**
@@ -223,8 +275,22 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangeOrderStatus = function handleChangeOrderStatus(status) {
+    var _statuses = _toConsumableArray(filterValues.statuses);
+
+    if (!_statuses.includes(status)) {
+      _statuses.push(status);
+    } else {
+      for (var i = 0; i < _statuses.length; i++) {
+        if (_statuses[i] === status) {
+          _statuses.splice(i, 1);
+
+          i--;
+        }
+      }
+    }
+
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      status: status
+      statuses: _statuses
     }));
   };
   /**
@@ -234,8 +300,22 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangeDeliveryType = function handleChangeDeliveryType(deliveryType) {
+    var _deliveryTypes = _toConsumableArray(filterValues.deliveryTypes);
+
+    if (!_deliveryTypes.includes(deliveryType)) {
+      _deliveryTypes.push(deliveryType);
+    } else {
+      for (var i = 0; i < _deliveryTypes.length; i++) {
+        if (_deliveryTypes[i] === deliveryType) {
+          _deliveryTypes.splice(i, 1);
+
+          i--;
+        }
+      }
+    }
+
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      deliveryType: deliveryType
+      deliveryTypes: _deliveryTypes
     }));
   };
   /**
@@ -245,8 +325,43 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangePaymethodType = function handleChangePaymethodType(paymethodId) {
+    var _paymethodIds = _toConsumableArray(filterValues.paymethodIds);
+
+    if (!_paymethodIds.includes(paymethodId)) {
+      _paymethodIds.push(paymethodId);
+    } else {
+      for (var i = 0; i < _paymethodIds.length; i++) {
+        if (_paymethodIds[i] === paymethodId) {
+          _paymethodIds.splice(i, 1);
+
+          i--;
+        }
+      }
+    }
+
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      paymethodId: paymethodId
+      paymethodIds: _paymethodIds
+    }));
+  };
+  /**
+   * Change isPendingOrder
+   * */
+
+
+  var handleChangeIsPendingOrder = function handleChangeIsPendingOrder() {
+    var _isPendingOrder = filterValues.isPendingOrder;
+    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
+      isPendingOrder: !_isPendingOrder
+    }));
+  };
+  /**
+   * Change isPreOrder
+  */
+
+
+  var handleChangeIsPreOrder = function handleChangeIsPreOrder() {
+    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
+      isPreOrder: !filterValues.isPreOrder
     }));
   };
   /**
@@ -256,18 +371,33 @@ var OrdersFilter = function OrdersFilter(props) {
 
   var handleResetFilterValues = function handleResetFilterValues() {
     setFilterValues({
-      groupType: null,
+      groupTypes: [],
       deliveryFromDatetime: null,
       deliveryEndDatetime: null,
+      isPendingOrder: false,
+      isPreOrder: false,
       businessIds: [],
-      driverId: null,
-      cityId: null,
-      status: null,
-      deliveryType: null,
-      paymethodId: null
+      driverIds: [],
+      cityIds: [],
+      statuses: [],
+      deliveryTypes: [],
+      paymethodIds: []
     });
   };
 
+  (0, _react.useEffect)(function () {
+    var _statuses = _toConsumableArray(filterValues.statuses);
+
+    if (filterValues.isPreOrder || filterValues.isPreOrder) {
+      if (!_statuses.includes(0)) {
+        _statuses.push(0);
+
+        setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
+          statuses: _statuses
+        }));
+      }
+    }
+  }, [filterValues.isPendingOrder, filterValues.isPreOrder]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     filterValues: filterValues,
     driversList: driversList,
@@ -284,7 +414,9 @@ var OrdersFilter = function OrdersFilter(props) {
     handleChangeOrderStatus: handleChangeOrderStatus,
     handleChangeDeliveryType: handleChangeDeliveryType,
     handleChangePaymethodType: handleChangePaymethodType,
-    handleResetFilterValues: handleResetFilterValues
+    handleResetFilterValues: handleResetFilterValues,
+    handleChangeIsPendingOrder: handleChangeIsPendingOrder,
+    handleChangeIsPreOrder: handleChangeIsPreOrder
   })));
 };
 

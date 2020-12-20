@@ -206,15 +206,30 @@ export const OrderList = (props) => {
       conditions.push({ attribute: 'id', value: orderIds })
     }
 
-    if (filterValues?.status === null || Object.keys(filterValues).length === 0) {
+    if (Object.keys(filterValues).length === 0) {
       if (orderStatus) {
         conditions.push({ attribute: 'status', value: orderStatus })
       }
     } else {
-      if (orderStatus.includes(filterValues.status)) {
-        conditions.push({ attribute: 'status', value: filterValues.status })
+      if (filterValues.statuses.length > 0) {
+        const checkInnerContain = filterValues.statuses.every((el) => {
+          return orderStatus.indexOf(el) !== -1
+        })
+
+        const checkOutContain = orderStatus.every((el) => {
+          return filterValues.statuses.indexOf(el) !== -1
+        })
+
+        if (checkInnerContain) conditions.push({ attribute: 'status', value: filterValues.statuses })
+        if (checkOutContain) {
+          if (orderStatus) {
+            conditions.push({ attribute: 'status', value: orderStatus })
+          }
+        }
       } else {
-        return
+        if (orderStatus) {
+          conditions.push({ attribute: 'status', value: orderStatus })
+        }
       }
     }
 
@@ -302,27 +317,27 @@ export const OrderList = (props) => {
           }
         )
       }
-      if (filterValues.driverId !== null) {
+      if (filterValues.driverIds.length !== 0) {
         filterConditons.push(
           {
             attribute: 'driver_id',
-            value: filterValues.driverId
+            value: filterValues.driverIds
           }
         )
       }
-      if (filterValues.deliveryType !== null) {
+      if (filterValues.deliveryTypes.length !== 0) {
         filterConditons.push(
           {
             attribute: 'delivery_type',
-            value: filterValues.deliveryType
+            value: filterValues.deliveryTypes
           }
         )
       }
-      if (filterValues.paymethodId !== null) {
+      if (filterValues.paymethodIds.length !== 0) {
         filterConditons.push(
           {
             attribute: 'paymethod_id',
-            value: filterValues.paymethodId
+            value: filterValues.paymethodIds
           }
         )
       }
@@ -374,10 +389,16 @@ export const OrderList = (props) => {
         if (!response.content.error) {
           filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime))
         }
+        if (filterValues.isPreOrder) {
+          if (!filterValues.isPendingOrder) filteredResult = []
+        }
       }
       if (preOrder) {
         if (!response.content.error) {
           filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime))
+        }
+        if (filterValues.isPendingOrder) {
+          if (!filterValues.isPreOrder) filteredResult = []
         }
       }
 
@@ -420,16 +441,8 @@ export const OrderList = (props) => {
     loadOrders()
   }, [searchValue])
   /**
-   * Listening filter values change
+   * Listening sesssion and filter values change
    */
-  useEffect(() => {
-    if (orderStatus.includes(filterValues.status) || filterValues.status === null || Object.keys(filterValues).length === 0) {
-      loadOrders()
-    } else {
-      setOrderList({ loading: false, orders: [], error: null })
-    }
-  }, [filterValues])
-
   useEffect(() => {
     if (orders) {
       setOrderList({
@@ -437,6 +450,22 @@ export const OrderList = (props) => {
         orders
       })
     } else {
+      let checkInnerContain = false
+      let checkOutContain = false
+      if (Object.keys(filterValues).length > 0) {
+        checkInnerContain = filterValues.statuses.every((el) => {
+          return orderStatus.indexOf(el) !== -1
+        })
+
+        checkOutContain = orderStatus.every((el) => {
+          return filterValues.statuses.indexOf(el) !== -1
+        })
+
+        if (!checkInnerContain && !checkOutContain) {
+          setOrderList({ loading: false, orders: [], error: null })
+          return
+        }
+      }
       loadOrders()
     }
     return () => {
@@ -444,7 +473,7 @@ export const OrderList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [session])
+  }, [session, filterValues])
 
   /**
    * Listening mulit orders delete action start

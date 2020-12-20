@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
-
 export const OrdersFilter = (props) => {
   const {
     driversList,
@@ -15,16 +14,18 @@ export const OrdersFilter = (props) => {
    * This property is used to set in state the current value
    */
   const [filterValues, setFilterValues] = useState({
-    groupType: null,
+    groupTypes: [],
     dateType: null,
     deliveryFromDatetime: null,
     deliveryEndDatetime: null,
+    isPendingOrder: false,
+    isPreOrder: false,
     businessIds: [],
-    driverId: null,
-    cityId: null,
-    status: null,
-    deliveryType: null,
-    paymethodId: null
+    driverIds: [],
+    cityIds: [],
+    statuses: [],
+    deliveryTypes: [],
+    paymethodIds: []
   })
 
   /**
@@ -32,7 +33,18 @@ export const OrdersFilter = (props) => {
    * * @param {object} groupType Group type
    */
   const handleChangeGroup = (groupType) => {
-    setFilterValues({ ...filterValues, groupType: groupType })
+    const _groupTypes = [...filterValues.groupTypes]
+    if (!_groupTypes.includes(groupType)) {
+      _groupTypes.push(groupType)
+    } else {
+      for (let i = 0; i < _groupTypes.length; i++) {
+        if (_groupTypes[i] === groupType) {
+          _groupTypes.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setFilterValues({ ...filterValues, groupTypes: _groupTypes })
   }
   /**
    * Change date type
@@ -93,7 +105,7 @@ export const OrdersFilter = (props) => {
    * * @param {number} businessId business id
   */
   const handleChangeBusinesses = (businessId) => {
-    const _businessIds = filterValues.businessIds
+    const _businessIds = [...filterValues.businessIds]
     if (!_businessIds.includes(businessId)) {
       _businessIds.push(businessId)
     } else {
@@ -111,52 +123,132 @@ export const OrdersFilter = (props) => {
    * * @param {number} driverId driver id
   */
   const handleChangeDriver = (driverId) => {
-    setFilterValues({ ...filterValues, driverId: driverId })
+    const _driverIds = [...filterValues.driverIds]
+    if (!_driverIds.includes(driverId)) {
+      _driverIds.push(driverId)
+    } else {
+      for (let i = 0; i < _driverIds.length; i++) {
+        if (_driverIds[i] === driverId) {
+          _driverIds.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setFilterValues({ ...filterValues, driverIds: _driverIds })
   }
   /**
    * Change city
    * * @param {number} cityId city id of business
   */
   const handleChangeCity = (cityId) => {
-    setFilterValues({ ...filterValues, cityId: cityId })
+    const _cityIds = [...filterValues.cityIds]
+    if (!_cityIds.includes(cityId)) {
+      _cityIds.push(cityId)
+    } else {
+      for (let i = 0; i < _cityIds.length; i++) {
+        if (_cityIds[i] === cityId) {
+          _cityIds.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setFilterValues({ ...filterValues, cityIds: _cityIds })
   }
   /**
    * Change order status
    * * @param {number} status status
   */
   const handleChangeOrderStatus = (status) => {
-    setFilterValues({ ...filterValues, status: status })
+    const _statuses = [...filterValues.statuses]
+    if (!_statuses.includes(status)) {
+      _statuses.push(status)
+    } else {
+      for (let i = 0; i < _statuses.length; i++) {
+        if (_statuses[i] === status) {
+          _statuses.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setFilterValues({ ...filterValues, statuses: _statuses })
   }
   /**
    * Change delivery type
    * * @param {number} deliveryType delivery type
   */
   const handleChangeDeliveryType = (deliveryType) => {
-    setFilterValues({ ...filterValues, deliveryType: deliveryType })
+    const _deliveryTypes = [...filterValues.deliveryTypes]
+    if (!_deliveryTypes.includes(deliveryType)) {
+      _deliveryTypes.push(deliveryType)
+    } else {
+      for (let i = 0; i < _deliveryTypes.length; i++) {
+        if (_deliveryTypes[i] === deliveryType) {
+          _deliveryTypes.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setFilterValues({ ...filterValues, deliveryTypes: _deliveryTypes })
   }
   /**
    * Change paymethod type
    * * @param {number} paymethodId paymethod Id
   */
   const handleChangePaymethodType = (paymethodId) => {
-    setFilterValues({ ...filterValues, paymethodId: paymethodId })
+    const _paymethodIds = [...filterValues.paymethodIds]
+    if (!_paymethodIds.includes(paymethodId)) {
+      _paymethodIds.push(paymethodId)
+    } else {
+      for (let i = 0; i < _paymethodIds.length; i++) {
+        if (_paymethodIds[i] === paymethodId) {
+          _paymethodIds.splice(i, 1)
+          i--
+        }
+      }
+    }
+    setFilterValues({ ...filterValues, paymethodIds: _paymethodIds })
+  }
+  /**
+   * Change isPendingOrder
+   * */
+  const handleChangeIsPendingOrder = () => {
+    const _isPendingOrder = filterValues.isPendingOrder
+    setFilterValues({ ...filterValues, isPendingOrder: !_isPendingOrder })
+  }
+  /**
+   * Change isPreOrder
+  */
+  const handleChangeIsPreOrder = () => {
+    setFilterValues({ ...filterValues, isPreOrder: !filterValues.isPreOrder })
   }
   /**
    * Reset filter values
   */
   const handleResetFilterValues = () => {
     setFilterValues({
-      groupType: null,
+      groupTypes: [],
       deliveryFromDatetime: null,
       deliveryEndDatetime: null,
+      isPendingOrder: false,
+      isPreOrder: false,
       businessIds: [],
-      driverId: null,
-      cityId: null,
-      status: null,
-      deliveryType: null,
-      paymethodId: null
+      driverIds: [],
+      cityIds: [],
+      statuses: [],
+      deliveryTypes: [],
+      paymethodIds: []
     })
   }
+
+  useEffect(() => {
+    const _statuses = [...filterValues.statuses]
+    if (filterValues.isPreOrder || filterValues.isPreOrder) {
+      if (!_statuses.includes(0)) {
+        _statuses.push(0)
+        setFilterValues({ ...filterValues, statuses: _statuses })
+      }
+    }
+  }, [filterValues.isPendingOrder, filterValues.isPreOrder])
 
   return (
     <>
@@ -179,6 +271,8 @@ export const OrdersFilter = (props) => {
           handleChangeDeliveryType={handleChangeDeliveryType}
           handleChangePaymethodType={handleChangePaymethodType}
           handleResetFilterValues={handleResetFilterValues}
+          handleChangeIsPendingOrder={handleChangeIsPendingOrder}
+          handleChangeIsPreOrder={handleChangeIsPreOrder}
         />
       )}
     </>

@@ -418,7 +418,7 @@ var OrderList = function OrderList(props) {
 
   var getOrders = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(page) {
-      var options, where, conditions, searchConditions, filterConditons, source, functionFetch;
+      var options, where, conditions, checkInnerContain, checkOutContain, searchConditions, filterConditons, source, functionFetch;
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -450,38 +450,44 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              if (!((filterValues === null || filterValues === void 0 ? void 0 : filterValues.status) === null || Object.keys(filterValues).length === 0)) {
-                _context4.next = 9;
-                break;
+              if (Object.keys(filterValues).length === 0) {
+                if (orderStatus) {
+                  conditions.push({
+                    attribute: 'status',
+                    value: orderStatus
+                  });
+                }
+              } else {
+                if (filterValues.statuses.length > 0) {
+                  checkInnerContain = filterValues.statuses.every(function (el) {
+                    return orderStatus.indexOf(el) !== -1;
+                  });
+                  checkOutContain = orderStatus.every(function (el) {
+                    return filterValues.statuses.indexOf(el) !== -1;
+                  });
+                  if (checkInnerContain) conditions.push({
+                    attribute: 'status',
+                    value: filterValues.statuses
+                  });
+
+                  if (checkOutContain) {
+                    if (orderStatus) {
+                      conditions.push({
+                        attribute: 'status',
+                        value: orderStatus
+                      });
+                    }
+                  }
+                } else {
+                  if (orderStatus) {
+                    conditions.push({
+                      attribute: 'status',
+                      value: orderStatus
+                    });
+                  }
+                }
               }
 
-              if (orderStatus) {
-                conditions.push({
-                  attribute: 'status',
-                  value: orderStatus
-                });
-              }
-
-              _context4.next = 14;
-              break;
-
-            case 9:
-              if (!orderStatus.includes(filterValues.status)) {
-                _context4.next = 13;
-                break;
-              }
-
-              conditions.push({
-                attribute: 'status',
-                value: filterValues.status
-              });
-              _context4.next = 14;
-              break;
-
-            case 13:
-              return _context4.abrupt("return");
-
-            case 14:
               if (searchValue) {
                 searchConditions = [];
 
@@ -557,24 +563,24 @@ var OrderList = function OrderList(props) {
                   });
                 }
 
-                if (filterValues.driverId !== null) {
+                if (filterValues.driverIds.length !== 0) {
                   filterConditons.push({
                     attribute: 'driver_id',
-                    value: filterValues.driverId
+                    value: filterValues.driverIds
                   });
                 }
 
-                if (filterValues.deliveryType !== null) {
+                if (filterValues.deliveryTypes.length !== 0) {
                   filterConditons.push({
                     attribute: 'delivery_type',
-                    value: filterValues.deliveryType
+                    value: filterValues.deliveryTypes
                   });
                 }
 
-                if (filterValues.paymethodId !== null) {
+                if (filterValues.paymethodIds.length !== 0) {
                   filterConditons.push({
                     attribute: 'paymethod_id',
-                    value: filterValues.paymethodId
+                    value: filterValues.paymethodIds
                   });
                 }
 
@@ -597,13 +603,13 @@ var OrderList = function OrderList(props) {
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where) : ordering.setAccessToken(accessToken).orders().where(where);
-              _context4.next = 23;
+              _context4.next = 15;
               return functionFetch.get(options);
 
-            case 23:
+            case 15:
               return _context4.abrupt("return", _context4.sent);
 
-            case 24:
+            case 16:
             case "end":
               return _context4.stop();
           }
@@ -660,6 +666,10 @@ var OrderList = function OrderList(props) {
                     return isPendingOrder(order.created_at, order.delivery_datetime);
                   });
                 }
+
+                if (filterValues.isPreOrder) {
+                  if (!filterValues.isPendingOrder) filteredResult = [];
+                }
               }
 
               if (preOrder) {
@@ -667,6 +677,10 @@ var OrderList = function OrderList(props) {
                   filteredResult = response.content.result.filter(function (order) {
                     return isPreOrder(order.created_at, order.delivery_datetime);
                   });
+                }
+
+                if (filterValues.isPendingOrder) {
+                  if (!filterValues.isPreOrder) filteredResult = [];
                 }
               }
 
@@ -731,26 +745,36 @@ var OrderList = function OrderList(props) {
     loadOrders();
   }, [searchValue]);
   /**
-   * Listening filter values change
+   * Listening sesssion and filter values change
    */
 
-  (0, _react.useEffect)(function () {
-    if (orderStatus.includes(filterValues.status) || filterValues.status === null || Object.keys(filterValues).length === 0) {
-      loadOrders();
-    } else {
-      setOrderList({
-        loading: false,
-        orders: [],
-        error: null
-      });
-    }
-  }, [filterValues]);
   (0, _react.useEffect)(function () {
     if (orders) {
       setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
         orders: orders
       }));
     } else {
+      var checkInnerContain = false;
+      var checkOutContain = false;
+
+      if (Object.keys(filterValues).length > 0) {
+        checkInnerContain = filterValues.statuses.every(function (el) {
+          return orderStatus.indexOf(el) !== -1;
+        });
+        checkOutContain = orderStatus.every(function (el) {
+          return filterValues.statuses.indexOf(el) !== -1;
+        });
+
+        if (!checkInnerContain && !checkOutContain) {
+          setOrderList({
+            loading: false,
+            orders: [],
+            error: null
+          });
+          return;
+        }
+      }
+
       loadOrders();
     }
 
@@ -759,7 +783,7 @@ var OrderList = function OrderList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, [session]);
+  }, [session, filterValues]);
   /**
    * Listening mulit orders delete action start
    */
