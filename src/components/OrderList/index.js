@@ -45,6 +45,7 @@ export const OrderList = (props) => {
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [deleteActionStart, setDeleteActionStart] = useState(false)
   const [updateActionStart, setUpdateActionStart] = useState(false)
+  const [registerOrderId, setRegisterOrderId] = useState(null)
 
   /**
    * Object to save selected order ids
@@ -67,6 +68,12 @@ export const OrderList = (props) => {
       }
     }
     setSelectedOrderIds(_ids)
+  }
+  /**
+   * Reset registerOrderId
+   */
+  const handleResetNotification = () => {
+    setRegisterOrderId(null)
   }
   /**
    * Method to delete order from API
@@ -555,6 +562,7 @@ export const OrderList = (props) => {
       }
     }
     const handleRegisterOrder = (_order) => {
+      setRegisterOrderId(_order.id)
       const order = { ..._order, status: 0 }
       let orders = []
       if (orderStatus.includes(0)) {
@@ -676,11 +684,13 @@ export const OrderList = (props) => {
           pagination={pagination}
           pendingOrder={pendingOrder}
           preOrder={preOrder}
+          registerOrderId={registerOrderId}
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
           handleUpdateOrderStatus={handleUpdateOrderStatus}
           selectedOrderIds={selectedOrderIds}
           handleSelectedOrderIds={handleSelectedOrderIds}
+          handleResetNotification={handleResetNotification}
         />
       )}
     </>
@@ -716,7 +726,7 @@ OrderList.propTypes = {
   handleResetChangeMultiOrder: PropTypes.func,
   /**
    * Function to remove order id selected
-   */  
+   */
   handleRemoveSelectedOrderId: PropTypes.func,
   /**
    * Function to get order that was clicked

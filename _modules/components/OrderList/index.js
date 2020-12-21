@@ -131,15 +131,20 @@ var OrderList = function OrderList(props) {
       _useState10 = _slicedToArray(_useState9, 2),
       updateActionStart = _useState10[0],
       setUpdateActionStart = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(null),
+      _useState12 = _slicedToArray(_useState11, 2),
+      registerOrderId = _useState12[0],
+      setRegisterOrderId = _useState12[1];
   /**
    * Object to save selected order ids
    */
 
 
-  var _useState11 = (0, _react.useState)([]),
-      _useState12 = _slicedToArray(_useState11, 2),
-      selectedOrderIds = _useState12[0],
-      setSelectedOrderIds = _useState12[1];
+  var _useState13 = (0, _react.useState)([]),
+      _useState14 = _slicedToArray(_useState13, 2),
+      selectedOrderIds = _useState14[0],
+      setSelectedOrderIds = _useState14[1];
   /**
    * Save ids of orders selected
    * @param {string} orderId order id
@@ -162,6 +167,14 @@ var OrderList = function OrderList(props) {
     }
 
     setSelectedOrderIds(_ids);
+  };
+  /**
+   * Reset registerOrderId
+   */
+
+
+  var handleResetNotification = function handleResetNotification() {
+    setRegisterOrderId(null);
   };
   /**
    * Method to delete order from API
@@ -870,6 +883,8 @@ var OrderList = function OrderList(props) {
     };
 
     var handleRegisterOrder = function handleRegisterOrder(_order) {
+      setRegisterOrderId(_order.id);
+
       var order = _objectSpread(_objectSpread({}, _order), {}, {
         status: 0
       });
@@ -1065,11 +1080,13 @@ var OrderList = function OrderList(props) {
     pagination: pagination,
     pendingOrder: pendingOrder,
     preOrder: preOrder,
+    registerOrderId: registerOrderId,
     loadMoreOrders: loadMoreOrders,
     goToPage: goToPage,
     handleUpdateOrderStatus: handleUpdateOrderStatus,
     selectedOrderIds: selectedOrderIds,
-    handleSelectedOrderIds: handleSelectedOrderIds
+    handleSelectedOrderIds: handleSelectedOrderIds,
+    handleResetNotification: handleResetNotification
   })));
 };
 
