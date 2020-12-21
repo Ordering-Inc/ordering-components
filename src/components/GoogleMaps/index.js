@@ -4,17 +4,6 @@ import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
 import { useEvent } from '../../contexts/EventContext'
 
-const getMarkerColor = (n) => {
-  switch (n) {
-    case 1:
-      return 'red'
-    case 2:
-      return 'green'
-    default:
-      return 'blue'
-  }
-}
-
 export const GoogleMaps = (props) => {
   const {
     googleReady,
@@ -42,11 +31,16 @@ export const GoogleMaps = (props) => {
   const generateMarkers = (map) => {
     const bounds = new window.google.maps.LatLngBounds()
     for (let i = 0; i < locations.length; i++) {
+      let formatUrl = null
+      if (i === 1) {
+        formatUrl = `${locations[i].icon.slice(0, 50)}f_auto,r_max/${locations[i].icon.slice(50)}`
+      }
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
         map,
         icon: {
-          url: `http://maps.google.com/mapfiles/ms/icons/${getMarkerColor(i)}-dot.png`
+          url: formatUrl || locations[i].icon,
+          scaledSize: new window.google.maps.Size(45, 45)
         }
       })
       bounds.extend(marker.position)
