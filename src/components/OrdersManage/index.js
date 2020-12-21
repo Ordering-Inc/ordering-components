@@ -26,6 +26,10 @@ export const OrdersManage = (props) => {
   const [selectedOrderNumber, setSelectedOrderNumber] = useState(0)
 
   /**
+   * Object to save api config list
+   */
+  const [apiConfigList, setApiConfigList] = useState({ configList: [], loading: true, error: null })
+  /**
    * Object to save drivers
    */
   const [driversList, setDriversList] = useState({ drivers: [], loading: true, error: null })
@@ -127,7 +131,6 @@ export const OrdersManage = (props) => {
    * Delete orders for orders selected
    */
   const handleDeleteMultiOrders = () => {
-    // setDeleteActionStart(true)
     setDeleteMultiOrderStatus(true)
   }
   /**
@@ -136,7 +139,23 @@ export const OrdersManage = (props) => {
   const handleResetDeleteMulitOrders = () => {
     setDeleteMultiOrderStatus(false)
   }
-
+  /**
+   * Method to get api configure from API
+   */
+  const getApiConfig = async () => {
+    try {
+      const source = {}
+      requestsState.apiConfig = source
+      const { content: { result } } = await ordering
+        .setAccessToken(token)
+        .configs()
+        .asDictionary()
+        .get({ cancelToken: source })
+      setApiConfigList({ ...apiConfigList, loading: false, configList: result })
+    } catch (err) {
+      setApiConfigList({ ...apiConfigList, loading: false, error: err.message })
+    }
+  }
   /**
    * Method to get paymethods from API
    */
@@ -286,6 +305,7 @@ export const OrdersManage = (props) => {
   }, [driverOrdersModal.id])
 
   useEffect(() => {
+    getApiConfig()
     getDrivers()
     getPaymethods()
     getBusinesses()
@@ -302,6 +322,7 @@ export const OrdersManage = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          apiConfigList={apiConfigList}
           searchValue={searchValue}
           driversList={driversList}
           paymethodsList={paymethodsList}
