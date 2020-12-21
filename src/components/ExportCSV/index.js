@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 export const ExportCSV = (props) => {
-  const { UIComponent } = props
+  const {
+    UIComponent,
+    filterValues
+  } = props
   const [tokenStatus, setTokenStatus] = useState({ token: null, error: null })
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
-
+  const [filterApply, setFilterApply] = useState(false)
   /**
    * Method to get token from API
    */
@@ -37,7 +40,78 @@ export const ExportCSV = (props) => {
           Authorization: `Bearer ${tokenStatus.token}`
         }
       }
-      const response = await fetch('https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id', requestOptions)
+
+      const filterConditons = []
+
+      if (filterApply) {
+        if (Object.keys(filterValues).length) {
+          if (filterValues.statuses.length > 0) {
+            filterConditons.push({ attribute: 'status', value: filterValues.statuses })
+          } else {
+            filterConditons.push({ attribute: 'status', value: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] })
+          }
+          if (filterValues.deliveryFromDatetime !== null) {
+            filterConditons.push(
+              {
+                attribute: 'delivery_datetime',
+                value: {
+                  condition: '>=',
+                  value: encodeURI(filterValues.deliveryFromDatetime)
+                }
+              }
+            )
+          }
+          if (filterValues.deliveryEndDatetime !== null) {
+            filterConditons.push(
+              {
+                attribute: 'delivery_datetime',
+                value: {
+                  condition: '<=',
+                  value: filterValues.deliveryEndDatetime
+                }
+              }
+            )
+          }
+          if (filterValues.businessIds.length !== 0) {
+            filterConditons.push(
+              {
+                attribute: 'business_id',
+                value: filterValues.businessIds
+              }
+            )
+          }
+          if (filterValues.driverIds.length !== 0) {
+            filterConditons.push(
+              {
+                attribute: 'driver_id',
+                value: filterValues.driverIds
+              }
+            )
+          }
+          if (filterValues.deliveryTypes.length !== 0) {
+            filterConditons.push(
+              {
+                attribute: 'delivery_type',
+                value: filterValues.deliveryTypes
+              }
+            )
+          }
+          if (filterValues.paymethodIds.length !== 0) {
+            filterConditons.push(
+              {
+                attribute: 'paymethod_id',
+                value: filterValues.paymethodIds
+              }
+            )
+          }
+        }
+      }
+
+      const functionFetch = filterApply
+        ? `https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id&where=${JSON.stringify(filterConditons)}`
+        : 'https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id'
+
+      const response = await fetch(functionFetch, requestOptions)
       const fileSuffix = new Date().getTime()
       await response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob)
@@ -56,6 +130,19 @@ export const ExportCSV = (props) => {
    * Method to start csv downloading
    */
   const handleGetCsvExport = () => {
+    setFilterApply(false)
+    setActionStatus({ ...actionStatus, loading: true })
+    if (tokenStatus.token === null) {
+      getToken()
+    } else {
+      getCSV()
+    }
+  }
+  /**
+   * Method to start csv downloading for filtered orders
+   */
+  const handleGetCsvFilteredExport = () => {
+    setFilterApply(true)
     setActionStatus({ ...actionStatus, loading: true })
     if (tokenStatus.token === null) {
       getToken()
@@ -76,6 +163,7 @@ export const ExportCSV = (props) => {
           {...props}
           actionStatus={actionStatus}
           handleGetCsvExport={handleGetCsvExport}
+          handleGetCsvFilteredExport={handleGetCsvFilteredExport}
         />
       )}
     </>

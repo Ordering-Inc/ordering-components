@@ -44,7 +44,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ExportCSV = function ExportCSV(props) {
-  var UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent,
+      filterValues = props.filterValues;
 
   var _useState = (0, _react.useState)({
     token: null,
@@ -61,6 +62,11 @@ var ExportCSV = function ExportCSV(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       actionStatus = _useState4[0],
       setActionStatus = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      filterApply = _useState6[0],
+      setFilterApply = _useState6[1];
   /**
    * Method to get token from API
    */
@@ -132,7 +138,7 @@ var ExportCSV = function ExportCSV(props) {
 
   var getCSV = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var requestOptions, response, fileSuffix;
+      var requestOptions, filterConditons, functionFetch, response, fileSuffix;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -145,13 +151,80 @@ var ExportCSV = function ExportCSV(props) {
                   Authorization: "Bearer ".concat(tokenStatus.token)
                 }
               };
-              _context2.next = 4;
-              return fetch('https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id', requestOptions);
+              filterConditons = [];
 
-            case 4:
+              if (filterApply) {
+                if (Object.keys(filterValues).length) {
+                  if (filterValues.statuses.length > 0) {
+                    filterConditons.push({
+                      attribute: 'status',
+                      value: filterValues.statuses
+                    });
+                  } else {
+                    filterConditons.push({
+                      attribute: 'status',
+                      value: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                    });
+                  }
+
+                  if (filterValues.deliveryFromDatetime !== null) {
+                    filterConditons.push({
+                      attribute: 'delivery_datetime',
+                      value: {
+                        condition: '>=',
+                        value: encodeURI(filterValues.deliveryFromDatetime)
+                      }
+                    });
+                  }
+
+                  if (filterValues.deliveryEndDatetime !== null) {
+                    filterConditons.push({
+                      attribute: 'delivery_datetime',
+                      value: {
+                        condition: '<=',
+                        value: filterValues.deliveryEndDatetime
+                      }
+                    });
+                  }
+
+                  if (filterValues.businessIds.length !== 0) {
+                    filterConditons.push({
+                      attribute: 'business_id',
+                      value: filterValues.businessIds
+                    });
+                  }
+
+                  if (filterValues.driverIds.length !== 0) {
+                    filterConditons.push({
+                      attribute: 'driver_id',
+                      value: filterValues.driverIds
+                    });
+                  }
+
+                  if (filterValues.deliveryTypes.length !== 0) {
+                    filterConditons.push({
+                      attribute: 'delivery_type',
+                      value: filterValues.deliveryTypes
+                    });
+                  }
+
+                  if (filterValues.paymethodIds.length !== 0) {
+                    filterConditons.push({
+                      attribute: 'paymethod_id',
+                      value: filterValues.paymethodIds
+                    });
+                  }
+                }
+              }
+
+              functionFetch = filterApply ? "https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id&where=".concat(JSON.stringify(filterConditons)) : 'https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id';
+              _context2.next = 7;
+              return fetch(functionFetch, requestOptions);
+
+            case 7:
               response = _context2.sent;
               fileSuffix = new Date().getTime();
-              _context2.next = 8;
+              _context2.next = 11;
               return response.blob().then(function (blob) {
                 var url = window.URL.createObjectURL(blob);
                 var a = document.createElement('a');
@@ -160,27 +233,27 @@ var ExportCSV = function ExportCSV(props) {
                 a.click();
               });
 
-            case 8:
+            case 11:
               setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: false
               }));
-              _context2.next = 14;
+              _context2.next = 17;
               break;
 
-            case 11:
-              _context2.prev = 11;
+            case 14:
+              _context2.prev = 14;
               _context2.t0 = _context2["catch"](0);
               setActionStatus({
                 loading: false,
                 error: _context2.t0
               });
 
-            case 14:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee2, null, [[0, 14]]);
     }));
 
     return function getCSV() {
@@ -193,6 +266,24 @@ var ExportCSV = function ExportCSV(props) {
 
 
   var handleGetCsvExport = function handleGetCsvExport() {
+    setFilterApply(false);
+    setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+      loading: true
+    }));
+
+    if (tokenStatus.token === null) {
+      getToken();
+    } else {
+      getCSV();
+    }
+  };
+  /**
+   * Method to start csv downloading for filtered orders
+   */
+
+
+  var handleGetCsvFilteredExport = function handleGetCsvFilteredExport() {
+    setFilterApply(true);
     setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
       loading: true
     }));
@@ -210,7 +301,8 @@ var ExportCSV = function ExportCSV(props) {
   }, [tokenStatus]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     actionStatus: actionStatus,
-    handleGetCsvExport: handleGetCsvExport
+    handleGetCsvExport: handleGetCsvExport,
+    handleGetCsvFilteredExport: handleGetCsvFilteredExport
   })));
 };
 
