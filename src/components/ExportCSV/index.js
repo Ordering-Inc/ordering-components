@@ -8,7 +8,6 @@ export const ExportCSV = (props) => {
   } = props
   const [tokenStatus, setTokenStatus] = useState({ token: null, error: null })
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
-  const [filterApply, setFilterApply] = useState(false)
   /**
    * Method to get token from API
    */
@@ -30,8 +29,9 @@ export const ExportCSV = (props) => {
 
   /**
    * Method to get csv from API
+   * * @param {boolean} filterApply condition for filter apply
    */
-  const getCSV = async () => {
+  const getCSV = async (filterApply) => {
     try {
       const requestOptions = {
         method: 'GET',
@@ -106,7 +106,6 @@ export const ExportCSV = (props) => {
           }
         }
       }
-
       const functionFetch = filterApply
         ? `https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id&where=${JSON.stringify(filterConditons)}`
         : 'https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id'
@@ -130,24 +129,22 @@ export const ExportCSV = (props) => {
    * Method to start csv downloading
    */
   const handleGetCsvExport = () => {
-    setFilterApply(false)
     setActionStatus({ ...actionStatus, loading: true })
     if (tokenStatus.token === null) {
       getToken()
     } else {
-      getCSV()
+      getCSV(false)
     }
   }
   /**
    * Method to start csv downloading for filtered orders
    */
   const handleGetCsvFilteredExport = () => {
-    setFilterApply(true)
     setActionStatus({ ...actionStatus, loading: true })
     if (tokenStatus.token === null) {
       getToken()
     } else {
-      getCSV()
+      getCSV(true)
     }
   }
 

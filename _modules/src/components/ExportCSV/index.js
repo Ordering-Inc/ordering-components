@@ -62,11 +62,6 @@ var ExportCSV = function ExportCSV(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       actionStatus = _useState4[0],
       setActionStatus = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      filterApply = _useState6[0],
-      setFilterApply = _useState6[1];
   /**
    * Method to get token from API
    */
@@ -133,11 +128,12 @@ var ExportCSV = function ExportCSV(props) {
   }();
   /**
    * Method to get csv from API
+   * * @param {boolean} filterApply condition for filter apply
    */
 
 
   var getCSV = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(filterApply) {
       var requestOptions, filterConditons, functionFetch, response, fileSuffix;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -256,7 +252,7 @@ var ExportCSV = function ExportCSV(props) {
       }, _callee2, null, [[0, 14]]);
     }));
 
-    return function getCSV() {
+    return function getCSV(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -266,7 +262,6 @@ var ExportCSV = function ExportCSV(props) {
 
 
   var handleGetCsvExport = function handleGetCsvExport() {
-    setFilterApply(false);
     setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
       loading: true
     }));
@@ -274,7 +269,7 @@ var ExportCSV = function ExportCSV(props) {
     if (tokenStatus.token === null) {
       getToken();
     } else {
-      getCSV();
+      getCSV(false);
     }
   };
   /**
@@ -283,7 +278,6 @@ var ExportCSV = function ExportCSV(props) {
 
 
   var handleGetCsvFilteredExport = function handleGetCsvFilteredExport() {
-    setFilterApply(true);
     setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
       loading: true
     }));
@@ -291,7 +285,7 @@ var ExportCSV = function ExportCSV(props) {
     if (tokenStatus.token === null) {
       getToken();
     } else {
-      getCSV();
+      getCSV(true);
     }
   };
 
