@@ -49,19 +49,6 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var getMarkerColor = function getMarkerColor(n) {
-  switch (n) {
-    case 1:
-      return 'red';
-
-    case 2:
-      return 'green';
-
-    default:
-      return 'blue';
-  }
-};
-
 var GoogleMaps = function GoogleMaps(props) {
   var googleReady = props.googleReady,
       location = props.location,
@@ -110,11 +97,18 @@ var GoogleMaps = function GoogleMaps(props) {
     var bounds = new window.google.maps.LatLngBounds();
 
     var _loop = function _loop(i) {
+      var formatUrl = null;
+
+      if (i === 1) {
+        formatUrl = "".concat(locations[i].icon.slice(0, 50), "f_auto,r_max/").concat(locations[i].icon.slice(50));
+      }
+
       var marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
         map: map,
         icon: {
-          url: "http://maps.google.com/mapfiles/ms/icons/".concat(getMarkerColor(i), "-dot.png")
+          url: formatUrl || locations[i].icon,
+          scaledSize: new window.google.maps.Size(45, 45)
         }
       });
       bounds.extend(marker.position);
