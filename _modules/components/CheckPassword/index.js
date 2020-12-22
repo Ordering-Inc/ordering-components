@@ -48,6 +48,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var CheckPassword = function CheckPassword(props) {
   var UIComponent = props.UIComponent;
 
+  var _useApi = (0, _SessionContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
@@ -101,7 +105,7 @@ var CheckPassword = function CheckPassword(props) {
                 })
               };
               _context.next = 5;
-              return fetch('https://apiv4-dev.ordering.co/v400/en/luisv4/users/check_password', requestOptions);
+              return fetch("".concat(ordering.root, "/users/check_password"), requestOptions);
 
             case 5:
               response = _context.sent;

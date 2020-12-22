@@ -397,7 +397,7 @@ var OrdersManage = function OrdersManage(props) {
                 }
               }];
               _context2.next = 6;
-              return fetch("https://apiv4.ordering.co/v400/en/luisv4/drivergroups?params=id,name,drivers&where=".concat(JSON.stringify(where)), requestOptions);
+              return fetch("".concat(ordering.root, "/drivergroups?params=id,name,drivers&where=").concat(JSON.stringify(where)), requestOptions);
 
             case 6:
               response = _context2.sent;

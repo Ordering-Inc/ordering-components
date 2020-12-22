@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
+import { useSession, useApi } from '../../contexts/SessionContext'
 
 export const CheckPassword = (props) => {
   const {
     UIComponent
   } = props
-
+  const [ordering] = useApi()
   const [{ token }] = useSession()
 
   const [passwordValue, setPasswordValue] = useState(null)
@@ -34,7 +34,7 @@ export const CheckPassword = (props) => {
         },
         body: JSON.stringify({ password: passwordValue })
       }
-      const response = await fetch('https://apiv4-dev.ordering.co/v400/en/luisv4/users/check_password', requestOptions)
+      const response = await fetch(`${ordering.root}/users/check_password`, requestOptions)
       const content = await response.json()
       if (!content.error) {
         setCheckPasswordStatus({ ...checkPasswordStatus, loading: false, result: content.result, error: null })

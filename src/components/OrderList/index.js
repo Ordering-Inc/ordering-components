@@ -162,7 +162,7 @@ export const OrderList = (props) => {
         },
         body: JSON.stringify({ status: multiOrderUpdateStatus })
       }
-      const response = await fetch(`https://apiv4-dev.ordering.co/v400/en/luisv4/orders/${orderId}`, requestOptions)
+      const response = await fetch(`${ordering.root}/orders/${orderId}`, requestOptions)
       const { result } = await response.json()
 
       if (parseInt(result.status) === multiOrderUpdateStatus) {
@@ -376,14 +376,14 @@ export const OrderList = (props) => {
     return await functionFetch.get(options)
   }
 
-  const isPendingOrder = (createdAt, deliveryDatetime) => {
-    const date1 = dayjs(createdAt)
+  const isPendingOrder = (deliveryDatetimeUtc, deliveryDatetime) => {
+    const date1 = dayjs(deliveryDatetimeUtc)
     const date2 = dayjs(deliveryDatetime)
     return date1.diff(date2, 'minute') < 60
   }
 
-  const isPreOrder = (createdAt, deliveryDatetime) => {
-    const date1 = dayjs(createdAt)
+  const isPreOrder = (deliveryDatetimeUtc, deliveryDatetime) => {
+    const date1 = dayjs(deliveryDatetimeUtc)
     const date2 = dayjs(deliveryDatetime)
     return date1.diff(date2, 'minute') > 60
   }
@@ -397,7 +397,7 @@ export const OrderList = (props) => {
       let filteredResult = []
       if (pendingOrder) {
         if (!response.content.error) {
-          filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime))
+          filteredResult = response.content.result.filter(order => isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime))
         }
         if (filterValues.isPreOrder) {
           if (!filterValues.isPendingOrder) filteredResult = []
@@ -405,7 +405,7 @@ export const OrderList = (props) => {
       }
       if (preOrder) {
         if (!response.content.error) {
-          filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime))
+          filteredResult = response.content.result.filter((order) => isPreOrder(order.delivery_datetime_utc, order.delivery_datetime))
         }
         if (filterValues.isPendingOrder) {
           if (!filterValues.isPreOrder) filteredResult = []

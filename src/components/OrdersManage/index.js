@@ -175,7 +175,7 @@ export const OrdersManage = (props) => {
         }
       }
       const where = [{ attribute: 'enabled', value: { condition: '=', value: true } }]
-      const response = await fetch(`https://apiv4.ordering.co/v400/en/luisv4/drivergroups?params=id,name,drivers&where=${JSON.stringify(where)}`, requestOptions)
+      const response = await fetch(`${ordering.root}/drivergroups?params=id,name,drivers&where=${JSON.stringify(where)}`, requestOptions)
       const { result } = await response.json()
       setDriverGroupList({ ...driverGroupList, loading: false, groups: result })
     } catch (err) {

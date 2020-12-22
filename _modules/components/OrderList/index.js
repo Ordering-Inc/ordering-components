@@ -367,7 +367,7 @@ var OrderList = function OrderList(props) {
                 })
               };
               _context3.next = 5;
-              return fetch("https://apiv4-dev.ordering.co/v400/en/luisv4/orders/".concat(orderId), requestOptions);
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId), requestOptions);
 
             case 5:
               response = _context3.sent;
@@ -638,14 +638,14 @@ var OrderList = function OrderList(props) {
     };
   }();
 
-  var isPendingOrder = function isPendingOrder(createdAt, deliveryDatetime) {
-    var date1 = (0, _dayjs.default)(createdAt);
+  var isPendingOrder = function isPendingOrder(deliveryDatetimeUtc, deliveryDatetime) {
+    var date1 = (0, _dayjs.default)(deliveryDatetimeUtc);
     var date2 = (0, _dayjs.default)(deliveryDatetime);
     return date1.diff(date2, 'minute') < 60;
   };
 
-  var isPreOrder = function isPreOrder(createdAt, deliveryDatetime) {
-    var date1 = (0, _dayjs.default)(createdAt);
+  var isPreOrder = function isPreOrder(deliveryDatetimeUtc, deliveryDatetime) {
+    var date1 = (0, _dayjs.default)(deliveryDatetimeUtc);
     var date2 = (0, _dayjs.default)(deliveryDatetime);
     return date1.diff(date2, 'minute') > 60;
   };
@@ -679,7 +679,7 @@ var OrderList = function OrderList(props) {
               if (pendingOrder) {
                 if (!response.content.error) {
                   filteredResult = response.content.result.filter(function (order) {
-                    return isPendingOrder(order.created_at, order.delivery_datetime);
+                    return isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime);
                   });
                 }
 
@@ -691,7 +691,7 @@ var OrderList = function OrderList(props) {
               if (preOrder) {
                 if (!response.content.error) {
                   filteredResult = response.content.result.filter(function (order) {
-                    return isPreOrder(order.created_at, order.delivery_datetime);
+                    return isPreOrder(order.delivery_datetime_utc, order.delivery_datetime);
                   });
                 }
 
