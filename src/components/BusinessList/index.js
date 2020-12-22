@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
+
+dayjs.extend(utc)
 
 export const BusinessList = (props) => {
   const {
@@ -21,6 +24,8 @@ export const BusinessList = (props) => {
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
 
+  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
+
   /**
    * Get businesses by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
@@ -35,11 +40,8 @@ export const BusinessList = (props) => {
         page_size: paginationProps.pageSize
       }
 
-      if (orderState.options?.moment && moment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
-        const parts = orderState?.options?.moment?.split(' ')
-        const dateParts = parts[0]?.split('-')
-        const timeParts = parts[1]?.split(':')
-        const moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000
+      if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+        const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
         parameters.timestamp = moment
       }
 
@@ -57,7 +59,7 @@ export const BusinessList = (props) => {
               attribute: 'name',
               value: {
                 condition: 'ilike',
-                value: `%${encodeURI(searchValue)}%`
+                value: encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -68,20 +70,20 @@ export const BusinessList = (props) => {
               attribute: 'description',
               value: {
                 condition: 'ilike',
-                value: `%${encodeURI(searchValue)}%`
+                value: encodeURI(`%${searchValue}%`)
               }
             }
           )
         }
         conditions.push({
           conector: 'OR',
-          contidions: searchConditions
+          conditions: searchConditions
         })
       }
 
       if (conditions.length) {
         where = {
-          contidions: conditions,
+          conditions,
           conector: 'AND'
         }
       }

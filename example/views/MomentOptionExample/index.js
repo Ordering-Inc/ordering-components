@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { MomentOptionUI } from '../../components/MomentOptionUI'
 import { MomentOption } from '../../../src/components/MomentOption'
 import { TestComponent } from '../../components/TestComponent'
@@ -21,7 +20,7 @@ export const MomentOptionExample = () => {
     /**
      * maxDate, this must be contains a custom date selected
      */
-    maxDate: new Date('2020-10-25 09:59'),
+    maxDate: new Date('2020-11-10 09:59'),
     /**
      * Method to return moment selection
      */

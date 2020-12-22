@@ -24,12 +24,16 @@ export const FacebookLoginButton = (props) => {
   let wasUnmounted = false
 
   useEffect(() => {
+    if (window.document.getElementById('facebook-jssdk')) {
+      return
+    }
     window.fbAsyncInit = () => {
       window.FB.init({
         appId: appId,
         cookie: true,
         xfbml: false,
-        version: version
+        version: version,
+        status: true
       })
       !wasUnmounted && setFacebookStatus({ ...facebookStatus, ready: true })
       window.FB.getLoginStatus((response) => {
@@ -39,17 +43,13 @@ export const FacebookLoginButton = (props) => {
       })
     }
 
-    if (window.document.getElementById('facebook-jssdk')) {
-      return
-    }
-
     const js = window.document.createElement('script')
+    const fjs = window.document.getElementsByTagName('script')[0]
     js.id = 'facebook-jssdk'
     js.async = true
     js.defer = true
     js.src = `https://${domain}/${language}/sdk${debug ? '/debug' : ''}.js`
-
-    window.document.body.appendChild(js)
+    fjs.parentNode.insertBefore(js, fjs)
   }, [])
 
   useEffect(() => {

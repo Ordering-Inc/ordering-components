@@ -1,6 +1,6 @@
 context('Language Selector', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/language_selector')
+    cy.visit('/language_selector')
   })
 
   it('Check UI', () => {

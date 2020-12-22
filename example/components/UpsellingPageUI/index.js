@@ -1,9 +1,9 @@
 import React from 'react'
 
 export const UpsellingPageUI = (props) => {
-  const { upsellingProducts, handleAddProductUpselling } = props
+  const { upsellingProducts, handleFormProduct } = props
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }} name='product'>
       {
         <>
           {!upsellingProducts.error ? upsellingProducts?.products.map(product => (
@@ -11,7 +11,7 @@ export const UpsellingPageUI = (props) => {
               <img src={product.images} width='100px' />
               <p>{product.name}</p>
               <p>${product.price}</p>
-              <button onClick={() => handleAddProductUpselling(product)}>Add</button>
+              <button onClick={() => handleFormProduct(product)}>Add</button>
             </div>
           )
           ) : (

@@ -45,10 +45,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.10.4",
+    "@react-native-async-storage/async-storage": "^1.13.1",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.9.0",
-    "lodash": "^4.17.19",
-    "moment": "^2.27.0",
+    "dayjs": "^1.9.3",
     "ordering-api-sdk": "github:sergioaok/ordering-api-sdk#development",
     "prop-types": "^15.7.2",
     "socket.io-client": "^2.3.0"

@@ -23,7 +23,7 @@ import { ExamineClick } from './components/ExamineClick'
 import { FacebookLoginButton } from './components/FacebookLoginButton'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
 import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
-import { GoogleMaps } from './components/GoogleMaps'
+import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
 import { GpsButton, GoogleGpsButton } from './components/GpsButton'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
@@ -52,8 +52,7 @@ import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
 import { SingleOrderCard } from './components/SingleOrderCard'
 import { SingleProductCard } from './components/SingleProductCard'
-import { UserDetails } from './components/UserDetails'
-import { UserProfileForm } from './components/UserProfileForm'
+import { UserFormDetails } from './components/UserFormDetails'
 import { UpsellingPage } from './components/UpsellingPage'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
 import { OrderDetails } from './components/OrderDetails'
@@ -67,6 +66,7 @@ import { SessionContext, SessionProvider, useSession } from './contexts/SessionC
 import { WebsocketContext, WebsocketProvider, useWebsocket } from './contexts/WebsocketContext'
 import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
 import { EventContext, EventProvider, useEvent } from './contexts/EventContext'
+import { UtilsContext, UtilsProviders, useUtils } from './contexts/UtilsContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
@@ -75,6 +75,9 @@ import { PaymentOptionStripeRedirect } from './components/PaymentOptionStripeRed
 import { StripeElementsForm } from './components/StripeElementsForm'
 import { CardForm } from './components/StripeElementsForm/CardForm'
 import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/StripeRedirectForm'
+import { FloatingButton } from './components/FloatingButton'
+import { InputPhoneNumber } from './components/InputPhoneNumber'
+import { ResetPassword } from './components/ResetPassword'
 
 export {
   AddressDetails,
@@ -103,6 +106,7 @@ export {
   ForgotPasswordForm,
   GoogleAutocompleteInput,
   GoogleMaps,
+  GoogleMapsMap,
   GpsButton,
   GoogleGpsButton,
   LanguageSelector,
@@ -132,8 +136,7 @@ export {
   SingleBusinessCard,
   SingleOrderCard,
   SingleProductCard,
-  UserDetails,
-  UserProfileForm,
+  UserFormDetails,
   UpsellingPage,
   WrapperGoogleMaps,
   OrderDetails,
@@ -146,6 +149,9 @@ export {
   CardForm,
   StripeRedirectForm,
   CmsContent,
+  FloatingButton,
+  InputPhoneNumber,
+  ResetPassword,
   // Contexts
   ConfigContext,
   ConfigProvider,
@@ -172,5 +178,8 @@ export {
   OrderingProvider,
   EventContext,
   EventProvider,
-  useEvent
+  useEvent,
+  UtilsContext,
+  UtilsProviders,
+  useUtils
 }

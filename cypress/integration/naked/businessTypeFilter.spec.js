@@ -1,6 +1,6 @@
 context('Business type filter', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/business_type_filter')
+    cy.visit('/business_type_filter')
   })
 
   it('Check UI', () => {

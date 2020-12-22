@@ -1,6 +1,10 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useApi } from '../ApiContext'
 import { useLanguage } from '../LanguageContext'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
 
 /**
  * Create ConfigContext
@@ -15,7 +19,7 @@ export const ConfigContext = createContext()
  */
 export const ConfigProvider = ({ children }) => {
   const [state, setState] = useState({ loading: true, configs: {} })
-  const [languageState] = useLanguage()
+  const [languageState, t] = useLanguage()
   const [ordering] = useApi()
 
   const refreshConfigs = async () => {
@@ -32,6 +36,10 @@ export const ConfigProvider = ({ children }) => {
     }
   }
 
+  const functions = {
+    refreshConfigs
+  }
+
   useEffect(() => {
     if (!languageState.loading) {
       refreshConfigs()
@@ -39,7 +47,7 @@ export const ConfigProvider = ({ children }) => {
   }, [languageState])
 
   return (
-    <ConfigContext.Provider value={[state, refreshConfigs]}>
+    <ConfigContext.Provider value={[state, functions]}>
       {children}
     </ConfigContext.Provider>
   )

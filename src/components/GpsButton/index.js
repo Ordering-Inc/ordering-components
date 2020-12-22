@@ -8,23 +8,24 @@ import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
  */
 export const GpsButton = (props) => {
   const {
+    UIComponent,
     googleReady,
     onData,
     onError,
     onAddress
   } = props
 
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const isGoogleButton = typeof googleReady !== 'undefined'
 
   /**
    * Function to get location from GPS
    */
   const handleGPS = () => {
-    if ((isGoogleButton && !googleReady) || loading) {
+    if ((isGoogleButton && !googleReady) || isLoading) {
       return
     }
-    setLoading(true)
+    setIsLoading(true)
     navigator.geolocation.getCurrentPosition((geo) => {
       const location = {
         lat: geo.coords.latitude,
@@ -33,12 +34,21 @@ export const GpsButton = (props) => {
       if (isGoogleButton && onAddress) {
         const geocoder = new window.google.maps.Geocoder()
         geocoder.geocode({ location }, (results, status) => {
-          setLoading(false)
+          setIsLoading(false)
+          let postalCode = null
+          for (const component of results[0].address_components) {
+            const addressType = component.types[0]
+            if (addressType === 'postal_code') {
+              postalCode = component.short_name
+              break
+            }
+          }
           if (status === 'OK') {
             onAddress({
               address: results[0].formatted_address,
               location,
               utc_offset: (new Date()).getTimezoneOffset(),
+              zipcode: postalCode,
               map_data: {
                 library: 'google',
                 place_id: results[0].place_id
@@ -49,14 +59,14 @@ export const GpsButton = (props) => {
           }
         })
       } else {
-        setLoading(false)
+        setIsLoading(false)
         onData && onData({
           location,
           utc_offset: (new Date()).getTimezoneOffset()
         })
       }
     }, (err) => {
-      setLoading(false)
+      setIsLoading(false)
       onError(new Error(err.message))
     }, {
       timeout: 5000,
@@ -65,7 +75,15 @@ export const GpsButton = (props) => {
   }
 
   return (
-    navigator.geolocation && <button type='button' onClick={handleGPS} disabled={(isGoogleButton && !googleReady) || loading}>GPS</button>
+    navigator.geolocation && (
+      <UIComponent
+        {...props}
+        handleGPS={handleGPS}
+        isGoogleButton={isGoogleButton}
+        googleReady={googleReady}
+        isLoading={isLoading}
+      />
+    )
   )
 }
 

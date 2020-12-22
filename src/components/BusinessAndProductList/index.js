@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+
+dayjs.extend(utc)
 
 export const BusinessAndProductList = (props) => {
   const {
@@ -22,11 +25,13 @@ export const BusinessAndProductList = (props) => {
 
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
   const [searchValue, setSearchValue] = useState(null)
+  const [sortByValue, setSortByValue] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, loading: true, error: null })
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState()
   const [requestsState, setRequestsState] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
+  const [featuredProducts, setFeaturedProducts] = useState(false)
 
   const categoryStateDefault = {
     loading: true,
@@ -50,42 +55,82 @@ export const BusinessAndProductList = (props) => {
     setSearchValue(search)
   }
 
+  const handleChangeSortBy = (val) => {
+    setSortByValue(val)
+  }
+
   const isMatchSearch = (name, description) => {
     if (!searchValue) return true
     return (name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName) ||
       (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
   }
 
+  const isFeaturedSearch = (product) => {
+    if (product.featured) {
+      if (!searchValue) return true
+      return (product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName) ||
+      (product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription)
+    }
+    return false
+  }
+
+  const sortProductsArray = (option, array) => {
+    if (option === 'rank') {
+      return array.sort((a, b) => b.rank - a.rank)
+    }
+    if (option === 'a-z') {
+      return array.sort((a, b) =>
+        (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
+      )
+    }
+    return array
+  }
+
   const getProducts = async (newFetch) => {
     if (!businessState?.business?.lazy_load_products_recommended) {
+      const isFeatured = !!businessState?.business?.categories?.find(
+        category => category
+      )?.products.filter(
+        product => product.featured
+      ).length
+      setFeaturedProducts(isFeatured)
       const categoryState = {
         ...categoryStateDefault,
         loading: false
       }
-      if (categorySelected.id) {
-        const productsFiltered = businessState.business.categories?.find(
+      if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
+        const productsFiltered = businessState?.business?.categories?.find(
           category => category.id === categorySelected.id
         )?.products.filter(
           product => isMatchSearch(product.name, product.description)
         )
         categoryState.products = productsFiltered || []
+      } else if (categorySelected.id === 'featured') {
+        const productsFiltered = businessState?.business?.categories?.reduce(
+          (products, category) => [...products, ...category.products], []
+        ).filter(
+          product => isFeaturedSearch(product)
+        )
+        categoryState.products = productsFiltered || []
       } else {
-        const productsFiltered = businessState.business.categories?.reduce(
+        const productsFiltered = businessState?.business?.categories?.reduce(
           (products, category) => [...products, ...category.products], []
         ).filter(
           product => isMatchSearch(product.name, product.description)
         )
         categoryState.products = productsFiltered || []
       }
+      categoryState.products = sortProductsArray(sortByValue, categoryState.products)
       setCategoryState({ ...categoryState })
       return
     }
 
-    const categoryKey = searchValue ? 'search' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
-    const categoryState = categoriesState[categoryKey] || categoryStateDefault
+    const categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
 
+    const categoryState = categoriesState[categoryKey] || categoryStateDefault
+    categoryState.products = sortProductsArray(sortByValue, categoryState.products)
     const pagination = categoryState.pagination
-    if (pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) {
+    if (!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) {
       setCategoryState({ ...categoryState, loading: false })
       return
     }
@@ -99,38 +144,66 @@ export const BusinessAndProductList = (props) => {
     }
 
     let where = null
+    const searchConditions = []
     if (searchValue) {
-      const conditions = []
       if (isSearchByName) {
-        conditions.push(
+        searchConditions.push(
           {
             attribute: 'name',
             value: {
               condition: 'ilike',
-              value: `%${encodeURI(searchValue)}%`
+              value: encodeURI(`%${searchValue}%`)
             }
           }
         )
       }
       if (isSearchByDescription) {
-        conditions.push(
+        searchConditions.push(
           {
             attribute: 'description',
             value: {
               condition: 'ilike',
-              value: `%${encodeURI(searchValue)}%`
+              value: encodeURI(`%${searchValue}%`)
             }
           }
         )
       }
+    }
+
+    where = {
+      conditions: searchConditions,
+      conector: 'OR'
+    }
+
+    if (categorySelected.id === 'featured') {
       where = {
-        contidions: conditions,
-        conector: 'OR'
+        conditions: [
+          {
+            attribute: 'featured',
+            value: true
+          }
+        ]
+      }
+    }
+
+    if (categorySelected.id === 'featured' && searchValue) {
+      where = {
+        conditions: [
+          {
+            attribute: 'featured',
+            value: true
+          },
+          {
+            conditions: searchConditions,
+            conector: 'OR'
+          }
+        ],
+        conector: 'AND'
       }
     }
 
     try {
-      const functionFetch = categorySelected.id
+      const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
         ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
         : ordering.businesses(businessState.business.id).products()
       const source = {}
@@ -147,18 +220,21 @@ export const BusinessAndProductList = (props) => {
             totalPages: pagination.total_pages
           },
           loading: false,
-          products: [...categoryState.products, ...result]
+          products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
+
+        newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products)
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
+        setFeaturedProducts(!!categoriesState.all.products.find(product => product.featured))
       } else {
         setErrors(result)
       }
     } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setErrors([err.message])
-      }
+      // if (err.constructor.name !== 'Cancel') {
+      setErrors([err.message])
+      // }
     }
   }
 
@@ -172,7 +248,8 @@ export const BusinessAndProductList = (props) => {
         const source = {}
         requestsState.product = source
         const parameters = {
-          type: orderState.options?.type || 1
+          type: orderState.options?.type || 1,
+          moment: orderState.options?.moment || null
         }
 
         const { content: { result } } = await ordering
@@ -201,7 +278,9 @@ export const BusinessAndProductList = (props) => {
     if (isInitialRender) {
       getProduct()
     }
-  }, [JSON.stringify(businessState.business?.id)])
+  }, [JSON.stringify(businessState.business?.id), isInitialRender])
+
+  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
 
   const getBusiness = async () => {
     try {
@@ -215,11 +294,8 @@ export const BusinessAndProductList = (props) => {
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : null
       }
-      if (orderState.options?.moment && moment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss', true).isValid()) {
-        const parts = orderState.options?.moment.split(' ')
-        const dateParts = parts[0].split('-')
-        const timeParts = parts[1].split(':')
-        const moment = Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]) / 1000
+      if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+        const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
         parameters.timestamp = moment
       }
       const { content: { result } } = await ordering
@@ -233,31 +309,43 @@ export const BusinessAndProductList = (props) => {
         loading: false
       })
     } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setBusinessState({
-          ...businessState,
-          loading: false,
-          error: [err.message]
-        })
-      }
+      // if (err.constructor.name !== 'Cancel') {
+      setBusinessState({
+        ...businessState,
+        loading: false,
+        error: [err.message]
+      })
+      // }
     }
   }
 
   useEffect(() => {
-    if (!orderState.loading && !businessState.loading) {
-      getProducts()
+    if (!businessState.loading) {
+      getProducts(true)
     }
-  }, [orderState, categorySelected, businessState])
+  }, [businessState])
 
   useEffect(() => {
     getProducts(!!searchValue)
   }, [searchValue])
 
   useEffect(() => {
+    getProducts(!!searchValue)
+  }, [categorySelected.id])
+
+  useEffect(() => {
+    getProducts(!!searchValue)
+  }, [sortByValue])
+
+  useEffect(() => {
+    getProducts()
+  }, [slug])
+
+  useEffect(() => {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness()
     }
-  }, [orderOptions, languageState])
+  }, [orderOptions, languageState.loading, slug])
 
   useEffect(() => {
     if (!orderState.loading) {
@@ -267,7 +355,7 @@ export const BusinessAndProductList = (props) => {
         location: orderState?.options?.address?.location
       })
     }
-  }, [JSON.stringify(orderState?.options)])
+  }, [orderState?.options?.type, orderState?.options?.moment, JSON.stringify(orderState?.options?.address?.location)])
 
   /**
    * Cancel business request
@@ -297,11 +385,14 @@ export const BusinessAndProductList = (props) => {
           errors={errors}
           categorySelected={categorySelected}
           searchValue={searchValue}
+          sortByValue={sortByValue}
           categoryState={categoryState}
           businessState={businessState}
           productModal={productModal}
+          featuredProducts={featuredProducts}
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
+          handleChangeSortBy={handleChangeSortBy}
           getNextProducts={getProducts}
           updateProductModal={(val) => setProductModal({ ...productModal, product: val })}
         />

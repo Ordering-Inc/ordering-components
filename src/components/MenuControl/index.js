@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export const MenuControl = (props) => {
   const {
@@ -44,7 +44,7 @@ export const MenuControl = (props) => {
    * @param {string} date
    */
   const isDisabledDay = date => {
-    const day = moment(date, 'YYYY-MM-DD').day()
+    const day = dayjs(date, 'YYYY-MM-DD').day()
     return disableDays.every(number => number !== day)
   }
 
@@ -53,15 +53,15 @@ export const MenuControl = (props) => {
    * @param {string} date
    */
   const onDateSelected = (date) => {
-    const day = moment(date, 'YYYY-MM-DD').day()
+    const day = dayjs(date, 'YYYY-MM-DD').day()
     const lapses = menuSelected?.schedule[day]?.lapses
     setScheduleSelected({
       ...scheduleSelected,
       lapses
     })
     setStartDate(date)
-    setDateSelected(moment(date).format('YYYY-MM-DD HH:mm'))
-    props.handlerSelectDate(moment(date).format('YYYY-MM-DD HH:mm'))
+    setDateSelected(dayjs(date).format('YYYY-MM-DD HH:mm'))
+    props.handlerSelectDate(dayjs(date).format('YYYY-MM-DD HH:mm'))
   }
 
   /**
@@ -83,7 +83,7 @@ export const MenuControl = (props) => {
    */
   const formatScheduleTime = (menu) => {
     setMenuSelected(menu)
-    const today = moment().day()
+    const today = dayjs().day()
     return {
       lapses: menu?.schedule[today]?.lapses,
       menuId: menu.id
@@ -95,14 +95,14 @@ export const MenuControl = (props) => {
    */
   const generateDatesList = () => {
     const list = []
-    const _start = moment().format('YYYY-MM-DD')
-    const _end = moment().day(30).format('YYYY-MM-DD')
-    const diff = moment(_end, 'YYYY-MM-DD HH:mm').diff(moment(_start, 'YYYY-MM-DD HH:mm'), 'days')
+    const _start = dayjs().format('YYYY-MM-DD')
+    const _end = dayjs().day(30).format('YYYY-MM-DD')
+    const diff = dayjs(_end, 'YYYY-MM-DD HH:mm').diff(dayjs(_start, 'YYYY-MM-DD HH:mm'), 'days')
 
     for (let i = 0; i <= diff; i++) {
       list.push({
         key: `${i}`,
-        date: moment(_start).add(i, 'd').format('YYYY-MM-DD')
+        date: dayjs(_start).add(i, 'd').format('YYYY-MM-DD')
       })
     }
 
@@ -118,11 +118,11 @@ export const MenuControl = (props) => {
     for (let i = 0; i < lapses.length; i++) {
       let start = `${lapses[i]?.open?.hour}:${lapses[i]?.open?.minute}`
       const end = `${lapses[i]?.close?.hour}:${lapses[i]?.close?.minute}`
-      let diff = Math.round(moment.duration(moment(end, 'HH:mm').diff(moment(start, 'HH:mm'))).asHours())
+      let diff = dayjs(end, 'HH:mm').diff(dayjs(start, 'HH:mm'), 'hour', true)
       while (diff > 0) {
         const day = start
-        timesList.push(moment(day, 'HH:mm').toDate())
-        start = moment(day, 'HH:mm').add(15, 'minutes')
+        timesList.push(dayjs(day, 'HH:mm').toDate())
+        start = dayjs(day, 'HH:mm').add(15, 'minutes')
         diff = diff - 0.25
       }
     }
@@ -134,26 +134,26 @@ export const MenuControl = (props) => {
    */
   const futureDaysToShow = () => {
     let futureDays = maxPreoderDays
-    let today = moment().toDate()
+    let today = dayjs().toDate()
     const datesToShow = []
     const isDisabledDays = disableDays.every(d => d === false)
     if (disableDays.length && !isDisabledDays) {
       while (futureDays > 0) {
         const date = today
-        const day = moment(today).day()
+        const day = dayjs(today).day()
         if (disableDays[day] === false) {
-          datesToShow.push(moment(date).toDate())
+          datesToShow.push(dayjs(date).toDate())
           futureDays--
         }
-        today = moment(moment(today).add(1, 'd')).toDate()
+        today = dayjs(dayjs(today).add(1, 'd')).toDate()
       }
     }
     if (disableDays.length && isDisabledDays) {
       for (let i = 1; i <= maxPreoderDays; i++) {
-        datesToShow.push(moment(moment(today).add(i, 'd')).toDate())
+        datesToShow.push(dayjs(dayjs(today).add(i, 'd')).toDate())
       }
     }
-    datesToShow.unshift(moment().toDate())
+    datesToShow.unshift(dayjs().toDate())
     return datesToShow
   }
 

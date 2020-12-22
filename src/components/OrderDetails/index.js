@@ -10,11 +10,14 @@ export const OrderDetails = (props) => {
     UIComponent
   } = props
 
-  const [{ user, token }] = useSession()
+  const [{ user, token, loading }] = useSession()
   const [ordering] = useApi()
-  const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const socket = useWebsocket()
+  const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
+
+  const propsToFetch = ['header', 'slug']
 
   /**
    * Method to format a price number
@@ -74,10 +77,13 @@ export const OrderDetails = (props) => {
     try {
       const { content: { result } } = await ordering.setAccessToken(token).orders(orderId).get()
       const order = Array.isArray(result) ? null : result
+      const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
+      const businessData = content.result
       setOrderState({
         ...orderState,
         loading: false,
-        order
+        order,
+        businessData
       })
     } catch (e) {
       setOrderState({
@@ -100,7 +106,7 @@ export const OrderDetails = (props) => {
   }, [])
 
   useEffect(() => {
-    if (orderState.loading) return
+    if (orderState.loading || loading) return
     const handleUpdateOrder = (order) => {
       if (order.id !== orderState.order.id) return
       delete order.total
@@ -110,13 +116,21 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
     }
+    const handleTrackingDriver = ({ location }) => {
+      const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
+      setDriverLocation(newLocation)
+    }
     socket.join(`orders_${user.id}`)
+    socket.join(`drivers_${orderState.order?.driver_id}`)
+    socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
       socket.leave(`orders_${user.id}`)
+      socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
+      socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket])
+  }, [orderState.order, socket, loading])
 
   return (
     <>
@@ -124,6 +138,7 @@ export const OrderDetails = (props) => {
         <UIComponent
           {...props}
           order={orderState}
+          driverLocation={driverLocation}
           messageErrors={messageErrors}
           formatPrice={formatPrice}
           handlerSubmit={handlerSubmitSpotNumber}

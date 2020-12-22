@@ -1,6 +1,6 @@
 context('Product images', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8200/product_images')
+    cy.visit('/product_images')
   })
 
   it('Check UI', () => {

@@ -62,6 +62,8 @@ import { UpsellingPageExample } from './views/UpsellingPageExample'
 import { EventsExample } from './views/EventsExample'
 import { Analytics } from '../src/components/Analitycs'
 import ChangeView from './components/ChangeView'
+import { FloatingButtonExample } from './views/FloatingButtonExample'
+import { ResetPasswordExample } from './views/ResetPasswordExample'
 
 export default function App () {
   return (
@@ -80,6 +82,9 @@ export default function App () {
             </Route>
             <Route path='/forgot_password'>
               <ForgotPassword />
+            </Route>
+            <Route path='/reset_password'>
+              <ResetPasswordExample />
             </Route>
             <Route path='/facebook_login'>
               <FacebookLogin />
@@ -239,6 +244,9 @@ export default function App () {
             </Route>
             <Route path='/events'>
               <EventsExample />
+            </Route>
+            <Route path='/floating_button'>
+              <FloatingButtonExample />
             </Route>
             <Route path='/'>
               <Home />

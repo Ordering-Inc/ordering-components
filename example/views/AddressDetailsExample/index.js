@@ -21,7 +21,7 @@ export const AddressDetailsExample = () => {
     /**
      * apiKey, google maps api key
      */
-    apiKey: '',
+    apiKey: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk',
     /**
      * zoom of google Map
      */

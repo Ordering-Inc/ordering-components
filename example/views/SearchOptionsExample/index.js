@@ -34,7 +34,7 @@ export const SearchOptionsExample = () => {
 
   const momentProps = {
     minDate: new Date('2020-08-21 04:00 PM'),
-    maxDate: new Date('2020-08-27 04:00 PM'),
+    maxDate: new Date('2020-12-31 04:00 PM'),
     currentDate: new Date()
   }
 

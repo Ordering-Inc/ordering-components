@@ -10,7 +10,8 @@ export const AddressForm = (props) => {
     addressId,
     address,
     useValidationFileds,
-    onSaveAddress
+    onSaveAddress,
+    isSelectedAfterAdd
   } = props
 
   const [ordering] = useApi()
@@ -20,9 +21,10 @@ export const AddressForm = (props) => {
   const [{ auth, user, token }] = useSession()
   const requestsState = {}
   const [, { changeAddress }] = useOrder()
-
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
+
+  const [isEdit, setIsEdit] = useState(false)
 
   // if (!userId) {
   //   throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
@@ -165,6 +167,12 @@ export const AddressForm = (props) => {
           address: content.result
         })
         onSaveAddress && onSaveAddress(content.result)
+        if (isSelectedAfterAdd) {
+          changeAddress(content.result.id, {
+            address: isEdit ? null : content.result,
+            isEdit
+          })
+        }
       }
     } catch (err) {
       setFormState({
@@ -217,6 +225,7 @@ export const AddressForm = (props) => {
             saveAddress={saveAddress}
             addressState={addressState}
             validationFields={validationFields}
+            setIsEdit={(val) => setIsEdit(val)}
           />
         )
       }
@@ -229,6 +238,10 @@ AddressForm.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Prop to set address after add
+   */
+  isSelectedAfterAdd: PropTypes.bool,
   /**
    * Enable to get checkout fields to show/hide fields from Ordering API
    */

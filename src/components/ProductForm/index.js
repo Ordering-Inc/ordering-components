@@ -11,6 +11,8 @@ export const ProductForm = (props) => {
     onSave
   } = props
 
+  const requestsState = {}
+
   const [ordering] = useApi()
   /**
    * Original product state
@@ -28,9 +30,14 @@ export const ProductForm = (props) => {
   const [errors, setErrors] = useState({})
 
   /**
+   * Suboption by default when there is only one
+   */
+  const [defaultSubOption, setDefaultSubOption] = useState(null)
+
+  /**
    * Edit mode
    */
-  const editMode = typeof props.productCart.code !== 'undefined'
+  const editMode = typeof props.productCart?.code !== 'undefined'
 
   /**
    * Order context manager
@@ -113,10 +120,10 @@ export const ProductForm = (props) => {
       categoryId: product.category_id,
       inventoried: product.inventoried,
       stock: product.quantity,
-      ingredients: props.productCart.ingredients || ingredients,
-      options: props.productCart.options || {},
-      comment: props.productCart.comment || null,
-      quantity: props.productCart.quantity || 1
+      ingredients: props.productCart?.ingredients || ingredients,
+      options: props.productCart?.options || {},
+      comment: props.productCart?.comment || null,
+      quantity: props.productCart?.quantity || 1
     }
     newProductCart.unitTotal = getUnitTotal(newProductCart)
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
@@ -153,11 +160,13 @@ export const ProductForm = (props) => {
   const loadProductWithOptions = async () => {
     try {
       setProduct({ ...product, loading: true })
+      const source = {}
+      requestsState.product = source
       const { content: { result } } = await ordering
         .businesses(props.businessId)
         .categories(props.categoryId)
         .products(props.productId)
-        .get()
+        .get({ cancelToken: source })
 
       setProduct({
         ...product,
@@ -281,7 +290,7 @@ export const ProductForm = (props) => {
     product.product.extras.forEach(extra => {
       extra.options.map(option => {
         const suboptions = productCart.options[`id:${option.id}`]?.suboptions
-        const quantity = suboptions ? Object.keys(suboptions) : 0
+        const quantity = suboptions ? Object.keys(suboptions).length : 0
         let evaluateRespectTo = false
         if (option.respect_to && productCart.options) {
           const options = productCart.options
@@ -316,14 +325,14 @@ export const ProductForm = (props) => {
       let successful = true
       if (useOrderContext) {
         successful = false
-        if (!props.productCart.code) {
+        if (!props.productCart?.code) {
           successful = await addProduct(productCart)
         } else {
           successful = await updateProduct(productCart)
         }
       }
       if (successful) {
-        onSave(productCart, !props.productCart.code)
+        onSave(productCart, !props.productCart?.code)
       }
     }
   }
@@ -391,6 +400,45 @@ export const ProductForm = (props) => {
   }, [productCart])
 
   /**
+   * Check if there is an option required with one suboption
+   */
+  useEffect(() => {
+    if (product?.product && Object.keys(product?.product).length) {
+      const option = product.product.extras.map(extra => extra.options.find(
+        option => option.min === 1 && option.max === 1 && option.suboptions.length === 1
+      ))[0]
+      if (!option) {
+        return
+      }
+      const suboption = option.suboptions[0]
+      const price = option.with_half_option && suboption.half_price && suboption?.position !== 'whole'
+        ? suboption.half_price
+        : suboption.price
+
+      const state = {
+        id: suboption.id,
+        name: suboption.name,
+        position: suboption.position || 'whole',
+        price,
+        quantity: 1,
+        selected: true,
+        total: price
+      }
+      setDefaultSubOption({ state, suboption, option })
+    }
+  }, [product.product])
+
+  /**
+   * Check if defaultSubOption has content to set product Cart
+   */
+  useEffect(() => {
+    if (defaultSubOption) {
+      const { state, suboption, option } = defaultSubOption
+      handleChangeSuboptionState(state, suboption, option)
+    }
+  }, [defaultSubOption])
+
+  /**
    * Load product on component mounted
    */
   useEffect(() => {
@@ -399,6 +447,11 @@ export const ProductForm = (props) => {
     }
     if (!props.product && props.businessId && props.categoryId && props.productId) {
       loadProductWithOptions()
+    }
+    return () => {
+      if (requestsState.product) {
+        requestsState.product.cancel()
+      }
     }
   }, [])
 

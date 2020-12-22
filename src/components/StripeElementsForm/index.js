@@ -34,8 +34,9 @@ export const StripeElementsForm = (props) => {
   }
 
   useEffect(() => {
-    token && toSave && getRequirements()
-  }, [])
+    if (!token) return
+    toSave && getRequirements()
+  }, [token])
 
   return (
     <UIComponent

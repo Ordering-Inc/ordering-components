@@ -113,17 +113,14 @@ export const PaymentOptionStripe = (props) => {
     handleCardClick(card)
   }
 
-  // useEffect(() => {
-  //   getCards()
-  // }, [createdCard])
-
   useEffect(() => {
-    // getRequirements()
-    getCards()
-    if (!props.publicKey) {
-      getCredentials()
+    if (token) {
+      getCards()
+      if (!props.publicKey) {
+        getCredentials()
+      }
     }
-  }, [])
+  }, [token])
 
   return (
     <>
@@ -136,7 +133,6 @@ export const PaymentOptionStripe = (props) => {
           publicKey={publicKey}
           handleNewCard={handleNewCard}
           deleteCard={deleteCard}
-          // handlerCreateCard={(val) => setCreatedCard(val)}
         />
       )}
     </>

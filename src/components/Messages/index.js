@@ -8,7 +8,8 @@ export const Messages = (props) => {
   const {
     UIComponent,
     orderId,
-    customHandleSend
+    customHandleSend,
+    order
   } = props
 
   const [ordering] = useApi()
@@ -52,7 +53,6 @@ export const Messages = (props) => {
       const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }, body: JSON.stringify(body) })
       const { error, result } = await response.json()
       if (!error) {
-        setMessage('')
         setMessages({
           ...messages,
           messages: [
@@ -94,7 +94,7 @@ export const Messages = (props) => {
 
   useEffect(() => {
     loadMessages()
-  }, [orderId])
+  }, [orderId, order?.status])
 
   useEffect(() => {
     if (messages.loading) return
@@ -111,12 +111,12 @@ export const Messages = (props) => {
     return () => {
       socket.off('message', handleNewMessage)
     }
-  }, [messages, socket])
+  }, [messages, socket, order?.status])
 
   useEffect(() => {
-    socket.join(`messages_orders_${user.id}`)
+    socket.join(`messages_orders_${user?.id}`)
     return () => {
-      socket.leave(`messages_orders_${user.id}`)
+      socket.leave(`messages_orders_${user?.id}`)
     }
   }, [socket])
 
@@ -129,6 +129,7 @@ export const Messages = (props) => {
           image={image}
           canRead={canRead}
           handleSend={handleSend}
+          message={message}
           setMessage={setMessage}
           setCanRead={setCanRead}
           sendMessage={sendMessage}

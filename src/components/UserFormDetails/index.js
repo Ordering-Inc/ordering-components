@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSession, SESSION_ACTIONS } from '../../contexts/SessionContext'
+import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
 /**
- * Component to manage user details behavior without UI component
+ * Component to manage user form details behavior without UI component
  */
-export const UserDetails = (props) => {
+export const UserFormDetails = (props) => {
   const {
     UIComponent,
     useSessionUser,
@@ -20,30 +20,27 @@ export const UserDetails = (props) => {
     handleSuccessUpdate
   } = props
 
-  const [session, dispatchSession] = useSession()
+  const [ordering] = useApi()
+  const [session, { changeUser }] = useSession()
   const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
-  const [ordering] = useApi()
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if (userId || (useSessionUser && refreshSessionUser)) {
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
       ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source }).then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
-          dispatchSession({
-            type: SESSION_ACTIONS.CHANGE_USER,
-            user: {
-              ...session.user,
-              ...response.content.result
-            }
+          changeUser({
+            ...session.user,
+            ...response.content.result
           })
         }
       }).catch((err) => {
@@ -91,18 +88,26 @@ export const UserDetails = (props) => {
         requestsState.validation.cancel()
       }
     }
-  }, [])
+  }, [session.loading])
 
   /**
-   * Default fuction for user details workflow
+   * Clean formState
    */
-  const handleUpdateClick = async () => {
+  const cleanFormState = () => setFormState({ ...formState, changes: {} })
+
+  /**
+   * Default fuction for user profile workflow
+   */
+  const handleUpdateClick = async (changes) => {
     if (handleButtonUpdateClick) {
       return handleButtonUpdateClick(userState.result.result, formState.changes)
     }
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.setAccessToken(accessToken).users(userState.result.result.id).save(formState.changes, {
+      if (changes) {
+        formState.changes = { ...formState.changes, ...changes }
+      }
+      const response = await ordering.users(userState.result.result.id).save(formState.changes, {
         accessToken: accessToken
       })
       setFormState({
@@ -111,7 +116,6 @@ export const UserDetails = (props) => {
         result: response.content,
         loading: false
       })
-      setIsEdit(false)
       if (!response.content.error) {
         setUserState({
           ...userState,
@@ -120,12 +124,9 @@ export const UserDetails = (props) => {
             ...response.content
           }
         })
-        dispatchSession({
-          type: SESSION_ACTIONS.CHANGE_USER,
-          user: {
-            ...session.user,
-            ...response.content.result
-          }
+        changeUser({
+          ...session.user,
+          ...response.content.result
         })
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)
@@ -147,14 +148,54 @@ export const UserDetails = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const handleChangeInput = (e) => {
-    setFormState({
-      ...formState,
-      changes: {
-        ...formState.changes,
+  const handleChangeInput = (e, isMany) => {
+    let currentChanges = {}
+    if (isMany) {
+      Object.values(e).map(obj => {
+        currentChanges = {
+          ...currentChanges,
+          [obj.name]: obj.value
+        }
+      })
+    } else {
+      currentChanges = {
         [e.target.name]: e.target.value
       }
+    }
+
+    setFormState({
+      ...formState,
+      changes: { ...formState.changes, ...currentChanges }
     })
+  }
+
+  /**
+   * Update user photo data
+   * @param {File} file Image to change user photo
+   */
+  const handlechangeImage = (file) => {
+    const reader = new window.FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      setFormState({
+        ...formState,
+        changes: {
+          ...formState.changes,
+          photo: reader.result
+        }
+      })
+    }
+    reader.onerror = error => console.log(error)
+  }
+
+  /**
+   * Check if field should be show
+   * @param {string} fieldName Field name
+   */
+  const showField = (fieldName) => {
+    return !useValidationFields ||
+              (!validationFields.loading && !validationFields.fields[fieldName]) ||
+              (!validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled)
   }
 
   /**
@@ -174,21 +215,24 @@ export const UserDetails = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          isEdit={isEdit}
+          cleanFormState={cleanFormState}
           formState={formState}
           userState={userState}
-          isEdit={isEdit}
           validationFields={validationFields}
+          showField={showField}
           isRequiredField={isRequiredField}
           handleChangeInput={handleChangeInput}
           handleButtonUpdateClick={handleUpdateClick}
-          onEditUserClick={() => setIsEdit(!isEdit)}
+          handlechangeImage={handlechangeImage}
+          toggleIsEdit={() => setIsEdit(!isEdit)}
         />
       )}
     </>
   )
 }
 
-UserDetails.propTypes = {
+UserFormDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -198,7 +242,7 @@ UserDetails.propTypes = {
    */
   useSessionUser: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'boolean') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserDetails\`, expected \`boolean\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`boolean\`.`)
     }
     if (props.user === undefined && props.userId === undefined && !props[propName]) {
       return new Error(`Invalid prop \`${propName}\` must be true when \`user\` and \`userId\` is not present.`)
@@ -217,7 +261,7 @@ UserDetails.propTypes = {
    */
   userId: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'number') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserDetails\`, expected \`number\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`number\`.`)
     }
     if (props.user === undefined && !props.useSessionUser && !props[propName]) {
       return new Error(`Invalid prop \`${propName}\` must be true when \`user\` and \`useSessionUser\` is not present.`)
@@ -232,7 +276,7 @@ UserDetails.propTypes = {
    */
   user: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'object') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserDetails\`, expected \`object\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`object\`.`)
     }
     if (props.userId === undefined && !props.useSessionUser && !props[propName]) {
       return new Error(`Invalid prop \`${propName}\` must be true when \`useSessionUser\` and \`userId\` is not present.`)
@@ -271,7 +315,7 @@ UserDetails.propTypes = {
    */
   accessToken: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserDetails\`, expected \`object\`.`)
+      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserFormDetails\`, expected \`object\`.`)
     }
     if (props[propName] === undefined && !props.useDefualtSessionManager) {
       return new Error(`Invalid prop \`${propName}\` is required when \`useDefualtSessionManager\` is false.`)
@@ -309,7 +353,7 @@ UserDetails.propTypes = {
   elementLinkToLogin: PropTypes.element
 }
 
-UserDetails.defaultProps = {
+UserFormDetails.defaultProps = {
   useValidationFields: false,
   validationFieldsType: 'checkout',
   useDefualtSessionManager: true,
