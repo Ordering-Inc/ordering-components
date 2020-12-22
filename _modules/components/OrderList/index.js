@@ -883,6 +883,7 @@ var OrderList = function OrderList(props) {
     };
 
     var handleRegisterOrder = function handleRegisterOrder(_order) {
+      console.log(_order);
       setRegisterOrderId(_order.id);
 
       var order = _objectSpread(_objectSpread({}, _order), {}, {
@@ -918,7 +919,7 @@ var OrderList = function OrderList(props) {
 
       if (orderStatus.includes(0) && filterCheck) {
         if (pendingOrder) {
-          var isPending = isPendingOrder(order.created_at, order.delivery_datetime);
+          var isPending = isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime);
 
           if (isPending) {
             orders = [].concat(_toConsumableArray(orderList.orders), [order]);
@@ -934,7 +935,7 @@ var OrderList = function OrderList(props) {
         }
 
         if (preOrder) {
-          var isPre = isPreOrder(order.created_at, order.delivery_datetime);
+          var isPre = isPreOrder(order.delivery_datetime_utc, order.delivery_datetime);
 
           if (isPre) {
             orders = [].concat(_toConsumableArray(orderList.orders), [order]);

@@ -562,6 +562,8 @@ export const OrderList = (props) => {
       }
     }
     const handleRegisterOrder = (_order) => {
+      console.log(_order)
+
       setRegisterOrderId(_order.id)
       const order = { ..._order, status: 0 }
       let orders = []
@@ -589,7 +591,7 @@ export const OrderList = (props) => {
 
       if (orderStatus.includes(0) && filterCheck) {
         if (pendingOrder) {
-          const isPending = isPendingOrder(order.created_at, order.delivery_datetime)
+          const isPending = isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime)
           if (isPending) {
             orders = [...orderList.orders, order]
             const _orders = sortOrdersArray(orderDirection, orders)
@@ -604,7 +606,7 @@ export const OrderList = (props) => {
           }
         }
         if (preOrder) {
-          const isPre = isPreOrder(order.created_at, order.delivery_datetime)
+          const isPre = isPreOrder(order.delivery_datetime_utc, order.delivery_datetime)
           if (isPre) {
             orders = [...orderList.orders, order]
             const _orders = sortOrdersArray(orderDirection, orders)
