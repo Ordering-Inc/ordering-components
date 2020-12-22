@@ -13,6 +13,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _ApiContext = require("../../contexts/ApiContext");
+
 var _SessionContext = require("../../contexts/SessionContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -48,7 +50,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var CheckPassword = function CheckPassword(props) {
   var UIComponent = props.UIComponent;
 
-  var _useApi = (0, _SessionContext.useApi)(),
+  var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 

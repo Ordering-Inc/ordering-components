@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession, useApi } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
+import { useSession } from '../../contexts/SessionContext'
 
 export const CheckPassword = (props) => {
   const {
