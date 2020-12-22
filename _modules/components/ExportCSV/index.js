@@ -62,13 +62,19 @@ var ExportCSV = function ExportCSV(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       actionStatus = _useState4[0],
       setActionStatus = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      filterApply = _useState6[0],
+      setFilterApply = _useState6[1];
   /**
    * Method to get token from API
+   * * @param {boolean} filter condition for filter apply
    */
 
 
   var getToken = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(filter) {
       var requestOptions, response, _yield$response$json, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
@@ -76,6 +82,10 @@ var ExportCSV = function ExportCSV(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
+              setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
+                token: null
+              }));
+              setFilterApply(filter);
               requestOptions = {
                 method: 'POST',
                 headers: {
@@ -86,25 +96,25 @@ var ExportCSV = function ExportCSV(props) {
                   password: 'super'
                 })
               };
-              _context.next = 4;
+              _context.next = 6;
               return fetch('https://apiv4.ordering.co/v400/en/demo/auth', requestOptions);
 
-            case 4:
+            case 6:
               response = _context.sent;
-              _context.next = 7;
+              _context.next = 9;
               return response.json();
 
-            case 7:
+            case 9:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
               setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
                 token: result.session.access_token
               }));
-              _context.next = 16;
+              _context.next = 18;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 14:
+              _context.prev = 14;
               _context.t0 = _context["catch"](0);
               setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
                 error: _context.t0
@@ -114,26 +124,25 @@ var ExportCSV = function ExportCSV(props) {
                 error: _context.t0
               });
 
-            case 16:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 12]]);
+      }, _callee, null, [[0, 14]]);
     }));
 
-    return function getToken() {
+    return function getToken(_x) {
       return _ref.apply(this, arguments);
     };
   }();
   /**
    * Method to get csv from API
-   * * @param {boolean} filterApply condition for filter apply
    */
 
 
   var getCSV = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(filterApply) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
       var requestOptions, filterConditons, functionFetch, response, fileSuffix;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -151,64 +160,78 @@ var ExportCSV = function ExportCSV(props) {
 
               if (filterApply) {
                 if (Object.keys(filterValues).length) {
-                  if (filterValues.statuses.length > 0) {
-                    filterConditons.push({
-                      attribute: 'status',
-                      value: filterValues.statuses
-                    });
-                  } else {
-                    filterConditons.push({
-                      attribute: 'status',
-                      value: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                    });
+                  if (filterValues['statuses'] !== undefined) {
+                    if (filterValues.statuses.length > 0) {
+                      filterConditons.push({
+                        attribute: 'status',
+                        value: filterValues.statuses
+                      });
+                    } else {
+                      filterConditons.push({
+                        attribute: 'status',
+                        value: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                      });
+                    }
                   }
 
-                  if (filterValues.deliveryFromDatetime !== null) {
-                    filterConditons.push({
-                      attribute: 'delivery_datetime',
-                      value: {
-                        condition: '>=',
-                        value: encodeURI(filterValues.deliveryFromDatetime)
-                      }
-                    });
+                  if (filterValues['deliveryFromDatetime'] !== undefined) {
+                    if (filterValues.deliveryFromDatetime !== null) {
+                      filterConditons.push({
+                        attribute: 'delivery_datetime',
+                        value: {
+                          condition: '>=',
+                          value: encodeURI(filterValues.deliveryFromDatetime)
+                        }
+                      });
+                    }
                   }
 
-                  if (filterValues.deliveryEndDatetime !== null) {
-                    filterConditons.push({
-                      attribute: 'delivery_datetime',
-                      value: {
-                        condition: '<=',
-                        value: filterValues.deliveryEndDatetime
-                      }
-                    });
+                  if (filterValues['deliveryEndDatetime'] !== undefined) {
+                    if (filterValues.deliveryEndDatetime !== null) {
+                      filterConditons.push({
+                        attribute: 'delivery_datetime',
+                        value: {
+                          condition: '<=',
+                          value: filterValues.deliveryEndDatetime
+                        }
+                      });
+                    }
                   }
 
-                  if (filterValues.businessIds.length !== 0) {
-                    filterConditons.push({
-                      attribute: 'business_id',
-                      value: filterValues.businessIds
-                    });
+                  if (filterValues['businessIds'] !== undefined) {
+                    if (filterValues.businessIds.length !== 0) {
+                      filterConditons.push({
+                        attribute: 'business_id',
+                        value: filterValues.businessIds
+                      });
+                    }
                   }
 
-                  if (filterValues.driverIds.length !== 0) {
-                    filterConditons.push({
-                      attribute: 'driver_id',
-                      value: filterValues.driverIds
-                    });
+                  if (filterValues['driverIds'] !== undefined) {
+                    if (filterValues.driverIds.length !== 0) {
+                      filterConditons.push({
+                        attribute: 'driver_id',
+                        value: filterValues.driverIds
+                      });
+                    }
                   }
 
-                  if (filterValues.deliveryTypes.length !== 0) {
-                    filterConditons.push({
-                      attribute: 'delivery_type',
-                      value: filterValues.deliveryTypes
-                    });
+                  if (filterValues['deliveryTypes'] !== undefined) {
+                    if (filterValues.deliveryTypes.length !== 0) {
+                      filterConditons.push({
+                        attribute: 'delivery_type',
+                        value: filterValues.deliveryTypes
+                      });
+                    }
                   }
 
-                  if (filterValues.paymethodIds.length !== 0) {
-                    filterConditons.push({
-                      attribute: 'paymethod_id',
-                      value: filterValues.paymethodIds
-                    });
+                  if (filterValues['paymethodIds'] !== undefined) {
+                    if (filterValues.paymethodIds.length !== 0 && filterValues['paymethodIds'] !== undefined) {
+                      filterConditons.push({
+                        attribute: 'paymethod_id',
+                        value: filterValues.paymethodIds
+                      });
+                    }
                   }
                 }
               }
@@ -252,7 +275,7 @@ var ExportCSV = function ExportCSV(props) {
       }, _callee2, null, [[0, 14]]);
     }));
 
-    return function getCSV(_x) {
+    return function getCSV() {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -265,12 +288,7 @@ var ExportCSV = function ExportCSV(props) {
     setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
       loading: true
     }));
-
-    if (tokenStatus.token === null) {
-      getToken();
-    } else {
-      getCSV(false);
-    }
+    getToken(false);
   };
   /**
    * Method to start csv downloading for filtered orders
@@ -281,12 +299,7 @@ var ExportCSV = function ExportCSV(props) {
     setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
       loading: true
     }));
-
-    if (tokenStatus.token === null) {
-      getToken();
-    } else {
-      getCSV(true);
-    }
+    getToken(true);
   };
 
   (0, _react.useEffect)(function () {

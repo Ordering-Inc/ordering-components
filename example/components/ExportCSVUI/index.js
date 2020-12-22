@@ -4,6 +4,7 @@ export const ExportCSVUI = (props) => {
   const {
     actionStatus,
     handleGetCsvExport,
+    handleGetCsvFilteredExport,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -25,7 +26,8 @@ export const ExportCSVUI = (props) => {
 
       <div className='csv-export'>
         <p>CSV Export</p>
-        <button onClick={() => handleGetCsvExport()}>Export</button>
+        <button onClick={() => handleGetCsvExport()}>Export all</button>
+        <button onClick={() => handleGetCsvFilteredExport()}>Export filtered</button>
         {actionStatus.loading && (
           <p>loading...</p>
         )}

@@ -11,6 +11,13 @@ export const ExportCSVExample = () => {
      */
     UIComponent: ExportCSVUI,
     /**
+     * filter values to export filtered orders ,here just driver id
+     */
+    filterValues: {
+      statuses: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      driverIds: [9]
+    },
+    /**
      * Components types before products list
      * Array of type components, the parent props will pass to these components
      */

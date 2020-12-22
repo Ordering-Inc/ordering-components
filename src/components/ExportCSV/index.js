@@ -8,11 +8,15 @@ export const ExportCSV = (props) => {
   } = props
   const [tokenStatus, setTokenStatus] = useState({ token: null, error: null })
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
+  const [filterApply, setFilterApply] = useState(false)
   /**
    * Method to get token from API
+   * * @param {boolean} filter condition for filter apply
    */
-  const getToken = async () => {
+  const getToken = async (filter) => {
     try {
+      setTokenStatus({ ...tokenStatus, token: null })
+      setFilterApply(filter)
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -29,9 +33,8 @@ export const ExportCSV = (props) => {
 
   /**
    * Method to get csv from API
-   * * @param {boolean} filterApply condition for filter apply
    */
-  const getCSV = async (filterApply) => {
+  const getCSV = async () => {
     try {
       const requestOptions = {
         method: 'GET',
@@ -45,64 +48,78 @@ export const ExportCSV = (props) => {
 
       if (filterApply) {
         if (Object.keys(filterValues).length) {
-          if (filterValues.statuses.length > 0) {
-            filterConditons.push({ attribute: 'status', value: filterValues.statuses })
-          } else {
-            filterConditons.push({ attribute: 'status', value: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] })
+          if (filterValues['statuses'] !== undefined) {
+            if (filterValues.statuses.length > 0) {
+              filterConditons.push({ attribute: 'status', value: filterValues.statuses })
+            } else {
+              filterConditons.push({ attribute: 'status', value: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] })
+            }
           }
-          if (filterValues.deliveryFromDatetime !== null) {
-            filterConditons.push(
-              {
-                attribute: 'delivery_datetime',
-                value: {
-                  condition: '>=',
-                  value: encodeURI(filterValues.deliveryFromDatetime)
+          if (filterValues['deliveryFromDatetime'] !== undefined) {
+            if (filterValues.deliveryFromDatetime !== null) {
+              filterConditons.push(
+                {
+                  attribute: 'delivery_datetime',
+                  value: {
+                    condition: '>=',
+                    value: encodeURI(filterValues.deliveryFromDatetime)
+                  }
                 }
-              }
-            )
+              )
+            }
           }
-          if (filterValues.deliveryEndDatetime !== null) {
-            filterConditons.push(
-              {
-                attribute: 'delivery_datetime',
-                value: {
-                  condition: '<=',
-                  value: filterValues.deliveryEndDatetime
+          if (filterValues['deliveryEndDatetime'] !== undefined) {
+            if (filterValues.deliveryEndDatetime !== null) {
+              filterConditons.push(
+                {
+                  attribute: 'delivery_datetime',
+                  value: {
+                    condition: '<=',
+                    value: filterValues.deliveryEndDatetime
+                  }
                 }
-              }
-            )
+              )
+            }
           }
-          if (filterValues.businessIds.length !== 0) {
-            filterConditons.push(
-              {
-                attribute: 'business_id',
-                value: filterValues.businessIds
-              }
-            )
+          if (filterValues['businessIds'] !== undefined) {
+            if (filterValues.businessIds.length !== 0) {
+              filterConditons.push(
+                {
+                  attribute: 'business_id',
+                  value: filterValues.businessIds
+                }
+              )
+            }
           }
-          if (filterValues.driverIds.length !== 0) {
-            filterConditons.push(
-              {
-                attribute: 'driver_id',
-                value: filterValues.driverIds
-              }
-            )
+          if (filterValues['driverIds'] !== undefined) {
+            if (filterValues.driverIds.length !== 0) {
+              filterConditons.push(
+                {
+                  attribute: 'driver_id',
+                  value: filterValues.driverIds
+                }
+              )
+            }
           }
-          if (filterValues.deliveryTypes.length !== 0) {
-            filterConditons.push(
-              {
-                attribute: 'delivery_type',
-                value: filterValues.deliveryTypes
-              }
-            )
+          if (filterValues['deliveryTypes'] !== undefined) {
+            if (filterValues.deliveryTypes.length !== 0) {
+              filterConditons.push(
+                {
+                  attribute: 'delivery_type',
+                  value: filterValues.deliveryTypes
+                }
+              )
+            }
           }
-          if (filterValues.paymethodIds.length !== 0) {
-            filterConditons.push(
-              {
-                attribute: 'paymethod_id',
-                value: filterValues.paymethodIds
-              }
-            )
+          if (filterValues['paymethodIds'] !== undefined) {
+            if (filterValues.paymethodIds.length !== 0 && filterValues['paymethodIds'] !== undefined) {
+              filterConditons.push(
+                {
+                  attribute: 'paymethod_id',
+                  value: filterValues.paymethodIds
+                }
+              )
+            }
           }
         }
       }
@@ -130,22 +147,14 @@ export const ExportCSV = (props) => {
    */
   const handleGetCsvExport = () => {
     setActionStatus({ ...actionStatus, loading: true })
-    if (tokenStatus.token === null) {
-      getToken()
-    } else {
-      getCSV(false)
-    }
+    getToken(false)
   }
   /**
    * Method to start csv downloading for filtered orders
    */
   const handleGetCsvFilteredExport = () => {
     setActionStatus({ ...actionStatus, loading: true })
-    if (tokenStatus.token === null) {
-      getToken()
-    } else {
-      getCSV(true)
-    }
+    getToken(true)
   }
 
   useEffect(() => {
