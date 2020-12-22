@@ -609,6 +609,12 @@ Object.defineProperty(exports, "ResetPassword", {
     return _ResetPassword.ResetPassword;
   }
 });
+Object.defineProperty(exports, "Analytics", {
+  enumerable: true,
+  get: function get() {
+    return _Analitycs.Analytics;
+  }
+});
 
 var _AddressDetails = require("./components/AddressDetails");
 
@@ -769,3 +775,5 @@ var _FloatingButton = require("./components/FloatingButton");
 var _InputPhoneNumber = require("./components/InputPhoneNumber");
 
 var _ResetPassword = require("./components/ResetPassword");
+
+var _Analitycs = require("./components/Analitycs");
