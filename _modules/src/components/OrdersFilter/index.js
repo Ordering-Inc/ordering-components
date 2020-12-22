@@ -415,6 +415,10 @@ var OrdersFilter = function OrdersFilter(props) {
           statuses: _statuses
         }));
       }
+    } else {
+      setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
+        statuses: []
+      }));
     }
   }, [filterValues.isPendingOrder, filterValues.isPreOrder]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

@@ -231,6 +231,8 @@ export const OrdersFilter = (props) => {
         _statuses.push(0)
         setFilterValues({ ...filterValues, statuses: _statuses })
       }
+    } else {
+        setFilterValues({ ...filterValues, statuses: [] })
     }
   }, [filterValues.isPendingOrder, filterValues.isPreOrder])
 
