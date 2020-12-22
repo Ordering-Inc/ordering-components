@@ -125,67 +125,80 @@ var OrdersManage = function OrdersManage(props) {
       apiConfigList = _useState16[0],
       setApiConfigList = _useState16[1];
   /**
-   * Object to save drivers
+   * Object to save driver group list
    */
 
 
   var _useState17 = (0, _react.useState)({
+    groups: [],
+    loading: false,
+    error: null
+  }),
+      _useState18 = _slicedToArray(_useState17, 2),
+      driverGroupList = _useState18[0],
+      setDriverGroupList = _useState18[1];
+  /**
+   * Object to save drivers
+   */
+
+
+  var _useState19 = (0, _react.useState)({
     drivers: [],
     loading: true,
     error: null
   }),
-      _useState18 = _slicedToArray(_useState17, 2),
-      driversList = _useState18[0],
-      setDriversList = _useState18[1];
+      _useState20 = _slicedToArray(_useState19, 2),
+      driversList = _useState20[0],
+      setDriversList = _useState20[1];
   /**
    * Object to save paymethods
    */
 
 
-  var _useState19 = (0, _react.useState)({
+  var _useState21 = (0, _react.useState)({
     paymethods: [],
     loading: true,
     error: null
   }),
-      _useState20 = _slicedToArray(_useState19, 2),
-      paymethodsList = _useState20[0],
-      setPaymethodsList = _useState20[1];
+      _useState22 = _slicedToArray(_useState21, 2),
+      paymethodsList = _useState22[0],
+      setPaymethodsList = _useState22[1];
   /**
    * Object to save businesses
    */
 
 
-  var _useState21 = (0, _react.useState)({
+  var _useState23 = (0, _react.useState)({
     businesses: [],
     loading: true,
     error: null
   }),
-      _useState22 = _slicedToArray(_useState21, 2),
-      businessesList = _useState22[0],
-      setBusinessesList = _useState22[1];
+      _useState24 = _slicedToArray(_useState23, 2),
+      businessesList = _useState24[0],
+      setBusinessesList = _useState24[1];
   /**
    * Object to save driver orders
    */
 
 
-  var _useState23 = (0, _react.useState)({
+  var _useState25 = (0, _react.useState)({
     id: null,
     orders: [],
     loading: true,
     error: null
   }),
-      _useState24 = _slicedToArray(_useState23, 2),
-      driverOrdersModal = _useState24[0],
-      setDriverOrdersModal = _useState24[1];
+      _useState26 = _slicedToArray(_useState25, 2),
+      driverOrdersModal = _useState26[0],
+      setDriverOrdersModal = _useState26[1];
   /**
    * Object to save selected order ids
    */
 
 
-  var _useState25 = (0, _react.useState)([]),
-      _useState26 = _slicedToArray(_useState25, 2),
-      selectedOrderIds = _useState26[0],
-      setSelectedOrderIds = _useState26[1];
+  var _useState27 = (0, _react.useState)([]),
+      _useState28 = _slicedToArray(_useState27, 2),
+      selectedOrderIds = _useState28[0],
+      setSelectedOrderIds = _useState28[1];
   /**
    * Save ids of orders selected
    * @param {string} orderId order id
@@ -312,41 +325,113 @@ var OrdersManage = function OrdersManage(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
+              setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
+                loading: true
+              }));
               source = {};
               requestsState.apiConfig = source;
-              _context.next = 5;
+              _context.next = 6;
               return ordering.setAccessToken(token).configs().asDictionary().get({
                 cancelToken: source
               });
 
-            case 5:
+            case 6:
               _yield$ordering$setAc = _context.sent;
               result = _yield$ordering$setAc.content.result;
               setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
                 loading: false,
                 configList: result
               }));
-              _context.next = 13;
+              _context.next = 14;
               break;
 
-            case 10:
-              _context.prev = 10;
+            case 11:
+              _context.prev = 11;
               _context.t0 = _context["catch"](0);
               setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
                 loading: false,
                 error: _context.t0.message
               }));
 
-            case 13:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 10]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
     return function getApiConfig() {
       return _ref.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to get driver group from API
+   */
+
+
+  var getDriverGroup = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var requestOptions, where, response, _yield$response$json, result;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              where = [{
+                attribute: 'enabled',
+                value: {
+                  condition: '=',
+                  value: true
+                }
+              }];
+              _context2.next = 6;
+              return fetch("https://apiv4.ordering.co/v400/en/luisv4/drivergroups?params=id,name,drivers&where=".concat(JSON.stringify(where)), requestOptions);
+
+            case 6:
+              response = _context2.sent;
+              _context2.next = 9;
+              return response.json();
+
+            case 9:
+              _yield$response$json = _context2.sent;
+              result = _yield$response$json.result;
+              setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
+                loading: false,
+                groups: result
+              }));
+              _context2.next = 17;
+              break;
+
+            case 14:
+              _context2.prev = 14;
+              _context2.t0 = _context2["catch"](0);
+              setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
+                loading: false,
+                error: _context2.t0.message
+              }));
+
+            case 17:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 14]]);
+    }));
+
+    return function getDriverGroup() {
+      return _ref2.apply(this, arguments);
     };
   }();
   /**
@@ -355,15 +440,15 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getPaymethods = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var response, _yield$response$json, result;
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var response, _yield$response$json2, result;
 
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _context2.prev = 0;
-              _context2.next = 3;
+              _context3.prev = 0;
+              _context3.next = 3;
               return fetch("".concat(ordering.root, "/paymethods?params=id,name&where=[{%22attribute%22:%22enabled%22,%22value%22:true}]"), {
                 method: 'GET',
                 headers: {
@@ -373,38 +458,38 @@ var OrdersManage = function OrdersManage(props) {
               });
 
             case 3:
-              response = _context2.sent;
-              _context2.next = 6;
+              response = _context3.sent;
+              _context3.next = 6;
               return response.json();
 
             case 6:
-              _yield$response$json = _context2.sent;
-              result = _yield$response$json.result;
+              _yield$response$json2 = _context3.sent;
+              result = _yield$response$json2.result;
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 loading: false,
                 paymethods: result
               }));
-              _context2.next = 14;
+              _context3.next = 14;
               break;
 
             case 11:
-              _context2.prev = 11;
-              _context2.t0 = _context2["catch"](0);
+              _context3.prev = 11;
+              _context3.t0 = _context3["catch"](0);
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 loading: false,
-                error: _context2.t0.message
+                error: _context3.t0.message
               }));
 
             case 14:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee3, null, [[0, 11]]);
     }));
 
     return function getPaymethods() {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
   /**
@@ -413,59 +498,8 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var source, _yield$ordering$setAc2, result;
-
-      return _regenerator.default.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.prev = 0;
-              source = {};
-              requestsState.business = source;
-              _context3.next = 5;
-              return ordering.setAccessToken(token).businesses().asDashboard().select(businessesPropsToFetch).get({
-                cancelToken: source
-              });
-
-            case 5:
-              _yield$ordering$setAc2 = _context3.sent;
-              result = _yield$ordering$setAc2.content.result;
-              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-                loading: false,
-                businesses: result
-              }));
-              _context3.next = 13;
-              break;
-
-            case 10:
-              _context3.prev = 10;
-              _context3.t0 = _context3["catch"](0);
-              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-                loading: false,
-                error: _context3.t0.message
-              }));
-
-            case 13:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3, null, [[0, 10]]);
-    }));
-
-    return function getBusinesses() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to get drivers from API
-   */
-
-
-  var getDrivers = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
-      var source, _yield$ordering$setAc3, result;
+      var source, _yield$ordering$setAc2, result;
 
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
@@ -473,21 +507,18 @@ var OrdersManage = function OrdersManage(props) {
             case 0:
               _context4.prev = 0;
               source = {};
-              requestsState.drivers = source;
+              requestsState.business = source;
               _context4.next = 5;
-              return ordering.setAccessToken(token).users().select(driversPropsToFetch).where([{
-                attribute: 'level',
-                value: [4]
-              }]).get({
+              return ordering.setAccessToken(token).businesses().asDashboard().select(businessesPropsToFetch).get({
                 cancelToken: source
               });
 
             case 5:
-              _yield$ordering$setAc3 = _context4.sent;
-              result = _yield$ordering$setAc3.content.result;
-              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
+              _yield$ordering$setAc2 = _context4.sent;
+              result = _yield$ordering$setAc2.content.result;
+              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false,
-                drivers: result
+                businesses: result
               }));
               _context4.next = 13;
               break;
@@ -495,7 +526,7 @@ var OrdersManage = function OrdersManage(props) {
             case 10:
               _context4.prev = 10;
               _context4.t0 = _context4["catch"](0);
-              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
+              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false,
                 error: _context4.t0.message
               }));
@@ -508,8 +539,62 @@ var OrdersManage = function OrdersManage(props) {
       }, _callee4, null, [[0, 10]]);
     }));
 
-    return function getDrivers() {
+    return function getBusinesses() {
       return _ref4.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to get drivers from API
+   */
+
+
+  var getDrivers = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+      var source, _yield$ordering$setAc3, result;
+
+      return _regenerator.default.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.prev = 0;
+              source = {};
+              requestsState.drivers = source;
+              _context5.next = 5;
+              return ordering.setAccessToken(token).users().select(driversPropsToFetch).where([{
+                attribute: 'level',
+                value: [4]
+              }]).get({
+                cancelToken: source
+              });
+
+            case 5:
+              _yield$ordering$setAc3 = _context5.sent;
+              result = _yield$ordering$setAc3.content.result;
+              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
+                loading: false,
+                drivers: result
+              }));
+              _context5.next = 13;
+              break;
+
+            case 10:
+              _context5.prev = 10;
+              _context5.t0 = _context5["catch"](0);
+              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
+                loading: false,
+                error: _context5.t0.message
+              }));
+
+            case 13:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[0, 10]]);
+    }));
+
+    return function getDrivers() {
+      return _ref5.apply(this, arguments);
     };
   }();
   /**
@@ -518,14 +603,14 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getDriverOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
       var where, conditions, source, _yield$ordering$setAc4, result;
 
-      return _regenerator.default.wrap(function _callee5$(_context5) {
+      return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
-              _context5.prev = 0;
+              _context6.prev = 0;
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 loading: true
               }));
@@ -545,40 +630,40 @@ var OrdersManage = function OrdersManage(props) {
               };
               source = {};
               requestsState.driverOrders = source;
-              _context5.next = 11;
+              _context6.next = 11;
               return ordering.setAccessToken(token).orders().asDashboard().where(where).get({
                 cancelToken: source
               });
 
             case 11:
-              _yield$ordering$setAc4 = _context5.sent;
+              _yield$ordering$setAc4 = _context6.sent;
               result = _yield$ordering$setAc4.content.result;
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 id: null,
                 loading: false,
                 orders: result
               }));
-              _context5.next = 19;
+              _context6.next = 19;
               break;
 
             case 16:
-              _context5.prev = 16;
-              _context5.t0 = _context5["catch"](0);
+              _context6.prev = 16;
+              _context6.t0 = _context6["catch"](0);
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 loading: false,
-                error: _context5.t0.message
+                error: _context6.t0.message
               }));
 
             case 19:
             case "end":
-              return _context5.stop();
+              return _context6.stop();
           }
         }
-      }, _callee5, null, [[0, 16]]);
+      }, _callee6, null, [[0, 16]]);
     }));
 
     return function getDriverOrders() {
-      return _ref5.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
   /**
@@ -648,6 +733,7 @@ var OrdersManage = function OrdersManage(props) {
   }, [driverOrdersModal.id]);
   (0, _react.useEffect)(function () {
     getApiConfig();
+    getDriverGroup();
     getDrivers();
     getPaymethods();
     getBusinesses();
@@ -660,6 +746,7 @@ var OrdersManage = function OrdersManage(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     apiConfigList: apiConfigList,
     searchValue: searchValue,
+    driverGroupList: driverGroupList,
     driversList: driversList,
     paymethodsList: paymethodsList,
     businessesList: businessesList,

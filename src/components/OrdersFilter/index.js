@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import dayjs from 'dayjs'
 export const OrdersFilter = (props) => {
   const {
-    driversList,
-    paymethodsList,
-    businessesList,
-    ordersStatusSelected,
-    UIComponent
+    UIComponent,
+    driverGroupList
   } = props
 
+  const [groupDriverIds, setGroupDriverIds] = useState([])
+  const [singleDriverIds, setSingleDriverIds] = useState([])
   /**
    * This property is used to set in state the current value
    */
@@ -33,17 +32,25 @@ export const OrdersFilter = (props) => {
    * * @param {object} groupType Group type
    */
   const handleChangeGroup = (groupType) => {
-    const _groupTypes = [...filterValues.groupTypes]
+    let _groupTypes = [...filterValues.groupTypes]
+    let _driverIds = [...groupDriverIds]
+    const selectedDriverGroup = driverGroupList.groups.filter((group) => group.id === groupType)
+    const selectedDriverIds = []
+    for (const driver of selectedDriverGroup[0].drivers) {
+      selectedDriverIds.push(driver.id)
+    }
+
     if (!_groupTypes.includes(groupType)) {
       _groupTypes.push(groupType)
+      _driverIds = [..._driverIds, ...selectedDriverIds]
     } else {
-      for (let i = 0; i < _groupTypes.length; i++) {
-        if (_groupTypes[i] === groupType) {
-          _groupTypes.splice(i, 1)
-          i--
-        }
-      }
+      _groupTypes = _groupTypes.filter((type) => type !== groupType)
+      _driverIds = _driverIds.filter((el) => {
+        return !selectedDriverIds.includes(el)
+      })
     }
+
+    setGroupDriverIds(_driverIds)
     setFilterValues({ ...filterValues, groupTypes: _groupTypes })
   }
   /**
@@ -105,16 +112,11 @@ export const OrdersFilter = (props) => {
    * * @param {number} businessId business id
   */
   const handleChangeBusinesses = (businessId) => {
-    const _businessIds = [...filterValues.businessIds]
+    let _businessIds = [...filterValues.businessIds]
     if (!_businessIds.includes(businessId)) {
       _businessIds.push(businessId)
     } else {
-      for (let i = 0; i < _businessIds.length; i++) {
-        if (_businessIds[i] === businessId) {
-          _businessIds.splice(i, 1)
-          i--
-        }
-      }
+      _businessIds = _businessIds.filter((_businessId) => _businessId !== businessId)
     }
     setFilterValues({ ...filterValues, businessIds: _businessIds })
   }
@@ -123,34 +125,24 @@ export const OrdersFilter = (props) => {
    * * @param {number} driverId driver id
   */
   const handleChangeDriver = (driverId) => {
-    const _driverIds = [...filterValues.driverIds]
+    let _driverIds = [...singleDriverIds]
     if (!_driverIds.includes(driverId)) {
       _driverIds.push(driverId)
     } else {
-      for (let i = 0; i < _driverIds.length; i++) {
-        if (_driverIds[i] === driverId) {
-          _driverIds.splice(i, 1)
-          i--
-        }
-      }
+      _driverIds = _driverIds.filter((id) => id !== driverId)
     }
-    setFilterValues({ ...filterValues, driverIds: _driverIds })
+    setSingleDriverIds(_driverIds)
   }
   /**
    * Change city
    * * @param {number} cityId city id of business
   */
   const handleChangeCity = (cityId) => {
-    const _cityIds = [...filterValues.cityIds]
+    let _cityIds = [...filterValues.cityIds]
     if (!_cityIds.includes(cityId)) {
       _cityIds.push(cityId)
     } else {
-      for (let i = 0; i < _cityIds.length; i++) {
-        if (_cityIds[i] === cityId) {
-          _cityIds.splice(i, 1)
-          i--
-        }
-      }
+      _cityIds = _cityIds.filter((_cityId) => _cityId !== cityId)
     }
     setFilterValues({ ...filterValues, cityIds: _cityIds })
   }
@@ -159,16 +151,11 @@ export const OrdersFilter = (props) => {
    * * @param {number} status status
   */
   const handleChangeOrderStatus = (status) => {
-    const _statuses = [...filterValues.statuses]
+    let _statuses = [...filterValues.statuses]
     if (!_statuses.includes(status)) {
       _statuses.push(status)
     } else {
-      for (let i = 0; i < _statuses.length; i++) {
-        if (_statuses[i] === status) {
-          _statuses.splice(i, 1)
-          i--
-        }
-      }
+      _statuses = _statuses.filter((_status) => _status !== status)
     }
     setFilterValues({ ...filterValues, statuses: _statuses })
   }
@@ -177,16 +164,11 @@ export const OrdersFilter = (props) => {
    * * @param {number} deliveryType delivery type
   */
   const handleChangeDeliveryType = (deliveryType) => {
-    const _deliveryTypes = [...filterValues.deliveryTypes]
+    let _deliveryTypes = [...filterValues.deliveryTypes]
     if (!_deliveryTypes.includes(deliveryType)) {
       _deliveryTypes.push(deliveryType)
     } else {
-      for (let i = 0; i < _deliveryTypes.length; i++) {
-        if (_deliveryTypes[i] === deliveryType) {
-          _deliveryTypes.splice(i, 1)
-          i--
-        }
-      }
+      _deliveryTypes = _deliveryTypes.filter((_deliveryType) => _deliveryType !== deliveryType)
     }
     setFilterValues({ ...filterValues, deliveryTypes: _deliveryTypes })
   }
@@ -195,16 +177,11 @@ export const OrdersFilter = (props) => {
    * * @param {number} paymethodId paymethod Id
   */
   const handleChangePaymethodType = (paymethodId) => {
-    const _paymethodIds = [...filterValues.paymethodIds]
+    let _paymethodIds = [...filterValues.paymethodIds]
     if (!_paymethodIds.includes(paymethodId)) {
       _paymethodIds.push(paymethodId)
     } else {
-      for (let i = 0; i < _paymethodIds.length; i++) {
-        if (_paymethodIds[i] === paymethodId) {
-          _paymethodIds.splice(i, 1)
-          i--
-        }
-      }
+      _paymethodIds = _paymethodIds.filter((_paymethodId) => _paymethodId !== paymethodId)
     }
     setFilterValues({ ...filterValues, paymethodIds: _paymethodIds })
   }
@@ -241,6 +218,12 @@ export const OrdersFilter = (props) => {
   }
 
   useEffect(() => {
+    const _driverIds = [...groupDriverIds, ...singleDriverIds]
+    const uniqueDriverIds = _driverIds.filter((v, i, a) => a.indexOf(v) === i)
+    setFilterValues({ ...filterValues, driverIds: uniqueDriverIds })
+  }, [groupDriverIds, singleDriverIds])
+
+  useEffect(() => {
     const _statuses = [...filterValues.statuses]
     if (filterValues.isPreOrder || filterValues.isPreOrder) {
       if (!_statuses.includes(0)) {
@@ -256,10 +239,7 @@ export const OrdersFilter = (props) => {
         <UIComponent
           {...props}
           filterValues={filterValues}
-          driversList={driversList}
-          paymethodsList={paymethodsList}
-          businessesList={businessesList}
-          ordersStatusSelected={ordersStatusSelected}
+          singleDriverIds={singleDriverIds}
           handleChangeGroup={handleChangeGroup}
           handleChangeDateType={handleChangeDateType}
           handleChangeFromDate={handleChangeFromDate}

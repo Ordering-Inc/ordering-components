@@ -30,6 +30,10 @@ export const OrdersManage = (props) => {
    */
   const [apiConfigList, setApiConfigList] = useState({ configList: [], loading: true, error: null })
   /**
+   * Object to save driver group list
+   */
+  const [driverGroupList, setDriverGroupList] = useState({ groups: [], loading: false, error: null })
+  /**
    * Object to save drivers
    */
   const [driversList, setDriversList] = useState({ drivers: [], loading: true, error: null })
@@ -144,6 +148,7 @@ export const OrdersManage = (props) => {
    */
   const getApiConfig = async () => {
     try {
+      setApiConfigList({ ...apiConfigList, loading: true })
       const source = {}
       requestsState.apiConfig = source
       const { content: { result } } = await ordering
@@ -154,6 +159,27 @@ export const OrdersManage = (props) => {
       setApiConfigList({ ...apiConfigList, loading: false, configList: result })
     } catch (err) {
       setApiConfigList({ ...apiConfigList, loading: false, error: err.message })
+    }
+  }
+  /**
+   * Method to get driver group from API
+   */
+  const getDriverGroup = async () => {
+    try {
+      setDriverGroupList({ ...driverGroupList, loading: true })
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const where = [{ attribute: 'enabled', value: { condition: '=', value: true } }]
+      const response = await fetch(`https://apiv4.ordering.co/v400/en/luisv4/drivergroups?params=id,name,drivers&where=${JSON.stringify(where)}`, requestOptions)
+      const { result } = await response.json()
+      setDriverGroupList({ ...driverGroupList, loading: false, groups: result })
+    } catch (err) {
+      setDriverGroupList({ ...driverGroupList, loading: false, error: err.message })
     }
   }
   /**
@@ -306,6 +332,7 @@ export const OrdersManage = (props) => {
 
   useEffect(() => {
     getApiConfig()
+    getDriverGroup()
     getDrivers()
     getPaymethods()
     getBusinesses()
@@ -324,6 +351,7 @@ export const OrdersManage = (props) => {
           {...props}
           apiConfigList={apiConfigList}
           searchValue={searchValue}
+          driverGroupList={driverGroupList}
           driversList={driversList}
           paymethodsList={paymethodsList}
           businessesList={businessesList}

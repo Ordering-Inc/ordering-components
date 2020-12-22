@@ -27,6 +27,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -48,16 +50,24 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrdersFilter = function OrdersFilter(props) {
-  var driversList = props.driversList,
-      paymethodsList = props.paymethodsList,
-      businessesList = props.businessesList,
-      ordersStatusSelected = props.ordersStatusSelected,
-      UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent,
+      driverGroupList = props.driverGroupList;
+
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      groupDriverIds = _useState2[0],
+      setGroupDriverIds = _useState2[1];
+
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      singleDriverIds = _useState4[0],
+      setSingleDriverIds = _useState4[1];
   /**
    * This property is used to set in state the current value
    */
 
-  var _useState = (0, _react.useState)({
+
+  var _useState5 = (0, _react.useState)({
     groupTypes: [],
     dateType: null,
     deliveryFromDatetime: null,
@@ -71,9 +81,9 @@ var OrdersFilter = function OrdersFilter(props) {
     deliveryTypes: [],
     paymethodIds: []
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      filterValues = _useState2[0],
-      setFilterValues = _useState2[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      filterValues = _useState6[0],
+      setFilterValues = _useState6[1];
   /**
    * Change group type
    * * @param {object} groupType Group type
@@ -83,18 +93,41 @@ var OrdersFilter = function OrdersFilter(props) {
   var handleChangeGroup = function handleChangeGroup(groupType) {
     var _groupTypes = _toConsumableArray(filterValues.groupTypes);
 
-    if (!_groupTypes.includes(groupType)) {
-      _groupTypes.push(groupType);
-    } else {
-      for (var i = 0; i < _groupTypes.length; i++) {
-        if (_groupTypes[i] === groupType) {
-          _groupTypes.splice(i, 1);
+    var _driverIds = _toConsumableArray(groupDriverIds);
 
-          i--;
-        }
+    var selectedDriverGroup = driverGroupList.groups.filter(function (group) {
+      return group.id === groupType;
+    });
+    var selectedDriverIds = [];
+
+    var _iterator = _createForOfIteratorHelper(selectedDriverGroup[0].drivers),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var driver = _step.value;
+        selectedDriverIds.push(driver.id);
       }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
     }
 
+    if (!_groupTypes.includes(groupType)) {
+      _groupTypes.push(groupType);
+
+      _driverIds = [].concat(_toConsumableArray(_driverIds), selectedDriverIds);
+    } else {
+      _groupTypes = _groupTypes.filter(function (type) {
+        return type !== groupType;
+      });
+      _driverIds = _driverIds.filter(function (el) {
+        return !selectedDriverIds.includes(el);
+      });
+    }
+
+    setGroupDriverIds(_driverIds);
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
       groupTypes: _groupTypes
     }));
@@ -205,13 +238,9 @@ var OrdersFilter = function OrdersFilter(props) {
     if (!_businessIds.includes(businessId)) {
       _businessIds.push(businessId);
     } else {
-      for (var i = 0; i < _businessIds.length; i++) {
-        if (_businessIds[i] === businessId) {
-          _businessIds.splice(i, 1);
-
-          i--;
-        }
-      }
+      _businessIds = _businessIds.filter(function (_businessId) {
+        return _businessId !== businessId;
+      });
     }
 
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
@@ -225,23 +254,17 @@ var OrdersFilter = function OrdersFilter(props) {
 
 
   var handleChangeDriver = function handleChangeDriver(driverId) {
-    var _driverIds = _toConsumableArray(filterValues.driverIds);
+    var _driverIds = _toConsumableArray(singleDriverIds);
 
     if (!_driverIds.includes(driverId)) {
       _driverIds.push(driverId);
     } else {
-      for (var i = 0; i < _driverIds.length; i++) {
-        if (_driverIds[i] === driverId) {
-          _driverIds.splice(i, 1);
-
-          i--;
-        }
-      }
+      _driverIds = _driverIds.filter(function (id) {
+        return id !== driverId;
+      });
     }
 
-    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      driverIds: _driverIds
-    }));
+    setSingleDriverIds(_driverIds);
   };
   /**
    * Change city
@@ -255,13 +278,9 @@ var OrdersFilter = function OrdersFilter(props) {
     if (!_cityIds.includes(cityId)) {
       _cityIds.push(cityId);
     } else {
-      for (var i = 0; i < _cityIds.length; i++) {
-        if (_cityIds[i] === cityId) {
-          _cityIds.splice(i, 1);
-
-          i--;
-        }
-      }
+      _cityIds = _cityIds.filter(function (_cityId) {
+        return _cityId !== cityId;
+      });
     }
 
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
@@ -280,13 +299,9 @@ var OrdersFilter = function OrdersFilter(props) {
     if (!_statuses.includes(status)) {
       _statuses.push(status);
     } else {
-      for (var i = 0; i < _statuses.length; i++) {
-        if (_statuses[i] === status) {
-          _statuses.splice(i, 1);
-
-          i--;
-        }
-      }
+      _statuses = _statuses.filter(function (_status) {
+        return _status !== status;
+      });
     }
 
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
@@ -305,13 +320,9 @@ var OrdersFilter = function OrdersFilter(props) {
     if (!_deliveryTypes.includes(deliveryType)) {
       _deliveryTypes.push(deliveryType);
     } else {
-      for (var i = 0; i < _deliveryTypes.length; i++) {
-        if (_deliveryTypes[i] === deliveryType) {
-          _deliveryTypes.splice(i, 1);
-
-          i--;
-        }
-      }
+      _deliveryTypes = _deliveryTypes.filter(function (_deliveryType) {
+        return _deliveryType !== deliveryType;
+      });
     }
 
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
@@ -330,13 +341,9 @@ var OrdersFilter = function OrdersFilter(props) {
     if (!_paymethodIds.includes(paymethodId)) {
       _paymethodIds.push(paymethodId);
     } else {
-      for (var i = 0; i < _paymethodIds.length; i++) {
-        if (_paymethodIds[i] === paymethodId) {
-          _paymethodIds.splice(i, 1);
-
-          i--;
-        }
-      }
+      _paymethodIds = _paymethodIds.filter(function (_paymethodId) {
+        return _paymethodId !== paymethodId;
+      });
     }
 
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
@@ -386,6 +393,17 @@ var OrdersFilter = function OrdersFilter(props) {
   };
 
   (0, _react.useEffect)(function () {
+    var _driverIds = [].concat(_toConsumableArray(groupDriverIds), _toConsumableArray(singleDriverIds));
+
+    var uniqueDriverIds = _driverIds.filter(function (v, i, a) {
+      return a.indexOf(v) === i;
+    });
+
+    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
+      driverIds: uniqueDriverIds
+    }));
+  }, [groupDriverIds, singleDriverIds]);
+  (0, _react.useEffect)(function () {
     var _statuses = _toConsumableArray(filterValues.statuses);
 
     if (filterValues.isPreOrder || filterValues.isPreOrder) {
@@ -400,10 +418,7 @@ var OrdersFilter = function OrdersFilter(props) {
   }, [filterValues.isPendingOrder, filterValues.isPreOrder]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     filterValues: filterValues,
-    driversList: driversList,
-    paymethodsList: paymethodsList,
-    businessesList: businessesList,
-    ordersStatusSelected: ordersStatusSelected,
+    singleDriverIds: singleDriverIds,
     handleChangeGroup: handleChangeGroup,
     handleChangeDateType: handleChangeDateType,
     handleChangeFromDate: handleChangeFromDate,
