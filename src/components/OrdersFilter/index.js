@@ -215,6 +215,7 @@ export const OrdersFilter = (props) => {
       deliveryTypes: [],
       paymethodIds: []
     })
+    setSingleDriverIds([])
   }
 
   useEffect(() => {

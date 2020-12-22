@@ -390,6 +390,7 @@ var OrdersFilter = function OrdersFilter(props) {
       deliveryTypes: [],
       paymethodIds: []
     });
+    setSingleDriverIds([]);
   };
 
   (0, _react.useEffect)(function () {
