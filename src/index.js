@@ -30,6 +30,7 @@ import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
 import { GpsButton, GoogleGpsButton } from './components/GpsButton'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
+import { Logistics } from './components/Logistics'
 import { LogoutAction } from './components/LogoutAction'
 import { MainSearch } from './components/MainSearch'
 import { MenuControl } from './components/MenuControl'
@@ -120,6 +121,7 @@ export {
   GoogleGpsButton,
   LanguageSelector,
   LoginForm,
+  Logistics,
   LogoutAction,
   MainSearch,
   MenuControl,
