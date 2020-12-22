@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useEvent } from '../../contexts/EventContext'
 import PropTypes from 'prop-types'
 
-// import PropTypes from 'prop-types'
-
 export const Analytics = (props) => {
   const {
     trackId,
@@ -18,9 +16,6 @@ export const Analytics = (props) => {
       return
     }
     if (window.document.getElementById('google-analytics-sdk')) {
-      events.on('change_view', (data) => {
-        console.log('Data', data)
-      })
       if (typeof ga !== 'undefined') {
         setAnalyticsReady(true)
       }
@@ -51,7 +46,7 @@ export const Analytics = (props) => {
    * @param {String} pageName
    */
   const handlechangeView = (pageName) => {
-    window.ga('set', 'page', pageName)
+    window.ga('set', 'page', pageName?.page)
     window.ga('send', 'pageview')
   }
   const handleClickProduct = (product) => {
