@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useUtils } from '../../contexts/UtilsContext'
 
 export const BusinessController = (props) => {
   const {
@@ -32,6 +33,10 @@ export const BusinessController = (props) => {
    */
   const [orderState] = useOrder()
   /**
+   * formatPrice function
+   */
+  const [{ parsePrice }] = useUtils()
+  /**
    * Method to get business from SDK
    */
   const getBusiness = async () => {
@@ -45,7 +50,7 @@ export const BusinessController = (props) => {
   const getBusinessOffer = (offers) => {
     if (!offers || !offers.length) return null
     const maxOffer = offers.reduce((acc, cur) => (acc.rate > cur.rate) ? acc : cur)
-    return maxOffer?.rate_type === 1 ? `${maxOffer?.rate}%` : `$ ${maxOffer?.rate?.toFixed(2)}`
+    return maxOffer?.rate_type === 1 ? `${maxOffer?.rate}%` : parsePrice(maxOffer?.rate)
   }
   /**
    * Method to format date
