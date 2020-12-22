@@ -7,7 +7,6 @@ export const OrdersFilter = (props) => {
     driverGroupList
   } = props
 
-  const [groupDriverIds, setGroupDriverIds] = useState([])
   const [singleDriverIds, setSingleDriverIds] = useState([])
   /**
    * This property is used to set in state the current value
@@ -33,24 +32,13 @@ export const OrdersFilter = (props) => {
    */
   const handleChangeGroup = (groupType) => {
     let _groupTypes = [...filterValues.groupTypes]
-    let _driverIds = [...groupDriverIds]
-    const selectedDriverGroup = driverGroupList.groups.filter((group) => group.id === groupType)
-    const selectedDriverIds = []
-    for (const driver of selectedDriverGroup[0].drivers) {
-      selectedDriverIds.push(driver.id)
-    }
-
     if (!_groupTypes.includes(groupType)) {
       _groupTypes.push(groupType)
-      _driverIds = [..._driverIds, ...selectedDriverIds]
     } else {
       _groupTypes = _groupTypes.filter((type) => type !== groupType)
-      _driverIds = _driverIds.filter((el) => {
-        return !selectedDriverIds.includes(el)
-      })
     }
 
-    setGroupDriverIds(_driverIds)
+    // setGroupDriverIds(_driverIds)
     setFilterValues({ ...filterValues, groupTypes: _groupTypes })
   }
   /**
@@ -219,10 +207,20 @@ export const OrdersFilter = (props) => {
   }
 
   useEffect(() => {
+    const groupDriverIds = []
+    if (filterValues.groupTypes.length > 0) {
+      for (const groupId of filterValues.groupTypes) {
+        const selectedDriverGroup = driverGroupList.groups.filter((group) => group.id === groupId)
+        for (const driver of selectedDriverGroup[0].drivers) {
+          groupDriverIds.push(driver.id)
+        }
+      }
+    }
     const _driverIds = [...groupDriverIds, ...singleDriverIds]
+
     const uniqueDriverIds = _driverIds.filter((v, i, a) => a.indexOf(v) === i)
     setFilterValues({ ...filterValues, driverIds: uniqueDriverIds })
-  }, [groupDriverIds, singleDriverIds])
+  }, [filterValues.groupTypes, singleDriverIds])
 
   useEffect(() => {
     const _statuses = [...filterValues.statuses]
@@ -232,7 +230,7 @@ export const OrdersFilter = (props) => {
         setFilterValues({ ...filterValues, statuses: _statuses })
       }
     } else {
-        setFilterValues({ ...filterValues, statuses: [] })
+      setFilterValues({ ...filterValues, statuses: [] })
     }
   }, [filterValues.isPendingOrder, filterValues.isPreOrder])
 
