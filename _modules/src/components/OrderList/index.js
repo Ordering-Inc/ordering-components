@@ -890,8 +890,33 @@ var OrderList = function OrderList(props) {
       });
 
       var orders = [];
+      var filterCheck = true;
 
-      if (orderStatus.includes(0)) {
+      if (filterValues.businessIds !== undefined && filterValues.businessIds.length > 0) {
+        if (!filterValues.businessIds.includes(_order.business_id)) {
+          filterCheck = false;
+        }
+      }
+
+      if (filterValues.driverIds !== undefined && filterValues.driverIds.length > 0) {
+        if (!filterValues.driverIds.includes(_order.driver_id)) {
+          filterCheck = false;
+        }
+      }
+
+      if (filterValues.deliveryTypes !== undefined && filterValues.deliveryTypes.length > 0) {
+        if (!filterValues.deliveryTypes.includes(_order.delivery_type)) {
+          filterCheck = false;
+        }
+      }
+
+      if (filterValues.paymethodIds !== undefined && filterValues.paymethodIds.length > 0) {
+        if (!filterValues.paymethodIds.includes(_order.paymethod_id)) {
+          filterCheck = false;
+        }
+      }
+
+      if (orderStatus.includes(0) && filterCheck) {
         if (pendingOrder) {
           var isPending = isPendingOrder(order.created_at, order.delivery_datetime);
 
