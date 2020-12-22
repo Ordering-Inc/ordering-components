@@ -78,6 +78,7 @@ import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/Str
 import { FloatingButton } from './components/FloatingButton'
 import { InputPhoneNumber } from './components/InputPhoneNumber'
 import { ResetPassword } from './components/ResetPassword'
+import { Analytics } from './components/Analitycs'
 
 export {
   AddressDetails,
@@ -152,6 +153,7 @@ export {
   FloatingButton,
   InputPhoneNumber,
   ResetPassword,
+  Analytics,
   // Contexts
   ConfigContext,
   ConfigProvider,
