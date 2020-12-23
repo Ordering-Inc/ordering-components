@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useEvent } from '../../contexts/EventContext'
 
 /**
  * Component to manage login behavior without UI component
@@ -20,6 +21,7 @@ export const LoginForm = (props) => {
   let { defaultLoginTab } = props
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
+  const [events] = useEvent()
 
   if (!useLoginByEmail && !useLoginByCellphone) {
     defaultLoginTab = 'none'
