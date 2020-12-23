@@ -267,6 +267,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_added', product, result)
         events.emit('cart_updated', result)
+        events.emit('product_added', product)
       } else {
         setAlert({ show: true, content: result })
       }
@@ -444,6 +445,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         events.emit('cart_updated', cart)
       }
       setState({ ...state, loading: false })
+      events.emit('order_placed', result.order)
       return { error, result }
     } catch (err) {
       setState({ ...state, loading: false })
