@@ -6,6 +6,7 @@ import App from './example/App'
 import { OrderingProvider } from './src/contexts/OrderingContext'
 
 const configFile = {
+  app_id: 'ordering-react',
   project: 'luisv4',
   api: {
     url: 'https://apiv4-dev.ordering.co',
