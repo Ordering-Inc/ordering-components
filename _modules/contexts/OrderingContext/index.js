@@ -53,7 +53,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
   var webStrategy = new _webStrategy.WebStrategy();
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
-      project: settings.project
+      project: settings.project,
+      app_id: settings.app_id
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: webStrategy
@@ -61,7 +62,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     settings: Object.assign(settings.socket, {
-      project: settings.project
+      project: settings.project,
+      app_id: settings.app_id
     })
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,

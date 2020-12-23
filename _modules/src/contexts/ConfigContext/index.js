@@ -75,13 +75,47 @@ var ConfigProvider = function ConfigProvider(_ref) {
       setState = _useState2[1];
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      languageState = _useLanguage2[0],
-      t = _useLanguage2[1];
+      _useLanguage2 = _slicedToArray(_useLanguage, 1),
+      languageState = _useLanguage2[0];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var customConfigs = {
+    max_days_preorder: {
+      key: 'max_days_preorder',
+      value: 6
+    },
+    meters_to_change_address: {
+      key: 'meters_to_change_address',
+      value: 500
+    },
+    default_order_type: {
+      key: 'default_order_type',
+      value: 'delivery'
+    },
+    order_types_allowed: {
+      key: 'order_types_allowed',
+      value: '1|2|3|4|5'
+    },
+    google_autocomplete_selection_required: {
+      key: 'google_autocomplete_selection_required',
+      value: false
+    },
+    google_maps_api_key: {
+      key: 'google_maps_api_key',
+      value: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+    },
+    country_autocomplete: {
+      key: 'country_autocomplete',
+      value: '*'
+    },
+    track_id_google_analytics: {
+      key: 'track_id_google_analytics',
+      value: 'UA-51635411-4'
+    }
+  };
 
   var refreshConfigs = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -105,7 +139,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
               result = _yield$ordering$confi2.result;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
-                configs: error ? {} : result
+                configs: error ? {} : _objectSpread(_objectSpread({}, customConfigs), result)
               }));
               _context.next = 14;
               break;
