@@ -97,7 +97,7 @@ export const Analytics = (props) => {
         events.off('userLogin', handleLogin)
         events.off('product_clicked', handleClickProduct)
         events.off('product_added', handleProductAdded)
-        events.on('order_placed', handleOrderPlaced)
+        events.off('order_placed', handleOrderPlaced)
       }
     }
   }, [analyticsReady])
