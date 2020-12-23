@@ -414,7 +414,7 @@ var OrdersFilter = function OrdersFilter(props) {
   (0, _react.useEffect)(function () {
     var _statuses = _toConsumableArray(filterValues.statuses);
 
-    if (filterValues.isPreOrder || filterValues.isPreOrder) {
+    if (filterValues.isPendingOrder || filterValues.isPreOrder) {
       if (!_statuses.includes(0)) {
         _statuses.push(0);
 

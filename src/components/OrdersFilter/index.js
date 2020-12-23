@@ -224,7 +224,7 @@ export const OrdersFilter = (props) => {
 
   useEffect(() => {
     const _statuses = [...filterValues.statuses]
-    if (filterValues.isPreOrder || filterValues.isPreOrder) {
+    if (filterValues.isPendingOrder || filterValues.isPreOrder) {
       if (!_statuses.includes(0)) {
         _statuses.push(0)
         setFilterValues({ ...filterValues, statuses: _statuses })
