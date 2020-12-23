@@ -267,6 +267,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_added', product, result)
         events.emit('cart_updated', result)
+        events.emit('product_added', product)
       } else {
         setAlert({ show: true, content: result })
       }
