@@ -43,9 +43,9 @@ export const ValidationFieldsProvider = ({ children }) => {
   }, [])
 
   return (
-    <ValidationFieldsContext value={[state, functions]}>
+    <ValidationFieldsContext.Provider value={[state, functions]}>
       {children}
-    </ValidationFieldsContext>
+    </ValidationFieldsContext.Provider>
   )
 }
 
