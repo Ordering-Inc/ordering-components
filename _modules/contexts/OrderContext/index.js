@@ -1068,7 +1068,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var placeCart = /*#__PURE__*/function () {
     var _ref13 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12(cardId, data) {
-      var body, _yield$ordering$setAc17, _yield$ordering$setAc18, error, result, cart;
+      var body, _yield$ordering$setAc17, _yield$ordering$setAc18, error, result, cart, orderObject;
 
       return _regenerator.default.wrap(function _callee12$(_context12) {
         while (1) {
@@ -1108,14 +1108,23 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              events.emit('order_placed', result.order);
+              orderObject = {
+                id: result.order.uuid,
+                business: {
+                  name: result.business.name
+                },
+                total: result.total,
+                tax_total: result.tax,
+                delivery_zone_price: result.delivery_price
+              };
+              events.emit('order_placed', orderObject);
               return _context12.abrupt("return", {
                 error: error,
                 result: result
               });
 
-            case 16:
-              _context12.prev = 16;
+            case 17:
+              _context12.prev = 17;
               _context12.t0 = _context12["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1125,12 +1134,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context12.t0.message]
               });
 
-            case 20:
+            case 21:
             case "end":
               return _context12.stop();
           }
         }
-      }, _callee12, null, [[0, 16]]);
+      }, _callee12, null, [[0, 17]]);
     }));
 
     return function placeCart(_x13, _x14) {
