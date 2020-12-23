@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, createContext } from 'react'
 import { useApi } from '../ApiContext'
 
-export const validationFieldsContext = createContext()
+export const ValidationFieldsContext = createContext()
 
 export const ValidationFieldsProvider = ({ children }) => {
   const [ordering] = useApi()
@@ -43,13 +43,13 @@ export const ValidationFieldsProvider = ({ children }) => {
   }, [])
 
   return (
-    <validationFieldsContext value={[state, functions]}>
+    <ValidationFieldsContext value={[state, functions]}>
       {children}
-    </validationFieldsContext>
+    </ValidationFieldsContext>
   )
 }
 
 export const useValidationFields = () => {
-  const validationFieldsManager = useContext(validationFieldsContext)
+  const validationFieldsManager = useContext(ValidationFieldsContext)
   return validationFieldsManager || [{}, async () => {}]
 }
