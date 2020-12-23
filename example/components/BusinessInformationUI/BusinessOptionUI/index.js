@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { GoogleMapsMap } from '../../../../src/components/GoogleMaps'
+import { useConfig } from '../../../../src/contexts/ConfigContext'
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -19,6 +20,8 @@ export const BusinessOptionUI = (props) => {
     beforeElements,
     afterElements
   } = props
+
+  const [{ configs }] = useConfig()
 
   return (
     <>
@@ -56,7 +59,7 @@ export const BusinessOptionUI = (props) => {
           <span>{locationData.address}</span>
           <span>{locationData.address_notes}</span>
           <GoogleMapsMap
-            apiKey=''
+            apiKey={configs?.google_maps_api_key?.value}
             location={locationData.location}
             mapControls={locationData.googleMapsControls}
           />

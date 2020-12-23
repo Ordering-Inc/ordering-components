@@ -215,6 +215,17 @@ export const UtilsProviders = ({ children }) => {
     const _date = dateOptions.utc ? dayjs.utc(dateTime, dateOptions.inputFormat).local() : dayjs(dateTime, dateOptions.inputFormat)
     return _date.toNow()
   }
+
+  const optimizeImage = (url, params, fallback) => {
+    if (!url && fallback) return fallback
+    params = params && params.length > 0 ? `,${params}` : ''
+    if (url != null && url.indexOf('res.cloudinary.com') !== -1) {
+      var parts = url.split('upload')
+      url = `${parts[0]}upload/f_auto,q_auto${params}${parts[1]}`
+    }
+    return url
+  }
+
   const functions = {
     parsePrice,
     parseNumber,
@@ -223,7 +234,8 @@ export const UtilsProviders = ({ children }) => {
     parseDistance,
     parseShortenDistance,
     getTimeAgo,
-    getTimeTo
+    getTimeTo,
+    optimizeImage
   }
 
   useEffect(() => {
