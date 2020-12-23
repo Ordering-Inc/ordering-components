@@ -445,6 +445,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         events.emit('cart_updated', cart)
       }
       setState({ ...state, loading: false })
+      events.emit('order_placed', result.order)
       return { error, result }
     } catch (err) {
       setState({ ...state, loading: false })
