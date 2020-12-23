@@ -3,8 +3,10 @@ import React from 'react'
 import { AddressDetailsUI } from '../../components/AddressDetailsUI'
 import { AddressDetails } from '../../../src/components/AddressDetails'
 import { TestComponent } from '../../components/TestComponent'
+import { useConfig } from '../../../src/contexts/ConfigContext'
 
 export const AddressDetailsExample = () => {
+  const [{ configs }] = useConfig()
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
@@ -21,7 +23,7 @@ export const AddressDetailsExample = () => {
     /**
      * apiKey, google maps api key
      */
-    apiKey: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk',
+    apiKey: configs?.google_maps_api_key?.value,
     /**
      * zoom of google Map
      */

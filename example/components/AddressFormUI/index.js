@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { GoogleAutocompleteInput } from '../../../src/components/GoogleAutocompleteInput'
 import { GoogleGpsButton } from '../../../src/components/GpsButton'
+import { useConfig } from '../../../src/contexts/ConfigContext'
 import { GpsButtonUI } from '../GpsButtonUI'
 
 export const AddressFormUI = (props) => {
@@ -20,6 +21,7 @@ export const AddressFormUI = (props) => {
     hanldeChangeInput
   } = props
 
+  const [{ configs }] = useConfig()
   const { handleSubmit, register, errors } = useForm()
   const [state, setState] = useState({ selectedFromAutocomplete: true })
 
@@ -70,7 +72,7 @@ export const AddressFormUI = (props) => {
           <>
             <form onSubmit={handleSubmit(onSubmit)}>
               <GoogleAutocompleteInput
-                apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+                apiKey={configs?.google_maps_api_key?.value}
                 name='address'
                 placeholder='Address'
                 onChangeAddress={handleChangeAddress}
@@ -86,7 +88,7 @@ export const AddressFormUI = (props) => {
                 UIComponent={GpsButtonUI}
                 IconButton
                 IconLoadingButton
-                apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+                apiKey={configs?.google_maps_api_key?.value}
                 onAddress={handleChangeAddress}
               />
               {
