@@ -621,6 +621,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 state.carts["businessId:".concat(result.business_id)] = result;
                 events.emit('cart_product_added', product, result);
                 events.emit('cart_updated', result);
+                events.emit('product_added', product);
               } else {
                 setAlert({
                   show: true,
@@ -1107,13 +1108,14 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
+              events.emit('order_placed', result.order);
               return _context12.abrupt("return", {
                 error: error,
                 result: result
               });
 
-            case 15:
-              _context12.prev = 15;
+            case 16:
+              _context12.prev = 16;
               _context12.t0 = _context12["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1123,12 +1125,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context12.t0.message]
               });
 
-            case 19:
+            case 20:
             case "end":
               return _context12.stop();
           }
         }
-      }, _callee12, null, [[0, 15]]);
+      }, _callee12, null, [[0, 16]]);
     }));
 
     return function placeCart(_x13, _x14) {

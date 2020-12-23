@@ -15,6 +15,8 @@ var _WrapperGoogleMaps = require("../WrapperGoogleMaps");
 
 var _EventContext = require("../../contexts/EventContext");
 
+var _UtilsContext = require("../../contexts/UtilsContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -58,6 +60,10 @@ var GoogleMaps = function GoogleMaps(props) {
       handleChangeAddressMap = props.handleChangeAddressMap,
       maxLimitLocation = props.maxLimitLocation;
 
+  var _useUtils = (0, _UtilsContext.useUtils)(),
+      _useUtils2 = _slicedToArray(_useUtils, 1),
+      optimizeImage = _useUtils2[0].optimizeImage;
+
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
@@ -100,7 +106,7 @@ var GoogleMaps = function GoogleMaps(props) {
       var formatUrl = null;
 
       if (i === 1) {
-        formatUrl = "".concat(locations[i].icon.slice(0, 50), "f_auto,r_max/").concat(locations[i].icon.slice(50));
+        formatUrl = optimizeImage(locations[i].icon, 'r_max');
       }
 
       var marker = new window.google.maps.Marker({

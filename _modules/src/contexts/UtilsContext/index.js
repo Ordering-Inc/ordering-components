@@ -299,6 +299,18 @@ var UtilsProviders = function UtilsProviders(_ref) {
     return _date.toNow();
   };
 
+  var optimizeImage = function optimizeImage(url, params, fallback) {
+    if (!url && fallback) return fallback;
+    params = params && params.length > 0 ? ",".concat(params) : '';
+
+    if (url != null && url.indexOf('res.cloudinary.com') !== -1) {
+      var parts = url.split('upload');
+      url = "".concat(parts[0], "upload/f_auto,q_auto").concat(params).concat(parts[1]);
+    }
+
+    return url;
+  };
+
   var functions = {
     parsePrice: parsePrice,
     parseNumber: parseNumber,
@@ -307,7 +319,8 @@ var UtilsProviders = function UtilsProviders(_ref) {
     parseDistance: parseDistance,
     parseShortenDistance: parseShortenDistance,
     getTimeAgo: getTimeAgo,
-    getTimeTo: getTimeTo
+    getTimeTo: getTimeTo,
+    optimizeImage: optimizeImage
   };
   (0, _react.useEffect)(function () {
     if (!languageState.loading) {
