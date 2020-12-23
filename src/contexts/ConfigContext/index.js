@@ -38,6 +38,22 @@ export const ConfigProvider = ({ children }) => {
     order_types_allowed: {
       key: 'order_types_allowed',
       value: '1|2|3|4|5'
+    },
+    google_autocomplete_selection_required: {
+      key: 'google_autocomplete_selection_required',
+      value: false
+    },
+    google_maps_api_key: {
+      key: 'google_maps_api_key',
+      value: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+    },
+    country_autocomplete: {
+      key: 'country_autocomplete',
+      value: '*'
+    },
+    track_id_google_analytics: {
+      key: 'track_id_google_analytics',
+      value: 'UA-51635411-4'
     }
   }
 
