@@ -23,7 +23,7 @@ export const AddressDetailsExample = () => {
     /**
      * apiKey, google maps api key
      */
-    apiKey: configs?.google_maps_api_key?.value,
+    apiKey: configs?.google_maps_api_key?.value || 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk',
     /**
      * zoom of google Map
      */
