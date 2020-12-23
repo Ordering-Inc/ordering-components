@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
 import { useEvent } from '../../contexts/EventContext'
+import { useUtils } from '../../contexts/UtilsContext'
 
 export const GoogleMaps = (props) => {
   const {
@@ -15,6 +16,7 @@ export const GoogleMaps = (props) => {
     maxLimitLocation
   } = props
 
+  const [{ optimizeImage }] = useUtils()
   const [events] = useEvent()
   const divRef = useRef()
   const [googleMap, setGoogleMap] = useState(null)
@@ -33,7 +35,7 @@ export const GoogleMaps = (props) => {
     for (let i = 0; i < locations.length; i++) {
       let formatUrl = null
       if (i === 1) {
-        formatUrl = `${locations[i].icon.slice(0, 50)}f_auto,r_max/${locations[i].icon.slice(50)}`
+        formatUrl = optimizeImage(locations[i].icon, 'r_max')
       }
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
