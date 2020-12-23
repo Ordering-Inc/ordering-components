@@ -21,10 +21,10 @@ export const OrdersManage = (props) => {
   const [ordersStatusGroup, setOrdersStatusGroup] = useState(statusGroup || 'pending')
   const [filterValues, setFilterValues] = useState({})
   const [updateStatus, setUpdateStatus] = useState(null)
-  const [changeMulitOrderStatus, setChangeMultiOrderStatus] = useState(false)
-  const [deleteMultiOrderStatus, setDeleteMultiOrderStatus] = useState(false)
-  const [selectedOrderNumber, setSelectedOrderNumber] = useState(0)
-
+  const [startMulitOrderStatusChange, setStartMulitOrderStatusChange] = useState(false)
+  const [startMulitOrderDelete, setStartMulitOrderDelete] = useState(false)
+  const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
+  const [deletedOrderId, setDeletedOrderId] = useState(null)
   /**
    * Object to save api config list
    */
@@ -59,17 +59,12 @@ export const OrdersManage = (props) => {
    * Save ids of orders selected
    * @param {string} orderId order id
    */
-  const handleOrderIds = (orderId) => {
-    const _ids = [...selectedOrderIds]
+  const handleSelectedOrderIds = (orderId) => {
+    let _ids = [...selectedOrderIds]
     if (!_ids.includes(orderId)) {
       _ids.push(orderId)
     } else {
-      for (let i = 0; i < _ids.length; i++) {
-        if (_ids[i] === orderId) {
-          _ids.splice(i, 1)
-          i--
-        }
-      }
+      _ids = _ids.filter((_id) => _id !== orderId)
     }
     setSelectedOrderIds(_ids)
   }
@@ -78,15 +73,11 @@ export const OrdersManage = (props) => {
    * @param {string} orderId order id
    */
   const handleRemoveSelectedOrderId = (orderId) => {
-    const _ids = [...selectedOrderIds]
-    for (let i = 0; i < _ids.length; i++) {
-      if (_ids[i] === orderId) {
-        _ids.splice(i, 1)
-        i--
-      }
-    }
+    let _ids = [...selectedOrderIds]
+    _ids = _ids.filter((_id) => _id !== orderId)
     setSelectedOrderIds(_ids)
   }
+
   /**
    * Change orders filter by statuses selected
    * @param {string} ordersStatusGroup orders status
@@ -124,25 +115,74 @@ export const OrdersManage = (props) => {
    */
   const handleChangeMultiOrdersStatus = (status) => {
     setUpdateStatus(status)
-    setChangeMultiOrderStatus(true)
+    setStartMulitOrderStatusChange(true)
   }
+  /**
+   * Method to change multi orders status from API
+   */
+  const handleChangeMultiOrderStatus = async (orderId) => {
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      const requestOptions = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: updateStatus })
+      }
+      const response = await fetch(`${ordering.root}/orders/${orderId}`, requestOptions)
+      const { result } = await response.json()
 
-  const handleResetChangeMultiOrder = () => {
-    setChangeMultiOrderStatus(false)
+      if (parseInt(result.status) === updateStatus) {
+        const _ordersIds = [...selectedOrderIds]
+        _ordersIds.shift()
+        if (_ordersIds.length === 0) {
+          setStartMulitOrderStatusChange(false)
+        }
+        setSelectedOrderIds(_ordersIds)
+      }
+      setActionStatus({ ...actionStatus, loading: false })
+    } catch (err) {
+      setActionStatus({ loading: false, error: [err.message] })
+      setStartMulitOrderStatusChange(false)
+    }
   }
 
   /**
    * Delete orders for orders selected
    */
   const handleDeleteMultiOrders = () => {
-    setDeleteMultiOrderStatus(true)
+    setStartMulitOrderDelete(true)
   }
   /**
-   * Reset order delete action
+   * Method to delete order from API
    */
-  const handleResetDeleteMulitOrders = () => {
-    setDeleteMultiOrderStatus(false)
+  const deleteOrder = async (id) => {
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      const source = {}
+      requestsState.deleteOrder = source
+      const { content } = await ordering.setAccessToken(token).orders(id).delete({ cancelToken: source })
+      if (!content.error) {
+        setDeletedOrderId(id)
+        const _ordersIds = [...selectedOrderIds]
+        _ordersIds.shift()
+        if (_ordersIds.length === 0) {
+          setStartMulitOrderDelete(false)
+        }
+        setSelectedOrderIds(_ordersIds)
+      }
+      setActionStatus({
+        loading: false,
+        error: content.error ? content.result : null
+      })
+    } catch (err) {
+      setActionStatus({ loading: false, error: [err.message] })
+      setStartMulitOrderDelete(false)
+    }
   }
+
   /**
    * Method to get api configure from API
    */
@@ -276,13 +316,6 @@ export const OrdersManage = (props) => {
   }
 
   /**
-   * Listening selected order id change
-   */
-  useEffect(() => {
-    setSelectedOrderNumber(selectedOrderIds.length)
-  }, [selectedOrderIds])
-
-  /**
    * Listening driver change
    */
   useEffect(() => {
@@ -325,6 +358,22 @@ export const OrdersManage = (props) => {
     }
   }, [socket, loading])
 
+  /**
+   * Listening multi orders action start to change status
+   */
+  useEffect(() => {
+    if (!startMulitOrderStatusChange || selectedOrderIds.length === 0) return
+    handleChangeMultiOrderStatus(selectedOrderIds[0])
+  }, [selectedOrderIds, startMulitOrderStatusChange])
+
+  /**
+  * Listening mulit orders delete action start
+  */
+  useEffect(() => {
+    if (!startMulitOrderDelete || selectedOrderIds.length === 0) return
+    deleteOrder(selectedOrderIds[0])
+  }, [selectedOrderIds, startMulitOrderDelete])
+
   useEffect(() => {
     if (driverOrdersModal.id === null) return
     getDriverOrders()
@@ -358,11 +407,12 @@ export const OrdersManage = (props) => {
           driverOrders={driverOrdersModal}
           ordersStatusGroup={ordersStatusGroup}
           filterValues={filterValues}
-          selectedOrderNumber={selectedOrderNumber}
-          deleteMultiOrderStatus={deleteMultiOrderStatus}
-          changeMulitOrderStatus={changeMulitOrderStatus}
           multiOrderUpdateStatus={updateStatus}
-          handleOrderIds={handleOrderIds}
+          selectedOrderIds={selectedOrderIds}
+          deletedOrderId={deletedOrderId}
+          startMulitOrderStatusChange={startMulitOrderStatusChange}
+          startMulitOrderDelete={startMulitOrderDelete}
+          handleSelectedOrderIds={handleSelectedOrderIds}
           handleRemoveSelectedOrderId={handleRemoveSelectedOrderId}
           handleChangeSearch={handleChangeSearch}
           handleChangeFilterValues={handleChangeFilterValues}
@@ -370,8 +420,6 @@ export const OrdersManage = (props) => {
           handleChangeDriverOrdersModal={handleChangeDriverOrdersModal}
           handleChangeMultiOrdersStatus={handleChangeMultiOrdersStatus}
           handleDeleteMultiOrders={handleDeleteMultiOrders}
-          handleResetDeleteMulitOrders={handleResetDeleteMulitOrders}
-          handleResetChangeMultiOrder={handleResetChangeMultiOrder}
         />
       )}
     </>

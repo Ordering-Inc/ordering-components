@@ -99,125 +99,129 @@ var OrdersManage = function OrdersManage(props) {
 
   var _useState9 = (0, _react.useState)(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      changeMulitOrderStatus = _useState10[0],
-      setChangeMultiOrderStatus = _useState10[1];
+      startMulitOrderStatusChange = _useState10[0],
+      setStartMulitOrderStatusChange = _useState10[1];
 
   var _useState11 = (0, _react.useState)(false),
       _useState12 = _slicedToArray(_useState11, 2),
-      deleteMultiOrderStatus = _useState12[0],
-      setDeleteMultiOrderStatus = _useState12[1];
+      startMulitOrderDelete = _useState12[0],
+      setStartMulitOrderDelete = _useState12[1];
 
-  var _useState13 = (0, _react.useState)(0),
+  var _useState13 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
       _useState14 = _slicedToArray(_useState13, 2),
-      selectedOrderNumber = _useState14[0],
-      setSelectedOrderNumber = _useState14[1];
+      actionStatus = _useState14[0],
+      setActionStatus = _useState14[1];
+
+  var _useState15 = (0, _react.useState)(null),
+      _useState16 = _slicedToArray(_useState15, 2),
+      deletedOrderId = _useState16[0],
+      setDeletedOrderId = _useState16[1];
   /**
    * Object to save api config list
    */
 
 
-  var _useState15 = (0, _react.useState)({
+  var _useState17 = (0, _react.useState)({
     configList: [],
     loading: true,
     error: null
   }),
-      _useState16 = _slicedToArray(_useState15, 2),
-      apiConfigList = _useState16[0],
-      setApiConfigList = _useState16[1];
+      _useState18 = _slicedToArray(_useState17, 2),
+      apiConfigList = _useState18[0],
+      setApiConfigList = _useState18[1];
   /**
    * Object to save driver group list
    */
 
 
-  var _useState17 = (0, _react.useState)({
+  var _useState19 = (0, _react.useState)({
     groups: [],
     loading: false,
     error: null
   }),
-      _useState18 = _slicedToArray(_useState17, 2),
-      driverGroupList = _useState18[0],
-      setDriverGroupList = _useState18[1];
+      _useState20 = _slicedToArray(_useState19, 2),
+      driverGroupList = _useState20[0],
+      setDriverGroupList = _useState20[1];
   /**
    * Object to save drivers
    */
 
 
-  var _useState19 = (0, _react.useState)({
+  var _useState21 = (0, _react.useState)({
     drivers: [],
     loading: true,
     error: null
   }),
-      _useState20 = _slicedToArray(_useState19, 2),
-      driversList = _useState20[0],
-      setDriversList = _useState20[1];
+      _useState22 = _slicedToArray(_useState21, 2),
+      driversList = _useState22[0],
+      setDriversList = _useState22[1];
   /**
    * Object to save paymethods
    */
 
 
-  var _useState21 = (0, _react.useState)({
+  var _useState23 = (0, _react.useState)({
     paymethods: [],
     loading: true,
     error: null
   }),
-      _useState22 = _slicedToArray(_useState21, 2),
-      paymethodsList = _useState22[0],
-      setPaymethodsList = _useState22[1];
+      _useState24 = _slicedToArray(_useState23, 2),
+      paymethodsList = _useState24[0],
+      setPaymethodsList = _useState24[1];
   /**
    * Object to save businesses
    */
 
 
-  var _useState23 = (0, _react.useState)({
+  var _useState25 = (0, _react.useState)({
     businesses: [],
     loading: true,
     error: null
   }),
-      _useState24 = _slicedToArray(_useState23, 2),
-      businessesList = _useState24[0],
-      setBusinessesList = _useState24[1];
+      _useState26 = _slicedToArray(_useState25, 2),
+      businessesList = _useState26[0],
+      setBusinessesList = _useState26[1];
   /**
    * Object to save driver orders
    */
 
 
-  var _useState25 = (0, _react.useState)({
+  var _useState27 = (0, _react.useState)({
     id: null,
     orders: [],
     loading: true,
     error: null
   }),
-      _useState26 = _slicedToArray(_useState25, 2),
-      driverOrdersModal = _useState26[0],
-      setDriverOrdersModal = _useState26[1];
+      _useState28 = _slicedToArray(_useState27, 2),
+      driverOrdersModal = _useState28[0],
+      setDriverOrdersModal = _useState28[1];
   /**
    * Object to save selected order ids
    */
 
 
-  var _useState27 = (0, _react.useState)([]),
-      _useState28 = _slicedToArray(_useState27, 2),
-      selectedOrderIds = _useState28[0],
-      setSelectedOrderIds = _useState28[1];
+  var _useState29 = (0, _react.useState)([]),
+      _useState30 = _slicedToArray(_useState29, 2),
+      selectedOrderIds = _useState30[0],
+      setSelectedOrderIds = _useState30[1];
   /**
    * Save ids of orders selected
    * @param {string} orderId order id
    */
 
 
-  var handleOrderIds = function handleOrderIds(orderId) {
+  var handleSelectedOrderIds = function handleSelectedOrderIds(orderId) {
     var _ids = _toConsumableArray(selectedOrderIds);
 
     if (!_ids.includes(orderId)) {
       _ids.push(orderId);
     } else {
-      for (var i = 0; i < _ids.length; i++) {
-        if (_ids[i] === orderId) {
-          _ids.splice(i, 1);
-
-          i--;
-        }
-      }
+      _ids = _ids.filter(function (_id) {
+        return _id !== orderId;
+      });
     }
 
     setSelectedOrderIds(_ids);
@@ -231,14 +235,9 @@ var OrdersManage = function OrdersManage(props) {
   var handleRemoveSelectedOrderId = function handleRemoveSelectedOrderId(orderId) {
     var _ids = _toConsumableArray(selectedOrderIds);
 
-    for (var i = 0; i < _ids.length; i++) {
-      if (_ids[i] === orderId) {
-        _ids.splice(i, 1);
-
-        i--;
-      }
-    }
-
+    _ids = _ids.filter(function (_id) {
+      return _id !== orderId;
+    });
     setSelectedOrderIds(_ids);
   };
   /**
@@ -289,80 +288,215 @@ var OrdersManage = function OrdersManage(props) {
 
   var handleChangeMultiOrdersStatus = function handleChangeMultiOrdersStatus(status) {
     setUpdateStatus(status);
-    setChangeMultiOrderStatus(true);
-  };
-
-  var handleResetChangeMultiOrder = function handleResetChangeMultiOrder() {
-    setChangeMultiOrderStatus(false);
+    setStartMulitOrderStatusChange(true);
   };
   /**
-   * Delete orders for orders selected
+   * Method to change multi orders status from API
    */
 
 
-  var handleDeleteMultiOrders = function handleDeleteMultiOrders() {
-    setDeleteMultiOrderStatus(true);
-  };
-  /**
-   * Reset order delete action
-   */
-
-
-  var handleResetDeleteMulitOrders = function handleResetDeleteMulitOrders() {
-    setDeleteMultiOrderStatus(false);
-  };
-  /**
-   * Method to get api configure from API
-   */
-
-
-  var getApiConfig = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$setAc, result;
+  var handleChangeMultiOrderStatus = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(orderId) {
+      var requestOptions, response, _yield$response$json, result, _ordersIds;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                },
+                body: JSON.stringify({
+                  status: updateStatus
+                })
+              };
+              _context.next = 5;
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId), requestOptions);
+
+            case 5:
+              response = _context.sent;
+              _context.next = 8;
+              return response.json();
+
+            case 8:
+              _yield$response$json = _context.sent;
+              result = _yield$response$json.result;
+
+              if (parseInt(result.status) === updateStatus) {
+                _ordersIds = _toConsumableArray(selectedOrderIds);
+
+                _ordersIds.shift();
+
+                if (_ordersIds.length === 0) {
+                  setStartMulitOrderStatusChange(false);
+                }
+
+                setSelectedOrderIds(_ordersIds);
+              }
+
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: false
+              }));
+              _context.next = 18;
+              break;
+
+            case 14:
+              _context.prev = 14;
+              _context.t0 = _context["catch"](0);
+              setActionStatus({
+                loading: false,
+                error: [_context.t0.message]
+              });
+              setStartMulitOrderStatusChange(false);
+
+            case 18:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 14]]);
+    }));
+
+    return function handleChangeMultiOrderStatus(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  /**
+   * Delete orders for orders selected
+   */
+
+
+  var handleDeleteMultiOrders = function handleDeleteMultiOrders() {
+    setStartMulitOrderDelete(true);
+  };
+  /**
+   * Method to delete order from API
+   */
+
+
+  var deleteOrder = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(id) {
+      var source, _yield$ordering$setAc, content, _ordersIds;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: true
+              }));
+              source = {};
+              requestsState.deleteOrder = source;
+              _context2.next = 6;
+              return ordering.setAccessToken(token).orders(id).delete({
+                cancelToken: source
+              });
+
+            case 6:
+              _yield$ordering$setAc = _context2.sent;
+              content = _yield$ordering$setAc.content;
+
+              if (!content.error) {
+                setDeletedOrderId(id);
+                _ordersIds = _toConsumableArray(selectedOrderIds);
+
+                _ordersIds.shift();
+
+                if (_ordersIds.length === 0) {
+                  setStartMulitOrderDelete(false);
+                }
+
+                setSelectedOrderIds(_ordersIds);
+              }
+
+              setActionStatus({
+                loading: false,
+                error: content.error ? content.result : null
+              });
+              _context2.next = 16;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](0);
+              setActionStatus({
+                loading: false,
+                error: [_context2.t0.message]
+              });
+              setStartMulitOrderDelete(false);
+
+            case 16:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 12]]);
+    }));
+
+    return function deleteOrder(_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to get api configure from API
+   */
+
+
+  var getApiConfig = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var source, _yield$ordering$setAc2, result;
+
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
               setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
                 loading: true
               }));
               source = {};
               requestsState.apiConfig = source;
-              _context.next = 6;
+              _context3.next = 6;
               return ordering.setAccessToken(token).configs().asDictionary().get({
                 cancelToken: source
               });
 
             case 6:
-              _yield$ordering$setAc = _context.sent;
-              result = _yield$ordering$setAc.content.result;
+              _yield$ordering$setAc2 = _context3.sent;
+              result = _yield$ordering$setAc2.content.result;
               setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
                 loading: false,
                 configList: result
               }));
-              _context.next = 14;
+              _context3.next = 14;
               break;
 
             case 11:
-              _context.prev = 11;
-              _context.t0 = _context["catch"](0);
+              _context3.prev = 11;
+              _context3.t0 = _context3["catch"](0);
               setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
                 loading: false,
-                error: _context.t0.message
+                error: _context3.t0.message
               }));
 
             case 14:
             case "end":
-              return _context.stop();
+              return _context3.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee3, null, [[0, 11]]);
     }));
 
     return function getApiConfig() {
-      return _ref.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
   /**
@@ -371,14 +505,14 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getDriverGroup = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var requestOptions, where, response, _yield$response$json, result;
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
+      var requestOptions, where, response, _yield$response$json2, result;
 
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context2.prev = 0;
+              _context4.prev = 0;
               setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
                 loading: true
               }));
@@ -396,42 +530,42 @@ var OrdersManage = function OrdersManage(props) {
                   value: true
                 }
               }];
-              _context2.next = 6;
+              _context4.next = 6;
               return fetch("".concat(ordering.root, "/drivergroups?params=id,name,drivers&where=").concat(JSON.stringify(where)), requestOptions);
 
             case 6:
-              response = _context2.sent;
-              _context2.next = 9;
+              response = _context4.sent;
+              _context4.next = 9;
               return response.json();
 
             case 9:
-              _yield$response$json = _context2.sent;
-              result = _yield$response$json.result;
+              _yield$response$json2 = _context4.sent;
+              result = _yield$response$json2.result;
               setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
                 loading: false,
                 groups: result
               }));
-              _context2.next = 17;
+              _context4.next = 17;
               break;
 
             case 14:
-              _context2.prev = 14;
-              _context2.t0 = _context2["catch"](0);
+              _context4.prev = 14;
+              _context4.t0 = _context4["catch"](0);
               setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
                 loading: false,
-                error: _context2.t0.message
+                error: _context4.t0.message
               }));
 
             case 17:
             case "end":
-              return _context2.stop();
+              return _context4.stop();
           }
         }
-      }, _callee2, null, [[0, 14]]);
+      }, _callee4, null, [[0, 14]]);
     }));
 
     return function getDriverGroup() {
-      return _ref2.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
   /**
@@ -440,15 +574,15 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getPaymethods = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var response, _yield$response$json2, result;
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+      var response, _yield$response$json3, result;
 
-      return _regenerator.default.wrap(function _callee3$(_context3) {
+      return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
-              _context3.prev = 0;
-              _context3.next = 3;
+              _context5.prev = 0;
+              _context5.next = 3;
               return fetch("".concat(ordering.root, "/paymethods?params=id,name&where=[{%22attribute%22:%22enabled%22,%22value%22:true}]"), {
                 method: 'GET',
                 headers: {
@@ -458,38 +592,38 @@ var OrdersManage = function OrdersManage(props) {
               });
 
             case 3:
-              response = _context3.sent;
-              _context3.next = 6;
+              response = _context5.sent;
+              _context5.next = 6;
               return response.json();
 
             case 6:
-              _yield$response$json2 = _context3.sent;
-              result = _yield$response$json2.result;
+              _yield$response$json3 = _context5.sent;
+              result = _yield$response$json3.result;
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 loading: false,
                 paymethods: result
               }));
-              _context3.next = 14;
+              _context5.next = 14;
               break;
 
             case 11:
-              _context3.prev = 11;
-              _context3.t0 = _context3["catch"](0);
+              _context5.prev = 11;
+              _context5.t0 = _context5["catch"](0);
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 loading: false,
-                error: _context3.t0.message
+                error: _context5.t0.message
               }));
 
             case 14:
             case "end":
-              return _context3.stop();
+              return _context5.stop();
           }
         }
-      }, _callee3, null, [[0, 11]]);
+      }, _callee5, null, [[0, 11]]);
     }));
 
     return function getPaymethods() {
-      return _ref3.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
   /**
@@ -498,49 +632,49 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
-      var source, _yield$ordering$setAc2, result;
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
+      var source, _yield$ordering$setAc3, result;
 
-      return _regenerator.default.wrap(function _callee4$(_context4) {
+      return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
-              _context4.prev = 0;
+              _context6.prev = 0;
               source = {};
               requestsState.business = source;
-              _context4.next = 5;
+              _context6.next = 5;
               return ordering.setAccessToken(token).businesses().asDashboard().select(businessesPropsToFetch).get({
                 cancelToken: source
               });
 
             case 5:
-              _yield$ordering$setAc2 = _context4.sent;
-              result = _yield$ordering$setAc2.content.result;
+              _yield$ordering$setAc3 = _context6.sent;
+              result = _yield$ordering$setAc3.content.result;
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false,
                 businesses: result
               }));
-              _context4.next = 13;
+              _context6.next = 13;
               break;
 
             case 10:
-              _context4.prev = 10;
-              _context4.t0 = _context4["catch"](0);
+              _context6.prev = 10;
+              _context6.t0 = _context6["catch"](0);
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false,
-                error: _context4.t0.message
+                error: _context6.t0.message
               }));
 
             case 13:
             case "end":
-              return _context4.stop();
+              return _context6.stop();
           }
         }
-      }, _callee4, null, [[0, 10]]);
+      }, _callee6, null, [[0, 10]]);
     }));
 
     return function getBusinesses() {
-      return _ref4.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
   /**
@@ -549,17 +683,17 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getDrivers = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
-      var source, _yield$ordering$setAc3, result;
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7() {
+      var source, _yield$ordering$setAc4, result;
 
-      return _regenerator.default.wrap(function _callee5$(_context5) {
+      return _regenerator.default.wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              _context5.prev = 0;
+              _context7.prev = 0;
               source = {};
               requestsState.drivers = source;
-              _context5.next = 5;
+              _context7.next = 5;
               return ordering.setAccessToken(token).users().select(driversPropsToFetch).where([{
                 attribute: 'level',
                 value: [4]
@@ -568,33 +702,33 @@ var OrdersManage = function OrdersManage(props) {
               });
 
             case 5:
-              _yield$ordering$setAc3 = _context5.sent;
-              result = _yield$ordering$setAc3.content.result;
+              _yield$ordering$setAc4 = _context7.sent;
+              result = _yield$ordering$setAc4.content.result;
               setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
                 loading: false,
                 drivers: result
               }));
-              _context5.next = 13;
+              _context7.next = 13;
               break;
 
             case 10:
-              _context5.prev = 10;
-              _context5.t0 = _context5["catch"](0);
+              _context7.prev = 10;
+              _context7.t0 = _context7["catch"](0);
               setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
                 loading: false,
-                error: _context5.t0.message
+                error: _context7.t0.message
               }));
 
             case 13:
             case "end":
-              return _context5.stop();
+              return _context7.stop();
           }
         }
-      }, _callee5, null, [[0, 10]]);
+      }, _callee7, null, [[0, 10]]);
     }));
 
     return function getDrivers() {
-      return _ref5.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
   /**
@@ -603,14 +737,14 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getDriverOrders = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
-      var where, conditions, source, _yield$ordering$setAc4, result;
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8() {
+      var where, conditions, source, _yield$ordering$setAc5, result;
 
-      return _regenerator.default.wrap(function _callee6$(_context6) {
+      return _regenerator.default.wrap(function _callee8$(_context8) {
         while (1) {
-          switch (_context6.prev = _context6.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
-              _context6.prev = 0;
+              _context8.prev = 0;
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 loading: true
               }));
@@ -630,53 +764,46 @@ var OrdersManage = function OrdersManage(props) {
               };
               source = {};
               requestsState.driverOrders = source;
-              _context6.next = 11;
+              _context8.next = 11;
               return ordering.setAccessToken(token).orders().asDashboard().where(where).get({
                 cancelToken: source
               });
 
             case 11:
-              _yield$ordering$setAc4 = _context6.sent;
-              result = _yield$ordering$setAc4.content.result;
+              _yield$ordering$setAc5 = _context8.sent;
+              result = _yield$ordering$setAc5.content.result;
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 id: null,
                 loading: false,
                 orders: result
               }));
-              _context6.next = 19;
+              _context8.next = 19;
               break;
 
             case 16:
-              _context6.prev = 16;
-              _context6.t0 = _context6["catch"](0);
+              _context8.prev = 16;
+              _context8.t0 = _context8["catch"](0);
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 loading: false,
-                error: _context6.t0.message
+                error: _context8.t0.message
               }));
 
             case 19:
             case "end":
-              return _context6.stop();
+              return _context8.stop();
           }
         }
-      }, _callee6, null, [[0, 16]]);
+      }, _callee8, null, [[0, 16]]);
     }));
 
     return function getDriverOrders() {
-      return _ref6.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
   /**
-   * Listening selected order id change
-   */
-
-
-  (0, _react.useEffect)(function () {
-    setSelectedOrderNumber(selectedOrderIds.length);
-  }, [selectedOrderIds]);
-  /**
    * Listening driver change
    */
+
 
   (0, _react.useEffect)(function () {
     if (driversList.loading || loading) return;
@@ -727,6 +854,22 @@ var OrdersManage = function OrdersManage(props) {
       socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [socket, loading]);
+  /**
+   * Listening multi orders action start to change status
+   */
+
+  (0, _react.useEffect)(function () {
+    if (!startMulitOrderStatusChange || selectedOrderIds.length === 0) return;
+    handleChangeMultiOrderStatus(selectedOrderIds[0]);
+  }, [selectedOrderIds, startMulitOrderStatusChange]);
+  /**
+  * Listening mulit orders delete action start
+  */
+
+  (0, _react.useEffect)(function () {
+    if (!startMulitOrderDelete || selectedOrderIds.length === 0) return;
+    deleteOrder(selectedOrderIds[0]);
+  }, [selectedOrderIds, startMulitOrderDelete]);
   (0, _react.useEffect)(function () {
     if (driverOrdersModal.id === null) return;
     getDriverOrders();
@@ -753,20 +896,19 @@ var OrdersManage = function OrdersManage(props) {
     driverOrders: driverOrdersModal,
     ordersStatusGroup: ordersStatusGroup,
     filterValues: filterValues,
-    selectedOrderNumber: selectedOrderNumber,
-    deleteMultiOrderStatus: deleteMultiOrderStatus,
-    changeMulitOrderStatus: changeMulitOrderStatus,
     multiOrderUpdateStatus: updateStatus,
-    handleOrderIds: handleOrderIds,
+    selectedOrderIds: selectedOrderIds,
+    deletedOrderId: deletedOrderId,
+    startMulitOrderStatusChange: startMulitOrderStatusChange,
+    startMulitOrderDelete: startMulitOrderDelete,
+    handleSelectedOrderIds: handleSelectedOrderIds,
     handleRemoveSelectedOrderId: handleRemoveSelectedOrderId,
     handleChangeSearch: handleChangeSearch,
     handleChangeFilterValues: handleChangeFilterValues,
     handleOrdersStatusGroupFilter: handleOrdersStatusGroupFilter,
     handleChangeDriverOrdersModal: handleChangeDriverOrdersModal,
     handleChangeMultiOrdersStatus: handleChangeMultiOrdersStatus,
-    handleDeleteMultiOrders: handleDeleteMultiOrders,
-    handleResetDeleteMulitOrders: handleResetDeleteMulitOrders,
-    handleResetChangeMultiOrder: handleResetChangeMultiOrder
+    handleDeleteMultiOrders: handleDeleteMultiOrders
   })));
 };
 

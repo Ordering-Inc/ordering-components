@@ -29,6 +29,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -38,14 +46,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -65,6 +65,7 @@ var OrderList = function OrderList(props) {
   var UIComponent = props.UIComponent,
       orders = props.orders,
       orderIds = props.orderIds,
+      deletedOrderId = props.deletedOrderId,
       orderStatus = props.orderStatus,
       pendingOrder = props.pendingOrder,
       preOrder = props.preOrder,
@@ -77,13 +78,7 @@ var OrderList = function OrderList(props) {
       searchValue = props.searchValue,
       isSearchByOrderId = props.isSearchByOrderId,
       isSearchByCustomerEmail = props.isSearchByCustomerEmail,
-      isSearchByCustomerPhone = props.isSearchByCustomerPhone,
-      deleteMultiOrderStatus = props.deleteMultiOrderStatus,
-      handleResetDeleteMulitOrders = props.handleResetDeleteMulitOrders,
-      changeMulitOrderStatus = props.changeMulitOrderStatus,
-      multiOrderUpdateStatus = props.multiOrderUpdateStatus,
-      handleResetChangeMultiOrder = props.handleResetChangeMultiOrder,
-      handleRemoveSelectedOrderId = props.handleRemoveSelectedOrderId;
+      isSearchByCustomerPhone = props.isSearchByCustomerPhone;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -122,52 +117,10 @@ var OrderList = function OrderList(props) {
       actionStatus = _useState6[0],
       setActionStatus = _useState6[1];
 
-  var _useState7 = (0, _react.useState)(false),
+  var _useState7 = (0, _react.useState)(null),
       _useState8 = _slicedToArray(_useState7, 2),
-      deleteActionStart = _useState8[0],
-      setDeleteActionStart = _useState8[1];
-
-  var _useState9 = (0, _react.useState)(false),
-      _useState10 = _slicedToArray(_useState9, 2),
-      updateActionStart = _useState10[0],
-      setUpdateActionStart = _useState10[1];
-
-  var _useState11 = (0, _react.useState)(null),
-      _useState12 = _slicedToArray(_useState11, 2),
-      registerOrderId = _useState12[0],
-      setRegisterOrderId = _useState12[1];
-  /**
-   * Object to save selected order ids
-   */
-
-
-  var _useState13 = (0, _react.useState)([]),
-      _useState14 = _slicedToArray(_useState13, 2),
-      selectedOrderIds = _useState14[0],
-      setSelectedOrderIds = _useState14[1];
-  /**
-   * Save ids of orders selected
-   * @param {string} orderId order id
-   */
-
-
-  var handleSelectedOrderIds = function handleSelectedOrderIds(orderId) {
-    var _ids = _toConsumableArray(selectedOrderIds);
-
-    if (!_ids.includes(orderId)) {
-      _ids.push(orderId);
-    } else {
-      for (var i = 0; i < _ids.length; i++) {
-        if (_ids[i] === orderId) {
-          _ids.splice(i, 1);
-
-          i--;
-        }
-      }
-    }
-
-    setSelectedOrderIds(_ids);
-  };
+      registerOrderId = _useState8[0],
+      setRegisterOrderId = _useState8[1];
   /**
    * Reset registerOrderId
    */
@@ -176,83 +129,6 @@ var OrderList = function OrderList(props) {
   var handleResetNotification = function handleResetNotification() {
     setRegisterOrderId(null);
   };
-  /**
-   * Method to delete order from API
-   */
-
-
-  var deleteOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(id) {
-      var source, _yield$ordering$setAc, content, _orders2, _ordersIds;
-
-      return _regenerator.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: true
-              }));
-              source = {};
-              requestsState.deleteOrder = source;
-              _context.next = 6;
-              return ordering.setAccessToken(accessToken).orders(id).delete({
-                cancelToken: source
-              });
-
-            case 6:
-              _yield$ordering$setAc = _context.sent;
-              content = _yield$ordering$setAc.content;
-
-              if (!content.error) {
-                handleRemoveSelectedOrderId(id);
-                _orders2 = orderList.orders.filter(function (_order) {
-                  return _order.id !== id;
-                });
-                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                  orders: _orders2
-                }));
-                _ordersIds = _toConsumableArray(selectedOrderIds);
-
-                _ordersIds.shift();
-
-                if (_ordersIds.length === 0) {
-                  setDeleteActionStart(false);
-                  handleResetDeleteMulitOrders();
-                }
-
-                setSelectedOrderIds(_ordersIds);
-              }
-
-              setActionStatus({
-                loading: false,
-                error: content.error ? content.result : null
-              });
-              _context.next = 17;
-              break;
-
-            case 12:
-              _context.prev = 12;
-              _context.t0 = _context["catch"](0);
-              setActionStatus({
-                loading: false,
-                error: [_context.t0.message]
-              });
-              setDeleteActionStart(false);
-              handleResetDeleteMulitOrders();
-
-            case 17:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 12]]);
-    }));
-
-    return function deleteOrder(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
 
   var sortOrdersArray = function sortOrdersArray(option, array) {
     if (option === 'desc') {
@@ -276,20 +152,20 @@ var OrderList = function OrderList(props) {
 
 
   var handleUpdateOrderStatus = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(order) {
-      var source, _yield$ordering$setAc2, content, _orders3;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(order) {
+      var source, _yield$ordering$setAc, content, _orders2;
 
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context.prev = _context.next) {
             case 0:
-              _context2.prev = 0;
+              _context.prev = 0;
               setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: true
               }));
               source = {};
               requestsState.updateOrders = source;
-              _context2.next = 6;
+              _context.next = 6;
               return ordering.setAccessToken(accessToken).orders(order.id).save({
                 status: order.newStatus
               }, {
@@ -297,133 +173,43 @@ var OrderList = function OrderList(props) {
               });
 
             case 6:
-              _yield$ordering$setAc2 = _context2.sent;
-              content = _yield$ordering$setAc2.content;
+              _yield$ordering$setAc = _context.sent;
+              content = _yield$ordering$setAc.content;
               setActionStatus({
                 loading: false,
                 error: content.error ? content.result : null
               });
 
               if (!content.error) {
-                _orders3 = orderList.orders.filter(function (_order) {
+                _orders2 = orderList.orders.filter(function (_order) {
                   return _order.id !== order.id;
                 });
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                  orders: _orders3
+                  orders: _orders2
                 }));
               }
 
-              _context2.next = 15;
+              _context.next = 15;
               break;
 
             case 12:
-              _context2.prev = 12;
-              _context2.t0 = _context2["catch"](0);
+              _context.prev = 12;
+              _context.t0 = _context["catch"](0);
               setActionStatus({
                 loading: false,
-                error: [_context2.t0.message]
+                error: [_context.t0.message]
               });
 
             case 15:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2, null, [[0, 12]]);
+      }, _callee, null, [[0, 12]]);
     }));
 
-    return function handleUpdateOrderStatus(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to change multi orders status from API
-   */
-
-
-  var handleChangeMultiOrderStatus = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(orderId) {
-      var requestOptions, response, _yield$response$json, result, _orders4, _ordersIds;
-
-      return _regenerator.default.wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.prev = 0;
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: true
-              })); //   const source = {}
-              //   requestsState.updateOrder = source
-              //   const { content } = await ordering.setAccessToken(accessToken).orders(orderId).save({ status: updateStatus }, { cancelToken: source })
-
-              requestOptions = {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(accessToken)
-                },
-                body: JSON.stringify({
-                  status: multiOrderUpdateStatus
-                })
-              };
-              _context3.next = 5;
-              return fetch("".concat(ordering.root, "/orders/").concat(orderId), requestOptions);
-
-            case 5:
-              response = _context3.sent;
-              _context3.next = 8;
-              return response.json();
-
-            case 8:
-              _yield$response$json = _context3.sent;
-              result = _yield$response$json.result;
-
-              if (parseInt(result.status) === multiOrderUpdateStatus) {
-                handleRemoveSelectedOrderId(orderId);
-                _orders4 = orderList.orders.filter(function (_order) {
-                  return _order.id !== orderId || _order.status === multiOrderUpdateStatus;
-                });
-                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                  orders: _orders4
-                }));
-                _ordersIds = _toConsumableArray(selectedOrderIds);
-
-                _ordersIds.shift();
-
-                if (_ordersIds.length === 0) {
-                  setUpdateActionStart(false);
-                  handleResetChangeMultiOrder();
-                }
-
-                setSelectedOrderIds(_ordersIds);
-              }
-
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: false
-              }));
-              _context3.next = 19;
-              break;
-
-            case 14:
-              _context3.prev = 14;
-              _context3.t0 = _context3["catch"](0);
-              setActionStatus({
-                loading: false,
-                error: [_context3.t0.message]
-              });
-              setUpdateActionStart(false);
-              handleResetChangeMultiOrder();
-
-            case 19:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3, null, [[0, 14]]);
-    }));
-
-    return function handleChangeMultiOrderStatus(_x3) {
-      return _ref3.apply(this, arguments);
+    return function handleUpdateOrderStatus(_x) {
+      return _ref.apply(this, arguments);
     };
   }();
   /**
@@ -433,11 +219,11 @@ var OrderList = function OrderList(props) {
 
 
   var getOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(page) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(page) {
       var options, where, conditions, checkInnerContain, checkOutContain, searchConditions, filterConditons, source, functionFetch;
-      return _regenerator.default.wrap(function _callee4$(_context4) {
+      return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               options = null;
               where = [];
@@ -619,22 +405,22 @@ var OrderList = function OrderList(props) {
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where) : ordering.setAccessToken(accessToken).orders().where(where);
-              _context4.next = 15;
+              _context2.next = 15;
               return functionFetch.get(options);
 
             case 15:
-              return _context4.abrupt("return", _context4.sent);
+              return _context2.abrupt("return", _context2.sent);
 
             case 16:
             case "end":
-              return _context4.stop();
+              return _context2.stop();
           }
         }
-      }, _callee4);
+      }, _callee2);
     }));
 
-    return function getOrders(_x4) {
-      return _ref4.apply(this, arguments);
+    return function getOrders(_x2) {
+      return _ref2.apply(this, arguments);
     };
   }();
 
@@ -651,29 +437,29 @@ var OrderList = function OrderList(props) {
   };
 
   var loadOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
       var response, filteredResult;
-      return _regenerator.default.wrap(function _callee5$(_context5) {
+      return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               if (session.token) {
-                _context5.next = 2;
+                _context3.next = 2;
                 break;
               }
 
-              return _context5.abrupt("return");
+              return _context3.abrupt("return");
 
             case 2:
-              _context5.prev = 2;
+              _context3.prev = 2;
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: true
               }));
-              _context5.next = 6;
+              _context3.next = 6;
               return getOrders(pagination.currentPage + 1);
 
             case 6:
-              response = _context5.sent;
+              response = _context3.sent;
               filteredResult = [];
 
               if (pendingOrder) {
@@ -725,36 +511,49 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context5.next = 17;
+              _context3.next = 17;
               break;
 
             case 14:
-              _context5.prev = 14;
-              _context5.t0 = _context5["catch"](2);
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](2);
 
-              if (_context5.t0.constructor.name !== 'Cancel') {
+              if (_context3.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                   loading: false,
-                  error: [_context5.t0.message]
+                  error: [_context3.t0.message]
                 }));
               }
 
             case 17:
             case "end":
-              return _context5.stop();
+              return _context3.stop();
           }
         }
-      }, _callee5, null, [[2, 14]]);
+      }, _callee3, null, [[2, 14]]);
     }));
 
     return function loadOrders() {
-      return _ref5.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
   /**
-   * Listening search value change
+   * Listening deleted order
    */
 
+
+  (0, _react.useEffect)(function () {
+    if (deletedOrderId === null) return;
+    var orders = orderList.orders.filter(function (_order) {
+      return _order.id !== deletedOrderId;
+    });
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: orders
+    }));
+  }, [deletedOrderId]);
+  /**
+   * Listening search value change
+   */
 
   (0, _react.useEffect)(function () {
     if (searchValue === null) return;
@@ -800,42 +599,6 @@ var OrderList = function OrderList(props) {
       }
     };
   }, [session, filterValues]);
-  /**
-   * Listening mulit orders delete action start
-   */
-
-  (0, _react.useEffect)(function () {
-    if (!deleteMultiOrderStatus) return;
-
-    if (selectedOrderIds.length === 0) {
-      handleResetDeleteMulitOrders();
-      return;
-    }
-
-    setDeleteActionStart(true);
-  }, [deleteMultiOrderStatus]);
-  (0, _react.useEffect)(function () {
-    if (!deleteActionStart || selectedOrderIds.length === 0) return;
-    deleteOrder(selectedOrderIds[0]);
-  }, [selectedOrderIds, deleteActionStart]);
-  /**
-   * Listening multi orders action start to change status
-   */
-
-  (0, _react.useEffect)(function () {
-    if (!updateActionStart || selectedOrderIds.length === 0) return;
-    handleChangeMultiOrderStatus(selectedOrderIds[0]);
-  }, [selectedOrderIds, updateActionStart]);
-  (0, _react.useEffect)(function () {
-    if (!changeMulitOrderStatus) return;
-
-    if (selectedOrderIds.length === 0) {
-      handleResetChangeMultiOrder();
-      return;
-    }
-
-    setUpdateActionStart(true);
-  }, [changeMulitOrderStatus]);
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
 
@@ -940,12 +703,12 @@ var OrderList = function OrderList(props) {
           if (isPre) {
             orders = [].concat(_toConsumableArray(orderList.orders), [order]);
 
-            var _orders5 = sortOrdersArray(orderDirection, orders);
+            var _orders3 = sortOrdersArray(orderDirection, orders);
 
             pagination.total++;
             setPagination(_objectSpread({}, pagination));
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-              orders: _orders5
+              orders: _orders3
             }));
           }
         }
@@ -982,21 +745,21 @@ var OrderList = function OrderList(props) {
   }, [socket, session]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
       var response;
-      return _regenerator.default.wrap(function _callee6$(_context6) {
+      return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context6.prev = _context6.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: true
               }));
-              _context6.prev = 1;
-              _context6.next = 4;
+              _context4.prev = 1;
+              _context4.next = 4;
               return getOrders(pagination.currentPage + 1);
 
             case 4:
-              response = _context6.sent;
+              response = _context4.sent;
               setOrderList({
                 loading: false,
                 orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
@@ -1014,49 +777,49 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context6.next = 12;
+              _context4.next = 12;
               break;
 
             case 9:
-              _context6.prev = 9;
-              _context6.t0 = _context6["catch"](1);
+              _context4.prev = 9;
+              _context4.t0 = _context4["catch"](1);
 
-              if (_context6.t0.constructor.name !== 'Cancel') {
+              if (_context4.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                   loading: false,
-                  error: [_context6.t0.message]
+                  error: [_context4.t0.message]
                 }));
               }
 
             case 12:
             case "end":
-              return _context6.stop();
+              return _context4.stop();
           }
         }
-      }, _callee6, null, [[1, 9]]);
+      }, _callee4, null, [[1, 9]]);
     }));
 
     return function loadMoreOrders() {
-      return _ref6.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
   var goToPage = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(page) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(page) {
       var response;
-      return _regenerator.default.wrap(function _callee7$(_context7) {
+      return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context7.prev = _context7.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: true
               }));
-              _context7.prev = 1;
-              _context7.next = 4;
+              _context5.prev = 1;
+              _context5.next = 4;
               return getOrders(page);
 
             case 4:
-              response = _context7.sent;
+              response = _context5.sent;
               setOrderList({
                 loading: false,
                 orders: response.content.error ? [] : response.content.result,
@@ -1074,30 +837,30 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context7.next = 12;
+              _context5.next = 12;
               break;
 
             case 9:
-              _context7.prev = 9;
-              _context7.t0 = _context7["catch"](1);
+              _context5.prev = 9;
+              _context5.t0 = _context5["catch"](1);
 
-              if (_context7.t0.constructor.name !== 'Cancel') {
+              if (_context5.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                   loading: false,
-                  error: [_context7.t0.message]
+                  error: [_context5.t0.message]
                 }));
               }
 
             case 12:
             case "end":
-              return _context7.stop();
+              return _context5.stop();
           }
         }
-      }, _callee7, null, [[1, 9]]);
+      }, _callee5, null, [[1, 9]]);
     }));
 
-    return function goToPage(_x5) {
-      return _ref7.apply(this, arguments);
+    return function goToPage(_x3) {
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -1110,8 +873,6 @@ var OrderList = function OrderList(props) {
     loadMoreOrders: loadMoreOrders,
     goToPage: goToPage,
     handleUpdateOrderStatus: handleUpdateOrderStatus,
-    selectedOrderIds: selectedOrderIds,
-    handleSelectedOrderIds: handleSelectedOrderIds,
     handleResetNotification: handleResetNotification
   })));
 };
@@ -1122,36 +883,6 @@ OrderList.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
-
-  /**
-   * new status to change status for several orders
-   */
-  multiOrderUpdateStatus: _propTypes.default.number,
-
-  /**
-   * notify to start for several orders delete action
-   */
-  deleteMultiOrderStatus: _propTypes.default.bool,
-
-  /**
-   * notify to start for several orders status change action
-   */
-  changeMulitOrderStatus: _propTypes.default.bool,
-
-  /**
-   * Function to initiate delete action status
-   */
-  handleResetDeleteMulitOrders: _propTypes.default.func,
-
-  /**
-   * Function to initiate multi order status change action
-   */
-  handleResetChangeMultiOrder: _propTypes.default.func,
-
-  /**
-   * Function to remove order id selected
-   */
-  handleRemoveSelectedOrderId: _propTypes.default.func,
 
   /**
    * Function to get order that was clicked
