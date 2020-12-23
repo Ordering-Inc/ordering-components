@@ -56,7 +56,7 @@ export const ConfigsExample = (props) => {
       <ul>
         {
           Object.values(configs).map((config) => (
-            <li key={config.id}>
+            <li key={config.id || config.key}>
               <strong>{config.key}:</strong> {config.value}
             </li>
           ))
