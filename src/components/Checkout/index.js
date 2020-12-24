@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
 
 /**
  * Component to manage Checkout page behavior without UI component
@@ -12,8 +13,6 @@ export const Checkout = (props) => {
     actionsBeforePlace,
     handleCustomClick,
     onPlaceOrderClick,
-    useValidationFields,
-    validationFieldsType,
     UIComponent
   } = props
 
@@ -25,9 +24,7 @@ export const Checkout = (props) => {
   /**
    * Save array of inputs validate to show
    */
-  const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
-
-  const requestsState = {}
+  const [validationFields] = useValidationFields()
 
   /**
    * Order context
@@ -117,30 +114,6 @@ export const Checkout = (props) => {
   const handlePaymethodChange = (paymethod) => {
     setPaymethodSelected(paymethod)
   }
-
-  useEffect(() => {
-    if (useValidationFields) {
-      const source = {}
-      requestsState.validation = source
-      ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source }).then((response) => {
-        const fields = {}
-        response.content.result.forEach((field) => {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-        })
-        setValidationFields({ loading: false, fields })
-      }).catch((err) => {
-        if (err.constructor.name !== 'Cancel') {
-          setValidationFields({ loading: false })
-        }
-      })
-    }
-
-    return () => {
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
-      }
-    }
-  }, [])
 
   useEffect(() => {
     getBusiness()
