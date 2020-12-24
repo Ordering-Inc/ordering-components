@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
 
 /**
  * Component to manage signup behavior without UI component
@@ -17,28 +18,7 @@ export const SignupForm = (props) => {
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [signupData, setSignupData] = useState({ email: '', cellphone: '', password: '' })
   const requestsState = {}
-  const [validationFields, setValidationFields] = useState({ loading: useChekoutFileds, fields: {} })
-
-  const loadValidationFields = async () => {
-    try {
-      const source = {}
-      requestsState.validation = source
-      const { content: { error, result } } = await ordering.validationFields().get({ cancelToken: source })
-      const fields = {}
-      if (!error) {
-        result.forEach((field) => {
-          if (field.validate === 'checkout') {
-            fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-          }
-        })
-      }
-      setValidationFields({ loading: false, fields })
-    } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setValidationFields({ loading: false })
-      }
-    }
-  }
+  const [validationFields] = useValidationFields()
 
   /**
    * Default fuction for signup workflow
@@ -117,20 +97,6 @@ export const SignupForm = (props) => {
             validationFields.fields?.[fieldName]?.enabled &&
             validationFields.fields?.[fieldName]?.required)
   }
-
-  useEffect(() => {
-    if (useChekoutFileds) {
-      loadValidationFields()
-    }
-    return () => {
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
-      }
-      if (requestsState.signup) {
-        requestsState.signup.cancel()
-      }
-    }
-  }, [])
 
   return (
     <>
