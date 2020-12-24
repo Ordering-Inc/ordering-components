@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
@@ -97,6 +97,14 @@ export const SignupForm = (props) => {
             validationFields.fields?.[fieldName]?.enabled &&
             validationFields.fields?.[fieldName]?.required)
   }
+
+  useEffect(() => {
+    return () => {
+      if (requestsState.signup) {
+        requestsState.signup.cancel()
+      }
+    }
+  }, [])
 
   return (
     <>
