@@ -12,7 +12,7 @@ export const ValidationFieldsProvider = ({ children }) => {
     try {
       const source = {}
       requestsState.validation = source
-      const { content: { error, result } } = await ordering.validationFields().get({ cancelToken: source })
+      const { content: { error, result } } = await ordering.validationFields().toType('checkout').get({ cancelToken: source })
       const fields = {}
       if (!error) {
         result.forEach((field) => {
