@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { object, number } from 'prop-types'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
@@ -269,20 +269,18 @@ export const OrderList = (props) => {
       : ordering.setAccessToken(accessToken).orders().where(where)
     return await functionFetch.get(options)
   }
-
-  const isPendingOrder = (createdAt, deliveryDatetimeUtc) => {
-    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true
-    const date1 = dayjs(createdAt)
-    const date2 = dayjs(deliveryDatetimeUtc)
-    return Math.abs(date1.diff(date2, 'minute')) < 60
-  }
-
-  const isPreOrder = (createdAt, deliveryDatetimeUtc) => {
-    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false
-    const date1 = dayjs(createdAt)
-    const date2 = dayjs(deliveryDatetimeUtc)
-    return Math.abs(date1.diff(date2, 'minute')) >= 60
-  }
+  //   const isPendingOrder = (createdAt, deliveryDatetimeUtc) => {
+  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true
+  //     const date1 = dayjs(createdAt)
+  //     const date2 = dayjs(deliveryDatetimeUtc)
+  //     return Math.abs(date1.diff(date2, 'minute')) < 60
+  //   }
+  //   const isPreOrder = (createdAt, deliveryDatetimeUtc) => {
+  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false
+  //     const date1 = dayjs(createdAt)
+  //     const date2 = dayjs(deliveryDatetimeUtc)
+  //     return Math.abs(date1.diff(date2, 'minute')) >= 60
+  //   }
   /**
    * Method to detect if incoming order and update order belong to filter.
    * @param {Object} order incoming order and update order
@@ -323,37 +321,37 @@ export const OrderList = (props) => {
       setOrderList({ ...orderList, loading: true })
       const response = await getOrders(pagination.currentPage + 1)
 
-      let filteredResult = []
-      if (pendingOrder) {
-        if (!response.content.error) {
-          filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime_utc))
-        }
-        if (filterValues.isPreOrder) {
-          if (!filterValues.isPendingOrder) filteredResult = []
-        }
-      }
-      if (preOrder) {
-        if (!response.content.error) {
-          filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime_utc))
-        }
-        if (filterValues.isPendingOrder) {
-          if (!filterValues.isPreOrder) filteredResult = []
-        }
-      }
+      //   let filteredResult = []
+      //   if (pendingOrder) {
+      //     if (!response.content.error) {
+      //       filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime_utc))
+      //     }
+      //     if (filterValues.isPreOrder) {
+      //       if (!filterValues.isPendingOrder) filteredResult = []
+      //     }
+      //   }
+      //   if (preOrder) {
+      //     if (!response.content.error) {
+      //       filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime_utc))
+      //     }
+      //     if (filterValues.isPendingOrder) {
+      //       if (!filterValues.isPreOrder) filteredResult = []
+      //     }
+      //   }
 
-      if (pendingOrder || preOrder) {
-        setOrderList({
-          loading: false,
-          orders: response.content.error ? [] : filteredResult,
-          error: response.content.error ? response.content.result : null
-        })
-      } else {
-        setOrderList({
-          loading: false,
-          orders: response.content.error ? [] : response.content.result,
-          error: response.content.error ? response.content.result : null
-        })
-      }
+      //   if (pendingOrder || preOrder) {
+      //     setOrderList({
+      //       loading: false,
+      //       orders: response.content.error ? [] : filteredResult,
+      //       error: response.content.error ? response.content.result : null
+      //     })
+      //   } else {
+      setOrderList({
+        loading: false,
+        orders: response.content.error ? [] : response.content.result,
+        error: response.content.error ? response.content.result : null
+      })
+      //   }
 
       if (!response.content.error) {
         setPagination({
@@ -475,42 +473,42 @@ export const OrderList = (props) => {
       const order = { ..._order, status: 0 }
       let orders = []
       if (orderStatus.includes(0) && isFilteredOrder(_order)) {
-        if (pendingOrder) {
-          const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
-          if (isPending) {
-            orders = [...orderList.orders, order]
-            if (filterValues.isPreOrder) {
-              if (!filterValues.isPendingOrder) orders = []
-            }
-            const _orders = sortOrdersArray(orderDirection, orders)
-            pagination.total++
-            setPagination({
-              ...pagination
-            })
-            setOrderList({
-              ...orderList,
-              orders: _orders
-            })
-          }
-        }
-        if (preOrder) {
-          const isPre = isPreOrder(order.created_at, order.delivery_datetime_utc)
-          if (isPre) {
-            orders = [...orderList.orders, order]
-            if (filterValues.isPendingOrder) {
-              if (!filterValues.isPreOrder) orders = []
-            }
-            const _orders = sortOrdersArray(orderDirection, orders)
-            pagination.total++
-            setPagination({
-              ...pagination
-            })
-            setOrderList({
-              ...orderList,
-              orders: _orders
-            })
-          }
-        }
+        // if (pendingOrder) {
+        //   const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
+        //   if (isPending) {
+        orders = [...orderList.orders, order]
+        // if (filterValues.isPreOrder) {
+        //   if (!filterValues.isPendingOrder) orders = []
+        // }
+        const _orders = sortOrdersArray(orderDirection, orders)
+        pagination.total++
+        setPagination({
+          ...pagination
+        })
+        setOrderList({
+          ...orderList,
+          orders: _orders
+        })
+        //   }
+        // }
+        // if (preOrder) {
+        //   const isPre = isPreOrder(order.created_at, order.delivery_datetime_utc)
+        //   if (isPre) {
+        //     orders = [...orderList.orders, order]
+        //     if (filterValues.isPendingOrder) {
+        //       if (!filterValues.isPreOrder) orders = []
+        //     }
+        //     const _orders = sortOrdersArray(orderDirection, orders)
+        //     pagination.total++
+        //     setPagination({
+        //       ...pagination
+        //     })
+        //     setOrderList({
+        //       ...orderList,
+        //       orders: _orders
+        //     })
+        //   }
+        // }
       }
     }
     socket.on('update_order', handleUpdateOrder)

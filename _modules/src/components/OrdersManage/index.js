@@ -739,7 +739,7 @@ var OrdersManage = function OrdersManage(props) {
 
 
   (0, _react.useEffect)(function () {
-    if (driversList.loading || loading) return;
+    if (loading) return;
 
     var handleUpdateDriver = function handleUpdateDriver(driver) {
       var found = driversList.drivers.find(function (_driver) {
@@ -767,7 +767,7 @@ var OrdersManage = function OrdersManage(props) {
     var handleTrackingDriver = function handleTrackingDriver(trackingData) {
       var drivers = [];
       drivers = driversList.drivers.filter(function (_driver) {
-        if (_driver.id === trackingData.driver_id) {
+        if (_driver.id === trackingData.id) {
           _driver.location = trackingData.location;
         }
 
@@ -786,7 +786,7 @@ var OrdersManage = function OrdersManage(props) {
       socket.off('drivers_update', handleUpdateDriver);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [socket, loading]);
+  }, [socket, loading, driversList.drivers]);
   /**
    * Listening multi orders action start to change status
    */

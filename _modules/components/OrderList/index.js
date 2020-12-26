@@ -13,8 +13,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireWildcard(require("prop-types"));
 
-var _dayjs = _interopRequireDefault(require("dayjs"));
-
 var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
@@ -422,21 +420,19 @@ var OrderList = function OrderList(props) {
     return function getOrders(_x2) {
       return _ref2.apply(this, arguments);
     };
-  }();
+  }(); //   const isPendingOrder = (createdAt, deliveryDatetimeUtc) => {
+  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true
+  //     const date1 = dayjs(createdAt)
+  //     const date2 = dayjs(deliveryDatetimeUtc)
+  //     return Math.abs(date1.diff(date2, 'minute')) < 60
+  //   }
+  //   const isPreOrder = (createdAt, deliveryDatetimeUtc) => {
+  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false
+  //     const date1 = dayjs(createdAt)
+  //     const date2 = dayjs(deliveryDatetimeUtc)
+  //     return Math.abs(date1.diff(date2, 'minute')) >= 60
+  //   }
 
-  var isPendingOrder = function isPendingOrder(createdAt, deliveryDatetimeUtc) {
-    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true;
-    var date1 = (0, _dayjs.default)(createdAt);
-    var date2 = (0, _dayjs.default)(deliveryDatetimeUtc);
-    return Math.abs(date1.diff(date2, 'minute')) < 60;
-  };
-
-  var isPreOrder = function isPreOrder(createdAt, deliveryDatetimeUtc) {
-    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false;
-    var date1 = (0, _dayjs.default)(createdAt);
-    var date2 = (0, _dayjs.default)(deliveryDatetimeUtc);
-    return Math.abs(date1.diff(date2, 'minute')) >= 60;
-  };
   /**
    * Method to detect if incoming order and update order belong to filter.
    * @param {Object} order incoming order and update order
@@ -481,7 +477,7 @@ var OrderList = function OrderList(props) {
 
   var loadOrders = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var response, filteredResult;
+      var response;
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -503,45 +499,35 @@ var OrderList = function OrderList(props) {
 
             case 6:
               response = _context3.sent;
-              filteredResult = [];
-
-              if (pendingOrder) {
-                if (!response.content.error) {
-                  filteredResult = response.content.result.filter(function (order) {
-                    return isPendingOrder(order.created_at, order.delivery_datetime_utc);
-                  });
-                }
-
-                if (filterValues.isPreOrder) {
-                  if (!filterValues.isPendingOrder) filteredResult = [];
-                }
-              }
-
-              if (preOrder) {
-                if (!response.content.error) {
-                  filteredResult = response.content.result.filter(function (order) {
-                    return isPreOrder(order.created_at, order.delivery_datetime_utc);
-                  });
-                }
-
-                if (filterValues.isPendingOrder) {
-                  if (!filterValues.isPreOrder) filteredResult = [];
-                }
-              }
-
-              if (pendingOrder || preOrder) {
-                setOrderList({
-                  loading: false,
-                  orders: response.content.error ? [] : filteredResult,
-                  error: response.content.error ? response.content.result : null
-                });
-              } else {
-                setOrderList({
-                  loading: false,
-                  orders: response.content.error ? [] : response.content.result,
-                  error: response.content.error ? response.content.result : null
-                });
-              }
+              //   let filteredResult = []
+              //   if (pendingOrder) {
+              //     if (!response.content.error) {
+              //       filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime_utc))
+              //     }
+              //     if (filterValues.isPreOrder) {
+              //       if (!filterValues.isPendingOrder) filteredResult = []
+              //     }
+              //   }
+              //   if (preOrder) {
+              //     if (!response.content.error) {
+              //       filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime_utc))
+              //     }
+              //     if (filterValues.isPendingOrder) {
+              //       if (!filterValues.isPreOrder) filteredResult = []
+              //     }
+              //   }
+              //   if (pendingOrder || preOrder) {
+              //     setOrderList({
+              //       loading: false,
+              //       orders: response.content.error ? [] : filteredResult,
+              //       error: response.content.error ? response.content.result : null
+              //     })
+              //   } else {
+              setOrderList({
+                loading: false,
+                orders: response.content.error ? [] : response.content.result,
+                error: response.content.error ? response.content.result : null
+              }); //   }
 
               if (!response.content.error) {
                 setPagination({
@@ -554,11 +540,11 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context3.next = 17;
+              _context3.next = 14;
               break;
 
-            case 14:
-              _context3.prev = 14;
+            case 11:
+              _context3.prev = 11;
               _context3.t0 = _context3["catch"](2);
 
               if (_context3.t0.constructor.name !== 'Cancel') {
@@ -568,12 +554,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 17:
+            case 14:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[2, 14]]);
+      }, _callee3, null, [[2, 11]]);
     }));
 
     return function loadOrders() {
@@ -701,45 +687,39 @@ var OrderList = function OrderList(props) {
       var orders = [];
 
       if (orderStatus.includes(0) && isFilteredOrder(_order)) {
-        if (pendingOrder) {
-          var isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc);
+        // if (pendingOrder) {
+        //   const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
+        //   if (isPending) {
+        orders = [].concat(_toConsumableArray(orderList.orders), [order]); // if (filterValues.isPreOrder) {
+        //   if (!filterValues.isPendingOrder) orders = []
+        // }
 
-          if (isPending) {
-            orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+        var _orders = sortOrdersArray(orderDirection, orders);
 
-            if (filterValues.isPreOrder) {
-              if (!filterValues.isPendingOrder) orders = [];
-            }
-
-            var _orders = sortOrdersArray(orderDirection, orders);
-
-            pagination.total++;
-            setPagination(_objectSpread({}, pagination));
-            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-              orders: _orders
-            }));
-          }
-        }
-
-        if (preOrder) {
-          var isPre = isPreOrder(order.created_at, order.delivery_datetime_utc);
-
-          if (isPre) {
-            orders = [].concat(_toConsumableArray(orderList.orders), [order]);
-
-            if (filterValues.isPendingOrder) {
-              if (!filterValues.isPreOrder) orders = [];
-            }
-
-            var _orders3 = sortOrdersArray(orderDirection, orders);
-
-            pagination.total++;
-            setPagination(_objectSpread({}, pagination));
-            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-              orders: _orders3
-            }));
-          }
-        }
+        pagination.total++;
+        setPagination(_objectSpread({}, pagination));
+        setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+          orders: _orders
+        })); //   }
+        // }
+        // if (preOrder) {
+        //   const isPre = isPreOrder(order.created_at, order.delivery_datetime_utc)
+        //   if (isPre) {
+        //     orders = [...orderList.orders, order]
+        //     if (filterValues.isPendingOrder) {
+        //       if (!filterValues.isPreOrder) orders = []
+        //     }
+        //     const _orders = sortOrdersArray(orderDirection, orders)
+        //     pagination.total++
+        //     setPagination({
+        //       ...pagination
+        //     })
+        //     setOrderList({
+        //       ...orderList,
+        //       orders: _orders
+        //     })
+        //   }
+        // }
       }
     };
 

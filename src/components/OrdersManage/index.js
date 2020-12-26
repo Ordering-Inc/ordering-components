@@ -297,7 +297,7 @@ export const OrdersManage = (props) => {
    * Listening driver change
    */
   useEffect(() => {
-    if (driversList.loading || loading) return
+    if (loading) return
     const handleUpdateDriver = (driver) => {
       const found = driversList.drivers.find(_driver => _driver.id === driver.id)
       let _drivers = []
@@ -319,7 +319,7 @@ export const OrdersManage = (props) => {
     const handleTrackingDriver = (trackingData) => {
       let drivers = []
       drivers = driversList.drivers.filter(_driver => {
-        if (_driver.id === trackingData.driver_id) {
+        if (_driver.id === trackingData.id) {
           _driver.location = trackingData.location
         }
         return true
@@ -334,7 +334,7 @@ export const OrdersManage = (props) => {
       socket.off('drivers_update', handleUpdateDriver)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [socket, loading])
+  }, [socket, loading, driversList.drivers])
 
   /**
    * Listening multi orders action start to change status
