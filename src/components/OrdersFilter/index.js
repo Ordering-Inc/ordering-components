@@ -223,14 +223,15 @@ export const OrdersFilter = (props) => {
   }, [filterValues.groupTypes, singleDriverIds])
 
   useEffect(() => {
-    const _statuses = [...filterValues.statuses]
+    let _statuses = [...filterValues.statuses]
     if (filterValues.isPendingOrder || filterValues.isPreOrder) {
       if (!_statuses.includes(0)) {
         _statuses.push(0)
         setFilterValues({ ...filterValues, statuses: _statuses })
       }
     } else {
-      setFilterValues({ ...filterValues, statuses: [] })
+      _statuses = _statuses.filter((_status) => _status !== 0)
+      setFilterValues({ ...filterValues, statuses: _statuses })
     }
   }, [filterValues.isPendingOrder, filterValues.isPreOrder])
 

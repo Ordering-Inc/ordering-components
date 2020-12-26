@@ -423,8 +423,11 @@ var OrdersFilter = function OrdersFilter(props) {
         }));
       }
     } else {
+      _statuses = _statuses.filter(function (_status) {
+        return _status !== 0;
+      });
       setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-        statuses: []
+        statuses: _statuses
       }));
     }
   }, [filterValues.isPendingOrder, filterValues.isPreOrder]);

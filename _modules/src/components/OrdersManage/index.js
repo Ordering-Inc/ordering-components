@@ -120,93 +120,80 @@ var OrdersManage = function OrdersManage(props) {
       deletedOrderId = _useState16[0],
       setDeletedOrderId = _useState16[1];
   /**
-   * Object to save api config list
-   */
-
-
-  var _useState17 = (0, _react.useState)({
-    configList: [],
-    loading: true,
-    error: null
-  }),
-      _useState18 = _slicedToArray(_useState17, 2),
-      apiConfigList = _useState18[0],
-      setApiConfigList = _useState18[1];
-  /**
    * Object to save driver group list
    */
 
 
-  var _useState19 = (0, _react.useState)({
+  var _useState17 = (0, _react.useState)({
     groups: [],
     loading: false,
     error: null
   }),
-      _useState20 = _slicedToArray(_useState19, 2),
-      driverGroupList = _useState20[0],
-      setDriverGroupList = _useState20[1];
+      _useState18 = _slicedToArray(_useState17, 2),
+      driverGroupList = _useState18[0],
+      setDriverGroupList = _useState18[1];
   /**
    * Object to save drivers
    */
 
 
-  var _useState21 = (0, _react.useState)({
+  var _useState19 = (0, _react.useState)({
     drivers: [],
     loading: true,
     error: null
   }),
-      _useState22 = _slicedToArray(_useState21, 2),
-      driversList = _useState22[0],
-      setDriversList = _useState22[1];
+      _useState20 = _slicedToArray(_useState19, 2),
+      driversList = _useState20[0],
+      setDriversList = _useState20[1];
   /**
    * Object to save paymethods
    */
 
 
-  var _useState23 = (0, _react.useState)({
+  var _useState21 = (0, _react.useState)({
     paymethods: [],
     loading: true,
     error: null
   }),
-      _useState24 = _slicedToArray(_useState23, 2),
-      paymethodsList = _useState24[0],
-      setPaymethodsList = _useState24[1];
+      _useState22 = _slicedToArray(_useState21, 2),
+      paymethodsList = _useState22[0],
+      setPaymethodsList = _useState22[1];
   /**
    * Object to save businesses
    */
 
 
-  var _useState25 = (0, _react.useState)({
+  var _useState23 = (0, _react.useState)({
     businesses: [],
     loading: true,
     error: null
   }),
-      _useState26 = _slicedToArray(_useState25, 2),
-      businessesList = _useState26[0],
-      setBusinessesList = _useState26[1];
+      _useState24 = _slicedToArray(_useState23, 2),
+      businessesList = _useState24[0],
+      setBusinessesList = _useState24[1];
   /**
    * Object to save driver orders
    */
 
 
-  var _useState27 = (0, _react.useState)({
+  var _useState25 = (0, _react.useState)({
     id: null,
     orders: [],
     loading: true,
     error: null
   }),
-      _useState28 = _slicedToArray(_useState27, 2),
-      driverOrdersModal = _useState28[0],
-      setDriverOrdersModal = _useState28[1];
+      _useState26 = _slicedToArray(_useState25, 2),
+      driverOrdersModal = _useState26[0],
+      setDriverOrdersModal = _useState26[1];
   /**
    * Object to save selected order ids
    */
 
 
-  var _useState29 = (0, _react.useState)([]),
-      _useState30 = _slicedToArray(_useState29, 2),
-      selectedOrderIds = _useState30[0],
-      setSelectedOrderIds = _useState30[1];
+  var _useState27 = (0, _react.useState)([]),
+      _useState28 = _slicedToArray(_useState27, 2),
+      selectedOrderIds = _useState28[0],
+      setSelectedOrderIds = _useState28[1];
   /**
    * Save ids of orders selected
    * @param {string} orderId order id
@@ -446,73 +433,19 @@ var OrdersManage = function OrdersManage(props) {
     };
   }();
   /**
-   * Method to get api configure from API
+   * Method to get driver group from API
    */
 
 
-  var getApiConfig = /*#__PURE__*/function () {
+  var getDriverGroup = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var source, _yield$ordering$setAc2, result;
+      var requestOptions, where, response, _yield$response$json2, result;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.prev = 0;
-              setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
-                loading: true
-              }));
-              source = {};
-              requestsState.apiConfig = source;
-              _context3.next = 6;
-              return ordering.setAccessToken(token).configs().asDictionary().get({
-                cancelToken: source
-              });
-
-            case 6:
-              _yield$ordering$setAc2 = _context3.sent;
-              result = _yield$ordering$setAc2.content.result;
-              setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
-                loading: false,
-                configList: result
-              }));
-              _context3.next = 14;
-              break;
-
-            case 11:
-              _context3.prev = 11;
-              _context3.t0 = _context3["catch"](0);
-              setApiConfigList(_objectSpread(_objectSpread({}, apiConfigList), {}, {
-                loading: false,
-                error: _context3.t0.message
-              }));
-
-            case 14:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3, null, [[0, 11]]);
-    }));
-
-    return function getApiConfig() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to get driver group from API
-   */
-
-
-  var getDriverGroup = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
-      var requestOptions, where, response, _yield$response$json2, result;
-
-      return _regenerator.default.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.prev = 0;
               setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
                 loading: true
               }));
@@ -530,42 +463,42 @@ var OrdersManage = function OrdersManage(props) {
                   value: true
                 }
               }];
-              _context4.next = 6;
+              _context3.next = 6;
               return fetch("".concat(ordering.root, "/drivergroups?params=id,name,drivers&where=").concat(JSON.stringify(where)), requestOptions);
 
             case 6:
-              response = _context4.sent;
-              _context4.next = 9;
+              response = _context3.sent;
+              _context3.next = 9;
               return response.json();
 
             case 9:
-              _yield$response$json2 = _context4.sent;
+              _yield$response$json2 = _context3.sent;
               result = _yield$response$json2.result;
               setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
                 loading: false,
                 groups: result
               }));
-              _context4.next = 17;
+              _context3.next = 17;
               break;
 
             case 14:
-              _context4.prev = 14;
-              _context4.t0 = _context4["catch"](0);
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](0);
               setDriverGroupList(_objectSpread(_objectSpread({}, driverGroupList), {}, {
                 loading: false,
-                error: _context4.t0.message
+                error: _context3.t0.message
               }));
 
             case 17:
             case "end":
-              return _context4.stop();
+              return _context3.stop();
           }
         }
-      }, _callee4, null, [[0, 14]]);
+      }, _callee3, null, [[0, 14]]);
     }));
 
     return function getDriverGroup() {
-      return _ref4.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
   /**
@@ -574,15 +507,15 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getPaymethods = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
       var response, _yield$response$json3, result;
 
-      return _regenerator.default.wrap(function _callee5$(_context5) {
+      return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context5.prev = 0;
-              _context5.next = 3;
+              _context4.prev = 0;
+              _context4.next = 3;
               return fetch("".concat(ordering.root, "/paymethods?params=id,name&where=[{%22attribute%22:%22enabled%22,%22value%22:true}]"), {
                 method: 'GET',
                 headers: {
@@ -592,38 +525,38 @@ var OrdersManage = function OrdersManage(props) {
               });
 
             case 3:
-              response = _context5.sent;
-              _context5.next = 6;
+              response = _context4.sent;
+              _context4.next = 6;
               return response.json();
 
             case 6:
-              _yield$response$json3 = _context5.sent;
+              _yield$response$json3 = _context4.sent;
               result = _yield$response$json3.result;
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 loading: false,
                 paymethods: result
               }));
-              _context5.next = 14;
+              _context4.next = 14;
               break;
 
             case 11:
-              _context5.prev = 11;
-              _context5.t0 = _context5["catch"](0);
+              _context4.prev = 11;
+              _context4.t0 = _context4["catch"](0);
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 loading: false,
-                error: _context5.t0.message
+                error: _context4.t0.message
               }));
 
             case 14:
             case "end":
-              return _context5.stop();
+              return _context4.stop();
           }
         }
-      }, _callee5, null, [[0, 11]]);
+      }, _callee4, null, [[0, 11]]);
     }));
 
     return function getPaymethods() {
-      return _ref5.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
   /**
@@ -632,6 +565,57 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getBusinesses = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+      var source, _yield$ordering$setAc2, result;
+
+      return _regenerator.default.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.prev = 0;
+              source = {};
+              requestsState.business = source;
+              _context5.next = 5;
+              return ordering.setAccessToken(token).businesses().asDashboard().select(businessesPropsToFetch).get({
+                cancelToken: source
+              });
+
+            case 5:
+              _yield$ordering$setAc2 = _context5.sent;
+              result = _yield$ordering$setAc2.content.result;
+              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+                loading: false,
+                businesses: result
+              }));
+              _context5.next = 13;
+              break;
+
+            case 10:
+              _context5.prev = 10;
+              _context5.t0 = _context5["catch"](0);
+              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+                loading: false,
+                error: _context5.t0.message
+              }));
+
+            case 13:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[0, 10]]);
+    }));
+
+    return function getBusinesses() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to get drivers from API
+   */
+
+
+  var getDrivers = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
       var source, _yield$ordering$setAc3, result;
 
@@ -641,18 +625,21 @@ var OrdersManage = function OrdersManage(props) {
             case 0:
               _context6.prev = 0;
               source = {};
-              requestsState.business = source;
+              requestsState.drivers = source;
               _context6.next = 5;
-              return ordering.setAccessToken(token).businesses().asDashboard().select(businessesPropsToFetch).get({
+              return ordering.setAccessToken(token).users().select(driversPropsToFetch).where([{
+                attribute: 'level',
+                value: [4]
+              }]).get({
                 cancelToken: source
               });
 
             case 5:
               _yield$ordering$setAc3 = _context6.sent;
               result = _yield$ordering$setAc3.content.result;
-              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
                 loading: false,
-                businesses: result
+                drivers: result
               }));
               _context6.next = 13;
               break;
@@ -660,7 +647,7 @@ var OrdersManage = function OrdersManage(props) {
             case 10:
               _context6.prev = 10;
               _context6.t0 = _context6["catch"](0);
-              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
                 loading: false,
                 error: _context6.t0.message
               }));
@@ -673,62 +660,8 @@ var OrdersManage = function OrdersManage(props) {
       }, _callee6, null, [[0, 10]]);
     }));
 
-    return function getBusinesses() {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to get drivers from API
-   */
-
-
-  var getDrivers = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7() {
-      var source, _yield$ordering$setAc4, result;
-
-      return _regenerator.default.wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              _context7.prev = 0;
-              source = {};
-              requestsState.drivers = source;
-              _context7.next = 5;
-              return ordering.setAccessToken(token).users().select(driversPropsToFetch).where([{
-                attribute: 'level',
-                value: [4]
-              }]).get({
-                cancelToken: source
-              });
-
-            case 5:
-              _yield$ordering$setAc4 = _context7.sent;
-              result = _yield$ordering$setAc4.content.result;
-              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
-                loading: false,
-                drivers: result
-              }));
-              _context7.next = 13;
-              break;
-
-            case 10:
-              _context7.prev = 10;
-              _context7.t0 = _context7["catch"](0);
-              setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
-                loading: false,
-                error: _context7.t0.message
-              }));
-
-            case 13:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, _callee7, null, [[0, 10]]);
-    }));
-
     return function getDrivers() {
-      return _ref7.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
   /**
@@ -737,14 +670,14 @@ var OrdersManage = function OrdersManage(props) {
 
 
   var getDriverOrders = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8() {
-      var where, conditions, source, _yield$ordering$setAc5, result;
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7() {
+      var where, conditions, source, _yield$ordering$setAc4, result;
 
-      return _regenerator.default.wrap(function _callee8$(_context8) {
+      return _regenerator.default.wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context8.prev = _context8.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              _context8.prev = 0;
+              _context7.prev = 0;
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 loading: true
               }));
@@ -764,40 +697,40 @@ var OrdersManage = function OrdersManage(props) {
               };
               source = {};
               requestsState.driverOrders = source;
-              _context8.next = 11;
+              _context7.next = 11;
               return ordering.setAccessToken(token).orders().asDashboard().where(where).get({
                 cancelToken: source
               });
 
             case 11:
-              _yield$ordering$setAc5 = _context8.sent;
-              result = _yield$ordering$setAc5.content.result;
+              _yield$ordering$setAc4 = _context7.sent;
+              result = _yield$ordering$setAc4.content.result;
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 id: null,
                 loading: false,
                 orders: result
               }));
-              _context8.next = 19;
+              _context7.next = 19;
               break;
 
             case 16:
-              _context8.prev = 16;
-              _context8.t0 = _context8["catch"](0);
+              _context7.prev = 16;
+              _context7.t0 = _context7["catch"](0);
               setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
                 loading: false,
-                error: _context8.t0.message
+                error: _context7.t0.message
               }));
 
             case 19:
             case "end":
-              return _context8.stop();
+              return _context7.stop();
           }
         }
-      }, _callee8, null, [[0, 16]]);
+      }, _callee7, null, [[0, 16]]);
     }));
 
     return function getDriverOrders() {
-      return _ref8.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
   /**
@@ -875,7 +808,6 @@ var OrdersManage = function OrdersManage(props) {
     getDriverOrders();
   }, [driverOrdersModal.id]);
   (0, _react.useEffect)(function () {
-    getApiConfig();
     getDriverGroup();
     getDrivers();
     getPaymethods();
@@ -887,7 +819,6 @@ var OrdersManage = function OrdersManage(props) {
     };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    apiConfigList: apiConfigList,
     searchValue: searchValue,
     driverGroupList: driverGroupList,
     driversList: driversList,

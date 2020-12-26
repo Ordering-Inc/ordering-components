@@ -424,16 +424,59 @@ var OrderList = function OrderList(props) {
     };
   }();
 
-  var isPendingOrder = function isPendingOrder(deliveryDatetimeUtc, deliveryDatetime) {
-    var date1 = (0, _dayjs.default)(deliveryDatetimeUtc);
-    var date2 = (0, _dayjs.default)(deliveryDatetime);
-    return date1.diff(date2, 'minute') < 60;
+  var isPendingOrder = function isPendingOrder(createdAt, deliveryDatetimeUtc) {
+    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true;
+    var date1 = (0, _dayjs.default)(createdAt);
+    var date2 = (0, _dayjs.default)(deliveryDatetimeUtc);
+    return Math.abs(date1.diff(date2, 'minute')) < 60;
   };
 
-  var isPreOrder = function isPreOrder(deliveryDatetimeUtc, deliveryDatetime) {
-    var date1 = (0, _dayjs.default)(deliveryDatetimeUtc);
-    var date2 = (0, _dayjs.default)(deliveryDatetime);
-    return date1.diff(date2, 'minute') > 60;
+  var isPreOrder = function isPreOrder(createdAt, deliveryDatetimeUtc) {
+    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false;
+    var date1 = (0, _dayjs.default)(createdAt);
+    var date2 = (0, _dayjs.default)(deliveryDatetimeUtc);
+    return Math.abs(date1.diff(date2, 'minute')) >= 60;
+  };
+  /**
+   * Method to detect if incoming order and update order belong to filter.
+   * @param {Object} order incoming order and update order
+   */
+
+
+  var isFilteredOrder = function isFilteredOrder(order) {
+    var filterCheck = true;
+
+    if (filterValues.businessIds !== undefined && filterValues.businessIds.length > 0) {
+      if (!filterValues.businessIds.includes(order.business_id)) {
+        filterCheck = false;
+      }
+    }
+
+    if (filterValues.driverIds !== undefined && filterValues.driverIds.length > 0) {
+      if (!filterValues.driverIds.includes(order.driver_id)) {
+        filterCheck = false;
+      }
+    }
+
+    if (filterValues.deliveryTypes !== undefined && filterValues.deliveryTypes.length > 0) {
+      if (!filterValues.deliveryTypes.includes(order.delivery_type)) {
+        filterCheck = false;
+      }
+    }
+
+    if (filterValues.paymethodIds !== undefined && filterValues.paymethodIds.length > 0) {
+      if (!filterValues.paymethodIds.includes(order.paymethod_id)) {
+        filterCheck = false;
+      }
+    }
+
+    if (filterValues.statuses !== undefined && filterValues.statuses.length > 0) {
+      if (!filterValues.statuses.includes(parseInt(order.status))) {
+        filterCheck = false;
+      }
+    }
+
+    return filterCheck;
   };
 
   var loadOrders = /*#__PURE__*/function () {
@@ -465,7 +508,7 @@ var OrderList = function OrderList(props) {
               if (pendingOrder) {
                 if (!response.content.error) {
                   filteredResult = response.content.result.filter(function (order) {
-                    return isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime);
+                    return isPendingOrder(order.created_at, order.delivery_datetime_utc);
                   });
                 }
 
@@ -477,7 +520,7 @@ var OrderList = function OrderList(props) {
               if (preOrder) {
                 if (!response.content.error) {
                   filteredResult = response.content.result.filter(function (order) {
-                    return isPreOrder(order.delivery_datetime_utc, order.delivery_datetime);
+                    return isPreOrder(order.created_at, order.delivery_datetime_utc);
                   });
                 }
 
@@ -610,17 +653,18 @@ var OrderList = function OrderList(props) {
 
       if (found) {
         orders = orderList.orders.filter(function (_order) {
+          var valid = true;
+
           if (_order.id === order.id) {
             delete order.total;
             delete order.subtotal;
             Object.assign(_order, order);
-          }
+            valid = (orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status))) && isFilteredOrder(order);
 
-          var valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status));
-
-          if (!valid) {
-            pagination.total--;
-            setPagination(_objectSpread({}, pagination));
+            if (!valid) {
+              pagination.total--;
+              setPagination(_objectSpread({}, pagination));
+            }
           }
 
           return valid;
@@ -629,24 +673,25 @@ var OrderList = function OrderList(props) {
           orders: orders
         }));
       } else {
-        var isOrderStatus = orderStatus.includes(parseInt(order.status));
+        if (isFilteredOrder(order)) {
+          var isOrderStatus = orderStatus.includes(parseInt(order.status));
 
-        if (isOrderStatus) {
-          orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+          if (isOrderStatus) {
+            orders = [].concat(_toConsumableArray(orderList.orders), [order]);
 
-          var _orders = sortOrdersArray(orderDirection, orders);
+            var _orders = sortOrdersArray(orderDirection, orders);
 
-          pagination.total++;
-          setPagination(_objectSpread({}, pagination));
-          setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-            orders: _orders
-          }));
+            pagination.total++;
+            setPagination(_objectSpread({}, pagination));
+            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+              orders: _orders
+            }));
+          }
         }
       }
     };
 
     var handleRegisterOrder = function handleRegisterOrder(_order) {
-      console.log(_order);
       setRegisterOrderId(_order.id);
 
       var order = _objectSpread(_objectSpread({}, _order), {}, {
@@ -654,38 +699,17 @@ var OrderList = function OrderList(props) {
       });
 
       var orders = [];
-      var filterCheck = true;
 
-      if (filterValues.businessIds !== undefined && filterValues.businessIds.length > 0) {
-        if (!filterValues.businessIds.includes(_order.business_id)) {
-          filterCheck = false;
-        }
-      }
-
-      if (filterValues.driverIds !== undefined && filterValues.driverIds.length > 0) {
-        if (!filterValues.driverIds.includes(_order.driver_id)) {
-          filterCheck = false;
-        }
-      }
-
-      if (filterValues.deliveryTypes !== undefined && filterValues.deliveryTypes.length > 0) {
-        if (!filterValues.deliveryTypes.includes(_order.delivery_type)) {
-          filterCheck = false;
-        }
-      }
-
-      if (filterValues.paymethodIds !== undefined && filterValues.paymethodIds.length > 0) {
-        if (!filterValues.paymethodIds.includes(_order.paymethod_id)) {
-          filterCheck = false;
-        }
-      }
-
-      if (orderStatus.includes(0) && filterCheck) {
+      if (orderStatus.includes(0) && isFilteredOrder(_order)) {
         if (pendingOrder) {
-          var isPending = isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime);
+          var isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc);
 
           if (isPending) {
             orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+
+            if (filterValues.isPreOrder) {
+              if (!filterValues.isPendingOrder) orders = [];
+            }
 
             var _orders = sortOrdersArray(orderDirection, orders);
 
@@ -698,10 +722,14 @@ var OrderList = function OrderList(props) {
         }
 
         if (preOrder) {
-          var isPre = isPreOrder(order.delivery_datetime_utc, order.delivery_datetime);
+          var isPre = isPreOrder(order.created_at, order.delivery_datetime_utc);
 
           if (isPre) {
             orders = [].concat(_toConsumableArray(orderList.orders), [order]);
+
+            if (filterValues.isPendingOrder) {
+              if (!filterValues.isPreOrder) orders = [];
+            }
 
             var _orders3 = sortOrdersArray(orderDirection, orders);
 

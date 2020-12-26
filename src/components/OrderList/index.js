@@ -270,16 +270,51 @@ export const OrderList = (props) => {
     return await functionFetch.get(options)
   }
 
-  const isPendingOrder = (deliveryDatetimeUtc, deliveryDatetime) => {
-    const date1 = dayjs(deliveryDatetimeUtc)
-    const date2 = dayjs(deliveryDatetime)
-    return date1.diff(date2, 'minute') < 60
+  const isPendingOrder = (createdAt, deliveryDatetimeUtc) => {
+    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true
+    const date1 = dayjs(createdAt)
+    const date2 = dayjs(deliveryDatetimeUtc)
+    return Math.abs(date1.diff(date2, 'minute')) < 60
   }
 
-  const isPreOrder = (deliveryDatetimeUtc, deliveryDatetime) => {
-    const date1 = dayjs(deliveryDatetimeUtc)
-    const date2 = dayjs(deliveryDatetime)
-    return date1.diff(date2, 'minute') > 60
+  const isPreOrder = (createdAt, deliveryDatetimeUtc) => {
+    if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false
+    const date1 = dayjs(createdAt)
+    const date2 = dayjs(deliveryDatetimeUtc)
+    return Math.abs(date1.diff(date2, 'minute')) >= 60
+  }
+  /**
+   * Method to detect if incoming order and update order belong to filter.
+   * @param {Object} order incoming order and update order
+   */
+  const isFilteredOrder = (order) => {
+    let filterCheck = true
+    if (filterValues.businessIds !== undefined && filterValues.businessIds.length > 0) {
+      if (!filterValues.businessIds.includes(order.business_id)) {
+        filterCheck = false
+      }
+    }
+    if (filterValues.driverIds !== undefined && filterValues.driverIds.length > 0) {
+      if (!filterValues.driverIds.includes(order.driver_id)) {
+        filterCheck = false
+      }
+    }
+    if (filterValues.deliveryTypes !== undefined && filterValues.deliveryTypes.length > 0) {
+      if (!filterValues.deliveryTypes.includes(order.delivery_type)) {
+        filterCheck = false
+      }
+    }
+    if (filterValues.paymethodIds !== undefined && filterValues.paymethodIds.length > 0) {
+      if (!filterValues.paymethodIds.includes(order.paymethod_id)) {
+        filterCheck = false
+      }
+    }
+    if (filterValues.statuses !== undefined && filterValues.statuses.length > 0) {
+      if (!filterValues.statuses.includes(parseInt(order.status))) {
+        filterCheck = false
+      }
+    }
+    return filterCheck
   }
 
   const loadOrders = async () => {
@@ -291,7 +326,7 @@ export const OrderList = (props) => {
       let filteredResult = []
       if (pendingOrder) {
         if (!response.content.error) {
-          filteredResult = response.content.result.filter(order => isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime))
+          filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime_utc))
         }
         if (filterValues.isPreOrder) {
           if (!filterValues.isPendingOrder) filteredResult = []
@@ -299,7 +334,7 @@ export const OrderList = (props) => {
       }
       if (preOrder) {
         if (!response.content.error) {
-          filteredResult = response.content.result.filter((order) => isPreOrder(order.delivery_datetime_utc, order.delivery_datetime))
+          filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime_utc))
         }
         if (filterValues.isPendingOrder) {
           if (!filterValues.isPreOrder) filteredResult = []
@@ -397,17 +432,19 @@ export const OrderList = (props) => {
       let orders = []
       if (found) {
         orders = orderList.orders.filter(_order => {
+          let valid = true
           if (_order.id === order.id) {
             delete order.total
             delete order.subtotal
             Object.assign(_order, order)
-          }
-          const valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status))
-          if (!valid) {
-            pagination.total--
-            setPagination({
-              ...pagination
-            })
+
+            valid = (orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status))) && isFilteredOrder(order)
+            if (!valid) {
+              pagination.total--
+              setPagination({
+                ...pagination
+              })
+            }
           }
           return valid
         })
@@ -416,53 +453,9 @@ export const OrderList = (props) => {
           orders
         })
       } else {
-        const isOrderStatus = orderStatus.includes(parseInt(order.status))
-        if (isOrderStatus) {
-          orders = [...orderList.orders, order]
-          const _orders = sortOrdersArray(orderDirection, orders)
-          pagination.total++
-          setPagination({
-            ...pagination
-          })
-          setOrderList({
-            ...orderList,
-            orders: _orders
-          })
-        }
-      }
-    }
-    const handleRegisterOrder = (_order) => {
-      console.log(_order)
-
-      setRegisterOrderId(_order.id)
-      const order = { ..._order, status: 0 }
-      let orders = []
-      let filterCheck = true
-      if (filterValues.businessIds !== undefined && filterValues.businessIds.length > 0) {
-        if (!filterValues.businessIds.includes(_order.business_id)) {
-          filterCheck = false
-        }
-      }
-      if (filterValues.driverIds !== undefined && filterValues.driverIds.length > 0) {
-        if (!filterValues.driverIds.includes(_order.driver_id)) {
-          filterCheck = false
-        }
-      }
-      if (filterValues.deliveryTypes !== undefined && filterValues.deliveryTypes.length > 0) {
-        if (!filterValues.deliveryTypes.includes(_order.delivery_type)) {
-          filterCheck = false
-        }
-      }
-      if (filterValues.paymethodIds !== undefined && filterValues.paymethodIds.length > 0) {
-        if (!filterValues.paymethodIds.includes(_order.paymethod_id)) {
-          filterCheck = false
-        }
-      }
-
-      if (orderStatus.includes(0) && filterCheck) {
-        if (pendingOrder) {
-          const isPending = isPendingOrder(order.delivery_datetime_utc, order.delivery_datetime)
-          if (isPending) {
+        if (isFilteredOrder(order)) {
+          const isOrderStatus = orderStatus.includes(parseInt(order.status))
+          if (isOrderStatus) {
             orders = [...orderList.orders, order]
             const _orders = sortOrdersArray(orderDirection, orders)
             pagination.total++
@@ -475,10 +468,38 @@ export const OrderList = (props) => {
             })
           }
         }
+      }
+    }
+    const handleRegisterOrder = (_order) => {
+      setRegisterOrderId(_order.id)
+      const order = { ..._order, status: 0 }
+      let orders = []
+      if (orderStatus.includes(0) && isFilteredOrder(_order)) {
+        if (pendingOrder) {
+          const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
+          if (isPending) {
+            orders = [...orderList.orders, order]
+            if (filterValues.isPreOrder) {
+              if (!filterValues.isPendingOrder) orders = []
+            }
+            const _orders = sortOrdersArray(orderDirection, orders)
+            pagination.total++
+            setPagination({
+              ...pagination
+            })
+            setOrderList({
+              ...orderList,
+              orders: _orders
+            })
+          }
+        }
         if (preOrder) {
-          const isPre = isPreOrder(order.delivery_datetime_utc, order.delivery_datetime)
+          const isPre = isPreOrder(order.created_at, order.delivery_datetime_utc)
           if (isPre) {
             orders = [...orderList.orders, order]
+            if (filterValues.isPendingOrder) {
+              if (!filterValues.isPreOrder) orders = []
+            }
             const _orders = sortOrdersArray(orderDirection, orders)
             pagination.total++
             setPagination({

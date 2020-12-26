@@ -13,6 +13,10 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _ApiContext = require("../../contexts/ApiContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -47,120 +51,59 @@ var ExportCSV = function ExportCSV(props) {
   var UIComponent = props.UIComponent,
       filterValues = props.filterValues;
 
-  var _useState = (0, _react.useState)({
-    token: null,
-    error: null
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      tokenStatus = _useState2[0],
-      setTokenStatus = _useState2[1];
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
 
-  var _useState3 = (0, _react.useState)({
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2$ = _useSession2[0],
+      token = _useSession2$.token,
+      loading = _useSession2$.loading;
+
+  var _useState = (0, _react.useState)({
     loading: false,
     error: null
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      actionStatus = _useState4[0],
-      setActionStatus = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      filterApply = _useState6[0],
-      setFilterApply = _useState6[1];
-  /**
-   * Method to get token from API
-   * * @param {boolean} filter condition for filter apply
-   */
-
-
-  var getToken = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(filter) {
-      var requestOptions, response, _yield$response$json, result;
-
-      return _regenerator.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
-                token: null
-              }));
-              setFilterApply(filter);
-              requestOptions = {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  email: 'superadmin@ordering.co',
-                  password: 'super'
-                })
-              };
-              _context.next = 6;
-              return fetch('https://apiv4.ordering.co/v400/en/demo/auth', requestOptions);
-
-            case 6:
-              response = _context.sent;
-              _context.next = 9;
-              return response.json();
-
-            case 9:
-              _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
-              setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
-                token: result.session.access_token
-              }));
-              _context.next = 18;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
-              setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
-                error: _context.t0
-              }));
-              setActionStatus({
-                loading: false,
-                error: _context.t0
-              });
-
-            case 18:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 14]]);
-    }));
-
-    return function getToken(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+      _useState2 = _slicedToArray(_useState, 2),
+      actionStatus = _useState2[0],
+      setActionStatus = _useState2[1];
   /**
    * Method to get csv from API
    */
 
 
   var getCSV = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(filterApply) {
       var requestOptions, filterConditons, functionFetch, response, fileSuffix;
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context.prev = _context.next) {
             case 0:
-              _context2.prev = 0;
+              if (!loading) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 2:
+              _context.prev = 2;
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: true
+              }));
               requestOptions = {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(tokenStatus.token)
+                  Authorization: "Bearer ".concat(token)
                 }
               };
               filterConditons = [];
 
               if (filterApply) {
                 if (Object.keys(filterValues).length) {
-                  if (filterValues['statuses'] !== undefined) {
+                  if (filterValues.statuses !== undefined) {
                     if (filterValues.statuses.length > 0) {
                       filterConditons.push({
                         attribute: 'status',
@@ -174,7 +117,7 @@ var ExportCSV = function ExportCSV(props) {
                     }
                   }
 
-                  if (filterValues['deliveryFromDatetime'] !== undefined) {
+                  if (filterValues.deliveryFromDatetime !== undefined) {
                     if (filterValues.deliveryFromDatetime !== null) {
                       filterConditons.push({
                         attribute: 'delivery_datetime',
@@ -186,7 +129,7 @@ var ExportCSV = function ExportCSV(props) {
                     }
                   }
 
-                  if (filterValues['deliveryEndDatetime'] !== undefined) {
+                  if (filterValues.deliveryEndDatetime !== undefined) {
                     if (filterValues.deliveryEndDatetime !== null) {
                       filterConditons.push({
                         attribute: 'delivery_datetime',
@@ -198,7 +141,7 @@ var ExportCSV = function ExportCSV(props) {
                     }
                   }
 
-                  if (filterValues['businessIds'] !== undefined) {
+                  if (filterValues.businessIds !== undefined) {
                     if (filterValues.businessIds.length !== 0) {
                       filterConditons.push({
                         attribute: 'business_id',
@@ -207,7 +150,7 @@ var ExportCSV = function ExportCSV(props) {
                     }
                   }
 
-                  if (filterValues['driverIds'] !== undefined) {
+                  if (filterValues.driverIds !== undefined) {
                     if (filterValues.driverIds.length !== 0) {
                       filterConditons.push({
                         attribute: 'driver_id',
@@ -216,7 +159,7 @@ var ExportCSV = function ExportCSV(props) {
                     }
                   }
 
-                  if (filterValues['deliveryTypes'] !== undefined) {
+                  if (filterValues.deliveryTypes !== undefined) {
                     if (filterValues.deliveryTypes.length !== 0) {
                       filterConditons.push({
                         attribute: 'delivery_type',
@@ -225,8 +168,8 @@ var ExportCSV = function ExportCSV(props) {
                     }
                   }
 
-                  if (filterValues['paymethodIds'] !== undefined) {
-                    if (filterValues.paymethodIds.length !== 0 && filterValues['paymethodIds'] !== undefined) {
+                  if (filterValues.paymethodIds !== undefined) {
+                    if (filterValues.paymethodIds.length !== 0) {
                       filterConditons.push({
                         attribute: 'paymethod_id',
                         value: filterValues.paymethodIds
@@ -236,14 +179,14 @@ var ExportCSV = function ExportCSV(props) {
                 }
               }
 
-              functionFetch = filterApply ? "https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id&where=".concat(JSON.stringify(filterConditons)) : 'https://apiv4.ordering.co/v400/en/demo/orders.csv?mode=dashboard&orderBy=id';
-              _context2.next = 7;
+              functionFetch = filterApply ? "".concat(ordering.root, "/orders.csv?mode=dashboard&orderBy=id&where=").concat(JSON.stringify(filterConditons)) : "".concat(ordering.root, "/orders.csv?mode=dashboard&orderBy=id");
+              _context.next = 10;
               return fetch(functionFetch, requestOptions);
 
-            case 7:
-              response = _context2.sent;
+            case 10:
+              response = _context.sent;
               fileSuffix = new Date().getTime();
-              _context2.next = 11;
+              _context.next = 14;
               return response.blob().then(function (blob) {
                 var url = window.URL.createObjectURL(blob);
                 var a = document.createElement('a');
@@ -252,64 +195,37 @@ var ExportCSV = function ExportCSV(props) {
                 a.click();
               });
 
-            case 11:
+            case 14:
               setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: false
               }));
-              _context2.next = 17;
+              _context.next = 20;
               break;
 
-            case 14:
-              _context2.prev = 14;
-              _context2.t0 = _context2["catch"](0);
+            case 17:
+              _context.prev = 17;
+              _context.t0 = _context["catch"](2);
               setActionStatus({
                 loading: false,
-                error: _context2.t0
+                error: _context.t0
               });
 
-            case 17:
+            case 20:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2, null, [[0, 14]]);
+      }, _callee, null, [[2, 17]]);
     }));
 
-    return function getCSV() {
-      return _ref2.apply(this, arguments);
+    return function getCSV(_x) {
+      return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Method to start csv downloading
-   */
 
-
-  var handleGetCsvExport = function handleGetCsvExport() {
-    setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-      loading: true
-    }));
-    getToken(false);
-  };
-  /**
-   * Method to start csv downloading for filtered orders
-   */
-
-
-  var handleGetCsvFilteredExport = function handleGetCsvFilteredExport() {
-    setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-      loading: true
-    }));
-    getToken(true);
-  };
-
-  (0, _react.useEffect)(function () {
-    if (tokenStatus.token === null) return;
-    getCSV();
-  }, [tokenStatus]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     actionStatus: actionStatus,
-    handleGetCsvExport: handleGetCsvExport,
-    handleGetCsvFilteredExport: handleGetCsvFilteredExport
+    getCSV: getCSV
   })));
 };
 

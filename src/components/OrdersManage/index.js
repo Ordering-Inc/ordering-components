@@ -26,10 +26,6 @@ export const OrdersManage = (props) => {
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [deletedOrderId, setDeletedOrderId] = useState(null)
   /**
-   * Object to save api config list
-   */
-  const [apiConfigList, setApiConfigList] = useState({ configList: [], loading: true, error: null })
-  /**
    * Object to save driver group list
    */
   const [driverGroupList, setDriverGroupList] = useState({ groups: [], loading: false, error: null })
@@ -183,24 +179,6 @@ export const OrdersManage = (props) => {
     }
   }
 
-  /**
-   * Method to get api configure from API
-   */
-  const getApiConfig = async () => {
-    try {
-      setApiConfigList({ ...apiConfigList, loading: true })
-      const source = {}
-      requestsState.apiConfig = source
-      const { content: { result } } = await ordering
-        .setAccessToken(token)
-        .configs()
-        .asDictionary()
-        .get({ cancelToken: source })
-      setApiConfigList({ ...apiConfigList, loading: false, configList: result })
-    } catch (err) {
-      setApiConfigList({ ...apiConfigList, loading: false, error: err.message })
-    }
-  }
   /**
    * Method to get driver group from API
    */
@@ -380,7 +358,6 @@ export const OrdersManage = (props) => {
   }, [driverOrdersModal.id])
 
   useEffect(() => {
-    getApiConfig()
     getDriverGroup()
     getDrivers()
     getPaymethods()
@@ -398,7 +375,6 @@ export const OrdersManage = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          apiConfigList={apiConfigList}
           searchValue={searchValue}
           driverGroupList={driverGroupList}
           driversList={driversList}
