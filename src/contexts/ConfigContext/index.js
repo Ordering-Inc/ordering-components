@@ -61,10 +61,20 @@ export const ConfigProvider = ({ children }) => {
     try {
       !state.loading && setState({ ...state, loading: true })
       const { content: { error, result } } = await ordering.configs().asDictionary().get()
+      const response = await fetch('https://ipapi.co/json/')
+      const data = await response.json()
+      const configsResult = {
+        ...customConfigs,
+        countryDefaultCode: {
+          value: data?.country_code || 'US',
+          calling_number: data?.country_calling_code || '+1'
+        },
+        ...result
+      }
       setState({
         ...state,
         loading: false,
-        configs: error ? {} : { ...customConfigs, ...result }
+        configs: error ? {} : configsResult
       })
     } catch (err) {
       setState({ ...state, loading: false })
