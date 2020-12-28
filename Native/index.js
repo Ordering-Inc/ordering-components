@@ -48,6 +48,7 @@ import { ProductOption } from '../src/components/ProductOption'
 import { ProductOptionSuboption } from '../src/components/ProductOptionSuboption'
 import { ProductsList } from '../src/components/ProductsList'
 import { ProductsListing } from '../src/components/ProductsListing'
+import { ResetPassword } from '../src/components/ResetPassword'
 import { SearchOptions } from '../src/components/SearchOptions'
 import { SignupForm } from '../src/components/SignupForm'
 import { SingleBusinessCard } from '../src/components/SingleBusinessCard'
@@ -119,6 +120,7 @@ export {
   ProductOptionSuboption,
   ProductsList,
   ProductsListing,
+  ResetPassword,
   SearchOptions,
   SignupForm,
   SingleBusinessCard,
