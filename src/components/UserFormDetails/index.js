@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-import omit from 'lodash/omit'
-
 /**
  * Component to manage user form details behavior without UI component
  */
@@ -114,7 +112,7 @@ export const UserFormDetails = (props) => {
           accessToken: accessToken
         })
 
-        const changes = omit(formState.changes, 'photo')
+        const { photo, ...changes } = formState.changes
 
         setFormState({
           ...formState,
