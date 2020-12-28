@@ -8,20 +8,27 @@ export const ValidationFieldsProvider = ({ children }) => {
   const [state, setState] = useState({ loading: true, fields: {} })
   const requestsState = {}
 
+  const changeCellphoneName = (result) => {
+    result.forEach((field) => {
+      result[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
+    })
+  }
+
   const loadValidationFields = async () => {
     try {
       const source = {}
       requestsState.validation = source
-      const { content: { error, result } } = await ordering.validationFields().toType('checkout').get({ cancelToken: source })
-      const fields = {}
-      if (!error) {
-        result.forEach((field) => {
-          if (field.validate === 'checkout') {
-            fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-          }
-        })
+      const { content: { result: checkoutResult, error: checkoutError } } = await ordering.validationFields().toType('checkout').get({ cancelToken: source })
+      const { content: { result: addressResult, error: addressError } } = await ordering.validationFields().toType('address').get({ cancelToken: source })
+      const checkoutFields = {}
+      const addressFields = {}
+      if (!checkoutError) {
+        changeCellphoneName(checkoutResult)
       }
-      setState({ loading: false, fields })
+      if (!addressError) {
+        changeCellphoneName(addressResult)
+      }
+      setState({ loading: false, fields: { checkout: checkoutFields, address: addressFields } })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
         setState({ loading: false })
