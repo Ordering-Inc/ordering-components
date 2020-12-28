@@ -432,7 +432,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     try {
       setState({ ...state, loading: true })
       const body = data
-      const { content: { error, result, cart } } = await ordering.setAccessToken(session.token).carts(cardId).place(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts(cardId).place(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result
@@ -441,8 +441,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           delete state.carts[`businessId:${result.business_id}`]
         }
       } else {
-        state.carts[`businessId:${cart.business_id}`] = cart
-        events.emit('cart_updated', cart)
+        setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
       const orderObject = {
