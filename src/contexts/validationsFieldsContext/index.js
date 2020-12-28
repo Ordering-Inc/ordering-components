@@ -8,9 +8,9 @@ export const ValidationFieldsProvider = ({ children }) => {
   const [state, setState] = useState({ loading: true, fields: {} })
   const requestsState = {}
 
-  const changeCellphoneName = (result) => {
+  const changeCellphoneName = (result, fields) => {
     result.forEach((field) => {
-      result[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
+      fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
     })
   }
 
@@ -23,10 +23,10 @@ export const ValidationFieldsProvider = ({ children }) => {
       const checkoutFields = {}
       const addressFields = {}
       if (!checkoutError) {
-        changeCellphoneName(checkoutResult)
+        changeCellphoneName(checkoutResult, checkoutFields)
       }
       if (!addressError) {
-        changeCellphoneName(addressResult)
+        changeCellphoneName(addressResult, addressFields)
       }
       setState({ loading: false, fields: { checkout: checkoutFields, address: addressFields } })
     } catch (err) {
