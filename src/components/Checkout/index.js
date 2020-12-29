@@ -12,8 +12,6 @@ export const Checkout = (props) => {
     actionsBeforePlace,
     handleCustomClick,
     onPlaceOrderClick,
-    useValidationFields,
-    validationFieldsType,
     UIComponent
   } = props
 
@@ -21,13 +19,6 @@ export const Checkout = (props) => {
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
-
-  /**
-   * Save array of inputs validate to show
-   */
-  const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
-
-  const requestsState = {}
 
   /**
    * Order context
@@ -126,30 +117,6 @@ export const Checkout = (props) => {
   }
 
   useEffect(() => {
-    if (useValidationFields) {
-      const source = {}
-      requestsState.validation = source
-      ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source }).then((response) => {
-        const fields = {}
-        response.content.result.forEach((field) => {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-        })
-        setValidationFields({ loading: false, fields })
-      }).catch((err) => {
-        if (err.constructor.name !== 'Cancel') {
-          setValidationFields({ loading: false })
-        }
-      })
-    }
-
-    return () => {
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
-      }
-    }
-  }, [])
-
-  useEffect(() => {
     getBusiness()
   }, [businessId])
 
@@ -180,7 +147,6 @@ export const Checkout = (props) => {
           orderOptions={orderState.options}
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
-          validationFields={validationFields}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
         />

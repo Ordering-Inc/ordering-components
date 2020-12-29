@@ -68,6 +68,7 @@ import { OrderContext, OrderProvider, useOrder } from '../src/contexts/OrderCont
 import { OrderingContext, OrderingProvider } from '../src/contexts/OrderingContext'
 import { SessionContext, SessionProvider, useSession } from '../src/contexts/SessionContext'
 import { UtilsContext, UtilsProviders, useUtils } from '../src/contexts/UtilsContext'
+import { ValidationFieldsContext, useValidationFields, ValidationFieldsProvider } from '../src/contexts/ValidationsFieldsContext'
 import { WebsocketContext, WebsocketProvider, useWebsocket } from '../src/contexts/WebsocketContext'
 
 export {
@@ -159,5 +160,8 @@ export {
   useUtils,
   WebsocketContext,
   WebsocketProvider,
-  useWebsocket
+  useWebsocket,
+  ValidationFieldsContext,
+  useValidationFields,
+  ValidationFieldsProvider
 }
