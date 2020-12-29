@@ -94,7 +94,3 @@ Cart.propTypes = {
    */
   validationFieldsType: PropTypes.string
 }
-
-Cart.defaultProps = {
-  validationFieldsType: 'checkout'
-}
