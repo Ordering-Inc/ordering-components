@@ -175,7 +175,6 @@ export const AddressForm = (props) => {
             isRequiredField={isRequiredField}
             saveAddress={saveAddress}
             addressState={addressState}
-            validationFields={validationFields}
             setIsEdit={(val) => setIsEdit(val)}
           />
         )
