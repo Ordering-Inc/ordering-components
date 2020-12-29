@@ -8,6 +8,7 @@ import { LanguageProvider } from '../../../../src/contexts/LanguageContext'
 import { ApiProvider } from '../../../../src/contexts/ApiContext'
 import { EventProvider } from '../../../../src/contexts/EventContext'
 import { UtilsProviders } from '../../../../src/contexts/UtilsContext'
+import { ValidationFieldsProvider } from '../../../../src/contexts/ValidationsFieldsContext'
 import { NativeStrategy } from '../../NativeStrategy'
 
 /**
@@ -30,15 +31,17 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
           <LanguageProvider strategy={nativeStrategy}>
             <ConfigProvider>
               <UtilsProviders>
-                <SessionProvider strategy={nativeStrategy}>
-                  <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
-                    <OrderProvider strategy={nativeStrategy} Alert={Alert}>
-                      <BusinessProvider>
-                        {children}
-                      </BusinessProvider>
-                    </OrderProvider>
-                  </WebsocketProvider>
-                </SessionProvider>
+                <ValidationFieldsProvider>
+                  <SessionProvider strategy={nativeStrategy}>
+                    <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
+                      <OrderProvider strategy={nativeStrategy} Alert={Alert}>
+                        <BusinessProvider>
+                          {children}
+                        </BusinessProvider>
+                      </OrderProvider>
+                    </WebsocketProvider>
+                  </SessionProvider>
+                </ValidationFieldsProvider>
               </UtilsProviders>
             </ConfigProvider>
           </LanguageProvider>

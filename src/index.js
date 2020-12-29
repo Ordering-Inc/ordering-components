@@ -68,6 +68,7 @@ import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
 import { EventContext, EventProvider, useEvent } from './contexts/EventContext'
 import { UtilsContext, UtilsProviders, useUtils } from './contexts/UtilsContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
+import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
 import { PaymentOptionStripeDirect } from './components/PaymentOptionStripeDirect'
@@ -181,5 +182,8 @@ export {
   useEvent,
   UtilsContext,
   UtilsProviders,
-  useUtils
+  useUtils,
+  ValidationFieldsContext,
+  ValidationFieldsProvider,
+  useValidationFields
 }

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
+
 /**
  * Component to manage user form details behavior without UI component
  */
@@ -14,17 +16,16 @@ export const UserFormDetails = (props) => {
     userId,
     user,
     useValidationFields,
-    validationFieldsType,
     handleButtonUpdateClick,
     handleSuccessUpdate
   } = props
 
   const [ordering] = useApi()
   const [session, { changeUser }] = useSession()
+  const [validationFields] = useValidationsFieldsController()
   const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
-  const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -63,28 +64,9 @@ export const UserFormDetails = (props) => {
       })
     }
 
-    if (useValidationFields) {
-      const source = {}
-      requestsState.validation = source
-      ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source }).then((response) => {
-        const fields = {}
-        response.content.result.forEach((field) => {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-        })
-        setValidationFields({ loading: false, fields })
-      }).catch((err) => {
-        if (err.constructor.name !== 'Cancel') {
-          setValidationFields({ loading: false })
-        }
-      })
-    }
-
     return () => {
       if (requestsState.user) {
         requestsState.user.cancel()
-      }
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
       }
     }
   }, [session.loading])
@@ -211,8 +193,9 @@ export const UserFormDetails = (props) => {
    */
   const showField = (fieldName) => {
     return !useValidationFields ||
-              (!validationFields.loading && !validationFields.fields[fieldName]) ||
-              (!validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled)
+      (!validationFields.loading && !validationFields.fields?.checkout[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.checkout[fieldName] &&
+        validationFields.fields?.checkout[fieldName].enabled)
   }
 
   /**
@@ -221,10 +204,10 @@ export const UserFormDetails = (props) => {
    */
   const isRequiredField = (fieldName) => {
     return useValidationFields &&
-            !validationFields.loading &&
-            validationFields.fields[fieldName] &&
-            validationFields.fields[fieldName].enabled &&
-            validationFields.fields[fieldName].required
+      !validationFields.loading &&
+      validationFields.fields?.checkout[fieldName] &&
+      validationFields.fields?.checkout[fieldName].enabled &&
+      validationFields.fields?.checkout[fieldName].required
   }
 
   return (
