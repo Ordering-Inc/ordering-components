@@ -65,7 +65,7 @@ export const ConfigProvider = ({ children }) => {
       const data = await response.json()
       const configsResult = {
         ...customConfigs,
-        countryDefaultCode: {
+        default_country_code: {
           value: data?.country_code || 'US',
           calling_number: data?.country_calling_code || '+1'
         },

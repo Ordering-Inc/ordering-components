@@ -131,6 +131,7 @@ export const UserFormDetails = (props) => {
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)
         }
+        setIsEdit(!isEdit)
       }
     } catch (err) {
       setFormState({
