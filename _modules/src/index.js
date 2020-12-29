@@ -597,12 +597,6 @@ Object.defineProperty(exports, "FloatingButton", {
     return _FloatingButton.FloatingButton;
   }
 });
-Object.defineProperty(exports, "InputPhoneNumber", {
-  enumerable: true,
-  get: function get() {
-    return _InputPhoneNumber.InputPhoneNumber;
-  }
-});
 Object.defineProperty(exports, "ResetPassword", {
   enumerable: true,
   get: function get() {
@@ -771,8 +765,6 @@ var _CardForm = require("./components/StripeElementsForm/CardForm");
 var _StripeRedirectForm = require("./components/PaymentOptionStripeRedirect/StripeRedirectForm");
 
 var _FloatingButton = require("./components/FloatingButton");
-
-var _InputPhoneNumber = require("./components/InputPhoneNumber");
 
 var _ResetPassword = require("./components/ResetPassword");
 

@@ -119,7 +119,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
 
   var refreshConfigs = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$confi, _yield$ordering$confi2, error, result;
+      var _yield$ordering$confi, _yield$ordering$confi2, error, result, response, data, configsResult;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -137,26 +137,42 @@ var ConfigProvider = function ConfigProvider(_ref) {
               _yield$ordering$confi2 = _yield$ordering$confi.content;
               error = _yield$ordering$confi2.error;
               result = _yield$ordering$confi2.result;
+              _context.next = 10;
+              return fetch('https://ipapi.co/json/');
+
+            case 10:
+              response = _context.sent;
+              _context.next = 13;
+              return response.json();
+
+            case 13:
+              data = _context.sent;
+              configsResult = _objectSpread(_objectSpread({}, customConfigs), {}, {
+                default_country_code: {
+                  value: (data === null || data === void 0 ? void 0 : data.country_code) || 'US',
+                  calling_number: (data === null || data === void 0 ? void 0 : data.country_calling_code) || '+1'
+                }
+              }, result);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
-                configs: error ? {} : _objectSpread(_objectSpread({}, customConfigs), result)
+                configs: error ? {} : configsResult
               }));
-              _context.next = 14;
+              _context.next = 21;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 18:
+              _context.prev = 18;
               _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 14:
+            case 21:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 18]]);
     }));
 
     return function refreshConfigs() {

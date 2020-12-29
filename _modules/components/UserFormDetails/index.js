@@ -25,6 +25,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -182,10 +186,8 @@ var UserFormDetails = function UserFormDetails(props) {
    * Clean formState
    */
 
-  var cleanFormState = function cleanFormState() {
-    return setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-      changes: {}
-    }));
+  var cleanFormState = function cleanFormState(values) {
+    return setFormState(_objectSpread(_objectSpread({}, formState), values));
   };
   /**
    * Default fuction for user profile workflow
@@ -193,8 +195,9 @@ var UserFormDetails = function UserFormDetails(props) {
 
 
   var handleUpdateClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes) {
-      var response;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes, isImage) {
+      var response, _formState$changes, photo, _changes;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -216,12 +219,36 @@ var UserFormDetails = function UserFormDetails(props) {
                 formState.changes = _objectSpread(_objectSpread({}, formState.changes), changes);
               }
 
-              _context.next = 7;
+              if (!isImage) {
+                _context.next = 13;
+                break;
+              }
+
+              _context.next = 8;
+              return ordering.users(userState.result.result.id).save({
+                photo: formState.changes.photo
+              }, {
+                accessToken: accessToken
+              });
+
+            case 8:
+              response = _context.sent;
+              _formState$changes = formState.changes, photo = _formState$changes.photo, _changes = _objectWithoutProperties(_formState$changes, ["photo"]);
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                changes: response.content.error ? formState.changes : _changes,
+                result: response.content,
+                loading: false
+              }));
+              _context.next = 17;
+              break;
+
+            case 13:
+              _context.next = 15;
               return ordering.users(userState.result.result.id).save(formState.changes, {
                 accessToken: accessToken
               });
 
-            case 7:
+            case 15:
               response = _context.sent;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
@@ -229,6 +256,7 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false
               }));
 
+            case 17:
               if (!response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   result: _objectSpread(_objectSpread({}, userState.result), response.content)
@@ -238,13 +266,15 @@ var UserFormDetails = function UserFormDetails(props) {
                 if (handleSuccessUpdate) {
                   handleSuccessUpdate(response.content.result);
                 }
+
+                setIsEdit(!isEdit);
               }
 
-              _context.next = 15;
+              _context.next = 23;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 20:
+              _context.prev = 20;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -254,15 +284,15 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false
               }));
 
-            case 15:
+            case 23:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 12]]);
+      }, _callee, null, [[2, 20]]);
     }));
 
-    return function handleUpdateClick(_x) {
+    return function handleUpdateClick(_x, _x2) {
       return _ref.apply(this, arguments);
     };
   }();
