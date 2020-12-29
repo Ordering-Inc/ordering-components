@@ -76,7 +76,6 @@ import { StripeElementsForm } from './components/StripeElementsForm'
 import { CardForm } from './components/StripeElementsForm/CardForm'
 import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/StripeRedirectForm'
 import { FloatingButton } from './components/FloatingButton'
-import { InputPhoneNumber } from './components/InputPhoneNumber'
 import { ResetPassword } from './components/ResetPassword'
 import { Analytics } from './components/Analitycs'
 
@@ -151,7 +150,6 @@ export {
   StripeRedirectForm,
   CmsContent,
   FloatingButton,
-  InputPhoneNumber,
   ResetPassword,
   Analytics,
   // Contexts
