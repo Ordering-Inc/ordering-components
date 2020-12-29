@@ -440,12 +440,12 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         } else {
           delete state.carts[`businessId:${result.business_id}`]
         }
-        setState({ ...state, loading: false })
       } else {
         setAlert({ show: true, content: result })
         setState({ ...state, loading: false })
         return
       }
+      setState({ ...state, loading: false })
       const orderObject = {
         id: result.order.uuid,
         business: { name: result.business.name },
