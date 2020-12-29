@@ -18,8 +18,14 @@ export const ValidationFieldsProvider = ({ children }) => {
     try {
       const source = {}
       requestsState.validation = source
-      const { content: { result: checkoutResult, error: checkoutError } } = await ordering.validationFields().toType('checkout').get({ cancelToken: source })
-      const { content: { result: addressResult, error: addressError } } = await ordering.validationFields().toType('address').get({ cancelToken: source })
+      const { content: { result: checkoutResult, error: checkoutError } } = await ordering
+        .validationFields()
+        .toType('checkout')
+        .get({ cancelToken: source })
+      const { content: { result: addressResult, error: addressError } } = await ordering
+        .validationFields()
+        .toType('address')
+        .get({ cancelToken: source })
       const checkoutFields = {}
       const addressFields = {}
       if (!checkoutError) {
@@ -28,10 +34,16 @@ export const ValidationFieldsProvider = ({ children }) => {
       if (!addressError) {
         changeCellphoneName(addressResult, addressFields)
       }
-      setState({ loading: false, fields: { checkout: checkoutFields, address: addressFields } })
+      setState({
+        loading: false,
+        fields: {
+          checkout: checkoutFields,
+          address: addressFields
+        }
+      })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
-        setState({ loading: false })
+        setState({ ...state, loading: false })
       }
     }
   }

@@ -27,14 +27,6 @@ export const AddressForm = (props) => {
 
   const [isEdit, setIsEdit] = useState(false)
 
-  // if (!userId) {
-  //   throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
-  // }
-
-  // if (!accessToken) {
-  //   throw new Error('`accessToken` must provide from props or use SessionProviver to wrappe the app.')
-  // }
-
   /**
    * Load an address by id
    * @param {number} userId User id for address user
@@ -90,8 +82,9 @@ export const AddressForm = (props) => {
    */
   const showField = (fieldName) => {
     return !useValidationFileds ||
-              (!validationFields.loading && !validationFields.fields?.address[fieldName]) ||
-              (!validationFields.loading && validationFields.fields?.address[fieldName] && validationFields.fields?.address[fieldName].enabled)
+      (!validationFields.loading && !validationFields.fields?.address[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.address[fieldName] &&
+        validationFields.fields?.address[fieldName].enabled)
   }
 
   /**
@@ -100,10 +93,10 @@ export const AddressForm = (props) => {
    */
   const isRequiredField = (fieldName) => {
     return useValidationFileds &&
-            !validationFields.loading &&
-            validationFields.fields?.address[fieldName] &&
-            validationFields.fields?.address[fieldName].enabled &&
-            validationFields.fields?.address[fieldName].required
+      !validationFields.loading &&
+      validationFields.fields?.address[fieldName] &&
+      validationFields.fields?.address[fieldName].enabled &&
+      validationFields.fields?.address[fieldName].required
   }
 
   /**

@@ -193,8 +193,9 @@ export const UserFormDetails = (props) => {
    */
   const showField = (fieldName) => {
     return !useValidationFields ||
-              (!validationFields.loading && !validationFields.fields[fieldName]) ||
-              (!validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled)
+      (!validationFields.loading && !validationFields.fields?.checkout[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.checkout[fieldName] &&
+        validationFields.fields?.checkout[fieldName].enabled)
   }
 
   /**
@@ -203,10 +204,10 @@ export const UserFormDetails = (props) => {
    */
   const isRequiredField = (fieldName) => {
     return useValidationFields &&
-            !validationFields.loading &&
-            validationFields.fields[fieldName] &&
-            validationFields.fields[fieldName].enabled &&
-            validationFields.fields[fieldName].required
+      !validationFields.loading &&
+      validationFields.fields?.checkout[fieldName] &&
+      validationFields.fields?.checkout[fieldName].enabled &&
+      validationFields.fields?.checkout[fieldName].required
   }
 
   return (

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
-import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
 
 /**
  * Component to manage Checkout page behavior without UI component
@@ -20,11 +19,6 @@ export const Checkout = (props) => {
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
-
-  /**
-   * Save array of inputs validate to show
-   */
-  const [validationFields] = useValidationFields()
 
   /**
    * Order context
@@ -153,7 +147,6 @@ export const Checkout = (props) => {
           orderOptions={orderState.options}
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
-          validationFields={validationFields}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
         />
