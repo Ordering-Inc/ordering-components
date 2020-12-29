@@ -15,6 +15,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -79,99 +81,34 @@ var SignupForm = function SignupForm(props) {
 
   var requestsState = {};
 
-  var _useState5 = (0, _react.useState)({
-    loading: useChekoutFileds,
-    fields: {}
-  }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      validationFields = _useState6[0],
-      setValidationFields = _useState6[1];
-
-  var loadValidationFields = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$valid, _yield$ordering$valid2, error, result, fields;
-
-      return _regenerator.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              source = {};
-              requestsState.validation = source;
-              _context.next = 5;
-              return ordering.validationFields().get({
-                cancelToken: source
-              });
-
-            case 5:
-              _yield$ordering$valid = _context.sent;
-              _yield$ordering$valid2 = _yield$ordering$valid.content;
-              error = _yield$ordering$valid2.error;
-              result = _yield$ordering$valid2.result;
-              fields = {};
-
-              if (!error) {
-                result.forEach(function (field) {
-                  if (field.validate === 'checkout') {
-                    fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
-                  }
-                });
-              }
-
-              setValidationFields({
-                loading: false,
-                fields: fields
-              });
-              _context.next = 17;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
-
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setValidationFields({
-                  loading: false
-                });
-              }
-
-            case 17:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 14]]);
-    }));
-
-    return function loadValidationFields() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+  var _useValidationFields = (0, _ValidationsFieldsContext.useValidationFields)(),
+      _useValidationFields2 = _slicedToArray(_useValidationFields, 1),
+      validationFields = _useValidationFields2[0];
   /**
    * Default fuction for signup workflow
    */
 
 
   var handleSignupClick = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var source, response;
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context.prev = _context.next) {
             case 0:
-              _context2.prev = 0;
+              _context.prev = 0;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.signup = source;
-              _context2.next = 6;
+              _context.next = 6;
               return ordering.users().save(signupData, {
                 cancelToken: source
               });
 
             case 6:
-              response = _context2.sent;
+              response = _context.sent;
               setFormState({
                 result: response.content,
                 loading: false
@@ -183,18 +120,18 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
-              _context2.next = 14;
+              _context.next = 14;
               break;
 
             case 11:
-              _context2.prev = 11;
-              _context2.t0 = _context2["catch"](0);
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
 
-              if (_context2.t0.constructor.name !== 'Cancel') {
+              if (_context.t0.constructor.name !== 'Cancel') {
                 setFormState({
                   result: {
                     error: true,
-                    result: _context2.t0.message
+                    result: _context.t0.message
                   },
                   loading: false
                 });
@@ -202,14 +139,14 @@ var SignupForm = function SignupForm(props) {
 
             case 14:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
     return function handleSignupClick() {
-      return _ref2.apply(this, arguments);
+      return _ref.apply(this, arguments);
     };
   }();
   /**
@@ -238,9 +175,9 @@ var SignupForm = function SignupForm(props) {
 
 
   var showField = function showField(fieldName) {
-    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3, _validationFields$fie4;
+    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3;
 
-    return !useChekoutFileds || !validationFields.loading && !((_validationFields$fie = validationFields.fields) === null || _validationFields$fie === void 0 ? void 0 : _validationFields$fie[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : (_validationFields$fie4 = _validationFields$fie3[fieldName]) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.enabled);
+    return !useChekoutFileds || !validationFields.loading && !((_validationFields$fie = validationFields.fields) === null || _validationFields$fie === void 0 ? void 0 : _validationFields$fie.checkout[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2.checkout[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : _validationFields$fie3.checkout[fieldName].enabled);
   };
   /**
    * Check if field is required
@@ -249,21 +186,13 @@ var SignupForm = function SignupForm(props) {
 
 
   var isRequiredField = function isRequiredField(fieldName) {
-    var _validationFields$fie5, _validationFields$fie6, _validationFields$fie7, _validationFields$fie8, _validationFields$fie9;
+    var _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
 
-    return fieldName === 'password' || useChekoutFileds && !validationFields.loading && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5[fieldName]) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : (_validationFields$fie7 = _validationFields$fie6[fieldName]) === null || _validationFields$fie7 === void 0 ? void 0 : _validationFields$fie7.enabled) && ((_validationFields$fie8 = validationFields.fields) === null || _validationFields$fie8 === void 0 ? void 0 : (_validationFields$fie9 = _validationFields$fie8[fieldName]) === null || _validationFields$fie9 === void 0 ? void 0 : _validationFields$fie9.required);
+    return fieldName === 'password' || useChekoutFileds && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.checkout[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.checkout[fieldName].enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.checkout[fieldName].required);
   };
 
   (0, _react.useEffect)(function () {
-    if (useChekoutFileds) {
-      loadValidationFields();
-    }
-
     return function () {
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
-      }
-
       if (requestsState.signup) {
         requestsState.signup.cancel();
       }

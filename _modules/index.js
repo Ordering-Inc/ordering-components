@@ -549,6 +549,24 @@ Object.defineProperty(exports, "OrderingProvider", {
     return _OrderingContext.OrderingProvider;
   }
 });
+Object.defineProperty(exports, "ValidationFieldsContext", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.ValidationFieldsContext;
+  }
+});
+Object.defineProperty(exports, "ValidationFieldsProvider", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.ValidationFieldsProvider;
+  }
+});
+Object.defineProperty(exports, "useValidationFields", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.useValidationFields;
+  }
+});
 Object.defineProperty(exports, "PaymentOptionCash", {
   enumerable: true,
   get: function get() {
@@ -749,6 +767,8 @@ var _EventContext = require("./contexts/EventContext");
 var _UtilsContext = require("./contexts/UtilsContext");
 
 var _OrderingContext = require("./contexts/OrderingContext");
+
+var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
 
 var _PaymentOptionCash = require("./components/PaymentOptionCash");
 

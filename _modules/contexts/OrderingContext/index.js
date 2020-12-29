@@ -27,6 +27,8 @@ var _EventContext = require("../EventContext");
 
 var _UtilsContext = require("../UtilsContext");
 
+var _ValidationsFieldsContext = require("../ValidationsFieldsContext");
+
 var _webStrategy = require("../../webStrategy");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -58,7 +60,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: webStrategy
-  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
+  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     settings: Object.assign(settings.socket, {
@@ -68,7 +70,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,
     Alert: Alert
-  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children))))))))));
+  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children)))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

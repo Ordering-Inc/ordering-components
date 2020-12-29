@@ -15,6 +15,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -62,7 +64,6 @@ var UserFormDetails = function UserFormDetails(props) {
       userId = props.userId,
       user = props.user,
       useValidationFields = props.useValidationFields,
-      validationFieldsType = props.validationFieldsType,
       handleButtonUpdateClick = props.handleButtonUpdateClick,
       handleSuccessUpdate = props.handleSuccessUpdate;
 
@@ -74,6 +75,10 @@ var UserFormDetails = function UserFormDetails(props) {
       _useSession2 = _slicedToArray(_useSession, 2),
       session = _useSession2[0],
       changeUser = _useSession2[1].changeUser;
+
+  var _useValidationsFields = (0, _ValidationsFieldsContext.useValidationFields)(),
+      _useValidationsFields2 = _slicedToArray(_useValidationsFields, 1),
+      validationFields = _useValidationsFields2[0];
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -100,13 +105,6 @@ var UserFormDetails = function UserFormDetails(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       formState = _useState6[0],
       setFormState = _useState6[1];
-
-  var _useState7 = (0, _react.useState)({
-    loading: useValidationFields
-  }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      validationFields = _useState8[0],
-      setValidationFields = _useState8[1];
 
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
@@ -149,36 +147,9 @@ var UserFormDetails = function UserFormDetails(props) {
       });
     }
 
-    if (useValidationFields) {
-      var _source = {};
-      requestsState.validation = _source;
-      ordering.validationFields().toType(validationFieldsType).get({
-        cancelToken: _source
-      }).then(function (response) {
-        var fields = {};
-        response.content.result.forEach(function (field) {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
-        });
-        setValidationFields({
-          loading: false,
-          fields: fields
-        });
-      }).catch(function (err) {
-        if (err.constructor.name !== 'Cancel') {
-          setValidationFields({
-            loading: false
-          });
-        }
-      });
-    }
-
     return function () {
       if (requestsState.user) {
         requestsState.user.cancel();
-      }
-
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
       }
     };
   }, [session.loading]);
@@ -346,7 +317,9 @@ var UserFormDetails = function UserFormDetails(props) {
 
 
   var showField = function showField(fieldName) {
-    return !useValidationFields || !validationFields.loading && !validationFields.fields[fieldName] || !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled;
+    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3;
+
+    return !useValidationFields || !validationFields.loading && !((_validationFields$fie = validationFields.fields) === null || _validationFields$fie === void 0 ? void 0 : _validationFields$fie.checkout[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2.checkout[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : _validationFields$fie3.checkout[fieldName].enabled);
   };
   /**
    * Check if field is required
@@ -355,7 +328,9 @@ var UserFormDetails = function UserFormDetails(props) {
 
 
   var isRequiredField = function isRequiredField(fieldName) {
-    return useValidationFields && !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled && validationFields.fields[fieldName].required;
+    var _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
+
+    return useValidationFields && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.checkout[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.checkout[fieldName].enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.checkout[fieldName].required);
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
