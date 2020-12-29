@@ -54,7 +54,7 @@ export const Cart = (props) => {
     } else {
       updateProduct({
         id: product.id,
-        business_id: product.id,
+        business_id: product.business_id,
         code: product.code,
         quantity: quantity
       })

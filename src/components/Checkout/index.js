@@ -73,25 +73,32 @@ export const Checkout = (props) => {
         source_id: paymethodSelected.data.id
       }
     }
-    const data = {
+    let payload = {
       paymethod_id: paymethodSelected.paymethodId,
       paymethod_data: paymethodSelected.data,
-      delivery_zone_id: cart.delivery_zone_id,
       offer_id: cart.offer_id,
       amount: cart.total
     }
+
+    if (orderState.options.type === 1) {
+      payload = {
+        ...payload,
+        delivery_zone_id: cart.delivery_zone_id
+      }
+    }
+
     if (handleCustomClick) {
-      handleCustomClick(data, paymethodSelected, cart)
+      handleCustomClick(payload, paymethodSelected, cart)
       return
     }
+
+    payload = {
+      ...payload,
+      paymethod_data: paymethodData
+    }
+
     setPlacing(true)
-    const result = await placeCart(cart.uuid, {
-      paymethod_id: paymethodSelected.paymethodId,
-      paymethod_data: paymethodData,
-      delivery_zone_id: cart.delivery_zone_id,
-      offer_id: cart.offer_id,
-      amount: cart.total
-    })
+    const result = await placeCart(cart.uuid, payload)
 
     if (result.error) {
       setErrors(result.result)
@@ -108,7 +115,7 @@ export const Checkout = (props) => {
       }
     }
     setPlacing(false)
-    onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cartResult)
+    onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
   }
 
   const handlePaymethodChange = (paymethod) => {
