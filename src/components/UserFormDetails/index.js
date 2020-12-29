@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-
 /**
  * Component to manage user form details behavior without UI component
  */
@@ -98,24 +97,41 @@ export const UserFormDetails = (props) => {
   /**
    * Default fuction for user profile workflow
    */
-  const handleUpdateClick = async (changes) => {
+  const handleUpdateClick = async (changes, isImage) => {
     if (handleButtonUpdateClick) {
       return handleButtonUpdateClick(userState.result.result, formState.changes)
     }
     try {
+      let response
       setFormState({ ...formState, loading: true })
       if (changes) {
         formState.changes = { ...formState.changes, ...changes }
       }
-      const response = await ordering.users(userState.result.result.id).save(formState.changes, {
-        accessToken: accessToken
-      })
-      setFormState({
-        ...formState,
-        changes: response.content.error ? formState.changes : {},
-        result: response.content,
-        loading: false
-      })
+      if (isImage) {
+        response = await ordering.users(userState.result.result.id).save({ photo: formState.changes.photo }, {
+          accessToken: accessToken
+        })
+
+        const { photo, ...changes } = formState.changes
+
+        setFormState({
+          ...formState,
+          changes: response.content.error ? formState.changes : changes,
+          result: response.content,
+          loading: false
+        })
+      } else {
+        response = await ordering.users(userState.result.result.id).save(formState.changes, {
+          accessToken: accessToken
+        })
+        setFormState({
+          ...formState,
+          changes: response.content.error ? formState.changes : {},
+          result: response.content,
+          loading: false
+        })
+      }
+
       if (!response.content.error) {
         setUserState({
           ...userState,
