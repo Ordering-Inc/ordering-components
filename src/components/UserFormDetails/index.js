@@ -93,7 +93,7 @@ export const UserFormDetails = (props) => {
   /**
    * Clean formState
    */
-  const cleanFormState = () => setFormState({ ...formState, changes: {} })
+  const cleanFormState = (values) => setFormState({ ...formState, ...values })
 
   /**
    * Default fuction for user profile workflow
@@ -131,6 +131,7 @@ export const UserFormDetails = (props) => {
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)
         }
+        setIsEdit(!isEdit)
       }
     } catch (err) {
       setFormState({
