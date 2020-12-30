@@ -19,13 +19,13 @@ export const BusinessList = (props) => {
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
   const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: 10, totalItems: null, totalPages: null })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
-  const [searchValue, setSearchValue] = useState(null)
+  const [searchValue, setSearchValue] = useState('')
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
 
   const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
-
+  const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   /**
    * Get businesses by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
@@ -53,13 +53,14 @@ export const BusinessList = (props) => {
 
       if (searchValue) {
         const searchConditions = []
+        const isSpecialCharacter = rex.test(searchValue)
         if (isSearchByName) {
           searchConditions.push(
             {
               attribute: 'name',
               value: {
                 condition: 'ilike',
-                value: encodeURI(`%${searchValue}%`)
+                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -70,7 +71,7 @@ export const BusinessList = (props) => {
               attribute: 'description',
               value: {
                 condition: 'ilike',
-                value: encodeURI(`%${searchValue}%`)
+                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -168,11 +169,18 @@ export const BusinessList = (props) => {
    * @param {string} search Search value
    */
   const handleChangeSearch = (search) => {
-    setBusinessesList({
-      ...businessesList,
-      businesses: [],
-      loading: true
-    })
+    if (!!search !== !!searchValue) {
+      setBusinessesList({
+        ...businessesList,
+        businesses: [],
+        loading: true
+      })
+    } else {
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
+    }
     setSearchValue(search)
   }
 
