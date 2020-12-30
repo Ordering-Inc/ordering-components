@@ -103,15 +103,18 @@ export const AddressForm = (props) => {
    * Function to save current changes
    * Update if address id exist or create if not
    */
-  const saveAddress = async () => {
+  const saveAddress = async (values) => {
     if (!auth) {
-      changeAddress(formState.changes)
+      changeAddress({ ...values, ...formState.changes })
       onSaveAddress && onSaveAddress(formState.changes)
       return
     }
     setFormState({ ...formState, loading: true })
     try {
-      const { content } = await ordering.users(userId).addresses(addressState.address?.id).save(formState.changes, { accessToken })
+      const { content } = await ordering
+        .users(userId)
+        .addresses(addressState.address?.id)
+        .save({ ...values, ...formState.changes }, { accessToken })
       setFormState({
         ...formState,
         loading: false,

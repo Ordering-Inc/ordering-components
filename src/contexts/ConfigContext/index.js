@@ -41,7 +41,7 @@ export const ConfigProvider = ({ children }) => {
     },
     google_autocomplete_selection_required: {
       key: 'google_autocomplete_selection_required',
-      value: false
+      value: 'true'
     },
     google_maps_api_key: {
       key: 'google_maps_api_key',
