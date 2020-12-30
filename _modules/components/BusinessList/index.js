@@ -92,7 +92,7 @@ var BusinessList = function BusinessList(props) {
       businessTypeSelected = _useState6[0],
       setBusinessTypeSelected = _useState6[1];
 
-  var _useState7 = (0, _react.useState)(null),
+  var _useState7 = (0, _react.useState)(''),
       _useState8 = _slicedToArray(_useState7, 2),
       searchValue = _useState8[0],
       setSearchValue = _useState8[1];
@@ -113,15 +113,16 @@ var BusinessList = function BusinessList(props) {
   var isValidMoment = function isValidMoment(date, format) {
     return (0, _dayjs.default)(date, format).format(format) === date;
   };
+
+  var rex = new RegExp(/^[A-Za-z0-9\s]+$/g);
   /**
    * Get businesses by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
    */
 
-
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, moment, where, conditions, searchConditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, moment, where, conditions, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -155,13 +156,14 @@ var BusinessList = function BusinessList(props) {
 
               if (searchValue) {
                 searchConditions = [];
+                isSpecialCharacter = rex.test(searchValue);
 
                 if (isSearchByName) {
                   searchConditions.push({
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -171,7 +173,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -296,10 +298,17 @@ var BusinessList = function BusinessList(props) {
 
 
   var handleChangeSearch = function handleChangeSearch(search) {
-    setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-      businesses: [],
-      loading: true
-    }));
+    if (!!search !== !!searchValue) {
+      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+        businesses: [],
+        loading: true
+      }));
+    } else {
+      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+        loading: false
+      }));
+    }
+
     setSearchValue(search);
   };
 

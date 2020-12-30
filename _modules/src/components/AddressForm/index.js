@@ -216,7 +216,7 @@ var AddressForm = function AddressForm(props) {
 
 
   var saveAddress = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
       var _addressState$address, _yield$ordering$users2, content;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
@@ -228,7 +228,7 @@ var AddressForm = function AddressForm(props) {
                 break;
               }
 
-              changeAddress(formState.changes);
+              changeAddress(_objectSpread(_objectSpread({}, values), formState.changes));
               onSaveAddress && onSaveAddress(formState.changes);
               return _context2.abrupt("return");
 
@@ -238,7 +238,7 @@ var AddressForm = function AddressForm(props) {
               }));
               _context2.prev = 5;
               _context2.next = 8;
-              return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(formState.changes, {
+              return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
                 accessToken: accessToken
               });
 
@@ -285,7 +285,7 @@ var AddressForm = function AddressForm(props) {
       }, _callee2, null, [[5, 14]]);
     }));
 
-    return function saveAddress() {
+    return function saveAddress(_x3) {
       return _ref2.apply(this, arguments);
     };
   }();
