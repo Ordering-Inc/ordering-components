@@ -4,6 +4,7 @@ import { useApi } from '../ApiContext'
 import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
+import { useConfig } from '../ConfigContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -27,11 +28,20 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const [languageState, t] = useLanguage()
   const socket = useWebsocket()
   const [events] = useEvent()
+  const [configState] = useConfig()
+
+  const orderTypes = {
+    delivery: 1,
+    pickup: 2,
+    eatin: 3,
+    curbside: 4,
+    drivethru: 5
+  }
 
   const [state, setState] = useState({
     loading: true,
     options: {
-      type: 1,
+      type: orderTypes[configState?.configs?.default_order_type?.value],
       moment: null
     },
     carts: {},
@@ -91,7 +101,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           }
           address && (options.address_id = address.id)
         }
-        if (localOptions.type && localOptions.type !== 1) {
+        if (localOptions.type) {
           options.type = localOptions.type
         }
         if (localOptions.moment) {
@@ -523,7 +533,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   }
 
   useEffect(() => {
-    if (session.loading) return
+    if (session.loading || configState.loading) return
     if (session.auth) {
       if (!languageState.loading) {
         refreshOrderOptions()
@@ -534,13 +544,13 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         ...state,
         loading: false,
         options: {
-          type: optionsLocalStorage?.type || 1,
+          type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
           moment: optionsLocalStorage?.moment || null,
           address: optionsLocalStorage?.address || {}
         }
       })
     }
-  }, [session, languageState])
+  }, [session, languageState, configState])
 
   /**
    * Update carts from sockets
