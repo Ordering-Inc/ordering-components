@@ -44,7 +44,7 @@ export const ResetPassword = (props) => {
   }
 
   const handleCodes = () => {
-    history.push(`/reset_password?code=${resetPasswordData.code}&random=${resetPasswordData.random}`)
+    history.push(`/password/reset?code=${resetPasswordData.code}&random=${resetPasswordData.random}`)
   }
 
   const handleChangeInput = e => {
