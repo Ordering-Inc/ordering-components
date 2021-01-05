@@ -95,7 +95,7 @@ export const UtilsProviders = ({ children }) => {
       separator: options?.separator || configState.configs.format_number_decimal_separator?.value || ',',
       thousand: options?.thousand || configState.configs.format_number_thousand_separator?.value || '.',
       currency: options?.currency || configState.configs.format_number_currency?.value || '$',
-      currencyPosition: options?.currencyPosition || configState.configs.format_number_currency_position?.value || 'left'
+      currencyPosition: options?.currencyPosition || configState.configs.currency_position?.value || 'left'
     }
     let number = parseNumber(value, formatNumber)
     if (formatNumber.currencyPosition === 'left') {
