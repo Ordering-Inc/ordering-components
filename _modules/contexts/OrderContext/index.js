@@ -19,6 +19,8 @@ var _LanguageContext = require("../LanguageContext");
 
 var _EventContext = require("../EventContext");
 
+var _ConfigContext = require("../ConfigContext");
+
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
@@ -74,6 +76,8 @@ var OrderContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderContext = OrderContext;
 
 var OrderProvider = function OrderProvider(_ref) {
+  var _configState$configs, _configState$configs$;
+
   var Alert = _ref.Alert,
       children = _ref.children,
       strategy = _ref.strategy;
@@ -107,10 +111,22 @@ var OrderProvider = function OrderProvider(_ref) {
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
 
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configState = _useConfig2[0];
+
+  var orderTypes = {
+    delivery: 1,
+    pickup: 2,
+    eatin: 3,
+    curbside: 4,
+    drivethru: 5
+  };
+
   var _useState5 = (0, _react.useState)({
     loading: true,
     options: {
-      type: 1,
+      type: orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs = configState.configs) === null || _configState$configs === void 0 ? void 0 : (_configState$configs$ = _configState$configs.default_order_type) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value],
       moment: null
     },
     carts: {},
@@ -233,7 +249,7 @@ var OrderProvider = function OrderProvider(_ref) {
               address && (_options.address_id = address.id);
 
             case 34:
-              if (localOptions.type && localOptions.type !== 1) {
+              if (localOptions.type) {
                 _options.type = localOptions.type;
               }
 
@@ -1339,24 +1355,24 @@ var OrderProvider = function OrderProvider(_ref) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (session.loading) return;
+    if (session.loading || languageState.loading || configState.loading) return;
 
     if (session.auth) {
-      if (!languageState.loading) {
-        refreshOrderOptions();
-      }
+      refreshOrderOptions();
     } else {
+      var _configState$configs2, _configState$configs3;
+
       getOptionFromLocalStorage();
       setState(_objectSpread(_objectSpread({}, state), {}, {
         loading: false,
         options: {
-          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || 1,
+          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value],
           moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
           address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || {}
         }
       }));
     }
-  }, [session, languageState]);
+  }, [session.loading, languageState.loading, configState.loading]);
   /**
    * Update carts from sockets
    */
