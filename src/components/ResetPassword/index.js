@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { useHistory } from 'react-router-dom'
 
 export const ResetPassword = (props) => {
   const {
@@ -10,6 +11,7 @@ export const ResetPassword = (props) => {
     handleSuccessResetPassword
   } = props
 
+  const history = useHistory()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [resetPasswordData, setResetPasswordData] = useState({ code: code, random: random, password: '' })
   const [ordering] = useApi()
@@ -41,6 +43,10 @@ export const ResetPassword = (props) => {
     }
   }
 
+  const handleCodes = () => {
+    history.push(`/password/reset?code=${resetPasswordData.code}&random=${resetPasswordData.random}`)
+  }
+
   const handleChangeInput = e => {
     setResetPasswordData({ ...resetPasswordData, [e.target.name]: e.target.value })
   }
@@ -53,6 +59,7 @@ export const ResetPassword = (props) => {
           handleResetPassword={handleResetPassword}
           handleChangeInput={handleChangeInput}
           formState={formState}
+          handleCodes={handleCodes}
         />
       )}
     </>
@@ -67,11 +74,11 @@ ResetPassword.propTypes = {
   /**
    *  Code is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
    */
-  code: PropTypes.string.isRequired,
+  code: PropTypes.string,
   /**
    *  Random is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
    */
-  random: PropTypes.string.isRequired,
+  random: PropTypes.string,
   /**
    * Components types before products list
    * Array of type components, the parent props will pass to these components
