@@ -533,11 +533,9 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   }
 
   useEffect(() => {
-    if (session.loading || configState.loading) return
+    if (session.loading || languageState.loading || configState.loading) return
     if (session.auth) {
-      if (!languageState.loading) {
-        refreshOrderOptions()
-      }
+      refreshOrderOptions()
     } else {
       getOptionFromLocalStorage()
       setState({
@@ -550,7 +548,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         }
       })
     }
-  }, [session, languageState, configState])
+  }, [session.loading, languageState.loading, configState.loading])
 
   /**
    * Update carts from sockets
