@@ -1355,11 +1355,16 @@ var OrderProvider = function OrderProvider(_ref) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (session.loading || languageState.loading || configState.loading) return;
+    if (session.loading || languageState.loading) return;
 
     if (session.auth) {
       refreshOrderOptions();
-    } else {
+    }
+  }, [session.auth, session.loading, languageState.loading]);
+  (0, _react.useEffect)(function () {
+    if (session.loading || configState.loading) return;
+
+    if (!session.auth) {
       var _configState$configs2, _configState$configs3;
 
       getOptionFromLocalStorage();
@@ -1372,7 +1377,7 @@ var OrderProvider = function OrderProvider(_ref) {
         }
       }));
     }
-  }, [session.loading, languageState.loading, configState.loading]);
+  }, [session.auth, session.loading, configState]);
   /**
    * Update carts from sockets
    */

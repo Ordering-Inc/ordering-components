@@ -32,8 +32,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderTypeControl = function OrderTypeControl(props) {
-  var defaultValue = props.defaultValue,
-      UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
@@ -53,11 +52,6 @@ var OrderTypeControl = function OrderTypeControl(props) {
   (0, _react.useEffect)(function () {
     setTypeSelected(orderState.options.type);
   }, [orderState.options.type]);
-  (0, _react.useEffect)(function () {
-    if (defaultValue) {
-      handleChangeOrderType(defaultValue);
-    }
-  }, [defaultValue]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     typeSelected: typeSelected || orderState.options.type,
     handleChangeOrderType: props.handleChangeOrderType || handleChangeOrderType
