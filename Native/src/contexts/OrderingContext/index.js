@@ -9,7 +9,7 @@ import { ApiProvider } from '../../../../src/contexts/ApiContext'
 import { EventProvider } from '../../../../src/contexts/EventContext'
 import { UtilsProviders } from '../../../../src/contexts/UtilsContext'
 import { ValidationFieldsProvider } from '../../../../src/contexts/ValidationsFieldsContext'
-import { NativeStrategy } from '../../nativeStrategy'
+import { NativeStrategy } from '../../NativeStrategy'
 
 /**
  * Create OrderingContext
