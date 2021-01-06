@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
-import { useHistory } from 'react-router-dom'
 
 export const ResetPassword = (props) => {
   const {
@@ -11,7 +10,6 @@ export const ResetPassword = (props) => {
     handleSuccessResetPassword
   } = props
 
-  const history = useHistory()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [resetPasswordData, setResetPasswordData] = useState({ code: code, random: random, password: '' })
   const [ordering] = useApi()
@@ -43,10 +41,6 @@ export const ResetPassword = (props) => {
     }
   }
 
-  const handleCodes = () => {
-    history.push(`/password/reset?code=${resetPasswordData.code}&random=${resetPasswordData.random}`)
-  }
-
   const handleChangeInput = e => {
     setResetPasswordData({ ...resetPasswordData, [e.target.name]: e.target.value })
   }
@@ -58,8 +52,8 @@ export const ResetPassword = (props) => {
           {...props}
           handleResetPassword={handleResetPassword}
           handleChangeInput={handleChangeInput}
+          resetPasswordData={resetPasswordData}
           formState={formState}
-          handleCodes={handleCodes}
         />
       )}
     </>

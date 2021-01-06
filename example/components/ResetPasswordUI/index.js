@@ -1,8 +1,22 @@
 import React, { useRef } from 'react'
 import { useForm } from 'react-hook-form'
+import { useHistory } from 'react-router-dom'
 
 export const ResetPasswordUI = (props) => {
-  const { code, random, handleCodes, handleChangeInput, handleResetPassword, formState, beforeComponents, beforeElements, afterComponents, afterElements } = props
+  const {
+    code,
+    random,
+    resetPasswordData,
+    handleChangeInput,
+    handleResetPassword,
+    formState,
+    beforeComponents,
+    beforeElements,
+    afterComponents,
+    afterElements
+  } = props
+
+  const history = useHistory()
 
   const { handleSubmit, register, errors, watch } = useForm()
 
@@ -10,7 +24,7 @@ export const ResetPasswordUI = (props) => {
     if (code && random) {
       handleResetPassword()
     } else {
-      handleCodes()
+      history.push(`/password/reset?code=${resetPasswordData.code}&random=${resetPasswordData.random}`)
     }
   }
 
