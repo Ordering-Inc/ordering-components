@@ -1,9 +1,10 @@
 export class WebStrategy {
   async getItem (storageKey, isJson) {
-    if (isJson) {
-      return await JSON.parse(window.localStorage.getItem(storageKey))
+    const value = await window.localStorage.getItem(storageKey)
+    if (isJson && typeof value !== 'object') {
+      return JSON.parse(value)
     }
-    return await window.localStorage.getItem(storageKey)
+    return value
   }
 
   async setItem (key, val, isJson) {
