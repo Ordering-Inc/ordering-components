@@ -122,7 +122,7 @@ var Checkout = function Checkout(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods'];
+              _props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location'];
               _context.next = 4;
               return ordering.businesses(businessId).select(_props).get();
 

@@ -61,7 +61,7 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
 
   var requestsState = {};
 
-  var changeCellphoneName = function changeCellphoneName(result, fields) {
+  var convertArrayToObject = function convertArrayToObject(result, fields) {
     result.forEach(function (field) {
       fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
     });
@@ -69,7 +69,7 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
 
   var loadValidationFields = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$valid, _yield$ordering$valid2, checkoutResult, checkoutError, _yield$ordering$valid3, _yield$ordering$valid4, addressResult, addressError, checkoutFields, addressFields;
+      var source, _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -79,48 +79,39 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
               source = {};
               requestsState.validation = source;
               _context.next = 5;
-              return ordering.validationFields().toType('checkout').get({
+              return ordering.validationFields().get({
                 cancelToken: source
               });
 
             case 5:
               _yield$ordering$valid = _context.sent;
               _yield$ordering$valid2 = _yield$ordering$valid.content;
-              checkoutResult = _yield$ordering$valid2.result;
-              checkoutError = _yield$ordering$valid2.error;
-              _context.next = 11;
-              return ordering.validationFields().toType('address').get({
-                cancelToken: source
-              });
+              result = _yield$ordering$valid2.result;
+              error = _yield$ordering$valid2.error;
+              checkout = {};
+              address = {};
 
-            case 11:
-              _yield$ordering$valid3 = _context.sent;
-              _yield$ordering$valid4 = _yield$ordering$valid3.content;
-              addressResult = _yield$ordering$valid4.result;
-              addressError = _yield$ordering$valid4.error;
-              checkoutFields = {};
-              addressFields = {};
-
-              if (!checkoutError) {
-                changeCellphoneName(checkoutResult, checkoutFields);
-              }
-
-              if (!addressError) {
-                changeCellphoneName(addressResult, addressFields);
+              if (!error) {
+                convertArrayToObject(result.filter(function (field) {
+                  return field.validate === 'checkout';
+                }), checkout);
+                convertArrayToObject(result.filter(function (field) {
+                  return field.validate === 'address';
+                }), address);
               }
 
               setState({
                 loading: false,
                 fields: {
-                  checkout: checkoutFields,
-                  address: addressFields
+                  checkout: checkout,
+                  address: address
                 }
               });
-              _context.next = 25;
+              _context.next = 18;
               break;
 
-            case 22:
-              _context.prev = 22;
+            case 15:
+              _context.prev = 15;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -129,12 +120,12 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
                 }));
               }
 
-            case 25:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 22]]);
+      }, _callee, null, [[0, 15]]);
     }));
 
     return function loadValidationFields() {
