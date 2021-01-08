@@ -8,7 +8,7 @@ export const ValidationFieldsProvider = ({ children }) => {
   const [state, setState] = useState({ loading: true, fields: {} })
   const requestsState = {}
 
-  const changeCellphoneName = (result, fields) => {
+  const convertArrayToObject = (result, fields) => {
     result.forEach((field) => {
       fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
     })
@@ -18,27 +18,24 @@ export const ValidationFieldsProvider = ({ children }) => {
     try {
       const source = {}
       requestsState.validation = source
-      const { content: { result: checkoutResult, error: checkoutError } } = await ordering
-        .validationFields()
-        .toType('checkout')
-        .get({ cancelToken: source })
-      const { content: { result: addressResult, error: addressError } } = await ordering
-        .validationFields()
-        .toType('address')
-        .get({ cancelToken: source })
-      const checkoutFields = {}
-      const addressFields = {}
-      if (!checkoutError) {
-        changeCellphoneName(checkoutResult, checkoutFields)
-      }
-      if (!addressError) {
-        changeCellphoneName(addressResult, addressFields)
+      const { content: { result, error } } = await ordering.validationFields().get({ cancelToken: source })
+      const checkout = {}
+      const address = {}
+      if (!error) {
+        convertArrayToObject(
+          result.filter(field => field.validate === 'checkout'),
+          checkout
+        )
+        convertArrayToObject(
+          result.filter(field => field.validate === 'address'),
+          address
+        )
       }
       setState({
         loading: false,
         fields: {
-          checkout: checkoutFields,
-          address: addressFields
+          checkout,
+          address
         }
       })
     } catch (err) {
