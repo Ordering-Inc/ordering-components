@@ -41,7 +41,7 @@ export const Checkout = (props) => {
    */
   const getBusiness = async () => {
     try {
-      const props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods']
+      const props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location']
       const { content: { result } } = await ordering.businesses(businessId).select(props).get()
       setBusinessDetails({
         ...businessDetails,
