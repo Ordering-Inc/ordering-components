@@ -98,16 +98,18 @@ export const FacebookLoginButton = (props) => {
    * @param {EventTarget} e Click button event
    */
   const handleFacebookLogin = (e) => {
-    setFormState({ ...formState, loading: true })
-    window.FB.login((response) => {
-      if (response.status === 'connected') {
-        setFormState({ loading: false, result: { error: false } })
-        setFacebookStatus({ ...facebookStatus, logged: true })
-        handleFacebookLoginClick(response)
-      } else {
-        setFormState({ loading: false, result: { error: true, result: 'Error login with Facebook' } })
-      }
-    })
+    if (window.FB) {
+      setFormState({ ...formState, loading: true })
+      window.FB.login((response) => {
+        if (response.status === 'connected') {
+          setFormState({ loading: false, result: { error: false } })
+          setFacebookStatus({ ...facebookStatus, logged: true })
+          handleFacebookLoginClick(response)
+        } else {
+          setFormState({ loading: false, result: { error: true, result: 'Error login with Facebook' } })
+        }
+      })
+    }
   }
 
   /**
@@ -115,14 +117,16 @@ export const FacebookLoginButton = (props) => {
    * @param {EventTarget} e Click button event
    */
   const handleFacebookLogout = (e) => {
-    setFormState({ ...formState, loading: true })
-    window.FB.logout((response) => {
-      setFormState({ loading: false, result: { error: false } })
-      setFacebookStatus({ ...facebookStatus, logged: false })
-      if (handleSuccessFacebookLogout) {
-        handleSuccessFacebookLogout(response)
-      }
-    })
+    if (window.FB) {
+      setFormState({ ...formState, loading: true })
+      window.FB.logout((response) => {
+        setFormState({ loading: false, result: { error: false } })
+        setFacebookStatus({ ...facebookStatus, logged: false })
+        if (handleSuccessFacebookLogout) {
+          handleSuccessFacebookLogout(response)
+        }
+      })
+    }
   }
 
   return (
