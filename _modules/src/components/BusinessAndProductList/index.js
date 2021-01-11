@@ -286,6 +286,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 page: newFetch ? 1 : pagination.currentPage + 1,
                 page_size: pagination.pageSize
               };
+
+              if (sortByValue) {
+                parameters.orderBy = sortByValue === 'a-z' ? 'name' : sortByValue;
+              }
+
               where = null;
               searchConditions = [];
 
@@ -338,18 +343,18 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 };
               }
 
-              _context.prev = 23;
+              _context.prev = 24;
               functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products();
               source = {};
               requestsState.products = source;
               setRequestsState(_objectSpread({}, requestsState));
-              productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
-              _context.next = 31;
+              productEndpoint = where.conditions.length > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
+              _context.next = 32;
               return productEndpoint.get({
                 cancelToken: source
               });
 
-            case 31:
+            case 32:
               _yield$productEndpoin = _context.sent;
               _yield$productEndpoin2 = _yield$productEndpoin.content;
               error = _yield$productEndpoin2.error;
@@ -366,7 +371,6 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                   loading: false,
                   products: newFetch ? _toConsumableArray(result) : [].concat(_toConsumableArray(categoryState.products), _toConsumableArray(result))
                 };
-                newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products);
                 categoriesState[categoryKey] = newcategoryState;
                 setCategoryState(_objectSpread({}, newcategoryState));
                 setCategoriesState(_objectSpread({}, categoriesState));
@@ -377,21 +381,20 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 setErrors(result);
               }
 
-              _context.next = 42;
+              _context.next = 43;
               break;
 
-            case 39:
-              _context.prev = 39;
-              _context.t0 = _context["catch"](23);
-              // if (err.constructor.name !== 'Cancel') {
-              setErrors([_context.t0.message]); // }
+            case 40:
+              _context.prev = 40;
+              _context.t0 = _context["catch"](24);
+              setErrors([_context.t0.message]);
 
-            case 42:
+            case 43:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[23, 39]]);
+      }, _callee, null, [[24, 40]]);
     }));
 
     return function getProducts(_x) {
