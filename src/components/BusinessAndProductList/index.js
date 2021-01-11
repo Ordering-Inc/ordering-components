@@ -125,7 +125,13 @@ export const BusinessAndProductList = (props) => {
       return
     }
 
-    const categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? `categoryId:${categorySelected.id}` : 'all'
+    const categoryKey = searchValue
+      ? 'search'
+      : categorySelected.id === 'featured'
+        ? 'featured'
+        : categorySelected.id
+          ? `categoryId:${categorySelected.id}`
+          : 'all'
 
     const categoryState = categoriesState[categoryKey] || categoryStateDefault
     categoryState.products = sortProductsArray(sortByValue, categoryState.products)
@@ -141,6 +147,10 @@ export const BusinessAndProductList = (props) => {
       type: orderState.options?.type || 1,
       page: newFetch ? 1 : pagination.currentPage + 1,
       page_size: pagination.pageSize
+    }
+
+    if (sortByValue) {
+      parameters.orderBy = sortByValue === 'a-z' ? 'name' : sortByValue
     }
 
     let where = null
@@ -209,7 +219,9 @@ export const BusinessAndProductList = (props) => {
       const source = {}
       requestsState.products = source
       setRequestsState({ ...requestsState })
-      const productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters)
+      const productEndpoint = where.conditions.length > 0
+        ? functionFetch.parameters(parameters).where(where)
+        : functionFetch.parameters(parameters)
       const { content: { error, result, pagination } } = await productEndpoint.get({ cancelToken: source })
       if (!error) {
         const newcategoryState = {
@@ -223,7 +235,6 @@ export const BusinessAndProductList = (props) => {
           products: newFetch ? [...result] : [...categoryState.products, ...result]
         }
 
-        newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products)
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
@@ -232,9 +243,7 @@ export const BusinessAndProductList = (props) => {
         setErrors(result)
       }
     } catch (err) {
-      // if (err.constructor.name !== 'Cancel') {
       setErrors([err.message])
-      // }
     }
   }
 
