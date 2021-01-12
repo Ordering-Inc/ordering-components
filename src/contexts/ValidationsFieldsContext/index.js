@@ -6,7 +6,6 @@ export const ValidationFieldsContext = createContext()
 export const ValidationFieldsProvider = ({ children }) => {
   const [ordering] = useApi()
   const [state, setState] = useState({ loading: true, fields: {} })
-  const requestsState = {}
 
   const convertArrayToObject = (result, fields) => {
     result.forEach((field) => {
@@ -16,9 +15,7 @@ export const ValidationFieldsProvider = ({ children }) => {
 
   const loadValidationFields = async () => {
     try {
-      const source = {}
-      requestsState.validation = source
-      const { content: { result, error } } = await ordering.validationFields().get({ cancelToken: source })
+      const { content: { result, error } } = await ordering.validationFields().get()
       const checkout = {}
       const address = {}
       if (!error) {
@@ -39,9 +36,7 @@ export const ValidationFieldsProvider = ({ children }) => {
         }
       })
     } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setState({ ...state, loading: false })
-      }
+      setState({ ...state, loading: false })
     }
   }
 
@@ -51,11 +46,6 @@ export const ValidationFieldsProvider = ({ children }) => {
 
   useEffect(() => {
     loadValidationFields()
-    return () => {
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
-      }
-    }
   }, [])
 
   return (
