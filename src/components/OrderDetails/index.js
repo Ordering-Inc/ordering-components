@@ -121,7 +121,7 @@ export const OrderDetails = (props) => {
     } else {
       getOrder()
     }
-  }, [])
+  }, [orderId])
 
   useEffect(() => {
     if (orderState.loading || loading) return
