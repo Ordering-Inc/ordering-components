@@ -186,11 +186,14 @@ var OrderDetails = function OrderDetails(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: true
+              }));
               functionFetch = asDashboard ? ordering.setAccessToken(token).orders(orderId).asDashboard() : ordering.setAccessToken(token).orders(orderId);
-              _context2.next = 4;
+              _context2.next = 5;
               return functionFetch.get();
 
-            case 4:
+            case 5:
               _yield$functionFetch$ = _context2.sent;
               result = _yield$functionFetch$.content.result;
               order = Array.isArray(result) ? null : result;
@@ -198,23 +201,23 @@ var OrderDetails = function OrderDetails(props) {
                 loading: false,
                 order: order
               }));
-              _context2.next = 13;
+              _context2.next = 14;
               break;
 
-            case 10:
-              _context2.prev = 10;
+            case 11:
+              _context2.prev = 11;
               _context2.t0 = _context2["catch"](0);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 13:
+            case 14:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 10]]);
+      }, _callee2, null, [[0, 11]]);
     }));
 
     return function getOrder() {

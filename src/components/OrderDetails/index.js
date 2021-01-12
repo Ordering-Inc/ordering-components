@@ -74,6 +74,10 @@ export const OrderDetails = (props) => {
    */
   const getOrder = async () => {
     try {
+      setOrderState({
+        ...orderState,
+        loading: true,
+      })
       const functionFetch = asDashboard
         ? ordering.setAccessToken(token).orders(orderId).asDashboard()
         : ordering.setAccessToken(token).orders(orderId)
