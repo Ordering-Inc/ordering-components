@@ -59,8 +59,6 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
       state = _useState2[0],
       setState = _useState2[1];
 
-  var requestsState = {};
-
   var convertArrayToObject = function convertArrayToObject(result, fields) {
     result.forEach(function (field) {
       fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
@@ -69,21 +67,17 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
 
   var loadValidationFields = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address;
+      var _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              source = {};
-              requestsState.validation = source;
-              _context.next = 5;
-              return ordering.validationFields().get({
-                cancelToken: source
-              });
+              _context.next = 3;
+              return ordering.validationFields().get();
 
-            case 5:
+            case 3:
               _yield$ordering$valid = _context.sent;
               _yield$ordering$valid2 = _yield$ordering$valid.content;
               result = _yield$ordering$valid2.result;
@@ -107,25 +101,22 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
                   address: address
                 }
               });
-              _context.next = 18;
+              _context.next = 16;
               break;
 
-            case 15:
-              _context.prev = 15;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
 
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setState(_objectSpread(_objectSpread({}, state), {}, {
-                  loading: false
-                }));
-              }
-
-            case 18:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 15]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
     return function loadValidationFields() {
@@ -138,11 +129,6 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
   };
   (0, _react.useEffect)(function () {
     loadValidationFields();
-    return function () {
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
-      }
-    };
   }, []);
   return /*#__PURE__*/_react.default.createElement(ValidationFieldsContext.Provider, {
     value: [state, functions]
