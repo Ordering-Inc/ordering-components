@@ -54,16 +54,7 @@ export const UtilsProviders = ({ children }) => {
     const localeObject = {
       name: 'auto', // name String
       weekdays: weekdays, // weekdays Array
-      weekdaysShort: weekdays.map(day => {
-        return day.substring(0, 3)
-      }), // OPTIONAL, short weekdays Array, use first three letters if not provided
-      weekdaysMin: weekdays.map(day => {
-        return day.substring(0, 2)
-      }), // OPTIONAL, min weekdays Array, use first two letters if not provided
       months: months, // months Array
-      monthsShort: months.map(moths => {
-        return moths.substring(0, 3)
-      }), // OPTIONAL, short months Array, use first three letters if not provided
       ordinal: n => `${n}º`, // ordinal Function (number) => return number + output
       relativeTime: {
         // relative time format strings, keep %s %d as the same
