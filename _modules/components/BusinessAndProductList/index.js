@@ -219,14 +219,14 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.lazy_load_products_recommended) {
+              if (businessState !== null && businessState !== void 0 && (_businessState$busine = businessState.business) !== null && _businessState$busine !== void 0 && _businessState$busine.lazy_load_products_recommended) {
                 _context.next = 8;
                 break;
               }
 
-              isFeatured = !!((_businessState$busine2 = businessState.business.categories) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.find(function (category) {
+              isFeatured = !!((_businessState$busine2 = businessState.business.categories) !== null && _businessState$busine2 !== void 0 && (_businessState$busine3 = _businessState$busine2.find(function (category) {
                 return category;
-              })) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.products.filter(function (product) {
+              })) !== null && _businessState$busine3 !== void 0 && _businessState$busine3.products.filter(function (product) {
                 return product.featured;
               }).length);
               setFeaturedProducts(isFeatured);
@@ -486,10 +486,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               setRequestsState(_objectSpread({}, requestsState));
               parameters = {
                 type: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type) || 1,
-                location: ((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : _orderState$options5$.location) ? "".concat((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lat, ",").concat((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : (_orderState$options7$ = _orderState$options7.address) === null || _orderState$options7$ === void 0 ? void 0 : (_orderState$options7$2 = _orderState$options7$.location) === null || _orderState$options7$2 === void 0 ? void 0 : _orderState$options7$2.lng) : null
+                location: (_orderState$options5 = orderState.options) !== null && _orderState$options5 !== void 0 && (_orderState$options5$ = _orderState$options5.address) !== null && _orderState$options5$ !== void 0 && _orderState$options5$.location ? "".concat((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lat, ",").concat((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : (_orderState$options7$ = _orderState$options7.address) === null || _orderState$options7$ === void 0 ? void 0 : (_orderState$options7$2 = _orderState$options7$.location) === null || _orderState$options7$2 === void 0 ? void 0 : _orderState$options7$2.lng) : null
               };
 
-              if (((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment) && isValidMoment((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss')) {
+              if ((_orderState$options8 = orderState.options) !== null && _orderState$options8 !== void 0 && _orderState$options8.moment && isValidMoment((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss')) {
                 moment = _dayjs.default.utc((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }

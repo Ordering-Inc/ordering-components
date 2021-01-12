@@ -66,7 +66,7 @@ var Socket = /*#__PURE__*/function () {
     value: function close() {
       var _this$socket;
 
-      if ((_this$socket = this.socket) === null || _this$socket === void 0 ? void 0 : _this$socket.connected) {
+      if ((_this$socket = this.socket) !== null && _this$socket !== void 0 && _this$socket.connected) {
         this.socket.close();
       }
     }
@@ -75,7 +75,7 @@ var Socket = /*#__PURE__*/function () {
     value: function join(room) {
       var _this$socket2;
 
-      if ((_this$socket2 = this.socket) === null || _this$socket2 === void 0 ? void 0 : _this$socket2.connected) {
+      if ((_this$socket2 = this.socket) !== null && _this$socket2 !== void 0 && _this$socket2.connected) {
         this.socket.emit('join', "".concat(this.project, "_").concat(room));
       } else {
         this.queue.push({
@@ -91,7 +91,7 @@ var Socket = /*#__PURE__*/function () {
     value: function leave(room) {
       var _this$socket3;
 
-      if ((_this$socket3 = this.socket) === null || _this$socket3 === void 0 ? void 0 : _this$socket3.connected) {
+      if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
         this.socket.emit('leave', "".concat(this.project, "_").concat(room));
       } else {
         this.queue.push({
@@ -109,7 +109,7 @@ var Socket = /*#__PURE__*/function () {
 
       var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
-      if ((_this$socket4 = this.socket) === null || _this$socket4 === void 0 ? void 0 : _this$socket4.connected) {
+      if ((_this$socket4 = this.socket) !== null && _this$socket4 !== void 0 && _this$socket4.connected) {
         this.socket.on(event, func);
       } else {
         this.queue.push({
@@ -128,7 +128,7 @@ var Socket = /*#__PURE__*/function () {
 
       var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
 
-      if ((_this$socket5 = this.socket) === null || _this$socket5 === void 0 ? void 0 : _this$socket5.connected) {
+      if ((_this$socket5 = this.socket) !== null && _this$socket5 !== void 0 && _this$socket5.connected) {
         this.socket.off(event, func);
       } else {
         this.queue.push({

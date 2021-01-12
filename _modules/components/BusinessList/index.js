@@ -138,7 +138,7 @@ var BusinessList = function BusinessList(props) {
                 page_size: paginationProps.pageSize
               };
 
-              if (((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment) && isValidMoment((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss')) {
+              if ((_orderState$options4 = orderState.options) !== null && _orderState$options4 !== void 0 && _orderState$options4.moment && isValidMoment((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss')) {
                 moment = _dayjs.default.utc((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }
@@ -263,7 +263,7 @@ var BusinessList = function BusinessList(props) {
   (0, _react.useEffect)(function () {
     var _orderState$options7, _orderState$options7$;
 
-    if (orderState.loading || !((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : (_orderState$options7$ = _orderState$options7.address) === null || _orderState$options7$ === void 0 ? void 0 : _orderState$options7$.location)) return;
+    if (orderState.loading || !((_orderState$options7 = orderState.options) !== null && _orderState$options7 !== void 0 && (_orderState$options7$ = _orderState$options7.address) !== null && _orderState$options7$ !== void 0 && _orderState$options7$.location)) return;
     getBusinesses(true);
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue]);
   /**

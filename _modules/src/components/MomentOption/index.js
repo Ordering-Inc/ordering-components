@@ -168,7 +168,7 @@ var MomentOption = function MomentOption(props) {
     if (useOrderContext) {
       var _orderStatus$options2;
 
-      if ((_orderStatus$options2 = orderStatus.options) === null || _orderStatus$options2 === void 0 ? void 0 : _orderStatus$options2.moment) {
+      if ((_orderStatus$options2 = orderStatus.options) !== null && _orderStatus$options2 !== void 0 && _orderStatus$options2.moment) {
         var _orderStatus$options3;
 
         var _currentDate2 = _dayjs.default.utc(validDate((_orderStatus$options3 = orderStatus.options) === null || _orderStatus$options3 === void 0 ? void 0 : _orderStatus$options3.moment)).local();

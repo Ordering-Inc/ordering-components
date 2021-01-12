@@ -288,7 +288,7 @@ var OrderDetails = function OrderDetails(props) {
     } else {
       getOrder();
     }
-  }, []);
+  }, [orderId]);
   (0, _react.useEffect)(function () {
     if (orderState.loading || loading) return;
 

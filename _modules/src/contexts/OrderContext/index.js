@@ -215,12 +215,12 @@ var OrderProvider = function OrderProvider(_ref) {
             case 25:
               _options = {};
 
-              if (localOptions.moment || (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id)) {
+              if (localOptions.moment || localOptions !== null && localOptions !== void 0 && localOptions.address_id) {
                 _options.moment = localOptions.moment ? _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix() : null;
                 _options.type = localOptions.type;
               }
 
-              if (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id) {
+              if (localOptions !== null && localOptions !== void 0 && localOptions.address_id) {
                 _options.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
               }
 

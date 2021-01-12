@@ -228,7 +228,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
       unit = 'KM';
     }
 
-    if ((_configState$configs$12 = configState.configs.distance_unit) === null || _configState$configs$12 === void 0 ? void 0 : _configState$configs$12.value) {
+    if ((_configState$configs$12 = configState.configs.distance_unit) !== null && _configState$configs$12 !== void 0 && _configState$configs$12.value) {
       var _configState$configs$13;
 
       unit = (_configState$configs$13 = configState.configs.distance_unit) === null || _configState$configs$13 === void 0 ? void 0 : _configState$configs$13.value;
