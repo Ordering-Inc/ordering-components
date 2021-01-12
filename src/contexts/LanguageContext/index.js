@@ -86,7 +86,7 @@ export const LanguageProvider = ({ children, strategy }) => {
   }, [state.language])
 
   const t = (key, fallback = null) => {
-    return state.dictionary[key] || fallback || key
+    return (state?.dictionary && Object.keys(state?.dictionary).length > 0 && state.dictionary[key]) || fallback || key
   }
 
   return (
