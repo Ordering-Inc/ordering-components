@@ -80,20 +80,8 @@ var UtilsProviders = function UtilsProviders(_ref) {
       // name String
       weekdays: weekdays,
       // weekdays Array
-      weekdaysShort: weekdays.map(function (day) {
-        return day.substring(0, 3);
-      }),
-      // OPTIONAL, short weekdays Array, use first three letters if not provided
-      weekdaysMin: weekdays.map(function (day) {
-        return day.substring(0, 2);
-      }),
-      // OPTIONAL, min weekdays Array, use first two letters if not provided
       months: months,
       // months Array
-      monthsShort: months.map(function (moths) {
-        return moths.substring(0, 3);
-      }),
-      // OPTIONAL, short months Array, use first three letters if not provided
       ordinal: function ordinal(n) {
         return "".concat(n, "\xBA");
       },

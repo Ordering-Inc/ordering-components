@@ -286,7 +286,7 @@ var LanguageProvider = function LanguageProvider(_ref) {
 
   var t = function t(key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    return state.dictionary[key] || fallback || key;
+    return (state === null || state === void 0 ? void 0 : state.dictionary) && Object.keys(state === null || state === void 0 ? void 0 : state.dictionary).length > 0 && state.dictionary[key] || fallback || key;
   };
 
   return /*#__PURE__*/_react.default.createElement(LanguageContext.Provider, {
