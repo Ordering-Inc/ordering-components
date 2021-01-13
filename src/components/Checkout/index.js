@@ -94,12 +94,12 @@ export const Checkout = (props) => {
     setPlacing(true)
     const result = await placeCart(cart.uuid, payload)
 
-    if (result.error) {
-      setErrors(result.result)
+    if (result?.error) {
+      setErrors(result?.result)
       return
     }
 
-    let cartResult = result.result
+    let cartResult = result?.result
 
     if (cartResult?.paymethod_data?.status === 2 && actionsBeforePlace) {
       const toConfirm = await actionsBeforePlace(paymethodSelected, result.result)
