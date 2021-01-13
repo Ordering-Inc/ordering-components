@@ -129,15 +129,23 @@ var OrderList = function OrderList(props) {
   };
 
   var sortOrdersArray = function sortOrdersArray(option, array) {
-    if (option === 'desc') {
-      return array.sort(function (a, b) {
-        return b.id - a.id;
-      });
+    if (option === 'id') {
+      if (orderDirection === 'desc') {
+        return array.sort(function (a, b) {
+          return b.id - a.id;
+        });
+      }
+
+      if (orderDirection === 'asc') {
+        return array.sort(function (a, b) {
+          return a.id - b.id;
+        });
+      }
     }
 
-    if (option === 'asc') {
+    if (option === 'last_direct_message_at') {
       return array.sort(function (a, b) {
-        return a.id - b.id;
+        return new Date(b.last_direct_message_at) - new Date(a.last_direct_message_at);
       });
     }
 
@@ -589,6 +597,19 @@ var OrderList = function OrderList(props) {
     loadOrders();
   }, [searchValue]);
   /**
+   * Listening orderBy value change
+   */
+
+  (0, _react.useEffect)(function () {
+    if (orderList.loading) return;
+
+    var _orders = sortOrdersArray(orderBy, orderList.orders);
+
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: _orders
+    }));
+  }, [orderBy]);
+  /**
    * Listening sesssion and filter values change
    */
 
@@ -665,7 +686,7 @@ var OrderList = function OrderList(props) {
           if (isOrderStatus) {
             orders = [].concat(_toConsumableArray(orderList.orders), [order]);
 
-            var _orders = sortOrdersArray(orderDirection, orders);
+            var _orders = sortOrdersArray(orderBy, orders);
 
             pagination.total++;
             setPagination(_objectSpread({}, pagination));
@@ -690,11 +711,11 @@ var OrderList = function OrderList(props) {
         // if (pendingOrder) {
         //   const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
         //   if (isPending) {
-        orders = [].concat(_toConsumableArray(orderList.orders), [order]); // if (filterValues.isPreOrder) {
+        orders = [order].concat(_toConsumableArray(orderList.orders)); // if (filterValues.isPreOrder) {
         //   if (!filterValues.isPendingOrder) orders = []
         // }
 
-        var _orders = sortOrdersArray(orderDirection, orders);
+        var _orders = sortOrdersArray(orderBy, orders);
 
         pagination.total++;
         setPagination(_objectSpread({}, pagination));
@@ -729,7 +750,7 @@ var OrderList = function OrderList(props) {
       socket.off('update_order', handleUpdateOrder);
       socket.off('orders_register', handleRegisterOrder);
     };
-  }, [orderList.orders, pagination, socket]);
+  }, [orderList.orders, pagination, orderBy, socket]);
   (0, _react.useEffect)(function () {
     if (!session.user) return;
 

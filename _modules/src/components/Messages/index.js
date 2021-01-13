@@ -108,10 +108,19 @@ var Messages = function Messages(props) {
       sendMessage = _useState8[0],
       setSendMessages = _useState8[1];
 
-  var _useState9 = (0, _react.useState)(null),
+  var _useState9 = (0, _react.useState)({
+    loading: true,
+    error: null,
+    messages: []
+  }),
       _useState10 = _slicedToArray(_useState9, 2),
-      image = _useState10[0],
-      setImage = _useState10[1];
+      readMessages = _useState10[0],
+      setReadMessages = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(null),
+      _useState12 = _slicedToArray(_useState11, 2),
+      image = _useState12[0],
+      setImage = _useState12[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
   /**
@@ -294,6 +303,80 @@ var Messages = function Messages(props) {
       return _ref2.apply(this, arguments);
     };
   }();
+  /**
+   * Method to Load message for first time
+   * @param {number} messageId order message Id
+   */
+
+
+  var handleReadMessages = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(messageId) {
+      var functionFetch, response, _yield$response$json3, error, result;
+
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setReadMessages(_objectSpread(_objectSpread({}, readMessages), {}, {
+                loading: true
+              }));
+              functionFetch = "".concat(ordering.root, "/orders/").concat(orderId, "/messages/").concat(messageId, "/read?order_id=").concat(orderId, "&order_message_id=").concat(messageId);
+              _context3.next = 5;
+              return fetch(functionFetch, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(accessToken)
+                }
+              });
+
+            case 5:
+              response = _context3.sent;
+              _context3.next = 8;
+              return response.json();
+
+            case 8:
+              _yield$response$json3 = _context3.sent;
+              error = _yield$response$json3.error;
+              result = _yield$response$json3.result;
+
+              if (!error) {
+                setReadMessages({
+                  messages: result,
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setReadMessages(_objectSpread(_objectSpread({}, readMessages), {}, {
+                  loading: false,
+                  error: result
+                }));
+              }
+
+              _context3.next = 17;
+              break;
+
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](0);
+              setReadMessages(_objectSpread(_objectSpread({}, readMessages), {}, {
+                loading: false,
+                error: [_context3.t0.Messages]
+              }));
+
+            case 17:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 14]]);
+    }));
+
+    return function handleReadMessages(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
     loadMessages();
@@ -332,13 +415,14 @@ var Messages = function Messages(props) {
         socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
       }
     };
-  }, [socket]);
+  }, [socket, orderId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     messages: messages,
     image: image,
     canRead: canRead,
     handleSend: handleSend,
     message: message,
+    handleReadMessages: handleReadMessages,
     setMessage: setMessage,
     setCanRead: setCanRead,
     sendMessage: sendMessage,

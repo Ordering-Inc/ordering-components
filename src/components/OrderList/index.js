@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { object, number } from 'prop-types'
-// import dayjs from 'dayjs'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
@@ -48,11 +47,16 @@ export const OrderList = (props) => {
   }
 
   const sortOrdersArray = (option, array) => {
-    if (option === 'desc') {
-      return array.sort((a, b) => b.id - a.id)
+    if (option === 'id') {
+      if (orderDirection === 'desc') {
+        return array.sort((a, b) => b.id - a.id)
+      }
+      if (orderDirection === 'asc') {
+        return array.sort((a, b) => a.id - b.id)
+      }
     }
-    if (option === 'asc') {
-      return array.sort((a, b) => a.id - b.id)
+    if (option === 'last_direct_message_at') {
+      return array.sort((a, b) => new Date(b.last_direct_message_at) - new Date(a.last_direct_message_at))
     }
     return array
   }
@@ -389,6 +393,17 @@ export const OrderList = (props) => {
     loadOrders()
   }, [searchValue])
   /**
+   * Listening orderBy value change
+   */
+  useEffect(() => {
+    if (orderList.loading) return
+    const _orders = sortOrdersArray(orderBy, orderList.orders)
+    setOrderList({
+      ...orderList,
+      orders: _orders
+    })
+  }, [orderBy])
+  /**
    * Listening sesssion and filter values change
    */
   useEffect(() => {
@@ -455,7 +470,7 @@ export const OrderList = (props) => {
           const isOrderStatus = orderStatus.includes(parseInt(order.status))
           if (isOrderStatus) {
             orders = [...orderList.orders, order]
-            const _orders = sortOrdersArray(orderDirection, orders)
+            const _orders = sortOrdersArray(orderBy, orders)
             pagination.total++
             setPagination({
               ...pagination
@@ -476,11 +491,11 @@ export const OrderList = (props) => {
         // if (pendingOrder) {
         //   const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
         //   if (isPending) {
-        orders = [...orderList.orders, order]
+        orders = [order, ...orderList.orders]
         // if (filterValues.isPreOrder) {
         //   if (!filterValues.isPendingOrder) orders = []
         // }
-        const _orders = sortOrdersArray(orderDirection, orders)
+        const _orders = sortOrdersArray(orderBy, orders)
         pagination.total++
         setPagination({
           ...pagination
@@ -517,7 +532,7 @@ export const OrderList = (props) => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('orders_register', handleRegisterOrder)
     }
-  }, [orderList.orders, pagination, socket])
+  }, [orderList.orders, pagination, orderBy, socket])
 
   useEffect(() => {
     if (!session.user) return

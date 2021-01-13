@@ -21,6 +21,7 @@ export const Messages = (props) => {
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
+  const [readMessages, setReadMessages] = useState({ loading: true, error: null, messages: [] })
   const [image, setImage] = useState(null)
   const socket = useWebsocket()
   /**
@@ -98,6 +99,33 @@ export const Messages = (props) => {
       setMessages({ ...messages, loading: false, error: [error.Messages] })
     }
   }
+  /**
+   * Method to Load message for first time
+   * @param {number} messageId order message Id
+   */
+  const handleReadMessages = async (messageId) => {
+    try {
+      setReadMessages({ ...readMessages, loading: true })
+      const functionFetch = `${ordering.root}/orders/${orderId}/messages/${messageId}/read?order_id=${orderId}&order_message_id=${messageId}`
+      const response = await fetch(functionFetch, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const { error, result } = await response.json()
+      if (!error) {
+        setReadMessages({
+          messages: result,
+          loading: false,
+          error: null
+        })
+      } else {
+        setReadMessages({
+          ...readMessages,
+          loading: false,
+          error: result
+        })
+      }
+    } catch (error) {
+      setReadMessages({ ...readMessages, loading: false, error: [error.Messages] })
+    }
+  }
 
   useEffect(() => {
     loadMessages()
@@ -133,7 +161,7 @@ export const Messages = (props) => {
         socket.leave(`messages_orders_${user?.id}`)
       }
     }
-  }, [socket])
+  }, [socket, orderId])
 
   return (
     <>
@@ -145,6 +173,7 @@ export const Messages = (props) => {
           canRead={canRead}
           handleSend={handleSend}
           message={message}
+          handleReadMessages={handleReadMessages}
           setMessage={setMessage}
           setCanRead={setCanRead}
           sendMessage={sendMessage}
