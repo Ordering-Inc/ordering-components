@@ -47,7 +47,7 @@ var CouponControl = function CouponControl(props) {
       orderState = _useOrder2[0],
       applyCoupon = _useOrder2[1].applyCoupon;
 
-  var couponDefault = ((_orderState$carts$ = orderState.carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.coupon) || null;
+  var couponDefault = (orderState === null || orderState === void 0 ? void 0 : orderState.carts) && businessId && (orderState === null || orderState === void 0 ? void 0 : (_orderState$carts$ = orderState.carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.coupon) || null;
 
   var _useState = (0, _react.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
