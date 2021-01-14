@@ -13,7 +13,11 @@ export const CouponControl = (props) => {
 
   const [orderState, { applyCoupon }] = useOrder()
 
-  const couponDefault = orderState.carts[`businessId:${businessId}`]?.coupon || null
+  const couponDefault = (
+    orderState?.carts &&
+    businessId &&
+    orderState?.carts[`businessId:${businessId}`]?.coupon
+  ) || null
 
   const [couponInput, setCouponInput] = useState(null)
 
