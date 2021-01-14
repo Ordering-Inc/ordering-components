@@ -73,7 +73,7 @@ export const CardForm = (props) => {
   const handleSubmit = async (event) => {
     setLoading(true)
     event.preventDefault()
-    const card = elements.getElement(CardElement)
+    const card = elements?.getElement(CardElement)
 
     if (!requirements) {
       const result = await stripe.createPaymentMethod({
