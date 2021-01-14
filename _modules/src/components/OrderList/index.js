@@ -76,7 +76,8 @@ var OrderList = function OrderList(props) {
       searchValue = props.searchValue,
       isSearchByOrderId = props.isSearchByOrderId,
       isSearchByCustomerEmail = props.isSearchByCustomerEmail,
-      isSearchByCustomerPhone = props.isSearchByCustomerPhone;
+      isSearchByCustomerPhone = props.isSearchByCustomerPhone,
+      orderIdForUnreadCountUpdate = props.orderIdForUnreadCountUpdate;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -507,35 +508,11 @@ var OrderList = function OrderList(props) {
 
             case 6:
               response = _context3.sent;
-              //   let filteredResult = []
-              //   if (pendingOrder) {
-              //     if (!response.content.error) {
-              //       filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime_utc))
-              //     }
-              //     if (filterValues.isPreOrder) {
-              //       if (!filterValues.isPendingOrder) filteredResult = []
-              //     }
-              //   }
-              //   if (preOrder) {
-              //     if (!response.content.error) {
-              //       filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime_utc))
-              //     }
-              //     if (filterValues.isPendingOrder) {
-              //       if (!filterValues.isPreOrder) filteredResult = []
-              //     }
-              //   }
-              //   if (pendingOrder || preOrder) {
-              //     setOrderList({
-              //       loading: false,
-              //       orders: response.content.error ? [] : filteredResult,
-              //       error: response.content.error ? response.content.result : null
-              //     })
-              //   } else {
               setOrderList({
                 loading: false,
                 orders: response.content.error ? [] : response.content.result,
                 error: response.content.error ? response.content.result : null
-              }); //   }
+              });
 
               if (!response.content.error) {
                 setPagination({
@@ -575,9 +552,30 @@ var OrderList = function OrderList(props) {
     };
   }();
   /**
-   * Listening deleted order
+   * Listening order id to updatea for unread_count parameter
    */
 
+
+  (0, _react.useEffect)(function () {
+    if (orderIdForUnreadCountUpdate === null || orderList.orders.length === 0) return;
+
+    var _orders = orderList.orders.filter(function (order) {
+      if (order.id === orderIdForUnreadCountUpdate) {
+        order.unread_count = 0;
+        order.unread_general_count = 0;
+        order.unread_direct_count = 0;
+      }
+
+      return true;
+    });
+
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: _orders
+    }));
+  }, [orderIdForUnreadCountUpdate]);
+  /**
+   * Listening deleted order
+   */
 
   (0, _react.useEffect)(function () {
     if (deletedOrderId === null) return;
@@ -708,12 +706,7 @@ var OrderList = function OrderList(props) {
       var orders = [];
 
       if (orderStatus.includes(0) && isFilteredOrder(_order)) {
-        // if (pendingOrder) {
-        //   const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
-        //   if (isPending) {
-        orders = [order].concat(_toConsumableArray(orderList.orders)); // if (filterValues.isPreOrder) {
-        //   if (!filterValues.isPendingOrder) orders = []
-        // }
+        orders = [order].concat(_toConsumableArray(orderList.orders));
 
         var _orders = sortOrdersArray(orderBy, orders);
 
@@ -721,34 +714,60 @@ var OrderList = function OrderList(props) {
         setPagination(_objectSpread({}, pagination));
         setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
           orders: _orders
-        })); //   }
-        // }
-        // if (preOrder) {
-        //   const isPre = isPreOrder(order.created_at, order.delivery_datetime_utc)
-        //   if (isPre) {
-        //     orders = [...orderList.orders, order]
-        //     if (filterValues.isPendingOrder) {
-        //       if (!filterValues.isPreOrder) orders = []
-        //     }
-        //     const _orders = sortOrdersArray(orderDirection, orders)
-        //     pagination.total++
-        //     setPagination({
-        //       ...pagination
-        //     })
-        //     setOrderList({
-        //       ...orderList,
-        //       orders: _orders
-        //     })
-        //   }
-        // }
+        }));
+      }
+    };
+
+    var handleNewMessage = function handleNewMessage(message) {
+      if (orderList.orders.length === 0) return;
+      var found = orderList.orders.find(function (order) {
+        return order.id === message.order.id;
+      });
+
+      if (found) {
+        var _orders = orderList.orders.filter(function (order) {
+          if (order.id === message.order.id) {
+            if (order.last_message_at !== message.created_at) {
+              if (message.type === 1) {
+                order.last_general_message_at = message.created_at;
+
+                if (message.author.level !== 0) {
+                  order.unread_general_count = order.unread_general_count + 1;
+                }
+              } else {
+                order.last_direct_message_at = message.created_at;
+
+                if (message.author.level !== 0) {
+                  order.unread_direct_count = order.unread_direct_count + 1;
+                }
+              }
+
+              order.last_message_at = message.created_at;
+
+              if (message.author.level !== 0) {
+                order.unread_count = order.unread_count + 1;
+              }
+            }
+          }
+
+          return true;
+        });
+
+        var _sortedOrders = sortOrdersArray(orderBy, _orders);
+
+        setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+          orders: _sortedOrders
+        }));
       }
     };
 
     socket.on('update_order', handleUpdateOrder);
     socket.on('orders_register', handleRegisterOrder);
+    socket.on('message', handleNewMessage);
     return function () {
       socket.off('update_order', handleUpdateOrder);
       socket.off('orders_register', handleRegisterOrder);
+      socket.off('message', handleNewMessage);
     };
   }, [orderList.orders, pagination, orderBy, socket]);
   (0, _react.useEffect)(function () {
@@ -756,6 +775,7 @@ var OrderList = function OrderList(props) {
 
     if (asDashboard) {
       socket.join('orders');
+      socket.join('messages_orders');
     } else {
       var _session$user;
 
@@ -765,6 +785,7 @@ var OrderList = function OrderList(props) {
     return function () {
       if (asDashboard) {
         socket.leave('orders');
+        socket.leave('messages_orders');
       } else {
         var _session$user2;
 
@@ -936,6 +957,11 @@ OrderList.propTypes = {
    * Get a list of orders by ids form Ordering API
    */
   orderIds: _propTypes.default.arrayOf(_propTypes.number),
+
+  /**
+   * id of order to update unread_count parameter
+   */
+  orderIdForUnreadCountUpdate: _propTypes.default.number,
 
   /**
    * Array of id of orders

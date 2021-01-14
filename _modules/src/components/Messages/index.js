@@ -62,7 +62,8 @@ var Messages = function Messages(props) {
       orderId = props.orderId,
       customHandleSend = props.customHandleSend,
       order = props.order,
-      asDashboard = props.asDashboard;
+      asDashboard = props.asDashboard,
+      handleUpdateOrderForUnreadCount = props.handleUpdateOrderForUnreadCount;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -311,7 +312,7 @@ var Messages = function Messages(props) {
 
   var handleReadMessages = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(messageId) {
-      var functionFetch, response, _yield$response$json3, error, result;
+      var functionFetch, response, _yield$response$json3, error, result, _messages;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -347,6 +348,22 @@ var Messages = function Messages(props) {
                   loading: false,
                   error: null
                 });
+
+                if (messages.messages.length > 0) {
+                  _messages = messages.messages.filter(function (message) {
+                    if (message.id === messageId) {
+                      message.read = true;
+                    }
+
+                    return true;
+                  });
+                  setMessage(_objectSpread(_objectSpread({}, messages), {}, {
+                    messages: _messages
+                  }));
+                }
+
+                handleUpdateOrderForUnreadCount(null);
+                handleUpdateOrderForUnreadCount(orderId);
               } else {
                 setReadMessages(_objectSpread(_objectSpread({}, readMessages), {}, {
                   loading: false,

@@ -22,7 +22,8 @@ export const OrderList = (props) => {
     searchValue,
     isSearchByOrderId,
     isSearchByCustomerEmail,
-    isSearchByCustomerPhone
+    isSearchByCustomerPhone,
+    orderIdForUnreadCountUpdate
   } = props
 
   const [ordering] = useApi()
@@ -325,37 +326,11 @@ export const OrderList = (props) => {
       setOrderList({ ...orderList, loading: true })
       const response = await getOrders(pagination.currentPage + 1)
 
-      //   let filteredResult = []
-      //   if (pendingOrder) {
-      //     if (!response.content.error) {
-      //       filteredResult = response.content.result.filter(order => isPendingOrder(order.created_at, order.delivery_datetime_utc))
-      //     }
-      //     if (filterValues.isPreOrder) {
-      //       if (!filterValues.isPendingOrder) filteredResult = []
-      //     }
-      //   }
-      //   if (preOrder) {
-      //     if (!response.content.error) {
-      //       filteredResult = response.content.result.filter((order) => isPreOrder(order.created_at, order.delivery_datetime_utc))
-      //     }
-      //     if (filterValues.isPendingOrder) {
-      //       if (!filterValues.isPreOrder) filteredResult = []
-      //     }
-      //   }
-
-      //   if (pendingOrder || preOrder) {
-      //     setOrderList({
-      //       loading: false,
-      //       orders: response.content.error ? [] : filteredResult,
-      //       error: response.content.error ? response.content.result : null
-      //     })
-      //   } else {
       setOrderList({
         loading: false,
         orders: response.content.error ? [] : response.content.result,
         error: response.content.error ? response.content.result : null
       })
-      //   }
 
       if (!response.content.error) {
         setPagination({
@@ -373,6 +348,21 @@ export const OrderList = (props) => {
       }
     }
   }
+  /**
+   * Listening order id to updatea for unread_count parameter
+   */
+  useEffect(() => {
+    if (orderIdForUnreadCountUpdate === null || orderList.orders.length === 0) return
+    const _orders = orderList.orders.filter(order => {
+      if (order.id === orderIdForUnreadCountUpdate) {
+        order.unread_count = 0
+        order.unread_general_count = 0
+        order.unread_direct_count = 0
+      }
+      return true
+    })
+    setOrderList({ ...orderList, orders: _orders })
+  }, [orderIdForUnreadCountUpdate])
 
   /**
    * Listening deleted order
@@ -488,13 +478,7 @@ export const OrderList = (props) => {
       const order = { ..._order, status: 0 }
       let orders = []
       if (orderStatus.includes(0) && isFilteredOrder(_order)) {
-        // if (pendingOrder) {
-        //   const isPending = isPendingOrder(order.created_at, order.delivery_datetime_utc)
-        //   if (isPending) {
         orders = [order, ...orderList.orders]
-        // if (filterValues.isPreOrder) {
-        //   if (!filterValues.isPendingOrder) orders = []
-        // }
         const _orders = sortOrdersArray(orderBy, orders)
         pagination.total++
         setPagination({
@@ -504,33 +488,46 @@ export const OrderList = (props) => {
           ...orderList,
           orders: _orders
         })
-        //   }
-        // }
-        // if (preOrder) {
-        //   const isPre = isPreOrder(order.created_at, order.delivery_datetime_utc)
-        //   if (isPre) {
-        //     orders = [...orderList.orders, order]
-        //     if (filterValues.isPendingOrder) {
-        //       if (!filterValues.isPreOrder) orders = []
-        //     }
-        //     const _orders = sortOrdersArray(orderDirection, orders)
-        //     pagination.total++
-        //     setPagination({
-        //       ...pagination
-        //     })
-        //     setOrderList({
-        //       ...orderList,
-        //       orders: _orders
-        //     })
-        //   }
-        // }
+      }
+    }
+
+    const handleNewMessage = (message) => {
+      if (orderList.orders.length === 0) return
+      const found = orderList.orders.find(order => order.id === message.order.id)
+      if (found) {
+        const _orders = orderList.orders.filter(order => {
+          if (order.id === message.order.id) {
+            if (order.last_message_at !== message.created_at) {
+              if (message.type === 1) {
+                order.last_general_message_at = message.created_at
+                if (message.author.level !== 0) {
+                  order.unread_general_count = order.unread_general_count + 1
+                }
+              } else {
+                order.last_direct_message_at = message.created_at
+                if (message.author.level !== 0) {
+                  order.unread_direct_count = order.unread_direct_count + 1
+                }
+              }
+              order.last_message_at = message.created_at
+              if (message.author.level !== 0) {
+                order.unread_count = order.unread_count + 1
+              }
+            }
+          }
+          return true
+        })
+        const _sortedOrders = sortOrdersArray(orderBy, _orders)
+        setOrderList({ ...orderList, orders: _sortedOrders })
       }
     }
     socket.on('update_order', handleUpdateOrder)
     socket.on('orders_register', handleRegisterOrder)
+    socket.on('message', handleNewMessage)
     return () => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('orders_register', handleRegisterOrder)
+      socket.off('message', handleNewMessage)
     }
   }, [orderList.orders, pagination, orderBy, socket])
 
@@ -539,12 +536,14 @@ export const OrderList = (props) => {
 
     if (asDashboard) {
       socket.join('orders')
+      socket.join('messages_orders')
     } else {
       socket.join(`orders_${session?.user?.id}`)
     }
     return () => {
       if (asDashboard) {
         socket.leave('orders')
+        socket.leave('messages_orders')
       } else {
         socket.leave(`orders_${session?.user?.id}`)
       }
@@ -648,6 +647,10 @@ OrderList.propTypes = {
    * Get a list of orders by ids form Ordering API
    */
   orderIds: PropTypes.arrayOf(number),
+  /**
+   * id of order to update unread_count parameter
+   */
+  orderIdForUnreadCountUpdate: PropTypes.number,
   /**
    * Array of id of orders
    * Get a list of orders by status form Ordering API

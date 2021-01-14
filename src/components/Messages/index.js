@@ -10,7 +10,8 @@ export const Messages = (props) => {
     orderId,
     customHandleSend,
     order,
-    asDashboard
+    asDashboard,
+    handleUpdateOrderForUnreadCount
   } = props
 
   const [ordering] = useApi()
@@ -115,6 +116,17 @@ export const Messages = (props) => {
           loading: false,
           error: null
         })
+        if (messages.messages.length > 0) {
+          const _messages = messages.messages.filter(message => {
+            if (message.id === messageId) {
+              message.read = true
+            }
+            return true
+          })
+          setMessage({ ...messages, messages: _messages })
+        }
+        handleUpdateOrderForUnreadCount(null)
+        handleUpdateOrderForUnreadCount(orderId)
       } else {
         setReadMessages({
           ...readMessages,
