@@ -210,16 +210,16 @@ var Checkout = function Checkout(props) {
             case 11:
               result = _context2.sent;
 
-              if (!result.error) {
+              if (!(result === null || result === void 0 ? void 0 : result.error)) {
                 _context2.next = 15;
                 break;
               }
 
-              setErrors(result.result);
+              setErrors(result === null || result === void 0 ? void 0 : result.result);
               return _context2.abrupt("return");
 
             case 15:
-              cartResult = result.result;
+              cartResult = result === null || result === void 0 ? void 0 : result.result;
 
               if (!(((_cartResult = cartResult) === null || _cartResult === void 0 ? void 0 : (_cartResult$paymethod = _cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
                 _context2.next = 25;
