@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import PropTypes, { number } from 'prop-types'
+import PropTypes, { object } from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 
 export const OrderTypeControl = (props) => {
@@ -39,7 +39,7 @@ OrderTypeControl.propTypes = {
   /**
    * Order availables to the control
    */
-  orderTypes: PropTypes.arrayOf(number),
+  orderTypes: PropTypes.arrayOf(object),
   /**
    * Custom function to control order type changes
    */
