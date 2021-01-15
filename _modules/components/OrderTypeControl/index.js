@@ -68,7 +68,7 @@ OrderTypeControl.propTypes = {
   /**
    * Order availables to the control
    */
-  orderTypes: _propTypes.default.arrayOf(_propTypes.number),
+  orderTypes: _propTypes.default.arrayOf(_propTypes.object),
 
   /**
    * Custom function to control order type changes

@@ -47,8 +47,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage address details behavior without UI component
  */
 var AddressDetails = function AddressDetails(props) {
-  var _orderState$options2, _orderState$options2$;
-
   var apiKey = props.apiKey,
       UIComponent = props.UIComponent,
       mapConfigs = props.mapConfigs;
@@ -151,9 +149,7 @@ var AddressDetails = function AddressDetails(props) {
     };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    googleMapsUrl: formatUrl(location),
-    userAddress: orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : _orderState$options2$.address,
-    orderType: orderState === null || orderState === void 0 ? void 0 : orderState.options.type
+    googleMapsUrl: formatUrl(location)
   })));
 };
 
