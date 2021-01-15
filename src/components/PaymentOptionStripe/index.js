@@ -34,10 +34,10 @@ export const PaymentOptionStripe = (props) => {
    */
   const getCards = async () => {
     setCardsList({ ...cardsList, loading: true })
-    // Replace for a sdk method
     try {
       const source = {}
       requestState.paymentCards = source
+      // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
       const { content: { result } } = await ordering.setAccessToken(token).paymentCards(businessId, user.id).get({ cancelToken: source })
       const defaultCart = result?.find(card => card.default)
       if (defaultCart) {
@@ -68,8 +68,8 @@ export const PaymentOptionStripe = (props) => {
    * method to get cards from API
    */
   const deleteCard = async (card) => {
-    // Replace for a sdk method
     try {
+      // The order of paymentCards params is businessId, userId, cardId. This sdk needs to be improved in the future,
       const { content: { error } } = await ordering.paymentCards(-1, user.id, card.id).delete()
       if (!error) {
         cardsList.cards = cardsList.cards.filter(_card => _card.id !== card.id)
@@ -85,7 +85,6 @@ export const PaymentOptionStripe = (props) => {
    * Method to get stripe credentials from API
    */
   const getCredentials = async () => {
-    // Replace for a sdk method
     try {
       const { content: { result } } = await ordering.setAccessToken(token).paymentCards().getCredentials()
       setPublicKey(result.publishable)
