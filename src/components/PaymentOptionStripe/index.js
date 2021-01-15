@@ -27,6 +27,8 @@ export const PaymentOptionStripe = (props) => {
 
   const [cardSelected, setCardSelected] = useState(null)
 
+  const requestState = {}
+
   /**
    * method to get cards from API
    */
@@ -34,9 +36,10 @@ export const PaymentOptionStripe = (props) => {
     setCardsList({ ...cardsList, loading: true })
     // Replace for a sdk method
     try {
-      const response = await fetch(`${ordering.root}/payments/stripe/cards?business_id=${businessId}&user_id=${user.id}`, { headers: { Authorization: `Bearer ${token}` } })
-      const { result } = await response.json()
-      const defaultCart = result.find(card => card.default)
+      const source = {}
+      requestState.paymentCards = source
+      const { content: { result } } = await ordering.setAccessToken(token).paymentCards(businessId, user.id).get({ cancelToken: source })
+      const defaultCart = result?.find(card => card.default)
       if (defaultCart) {
         setCardSelected({
           id: defaultCart.id,
@@ -67,13 +70,7 @@ export const PaymentOptionStripe = (props) => {
   const deleteCard = async (card) => {
     // Replace for a sdk method
     try {
-      const body = JSON.stringify({
-        business_id: -1,
-        card_id: card.id,
-        user_id: user.id
-      })
-      const response = await fetch(`${ordering.root}/payments/stripe/cards`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body })
-      const { error } = await response.json()
+      const { content: { error } } = await ordering.paymentCards(-1, user.id, card.id).delete()
       if (!error) {
         cardsList.cards = cardsList.cards.filter(_card => _card.id !== card.id)
         setCardsList({
@@ -81,17 +78,20 @@ export const PaymentOptionStripe = (props) => {
         })
       }
     } catch (error) {
+      console.error(error.message)
     }
   }
-
   /**
    * Method to get stripe credentials from API
    */
   const getCredentials = async () => {
     // Replace for a sdk method
-    const response = await fetch(`${ordering.root}/payments/stripe/credentials`, { headers: { Authorization: `Bearer ${token}` } })
-    const { result: { publishable } } = await response.json()
-    setPublicKey(publishable)
+    try {
+      const { content: { result } } = await ordering.setAccessToken(token).paymentCards().getCredentials()
+      setPublicKey(result.publishable)
+    } catch (error) {
+      console.error(error.message)
+    }
   }
 
   const handleCardClick = (card) => {
@@ -118,6 +118,11 @@ export const PaymentOptionStripe = (props) => {
       getCards()
       if (!props.publicKey) {
         getCredentials()
+      }
+    }
+    return () => {
+      if (requestState.paymentCards) {
+        requestState.paymentCards.cancel()
       }
     }
   }, [token])
