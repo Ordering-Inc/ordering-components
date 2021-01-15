@@ -66,8 +66,6 @@ export const AddressDetails = (props) => {
         <UIComponent
           {...props}
           googleMapsUrl={formatUrl(location)}
-          userAddress={orderState?.options?.address?.address}
-          orderType={orderState?.options.type}
         />
       )}
     </>
