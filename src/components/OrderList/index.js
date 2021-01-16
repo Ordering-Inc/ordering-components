@@ -541,7 +541,18 @@ export const OrderList = (props) => {
         socket.leave(`orders_${session?.user?.id}`)
       }
     }
-  }, [socket, session, activeSwitch])
+  }, [socket, session])
+
+  useEffect(() => {
+    if (asDashboard) {
+      socket.join('orders')
+    }
+    return () => {
+      if (asDashboard) {
+        socket.leave('orders')
+      }
+    }
+  }, [activeSwitch])
 
   const loadMoreOrders = async () => {
     setOrderList({ ...orderList, loading: true })

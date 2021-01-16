@@ -791,7 +791,18 @@ var OrderList = function OrderList(props) {
         socket.leave("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
       }
     };
-  }, [socket, session, activeSwitch]);
+  }, [socket, session]);
+  (0, _react.useEffect)(function () {
+    if (asDashboard) {
+      socket.join('orders');
+    }
+
+    return function () {
+      if (asDashboard) {
+        socket.leave('orders');
+      }
+    };
+  }, [activeSwitch]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
