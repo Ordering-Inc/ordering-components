@@ -123,7 +123,7 @@ export const Messages = (props) => {
             }
             return true
           })
-          setMessage({ ...messages, messages: _messages })
+          setMessages({ ...messages, messages: _messages })
         }
         handleUpdateOrderForUnreadCount(null)
         handleUpdateOrderForUnreadCount(orderId)
@@ -141,17 +141,19 @@ export const Messages = (props) => {
 
   useEffect(() => {
     loadMessages()
-  }, [orderId, order?.status])
+  }, [orderId])
 
   useEffect(() => {
     if (messages.loading) return
     const handleNewMessage = (message) => {
-      const found = messages.messages.find(_message => _message.id === message.id)
-      if (!found) {
-        setMessages({
-          ...messages,
-          messages: [...messages.messages, message]
-        })
+      if (message.order.id === orderId) {
+        const found = messages.messages.find(_message => _message.id === message.id)
+        if (!found) {
+          setMessages({
+            ...messages,
+            messages: [...messages.messages, message]
+          })
+        }
       }
     }
     socket.on('message', handleNewMessage)

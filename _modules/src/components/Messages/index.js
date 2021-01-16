@@ -357,7 +357,7 @@ var Messages = function Messages(props) {
 
                     return true;
                   });
-                  setMessage(_objectSpread(_objectSpread({}, messages), {}, {
+                  setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                     messages: _messages
                   }));
                 }
@@ -397,19 +397,21 @@ var Messages = function Messages(props) {
 
   (0, _react.useEffect)(function () {
     loadMessages();
-  }, [orderId, order === null || order === void 0 ? void 0 : order.status]);
+  }, [orderId]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
 
     var handleNewMessage = function handleNewMessage(message) {
-      var found = messages.messages.find(function (_message) {
-        return _message.id === message.id;
-      });
+      if (message.order.id === orderId) {
+        var found = messages.messages.find(function (_message) {
+          return _message.id === message.id;
+        });
 
-      if (!found) {
-        setMessages(_objectSpread(_objectSpread({}, messages), {}, {
-          messages: [].concat(_toConsumableArray(messages.messages), [message])
-        }));
+        if (!found) {
+          setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+            messages: [].concat(_toConsumableArray(messages.messages), [message])
+          }));
+        }
       }
     };
 

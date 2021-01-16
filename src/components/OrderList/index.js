@@ -11,8 +11,6 @@ export const OrderList = (props) => {
     orderIds,
     deletedOrderId,
     orderStatus,
-    pendingOrder,
-    preOrder,
     orderBy,
     orderDirection,
     useDefualtSessionManager,
@@ -23,7 +21,8 @@ export const OrderList = (props) => {
     isSearchByOrderId,
     isSearchByCustomerEmail,
     isSearchByCustomerPhone,
-    orderIdForUnreadCountUpdate
+    orderIdForUnreadCountUpdate,
+    activeSwitch
   } = props
 
   const [ordering] = useApi()
@@ -39,6 +38,7 @@ export const OrderList = (props) => {
   const requestsState = {}
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [registerOrderId, setRegisterOrderId] = useState(null)
+  const [lastMessage, setLastMessage] = useState(null)
 
   /**
    * Reset registerOrderId
@@ -274,18 +274,7 @@ export const OrderList = (props) => {
       : ordering.setAccessToken(accessToken).orders().where(where)
     return await functionFetch.get(options)
   }
-  //   const isPendingOrder = (createdAt, deliveryDatetimeUtc) => {
-  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true
-  //     const date1 = dayjs(createdAt)
-  //     const date2 = dayjs(deliveryDatetimeUtc)
-  //     return Math.abs(date1.diff(date2, 'minute')) < 60
-  //   }
-  //   const isPreOrder = (createdAt, deliveryDatetimeUtc) => {
-  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false
-  //     const date1 = dayjs(createdAt)
-  //     const date2 = dayjs(deliveryDatetimeUtc)
-  //     return Math.abs(date1.diff(date2, 'minute')) >= 60
-  //   }
+
   /**
    * Method to detect if incoming order and update order belong to filter.
    * @param {Object} order incoming order and update order
@@ -363,6 +352,17 @@ export const OrderList = (props) => {
     })
     setOrderList({ ...orderList, orders: _orders })
   }, [orderIdForUnreadCountUpdate])
+  /**
+   * Listening orderBy value change
+   */
+  useEffect(() => {
+    if (orderList.loading) return
+    const _orders = sortOrdersArray(orderBy, orderList.orders)
+    setOrderList({
+      ...orderList,
+      orders: _orders
+    })
+  }, [orderBy, orderList.orders])
 
   /**
    * Listening deleted order
@@ -382,17 +382,7 @@ export const OrderList = (props) => {
     if (searchValue === null) return
     loadOrders()
   }, [searchValue])
-  /**
-   * Listening orderBy value change
-   */
-  useEffect(() => {
-    if (orderList.loading) return
-    const _orders = sortOrdersArray(orderBy, orderList.orders)
-    setOrderList({
-      ...orderList,
-      orders: _orders
-    })
-  }, [orderBy])
+
   /**
    * Listening sesssion and filter values change
    */
@@ -426,7 +416,7 @@ export const OrderList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [session, filterValues])
+  }, [session, filterValues, orders])
 
   useEffect(() => {
     if (orderList.loading) return
@@ -440,7 +430,6 @@ export const OrderList = (props) => {
             delete order.total
             delete order.subtotal
             Object.assign(_order, order)
-
             valid = (orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status))) && isFilteredOrder(order)
             if (!valid) {
               pagination.total--
@@ -451,9 +440,10 @@ export const OrderList = (props) => {
           }
           return valid
         })
+        const _orders = sortOrdersArray(orderBy, orders)
         setOrderList({
           ...orderList,
-          orders
+          orders: _orders
         })
       } else {
         if (isFilteredOrder(order)) {
@@ -497,6 +487,9 @@ export const OrderList = (props) => {
       if (found) {
         const _orders = orderList.orders.filter(order => {
           if (order.id === message.order.id) {
+            const _lastMessage = message
+            _lastMessage.order = order
+            setLastMessage(_lastMessage)
             if (order.last_message_at !== message.created_at) {
               if (message.type === 1) {
                 order.last_general_message_at = message.created_at
@@ -535,20 +528,20 @@ export const OrderList = (props) => {
     if (!session.user) return
 
     if (asDashboard) {
-      socket.join('orders')
       socket.join('messages_orders')
+      socket.join('orders')
     } else {
       socket.join(`orders_${session?.user?.id}`)
     }
     return () => {
       if (asDashboard) {
-        socket.leave('orders')
         socket.leave('messages_orders')
+        socket.leave('orders')
       } else {
         socket.leave(`orders_${session?.user?.id}`)
       }
     }
-  }, [socket, session])
+  }, [socket, session, activeSwitch])
 
   const loadMoreOrders = async () => {
     setOrderList({ ...orderList, loading: true })
@@ -609,9 +602,8 @@ export const OrderList = (props) => {
           {...props}
           orderList={orderList}
           pagination={pagination}
-          pendingOrder={pendingOrder}
-          preOrder={preOrder}
           registerOrderId={registerOrderId}
+          lastMessage={lastMessage}
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
           handleUpdateOrderStatus={handleUpdateOrderStatus}

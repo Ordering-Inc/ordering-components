@@ -65,8 +65,6 @@ var OrderList = function OrderList(props) {
       orderIds = props.orderIds,
       deletedOrderId = props.deletedOrderId,
       orderStatus = props.orderStatus,
-      pendingOrder = props.pendingOrder,
-      preOrder = props.preOrder,
       orderBy = props.orderBy,
       orderDirection = props.orderDirection,
       useDefualtSessionManager = props.useDefualtSessionManager,
@@ -77,7 +75,8 @@ var OrderList = function OrderList(props) {
       isSearchByOrderId = props.isSearchByOrderId,
       isSearchByCustomerEmail = props.isSearchByCustomerEmail,
       isSearchByCustomerPhone = props.isSearchByCustomerPhone,
-      orderIdForUnreadCountUpdate = props.orderIdForUnreadCountUpdate;
+      orderIdForUnreadCountUpdate = props.orderIdForUnreadCountUpdate,
+      activeSwitch = props.activeSwitch;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -120,6 +119,11 @@ var OrderList = function OrderList(props) {
       _useState8 = _slicedToArray(_useState7, 2),
       registerOrderId = _useState8[0],
       setRegisterOrderId = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      lastMessage = _useState10[0],
+      setLastMessage = _useState10[1];
   /**
    * Reset registerOrderId
    */
@@ -429,19 +433,7 @@ var OrderList = function OrderList(props) {
     return function getOrders(_x2) {
       return _ref2.apply(this, arguments);
     };
-  }(); //   const isPendingOrder = (createdAt, deliveryDatetimeUtc) => {
-  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return true
-  //     const date1 = dayjs(createdAt)
-  //     const date2 = dayjs(deliveryDatetimeUtc)
-  //     return Math.abs(date1.diff(date2, 'minute')) < 60
-  //   }
-  //   const isPreOrder = (createdAt, deliveryDatetimeUtc) => {
-  //     if (deliveryDatetimeUtc === null || !deliveryDatetimeUtc) return false
-  //     const date1 = dayjs(createdAt)
-  //     const date2 = dayjs(deliveryDatetimeUtc)
-  //     return Math.abs(date1.diff(date2, 'minute')) >= 60
-  //   }
-
+  }();
   /**
    * Method to detect if incoming order and update order belong to filter.
    * @param {Object} order incoming order and update order
@@ -574,6 +566,19 @@ var OrderList = function OrderList(props) {
     }));
   }, [orderIdForUnreadCountUpdate]);
   /**
+   * Listening orderBy value change
+   */
+
+  (0, _react.useEffect)(function () {
+    if (orderList.loading) return;
+
+    var _orders = sortOrdersArray(orderBy, orderList.orders);
+
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: _orders
+    }));
+  }, [orderBy, orderList.orders]);
+  /**
    * Listening deleted order
    */
 
@@ -594,19 +599,6 @@ var OrderList = function OrderList(props) {
     if (searchValue === null) return;
     loadOrders();
   }, [searchValue]);
-  /**
-   * Listening orderBy value change
-   */
-
-  (0, _react.useEffect)(function () {
-    if (orderList.loading) return;
-
-    var _orders = sortOrdersArray(orderBy, orderList.orders);
-
-    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-      orders: _orders
-    }));
-  }, [orderBy]);
   /**
    * Listening sesssion and filter values change
    */
@@ -646,7 +638,7 @@ var OrderList = function OrderList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, [session, filterValues]);
+  }, [session, filterValues, orders]);
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
 
@@ -674,8 +666,11 @@ var OrderList = function OrderList(props) {
 
           return valid;
         });
+
+        var _orders = sortOrdersArray(orderBy, orders);
+
         setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-          orders: orders
+          orders: _orders
         }));
       } else {
         if (isFilteredOrder(order)) {
@@ -684,12 +679,12 @@ var OrderList = function OrderList(props) {
           if (isOrderStatus) {
             orders = [].concat(_toConsumableArray(orderList.orders), [order]);
 
-            var _orders = sortOrdersArray(orderBy, orders);
+            var _orders3 = sortOrdersArray(orderBy, orders);
 
             pagination.total++;
             setPagination(_objectSpread({}, pagination));
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-              orders: _orders
+              orders: _orders3
             }));
           }
         }
@@ -727,6 +722,10 @@ var OrderList = function OrderList(props) {
       if (found) {
         var _orders = orderList.orders.filter(function (order) {
           if (order.id === message.order.id) {
+            var _lastMessage = message;
+            _lastMessage.order = order;
+            setLastMessage(_lastMessage);
+
             if (order.last_message_at !== message.created_at) {
               if (message.type === 1) {
                 order.last_general_message_at = message.created_at;
@@ -774,8 +773,8 @@ var OrderList = function OrderList(props) {
     if (!session.user) return;
 
     if (asDashboard) {
-      socket.join('orders');
       socket.join('messages_orders');
+      socket.join('orders');
     } else {
       var _session$user;
 
@@ -784,15 +783,15 @@ var OrderList = function OrderList(props) {
 
     return function () {
       if (asDashboard) {
-        socket.leave('orders');
         socket.leave('messages_orders');
+        socket.leave('orders');
       } else {
         var _session$user2;
 
         socket.leave("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
       }
     };
-  }, [socket, session]);
+  }, [socket, session, activeSwitch]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
@@ -917,9 +916,8 @@ var OrderList = function OrderList(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderList: orderList,
     pagination: pagination,
-    pendingOrder: pendingOrder,
-    preOrder: preOrder,
     registerOrderId: registerOrderId,
+    lastMessage: lastMessage,
     loadMoreOrders: loadMoreOrders,
     goToPage: goToPage,
     handleUpdateOrderStatus: handleUpdateOrderStatus,
