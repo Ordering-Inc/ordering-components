@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 
 export const OrderReview = (props) => {
-  const { UIComponent, order, onSaveReview } = props
+  const { UIComponent, order, onSaveReview, isTesting } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
@@ -23,7 +23,7 @@ export const OrderReview = (props) => {
         service: stars.service,
         package: stars.packaging,
         comment: stars.comments,
-        user_id: session.user.id,
+        user_id: !isTesting ? session?.user?.id : 1,
         business_id: order.business_id
       }
       const response = await fetch(`${ordering.root}/business/${order.business_id}/reviews`, {
