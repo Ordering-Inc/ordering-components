@@ -119,11 +119,6 @@ var OrderList = function OrderList(props) {
       _useState8 = _slicedToArray(_useState7, 2),
       registerOrderId = _useState8[0],
       setRegisterOrderId = _useState8[1];
-
-  var _useState9 = (0, _react.useState)(null),
-      _useState10 = _slicedToArray(_useState9, 2),
-      lastMessage = _useState10[0],
-      setLastMessage = _useState10[1];
   /**
    * Reset registerOrderId
    */
@@ -722,10 +717,6 @@ var OrderList = function OrderList(props) {
       if (found) {
         var _orders = orderList.orders.filter(function (order) {
           if (order.id === message.order.id) {
-            var _lastMessage = message;
-            _lastMessage.order = order;
-            setLastMessage(_lastMessage);
-
             if (order.last_message_at !== message.created_at) {
               if (message.type === 1) {
                 order.last_general_message_at = message.created_at;
@@ -928,7 +919,6 @@ var OrderList = function OrderList(props) {
     orderList: orderList,
     pagination: pagination,
     registerOrderId: registerOrderId,
-    lastMessage: lastMessage,
     loadMoreOrders: loadMoreOrders,
     goToPage: goToPage,
     handleUpdateOrderStatus: handleUpdateOrderStatus,
