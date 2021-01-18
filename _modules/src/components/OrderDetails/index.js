@@ -57,6 +57,7 @@ var OrderDetails = function OrderDetails(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
       token = _useSession2$.token,
       loading = _useSession2$.loading;
 
@@ -304,10 +305,10 @@ var OrderDetails = function OrderDetails(props) {
       }));
     };
 
-    socket.join('orders');
+    socket.join("orders_".concat(user.id));
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      socket.leave('orders');
+      socket.leave("orders_".concat(user.id));
       socket.off('update_order', handleUpdateOrder);
     };
   }, [orderState.order, socket, loading]);

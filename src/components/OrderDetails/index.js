@@ -11,7 +11,7 @@ export const OrderDetails = (props) => {
     UIComponent
   } = props
 
-  const [{ token, loading }] = useSession()
+  const [{ user, token, loading }] = useSession()
   const [ordering] = useApi()
   const [orderState, setOrderState] = useState({ order: null, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
@@ -76,7 +76,7 @@ export const OrderDetails = (props) => {
     try {
       setOrderState({
         ...orderState,
-        loading: true,
+        loading: true
       })
       const functionFetch = asDashboard
         ? ordering.setAccessToken(token).orders(orderId).asDashboard()
@@ -138,10 +138,10 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
     }
-    socket.join('orders')
+    socket.join(`orders_${user.id}`)
     socket.on('update_order', handleUpdateOrder)
     return () => {
-      socket.leave('orders')
+      socket.leave(`orders_${user.id}`)
       socket.off('update_order', handleUpdateOrder)
     }
   }, [orderState.order, socket, loading])
