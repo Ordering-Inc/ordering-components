@@ -23,7 +23,7 @@ export const OrderReview = (props) => {
         service: stars.service,
         package: stars.packaging,
         comment: stars.comments,
-        user_id: session.user.id,
+        user_id: session?.user?.id,
         business_id: order.business_id
       }
       const response = await fetch(`${ordering.root}/business/${order.business_id}/reviews`, {
