@@ -163,18 +163,24 @@ var OrderList = function OrderList(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (session.token) {
-                _context2.next = 2;
+                _context2.next = 3;
                 break;
               }
 
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: false
+              }));
               return _context2.abrupt("return");
 
-            case 2:
-              _context2.prev = 2;
-              _context2.next = 5;
+            case 3:
+              _context2.prev = 3;
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: true
+              }));
+              _context2.next = 7;
               return getOrders(pagination.currentPage + 1);
 
-            case 5:
+            case 7:
               response = _context2.sent;
               setOrderList({
                 loading: false,
@@ -193,12 +199,12 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 13;
+              _context2.next = 15;
               break;
 
-            case 10:
-              _context2.prev = 10;
-              _context2.t0 = _context2["catch"](2);
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](3);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -207,12 +213,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 13:
+            case 15:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[2, 10]]);
+      }, _callee2, null, [[3, 12]]);
     }));
 
     return function loadOrders() {
