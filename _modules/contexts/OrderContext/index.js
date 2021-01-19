@@ -1118,6 +1118,16 @@ var OrderProvider = function OrderProvider(_ref) {
                 events.emit('cart_updated', result);
               } else {
                 delete state.carts["businessId:".concat(result.business_id)];
+                orderObject = {
+                  id: result.order.uuid,
+                  business: {
+                    name: result.business.name
+                  },
+                  total: result.total,
+                  tax_total: result.tax,
+                  delivery_zone_price: result.delivery_price
+                };
+                events.emit('order_placed', orderObject);
               }
 
               _context12.next = 16;
@@ -1137,23 +1147,13 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              orderObject = {
-                id: result.order.uuid,
-                business: {
-                  name: result.business.name
-                },
-                total: result.total,
-                tax_total: result.tax,
-                delivery_zone_price: result.delivery_price
-              };
-              events.emit('order_placed', orderObject);
               return _context12.abrupt("return", {
                 error: error,
                 result: result
               });
 
-            case 22:
-              _context12.prev = 22;
+            case 20:
+              _context12.prev = 20;
               _context12.t0 = _context12["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1163,12 +1163,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context12.t0.message]
               });
 
-            case 26:
+            case 24:
             case "end":
               return _context12.stop();
           }
         }
-      }, _callee12, null, [[0, 22]]);
+      }, _callee12, null, [[0, 20]]);
     }));
 
     return function placeCart(_x13, _x14) {
