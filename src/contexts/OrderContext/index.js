@@ -449,6 +449,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           events.emit('cart_updated', result)
         } else {
           delete state.carts[`businessId:${result.business_id}`]
+          const orderObject = {
+            id: result.order.uuid,
+            business: { name: result.business.name },
+            total: result.total,
+            tax_total: result.tax,
+            delivery_zone_price: result.delivery_price
+          }
+          events.emit('order_placed', orderObject)
         }
       } else {
         setAlert({ show: true, content: result })
@@ -456,14 +464,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         return
       }
       setState({ ...state, loading: false })
-      const orderObject = {
-        id: result.order.uuid,
-        business: { name: result.business.name },
-        total: result.total,
-        tax_total: result.tax,
-        delivery_zone_price: result.delivery_price
-      }
-      events.emit('order_placed', orderObject)
       return { error, result }
     } catch (err) {
       setState({ ...state, loading: false })
