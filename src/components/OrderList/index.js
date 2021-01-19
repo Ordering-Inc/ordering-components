@@ -21,8 +21,7 @@ export const OrderList = (props) => {
     isSearchByOrderId,
     isSearchByCustomerEmail,
     isSearchByCustomerPhone,
-    orderIdForUnreadCountUpdate,
-    activeSwitch
+    orderIdForUnreadCountUpdate
   } = props
 
   const [ordering] = useApi()
@@ -38,6 +37,7 @@ export const OrderList = (props) => {
   const requestsState = {}
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [registerOrderId, setRegisterOrderId] = useState(null)
+  const [lastMessage, setLastMessage] = useState(null)
 
   /**
    * Reset registerOrderId
@@ -486,6 +486,9 @@ export const OrderList = (props) => {
       if (found) {
         const _orders = orderList.orders.filter(order => {
           if (order.id === message.order.id) {
+            const _lastMessage = message
+            _lastMessage.order = order
+            setLastMessage(_lastMessage)
             if (order.last_message_at !== message.created_at) {
               if (message.type === 1) {
                 order.last_general_message_at = message.created_at
@@ -538,17 +541,6 @@ export const OrderList = (props) => {
       }
     }
   }, [socket, session])
-
-  useEffect(() => {
-    if (asDashboard) {
-      socket.join('orders')
-    }
-    return () => {
-      if (asDashboard) {
-        socket.leave('orders')
-      }
-    }
-  }, [activeSwitch])
 
   const loadMoreOrders = async () => {
     setOrderList({ ...orderList, loading: true })
@@ -610,6 +602,7 @@ export const OrderList = (props) => {
           orderList={orderList}
           pagination={pagination}
           registerOrderId={registerOrderId}
+          lastMessage={lastMessage}
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
           handleUpdateOrderStatus={handleUpdateOrderStatus}
