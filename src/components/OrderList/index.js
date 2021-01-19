@@ -57,8 +57,18 @@ export const OrderList = (props) => {
   }
 
   const loadOrders = async () => {
-    if (!session.token) return
+    if (!session.token) {
+      setOrderList({
+        ...orderList,
+        loading: false
+      })
+      return
+    }
     try {
+      setOrderList({
+        ...orderList,
+        loading: true
+      })
       const response = await getOrders(pagination.currentPage + 1)
       setOrderList({
         loading: false,
