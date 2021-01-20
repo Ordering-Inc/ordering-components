@@ -108,7 +108,7 @@ export const OrderDetails = (props) => {
   useEffect(() => {
     if (orderState.loading || loading) return
     const handleUpdateOrder = (order) => {
-      if (order.id !== orderState.order.id) return
+      if (order?.id !== orderState.order?.id) return
       delete order.total
       delete order.subtotal
       setOrderState({
@@ -120,12 +120,12 @@ export const OrderDetails = (props) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
     }
-    socket.join(`orders_${user.id}`)
+    socket.join(`orders_${user?.id}`)
     socket.join(`drivers_${orderState.order?.driver_id}`)
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
-      socket.leave(`orders_${user.id}`)
+      socket.leave(`orders_${user?.id}`)
       socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
