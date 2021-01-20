@@ -241,12 +241,14 @@ var OrderDetails = function OrderDetails(props) {
     }
   }, []);
   (0, _react.useEffect)(function () {
-    var _orderState$order4;
+    var _orderState$order5;
 
     if (orderState.loading || loading) return;
 
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      if (order.id !== orderState.order.id) return;
+      var _orderState$order4;
+
+      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order4 = orderState.order) === null || _orderState$order4 === void 0 ? void 0 : _orderState$order4.id)) return;
       delete order.total;
       delete order.subtotal;
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -263,15 +265,15 @@ var OrderDetails = function OrderDetails(props) {
       setDriverLocation(newLocation);
     };
 
-    socket.join("orders_".concat(user.id));
-    socket.join("drivers_".concat((_orderState$order4 = orderState.order) === null || _orderState$order4 === void 0 ? void 0 : _orderState$order4.driver_id));
+    socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    socket.join("drivers_".concat((_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.driver_id));
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      var _orderState$order5;
+      var _orderState$order6;
 
-      socket.leave("orders_".concat(user.id));
-      socket.leave("drivers_".concat((_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.driver_id));
+      socket.leave("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.leave("drivers_".concat((_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
