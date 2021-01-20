@@ -87,7 +87,8 @@ var OrderReview = function OrderReview(props) {
 
   var handleSendReview = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var body, response;
+      var _session$user, body, response;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -103,7 +104,7 @@ var OrderReview = function OrderReview(props) {
                 service: stars.service,
                 package: stars.packaging,
                 comment: stars.comments,
-                user_id: session.user.id,
+                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
                 business_id: order.business_id
               };
               _context.next = 5;
