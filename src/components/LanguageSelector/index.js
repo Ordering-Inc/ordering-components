@@ -12,7 +12,7 @@ export const LanguageSelector = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [languagesState, setLanguageState] = useState({ loading: true, languages, error: null })
+  const [languagesState, setLanguageState] = useState({ loading: !languages, languages, error: null })
   const [languageState, , setLanguage] = useLanguage()
   const [languageSelected, setLanguageSelected] = useState(null)
   const requestsState = {}
@@ -60,7 +60,8 @@ export const LanguageSelector = (props) => {
     if (languages?.length > 0) {
       setLanguageState({
         ...languagesState,
-        loading: false
+        loading: false,
+        languages
       })
     } else {
       loadLanguages()
@@ -97,7 +98,7 @@ export const LanguageSelector = (props) => {
         <UIComponent
           {...props}
           currentLanguage={props.handlerCustomChangeLanguage ? languageSelected?.code : languageState?.language?.code}
-          languages={languagesState}
+          languagesState={languagesState}
           handleChangeLanguage={onChangeLanguage}
         />
       )}
