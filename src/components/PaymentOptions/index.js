@@ -9,6 +9,7 @@ import { useApi } from '../../contexts/ApiContext'
  */
 export const PaymentOptions = (props) => {
   const {
+    isLoading,
     paymethods,
     businessId,
     onPaymentChange,
@@ -24,13 +25,15 @@ export const PaymentOptions = (props) => {
   const [paymethodData, setPaymethodData] = useState({})
 
   const parsePaymethods = (paymethods) => {
-    const _paymethods = paymethods.filter(credentials => !['paypal_express', 'authorize'].includes(credentials.paymethod.gateway)).map(credentials => {
-      const { data, sandbox } = credentials
-      const paymethod = credentials.paymethod
-      paymethod.sandbox = sandbox
-      paymethod.credentials = data
-      return paymethod
-    })
+    const _paymethods = paymethods && paymethods
+      .filter(credentials => !['paypal_express', 'authorize'].includes(credentials?.paymethod?.gateway))
+      .map(credentials => {
+        return {
+          ...credentials?.paymethod,
+          sandbox: credentials?.sandbox,
+          credentials: credentials?.data
+        }
+      })
     return _paymethods
   }
 
@@ -39,7 +42,6 @@ export const PaymentOptions = (props) => {
    */
   const getPaymentOptions = async () => {
     try {
-      // setPaymethodsList({ ...paymethodsList, loading: true })
       const { content: { error, result } } = await ordering.businesses(businessId).get()
       if (!error) {
         paymethodsList.paymethods = parsePaymethods(result.paymethods)
@@ -47,7 +49,8 @@ export const PaymentOptions = (props) => {
       setPaymethodsList({
         ...paymethodsList,
         error: error ? result : null,
-        loading: false
+        loading: false,
+        paymethods: error ? [] : parsePaymethods(result.paymethods)
       })
     } catch (error) {
       setPaymethodsList({
@@ -95,6 +98,7 @@ export const PaymentOptions = (props) => {
   }, [paymethodSelected])
 
   useEffect(() => {
+    if (isLoading) return
     if (paymethods) {
       setPaymethodsList({
         ...paymethodsList,
@@ -102,9 +106,16 @@ export const PaymentOptions = (props) => {
         paymethods: parsePaymethods(paymethods)
       })
     } else {
-      getPaymentOptions()
+      if (businessId) {
+        getPaymentOptions()
+      } else {
+        setPaymethodsList({
+          ...paymethodsList,
+          loading: false
+        })
+      }
     }
-  }, [])
+  }, [isLoading])
 
   return (
     <>
