@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 /**
  * Component to manage coupon form behavior without UI component
@@ -8,10 +9,13 @@ import { useOrder } from '../../contexts/OrderContext'
 export const CouponControl = (props) => {
   const {
     businessId,
+    price,
     UIComponent
   } = props
 
   const [orderState, { applyCoupon }] = useOrder()
+  const [confirm, setConfirm] = useState({ open: false, content: null, error: false })
+  const [, t] = useLanguage()
 
   const couponDefault = (
     orderState?.carts &&
@@ -41,6 +45,13 @@ export const CouponControl = (props) => {
     })
   }
 
+  useEffect(() => {
+    if (price < 1) {
+      handleRemoveCouponClick()
+      setConfirm({ ...confirm, open: true, content: t('COUPON_TOTAL_ERROR', 'The total value of the cart with discount must be at least 1$'), error: true })
+    }
+  }, [price])
+
   return (
     <>
       {UIComponent && (
@@ -51,6 +62,8 @@ export const CouponControl = (props) => {
           onChangeInputCoupon={(val => setCouponInput(val))}
           handleButtonApplyClick={handleButtonApplyClick}
           handleRemoveCouponClick={handleRemoveCouponClick}
+          confirm={confirm}
+          setConfirm={setConfirm}
         />
       )}
     </>
