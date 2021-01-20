@@ -23,7 +23,7 @@ export const Checkout = (props) => {
   /**
    * Order context
    */
-  const [orderState, { placeCart, confirmCart }] = useOrder()
+  const [orderState, { placeCart }] = useOrder()
   /**
    * Object to save an object with business information
    */
@@ -99,14 +99,10 @@ export const Checkout = (props) => {
       return
     }
 
-    let cartResult = result?.result
+    const cartResult = result?.result
 
     if (cartResult?.paymethod_data?.status === 2 && actionsBeforePlace) {
-      const toConfirm = await actionsBeforePlace(paymethodSelected, result.result)
-      if (toConfirm) {
-        const confirmResponse = await confirmCart(cart.uuid)
-        cartResult = confirmResponse.result
-      }
+      await actionsBeforePlace(paymethodSelected, result.result)
     }
     setPlacing(false)
     onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
