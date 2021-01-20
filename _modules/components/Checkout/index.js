@@ -78,9 +78,7 @@ var Checkout = function Checkout(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       orderState = _useOrder2[0],
-      _useOrder2$ = _useOrder2[1],
-      placeCart = _useOrder2$.placeCart,
-      confirmCart = _useOrder2$.confirmCart;
+      placeCart = _useOrder2[1].placeCart;
   /**
    * Object to save an object with business information
    */
@@ -163,9 +161,9 @@ var Checkout = function Checkout(props) {
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _cartResult, _cartResult$paymethod;
+      var _cartResult$paymethod;
 
-      var paymethodData, payload, result, cartResult, toConfirm, confirmResponse;
+      var paymethodData, payload, result, cartResult;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -221,8 +219,8 @@ var Checkout = function Checkout(props) {
             case 15:
               cartResult = result === null || result === void 0 ? void 0 : result.result;
 
-              if (!(((_cartResult = cartResult) === null || _cartResult === void 0 ? void 0 : (_cartResult$paymethod = _cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-                _context2.next = 25;
+              if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
+                _context2.next = 19;
                 break;
               }
 
@@ -230,25 +228,10 @@ var Checkout = function Checkout(props) {
               return actionsBeforePlace(paymethodSelected, result.result);
 
             case 19:
-              toConfirm = _context2.sent;
-
-              if (!toConfirm) {
-                _context2.next = 25;
-                break;
-              }
-
-              _context2.next = 23;
-              return confirmCart(cart.uuid);
-
-            case 23:
-              confirmResponse = _context2.sent;
-              cartResult = confirmResponse.result;
-
-            case 25:
               setPlacing(false);
               onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
 
-            case 27:
+            case 21:
             case "end":
               return _context2.stop();
           }
