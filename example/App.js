@@ -64,6 +64,7 @@ import { Analytics } from '../src/components/Analitycs'
 import ChangeView from './components/ChangeView'
 import { FloatingButtonExample } from './views/FloatingButtonExample'
 import { ResetPasswordExample } from './views/ResetPasswordExample'
+import { PhoneExample } from './views/PhoneExample'
 
 export default function App () {
   return (
@@ -245,6 +246,9 @@ export default function App () {
             </Route>
             <Route path='/floating_button'>
               <FloatingButtonExample />
+            </Route>
+            <Route path='/phone'>
+              <PhoneExample />
             </Route>
             <Route path='/'>
               <Home />
