@@ -11,7 +11,7 @@ export const PhoneUI = (props) => {
     phone,
     onChangeNumber,
     setModalOpen,
-    error
+    errorMinLength
   } = props
 
   const { register, handleSubmit } = useForm()
@@ -49,7 +49,7 @@ export const PhoneUI = (props) => {
             })}
           />
         </div>
-        {error.dispatch && <a style={{ color: 'red' }}>The Phone / Mobile must be 10 characters</a>}
+        {errorMinLength.dispatch && <a style={{ color: 'red' }}>The Phone / Mobile must be 10 characters</a>}
       </form>
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

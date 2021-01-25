@@ -15,6 +15,7 @@ export const PaypalButton = props => {
     script.type = 'text/javascript'
     script.src = `https://www.paypal.com/sdk/js?client-id=${props.clientID}`
     script.async = true
+    script.defer = true
     script.onload = () => {
       setSdkReady(true)
     }

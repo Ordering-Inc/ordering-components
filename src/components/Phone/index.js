@@ -8,10 +8,9 @@ export const Phone = (props) => {
   } = props
 
   const [phone, setPhone] = useState('')
-  // const [openCustomer, setOpenCustomer] = useState(false)
-  const [error, setError] = useState({ dispatch: false, error: false })
+  const [openCustomer, setOpenCustomer] = useState(false)
+  const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
 
-  console.log(phone.length)
   const onChangeNumber = e => {
     const number = (e.target.validity.valid)
       ? e.target.value : phone
@@ -65,9 +64,10 @@ export const Phone = (props) => {
       b.innerHTML += "<input type='hidden' value='" + 'Create new customer' + "'>"
       b.addEventListener('click', function (e) {
         if (evt.target.value.length === 10) {
-          setError({ error: false, dispatch: false })
+          setErrorMinLength({ error: false, dispatch: false })
+          setOpenCustomer(true)
         } else {
-          setError({ error: true, dispatch: true })
+          setErrorMinLength({ error: true, dispatch: true })
         }
         closeAllLists()
       })
@@ -141,8 +141,9 @@ export const Phone = (props) => {
           {...props}
           onChangeNumber={onChangeNumber}
           phone={phone}
-          setError={setError}
-          error={error}
+          setErrorMinLength={setErrorMinLength}
+          errorMinLength={errorMinLength}
+          openCustomer={openCustomer}
         />
       )}
     </>
