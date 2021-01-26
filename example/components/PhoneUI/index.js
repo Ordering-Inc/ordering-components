@@ -41,6 +41,7 @@ export const PhoneUI = (props) => {
             onInput={onChangeNumber}
             value={phone}
             maxLength='10'
+            onChange={() => {}}
             ref={register({
               minLength: {
                 value: 10,

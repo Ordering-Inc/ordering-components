@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useSession } from '../../contexts/SessionContext'
 
 export const Phone = (props) => {
   const {
@@ -11,10 +12,12 @@ export const Phone = (props) => {
   const [phone, setPhone] = useState('')
   const [openCustomer, setOpenCustomer] = useState(false)
   const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
+  const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [, t] = useLanguage()
   const [ordering] = useApi()
-  const [phones, setPhones] = useState(props?.phones || [])
-  const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k'
+  const [phones, setPhones] = useState([{ name: 'test', phone: '1231231231' }])
+  const [{ token }] = useSession()
+  // const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k'
 
   const onChangeNumber = e => {
     const number = (e.target.validity.valid)
@@ -22,14 +25,20 @@ export const Phone = (props) => {
     setPhone(number)
   }
 
-  const getPhone = async () => {
+  const getPhone = async (isCustomer) => {
+    setUserState({ ...userState, loading: true })
     const { content: { result } } = await ordering
-      .setAccessToken(testToken)
+      .setAccessToken(token)
       .users()
       .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
       .get()
     const newPhones = result.map(user => { return { name: user.name, phone: user.phone } })
-    setPhones(newPhones)
+    if (isCustomer) {
+      setUserState({ loading: false, result })
+    } else {
+      setPhones(newPhones)
+      setUserState({ ...userState, loading: false })
+    }
   }
 
   const autocomplete = (inp, arr) => {
@@ -68,6 +77,7 @@ export const Phone = (props) => {
             setPhone(this.getElementsByTagName('input')[0].value)
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
+            getPhone(true)
             closeAllLists()
           })
           a.appendChild(b)
@@ -150,7 +160,7 @@ export const Phone = (props) => {
   }, [phones])
 
   useEffect(() => {
-    if (!props?.phones?.length) {
+    if (props?.phones) {
       getPhone()
     }
   }, [phone])
