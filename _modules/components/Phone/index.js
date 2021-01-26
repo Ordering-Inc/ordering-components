@@ -17,6 +17,8 @@ var _LanguageContext = require("../../contexts/LanguageContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _SessionContext = require("../../contexts/SessionContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -24,6 +26,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -62,6 +70,16 @@ var Phone = function Phone(props) {
       errorMinLength = _useState6[0],
       setErrorMinLength = _useState6[1];
 
+  var _useState7 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      userState = _useState8[0],
+      setUserState = _useState8[1];
+
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
       t = _useLanguage2[1];
@@ -70,12 +88,18 @@ var Phone = function Phone(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState7 = (0, _react.useState)((props === null || props === void 0 ? void 0 : props.phones) || []),
-      _useState8 = _slicedToArray(_useState7, 2),
-      phones = _useState8[0],
-      setPhones = _useState8[1];
+  var _useState9 = (0, _react.useState)([{
+    name: 'test',
+    phone: '1231231231'
+  }]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      phones = _useState10[0],
+      setPhones = _useState10[1];
 
-  var testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k';
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token; // const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k'
+
 
   var onChangeNumber = function onChangeNumber(e) {
     var number = e.target.validity.valid ? e.target.value : phone;
@@ -83,15 +107,18 @@ var Phone = function Phone(props) {
   };
 
   var getPhone = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(isCustomer) {
       var _yield$ordering$setAc, result, newPhones;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return ordering.setAccessToken(testToken).users().where([{
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: true
+              }));
+              _context.next = 3;
+              return ordering.setAccessToken(token).users().where([{
                 attribute: 'cellphone',
                 value: {
                   condition: 'ilike',
@@ -99,7 +126,7 @@ var Phone = function Phone(props) {
                 }
               }]).get();
 
-            case 2:
+            case 3:
               _yield$ordering$setAc = _context.sent;
               result = _yield$ordering$setAc.content.result;
               newPhones = result.map(function (user) {
@@ -108,9 +135,20 @@ var Phone = function Phone(props) {
                   phone: user.phone
                 };
               });
-              setPhones(newPhones);
 
-            case 6:
+              if (isCustomer) {
+                setUserState({
+                  loading: false,
+                  result: result
+                });
+              } else {
+                setPhones(newPhones);
+                setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                  loading: false
+                }));
+              }
+
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -118,7 +156,7 @@ var Phone = function Phone(props) {
       }, _callee);
     }));
 
-    return function getPhone() {
+    return function getPhone(_x) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -170,6 +208,7 @@ var Phone = function Phone(props) {
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
 
+            getPhone(true);
             closeAllLists();
           });
           a.appendChild(b);
@@ -275,9 +314,7 @@ var Phone = function Phone(props) {
     autocomplete(document.getElementById('phone-input'), phones);
   }, [phones]);
   (0, _react.useEffect)(function () {
-    var _props$phones;
-
-    if (!(props === null || props === void 0 ? void 0 : (_props$phones = props.phones) === null || _props$phones === void 0 ? void 0 : _props$phones.length)) {
+    if (props === null || props === void 0 ? void 0 : props.phones) {
       getPhone();
     }
   }, [phone]);
