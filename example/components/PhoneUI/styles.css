@@ -18,8 +18,8 @@ input[type=text] {
   width: 100%;
 }
 input[type=submit] {
-  background-color: #f1f1f1;
-  width: 100%;
+  background-color: DodgerBlue;
+  color: #fff;
 }
 .autocomplete-items {
   position: absolute;

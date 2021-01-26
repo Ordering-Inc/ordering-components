@@ -144,6 +144,7 @@ export const Phone = (props) => {
           setErrorMinLength={setErrorMinLength}
           errorMinLength={errorMinLength}
           openCustomer={openCustomer}
+          setOpenCustomer={setOpenCustomer}
         />
       )}
     </>
