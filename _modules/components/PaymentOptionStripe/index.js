@@ -303,7 +303,7 @@ PaymentOptionStripe.propTypes = {
   /**
    * Business id to get cards from API
    */
-  businessId: _propTypes.default.number,
+  businessId: _propTypes.default.number.isRequired,
 
   /**
    * User id to pass in endpoint to get cards from API,
