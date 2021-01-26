@@ -62,23 +62,28 @@ var Phone = function Phone(props) {
       openCustomer = _useState4[0],
       setOpenCustomer = _useState4[1];
 
-  var _useState5 = (0, _react.useState)({
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      openAddress = _useState6[0],
+      setOpenAddress = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
     dispatch: false,
     error: false
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      errorMinLength = _useState6[0],
-      setErrorMinLength = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      errorMinLength = _useState8[0],
+      setErrorMinLength = _useState8[1];
 
-  var _useState7 = (0, _react.useState)({
+  var _useState9 = (0, _react.useState)({
     loading: false,
     result: {
       error: false
     }
   }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      userState = _useState8[0],
-      setUserState = _useState8[1];
+      _useState10 = _slicedToArray(_useState9, 2),
+      userState = _useState10[0],
+      setUserState = _useState10[1];
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
@@ -88,13 +93,13 @@ var Phone = function Phone(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState9 = (0, _react.useState)([{
+  var _useState11 = (0, _react.useState)([{
     name: 'test',
     phone: '1231231231'
   }]),
-      _useState10 = _slicedToArray(_useState9, 2),
-      phones = _useState10[0],
-      setPhones = _useState10[1];
+      _useState12 = _slicedToArray(_useState11, 2),
+      phones = _useState12[0],
+      setPhones = _useState12[1];
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -141,6 +146,7 @@ var Phone = function Phone(props) {
                   loading: false,
                   result: result
                 });
+                setOpenAddress(true);
               } else {
                 setPhones(newPhones);
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
@@ -324,7 +330,10 @@ var Phone = function Phone(props) {
     setErrorMinLength: setErrorMinLength,
     errorMinLength: errorMinLength,
     openCustomer: openCustomer,
-    setOpenCustomer: setOpenCustomer
+    setOpenCustomer: setOpenCustomer,
+    openAddress: openAddress,
+    setOpenAddress: setOpenAddress,
+    userState: userState
   })));
 };
 
