@@ -11,6 +11,7 @@ export const Phone = (props) => {
 
   const [phone, setPhone] = useState('')
   const [openCustomer, setOpenCustomer] = useState(false)
+  const [openAddress, setOpenAddress] = useState(false)
   const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [, t] = useLanguage()
@@ -35,6 +36,7 @@ export const Phone = (props) => {
     const newPhones = result.map(user => { return { name: user.name, phone: user.phone } })
     if (isCustomer) {
       setUserState({ loading: false, result })
+      setOpenAddress(true)
     } else {
       setPhones(newPhones)
       setUserState({ ...userState, loading: false })
@@ -176,6 +178,9 @@ export const Phone = (props) => {
           errorMinLength={errorMinLength}
           openCustomer={openCustomer}
           setOpenCustomer={setOpenCustomer}
+          openAddress={openAddress}
+          setOpenAddress={setOpenAddress}
+          userState={userState}
         />
       )}
     </>
