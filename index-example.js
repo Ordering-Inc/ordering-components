@@ -5,9 +5,9 @@ import { OrderingProvider } from './src/contexts/OrderingContext'
 
 const configFile = {
   app_id: 'ordering-react',
-  project: 'luisv4',
+  project: 'demo',
   api: {
-    url: 'https://apiv4-dev.ordering.co',
+    url: 'https://apiv4.ordering.co',
     language: 'en',
     version: 'v400'
   },
