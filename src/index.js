@@ -70,6 +70,7 @@ import { UtilsContext, UtilsProviders, useUtils } from './contexts/UtilsContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
 import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
+import { PaymentOptionPaypal } from './components/PaymentOptionPaypal'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
 import { PaymentOptionStripeDirect } from './components/PaymentOptionStripeDirect'
 import { PaymentOptionStripeRedirect } from './components/PaymentOptionStripeRedirect'
@@ -143,6 +144,7 @@ export {
   OrderDetails,
   OrderReview,
   PaymentOptionCash,
+  PaymentOptionPaypal,
   PaymentOptionStripe,
   PaymentOptionStripeDirect,
   PaymentOptionStripeRedirect,

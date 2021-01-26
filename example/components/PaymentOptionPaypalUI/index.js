@@ -1,33 +1,16 @@
 import React from 'react'
-import { PaypalButton } from '../../../src/components/PaymentOptionPaypal/PaypalButton'
 
 export const PaymentOptionPaypalUI = (props) => {
   const {
-    style,
-    amount,
-    clientID,
-    handlerChangePaypal,
+    isSdkReady,
+    PaypalButton,
+    noAuthMessage,
+    paypalButtonProps,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
-
-  const onSuccess = payment => {
-    handlerChangePaypal({
-      paymethodId: 29,
-      gateway: 'paypal_express',
-      data: payment
-    })
-  }
-
-  const onCancel = data => {
-    console.log(data)
-  }
-
-  const onError = err => {
-    console.log(err)
-  }
 
   return (
     <>
@@ -42,14 +25,15 @@ export const PaymentOptionPaypalUI = (props) => {
       )}
 
       <div style={{ width: '500px' }}>
-        <PaypalButton
-          clientID={clientID}
-          style={style}
-          amount={amount}
-          onError={onError}
-          onSuccess={onSuccess}
-          onCancel={onCancel}
-        />
+        {noAuthMessage ? (
+          <p>{noAuthMessage}</p>
+        ) : (
+          isSdkReady ? (
+            PaypalButton && <PaypalButton {...paypalButtonProps} />
+          ) : (
+            <div>Loading...</div>
+          )
+        )}
       </div>
 
       {afterComponents.map(
