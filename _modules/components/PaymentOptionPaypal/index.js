@@ -235,11 +235,6 @@ PaymentOptionPaypal.propTypes = {
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * User token
-   */
-  token: _propTypes.default.string.isRequired,
-
-  /**
    * Object with body data to place order
    */
   body: _propTypes.default.object.isRequired,
