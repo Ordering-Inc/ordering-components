@@ -214,7 +214,8 @@ var Phone = function Phone(props) {
     phone: phone,
     setErrorMinLength: setErrorMinLength,
     errorMinLength: errorMinLength,
-    openCustomer: openCustomer
+    openCustomer: openCustomer,
+    setOpenCustomer: setOpenCustomer
   })));
 };
 
