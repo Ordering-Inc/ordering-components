@@ -375,6 +375,12 @@ Object.defineProperty(exports, "CmsContent", {
     return _CmsContent.CmsContent;
   }
 });
+Object.defineProperty(exports, "Phone", {
+  enumerable: true,
+  get: function get() {
+    return _Phone.Phone;
+  }
+});
 Object.defineProperty(exports, "ConfigContext", {
   enumerable: true,
   get: function get() {
@@ -747,6 +753,8 @@ var _OrderDetails = require("./components/OrderDetails");
 var _OrderReview = require("./components/OrderReview");
 
 var _CmsContent = require("./components/CmsContent");
+
+var _Phone = require("./components/Phone");
 
 var _ConfigContext = require("./contexts/ConfigContext");
 
