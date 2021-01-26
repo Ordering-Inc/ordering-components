@@ -58,6 +58,7 @@ import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
 import { OrderDetails } from './components/OrderDetails'
 import { OrderReview } from './components/OrderReview'
 import { CmsContent } from './components/CmsContent'
+import { Phone } from './components/Phone'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -146,6 +147,7 @@ export {
   PaymentOptionStripe,
   PaymentOptionStripeDirect,
   PaymentOptionStripeRedirect,
+  Phone,
   StripeElementsForm,
   CardForm,
   StripeRedirectForm,
