@@ -151,7 +151,7 @@ PaymentOptionStripe.propTypes = {
   /**
    * Business id to get cards from API
    */
-  businessId: PropTypes.number,
+  businessId: PropTypes.number.isRequired,
   /**
    * User id to pass in endpoint to get cards from API,
    */
