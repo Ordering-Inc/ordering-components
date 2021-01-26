@@ -573,6 +573,12 @@ Object.defineProperty(exports, "PaymentOptionCash", {
     return _PaymentOptionCash.PaymentOptionCash;
   }
 });
+Object.defineProperty(exports, "PaymentOptionPaypal", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionPaypal.PaymentOptionPaypal;
+  }
+});
 Object.defineProperty(exports, "PaymentOptionStripe", {
   enumerable: true,
   get: function get() {
@@ -771,6 +777,8 @@ var _OrderingContext = require("./contexts/OrderingContext");
 var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
 
 var _PaymentOptionCash = require("./components/PaymentOptionCash");
+
+var _PaymentOptionPaypal = require("./components/PaymentOptionPaypal");
 
 var _PaymentOptionStripe = require("./components/PaymentOptionStripe");
 
