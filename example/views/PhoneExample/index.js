@@ -13,7 +13,6 @@ export const PhoneExample = () => {
     /**
      * Array of phones for autocomplete
      */
-    phones: [{ name: 'jesus', phone: '1234123416' }, { name: 'test', phone: '4321234150' }, { name: 'test2', phone: '1234567890' }],
     /**
      * Options, this must be containt an array of payment options
      */

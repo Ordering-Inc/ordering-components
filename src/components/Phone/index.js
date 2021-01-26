@@ -1,20 +1,35 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useLanguage } from '../../contexts/LanguageContext'
+import { useApi } from '../../contexts/ApiContext'
 
 export const Phone = (props) => {
   const {
-    UIComponent,
-    phones
+    UIComponent
   } = props
 
   const [phone, setPhone] = useState('')
   const [openCustomer, setOpenCustomer] = useState(false)
   const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
+  const [, t] = useLanguage()
+  const [ordering] = useApi()
+  const [phones, setPhones] = useState(props?.phones || [])
+  const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k'
 
   const onChangeNumber = e => {
     const number = (e.target.validity.valid)
       ? e.target.value : phone
     setPhone(number)
+  }
+
+  const getPhone = async () => {
+    const { content: { result } } = await ordering
+      .setAccessToken(testToken)
+      .users()
+      .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
+      .get()
+    const newPhones = result.map(user => { return { name: user.name, phone: user.phone } })
+    setPhones(newPhones)
   }
 
   const autocomplete = (inp, arr) => {
@@ -60,8 +75,8 @@ export const Phone = (props) => {
       }
       /* create a DIV element for add new users */
       b = document.createElement('DIV')
-      b.innerHTML = '<strong>' + 'Create new customer' + '</strong>'
-      b.innerHTML += "<input type='hidden' value='" + 'Create new customer' + "'>"
+      b.innerHTML = '<strong>' + t('CREATE_CUSTOMER', 'Create new customer') + '</strong>'
+      b.innerHTML += "<input type='hidden' value='" + t('CREATE_CUSTOMER', 'Create new customer') + "'>"
       b.addEventListener('click', function (e) {
         if (evt.target.value.length === 10) {
           setErrorMinLength({ error: false, dispatch: false })
@@ -132,7 +147,13 @@ export const Phone = (props) => {
 
   useEffect(() => {
     autocomplete(document.getElementById('phone-input'), phones)
-  }, [])
+  }, [phones])
+
+  useEffect(() => {
+    if (!props?.phones?.length) {
+      getPhone()
+    }
+  }, [phone])
 
   return (
     <>
