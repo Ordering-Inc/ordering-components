@@ -103,7 +103,7 @@ export const UserFormDetails = (props) => {
           loading: false
         })
       } else {
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
+        response = await ordering.users(props?.userData.id || userState.result.result.id).save(formState.changes, {
           accessToken: accessToken
         })
         setFormState({
