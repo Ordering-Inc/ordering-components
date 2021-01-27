@@ -93,10 +93,7 @@ var Phone = function Phone(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState11 = (0, _react.useState)([{
-    name: 'test',
-    phone: '1231231231'
-  }]),
+  var _useState11 = (0, _react.useState)([]),
       _useState12 = _slicedToArray(_useState11, 2),
       phones = _useState12[0],
       setPhones = _useState12[1];
@@ -320,7 +317,7 @@ var Phone = function Phone(props) {
     autocomplete(document.getElementById('phone-input'), phones);
   }, [phones]);
   (0, _react.useEffect)(function () {
-    if (props === null || props === void 0 ? void 0 : props.phones) {
+    if (!(props === null || props === void 0 ? void 0 : props.phones)) {
       getPhone();
     }
   }, [phone]);
