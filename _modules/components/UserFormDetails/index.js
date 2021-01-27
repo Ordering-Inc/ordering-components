@@ -109,7 +109,7 @@ var UserFormDetails = function UserFormDetails(props) {
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
-    if ((userId || useSessionUser && refreshSessionUser) && !session.loading) {
+    if ((userId || useSessionUser && refreshSessionUser) && !session.loading && !props.externalUserState) {
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
         loading: true
       }));
@@ -210,24 +210,42 @@ var UserFormDetails = function UserFormDetails(props) {
                 result: response.content,
                 loading: false
               }));
-              _context.next = 17;
+              _context.next = 23;
               break;
 
             case 13:
-              _context.next = 15;
+              if (props.externalUserState) {
+                _context.next = 19;
+                break;
+              }
+
+              _context.next = 16;
               return ordering.users(userState.result.result.id).save(formState.changes, {
                 accessToken: accessToken
               });
 
-            case 15:
+            case 16:
               response = _context.sent;
+              _context.next = 22;
+              break;
+
+            case 19:
+              _context.next = 21;
+              return ordering.users(props.externalUserState.result.id).save(formState.changes, {
+                accessToken: accessToken
+              });
+
+            case 21:
+              response = _context.sent;
+
+            case 22:
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
                 result: response.content,
                 loading: false
               }));
 
-            case 17:
+            case 23:
               if (!response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   result: _objectSpread(_objectSpread({}, userState.result), response.content)
@@ -241,11 +259,11 @@ var UserFormDetails = function UserFormDetails(props) {
                 setIsEdit(!isEdit);
               }
 
-              _context.next = 23;
+              _context.next = 29;
               break;
 
-            case 20:
-              _context.prev = 20;
+            case 26:
+              _context.prev = 26;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -255,12 +273,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false
               }));
 
-            case 23:
+            case 29:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 20]]);
+      }, _callee, null, [[2, 26]]);
     }));
 
     return function handleUpdateClick(_x, _x2) {
