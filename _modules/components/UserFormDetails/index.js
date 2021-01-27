@@ -85,7 +85,7 @@ var UserFormDetails = function UserFormDetails(props) {
       isEdit = _useState2[0],
       setIsEdit = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(props.externalUserState || {
+  var _useState3 = (0, _react.useState)({
     loading: false,
     result: {
       error: false
@@ -109,7 +109,7 @@ var UserFormDetails = function UserFormDetails(props) {
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
-    if ((userId || useSessionUser && refreshSessionUser) && !session.loading && !props.externalUserState) {
+    if ((userId || useSessionUser && refreshSessionUser) && !session.loading) {
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
         loading: true
       }));
@@ -210,53 +210,28 @@ var UserFormDetails = function UserFormDetails(props) {
                 result: response.content,
                 loading: false
               }));
-              _context.next = 23;
+              _context.next = 17;
               break;
 
             case 13:
-              if (props.externalUserState) {
-                _context.next = 19;
-                break;
-              }
-
-              _context.next = 16;
+              _context.next = 15;
               return ordering.users(userState.result.result.id).save(formState.changes, {
                 accessToken: accessToken
               });
 
-            case 16:
+            case 15:
               response = _context.sent;
-              _context.next = 22;
-              break;
-
-            case 19:
-              _context.next = 21;
-              return ordering.users(props.externalUserState.result.id).save(formState.changes, {
-                accessToken: accessToken
-              });
-
-            case 21:
-              response = _context.sent;
-
-            case 22:
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
                 result: response.content,
                 loading: false
               }));
 
-            case 23:
+            case 17:
               if (!response.content.error) {
-                if (!props.externalUserState) {
-                  setUserState(_objectSpread(_objectSpread({}, userState), {}, {
-                    result: _objectSpread(_objectSpread({}, userState.result), response.content)
-                  }));
-                } else {
-                  setUserState(_objectSpread(_objectSpread({}, props.externalUserState), {}, {
-                    result: _objectSpread(_objectSpread({}, props.externalUserState.result), response.content)
-                  }));
-                }
-
+                setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                  result: _objectSpread(_objectSpread({}, userState.result), response.content)
+                }));
                 changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
 
                 if (handleSuccessUpdate) {
@@ -266,11 +241,11 @@ var UserFormDetails = function UserFormDetails(props) {
                 setIsEdit(!isEdit);
               }
 
-              _context.next = 29;
+              _context.next = 23;
               break;
 
-            case 26:
-              _context.prev = 26;
+            case 20:
+              _context.prev = 20;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -280,12 +255,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false
               }));
 
-            case 29:
+            case 23:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 26]]);
+      }, _callee, null, [[2, 20]]);
     }));
 
     return function handleUpdateClick(_x, _x2) {
@@ -362,7 +337,6 @@ var UserFormDetails = function UserFormDetails(props) {
     isEdit: isEdit,
     cleanFormState: cleanFormState,
     formState: formState,
-    userData: props.externalUserState ? userState : undefined,
     userState: userState,
     validationFields: validationFields,
     showField: showField,

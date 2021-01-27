@@ -137,9 +137,7 @@ var Phone = function Phone(props) {
                   phone: user.phone || user.cellphone
                 };
               });
-              user = result.filter(function (user) {
-                return user.phone === phone || user.cellphone === phone;
-              });
+              user = result;
               setUserState({
                 loading: false,
                 result: user[0]
