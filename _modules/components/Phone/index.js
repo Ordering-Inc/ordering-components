@@ -93,7 +93,7 @@ var Phone = function Phone(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState11 = (0, _react.useState)([]),
+  var _useState11 = (0, _react.useState)(props.phones || []),
       _useState12 = _slicedToArray(_useState11, 2),
       phones = _useState12[0],
       setPhones = _useState12[1];
@@ -188,20 +188,24 @@ var Phone = function Phone(props) {
       this.parentNode.appendChild(a);
       /* for each item in the array... */
 
-      for (i = 0; i < arr.length; i++) {
+      for (i = 0; i < (arr === null || arr === void 0 ? void 0 : arr.length); i++) {
+        var _arr$i, _arr$i$phone, _arr$i$phone$substr;
+
         /* check if the item starts with the same letters as the text field value: */
-        if (arr[i].phone.substr(0, val.length).toUpperCase() === val.toUpperCase()) {
+        if (((_arr$i = arr[i]) === null || _arr$i === void 0 ? void 0 : (_arr$i$phone = _arr$i.phone) === null || _arr$i$phone === void 0 ? void 0 : (_arr$i$phone$substr = _arr$i$phone.substr(0, val.length)) === null || _arr$i$phone$substr === void 0 ? void 0 : _arr$i$phone$substr.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase())) {
+          var _arr$i2, _arr$i2$phone, _arr$i3, _arr$i3$phone, _arr$i4, _arr$i5;
+
           /* create a DIV element for each matching element: */
           b = document.createElement('DIV');
           /* make the matching letters bold: */
 
-          b.innerHTML = '<strong>' + arr[i].phone.substr(0, val.length) + '</strong>';
-          b.innerHTML += arr[i].phone.substr(val.length); // insert name of the customer
+          b.innerHTML = '<strong>' + ((_arr$i2 = arr[i]) === null || _arr$i2 === void 0 ? void 0 : (_arr$i2$phone = _arr$i2.phone) === null || _arr$i2$phone === void 0 ? void 0 : _arr$i2$phone.substr(0, val === null || val === void 0 ? void 0 : val.length)) + '</strong>';
+          b.innerHTML += (_arr$i3 = arr[i]) === null || _arr$i3 === void 0 ? void 0 : (_arr$i3$phone = _arr$i3.phone) === null || _arr$i3$phone === void 0 ? void 0 : _arr$i3$phone.substr(val === null || val === void 0 ? void 0 : val.length); // insert name of the customer
 
-          b.innerHTML += ' (' + arr[i].name + ')';
+          b.innerHTML += ' (' + ((_arr$i4 = arr[i]) === null || _arr$i4 === void 0 ? void 0 : _arr$i4.name) + ')';
           /* insert a input field that will hold the current array item's value: */
 
-          b.innerHTML += "<input type='hidden' value='" + arr[i].phone + "'>";
+          b.innerHTML += "<input type='hidden' value='" + ((_arr$i5 = arr[i]) === null || _arr$i5 === void 0 ? void 0 : _arr$i5.phone) + "'>";
           /* execute a function when someone clicks on the item value (DIV element): */
 
           b.addEventListener('click', function (e) {
