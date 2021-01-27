@@ -144,10 +144,9 @@ var Phone = function Phone(props) {
                 loading: false,
                 result: user
               });
-              setOpenAddress(true);
               setPhones(newPhones);
 
-            case 10:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -208,6 +207,7 @@ var Phone = function Phone(props) {
             /* insert the value for the autocomplete text field: */
             inp.value = this.getElementsByTagName('input')[0].value;
             setPhone(this.getElementsByTagName('input')[0].value);
+            setOpenAddress(true);
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
 
