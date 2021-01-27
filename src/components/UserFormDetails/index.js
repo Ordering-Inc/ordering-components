@@ -24,7 +24,7 @@ export const UserFormDetails = (props) => {
   const [session, { changeUser }] = useSession()
   const [validationFields] = useValidationsFieldsController()
   const [isEdit, setIsEdit] = useState(false)
-  const [userState, setUserState] = useState({ loading: false, result: { error: false } })
+  const [userState, setUserState] = useState(props.externalUserState || { loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const requestsState = {}
 
@@ -121,13 +121,23 @@ export const UserFormDetails = (props) => {
       }
 
       if (!response.content.error) {
-        setUserState({
-          ...userState,
-          result: {
-            ...userState.result,
-            ...response.content
-          }
-        })
+        if (!props.externalUserState) {
+          setUserState({
+            ...userState,
+            result: {
+              ...userState.result,
+              ...response.content
+            }
+          })
+        } else {
+          setUserState({
+            ...props.externalUserState,
+            result: {
+              ...props.externalUserState.result,
+              ...response.content
+            }
+          })
+        }
         changeUser({
           ...session.user,
           ...response.content.result

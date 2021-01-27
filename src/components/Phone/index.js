@@ -35,7 +35,7 @@ export const Phone = (props) => {
       .get()
     const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
     const user = result.filter(user => user.phone === phone || user.cellphone === phone)
-    setUserState({ loading: false, result: user })
+    setUserState({ loading: false, result: user[0] })
     setPhones(newPhones)
   }
 
