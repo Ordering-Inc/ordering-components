@@ -24,14 +24,14 @@ export const UserFormDetails = (props) => {
   const [session, { changeUser }] = useSession()
   const [validationFields] = useValidationsFieldsController()
   const [isEdit, setIsEdit] = useState(false)
-  const [userState, setUserState] = useState(props.externalUserState || { loading: false, result: { error: false } })
+  const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading && !props.externalUserState) {
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
@@ -103,15 +103,9 @@ export const UserFormDetails = (props) => {
           loading: false
         })
       } else {
-        if (!props.externalUserState) {
-          response = await ordering.users(userState.result.result.id).save(formState.changes, {
-            accessToken: accessToken
-          })
-        } else {
-          response = await ordering.users(props.externalUserState.result.id).save(formState.changes, {
-            accessToken: accessToken
-          })
-        }
+        response = await ordering.users(userState.result.result.id).save(formState.changes, {
+          accessToken: accessToken
+        })
         setFormState({
           ...formState,
           changes: response.content.error ? formState.changes : {},
@@ -121,23 +115,13 @@ export const UserFormDetails = (props) => {
       }
 
       if (!response.content.error) {
-        if (!props.externalUserState) {
-          setUserState({
-            ...userState,
-            result: {
-              ...userState.result,
-              ...response.content
-            }
-          })
-        } else {
-          setUserState({
-            ...props.externalUserState,
-            result: {
-              ...props.externalUserState.result,
-              ...response.content
-            }
-          })
-        }
+        setUserState({
+          ...userState,
+          result: {
+            ...userState.result,
+            ...response.content
+          }
+        })
         changeUser({
           ...session.user,
           ...response.content.result
@@ -234,7 +218,6 @@ export const UserFormDetails = (props) => {
           isEdit={isEdit}
           cleanFormState={cleanFormState}
           formState={formState}
-          userData={props.externalUserState ? userState : undefined}
           userState={userState}
           validationFields={validationFields}
           showField={showField}

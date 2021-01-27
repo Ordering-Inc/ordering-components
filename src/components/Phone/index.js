@@ -34,7 +34,7 @@ export const Phone = (props) => {
       .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
       .get()
     const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
-    const user = result.filter(user => user.phone === phone || user.cellphone === phone)
+    const user = result
     setUserState({ loading: false, result: user[0] })
     setPhones(newPhones)
   }
