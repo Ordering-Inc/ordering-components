@@ -110,7 +110,7 @@ var Phone = function Phone(props) {
 
   var getPhone = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(isCustomer) {
-      var _yield$ordering$setAc, result, newPhones;
+      var _yield$ordering$setAc, result, newPhones, user;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -139,9 +139,12 @@ var Phone = function Phone(props) {
               });
 
               if (isCustomer) {
+                user = result.filter(function (user) {
+                  return user.phone === phone;
+                });
                 setUserState({
                   loading: false,
-                  result: result
+                  result: user
                 });
                 setOpenAddress(true);
               } else {
