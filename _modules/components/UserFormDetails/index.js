@@ -167,7 +167,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes, isImage) {
-      var response, _props$userData, _formState$changes, photo, _changes, _props$userData2;
+      var response, _props$userData, _formState$changes, photo, _changes;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -215,7 +215,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
             case 13:
               _context.next = 15;
-              return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData2 = props.userData) === null || _props$userData2 === void 0 ? void 0 : _props$userData2.id) || userState.result.result.id).save(formState.changes, {
+              return ordering.users((props === null || props === void 0 ? void 0 : props.userData.id) || userState.result.result.id).save(formState.changes, {
                 accessToken: accessToken
               });
 
