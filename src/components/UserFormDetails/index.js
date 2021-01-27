@@ -31,7 +31,7 @@ export const UserFormDetails = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading) {
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading && !props.externalUserState) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
@@ -103,9 +103,15 @@ export const UserFormDetails = (props) => {
           loading: false
         })
       } else {
-        response = await ordering.users(userState.result.result.id).save(formState.changes, {
-          accessToken: accessToken
-        })
+        if (!props.externalUserState) {
+          response = await ordering.users(userState.result.result.id).save(formState.changes, {
+            accessToken: accessToken
+          })
+        } else {
+          response = await ordering.users(props.externalUserState.result.id).save(formState.changes, {
+            accessToken: accessToken
+          })
+        }
         setFormState({
           ...formState,
           changes: response.content.error ? formState.changes : {},
