@@ -109,7 +109,7 @@ var Phone = function Phone(props) {
   };
 
   var getPhone = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(isCustomer) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var _yield$ordering$setAc, result, newPhones, user;
 
       return _regenerator.default.wrap(function _callee$(_context) {
@@ -134,27 +134,20 @@ var Phone = function Phone(props) {
               newPhones = result.map(function (user) {
                 return {
                   name: user.name,
-                  phone: user.phone
+                  phone: user.phone || user.cellphone
                 };
               });
+              user = result.filter(function (user) {
+                return user.phone === phone || user.cellphone === phone;
+              });
+              setUserState({
+                loading: false,
+                result: user
+              });
+              setOpenAddress(true);
+              setPhones(newPhones);
 
-              if (isCustomer) {
-                user = result.filter(function (user) {
-                  return user.phone === phone;
-                });
-                setUserState({
-                  loading: false,
-                  result: user
-                });
-                setOpenAddress(true);
-              } else {
-                setPhones(newPhones);
-                setUserState(_objectSpread(_objectSpread({}, userState), {}, {
-                  loading: false
-                }));
-              }
-
-            case 7:
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -162,7 +155,7 @@ var Phone = function Phone(props) {
       }, _callee);
     }));
 
-    return function getPhone(_x) {
+    return function getPhone() {
       return _ref.apply(this, arguments);
     };
   }();
@@ -218,7 +211,6 @@ var Phone = function Phone(props) {
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
 
-            getPhone(true);
             closeAllLists();
           });
           a.appendChild(b);
