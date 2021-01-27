@@ -142,7 +142,7 @@ var Phone = function Phone(props) {
               });
               setUserState({
                 loading: false,
-                result: user
+                result: user[0]
               });
               setPhones(newPhones);
 

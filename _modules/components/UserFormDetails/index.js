@@ -85,7 +85,7 @@ var UserFormDetails = function UserFormDetails(props) {
       isEdit = _useState2[0],
       setIsEdit = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({
+  var _useState3 = (0, _react.useState)(props.externalUserState || {
     loading: false,
     result: {
       error: false
@@ -247,9 +247,16 @@ var UserFormDetails = function UserFormDetails(props) {
 
             case 23:
               if (!response.content.error) {
-                setUserState(_objectSpread(_objectSpread({}, userState), {}, {
-                  result: _objectSpread(_objectSpread({}, userState.result), response.content)
-                }));
+                if (!props.externalUserState) {
+                  setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                    result: _objectSpread(_objectSpread({}, userState.result), response.content)
+                  }));
+                } else {
+                  setUserState(_objectSpread(_objectSpread({}, props.externalUserState), {}, {
+                    result: _objectSpread(_objectSpread({}, props.externalUserState.result), response.content)
+                  }));
+                }
+
                 changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
 
                 if (handleSuccessUpdate) {
