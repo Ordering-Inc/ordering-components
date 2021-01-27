@@ -5,7 +5,7 @@ import { OrderingProvider } from './src/contexts/OrderingContext'
 
 const configFile = {
   app_id: 'ordering-react',
-  project: 'demo',
+  project: 'luisv4',
   api: {
     url: 'https://apiv4-staging.ordering.co',
     language: 'en',

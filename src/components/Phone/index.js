@@ -16,7 +16,7 @@ export const Phone = (props) => {
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [, t] = useLanguage()
   const [ordering] = useApi()
-  const [phones, setPhones] = useState([{ name: 'test', phone: '1231231231' }])
+  const [phones, setPhones] = useState(props.phones || [])
   const [{ token }] = useSession()
   // const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k'
 
@@ -26,21 +26,17 @@ export const Phone = (props) => {
     setPhone(number)
   }
 
-  const getPhone = async (isCustomer) => {
+  const getPhone = async () => {
     setUserState({ ...userState, loading: true })
     const { content: { result } } = await ordering
       .setAccessToken(token)
       .users()
       .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
       .get()
-    const newPhones = result.map(user => { return { name: user.name, phone: user.phone } })
-    if (isCustomer) {
-      setUserState({ loading: false, result })
-      setOpenAddress(true)
-    } else {
-      setPhones(newPhones)
-      setUserState({ ...userState, loading: false })
-    }
+    const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
+    const user = result.filter(user => user.phone === phone || user.cellphone === phone)
+    setUserState({ loading: false, result: user })
+    setPhones(newPhones)
   }
 
   const autocomplete = (inp, arr) => {
@@ -60,26 +56,26 @@ export const Phone = (props) => {
       /* append the DIV element as a child of the autocomplete container: */
       this.parentNode.appendChild(a)
       /* for each item in the array... */
-      for (i = 0; i < arr.length; i++) {
+      for (i = 0; i < arr?.length; i++) {
         /* check if the item starts with the same letters as the text field value: */
-        if (arr[i].phone.substr(0, val.length).toUpperCase() === val.toUpperCase()) {
+        if (arr[i]?.phone?.substr(0, val.length)?.toUpperCase() === val?.toUpperCase()) {
           /* create a DIV element for each matching element: */
           b = document.createElement('DIV')
           /* make the matching letters bold: */
-          b.innerHTML = '<strong>' + arr[i].phone.substr(0, val.length) + '</strong>'
-          b.innerHTML += arr[i].phone.substr(val.length)
+          b.innerHTML = '<strong>' + arr[i]?.phone?.substr(0, val?.length) + '</strong>'
+          b.innerHTML += arr[i]?.phone?.substr(val?.length)
           // insert name of the customer
-          b.innerHTML += ' (' + arr[i].name + ')'
+          b.innerHTML += ' (' + arr[i]?.name + ')'
           /* insert a input field that will hold the current array item's value: */
-          b.innerHTML += "<input type='hidden' value='" + arr[i].phone + "'>"
+          b.innerHTML += "<input type='hidden' value='" + arr[i]?.phone + "'>"
           /* execute a function when someone clicks on the item value (DIV element): */
           b.addEventListener('click', function (e) {
             /* insert the value for the autocomplete text field: */
             inp.value = this.getElementsByTagName('input')[0].value
             setPhone(this.getElementsByTagName('input')[0].value)
+            setOpenAddress(true)
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
-            getPhone(true)
             closeAllLists()
           })
           a.appendChild(b)
@@ -162,7 +158,7 @@ export const Phone = (props) => {
   }, [phones])
 
   useEffect(() => {
-    if (props?.phones) {
+    if (!props?.phones) {
       getPhone()
     }
   }, [phone])
