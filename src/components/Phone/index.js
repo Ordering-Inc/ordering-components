@@ -36,7 +36,6 @@ export const Phone = (props) => {
     const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
     const user = result.filter(user => user.phone === phone || user.cellphone === phone)
     setUserState({ loading: false, result: user })
-    setOpenAddress(true)
     setPhones(newPhones)
   }
 
@@ -74,6 +73,7 @@ export const Phone = (props) => {
             /* insert the value for the autocomplete text field: */
             inp.value = this.getElementsByTagName('input')[0].value
             setPhone(this.getElementsByTagName('input')[0].value)
+            setOpenAddress(true)
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
             closeAllLists()
