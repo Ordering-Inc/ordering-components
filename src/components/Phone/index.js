@@ -16,7 +16,7 @@ export const Phone = (props) => {
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [, t] = useLanguage()
   const [ordering] = useApi()
-  const [phones, setPhones] = useState([{ name: 'test', phone: '1231231231' }])
+  const [phones, setPhones] = useState([])
   const [{ token }] = useSession()
   // const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k'
 
@@ -162,7 +162,7 @@ export const Phone = (props) => {
   }, [phones])
 
   useEffect(() => {
-    if (props?.phones) {
+    if (!props?.phones) {
       getPhone()
     }
   }, [phone])
