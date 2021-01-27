@@ -35,7 +35,8 @@ export const Phone = (props) => {
       .get()
     const newPhones = result.map(user => { return { name: user.name, phone: user.phone } })
     if (isCustomer) {
-      setUserState({ loading: false, result })
+      const user = result.filter(user => user.phone === phone)
+      setUserState({ loading: false, result: user })
       setOpenAddress(true)
     } else {
       setPhones(newPhones)
