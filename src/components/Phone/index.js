@@ -26,22 +26,18 @@ export const Phone = (props) => {
     setPhone(number)
   }
 
-  const getPhone = async (isCustomer) => {
+  const getPhone = async () => {
     setUserState({ ...userState, loading: true })
     const { content: { result } } = await ordering
       .setAccessToken(token)
       .users()
       .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
       .get()
-    const newPhones = result.map(user => { return { name: user.name, phone: user.phone } })
-    if (isCustomer) {
-      const user = result.filter(user => user.phone === phone)
-      setUserState({ loading: false, result: user })
-      setOpenAddress(true)
-    } else {
-      setPhones(newPhones)
-      setUserState({ ...userState, loading: false })
-    }
+    const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
+    const user = result.filter(user => user.phone === phone || user.cellphone === phone)
+    setUserState({ loading: false, result: user })
+    setOpenAddress(true)
+    setPhones(newPhones)
   }
 
   const autocomplete = (inp, arr) => {
@@ -80,7 +76,6 @@ export const Phone = (props) => {
             setPhone(this.getElementsByTagName('input')[0].value)
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
-            getPhone(true)
             closeAllLists()
           })
           a.appendChild(b)
