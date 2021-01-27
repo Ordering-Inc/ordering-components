@@ -362,6 +362,7 @@ var UserFormDetails = function UserFormDetails(props) {
     isEdit: isEdit,
     cleanFormState: cleanFormState,
     formState: formState,
+    userData: props.externalUserState ? userState : undefined,
     userState: userState,
     validationFields: validationFields,
     showField: showField,
