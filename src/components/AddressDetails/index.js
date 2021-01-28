@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useUtils } from '../../contexts/UtilsContext'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 /**
  * Component to manage address details behavior without UI component
@@ -16,8 +16,8 @@ export const AddressDetails = (props) => {
   } = props
   const [orderState] = useOrder()
   const [{ optimizeImage }] = useUtils()
-  const [languageState] = useLanguage()
-  const GM_API_KEY = apiKey || languageState?.dictionary?.GM_API_KEY
+  const [{ configs }] = useConfig()
+  const GM_API_KEY = apiKey || configs?.google_maps_api_key?.value
   const requestsState = {}
 
   /**
