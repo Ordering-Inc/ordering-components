@@ -43,6 +43,10 @@ export const ConfigProvider = ({ children }) => {
       key: 'google_autocomplete_selection_required',
       value: 'true'
     },
+    google_maps_api_key: {
+      key: 'google_maps_api_key',
+      value: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+    },
     country_autocomplete: {
       key: 'country_autocomplete',
       value: '*'
