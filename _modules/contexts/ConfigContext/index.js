@@ -103,10 +103,6 @@ var ConfigProvider = function ConfigProvider(_ref) {
       key: 'google_autocomplete_selection_required',
       value: 'true'
     },
-    google_maps_api_key: {
-      key: 'google_maps_api_key',
-      value: 'AIzaSyBs9iJzThW-gVXM1m9RwYD328Mb34HVL4c'
-    },
     country_autocomplete: {
       key: 'country_autocomplete',
       value: '*'

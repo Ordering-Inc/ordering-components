@@ -49,7 +49,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage address details behavior without UI component
  */
 var AddressDetails = function AddressDetails(props) {
-  var _langueageState$dicti;
+  var _languageState$dictio;
 
   var apiKey = props.apiKey,
       UIComponent = props.UIComponent,
@@ -65,9 +65,9 @@ var AddressDetails = function AddressDetails(props) {
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 1),
-      langueageState = _useLanguage2[0];
+      languageState = _useLanguage2[0];
 
-  var GM_API_KEY = apiKey || (langueageState === null || langueageState === void 0 ? void 0 : (_langueageState$dicti = langueageState.dictionary) === null || _langueageState$dicti === void 0 ? void 0 : _langueageState$dicti.GM_API_KEY);
+  var GM_API_KEY = apiKey || (languageState === null || languageState === void 0 ? void 0 : (_languageState$dictio = languageState.dictionary) === null || _languageState$dictio === void 0 ? void 0 : _languageState$dictio.GM_API_KEY);
   var requestsState = {};
   /**
    * This must be contains an object with business location
