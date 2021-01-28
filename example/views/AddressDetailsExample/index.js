@@ -3,10 +3,10 @@ import React from 'react'
 import { AddressDetailsUI } from '../../components/AddressDetailsUI'
 import { AddressDetails } from '../../../src/components/AddressDetails'
 import { TestComponent } from '../../components/TestComponent'
-import { useConfig } from '../../../src/contexts/ConfigContext'
+import { useLanguage } from '../../../src/contexts/LanguageContext'
 
 export const AddressDetailsExample = () => {
-  const [{ configs }] = useConfig()
+  const [languageState] = useLanguage()
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
@@ -23,7 +23,7 @@ export const AddressDetailsExample = () => {
     /**
      * apiKey, google maps api key
      */
-    apiKey: configs?.google_maps_api_key?.value || 'AIzaSyBs9iJzThW-gVXM1m9RwYD328Mb34HVL4c',
+    apiKey: languageState?.dictionary?.GM_API_KEY,
     /**
      * zoom of google Map
      */
