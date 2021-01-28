@@ -19,7 +19,7 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _UtilsContext = require("../../contexts/UtilsContext");
 
-var _LanguageContext = require("../../contexts/LanguageContext");
+var _ConfigContext = require("../../contexts/ConfigContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -49,7 +49,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage address details behavior without UI component
  */
 var AddressDetails = function AddressDetails(props) {
-  var _languageState$dictio;
+  var _configs$google_maps_;
 
   var apiKey = props.apiKey,
       UIComponent = props.UIComponent,
@@ -63,11 +63,11 @@ var AddressDetails = function AddressDetails(props) {
       _useUtils2 = _slicedToArray(_useUtils, 1),
       optimizeImage = _useUtils2[0].optimizeImage;
 
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 1),
-      languageState = _useLanguage2[0];
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
 
-  var GM_API_KEY = apiKey || (languageState === null || languageState === void 0 ? void 0 : (_languageState$dictio = languageState.dictionary) === null || _languageState$dictio === void 0 ? void 0 : _languageState$dictio.GM_API_KEY);
+  var GM_API_KEY = apiKey || (configs === null || configs === void 0 ? void 0 : (_configs$google_maps_ = configs.google_maps_api_key) === null || _configs$google_maps_ === void 0 ? void 0 : _configs$google_maps_.value);
   var requestsState = {};
   /**
    * This must be contains an object with business location
