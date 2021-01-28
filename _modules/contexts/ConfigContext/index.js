@@ -105,7 +105,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
     },
     google_maps_api_key: {
       key: 'google_maps_api_key',
-      value: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+      value: 'AIzaSyBs9iJzThW-gVXM1m9RwYD328Mb34HVL4c'
     },
     country_autocomplete: {
       key: 'country_autocomplete',
