@@ -16,8 +16,8 @@ export const AddressDetails = (props) => {
   } = props
   const [orderState] = useOrder()
   const [{ optimizeImage }] = useUtils()
-  const [langueageState] = useLanguage()
-  const GM_API_KEY = apiKey || langueageState?.dictionary?.GM_API_KEY
+  const [languageState] = useLanguage()
+  const GM_API_KEY = apiKey || languageState?.dictionary?.GM_API_KEY
   const requestsState = {}
 
   /**
