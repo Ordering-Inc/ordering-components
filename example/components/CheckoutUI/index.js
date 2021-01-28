@@ -23,7 +23,7 @@ import { CouponControlUI } from '../CouponControlUI'
 
 import { Cart } from '../../../src/components/Cart'
 import { CartUI } from '../../components/CartUI'
-import { useConfig } from '../../../src/contexts/ConfigContext'
+import { useLanguage } from '../../../src/contexts/LanguageContext'
 
 const styleButtonOrder = {
   padding: '10px 20px',
@@ -50,7 +50,7 @@ export const CheckoutUI = (props) => {
     afterElements
   } = props
 
-  const [{ configs }] = useConfig()
+  const [languageState] = useLanguage()
 
   return (
     <>
@@ -79,7 +79,7 @@ export const CheckoutUI = (props) => {
       <AddressDetails
         UIComponent={AddressDetailsUI}
         businessId={props.businessId}
-        apiKey={configs?.google_maps_api_key?.value}
+        apiKey={languageState?.dictionary?.GM_API_KEY}
       />
       <hr />
 
