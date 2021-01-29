@@ -57,6 +57,7 @@ var GoogleMaps = function GoogleMaps(props) {
       locations = props.locations,
       mapControls = props.mapControls,
       setErrors = props.setErrors,
+      isSetInputs = props.isSetInputs,
       handleChangeAddressMap = props.handleChangeAddressMap,
       maxLimitLocation = props.maxLimitLocation;
 
@@ -137,50 +138,63 @@ var GoogleMaps = function GoogleMaps(props) {
 
 
   var geocodePosition = function geocodePosition(pos) {
-    var geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({
-      latLng: pos
-    }, function (results) {
-      var zipcode = null;
+    if (isSetInputs) {
+      var geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({
+        latLng: pos
+      }, function (results) {
+        var zipcode = null;
 
-      if (results && results.length > 0) {
-        var _iterator = _createForOfIteratorHelper(results[0].address_components),
-            _step;
+        if (results && results.length > 0) {
+          var _iterator = _createForOfIteratorHelper(results[0].address_components),
+              _step;
 
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var component = _step.value;
-            var addressType = component.types[0];
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              var component = _step.value;
+              var addressType = component.types[0];
 
-            if (addressType === 'postal_code') {
-              zipcode = component.short_name;
-              break;
+              if (addressType === 'postal_code') {
+                zipcode = component.short_name;
+                break;
+              }
             }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
           }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
+
+          var address = {
+            address: results[0].formatted_address,
+            location: {
+              lat: pos.lat(),
+              lng: pos.lng()
+            },
+            zipcode: zipcode
+          };
+          handleChangeAddressMap && handleChangeAddressMap(address);
+          center.lat = address.location.lat;
+          center.lng = address.location.lng;
+        } else {
+          googleMapMarker && googleMapMarker.setPosition(center);
+          setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS');
         }
 
-        var address = {
-          address: results[0].formatted_address,
-          location: {
-            lat: pos.lat(),
-            lng: pos.lng()
-          },
-          zipcode: zipcode
-        };
-        handleChangeAddressMap && handleChangeAddressMap(address);
-        center.lat = address.location.lat;
-        center.lng = address.location.lng;
-      } else {
-        googleMapMarker && googleMapMarker.setPosition(center);
-        setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS');
-      }
-
-      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng));
-    });
+        googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+      });
+    } else {
+      var _location = {
+        lat: pos.lat(),
+        lng: pos.lng()
+      };
+      handleChangeAddressMap && handleChangeAddressMap({
+        location: _location
+      });
+      center.lat = _location.lat;
+      center.lng = _location.lng;
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(_location.lat, _location.lng));
+    }
   };
   /**
    * Function to return distance between two locations
