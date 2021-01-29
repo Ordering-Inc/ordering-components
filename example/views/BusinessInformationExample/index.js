@@ -20,14 +20,16 @@ export const BusinessInformationExample = () => {
      * google maps controls [zoomControl, streetViewControl, fullscreenControl, mapTypeControl, mapTypeId, mapTypeControlOptions]
      */
     googleMapsControls: {
-      zoomControl: false,
-      streetViewControl: true,
+      defaultZoom: 17,
+      zoomControl: true,
+      streetViewControl: false,
       fullscreenControl: false,
-      mapTypeId: 'satellite', // 'roadmap', 'satellite', 'hybrid', 'terrain'
+      mapTypeId: 'roadmap', // 'roadmap', 'satellite', 'hybrid', 'terrain'
       mapTypeControl: true,
       mapTypeControlOptions: {
         mapTypeIds: ['roadmap', 'satellite']
-      }
+      },
+      isMarkerDraggable: true
     },
     /**
      * Components types before business information
