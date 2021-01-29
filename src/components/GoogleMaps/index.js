@@ -12,6 +12,7 @@ export const GoogleMaps = (props) => {
     locations,
     mapControls,
     setErrors,
+    isSetInputs,
     handleChangeAddressMap,
     maxLimitLocation
   } = props
@@ -57,33 +58,43 @@ export const GoogleMaps = (props) => {
    * @param {google location} pos
    */
   const geocodePosition = (pos) => {
-    const geocoder = new window.google.maps.Geocoder()
+    if (isSetInputs) {
+      const geocoder = new window.google.maps.Geocoder()
 
-    geocoder.geocode({ latLng: pos }, (results) => {
-      let zipcode = null
-      if (results && results.length > 0) {
-        for (const component of results[0].address_components) {
-          const addressType = component.types[0]
-          if (addressType === 'postal_code') {
-            zipcode = component.short_name
-            break
+      geocoder.geocode({ latLng: pos }, (results) => {
+        let zipcode = null
+        if (results && results.length > 0) {
+          for (const component of results[0].address_components) {
+            const addressType = component.types[0]
+            if (addressType === 'postal_code') {
+              zipcode = component.short_name
+              break
+            }
           }
-        }
-        const address = {
-          address: results[0].formatted_address,
-          location: { lat: pos.lat(), lng: pos.lng() },
-          zipcode
-        }
-        handleChangeAddressMap && handleChangeAddressMap(address)
+          const address = {
+            address: results[0].formatted_address,
+            location: { lat: pos.lat(), lng: pos.lng() },
+            zipcode
+          }
+          handleChangeAddressMap && handleChangeAddressMap(address)
 
-        center.lat = address.location.lat
-        center.lng = address.location.lng
-      } else {
-        googleMapMarker && googleMapMarker.setPosition(center)
-        setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS')
-      }
-      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng))
-    })
+          center.lat = address.location.lat
+          center.lng = address.location.lng
+        } else {
+          googleMapMarker && googleMapMarker.setPosition(center)
+          setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS')
+        }
+        googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng))
+      })
+    } else {
+      const location = { lat: pos.lat(), lng: pos.lng() }
+      handleChangeAddressMap && handleChangeAddressMap({
+        location
+      })
+      center.lat = location.lat
+      center.lng = location.lng
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(location.lat, location.lng))
+    }
   }
 
   /**
