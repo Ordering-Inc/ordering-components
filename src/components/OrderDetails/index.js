@@ -11,9 +11,11 @@ export const OrderDetails = (props) => {
   } = props
 
   const [{ user, token, loading }] = useSession()
+  const accessToken = props.accessToken || token
   const [ordering] = useApi()
   const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
+  const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
 
@@ -24,6 +26,36 @@ export const OrderDetails = (props) => {
    * @param {Number} price
    */
   const formatPrice = price => `$ ${price.toFixed(2)}`
+
+  /**
+   * Method to Load message for first time
+   */
+  const loadMessages = async () => {
+    try {
+      setMessages({ ...messages, loading: true })
+      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const { error, result } = await response.json()
+      if (!error) {
+        setMessages({
+          messages: result,
+          loading: false,
+          error: null
+        })
+      } else {
+        setMessages({
+          ...messages,
+          loading: false,
+          error: result
+        })
+      }
+    } catch (error) {
+      setMessages({ ...messages, loading: false, error: [error.Messages] })
+    }
+  }
+
+  useEffect(() => {
+    loadMessages()
+  }, [orderId, orderState?.order?.status])
 
   /**
    * Method to send a message
@@ -94,6 +126,22 @@ export const OrderDetails = (props) => {
     }
   }
 
+  const readMessages = async () => {
+    const messageId = messages?.messages[messages?.messages?.length - 1]?.id
+    try {
+      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/4/read?order_id=3&order_message_id=${messageId}`, {
+        method: 'post',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      console.log(response)
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
   useEffect(() => {
     if (props.order) {
       setOrderState({
@@ -142,6 +190,7 @@ export const OrderDetails = (props) => {
           messageErrors={messageErrors}
           formatPrice={formatPrice}
           handlerSubmit={handlerSubmitSpotNumber}
+          messages={messages}
         />
       )}
     </>
