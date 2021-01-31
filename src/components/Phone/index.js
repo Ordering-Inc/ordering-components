@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const Phone = (props) => {
   const {
@@ -17,8 +18,8 @@ export const Phone = (props) => {
   const [, t] = useLanguage()
   const [ordering] = useApi()
   const [phones, setPhones] = useState(props.phones || [])
-  const [{ token }] = useSession()
-  // const testToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGl2NC5vcmRlcmluZy5jb1wvdjQwMFwvZW5cL2RlbW9cL2F1dGgiLCJpYXQiOjE2MTE1ODQxNjAsImV4cCI6MTY0MzEyMDE2MCwibmJmIjoxNjExNTg0MTYwLCJqdGkiOiI5WTNJYXA4dnJ2MFhRM1h0Iiwic3ViIjoxLCJsZXZlbCI6MH0.m4b6tvsmLEHwqd8b_RE3xuU6HzHN-tw18MzZv47tU5k'
+  const [{ token, auth }] = useSession()
+  const [events] = useEvent()
 
   const onChangeNumber = e => {
     const number = (e.target.validity.valid)
@@ -27,16 +28,20 @@ export const Phone = (props) => {
   }
 
   const getPhone = async () => {
-    setUserState({ ...userState, loading: true })
-    const { content: { result } } = await ordering
-      .setAccessToken(token)
-      .users()
-      .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
-      .get()
-    const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
-    const user = result
-    setUserState({ loading: false, result: user[0] })
-    setPhones(newPhones)
+    if (auth && token) {
+      setUserState({ ...userState, loading: true })
+      const { content: { result } } = await ordering
+        .setAccessToken(token)
+        .users()
+        .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
+        .get()
+      const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
+      const user = result
+      setUserState({ loading: false, result: user[0] })
+      setPhones(newPhones)
+    } else {
+      events.emit('go_to_page', { page: 'signin' })
+    }
   }
 
   const autocomplete = (inp, arr) => {
@@ -188,6 +193,11 @@ Phone.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+
+  /**
+   * Example of array phones to test the component without api
+   */
+  Phones: PropTypes.array,
   /**
    * Components types before payment option stripe direct
    * Array of type components, the parent props will pass to these components

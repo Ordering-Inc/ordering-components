@@ -31,11 +31,12 @@ export const PhoneUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
       <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-        <div className='autocomplete'>
+        <div className='phone-autocomplete'>
           <input
             name='phone-input'
             id='phone-input'
             placeholder='Phone'
+            className='phone-autocomplete-input'
             type='text'
             pattern='[0-9]*'
             onInput={onChangeNumber}

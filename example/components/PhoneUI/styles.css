@@ -2,22 +2,22 @@
 body {
   font: 16px Arial;
 }
-.autocomplete {
+.phone-autocomplete {
   /*the container must be positioned relative:*/
   position: relative;
   display: inline-block;
 }
-input {
+.phone-autocomplete-input {
   border: 1px solid transparent;
   background-color: #f1f1f1;
   padding: 10px;
   font-size: 16px;
 }
-input[type=text] {
+.phone-autocomplete-input input[type=text] {
   background-color: #f1f1f1;
   width: 100%;
 }
-input[type=submit] {
+.phone-autocomplete-input input[type=submit] {
   background-color: DodgerBlue;
   color: #fff;
 }
