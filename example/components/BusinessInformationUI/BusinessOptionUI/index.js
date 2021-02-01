@@ -62,6 +62,8 @@ export const BusinessOptionUI = (props) => {
             apiKey={configs?.google_maps_api_key?.value}
             location={locationData.location}
             mapControls={locationData.googleMapsControls}
+            maxLimitLocation={500}
+            setErrors={(e) => { console.log(e) }}
           />
         </>
       )}
