@@ -32,8 +32,8 @@ export const AddressDetails = (props) => {
   const formatUrl = (location) => {
     const orderLocation = orderState?.options?.address?.location
     return orderState.options.type === 1
-      ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=${mapConfigs?.mapZoom || 15}&scale=2&maptype=roadmap&markers=icon:${optimizeImage('https://res.cloudinary.com/demo/image/upload/c_thumb,g_face,r_max/d_avatar.png/non_existing_id.png', 'w_45,h_45')}%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&key=${GM_API_KEY}`
-      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:${optimizeImage('https://res.cloudinary.com/demo/image/upload/c_thumb,g_face,r_max/d_avatar.png/non_existing_id.png', 'w_60,h_60')}%7Ccolor:blue%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:${optimizeImage(logo, 'w_60,h_60,r_max')}%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${GM_API_KEY}`
+      ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=${mapConfigs?.mapZoom || 15}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&key=${GM_API_KEY}`
+      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:${optimizeImage(logo, 'w_60,h_60,r_max')}%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${GM_API_KEY}`
   }
   /**
    * Method to get business location from API
