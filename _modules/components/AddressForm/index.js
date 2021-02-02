@@ -173,7 +173,7 @@ var AddressForm = function AddressForm(props) {
    */
 
 
-  var hanldeChangeInput = function hanldeChangeInput(e) {
+  var handleChangeInput = function handleChangeInput(e) {
     updateChanges(_defineProperty({}, e.target.name, e.target.value));
   };
   /**
@@ -311,7 +311,7 @@ var AddressForm = function AddressForm(props) {
     formState: formState,
     showField: showField,
     updateChanges: updateChanges,
-    hanldeChangeInput: hanldeChangeInput,
+    handleChangeInput: handleChangeInput,
     isRequiredField: isRequiredField,
     saveAddress: saveAddress,
     addressState: addressState,
