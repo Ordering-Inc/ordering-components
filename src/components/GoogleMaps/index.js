@@ -167,6 +167,7 @@ export const GoogleMaps = (props) => {
         window.google.maps.event.addListener(googleMapMarker, 'dragend', () => {
           validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
         })
+
         window.google.maps.event.addListener(googleMapMarker, 'drag', () => {
           events.emit('map_is_dragging', true)
         })
@@ -182,12 +183,12 @@ export const GoogleMaps = (props) => {
             validateResult(googleMap, googleMapMarker, googleMap.getCenter())
           })
         }
-      }
 
-      return () => {
-        window.google.maps.event.clearListeners(googleMapMarker, 'dragend')
-        window.google.maps.event.clearListeners(googleMap, 'drag')
-        window.google.maps.event.clearListeners(googleMap, 'dragend')
+        return () => {
+          window.google.maps.event.clearListeners(googleMapMarker, 'dragend')
+          window.google.maps.event.clearListeners(googleMap, 'drag')
+          window.google.maps.event.clearListeners(googleMap, 'dragend')
+        }
       }
     }
   }, [googleMapMarker, googleMap, location])
