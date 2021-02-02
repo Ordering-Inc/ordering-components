@@ -40,6 +40,7 @@ export const BusinessMapUI = (props) => {
           location={userLocation}
           locations={businessLocations}
           mapControls={googleMapsControls}
+          maxLimitLocation={configState?.configs?.meters_to_change_address?.value}
           businessMap
         />
       )}

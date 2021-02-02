@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useEffect } from 'react/cjs/react.development'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 export const BusinessMap = (props) => {
