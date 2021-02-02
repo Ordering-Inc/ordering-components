@@ -286,13 +286,13 @@ var GoogleMaps = function GoogleMaps(props) {
             validateResult(googleMap, googleMapMarker, googleMap.getCenter());
           });
         }
-      }
 
-      return function () {
-        window.google.maps.event.clearListeners(googleMapMarker, 'dragend');
-        window.google.maps.event.clearListeners(googleMap, 'drag');
-        window.google.maps.event.clearListeners(googleMap, 'dragend');
-      };
+        return function () {
+          window.google.maps.event.clearListeners(googleMapMarker, 'dragend');
+          window.google.maps.event.clearListeners(googleMap, 'drag');
+          window.google.maps.event.clearListeners(googleMap, 'dragend');
+        };
+      }
     }
   }, [googleMapMarker, googleMap, location]);
   (0, _react.useEffect)(function () {
