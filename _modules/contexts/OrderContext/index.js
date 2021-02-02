@@ -147,7 +147,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, options, localOptions, _options, _localOptions$address, conditions, addressesResponse, address, _yield$ordering$setAc3, _yield$ordering$setAc4, _error, _result;
+      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, options, localOptions, _options, _localOptions$address, conditions, addressesResponse, address, _yield$ordering$setAc3, _yield$ordering$setAc4, _error, _result, _err$message, message;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -179,21 +179,28 @@ var OrderProvider = function OrderProvider(_ref) {
                 state.options = _objectSpread(_objectSpread({}, state.options), options);
               }
 
-              _context.next = 11;
+              if (error) {
+                setAlert({
+                  show: true,
+                  content: result
+                });
+              }
+
+              _context.next = 12;
               return strategy.getItem('options', true);
 
-            case 11:
+            case 12:
               localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 42;
+                _context.next = 43;
                 break;
               }
 
               _options = {};
 
               if (!(Object.keys(localOptions.address).length > 0)) {
-                _context.next = 34;
+                _context.next = 35;
                 break;
               }
 
@@ -201,10 +208,10 @@ var OrderProvider = function OrderProvider(_ref) {
                 attribute: 'address',
                 value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
-              _context.next = 18;
+              _context.next = 19;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get();
 
-            case 18:
+            case 19:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
                 var _localOptions$address2, _localOptions$address3, _localOptions$address4;
@@ -216,17 +223,17 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
               if (address) {
-                _context.next = 31;
+                _context.next = 32;
                 break;
               }
 
               Object.keys(localOptions.address).forEach(function (key) {
                 return localOptions.address[key] === null && delete localOptions.address[key];
               });
-              _context.next = 24;
+              _context.next = 25;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address);
 
-            case 24:
+            case 25:
               _yield$ordering$setAc3 = _context.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               _error = _yield$ordering$setAc4.error;
@@ -236,19 +243,19 @@ var OrderProvider = function OrderProvider(_ref) {
                 address = _result;
               }
 
-              _context.next = 33;
+              _context.next = 34;
               break;
 
-            case 31:
-              _context.next = 33;
+            case 32:
+              _context.next = 34;
               return ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({
                 default: true
               });
 
-            case 33:
+            case 34:
               address && (_options.address_id = address.id);
 
-            case 34:
+            case 35:
               if (localOptions.type) {
                 _options.type = localOptions.type;
               }
@@ -269,35 +276,40 @@ var OrderProvider = function OrderProvider(_ref) {
                 }));
               }
 
-              _context.next = 40;
+              _context.next = 41;
               return strategy.removeItem('options');
 
-            case 40:
-              _context.next = 43;
+            case 41:
+              _context.next = 44;
               break;
-
-            case 42:
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
 
             case 43:
-              _context.next = 48;
-              break;
-
-            case 45:
-              _context.prev = 45;
-              _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 48:
+            case 44:
+              _context.next = 51;
+              break;
+
+            case 46:
+              _context.prev = 46;
+              _context.t0 = _context["catch"](0);
+              message = (_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$message = _context.t0.message) === null || _err$message === void 0 ? void 0 : _err$message.includes('Internal error')) ? 'INTERNAL_ERROR' : _context.t0.message;
+              setAlert({
+                show: true,
+                content: [message]
+              });
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+
+            case 51:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 45]]);
+      }, _callee, null, [[0, 46]]);
     }));
 
     return function refreshOrderOptions() {
@@ -529,14 +541,14 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(changes) {
-      var _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, carts, options;
+      var _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, carts, options, _err$message2, message;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 19;
+                _context5.next = 20;
                 break;
               }
 
@@ -579,16 +591,17 @@ var OrderProvider = function OrderProvider(_ref) {
             case 14:
               _context5.prev = 14;
               _context5.t0 = _context5["catch"](1);
+              message = (_context5.t0 === null || _context5.t0 === void 0 ? void 0 : (_err$message2 = _context5.t0.message) === null || _err$message2 === void 0 ? void 0 : _err$message2.includes('Internal error')) ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
                 show: true,
-                content: [_context5.t0]
+                content: [message]
               });
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context5.abrupt("return", false);
 
-            case 19:
+            case 20:
             case "end":
               return _context5.stop();
           }
@@ -1458,7 +1471,7 @@ var OrderProvider = function OrderProvider(_ref) {
     value: [copyState, functions]
   }, Alert && /*#__PURE__*/_react.default.createElement(Alert, {
     open: alert.show,
-    title: t('CART_ERROR', 'Cart error'),
+    title: t('ERROR', 'Error'),
     onAccept: function onAccept() {
       return setAlert({
         show: false

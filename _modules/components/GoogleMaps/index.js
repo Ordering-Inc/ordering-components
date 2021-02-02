@@ -53,11 +53,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var GoogleMaps = function GoogleMaps(props) {
   var googleReady = props.googleReady,
-      location = props.location,
       locations = props.locations,
       mapControls = props.mapControls,
       setErrors = props.setErrors,
       isSetInputs = props.isSetInputs,
+      fixedLocation = props.fixedLocation,
       handleChangeAddressMap = props.handleChangeAddressMap,
       maxLimitLocation = props.maxLimitLocation;
 
@@ -91,6 +91,7 @@ var GoogleMaps = function GoogleMaps(props) {
       boundMap = _useState8[0],
       setBoundMap = _useState8[1];
 
+  var location = fixedLocation || props.location;
   var center = {
     lat: location.lat,
     lng: location.lng
