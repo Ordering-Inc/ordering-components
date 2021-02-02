@@ -75,17 +75,51 @@ var ConfigProvider = function ConfigProvider(_ref) {
       setState = _useState2[1];
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      languageState = _useLanguage2[0],
-      t = _useLanguage2[1];
+      _useLanguage2 = _slicedToArray(_useLanguage, 1),
+      languageState = _useLanguage2[0];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var customConfigs = {
+    max_days_preorder: {
+      key: 'max_days_preorder',
+      value: 6
+    },
+    meters_to_change_address: {
+      key: 'meters_to_change_address',
+      value: 500
+    },
+    default_order_type: {
+      key: 'default_order_type',
+      value: 'delivery'
+    },
+    order_types_allowed: {
+      key: 'order_types_allowed',
+      value: '1|2|3|4|5'
+    },
+    google_autocomplete_selection_required: {
+      key: 'google_autocomplete_selection_required',
+      value: 'true'
+    },
+    google_maps_api_key: {
+      key: 'google_maps_api_key',
+      value: 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+    },
+    country_autocomplete: {
+      key: 'country_autocomplete',
+      value: '*'
+    },
+    track_id_google_analytics: {
+      key: 'track_id_google_analytics',
+      value: 'UA-51635411-4'
+    }
+  };
+
   var refreshConfigs = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$confi, _yield$ordering$confi2, error, result;
+      var _data, _data2, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, configsResult;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -103,26 +137,53 @@ var ConfigProvider = function ConfigProvider(_ref) {
               _yield$ordering$confi2 = _yield$ordering$confi.content;
               error = _yield$ordering$confi2.error;
               result = _yield$ordering$confi2.result;
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false,
-                configs: error ? {} : result
-              }));
-              _context.next = 14;
+              data = null;
+              _context.prev = 9;
+              _context.next = 12;
+              return fetch('https://ipapi.co/json/');
+
+            case 12:
+              response = _context.sent;
+              _context.next = 15;
+              return response.json();
+
+            case 15:
+              data = _context.sent;
+              _context.next = 21;
               break;
 
-            case 11:
-              _context.prev = 11;
-              _context.t0 = _context["catch"](0);
+            case 18:
+              _context.prev = 18;
+              _context.t0 = _context["catch"](9);
+              data = null;
+
+            case 21:
+              configsResult = _objectSpread(_objectSpread({}, customConfigs), {}, {
+                default_country_code: {
+                  value: data && ((_data = data) === null || _data === void 0 ? void 0 : _data.country_code) || 'US',
+                  calling_number: data && ((_data2 = data) === null || _data2 === void 0 ? void 0 : _data2.country_calling_code) || '+1'
+                }
+              }, result);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false,
+                configs: error ? {} : configsResult
+              }));
+              _context.next = 28;
+              break;
+
+            case 25:
+              _context.prev = 25;
+              _context.t1 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 14:
+            case 28:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 25], [9, 18]]);
     }));
 
     return function refreshConfigs() {
