@@ -7,7 +7,8 @@ export const BusinessMapUI = (props) => {
     toggleMap,
     activeMap,
     businessLocations,
-    userLocation
+    userLocation,
+    onBusinessClick
   } = props
 
   const [configState] = useConfig()
@@ -42,6 +43,7 @@ export const BusinessMapUI = (props) => {
           mapControls={googleMapsControls}
           maxLimitLocation={configState?.configs?.meters_to_change_address?.value}
           businessMap
+          onBusinessClick={onBusinessClick}
         />
       )}
     </>

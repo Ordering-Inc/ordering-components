@@ -14,7 +14,8 @@ export const GoogleMaps = (props) => {
     setErrors,
     handleChangeAddressMap,
     maxLimitLocation,
-    businessMap
+    businessMap,
+    onBusinessClick
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -36,18 +37,20 @@ export const GoogleMaps = (props) => {
     for (let i = 0; i < locations.length; i++) {
       let formatUrl = null
       if (i === 1 || businessMap) {
-        formatUrl = optimizeImage(locations[i].icon, 'r_max')
+        formatUrl = optimizeImage(locations[i]?.icon, 'r_max')
       }
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
         map,
-        icon: {
+        title: locations[i]?.slug,
+        icon: locations[i]?.icon ? {
           url: formatUrl || locations[i].icon,
           scaledSize: new window.google.maps.Size(45, 45)
-        }
+        } : null
       })
       const isNear = validateResult(googleMap, marker, marker.getPosition())
       if (isNear) {
+        marker.addListener('click', () => onBusinessClick(locations[i]?.slug))
         bounds.extend(marker.position)
         setMarkers(markers => [...markers, marker])
       }
