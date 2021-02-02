@@ -20,6 +20,9 @@ export const Home = () => {
         </li>
         <h2>B</h2>
         <li>
+          <Link to='/business_map'>Business Map</Link>
+        </li>
+        <li>
           <Link to='/businesses_list'>Businesses List</Link>
         </li>
         <li>
