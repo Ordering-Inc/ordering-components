@@ -381,6 +381,12 @@ Object.defineProperty(exports, "Phone", {
     return _Phone.Phone;
   }
 });
+Object.defineProperty(exports, "BusinessMap", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessMap.BusinessMap;
+  }
+});
 Object.defineProperty(exports, "ConfigContext", {
   enumerable: true,
   get: function get() {
@@ -761,6 +767,8 @@ var _OrderReview = require("./components/OrderReview");
 var _CmsContent = require("./components/CmsContent");
 
 var _Phone = require("./components/Phone");
+
+var _BusinessMap = require("./components/BusinessMap");
 
 var _ConfigContext = require("./contexts/ConfigContext");
 
