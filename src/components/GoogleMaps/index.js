@@ -8,11 +8,11 @@ import { useUtils } from '../../contexts/UtilsContext'
 export const GoogleMaps = (props) => {
   const {
     googleReady,
-    location,
     locations,
     mapControls,
     setErrors,
     isSetInputs,
+    fixedLocation,
     handleChangeAddressMap,
     maxLimitLocation
   } = props
@@ -25,6 +25,7 @@ export const GoogleMaps = (props) => {
   const [markers, setMarkers] = useState([])
   const [boundMap, setBoundMap] = useState(null)
 
+  const location = fixedLocation || props.location
   const center = { lat: location.lat, lng: location.lng }
 
   /**
