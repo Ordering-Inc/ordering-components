@@ -21,7 +21,10 @@ export const ApiProvider = ({ settings, children }) => {
   }
 
   useEffect(() => {
-    console.log(settings)
+    console.log('api provider', settings)
+  }, [settings])
+
+  useEffect(() => {
     if (settings.project === '') return
     if (ordering.language === language) return
     const _ordering = new Ordering({

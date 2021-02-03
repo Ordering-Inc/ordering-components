@@ -65,7 +65,9 @@ var ApiProvider = function ApiProvider(_ref) {
   };
 
   (0, _react.useEffect)(function () {
-    console.log(settings);
+    console.log('api provider', settings);
+  }, [settings]);
+  (0, _react.useEffect)(function () {
     if (settings.project === '') return;
     if (ordering.language === language) return;
 
