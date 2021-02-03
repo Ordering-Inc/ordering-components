@@ -11,7 +11,7 @@ export const ApiContext = createContext()
  * Api provider to manage api request
  * @param {props} props
  */
-export const ApiProvider = ({ settings, children }) => {
+export const ApiProvider = ({ settings, children, test }) => {
   const [ordering, setOrdering] = useState(new Ordering(settings))
   const [language, setLanguage] = useState(settings.language)
 
@@ -23,6 +23,9 @@ export const ApiProvider = ({ settings, children }) => {
   useEffect(() => {
     console.log('api provider', settings)
   }, [settings])
+  useEffect(() => {
+    console.log('api provider', test)
+  }, [test])
 
   useEffect(() => {
     if (settings.project === '') return
