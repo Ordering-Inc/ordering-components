@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React, { createContext, useEffect } from 'react'
 import { ConfigProvider } from '../ConfigContext'
 import { SessionProvider } from '../SessionContext'
 import { WebsocketProvider } from '../WebsocketContext'
@@ -22,7 +22,11 @@ export const OrderingContext = createContext()
  * @param {props} props
  */
 export const OrderingProvider = ({ Alert, settings, children }) => {
+
   const webStrategy = new WebStrategy()
+  useEffect(() => {
+    console.log('ordering provider', settings)
+  }, [settings])
   return (
     <OrderingContext.Provider>
       <EventProvider>

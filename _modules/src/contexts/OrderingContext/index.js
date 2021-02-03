@@ -51,6 +51,9 @@ var OrderingProvider = function OrderingProvider(_ref) {
       settings = _ref.settings,
       children = _ref.children;
   var webStrategy = new _webStrategy.WebStrategy();
+  (0, _react.useEffect)(function () {
+    console.log('ordering provider', settings);
+  }, [settings]);
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
       project: settings.project
