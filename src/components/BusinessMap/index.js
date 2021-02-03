@@ -6,12 +6,7 @@ export const BusinessMap = (props) => {
   const { UIComponent, businessList, userLocation } = props
 
   const [events] = useEvent()
-  const [activeMap, setActiveMap] = useState(false)
   const [businessLocations, setBusinessLocations] = useState([])
-
-  const toggleMap = () => {
-    setActiveMap(!activeMap)
-  }
 
   const getBusinessListLocations = () => {
     setBusinessLocations(businessList.map(business => {
@@ -37,8 +32,6 @@ export const BusinessMap = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          toggleMap={toggleMap}
-          activeMap={activeMap}
           businessLocations={businessLocations}
           userLocation={userLocation}
           onBusinessClick={onBusinessClick}

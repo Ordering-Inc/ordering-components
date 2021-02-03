@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GoogleMapsMap } from '../../../src/components/GoogleMaps'
 import { useConfig } from '../../../src/contexts/ConfigContext'
 
 export const BusinessMapUI = (props) => {
   const {
-    toggleMap,
-    activeMap,
     businessLocations,
     userLocation,
     onBusinessClick
   } = props
 
   const [configState] = useConfig()
+
+  const [activeMap, setActiveMap] = useState(false)
+
+  const toggleMap = () => {
+    setActiveMap(!activeMap)
+  }
 
   const googleMapsControls = {
     defaultZoom: 15,
