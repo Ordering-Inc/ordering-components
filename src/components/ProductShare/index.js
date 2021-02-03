@@ -6,11 +6,12 @@ export const ProductShare = (props) => {
     UIComponent,
     slug,
     categoryId,
-    productId
+    productId,
+    defaultUrl
   } = props
 
   const [showShareButton, setShowShareButton] = useState(false)
-  const urlToShare = `${window.location.origin}/store/${slug}?category=${categoryId}&product=${productId}`
+  const urlToShare = defaultUrl || `${window.location.origin}/store/${slug}?category=${categoryId}&product=${productId}`
 
   const addToAnyScript = () => {
     const script = document.createElement('script')
