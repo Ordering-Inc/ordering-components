@@ -7,6 +7,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 export const OrderDetails = (props) => {
   const {
     orderId,
+    hashKey,
     UIComponent
   } = props
 
@@ -74,22 +75,36 @@ export const OrderDetails = (props) => {
    * Method to get order from API
    */
   const getOrder = async () => {
+    const options = {}
+    if (hashKey) {
+      options.headers = {
+        'X-uuid-access-X': hashKey
+      }
+    }
     try {
-      const { content: { result } } = await ordering.setAccessToken(token).orders(orderId).get()
-      const order = Array.isArray(result) ? null : result
-      const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
-      const businessData = content.result
+      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get(options)
+      const order = error ? null : result
+      const err = error ? result : null
+      let businessData = null
+      try {
+        const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
+        businessData = content.result
+        content.error && err.push(content.result[0])
+      } catch (e) {
+        err.push(e.message)
+      }
       setOrderState({
         ...orderState,
         loading: false,
         order,
-        businessData
+        businessData,
+        error: err
       })
     } catch (e) {
       setOrderState({
         ...orderState,
         loading: false,
-        error: [e.message]
+        error: e.message ? orderState.error?.push(e?.message) : ['ERROR']
       })
     }
   }
