@@ -81,6 +81,7 @@ export const LanguageProvider = ({ children, strategy }) => {
 
   useEffect(() => {
     setLanguageFromLocalStorage()
+    console.log(ordering.project)
   }, [ordering.project])
 
   useEffect(() => {
