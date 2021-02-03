@@ -12,7 +12,7 @@ export const ApiContext = createContext()
  * @param {props} props
  */
 export const ApiProvider = ({ settings, children }) => {
-  const apiSettings = Object.assign(settings.api, { project: settings.project })
+  const [apiSettings, setApiSettings] = useState(Object.assign(settings.api, { project: settings.project }))
   const [ordering, setOrdering] = useState(new Ordering(settings))
   const [language, setLanguage] = useState(settings.language)
 
@@ -22,8 +22,9 @@ export const ApiProvider = ({ settings, children }) => {
   }
 
   useEffect(() => {
+    setApiSettings(Object.assign(settings.api, { project: settings.project }))
     console.log('api provider', apiSettings)
-  }, [apiSettings])
+  }, [settings])
 
   useEffect(() => {
     if (settings.project === '') return
