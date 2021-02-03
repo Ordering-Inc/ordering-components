@@ -13,6 +13,10 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireWildcard(require("prop-types"));
 
+var _SessionContext = require("../../contexts/SessionContext");
+
+var _ApiContext = require("../../contexts/ApiContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -47,40 +51,32 @@ var Logistics = function Logistics(props) {
   var orderId = props.orderId,
       UIComponent = props.UIComponent;
 
-  var _useState = (0, _react.useState)({
-    token: null,
-    error: null
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      tokenStatus = _useState2[0],
-      setTokenStatus = _useState2[1];
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
 
-  var _useState3 = (0, _react.useState)({
-    loading: false,
-    error: null
-  }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      actionStatus = _useState4[0],
-      setActionStatus = _useState4[1];
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      session = _useSession2[0];
   /**
    * Array to save logistics
    */
 
 
-  var _useState5 = (0, _react.useState)({
+  var _useState = (0, _react.useState)({
     logs: [],
     loading: true,
     error: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      logisticList = _useState6[0],
-      setLogisticList = _useState6[1];
+      _useState2 = _slicedToArray(_useState, 2),
+      logisticList = _useState2[0],
+      setLogisticList = _useState2[1];
   /**
-   * Method to get token from API
+   * Method to get logistics from API
    */
 
 
-  var getToken = /*#__PURE__*/function () {
+  var getLogistics = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var requestOptions, response, _yield$response$json, result;
 
@@ -89,76 +85,6 @@ var Logistics = function Logistics(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: true
-              }));
-              setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
-                token: null
-              }));
-              requestOptions = {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  email: 'superadmin@ordering.co',
-                  password: 'super'
-                })
-              };
-              _context.next = 6;
-              return fetch('https://apiv4.ordering.co/v400/en/demologistic/auth', requestOptions);
-
-            case 6:
-              response = _context.sent;
-              _context.next = 9;
-              return response.json();
-
-            case 9:
-              _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
-              setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
-                token: result.session.access_token
-              }));
-              _context.next = 18;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
-              setTokenStatus(_objectSpread(_objectSpread({}, tokenStatus), {}, {
-                error: _context.t0
-              }));
-              setActionStatus({
-                loading: false,
-                error: _context.t0
-              });
-
-            case 18:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 14]]);
-    }));
-
-    return function getToken() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to get logistics from API
-   */
-
-
-  var getLogistics = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var requestOptions, response, _yield$response$json2, result;
-
-      return _regenerator.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.prev = 0;
               setLogisticList(_objectSpread(_objectSpread({}, logisticList), {}, {
                 loading: true
               }));
@@ -166,63 +92,52 @@ var Logistics = function Logistics(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(tokenStatus.token)
+                  Authorization: "Bearer ".concat(session.token)
                 }
               };
-              _context2.next = 5;
-              return fetch("https://apiv4.ordering.co/v400/en/demologistic/orders/".concat(orderId, "/logs?order_id=").concat(orderId), requestOptions);
+              _context.next = 5;
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/logs?order_id=").concat(orderId), requestOptions);
 
             case 5:
-              response = _context2.sent;
-              _context2.next = 8;
+              response = _context.sent;
+              _context.next = 8;
               return response.json();
 
             case 8:
-              _yield$response$json2 = _context2.sent;
-              result = _yield$response$json2.result;
+              _yield$response$json = _context.sent;
+              result = _yield$response$json.result;
               setLogisticList(_objectSpread(_objectSpread({}, logisticList), {}, {
                 loading: false,
                 logs: result
               }));
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: false
-              }));
-              _context2.next = 18;
+              _context.next = 16;
               break;
 
-            case 14:
-              _context2.prev = 14;
-              _context2.t0 = _context2["catch"](0);
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](0);
               setLogisticList(_objectSpread(_objectSpread({}, logisticList), {}, {
                 loading: false,
-                error: _context2.t0.message
-              }));
-              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
-                loading: false
+                error: _context.t0.message
               }));
 
-            case 18:
+            case 16:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2, null, [[0, 14]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
     return function getLogistics() {
-      return _ref2.apply(this, arguments);
+      return _ref.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    if (tokenStatus.token === null) return;
     getLogistics();
-  }, [tokenStatus]);
-  (0, _react.useEffect)(function () {
-    getToken();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    actionStatus: actionStatus,
     logisticList: logisticList
   })));
 };

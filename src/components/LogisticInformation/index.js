@@ -3,7 +3,7 @@ import PropTypes, { string } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
-export const Logistics = (props) => {
+export const LogisticInformation = (props) => {
   const {
     orderId,
     UIComponent
@@ -11,18 +11,17 @@ export const Logistics = (props) => {
 
   const [ordering] = useApi()
   const [session] = useSession()
-
   /**
    * Array to save logistics
    */
-  const [logisticList, setLogisticList] = useState({ logs: [], loading: true, error: null })
+  const [logisticInformation, setLogisticInformation] = useState({ data: [], loading: true, error: null })
 
   /**
    * Method to get logistics from API
    */
   const getLogistics = async () => {
     try {
-      setLogisticList({ ...logisticList, loading: true })
+      setLogisticInformation({ ...logisticInformation, loading: true })
       const requestOptions = {
         method: 'GET',
         headers: {
@@ -30,11 +29,15 @@ export const Logistics = (props) => {
           Authorization: `Bearer ${session.token}`
         }
       }
-      const response = await fetch(`${ordering.root}/orders/${orderId}/logs?order_id=${orderId}`, requestOptions)
+      const response = await fetch(`${ordering.root}/logistic/orders/${orderId}/information`, requestOptions)
       const { result } = await response.json()
-      setLogisticList({ ...logisticList, loading: false, logs: result })
+      if (response.ok) {
+        setLogisticInformation({ error: null, loading: false, data: result })
+      } else {
+        setLogisticInformation({ ...logisticInformation, loading: false, error: result })
+      }
     } catch (err) {
-      setLogisticList({ ...logisticList, loading: false, error: err.message })
+      setLogisticInformation({ ...logisticInformation, loading: false, error: err.message })
     }
   }
 
@@ -47,14 +50,14 @@ export const Logistics = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          logisticList={logisticList}
+          logisticInformation={logisticInformation}
         />
       )}
     </>
   )
 }
 
-Logistics.propTypes = {
+LogisticInformation.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -85,7 +88,7 @@ Logistics.propTypes = {
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-Logistics.defaultProps = {
+LogisticInformation.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

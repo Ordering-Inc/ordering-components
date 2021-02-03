@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Logistics = void 0;
+exports.LogisticInformation = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -47,7 +47,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var Logistics = function Logistics(props) {
+var LogisticInformation = function LogisticInformation(props) {
   var orderId = props.orderId,
       UIComponent = props.UIComponent;
 
@@ -64,13 +64,13 @@ var Logistics = function Logistics(props) {
 
 
   var _useState = (0, _react.useState)({
-    logs: [],
+    data: [],
     loading: true,
     error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      logisticList = _useState2[0],
-      setLogisticList = _useState2[1];
+      logisticInformation = _useState2[0],
+      setLogisticInformation = _useState2[1];
   /**
    * Method to get logistics from API
    */
@@ -85,7 +85,7 @@ var Logistics = function Logistics(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              setLogisticList(_objectSpread(_objectSpread({}, logisticList), {}, {
+              setLogisticInformation(_objectSpread(_objectSpread({}, logisticInformation), {}, {
                 loading: true
               }));
               requestOptions = {
@@ -96,7 +96,7 @@ var Logistics = function Logistics(props) {
                 }
               };
               _context.next = 5;
-              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/logs?order_id=").concat(orderId), requestOptions);
+              return fetch("".concat(ordering.root, "/logistic/orders/").concat(orderId, "/information"), requestOptions);
 
             case 5:
               response = _context.sent;
@@ -106,17 +106,27 @@ var Logistics = function Logistics(props) {
             case 8:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
-              setLogisticList(_objectSpread(_objectSpread({}, logisticList), {}, {
-                loading: false,
-                logs: result
-              }));
+
+              if (response.ok) {
+                setLogisticInformation({
+                  error: null,
+                  loading: false,
+                  data: result
+                });
+              } else {
+                setLogisticInformation(_objectSpread(_objectSpread({}, logisticInformation), {}, {
+                  loading: false,
+                  error: result
+                }));
+              }
+
               _context.next = 16;
               break;
 
             case 13:
               _context.prev = 13;
               _context.t0 = _context["catch"](0);
-              setLogisticList(_objectSpread(_objectSpread({}, logisticList), {}, {
+              setLogisticInformation(_objectSpread(_objectSpread({}, logisticInformation), {}, {
                 loading: false,
                 error: _context.t0.message
               }));
@@ -138,12 +148,12 @@ var Logistics = function Logistics(props) {
     getLogistics();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    logisticList: logisticList
+    logisticInformation: logisticInformation
   })));
 };
 
-exports.Logistics = Logistics;
-Logistics.propTypes = {
+exports.LogisticInformation = LogisticInformation;
+LogisticInformation.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -178,7 +188,7 @@ Logistics.propTypes = {
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-Logistics.defaultProps = {
+LogisticInformation.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
