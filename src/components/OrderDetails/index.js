@@ -78,15 +78,21 @@ export const OrderDetails = (props) => {
     const options = {}
     if (hashKey) {
       options.headers = {
-        'uuid-access': hashKey
+        'X-uuid-access-X': hashKey
       }
     }
     try {
       const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get(options)
       const order = error ? null : result
       const err = error ? result : null
-      const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
-      const businessData = content.result
+      let businessData = null
+      try {
+        const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
+        businessData = content.result
+        content.error && err.push(content.result[0])
+      } catch (e) {
+        err.push(e.message)
+      }
       setOrderState({
         ...orderState,
         loading: false,
@@ -98,7 +104,7 @@ export const OrderDetails = (props) => {
       setOrderState({
         ...orderState,
         loading: false,
-        error: [e.message]
+        error: orderState.error.push(e.message)
       })
     }
   }
