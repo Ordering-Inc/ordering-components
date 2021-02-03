@@ -13,9 +13,6 @@ export const PhoneExample = () => {
     /**
      * Array of phones for autocomplete
      */
-    /**
-     * Options, this must be containt an array of payment options
-     */
     beforeComponents: [TestComponent],
     /**
      * Components types after Payment options

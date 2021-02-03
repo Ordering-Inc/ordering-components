@@ -17,7 +17,7 @@ export const Phone = (props) => {
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [, t] = useLanguage()
   const [ordering] = useApi()
-  const [phones, setPhones] = useState(props.phones || [])
+  const [phones, setPhones] = useState([])
   const [{ token, auth }] = useSession()
   const [events] = useEvent()
 
@@ -163,9 +163,7 @@ export const Phone = (props) => {
   }, [phones])
 
   useEffect(() => {
-    if (!props?.phones) {
-      getPhone()
-    }
+    getPhone()
   }, [phone])
 
   return (
@@ -193,11 +191,6 @@ Phone.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
-
-  /**
-   * Example of array phones to test the component without api
-   */
-  Phones: PropTypes.array,
   /**
    * Components types before payment option stripe direct
    * Array of type components, the parent props will pass to these components
