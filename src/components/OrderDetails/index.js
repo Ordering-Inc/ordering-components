@@ -104,7 +104,7 @@ export const OrderDetails = (props) => {
       setOrderState({
         ...orderState,
         loading: false,
-        error: orderState.error.push(e.message)
+        error: e.message ? orderState.error?.push(e?.message) : ['ERROR']
       })
     }
   }
