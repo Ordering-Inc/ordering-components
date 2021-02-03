@@ -86,7 +86,9 @@ var LanguageProvider = function LanguageProvider(_ref) {
               language = _context.sent;
 
               if (!language) {
-                loadDefaultLanguage();
+                if (ordering.project !== '') {
+                  loadDefaultLanguage();
+                }
               } else {
                 setState(_objectSpread(_objectSpread({}, state), {}, {
                   language: language
@@ -277,7 +279,7 @@ var LanguageProvider = function LanguageProvider(_ref) {
   }, [(_state$language4 = state.language) === null || _state$language4 === void 0 ? void 0 : _state$language4.code, ordering]);
   (0, _react.useEffect)(function () {
     setLanguageFromLocalStorage();
-  }, []);
+  }, [ordering.project]);
   (0, _react.useEffect)(function () {
     var _state$language5;
 
