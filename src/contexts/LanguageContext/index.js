@@ -24,7 +24,7 @@ export const LanguageProvider = ({ children, strategy }) => {
   const setLanguageFromLocalStorage = async () => {
     const language = await strategy.getItem('language', true)
     if (!language) {
-      if (ordering.project !== '') {
+      if (ordering?.project !== null) {
         loadDefaultLanguage()
       }
     } else {
@@ -74,6 +74,7 @@ export const LanguageProvider = ({ children, strategy }) => {
    * Refresh translation when change language from ordering
    */
   useEffect(() => {
+    if (ordering?.project === null) return
     if (state.language?.code && state.language?.code === ordering.language) {
       refreshTranslations()
     }
@@ -81,8 +82,7 @@ export const LanguageProvider = ({ children, strategy }) => {
 
   useEffect(() => {
     setLanguageFromLocalStorage()
-    console.log(ordering.project)
-  }, [ordering.project])
+  }, [ordering])
 
   useEffect(() => {
     apiHelper.setLanguage(state?.language?.code)

@@ -91,10 +91,11 @@ export const ConfigProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    if (ordering?.project === null) return
     if (!languageState.loading) {
       refreshConfigs()
     }
-  }, [languageState])
+  }, [languageState, ordering])
 
   return (
     <ConfigContext.Provider value={[state, functions]}>
