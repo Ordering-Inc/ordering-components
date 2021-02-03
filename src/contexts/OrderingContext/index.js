@@ -1,4 +1,4 @@
-import React, { createContext, useEffect } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 import { ConfigProvider } from '../ConfigContext'
 import { SessionProvider } from '../SessionContext'
 import { WebsocketProvider } from '../WebsocketContext'
@@ -22,20 +22,21 @@ export const OrderingContext = createContext()
  * @param {props} props
  */
 export const OrderingProvider = ({ Alert, settings, children }) => {
-
   const webStrategy = new WebStrategy()
+  const [settingItems, setSettingItems] = useState(settings)
   useEffect(() => {
     console.log('ordering provider', settings)
+    setSettingItems(settings)
   }, [settings])
   return (
     <OrderingContext.Provider>
       <EventProvider>
-        <ApiProvider settings={Object.assign(settings.api, { project: settings.project })}>
+        <ApiProvider settings={Object.assign(settingItems.api, { project: settingItems.project })}>
           <LanguageProvider strategy={webStrategy}>
             <ConfigProvider>
               <UtilsProviders>
                 <SessionProvider strategy={webStrategy}>
-                  <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
+                  <WebsocketProvider settings={Object.assign(settingItems.socket, { project: settingItems.project })}>
                     <OrderProvider strategy={webStrategy} Alert={Alert}>
                       <BusinessProvider>
                         {children}
