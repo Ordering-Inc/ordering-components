@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { BusinessMap } from '../../../src/components/BusinessMap'
-import { BusinessMapUI } from '../../components/BusinessMapUI'
+import { BusinessesMap } from '../../../src/components/BusinessesMap'
+import { BusinessesMapUI } from '../../components/BusinessesMapUI'
 
-export const BusinessMapExample = () => {
+export const BusinessesMapExample = () => {
   const props = {
-    UIComponent: BusinessMapUI,
+    UIComponent: BusinessesMapUI,
 
     /**
      * Business list must have locations
@@ -35,6 +35,6 @@ export const BusinessMapExample = () => {
   }
 
   return (
-    <BusinessMap {...props} />
+    <BusinessesMap {...props} />
   )
 }

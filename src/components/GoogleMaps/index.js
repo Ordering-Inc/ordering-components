@@ -103,6 +103,7 @@ export const GoogleMaps = (props) => {
     const loc2 = new window.google.maps.LatLng(location.lat, location.lng)
 
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
+    const minimumBusinessDistance = 20000
 
     if (!maxLimitLocation && !businessMap) {
       geocodePosition(curPos)
@@ -110,7 +111,7 @@ export const GoogleMaps = (props) => {
     }
 
     if (businessMap) {
-      if (distance <= 20000) return true
+      if (distance <= minimumBusinessDistance) return true
       return false
     }
 

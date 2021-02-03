@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useEvent } from '../../contexts/EventContext'
 
-export const BusinessMap = (props) => {
+export const BusinessesMap = (props) => {
   const { UIComponent, businessList, userLocation } = props
 
   const [events] = useEvent()
@@ -41,7 +41,7 @@ export const BusinessMap = (props) => {
   )
 }
 
-BusinessMap.propTypes = {
+BusinessesMap.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -76,7 +76,7 @@ BusinessMap.propTypes = {
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-BusinessMap.defaultProps = {
+BusinessesMap.defaultProps = {
   businessList: [],
   beforeComponents: [],
   afterComponents: [],

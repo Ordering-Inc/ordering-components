@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { GoogleMapsMap } from '../../../src/components/GoogleMaps'
 import { useConfig } from '../../../src/contexts/ConfigContext'
 
-export const BusinessMapUI = (props) => {
+export const BusinessesMapUI = (props) => {
   const {
     businessLocations,
     userLocation,

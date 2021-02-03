@@ -59,7 +59,7 @@ import { OrderDetails } from './components/OrderDetails'
 import { OrderReview } from './components/OrderReview'
 import { CmsContent } from './components/CmsContent'
 import { Phone } from './components/Phone'
-import { BusinessMap } from './components/BusinessMap'
+import { BusinessesMap } from './components/BusinessesMap'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -151,7 +151,7 @@ export {
   PaymentOptionStripeDirect,
   PaymentOptionStripeRedirect,
   Phone,
-  BusinessMap,
+  BusinessesMap,
   StripeElementsForm,
   CardForm,
   StripeRedirectForm,

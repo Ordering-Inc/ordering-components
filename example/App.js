@@ -65,7 +65,7 @@ import ChangeView from './components/ChangeView'
 import { FloatingButtonExample } from './views/FloatingButtonExample'
 import { ResetPasswordExample } from './views/ResetPasswordExample'
 import { PhoneExample } from './views/PhoneExample'
-import { BusinessMapExample } from './views/BusinessMapExample'
+import { BusinessesMapExample } from './views/BusinessesMapExample'
 
 export default function App () {
   return (
@@ -252,7 +252,7 @@ export default function App () {
               <PhoneExample />
             </Route>
             <Route path='/business_map'>
-              <BusinessMapExample />
+              <BusinessesMapExample />
             </Route>
             <Route path='/'>
               <Home />
