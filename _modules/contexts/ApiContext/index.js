@@ -47,8 +47,10 @@ exports.ApiContext = ApiContext;
 
 var ApiProvider = function ApiProvider(_ref) {
   var settings = _ref.settings,
-      children = _ref.children,
-      test = _ref.test;
+      children = _ref.children;
+  var apiSettings = Object.assign(settings.api, {
+    project: settings.project
+  });
 
   var _useState = (0, _react.useState)(new _orderingApiSdk.Ordering(settings)),
       _useState2 = _slicedToArray(_useState, 2),
@@ -66,11 +68,8 @@ var ApiProvider = function ApiProvider(_ref) {
   };
 
   (0, _react.useEffect)(function () {
-    console.log('api provider', settings);
-  }, [settings]);
-  (0, _react.useEffect)(function () {
-    console.log('api provider', test);
-  }, [test]);
+    console.log('api provider', apiSettings);
+  }, [apiSettings]);
   (0, _react.useEffect)(function () {
     if (settings.project === '') return;
     if (ordering.language === language) return;
