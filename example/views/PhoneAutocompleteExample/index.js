@@ -1,15 +1,15 @@
 import React from 'react'
 
-import { PhoneUI } from '../../components/PhoneUI'
-import { Phone } from '../../../src/components/Phone'
+import { PhoneAutocompleteUI } from '../../components/PhoneAutocompleteUI'
+import { PhoneAutocomplete } from '../../../src/components/PhoneAutocomplete'
 import { TestComponent } from '../../components/TestComponent'
 
-export const PhoneExample = () => {
+export const PhoneAutocompleteExample = () => {
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
-    UIComponent: PhoneUI,
+    UIComponent: PhoneAutocompleteUI,
     /**
      * Array of phones for autocomplete
      */
@@ -30,5 +30,5 @@ export const PhoneExample = () => {
      */
     afterElements: [<p key>Test Element After</p>]
   }
-  return <Phone {...props} />
+  return <PhoneAutocomplete {...props} />
 }

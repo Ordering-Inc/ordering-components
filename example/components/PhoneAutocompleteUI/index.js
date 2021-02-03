@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import './styles.css'
 
-export const PhoneUI = (props) => {
+export const PhoneAutocompleteUI = (props) => {
   const {
     beforeElements,
     beforeComponents,

@@ -5,7 +5,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useEvent } from '../../contexts/EventContext'
 
-export const Phone = (props) => {
+export const PhoneAutocomplete = (props) => {
   const {
     UIComponent
   } = props
@@ -186,7 +186,7 @@ export const Phone = (props) => {
   )
 }
 
-Phone.propTypes = {
+PhoneAutocomplete.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -213,7 +213,7 @@ Phone.propTypes = {
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-Phone.defaultProps = {
+PhoneAutocomplete.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
