@@ -182,7 +182,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, order, err, businessData, _yield$ordering$setAc3, content;
+      var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, order, err, businessData, _yield$ordering$setAc3, content, _orderState$error;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -240,7 +240,7 @@ var OrderDetails = function OrderDetails(props) {
               _context2.t1 = _context2["catch"](2);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                error: orderState.error.push(_context2.t1.message)
+                error: _context2.t1.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context2.t1 === null || _context2.t1 === void 0 ? void 0 : _context2.t1.message) : ['ERROR']
               }));
 
             case 30:
