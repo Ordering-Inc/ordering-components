@@ -23,7 +23,7 @@ export const ApiProvider = ({ settings, children }) => {
 
   useEffect(() => {
     setApiSettings(Object.assign(settings.api, { project: settings.project }))
-    setOrdering(apiSettings)
+    setOrdering(new Ordering(Object.assign(settings.api, { project: settings.project })))
   }, [settings])
 
   useEffect(() => {

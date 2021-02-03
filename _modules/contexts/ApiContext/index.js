@@ -75,7 +75,9 @@ var ApiProvider = function ApiProvider(_ref) {
     setApiSettings(Object.assign(settings.api, {
       project: settings.project
     }));
-    setOrdering(apiSettings);
+    setOrdering(new _orderingApiSdk.Ordering(Object.assign(settings.api, {
+      project: settings.project
+    })));
   }, [settings]);
   (0, _react.useEffect)(function () {
     if (ordering.language === language) return;
