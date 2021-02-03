@@ -114,6 +114,14 @@ var ConfigProvider = function ConfigProvider(_ref) {
     track_id_google_analytics: {
       key: 'track_id_google_analytics',
       value: 'UA-51635411-4'
+    },
+    guest_uuid_max_days: {
+      key: 'guest_uuid_max_days',
+      value: 3
+    },
+    guest_uuid_access: {
+      key: 'guest_uuid_access',
+      value: 1
     }
   };
 
