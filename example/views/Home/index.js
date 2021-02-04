@@ -20,9 +20,6 @@ export const Home = () => {
         </li>
         <h2>B</h2>
         <li>
-          <Link to='/businesses_list'>Businesses List</Link>
-        </li>
-        <li>
           <Link to='/business_basic_information'>Business basic information</Link>
         </li>
         <li>
@@ -39,9 +36,6 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/business_products_categories'>Business products categories</Link>
-        </li>
-        <li>
-          <Link to='/business_featured_options'>Business featured options</Link>
         </li>
         <li>
           <Link to='/business_controller'>Business Controller</Link>

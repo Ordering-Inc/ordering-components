@@ -9,6 +9,6 @@ context('Businesses Basic information', () => {
 
   it('Shows modal business basic component', () => {
     cy.get('button').contains('More information').click()
-    cy.get('.modal-info').should('exist')
+    cy.get('.popup-dialog').should('exist')
   })
 })
