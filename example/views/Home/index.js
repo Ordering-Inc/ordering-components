@@ -167,9 +167,6 @@ export const Home = () => {
         <li>
           <Link to='/payment_option_stripe_redirect'>Payments Options Stripe Redirect</Link>
         </li>
-        <li>
-          <Link to='/phone'>Phone</Link>
-        </li>
         <h2>R</h2>
         <li>
           <Link to='/review_orders'>Review my Orders</Link>

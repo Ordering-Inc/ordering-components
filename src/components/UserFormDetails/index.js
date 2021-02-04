@@ -31,7 +31,7 @@ export const UserFormDetails = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading && !props.userData) {
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
@@ -90,7 +90,7 @@ export const UserFormDetails = (props) => {
         formState.changes = { ...formState.changes, ...changes }
       }
       if (isImage) {
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ photo: formState.changes.photo }, {
+        response = await ordering.users(userState.result.result.id).save({ photo: formState.changes.photo }, {
           accessToken: accessToken
         })
 
@@ -103,7 +103,7 @@ export const UserFormDetails = (props) => {
           loading: false
         })
       } else {
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
+        response = await ordering.users(userState.result.result.id).save(formState.changes, {
           accessToken: accessToken
         })
         setFormState({
