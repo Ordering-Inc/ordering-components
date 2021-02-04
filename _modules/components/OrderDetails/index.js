@@ -11,7 +11,7 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _SessionContext = require("../../contexts/SessionContext");
 
@@ -51,6 +51,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
   var orderId = props.orderId,
+      propsToFetch = props.propsToFetch,
       asDashboard = props.asDashboard,
       UIComponent = props.UIComponent;
 
@@ -190,7 +191,13 @@ var OrderDetails = function OrderDetails(props) {
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: true
               }));
-              functionFetch = asDashboard ? ordering.setAccessToken(token).orders(orderId).asDashboard() : ordering.setAccessToken(token).orders(orderId);
+
+              if (propsToFetch) {
+                functionFetch = asDashboard ? ordering.setAccessToken(token).orders(orderId).asDashboard().select(propsToFetch) : ordering.setAccessToken(token).orders(orderId).select(propsToFetch);
+              } else {
+                functionFetch = asDashboard ? ordering.setAccessToken(token).orders(orderId).asDashboard() : ordering.setAccessToken(token).orders(orderId);
+              }
+
               _context2.next = 5;
               return functionFetch.get();
 
@@ -328,6 +335,11 @@ OrderDetails.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
+
+  /**
+   * Array of drivers props to fetch
+   */
+  propsToFetch: _propTypes.default.arrayOf(_propTypes.string),
 
   /**
    * This must be contains orderId to fetch

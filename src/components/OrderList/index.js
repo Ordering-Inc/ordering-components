@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes, { object, number } from 'prop-types'
+import PropTypes, { string, object, number } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
@@ -7,6 +7,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 export const OrderList = (props) => {
   const {
     UIComponent,
+    propsToFetch,
     orders,
     orderIds,
     deletedOrderId,
@@ -268,9 +269,16 @@ export const OrderList = (props) => {
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
-    const functionFetch = asDashboard
-      ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where)
-      : ordering.setAccessToken(accessToken).orders().where(where)
+    let functionFetch
+    if (propsToFetch) {
+      functionFetch = asDashboard
+        ? ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch).where(where)
+        : ordering.setAccessToken(accessToken).orders().select(propsToFetch).where(where)
+    } else {
+      functionFetch = asDashboard
+        ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where)
+        : ordering.setAccessToken(accessToken).orders().where(where)
+    }
     return await functionFetch.get(options)
   }
 
@@ -618,6 +626,10 @@ OrderList.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Array of drivers props to fetch
+   */
+  propsToFetch: PropTypes.arrayOf(string),
   /**
    * Function to get order that was clicked
    * @param {Object} order Order that was clicked

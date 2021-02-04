@@ -61,6 +61,7 @@ var OrderList = function OrderList(props) {
   var _paginationSettings$p;
 
   var UIComponent = props.UIComponent,
+      propsToFetch = props.propsToFetch,
       orders = props.orders,
       orderIds = props.orderIds,
       deletedOrderId = props.deletedOrderId,
@@ -414,7 +415,13 @@ var OrderList = function OrderList(props) {
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
-              functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where) : ordering.setAccessToken(accessToken).orders().where(where);
+
+              if (propsToFetch) {
+                functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch).where(where) : ordering.setAccessToken(accessToken).orders().select(propsToFetch).where(where);
+              } else {
+                functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where) : ordering.setAccessToken(accessToken).orders().where(where);
+              }
+
               _context2.next = 15;
               return functionFetch.get(options);
 
@@ -930,6 +937,11 @@ OrderList.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
+
+  /**
+   * Array of drivers props to fetch
+   */
+  propsToFetch: _propTypes.default.arrayOf(_propTypes.string),
 
   /**
    * Function to get order that was clicked

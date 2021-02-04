@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { string } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
@@ -7,6 +7,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 export const OrderDetails = (props) => {
   const {
     orderId,
+    propsToFetch,
     asDashboard,
     UIComponent
   } = props
@@ -78,9 +79,16 @@ export const OrderDetails = (props) => {
         ...orderState,
         loading: true
       })
-      const functionFetch = asDashboard
-        ? ordering.setAccessToken(token).orders(orderId).asDashboard()
-        : ordering.setAccessToken(token).orders(orderId)
+      let functionFetch
+      if (propsToFetch) {
+        functionFetch = asDashboard
+          ? ordering.setAccessToken(token).orders(orderId).asDashboard().select(propsToFetch)
+          : ordering.setAccessToken(token).orders(orderId).select(propsToFetch)
+      } else {
+        functionFetch = asDashboard
+          ? ordering.setAccessToken(token).orders(orderId).asDashboard()
+          : ordering.setAccessToken(token).orders(orderId)
+      }
       const { content: { result } } = await functionFetch.get()
       const order = Array.isArray(result) ? null : result
       setOrderState({
@@ -168,6 +176,10 @@ OrderDetails.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
+  /**
+   * Array of drivers props to fetch
+   */
+  propsToFetch: PropTypes.arrayOf(string),
   /**
    * This must be contains orderId to fetch
    */
