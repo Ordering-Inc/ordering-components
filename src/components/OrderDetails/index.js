@@ -125,7 +125,7 @@ export const OrderDetails = (props) => {
   const readMessages = async () => {
     const messageId = messages?.messages[messages?.messages?.length - 1]?.id
     try {
-      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/4/read?order_id=3&order_message_id=${messageId}`, {
+      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read?order_id=${orderState.order.id}&order_message_id=${messageId}`, {
         method: 'post',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -139,8 +139,8 @@ export const OrderDetails = (props) => {
   }
 
   useEffect(() => {
-    loadMessages()
-  }, [orderId, orderState?.order?.status])
+    !orderState.loading && loadMessages()
+  }, [orderId, orderState?.order?.status, orderState.loading])
 
   useEffect(() => {
     if (props.order) {
