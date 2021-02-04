@@ -35,6 +35,8 @@ import { Logistics } from './components/Logistics'
 import { LogoutAction } from './components/LogoutAction'
 import { MainSearch } from './components/MainSearch'
 import { MenuControl } from './components/MenuControl'
+import { Messages } from './components/Messages'
+import { MetaFields } from './components/MetaFields'
 import { MomentOption } from './components/MomentOption'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
@@ -54,7 +56,6 @@ import { ProductOption } from './components/ProductOption'
 import { ProductOptionSuboption } from './components/ProductOptionSuboption'
 import { ProductsList } from './components/ProductsList'
 import { ProductsListing } from './components/ProductsListing'
-import { Messages } from './components/Messages'
 import { SearchOptions } from './components/SearchOptions'
 import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
@@ -127,6 +128,7 @@ export {
   LogoutAction,
   MainSearch,
   MenuControl,
+  MetaFields,
   MomentOption,
   MyOrders,
   MyOrdersList,

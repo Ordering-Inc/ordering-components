@@ -237,6 +237,18 @@ Object.defineProperty(exports, "MenuControl", {
     return _MenuControl.MenuControl;
   }
 });
+Object.defineProperty(exports, "Messages", {
+  enumerable: true,
+  get: function get() {
+    return _Messages.Messages;
+  }
+});
+Object.defineProperty(exports, "MetaFields", {
+  enumerable: true,
+  get: function get() {
+    return _MetaFields.MetaFields;
+  }
+});
 Object.defineProperty(exports, "MomentOption", {
   enumerable: true,
   get: function get() {
@@ -349,12 +361,6 @@ Object.defineProperty(exports, "ProductsListing", {
   enumerable: true,
   get: function get() {
     return _ProductsListing.ProductsListing;
-  }
-});
-Object.defineProperty(exports, "Messages", {
-  enumerable: true,
-  get: function get() {
-    return _Messages.Messages;
   }
 });
 Object.defineProperty(exports, "SearchOptions", {
@@ -732,6 +738,10 @@ var _MainSearch = require("./components/MainSearch");
 
 var _MenuControl = require("./components/MenuControl");
 
+var _Messages = require("./components/Messages");
+
+var _MetaFields = require("./components/MetaFields");
+
 var _MomentOption = require("./components/MomentOption");
 
 var _MyOrders = require("./components/MyOrders");
@@ -769,8 +779,6 @@ var _ProductOptionSuboption = require("./components/ProductOptionSuboption");
 var _ProductsList = require("./components/ProductsList");
 
 var _ProductsListing = require("./components/ProductsListing");
-
-var _Messages = require("./components/Messages");
 
 var _SearchOptions = require("./components/SearchOptions");
 
