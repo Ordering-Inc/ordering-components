@@ -4,6 +4,7 @@ context('Apple Login', () => {
   })
 
   it('Check UI', () => {
+    cy.get('h2').should('contain.text', 'AppleLogin')
     cy.get('img').should('be.visible')
   })
 

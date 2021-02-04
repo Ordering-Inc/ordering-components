@@ -6,8 +6,6 @@ import { BusinessAndProductList } from './components/BusinessAndProductList'
 import { BusinessBasicInformation } from './components/BusinessBasicInformation'
 import { BusinessController } from './components/BusinessController'
 import { BusinessList } from './components/BusinessList'
-import { BusinessesList } from './components/BusinessesList'
-import { BusinessFeaturedProducts } from './components/BusinessFeaturedProducts'
 import { BusinessInformation } from './components/BusinessInformation'
 import { BusinessProductsCategories } from './components/BusinessProductsCategories'
 import { BusinessProductsSearch } from './components/BusinessProductsSearch'
@@ -90,8 +88,6 @@ export {
   BusinessBasicInformation,
   BusinessController,
   BusinessList,
-  BusinessesList,
-  BusinessFeaturedProducts,
   BusinessInformation,
   BusinessProductsCategories,
   BusinessProductsSearch,
