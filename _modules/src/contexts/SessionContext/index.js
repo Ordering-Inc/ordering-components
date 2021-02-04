@@ -74,36 +74,38 @@ var SessionProvider = function SessionProvider(_ref) {
 
   var setValuesFromLocalStorage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$confi, error, _yield$getValuesFromL, auth, token, user;
+      var _yield$getValuesFromL, auth, token, user, _yield$ordering$confi, error;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return ordering.configs().asDictionary().get();
-
-            case 2:
-              _yield$ordering$confi = _context.sent;
-              error = _yield$ordering$confi.content.error;
-
-              if (!error) {
-                _context.next = 7;
-                break;
-              }
-
-              _context.next = 7;
-              return strategy.removeItem('token');
-
-            case 7:
-              _context.next = 9;
               return getValuesFromLocalStorage();
 
-            case 9:
+            case 2:
               _yield$getValuesFromL = _context.sent;
               auth = _yield$getValuesFromL.auth;
               token = _yield$getValuesFromL.token;
               user = _yield$getValuesFromL.user;
+
+              if (!token) {
+                _context.next = 12;
+                break;
+              }
+
+              _context.next = 9;
+              return ordering.configs().asDictionary().get();
+
+            case 9:
+              _yield$ordering$confi = _context.sent;
+              error = _yield$ordering$confi.content.error;
+
+              if (error) {
+                logout();
+              }
+
+            case 12:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 auth: auth,
                 token: token,
@@ -111,7 +113,7 @@ var SessionProvider = function SessionProvider(_ref) {
                 loading: false
               }));
 
-            case 14:
+            case 13:
             case "end":
               return _context.stop();
           }

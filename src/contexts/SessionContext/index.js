@@ -21,13 +21,14 @@ export const SessionProvider = ({ children, strategy }) => {
   })
 
   const setValuesFromLocalStorage = async () => {
-    const { content: { error } } = await ordering.configs().asDictionary().get()
-
-    if (error) {
-      await strategy.removeItem('token')
-    }
-
     const { auth, token, user } = await getValuesFromLocalStorage()
+
+    if (token) {
+      const { content: { error } } = await ordering.configs().asDictionary().get()
+      if (error) {
+        logout()
+      }
+    }
     setState({
       ...state,
       auth,
