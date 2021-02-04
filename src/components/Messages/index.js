@@ -9,7 +9,9 @@ export const Messages = (props) => {
     UIComponent,
     orderId,
     customHandleSend,
-    order
+    order,
+    messages,
+    setMessages
   } = props
 
   const [ordering] = useApi()
@@ -18,7 +20,6 @@ export const Messages = (props) => {
 
   const [canRead, setCanRead] = useState({ business: true, administrator: true, driver: true })
   const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
   const [image, setImage] = useState(null)
   const socket = useWebsocket()
@@ -66,35 +67,6 @@ export const Messages = (props) => {
       setSendMessages({ loading: false, error: [error.Messages] })
     }
   }
-  /**
-   * Method to Load message for first time
-   */
-  const loadMessages = async () => {
-    try {
-      setMessages({ ...messages, loading: true })
-      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
-      const { error, result } = await response.json()
-      if (!error) {
-        setMessages({
-          messages: result,
-          loading: false,
-          error: null
-        })
-      } else {
-        setMessages({
-          ...messages,
-          loading: false,
-          error: result
-        })
-      }
-    } catch (error) {
-      setMessages({ ...messages, loading: false, error: [error.Messages] })
-    }
-  }
-
-  useEffect(() => {
-    loadMessages()
-  }, [orderId, order?.status])
 
   useEffect(() => {
     if (messages.loading) return

@@ -53,10 +53,6 @@ export const OrderDetails = (props) => {
     }
   }
 
-  useEffect(() => {
-    loadMessages()
-  }, [orderId, orderState?.order?.status])
-
   /**
    * Method to send a message
    * @param {string} spot
@@ -143,6 +139,10 @@ export const OrderDetails = (props) => {
   }
 
   useEffect(() => {
+    loadMessages()
+  }, [orderId, orderState?.order?.status])
+
+  useEffect(() => {
     if (props.order) {
       setOrderState({
         ...orderState,
@@ -191,6 +191,7 @@ export const OrderDetails = (props) => {
           formatPrice={formatPrice}
           handlerSubmit={handlerSubmitSpotNumber}
           messages={messages}
+          setMessages={setMessages}
         />
       )}
     </>
