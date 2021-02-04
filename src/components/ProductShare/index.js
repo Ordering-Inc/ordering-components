@@ -58,15 +58,15 @@ ProductShare.propTypes = {
   /**
    * Business slug
    */
-  slug: PropTypes.string.isRequired,
+  slug: PropTypes.string,
   /**
    * product category id
    */
-  categoryId: PropTypes.number.isRequired,
+  categoryId: PropTypes.number,
   /**
    * product id
    */
-  productId: PropTypes.number.isRequired,
+  productId: PropTypes.number,
   /**
    * Components types before business type filter
    * Array of type components, the parent props will pass to these components

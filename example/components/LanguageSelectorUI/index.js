@@ -3,7 +3,7 @@ import React from 'react'
 export const LanguageSelectorUI = (props) => {
   const {
     currentLanguage,
-    languages,
+    languagesState,
     handleChangeLanguage,
     beforeComponents,
     afterComponents,
@@ -23,10 +23,10 @@ export const LanguageSelectorUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      {!languages.loading ? (
+      {!languagesState.loading ? (
         <>
           <select className='languages-select' value={currentLanguage} onChange={(e) => handleChangeLanguage(e.target.value)}>
-            {languages.languages?.length && languages.languages.map(language => (
+            {languagesState.languages?.length && languagesState.languages.map(language => (
               <option key={language.code} value={language.code}>{language.name}</option>
             ))}
           </select>
@@ -37,8 +37,8 @@ export const LanguageSelectorUI = (props) => {
         <span>Loading...</span>
       )}
 
-      {!languages.loading && languages.error && languages.error.length > 0 && (
-        languages.error.map((e, i) => (
+      {!languagesState.loading && languagesState.error && languagesState.error.length > 0 && (
+        languagesState.error.map((e, i) => (
           <p key={i}>ERROR: [{e}]</p>
         ))
       )}

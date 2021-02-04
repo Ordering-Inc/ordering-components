@@ -81,7 +81,9 @@ export default function App () {
             <Route path='/forgot_password'>
               <ForgotPassword />
             </Route>
-            <Route path='/password/reset' component={ResetPasswordExample} />
+            <Route path='/password/reset'>
+              <ResetPasswordExample />
+            </Route>
             <Route path='/facebook_login'>
               <FacebookLogin />
             </Route>

@@ -24,7 +24,7 @@ export const OrderDetails = (props) => {
    * Method to format a price number
    * @param {Number} price
    */
-  const formatPrice = price => `$ ${price.toFixed(2)}`
+  const formatPrice = price => price && `$ ${price.toFixed(2)}`
 
   /**
    * Method to send a message

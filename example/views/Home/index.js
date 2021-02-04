@@ -163,7 +163,7 @@ export const Home = () => {
           <Link to='/review_orders'>Review my Orders</Link>
         </li>
         <li>
-          <Link to='/reset_password'>Reset Password</Link>
+          <Link to='/password/reset'>Reset Password</Link>
         </li>
         <h2>S</h2>
         <li>
