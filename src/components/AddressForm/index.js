@@ -58,7 +58,7 @@ export const AddressForm = (props) => {
    * Update address data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
+  const handleChangeInput = (e) => {
     updateChanges({ [e.target.name]: e.target.value })
   }
 
@@ -174,7 +174,7 @@ export const AddressForm = (props) => {
             formState={formState}
             showField={showField}
             updateChanges={updateChanges}
-            hanldeChangeInput={hanldeChangeInput}
+            handleChangeInput={handleChangeInput}
             isRequiredField={isRequiredField}
             saveAddress={saveAddress}
             addressState={addressState}

@@ -5,7 +5,7 @@ import { ResetPassword } from '../../../src/components/ResetPassword'
 import { TestComponent } from '../../components/TestComponent'
 
 export const ResetPasswordExample = (props) => {
-  const params = new URLSearchParams(props.location.search)
+  const params = new URLSearchParams(props.location?.search)
   const code = params.get('code')
   const random = params.get('random')
 

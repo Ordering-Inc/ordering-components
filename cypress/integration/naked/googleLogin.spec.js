@@ -6,6 +6,6 @@ context('google login', () => {
 
   it('Check UI', () => {
     cy.server({ method: 'POST' })
-    cy.get('button').click()
+    cy.get('div#my-signin2').click()
   })
 })
