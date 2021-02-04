@@ -34,6 +34,10 @@ export const UserDetailsExample = () => {
      */
     accessToken: 'TOKEN',
     /**
+     * onEditUserClick
+     */
+    onEditUserClick: () => { console.log('editing') },
+    /**
      * Components types before user details
      * Array of type components, the parent props will pass to these components
      */

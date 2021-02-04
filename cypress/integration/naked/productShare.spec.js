@@ -3,9 +3,7 @@ context('Product share', () => {
     cy.visit('/product_share')
   })
   it('Check UI', () => {
-    cy.get('#app > button').click()
-    cy.get('.at-svc-facebook').click()
+    cy.get('button').contains('share').click()
+    cy.get('.a2a_kit').should('exist')
   })
-
-  /* ckeck the share of the product */
 })

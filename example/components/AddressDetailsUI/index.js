@@ -8,6 +8,8 @@ import { AddressListUI } from '../../components/AddressListUI'
 import { AddressForm } from '../../../src/components/AddressForm'
 import { AddressFormUI } from '../../components/AddressFormUI'
 
+import { useConfig } from '../../../src/contexts/ConfigContext'
+
 export const AddressDetailsUI = (props) => {
   const {
     userAddress,
@@ -21,6 +23,7 @@ export const AddressDetailsUI = (props) => {
 
   const [modalIsOpen, setIsOpen] = useState(false)
   const [curAddress, setCurAddress] = useState(null)
+  const [{ loading }] = useConfig()
 
   const customStyles = {
     content: {
@@ -50,18 +53,24 @@ export const AddressDetailsUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
-      <div style={{ display: 'flex' }}>
-        <h3 style={{ margin: '0px 5px 10px 0px' }}>
-          <strong>{userAddress}</strong>
-        </h3>
-        <div>
-          {orderType === 1 &&
-            <button onClick={() => handleClick(true)}>
-              ✏️
-            </button>}
-        </div>
-      </div>
-      <img src={googleMapsUrl} alt='google-maps-location' width='700' height='260' />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <div style={{ display: 'flex' }}>
+            <h3 style={{ margin: '0px 5px 10px 0px' }}>
+              <strong>{userAddress}</strong>
+            </h3>
+            <div>
+              {orderType === 1 &&
+                <button onClick={() => handleClick(true)}>
+                  ✏️
+                </button>}
+            </div>
+          </div>
+          <img src={googleMapsUrl} alt='google-maps-location' width='700' height='260' />
+        </>
+      )}
 
       <Popup
         className='modal-info'

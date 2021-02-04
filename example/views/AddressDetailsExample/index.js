@@ -29,6 +29,10 @@ export const AddressDetailsExample = () => {
      */
     mapZoom: 15,
     /**
+     * location default
+     */
+    orderLocation: { lat: 40.77312273847563, lng: -73.9645569005249 },
+    /**
      * Components types before address details
      * Array of type components, the parent props will pass to these components
      */

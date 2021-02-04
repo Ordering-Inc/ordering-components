@@ -17,7 +17,10 @@ export const LanguageSelectorExample = () => {
     /**
      * languages, this array must be containt a list of available languages
      */
-    languages: [],
+    languages: [
+      { code: 'EN', name: 'English' },
+      { code: 'FR', name: 'French' }
+    ],
     /**
      * Return language selected
      */

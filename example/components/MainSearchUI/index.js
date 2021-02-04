@@ -9,7 +9,13 @@ import { OrderTypeControlUI } from '../../components/OrderTypeControlUI'
 export const MainSearchUI = (props) => {
   const { register } = useForm()
 
-  const orderTypes = [1, 2, 3, 4, 5]
+  const orderTypes = [
+    { value: 1 },
+    { value: 2 },
+    { value: 3 },
+    { value: 4 },
+    { value: 5 }
+  ]
 
   const {
     orderState,

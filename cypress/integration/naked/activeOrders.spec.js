@@ -1,5 +1,6 @@
 context('Active orders', () => {
   beforeEach(() => {
+    cy.login('sergio+admin@ordering.co', 'test2020')
     cy.visit('/active_orders')
   })
 
