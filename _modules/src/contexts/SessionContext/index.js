@@ -11,6 +11,8 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _ApiContext = require("../ApiContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -56,6 +58,10 @@ var SessionProvider = function SessionProvider(_ref) {
   var children = _ref.children,
       strategy = _ref.strategy;
 
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+
   var _useState = (0, _react.useState)({
     auth: null,
     token: null,
@@ -68,16 +74,32 @@ var SessionProvider = function SessionProvider(_ref) {
 
   var setValuesFromLocalStorage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$getValuesFromL, auth, token, user;
+      var _yield$ordering$confi, error, _yield$getValuesFromL, auth, token, user;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.next = 2;
-              return getValuesFromLocalStorage();
+              return ordering.configs().asDictionary().get();
 
             case 2:
+              _yield$ordering$confi = _context.sent;
+              error = _yield$ordering$confi.content.error;
+
+              if (!error) {
+                _context.next = 7;
+                break;
+              }
+
+              _context.next = 7;
+              return strategy.removeItem('token');
+
+            case 7:
+              _context.next = 9;
+              return getValuesFromLocalStorage();
+
+            case 9:
               _yield$getValuesFromL = _context.sent;
               auth = _yield$getValuesFromL.auth;
               token = _yield$getValuesFromL.token;
@@ -89,7 +111,7 @@ var SessionProvider = function SessionProvider(_ref) {
                 loading: false
               }));
 
-            case 7:
+            case 14:
             case "end":
               return _context.stop();
           }

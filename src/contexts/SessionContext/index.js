@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
+import { useApi } from '../ApiContext'
 /**
  * Create SessionContext
  * This context will manage the session internally and provide an easy interface
@@ -12,6 +12,7 @@ export const SessionContext = createContext()
  * @param {props} props
  */
 export const SessionProvider = ({ children, strategy }) => {
+  const [ordering] = useApi()
   const [state, setState] = useState({
     auth: null,
     token: null,
@@ -20,6 +21,12 @@ export const SessionProvider = ({ children, strategy }) => {
   })
 
   const setValuesFromLocalStorage = async () => {
+    const { content: { error } } = await ordering.configs().asDictionary().get()
+
+    if (error) {
+      await strategy.removeItem('token')
+    }
+
     const { auth, token, user } = await getValuesFromLocalStorage()
     setState({
       ...state,
