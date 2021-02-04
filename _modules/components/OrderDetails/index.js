@@ -328,7 +328,7 @@ var OrderDetails = function OrderDetails(props) {
               _context4.prev = 1;
               _context4.next = 4;
               return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.id, "/messages/").concat(messageId, "/read?order_id=").concat(orderState.order.id, "&order_message_id=").concat(messageId), {
-                method: 'post',
+                method: 'get',
                 headers: {
                   Authorization: "Bearer ".concat(token),
                   'Content-Type': 'application/json'
