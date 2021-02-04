@@ -33,7 +33,7 @@ export const OrderDetails = (props) => {
   const loadMessages = async () => {
     try {
       setMessages({ ...messages, loading: true })
-      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({
@@ -192,6 +192,7 @@ export const OrderDetails = (props) => {
           handlerSubmit={handlerSubmitSpotNumber}
           messages={messages}
           setMessages={setMessages}
+          readMessages={readMessages}
         />
       )}
     </>
