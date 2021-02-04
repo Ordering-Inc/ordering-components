@@ -24,8 +24,15 @@ export const SessionProvider = ({ children, strategy }) => {
     const { auth, token, user } = await getValuesFromLocalStorage()
 
     if (token) {
-      const { content: { error } } = await ordering.configs().asDictionary().get()
-      if (error) {
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const response = await fetch(`${ordering.root}/order_options`, requestOptions)
+      if (!response.ok) {
         logout()
       }
     }

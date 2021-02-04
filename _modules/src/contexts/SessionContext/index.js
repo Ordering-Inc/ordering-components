@@ -74,7 +74,7 @@ var SessionProvider = function SessionProvider(_ref) {
 
   var setValuesFromLocalStorage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$getValuesFromL, auth, token, user, _yield$ordering$confi, error;
+      var _yield$getValuesFromL, auth, token, user, requestOptions, response;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -94,14 +94,20 @@ var SessionProvider = function SessionProvider(_ref) {
                 break;
               }
 
-              _context.next = 9;
-              return ordering.configs().asDictionary().get();
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              _context.next = 10;
+              return fetch("".concat(ordering.root, "/order_options"), requestOptions);
 
-            case 9:
-              _yield$ordering$confi = _context.sent;
-              error = _yield$ordering$confi.content.error;
+            case 10:
+              response = _context.sent;
 
-              if (error) {
+              if (!response.ok) {
                 logout();
               }
 
