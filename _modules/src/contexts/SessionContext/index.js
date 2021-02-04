@@ -191,6 +191,10 @@ var SessionProvider = function SessionProvider(_ref) {
               return strategy.removeItem('user');
 
             case 4:
+              _context4.next = 6;
+              return strategy.removeItem('project');
+
+            case 6:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 auth: false,
                 user: null,
@@ -198,7 +202,7 @@ var SessionProvider = function SessionProvider(_ref) {
                 loading: false
               }));
 
-            case 5:
+            case 7:
             case "end":
               return _context4.stop();
           }
