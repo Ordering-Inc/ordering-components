@@ -327,7 +327,7 @@ var OrderDetails = function OrderDetails(props) {
               messageId = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages[(messages === null || messages === void 0 ? void 0 : (_messages$messages2 = messages.messages) === null || _messages$messages2 === void 0 ? void 0 : _messages$messages2.length) - 1]) === null || _messages$messages === void 0 ? void 0 : _messages$messages.id;
               _context4.prev = 1;
               _context4.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.id, "/messages/4/read?order_id=3&order_message_id=").concat(messageId), {
+              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.id, "/messages/").concat(messageId, "/read?order_id=").concat(orderState.order.id, "&order_message_id=").concat(messageId), {
                 method: 'post',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -360,8 +360,8 @@ var OrderDetails = function OrderDetails(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    loadMessages();
-  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.status]);
+    !orderState.loading && loadMessages();
+  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.status, orderState.loading]);
   (0, _react.useEffect)(function () {
     if (props.order) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
