@@ -247,7 +247,7 @@ export default function App () {
             <Route path='/floating_button'>
               <FloatingButtonExample />
             </Route>
-            <Route path='/phone'>
+            <Route path='/phone_autocomplete'>
               <PhoneAutocompleteExample />
             </Route>
             <Route path='/'>

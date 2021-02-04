@@ -21,12 +21,19 @@ export const PhoneAutocomplete = (props) => {
   const [{ token, auth }] = useSession()
   const [events] = useEvent()
 
+  /**
+   * @param {event} e
+   * Validate input that only numbers can be inserted
+   */
   const onChangeNumber = e => {
     const number = (e.target.validity.valid)
       ? e.target.value : phone
     setPhone(number)
   }
 
+  /**
+   * Getting phones depending of phone input value
+   */
   const getPhone = async () => {
     if (auth && token) {
       setUserState({ ...userState, loading: true })
@@ -44,6 +51,11 @@ export const PhoneAutocomplete = (props) => {
     }
   }
 
+  /**
+   * @param {input} inp
+   * @param {array of phones} arr
+   * script for autocomplete functionality
+   */
   const autocomplete = (inp, arr) => {
     let currentFocus
     inp.addEventListener('input', function (evt) {
