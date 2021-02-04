@@ -8,6 +8,9 @@ export const BusinessesMap = (props) => {
   const [events] = useEvent()
   const [businessLocations, setBusinessLocations] = useState([])
 
+  /**
+   * Getting necessary info for locate business on the map
+   */
   const getBusinessListLocations = () => {
     setBusinessLocations(businessList.map(business => {
       return {
@@ -19,6 +22,10 @@ export const BusinessesMap = (props) => {
     }))
   }
 
+  /**
+   * @param {business_slug} slug
+   * handler event when clicks business on the map
+   */
   const onBusinessClick = (slug) => {
     events.emit('go_to_page', { page: 'business', params: { store: slug } })
   }
