@@ -50,7 +50,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri, _orderState$order5;
+  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri, _orderState$order6;
 
   var orderId = props.orderId,
       UIComponent = props.UIComponent;
@@ -119,7 +119,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var loadMessages = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var response, _yield$response$json, error, result;
+      var _orderState$order2, response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -130,7 +130,7 @@ var OrderDetails = function OrderDetails(props) {
                 loading: true
               }));
               _context.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
+              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.id, "/messages"), {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
@@ -192,7 +192,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var sendMessage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(spot) {
-      var _orderState$order2, _orderState$order3, _yield$fetch, status;
+      var _orderState$order3, _orderState$order4, _yield$fetch, status;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -203,7 +203,7 @@ var OrderDetails = function OrderDetails(props) {
                 loading: true
               }));
               _context2.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.id, "/messages"), {
+              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order3 = orderState.order) === null || _orderState$order3 === void 0 ? void 0 : _orderState$order3.id, "/messages"), {
                 method: 'post',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -212,7 +212,7 @@ var OrderDetails = function OrderDetails(props) {
                 body: JSON.stringify({
                   can_see: '0,2,3',
                   comment: "I am on the parking number: ".concat(spot),
-                  order_id: (_orderState$order3 = orderState.order) === null || _orderState$order3 === void 0 ? void 0 : _orderState$order3.id,
+                  order_id: (_orderState$order4 = orderState.order) === null || _orderState$order4 === void 0 ? void 0 : _orderState$order4.id,
                   type: 2
                 })
               });
@@ -318,7 +318,7 @@ var OrderDetails = function OrderDetails(props) {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
       var _messages$messages, _messages$messages2;
 
-      var messageId, _orderState$order4, response;
+      var messageId, _orderState$order5, response;
 
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
@@ -327,7 +327,7 @@ var OrderDetails = function OrderDetails(props) {
               messageId = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages[(messages === null || messages === void 0 ? void 0 : (_messages$messages2 = messages.messages) === null || _messages$messages2 === void 0 ? void 0 : _messages$messages2.length) - 1]) === null || _messages$messages === void 0 ? void 0 : _messages$messages.id;
               _context4.prev = 1;
               _context4.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order4 = orderState.order) === null || _orderState$order4 === void 0 ? void 0 : _orderState$order4.id, "/messages/4/read?order_id=3&order_message_id=").concat(messageId), {
+              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.id, "/messages/4/read?order_id=3&order_message_id=").concat(messageId), {
                 method: 'post',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -361,7 +361,7 @@ var OrderDetails = function OrderDetails(props) {
 
   (0, _react.useEffect)(function () {
     loadMessages();
-  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order5 = orderState.order) === null || _orderState$order5 === void 0 ? void 0 : _orderState$order5.status]);
+  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.status]);
   (0, _react.useEffect)(function () {
     if (props.order) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -372,14 +372,14 @@ var OrderDetails = function OrderDetails(props) {
     }
   }, []);
   (0, _react.useEffect)(function () {
-    var _orderState$order7;
+    var _orderState$order8;
 
     if (orderState.loading || loading) return;
 
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _orderState$order6;
+      var _orderState$order7;
 
-      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.id)) return;
+      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.id)) return;
       delete order.total;
       delete order.subtotal;
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -397,14 +397,14 @@ var OrderDetails = function OrderDetails(props) {
     };
 
     socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-    socket.join("drivers_".concat((_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.driver_id));
+    socket.join("drivers_".concat((_orderState$order8 = orderState.order) === null || _orderState$order8 === void 0 ? void 0 : _orderState$order8.driver_id));
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      var _orderState$order8;
+      var _orderState$order9;
 
       socket.leave("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-      socket.leave("drivers_".concat((_orderState$order8 = orderState.order) === null || _orderState$order8 === void 0 ? void 0 : _orderState$order8.driver_id));
+      socket.leave("drivers_".concat((_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
@@ -416,7 +416,8 @@ var OrderDetails = function OrderDetails(props) {
     formatPrice: formatPrice,
     handlerSubmit: handlerSubmitSpotNumber,
     messages: messages,
-    setMessages: setMessages
+    setMessages: setMessages,
+    readMessages: readMessages
   })));
 };
 
