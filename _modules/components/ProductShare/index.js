@@ -87,17 +87,17 @@ ProductShare.propTypes = {
   /**
    * Business slug
    */
-  slug: _propTypes.default.string.isRequired,
+  slug: _propTypes.default.string,
 
   /**
    * product category id
    */
-  categoryId: _propTypes.default.number.isRequired,
+  categoryId: _propTypes.default.number,
 
   /**
    * product id
    */
-  productId: _propTypes.default.number.isRequired,
+  productId: _propTypes.default.number,
 
   /**
    * Components types before business type filter

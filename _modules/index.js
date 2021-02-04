@@ -51,18 +51,6 @@ Object.defineProperty(exports, "BusinessList", {
     return _BusinessList.BusinessList;
   }
 });
-Object.defineProperty(exports, "BusinessesList", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessesList.BusinessesList;
-  }
-});
-Object.defineProperty(exports, "BusinessFeaturedProducts", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessFeaturedProducts.BusinessFeaturedProducts;
-  }
-});
 Object.defineProperty(exports, "BusinessInformation", {
   enumerable: true,
   get: function get() {
@@ -649,10 +637,6 @@ var _BusinessBasicInformation = require("./components/BusinessBasicInformation")
 var _BusinessController = require("./components/BusinessController");
 
 var _BusinessList = require("./components/BusinessList");
-
-var _BusinessesList = require("./components/BusinessesList");
-
-var _BusinessFeaturedProducts = require("./components/BusinessFeaturedProducts");
 
 var _BusinessInformation = require("./components/BusinessInformation");
 

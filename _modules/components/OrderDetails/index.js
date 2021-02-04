@@ -100,7 +100,7 @@ var OrderDetails = function OrderDetails(props) {
    */
 
   var formatPrice = function formatPrice(price) {
-    return "$ ".concat(price.toFixed(2));
+    return price && "$ ".concat(price.toFixed(2));
   };
   /**
    * Method to send a message
