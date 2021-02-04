@@ -125,7 +125,7 @@ export const OrderDetails = (props) => {
   const readMessages = async () => {
     const messageId = messages?.messages[messages?.messages?.length - 1]?.id
     try {
-      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read?order_id=${orderState.order.id}&order_message_id=${messageId}`, {
+      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
