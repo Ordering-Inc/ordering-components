@@ -17,8 +17,6 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _WebsocketContext = require("../../contexts/WebsocketContext");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -61,7 +59,8 @@ var Messages = function Messages(props) {
   var UIComponent = props.UIComponent,
       orderId = props.orderId,
       customHandleSend = props.customHandleSend,
-      order = props.order;
+      messages = props.messages,
+      setMessages = props.setMessages;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -69,9 +68,7 @@ var Messages = function Messages(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      _useSession2$ = _useSession2[0],
-      user = _useSession2$.user,
-      token = _useSession2$.token;
+      token = _useSession2[0].token;
 
   var accessToken = props.accessToken || token;
 
@@ -90,31 +87,21 @@ var Messages = function Messages(props) {
       setMessage = _useState4[1];
 
   var _useState5 = (0, _react.useState)({
-    loading: true,
-    error: null,
-    messages: []
-  }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      messages = _useState6[0],
-      setMessages = _useState6[1];
-
-  var _useState7 = (0, _react.useState)({
     loading: false,
     error: null
   }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      sendMessage = _useState6[0],
+      setSendMessages = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(null),
       _useState8 = _slicedToArray(_useState7, 2),
-      sendMessage = _useState8[0],
-      setSendMessages = _useState8[1];
-
-  var _useState9 = (0, _react.useState)(null),
-      _useState10 = _slicedToArray(_useState9, 2),
-      image = _useState10[0],
-      setImage = _useState10[1];
-
-  var socket = (0, _WebsocketContext.useWebsocket)();
+      image = _useState8[0],
+      setImage = _useState8[1];
   /**
    * Method to send message
    */
+
 
   var handleSend = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -215,108 +202,7 @@ var Messages = function Messages(props) {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Method to Load message for first time
-   */
 
-
-  var loadMessages = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var response, _yield$response$json2, error, result;
-
-      return _regenerator.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _context2.prev = 0;
-              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
-                loading: true
-              }));
-              _context2.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(accessToken)
-                }
-              });
-
-            case 4:
-              response = _context2.sent;
-              _context2.next = 7;
-              return response.json();
-
-            case 7:
-              _yield$response$json2 = _context2.sent;
-              error = _yield$response$json2.error;
-              result = _yield$response$json2.result;
-
-              if (!error) {
-                setMessages({
-                  messages: result,
-                  loading: false,
-                  error: null
-                });
-              } else {
-                setMessages(_objectSpread(_objectSpread({}, messages), {}, {
-                  loading: false,
-                  error: result
-                }));
-              }
-
-              _context2.next = 16;
-              break;
-
-            case 13:
-              _context2.prev = 13;
-              _context2.t0 = _context2["catch"](0);
-              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
-                loading: false,
-                error: [_context2.t0.Messages]
-              }));
-
-            case 16:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, null, [[0, 13]]);
-    }));
-
-    return function loadMessages() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  (0, _react.useEffect)(function () {
-    loadMessages();
-  }, [orderId, order === null || order === void 0 ? void 0 : order.status]);
-  (0, _react.useEffect)(function () {
-    if (messages.loading) return;
-
-    var handleNewMessage = function handleNewMessage(message) {
-      var found = messages.messages.find(function (_message) {
-        return _message.id === message.id;
-      });
-
-      if (!found) {
-        setMessages(_objectSpread(_objectSpread({}, messages), {}, {
-          messages: [].concat(_toConsumableArray(messages.messages), [message])
-        }));
-      }
-    };
-
-    socket.on('message', handleNewMessage);
-    return function () {
-      socket.off('message', handleNewMessage);
-    };
-  }, [messages, socket, order === null || order === void 0 ? void 0 : order.status]);
-  (0, _react.useEffect)(function () {
-    socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-    return function () {
-      socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-    };
-  }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     messages: messages,
     image: image,
