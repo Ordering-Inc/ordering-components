@@ -6,11 +6,12 @@ export const ProductShare = (props) => {
     UIComponent,
     slug,
     categoryId,
-    productId
+    productId,
+    defaultUrl
   } = props
 
   const [showShareButton, setShowShareButton] = useState(false)
-  const urlToShare = `${window.location.origin}/store/${slug}?category=${categoryId}&product=${productId}`
+  const urlToShare = defaultUrl || `${window.location.origin}/store/${slug}?category=${categoryId}&product=${productId}`
 
   const addToAnyScript = () => {
     const script = document.createElement('script')
@@ -57,15 +58,15 @@ ProductShare.propTypes = {
   /**
    * Business slug
    */
-  slug: PropTypes.string.isRequired,
+  slug: PropTypes.string,
   /**
    * product category id
    */
-  categoryId: PropTypes.number.isRequired,
+  categoryId: PropTypes.number,
   /**
    * product id
    */
-  productId: PropTypes.number.isRequired,
+  productId: PropTypes.number,
   /**
    * Components types before business type filter
    * Array of type components, the parent props will pass to these components

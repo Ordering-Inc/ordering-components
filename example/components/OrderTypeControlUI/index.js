@@ -4,14 +4,14 @@ export const OrderTypeControlUI = ({ typeSelected, orderTypes, handleChangeOrder
   const typeNames = [null, 'Delivery', 'Pickup', 'Eat in', 'Drive thru', 'Curbside']
 
   return (
-    <>
+    <div className='order-type-select'>
       Current order type: {typeSelected} {typeNames[typeSelected]}
       <div>
         Buttons control<br />
         {
           orderTypes.map(orderType => (
-            <button key={orderType} type='button' onClick={() => handleChangeOrderType(orderType)}>
-              {orderType}. {typeNames[orderType]} {orderType === typeSelected && '(Selected)'}
+            <button key={orderType.value} type='button' onClick={() => handleChangeOrderType(orderType.value)}>
+              {orderType.value}. {typeNames[orderType.value]} {orderType.value === typeSelected && '(Selected)'}
             </button>
           ))
         }
@@ -22,11 +22,11 @@ export const OrderTypeControlUI = ({ typeSelected, orderTypes, handleChangeOrder
           <option value='' disabled>Select an order type</option>
           {
             orderTypes.map(orderType => (
-              <option key={orderType} value={orderType}>{orderType}. {typeNames[orderType]}</option>
+              <option key={orderType.value} value={orderType.value}>{orderType.value}. {typeNames[orderType.value]}</option>
             ))
           }
         </select>
       </div>
-    </>
+    </div>
   )
 }

@@ -21,7 +21,7 @@ export const AddressFormUI = (props) => {
     hanldeChangeInput
   } = props
 
-  const [{ configs }] = useConfig()
+  const [{ loading, configs }] = useConfig()
   const { handleSubmit, register, errors } = useForm()
   const [state, setState] = useState({ selectedFromAutocomplete: true })
 
@@ -65,10 +65,10 @@ export const AddressFormUI = (props) => {
         beforeComponents.map((BeforeComponent, i) => <BeforeComponent key={i} {...props} />)
       }
       {
-        (validationFields.loading || addressState.loading) && <p>Loading form...</p>
+        (validationFields?.loading || addressState?.loading || loading) && <p>Loading form...</p>
       }
       {
-        !validationFields.loading && !addressState.loading && (
+        !validationFields?.loading && !addressState.loading && !loading && (
           <>
             <form onSubmit={handleSubmit(onSubmit)}>
               <GoogleAutocompleteInput

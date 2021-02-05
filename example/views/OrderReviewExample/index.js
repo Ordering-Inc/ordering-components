@@ -7,18 +7,19 @@ import { useSession } from '../../../src/contexts/SessionContext'
 
 export const OrderReviewExample = () => {
   const [ordering] = useApi()
-  const [{ token }] = useSession()
+  const [{ token, loading }] = useSession()
   const [order, setOrder] = useState(null)
   const getOrders = async () => {
-    await ordering.setAccessToken(token)
-    const { content: { error, result } } = await ordering.orders().where([{ attribute: 'status', value: [1, 11] }]).get()
+    const { content: { error, result } } = await ordering.setAccessToken(token).orders().where([{ attribute: 'status', value: [1, 11] }]).get()
     if (!error && result.length > 0) {
       setOrder(result[0])
     }
   }
   useEffect(() => {
-    getOrders()
-  }, [])
+    if (!loading) {
+      getOrders()
+    }
+  }, [loading])
 
   const props = {
     /**

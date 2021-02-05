@@ -4,7 +4,7 @@ context('Address details', () => {
   })
 
   it('Check UI', () => {
-    cy.get('.title').should('exist')
+    cy.get('p').should('contain.text', 'Loading...')
     cy.get('img').should('exist')
   })
 })
