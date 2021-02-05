@@ -14,7 +14,8 @@ export const LoginForm = (props) => {
     handleSuccessLogin,
     useLoginByEmail,
     useLoginByCellphone,
-    useDefualtSessionManager
+    useDefualtSessionManager,
+    urlToRedirect
   } = props
 
   const [ordering] = useApi()
@@ -60,6 +61,10 @@ export const LoginForm = (props) => {
         events.emit('userLogin', response.content.result)
         if (handleSuccessLogin) {
           handleSuccessLogin(response.content.result)
+        }
+
+        if (urlToRedirect) {
+          window.location.href = `${window.location.origin}${urlToRedirect}`
         }
       }
     } catch (err) {
