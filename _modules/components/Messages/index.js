@@ -61,7 +61,6 @@ var Messages = function Messages(props) {
   var UIComponent = props.UIComponent,
       orderId = props.orderId,
       customHandleSend = props.customHandleSend,
-      order = props.order,
       messages = props.messages,
       setMessages = props.setMessages;
 
@@ -71,9 +70,7 @@ var Messages = function Messages(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      _useSession2$ = _useSession2[0],
-      user = _useSession2$.user,
-      token = _useSession2$.token;
+      token = _useSession2[0].token;
 
   var accessToken = props.accessToken || token;
 
@@ -103,11 +100,10 @@ var Messages = function Messages(props) {
       _useState8 = _slicedToArray(_useState7, 2),
       image = _useState8[0],
       setImage = _useState8[1];
-
-  var socket = (0, _WebsocketContext.useWebsocket)();
   /**
    * Method to send message
    */
+
 
   var handleSend = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -209,32 +205,6 @@ var Messages = function Messages(props) {
     };
   }();
 
-  (0, _react.useEffect)(function () {
-    if (messages.loading) return;
-
-    var handleNewMessage = function handleNewMessage(message) {
-      var found = messages.messages.find(function (_message) {
-        return _message.id === message.id;
-      });
-
-      if (!found) {
-        setMessages(_objectSpread(_objectSpread({}, messages), {}, {
-          messages: [].concat(_toConsumableArray(messages.messages), [message])
-        }));
-      }
-    };
-
-    socket.on('message', handleNewMessage);
-    return function () {
-      socket.off('message', handleNewMessage);
-    };
-  }, [messages, socket, order === null || order === void 0 ? void 0 : order.status]);
-  (0, _react.useEffect)(function () {
-    socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-    return function () {
-      socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-    };
-  }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     messages: messages,
     image: image,

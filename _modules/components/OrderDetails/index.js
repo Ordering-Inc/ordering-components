@@ -27,6 +27,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -50,7 +58,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri, _orderState$order6;
+  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri, _orderState$order6, _orderState$order10;
 
   var orderId = props.orderId,
       UIComponent = props.UIComponent;
@@ -105,8 +113,8 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useState9 = (0, _react.useState)(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      isReadMessages = _useState10[0],
-      setIsReadMessages = _useState10[1];
+      messagesReaded = _useState10[0],
+      setMessagesReaded = _useState10[1];
 
   var propsToFetch = ['header', 'slug'];
   /**
@@ -323,7 +331,7 @@ var OrderDetails = function OrderDetails(props) {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
       var _messages$messages, _messages$messages2;
 
-      var messageId, _orderState$order5;
+      var messageId, _orderState$order5, response, _yield$response$json2, result;
 
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
@@ -341,21 +349,28 @@ var OrderDetails = function OrderDetails(props) {
               });
 
             case 4:
-              setIsReadMessages(true);
-              _context4.next = 10;
-              break;
+              response = _context4.sent;
+              _context4.next = 7;
+              return response.json();
 
             case 7:
-              _context4.prev = 7;
+              _yield$response$json2 = _context4.sent;
+              result = _yield$response$json2.result;
+              setMessagesReaded(result);
+              _context4.next = 15;
+              break;
+
+            case 12:
+              _context4.prev = 12;
               _context4.t0 = _context4["catch"](1);
               console.log(_context4.t0.message);
 
-            case 10:
+            case 15:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 7]]);
+      }, _callee4, null, [[1, 12]]);
     }));
 
     return function readMessages() {
@@ -413,6 +428,32 @@ var OrderDetails = function OrderDetails(props) {
       socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [orderState.order, socket, loading]);
+  (0, _react.useEffect)(function () {
+    if (messages.loading) return;
+
+    var handleNewMessage = function handleNewMessage(message) {
+      var found = messages.messages.find(function (_message) {
+        return _message.id === message.id;
+      });
+
+      if (!found) {
+        setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+          messages: [].concat(_toConsumableArray(messages.messages), [message])
+        }));
+      }
+    };
+
+    socket.on('message', handleNewMessage);
+    return function () {
+      socket.off('message', handleNewMessage);
+    };
+  }, [messages, socket, (_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.status]);
+  (0, _react.useEffect)(function () {
+    socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    return function () {
+      socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    };
+  }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     order: orderState,
     driverLocation: driverLocation,
@@ -422,7 +463,7 @@ var OrderDetails = function OrderDetails(props) {
     messages: messages,
     setMessages: setMessages,
     readMessages: readMessages,
-    isReadMessages: isReadMessages
+    messagesReaded: messagesReaded
   })));
 };
 
