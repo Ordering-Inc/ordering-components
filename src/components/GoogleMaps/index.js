@@ -14,7 +14,9 @@ export const GoogleMaps = (props) => {
     isSetInputs,
     fixedLocation,
     handleChangeAddressMap,
-    maxLimitLocation
+    maxLimitLocation,
+    businessMap,
+    onBusinessClick
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -36,19 +38,24 @@ export const GoogleMaps = (props) => {
     const bounds = new window.google.maps.LatLngBounds()
     for (let i = 0; i < locations.length; i++) {
       let formatUrl = null
-      if (i === 1) {
-        formatUrl = optimizeImage(locations[i].icon, 'r_max')
+      if (i === 1 || businessMap) {
+        formatUrl = optimizeImage(locations[i]?.icon, 'r_max')
       }
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
         map,
-        icon: {
+        title: locations[i]?.slug,
+        icon: locations[i]?.icon ? {
           url: formatUrl || locations[i].icon,
           scaledSize: new window.google.maps.Size(45, 45)
-        }
+        } : null
       })
-      bounds.extend(marker.position)
-      setMarkers(markers => [...markers, marker])
+      const isNear = validateResult(googleMap, marker, marker.getPosition())
+      if (isNear) {
+        marker.addListener('click', () => onBusinessClick(locations[i]?.slug))
+        bounds.extend(marker.position)
+        setMarkers(markers => [...markers, marker])
+      }
     }
     map.fitBounds(bounds)
     setBoundMap(bounds)
@@ -108,10 +115,16 @@ export const GoogleMaps = (props) => {
     const loc2 = new window.google.maps.LatLng(location.lat, location.lng)
 
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
+    const minimumBusinessDistance = 20000
 
-    if (!maxLimitLocation) {
+    if (!maxLimitLocation && !businessMap) {
       geocodePosition(curPos)
       return
+    }
+
+    if (businessMap) {
+      if (distance <= minimumBusinessDistance) return true
+      return false
     }
 
     if (distance <= maxLimitLocation) {
@@ -145,6 +158,11 @@ export const GoogleMaps = (props) => {
 
       if (locations) {
         generateMarkers(map)
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center.lat, center.lng),
+          map
+        })
+        setGoogleMapMarker(marker)
       } else {
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center.lat, center.lng),
@@ -157,31 +175,33 @@ export const GoogleMaps = (props) => {
   }, [googleReady])
 
   useEffect(() => {
-    if (googleReady && googleMap && googleMapMarker) {
-      window.google.maps.event.addListener(googleMapMarker, 'dragend', () => {
-        validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
-      })
+    if (!businessMap) {
+      if (googleReady && googleMap && googleMapMarker) {
+        window.google.maps.event.addListener(googleMapMarker, 'dragend', () => {
+          validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
+        })
 
-      window.google.maps.event.addListener(googleMapMarker, 'drag', () => {
-        events.emit('map_is_dragging', true)
-      })
-
-      if (mapControls?.isMarkerDraggable) {
-        window.google.maps.event.addListener(googleMap, 'drag', () => {
-          googleMapMarker.setPosition(googleMap.getCenter())
+        window.google.maps.event.addListener(googleMapMarker, 'drag', () => {
           events.emit('map_is_dragging', true)
         })
 
-        window.google.maps.event.addListener(googleMap, 'dragend', () => {
-          googleMapMarker.setPosition(googleMap.getCenter())
-          validateResult(googleMap, googleMapMarker, googleMap.getCenter())
-        })
-      }
+        if (mapControls?.isMarkerDraggable) {
+          window.google.maps.event.addListener(googleMap, 'drag', () => {
+            googleMapMarker.setPosition(googleMap.getCenter())
+            events.emit('map_is_dragging', true)
+          })
 
-      return () => {
-        window.google.maps.event.clearListeners(googleMapMarker, 'dragend')
-        window.google.maps.event.clearListeners(googleMap, 'drag')
-        window.google.maps.event.clearListeners(googleMap, 'dragend')
+          window.google.maps.event.addListener(googleMap, 'dragend', () => {
+            googleMapMarker.setPosition(googleMap.getCenter())
+            validateResult(googleMap, googleMapMarker, googleMap.getCenter())
+          })
+        }
+
+        return () => {
+          window.google.maps.event.clearListeners(googleMapMarker, 'dragend')
+          window.google.maps.event.clearListeners(googleMap, 'drag')
+          window.google.maps.event.clearListeners(googleMap, 'dragend')
+        }
       }
     }
   }, [googleMapMarker, googleMap, location])
