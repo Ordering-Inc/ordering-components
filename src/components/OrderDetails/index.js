@@ -18,7 +18,7 @@ export const OrderDetails = (props) => {
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
-  const [messagesReaded, setMessagesReaded] = useState(false)
+  const [messagesReadList, setMessagesReadList] = useState(false)
 
   const propsToFetch = ['header', 'slug']
 
@@ -136,7 +136,7 @@ export const OrderDetails = (props) => {
       })
       const { result } = await response.json()
 
-      setMessagesReaded(result)
+      setMessagesReadList(result)
     } catch (e) {
       console.log(e.message)
     }
@@ -221,7 +221,7 @@ export const OrderDetails = (props) => {
           messages={messages}
           setMessages={setMessages}
           readMessages={readMessages}
-          messagesReaded={messagesReaded}
+          messagesReadList={messagesReadList}
         />
       )}
     </>
