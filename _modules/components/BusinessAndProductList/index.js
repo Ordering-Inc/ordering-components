@@ -181,13 +181,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var isMatchSearch = function isMatchSearch(name, description) {
     if (!searchValue) return true;
-    return name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
+    return name && name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description && description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
   };
 
   var isFeaturedSearch = function isFeaturedSearch(product) {
     if (product.featured) {
       if (!searchValue) return true;
-      return product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
+      return product.name && product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || product.description && product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
     }
 
     return false;
