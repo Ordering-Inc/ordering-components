@@ -71,6 +71,9 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           ...options
         }
       }
+      if (error) {
+        setAlert({ show: true, content: result })
+      }
       const localOptions = await strategy.getItem('options', true)
       if (localOptions) {
         const options = {}
@@ -120,6 +123,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         setState({ ...state, loading: false })
       }
     } catch (err) {
+      const message = err?.message?.includes('Internal error')
+        ? 'INTERNAL_ERROR'
+        : err.message
+      setAlert({ show: true, content: [message] })
       setState({ ...state, loading: false })
     }
   }
@@ -256,7 +263,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         setState({ ...state, loading: false })
         return !error
       } catch (err) {
-        setAlert({ show: true, content: [err] })
+        const message = err?.message?.includes('Internal error')
+          ? 'INTERNAL_ERROR'
+          : err.message
+        setAlert({ show: true, content: [message] })
         setState({ ...state, loading: false })
         return false
       }
@@ -637,7 +647,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         Alert && (
           <Alert
             open={alert.show}
-            title={t('CART_ERROR', 'Cart error')}
+            title={t('ERROR', 'Error')}
             onAccept={() => setAlert({ show: false })}
             onClose={() => setAlert({ show: false })}
             content={alert.content}
