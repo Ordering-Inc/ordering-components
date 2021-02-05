@@ -58,7 +58,8 @@ var LoginForm = function LoginForm(props) {
       handleSuccessLogin = props.handleSuccessLogin,
       useLoginByEmail = props.useLoginByEmail,
       useLoginByCellphone = props.useLoginByCellphone,
-      useDefualtSessionManager = props.useDefualtSessionManager;
+      useDefualtSessionManager = props.useDefualtSessionManager,
+      urlToRedirect = props.urlToRedirect;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -146,6 +147,10 @@ var LoginForm = function LoginForm(props) {
 
                 if (handleSuccessLogin) {
                   handleSuccessLogin(response.content.result);
+                }
+
+                if (urlToRedirect) {
+                  window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
                 }
               }
 
