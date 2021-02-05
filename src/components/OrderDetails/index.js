@@ -18,6 +18,7 @@ export const OrderDetails = (props) => {
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
+  const [isReadMessages, setIsReadMessages] = useState(false)
 
   const propsToFetch = ['header', 'slug']
 
@@ -125,14 +126,14 @@ export const OrderDetails = (props) => {
   const readMessages = async () => {
     const messageId = messages?.messages[messages?.messages?.length - 1]?.id
     try {
-      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read`, {
+      await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       })
-      console.log(response)
+      setIsReadMessages(true)
     } catch (e) {
       console.log(e.message)
     }
@@ -193,6 +194,7 @@ export const OrderDetails = (props) => {
           messages={messages}
           setMessages={setMessages}
           readMessages={readMessages}
+          isReadMessages={isReadMessages}
         />
       )}
     </>
