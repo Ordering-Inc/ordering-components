@@ -1,15 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { MessagesUI } from '../../components/MessagesUI'
 import { Messages } from '../../../src/components/Messages'
 import { TestComponent } from '../../components/TestComponent'
 
 export const MessagesExample = () => {
+  const [messages, setMessages] = useState([])
   const props = {
     /**
      * UI Component, this must be containt all graphic elements and use parent props
      */
     UIComponent: MessagesUI,
+
+    /**
+     * Array of messages that must be provided form orderDetails
+     */
+    messages,
+    /**
+     * function for set new messages
+     */
+    setMessages,
     /**
      * order to change status
      */
