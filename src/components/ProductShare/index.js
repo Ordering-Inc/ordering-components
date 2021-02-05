@@ -18,6 +18,7 @@ export const ProductShare = (props) => {
     script.type = 'text/javascript'
     script.src = 'https://static.addtoany.com/menu/page.js'
     script.async = true
+    script.defer = true
     script.id = 'addthis_widget'
     document.body.appendChild(script)
   }
