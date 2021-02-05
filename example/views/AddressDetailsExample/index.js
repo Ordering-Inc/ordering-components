@@ -23,11 +23,15 @@ export const AddressDetailsExample = () => {
     /**
      * apiKey, google maps api key
      */
-    apiKey: configs?.google_maps_api_key?.value || 'AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk',
+    apiKey: configs?.google_maps_api_key?.value,
     /**
      * zoom of google Map
      */
     mapZoom: 15,
+    /**
+     * location default
+     */
+    orderLocation: { lat: 40.77312273847563, lng: -73.9645569005249 },
     /**
      * Components types before address details
      * Array of type components, the parent props will pass to these components

@@ -6,6 +6,5 @@ context('Driver tips', () => {
   it('Check UI', () => {
     cy.get('.tips-list').should('exist')
     cy.get(':nth-child(3) > button').click()
-    cy.get('.result').should('not.have.text', '0')
   })
 })

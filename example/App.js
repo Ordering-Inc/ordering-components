@@ -15,7 +15,6 @@ import { Profile } from './views/UserProfile'
 import { ActiveOrders } from './views/ActiveOrders'
 // import { ProductDetail } from './views/ProductDetail'
 // import { ProductList } from './views/ProductList(NOT)'
-// import { BusinessesListExample } from './views/BusinessesListExample'
 import { BusinessBasicInformationExample } from './views/BusinessBasicInformationExample'
 import { LanguageSelectorExample } from './views/LanguageSelectorExample'
 import { BusinessSortControlExample } from './views/BusinessSortControlExample'
@@ -39,7 +38,6 @@ import { BusinessProductsCategoriesExample } from './views/BusinessProductsCateg
 import { ProductsListExample } from './views/ProductsListExample'
 import { ProductsListingExample } from './views/ProductsListingExample'
 import { PaymentOptionsExample } from './views/PaymentOptionsExample'
-import { BusinessFeaturedProductsExample } from './views/BusinessFeaturedProductsExample'
 import { BusinessControllerExample } from './views/BusinessControllerExample'
 import { BusinessInformationExample } from './views/BusinessInformationExample'
 import { UserDetailsExample } from './views/UserDetailsExample'
@@ -65,6 +63,7 @@ import ChangeView from './components/ChangeView'
 import { FloatingButtonExample } from './views/FloatingButtonExample'
 import { ResetPasswordExample } from './views/ResetPasswordExample'
 import { PhoneAutocompleteExample } from './views/PhoneAutocompleteExample'
+import { BusinessesMapExample } from './views/BusinessesMapExample'
 
 export default function App () {
   return (
@@ -84,7 +83,9 @@ export default function App () {
             <Route path='/forgot_password'>
               <ForgotPassword />
             </Route>
-            <Route path='/password/reset' component={ResetPasswordExample} />
+            <Route path='/password/reset'>
+              <ResetPasswordExample />
+            </Route>
             <Route path='/facebook_login'>
               <FacebookLogin />
             </Route>
@@ -175,9 +176,6 @@ export default function App () {
             <Route path='/business_products_categories'>
               <BusinessProductsCategoriesExample />
             </Route>
-            <Route path='/business_featured_options'>
-              <BusinessFeaturedProductsExample />
-            </Route>
             <Route path='/business_controller'>
               <BusinessControllerExample />
             </Route>
@@ -208,9 +206,6 @@ export default function App () {
             <Route path='/business_basic_information'>
               <BusinessBasicInformationExample />
             </Route>
-            {/* <Route path='/businesses_list'>
-              <BusinessesListExample />
-            </Route> */}
             <Route path='/messages'>
               <MessagesExample />
             </Route>
@@ -249,6 +244,9 @@ export default function App () {
             </Route>
             <Route path='/phone_autocomplete'>
               <PhoneAutocompleteExample />
+            </Route>
+            <Route path='/business_map'>
+              <BusinessesMapExample />
             </Route>
             <Route path='/'>
               <Home />
