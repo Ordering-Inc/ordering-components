@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const Messages = (props) => {
   const {
     UIComponent,
     orderId,
     customHandleSend,
-    order
+    messages,
+    setMessages
   } = props
 
   const [ordering] = useApi()
-  const [{ user, token }] = useSession()
+  const [{ token }] = useSession()
   const accessToken = props.accessToken || token
 
   const [canRead, setCanRead] = useState({ business: true, administrator: true, driver: true })
   const [message, setMessage] = useState('')
-  const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
   const [image, setImage] = useState(null)
-  const socket = useWebsocket()
   /**
    * Method to send message
    */
@@ -66,59 +64,6 @@ export const Messages = (props) => {
       setSendMessages({ loading: false, error: [error.Messages] })
     }
   }
-  /**
-   * Method to Load message for first time
-   */
-  const loadMessages = async () => {
-    try {
-      setMessages({ ...messages, loading: true })
-      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
-      const { error, result } = await response.json()
-      if (!error) {
-        setMessages({
-          messages: result,
-          loading: false,
-          error: null
-        })
-      } else {
-        setMessages({
-          ...messages,
-          loading: false,
-          error: result
-        })
-      }
-    } catch (error) {
-      setMessages({ ...messages, loading: false, error: [error.Messages] })
-    }
-  }
-
-  useEffect(() => {
-    loadMessages()
-  }, [orderId, order?.status])
-
-  useEffect(() => {
-    if (messages.loading) return
-    const handleNewMessage = (message) => {
-      const found = messages.messages.find(_message => _message.id === message.id)
-      if (!found) {
-        setMessages({
-          ...messages,
-          messages: [...messages.messages, message]
-        })
-      }
-    }
-    socket.on('message', handleNewMessage)
-    return () => {
-      socket.off('message', handleNewMessage)
-    }
-  }, [messages, socket, order?.status])
-
-  useEffect(() => {
-    socket.join(`messages_orders_${user?.id}`)
-    return () => {
-      socket.leave(`messages_orders_${user?.id}`)
-    }
-  }, [socket])
 
   return (
     <>
