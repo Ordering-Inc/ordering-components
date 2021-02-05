@@ -9,20 +9,18 @@ export const Messages = (props) => {
     UIComponent,
     orderId,
     customHandleSend,
-    order,
     messages,
     setMessages
   } = props
 
   const [ordering] = useApi()
-  const [{ user, token }] = useSession()
+  const [{ token }] = useSession()
   const accessToken = props.accessToken || token
 
   const [canRead, setCanRead] = useState({ business: true, administrator: true, driver: true })
   const [message, setMessage] = useState('')
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
   const [image, setImage] = useState(null)
-  const socket = useWebsocket()
   /**
    * Method to send message
    */
@@ -67,30 +65,6 @@ export const Messages = (props) => {
       setSendMessages({ loading: false, error: [error.Messages] })
     }
   }
-
-  useEffect(() => {
-    if (messages.loading) return
-    const handleNewMessage = (message) => {
-      const found = messages.messages.find(_message => _message.id === message.id)
-      if (!found) {
-        setMessages({
-          ...messages,
-          messages: [...messages.messages, message]
-        })
-      }
-    }
-    socket.on('message', handleNewMessage)
-    return () => {
-      socket.off('message', handleNewMessage)
-    }
-  }, [messages, socket, order?.status])
-
-  useEffect(() => {
-    socket.join(`messages_orders_${user?.id}`)
-    return () => {
-      socket.leave(`messages_orders_${user?.id}`)
-    }
-  }, [socket])
 
   return (
     <>

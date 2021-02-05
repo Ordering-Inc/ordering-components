@@ -18,7 +18,7 @@ export const OrderDetails = (props) => {
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
-  const [isReadMessages, setIsReadMessages] = useState(false)
+  const [messagesReaded, setMessagesReaded] = useState(false)
 
   const propsToFetch = ['header', 'slug']
 
@@ -105,6 +105,7 @@ export const OrderDetails = (props) => {
   const getOrder = async () => {
     try {
       const { content: { result } } = await ordering.setAccessToken(token).orders(orderId).get()
+
       const order = Array.isArray(result) ? null : result
       const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
       const businessData = content.result
@@ -126,14 +127,16 @@ export const OrderDetails = (props) => {
   const readMessages = async () => {
     const messageId = messages?.messages[messages?.messages?.length - 1]?.id
     try {
-      await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read`, {
+      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       })
-      setIsReadMessages(true)
+      const { result } = await response.json()
+
+      setMessagesReaded(result)
     } catch (e) {
       console.log(e.message)
     }
@@ -181,6 +184,30 @@ export const OrderDetails = (props) => {
     }
   }, [orderState.order, socket, loading])
 
+  useEffect(() => {
+    if (messages.loading) return
+    const handleNewMessage = (message) => {
+      const found = messages.messages.find(_message => _message.id === message.id)
+      if (!found) {
+        setMessages({
+          ...messages,
+          messages: [...messages.messages, message]
+        })
+      }
+    }
+    socket.on('message', handleNewMessage)
+    return () => {
+      socket.off('message', handleNewMessage)
+    }
+  }, [messages, socket, orderState.order?.status])
+
+  useEffect(() => {
+    socket.join(`messages_orders_${user?.id}`)
+    return () => {
+      socket.leave(`messages_orders_${user?.id}`)
+    }
+  }, [socket])
+
   return (
     <>
       {UIComponent && (
@@ -194,7 +221,7 @@ export const OrderDetails = (props) => {
           messages={messages}
           setMessages={setMessages}
           readMessages={readMessages}
-          isReadMessages={isReadMessages}
+          messagesReaded={messagesReaded}
         />
       )}
     </>
