@@ -33,7 +33,7 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
               <UtilsProviders>
                 <ValidationFieldsProvider>
                   <SessionProvider strategy={webStrategy}>
-                    <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project, app_id: settings.app_id })}>
+                    <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}>
                       <OrderProvider strategy={webStrategy} Alert={Alert}>
                         <BusinessProvider>
                           {children}
