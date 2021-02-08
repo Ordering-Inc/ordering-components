@@ -56,7 +56,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
       project: settings.project,
-      app_id: settings.app_id
+      appId: settings.app_id
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: webStrategy
