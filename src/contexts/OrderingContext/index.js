@@ -27,7 +27,7 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
   return (
     <OrderingContext.Provider>
       <EventProvider>
-        <ApiProvider settings={Object.assign(settings.api, { project: settings.project, app_id: settings.app_id })}>
+        <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <LanguageProvider strategy={webStrategy}>
             <ConfigProvider>
               <UtilsProviders>
