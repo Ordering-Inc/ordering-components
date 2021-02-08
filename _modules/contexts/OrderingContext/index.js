@@ -65,7 +65,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     settings: Object.assign(settings.socket, {
       project: settings.project,
-      app_id: settings.app_id
+      appId: settings.app_id
     })
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,

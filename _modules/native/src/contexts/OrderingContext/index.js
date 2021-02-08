@@ -55,7 +55,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
   var nativeStrategy = new _NativeStrategy.NativeStrategy();
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
-      project: settings.project
+      project: settings.project,
+      appId: settings.app_id
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: nativeStrategy
