@@ -6,7 +6,8 @@ export const BusinessesMapUI = (props) => {
   const {
     businessLocations,
     userLocation,
-    onBusinessClick
+    onBusinessClick,
+    setErrors
   } = props
 
   const [configState] = useConfig()
@@ -48,6 +49,7 @@ export const BusinessesMapUI = (props) => {
           maxLimitLocation={configState?.configs?.meters_to_change_address?.value}
           businessMap
           onBusinessClick={onBusinessClick}
+          setErrors={setErrors}
         />
       )}
     </>

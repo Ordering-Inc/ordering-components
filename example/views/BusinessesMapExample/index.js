@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { BusinessesMap } from '../../../src/components/BusinessesMap'
 import { BusinessesMapUI } from '../../components/BusinessesMapUI'
 
 export const BusinessesMapExample = () => {
+  const [errors, setErrors] = useState('')
+
+  useEffect(() => {
+    if (errors) {
+      console.log(errors)
+    }
+  }, [errors])
+
   const props = {
     UIComponent: BusinessesMapUI,
 
@@ -31,7 +39,11 @@ export const BusinessesMapExample = () => {
     /**
      * User location is used for place center of the map
      */
-    userLocation: { lat: 40.7751052, lng: -73.9651148 }
+    userLocation: { lat: 40.7751052, lng: -73.9651148 },
+    /**
+     * setter for map errors
+     */
+    setErrors
   }
 
   return (
