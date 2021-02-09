@@ -54,7 +54,8 @@ var SignupForm = function SignupForm(props) {
   var UIComponent = props.UIComponent,
       useChekoutFileds = props.useChekoutFileds,
       handleButtonSignupClick = props.handleButtonSignupClick,
-      handleSuccessSignup = props.handleSuccessSignup;
+      handleSuccessSignup = props.handleSuccessSignup,
+      externalPhoneNumber = props.externalPhoneNumber;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -72,7 +73,7 @@ var SignupForm = function SignupForm(props) {
 
   var _useState3 = (0, _react.useState)({
     email: '',
-    cellphone: '',
+    cellphone: externalPhoneNumber || '',
     password: ''
   }),
       _useState4 = _slicedToArray(_useState3, 2),

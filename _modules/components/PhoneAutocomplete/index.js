@@ -109,6 +109,55 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
+
+  var filterPhones = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var result, _yield$ordering$setAc, _result;
+
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              result = phones.filter(function (user) {
+                var _user$phone;
+
+                return (user === null || user === void 0 ? void 0 : (_user$phone = user.phone) === null || _user$phone === void 0 ? void 0 : _user$phone.indexOf(phone)) > -1;
+              });
+
+              if (!(result.length === 1)) {
+                _context.next = 7;
+                break;
+              }
+
+              _context.next = 4;
+              return ordering.setAccessToken(token).users().where([{
+                attribute: 'cellphone',
+                value: {
+                  condition: 'ilike',
+                  value: encodeURI("%".concat(phone, "%"))
+                }
+              }]).get();
+
+            case 4:
+              _yield$ordering$setAc = _context.sent;
+              _result = _yield$ordering$setAc.content.result;
+              setUserState({
+                loading: false,
+                result: _result[0]
+              });
+
+            case 7:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function filterPhones() {
+      return _ref.apply(this, arguments);
+    };
+  }();
   /**
    * @param {event} e
    * Validate input that only numbers can be inserted
@@ -125,63 +174,52 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
 
   var getPhone = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$setAc, result, newPhones, user;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var _yield$ordering$setAc2, result, newPhones;
 
-      return _regenerator.default.wrap(function _callee$(_context) {
+      return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               if (!(auth && token)) {
-                _context.next = 12;
+                _context2.next = 10;
                 break;
               }
 
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: true
               }));
-              _context.next = 4;
-              return ordering.setAccessToken(token).users().where([{
-                attribute: 'cellphone',
-                value: {
-                  condition: 'ilike',
-                  value: encodeURI("%".concat(phone, "%"))
-                }
-              }]).get();
+              _context2.next = 4;
+              return ordering.setAccessToken(token).users().get();
 
             case 4:
-              _yield$ordering$setAc = _context.sent;
-              result = _yield$ordering$setAc.content.result;
+              _yield$ordering$setAc2 = _context2.sent;
+              result = _yield$ordering$setAc2.content.result;
               newPhones = result.map(function (user) {
                 return {
                   name: user.name,
                   phone: user.phone || user.cellphone
                 };
               });
-              user = result;
-              setUserState({
-                loading: false,
-                result: user[0]
-              });
               setPhones(newPhones);
-              _context.next = 13;
+              _context2.next = 11;
               break;
 
-            case 12:
+            case 10:
               events.emit('go_to_page', {
                 page: 'signin'
               });
 
-            case 13:
+            case 11:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }));
 
     return function getPhone() {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
   /**
@@ -349,6 +387,9 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   }, [phones]);
   (0, _react.useEffect)(function () {
     getPhone();
+  }, [auth, token]);
+  (0, _react.useEffect)(function () {
+    filterPhones();
   }, [phone]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     onChangeNumber: onChangeNumber,
