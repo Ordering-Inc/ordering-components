@@ -11,12 +11,13 @@ export const SignupForm = (props) => {
     UIComponent,
     useChekoutFileds,
     handleButtonSignupClick,
-    handleSuccessSignup
+    handleSuccessSignup,
+    externalPhoneNumber
   } = props
 
   const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
-  const [signupData, setSignupData] = useState({ email: '', cellphone: '', password: '' })
+  const [signupData, setSignupData] = useState({ email: '', cellphone: externalPhoneNumber || '', password: '' })
   const requestsState = {}
   const [validationFields] = useValidationFields()
 

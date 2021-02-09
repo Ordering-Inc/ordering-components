@@ -21,6 +21,20 @@ export const PhoneAutocomplete = (props) => {
   const [{ token, auth }] = useSession()
   const [events] = useEvent()
 
+  const filterPhones = async () => {
+    const result = phones.filter(user =>
+      user?.phone?.indexOf(phone) > -1
+    )
+    if (result.length === 1) {
+      const { content: { result } } = await ordering
+        .setAccessToken(token)
+        .users()
+        .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
+        .get()
+      setUserState({ loading: false, result: result[0] })
+    }
+  }
+
   /**
    * @param {event} e
    * Validate input that only numbers can be inserted
@@ -40,11 +54,8 @@ export const PhoneAutocomplete = (props) => {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
-        .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
         .get()
       const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
-      const user = result
-      setUserState({ loading: false, result: user[0] })
       setPhones(newPhones)
     } else {
       events.emit('go_to_page', { page: 'signin' })
@@ -176,6 +187,10 @@ export const PhoneAutocomplete = (props) => {
 
   useEffect(() => {
     getPhone()
+  }, [auth, token])
+
+  useEffect(() => {
+    filterPhones()
   }, [phone])
 
   return (
