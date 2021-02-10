@@ -153,7 +153,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _customerState$user, query, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, options, localOptions, _options, _localOptions$address, _customerState$user2, conditions, userId, addressesResponse, address, _yield$ordering$setAc3, _yield$ordering$setAc4, _error, _result, _err$message, message;
+      var _customerState$user, options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, _options, localOptions, _options2, _localOptions$address, _customerState$user2, conditions, userId, addressesResponse, address, _yield$ordering$setAc3, _yield$ordering$setAc4, _error, _result, _err$message, message;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -167,11 +167,13 @@ var OrderProvider = function OrderProvider(_ref) {
                 }));
               }
 
-              query = {
-                user_id: ((_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id) || session.user.id
+              options = {
+                query: {
+                  user_id: (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id
+                }
               };
               _context.next = 5;
-              return ordering.setAccessToken(session.token).orderOptions().get(query);
+              return ordering.setAccessToken(session.token).orderOptions().get(options);
 
             case 5:
               _yield$ordering$setAc = _context.sent;
@@ -180,12 +182,12 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc2.result;
 
               if (!error) {
-                carts = result.carts, options = _objectWithoutProperties(result, ["carts"]);
+                carts = result.carts, _options = _objectWithoutProperties(result, ["carts"]);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
                 });
-                state.options = _objectSpread(_objectSpread({}, state.options), options);
+                state.options = _objectSpread(_objectSpread({}, state.options), _options);
               }
 
               if (error) {
@@ -206,7 +208,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 break;
               }
 
-              _options = {};
+              _options2 = {};
 
               if (!(Object.keys(localOptions.address).length > 0)) {
                 _context.next = 37;
@@ -263,23 +265,23 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 36:
-              address && (_options.address_id = address.id);
+              address && (_options2.address_id = address.id);
 
             case 37:
               if (localOptions.type) {
-                _options.type = localOptions.type;
+                _options2.type = localOptions.type;
               }
 
               if (localOptions.moment) {
-                _options.moment = _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix();
+                _options2.moment = _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix();
               }
 
               if (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id) {
-                _options.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
+                _options2.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
               }
 
-              if (_options && Object.keys(_options).length > 0) {
-                updateOrderOptions(_options);
+              if (_options2 && Object.keys(_options2).length > 0) {
+                updateOrderOptions(_options2);
               } else {
                 setState(_objectSpread(_objectSpread({}, state), {}, {
                   loading: false
