@@ -19,8 +19,6 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
-var _EventContext = require("../../contexts/EventContext");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -106,10 +104,6 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       token = _useSession2$.token,
       auth = _useSession2$.auth;
 
-  var _useEvent = (0, _EventContext.useEvent)(),
-      _useEvent2 = _slicedToArray(_useEvent, 1),
-      events = _useEvent2[0];
-
   var filterPhones = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var result, _yield$ordering$setAc, _result;
@@ -118,6 +112,13 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              _context.prev = 0;
+              setUserState({
+                loading: true,
+                result: {
+                  error: false
+                }
+              });
               result = phones.filter(function (user) {
                 var _user$phone;
 
@@ -125,11 +126,11 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
 
               if (!(result.length === 1)) {
-                _context.next = 7;
+                _context.next = 9;
                 break;
               }
 
-              _context.next = 4;
+              _context.next = 6;
               return ordering.setAccessToken(token).users().where([{
                 attribute: 'cellphone',
                 value: {
@@ -138,7 +139,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 }
               }]).get();
 
-            case 4:
+            case 6:
               _yield$ordering$setAc = _context.sent;
               _result = _yield$ordering$setAc.content.result;
               setUserState({
@@ -146,12 +147,27 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 result: _result[0]
               });
 
-            case 7:
+            case 9:
+              _context.next = 14;
+              break;
+
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
+              setUserState({
+                loading: false,
+                result: {
+                  error: true,
+                  result: _context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message
+                }
+              });
+
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 11]]);
     }));
 
     return function filterPhones() {
