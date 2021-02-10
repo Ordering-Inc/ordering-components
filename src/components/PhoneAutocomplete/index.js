@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
-import { useEvent } from '../../contexts/EventContext'
 
 export const PhoneAutocomplete = (props) => {
   const {
@@ -19,19 +18,23 @@ export const PhoneAutocomplete = (props) => {
   const [ordering] = useApi()
   const [phones, setPhones] = useState([])
   const [{ token, auth }] = useSession()
-  const [events] = useEvent()
 
   const filterPhones = async () => {
-    const result = phones.filter(user =>
-      user?.phone?.indexOf(phone) > -1
-    )
-    if (result.length === 1) {
-      const { content: { result } } = await ordering
-        .setAccessToken(token)
-        .users()
-        .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
-        .get()
-      setUserState({ loading: false, result: result[0] })
+    try {
+      setUserState({ loading: true, result: { error: false } })
+      const result = phones.filter(user =>
+        user?.phone?.indexOf(phone) > -1
+      )
+      if (result.length === 1) {
+        const { content: { result } } = await ordering
+          .setAccessToken(token)
+          .users()
+          .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
+          .get()
+        setUserState({ loading: false, result: result[0] })
+      }
+    } catch (e) {
+      setUserState({ loading: false, result: { error: true, result: e?.message } })
     }
   }
 
