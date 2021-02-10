@@ -49,17 +49,13 @@ export const PhoneAutocomplete = (props) => {
    * Getting phones depending of phone input value
    */
   const getPhone = async () => {
-    if (auth && token) {
-      setUserState({ ...userState, loading: true })
-      const { content: { result } } = await ordering
-        .setAccessToken(token)
-        .users()
-        .get()
-      const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
-      setPhones(newPhones)
-    } else {
-      events.emit('go_to_page', { page: 'signin' })
-    }
+    setUserState({ ...userState, loading: true })
+    const { content: { result } } = await ordering
+      .setAccessToken(token)
+      .users()
+      .get()
+    const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
+    setPhones(newPhones)
   }
 
   /**
