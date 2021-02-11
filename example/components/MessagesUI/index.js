@@ -87,7 +87,7 @@ export const MessagesUI = (props) => {
           </>
       }
       {
-        messages.messages.map(message => (
+        messages?.messages?.map(message => (
           <div key={message.id}>
             {
               message.type === 1 && (
