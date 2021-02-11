@@ -15,7 +15,8 @@ export const LoginForm = (props) => {
     useLoginByEmail,
     useLoginByCellphone,
     useDefualtSessionManager,
-    urlToRedirect
+    urlToRedirect,
+    allowedLevels
   } = props
 
   const [ordering] = useApi()
@@ -33,7 +34,7 @@ export const LoginForm = (props) => {
   }
 
   const [loginTab, setLoginTab] = useState(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email'))
-  const [, { login }] = useSession()
+  const [, { login, logout }] = useSession()
 
   /**
    * Default fuction for login workflow
@@ -46,21 +47,52 @@ export const LoginForm = (props) => {
         password: credentials.password
       }
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users().auth(_credentials)
+      const { content: { error, result } } = await ordering.users().auth(_credentials)
       setFormState({
-        result: response.content,
+        result: {
+          error,
+          result
+        },
         loading: false
       })
-      if (!response.content.error) {
+      if (!error) {
         if (useDefualtSessionManager) {
+          if (allowedLevels && allowedLevels?.length > 0) {
+            const { level, session: { access_token } } = result
+            if (!allowedLevels.includes(level)) {
+              try {
+                const { content: logoutResp } = await ordering.setAccessToken(access_token).users().logout()
+                if (!logoutResp.error) {
+                  logout()
+                  setFormState({
+                    result: {
+                      error: true,
+                      result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                    },
+                    loading: false
+                  })
+                }
+              } catch (error) {
+                setFormState({
+                  result: {
+                    error: true,
+                    result: err.message
+                  },
+                  loading: false
+                })
+              }
+              return
+            }
+          }
           login({
-            user: response.content.result,
-            token: response.content.result.session.access_token
+            user: result,
+            token: result.session.access_token
           })
         }
-        events.emit('userLogin', response.content.result)
+        
+        events.emit('userLogin', result)
         if (handleSuccessLogin) {
-          handleSuccessLogin(response.content.result)
+          handleSuccessLogin(result)
         }
 
         if (urlToRedirect) {
