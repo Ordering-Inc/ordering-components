@@ -60,10 +60,9 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (!state.loading) {
         setState({ ...state, loading: true })
       }
-      const options = {
-        query: {
-          user_id: customerState.user?.id || session.user.id
-        }
+      const options = {}
+      if (customerState.user?.id) {
+        options.user_id = customerState.user?.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().get(options)
       if (!error) {
