@@ -14,9 +14,10 @@ export const PhoneAutocomplete = (props) => {
   const [openAddress, setOpenAddress] = useState(false)
   const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
+  const [phones, setPhones] = useState([])
+  const [isGettingPhones, setIsGettingPhones] = useState({ loading: true, error: null })
   const [, t] = useLanguage()
   const [ordering] = useApi()
-  const [phones, setPhones] = useState([])
   const [{ token }] = useSession()
 
   /**
@@ -35,6 +36,8 @@ export const PhoneAutocomplete = (props) => {
           .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
           .get()
         setUserState({ loading: false, result: result[0] })
+      } else {
+        setUserState({ ...userState, loading: false })
       }
     } catch (e) {
       setUserState({ loading: false, result: { error: true, result: e?.message } })
@@ -55,12 +58,18 @@ export const PhoneAutocomplete = (props) => {
    * Getting phones
    */
   const getPhone = async () => {
-    const { content: { result } } = await ordering
-      .setAccessToken(token)
-      .users()
-      .get()
-    const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
-    setPhones(newPhones)
+    setIsGettingPhones({ ...isGettingPhones, loading: true })
+    try {
+      const { content: { result } } = await ordering
+        .setAccessToken(token)
+        .users()
+        .get()
+      const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
+      setPhones(newPhones)
+      setIsGettingPhones({ ...isGettingPhones, loading: false })
+    } catch (e) {
+      setIsGettingPhones({ loading: false, error: e.message })
+    }
   }
 
   /**
@@ -208,6 +217,7 @@ export const PhoneAutocomplete = (props) => {
           openAddress={openAddress}
           setOpenAddress={setOpenAddress}
           userState={userState}
+          isGettingPhones={isGettingPhones}
         />
       )}
     </>
