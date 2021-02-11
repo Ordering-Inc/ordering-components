@@ -17,8 +17,11 @@ export const PhoneAutocomplete = (props) => {
   const [, t] = useLanguage()
   const [ordering] = useApi()
   const [phones, setPhones] = useState([])
-  const [{ token, auth }] = useSession()
+  const [{ token }] = useSession()
 
+  /**
+   * filt phones depending of phone input value and getting user data
+   */
   const filterPhones = async () => {
     setUserState({ loading: true, result: { error: false } })
     try {
@@ -49,10 +52,9 @@ export const PhoneAutocomplete = (props) => {
   }
 
   /**
-   * Getting phones depending of phone input value
+   * Getting phones
    */
   const getPhone = async () => {
-    setUserState({ ...userState, loading: true })
     const { content: { result } } = await ordering
       .setAccessToken(token)
       .users()
@@ -186,7 +188,7 @@ export const PhoneAutocomplete = (props) => {
 
   useEffect(() => {
     getPhone()
-  }, [auth, token])
+  }, [])
 
   useEffect(() => {
     filterPhones()
