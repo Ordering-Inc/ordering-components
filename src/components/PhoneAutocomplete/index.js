@@ -20,8 +20,8 @@ export const PhoneAutocomplete = (props) => {
   const [{ token, auth }] = useSession()
 
   const filterPhones = async () => {
+    setUserState({ loading: true, result: { error: false } })
     try {
-      setUserState({ loading: true, result: { error: false } })
       const result = phones.filter(user =>
         user?.phone?.indexOf(phone) > -1
       )
