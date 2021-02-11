@@ -62,7 +62,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const options = {
         query: {
-          user_id: customerState.user?.id
+          user_id: customerState.user?.id || session.user.id
         }
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().get(options)
