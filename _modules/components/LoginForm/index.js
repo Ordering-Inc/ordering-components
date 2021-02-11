@@ -136,13 +136,6 @@ var LoginForm = function LoginForm(props) {
               _yield$ordering$users2 = _yield$ordering$users.content;
               error = _yield$ordering$users2.error;
               result = _yield$ordering$users2.result;
-              setFormState({
-                result: {
-                  error: error,
-                  result: result
-                },
-                loading: false
-              });
 
               if (error) {
                 _context.next = 31;
@@ -166,31 +159,31 @@ var LoginForm = function LoginForm(props) {
                 break;
               }
 
-              _context.prev = 15;
-              _context.next = 18;
+              _context.prev = 14;
+              _context.next = 17;
               return ordering.setAccessToken(access_token).users().logout();
 
-            case 18:
+            case 17:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
               if (!logoutResp.error) {
                 logout();
-                setFormState({
-                  result: {
-                    error: true,
-                    result: ['YOU_DO_NOT_HAVE_PERMISSION']
-                  },
-                  loading: false
-                });
               }
 
+              setFormState({
+                result: {
+                  error: true,
+                  result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                },
+                loading: false
+              });
               _context.next = 26;
               break;
 
             case 23:
               _context.prev = 23;
-              _context.t0 = _context["catch"](15);
+              _context.t0 = _context["catch"](14);
               setFormState({
                 result: {
                   error: true,
@@ -220,11 +213,18 @@ var LoginForm = function LoginForm(props) {
               }
 
             case 31:
-              _context.next = 36;
+              setFormState({
+                result: {
+                  error: error,
+                  result: result
+                },
+                loading: false
+              });
+              _context.next = 37;
               break;
 
-            case 33:
-              _context.prev = 33;
+            case 34:
+              _context.prev = 34;
               _context.t1 = _context["catch"](0);
               setFormState({
                 result: {
@@ -234,12 +234,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 36:
+            case 37:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 33], [15, 23]]);
+      }, _callee, null, [[0, 34], [14, 23]]);
     }));
 
     return function handleLoginClick() {
