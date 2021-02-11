@@ -48,13 +48,6 @@ export const LoginForm = (props) => {
       }
       setFormState({ ...formState, loading: true })
       const { content: { error, result } } = await ordering.users().auth(_credentials)
-      setFormState({
-        result: {
-          error,
-          result
-        },
-        loading: false
-      })
       if (!error) {
         if (useDefualtSessionManager) {
           if (allowedLevels && allowedLevels?.length > 0) {
@@ -64,14 +57,14 @@ export const LoginForm = (props) => {
                 const { content: logoutResp } = await ordering.setAccessToken(access_token).users().logout()
                 if (!logoutResp.error) {
                   logout()
-                  setFormState({
-                    result: {
-                      error: true,
-                      result: ['YOU_DO_NOT_HAVE_PERMISSION']
-                    },
-                    loading: false
-                  })
                 }
+                setFormState({
+                  result: {
+                    error: true,
+                    result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                  },
+                  loading: false
+                })
               } catch (error) {
                 setFormState({
                   result: {
@@ -89,7 +82,6 @@ export const LoginForm = (props) => {
             token: result.session.access_token
           })
         }
-        
         events.emit('userLogin', result)
         if (handleSuccessLogin) {
           handleSuccessLogin(result)
@@ -99,6 +91,13 @@ export const LoginForm = (props) => {
           window.location.href = `${window.location.origin}${urlToRedirect}`
         }
       }
+      setFormState({
+        result: {
+          error,
+          result
+        },
+        loading: false
+      })
     } catch (err) {
       setFormState({
         result: {
