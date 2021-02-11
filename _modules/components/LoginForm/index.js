@@ -59,7 +59,8 @@ var LoginForm = function LoginForm(props) {
       useLoginByEmail = props.useLoginByEmail,
       useLoginByCellphone = props.useLoginByCellphone,
       useDefualtSessionManager = props.useDefualtSessionManager,
-      urlToRedirect = props.urlToRedirect;
+      urlToRedirect = props.urlToRedirect,
+      allowedLevels = props.allowedLevels;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -105,7 +106,9 @@ var LoginForm = function LoginForm(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
-      login = _useSession2[1].login;
+      _useSession2$ = _useSession2[1],
+      login = _useSession2$.login,
+      logout = _useSession2$.logout;
   /**
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
@@ -114,7 +117,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _credentials2, _credentials, response;
+      var _credentials2, _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, level, access_token, _yield$ordering$setAc, logoutResp;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -129,51 +132,114 @@ var LoginForm = function LoginForm(props) {
               return ordering.users().auth(_credentials);
 
             case 5:
-              response = _context.sent;
-              setFormState({
-                result: response.content,
-                loading: false
-              });
-
-              if (!response.content.error) {
-                if (useDefualtSessionManager) {
-                  login({
-                    user: response.content.result,
-                    token: response.content.result.session.access_token
-                  });
-                }
-
-                events.emit('userLogin', response.content.result);
-
-                if (handleSuccessLogin) {
-                  handleSuccessLogin(response.content.result);
-                }
-
-                if (urlToRedirect) {
-                  window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
-                }
-              }
-
-              _context.next = 13;
-              break;
-
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](0);
+              _yield$ordering$users = _context.sent;
+              _yield$ordering$users2 = _yield$ordering$users.content;
+              error = _yield$ordering$users2.error;
+              result = _yield$ordering$users2.result;
               setFormState({
                 result: {
-                  error: true,
-                  result: _context.t0.message
+                  error: error,
+                  result: result
                 },
                 loading: false
               });
 
-            case 13:
+              if (error) {
+                _context.next = 31;
+                break;
+              }
+
+              if (!useDefualtSessionManager) {
+                _context.next = 28;
+                break;
+              }
+
+              if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
+                _context.next = 27;
+                break;
+              }
+
+              level = result.level, access_token = result.session.access_token;
+
+              if (allowedLevels.includes(level)) {
+                _context.next = 27;
+                break;
+              }
+
+              _context.prev = 15;
+              _context.next = 18;
+              return ordering.setAccessToken(access_token).users().logout();
+
+            case 18:
+              _yield$ordering$setAc = _context.sent;
+              logoutResp = _yield$ordering$setAc.content;
+
+              if (!logoutResp.error) {
+                logout();
+                setFormState({
+                  result: {
+                    error: true,
+                    result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                  },
+                  loading: false
+                });
+              }
+
+              _context.next = 26;
+              break;
+
+            case 23:
+              _context.prev = 23;
+              _context.t0 = _context["catch"](15);
+              setFormState({
+                result: {
+                  error: true,
+                  result: err.message
+                },
+                loading: false
+              });
+
+            case 26:
+              return _context.abrupt("return");
+
+            case 27:
+              login({
+                user: result,
+                token: result.session.access_token
+              });
+
+            case 28:
+              events.emit('userLogin', result);
+
+              if (handleSuccessLogin) {
+                handleSuccessLogin(result);
+              }
+
+              if (urlToRedirect) {
+                window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
+              }
+
+            case 31:
+              _context.next = 36;
+              break;
+
+            case 33:
+              _context.prev = 33;
+              _context.t1 = _context["catch"](0);
+              setFormState({
+                result: {
+                  error: true,
+                  result: _context.t1.message
+                },
+                loading: false
+              });
+
+            case 36:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 10]]);
+      }, _callee, null, [[0, 33], [15, 23]]);
     }));
 
     return function handleLoginClick() {
