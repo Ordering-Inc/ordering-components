@@ -15,7 +15,7 @@ export const PhoneAutocomplete = (props) => {
   const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [phones, setPhones] = useState([])
-  const [isGettingPhones, setIsGettingPhones] = useState({ loading: true, error: null })
+  const [gettingPhones, setGettingPhones] = useState({ loading: true, error: null })
   const [, t] = useLanguage()
   const [ordering] = useApi()
   const [{ token }] = useSession()
@@ -58,7 +58,7 @@ export const PhoneAutocomplete = (props) => {
    * Getting phones
    */
   const getPhone = async () => {
-    setIsGettingPhones({ ...isGettingPhones, loading: true })
+    setGettingPhones({ ...gettingPhones, loading: true })
     try {
       const { content: { result } } = await ordering
         .setAccessToken(token)
@@ -66,9 +66,9 @@ export const PhoneAutocomplete = (props) => {
         .get()
       const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
       setPhones(newPhones)
-      setIsGettingPhones({ ...isGettingPhones, loading: false })
+      setGettingPhones({ ...gettingPhones, loading: false })
     } catch (e) {
-      setIsGettingPhones({ loading: false, error: e.message })
+      setGettingPhones({ loading: false, error: e.message })
     }
   }
 
@@ -217,7 +217,7 @@ export const PhoneAutocomplete = (props) => {
           openAddress={openAddress}
           setOpenAddress={setOpenAddress}
           userState={userState}
-          isGettingPhones={isGettingPhones}
+          gettingPhones={gettingPhones}
         />
       )}
     </>

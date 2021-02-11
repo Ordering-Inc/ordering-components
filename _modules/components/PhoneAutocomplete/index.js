@@ -19,8 +19,6 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
-var _EventContext = require("../../contexts/EventContext");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -87,6 +85,19 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       userState = _useState10[0],
       setUserState = _useState10[1];
 
+  var _useState11 = (0, _react.useState)([]),
+      _useState12 = _slicedToArray(_useState11, 2),
+      phones = _useState12[0],
+      setPhones = _useState12[1];
+
+  var _useState13 = (0, _react.useState)({
+    loading: true,
+    error: null
+  }),
+      _useState14 = _slicedToArray(_useState13, 2),
+      isGettingPhones = _useState14[0],
+      setIsGettingPhones = _useState14[1];
+
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
       t = _useLanguage2[1];
@@ -95,20 +106,13 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState11 = (0, _react.useState)([]),
-      _useState12 = _slicedToArray(_useState11, 2),
-      phones = _useState12[0],
-      setPhones = _useState12[1];
-
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      _useSession2$ = _useSession2[0],
-      token = _useSession2$.token,
-      auth = _useSession2$.auth;
+      token = _useSession2[0].token;
+  /**
+   * filt phones depending of phone input value and getting user data
+   */
 
-  var _useEvent = (0, _EventContext.useEvent)(),
-      _useEvent2 = _slicedToArray(_useEvent, 1),
-      events = _useEvent2[0];
 
   var filterPhones = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -118,6 +122,13 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              setUserState({
+                loading: true,
+                result: {
+                  error: false
+                }
+              });
+              _context.prev = 1;
               result = phones.filter(function (user) {
                 var _user$phone;
 
@@ -125,11 +136,11 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
 
               if (!(result.length === 1)) {
-                _context.next = 7;
+                _context.next = 11;
                 break;
               }
 
-              _context.next = 4;
+              _context.next = 6;
               return ordering.setAccessToken(token).users().where([{
                 attribute: 'cellphone',
                 value: {
@@ -138,20 +149,42 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 }
               }]).get();
 
-            case 4:
+            case 6:
               _yield$ordering$setAc = _context.sent;
               _result = _yield$ordering$setAc.content.result;
               setUserState({
                 loading: false,
                 result: _result[0]
               });
+              _context.next = 12;
+              break;
 
-            case 7:
+            case 11:
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: false
+              }));
+
+            case 12:
+              _context.next = 17;
+              break;
+
+            case 14:
+              _context.prev = 14;
+              _context.t0 = _context["catch"](1);
+              setUserState({
+                loading: false,
+                result: {
+                  error: true,
+                  result: _context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message
+                }
+              });
+
+            case 17:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[1, 14]]);
     }));
 
     return function filterPhones() {
@@ -169,7 +202,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     setPhone(number);
   };
   /**
-   * Getting phones depending of phone input value
+   * Getting phones
    */
 
 
@@ -181,14 +214,10 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (!(auth && token)) {
-                _context2.next = 10;
-                break;
-              }
-
-              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+              setIsGettingPhones(_objectSpread(_objectSpread({}, isGettingPhones), {}, {
                 loading: true
               }));
+              _context2.prev = 1;
               _context2.next = 4;
               return ordering.setAccessToken(token).users().get();
 
@@ -202,20 +231,26 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 };
               });
               setPhones(newPhones);
-              _context2.next = 11;
+              setIsGettingPhones(_objectSpread(_objectSpread({}, isGettingPhones), {}, {
+                loading: false
+              }));
+              _context2.next = 14;
               break;
 
-            case 10:
-              events.emit('go_to_page', {
-                page: 'signin'
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](1);
+              setIsGettingPhones({
+                loading: false,
+                error: _context2.t0.message
               });
 
-            case 11:
+            case 14:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2);
+      }, _callee2, null, [[1, 11]]);
     }));
 
     return function getPhone() {
@@ -387,7 +422,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   }, [phones]);
   (0, _react.useEffect)(function () {
     getPhone();
-  }, [auth, token]);
+  }, []);
   (0, _react.useEffect)(function () {
     filterPhones();
   }, [phone]);
@@ -400,7 +435,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     setOpenCustomer: setOpenCustomer,
     openAddress: openAddress,
     setOpenAddress: setOpenAddress,
-    userState: userState
+    userState: userState,
+    isGettingPhones: isGettingPhones
   })));
 };
 
