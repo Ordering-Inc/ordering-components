@@ -71,7 +71,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
   var _useState3 = (0, _react.useState)({
     customer: false,
-    address: false
+    signup: false
   }),
       _useState4 = _slicedToArray(_useState3, 2),
       openModal = _useState4[0],
@@ -101,79 +101,42 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
 
   var filterPhones = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var result, _yield$ordering$setAc, _result;
-
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(arr, value) {
+      var user;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setCustomerState({
-                loading: true,
-                result: {
-                  error: false
-                }
-              });
-              _context.prev = 1;
-              result = customersPhones.phones.filter(function (user) {
-                var _user$phone;
-
-                return (user === null || user === void 0 ? void 0 : (_user$phone = user.phone) === null || _user$phone === void 0 ? void 0 : _user$phone.indexOf(phone)) > -1;
+              user = arr.filter(function (user) {
+                return (user === null || user === void 0 ? void 0 : user.cellphone) === value;
               });
 
-              if (!(result.length === 1)) {
-                _context.next = 11;
-                break;
+              if (user[0]) {
+                setCustomerState({
+                  loading: false,
+                  result: user[0]
+                });
+                setOpenModal(_objectSpread(_objectSpread({}, openModal), {}, {
+                  customer: true
+                }));
+              } else {
+                setCustomerState({
+                  loading: false,
+                  result: {
+                    error: false
+                  }
+                });
               }
 
-              _context.next = 6;
-              return ordering.setAccessToken(token).users().where([{
-                attribute: 'cellphone',
-                value: {
-                  condition: 'ilike',
-                  value: encodeURI("%".concat(phone, "%"))
-                }
-              }]).get();
-
-            case 6:
-              _yield$ordering$setAc = _context.sent;
-              _result = _yield$ordering$setAc.content.result;
-              setCustomerState({
-                loading: false,
-                result: _result[0]
-              });
-              _context.next = 12;
-              break;
-
-            case 11:
-              setCustomerState(_objectSpread(_objectSpread({}, customerState), {}, {
-                loading: false
-              }));
-
-            case 12:
-              _context.next = 17;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](1);
-              setCustomerState({
-                loading: false,
-                result: {
-                  error: true,
-                  result: _context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message
-                }
-              });
-
-            case 17:
+            case 2:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee);
     }));
 
-    return function filterPhones() {
+    return function filterPhones(_x, _x2) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -194,7 +157,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
   var getPhone = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _yield$ordering$setAc2, result, newPhones;
+      var _yield$ordering$setAc, result;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -208,35 +171,29 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               return ordering.setAccessToken(token).users().get();
 
             case 4:
-              _yield$ordering$setAc2 = _context2.sent;
-              result = _yield$ordering$setAc2.content.result;
-              newPhones = result.map(function (user) {
-                return {
-                  name: user.name,
-                  phone: user.phone || user.cellphone
-                };
-              });
+              _yield$ordering$setAc = _context2.sent;
+              result = _yield$ordering$setAc.content.result;
               setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
-                phones: newPhones,
+                phones: result,
                 loading: false
               }));
-              _context2.next = 13;
+              _context2.next = 12;
               break;
 
-            case 10:
-              _context2.prev = 10;
+            case 9:
+              _context2.prev = 9;
               _context2.t0 = _context2["catch"](1);
               setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 loading: false,
                 error: _context2.t0.message
               }));
 
-            case 13:
+            case 12:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 10]]);
+      }, _callee2, null, [[1, 9]]);
     }));
 
     return function getPhone() {
@@ -275,32 +232,32 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       /* for each item in the array... */
 
       for (i = 0; i < (arr === null || arr === void 0 ? void 0 : arr.length); i++) {
-        var _arr$i, _arr$i$phone, _arr$i$phone$substr;
+        var _arr$i, _arr$i$phone, _arr$i$phone$substr, _arr$i2, _arr$i2$cellphone, _arr$i2$cellphone$sub;
 
         /* check if the item starts with the same letters as the text field value: */
-        if (((_arr$i = arr[i]) === null || _arr$i === void 0 ? void 0 : (_arr$i$phone = _arr$i.phone) === null || _arr$i$phone === void 0 ? void 0 : (_arr$i$phone$substr = _arr$i$phone.substr(0, val.length)) === null || _arr$i$phone$substr === void 0 ? void 0 : _arr$i$phone$substr.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase())) {
-          var _arr$i2, _arr$i2$phone, _arr$i3, _arr$i3$phone, _arr$i4, _arr$i5;
+        if (((_arr$i = arr[i]) === null || _arr$i === void 0 ? void 0 : (_arr$i$phone = _arr$i.phone) === null || _arr$i$phone === void 0 ? void 0 : (_arr$i$phone$substr = _arr$i$phone.substr(0, val.length)) === null || _arr$i$phone$substr === void 0 ? void 0 : _arr$i$phone$substr.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase()) || ((_arr$i2 = arr[i]) === null || _arr$i2 === void 0 ? void 0 : (_arr$i2$cellphone = _arr$i2.cellphone) === null || _arr$i2$cellphone === void 0 ? void 0 : (_arr$i2$cellphone$sub = _arr$i2$cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) === null || _arr$i2$cellphone$sub === void 0 ? void 0 : _arr$i2$cellphone$sub.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase())) {
+          var _arr$i3, _arr$i4, _arr$i5;
 
+          var cellphone = ((_arr$i3 = arr[i]) === null || _arr$i3 === void 0 ? void 0 : _arr$i3.phone) || ((_arr$i4 = arr[i]) === null || _arr$i4 === void 0 ? void 0 : _arr$i4.cellphone);
           /* create a DIV element for each matching element: */
+
           b = document.createElement('DIV');
           /* make the matching letters bold: */
 
-          b.innerHTML = '<strong>' + ((_arr$i2 = arr[i]) === null || _arr$i2 === void 0 ? void 0 : (_arr$i2$phone = _arr$i2.phone) === null || _arr$i2$phone === void 0 ? void 0 : _arr$i2$phone.substr(0, val === null || val === void 0 ? void 0 : val.length)) + '</strong>';
-          b.innerHTML += (_arr$i3 = arr[i]) === null || _arr$i3 === void 0 ? void 0 : (_arr$i3$phone = _arr$i3.phone) === null || _arr$i3$phone === void 0 ? void 0 : _arr$i3$phone.substr(val === null || val === void 0 ? void 0 : val.length); // insert name of the customer
+          b.innerHTML = '<strong>' + (cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) + '</strong>';
+          b.innerHTML += cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(val === null || val === void 0 ? void 0 : val.length); // insert name of the customer
 
-          b.innerHTML += ' (' + ((_arr$i4 = arr[i]) === null || _arr$i4 === void 0 ? void 0 : _arr$i4.name) + ')';
+          b.innerHTML += ' (' + ((_arr$i5 = arr[i]) === null || _arr$i5 === void 0 ? void 0 : _arr$i5.name) + ')';
           /* insert a input field that will hold the current array item's value: */
 
-          b.innerHTML += "<input type='hidden' value='" + ((_arr$i5 = arr[i]) === null || _arr$i5 === void 0 ? void 0 : _arr$i5.phone) + "'>";
+          b.innerHTML += "<input type='hidden' value='" + cellphone + "'>";
           /* execute a function when someone clicks on the item value (DIV element): */
 
           b.addEventListener('click', function (e) {
             /* insert the value for the autocomplete text field: */
             inp.value = this.getElementsByTagName('input')[0].value;
             setPhone(this.getElementsByTagName('input')[0].value);
-            setOpenModal(_objectSpread(_objectSpread({}, openModal), {}, {
-              address: true
-            }));
+            filterPhones(arr, this.getElementsByTagName('input')[0].value);
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
 
@@ -318,7 +275,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       b.addEventListener('click', function (e) {
         if (evt.target.value.length === 10) {
           setOpenModal(_objectSpread(_objectSpread({}, openModal), {}, {
-            customer: true
+            signup: true
           }));
         } else {
           setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
@@ -408,9 +365,6 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   (0, _react.useEffect)(function () {
     getPhone();
   }, []);
-  (0, _react.useEffect)(function () {
-    filterPhones();
-  }, [phone]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     phone: phone,
     customerState: customerState,
