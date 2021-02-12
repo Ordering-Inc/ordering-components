@@ -10,14 +10,16 @@ dayjs.extend(utc)
 export const BusinessList = (props) => {
   const {
     UIComponent,
+    isPopular,
     isSearchByName,
     isSearchByDescription,
     propsToFetch,
-    onBusinessClick
+    onBusinessClick,
+    paginationSettings
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
-  const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: 10, totalItems: null, totalPages: null })
+  const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: paginationSettings?.pageSize ? paginationSettings?.pageSize : 10, totalItems: null, totalPages: null })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [orderState] = useOrder()
@@ -33,11 +35,20 @@ export const BusinessList = (props) => {
   const getBusinesses = async (newFetch) => {
     try {
       setBusinessesList({ ...businessesList, loading: true })
-      const parameters = {
-        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-        type: orderState.options?.type || 1,
-        page: newFetch ? 1 : paginationProps.currentPage + 1,
-        page_size: paginationProps.pageSize
+      let parameters
+
+      if (isPopular) {
+        parameters = {
+          location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
+          type: orderState.options?.type || 1
+        }
+      } else {
+        parameters = {
+          location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
+          type: orderState.options?.type || 1,
+          page: newFetch ? 1 : paginationProps.currentPage + 1,
+          page_size: paginationProps.pageSize
+        }
       }
 
       if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
@@ -96,7 +107,13 @@ export const BusinessList = (props) => {
         ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
         : ordering.businesses().select(propsToFetch).parameters(parameters)
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
-      businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
+      if (isPopular) {
+        result.sort((a, b) => b.reviews.quality - a.reviews.quality)
+        const _result = result.slice(0, 2)
+        businessesList.businesses = [..._result]
+      } else {
+        businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
+      }
       setBusinessesList({
         ...businessesList,
         loading: false
