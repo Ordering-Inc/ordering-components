@@ -5,6 +5,7 @@ import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
 import { useConfig } from '../ConfigContext'
+import { useCustomer } from '../CustomerContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -29,6 +30,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const socket = useWebsocket()
   const [events] = useEvent()
   const [configState] = useConfig()
+  const [customerState] = useCustomer()
+  const [session] = useSession()
 
   const orderTypes = {
     delivery: 1,
@@ -49,7 +52,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     alert
   })
 
-  const [session] = useSession()
+  const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
+  const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
 
   /**
    * Refresh order options and carts from API
@@ -59,7 +63,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (!state.loading) {
         setState({ ...state, loading: true })
       }
-      const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().get()
+      const options = {}
+      if (userCustomerId) {
+        options.user_id = userCustomerId
+      }
+      const functionToFetch = ordering.setAccessToken(session.token).orderOptions()
+      const { content: { error, result } } = Object.keys(options).length > 0
+        ? await functionToFetch.get(options)
+        : await functionToFetch.get()
       if (!error) {
         const { carts, ...options } = result
         state.carts = {}
@@ -81,7 +92,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           const conditions = [
             { attribute: 'address', value: localOptions?.address?.address }
           ]
-          const addressesResponse = await ordering.setAccessToken(session.token).users(session.user.id).addresses().where(conditions).get()
+          const userId = userCustomerId || session.user.id
+          const addressesResponse = await ordering.setAccessToken(session.token).users(userId).addresses().where(conditions).get()
           let address = addressesResponse.content.result.find(address => {
             localOptions.address.internal_number = localOptions.address?.internal_number || null
             localOptions.address.zipcode = localOptions.address?.zipcode || null
@@ -95,12 +107,12 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           })
           if (!address) {
             Object.keys(localOptions.address).forEach(key => localOptions.address[key] === null && delete localOptions.address[key])
-            const { content: { error, result } } = await ordering.setAccessToken(session.token).users(session.user.id).addresses().save(localOptions.address)
+            const { content: { error, result } } = await ordering.setAccessToken(session.token).users(userId).addresses().save(localOptions.address)
             if (!error) {
               address = result
             }
           } else {
-            await ordering.setAccessToken(session.token).users(session.user.id).addresses(address.id).save({ default: true })
+            await ordering.setAccessToken(session.token).users(userId).addresses(address.id).save({ default: true })
           }
           address && (options.address_id = address.id)
         }
@@ -241,12 +253,16 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    */
   const updateOrderOptions = async (changes) => {
     if (session.auth) {
+      const body = {
+        ...changes,
+        user_id: userCustomerId || session.user.id
+      }
       try {
         setState({ ...state, loading: true })
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()
-          .save(changes, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+          .save(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}
@@ -280,7 +296,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     try {
       setState({ ...state, loading: true })
       const body = {
-        product
+        product,
+        user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -310,7 +327,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           id: product.id,
           code: product.code,
           business_id: product.business_id
-        }
+        },
+        user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().removeProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -335,7 +353,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     try {
       setState({ ...state, loading: true })
       const body = JSON.stringify({
-        uuid
+        uuid,
+        user_id: userCustomerId || session.user.id
       })
       const response = await fetch(`${ordering.root}/carts/clear`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
@@ -359,7 +378,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     try {
       setState({ ...state, loading: true })
       const body = {
-        product
+        product,
+        user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -394,7 +414,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       setState({ ...state, loading: true })
       const body = {
         business_id: couponData.business_id,
-        coupon: couponData.coupon
+        coupon: couponData.coupon,
+        user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -428,7 +449,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       setState({ ...state, loading: true })
       const body = {
         business_id: businessId,
-        driver_tip_rate: driverTipRate
+        driver_tip_rate: driverTipRate,
+        user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changeDriverTip(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -451,7 +473,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const placeCart = async (cardId, data) => {
     try {
       setState({ ...state, loading: true })
-      const body = data
+      const body = {
+        ...data,
+        user_id: userCustomerId || session.user.id
+      }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts(cardId).place(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         if (result.status !== 1) {
@@ -490,7 +515,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const confirmCart = async (cardId, data) => {
     try {
       setState({ ...state, loading: true })
-      const body = data
+      const body = {
+        ...data,
+        user_id: userCustomerId || session.user.id
+      }
       const { content: { error, result, cart } } = await ordering.setAccessToken(session.token).carts(cardId).confirm(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         if (result.status !== 1) {
@@ -520,7 +548,11 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const reorder = async (orderId) => {
     try {
       setState({ ...state, loading: true })
-      const { content: { error, result } } = await ordering.setAccessToken(session.token).orders(orderId).reorder({ headers: { 'X-Socket-Id-X': socket?.getId() } })
+      const options = {
+        headers: { 'X-Socket-Id-X': socket?.getId() },
+        query: { user_id: userCustomerId || session.user.id }
+      }
+      const { content: { error, result } } = await ordering.setAccessToken(session.token).orders(orderId).reorder(options)
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_added', result)

@@ -159,7 +159,7 @@ AddressList.propTypes = {
    * User id to get address from this user
    * If you don't provide one it is used by the current session by default
    */
-  userId: PropTypes.elementType,
+  userId: PropTypes.number,
   /**
    * Access token to get addresses
    * If you don't provide one it is used by the current session by default

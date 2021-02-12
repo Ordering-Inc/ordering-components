@@ -68,6 +68,7 @@ import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
 import { EventContext, EventProvider, useEvent } from './contexts/EventContext'
 import { UtilsContext, UtilsProviders, useUtils } from './contexts/UtilsContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
+import { CustomerContext, CustomerProvider, useCustomer } from './contexts/CustomerContext'
 import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionPaypal } from './components/PaymentOptionPaypal'
@@ -187,5 +188,8 @@ export {
   useUtils,
   ValidationFieldsContext,
   ValidationFieldsProvider,
-  useValidationFields
+  useValidationFields,
+  CustomerContext,
+  CustomerProvider,
+  useCustomer
 }
