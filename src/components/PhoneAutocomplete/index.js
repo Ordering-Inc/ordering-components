@@ -9,38 +9,49 @@ export const PhoneAutocomplete = (props) => {
     UIComponent
   } = props
 
+  const [, t] = useLanguage()
+  const [ordering] = useApi()
+  const [{ token }] = useSession()
+  const [, { setUserCustomer }] = useCustomer()
+
   const [phone, setPhone] = useState('')
+  const [phones, setPhones] = useState([])
   const [openCustomer, setOpenCustomer] = useState(false)
   const [openAddress, setOpenAddress] = useState(false)
   const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
-  const [phones, setPhones] = useState([])
   const [gettingPhones, setGettingPhones] = useState({ loading: true, error: null })
-  const [, t] = useLanguage()
-  const [ordering] = useApi()
-  const [{ token }] = useSession()
 
   /**
-   * filt phones depending of phone input value and getting user data
+   * filter phones depending of phone input value and get user data
    */
   const filterPhones = async () => {
-    setUserState({ loading: true, result: { error: false } })
+    setUserState({
+      loading: true,
+      result: { error: false }
+    })
     try {
-      const result = phones.filter(user =>
-        user?.phone?.indexOf(phone) > -1
-      )
-      if (result.length === 1) {
+      const phoneFiltered = phones.filter(user => user?.phone?.indexOf(phone) > -1)
+
+      if (phoneFiltered.length === 1) {
         const { content: { result } } = await ordering
           .setAccessToken(token)
           .users()
           .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
           .get()
         setUserState({ loading: false, result: result[0] })
+        setUserCustomer(result[0])
       } else {
         setUserState({ ...userState, loading: false })
       }
     } catch (e) {
-      setUserState({ loading: false, result: { error: true, result: e?.message } })
+      setUserState({
+        loading: false,
+        result: {
+          error: true,
+          result: e?.message
+        }
+      })
     }
   }
 
@@ -48,14 +59,12 @@ export const PhoneAutocomplete = (props) => {
    * @param {event} e
    * Validate input that only numbers can be inserted
    */
-  const onChangeNumber = e => {
-    const number = (e.target.validity.valid)
-      ? e.target.value : phone
-    setPhone(number)
+  const onChangeNumber = (e) => {
+    setPhone((e.target?.validity?.valid) ? e.target?.value : phone)
   }
 
   /**
-   * Getting phones
+   * Get phones from API based on all users
    */
   const getPhone = async () => {
     setGettingPhones({ ...gettingPhones, loading: true })
@@ -68,7 +77,10 @@ export const PhoneAutocomplete = (props) => {
       setPhones(newPhones)
       setGettingPhones({ ...gettingPhones, loading: false })
     } catch (e) {
-      setGettingPhones({ loading: false, error: e.message })
+      setGettingPhones({
+        loading: false,
+        error: e.message
+      })
     }
   }
 
@@ -223,7 +235,6 @@ export const PhoneAutocomplete = (props) => {
     </>
   )
 }
-
 PhoneAutocomplete.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
