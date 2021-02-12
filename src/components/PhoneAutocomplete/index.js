@@ -16,7 +16,7 @@ export const PhoneAutocomplete = (props) => {
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customersPhones, setCustomersPhones] = useState({ phones: [], loading: true, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: true, error: null })
 
   /**
    * filt phones depending of phone input value and getting user data
@@ -42,16 +42,16 @@ export const PhoneAutocomplete = (props) => {
   }
 
   /**
-   * Getting phones
+   * Getting users
    */
-  const getPhone = async () => {
+  const getUsers = async () => {
     setCustomersPhones({ ...customersPhones, loading: true })
     try {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
         .get()
-      setCustomersPhones({ ...customersPhones, phones: result, loading: false })
+      setCustomersPhones({ ...customersPhones, users: result, loading: false })
     } catch (e) {
       setCustomersPhones({ ...customersPhones, loading: false, error: e.message })
     }
@@ -177,11 +177,11 @@ export const PhoneAutocomplete = (props) => {
   }
 
   useEffect(() => {
-    autocomplete(document.getElementById('phone-input'), customersPhones.phones)
-  }, [customersPhones.phones])
+    autocomplete(document.getElementById('phone-input'), customersPhones.users)
+  }, [customersPhones.users])
 
   useEffect(() => {
-    getPhone()
+    getUsers()
   }, [])
 
   return (
