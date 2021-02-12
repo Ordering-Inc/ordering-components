@@ -218,6 +218,7 @@ export const GoogleMaps = (props) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (googleReady) {
+        if (markers.length === 0) return
         const driverLocation = locations[0]
         const newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng)
         markers[0].setPosition(newLocation)
