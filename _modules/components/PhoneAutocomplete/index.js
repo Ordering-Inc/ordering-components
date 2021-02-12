@@ -19,6 +19,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
+var _CustomerContext = require("../../contexts/CustomerContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -64,7 +66,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
-  var _useCustomer = useCustomer(),
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
       _useCustomer2 = _slicedToArray(_useCustomer, 2),
       setUserCustomer = _useCustomer2[1].setUserCustomer;
 
