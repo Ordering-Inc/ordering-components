@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 export const PhoneAutocomplete = (props) => {
   const {
