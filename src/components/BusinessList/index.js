@@ -110,7 +110,7 @@ export const BusinessList = (props) => {
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
       if (isPopular) {
         result.sort((a, b) => b.reviews.quality - a.reviews.quality)
-        const _result = result.slice(0, 2)
+        const _result = result.slice(0, 3)
         businessesList.businesses = [..._result]
       } else {
         businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]

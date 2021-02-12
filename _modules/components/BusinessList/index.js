@@ -221,7 +221,7 @@ var BusinessList = function BusinessList(props) {
                 result.sort(function (a, b) {
                   return b.reviews.quality - a.reviews.quality;
                 });
-                _result = result.slice(0, 2);
+                _result = result.slice(0, 3);
                 businessesList.businesses = _toConsumableArray(_result);
               } else {
                 businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
