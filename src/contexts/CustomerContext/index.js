@@ -1,29 +1,39 @@
-import React, { useEffect, useState, useContext, createContext } from 'react'
-import { useApi } from '../ApiContext'
+import React, { useState, useContext, createContext } from 'react'
 
 export const CustomerContext = createContext()
 
-export const CustomerProvider = ({ children }) => {
-  const [ordering] = useApi()
+export const CustomerProvider = ({ children, strategy }) => {
   const [state, setState] = useState({ loading: false, user: null })
 
-  const setUser = (user) => {
+  const setUserCustomer = async (user, isFromLocalStorage) => {
+    if (isFromLocalStorage && user) {
+      await strategy.setItem('user-customer', user.id, true)
+    }
     setState({
       ...state,
       user
     })
   }
 
-  const deleteUser = () => {
+  const deleteUserCustomer = async (isFromLocalStorage) => {
+    if (isFromLocalStorage) {
+      await strategy.removeItem('user-customer')
+    }
     setState({
       ...state,
       user: null
     })
   }
 
+  const getUserCustomer = async () => {
+    const user = await strategy.getItem('user-customer', true)
+    return user
+  }
+
   const functions = {
-    setUser,
-    deleteUser
+    setUserCustomer,
+    deleteUserCustomer,
+    getUserCustomer
   }
 
   return (
