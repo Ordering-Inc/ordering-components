@@ -232,13 +232,13 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       /* for each item in the array... */
 
       for (i = 0; i < (arr === null || arr === void 0 ? void 0 : arr.length); i++) {
-        var _arr$i, _arr$i$phone, _arr$i$phone$substr, _arr$i2, _arr$i2$cellphone, _arr$i2$cellphone$sub;
+        var _arr$i, _arr$i$cellphone, _arr$i$cellphone$subs;
 
         /* check if the item starts with the same letters as the text field value: */
-        if (((_arr$i = arr[i]) === null || _arr$i === void 0 ? void 0 : (_arr$i$phone = _arr$i.phone) === null || _arr$i$phone === void 0 ? void 0 : (_arr$i$phone$substr = _arr$i$phone.substr(0, val.length)) === null || _arr$i$phone$substr === void 0 ? void 0 : _arr$i$phone$substr.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase()) || ((_arr$i2 = arr[i]) === null || _arr$i2 === void 0 ? void 0 : (_arr$i2$cellphone = _arr$i2.cellphone) === null || _arr$i2$cellphone === void 0 ? void 0 : (_arr$i2$cellphone$sub = _arr$i2$cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) === null || _arr$i2$cellphone$sub === void 0 ? void 0 : _arr$i2$cellphone$sub.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase())) {
-          var _arr$i3, _arr$i4, _arr$i5;
+        if (((_arr$i = arr[i]) === null || _arr$i === void 0 ? void 0 : (_arr$i$cellphone = _arr$i.cellphone) === null || _arr$i$cellphone === void 0 ? void 0 : (_arr$i$cellphone$subs = _arr$i$cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) === null || _arr$i$cellphone$subs === void 0 ? void 0 : _arr$i$cellphone$subs.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase())) {
+          var _arr$i2, _arr$i3;
 
-          var cellphone = ((_arr$i3 = arr[i]) === null || _arr$i3 === void 0 ? void 0 : _arr$i3.phone) || ((_arr$i4 = arr[i]) === null || _arr$i4 === void 0 ? void 0 : _arr$i4.cellphone);
+          var cellphone = (_arr$i2 = arr[i]) === null || _arr$i2 === void 0 ? void 0 : _arr$i2.cellphone;
           /* create a DIV element for each matching element: */
 
           b = document.createElement('DIV');
@@ -247,7 +247,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
           b.innerHTML = '<strong>' + (cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) + '</strong>';
           b.innerHTML += cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(val === null || val === void 0 ? void 0 : val.length); // insert name of the customer
 
-          b.innerHTML += ' (' + ((_arr$i5 = arr[i]) === null || _arr$i5 === void 0 ? void 0 : _arr$i5.name) + ')';
+          b.innerHTML += ' (' + ((_arr$i3 = arr[i]) === null || _arr$i3 === void 0 ? void 0 : _arr$i3.name) + ')';
           /* insert a input field that will hold the current array item's value: */
 
           b.innerHTML += "<input type='hidden' value='" + cellphone + "'>";
