@@ -10,8 +10,7 @@ export const PhoneAutocompleteUI = (props) => {
     afterElements,
     phone,
     onChangeNumber,
-    setModalOpen,
-    errorMinLength
+    setModalOpen
   } = props
 
   const { register, handleSubmit } = useForm()
@@ -51,7 +50,6 @@ export const PhoneAutocompleteUI = (props) => {
             })}
           />
         </div>
-        {errorMinLength.dispatch && <a style={{ color: 'red' }}>The Phone / Mobile must be 10 characters</a>}
       </form>
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />
