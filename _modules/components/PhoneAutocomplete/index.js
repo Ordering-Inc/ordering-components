@@ -418,7 +418,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     setCustomersPhones: setCustomersPhones,
     onChangeNumber: onChangeNumber,
     openModal: openModal,
-    setOpenModal: setOpenModal
+    setOpenModal: setOpenModal,
+    setCustomerState: setCustomerState
   })));
 };
 
