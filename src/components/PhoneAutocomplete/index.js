@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 export const PhoneAutocomplete = (props) => {
   const {
@@ -13,19 +14,21 @@ export const PhoneAutocomplete = (props) => {
   const [ordering] = useApi()
   const [{ token }] = useSession()
 
+  const [, { setUserCustomer }] = useCustomer()
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
   const [customersPhones, setCustomersPhones] = useState({ users: [], loading: true, error: null })
 
   /**
-   * filt phones depending of phone input value and getting user data
+   * filter phones depending of phone input value and get user data
    */
   const filterPhones = async (arr, value) => {
     const user = arr.filter(user => user?.cellphone === value)
     if (user[0]) {
       setCustomerState({ loading: false, result: user[0] })
       setOpenModal({ ...openModal, customer: true })
+      setUserCustomer(user[0])
     } else {
       setCustomerState({ loading: false, result: { error: false } })
     }
@@ -35,14 +38,12 @@ export const PhoneAutocomplete = (props) => {
    * @param {event} e
    * Validate input that only numbers can be inserted
    */
-  const onChangeNumber = e => {
-    const number = (e.target.validity.valid)
-      ? e.target.value : phone
-    setPhone(number)
+  const onChangeNumber = (e) => {
+    setPhone((e.target?.validity?.valid) ? e.target?.value : phone)
   }
 
   /**
-   * Getting users
+   * Get users from API
    */
   const getUsers = async () => {
     setCustomersPhones({ ...customersPhones, loading: true })
@@ -202,7 +203,6 @@ export const PhoneAutocomplete = (props) => {
     </>
   )
 }
-
 PhoneAutocomplete.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
