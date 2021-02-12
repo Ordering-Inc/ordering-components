@@ -13,6 +13,7 @@ export const BusinessList = (props) => {
     isPopular,
     isSearchByName,
     isSearchByDescription,
+    reviewQuality,
     propsToFetch,
     onBusinessClick,
     paginationSettings
@@ -158,6 +159,17 @@ export const BusinessList = (props) => {
     if (orderState.loading || !orderState.options?.address?.location) return
     getBusinesses(true)
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue])
+
+  /**
+   * Listening review quality change
+   */
+  useEffect(() => {
+    if (orderState.loading || !orderState.options?.address?.location) return
+    if (reviewQuality) {
+      const _businesses = businessesList.businesses.filter(business => business.reviews.quality >= reviewQuality)
+      setBusinessesList({ ...businessesList, businesses: _businesses })
+    }
+  }, [JSON.stringify(orderState.options), reviewQuality])
 
   /**
    * Default behavior business click

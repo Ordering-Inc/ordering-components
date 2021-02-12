@@ -66,6 +66,7 @@ var BusinessList = function BusinessList(props) {
       isPopular = props.isPopular,
       isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
+      reviewQuality = props.reviewQuality,
       propsToFetch = props.propsToFetch,
       onBusinessClick = props.onBusinessClick,
       paginationSettings = props.paginationSettings;
@@ -289,6 +290,25 @@ var BusinessList = function BusinessList(props) {
     if (orderState.loading || !((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : (_orderState$options11 = _orderState$options10.address) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.location)) return;
     getBusinesses(true);
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue]);
+  /**
+   * Listening review quality change
+   */
+
+  (0, _react.useEffect)(function () {
+    var _orderState$options12, _orderState$options13;
+
+    if (orderState.loading || !((_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : (_orderState$options13 = _orderState$options12.address) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.location)) return;
+
+    if (reviewQuality) {
+      var _businesses = businessesList.businesses.filter(function (business) {
+        return business.reviews.quality >= reviewQuality;
+      });
+
+      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+        businesses: _businesses
+      }));
+    }
+  }, [JSON.stringify(orderState.options), reviewQuality]);
   /**
    * Default behavior business click
    * @param {object} business Business clicked
