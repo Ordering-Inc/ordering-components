@@ -211,6 +211,7 @@ export const PhoneAutocomplete = (props) => {
           onChangeNumber={onChangeNumber}
           openModal={openModal}
           setOpenModal={setOpenModal}
+          setCustomerState={setCustomerState}
         />
       )}
     </>
