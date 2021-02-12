@@ -239,6 +239,7 @@ var BusinessList = function BusinessList(props) {
               setPaginationProps(_objectSpread(_objectSpread({}, paginationProps), {}, {
                 currentPage: pagination.current_page,
                 totalPages: pagination.total_pages,
+                totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
               _context.next = 29;

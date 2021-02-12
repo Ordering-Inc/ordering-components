@@ -127,6 +127,7 @@ export const BusinessList = (props) => {
         ...paginationProps,
         currentPage: pagination.current_page,
         totalPages: pagination.total_pages,
+        totalItems: pagination.total,
         nextPageItems
       })
     } catch (err) {
