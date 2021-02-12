@@ -16,7 +16,7 @@ export const PhoneAutocomplete = (props) => {
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, address: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customerPhones, setCustomerPhones] = useState({ phones: [], loading: true, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ phones: [], loading: true, error: null })
 
   /**
    * filt phones depending of phone input value and getting user data
@@ -24,7 +24,7 @@ export const PhoneAutocomplete = (props) => {
   const filterPhones = async () => {
     setCustomerState({ loading: true, result: { error: false } })
     try {
-      const result = customerPhones.phones.filter(user =>
+      const result = customersPhones.phones.filter(user =>
         user?.phone?.indexOf(phone) > -1
       )
       if (result.length === 1) {
@@ -56,16 +56,16 @@ export const PhoneAutocomplete = (props) => {
    * Getting phones
    */
   const getPhone = async () => {
-    setCustomerPhones({ ...customerPhones, loading: true })
+    setCustomersPhones({ ...customersPhones, loading: true })
     try {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
         .get()
       const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
-      setCustomerPhones({ ...customerPhones, phones: newPhones, loading: false })
+      setCustomersPhones({ ...customersPhones, phones: newPhones, loading: false })
     } catch (e) {
-      setCustomerPhones({ ...customerPhones, loading: false, error: e.message })
+      setCustomersPhones({ ...customersPhones, loading: false, error: e.message })
     }
   }
 
@@ -124,7 +124,7 @@ export const PhoneAutocomplete = (props) => {
         if (evt.target.value.length === 10) {
           setOpenModal({ ...openModal, customer: true })
         } else {
-          setCustomerPhones({ ...customerPhones, error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters') })
+          setCustomersPhones({ ...customersPhones, error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters') })
         }
         closeAllLists()
       })
@@ -188,8 +188,8 @@ export const PhoneAutocomplete = (props) => {
   }
 
   useEffect(() => {
-    autocomplete(document.getElementById('phone-input'), customerPhones.phones)
-  }, [customerPhones.phones])
+    autocomplete(document.getElementById('phone-input'), customersPhones.phones)
+  }, [customersPhones.phones])
 
   useEffect(() => {
     getPhone()
@@ -206,10 +206,11 @@ export const PhoneAutocomplete = (props) => {
           {...props}
           phone={phone}
           customerState={customerState}
-          customerPhones={customerPhones}
-          setCustomerPhones={setCustomerPhones}
-          setCustomerStat={setCustomerState}
+          customersPhones={customersPhones}
+          setCustomersPhones={setCustomersPhones}
           onChangeNumber={onChangeNumber}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
         />
       )}
     </>
