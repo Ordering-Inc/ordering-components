@@ -52,52 +52,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PhoneAutocomplete = function PhoneAutocomplete(props) {
   var UIComponent = props.UIComponent;
 
-  var _useState = (0, _react.useState)(''),
-      _useState2 = _slicedToArray(_useState, 2),
-      phone = _useState2[0],
-      setPhone = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(false),
-      _useState4 = _slicedToArray(_useState3, 2),
-      openCustomer = _useState4[0],
-      setOpenCustomer = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      openAddress = _useState6[0],
-      setOpenAddress = _useState6[1];
-
-  var _useState7 = (0, _react.useState)({
-    dispatch: false,
-    error: false
-  }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      errorMinLength = _useState8[0],
-      setErrorMinLength = _useState8[1];
-
-  var _useState9 = (0, _react.useState)({
-    loading: false,
-    result: {
-      error: false
-    }
-  }),
-      _useState10 = _slicedToArray(_useState9, 2),
-      userState = _useState10[0],
-      setUserState = _useState10[1];
-
-  var _useState11 = (0, _react.useState)([]),
-      _useState12 = _slicedToArray(_useState11, 2),
-      phones = _useState12[0],
-      setPhones = _useState12[1];
-
-  var _useState13 = (0, _react.useState)({
-    loading: true,
-    error: null
-  }),
-      _useState14 = _slicedToArray(_useState13, 2),
-      gettingPhones = _useState14[0],
-      setGettingPhones = _useState14[1];
-
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
       t = _useLanguage2[1];
@@ -109,14 +63,64 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
+
+  var _useCustomer = useCustomer(),
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      setUserCustomer = _useCustomer2[1].setUserCustomer;
+
+  var _useState = (0, _react.useState)(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      phone = _useState2[0],
+      setPhone = _useState2[1];
+
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      phones = _useState4[0],
+      setPhones = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      openCustomer = _useState6[0],
+      setOpenCustomer = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      openAddress = _useState8[0],
+      setOpenAddress = _useState8[1];
+
+  var _useState9 = (0, _react.useState)({
+    dispatch: false,
+    error: false
+  }),
+      _useState10 = _slicedToArray(_useState9, 2),
+      errorMinLength = _useState10[0],
+      setErrorMinLength = _useState10[1];
+
+  var _useState11 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState12 = _slicedToArray(_useState11, 2),
+      userState = _useState12[0],
+      setUserState = _useState12[1];
+
+  var _useState13 = (0, _react.useState)({
+    loading: true,
+    error: null
+  }),
+      _useState14 = _slicedToArray(_useState13, 2),
+      gettingPhones = _useState14[0],
+      setGettingPhones = _useState14[1];
   /**
-   * filt phones depending of phone input value and getting user data
+   * filter phones depending of phone input value and get user data
    */
 
 
   var filterPhones = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var result, _yield$ordering$setAc, _result;
+      var phoneFiltered, _yield$ordering$setAc, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -129,14 +133,14 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 }
               });
               _context.prev = 1;
-              result = phones.filter(function (user) {
+              phoneFiltered = phones.filter(function (user) {
                 var _user$phone;
 
                 return (user === null || user === void 0 ? void 0 : (_user$phone = user.phone) === null || _user$phone === void 0 ? void 0 : _user$phone.indexOf(phone)) > -1;
               });
 
-              if (!(result.length === 1)) {
-                _context.next = 11;
+              if (!(phoneFiltered.length === 1)) {
+                _context.next = 12;
                 break;
               }
 
@@ -151,25 +155,26 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
             case 6:
               _yield$ordering$setAc = _context.sent;
-              _result = _yield$ordering$setAc.content.result;
+              result = _yield$ordering$setAc.content.result;
               setUserState({
                 loading: false,
-                result: _result[0]
+                result: result[0]
               });
-              _context.next = 12;
+              setUserCustomer(result[0]);
+              _context.next = 13;
               break;
 
-            case 11:
+            case 12:
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: false
               }));
 
-            case 12:
-              _context.next = 17;
+            case 13:
+              _context.next = 18;
               break;
 
-            case 14:
-              _context.prev = 14;
+            case 15:
+              _context.prev = 15;
               _context.t0 = _context["catch"](1);
               setUserState({
                 loading: false,
@@ -179,12 +184,12 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 }
               });
 
-            case 17:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee, null, [[1, 15]]);
     }));
 
     return function filterPhones() {
@@ -198,11 +203,12 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
 
   var onChangeNumber = function onChangeNumber(e) {
-    var number = e.target.validity.valid ? e.target.value : phone;
-    setPhone(number);
+    var _e$target, _e$target$validity, _e$target2;
+
+    setPhone(((_e$target = e.target) === null || _e$target === void 0 ? void 0 : (_e$target$validity = _e$target.validity) === null || _e$target$validity === void 0 ? void 0 : _e$target$validity.valid) ? (_e$target2 = e.target) === null || _e$target2 === void 0 ? void 0 : _e$target2.value : phone);
   };
   /**
-   * Getting phones
+   * Get phones from API based on all users
    */
 
 
