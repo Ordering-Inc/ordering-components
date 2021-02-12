@@ -93,8 +93,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     error: null
   }),
       _useState8 = _slicedToArray(_useState7, 2),
-      customerPhones = _useState8[0],
-      setCustomerPhones = _useState8[1];
+      customersPhones = _useState8[0],
+      setCustomersPhones = _useState8[1];
   /**
    * filt phones depending of phone input value and getting user data
    */
@@ -115,7 +115,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 }
               });
               _context.prev = 1;
-              result = customerPhones.phones.filter(function (user) {
+              result = customersPhones.phones.filter(function (user) {
                 var _user$phone;
 
                 return (user === null || user === void 0 ? void 0 : (_user$phone = user.phone) === null || _user$phone === void 0 ? void 0 : _user$phone.indexOf(phone)) > -1;
@@ -200,7 +200,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              setCustomerPhones(_objectSpread(_objectSpread({}, customerPhones), {}, {
+              setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 loading: true
               }));
               _context2.prev = 1;
@@ -216,7 +216,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                   phone: user.phone || user.cellphone
                 };
               });
-              setCustomerPhones(_objectSpread(_objectSpread({}, customerPhones), {}, {
+              setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 phones: newPhones,
                 loading: false
               }));
@@ -226,7 +226,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
             case 10:
               _context2.prev = 10;
               _context2.t0 = _context2["catch"](1);
-              setCustomerPhones(_objectSpread(_objectSpread({}, customerPhones), {}, {
+              setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
                 loading: false,
                 error: _context2.t0.message
               }));
@@ -321,7 +321,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
             customer: true
           }));
         } else {
-          setCustomerPhones(_objectSpread(_objectSpread({}, customerPhones), {}, {
+          setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
             error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters')
           }));
         }
@@ -403,8 +403,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   };
 
   (0, _react.useEffect)(function () {
-    autocomplete(document.getElementById('phone-input'), customerPhones.phones);
-  }, [customerPhones.phones]);
+    autocomplete(document.getElementById('phone-input'), customersPhones.phones);
+  }, [customersPhones.phones]);
   (0, _react.useEffect)(function () {
     getPhone();
   }, []);
@@ -414,10 +414,11 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     phone: phone,
     customerState: customerState,
-    customerPhones: customerPhones,
-    setCustomerPhones: setCustomerPhones,
-    setCustomerStat: setCustomerState,
-    onChangeNumber: onChangeNumber
+    customersPhones: customersPhones,
+    setCustomersPhones: setCustomersPhones,
+    onChangeNumber: onChangeNumber,
+    openModal: openModal,
+    setOpenModal: setOpenModal
   })));
 };
 
