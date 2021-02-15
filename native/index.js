@@ -5,7 +5,6 @@ import { BusinessAndProductList } from '../src/components/BusinessAndProductList
 import { BusinessBasicInformation } from '../src/components/BusinessBasicInformation'
 import { BusinessController } from '../src/components/BusinessController'
 import { BusinessList } from '../src/components/BusinessList'
-import { BusinessFeaturedProducts } from '../src/components/BusinessFeaturedProducts'
 import { BusinessInformation } from '../src/components/BusinessInformation'
 import { BusinessProductsCategories } from '../src/components/BusinessProductsCategories'
 import { BusinessProductsSearch } from '../src/components/BusinessProductsSearch'
@@ -79,7 +78,6 @@ export {
   BusinessBasicInformation,
   BusinessController,
   BusinessList,
-  BusinessFeaturedProducts,
   BusinessInformation,
   BusinessProductsCategories,
   BusinessProductsSearch,
