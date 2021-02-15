@@ -1,9 +1,19 @@
-import React, { useState, useContext, createContext } from 'react'
+import React, { useEffect, useState, useContext, createContext } from 'react'
 
 export const CustomerContext = createContext()
 
 export const CustomerProvider = ({ children, strategy }) => {
-  const [state, setState] = useState({ loading: false, user: null })
+  const [state, setState] = useState({
+    loading: false,
+    user: null
+  })
+
+  const getUserCustomerFromLocalStorage = async () => {
+    const userId = await strategy.getItem('user-customer', true)
+    if (userId) {
+      setState({ ...state, user: { id: userId } })
+    }
+  }
 
   const setUserCustomer = async (user, isFromLocalStorage) => {
     if (isFromLocalStorage && user) {
@@ -25,16 +35,14 @@ export const CustomerProvider = ({ children, strategy }) => {
     })
   }
 
-  const getUserCustomer = async () => {
-    const user = await strategy.getItem('user-customer', true)
-    return user
-  }
-
   const functions = {
     setUserCustomer,
-    deleteUserCustomer,
-    getUserCustomer
+    deleteUserCustomer
   }
+
+  useEffect(() => {
+    getUserCustomerFromLocalStorage()
+  }, [])
 
   return (
     <CustomerContext.Provider value={[state, functions]}>
@@ -45,5 +53,5 @@ export const CustomerProvider = ({ children, strategy }) => {
 
 export const useCustomer = () => {
   const customerManager = useContext(CustomerContext)
-  return customerManager || [{}, async () => {}]
+  return customerManager || [{}, () => {}]
 }

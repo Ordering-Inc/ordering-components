@@ -66,10 +66,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (userCustomerId) {
         options.user_id = userCustomerId
       }
-      const functionToFetch = ordering.setAccessToken(session.token).orderOptions()
-      const { content: { error, result } } = Object.keys(options).length > 0
-        ? await functionToFetch.get(options)
-        : await functionToFetch.get()
+      const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().get(options)
       if (!error) {
         const { carts, ...options } = result
         state.carts = {}
