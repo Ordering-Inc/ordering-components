@@ -1,5 +1,4 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useState, useEffect, useRef } from 'react'
 import './styles.css'
 
 export const PhoneAutocompleteUI = (props) => {
@@ -9,16 +8,21 @@ export const PhoneAutocompleteUI = (props) => {
     afterComponents,
     afterElements,
     phone,
-    onChangeNumber,
-    setModalOpen,
-    errorMinLength
+    onChangeNumber
   } = props
 
-  const { register, handleSubmit } = useForm()
+  const [showError, setShowError] = useState(false)
 
-  const onSubmit = () => {
-    setModalOpen(true)
-  }
+  const inputAutocomplete = useRef()
+
+  useEffect(() => {
+    if (inputAutocomplete?.current?.value?.length !== 10) {
+      setShowError(true)
+    } else {
+      setShowError(false)
+    }
+  }, [inputAutocomplete?.current?.value])
+
   return (
     <>
       {beforeElements.map((BeforeElement, i) => (
@@ -30,7 +34,7 @@ export const PhoneAutocompleteUI = (props) => {
       {beforeComponents.map(
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
-      <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+      <form autoComplete='off'>
         <div className='phone-autocomplete'>
           <input
             name='phone-input'
@@ -43,15 +47,10 @@ export const PhoneAutocompleteUI = (props) => {
             value={phone}
             maxLength='10'
             onChange={() => {}}
-            ref={register({
-              minLength: {
-                value: 10,
-                message: 'The Phone / Mobile must be 10 characters'
-              }
-            })}
+            ref={inputAutocomplete}
           />
         </div>
-        {errorMinLength.dispatch && <a style={{ color: 'red' }}>The Phone / Mobile must be 10 characters</a>}
+        {showError && <a style={{ color: 'red' }}>The Phone / Mobile must be 10 characters</a>}
       </form>
       {afterComponents.map(
         (AfterComponent, i) => <AfterComponent key={i} {...props} />

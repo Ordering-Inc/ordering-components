@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 /**
  * Component to control a address list
@@ -18,6 +19,7 @@ export const AddressList = (props) => {
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
+  const [, { setUserCustomer }] = useCustomer()
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
@@ -68,7 +70,12 @@ export const AddressList = (props) => {
    * Function to make an address as default address
    * @param {object} address Address to make as default
    */
-  const handleSetDefault = async (address) => {
+  const handleSetDefault = async (address, userCustomerSetup) => {
+    if (userCustomerSetup) {
+      setUserCustomer({
+        id: userCustomerSetup
+      }, true)
+    }
     if (handleClickSetDefault) {
       return handleClickSetDefault(address)
     }
