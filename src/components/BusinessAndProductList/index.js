@@ -26,7 +26,8 @@ export const BusinessAndProductList = (props) => {
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
   const [searchValue, setSearchValue] = useState(null)
   const [sortByValue, setSortByValue] = useState(null)
-  const [businessState, setBusinessState] = useState({ business: {}, loading: true, error: null })
+  const [filterByMenus, setFilterByMenus] = useState(null)
+  const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: true, error: null })
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState()
   const [requestsState, setRequestsState] = useState({})
@@ -57,6 +58,10 @@ export const BusinessAndProductList = (props) => {
 
   const handleChangeSortBy = (val) => {
     setSortByValue(val)
+  }
+
+  const handleChangeFilterByMenus = (val) => {
+    setFilterByMenus(val)
   }
 
   const isMatchSearch = (name, description) => {
@@ -307,24 +312,34 @@ export const BusinessAndProductList = (props) => {
         const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
         parameters.timestamp = moment
       }
+
+      if (filterByMenus) {
+        parameters.menu_id = filterByMenus
+      }
+
       const { content: { result } } = await ordering
         .businesses(slug)
         .select(businessProps)
         .parameters(parameters)
         .get({ cancelToken: source })
+
+      const { content: { result: menus } } = await ordering
+        .businesses(result.id)
+        .menus()
+        .get()
+
       setBusinessState({
         ...businessState,
         business: result,
-        loading: false
+        loading: false,
+        menus
       })
     } catch (err) {
-      // if (err.constructor.name !== 'Cancel') {
       setBusinessState({
         ...businessState,
         loading: false,
         error: [err.message]
       })
-      // }
     }
   }
 
@@ -354,7 +369,7 @@ export const BusinessAndProductList = (props) => {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness()
     }
-  }, [orderOptions, languageState.loading, slug])
+  }, [orderOptions, languageState.loading, slug, filterByMenus])
 
   useEffect(() => {
     if (!orderState.loading) {
@@ -395,6 +410,7 @@ export const BusinessAndProductList = (props) => {
           categorySelected={categorySelected}
           searchValue={searchValue}
           sortByValue={sortByValue}
+          filterByMenus={filterByMenus}
           categoryState={categoryState}
           businessState={businessState}
           productModal={productModal}
@@ -402,6 +418,7 @@ export const BusinessAndProductList = (props) => {
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
           handleChangeSortBy={handleChangeSortBy}
+          handleChangeFilterByMenus={handleChangeFilterByMenus}
           getNextProducts={getProducts}
           updateProductModal={(val) => setProductModal({ ...productModal, product: val })}
         />
