@@ -21,6 +21,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
 
+var _CustomerContext = require("../../contexts/CustomerContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -100,6 +102,10 @@ var AddressForm = function AddressForm(props) {
 
   var userId = props.userId || (user === null || user === void 0 ? void 0 : user.id);
   var accessToken = props.accessToken || token;
+
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      setUserCustomer = _useCustomer2[1].setUserCustomer;
 
   var _useState5 = (0, _react.useState)(false),
       _useState6 = _slicedToArray(_useState5, 2),
@@ -216,7 +222,7 @@ var AddressForm = function AddressForm(props) {
 
 
   var saveAddress = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values, userCustomerSetup) {
       var _addressState$address, _yield$ordering$users2, content;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
@@ -233,16 +239,22 @@ var AddressForm = function AddressForm(props) {
               return _context2.abrupt("return");
 
             case 4:
+              if (userCustomerSetup) {
+                setUserCustomer({
+                  id: userCustomerSetup
+                }, true);
+              }
+
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context2.prev = 5;
-              _context2.next = 8;
+              _context2.prev = 6;
+              _context2.next = 9;
               return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
                 accessToken: accessToken
               });
 
-            case 8:
+            case 9:
               _yield$ordering$users2 = _context2.sent;
               content = _yield$ordering$users2.content;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
@@ -265,27 +277,27 @@ var AddressForm = function AddressForm(props) {
                 }
               }
 
-              _context2.next = 17;
+              _context2.next = 18;
               break;
 
-            case 14:
-              _context2.prev = 14;
-              _context2.t0 = _context2["catch"](5);
+            case 15:
+              _context2.prev = 15;
+              _context2.t0 = _context2["catch"](6);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: false,
                 error: [_context2.t0.message],
                 address: {}
               }));
 
-            case 17:
+            case 18:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[5, 14]]);
+      }, _callee2, null, [[6, 15]]);
     }));
 
-    return function saveAddress(_x3) {
+    return function saveAddress(_x3, _x4) {
       return _ref2.apply(this, arguments);
     };
   }();

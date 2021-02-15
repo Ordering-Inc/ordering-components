@@ -54,24 +54,26 @@ var CustomerProvider = function CustomerProvider(_ref) {
       state = _useState2[0],
       setState = _useState2[1];
 
-  var setUserCustomer = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(user, isFromLocalStorage) {
+  var getUserCustomerFromLocalStorage = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var userId;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!(isFromLocalStorage && user)) {
-                _context.next = 3;
-                break;
+              _context.next = 2;
+              return strategy.getItem('user-customer', true);
+
+            case 2:
+              userId = _context.sent;
+
+              if (userId) {
+                setState(_objectSpread(_objectSpread({}, state), {}, {
+                  user: {
+                    id: userId
+                  }
+                }));
               }
-
-              _context.next = 3;
-              return strategy.setItem('user-customer', user.id, true);
-
-            case 3:
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                user: user
-              }));
 
             case 4:
             case "end":
@@ -81,28 +83,28 @@ var CustomerProvider = function CustomerProvider(_ref) {
       }, _callee);
     }));
 
-    return function setUserCustomer(_x, _x2) {
+    return function getUserCustomerFromLocalStorage() {
       return _ref2.apply(this, arguments);
     };
   }();
 
-  var deleteUserCustomer = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(isFromLocalStorage) {
+  var setUserCustomer = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(user, isFromLocalStorage) {
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (!isFromLocalStorage) {
+              if (!(isFromLocalStorage && user)) {
                 _context2.next = 3;
                 break;
               }
 
               _context2.next = 3;
-              return strategy.removeItem('user-customer');
+              return strategy.setItem('user-customer', user.id, true);
 
             case 3:
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                user: null
+                user: user
               }));
 
             case 4:
@@ -113,24 +115,29 @@ var CustomerProvider = function CustomerProvider(_ref) {
       }, _callee2);
     }));
 
-    return function deleteUserCustomer(_x3) {
+    return function setUserCustomer(_x, _x2) {
       return _ref3.apply(this, arguments);
     };
   }();
 
-  var getUserCustomer = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var user;
+  var deleteUserCustomer = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(isFromLocalStorage) {
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.next = 2;
-              return strategy.getItem('user-customer', true);
+              if (!isFromLocalStorage) {
+                _context3.next = 3;
+                break;
+              }
 
-            case 2:
-              user = _context3.sent;
-              return _context3.abrupt("return", user);
+              _context3.next = 3;
+              return strategy.removeItem('user-customer');
+
+            case 3:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                user: null
+              }));
 
             case 4:
             case "end":
@@ -140,16 +147,18 @@ var CustomerProvider = function CustomerProvider(_ref) {
       }, _callee3);
     }));
 
-    return function getUserCustomer() {
+    return function deleteUserCustomer(_x3) {
       return _ref4.apply(this, arguments);
     };
   }();
 
   var functions = {
     setUserCustomer: setUserCustomer,
-    deleteUserCustomer: deleteUserCustomer,
-    getUserCustomer: getUserCustomer
+    deleteUserCustomer: deleteUserCustomer
   };
+  (0, _react.useEffect)(function () {
+    getUserCustomerFromLocalStorage();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(CustomerContext.Provider, {
     value: [state, functions]
   }, children);
@@ -159,17 +168,7 @@ exports.CustomerProvider = CustomerProvider;
 
 var useCustomer = function useCustomer() {
   var customerManager = (0, _react.useContext)(CustomerContext);
-  return customerManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
-    return _regenerator.default.wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-          case "end":
-            return _context4.stop();
-        }
-      }
-    }, _callee4);
-  }))];
+  return customerManager || [{}, function () {}];
 };
 
 exports.useCustomer = useCustomer;
