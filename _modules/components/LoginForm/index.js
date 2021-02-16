@@ -187,7 +187,7 @@ var LoginForm = function LoginForm(props) {
               setFormState({
                 result: {
                   error: true,
-                  result: err.message
+                  result: _context.t0.message
                 },
                 loading: false
               });
