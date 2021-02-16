@@ -152,9 +152,8 @@ var UpsellingPage = function UpsellingPage(props) {
 
 
   var getUpsellingProducts = function getUpsellingProducts(result) {
-    console.log(result);
     var upsellingProductsfiltered = result.filter(function (product) {
-      return product.featured;
+      return product.upselling;
     });
     var repeatProducts = cartProducts.filter(function (cartProduct) {
       return upsellingProductsfiltered.find(function (product) {
