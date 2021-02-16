@@ -69,7 +69,7 @@ export const LoginForm = (props) => {
                 setFormState({
                   result: {
                     error: true,
-                    result: err.message
+                    result: error.message
                   },
                   loading: false
                 })
