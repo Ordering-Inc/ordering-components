@@ -60,8 +60,7 @@ export const UpsellingPage = (props) => {
    * @param {array} cartProducts
    */
   const getUpsellingProducts = (result) => {
-    console.log(result)
-    const upsellingProductsfiltered = result.filter(product => product.featured)
+    const upsellingProductsfiltered = result.filter(product => product.upselling)
 
     const repeatProducts = cartProducts.filter(cartProduct => upsellingProductsfiltered.find(product => product.id === cartProduct.id))
 
