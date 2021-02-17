@@ -252,7 +252,7 @@ var LoginForm = function LoginForm(props) {
    */
 
 
-  var hanldeChangeInput = function hanldeChangeInput(e) {
+  var handleChangeInput = function handleChangeInput(e) {
     setCredentials(_objectSpread(_objectSpread({}, credentials), {}, _defineProperty({}, e.target.name, e.target.value)));
   };
   /**
@@ -261,7 +261,7 @@ var LoginForm = function LoginForm(props) {
    */
 
 
-  var hanldeChangeTab = function hanldeChangeTab(tab) {
+  var handleChangeTab = function handleChangeTab(tab) {
     setLoginTab(tab);
   };
 
@@ -269,9 +269,9 @@ var LoginForm = function LoginForm(props) {
     formState: formState,
     loginTab: loginTab,
     credentials: credentials,
-    hanldeChangeInput: hanldeChangeInput,
+    handleChangeInput: handleChangeInput,
     handleButtonLoginClick: handleButtonLoginClick || handleLoginClick,
-    hanldeChangeTab: hanldeChangeTab
+    handleChangeTab: handleChangeTab
   })));
 };
 
