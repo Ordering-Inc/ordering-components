@@ -221,6 +221,7 @@ export const UserFormDetails = (props) => {
           userState={userState}
           validationFields={validationFields}
           showField={showField}
+          setFormState={setFormState}
           isRequiredField={isRequiredField}
           handleChangeInput={handleChangeInput}
           handleButtonUpdateClick={handleUpdateClick}
