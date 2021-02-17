@@ -113,7 +113,7 @@ export const LoginForm = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
+  const handleChangeInput = (e) => {
     setCredentials({
       ...credentials,
       [e.target.name]: e.target.value
@@ -124,7 +124,7 @@ export const LoginForm = (props) => {
    * Change current selected tab
    * @param {string} tab Reference tab email or cellphone
    */
-  const hanldeChangeTab = (tab) => {
+  const handleChangeTab = (tab) => {
     setLoginTab(tab)
   }
 
@@ -136,9 +136,9 @@ export const LoginForm = (props) => {
           formState={formState}
           loginTab={loginTab}
           credentials={credentials}
-          hanldeChangeInput={hanldeChangeInput}
+          handleChangeInput={handleChangeInput}
           handleButtonLoginClick={handleButtonLoginClick || handleLoginClick}
-          hanldeChangeTab={hanldeChangeTab}
+          handleChangeTab={handleChangeTab}
         />
       )}
     </>
