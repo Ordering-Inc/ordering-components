@@ -73,7 +73,7 @@ export const MomentOption = (props) => {
   }
 
   const handleChangeTime = (time) => {
-    if (!time || time === timeSelected) return
+    if (!time) return
     const _moment = dayjs(`${dateSelected} ${time}`, 'YYYY-MM-DD HH:mm').toDate()
     setTimeSelected(time)
     setIsAsap(false)

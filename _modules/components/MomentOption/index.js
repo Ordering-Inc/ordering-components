@@ -139,7 +139,7 @@ var MomentOption = function MomentOption(props) {
   };
 
   var handleChangeTime = function handleChangeTime(time) {
-    if (!time || time === timeSelected) return;
+    if (!time) return;
 
     var _moment = (0, _dayjs.default)("".concat(dateSelected, " ").concat(time), 'YYYY-MM-DD HH:mm').toDate();
 
