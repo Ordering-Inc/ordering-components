@@ -116,7 +116,7 @@ var LoginForm = function LoginForm(props) {
 
 
   var handleLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
       var _credentials2, _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, level, access_token, _yield$ordering$setAc, logoutResp;
 
       return _regenerator.default.wrap(function _callee$(_context) {
@@ -124,7 +124,7 @@ var LoginForm = function LoginForm(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _credentials = (_credentials2 = {}, _defineProperty(_credentials2, loginTab, credentials[loginTab]), _defineProperty(_credentials2, "password", credentials.password), _credentials2);
+              _credentials = (_credentials2 = {}, _defineProperty(_credentials2, loginTab, values && values[loginTab] || credentials[loginTab]), _defineProperty(_credentials2, "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password), _credentials2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
@@ -242,7 +242,7 @@ var LoginForm = function LoginForm(props) {
       }, _callee, null, [[0, 34], [14, 23]]);
     }));
 
-    return function handleLoginClick() {
+    return function handleLoginClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();
