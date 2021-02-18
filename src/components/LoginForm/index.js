@@ -40,11 +40,11 @@ export const LoginForm = (props) => {
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
    */
-  const handleLoginClick = async () => {
+  const handleLoginClick = async (values) => {
     try {
       const _credentials = {
-        [loginTab]: credentials[loginTab],
-        password: credentials.password
+        [loginTab]: values && values[loginTab] || credentials[loginTab],
+        password: values && values?.password || credentials.password
       }
       setFormState({ ...formState, loading: true })
       const { content: { error, result } } = await ordering.users().auth(_credentials)
