@@ -24,12 +24,13 @@ export const SignupForm = (props) => {
   /**
    * Default fuction for signup workflow
    */
-  const handleSignupClick = async () => {
+  const handleSignupClick = async (values) => {
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
       requestsState.signup = source
-      const response = await ordering.users().save(signupData, { cancelToken: source })
+      const data = values || signupData
+      const response = await ordering.users().save(data, { cancelToken: source })
       setFormState({
         result: response.content,
         loading: false
