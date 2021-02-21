@@ -130,7 +130,7 @@ var BusinessList = function BusinessList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options7, _orderState$options8, parameters, _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options4$2, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options9, moment, where, conditions, timeLimitConditions, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
+      var _orderState$options7, _orderState$options8, parameters, _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options4$2, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options9, moment, where, conditions, _orderState$options10, _orderState$options11, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -164,25 +164,25 @@ var BusinessList = function BusinessList(props) {
               conditions = [];
 
               if (timeLimitValue) {
-                timeLimitConditions = [];
-                timeLimitConditions.push({
-                  attribute: 'delivery_time',
-                  value: {
-                    condition: '<=',
-                    value: '0:30'
-                  }
-                });
-                timeLimitConditions.push({
-                  attribute: 'pickup_time',
-                  value: {
-                    condition: '<=',
-                    value: '0:30'
-                  }
-                });
-                conditions.push({
-                  conector: 'OR',
-                  conditions: timeLimitConditions
-                });
+                if (((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type) === 1) {
+                  conditions.push({
+                    attribute: 'delivery_time',
+                    value: {
+                      condition: '<=',
+                      value: timeLimitValue
+                    }
+                  });
+                }
+
+                if (((_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.type) === 2) {
+                  conditions.push({
+                    attribute: 'pickup_time',
+                    value: {
+                      condition: '<=',
+                      value: timeLimitValue
+                    }
+                  });
+                }
               }
 
               if (businessTypeSelected) {
@@ -311,9 +311,9 @@ var BusinessList = function BusinessList(props) {
    */
 
   (0, _react.useEffect)(function () {
-    var _orderState$options10, _orderState$options11;
+    var _orderState$options12, _orderState$options13;
 
-    if (orderState.loading || !((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : (_orderState$options11 = _orderState$options10.address) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.location)) return;
+    if (orderState.loading || !((_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : (_orderState$options13 = _orderState$options12.address) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.location)) return;
     getBusinesses(true);
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue]);
   /**
@@ -321,9 +321,9 @@ var BusinessList = function BusinessList(props) {
    */
 
   (0, _react.useEffect)(function () {
-    var _orderState$options12, _orderState$options13;
+    var _orderState$options14, _orderState$options15;
 
-    if (orderState.loading || !((_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : (_orderState$options13 = _orderState$options12.address) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.location)) return;
+    if (orderState.loading || !((_orderState$options14 = orderState.options) === null || _orderState$options14 === void 0 ? void 0 : (_orderState$options15 = _orderState$options14.address) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.location)) return;
 
     if (reviewQuality) {
       var _businesses = businessesList.businesses.filter(function (business) {

@@ -61,25 +61,24 @@ export const BusinessList = (props) => {
       let where = null
       const conditions = []
       if (timeLimitValue) {
-        const timeLimitConditions = []
-        timeLimitConditions.push({
-          attribute: 'delivery_time',
-          value: {
-            condition: '<=',
-            value: '0:30'
-          }
-        })
-        timeLimitConditions.push({
-          attribute: 'pickup_time',
-          value: {
-            condition: '<=',
-            value: '0:30'
-          }
-        })
-        conditions.push({
-          conector: 'OR',
-          conditions: timeLimitConditions
-        })
+        if (orderState.options?.type === 1) {
+          conditions.push({
+            attribute: 'delivery_time',
+            value: {
+              condition: '<=',
+              value: timeLimitValue
+            }
+          })
+        }
+        if (orderState.options?.type === 2) {
+          conditions.push({
+            attribute: 'pickup_time',
+            value: {
+              condition: '<=',
+              value: timeLimitValue
+            }
+          })
+        }
       }
       if (businessTypeSelected) {
         conditions.push({ attribute: businessTypeSelected, value: true })
