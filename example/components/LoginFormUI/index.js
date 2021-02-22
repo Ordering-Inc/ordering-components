@@ -8,7 +8,7 @@ export const LoginFormUI = (props) => {
     handleContinueAsGuest,
     useLoginByEmail,
     useLoginByCellphone,
-    hanldeChangeTab,
+    handleChangeTab,
     loginTab,
     beforeComponents,
     afterComponents,
@@ -18,7 +18,7 @@ export const LoginFormUI = (props) => {
     linkToForgetPassword,
     elementLinkToSignup,
     elementLinkToForgetPassword,
-    hanldeChangeInput
+    handleChangeInput
   } = props
 
   const { handleSubmit, register, errors } = useForm()
@@ -34,12 +34,12 @@ export const LoginFormUI = (props) => {
           <div>
             {
               useLoginByEmail && (
-                <button type='button' onClick={() => hanldeChangeTab('email')}>By Email {loginTab === 'email' && '(Selected)'}</button>
+                <button type='button' onClick={() => handleChangeTab('email')}>By Email {loginTab === 'email' && '(Selected)'}</button>
               )
             }
             {
               useLoginByCellphone && (
-                <button type='button' onClick={() => hanldeChangeTab('cellphone')}>By Cellphone  {loginTab === 'cellphone' && '(Selected)'}</button>
+                <button type='button' onClick={() => handleChangeTab('cellphone')}>By Cellphone  {loginTab === 'cellphone' && '(Selected)'}</button>
               )
             }
           </div>
@@ -68,7 +68,7 @@ export const LoginFormUI = (props) => {
                       placeholder='Cellphone'
                       // value={credentials.cellphone}
                       style={{ borderColor: errors.cellphone ? '#c10000' : null }}
-                      onChange={hanldeChangeInput}
+                      onChange={handleChangeInput}
                       ref={register({
                         required: 'Cellphone is required'
                       })}
@@ -86,7 +86,7 @@ export const LoginFormUI = (props) => {
                       placeholder='Email'
                       // value={credentials.email}
                       style={{ borderColor: errors.email ? '#c10000' : null }}
-                      onChange={hanldeChangeInput}
+                      onChange={handleChangeInput}
                       ref={register({
                         required: 'Required',
                         pattern: {
@@ -104,7 +104,7 @@ export const LoginFormUI = (props) => {
                 type='password'
                 placeholder='Password'
                 style={{ borderColor: errors.password ? '#c10000' : null }}
-                onChange={hanldeChangeInput}
+                onChange={handleChangeInput}
                 ref={register({
                   required: 'Password is required'
                 })}
