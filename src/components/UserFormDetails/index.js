@@ -79,7 +79,7 @@ export const UserFormDetails = (props) => {
   /**
    * Default fuction for user profile workflow
    */
-  const handleUpdateClick = async (changes, isImage) => {
+  const handleUpdateClick = async (changes, isImage, image) => {
     if (handleButtonUpdateClick) {
       return handleButtonUpdateClick(userState.result.result, formState.changes)
     }
@@ -90,7 +90,7 @@ export const UserFormDetails = (props) => {
         formState.changes = { ...formState.changes, ...changes }
       }
       if (isImage) {
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ photo: formState.changes.photo }, {
+        response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ photo: image || formState.changes.photo }, {
           accessToken: accessToken
         })
 
@@ -129,7 +129,9 @@ export const UserFormDetails = (props) => {
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)
         }
-        setIsEdit(!isEdit)
+        if (!image) {
+          setIsEdit(!isEdit)
+        }
       }
     } catch (err) {
       setFormState({
