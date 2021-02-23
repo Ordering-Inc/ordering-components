@@ -166,7 +166,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
 
   var handleUpdateClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes, isImage) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes, isImage, image) {
       var response, _props$userData, _formState$changes, photo, _changes, _props$userData2;
 
       return _regenerator.default.wrap(function _callee$(_context) {
@@ -197,7 +197,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
               _context.next = 8;
               return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData = props.userData) === null || _props$userData === void 0 ? void 0 : _props$userData.id) || userState.result.result.id).save({
-                photo: formState.changes.photo
+                photo: image || formState.changes.photo
               }, {
                 accessToken: accessToken
               });
@@ -238,7 +238,9 @@ var UserFormDetails = function UserFormDetails(props) {
                   handleSuccessUpdate(response.content.result);
                 }
 
-                setIsEdit(!isEdit);
+                if (!image) {
+                  setIsEdit(!isEdit);
+                }
               }
 
               _context.next = 23;
@@ -263,7 +265,7 @@ var UserFormDetails = function UserFormDetails(props) {
       }, _callee, null, [[2, 20]]);
     }));
 
-    return function handleUpdateClick(_x, _x2) {
+    return function handleUpdateClick(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
     };
   }();
