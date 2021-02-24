@@ -24,7 +24,7 @@ export const BusinessList = (props) => {
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [timeLimitValue, setTimeLimitValue] = useState(null)
-  const [orderState, { changeType }] = useOrder()
+  const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
 
@@ -178,11 +178,6 @@ export const BusinessList = (props) => {
         break
       case 'timeLimit':
         handleChangeTimeLimit(initialFilterValue)
-        break
-      case 'pickup':
-        if (orderState.options?.type !== 2) {
-          changeType(2)
-        }
         break
     }
   }, [initialFilterKey, initialFilterValue])
