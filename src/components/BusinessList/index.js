@@ -39,7 +39,7 @@ export const BusinessList = (props) => {
       setBusinessesList({ ...businessesList, loading: true })
       const parameters = {
         location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-        type: !orderType ? (orderState.options?.type || 1) : orderType,
+        type: orderState.options?.type || 1,
         page: newFetch ? 1 : paginationProps.currentPage + 1,
         page_size: paginationProps.pageSize
       }
