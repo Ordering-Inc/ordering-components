@@ -23,6 +23,7 @@ export const LoginForm = (props) => {
   let { defaultLoginTab } = props
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
+  const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [events] = useEvent()
 
   if (!useLoginByEmail && !useLoginByCellphone) {
@@ -128,6 +129,38 @@ export const LoginForm = (props) => {
     setLoginTab(tab)
   }
 
+  /**
+   * function to send verify code with twilio
+   * @param {Object} values object with cellphone and country code values
+   */
+  const sendVerifyPhoneCode = async (values) => {
+    try {
+      setVerifyPhoneState({ ...verifyPhoneState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cellphone: values.cellphone,
+          country_phone_code: `+${values.country_phone_code}`
+        })
+      })
+      const res = await response.json();
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -136,9 +169,11 @@ export const LoginForm = (props) => {
           formState={formState}
           loginTab={loginTab}
           credentials={credentials}
+          verifyPhoneState={verifyPhoneState}
           handleChangeInput={handleChangeInput}
           handleButtonLoginClick={handleButtonLoginClick || handleLoginClick}
           handleChangeTab={handleChangeTab}
+          handleVerifyCode={sendVerifyPhoneCode}
         />
       )}
     </>
