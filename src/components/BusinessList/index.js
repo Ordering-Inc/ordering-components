@@ -12,6 +12,7 @@ export const BusinessList = (props) => {
     UIComponent,
     initialFilterKey,
     initialFilterValue,
+    isSortByReview,
     orderType,
     isSearchByName,
     isSearchByDescription,
@@ -30,6 +31,13 @@ export const BusinessList = (props) => {
 
   const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
+
+  const sortBusinesses = (array, option) => {
+    if (option === 'review') {
+      return array.sort((a, b) => b.reviews.total - a.reviews.total)
+    }
+    return array
+  }
   /**
    * Get businesses by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
@@ -37,13 +45,18 @@ export const BusinessList = (props) => {
   const getBusinesses = async (newFetch) => {
     try {
       setBusinessesList({ ...businessesList, loading: true })
-      const parameters = {
-        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-        type: orderState.options?.type || 1,
-        page: newFetch ? 1 : paginationProps.currentPage + 1,
-        page_size: paginationProps.pageSize
-      }
 
+      let parameters = {
+        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
+        type: !orderType ? (orderState.options?.type || 1) : orderType
+      }
+      if (!isSortByReview) {
+        const paginationParams = {
+          page: newFetch ? 1 : paginationProps.currentPage + 1,
+          page_size: paginationProps.pageSize
+        }
+        parameters = { ...parameters, ...paginationParams }
+      }
       if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
         const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
         parameters.timestamp = moment
@@ -121,6 +134,12 @@ export const BusinessList = (props) => {
         ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
         : ordering.businesses().select(propsToFetch).parameters(parameters)
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
+      if (isSortByReview) {
+        const _result = sortBusinesses(result, 'review')
+        businessesList.businesses = _result
+      } else {
+        businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
+      }
       businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
       setBusinessesList({
         ...businessesList,
@@ -179,6 +198,8 @@ export const BusinessList = (props) => {
       case 'timeLimit':
         handleChangeTimeLimit(initialFilterValue)
         break
+      case 'search':
+        handleChangeSearch(initialFilterValue)
     }
   }, [initialFilterKey, initialFilterValue])
 
