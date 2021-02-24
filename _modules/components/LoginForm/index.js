@@ -59,7 +59,8 @@ var LoginForm = function LoginForm(props) {
       useLoginByEmail = props.useLoginByEmail,
       useLoginByCellphone = props.useLoginByCellphone,
       useDefualtSessionManager = props.useDefualtSessionManager,
-      urlToRedirect = props.urlToRedirect;
+      urlToRedirect = props.urlToRedirect,
+      allowedLevels = props.allowedLevels;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -105,7 +106,9 @@ var LoginForm = function LoginForm(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
-      login = _useSession2[1].login;
+      _useSession2$ = _useSession2[1],
+      login = _useSession2$.login,
+      logout = _useSession2$.logout;
   /**
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
@@ -113,15 +116,15 @@ var LoginForm = function LoginForm(props) {
 
 
   var handleLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _credentials2, _credentials, response;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
+      var _credentials2, _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, level, access_token, _yield$ordering$setAc, logoutResp;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _credentials = (_credentials2 = {}, _defineProperty(_credentials2, loginTab, credentials[loginTab]), _defineProperty(_credentials2, "password", credentials.password), _credentials2);
+              _credentials = (_credentials2 = {}, _defineProperty(_credentials2, loginTab, values && values[loginTab] || credentials[loginTab]), _defineProperty(_credentials2, "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password), _credentials2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
@@ -129,37 +132,58 @@ var LoginForm = function LoginForm(props) {
               return ordering.users().auth(_credentials);
 
             case 5:
-              response = _context.sent;
-              setFormState({
-                result: response.content,
-                loading: false
-              });
+              _yield$ordering$users = _context.sent;
+              _yield$ordering$users2 = _yield$ordering$users.content;
+              error = _yield$ordering$users2.error;
+              result = _yield$ordering$users2.result;
 
-              if (!response.content.error) {
-                if (useDefualtSessionManager) {
-                  login({
-                    user: response.content.result,
-                    token: response.content.result.session.access_token
-                  });
-                }
-
-                events.emit('userLogin', response.content.result);
-
-                if (handleSuccessLogin) {
-                  handleSuccessLogin(response.content.result);
-                }
-
-                if (urlToRedirect) {
-                  window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
-                }
+              if (error) {
+                _context.next = 31;
+                break;
               }
 
-              _context.next = 13;
+              if (!useDefualtSessionManager) {
+                _context.next = 28;
+                break;
+              }
+
+              if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
+                _context.next = 27;
+                break;
+              }
+
+              level = result.level, access_token = result.session.access_token;
+
+              if (allowedLevels.includes(level)) {
+                _context.next = 27;
+                break;
+              }
+
+              _context.prev = 14;
+              _context.next = 17;
+              return ordering.setAccessToken(access_token).users().logout();
+
+            case 17:
+              _yield$ordering$setAc = _context.sent;
+              logoutResp = _yield$ordering$setAc.content;
+
+              if (!logoutResp.error) {
+                logout();
+              }
+
+              setFormState({
+                result: {
+                  error: true,
+                  result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                },
+                loading: false
+              });
+              _context.next = 26;
               break;
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](0);
+            case 23:
+              _context.prev = 23;
+              _context.t0 = _context["catch"](14);
               setFormState({
                 result: {
                   error: true,
@@ -168,15 +192,57 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 13:
+            case 26:
+              return _context.abrupt("return");
+
+            case 27:
+              login({
+                user: result,
+                token: result.session.access_token
+              });
+
+            case 28:
+              events.emit('userLogin', result);
+
+              if (handleSuccessLogin) {
+                handleSuccessLogin(result);
+              }
+
+              if (urlToRedirect) {
+                window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
+              }
+
+            case 31:
+              setFormState({
+                result: {
+                  error: error,
+                  result: result
+                },
+                loading: false
+              });
+              _context.next = 37;
+              break;
+
+            case 34:
+              _context.prev = 34;
+              _context.t1 = _context["catch"](0);
+              setFormState({
+                result: {
+                  error: true,
+                  result: _context.t1.message
+                },
+                loading: false
+              });
+
+            case 37:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 10]]);
+      }, _callee, null, [[0, 34], [14, 23]]);
     }));
 
-    return function handleLoginClick() {
+    return function handleLoginClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -186,7 +252,7 @@ var LoginForm = function LoginForm(props) {
    */
 
 
-  var hanldeChangeInput = function hanldeChangeInput(e) {
+  var handleChangeInput = function handleChangeInput(e) {
     setCredentials(_objectSpread(_objectSpread({}, credentials), {}, _defineProperty({}, e.target.name, e.target.value)));
   };
   /**
@@ -195,7 +261,7 @@ var LoginForm = function LoginForm(props) {
    */
 
 
-  var hanldeChangeTab = function hanldeChangeTab(tab) {
+  var handleChangeTab = function handleChangeTab(tab) {
     setLoginTab(tab);
   };
 
@@ -203,9 +269,9 @@ var LoginForm = function LoginForm(props) {
     formState: formState,
     loginTab: loginTab,
     credentials: credentials,
-    hanldeChangeInput: hanldeChangeInput,
+    handleChangeInput: handleChangeInput,
     handleButtonLoginClick: handleButtonLoginClick || handleLoginClick,
-    hanldeChangeTab: hanldeChangeTab
+    handleChangeTab: handleChangeTab
   })));
 };
 

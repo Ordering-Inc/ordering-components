@@ -91,8 +91,8 @@ var SignupForm = function SignupForm(props) {
 
 
   var handleSignupClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, response;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
+      var source, data, response;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -103,12 +103,13 @@ var SignupForm = function SignupForm(props) {
               }));
               source = {};
               requestsState.signup = source;
-              _context.next = 6;
-              return ordering.users().save(signupData, {
+              data = values || signupData;
+              _context.next = 7;
+              return ordering.users().save(data, {
                 cancelToken: source
               });
 
-            case 6:
+            case 7:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -121,11 +122,11 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 12:
+              _context.prev = 12;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -138,15 +139,15 @@ var SignupForm = function SignupForm(props) {
                 });
               }
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 12]]);
     }));
 
-    return function handleSignupClick() {
+    return function handleSignupClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();

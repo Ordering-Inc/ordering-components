@@ -322,7 +322,6 @@ var GoogleMaps = function GoogleMaps(props) {
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       if (googleReady) {
-        if (markers.length === 0) return;
         var driverLocation = locations[0];
         var newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng);
         markers[0].setPosition(newLocation);

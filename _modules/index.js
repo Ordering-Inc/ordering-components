@@ -549,6 +549,24 @@ Object.defineProperty(exports, "OrderingProvider", {
     return _OrderingContext.OrderingProvider;
   }
 });
+Object.defineProperty(exports, "CustomerContext", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.CustomerContext;
+  }
+});
+Object.defineProperty(exports, "CustomerProvider", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.CustomerProvider;
+  }
+});
+Object.defineProperty(exports, "useCustomer", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.useCustomer;
+  }
+});
 Object.defineProperty(exports, "ValidationFieldsContext", {
   enumerable: true,
   get: function get() {
@@ -773,6 +791,8 @@ var _EventContext = require("./contexts/EventContext");
 var _UtilsContext = require("./contexts/UtilsContext");
 
 var _OrderingContext = require("./contexts/OrderingContext");
+
+var _CustomerContext = require("./contexts/CustomerContext");
 
 var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
 

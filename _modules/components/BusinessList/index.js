@@ -63,13 +63,13 @@ _dayjs.default.extend(_utc.default);
 
 var BusinessList = function BusinessList(props) {
   var UIComponent = props.UIComponent,
-      allBusinesses = props.allBusinesses,
+      initialFilterKey = props.initialFilterKey,
+      initialFilterValue = props.initialFilterValue,
+      orderType = props.orderType,
       isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
-      reviewQuality = props.reviewQuality,
       propsToFetch = props.propsToFetch,
-      onBusinessClick = props.onBusinessClick,
-      paginationSettings = props.paginationSettings;
+      onBusinessClick = props.onBusinessClick;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -82,7 +82,7 @@ var BusinessList = function BusinessList(props) {
 
   var _useState3 = (0, _react.useState)({
     currentPage: 0,
-    pageSize: (paginationSettings === null || paginationSettings === void 0 ? void 0 : paginationSettings.pageSize) ? paginationSettings === null || paginationSettings === void 0 ? void 0 : paginationSettings.pageSize : 10,
+    pageSize: 10,
     totalItems: null,
     totalPages: null
   }),
@@ -106,8 +106,9 @@ var BusinessList = function BusinessList(props) {
       setTimeLimitValue = _useState10[1];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 1),
-      orderState = _useOrder2[0];
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      orderState = _useOrder2[0],
+      changeType = _useOrder2[1].changeType;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -130,7 +131,7 @@ var BusinessList = function BusinessList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options7, _orderState$options8, parameters, _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options4$2, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options9, moment, where, conditions, _orderState$options10, _orderState$options11, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, moment, where, conditions, _orderState$options7, _orderState$options8, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -140,31 +141,30 @@ var BusinessList = function BusinessList(props) {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: true
               }));
+              parameters = {
+                location: "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng),
+                type: !orderType ? ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1 : orderType,
+                page: newFetch ? 1 : paginationProps.currentPage + 1,
+                page_size: paginationProps.pageSize
+              };
 
-              if (allBusinesses) {
-                parameters = {
-                  location: "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng),
-                  type: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1
-                };
-              } else {
-                parameters = {
-                  location: "".concat((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : (_orderState$options4$2 = _orderState$options4$.location) === null || _orderState$options4$2 === void 0 ? void 0 : _orderState$options4$2.lat, ",").concat((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : (_orderState$options5$2 = _orderState$options5$.location) === null || _orderState$options5$2 === void 0 ? void 0 : _orderState$options5$2.lng),
-                  type: ((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type) || 1,
-                  page: newFetch ? 1 : paginationProps.currentPage + 1,
-                  page_size: paginationProps.pageSize
-                };
-              }
-
-              if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.moment) && isValidMoment((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment, 'YYYY-MM-DD HH:mm:ss')) {
-                moment = _dayjs.default.utc((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+              if (((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment) && isValidMoment((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss')) {
+                moment = _dayjs.default.utc((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }
 
               where = null;
               conditions = [];
 
+              if (businessTypeSelected) {
+                conditions.push({
+                  attribute: businessTypeSelected,
+                  value: true
+                });
+              }
+
               if (timeLimitValue) {
-                if (((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type) === 1) {
+                if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.type) === 1) {
                   conditions.push({
                     attribute: 'delivery_time',
                     value: {
@@ -174,7 +174,7 @@ var BusinessList = function BusinessList(props) {
                   });
                 }
 
-                if (((_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.type) === 2) {
+                if (((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.type) === 2) {
                   conditions.push({
                     attribute: 'pickup_time',
                     value: {
@@ -183,13 +183,6 @@ var BusinessList = function BusinessList(props) {
                     }
                   });
                 }
-              }
-
-              if (businessTypeSelected) {
-                conditions.push({
-                  attribute: businessTypeSelected,
-                  value: true
-                });
               }
 
               if (searchValue) {
@@ -243,16 +236,7 @@ var BusinessList = function BusinessList(props) {
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               result = _yield$fetchEndpoint$2.result;
               pagination = _yield$fetchEndpoint$2.pagination;
-
-              if (allBusinesses) {
-                result.sort(function (a, b) {
-                  return b.reviews.quality - a.reviews.quality;
-                });
-                businessesList.businesses = _toConsumableArray(result);
-              } else {
-                businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
-              }
-
+              businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false
               }));
@@ -311,30 +295,31 @@ var BusinessList = function BusinessList(props) {
    */
 
   (0, _react.useEffect)(function () {
-    var _orderState$options12, _orderState$options13;
+    var _orderState$options9, _orderState$options9$;
 
-    if (orderState.loading || !((_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : (_orderState$options13 = _orderState$options12.address) === null || _orderState$options13 === void 0 ? void 0 : _orderState$options13.location)) return;
+    if (orderState.loading || !((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : (_orderState$options9$ = _orderState$options9.address) === null || _orderState$options9$ === void 0 ? void 0 : _orderState$options9$.location)) return;
     getBusinesses(true);
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue]);
   /**
-   * Listening review quality change
+   * Listening initial filter
    */
 
   (0, _react.useEffect)(function () {
-    var _orderState$options14, _orderState$options15;
+    if (!initialFilterKey && !initialFilterValue) return;
 
-    if (orderState.loading || !((_orderState$options14 = orderState.options) === null || _orderState$options14 === void 0 ? void 0 : (_orderState$options15 = _orderState$options14.address) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.location)) return;
+    switch (initialFilterKey) {
+      case 'category':
+        handleChangeBusinessType(initialFilterValue);
+        break;
 
-    if (reviewQuality) {
-      var _businesses = businessesList.businesses.filter(function (business) {
-        return business.reviews.quality >= reviewQuality;
-      });
+      case 'timeLimit':
+        handleChangeTimeLimit(initialFilterValue);
+        break;
 
-      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-        businesses: _businesses
-      }));
+      case 'pickup':
+        changeType(2);
     }
-  }, [JSON.stringify(orderState.options), reviewQuality]);
+  }, [initialFilterKey, initialFilterValue]);
   /**
    * Default behavior business click
    * @param {object} business Business clicked
@@ -379,12 +364,14 @@ var BusinessList = function BusinessList(props) {
     setSearchValue(search);
   };
   /**
-   * Change pickup time
-   * @param {string} time Search value
+   * Change time limt value
+   * @param {string} time time limt value (for example: 0:30)
    */
 
 
   var handleChangeTimeLimit = function handleChangeTimeLimit(time) {
+    console.log(time);
+
     if (!!time !== !!timeLimitValue) {
       setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
         businesses: [],
@@ -403,6 +390,8 @@ var BusinessList = function BusinessList(props) {
     businessesList: businessesList,
     paginationProps: paginationProps,
     searchValue: searchValue,
+    timeLimitValue: timeLimitValue,
+    businessTypeSelected: businessTypeSelected,
     getBusinesses: getBusinesses,
     handleChangeSearch: handleChangeSearch,
     handleChangeTimeLimit: handleChangeTimeLimit,

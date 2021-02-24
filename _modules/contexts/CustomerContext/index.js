@@ -5,25 +5,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OrderReview = void 0;
+exports.useCustomer = exports.CustomerProvider = exports.CustomerContext = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
-
-var _SessionContext = require("../../contexts/SessionContext");
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _ApiContext = require("../../contexts/ApiContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -47,166 +39,136 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var OrderReview = function OrderReview(props) {
-  var UIComponent = props.UIComponent,
-      order = props.order,
-      onSaveReview = props.onSaveReview;
+var CustomerContext = /*#__PURE__*/(0, _react.createContext)();
+exports.CustomerContext = CustomerContext;
 
-  var _useApi = (0, _ApiContext.useApi)(),
-      _useApi2 = _slicedToArray(_useApi, 1),
-      ordering = _useApi2[0];
-
-  var _useSession = (0, _SessionContext.useSession)(),
-      _useSession2 = _slicedToArray(_useSession, 1),
-      session = _useSession2[0];
+var CustomerProvider = function CustomerProvider(_ref) {
+  var children = _ref.children,
+      strategy = _ref.strategy;
 
   var _useState = (0, _react.useState)({
-    quality: 1,
-    punctiality: 1,
-    service: 1,
-    packaging: 1,
-    comments: ''
+    loading: false,
+    user: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      stars = _useState2[0],
-      setStars = _useState2[1];
+      state = _useState2[0],
+      setState = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({
-    loading: false,
-    result: {
-      error: false
-    }
-  }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
-  /**
-   * Function that load and send the review order to ordering
-   */
-
-
-  var handleSendReview = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _session$user, body, response;
-
+  var getUserCustomerFromLocalStorage = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var userId;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-                loading: true
-              }));
-              _context.prev = 1;
-              body = {
-                order_id: order.id,
-                quality: stars.quality,
-                delivery: stars.punctiality,
-                service: stars.service,
-                package: stars.packaging,
-                comment: stars.comments,
-                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
-                business_id: order.business_id
-              };
-              _context.next = 5;
-              return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
-                method: 'POST',
-                headers: {
-                  Authorization: "Bearer ".concat(session.token),
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-              });
+              _context.next = 2;
+              return strategy.getItem('user-customer', true);
 
-            case 5:
-              response = _context.sent;
-              onSaveReview && onSaveReview(response.content);
-              setFormState({
-                loading: false,
-                result: response.content
-              });
-              _context.next = 13;
-              break;
+            case 2:
+              userId = _context.sent;
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](1);
-              setFormState({
-                result: {
-                  error: true,
-                  result: _context.t0.message
-                },
-                loading: false
-              });
+              if (userId) {
+                setState(_objectSpread(_objectSpread({}, state), {}, {
+                  user: {
+                    id: userId
+                  }
+                }));
+              }
 
-            case 13:
+            case 4:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 10]]);
+      }, _callee);
     }));
 
-    return function handleSendReview() {
-      return _ref.apply(this, arguments);
+    return function getUserCustomerFromLocalStorage() {
+      return _ref2.apply(this, arguments);
     };
   }();
-  /**
-   * Rating the product
-   * @param {EventTarget} e Related HTML event
-   */
 
+  var setUserCustomer = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(user, isFromLocalStorage) {
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              if (!(isFromLocalStorage && user)) {
+                _context2.next = 3;
+                break;
+              }
 
-  var handleChangeRating = function handleChangeRating(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, _defineProperty({}, e.target.name, parseInt(e.target.value))));
-  };
-  /**
-   * Rating the product with comments
-   * @param {EventTarget} e Related HTML event
-   */
+              _context2.next = 3;
+              return strategy.setItem('user-customer', user.id, true);
 
+            case 3:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                user: user
+              }));
 
-  var handleChangeInput = function handleChangeInput(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, {
-      comments: e.target.value
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
     }));
+
+    return function setUserCustomer(_x, _x2) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var deleteUserCustomer = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(isFromLocalStorage) {
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (!isFromLocalStorage) {
+                _context3.next = 3;
+                break;
+              }
+
+              _context3.next = 3;
+              return strategy.removeItem('user-customer');
+
+            case 3:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                user: null
+              }));
+
+            case 4:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function deleteUserCustomer(_x3) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var functions = {
+    setUserCustomer: setUserCustomer,
+    deleteUserCustomer: deleteUserCustomer
   };
-
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    stars: stars,
-    order: order,
-    formState: formState,
-    handleSendReview: handleSendReview,
-    handleChangeInput: handleChangeInput,
-    handleChangeRating: handleChangeRating
-  })));
+  (0, _react.useEffect)(function () {
+    getUserCustomerFromLocalStorage();
+  }, []);
+  return /*#__PURE__*/_react.default.createElement(CustomerContext.Provider, {
+    value: [state, functions]
+  }, children);
 };
 
-exports.OrderReview = OrderReview;
-OrderReview.propTypes = {
-  /**
-   * UI Component, this must be containt all graphic elements and use parent props
-   */
-  UIComponent: _propTypes.default.elementType,
+exports.CustomerProvider = CustomerProvider;
 
-  /**
-   * Getting the order that can be review
-  */
-  order: _propTypes.default.object,
-
-  /**
-    * Response of ordering that contains de review
-   */
-  onSaveReview: _propTypes.default.func,
-
-  /**
-   * function that saves the order that will be reviewed
-   */
-  handleSendReview: _propTypes.default.func
+var useCustomer = function useCustomer() {
+  var customerManager = (0, _react.useContext)(CustomerContext);
+  return customerManager || [{}, function () {}];
 };
-OrderReview.defaultProps = {
-  order: {},
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
-};
+
+exports.useCustomer = useCustomer;
