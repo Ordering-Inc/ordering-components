@@ -180,7 +180,10 @@ export const BusinessList = (props) => {
         handleChangeTimeLimit(initialFilterValue)
         break
       case 'pickup':
-        changeType(2)
+        if (orderState.options?.type !== 2) {
+          changeType(2)
+        }
+        break
     }
   }, [initialFilterKey, initialFilterValue])
 
@@ -232,7 +235,6 @@ export const BusinessList = (props) => {
    * @param {string} time time limt value (for example: 0:30)
    */
   const handleChangeTimeLimit = (time) => {
-    console.log(time)
     if (!!time !== !!timeLimitValue) {
       setBusinessesList({
         ...businessesList,
