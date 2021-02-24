@@ -105,6 +105,7 @@ var GoogleMaps = function GoogleMaps(props) {
 
   var generateMarkers = function generateMarkers(map) {
     var bounds = new window.google.maps.LatLngBounds();
+    var businessesNear = 0;
 
     var _loop = function _loop(i) {
       var _locations$i2, _locations$i3;
@@ -126,14 +127,25 @@ var GoogleMaps = function GoogleMaps(props) {
           scaledSize: new window.google.maps.Size(45, 45)
         } : null
       });
-      var isNear = validateResult(googleMap, marker, marker.getPosition());
 
-      if (isNear) {
-        marker.addListener('click', function () {
-          var _locations$i4;
+      if (businessMap) {
+        var isNear = validateResult(googleMap, marker, marker.getPosition());
 
-          return onBusinessClick((_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug);
-        });
+        if (isNear) {
+          marker.addListener('click', function () {
+            var _locations$i4;
+
+            return onBusinessClick((_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug);
+          });
+          bounds.extend(marker.position);
+          setMarkers(function (markers) {
+            return [].concat(_toConsumableArray(markers), [marker]);
+          });
+          businessesNear = businessesNear + 1;
+        } else {
+          marker.setMap(null);
+        }
+      } else {
         bounds.extend(marker.position);
         setMarkers(function (markers) {
           return [].concat(_toConsumableArray(markers), [marker]);
@@ -145,6 +157,7 @@ var GoogleMaps = function GoogleMaps(props) {
       _loop(i);
     }
 
+    businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
     map.fitBounds(bounds);
     setBoundMap(bounds);
   };
@@ -224,16 +237,16 @@ var GoogleMaps = function GoogleMaps(props) {
     var loc1 = new window.google.maps.LatLng(curPos.lat(), curPos.lng());
     var loc2 = new window.google.maps.LatLng(location.lat, location.lng);
     var distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2);
-    var minimumBusinessDistance = 20000;
-
-    if (!maxLimitLocation && !businessMap) {
-      geocodePosition(curPos);
-      return;
-    }
 
     if (businessMap) {
+      var minimumBusinessDistance = 20000;
       if (distance <= minimumBusinessDistance) return true;
       return false;
+    }
+
+    if (!maxLimitLocation) {
+      geocodePosition(curPos);
+      return;
     }
 
     if (distance <= maxLimitLocation) {
@@ -266,12 +279,15 @@ var GoogleMaps = function GoogleMaps(props) {
       setGoogleMap(map);
 
       if (locations) {
+        if (businessMap) {
+          marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(center.lat, center.lng),
+            map: map
+          });
+          setGoogleMapMarker(marker);
+        }
+
         generateMarkers(map);
-        marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center.lat, center.lng),
-          map: map
-        });
-        setGoogleMapMarker(marker);
       } else {
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center.lat, center.lng),
@@ -313,6 +329,10 @@ var GoogleMaps = function GoogleMaps(props) {
   }, [googleMapMarker, googleMap, location]);
   (0, _react.useEffect)(function () {
     if (googleReady) {
+      if (businessMap && googleMap) {
+        generateMarkers(googleMap);
+      }
+
       center.lat = location.lat;
       center.lng = location.lng;
       googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center.lat, center.lng));
@@ -320,20 +340,22 @@ var GoogleMaps = function GoogleMaps(props) {
     }
   }, [location]);
   (0, _react.useEffect)(function () {
-    var interval = setInterval(function () {
-      if (googleReady) {
-        var driverLocation = locations[0];
-        var newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng);
-        markers[0].setPosition(newLocation);
-        markers.forEach(function (marker) {
-          return boundMap.extend(marker.position);
-        });
-        googleMap.fitBounds(boundMap);
-      }
-    }, 1000);
-    return function () {
-      return clearInterval(interval);
-    };
+    if (!businessMap) {
+      var interval = setInterval(function () {
+        if (googleReady) {
+          var driverLocation = locations[0];
+          var newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng);
+          markers[0].setPosition(newLocation);
+          markers.forEach(function (marker) {
+            return boundMap.extend(marker.position);
+          });
+          googleMap.fitBounds(boundMap);
+        }
+      }, 1000);
+      return function () {
+        return clearInterval(interval);
+      };
+    }
   }, [locations]);
   return googleReady && /*#__PURE__*/_react.default.createElement("div", {
     id: "map",

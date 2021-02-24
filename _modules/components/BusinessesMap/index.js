@@ -36,7 +36,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var BusinessesMap = function BusinessesMap(props) {
   var UIComponent = props.UIComponent,
       businessList = props.businessList,
-      userLocation = props.userLocation;
+      userLocation = props.userLocation,
+      setErrors = props.setErrors;
 
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
@@ -82,7 +83,8 @@ var BusinessesMap = function BusinessesMap(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     businessLocations: businessLocations,
     userLocation: userLocation,
-    onBusinessClick: onBusinessClick
+    onBusinessClick: onBusinessClick,
+    setErrors: setErrors
   })));
 };
 
@@ -102,6 +104,11 @@ BusinessesMap.propTypes = {
     * User location is used for place center of the map
     */
   userLocation: _propTypes.default.object,
+
+  /**
+   * setter for map errors
+   */
+  setErrors: _propTypes.default.func,
 
   /**
    * Components types before order details
