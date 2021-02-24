@@ -10,20 +10,16 @@ dayjs.extend(utc)
 export const BusinessList = (props) => {
   const {
     UIComponent,
-    allBusinesses,
     isSearchByName,
     isSearchByDescription,
-    reviewQuality,
     propsToFetch,
-    onBusinessClick,
-    paginationSettings
+    onBusinessClick
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
-  const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: paginationSettings?.pageSize ? paginationSettings?.pageSize : 10, totalItems: null, totalPages: null })
+  const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: 10, totalItems: null, totalPages: null })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
-  const [timeLimitValue, setTimeLimitValue] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
@@ -37,20 +33,11 @@ export const BusinessList = (props) => {
   const getBusinesses = async (newFetch) => {
     try {
       setBusinessesList({ ...businessesList, loading: true })
-      let parameters
-
-      if (allBusinesses) {
-        parameters = {
-          location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-          type: orderState.options?.type || 1
-        }
-      } else {
-        parameters = {
-          location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-          type: orderState.options?.type || 1,
-          page: newFetch ? 1 : paginationProps.currentPage + 1,
-          page_size: paginationProps.pageSize
-        }
+      const parameters = {
+        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
+        type: orderState.options?.type || 1,
+        page: newFetch ? 1 : paginationProps.currentPage + 1,
+        page_size: paginationProps.pageSize
       }
 
       if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
@@ -60,26 +47,6 @@ export const BusinessList = (props) => {
 
       let where = null
       const conditions = []
-      if (timeLimitValue) {
-        if (orderState.options?.type === 1) {
-          conditions.push({
-            attribute: 'delivery_time',
-            value: {
-              condition: '<=',
-              value: timeLimitValue
-            }
-          })
-        }
-        if (orderState.options?.type === 2) {
-          conditions.push({
-            attribute: 'pickup_time',
-            value: {
-              condition: '<=',
-              value: timeLimitValue
-            }
-          })
-        }
-      }
       if (businessTypeSelected) {
         conditions.push({ attribute: businessTypeSelected, value: true })
       }
@@ -129,12 +96,7 @@ export const BusinessList = (props) => {
         ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
         : ordering.businesses().select(propsToFetch).parameters(parameters)
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
-      if (allBusinesses) {
-        result.sort((a, b) => b.reviews.quality - a.reviews.quality)
-        businessesList.businesses = [...result]
-      } else {
-        businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
-      }
+      businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
       setBusinessesList({
         ...businessesList,
         loading: false
@@ -148,7 +110,6 @@ export const BusinessList = (props) => {
         ...paginationProps,
         currentPage: pagination.current_page,
         totalPages: pagination.total_pages,
-        totalItems: pagination.total,
         nextPageItems
       })
     } catch (err) {
@@ -178,18 +139,7 @@ export const BusinessList = (props) => {
   useEffect(() => {
     if (orderState.loading || !orderState.options?.address?.location) return
     getBusinesses(true)
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue])
-
-  /**
-   * Listening review quality change
-   */
-  useEffect(() => {
-    if (orderState.loading || !orderState.options?.address?.location) return
-    if (reviewQuality) {
-      const _businesses = businessesList.businesses.filter(business => business.reviews.quality >= reviewQuality)
-      setBusinessesList({ ...businessesList, businesses: _businesses })
-    }
-  }, [JSON.stringify(orderState.options), reviewQuality])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue])
 
   /**
    * Default behavior business click
@@ -234,26 +184,6 @@ export const BusinessList = (props) => {
     setSearchValue(search)
   }
 
-  /**
-   * Change pickup time
-   * @param {string} time Search value
-   */
-  const handleChangeTimeLimit = (time) => {
-    if (!!time !== !!timeLimitValue) {
-      setBusinessesList({
-        ...businessesList,
-        businesses: [],
-        loading: true
-      })
-    } else {
-      setBusinessesList({
-        ...businessesList,
-        loading: false
-      })
-    }
-    setTimeLimitValue(time)
-  }
-
   return (
     <>
       {
@@ -265,7 +195,6 @@ export const BusinessList = (props) => {
             searchValue={searchValue}
             getBusinesses={getBusinesses}
             handleChangeSearch={handleChangeSearch}
-            handleChangeTimeLimit={handleChangeTimeLimit}
             handleBusinessClick={handleBusinessClick}
             handleChangeBusinessType={handleChangeBusinessType}
           />

@@ -9,6 +9,7 @@ import { ApiProvider } from '../ApiContext'
 import { EventProvider } from '../EventContext'
 import { UtilsProviders } from '../UtilsContext'
 import { ValidationFieldsProvider } from '../ValidationsFieldsContext'
+import { CustomerProvider } from '../CustomerContext'
 import { WebStrategy } from '../../webStrategy'
 
 /**
@@ -36,7 +37,9 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
                     <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}>
                       <OrderProvider strategy={webStrategy} Alert={Alert}>
                         <BusinessProvider>
-                          {children}
+                          <CustomerProvider strategy={webStrategy}>
+                            {children}
+                          </CustomerProvider>
                         </BusinessProvider>
                       </OrderProvider>
                     </WebsocketProvider>

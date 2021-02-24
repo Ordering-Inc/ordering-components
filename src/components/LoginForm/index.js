@@ -15,7 +15,8 @@ export const LoginForm = (props) => {
     useLoginByEmail,
     useLoginByCellphone,
     useDefualtSessionManager,
-    urlToRedirect
+    urlToRedirect,
+    allowedLevels
   } = props
 
   const [ordering] = useApi()
@@ -33,40 +34,70 @@ export const LoginForm = (props) => {
   }
 
   const [loginTab, setLoginTab] = useState(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email'))
-  const [, { login }] = useSession()
+  const [, { login, logout }] = useSession()
 
   /**
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
    */
-  const handleLoginClick = async () => {
+  const handleLoginClick = async (values) => {
     try {
       const _credentials = {
-        [loginTab]: credentials[loginTab],
-        password: credentials.password
+        [loginTab]: values && values[loginTab] || credentials[loginTab],
+        password: values && values?.password || credentials.password
       }
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users().auth(_credentials)
-      setFormState({
-        result: response.content,
-        loading: false
-      })
-      if (!response.content.error) {
+      const { content: { error, result } } = await ordering.users().auth(_credentials)
+      if (!error) {
         if (useDefualtSessionManager) {
+          if (allowedLevels && allowedLevels?.length > 0) {
+            const { level, session: { access_token } } = result
+            if (!allowedLevels.includes(level)) {
+              try {
+                const { content: logoutResp } = await ordering.setAccessToken(access_token).users().logout()
+                if (!logoutResp.error) {
+                  logout()
+                }
+                setFormState({
+                  result: {
+                    error: true,
+                    result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                  },
+                  loading: false
+                })
+              } catch (error) {
+                setFormState({
+                  result: {
+                    error: true,
+                    result: error.message
+                  },
+                  loading: false
+                })
+              }
+              return
+            }
+          }
           login({
-            user: response.content.result,
-            token: response.content.result.session.access_token
+            user: result,
+            token: result.session.access_token
           })
         }
-        events.emit('userLogin', response.content.result)
+        events.emit('userLogin', result)
         if (handleSuccessLogin) {
-          handleSuccessLogin(response.content.result)
+          handleSuccessLogin(result)
         }
 
         if (urlToRedirect) {
           window.location.href = `${window.location.origin}${urlToRedirect}`
         }
       }
+      setFormState({
+        result: {
+          error,
+          result
+        },
+        loading: false
+      })
     } catch (err) {
       setFormState({
         result: {
@@ -82,7 +113,7 @@ export const LoginForm = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
+  const handleChangeInput = (e) => {
     setCredentials({
       ...credentials,
       [e.target.name]: e.target.value
@@ -93,7 +124,7 @@ export const LoginForm = (props) => {
    * Change current selected tab
    * @param {string} tab Reference tab email or cellphone
    */
-  const hanldeChangeTab = (tab) => {
+  const handleChangeTab = (tab) => {
     setLoginTab(tab)
   }
 
@@ -105,9 +136,9 @@ export const LoginForm = (props) => {
           formState={formState}
           loginTab={loginTab}
           credentials={credentials}
-          hanldeChangeInput={hanldeChangeInput}
+          handleChangeInput={handleChangeInput}
           handleButtonLoginClick={handleButtonLoginClick || handleLoginClick}
-          hanldeChangeTab={hanldeChangeTab}
+          handleChangeTab={handleChangeTab}
         />
       )}
     </>

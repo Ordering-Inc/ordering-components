@@ -3,35 +3,34 @@ import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
-import { useEvent } from '../../contexts/EventContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 export const PhoneAutocomplete = (props) => {
   const {
     UIComponent
   } = props
 
-  const [phone, setPhone] = useState('')
-  const [openCustomer, setOpenCustomer] = useState(false)
-  const [openAddress, setOpenAddress] = useState(false)
-  const [errorMinLength, setErrorMinLength] = useState({ dispatch: false, error: false })
-  const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [, t] = useLanguage()
   const [ordering] = useApi()
-  const [phones, setPhones] = useState([])
-  const [{ token, auth }] = useSession()
-  const [events] = useEvent()
+  const [{ token }] = useSession()
 
-  const filterPhones = async () => {
-    const result = phones.filter(user =>
-      user?.phone?.indexOf(phone) > -1
-    )
-    if (result.length === 1) {
-      const { content: { result } } = await ordering
-        .setAccessToken(token)
-        .users()
-        .where([{ attribute: 'cellphone', value: { condition: 'ilike', value: encodeURI(`%${phone}%`) } }])
-        .get()
-      setUserState({ loading: false, result: result[0] })
+  const [, { setUserCustomer }] = useCustomer()
+  const [phone, setPhone] = useState('')
+  const [openModal, setOpenModal] = useState({ customer: false, signup: false })
+  const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
+  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: true, error: null })
+
+  /**
+   * filter phones depending of phone input value and get user data
+   */
+  const filterPhones = async (arr, value) => {
+    const user = arr.filter(user => user?.cellphone === value)
+    if (user[0]) {
+      setCustomerState({ loading: false, result: user[0] })
+      setOpenModal({ ...openModal, customer: true })
+      setUserCustomer(user[0])
+    } else {
+      setCustomerState({ loading: false, result: { error: false } })
     }
   }
 
@@ -39,26 +38,23 @@ export const PhoneAutocomplete = (props) => {
    * @param {event} e
    * Validate input that only numbers can be inserted
    */
-  const onChangeNumber = e => {
-    const number = (e.target.validity.valid)
-      ? e.target.value : phone
-    setPhone(number)
+  const onChangeNumber = (e) => {
+    setPhone((e.target?.validity?.valid) ? e.target?.value : phone)
   }
 
   /**
-   * Getting phones depending of phone input value
+   * Get users from API
    */
-  const getPhone = async () => {
-    if (auth && token) {
-      setUserState({ ...userState, loading: true })
+  const getUsers = async () => {
+    setCustomersPhones({ ...customersPhones, loading: true })
+    try {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
         .get()
-      const newPhones = result.map(user => { return { name: user.name, phone: user.phone || user.cellphone } })
-      setPhones(newPhones)
-    } else {
-      events.emit('go_to_page', { page: 'signin' })
+      setCustomersPhones({ ...customersPhones, users: result, loading: false })
+    } catch (e) {
+      setCustomersPhones({ ...customersPhones, loading: false, error: e.message })
     }
   }
 
@@ -86,22 +82,23 @@ export const PhoneAutocomplete = (props) => {
       /* for each item in the array... */
       for (i = 0; i < arr?.length; i++) {
         /* check if the item starts with the same letters as the text field value: */
-        if (arr[i]?.phone?.substr(0, val.length)?.toUpperCase() === val?.toUpperCase()) {
+        if (arr[i]?.cellphone?.substr(0, val?.length)?.toUpperCase() === val?.toUpperCase()) {
+          const cellphone = arr[i]?.cellphone
           /* create a DIV element for each matching element: */
           b = document.createElement('DIV')
           /* make the matching letters bold: */
-          b.innerHTML = '<strong>' + arr[i]?.phone?.substr(0, val?.length) + '</strong>'
-          b.innerHTML += arr[i]?.phone?.substr(val?.length)
+          b.innerHTML = '<strong>' + cellphone?.substr(0, val?.length) + '</strong>'
+          b.innerHTML += cellphone?.substr(val?.length)
           // insert name of the customer
           b.innerHTML += ' (' + arr[i]?.name + ')'
           /* insert a input field that will hold the current array item's value: */
-          b.innerHTML += "<input type='hidden' value='" + arr[i]?.phone + "'>"
+          b.innerHTML += "<input type='hidden' value='" + cellphone + "'>"
           /* execute a function when someone clicks on the item value (DIV element): */
           b.addEventListener('click', function (e) {
             /* insert the value for the autocomplete text field: */
             inp.value = this.getElementsByTagName('input')[0].value
             setPhone(this.getElementsByTagName('input')[0].value)
-            setOpenAddress(true)
+            filterPhones(arr, this.getElementsByTagName('input')[0].value)
             /* close the list of autocompleted values,
                 (or any other open lists of autocompleted values: */
             closeAllLists()
@@ -115,10 +112,9 @@ export const PhoneAutocomplete = (props) => {
       b.innerHTML += "<input type='hidden' value='" + t('CREATE_CUSTOMER', 'Create new customer') + "'>"
       b.addEventListener('click', function (e) {
         if (evt.target.value.length === 10) {
-          setErrorMinLength({ error: false, dispatch: false })
-          setOpenCustomer(true)
+          setOpenModal({ ...openModal, signup: true })
         } else {
-          setErrorMinLength({ error: true, dispatch: true })
+          setCustomersPhones({ ...customersPhones, error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters') })
         }
         closeAllLists()
       })
@@ -182,37 +178,31 @@ export const PhoneAutocomplete = (props) => {
   }
 
   useEffect(() => {
-    autocomplete(document.getElementById('phone-input'), phones)
-  }, [phones])
+    autocomplete(document.getElementById('phone-input'), customersPhones.users)
+  }, [customersPhones.users])
 
   useEffect(() => {
-    getPhone()
-  }, [auth, token])
-
-  useEffect(() => {
-    filterPhones()
-  }, [phone])
+    getUsers()
+  }, [])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          onChangeNumber={onChangeNumber}
           phone={phone}
-          setErrorMinLength={setErrorMinLength}
-          errorMinLength={errorMinLength}
-          openCustomer={openCustomer}
-          setOpenCustomer={setOpenCustomer}
-          openAddress={openAddress}
-          setOpenAddress={setOpenAddress}
-          userState={userState}
+          customerState={customerState}
+          customersPhones={customersPhones}
+          setCustomersPhones={setCustomersPhones}
+          onChangeNumber={onChangeNumber}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          setCustomerState={setCustomerState}
         />
       )}
     </>
   )
 }
-
 PhoneAutocomplete.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props

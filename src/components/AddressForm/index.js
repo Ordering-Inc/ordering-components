@@ -4,6 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 export const AddressForm = (props) => {
   const {
@@ -24,6 +25,7 @@ export const AddressForm = (props) => {
   const [, { changeAddress }] = useOrder()
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
+  const [, { setUserCustomer }] = useCustomer()
 
   const [isEdit, setIsEdit] = useState(false)
 
@@ -103,11 +105,16 @@ export const AddressForm = (props) => {
    * Function to save current changes
    * Update if address id exist or create if not
    */
-  const saveAddress = async (values) => {
+  const saveAddress = async (values, userCustomerSetup) => {
     if (!auth) {
       changeAddress({ ...values, ...formState.changes })
       onSaveAddress && onSaveAddress(formState.changes)
       return
+    }
+    if (userCustomerSetup) {
+      setUserCustomer({
+        id: userCustomerSetup
+      }, true)
     }
     setFormState({ ...formState, loading: true })
     try {
