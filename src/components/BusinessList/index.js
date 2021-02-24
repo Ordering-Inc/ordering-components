@@ -10,9 +10,6 @@ dayjs.extend(utc)
 export const BusinessList = (props) => {
   const {
     UIComponent,
-    initialFilterKey,
-    initialFilterValue,
-    orderType,
     isSearchByName,
     isSearchByDescription,
     propsToFetch,
@@ -23,8 +20,7 @@ export const BusinessList = (props) => {
   const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: 10, totalItems: null, totalPages: null })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
-  const [timeLimitValue, setTimeLimitValue] = useState(null)
-  const [orderState, { changeType }] = useOrder()
+  const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
 
@@ -39,7 +35,7 @@ export const BusinessList = (props) => {
       setBusinessesList({ ...businessesList, loading: true })
       const parameters = {
         location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-        type: !orderType ? (orderState.options?.type || 1) : orderType,
+        type: orderState.options?.type || 1,
         page: newFetch ? 1 : paginationProps.currentPage + 1,
         page_size: paginationProps.pageSize
       }
@@ -53,27 +49,6 @@ export const BusinessList = (props) => {
       const conditions = []
       if (businessTypeSelected) {
         conditions.push({ attribute: businessTypeSelected, value: true })
-      }
-
-      if (timeLimitValue) {
-        if (orderState.options?.type === 1) {
-          conditions.push({
-            attribute: 'delivery_time',
-            value: {
-              condition: '<=',
-              value: timeLimitValue
-            }
-          })
-        }
-        if (orderState.options?.type === 2) {
-          conditions.push({
-            attribute: 'pickup_time',
-            value: {
-              condition: '<=',
-              value: timeLimitValue
-            }
-          })
-        }
       }
 
       if (searchValue) {
@@ -135,7 +110,6 @@ export const BusinessList = (props) => {
         ...paginationProps,
         currentPage: pagination.current_page,
         totalPages: pagination.total_pages,
-        totalItems: pagination.total,
         nextPageItems
       })
     } catch (err) {
@@ -165,27 +139,7 @@ export const BusinessList = (props) => {
   useEffect(() => {
     if (orderState.loading || !orderState.options?.address?.location) return
     getBusinesses(true)
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue])
-
-  /**
-   * Listening initial filter
-   */
-  useEffect(() => {
-    if (!initialFilterKey && !initialFilterValue) return
-    switch (initialFilterKey) {
-      case 'category':
-        handleChangeBusinessType(initialFilterValue)
-        break
-      case 'timeLimit':
-        handleChangeTimeLimit(initialFilterValue)
-        break
-      case 'pickup':
-        if (orderState.options?.type !== 2) {
-          changeType(2)
-        }
-        break
-    }
-  }, [initialFilterKey, initialFilterValue])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue])
 
   /**
    * Default behavior business click
@@ -230,26 +184,6 @@ export const BusinessList = (props) => {
     setSearchValue(search)
   }
 
-  /**
-   * Change time limt value
-   * @param {string} time time limt value (for example: 0:30)
-   */
-  const handleChangeTimeLimit = (time) => {
-    if (!!time !== !!timeLimitValue) {
-      setBusinessesList({
-        ...businessesList,
-        businesses: [],
-        loading: true
-      })
-    } else {
-      setBusinessesList({
-        ...businessesList,
-        loading: false
-      })
-    }
-    setTimeLimitValue(time)
-  }
-
   return (
     <>
       {
@@ -259,11 +193,8 @@ export const BusinessList = (props) => {
             businessesList={businessesList}
             paginationProps={paginationProps}
             searchValue={searchValue}
-            timeLimitValue={timeLimitValue}
-            businessTypeSelected={businessTypeSelected}
             getBusinesses={getBusinesses}
             handleChangeSearch={handleChangeSearch}
-            handleChangeTimeLimit={handleChangeTimeLimit}
             handleBusinessClick={handleBusinessClick}
             handleChangeBusinessType={handleChangeBusinessType}
           />
