@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useEvent } from '../../contexts/EventContext'
 
 export const BusinessesMap = (props) => {
-  const { UIComponent, businessList, userLocation } = props
+  const { UIComponent, businessList, userLocation, setErrors } = props
 
   const [events] = useEvent()
   const [businessLocations, setBusinessLocations] = useState([])
@@ -42,6 +42,7 @@ export const BusinessesMap = (props) => {
           businessLocations={businessLocations}
           userLocation={userLocation}
           onBusinessClick={onBusinessClick}
+          setErrors={setErrors}
         />
       )}
     </>
@@ -61,6 +62,10 @@ BusinessesMap.propTypes = {
     * User location is used for place center of the map
     */
   userLocation: PropTypes.object,
+  /**
+   * setter for map errors
+   */
+  setErrors: PropTypes.func,
   /**
    * Components types before order details
    * Array of type components, the parent props will pass to these components
