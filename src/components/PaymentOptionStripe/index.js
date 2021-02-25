@@ -26,6 +26,7 @@ export const PaymentOptionStripe = (props) => {
   const [publicKey, setPublicKey] = useState(props.publicKey)
 
   const [cardSelected, setCardSelected] = useState(null)
+  const [defaultCardSetActionStatus, setDefaultCardSetActionStatus] = useState({ loading: false, error: null })
 
   const requestState = {}
 
@@ -79,6 +80,44 @@ export const PaymentOptionStripe = (props) => {
       }
     } catch (error) {
       console.error(error.message)
+    }
+  }
+  /**
+   * method to set card as default
+   */
+  const setDefaultCard = async (card) => {
+    try {
+      setDefaultCardSetActionStatus({ ...defaultCardSetActionStatus, loading: true })
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          business_id: businessId,
+          user_id: user.id,
+          card_id: card.id
+        })
+      }
+      const functionFetch = `${ordering.root}/payments/stripe/cards/default`
+      const response = await fetch(functionFetch, requestOptions)
+      const content = await response.json()
+      if (!content.error) {
+        setCardSelected({
+          id: card.id,
+          type: 'card',
+          card: {
+            brand: card.brand,
+            last4: card.last4
+          }
+        })
+        setDefaultCardSetActionStatus({ loading: false, error: null })
+      } else {
+        setDefaultCardSetActionStatus({ loading: false, error: content.result })
+      }
+    } catch (error) {
+      setDefaultCardSetActionStatus({ loading: false, error: error })
     }
   }
   /**
@@ -137,6 +176,8 @@ export const PaymentOptionStripe = (props) => {
           publicKey={publicKey}
           handleNewCard={handleNewCard}
           deleteCard={deleteCard}
+          setDefaultCard={setDefaultCard}
+          defaultCardSetActionStatus={defaultCardSetActionStatus}
         />
       )}
     </>
