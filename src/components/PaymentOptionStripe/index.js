@@ -26,7 +26,7 @@ export const PaymentOptionStripe = (props) => {
   const [publicKey, setPublicKey] = useState(props.publicKey)
 
   const [cardSelected, setCardSelected] = useState(null)
-  const [defaultCardsetActionStatus, setDefaultCardSetActionStatus] = useState({ loading: false, error: null })
+  const [defaultCardSetActionStatus, setDefaultCardSetActionStatus] = useState({ loading: false, error: null })
 
   const requestState = {}
 
@@ -87,7 +87,7 @@ export const PaymentOptionStripe = (props) => {
    */
   const setDefaultCard = async (card) => {
     try {
-      setDefaultCardSetActionStatus({ ...defaultCardsetActionStatus, loading: true })
+      setDefaultCardSetActionStatus({ ...defaultCardSetActionStatus, loading: true })
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -169,7 +169,7 @@ export const PaymentOptionStripe = (props) => {
           handleNewCard={handleNewCard}
           deleteCard={deleteCard}
           setDefaultCard={setDefaultCard}
-          defaultCardsetActionStatus={defaultCardsetActionStatus}
+          defaultCardSetActionStatus={defaultCardSetActionStatus}
         />
       )}
     </>
