@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 /**
  * Component to get information from GPS
@@ -15,6 +16,7 @@ export const GpsButton = (props) => {
     onAddress
   } = props
 
+  const [ ,t] = useLanguage()
   const [isLoading, setIsLoading] = useState(false)
   const isGoogleButton = typeof googleReady !== 'undefined'
 
@@ -55,7 +57,7 @@ export const GpsButton = (props) => {
               }
             })
           } else {
-            onError(new Error('Error to get reault'))
+            onError && onError(t('ERROR_GPS_BUTTON','Error to get result with gps button')
           }
         })
       } else {
@@ -67,7 +69,7 @@ export const GpsButton = (props) => {
       }
     }, (err) => {
       setIsLoading(false)
-      onError(new Error(err.message))
+      onError && onError(t('ERROR_GPS_BUTTON',err.message))
     }, {
       timeout: 5000,
       enableHighAccuracy: true
