@@ -104,6 +104,14 @@ export const PaymentOptionStripe = (props) => {
       const response = await fetch(functionFetch, requestOptions)
       const content = await response.json()
       if (!content.error) {
+        setCardSelected({
+          id: card.id,
+          type: 'card',
+          card: {
+            brand: card.brand,
+            last4: card.last4
+          }
+        })
         setDefaultCardSetActionStatus({ loading: false, error: null })
       } else {
         setDefaultCardSetActionStatus({ loading: false, error: content.result })
