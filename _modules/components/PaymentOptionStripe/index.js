@@ -91,6 +91,14 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
       cardSelected = _useState6[0],
       setCardSelected = _useState6[1];
 
+  var _useState7 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      defaultCardSetActionStatus = _useState8[0],
+      setDefaultCardSetActionStatus = _useState8[1];
+
   var requestState = {};
   /**
    * method to get cards from API
@@ -210,44 +218,127 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     };
   }();
   /**
-   * Method to get stripe credentials from API
+   * method to set card as default
    */
 
 
-  var getCredentials = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _yield$ordering$setAc2, result;
-
+  var setDefaultCard = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(card) {
+      var requestOptions, functionFetch, response, content;
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
               _context3.prev = 0;
-              _context3.next = 3;
-              return ordering.setAccessToken(token).paymentCards().getCredentials();
+              setDefaultCardSetActionStatus(_objectSpread(_objectSpread({}, defaultCardSetActionStatus), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                },
+                body: JSON.stringify({
+                  business_id: businessId,
+                  user_id: user.id,
+                  card_id: card.id
+                })
+              };
+              functionFetch = "".concat(ordering.root, "/payments/stripe/cards/default");
+              _context3.next = 6;
+              return fetch(functionFetch, requestOptions);
 
-            case 3:
-              _yield$ordering$setAc2 = _context3.sent;
-              result = _yield$ordering$setAc2.content.result;
-              setPublicKey(result.publishable);
-              _context3.next = 11;
+            case 6:
+              response = _context3.sent;
+              _context3.next = 9;
+              return response.json();
+
+            case 9:
+              content = _context3.sent;
+
+              if (!content.error) {
+                setCardSelected({
+                  id: card.id,
+                  type: 'card',
+                  card: {
+                    brand: card.brand,
+                    last4: card.last4
+                  }
+                });
+                setDefaultCardSetActionStatus({
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setDefaultCardSetActionStatus({
+                  loading: false,
+                  error: content.result
+                });
+              }
+
+              _context3.next = 16;
               break;
 
-            case 8:
-              _context3.prev = 8;
+            case 13:
+              _context3.prev = 13;
               _context3.t0 = _context3["catch"](0);
-              console.error(_context3.t0.message);
+              setDefaultCardSetActionStatus({
+                loading: false,
+                error: _context3.t0
+              });
 
-            case 11:
+            case 16:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 8]]);
+      }, _callee3, null, [[0, 13]]);
+    }));
+
+    return function setDefaultCard(_x2) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to get stripe credentials from API
+   */
+
+
+  var getCredentials = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
+      var _yield$ordering$setAc2, result;
+
+      return _regenerator.default.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              _context4.next = 3;
+              return ordering.setAccessToken(token).paymentCards().getCredentials();
+
+            case 3:
+              _yield$ordering$setAc2 = _context4.sent;
+              result = _yield$ordering$setAc2.content.result;
+              setPublicKey(result.publishable);
+              _context4.next = 11;
+              break;
+
+            case 8:
+              _context4.prev = 8;
+              _context4.t0 = _context4["catch"](0);
+              console.error(_context4.t0.message);
+
+            case 11:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[0, 8]]);
     }));
 
     return function getCredentials() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
@@ -289,7 +380,9 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     handleCardClick: handleCardClick,
     publicKey: publicKey,
     handleNewCard: handleNewCard,
-    deleteCard: deleteCard
+    deleteCard: deleteCard,
+    setDefaultCard: setDefaultCard,
+    defaultCardSetActionStatus: defaultCardSetActionStatus
   })));
 };
 
