@@ -10,10 +10,10 @@ dayjs.extend(utc)
 export const BusinessList = (props) => {
   const {
     UIComponent,
+    initialOrderType,
     initialFilterKey,
     initialFilterValue,
     isSortByReview,
-    orderType,
     isSearchByName,
     isSearchByDescription,
     propsToFetch,
@@ -48,7 +48,7 @@ export const BusinessList = (props) => {
 
       let parameters = {
         location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-        type: !orderType ? (orderState.options?.type || 1) : orderType
+        type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
       }
       if (!isSortByReview) {
         const paginationParams = {
