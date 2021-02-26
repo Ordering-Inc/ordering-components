@@ -36,6 +36,7 @@ export const GoogleMaps = (props) => {
    */
   const generateMarkers = (map) => {
     const bounds = new window.google.maps.LatLngBounds()
+    let businessesNear = 0
     for (let i = 0; i < locations.length; i++) {
       let formatUrl = null
       if (i === 1 || businessMap) {
@@ -50,13 +51,22 @@ export const GoogleMaps = (props) => {
           scaledSize: new window.google.maps.Size(45, 45)
         } : null
       })
-      const isNear = validateResult(googleMap, marker, marker.getPosition())
-      if (isNear) {
-        marker.addListener('click', () => onBusinessClick(locations[i]?.slug))
+      if (businessMap) {
+        const isNear = validateResult(googleMap, marker, marker.getPosition())
+        if (isNear) {
+          marker.addListener('click', () => onBusinessClick(locations[i]?.slug))
+          bounds.extend(marker.position)
+          setMarkers(markers => [...markers, marker])
+          businessesNear = businessesNear + 1
+        } else {
+          marker.setMap(null)
+        }
+      } else {
         bounds.extend(marker.position)
         setMarkers(markers => [...markers, marker])
       }
     }
+    businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES')
     map.fitBounds(bounds)
     setBoundMap(bounds)
   }
@@ -115,16 +125,16 @@ export const GoogleMaps = (props) => {
     const loc2 = new window.google.maps.LatLng(location?.lat, location?.lng)
 
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
-    const minimumBusinessDistance = 20000
-
-    if (!maxLimitLocation && !businessMap) {
-      geocodePosition(curPos)
-      return
-    }
 
     if (businessMap) {
+      const minimumBusinessDistance = 20000
       if (distance <= minimumBusinessDistance) return true
       return false
+    }
+
+    if (!maxLimitLocation) {
+      geocodePosition(curPos)
+      return
     }
 
     if (distance <= maxLimitLocation) {
@@ -157,6 +167,13 @@ export const GoogleMaps = (props) => {
       setGoogleMap(map)
 
       if (locations) {
+        if (businessMap) {
+          marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(center.lat, center.lng),
+            map
+          })
+          setGoogleMapMarker(marker)
+        }
         generateMarkers(map)
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center?.lat, center?.lng),
@@ -208,6 +225,9 @@ export const GoogleMaps = (props) => {
 
   useEffect(() => {
     if (googleReady) {
+      if (businessMap && googleMap) {
+        generateMarkers(googleMap)
+      }
       center.lat = location?.lat
       center.lng = location?.lng
       googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center?.lat, center?.lng))
@@ -216,16 +236,18 @@ export const GoogleMaps = (props) => {
   }, [location])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (googleReady) {
-        const driverLocation = locations[0]
-        const newLocation = new window.google.maps.LatLng(driverLocation?.lat, driverLocation?.lng)
-        markers[0].setPosition(newLocation)
-        markers.forEach(marker => boundMap.extend(marker.position))
-        googleMap.fitBounds(boundMap)
-      }
-    }, 1000)
-    return () => clearInterval(interval)
+    if (!businessMap) {
+      const interval = setInterval(() => {
+        if (googleReady) {
+          const driverLocation = locations[0]
+          const newLocation = new window.google.maps.LatLng(driverLocation?.lat, driverLocation?.lng)
+          markers[0].setPosition(newLocation)
+          markers.forEach(marker => boundMap.extend(marker.position))
+          googleMap.fitBounds(boundMap)
+        }
+      }, 1000)
+      return () => clearInterval(interval)
+    }
   }, [locations])
 
   return (
