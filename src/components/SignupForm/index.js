@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
+import { useSession } from '../../contexts/SessionContext'
 
 /**
  * Component to manage signup behavior without UI component
@@ -14,12 +15,16 @@ export const SignupForm = (props) => {
     handleSuccessSignup,
     externalPhoneNumber
   } = props
+  const requestsState = {}
 
   const [ordering] = useApi()
+  const [, { login }] = useSession()
+  const [validationFields] = useValidationFields()
+
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [signupData, setSignupData] = useState({ email: '', cellphone: externalPhoneNumber || '', password: '' })
-  const requestsState = {}
-  const [validationFields] = useValidationFields()
+  const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
+  const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
 
   /**
    * Default fuction for signup workflow
@@ -101,6 +106,82 @@ export const SignupForm = (props) => {
       validationFields.fields?.checkout[fieldName].required)
   }
 
+  /**
+  * function to send verify code with twilio
+  * @param {Object} values object with cellphone and country code values
+  */
+  const sendVerifyPhoneCode = async (values) => {
+    try {
+      setVerifyPhoneState({ ...verifyPhoneState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...values,
+          cellphone: values.cellphone,
+          country_phone_code: `+${values.country_phone_code}`
+        })
+      })
+      const res = await response.json();
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
+
+  const handleSetCheckPhoneCodeState = (data) => {
+    const values = data || { loading: false, result: { error: false } }
+    setCheckPhoneCodeState(values)
+  }
+
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+  const checkVerifyPhoneCode = async (values) => {
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values)
+      })
+      const res = await response.json();
+      if (!res?.error && res?.result?.id) {
+        login({
+          user: res?.result,
+          token: res?.result?.session?.access_token
+        })
+        if (handleSuccessSignup) {
+          handleSuccessSignup(res?.result)
+        }
+      }
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
+
   useEffect(() => {
     return () => {
       if (requestsState.signup) {
@@ -119,8 +200,13 @@ export const SignupForm = (props) => {
           signupData={signupData}
           showField={showField}
           isRequiredField={isRequiredField}
+          verifyPhoneState={verifyPhoneState}
+          checkPhoneCodeState={checkPhoneCodeState}
+          setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
           handleChangeInput={handleChangeInput}
           handleButtonSignupClick={handleButtonSignupClick || handleSignupClick}
+          handleSendVerifyCode={sendVerifyPhoneCode}
+          handleCheckPhoneCode={checkVerifyPhoneCode}
         />
       )}
     </>

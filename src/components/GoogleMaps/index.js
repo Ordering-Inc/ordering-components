@@ -28,7 +28,7 @@ export const GoogleMaps = (props) => {
   const [boundMap, setBoundMap] = useState(null)
 
   const location = fixedLocation || props.location
-  const center = { lat: location.lat, lng: location.lng }
+  const center = { lat: location?.lat, lng: location?.lng }
 
   /**
    * Function to generate multiple markers
@@ -43,7 +43,7 @@ export const GoogleMaps = (props) => {
         formatUrl = optimizeImage(locations[i]?.icon, 'r_max')
       }
       const marker = new window.google.maps.Marker({
-        position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
+        position: new window.google.maps.LatLng(locations[i]?.lat, locations[i]?.lng),
         map,
         title: locations[i]?.slug,
         icon: locations[i]?.icon ? {
@@ -91,27 +91,27 @@ export const GoogleMaps = (props) => {
           }
           const address = {
             address: results[0].formatted_address,
-            location: { lat: pos.lat(), lng: pos.lng() },
+            location: { lat: pos?.lat(), lng: pos?.lng() },
             zipcode
           }
           handleChangeAddressMap && handleChangeAddressMap(address)
 
-          center.lat = address.location.lat
-          center.lng = address.location.lng
+          center.lat = address.location?.lat
+          center.lng = address.location?.lng
         } else {
           googleMapMarker && googleMapMarker.setPosition(center)
           setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS')
         }
-        googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng))
+        googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
       })
     } else {
-      const location = { lat: pos.lat(), lng: pos.lng() }
+      const location = { lat: pos?.lat(), lng: pos?.lng() }
       handleChangeAddressMap && handleChangeAddressMap({
         location
       })
-      center.lat = location.lat
-      center.lng = location.lng
-      googleMap && googleMap.panTo(new window.google.maps.LatLng(location.lat, location.lng))
+      center.lat = location?.lat
+      center.lng = location?.lng
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(location?.lat, location?.lng))
     }
   }
 
@@ -121,8 +121,8 @@ export const GoogleMaps = (props) => {
    * @param {*google location} loc2
    */
   const validateResult = (map, marker, curPos) => {
-    const loc1 = new window.google.maps.LatLng(curPos.lat(), curPos.lng())
-    const loc2 = new window.google.maps.LatLng(location.lat, location.lng)
+    const loc1 = new window.google.maps.LatLng(curPos?.lat(), curPos?.lng())
+    const loc2 = new window.google.maps.LatLng(location?.lat, location?.lng)
 
     const distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2)
 
@@ -141,7 +141,7 @@ export const GoogleMaps = (props) => {
       geocodePosition(curPos)
     } else {
       marker.setPosition(center)
-      map.panTo(new window.google.maps.LatLng(center.lat, center.lng))
+      map.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
       setErrors && setErrors('ERROR_MAX_LIMIT_LOCATION')
     }
   }
@@ -175,9 +175,14 @@ export const GoogleMaps = (props) => {
           setGoogleMapMarker(marker)
         }
         generateMarkers(map)
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center?.lat, center?.lng),
+          map
+        })
+        setGoogleMapMarker(marker)
       } else {
         marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center.lat, center.lng),
+          position: new window.google.maps.LatLng(center?.lat, center?.lng),
           map,
           draggable: !!mapControls?.isMarkerDraggable
         })
@@ -223,10 +228,10 @@ export const GoogleMaps = (props) => {
       if (businessMap && googleMap) {
         generateMarkers(googleMap)
       }
-      center.lat = location.lat
-      center.lng = location.lng
-      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center.lat, center.lng))
-      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng))
+      center.lat = location?.lat
+      center.lng = location?.lng
+      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center?.lat, center?.lng))
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
     }
   }, [location])
 
@@ -235,7 +240,7 @@ export const GoogleMaps = (props) => {
       const interval = setInterval(() => {
         if (googleReady) {
           const driverLocation = locations[0]
-          const newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng)
+          const newLocation = new window.google.maps.LatLng(driverLocation?.lat, driverLocation?.lng)
           markers[0].setPosition(newLocation)
           markers.forEach(marker => boundMap.extend(marker.position))
           googleMap.fitBounds(boundMap)
