@@ -20,10 +20,11 @@ export const ForgotPasswordForm = (props) => {
   /**
    * Default fuction for forgot password workflow
    */
-  const handleForgotPasswordClick = async () => {
+  const handleForgotPasswordClick = async (data) => {
     try {
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users().forgotPassword(formData)
+      const values = data || formData
+      const response = await ordering.users().forgotPassword(values)
       setFormState({
         result: response.content,
         loading: false
