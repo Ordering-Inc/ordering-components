@@ -151,20 +151,20 @@ export const MomentOption = (props) => {
       /**
        * Continue if is today and hour is smaller than current hour
        */
-      if (isToday && hour < now.getHours()) continue
+      if (isToday && hour < now?.getHours()) continue
       /**
        * Continue if is max date and hour is greater than max date hour
        */
-      if (isLastDate && hour > maxDate.getHours()) continue
+      if (isLastDate && hour > maxDate?.getHours()) continue
       for (let minute = 0; minute < 59; minute += 15) {
         /**
          * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
          */
-        if (isToday && hour === now.getHours() && minute <= now.getMinutes()) continue
+        if (isToday && hour === now?.getHours() && minute <= now.getMinutes()) continue
         /**
          * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
          */
-        if (isLastDate && hour === maxDate.getHours() && minute > maxDate.getMinutes()) continue
+        if (isLastDate && hour === maxDate?.getHours() && minute > maxDate.getMinutes()) continue
         const _hour = hour < 10 ? `0${hour}` : hour
         const startMinute = minute < 10 ? `0${minute}` : minute
         const endMinute = (minute + 14) < 10 ? `0${minute + 14}` : minute + 14
