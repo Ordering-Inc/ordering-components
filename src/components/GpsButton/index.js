@@ -57,7 +57,7 @@ export const GpsButton = (props) => {
               }
             })
           } else {
-            onError && onError(t('ERROR_GPS_BUTTON','Error to get result with gps button')
+            onError && onError(t('ERROR_GPS_BUTTON','Error to get result with gps button'))
           }
         })
       } else {
