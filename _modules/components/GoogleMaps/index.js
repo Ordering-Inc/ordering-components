@@ -95,8 +95,8 @@ var GoogleMaps = function GoogleMaps(props) {
 
   var location = fixedLocation || props.location;
   var center = {
-    lat: location.lat,
-    lng: location.lng
+    lat: location === null || location === void 0 ? void 0 : location.lat,
+    lng: location === null || location === void 0 ? void 0 : location.lng
   };
   /**
    * Function to generate multiple markers
@@ -108,7 +108,7 @@ var GoogleMaps = function GoogleMaps(props) {
     var businessesNear = 0;
 
     var _loop = function _loop(i) {
-      var _locations$i2, _locations$i3;
+      var _locations$i2, _locations$i3, _locations$i4, _locations$i5;
 
       var formatUrl = null;
 
@@ -119,10 +119,10 @@ var GoogleMaps = function GoogleMaps(props) {
       }
 
       var marker = new window.google.maps.Marker({
-        position: new window.google.maps.LatLng(locations[i].lat, locations[i].lng),
+        position: new window.google.maps.LatLng((_locations$i2 = locations[i]) === null || _locations$i2 === void 0 ? void 0 : _locations$i2.lat, (_locations$i3 = locations[i]) === null || _locations$i3 === void 0 ? void 0 : _locations$i3.lng),
         map: map,
-        title: (_locations$i2 = locations[i]) === null || _locations$i2 === void 0 ? void 0 : _locations$i2.slug,
-        icon: ((_locations$i3 = locations[i]) === null || _locations$i3 === void 0 ? void 0 : _locations$i3.icon) ? {
+        title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
+        icon: ((_locations$i5 = locations[i]) === null || _locations$i5 === void 0 ? void 0 : _locations$i5.icon) ? {
           url: formatUrl || locations[i].icon,
           scaledSize: new window.google.maps.Size(45, 45)
         } : null
@@ -133,9 +133,9 @@ var GoogleMaps = function GoogleMaps(props) {
 
         if (isNear) {
           marker.addListener('click', function () {
-            var _locations$i4;
+            var _locations$i6;
 
-            return onBusinessClick((_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug);
+            return onBusinessClick((_locations$i6 = locations[i]) === null || _locations$i6 === void 0 ? void 0 : _locations$i6.slug);
           });
           bounds.extend(marker.position);
           setMarkers(function (markers) {
@@ -176,6 +176,8 @@ var GoogleMaps = function GoogleMaps(props) {
         var zipcode = null;
 
         if (results && results.length > 0) {
+          var _address$location, _address$location2;
+
           var _iterator = _createForOfIteratorHelper(results[0].address_components),
               _step;
 
@@ -198,32 +200,32 @@ var GoogleMaps = function GoogleMaps(props) {
           var address = {
             address: results[0].formatted_address,
             location: {
-              lat: pos.lat(),
-              lng: pos.lng()
+              lat: pos === null || pos === void 0 ? void 0 : pos.lat(),
+              lng: pos === null || pos === void 0 ? void 0 : pos.lng()
             },
             zipcode: zipcode
           };
           handleChangeAddressMap && handleChangeAddressMap(address);
-          center.lat = address.location.lat;
-          center.lng = address.location.lng;
+          center.lat = (_address$location = address.location) === null || _address$location === void 0 ? void 0 : _address$location.lat;
+          center.lng = (_address$location2 = address.location) === null || _address$location2 === void 0 ? void 0 : _address$location2.lng;
         } else {
           googleMapMarker && googleMapMarker.setPosition(center);
           setErrors && setErrors('ERROR_NOT_FOUND_ADDRESS');
         }
 
-        googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+        googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
       });
     } else {
       var _location = {
-        lat: pos.lat(),
-        lng: pos.lng()
+        lat: pos === null || pos === void 0 ? void 0 : pos.lat(),
+        lng: pos === null || pos === void 0 ? void 0 : pos.lng()
       };
       handleChangeAddressMap && handleChangeAddressMap({
         location: _location
       });
-      center.lat = _location.lat;
-      center.lng = _location.lng;
-      googleMap && googleMap.panTo(new window.google.maps.LatLng(_location.lat, _location.lng));
+      center.lat = _location === null || _location === void 0 ? void 0 : _location.lat;
+      center.lng = _location === null || _location === void 0 ? void 0 : _location.lng;
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(_location === null || _location === void 0 ? void 0 : _location.lat, _location === null || _location === void 0 ? void 0 : _location.lng));
     }
   };
   /**
@@ -234,8 +236,8 @@ var GoogleMaps = function GoogleMaps(props) {
 
 
   var validateResult = function validateResult(map, marker, curPos) {
-    var loc1 = new window.google.maps.LatLng(curPos.lat(), curPos.lng());
-    var loc2 = new window.google.maps.LatLng(location.lat, location.lng);
+    var loc1 = new window.google.maps.LatLng(curPos === null || curPos === void 0 ? void 0 : curPos.lat(), curPos === null || curPos === void 0 ? void 0 : curPos.lng());
+    var loc2 = new window.google.maps.LatLng(location === null || location === void 0 ? void 0 : location.lat, location === null || location === void 0 ? void 0 : location.lng);
     var distance = window.google.maps.geometry.spherical.computeDistanceBetween(loc1, loc2);
 
     if (businessMap) {
@@ -253,7 +255,7 @@ var GoogleMaps = function GoogleMaps(props) {
       geocodePosition(curPos);
     } else {
       marker.setPosition(center);
-      map.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+      map.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
       setErrors && setErrors('ERROR_MAX_LIMIT_LOCATION');
     }
   };
@@ -288,9 +290,14 @@ var GoogleMaps = function GoogleMaps(props) {
         }
 
         generateMarkers(map);
+        marker = new window.google.maps.Marker({
+          position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
+          map: map
+        });
+        setGoogleMapMarker(marker);
       } else {
         marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center.lat, center.lng),
+          position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
           map: map,
           draggable: !!(mapControls === null || mapControls === void 0 ? void 0 : mapControls.isMarkerDraggable)
         });
@@ -333,10 +340,10 @@ var GoogleMaps = function GoogleMaps(props) {
         generateMarkers(googleMap);
       }
 
-      center.lat = location.lat;
-      center.lng = location.lng;
-      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center.lat, center.lng));
-      googleMap && googleMap.panTo(new window.google.maps.LatLng(center.lat, center.lng));
+      center.lat = location === null || location === void 0 ? void 0 : location.lat;
+      center.lng = location === null || location === void 0 ? void 0 : location.lng;
+      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
+      googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
   }, [location]);
   (0, _react.useEffect)(function () {
@@ -344,7 +351,7 @@ var GoogleMaps = function GoogleMaps(props) {
       var interval = setInterval(function () {
         if (googleReady) {
           var driverLocation = locations[0];
-          var newLocation = new window.google.maps.LatLng(driverLocation.lat, driverLocation.lng);
+          var newLocation = new window.google.maps.LatLng(driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lat, driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lng);
           markers[0].setPosition(newLocation);
           markers.forEach(function (marker) {
             return boundMap.extend(marker.position);

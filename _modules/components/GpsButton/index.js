@@ -13,6 +13,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _WrapperGoogleMaps = require("../WrapperGoogleMaps");
 
+var _LanguageContext = require("../../contexts/LanguageContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -45,6 +47,10 @@ var GpsButton = function GpsButton(props) {
       onData = props.onData,
       onError = props.onError,
       onAddress = props.onAddress;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -107,7 +113,7 @@ var GpsButton = function GpsButton(props) {
               }
             });
           } else {
-            onError(new Error('Error to get reault'));
+            onError && onError(t('ERROR_GPS_BUTTON', 'Error to get result with gps button'));
           }
         });
       } else {
@@ -119,7 +125,7 @@ var GpsButton = function GpsButton(props) {
       }
     }, function (err) {
       setIsLoading(false);
-      onError(new Error(err.message));
+      onError && onError(t('ERROR_GPS_BUTTON', err.message));
     }, {
       timeout: 5000,
       enableHighAccuracy: true

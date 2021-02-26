@@ -229,23 +229,23 @@ var MomentOption = function MomentOption(props) {
       /**
        * Continue if is today and hour is smaller than current hour
        */
-      if (isToday && hour < now.getHours()) continue;
+      if (isToday && hour < (now === null || now === void 0 ? void 0 : now.getHours())) continue;
       /**
        * Continue if is max date and hour is greater than max date hour
        */
 
-      if (isLastDate && hour > maxDate.getHours()) continue;
+      if (isLastDate && hour > (maxDate === null || maxDate === void 0 ? void 0 : maxDate.getHours())) continue;
 
       for (var minute = 0; minute < 59; minute += 15) {
         /**
          * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
          */
-        if (isToday && hour === now.getHours() && minute <= now.getMinutes()) continue;
+        if (isToday && hour === (now === null || now === void 0 ? void 0 : now.getHours()) && minute <= now.getMinutes()) continue;
         /**
          * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
          */
 
-        if (isLastDate && hour === maxDate.getHours() && minute > maxDate.getMinutes()) continue;
+        if (isLastDate && hour === (maxDate === null || maxDate === void 0 ? void 0 : maxDate.getHours()) && minute > maxDate.getMinutes()) continue;
 
         var _hour = hour < 10 ? "0".concat(hour) : hour;
 

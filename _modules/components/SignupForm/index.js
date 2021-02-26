@@ -17,6 +17,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
 
+var _SessionContext = require("../../contexts/SessionContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -56,10 +58,19 @@ var SignupForm = function SignupForm(props) {
       handleButtonSignupClick = props.handleButtonSignupClick,
       handleSuccessSignup = props.handleSuccessSignup,
       externalPhoneNumber = props.externalPhoneNumber;
+  var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 2),
+      login = _useSession2[1].login;
+
+  var _useValidationFields = (0, _ValidationsFieldsContext.useValidationFields)(),
+      _useValidationFields2 = _slicedToArray(_useValidationFields, 1),
+      validationFields = _useValidationFields2[0];
 
   var _useState = (0, _react.useState)({
     loading: false,
@@ -80,11 +91,25 @@ var SignupForm = function SignupForm(props) {
       signupData = _useState4[0],
       setSignupData = _useState4[1];
 
-  var requestsState = {};
+  var _useState5 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      verifyPhoneState = _useState6[0],
+      setVerifyPhoneState = _useState6[1];
 
-  var _useValidationFields = (0, _ValidationsFieldsContext.useValidationFields)(),
-      _useValidationFields2 = _slicedToArray(_useValidationFields, 1),
-      validationFields = _useValidationFields2[0];
+  var _useState7 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      checkPhoneCodeState = _useState8[0],
+      setCheckPhoneCodeState = _useState8[1];
   /**
    * Default fuction for signup workflow
    */
@@ -192,6 +217,156 @@ var SignupForm = function SignupForm(props) {
 
     return fieldName === 'password' || useChekoutFileds && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.checkout[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.checkout[fieldName].enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.checkout[fieldName].required);
   };
+  /**
+  * function to send verify code with twilio
+  * @param {Object} values object with cellphone and country code values
+  */
+
+
+  var sendVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
+      var response, res;
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(_objectSpread(_objectSpread({}, values), {}, {
+                  cellphone: values.cellphone,
+                  country_phone_code: "+".concat(values.country_phone_code)
+                }))
+              });
+
+            case 4:
+              response = _context2.sent;
+              _context2.next = 7;
+              return response.json();
+
+            case 7:
+              res = _context2.sent;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: false,
+                result: res
+              }));
+              _context2.next = 14;
+              break;
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](0);
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: false,
+                result: {
+                  error: _context2.t0.message
+                }
+              }));
+
+            case 14:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 11]]);
+    }));
+
+    return function sendVerifyPhoneCode(_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var handleSetCheckPhoneCodeState = function handleSetCheckPhoneCodeState(data) {
+    var values = data || {
+      loading: false,
+      result: {
+        error: false
+      }
+    };
+    setCheckPhoneCodeState(values);
+  };
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+
+
+  var checkVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
+      var _res$result, response, res, _res$result2, _res$result2$session;
+
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: true
+              }));
+              _context3.next = 4;
+              return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+              });
+
+            case 4:
+              response = _context3.sent;
+              _context3.next = 7;
+              return response.json();
+
+            case 7:
+              res = _context3.sent;
+
+              if (!(res === null || res === void 0 ? void 0 : res.error) && (res === null || res === void 0 ? void 0 : (_res$result = res.result) === null || _res$result === void 0 ? void 0 : _res$result.id)) {
+                login({
+                  user: res === null || res === void 0 ? void 0 : res.result,
+                  token: res === null || res === void 0 ? void 0 : (_res$result2 = res.result) === null || _res$result2 === void 0 ? void 0 : (_res$result2$session = _res$result2.session) === null || _res$result2$session === void 0 ? void 0 : _res$result2$session.access_token
+                });
+
+                if (handleSuccessSignup) {
+                  handleSuccessSignup(res === null || res === void 0 ? void 0 : res.result);
+                }
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: res
+              }));
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](0);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  error: _context3.t0.message
+                }
+              }));
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 12]]);
+    }));
+
+    return function checkVerifyPhoneCode(_x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
     return function () {
@@ -206,8 +381,13 @@ var SignupForm = function SignupForm(props) {
     signupData: signupData,
     showField: showField,
     isRequiredField: isRequiredField,
+    verifyPhoneState: verifyPhoneState,
+    checkPhoneCodeState: checkPhoneCodeState,
+    setCheckPhoneCodeState: handleSetCheckPhoneCodeState,
     handleChangeInput: handleChangeInput,
-    handleButtonSignupClick: handleButtonSignupClick || handleSignupClick
+    handleButtonSignupClick: handleButtonSignupClick || handleSignupClick,
+    handleSendVerifyCode: sendVerifyPhoneCode,
+    handleCheckPhoneCode: checkVerifyPhoneCode
   })));
 };
 
