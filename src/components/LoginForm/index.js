@@ -162,6 +162,11 @@ export const LoginForm = (props) => {
     }
   }
 
+  const handleSetCheckPhoneCodeState = (data) => {
+    const values = data || { loading: false, result: { error: false } }
+    setCheckPhoneCodeState(values)
+  }
+
   /**
    * function to verify code with endpoint
    * @param {Object} values object with cellphone and country code values
@@ -210,6 +215,7 @@ export const LoginForm = (props) => {
           credentials={credentials}
           verifyPhoneState={verifyPhoneState}
           checkPhoneCodeState={checkPhoneCodeState}
+          setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
           handleChangeInput={handleChangeInput}
           handleButtonLoginClick={handleButtonLoginClick || handleLoginClick}
           handleChangeTab={handleChangeTab}
