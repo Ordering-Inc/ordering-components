@@ -7,11 +7,12 @@ import { useConfig } from '../../contexts/ConfigContext'
 /**
  * Component to manage logout behavior without UI component
  */
-export const LogoutAction = (props) => {
+export const LogoutAction = (props: any) => {
   const {
     UIComponent,
     handleSuccessLogout,
     token,
+    isNative,
     useDefualtSessionManager
   } = props
 
@@ -22,7 +23,7 @@ export const LogoutAction = (props) => {
   const [{ configs }] = useConfig()
 
   useEffect(() => {
-    if (configs?.facebook_id?.value) {
+    if (configs?.facebook_id?.value && !isNative) {
       window.fbAsyncInit = () => {
         window.FB.init({
           appId: configs?.facebook_id?.value,
