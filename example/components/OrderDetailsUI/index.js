@@ -53,7 +53,7 @@ export const OrderDetailsUI = (props) => {
           <p key={i}>ERROR: [e]</p>
         ))}
 
-      {!loading && Object.keys(order).length === 0 && (
+      {!loading && order && Object.keys(order).length === 0 && (
         <p>Not Found elements</p>
       )}
 

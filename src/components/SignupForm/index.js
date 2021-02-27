@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
+import { useSession } from '../../contexts/SessionContext'
 
 /**
  * Component to manage signup behavior without UI component
@@ -10,45 +12,30 @@ export const SignupForm = (props) => {
     UIComponent,
     useChekoutFileds,
     handleButtonSignupClick,
-    handleSuccessSignup
+    handleSuccessSignup,
+    externalPhoneNumber
   } = props
+  const requestsState = {}
 
   const [ordering] = useApi()
-  const [formState, setFormState] = useState({ loading: false, result: { error: false } })
-  const [signupData, setSignupData] = useState({ email: '', cellphone: '', password: '' })
-  const requestsState = {}
-  const [validationFields, setValidationFields] = useState({ loading: useChekoutFileds, fields: {} })
+  const [, { login }] = useSession()
+  const [validationFields] = useValidationFields()
 
-  const loadValidationFields = async () => {
-    try {
-      const source = {}
-      requestsState.validation = source
-      const { content: { error, result } } = await ordering.validationFields().get({ cancelToken: source })
-      const fields = {}
-      if (!error) {
-        result.forEach((field) => {
-          if (field.validate === 'checkout') {
-            fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-          }
-        })
-      }
-      setValidationFields({ loading: false, fields })
-    } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setValidationFields({ loading: false })
-      }
-    }
-  }
+  const [formState, setFormState] = useState({ loading: false, result: { error: false } })
+  const [signupData, setSignupData] = useState({ email: '', cellphone: externalPhoneNumber || '', password: '' })
+  const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
+  const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
 
   /**
    * Default fuction for signup workflow
    */
-  const handleSignupClick = async () => {
+  const handleSignupClick = async (values) => {
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
       requestsState.signup = source
-      const response = await ordering.users().save(signupData, { cancelToken: source })
+      const data = values || signupData
+      const response = await ordering.users().save(data, { cancelToken: source })
       setFormState({
         result: response.content,
         loading: false
@@ -75,10 +62,24 @@ export const SignupForm = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
+  const handleChangeInput = (e, isMany) => {
+    let currentChanges = {}
+    if (isMany) {
+      Object.values(e).map(obj => {
+        currentChanges = {
+          ...currentChanges,
+          [obj.name]: obj.value
+        }
+      })
+    } else {
+      currentChanges = {
+        [e.target.name]: e.target.value
+      }
+    }
+
     setSignupData({
       ...signupData,
-      [e.target.name]: e.target.value
+      ...currentChanges
     })
   }
 
@@ -88,8 +89,9 @@ export const SignupForm = (props) => {
    */
   const showField = (fieldName) => {
     return !useChekoutFileds ||
-              (!validationFields.loading && !validationFields.fields?.[fieldName]) ||
-              (!validationFields.loading && validationFields.fields?.[fieldName] && validationFields.fields?.[fieldName]?.enabled)
+      (!validationFields.loading && !validationFields.fields?.checkout[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.checkout[fieldName] &&
+        validationFields.fields?.checkout[fieldName].enabled)
   }
 
   /**
@@ -98,20 +100,90 @@ export const SignupForm = (props) => {
    */
   const isRequiredField = (fieldName) => {
     return fieldName === 'password' || (useChekoutFileds &&
-            !validationFields.loading &&
-            validationFields.fields?.[fieldName] &&
-            validationFields.fields?.[fieldName]?.enabled &&
-            validationFields.fields?.[fieldName]?.required)
+      !validationFields.loading &&
+      validationFields.fields?.checkout[fieldName] &&
+      validationFields.fields?.checkout[fieldName].enabled &&
+      validationFields.fields?.checkout[fieldName].required)
+  }
+
+  /**
+  * function to send verify code with twilio
+  * @param {Object} values object with cellphone and country code values
+  */
+  const sendVerifyPhoneCode = async (values) => {
+    try {
+      setVerifyPhoneState({ ...verifyPhoneState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...values,
+          cellphone: values.cellphone,
+          country_phone_code: `+${values.country_phone_code}`
+        })
+      })
+      const res = await response.json();
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
+
+  const handleSetCheckPhoneCodeState = (data) => {
+    const values = data || { loading: false, result: { error: false } }
+    setCheckPhoneCodeState(values)
+  }
+
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+  const checkVerifyPhoneCode = async (values) => {
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values)
+      })
+      const res = await response.json();
+      if (!res?.error && res?.result?.id) {
+        login({
+          user: res?.result,
+          token: res?.result?.session?.access_token
+        })
+        if (handleSuccessSignup) {
+          handleSuccessSignup(res?.result)
+        }
+      }
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
   }
 
   useEffect(() => {
-    if (useChekoutFileds) {
-      loadValidationFields()
-    }
     return () => {
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
-      }
       if (requestsState.signup) {
         requestsState.signup.cancel()
       }
@@ -128,8 +200,13 @@ export const SignupForm = (props) => {
           signupData={signupData}
           showField={showField}
           isRequiredField={isRequiredField}
-          hanldeChangeInput={hanldeChangeInput}
+          verifyPhoneState={verifyPhoneState}
+          checkPhoneCodeState={checkPhoneCodeState}
+          setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
+          handleChangeInput={handleChangeInput}
           handleButtonSignupClick={handleButtonSignupClick || handleSignupClick}
+          handleSendVerifyCode={sendVerifyPhoneCode}
+          handleCheckPhoneCode={checkVerifyPhoneCode}
         />
       )}
     </>

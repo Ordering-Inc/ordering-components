@@ -20,7 +20,7 @@ export const Home = () => {
         </li>
         <h2>B</h2>
         <li>
-          <Link to='/businesses_list'>Businesses List</Link>
+          <Link to='/business_map'>Businesses Map</Link>
         </li>
         <li>
           <Link to='/business_basic_information'>Business basic information</Link>
@@ -39,9 +39,6 @@ export const Home = () => {
         </li>
         <li>
           <Link to='/business_products_categories'>Business products categories</Link>
-        </li>
-        <li>
-          <Link to='/business_featured_options'>Business featured options</Link>
         </li>
         <li>
           <Link to='/business_controller'>Business Controller</Link>
@@ -176,9 +173,15 @@ export const Home = () => {
         <li>
           <Link to='/payment_option_stripe_redirect'>Payments Options Stripe Redirect</Link>
         </li>
+        <li>
+          <Link to='/phone_autocomplete'>Phone Autocomplete</Link>
+        </li>
         <h2>R</h2>
         <li>
           <Link to='/review_orders'>Review my Orders</Link>
+        </li>
+        <li>
+          <Link to='/password/reset'>Reset Password</Link>
         </li>
         <h2>S</h2>
         <li>

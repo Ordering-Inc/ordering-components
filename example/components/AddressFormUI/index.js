@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { GoogleAutocompleteInput } from '../../../src/components/GoogleAutocompleteInput'
 import { GoogleGpsButton } from '../../../src/components/GpsButton'
+import { useConfig } from '../../../src/contexts/ConfigContext'
+import { GpsButtonUI } from '../GpsButtonUI'
 
 export const AddressFormUI = (props) => {
   const {
@@ -19,6 +21,7 @@ export const AddressFormUI = (props) => {
     hanldeChangeInput
   } = props
 
+  const [{ loading, configs }] = useConfig()
   const { handleSubmit, register, errors } = useForm()
   const [state, setState] = useState({ selectedFromAutocomplete: true })
 
@@ -62,14 +65,14 @@ export const AddressFormUI = (props) => {
         beforeComponents.map((BeforeComponent, i) => <BeforeComponent key={i} {...props} />)
       }
       {
-        (validationFields.loading || addressState.loading) && <p>Loading form...</p>
+        (validationFields?.loading || addressState?.loading || loading) && <p>Loading form...</p>
       }
       {
-        !validationFields.loading && !addressState.loading && (
+        !validationFields?.loading && !addressState.loading && !loading && (
           <>
             <form onSubmit={handleSubmit(onSubmit)}>
               <GoogleAutocompleteInput
-                apiKey=''
+                apiKey={configs?.google_maps_api_key?.value}
                 name='address'
                 placeholder='Address'
                 onChangeAddress={handleChangeAddress}
@@ -82,7 +85,10 @@ export const AddressFormUI = (props) => {
               {errors.address && <i style={{ color: '#c10000' }}>{errors.address.message}</i>}
               {!state.selectedFromAutocomplete && <i style={{ color: '#c10000' }}>Select address from autocomplete.</i>}
               <GoogleGpsButton
-                apiKey=''
+                UIComponent={GpsButtonUI}
+                IconButton
+                IconLoadingButton
+                apiKey={configs?.google_maps_api_key?.value}
                 onAddress={handleChangeAddress}
               />
               {

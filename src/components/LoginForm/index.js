@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useEvent } from '../../contexts/EventContext'
 
 /**
  * Component to manage login behavior without UI component
@@ -13,13 +14,18 @@ export const LoginForm = (props) => {
     handleSuccessLogin,
     useLoginByEmail,
     useLoginByCellphone,
-    useDefualtSessionManager
+    useDefualtSessionManager,
+    urlToRedirect,
+    allowedLevels
   } = props
 
   const [ordering] = useApi()
   let { defaultLoginTab } = props
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
+  const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
+  const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
+  const [events] = useEvent()
 
   if (!useLoginByEmail && !useLoginByCellphone) {
     defaultLoginTab = 'none'
@@ -30,35 +36,70 @@ export const LoginForm = (props) => {
   }
 
   const [loginTab, setLoginTab] = useState(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email'))
-  const [, { login }] = useSession()
+  const [, { login, logout }] = useSession()
 
   /**
    * Default fuction for login workflow
    * @param {object} credentials Login credentials email/cellphone and password
    */
-  const handleLoginClick = async () => {
+  const handleLoginClick = async (values) => {
     try {
       const _credentials = {
-        [loginTab]: credentials[loginTab],
-        password: credentials.password
+        [loginTab]: values && values[loginTab] || credentials[loginTab],
+        password: values && values?.password || credentials.password
       }
       setFormState({ ...formState, loading: true })
-      const response = await ordering.users().auth(_credentials)
-      setFormState({
-        result: response.content,
-        loading: false
-      })
-      if (!response.content.error) {
+      const { content: { error, result } } = await ordering.users().auth(_credentials)
+      if (!error) {
         if (useDefualtSessionManager) {
+          if (allowedLevels && allowedLevels?.length > 0) {
+            const { level, session: { access_token } } = result
+            if (!allowedLevels.includes(level)) {
+              try {
+                const { content: logoutResp } = await ordering.setAccessToken(access_token).users().logout()
+                if (!logoutResp.error) {
+                  logout()
+                }
+                setFormState({
+                  result: {
+                    error: true,
+                    result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                  },
+                  loading: false
+                })
+              } catch (error) {
+                setFormState({
+                  result: {
+                    error: true,
+                    result: error.message
+                  },
+                  loading: false
+                })
+              }
+              return
+            }
+          }
           login({
-            user: response.content.result,
-            token: response.content.result.session.access_token
+            user: result,
+            token: result.session.access_token
           })
         }
+        events.emit('userLogin', result)
         if (handleSuccessLogin) {
-          handleSuccessLogin(response.content.result)
+          handleSuccessLogin(result)
+        }
+
+        if (urlToRedirect) {
+          window.location.href = `${window.location.origin}${urlToRedirect}`
         }
       }
+      setFormState({
+        result: {
+          error,
+          result
+        },
+        loading: false
+      })
     } catch (err) {
       setFormState({
         result: {
@@ -74,7 +115,7 @@ export const LoginForm = (props) => {
    * Update credential data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
+  const handleChangeInput = (e) => {
     setCredentials({
       ...credentials,
       [e.target.name]: e.target.value
@@ -85,8 +126,83 @@ export const LoginForm = (props) => {
    * Change current selected tab
    * @param {string} tab Reference tab email or cellphone
    */
-  const hanldeChangeTab = (tab) => {
+  const handleChangeTab = (tab) => {
     setLoginTab(tab)
+  }
+
+  /**
+   * function to send verify code with twilio
+   * @param {Object} values object with cellphone and country code values
+   */
+  const sendVerifyPhoneCode = async (values) => {
+    try {
+      setVerifyPhoneState({ ...verifyPhoneState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cellphone: values.cellphone,
+          country_phone_code: `+${values.country_phone_code}`
+        })
+      })
+      const res = await response.json();
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
+
+  const handleSetCheckPhoneCodeState = (data) => {
+    const values = data || { loading: false, result: { error: false } }
+    setCheckPhoneCodeState(values)
+  }
+
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+  const checkVerifyPhoneCode = async (values) => {
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values)
+      })
+      const res = await response.json();
+      if (!res?.error && res?.result?.id) {
+        login({
+          user: res?.result,
+          token: res?.result?.session?.access_token
+        })
+        if (handleSuccessLogin) {
+          handleSuccessLogin(res?.result)
+        }
+      }
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
   }
 
   return (
@@ -97,9 +213,14 @@ export const LoginForm = (props) => {
           formState={formState}
           loginTab={loginTab}
           credentials={credentials}
-          hanldeChangeInput={hanldeChangeInput}
+          verifyPhoneState={verifyPhoneState}
+          checkPhoneCodeState={checkPhoneCodeState}
+          setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
+          handleChangeInput={handleChangeInput}
           handleButtonLoginClick={handleButtonLoginClick || handleLoginClick}
-          hanldeChangeTab={hanldeChangeTab}
+          handleChangeTab={handleChangeTab}
+          handleSendVerifyCode={sendVerifyPhoneCode}
+          handleCheckPhoneCode={checkVerifyPhoneCode}
         />
       )}
     </>

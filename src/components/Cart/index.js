@@ -28,7 +28,6 @@ export const Cart = (props) => {
    * Max total product in cart by config
    */
   const maxCartProductConfig = (stateConfig.configs.max_product_amount ? parseInt(stateConfig.configs.max_product_amount) : 100) - totalBalance
-
   /**
    * Calc balance by product id
    */
@@ -46,22 +45,6 @@ export const Cart = (props) => {
     return productMax - (product.balance - product.quantity)
   }
 
-  // /**
-  //  * Clear all product of the cart
-  //  */
-  // const clearCart = (uuid) => {
-  //   clearCart(uuid)
-  //   // dispatchOrd⁄er({ type: ORDER_ACTIONS.CLEAR_PRODUCTS })
-  // }
-
-  // /**
-  //  * Remove a product of the cart
-  //  */
-  // const removeProduct = (product) => {
-  //   removeProduct(product)
-  //   dispatchOrder({ type: ORDER_ACTIONS.REMOVE_PRODUCT, productCode })
-  // }
-
   /**
    * Change product quantity of the cart
    */
@@ -71,7 +54,7 @@ export const Cart = (props) => {
     } else {
       updateProduct({
         id: product.id,
-        business_id: product.id,
+        business_id: product.business_id,
         code: product.code,
         quantity: quantity
       })
@@ -105,8 +88,9 @@ Cart.propTypes = {
   /**
    * Function to edit product behavior
    */
-  handleEditProduct: PropTypes.func
-}
-
-Cart.defaultProps = {
+  handleEditProduct: PropTypes.func,
+  /**
+   * String filter to fetch validation fields
+   */
+  validationFieldsType: PropTypes.string
 }

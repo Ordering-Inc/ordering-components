@@ -23,3 +23,13 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', (email, password) => {
+  cy.visit('/session_manager')
+  cy.server({ method: 'POST' })
+  cy.route('/*/*/*/auth**').as('postLogin')
+  cy.get('input[name=email]').type(email)
+  cy.get('input[name=password]').type(password)
+  cy.get('button').contains('Login').click()
+  cy.wait('@postLogin').its('status').should('eq', 200)
+})

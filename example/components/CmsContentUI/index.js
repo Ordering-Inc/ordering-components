@@ -2,9 +2,7 @@ import React from 'react'
 // import parse from 'html-react-parser'
 export const CmsContentUI = (props) => {
   const {
-    body,
-    loading,
-    error,
+    cmsState,
     beforeComponents,
     afterComponents,
     beforeElements,
@@ -24,20 +22,20 @@ export const CmsContentUI = (props) => {
         beforeComponents.map((BeforeComponent, i) => <BeforeComponent key={i} {...props} />)
       }
       {
-        loading && 'Loading...'
+        cmsState.loading && 'Loading...'
       }
       {
-        body && (
+        cmsState.body && (
           <div
             className='page'
             dangerouslySetInnerHTML={{
-              __html: body
+              __html: cmsState.body
             }}
           />
         )
       }
       {
-        (!loading && error) && error
+        (!cmsState.loading && cmsState.error) && 'Ups... An error has ocurred'
       }
       {
         afterComponents.map((AfterComponent, i) => <AfterComponent key={i} {...props} />)

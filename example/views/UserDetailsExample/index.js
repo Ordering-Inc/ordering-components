@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserDetails } from '../../../src/components/UserDetails'
+import { UserFormDetails } from '../../../src/components/UserFormDetails'
 import { UserDetailsUI } from '../../components/UserDetailsUI'
 import { TestComponent } from '../../components/TestComponent'
 
@@ -34,6 +34,10 @@ export const UserDetailsExample = () => {
      */
     accessToken: 'TOKEN',
     /**
+     * onEditUserClick
+     */
+    onEditUserClick: () => { console.log('editing') },
+    /**
      * Components types before user details
      * Array of type components, the parent props will pass to these components
      */
@@ -55,5 +59,5 @@ export const UserDetailsExample = () => {
     afterElements: [<p key>Test Element After</p>]
   }
 
-  return <UserDetails {...userProps} />
+  return <UserFormDetails {...userProps} />
 }

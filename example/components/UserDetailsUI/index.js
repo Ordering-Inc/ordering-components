@@ -48,7 +48,7 @@ export const UserDetailsUI = (props) => {
 
       {(useValidationFields || !validationFields.loading) && !userState.loading && userState.result && !userState.result.error && userState.result.result && (
         <>
-          <button className='btn-edit' onClick={() => onEditUserClick()}>
+          <button className='btn-edit' onClick={() => onEditUserClick && onEditUserClick()}>
             {!isEdit ? '✏️' : '❌'}
           </button>
           <br />

@@ -12,8 +12,6 @@ export const Checkout = (props) => {
     actionsBeforePlace,
     handleCustomClick,
     onPlaceOrderClick,
-    useValidationFields,
-    validationFieldsType,
     UIComponent
   } = props
 
@@ -23,16 +21,9 @@ export const Checkout = (props) => {
   const [errors, setErrors] = useState(null)
 
   /**
-   * Save array of inputs validate to show
-   */
-  const [validationFields, setValidationFields] = useState({ loading: useValidationFields })
-
-  const requestsState = {}
-
-  /**
    * Order context
    */
-  const [orderState, { placeCart, confirmCart }] = useOrder()
+  const [orderState, { placeCart }] = useOrder()
   /**
    * Object to save an object with business information
    */
@@ -50,7 +41,7 @@ export const Checkout = (props) => {
    */
   const getBusiness = async () => {
     try {
-      const props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods']
+      const props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location']
       const { content: { result } } = await ordering.businesses(businessId).select(props).get()
       setBusinessDetails({
         ...businessDetails,
@@ -76,71 +67,50 @@ export const Checkout = (props) => {
         source_id: paymethodSelected.data.id
       }
     }
-    const data = {
+    let payload = {
       paymethod_id: paymethodSelected.paymethodId,
       paymethod_data: paymethodSelected.data,
-      delivery_zone_id: cart.delivery_zone_id,
       offer_id: cart.offer_id,
       amount: cart.total
     }
-    if (handleCustomClick) {
-      handleCustomClick(data, paymethodSelected, cart)
-      return
-    }
-    setPlacing(true)
-    const result = await placeCart(cart.uuid, {
-      paymethod_id: paymethodSelected.paymethodId,
-      paymethod_data: paymethodData,
-      delivery_zone_id: cart.delivery_zone_id,
-      offer_id: cart.offer_id,
-      amount: cart.total
-    })
 
-    if (result.error) {
-      setErrors(result.result)
-      return
-    }
-
-    let cartResult = result.result
-
-    if (cartResult?.paymethod_data?.status === 2 && actionsBeforePlace) {
-      const toConfirm = await actionsBeforePlace(paymethodSelected, result.result)
-      if (toConfirm) {
-        const confirmResponse = await confirmCart(cart.uuid)
-        cartResult = confirmResponse.result
+    if (orderState.options.type === 1) {
+      payload = {
+        ...payload,
+        delivery_zone_id: cart.delivery_zone_id
       }
     }
+
+    if (handleCustomClick) {
+      handleCustomClick(payload, paymethodSelected, cart)
+      return
+    }
+
+    payload = {
+      ...payload,
+      paymethod_data: paymethodData
+    }
+
+    setPlacing(true)
+    const result = await placeCart(cart.uuid, payload)
+
+    if (result?.error) {
+      setErrors(result?.result)
+      return
+    }
+
+    const cartResult = result?.result
+
+    if (cartResult?.paymethod_data?.status === 2 && actionsBeforePlace) {
+      await actionsBeforePlace(paymethodSelected, result.result)
+    }
     setPlacing(false)
-    onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cartResult)
+    onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
   }
 
   const handlePaymethodChange = (paymethod) => {
     setPaymethodSelected(paymethod)
   }
-
-  useEffect(() => {
-    if (useValidationFields) {
-      const source = {}
-      requestsState.validation = source
-      ordering.validationFields().toType(validationFieldsType).get({ cancelToken: source }).then((response) => {
-        const fields = {}
-        response.content.result.forEach((field) => {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-        })
-        setValidationFields({ loading: false, fields })
-      }).catch((err) => {
-        if (err.constructor.name !== 'Cancel') {
-          setValidationFields({ loading: false })
-        }
-      })
-    }
-
-    return () => {
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
-      }
-    }
-  }, [])
 
   useEffect(() => {
     getBusiness()
@@ -173,7 +143,6 @@ export const Checkout = (props) => {
           orderOptions={orderState.options}
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
-          validationFields={validationFields}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
         />

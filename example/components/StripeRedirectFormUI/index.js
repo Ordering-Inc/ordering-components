@@ -9,7 +9,7 @@ const inputStyle = {
 export const StripeRedirectFormUI = (props) => {
   const {
     user,
-    paymethods,
+    paymentMethods,
     handleSubmitPaymentMethod,
     beforeComponents,
     afterComponents,
@@ -43,7 +43,7 @@ export const StripeRedirectFormUI = (props) => {
           }
         >
           <option value=''>Select a payment method</option>
-          {paymethods?.length > 0 && paymethods.map((paymethod, i) => (
+          {paymentMethods?.length > 0 && paymentMethods.map((paymethod, i) => (
             <option key={i} value={paymethod.value}>{paymethod.name}</option>
           ))}
         </select>

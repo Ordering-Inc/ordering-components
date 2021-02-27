@@ -10,6 +10,10 @@ dayjs.extend(utc)
 export const BusinessList = (props) => {
   const {
     UIComponent,
+    initialOrderType,
+    initialFilterKey,
+    initialFilterValue,
+    isSortByReview,
     isSearchByName,
     isSearchByDescription,
     propsToFetch,
@@ -19,13 +23,21 @@ export const BusinessList = (props) => {
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
   const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: 10, totalItems: null, totalPages: null })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
-  const [searchValue, setSearchValue] = useState(null)
+  const [searchValue, setSearchValue] = useState('')
+  const [timeLimitValue, setTimeLimitValue] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
 
   const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
+  const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
 
+  const sortBusinesses = (array, option) => {
+    if (option === 'review') {
+      return array.sort((a, b) => b.reviews.total - a.reviews.total)
+    }
+    return array
+  }
   /**
    * Get businesses by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
@@ -33,13 +45,18 @@ export const BusinessList = (props) => {
   const getBusinesses = async (newFetch) => {
     try {
       setBusinessesList({ ...businessesList, loading: true })
-      const parameters = {
-        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
-        type: orderState.options?.type || 1,
-        page: newFetch ? 1 : paginationProps.currentPage + 1,
-        page_size: paginationProps.pageSize
-      }
 
+      let parameters = {
+        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
+        type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
+      }
+      if (!isSortByReview) {
+        const paginationParams = {
+          page: newFetch ? 1 : paginationProps.currentPage + 1,
+          page_size: paginationProps.pageSize
+        }
+        parameters = { ...parameters, ...paginationParams }
+      }
       if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
         const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
         parameters.timestamp = moment
@@ -51,15 +68,37 @@ export const BusinessList = (props) => {
         conditions.push({ attribute: businessTypeSelected, value: true })
       }
 
+      if (timeLimitValue) {
+        if (orderState.options?.type === 1) {
+          conditions.push({
+            attribute: 'delivery_time',
+            value: {
+              condition: '<=',
+              value: timeLimitValue
+            }
+          })
+        }
+        if (orderState.options?.type === 2) {
+          conditions.push({
+            attribute: 'pickup_time',
+            value: {
+              condition: '<=',
+              value: timeLimitValue
+            }
+          })
+        }
+      }
+
       if (searchValue) {
         const searchConditions = []
+        const isSpecialCharacter = rex.test(searchValue)
         if (isSearchByName) {
           searchConditions.push(
             {
               attribute: 'name',
               value: {
                 condition: 'ilike',
-                value: encodeURI(`%${searchValue}%`)
+                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -70,7 +109,7 @@ export const BusinessList = (props) => {
               attribute: 'description',
               value: {
                 condition: 'ilike',
-                value: encodeURI(`%${searchValue}%`)
+                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -95,6 +134,12 @@ export const BusinessList = (props) => {
         ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
         : ordering.businesses().select(propsToFetch).parameters(parameters)
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
+      if (isSortByReview) {
+        const _result = sortBusinesses(result, 'review')
+        businessesList.businesses = _result
+      } else {
+        businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
+      }
       businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
       setBusinessesList({
         ...businessesList,
@@ -109,6 +154,7 @@ export const BusinessList = (props) => {
         ...paginationProps,
         currentPage: pagination.current_page,
         totalPages: pagination.total_pages,
+        totalItems: pagination.total,
         nextPageItems
       })
     } catch (err) {
@@ -138,7 +184,24 @@ export const BusinessList = (props) => {
   useEffect(() => {
     if (orderState.loading || !orderState.options?.address?.location) return
     getBusinesses(true)
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue])
+
+  /**
+   * Listening initial filter
+   */
+  useEffect(() => {
+    if (!initialFilterKey && !initialFilterValue) return
+    switch (initialFilterKey) {
+      case 'category':
+        handleChangeBusinessType(initialFilterValue)
+        break
+      case 'timeLimit':
+        handleChangeTimeLimit(initialFilterValue)
+        break
+      case 'search':
+        handleChangeSearch(initialFilterValue)
+    }
+  }, [initialFilterKey, initialFilterValue])
 
   /**
    * Default behavior business click
@@ -168,12 +231,39 @@ export const BusinessList = (props) => {
    * @param {string} search Search value
    */
   const handleChangeSearch = (search) => {
-    setBusinessesList({
-      ...businessesList,
-      businesses: [],
-      loading: true
-    })
+    if (!!search !== !!searchValue) {
+      setBusinessesList({
+        ...businessesList,
+        businesses: [],
+        loading: true
+      })
+    } else {
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
+    }
     setSearchValue(search)
+  }
+
+  /**
+   * Change time limt value
+   * @param {string} time time limt value (for example: 0:30)
+   */
+  const handleChangeTimeLimit = (time) => {
+    if (!!time !== !!timeLimitValue) {
+      setBusinessesList({
+        ...businessesList,
+        businesses: [],
+        loading: true
+      })
+    } else {
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
+    }
+    setTimeLimitValue(time)
   }
 
   return (
@@ -185,8 +275,11 @@ export const BusinessList = (props) => {
             businessesList={businessesList}
             paginationProps={paginationProps}
             searchValue={searchValue}
+            timeLimitValue={timeLimitValue}
+            businessTypeSelected={businessTypeSelected}
             getBusinesses={getBusinesses}
             handleChangeSearch={handleChangeSearch}
+            handleChangeTimeLimit={handleChangeTimeLimit}
             handleBusinessClick={handleBusinessClick}
             handleChangeBusinessType={handleChangeBusinessType}
           />

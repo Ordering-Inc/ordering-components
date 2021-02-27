@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 /**
  * Component to manage logout behavior without UI component
@@ -11,6 +12,7 @@ export const LogoutAction = (props) => {
     UIComponent,
     handleSuccessLogout,
     token,
+    isNative,
     useDefualtSessionManager
   } = props
 
@@ -18,6 +20,33 @@ export const LogoutAction = (props) => {
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
 
   const [data, { logout }] = useSession()
+  const [{ configs }] = useConfig()
+
+  useEffect(() => {
+    if (configs?.facebook_id?.value && !isNative) {
+      window.fbAsyncInit = () => {
+        window.FB.init({
+          appId: configs?.facebook_id?.value,
+          cookie: true,
+          xfbml: false,
+          version: 'v7.0',
+          status: true
+        })
+      }
+
+      if (window.document.getElementById('facebook-jssdk')) {
+        return
+      }
+
+      const js = window.document.createElement('script')
+      const fjs = window.document.getElementsByTagName('script')[0]
+      js.id = 'facebook-jssdk'
+      js.async = true
+      js.defer = true
+      js.src = 'https://connect.facebook.net/en_US/sdk.js'
+      fjs.parentNode.insertBefore(js, fjs)
+    }
+  }, [configs?.facebook_id?.value])
 
   /**
    * Default fuction for logout workflow

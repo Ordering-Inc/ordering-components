@@ -6,8 +6,6 @@ import { BusinessAndProductList } from './components/BusinessAndProductList'
 import { BusinessBasicInformation } from './components/BusinessBasicInformation'
 import { BusinessController } from './components/BusinessController'
 import { BusinessList } from './components/BusinessList'
-import { BusinessesList } from './components/BusinessesList'
-import { BusinessFeaturedProducts } from './components/BusinessFeaturedProducts'
 import { BusinessInformation } from './components/BusinessInformation'
 import { BusinessProductsCategories } from './components/BusinessProductsCategories'
 import { BusinessProductsSearch } from './components/BusinessProductsSearch'
@@ -61,13 +59,14 @@ import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
 import { SingleOrderCard } from './components/SingleOrderCard'
 import { SingleProductCard } from './components/SingleProductCard'
-import { UserDetails } from './components/UserDetails'
-import { UserProfileForm } from './components/UserProfileForm'
+import { UserFormDetails } from './components/UserFormDetails'
 import { UpsellingPage } from './components/UpsellingPage'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
 import { OrderDetails } from './components/OrderDetails'
 import { OrderReview } from './components/OrderReview'
 import { CmsContent } from './components/CmsContent'
+import { PhoneAutocomplete } from './components/PhoneAutocomplete'
+import { BusinessesMap } from './components/BusinessesMap'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -78,7 +77,10 @@ import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
 import { EventContext, EventProvider, useEvent } from './contexts/EventContext'
 import { UtilsContext, UtilsProviders, useUtils } from './contexts/UtilsContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
+import { CustomerContext, CustomerProvider, useCustomer } from './contexts/CustomerContext'
+import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
+import { PaymentOptionPaypal } from './components/PaymentOptionPaypal'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
 import { PaymentOptionStripeDirect } from './components/PaymentOptionStripeDirect'
 import { PaymentOptionStripeRedirect } from './components/PaymentOptionStripeRedirect'
@@ -86,7 +88,8 @@ import { StripeElementsForm } from './components/StripeElementsForm'
 import { CardForm } from './components/StripeElementsForm/CardForm'
 import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/StripeRedirectForm'
 import { FloatingButton } from './components/FloatingButton'
-import { InputPhoneNumber } from './components/InputPhoneNumber'
+import { ResetPassword } from './components/ResetPassword'
+import { Analytics } from './components/Analitycs'
 
 export {
   AddressDetails,
@@ -97,8 +100,6 @@ export {
   BusinessBasicInformation,
   BusinessController,
   BusinessList,
-  BusinessesList,
-  BusinessFeaturedProducts,
   BusinessInformation,
   BusinessProductsCategories,
   BusinessProductsSearch,
@@ -154,22 +155,25 @@ export {
   SingleBusinessCard,
   SingleOrderCard,
   SingleProductCard,
-  UserDetails,
-  UserProfileForm,
+  UserFormDetails,
   UpsellingPage,
   WrapperGoogleMaps,
   OrderDetails,
   OrderReview,
   PaymentOptionCash,
+  PaymentOptionPaypal,
   PaymentOptionStripe,
   PaymentOptionStripeDirect,
   PaymentOptionStripeRedirect,
+  PhoneAutocomplete,
+  BusinessesMap,
   StripeElementsForm,
   CardForm,
   StripeRedirectForm,
   CmsContent,
   FloatingButton,
-  InputPhoneNumber,
+  ResetPassword,
+  Analytics,
   // Contexts
   ConfigContext,
   ConfigProvider,
@@ -199,5 +203,11 @@ export {
   useEvent,
   UtilsContext,
   UtilsProviders,
-  useUtils
+  useUtils,
+  ValidationFieldsContext,
+  ValidationFieldsProvider,
+  useValidationFields,
+  CustomerContext,
+  CustomerProvider,
+  useCustomer
 }

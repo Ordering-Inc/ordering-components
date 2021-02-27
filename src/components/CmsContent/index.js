@@ -15,32 +15,28 @@ export const CmsContent = (props) => {
   /**
    * Array to save the body of the page
    */
-  const [body, setBody] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [cmsState, setCmsState] = useState({ body: null, loading: false, error: null })
   const [ordering] = useApi()
   const requestsState = {}
   /**
    * Method used to get the page by slug
    */
   const getPage = async (slug) => {
-    setLoading(true)
+    setCmsState({ ...cmsState, loading: true })
     try {
       const source = {}
       requestsState.page = source
       const { content: { error, result } } = await ordering.pages(slug).get({ cancelToken: source })
-      setLoading(false)
+      setCmsState({ ...cmsState, loading: false })
       if (!error) {
-        setBody(result.body)
-        setError(null)
+        setCmsState({ ...cmsState, body: result.body })
       } else {
-        setError(result)
+        setCmsState({ ...cmsState, error: result })
         onNotFound && onNotFound(pageSlug)
       }
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
-        setLoading(false)
-        setError([error.message])
+        setCmsState({ ...cmsState, loading: false, error: [err.message] })
       }
     }
   }
@@ -59,9 +55,7 @@ export const CmsContent = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          body={body}
-          loading={loading}
-          error={error}
+          cmsState={cmsState}
         />
       )}
     </>

@@ -9,7 +9,7 @@ import { MomentOptionUI } from '../MomentOptionUI'
 import { AddressDetails } from '../../../src/components/AddressDetails'
 import { AddressDetailsUI } from '../AddressDetailsUI'
 
-import { UserDetails } from '../../../src/components/UserDetails'
+import { UserFormDetails } from '../../../src/components/UserFormDetails'
 import { UserDetailsUI } from '../UserDetailsUI'
 
 import { PaymentOptions } from '../../../src/components/PaymentOptions'
@@ -23,6 +23,7 @@ import { CouponControlUI } from '../CouponControlUI'
 
 import { Cart } from '../../../src/components/Cart'
 import { CartUI } from '../../components/CartUI'
+import { useConfig } from '../../../src/contexts/ConfigContext'
 
 const styleButtonOrder = {
   padding: '10px 20px',
@@ -48,6 +49,8 @@ export const CheckoutUI = (props) => {
     beforeElements,
     afterElements
   } = props
+
+  const [{ configs }] = useConfig()
 
   return (
     <>
@@ -76,13 +79,13 @@ export const CheckoutUI = (props) => {
       <AddressDetails
         UIComponent={AddressDetailsUI}
         businessId={props.businessId}
-        apiKey='AIzaSyDX5giPfK-mtbLR72qxzevCYSUrbi832Sk'
+        apiKey={configs?.google_maps_api_key?.value}
       />
       <hr />
 
       <div style={{ display: 'flex' }}>
         <div style={{ width: '50%' }}>
-          <UserDetails
+          <UserFormDetails
             UIComponent={UserDetailsUI}
             businessId={props.businessId}
             useValidationFields

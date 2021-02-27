@@ -13,7 +13,8 @@ export class Socket {
       extraHeaders: {
         Authorization: `Bearer ${this.accessToken}`
       },
-      query: `token=${this.accessToken}&project=${this.project}`
+      query: `token=${this.accessToken}&project=${this.project}`,
+      transports: ['websocket']
     })
     this.socket.on('connect', () => {
       let item
@@ -32,7 +33,7 @@ export class Socket {
   }
 
   getId () {
-    return this.socket.id
+    return this.socket?.id
   }
 
   close () {

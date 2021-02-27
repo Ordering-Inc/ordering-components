@@ -26,17 +26,21 @@ export const PaymentOptionStripe = (props) => {
   const [publicKey, setPublicKey] = useState(props.publicKey)
 
   const [cardSelected, setCardSelected] = useState(null)
+  const [defaultCardSetActionStatus, setDefaultCardSetActionStatus] = useState({ loading: false, error: null })
+
+  const requestState = {}
 
   /**
    * method to get cards from API
    */
   const getCards = async () => {
     setCardsList({ ...cardsList, loading: true })
-    // Replace for a sdk method
     try {
-      const response = await fetch(`${ordering.root}/payments/stripe/cards?business_id=${businessId}&user_id=${user.id}`, { headers: { Authorization: `Bearer ${token}` } })
-      const { result } = await response.json()
-      const defaultCart = result.find(card => card.default)
+      const source = {}
+      requestState.paymentCards = source
+      // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
+      const { content: { result } } = await ordering.setAccessToken(token).paymentCards(businessId, user.id).get({ cancelToken: source })
+      const defaultCart = result?.find(card => card.default)
       if (defaultCart) {
         setCardSelected({
           id: defaultCart.id,
@@ -65,15 +69,9 @@ export const PaymentOptionStripe = (props) => {
    * method to get cards from API
    */
   const deleteCard = async (card) => {
-    // Replace for a sdk method
     try {
-      const body = JSON.stringify({
-        business_id: -1,
-        card_id: card.id,
-        user_id: user.id
-      })
-      const response = await fetch(`${ordering.root}/payments/stripe/cards`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body })
-      const { error } = await response.json()
+      // The order of paymentCards params is businessId, userId, cardId. This sdk needs to be improved in the future,
+      const { content: { error } } = await ordering.paymentCards(-1, user.id, card.id).delete()
       if (!error) {
         cardsList.cards = cardsList.cards.filter(_card => _card.id !== card.id)
         setCardsList({
@@ -81,17 +79,57 @@ export const PaymentOptionStripe = (props) => {
         })
       }
     } catch (error) {
+      console.error(error.message)
     }
   }
-
+  /**
+   * method to set card as default
+   */
+  const setDefaultCard = async (card) => {
+    try {
+      setDefaultCardSetActionStatus({ ...defaultCardSetActionStatus, loading: true })
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          business_id: businessId,
+          user_id: user.id,
+          card_id: card.id
+        })
+      }
+      const functionFetch = `${ordering.root}/payments/stripe/cards/default`
+      const response = await fetch(functionFetch, requestOptions)
+      const content = await response.json()
+      if (!content.error) {
+        setCardSelected({
+          id: card.id,
+          type: 'card',
+          card: {
+            brand: card.brand,
+            last4: card.last4
+          }
+        })
+        setDefaultCardSetActionStatus({ loading: false, error: null })
+      } else {
+        setDefaultCardSetActionStatus({ loading: false, error: content.result })
+      }
+    } catch (error) {
+      setDefaultCardSetActionStatus({ loading: false, error: error })
+    }
+  }
   /**
    * Method to get stripe credentials from API
    */
   const getCredentials = async () => {
-    // Replace for a sdk method
-    const response = await fetch(`${ordering.root}/payments/stripe/credentials`, { headers: { Authorization: `Bearer ${token}` } })
-    const { result: { publishable } } = await response.json()
-    setPublicKey(publishable)
+    try {
+      const { content: { result } } = await ordering.setAccessToken(token).paymentCards().getCredentials()
+      setPublicKey(result.publishable)
+    } catch (error) {
+      console.error(error.message)
+    }
   }
 
   const handleCardClick = (card) => {
@@ -113,16 +151,17 @@ export const PaymentOptionStripe = (props) => {
     handleCardClick(card)
   }
 
-  // useEffect(() => {
-  //   getCards()
-  // }, [createdCard])
-
   useEffect(() => {
-    if (!token) return
-    // getRequirements()
-    getCards()
-    if (!props.publicKey) {
-      getCredentials()
+    if (token) {
+      getCards()
+      if (!props.publicKey) {
+        getCredentials()
+      }
+    }
+    return () => {
+      if (requestState.paymentCards) {
+        requestState.paymentCards.cancel()
+      }
     }
   }, [token])
 
@@ -137,7 +176,8 @@ export const PaymentOptionStripe = (props) => {
           publicKey={publicKey}
           handleNewCard={handleNewCard}
           deleteCard={deleteCard}
-          // handlerCreateCard={(val) => setCreatedCard(val)}
+          setDefaultCard={setDefaultCard}
+          defaultCardSetActionStatus={defaultCardSetActionStatus}
         />
       )}
     </>
@@ -152,7 +192,7 @@ PaymentOptionStripe.propTypes = {
   /**
    * Business id to get cards from API
    */
-  businessId: PropTypes.number,
+  businessId: PropTypes.number.isRequired,
   /**
    * User id to pass in endpoint to get cards from API,
    */

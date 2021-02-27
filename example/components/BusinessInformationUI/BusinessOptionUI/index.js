@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { GoogleMapsMap } from '../../../../src/components/GoogleMaps'
+import { useConfig } from '../../../../src/contexts/ConfigContext'
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
@@ -12,12 +13,15 @@ export const BusinessOptionUI = (props) => {
     locationData,
     formatUrlVideo,
     openingTime,
+    name,
     handleClickOption,
     beforeComponents,
     afterComponents,
     beforeElements,
     afterElements
   } = props
+
+  const [{ configs }] = useConfig()
 
   return (
     <>
@@ -31,7 +35,7 @@ export const BusinessOptionUI = (props) => {
         (BeforeComponent, i) => <BeforeComponent key={i} {...props} />
       )}
 
-      <button onClick={() => handleClickOption(label)}>{label}</button>
+      <button onClick={() => handleClickOption(label)} name={name}>{label}</button>
       <hr />
       {(optionToShow === label && label !== 'Business Location') && (
         <>
@@ -55,9 +59,11 @@ export const BusinessOptionUI = (props) => {
           <span>{locationData.address}</span>
           <span>{locationData.address_notes}</span>
           <GoogleMapsMap
-            apiKey=''
+            apiKey={configs?.google_maps_api_key?.value}
             location={locationData.location}
             mapControls={locationData.googleMapsControls}
+            maxLimitLocation={500}
+            setErrors={(e) => { console.log(e) }}
           />
         </>
       )}

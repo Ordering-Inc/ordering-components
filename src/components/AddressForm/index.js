@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 export const AddressForm = (props) => {
   const {
@@ -15,60 +17,17 @@ export const AddressForm = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [validationFields, setValidationFields] = useState({ loading: useValidationFileds, fields: {} })
+  const [validationFields] = useValidationFields()
   const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {} })
   const [formState, setFormState] = useState({ loading: false, changes: {}, error: null })
   const [{ auth, user, token }] = useSession()
   const requestsState = {}
   const [, { changeAddress }] = useOrder()
-
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
+  const [, { setUserCustomer }] = useCustomer()
 
-  // if (!userId) {
-  //   throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
-  // }
-
-  // if (!accessToken) {
-  //   throw new Error('`accessToken` must provide from props or use SessionProviver to wrappe the app.')
-  // }
-
-  /**
-   * Load the validation fields
-   */
-  const loadValidationFields = async () => {
-    try {
-      setValidationFields({ ...validationFields, loading: true })
-      const source = {}
-      requestsState.validation = source
-      const { content } = await ordering.validationFields().get({
-        cancelToken: source,
-        query: {
-          where: [
-            {
-              attribute: 'validate',
-              value: 'address'
-            }
-          ]
-        }
-      })
-      const fields = {}
-      if (!content.result.error) {
-        content.result.forEach((field) => {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
-        })
-      }
-      setValidationFields({
-        ...validationFields,
-        loading: false,
-        fields
-      })
-    } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setValidationFields({ ...validationFields, loading: false })
-      }
-    }
-  }
+  const [isEdit, setIsEdit] = useState(false)
 
   /**
    * Load an address by id
@@ -101,7 +60,7 @@ export const AddressForm = (props) => {
    * Update address data
    * @param {EventTarget} e Related HTML event
    */
-  const hanldeChangeInput = (e) => {
+  const handleChangeInput = (e) => {
     updateChanges({ [e.target.name]: e.target.value })
   }
 
@@ -125,8 +84,9 @@ export const AddressForm = (props) => {
    */
   const showField = (fieldName) => {
     return !useValidationFileds ||
-              (!validationFields.loading && !validationFields.fields[fieldName]) ||
-              (!validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled)
+      (!validationFields.loading && !validationFields.fields?.address[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.address[fieldName] &&
+        validationFields.fields?.address[fieldName].enabled)
   }
 
   /**
@@ -135,25 +95,33 @@ export const AddressForm = (props) => {
    */
   const isRequiredField = (fieldName) => {
     return useValidationFileds &&
-            !validationFields.loading &&
-            validationFields.fields[fieldName] &&
-            validationFields.fields[fieldName].enabled &&
-            validationFields.fields[fieldName].required
+      !validationFields.loading &&
+      validationFields.fields?.address[fieldName] &&
+      validationFields.fields?.address[fieldName].enabled &&
+      validationFields.fields?.address[fieldName].required
   }
 
   /**
    * Function to save current changes
    * Update if address id exist or create if not
    */
-  const saveAddress = async () => {
+  const saveAddress = async (values, userCustomerSetup) => {
     if (!auth) {
-      changeAddress(formState.changes)
+      changeAddress({ ...values, ...formState.changes })
       onSaveAddress && onSaveAddress(formState.changes)
       return
     }
+    if (userCustomerSetup) {
+      setUserCustomer({
+        id: userCustomerSetup
+      }, true)
+    }
     setFormState({ ...formState, loading: true })
     try {
-      const { content } = await ordering.users(userId).addresses(addressState.address?.id).save(formState.changes, { accessToken })
+      const { content } = await ordering
+        .users(userId)
+        .addresses(addressState.address?.id)
+        .save({ ...values, ...formState.changes }, { accessToken })
       setFormState({
         ...formState,
         loading: false,
@@ -167,7 +135,10 @@ export const AddressForm = (props) => {
         })
         onSaveAddress && onSaveAddress(content.result)
         if (isSelectedAfterAdd) {
-          changeAddress(content.result.id)
+          changeAddress(content.result.id, {
+            address: isEdit ? null : content.result,
+            isEdit
+          })
         }
       }
     } catch (err) {
@@ -188,9 +159,6 @@ export const AddressForm = (props) => {
   }, [address])
 
   useEffect(() => {
-    if (useValidationFileds) {
-      loadValidationFields()
-    }
     if (addressId && !address) {
       loadAddress(userId, addressId)
     }
@@ -198,9 +166,6 @@ export const AddressForm = (props) => {
 
   useEffect(() => {
     return () => {
-      if (requestsState.validation) {
-        requestsState.validation.cancel()
-      }
       if (requestsState.address) {
         requestsState.address.cancel()
       }
@@ -216,11 +181,11 @@ export const AddressForm = (props) => {
             formState={formState}
             showField={showField}
             updateChanges={updateChanges}
-            hanldeChangeInput={hanldeChangeInput}
+            handleChangeInput={handleChangeInput}
             isRequiredField={isRequiredField}
             saveAddress={saveAddress}
             addressState={addressState}
-            validationFields={validationFields}
+            setIsEdit={(val) => setIsEdit(val)}
           />
         )
       }
