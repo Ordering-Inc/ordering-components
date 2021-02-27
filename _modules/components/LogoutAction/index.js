@@ -58,6 +58,7 @@ var LogoutAction = function LogoutAction(props) {
   var UIComponent = props.UIComponent,
       handleSuccessLogout = props.handleSuccessLogout,
       token = props.token,
+      isNative = props.isNative,
       useDefualtSessionManager = props.useDefualtSessionManager;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -86,7 +87,7 @@ var LogoutAction = function LogoutAction(props) {
   (0, _react.useEffect)(function () {
     var _configs$facebook_id;
 
-    if (configs === null || configs === void 0 ? void 0 : (_configs$facebook_id = configs.facebook_id) === null || _configs$facebook_id === void 0 ? void 0 : _configs$facebook_id.value) {
+    if ((configs === null || configs === void 0 ? void 0 : (_configs$facebook_id = configs.facebook_id) === null || _configs$facebook_id === void 0 ? void 0 : _configs$facebook_id.value) && !isNative) {
       window.fbAsyncInit = function () {
         var _configs$facebook_id2;
 
