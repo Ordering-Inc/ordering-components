@@ -7,7 +7,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 /**
  * Component to manage logout behavior without UI component
  */
-export const LogoutAction = (props: any) => {
+export const LogoutAction = (props) => {
   const {
     UIComponent,
     handleSuccessLogout,
