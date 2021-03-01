@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BusinessFeaturedProducts = void 0;
+exports.ResetPassword = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -45,141 +45,149 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var BusinessFeaturedProducts = function BusinessFeaturedProducts(props) {
-  var products = props.products,
-      businessId = props.businessId,
-      UIComponent = props.UIComponent;
+var ResetPassword = function ResetPassword(props) {
+  var UIComponent = props.UIComponent,
+      code = props.code,
+      random = props.random,
+      handleSuccessResetPassword = props.handleSuccessResetPassword;
+
+  var _useState = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      formState = _useState2[0],
+      setFormState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
+    code: code,
+    random: random,
+    password: ''
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      resetPasswordData = _useState4[0],
+      setResetPasswordData = _useState4[1];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState = (0, _react.useState)({
-    products: products,
-    loading: true,
-    error: false
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      productsList = _useState2[0],
-      setProductsList = _useState2[1];
-  /**
-   * Method to get products from API
-   */
-
-
-  var getProducts = /*#__PURE__*/function () {
+  var handleResetPassword = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$busin, result;
+      var _yield$ordering$users, response, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _context.next = 3;
-              return ordering.businesses(businessId).parameters({
-                type: 1
-              }).where({
-                attribute: 'featured',
-                value: true
-              }).products().get();
-
-            case 3:
-              _yield$ordering$busin = _context.sent;
-              result = _yield$ordering$busin.content.result;
-              setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
-                loading: false,
-                products: result
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: true
               }));
-              _context.next = 11;
+              _context.next = 4;
+              return ordering.users().resetPassword(resetPasswordData);
+
+            case 4:
+              _yield$ordering$users = _context.sent;
+              response = _yield$ordering$users.response;
+              result = response.data;
+              setFormState({
+                result: result,
+                loading: false
+              });
+
+              if (!result.error) {
+                if (handleSuccessResetPassword) {
+                  handleSuccessResetPassword(result.result);
+                }
+              }
+
+              _context.next = 14;
               break;
 
-            case 8:
-              _context.prev = 8;
-              _context.t0 = _context["catch"](0);
-              setProductsList(_objectSpread(_objectSpread({}, productsList), {}, {
-                loading: false,
-                error: _context.t0
-              }));
-
             case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
+
+              if (_context.t0.constructor.name !== 'Cancel') {
+                setFormState({
+                  result: {
+                    error: true,
+                    result: _context.t0.message
+                  },
+                  loading: false
+                });
+              }
+
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 8]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
-    return function getProducts() {
+    return function handleResetPassword() {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * handler to get product id from UI
-   * @param {number} val product id
-   */
 
-
-  var onClickProduct = function onClickProduct(val) {
-    console.log(val);
+  var handleChangeInput = function handleChangeInput(e) {
+    setResetPasswordData(_objectSpread(_objectSpread({}, resetPasswordData), {}, _defineProperty({}, e.target.name, e.target.value)));
   };
 
-  (0, _react.useEffect)(function () {
-    getProducts();
-  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    productsList: productsList,
-    handlerClickProduct: onClickProduct
+    handleResetPassword: handleResetPassword,
+    handleChangeInput: handleChangeInput,
+    resetPasswordData: resetPasswordData,
+    formState: formState
   })));
 };
 
-exports.BusinessFeaturedProducts = BusinessFeaturedProducts;
-BusinessFeaturedProducts.propTypes = {
+exports.ResetPassword = ResetPassword;
+ResetPassword.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Products, this must be containt array of business products
+   *  Code is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
    */
-  products: _propTypes.default.arrayOf(_propTypes.default.object),
+  code: _propTypes.default.string,
 
   /**
-   * BusinessId, this must be containt a business id
+   *  Random is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
    */
-  businessId: _propTypes.default.number,
+  random: _propTypes.default.string,
 
   /**
-   * handlerClickProduct, method to handle click on product
-   */
-  handlerClickProduct: _propTypes.default.func,
-
-  /**
-   * Components types before Business featured products
+   * Components types before products list
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after Business featured products
+   * Components types after products list
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before Business featured products
+   * Elements before products list
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after Business featured products
+   * Elements after products list
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-BusinessFeaturedProducts.defaultProps = {
+ResetPassword.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

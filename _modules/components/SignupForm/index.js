@@ -15,6 +15,10 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -52,11 +56,21 @@ var SignupForm = function SignupForm(props) {
   var UIComponent = props.UIComponent,
       useChekoutFileds = props.useChekoutFileds,
       handleButtonSignupClick = props.handleButtonSignupClick,
-      handleSuccessSignup = props.handleSuccessSignup;
+      handleSuccessSignup = props.handleSuccessSignup,
+      externalPhoneNumber = props.externalPhoneNumber;
+  var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 2),
+      login = _useSession2[1].login;
+
+  var _useValidationFields = (0, _ValidationsFieldsContext.useValidationFields)(),
+      _useValidationFields2 = _slicedToArray(_useValidationFields, 1),
+      validationFields = _useValidationFields2[0];
 
   var _useState = (0, _react.useState)({
     loading: false,
@@ -70,108 +84,58 @@ var SignupForm = function SignupForm(props) {
 
   var _useState3 = (0, _react.useState)({
     email: '',
-    cellphone: '',
+    cellphone: externalPhoneNumber || '',
     password: ''
   }),
       _useState4 = _slicedToArray(_useState3, 2),
       signupData = _useState4[0],
       setSignupData = _useState4[1];
 
-  var requestsState = {};
-
   var _useState5 = (0, _react.useState)({
-    loading: useChekoutFileds,
-    fields: {}
+    loading: false,
+    result: {
+      error: false
+    }
   }),
       _useState6 = _slicedToArray(_useState5, 2),
-      validationFields = _useState6[0],
-      setValidationFields = _useState6[1];
+      verifyPhoneState = _useState6[0],
+      setVerifyPhoneState = _useState6[1];
 
-  var loadValidationFields = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$valid, _yield$ordering$valid2, error, result, fields;
-
-      return _regenerator.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              source = {};
-              requestsState.validation = source;
-              _context.next = 5;
-              return ordering.validationFields().get({
-                cancelToken: source
-              });
-
-            case 5:
-              _yield$ordering$valid = _context.sent;
-              _yield$ordering$valid2 = _yield$ordering$valid.content;
-              error = _yield$ordering$valid2.error;
-              result = _yield$ordering$valid2.result;
-              fields = {};
-
-              if (!error) {
-                result.forEach(function (field) {
-                  if (field.validate === 'checkout') {
-                    fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
-                  }
-                });
-              }
-
-              setValidationFields({
-                loading: false,
-                fields: fields
-              });
-              _context.next = 17;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
-
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setValidationFields({
-                  loading: false
-                });
-              }
-
-            case 17:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 14]]);
-    }));
-
-    return function loadValidationFields() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+  var _useState7 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      checkPhoneCodeState = _useState8[0],
+      setCheckPhoneCodeState = _useState8[1];
   /**
    * Default fuction for signup workflow
    */
 
 
   var handleSignupClick = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var source, response;
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
+      var source, data, response;
+      return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context.prev = _context.next) {
             case 0:
-              _context2.prev = 0;
+              _context.prev = 0;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.signup = source;
-              _context2.next = 6;
-              return ordering.users().save(signupData, {
+              data = values || signupData;
+              _context.next = 7;
+              return ordering.users().save(data, {
                 cancelToken: source
               });
 
-            case 6:
-              response = _context2.sent;
+            case 7:
+              response = _context.sent;
               setFormState({
                 result: response.content,
                 loading: false
@@ -183,22 +147,128 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
+              _context.next = 15;
+              break;
+
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](0);
+
+              if (_context.t0.constructor.name !== 'Cancel') {
+                setFormState({
+                  result: {
+                    error: true,
+                    result: _context.t0.message
+                  },
+                  loading: false
+                });
+              }
+
+            case 15:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 12]]);
+    }));
+
+    return function handleSignupClick(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  /**
+   * Update credential data
+   * @param {EventTarget} e Related HTML event
+   */
+
+
+  var handleChangeInput = function handleChangeInput(e, isMany) {
+    var currentChanges = {};
+
+    if (isMany) {
+      Object.values(e).map(function (obj) {
+        currentChanges = _objectSpread(_objectSpread({}, currentChanges), {}, _defineProperty({}, obj.name, obj.value));
+      });
+    } else {
+      currentChanges = _defineProperty({}, e.target.name, e.target.value);
+    }
+
+    setSignupData(_objectSpread(_objectSpread({}, signupData), currentChanges));
+  };
+  /**
+   * Check if field should be show
+   * @param {string} fieldName Field name
+   */
+
+
+  var showField = function showField(fieldName) {
+    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3;
+
+    return !useChekoutFileds || !validationFields.loading && !((_validationFields$fie = validationFields.fields) !== null && _validationFields$fie !== void 0 && _validationFields$fie.checkout[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2.checkout[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : _validationFields$fie3.checkout[fieldName].enabled);
+  };
+  /**
+   * Check if field is required
+   * @param {string} fieldName Field name
+   */
+
+
+  var isRequiredField = function isRequiredField(fieldName) {
+    var _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
+
+    return fieldName === 'password' || useChekoutFileds && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.checkout[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.checkout[fieldName].enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.checkout[fieldName].required);
+  };
+  /**
+  * function to send verify code with twilio
+  * @param {Object} values object with cellphone and country code values
+  */
+
+
+  var sendVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
+      var response, res;
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(_objectSpread(_objectSpread({}, values), {}, {
+                  cellphone: values.cellphone,
+                  country_phone_code: "+".concat(values.country_phone_code)
+                }))
+              });
+
+            case 4:
+              response = _context2.sent;
+              _context2.next = 7;
+              return response.json();
+
+            case 7:
+              res = _context2.sent;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: false,
+                result: res
+              }));
               _context2.next = 14;
               break;
 
             case 11:
               _context2.prev = 11;
               _context2.t0 = _context2["catch"](0);
-
-              if (_context2.t0.constructor.name !== 'Cancel') {
-                setFormState({
-                  result: {
-                    error: true,
-                    result: _context2.t0.message
-                  },
-                  loading: false
-                });
-              }
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: false,
+                result: {
+                  error: _context2.t0.message
+                }
+              }));
 
             case 14:
             case "end":
@@ -208,52 +278,98 @@ var SignupForm = function SignupForm(props) {
       }, _callee2, null, [[0, 11]]);
     }));
 
-    return function handleSignupClick() {
+    return function sendVerifyPhoneCode(_x2) {
       return _ref2.apply(this, arguments);
     };
   }();
+
+  var handleSetCheckPhoneCodeState = function handleSetCheckPhoneCodeState(data) {
+    var values = data || {
+      loading: false,
+      result: {
+        error: false
+      }
+    };
+    setCheckPhoneCodeState(values);
+  };
   /**
-   * Update credential data
-   * @param {EventTarget} e Related HTML event
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
    */
 
 
-  var hanldeChangeInput = function hanldeChangeInput(e) {
-    setSignupData(_objectSpread(_objectSpread({}, signupData), {}, _defineProperty({}, e.target.name, e.target.value)));
-  };
-  /**
-   * Check if field should be show
-   * @param {string} fieldName Field name
-   */
+  var checkVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
+      var _res$result, response, res, _res$result2, _res$result2$session;
 
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: true
+              }));
+              _context3.next = 4;
+              return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(values)
+              });
 
-  var showField = function showField(fieldName) {
-    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3, _validationFields$fie4;
+            case 4:
+              response = _context3.sent;
+              _context3.next = 7;
+              return response.json();
 
-    return !useChekoutFileds || !validationFields.loading && !((_validationFields$fie = validationFields.fields) !== null && _validationFields$fie !== void 0 && _validationFields$fie[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : (_validationFields$fie4 = _validationFields$fie3[fieldName]) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.enabled);
-  };
-  /**
-   * Check if field is required
-   * @param {string} fieldName Field name
-   */
+            case 7:
+              res = _context3.sent;
 
+              if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
+                login({
+                  user: res === null || res === void 0 ? void 0 : res.result,
+                  token: res === null || res === void 0 ? void 0 : (_res$result2 = res.result) === null || _res$result2 === void 0 ? void 0 : (_res$result2$session = _res$result2.session) === null || _res$result2$session === void 0 ? void 0 : _res$result2$session.access_token
+                });
 
-  var isRequiredField = function isRequiredField(fieldName) {
-    var _validationFields$fie5, _validationFields$fie6, _validationFields$fie7, _validationFields$fie8, _validationFields$fie9;
+                if (handleSuccessSignup) {
+                  handleSuccessSignup(res === null || res === void 0 ? void 0 : res.result);
+                }
+              }
 
-    return fieldName === 'password' || useChekoutFileds && !validationFields.loading && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5[fieldName]) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : (_validationFields$fie7 = _validationFields$fie6[fieldName]) === null || _validationFields$fie7 === void 0 ? void 0 : _validationFields$fie7.enabled) && ((_validationFields$fie8 = validationFields.fields) === null || _validationFields$fie8 === void 0 ? void 0 : (_validationFields$fie9 = _validationFields$fie8[fieldName]) === null || _validationFields$fie9 === void 0 ? void 0 : _validationFields$fie9.required);
-  };
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: res
+              }));
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](0);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  error: _context3.t0.message
+                }
+              }));
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 12]]);
+    }));
+
+    return function checkVerifyPhoneCode(_x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
-    if (useChekoutFileds) {
-      loadValidationFields();
-    }
-
     return function () {
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
-      }
-
       if (requestsState.signup) {
         requestsState.signup.cancel();
       }
@@ -265,8 +381,13 @@ var SignupForm = function SignupForm(props) {
     signupData: signupData,
     showField: showField,
     isRequiredField: isRequiredField,
-    hanldeChangeInput: hanldeChangeInput,
-    handleButtonSignupClick: handleButtonSignupClick || handleSignupClick
+    verifyPhoneState: verifyPhoneState,
+    checkPhoneCodeState: checkPhoneCodeState,
+    setCheckPhoneCodeState: handleSetCheckPhoneCodeState,
+    handleChangeInput: handleChangeInput,
+    handleButtonSignupClick: handleButtonSignupClick || handleSignupClick,
+    handleSendVerifyCode: sendVerifyPhoneCode,
+    handleCheckPhoneCode: checkVerifyPhoneCode
   })));
 };
 

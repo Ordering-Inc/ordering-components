@@ -83,12 +83,17 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
 
   var wasUnmounted = false;
   (0, _react.useEffect)(function () {
+    if (window.document.getElementById('facebook-jssdk')) {
+      return;
+    }
+
     window.fbAsyncInit = function () {
       window.FB.init({
         appId: appId,
         cookie: true,
         xfbml: false,
-        version: version
+        version: version,
+        status: true
       });
       !wasUnmounted && setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
         ready: true
@@ -102,16 +107,13 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
       });
     };
 
-    if (window.document.getElementById('facebook-jssdk')) {
-      return;
-    }
-
     var js = window.document.createElement('script');
+    var fjs = window.document.getElementsByTagName('script')[0];
     js.id = 'facebook-jssdk';
     js.async = true;
     js.defer = true;
     js.src = "https://".concat(domain, "/").concat(language, "/sdk").concat(debug ? '/debug' : '', ".js");
-    window.document.body.appendChild(js);
+    fjs.parentNode.insertBefore(js, fjs);
   }, []);
   (0, _react.useEffect)(function () {
     return function () {
@@ -197,31 +199,33 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
 
 
   var handleFacebookLogin = function handleFacebookLogin(e) {
-    setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-      loading: true
-    }));
-    window.FB.login(function (response) {
-      if (response.status === 'connected') {
-        setFormState({
-          loading: false,
-          result: {
-            error: false
-          }
-        });
-        setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
-          logged: true
-        }));
-        handleFacebookLoginClick(response);
-      } else {
-        setFormState({
-          loading: false,
-          result: {
-            error: true,
-            result: 'Error login with Facebook'
-          }
-        });
-      }
-    });
+    if (window.FB) {
+      setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+        loading: true
+      }));
+      window.FB.login(function (response) {
+        if (response.status === 'connected') {
+          setFormState({
+            loading: false,
+            result: {
+              error: false
+            }
+          });
+          setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
+            logged: true
+          }));
+          handleFacebookLoginClick(response);
+        } else {
+          setFormState({
+            loading: false,
+            result: {
+              error: true,
+              result: 'Error login with Facebook'
+            }
+          });
+        }
+      });
+    }
   };
   /**
    * Start Facebook logout
@@ -230,24 +234,26 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
 
 
   var handleFacebookLogout = function handleFacebookLogout(e) {
-    setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-      loading: true
-    }));
-    window.FB.logout(function (response) {
-      setFormState({
-        loading: false,
-        result: {
-          error: false
+    if (window.FB) {
+      setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+        loading: true
+      }));
+      window.FB.logout(function (response) {
+        setFormState({
+          loading: false,
+          result: {
+            error: false
+          }
+        });
+        setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
+          logged: false
+        }));
+
+        if (handleSuccessFacebookLogout) {
+          handleSuccessFacebookLogout(response);
         }
       });
-      setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
-        logged: false
-      }));
-
-      if (handleSuccessFacebookLogout) {
-        handleSuccessFacebookLogout(response);
-      }
-    });
+    }
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

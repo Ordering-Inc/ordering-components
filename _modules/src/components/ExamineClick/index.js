@@ -15,13 +15,18 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var ExamineClick = function ExamineClick(_ref) {
   var onFiles = _ref.onFiles,
+      childRef = _ref.childRef,
       children = _ref.children,
       className = _ref.className,
-      style = _ref.style;
+      style = _ref.style,
+      accept = _ref.accept,
+      disabled = _ref.disabled;
   var inputRef = (0, _react.useRef)(null);
 
   var handleClick = function handleClick(e) {
-    inputRef.current.click();
+    if (!childRef) {
+      inputRef.current.click();
+    }
   };
 
   var handleChange = function handleChange(e) {
@@ -44,7 +49,12 @@ var ExamineClick = function ExamineClick(_ref) {
     onClick: function onClick(e) {
       return e.stopPropagation();
     },
-    ref: inputRef
+    ref: function ref(e) {
+      inputRef.current = e;
+      childRef && childRef(e);
+    },
+    accept: accept,
+    disabled: disabled
   }), children);
 };
 

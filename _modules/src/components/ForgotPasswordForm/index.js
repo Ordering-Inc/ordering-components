@@ -80,8 +80,8 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
 
 
   var handleForgotPasswordClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var response;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(data) {
+      var values, response;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -90,10 +90,11 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.next = 4;
-              return ordering.users().forgotPassword(formData);
+              values = data || formData;
+              _context.next = 5;
+              return ordering.users().forgotPassword(values);
 
-            case 4:
+            case 5:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -106,11 +107,11 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
                 }
               }
 
-              _context.next = 12;
+              _context.next = 13;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 10:
+              _context.prev = 10;
               _context.t0 = _context["catch"](0);
               setFormState({
                 result: {
@@ -120,15 +121,15 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
                 loading: false
               });
 
-            case 12:
+            case 13:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 10]]);
     }));
 
-    return function handleForgotPasswordClick() {
+    return function handleForgotPasswordClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();

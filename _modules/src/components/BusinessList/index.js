@@ -63,6 +63,10 @@ _dayjs.default.extend(_utc.default);
 
 var BusinessList = function BusinessList(props) {
   var UIComponent = props.UIComponent,
+      initialOrderType = props.initialOrderType,
+      initialFilterKey = props.initialFilterKey,
+      initialFilterValue = props.initialFilterValue,
+      isSortByReview = props.isSortByReview,
       isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
       propsToFetch = props.propsToFetch,
@@ -92,10 +96,15 @@ var BusinessList = function BusinessList(props) {
       businessTypeSelected = _useState6[0],
       setBusinessTypeSelected = _useState6[1];
 
-  var _useState7 = (0, _react.useState)(null),
+  var _useState7 = (0, _react.useState)(''),
       _useState8 = _slicedToArray(_useState7, 2),
       searchValue = _useState8[0],
       setSearchValue = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      timeLimitValue = _useState10[0],
+      setTimeLimitValue = _useState10[1];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -105,13 +114,25 @@ var BusinessList = function BusinessList(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState9 = (0, _react.useState)({}),
-      _useState10 = _slicedToArray(_useState9, 2),
-      requestsState = _useState10[0],
-      setRequestsState = _useState10[1];
+  var _useState11 = (0, _react.useState)({}),
+      _useState12 = _slicedToArray(_useState11, 2),
+      requestsState = _useState12[0],
+      setRequestsState = _useState12[1];
 
   var isValidMoment = function isValidMoment(date, format) {
     return (0, _dayjs.default)(date, format).format(format) === date;
+  };
+
+  var rex = new RegExp(/^[A-Za-z0-9\s]+$/g);
+
+  var sortBusinesses = function sortBusinesses(array, option) {
+    if (option === 'review') {
+      return array.sort(function (a, b) {
+        return b.reviews.total - a.reviews.total;
+      });
+    }
+
+    return array;
   };
   /**
    * Get businesses by params, order options and filters
@@ -121,7 +142,7 @@ var BusinessList = function BusinessList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, _orderState$options6, moment, where, conditions, searchConditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, paginationParams, _orderState$options6, moment, where, conditions, _orderState$options7, _orderState$options8, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, _result, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -133,10 +154,16 @@ var BusinessList = function BusinessList(props) {
               }));
               parameters = {
                 location: "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng),
-                type: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1,
-                page: newFetch ? 1 : paginationProps.currentPage + 1,
-                page_size: paginationProps.pageSize
+                type: !initialOrderType ? ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1 : initialOrderType
               };
+
+              if (!isSortByReview) {
+                paginationParams = {
+                  page: newFetch ? 1 : paginationProps.currentPage + 1,
+                  page_size: paginationProps.pageSize
+                };
+                parameters = _objectSpread(_objectSpread({}, parameters), paginationParams);
+              }
 
               if ((_orderState$options4 = orderState.options) !== null && _orderState$options4 !== void 0 && _orderState$options4.moment && isValidMoment((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss')) {
                 moment = _dayjs.default.utc((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
@@ -153,15 +180,38 @@ var BusinessList = function BusinessList(props) {
                 });
               }
 
+              if (timeLimitValue) {
+                if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.type) === 1) {
+                  conditions.push({
+                    attribute: 'delivery_time',
+                    value: {
+                      condition: '<=',
+                      value: timeLimitValue
+                    }
+                  });
+                }
+
+                if (((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.type) === 2) {
+                  conditions.push({
+                    attribute: 'pickup_time',
+                    value: {
+                      condition: '<=',
+                      value: timeLimitValue
+                    }
+                  });
+                }
+              }
+
               if (searchValue) {
                 searchConditions = [];
+                isSpecialCharacter = rex.test(searchValue);
 
                 if (isSearchByName) {
                   searchConditions.push({
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -171,7 +221,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -193,16 +243,24 @@ var BusinessList = function BusinessList(props) {
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = where ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters);
-              _context.next = 15;
+              _context.next = 17;
               return fetchEndpoint.get({
                 cancelToken: source
               });
 
-            case 15:
+            case 17:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               result = _yield$fetchEndpoint$2.result;
               pagination = _yield$fetchEndpoint$2.pagination;
+
+              if (isSortByReview) {
+                _result = sortBusinesses(result, 'review');
+                businessesList.businesses = _result;
+              } else {
+                businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
+              }
+
               businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false
@@ -217,13 +275,14 @@ var BusinessList = function BusinessList(props) {
               setPaginationProps(_objectSpread(_objectSpread({}, paginationProps), {}, {
                 currentPage: pagination.current_page,
                 totalPages: pagination.total_pages,
+                totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
-              _context.next = 29;
+              _context.next = 32;
               break;
 
-            case 26:
-              _context.prev = 26;
+            case 29:
+              _context.prev = 29;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -233,12 +292,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 29:
+            case 32:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 26]]);
+      }, _callee, null, [[0, 29]]);
     }));
 
     return function getBusinesses(_x) {
@@ -261,11 +320,31 @@ var BusinessList = function BusinessList(props) {
    */
 
   (0, _react.useEffect)(function () {
-    var _orderState$options7, _orderState$options7$;
+    var _orderState$options9, _orderState$options9$;
 
-    if (orderState.loading || !((_orderState$options7 = orderState.options) !== null && _orderState$options7 !== void 0 && (_orderState$options7$ = _orderState$options7.address) !== null && _orderState$options7$ !== void 0 && _orderState$options7$.location)) return;
+    if (orderState.loading || !((_orderState$options9 = orderState.options) !== null && _orderState$options9 !== void 0 && (_orderState$options9$ = _orderState$options9.address) !== null && _orderState$options9$ !== void 0 && _orderState$options9$.location)) return;
     getBusinesses(true);
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue]);
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue]);
+  /**
+   * Listening initial filter
+   */
+
+  (0, _react.useEffect)(function () {
+    if (!initialFilterKey && !initialFilterValue) return;
+
+    switch (initialFilterKey) {
+      case 'category':
+        handleChangeBusinessType(initialFilterValue);
+        break;
+
+      case 'timeLimit':
+        handleChangeTimeLimit(initialFilterValue);
+        break;
+
+      case 'search':
+        handleChangeSearch(initialFilterValue);
+    }
+  }, [initialFilterKey, initialFilterValue]);
   /**
    * Default behavior business click
    * @param {object} business Business clicked
@@ -296,19 +375,49 @@ var BusinessList = function BusinessList(props) {
 
 
   var handleChangeSearch = function handleChangeSearch(search) {
-    setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-      businesses: [],
-      loading: true
-    }));
+    if (!!search !== !!searchValue) {
+      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+        businesses: [],
+        loading: true
+      }));
+    } else {
+      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+        loading: false
+      }));
+    }
+
     setSearchValue(search);
+  };
+  /**
+   * Change time limt value
+   * @param {string} time time limt value (for example: 0:30)
+   */
+
+
+  var handleChangeTimeLimit = function handleChangeTimeLimit(time) {
+    if (!!time !== !!timeLimitValue) {
+      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+        businesses: [],
+        loading: true
+      }));
+    } else {
+      setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+        loading: false
+      }));
+    }
+
+    setTimeLimitValue(time);
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     businessesList: businessesList,
     paginationProps: paginationProps,
     searchValue: searchValue,
+    timeLimitValue: timeLimitValue,
+    businessTypeSelected: businessTypeSelected,
     getBusinesses: getBusinesses,
     handleChangeSearch: handleChangeSearch,
+    handleChangeTimeLimit: handleChangeTimeLimit,
     handleBusinessClick: handleBusinessClick,
     handleChangeBusinessType: handleChangeBusinessType
   })));

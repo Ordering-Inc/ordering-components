@@ -23,6 +23,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -50,20 +56,14 @@ var CmsContent = function CmsContent(props) {
    * Array to save the body of the page
    */
 
-  var _useState = (0, _react.useState)(null),
+  var _useState = (0, _react.useState)({
+    body: null,
+    loading: false,
+    error: null
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      body = _useState2[0],
-      setBody = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(false),
-      _useState4 = _slicedToArray(_useState3, 2),
-      loading = _useState4[0],
-      setLoading = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(null),
-      _useState6 = _slicedToArray(_useState5, 2),
-      error = _useState6[0],
-      setError = _useState6[1];
+      cmsState = _useState2[0],
+      setCmsState = _useState2[1];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -76,13 +76,15 @@ var CmsContent = function CmsContent(props) {
 
   var getPage = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(slug) {
-      var source, _yield$ordering$pages, _yield$ordering$pages2, _error, result;
+      var source, _yield$ordering$pages, _yield$ordering$pages2, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setLoading(true);
+              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+                loading: true
+              }));
               _context.prev = 1;
               source = {};
               requestsState.page = source;
@@ -94,15 +96,20 @@ var CmsContent = function CmsContent(props) {
             case 6:
               _yield$ordering$pages = _context.sent;
               _yield$ordering$pages2 = _yield$ordering$pages.content;
-              _error = _yield$ordering$pages2.error;
+              error = _yield$ordering$pages2.error;
               result = _yield$ordering$pages2.result;
-              setLoading(false);
+              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+                loading: false
+              }));
 
-              if (!_error) {
-                setBody(result.body);
-                setError(null);
+              if (!error) {
+                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+                  body: result.body
+                }));
               } else {
-                setError(result);
+                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+                  error: result
+                }));
                 onNotFound && onNotFound(pageSlug);
               }
 
@@ -114,8 +121,10 @@ var CmsContent = function CmsContent(props) {
               _context.t0 = _context["catch"](1);
 
               if (_context.t0.constructor.name !== 'Cancel') {
-                setLoading(false);
-                setError([error.message]);
+                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+                  loading: false,
+                  error: [_context.t0.message]
+                }));
               }
 
             case 17:
@@ -140,9 +149,7 @@ var CmsContent = function CmsContent(props) {
     };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    body: body,
-    loading: loading,
-    error: error
+    cmsState: cmsState
   })));
 };
 

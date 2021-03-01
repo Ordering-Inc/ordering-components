@@ -39,7 +39,7 @@ var OrderTypeControl = function OrderTypeControl(props) {
       orderState = _useOrder2[0],
       changeType = _useOrder2[1].changeType;
 
-  var _useState = (0, _react.useState)(orderState.options.type),
+  var _useState = (0, _react.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
       typeSelected = _useState2[0],
       setTypeSelected = _useState2[1];
@@ -49,8 +49,11 @@ var OrderTypeControl = function OrderTypeControl(props) {
     changeType(orderType);
   };
 
+  (0, _react.useEffect)(function () {
+    setTypeSelected(orderState.options.type);
+  }, [orderState.options.type]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    typeSelected: typeSelected,
+    typeSelected: typeSelected || orderState.options.type,
     handleChangeOrderType: props.handleChangeOrderType || handleChangeOrderType
   })));
 };
@@ -65,7 +68,7 @@ OrderTypeControl.propTypes = {
   /**
    * Order availables to the control
    */
-  orderTypes: _propTypes.default.arrayOf(_propTypes.number),
+  orderTypes: _propTypes.default.arrayOf(_propTypes.object),
 
   /**
    * Custom function to control order type changes

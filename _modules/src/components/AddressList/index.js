@@ -19,6 +19,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _CustomerContext = require("../../contexts/CustomerContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -68,6 +70,10 @@ var AddressList = function AddressList(props) {
       _useSession2$ = _useSession2[0],
       user = _useSession2$.user,
       token = _useSession2$.token;
+
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      setUserCustomer = _useCustomer2[1].setUserCustomer;
 
   var userId = props.userId || (user === null || user === void 0 ? void 0 : user.id);
   var accessToken = props.accessToken || token;
@@ -174,31 +180,37 @@ var AddressList = function AddressList(props) {
    */
 
   var handleSetDefault = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(address) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(address, userCustomerSetup) {
       var _yield$ordering$setAc2, content;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              if (userCustomerSetup) {
+                setUserCustomer({
+                  id: userCustomerSetup
+                }, true);
+              }
+
               if (!handleClickSetDefault) {
-                _context2.next = 2;
+                _context2.next = 3;
                 break;
               }
 
               return _context2.abrupt("return", handleClickSetDefault(address));
 
-            case 2:
-              _context2.prev = 2;
+            case 3:
+              _context2.prev = 3;
               setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: true
               }));
-              _context2.next = 6;
+              _context2.next = 7;
               return ordering.setAccessToken(accessToken).users(userId).addresses(address.id).save({
                 default: true
               });
 
-            case 6:
+            case 7:
               _yield$ordering$setAc2 = _context2.sent;
               content = _yield$ordering$setAc2.content;
               setActionStatus({
@@ -219,26 +231,26 @@ var AddressList = function AddressList(props) {
                 setAddressList(_objectSpread({}, addressList));
               }
 
-              _context2.next = 15;
+              _context2.next = 16;
               break;
 
-            case 12:
-              _context2.prev = 12;
-              _context2.t0 = _context2["catch"](2);
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](3);
               setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 15:
+            case 16:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[2, 12]]);
+      }, _callee2, null, [[3, 13]]);
     }));
 
-    return function handleSetDefault(_x) {
+    return function handleSetDefault(_x, _x2) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -309,7 +321,7 @@ var AddressList = function AddressList(props) {
       }, _callee3, null, [[2, 12]]);
     }));
 
-    return function handleDelete(_x2) {
+    return function handleDelete(_x3) {
       return _ref3.apply(this, arguments);
     };
   }();
@@ -352,7 +364,7 @@ AddressList.propTypes = {
    * User id to get address from this user
    * If you don't provide one it is used by the current session by default
    */
-  userId: _propTypes.default.elementType,
+  userId: _propTypes.default.number,
 
   /**
    * Access token to get addresses

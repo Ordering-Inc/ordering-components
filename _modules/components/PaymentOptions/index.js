@@ -25,15 +25,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -53,7 +53,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PaymentOptions = function PaymentOptions(props) {
   var _orderState$carts$;
 
-  var paymethods = props.paymethods,
+  var isLoading = props.isLoading,
+      paymethods = props.paymethods,
       businessId = props.businessId,
       onPaymentChange = props.onPaymentChange,
       UIComponent = props.UIComponent;
@@ -88,15 +89,15 @@ var PaymentOptions = function PaymentOptions(props) {
       setPaymethodData = _useState6[1];
 
   var parsePaymethods = function parsePaymethods(paymethods) {
-    var _paymethods = paymethods.filter(function (credentials) {
-      return !['paypal_express', 'authorize'].includes(credentials.paymethod.gateway);
+    var _paymethods = paymethods && paymethods.filter(function (credentials) {
+      var _credentials$paymetho;
+
+      return !['paypal_express', 'authorize'].includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho = credentials.paymethod) === null || _credentials$paymetho === void 0 ? void 0 : _credentials$paymetho.gateway);
     }).map(function (credentials) {
-      var data = credentials.data,
-          sandbox = credentials.sandbox;
-      var paymethod = credentials.paymethod;
-      paymethod.sandbox = sandbox;
-      paymethod.credentials = data;
-      return paymethod;
+      return _objectSpread(_objectSpread({}, credentials === null || credentials === void 0 ? void 0 : credentials.paymethod), {}, {
+        sandbox: credentials === null || credentials === void 0 ? void 0 : credentials.sandbox,
+        credentials: credentials === null || credentials === void 0 ? void 0 : credentials.data
+      });
     });
 
     return _paymethods;
@@ -130,7 +131,8 @@ var PaymentOptions = function PaymentOptions(props) {
 
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 error: error ? result : null,
-                loading: false
+                loading: false,
+                paymethods: error ? [] : parsePaymethods(result.paymethods)
               }));
               _context.next = 14;
               break;
@@ -194,15 +196,23 @@ var PaymentOptions = function PaymentOptions(props) {
     }
   }, [paymethodSelected]);
   (0, _react.useEffect)(function () {
+    if (isLoading) return;
+
     if (paymethods) {
       setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
         loading: false,
         paymethods: parsePaymethods(paymethods)
       }));
     } else {
-      getPaymentOptions();
+      if (businessId) {
+        getPaymentOptions();
+      } else {
+        setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
+          loading: false
+        }));
+      }
     }
-  }, []);
+  }, [isLoading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderTotal: orderTotal,
     paymethodsList: paymethodsList,

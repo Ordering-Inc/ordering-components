@@ -5,21 +5,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.InputPhoneNumber = void 0;
+exports.useValidationFields = exports.ValidationFieldsProvider = exports.ValidationFieldsContext = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _ApiContext = require("../ApiContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -43,101 +41,115 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var InputPhoneNumber = function InputPhoneNumber(props) {
-  var UIComponent = props.UIComponent;
+var ValidationFieldsContext = /*#__PURE__*/(0, _react.createContext)();
+exports.ValidationFieldsContext = ValidationFieldsContext;
+
+var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
+  var children = _ref.children;
+
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
 
   var _useState = (0, _react.useState)({
     loading: true,
-    value: null
+    fields: {}
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      countryData = _useState2[0],
-      setCountryData = _useState2[1];
-  /**
-   * Function to get country code based on user IP
-   */
+      state = _useState2[0],
+      setState = _useState2[1];
 
+  var convertArrayToObject = function convertArrayToObject(result, fields) {
+    result.forEach(function (field) {
+      fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
+    });
+  };
 
-  var getCountryCode = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var response, _yield$response$json, status, countryCode;
+  var loadValidationFields = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return fetch('http://ip-api.com/json/?fields=status,countryCode');
+              _context.prev = 0;
+              _context.next = 3;
+              return ordering.validationFields().get();
 
-            case 2:
-              response = _context.sent;
-              _context.next = 5;
-              return response.json();
+            case 3:
+              _yield$ordering$valid = _context.sent;
+              _yield$ordering$valid2 = _yield$ordering$valid.content;
+              result = _yield$ordering$valid2.result;
+              error = _yield$ordering$valid2.error;
+              checkout = {};
+              address = {};
 
-            case 5:
-              _yield$response$json = _context.sent;
-              status = _yield$response$json.status;
-              countryCode = _yield$response$json.countryCode;
-              setCountryData(_objectSpread(_objectSpread({}, countryData), {}, {
+              if (!error) {
+                convertArrayToObject(result.filter(function (field) {
+                  return field.validate === 'checkout';
+                }), checkout);
+                convertArrayToObject(result.filter(function (field) {
+                  return field.validate === 'address';
+                }), address);
+              }
+
+              setState({
                 loading: false,
-                value: status === 'success' ? countryCode : 'US'
+                fields: {
+                  checkout: checkout,
+                  address: address
+                }
+              });
+              _context.next = 16;
+              break;
+
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
               }));
 
-            case 9:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 13]]);
     }));
 
-    return function getCountryCode() {
-      return _ref.apply(this, arguments);
+    return function loadValidationFields() {
+      return _ref2.apply(this, arguments);
     };
   }();
 
+  var functions = {
+    loadValidationFields: loadValidationFields
+  };
   (0, _react.useEffect)(function () {
-    getCountryCode();
+    loadValidationFields();
   }, []);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    countryData: countryData
-  })));
+  return /*#__PURE__*/_react.default.createElement(ValidationFieldsContext.Provider, {
+    value: [state, functions]
+  }, children);
 };
 
-exports.InputPhoneNumber = InputPhoneNumber;
-InputPhoneNumber.propTypes = {
-  /**
-   * UI Component, this must be containt all graphic elements and use parent props
-   */
-  UIComponent: _propTypes.default.elementType,
+exports.ValidationFieldsProvider = ValidationFieldsProvider;
 
-  /**
-   * Components types before input phone number
-   * Array of type components, the parent props will pass to these components
-   */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Components types after input phone number
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Elements before input phone number
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Elements after input phone number
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
+var useValidationFields = function useValidationFields() {
+  var validationFieldsManager = (0, _react.useContext)(ValidationFieldsContext);
+  return validationFieldsManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    return _regenerator.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }))];
 };
-InputPhoneNumber.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
-};
+
+exports.useValidationFields = useValidationFields;

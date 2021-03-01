@@ -155,7 +155,7 @@ var CardForm = function CardForm(props) {
             case 0:
               setLoading(true);
               event.preventDefault();
-              card = elements.getElement(_reactStripeJs.CardElement);
+              card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
 
               if (requirements) {
                 _context2.next = 10;

@@ -55,8 +55,6 @@ var Checkout = function Checkout(props) {
       actionsBeforePlace = props.actionsBeforePlace,
       handleCustomClick = props.handleCustomClick,
       onPlaceOrderClick = props.onPlaceOrderClick,
-      useValidationFields = props.useValidationFields,
-      validationFieldsType = props.validationFieldsType,
       UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -73,50 +71,36 @@ var Checkout = function Checkout(props) {
       errors = _useState4[0],
       setErrors = _useState4[1];
   /**
-   * Save array of inputs validate to show
-   */
-
-
-  var _useState5 = (0, _react.useState)({
-    loading: useValidationFields
-  }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      validationFields = _useState6[0],
-      setValidationFields = _useState6[1];
-
-  var requestsState = {};
-  /**
    * Order context
    */
+
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       orderState = _useOrder2[0],
-      _useOrder2$ = _useOrder2[1],
-      placeCart = _useOrder2$.placeCart,
-      confirmCart = _useOrder2$.confirmCart;
+      placeCart = _useOrder2[1].placeCart;
   /**
    * Object to save an object with business information
    */
 
 
-  var _useState7 = (0, _react.useState)({
+  var _useState5 = (0, _react.useState)({
     business: null,
     loading: true,
     error: null
   }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      businessDetails = _useState8[0],
-      setBusinessDetails = _useState8[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      businessDetails = _useState6[0],
+      setBusinessDetails = _useState6[1];
   /**
    * This must be contains an object with info about paymente selected
    */
 
 
-  var _useState9 = (0, _react.useState)(null),
-      _useState10 = _slicedToArray(_useState9, 2),
-      paymethodSelected = _useState10[0],
-      setPaymethodSelected = _useState10[1];
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      paymethodSelected = _useState8[0],
+      setPaymethodSelected = _useState8[1];
   /**
    * Current cart
    */
@@ -136,7 +120,7 @@ var Checkout = function Checkout(props) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods'];
+              _props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location'];
               _context.next = 4;
               return ordering.businesses(businessId).select(_props).get();
 
@@ -177,9 +161,9 @@ var Checkout = function Checkout(props) {
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _cartResult, _cartResult$paymethod;
+      var _cartResult$paymethod;
 
-      var paymethodData, data, result, cartResult, toConfirm, confirmResponse;
+      var paymethodData, payload, result, cartResult;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -192,75 +176,62 @@ var Checkout = function Checkout(props) {
                 };
               }
 
-              data = {
+              payload = {
                 paymethod_id: paymethodSelected.paymethodId,
                 paymethod_data: paymethodSelected.data,
-                delivery_zone_id: cart.delivery_zone_id,
                 offer_id: cart.offer_id,
                 amount: cart.total
               };
 
+              if (orderState.options.type === 1) {
+                payload = _objectSpread(_objectSpread({}, payload), {}, {
+                  delivery_zone_id: cart.delivery_zone_id
+                });
+              }
+
               if (!handleCustomClick) {
-                _context2.next = 6;
+                _context2.next = 7;
                 break;
               }
 
-              handleCustomClick(data, paymethodSelected, cart);
+              handleCustomClick(payload, paymethodSelected, cart);
               return _context2.abrupt("return");
 
-            case 6:
-              setPlacing(true);
-              _context2.next = 9;
-              return placeCart(cart.uuid, {
-                paymethod_id: paymethodSelected.paymethodId,
-                paymethod_data: paymethodData,
-                delivery_zone_id: cart.delivery_zone_id,
-                offer_id: cart.offer_id,
-                amount: cart.total
+            case 7:
+              payload = _objectSpread(_objectSpread({}, payload), {}, {
+                paymethod_data: paymethodData
               });
+              setPlacing(true);
+              _context2.next = 11;
+              return placeCart(cart.uuid, payload);
 
-            case 9:
+            case 11:
               result = _context2.sent;
 
-              if (!result.error) {
-                _context2.next = 13;
+              if (!(result !== null && result !== void 0 && result.error)) {
+                _context2.next = 15;
                 break;
               }
 
-              setErrors(result.result);
+              setErrors(result === null || result === void 0 ? void 0 : result.result);
               return _context2.abrupt("return");
 
-            case 13:
-              cartResult = result.result;
+            case 15:
+              cartResult = result === null || result === void 0 ? void 0 : result.result;
 
-              if (!(((_cartResult = cartResult) === null || _cartResult === void 0 ? void 0 : (_cartResult$paymethod = _cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-                _context2.next = 23;
+              if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
+                _context2.next = 19;
                 break;
               }
 
-              _context2.next = 17;
+              _context2.next = 19;
               return actionsBeforePlace(paymethodSelected, result.result);
 
-            case 17:
-              toConfirm = _context2.sent;
-
-              if (!toConfirm) {
-                _context2.next = 23;
-                break;
-              }
-
-              _context2.next = 21;
-              return confirmCart(cart.uuid);
+            case 19:
+              setPlacing(false);
+              onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
 
             case 21:
-              confirmResponse = _context2.sent;
-              cartResult = confirmResponse.result;
-
-            case 23:
-              setPlacing(false);
-              onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cartResult);
-
-            case 25:
             case "end":
               return _context2.stop();
           }
@@ -277,36 +248,6 @@ var Checkout = function Checkout(props) {
     setPaymethodSelected(paymethod);
   };
 
-  (0, _react.useEffect)(function () {
-    if (useValidationFields) {
-      var source = {};
-      requestsState.validation = source;
-      ordering.validationFields().toType(validationFieldsType).get({
-        cancelToken: source
-      }).then(function (response) {
-        var fields = {};
-        response.content.result.forEach(function (field) {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
-        });
-        setValidationFields({
-          loading: false,
-          fields: fields
-        });
-      }).catch(function (err) {
-        if (err.constructor.name !== 'Cancel') {
-          setValidationFields({
-            loading: false
-          });
-        }
-      });
-    }
-
-    return function () {
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
-      }
-    };
-  }, []);
   (0, _react.useEffect)(function () {
     getBusiness();
   }, [businessId]);
@@ -333,7 +274,6 @@ var Checkout = function Checkout(props) {
     orderOptions: orderState.options,
     paymethodSelected: paymethodSelected,
     businessDetails: businessDetails,
-    validationFields: validationFields,
     handlePaymethodChange: handlePaymethodChange,
     handlerClickPlaceOrder: handlerClickPlaceOrder
   })));

@@ -45,12 +45,6 @@ Object.defineProperty(exports, "BusinessList", {
     return _BusinessList.BusinessList;
   }
 });
-Object.defineProperty(exports, "BusinessFeaturedProducts", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessFeaturedProducts.BusinessFeaturedProducts;
-  }
-});
 Object.defineProperty(exports, "BusinessInformation", {
   enumerable: true,
   get: function get() {
@@ -297,6 +291,12 @@ Object.defineProperty(exports, "ProductsListing", {
     return _ProductsListing.ProductsListing;
   }
 });
+Object.defineProperty(exports, "ResetPassword", {
+  enumerable: true,
+  get: function get() {
+    return _ResetPassword.ResetPassword;
+  }
+});
 Object.defineProperty(exports, "SearchOptions", {
   enumerable: true,
   get: function get() {
@@ -339,10 +339,10 @@ Object.defineProperty(exports, "StripeRedirectForm", {
     return _StripeRedirectForm.StripeRedirectForm;
   }
 });
-Object.defineProperty(exports, "UserDetails", {
+Object.defineProperty(exports, "UserFormDetails", {
   enumerable: true,
   get: function get() {
-    return _UserDetails.UserDetails;
+    return _UserFormDetails.UserFormDetails;
   }
 });
 Object.defineProperty(exports, "UpsellingPage", {
@@ -495,6 +495,24 @@ Object.defineProperty(exports, "useUtils", {
     return _UtilsContext.useUtils;
   }
 });
+Object.defineProperty(exports, "ValidationFieldsContext", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.ValidationFieldsContext;
+  }
+});
+Object.defineProperty(exports, "useValidationFields", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.useValidationFields;
+  }
+});
+Object.defineProperty(exports, "ValidationFieldsProvider", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.ValidationFieldsProvider;
+  }
+});
 Object.defineProperty(exports, "WebsocketContext", {
   enumerable: true,
   get: function get() {
@@ -539,8 +557,6 @@ var _BusinessBasicInformation = require("../src/components/BusinessBasicInformat
 var _BusinessController = require("../src/components/BusinessController");
 
 var _BusinessList = require("../src/components/BusinessList");
-
-var _BusinessFeaturedProducts = require("../src/components/BusinessFeaturedProducts");
 
 var _BusinessInformation = require("../src/components/BusinessInformation");
 
@@ -624,6 +640,8 @@ var _ProductsList = require("../src/components/ProductsList");
 
 var _ProductsListing = require("../src/components/ProductsListing");
 
+var _ResetPassword = require("../src/components/ResetPassword");
+
 var _SearchOptions = require("../src/components/SearchOptions");
 
 var _SignupForm = require("../src/components/SignupForm");
@@ -638,7 +656,7 @@ var _StripeElementsForm = require("../src/components/StripeElementsForm");
 
 var _StripeRedirectForm = require("../src/components/PaymentOptionStripeRedirect/StripeRedirectForm");
 
-var _UserDetails = require("../src/components/UserDetails");
+var _UserFormDetails = require("../src/components/UserFormDetails");
 
 var _UpsellingPage = require("../src/components/UpsellingPage");
 
@@ -657,6 +675,8 @@ var _OrderContext = require("../src/contexts/OrderContext");
 var _SessionContext = require("../src/contexts/SessionContext");
 
 var _UtilsContext = require("../src/contexts/UtilsContext");
+
+var _ValidationsFieldsContext = require("../src/contexts/ValidationsFieldsContext");
 
 var _WebsocketContext = require("../src/contexts/WebsocketContext");
 

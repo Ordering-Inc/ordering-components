@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.UserProfileForm = void 0;
+exports.UserFormDetails = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -15,6 +15,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -24,6 +26,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -48,17 +54,16 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage user profile behavior without UI component
+ * Component to manage user form details behavior without UI component
  */
-var UserProfileForm = function UserProfileForm(props) {
+var UserFormDetails = function UserFormDetails(props) {
   var UIComponent = props.UIComponent,
       useSessionUser = props.useSessionUser,
       refreshSessionUser = props.refreshSessionUser,
       useDefualtSessionManager = props.useDefualtSessionManager,
       userId = props.userId,
       user = props.user,
-      useValidationFileds = props.useValidationFileds,
-      validationFieldsType = props.validationFieldsType,
+      useValidationFields = props.useValidationFields,
       handleButtonUpdateClick = props.handleButtonUpdateClick,
       handleSuccessUpdate = props.handleSuccessUpdate;
 
@@ -71,38 +76,40 @@ var UserProfileForm = function UserProfileForm(props) {
       session = _useSession2[0],
       changeUser = _useSession2[1].changeUser;
 
-  var _useState = (0, _react.useState)({
+  var _useValidationsFields = (0, _ValidationsFieldsContext.useValidationFields)(),
+      _useValidationsFields2 = _slicedToArray(_useValidationsFields, 1),
+      validationFields = _useValidationsFields2[0];
+
+  var _useState = (0, _react.useState)(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isEdit = _useState2[0],
+      setIsEdit = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
     loading: false,
     result: {
       error: false
     }
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      userState = _useState2[0],
-      setUserState = _useState2[1];
+      _useState4 = _slicedToArray(_useState3, 2),
+      userState = _useState4[0],
+      setUserState = _useState4[1];
 
-  var _useState3 = (0, _react.useState)({
+  var _useState5 = (0, _react.useState)({
     loading: false,
     changes: {},
     result: {
       error: false
     }
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
-
-  var _useState5 = (0, _react.useState)({
-    loading: useValidationFileds
-  }),
       _useState6 = _slicedToArray(_useState5, 2),
-      validationFields = _useState6[0],
-      setValidationFields = _useState6[1];
+      formState = _useState6[0],
+      setFormState = _useState6[1];
 
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
-    if ((userId || useSessionUser && refreshSessionUser) && !session.loading) {
+    if ((userId || useSessionUser && refreshSessionUser) && !session.loading && !props.userData) {
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
         loading: true
       }));
@@ -140,36 +147,9 @@ var UserProfileForm = function UserProfileForm(props) {
       });
     }
 
-    if (useValidationFileds) {
-      var _source = {};
-      requestsState.validation = _source;
-      ordering.validationFields().toType(validationFieldsType).get({
-        cancelToken: _source
-      }).then(function (response) {
-        var fields = {};
-        response.content.result.forEach(function (field) {
-          fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
-        });
-        setValidationFields({
-          loading: false,
-          fields: fields
-        });
-      }).catch(function (err) {
-        if (err.constructor.name !== 'Cancel') {
-          setValidationFields({
-            loading: false
-          });
-        }
-      });
-    }
-
     return function () {
       if (requestsState.user) {
         requestsState.user.cancel();
-      }
-
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
       }
     };
   }, [session.loading]);
@@ -177,10 +157,8 @@ var UserProfileForm = function UserProfileForm(props) {
    * Clean formState
    */
 
-  var cleanFormState = function cleanFormState() {
-    return setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-      changes: {}
-    }));
+  var cleanFormState = function cleanFormState(values) {
+    return setFormState(_objectSpread(_objectSpread({}, formState), values));
   };
   /**
    * Default fuction for user profile workflow
@@ -188,8 +166,9 @@ var UserProfileForm = function UserProfileForm(props) {
 
 
   var handleUpdateClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes) {
-      var response;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes, isImage, image) {
+      var response, _props$userData, _formState$changes, photo, _changes, _props$userData2;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -211,12 +190,36 @@ var UserProfileForm = function UserProfileForm(props) {
                 formState.changes = _objectSpread(_objectSpread({}, formState.changes), changes);
               }
 
-              _context.next = 7;
-              return ordering.users(userState.result.result.id).save(formState.changes, {
+              if (!isImage) {
+                _context.next = 13;
+                break;
+              }
+
+              _context.next = 8;
+              return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData = props.userData) === null || _props$userData === void 0 ? void 0 : _props$userData.id) || userState.result.result.id).save({
+                photo: image || formState.changes.photo
+              }, {
                 accessToken: accessToken
               });
 
-            case 7:
+            case 8:
+              response = _context.sent;
+              _formState$changes = formState.changes, photo = _formState$changes.photo, _changes = _objectWithoutProperties(_formState$changes, ["photo"]);
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                changes: response.content.error ? formState.changes : _changes,
+                result: response.content,
+                loading: false
+              }));
+              _context.next = 17;
+              break;
+
+            case 13:
+              _context.next = 15;
+              return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData2 = props.userData) === null || _props$userData2 === void 0 ? void 0 : _props$userData2.id) || userState.result.result.id).save(formState.changes, {
+                accessToken: accessToken
+              });
+
+            case 15:
               response = _context.sent;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
@@ -224,6 +227,7 @@ var UserProfileForm = function UserProfileForm(props) {
                 loading: false
               }));
 
+            case 17:
               if (!response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   result: _objectSpread(_objectSpread({}, userState.result), response.content)
@@ -233,13 +237,17 @@ var UserProfileForm = function UserProfileForm(props) {
                 if (handleSuccessUpdate) {
                   handleSuccessUpdate(response.content.result);
                 }
+
+                if (!image) {
+                  setIsEdit(!isEdit);
+                }
               }
 
-              _context.next = 15;
+              _context.next = 23;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 20:
+              _context.prev = 20;
               _context.t0 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -249,15 +257,15 @@ var UserProfileForm = function UserProfileForm(props) {
                 loading: false
               }));
 
-            case 15:
+            case 23:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 12]]);
+      }, _callee, null, [[2, 20]]);
     }));
 
-    return function handleUpdateClick(_x) {
+    return function handleUpdateClick(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -311,7 +319,9 @@ var UserProfileForm = function UserProfileForm(props) {
 
 
   var showField = function showField(fieldName) {
-    return !useValidationFileds || !validationFields.loading && !validationFields.fields[fieldName] || !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled;
+    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3;
+
+    return !useValidationFields || !validationFields.loading && !((_validationFields$fie = validationFields.fields) !== null && _validationFields$fie !== void 0 && _validationFields$fie.checkout[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2.checkout[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : _validationFields$fie3.checkout[fieldName].enabled);
   };
   /**
    * Check if field is required
@@ -320,35 +330,42 @@ var UserProfileForm = function UserProfileForm(props) {
 
 
   var isRequiredField = function isRequiredField(fieldName) {
-    return useValidationFileds && !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled && validationFields.fields[fieldName].required;
+    var _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
+
+    return useValidationFields && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.checkout[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.checkout[fieldName].enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.checkout[fieldName].required);
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    isEdit: isEdit,
+    cleanFormState: cleanFormState,
     formState: formState,
     userState: userState,
-    cleanFormState: cleanFormState,
     validationFields: validationFields,
     showField: showField,
+    setFormState: setFormState,
     isRequiredField: isRequiredField,
     handleChangeInput: handleChangeInput,
+    handleButtonUpdateClick: handleUpdateClick,
     handlechangeImage: handlechangeImage,
-    handleButtonUpdateClick: handleUpdateClick
+    toggleIsEdit: function toggleIsEdit() {
+      return setIsEdit(!isEdit);
+    }
   })));
 };
 
-exports.UserProfileForm = UserProfileForm;
-UserProfileForm.propTypes = {
+exports.UserFormDetails = UserFormDetails;
+UserFormDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Use session user to profile
+   * Use session user to details
    */
   useSessionUser: function useSessionUser(props, propName) {
     if (props[propName] !== undefined && typeof props[propName] !== 'boolean') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `boolean`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `boolean`."));
     }
 
     if (props.user === undefined && props.userId === undefined && !props[propName]) {
@@ -371,7 +388,7 @@ UserProfileForm.propTypes = {
    */
   userId: function userId(props, propName) {
     if (props[propName] !== undefined && typeof props[propName] !== 'number') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `number`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `number`."));
     }
 
     if (props.user === undefined && !props.useSessionUser && !props[propName]) {
@@ -389,7 +406,7 @@ UserProfileForm.propTypes = {
    */
   user: function user(props, propName) {
     if (props[propName] !== undefined && _typeof(props[propName]) !== 'object') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `object`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `object`."));
     }
 
     if (props.userId === undefined && !props.useSessionUser && !props[propName]) {
@@ -402,7 +419,7 @@ UserProfileForm.propTypes = {
   },
 
   /**
-   * Function to change default user profile behavior
+   * Function to change default user details behavior
    * @param {Object} user Current user data
    * @param {Object} changes Current form changes
    */
@@ -417,7 +434,7 @@ UserProfileForm.propTypes = {
   /**
    * Enable to get validation fields to show/hide fields from Ordering API
    */
-  useValidationFileds: _propTypes.default.bool,
+  useValidationFields: _propTypes.default.bool,
 
   /**
    * Type of validation field to apply and get from API
@@ -436,7 +453,7 @@ UserProfileForm.propTypes = {
    */
   accessToken: function accessToken(props, propName) {
     if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserProfile`, expected `object`."));
+      return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof(props[propName]), "` supplied to `UserFormDetails`, expected `object`."));
     }
 
     if (props[propName] === undefined && !props.useDefualtSessionManager) {
@@ -445,25 +462,25 @@ UserProfileForm.propTypes = {
   },
 
   /**
-   * Components types before user profile form
+   * Components types before user details form
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after user profile form
+   * Components types after user details form
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before user profile form
+   * Elements before user details form
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after user profile form
+   * Elements after user details form
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element),
@@ -480,11 +497,10 @@ UserProfileForm.propTypes = {
    */
   elementLinkToLogin: _propTypes.default.element
 };
-UserProfileForm.defaultProps = {
-  useValidationFileds: false,
+UserFormDetails.defaultProps = {
+  useValidationFields: false,
   validationFieldsType: 'checkout',
   useDefualtSessionManager: true,
-  refreshSessionUser: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

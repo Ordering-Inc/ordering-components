@@ -51,6 +51,7 @@ export const LogisticInformation = (props) => {
         <UIComponent
           {...props}
           logisticInformation={logisticInformation}
+          getLogistics={getLogistics}
         />
       )}
     </>

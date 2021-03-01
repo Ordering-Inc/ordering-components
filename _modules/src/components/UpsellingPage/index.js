@@ -152,8 +152,11 @@ var UpsellingPage = function UpsellingPage(props) {
 
 
   var getUpsellingProducts = function getUpsellingProducts(result) {
+    var upsellingProductsfiltered = result.filter(function (product) {
+      return product.upselling;
+    });
     var repeatProducts = cartProducts.filter(function (cartProduct) {
-      return result.find(function (product) {
+      return upsellingProductsfiltered.find(function (product) {
         return product.id === cartProduct.id;
       });
     });
@@ -161,8 +164,8 @@ var UpsellingPage = function UpsellingPage(props) {
     if (repeatProducts.length) {
       setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
         loading: false,
-        products: result.filter(function (product) {
-          return !repeatProducts.find(function (repeatProduct) {
+        products: upsellingProductsfiltered.filter(function (product) {
+          return !product.inventoried && !repeatProducts.find(function (repeatProduct) {
             return repeatProduct.id === product.id;
           });
         })
@@ -170,7 +173,7 @@ var UpsellingPage = function UpsellingPage(props) {
     } else {
       setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
         loading: false,
-        products: result
+        products: upsellingProductsfiltered
       }));
     }
   };

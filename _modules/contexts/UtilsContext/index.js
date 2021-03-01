@@ -80,20 +80,8 @@ var UtilsProviders = function UtilsProviders(_ref) {
       // name String
       weekdays: weekdays,
       // weekdays Array
-      weekdaysShort: weekdays.map(function (day) {
-        return day.substring(0, 3);
-      }),
-      // OPTIONAL, short weekdays Array, use first three letters if not provided
-      weekdaysMin: weekdays.map(function (day) {
-        return day.substring(0, 2);
-      }),
-      // OPTIONAL, min weekdays Array, use first two letters if not provided
       months: months,
       // months Array
-      monthsShort: months.map(function (moths) {
-        return moths.substring(0, 3);
-      }),
-      // OPTIONAL, short months Array, use first three letters if not provided
       ordinal: function ordinal(n) {
         return "".concat(n, "\xBA");
       },
@@ -136,7 +124,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
       separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_configState$configs$2 = configState.configs.format_number_decimal_separator) === null || _configState$configs$2 === void 0 ? void 0 : _configState$configs$2.value) || ',',
       thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$3 = configState.configs.format_number_thousand_separator) === null || _configState$configs$3 === void 0 ? void 0 : _configState$configs$3.value) || '.',
       currency: (options === null || options === void 0 ? void 0 : options.currency) || ((_configState$configs$4 = configState.configs.format_number_currency) === null || _configState$configs$4 === void 0 ? void 0 : _configState$configs$4.value) || '$',
-      currencyPosition: (options === null || options === void 0 ? void 0 : options.currencyPosition) || ((_configState$configs$5 = configState.configs.format_number_currency_position) === null || _configState$configs$5 === void 0 ? void 0 : _configState$configs$5.value) || 'left'
+      currencyPosition: (options === null || options === void 0 ? void 0 : options.currencyPosition) || ((_configState$configs$5 = configState.configs.currency_position) === null || _configState$configs$5 === void 0 ? void 0 : _configState$configs$5.value) || 'left'
     };
     var number = parseNumber(value, formatNumber);
 
@@ -217,6 +205,22 @@ var UtilsProviders = function UtilsProviders(_ref) {
     return _date.format(formatTime.outputFormat);
   };
 
+  var parseShortenDistance = function parseShortenDistance(distance) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    if (distance >= 1000000000) {
+      return "".concat((distance / 1000000000).toFixed(1).replace(/\.0$/, '')).concat(t('G', 'G'));
+    }
+
+    if (distance >= 1000000) {
+      return "".concat((distance / 1000000).toFixed(1).replace(/\.0$/, '')).concat(t('M', 'M'));
+    }
+
+    if (distance >= 1000) {
+      return "".concat((distance / 1000).toFixed(1).replace(/\.0$/, '')).concat(t('K', 'K'));
+    }
+  };
+
   var parseDistance = function parseDistance(distance) {
     var _configState$configs$11, _configState$configs$12;
 
@@ -235,9 +239,19 @@ var UtilsProviders = function UtilsProviders(_ref) {
     }
 
     if (unit.toUpperCase() === 'MI') {
-      return parseNumber(distance * 1.621371, options) + ' ' + t('MI', 'mi');
+      var dist = distance * 1.621371;
+
+      if (dist >= 1000) {
+        return "".concat(parseShortenDistance(dist), " ").concat(t('MI', 'mi'));
+      }
+
+      return "".concat(parseNumber(dist, options), " ").concat(t('MI', 'mi'));
     } else {
-      return parseNumber(distance, options) + ' ' + t('KM', 'km');
+      if (distance >= 1000) {
+        return "".concat(parseShortenDistance(distance), " ").concat(t('KM', 'km'));
+      }
+
+      return "".concat(parseNumber(distance, options), " ").concat(t('KM', 'km'));
     }
   };
 
@@ -273,14 +287,28 @@ var UtilsProviders = function UtilsProviders(_ref) {
     return _date.toNow();
   };
 
+  var optimizeImage = function optimizeImage(url, params, fallback) {
+    if (!url && fallback) return fallback;
+    params = params && params.length > 0 ? ",".concat(params) : '';
+
+    if (url != null && url.indexOf('res.cloudinary.com') !== -1) {
+      var parts = url.split('upload');
+      url = "".concat(parts[0], "upload/f_auto,q_auto").concat(params).concat(parts[1]);
+    }
+
+    return url;
+  };
+
   var functions = {
     parsePrice: parsePrice,
     parseNumber: parseNumber,
     parseDate: parseDate,
     parseTime: parseTime,
     parseDistance: parseDistance,
+    parseShortenDistance: parseShortenDistance,
     getTimeAgo: getTimeAgo,
-    getTimeTo: getTimeTo
+    getTimeTo: getTimeTo,
+    optimizeImage: optimizeImage
   };
   (0, _react.useEffect)(function () {
     if (!languageState.loading) {

@@ -148,7 +148,8 @@ var LogisticInformation = function LogisticInformation(props) {
     getLogistics();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    logisticInformation: logisticInformation
+    logisticInformation: logisticInformation,
+    getLogistics: getLogistics
   })));
 };
 

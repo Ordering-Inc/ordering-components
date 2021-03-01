@@ -90,14 +90,23 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       cardSelected = _useState6[0],
       setCardSelected = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      defaultCardSetActionStatus = _useState8[0],
+      setDefaultCardSetActionStatus = _useState8[1];
+
+  var requestState = {};
   /**
    * method to get cards from API
    */
 
-
   var getCards = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var response, _yield$response$json, result, defaultCart;
+      var source, _yield$ordering$setAc, result, defaultCart;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -105,25 +114,20 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
             case 0:
               setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                 loading: true
-              })); // Replace for a sdk method
-
+              }));
               _context.prev = 1;
-              _context.next = 4;
-              return fetch("".concat(ordering.root, "/payments/stripe/cards?business_id=").concat(businessId, "&user_id=").concat(user.id), {
-                headers: {
-                  Authorization: "Bearer ".concat(token)
-                }
+              source = {};
+              requestState.paymentCards = source; // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
+
+              _context.next = 6;
+              return ordering.setAccessToken(token).paymentCards(businessId, user.id).get({
+                cancelToken: source
               });
 
-            case 4:
-              response = _context.sent;
-              _context.next = 7;
-              return response.json();
-
-            case 7:
-              _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
-              defaultCart = result.find(function (card) {
+            case 6:
+              _yield$ordering$setAc = _context.sent;
+              result = _yield$ordering$setAc.content.result;
+              defaultCart = result === null || result === void 0 ? void 0 : result.find(function (card) {
                 return card.default;
               });
 
@@ -142,23 +146,23 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
                 loading: false,
                 cards: result
               }));
-              _context.next = 17;
+              _context.next = 16;
               break;
 
-            case 14:
-              _context.prev = 14;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](1);
               setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                 loading: false,
                 error: _context.t0
               }));
 
-            case 17:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee, null, [[1, 13]]);
     }));
 
     return function getCards() {
@@ -172,36 +176,19 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
 
   var deleteCard = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(card) {
-      var body, response, _yield$response$json2, error;
+      var _yield$ordering$payme, error;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              body = JSON.stringify({
-                business_id: -1,
-                card_id: card.id,
-                user_id: user.id
-              });
-              _context2.next = 4;
-              return fetch("".concat(ordering.root, "/payments/stripe/cards"), {
-                method: 'DELETE',
-                headers: {
-                  Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
-                },
-                body: body
-              });
+              _context2.next = 3;
+              return ordering.paymentCards(-1, user.id, card.id).delete();
 
-            case 4:
-              response = _context2.sent;
-              _context2.next = 7;
-              return response.json();
-
-            case 7:
-              _yield$response$json2 = _context2.sent;
-              error = _yield$response$json2.error;
+            case 3:
+              _yield$ordering$payme = _context2.sent;
+              error = _yield$ordering$payme.content.error;
 
               if (!error) {
                 cardsList.cards = cardsList.cards.filter(function (_card) {
@@ -210,23 +197,107 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
                 setCardsList(_objectSpread({}, cardsList));
               }
 
-              _context2.next = 14;
+              _context2.next = 11;
               break;
 
-            case 12:
-              _context2.prev = 12;
+            case 8:
+              _context2.prev = 8;
               _context2.t0 = _context2["catch"](0);
+              console.error(_context2.t0.message);
 
-            case 14:
+            case 11:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 12]]);
+      }, _callee2, null, [[0, 8]]);
     }));
 
     return function deleteCard(_x) {
       return _ref2.apply(this, arguments);
+    };
+  }();
+  /**
+   * method to set card as default
+   */
+
+
+  var setDefaultCard = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(card) {
+      var requestOptions, functionFetch, response, content;
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setDefaultCardSetActionStatus(_objectSpread(_objectSpread({}, defaultCardSetActionStatus), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                },
+                body: JSON.stringify({
+                  business_id: businessId,
+                  user_id: user.id,
+                  card_id: card.id
+                })
+              };
+              functionFetch = "".concat(ordering.root, "/payments/stripe/cards/default");
+              _context3.next = 6;
+              return fetch(functionFetch, requestOptions);
+
+            case 6:
+              response = _context3.sent;
+              _context3.next = 9;
+              return response.json();
+
+            case 9:
+              content = _context3.sent;
+
+              if (!content.error) {
+                setCardSelected({
+                  id: card.id,
+                  type: 'card',
+                  card: {
+                    brand: card.brand,
+                    last4: card.last4
+                  }
+                });
+                setDefaultCardSetActionStatus({
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setDefaultCardSetActionStatus({
+                  loading: false,
+                  error: content.result
+                });
+              }
+
+              _context3.next = 16;
+              break;
+
+            case 13:
+              _context3.prev = 13;
+              _context3.t0 = _context3["catch"](0);
+              setDefaultCardSetActionStatus({
+                loading: false,
+                error: _context3.t0
+              });
+
+            case 16:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 13]]);
+    }));
+
+    return function setDefaultCard(_x2) {
+      return _ref3.apply(this, arguments);
     };
   }();
   /**
@@ -235,40 +306,39 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
 
 
   var getCredentials = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var response, _yield$response$json3, publishable;
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
+      var _yield$ordering$setAc2, result;
 
-      return _regenerator.default.wrap(function _callee3$(_context3) {
+      return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context3.next = 2;
-              return fetch("".concat(ordering.root, "/payments/stripe/credentials"), {
-                headers: {
-                  Authorization: "Bearer ".concat(token)
-                }
-              });
+              _context4.prev = 0;
+              _context4.next = 3;
+              return ordering.setAccessToken(token).paymentCards().getCredentials();
 
-            case 2:
-              response = _context3.sent;
-              _context3.next = 5;
-              return response.json();
-
-            case 5:
-              _yield$response$json3 = _context3.sent;
-              publishable = _yield$response$json3.result.publishable;
-              setPublicKey(publishable);
+            case 3:
+              _yield$ordering$setAc2 = _context4.sent;
+              result = _yield$ordering$setAc2.content.result;
+              setPublicKey(result.publishable);
+              _context4.next = 11;
+              break;
 
             case 8:
+              _context4.prev = 8;
+              _context4.t0 = _context4["catch"](0);
+              console.error(_context4.t0.message);
+
+            case 11:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3);
+      }, _callee4, null, [[0, 8]]);
     }));
 
     return function getCredentials() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
@@ -287,19 +357,22 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     cardsList.cards.push(card);
     setCardsList(_objectSpread({}, cardsList));
     handleCardClick(card);
-  }; // useEffect(() => {
-  //   getCards()
-  // }, [createdCard])
-
+  };
 
   (0, _react.useEffect)(function () {
-    if (!token) return; // getRequirements()
+    if (token) {
+      getCards();
 
-    getCards();
-
-    if (!props.publicKey) {
-      getCredentials();
+      if (!props.publicKey) {
+        getCredentials();
+      }
     }
+
+    return function () {
+      if (requestState.paymentCards) {
+        requestState.paymentCards.cancel();
+      }
+    };
   }, [token]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cardSelected: cardSelected,
@@ -307,8 +380,9 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     handleCardClick: handleCardClick,
     publicKey: publicKey,
     handleNewCard: handleNewCard,
-    deleteCard: deleteCard // handlerCreateCard={(val) => setCreatedCard(val)}
-
+    deleteCard: deleteCard,
+    setDefaultCard: setDefaultCard,
+    defaultCardSetActionStatus: defaultCardSetActionStatus
   })));
 };
 
@@ -322,7 +396,7 @@ PaymentOptionStripe.propTypes = {
   /**
    * Business id to get cards from API
    */
-  businessId: _propTypes.default.number,
+  businessId: _propTypes.default.number.isRequired,
 
   /**
    * User id to pass in endpoint to get cards from API,

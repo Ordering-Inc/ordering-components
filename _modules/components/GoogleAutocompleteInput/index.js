@@ -51,7 +51,7 @@ var AutocompleteInput = function AutocompleteInput(props) {
         key = _ref2[0],
         value = _ref2[1];
 
-    if (['googleReady', 'apiKey', 'onChangeAddress', 'countryCode', 'childRef', 'types', 'fields'].indexOf(key) === -1) {
+    if (['googleReady', 'apiKey', 'onChangeAddress', 'setValue', 'childRef', 'countryCode', 'types', 'fields'].indexOf(key) === -1) {
       inputProps[key] = value;
     }
   });
@@ -113,7 +113,17 @@ var AutocompleteInput = function AutocompleteInput(props) {
       });
     }
   }, [googleReady]);
+  (0, _react.useEffect)(function () {
+    var interval = setInterval(function () {
+      if (inputRef.current.attributes.autocomplete && inputRef.current.attributes.autocomplete.value === 'new-field') clearInterval(interval);
+      inputRef.current.setAttribute('autocomplete', 'new-field');
+    }, 100);
+    return function () {
+      return clearInterval(interval);
+    };
+  });
   return /*#__PURE__*/_react.default.createElement("input", _extends({}, inputProps, {
+    autoComplete: "new-field",
     disabled: !props.googleReady,
     ref: function ref(e) {
       inputRef.current = e;

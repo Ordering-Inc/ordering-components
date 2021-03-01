@@ -19,6 +19,10 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _OrderContext = require("../../contexts/OrderContext");
 
+var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
+
+var _CustomerContext = require("../../contexts/CustomerContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -61,31 +65,27 @@ var AddressForm = function AddressForm(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState = (0, _react.useState)({
-    loading: useValidationFileds,
-    fields: {}
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      validationFields = _useState2[0],
-      setValidationFields = _useState2[1];
+  var _useValidationFields = (0, _ValidationsFieldsContext.useValidationFields)(),
+      _useValidationFields2 = _slicedToArray(_useValidationFields, 1),
+      validationFields = _useValidationFields2[0];
 
-  var _useState3 = (0, _react.useState)({
+  var _useState = (0, _react.useState)({
     loading: false,
     error: null,
     address: address || {}
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      addressState = _useState4[0],
-      setAddressState = _useState4[1];
+      _useState2 = _slicedToArray(_useState, 2),
+      addressState = _useState2[0],
+      setAddressState = _useState2[1];
 
-  var _useState5 = (0, _react.useState)({
+  var _useState3 = (0, _react.useState)({
     loading: false,
     changes: {},
     error: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      formState = _useState6[0],
-      setFormState = _useState6[1];
+      _useState4 = _slicedToArray(_useState3, 2),
+      formState = _useState4[0],
+      setFormState = _useState4[1];
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -101,82 +101,16 @@ var AddressForm = function AddressForm(props) {
       changeAddress = _useOrder2[1].changeAddress;
 
   var userId = props.userId || (user === null || user === void 0 ? void 0 : user.id);
-  var accessToken = props.accessToken || token; // if (!userId) {
-  //   throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
-  // }
-  // if (!accessToken) {
-  //   throw new Error('`accessToken` must provide from props or use SessionProviver to wrappe the app.')
-  // }
+  var accessToken = props.accessToken || token;
 
-  /**
-   * Load the validation fields
-   */
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      setUserCustomer = _useCustomer2[1].setUserCustomer;
 
-  var loadValidationFields = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$valid, content, fields;
-
-      return _regenerator.default.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              setValidationFields(_objectSpread(_objectSpread({}, validationFields), {}, {
-                loading: true
-              }));
-              source = {};
-              requestsState.validation = source;
-              _context.next = 6;
-              return ordering.validationFields().get({
-                cancelToken: source,
-                query: {
-                  where: [{
-                    attribute: 'validate',
-                    value: 'address'
-                  }]
-                }
-              });
-
-            case 6:
-              _yield$ordering$valid = _context.sent;
-              content = _yield$ordering$valid.content;
-              fields = {};
-
-              if (!content.result.error) {
-                content.result.forEach(function (field) {
-                  fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field;
-                });
-              }
-
-              setValidationFields(_objectSpread(_objectSpread({}, validationFields), {}, {
-                loading: false,
-                fields: fields
-              }));
-              _context.next = 16;
-              break;
-
-            case 13:
-              _context.prev = 13;
-              _context.t0 = _context["catch"](0);
-
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setValidationFields(_objectSpread(_objectSpread({}, validationFields), {}, {
-                  loading: false
-                }));
-              }
-
-            case 16:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[0, 13]]);
-    }));
-
-    return function loadValidationFields() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      isEdit = _useState6[0],
+      _setIsEdit = _useState6[1];
   /**
    * Load an address by id
    * @param {number} userId User id for address user
@@ -185,58 +119,58 @@ var AddressForm = function AddressForm(props) {
 
 
   var loadAddress = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(userId, addressId) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(userId, addressId) {
       var source, _yield$ordering$users, content;
 
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context.prev = _context.next) {
             case 0:
-              _context2.prev = 0;
+              _context.prev = 0;
               setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.address = source;
-              _context2.next = 6;
+              _context.next = 6;
               return ordering.users(userId).addresses(addressId).get({
                 accessToken: accessToken,
                 cancelToken: source
               });
 
             case 6:
-              _yield$ordering$users = _context2.sent;
+              _yield$ordering$users = _context.sent;
               content = _yield$ordering$users.content;
               setAddressState({
                 loading: false,
                 error: content.error ? content.result : null,
                 address: content.error ? {} : content.result
               });
-              _context2.next = 14;
+              _context.next = 14;
               break;
 
             case 11:
-              _context2.prev = 11;
-              _context2.t0 = _context2["catch"](0);
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
 
-              if (_context2.t0.constructor.name !== 'Cancel') {
+              if (_context.t0.constructor.name !== 'Cancel') {
                 setAddressState({
                   loading: false,
-                  error: [_context2.t0.message],
+                  error: [_context.t0.message],
                   address: {}
                 });
               }
 
             case 14:
             case "end":
-              return _context2.stop();
+              return _context.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
     return function loadAddress(_x, _x2) {
-      return _ref2.apply(this, arguments);
+      return _ref.apply(this, arguments);
     };
   }();
   /**
@@ -245,7 +179,7 @@ var AddressForm = function AddressForm(props) {
    */
 
 
-  var hanldeChangeInput = function hanldeChangeInput(e) {
+  var handleChangeInput = function handleChangeInput(e) {
     updateChanges(_defineProperty({}, e.target.name, e.target.value));
   };
   /**
@@ -266,7 +200,9 @@ var AddressForm = function AddressForm(props) {
 
 
   var showField = function showField(fieldName) {
-    return !useValidationFileds || !validationFields.loading && !validationFields.fields[fieldName] || !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled;
+    var _validationFields$fie, _validationFields$fie2, _validationFields$fie3;
+
+    return !useValidationFileds || !validationFields.loading && !((_validationFields$fie = validationFields.fields) !== null && _validationFields$fie !== void 0 && _validationFields$fie.address[fieldName]) || !validationFields.loading && ((_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2.address[fieldName]) && ((_validationFields$fie3 = validationFields.fields) === null || _validationFields$fie3 === void 0 ? void 0 : _validationFields$fie3.address[fieldName].enabled);
   };
   /**
    * Check if field is required
@@ -275,7 +211,9 @@ var AddressForm = function AddressForm(props) {
 
 
   var isRequiredField = function isRequiredField(fieldName) {
-    return useValidationFileds && !validationFields.loading && validationFields.fields[fieldName] && validationFields.fields[fieldName].enabled && validationFields.fields[fieldName].required;
+    var _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
+
+    return useValidationFileds && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4.address[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.address[fieldName].enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.address[fieldName].required);
   };
   /**
    * Function to save current changes
@@ -284,34 +222,40 @@ var AddressForm = function AddressForm(props) {
 
 
   var saveAddress = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values, userCustomerSetup) {
       var _addressState$address, _yield$ordering$users2, content;
 
-      return _regenerator.default.wrap(function _callee3$(_context3) {
+      return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               if (auth) {
-                _context3.next = 4;
+                _context2.next = 4;
                 break;
               }
 
-              changeAddress(formState.changes);
+              changeAddress(_objectSpread(_objectSpread({}, values), formState.changes));
               onSaveAddress && onSaveAddress(formState.changes);
-              return _context3.abrupt("return");
+              return _context2.abrupt("return");
 
             case 4:
+              if (userCustomerSetup) {
+                setUserCustomer({
+                  id: userCustomerSetup
+                }, true);
+              }
+
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context3.prev = 5;
-              _context3.next = 8;
-              return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(formState.changes, {
+              _context2.prev = 6;
+              _context2.next = 9;
+              return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
                 accessToken: accessToken
               });
 
-            case 8:
-              _yield$ordering$users2 = _context3.sent;
+            case 9:
+              _yield$ordering$users2 = _context2.sent;
               content = _yield$ordering$users2.content;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: false,
@@ -326,32 +270,35 @@ var AddressForm = function AddressForm(props) {
                 onSaveAddress && onSaveAddress(content.result);
 
                 if (isSelectedAfterAdd) {
-                  changeAddress(content.result.id);
+                  changeAddress(content.result.id, {
+                    address: isEdit ? null : content.result,
+                    isEdit: isEdit
+                  });
                 }
               }
 
-              _context3.next = 17;
+              _context2.next = 18;
               break;
 
-            case 14:
-              _context3.prev = 14;
-              _context3.t0 = _context3["catch"](5);
+            case 15:
+              _context2.prev = 15;
+              _context2.t0 = _context2["catch"](6);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: false,
-                error: [_context3.t0.message],
+                error: [_context2.t0.message],
                 address: {}
               }));
 
-            case 17:
+            case 18:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
         }
-      }, _callee3, null, [[5, 14]]);
+      }, _callee2, null, [[6, 15]]);
     }));
 
-    return function saveAddress() {
-      return _ref3.apply(this, arguments);
+    return function saveAddress(_x3, _x4) {
+      return _ref2.apply(this, arguments);
     };
   }();
 
@@ -361,20 +308,12 @@ var AddressForm = function AddressForm(props) {
     }));
   }, [address]);
   (0, _react.useEffect)(function () {
-    if (useValidationFileds) {
-      loadValidationFields();
-    }
-
     if (addressId && !address) {
       loadAddress(userId, addressId);
     }
   }, []);
   (0, _react.useEffect)(function () {
     return function () {
-      if (requestsState.validation) {
-        requestsState.validation.cancel();
-      }
-
       if (requestsState.address) {
         requestsState.address.cancel();
       }
@@ -384,11 +323,13 @@ var AddressForm = function AddressForm(props) {
     formState: formState,
     showField: showField,
     updateChanges: updateChanges,
-    hanldeChangeInput: hanldeChangeInput,
+    handleChangeInput: handleChangeInput,
     isRequiredField: isRequiredField,
     saveAddress: saveAddress,
     addressState: addressState,
-    validationFields: validationFields
+    setIsEdit: function setIsEdit(val) {
+      return _setIsEdit(val);
+    }
   })));
 };
 

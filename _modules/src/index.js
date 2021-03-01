@@ -51,18 +51,6 @@ Object.defineProperty(exports, "BusinessList", {
     return _BusinessList.BusinessList;
   }
 });
-Object.defineProperty(exports, "BusinessesList", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessesList.BusinessesList;
-  }
-});
-Object.defineProperty(exports, "BusinessFeaturedProducts", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessFeaturedProducts.BusinessFeaturedProducts;
-  }
-});
 Object.defineProperty(exports, "BusinessInformation", {
   enumerable: true,
   get: function get() {
@@ -393,16 +381,10 @@ Object.defineProperty(exports, "SingleProductCard", {
     return _SingleProductCard.SingleProductCard;
   }
 });
-Object.defineProperty(exports, "UserDetails", {
+Object.defineProperty(exports, "UserFormDetails", {
   enumerable: true,
   get: function get() {
-    return _UserDetails.UserDetails;
-  }
-});
-Object.defineProperty(exports, "UserProfileForm", {
-  enumerable: true,
-  get: function get() {
-    return _UserProfileForm.UserProfileForm;
+    return _UserFormDetails.UserFormDetails;
   }
 });
 Object.defineProperty(exports, "UpsellingPage", {
@@ -433,6 +415,18 @@ Object.defineProperty(exports, "CmsContent", {
   enumerable: true,
   get: function get() {
     return _CmsContent.CmsContent;
+  }
+});
+Object.defineProperty(exports, "PhoneAutocomplete", {
+  enumerable: true,
+  get: function get() {
+    return _PhoneAutocomplete.PhoneAutocomplete;
+  }
+});
+Object.defineProperty(exports, "BusinessesMap", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessesMap.BusinessesMap;
   }
 });
 Object.defineProperty(exports, "ConfigContext", {
@@ -609,10 +603,52 @@ Object.defineProperty(exports, "OrderingProvider", {
     return _OrderingContext.OrderingProvider;
   }
 });
+Object.defineProperty(exports, "CustomerContext", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.CustomerContext;
+  }
+});
+Object.defineProperty(exports, "CustomerProvider", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.CustomerProvider;
+  }
+});
+Object.defineProperty(exports, "useCustomer", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.useCustomer;
+  }
+});
+Object.defineProperty(exports, "ValidationFieldsContext", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.ValidationFieldsContext;
+  }
+});
+Object.defineProperty(exports, "ValidationFieldsProvider", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.ValidationFieldsProvider;
+  }
+});
+Object.defineProperty(exports, "useValidationFields", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.useValidationFields;
+  }
+});
 Object.defineProperty(exports, "PaymentOptionCash", {
   enumerable: true,
   get: function get() {
     return _PaymentOptionCash.PaymentOptionCash;
+  }
+});
+Object.defineProperty(exports, "PaymentOptionPaypal", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionPaypal.PaymentOptionPaypal;
   }
 });
 Object.defineProperty(exports, "PaymentOptionStripe", {
@@ -657,10 +693,16 @@ Object.defineProperty(exports, "FloatingButton", {
     return _FloatingButton.FloatingButton;
   }
 });
-Object.defineProperty(exports, "InputPhoneNumber", {
+Object.defineProperty(exports, "ResetPassword", {
   enumerable: true,
   get: function get() {
-    return _InputPhoneNumber.InputPhoneNumber;
+    return _ResetPassword.ResetPassword;
+  }
+});
+Object.defineProperty(exports, "Analytics", {
+  enumerable: true,
+  get: function get() {
+    return _Analitycs.Analytics;
   }
 });
 
@@ -679,10 +721,6 @@ var _BusinessBasicInformation = require("./components/BusinessBasicInformation")
 var _BusinessController = require("./components/BusinessController");
 
 var _BusinessList = require("./components/BusinessList");
-
-var _BusinessesList = require("./components/BusinessesList");
-
-var _BusinessFeaturedProducts = require("./components/BusinessFeaturedProducts");
 
 var _BusinessInformation = require("./components/BusinessInformation");
 
@@ -790,9 +828,7 @@ var _SingleOrderCard = require("./components/SingleOrderCard");
 
 var _SingleProductCard = require("./components/SingleProductCard");
 
-var _UserDetails = require("./components/UserDetails");
-
-var _UserProfileForm = require("./components/UserProfileForm");
+var _UserFormDetails = require("./components/UserFormDetails");
 
 var _UpsellingPage = require("./components/UpsellingPage");
 
@@ -803,6 +839,10 @@ var _OrderDetails = require("./components/OrderDetails");
 var _OrderReview = require("./components/OrderReview");
 
 var _CmsContent = require("./components/CmsContent");
+
+var _PhoneAutocomplete = require("./components/PhoneAutocomplete");
+
+var _BusinessesMap = require("./components/BusinessesMap");
 
 var _ConfigContext = require("./contexts/ConfigContext");
 
@@ -824,7 +864,13 @@ var _UtilsContext = require("./contexts/UtilsContext");
 
 var _OrderingContext = require("./contexts/OrderingContext");
 
+var _CustomerContext = require("./contexts/CustomerContext");
+
+var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
+
 var _PaymentOptionCash = require("./components/PaymentOptionCash");
+
+var _PaymentOptionPaypal = require("./components/PaymentOptionPaypal");
 
 var _PaymentOptionStripe = require("./components/PaymentOptionStripe");
 
@@ -840,4 +886,6 @@ var _StripeRedirectForm = require("./components/PaymentOptionStripeRedirect/Stri
 
 var _FloatingButton = require("./components/FloatingButton");
 
-var _InputPhoneNumber = require("./components/InputPhoneNumber");
+var _ResetPassword = require("./components/ResetPassword");
+
+var _Analitycs = require("./components/Analitycs");

@@ -62,7 +62,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _businessState$busine8, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
+  var _businessState$busine12, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
 
   var isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
@@ -101,43 +101,49 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       sortByValue = _useState6[0],
       setSortByValue = _useState6[1];
 
-  var _useState7 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      filterByMenus = _useState8[0],
+      setFilterByMenus = _useState8[1];
+
+  var _useState9 = (0, _react.useState)({
     business: {},
+    menus: null,
     loading: true,
     error: null
   }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      businessState = _useState8[0],
-      setBusinessState = _useState8[1];
-
-  var _useState9 = (0, _react.useState)({}),
       _useState10 = _slicedToArray(_useState9, 2),
-      categoriesState = _useState10[0],
-      setCategoriesState = _useState10[1];
+      businessState = _useState10[0],
+      setBusinessState = _useState10[1];
 
-  var _useState11 = (0, _react.useState)(),
+  var _useState11 = (0, _react.useState)({}),
       _useState12 = _slicedToArray(_useState11, 2),
-      orderOptions = _useState12[0],
-      setOrderOptions = _useState12[1];
+      categoriesState = _useState12[0],
+      setCategoriesState = _useState12[1];
 
-  var _useState13 = (0, _react.useState)({}),
+  var _useState13 = (0, _react.useState)(),
       _useState14 = _slicedToArray(_useState13, 2),
-      requestsState = _useState14[0],
-      setRequestsState = _useState14[1];
+      orderOptions = _useState14[0],
+      setOrderOptions = _useState14[1];
 
-  var _useState15 = (0, _react.useState)({
+  var _useState15 = (0, _react.useState)({}),
+      _useState16 = _slicedToArray(_useState15, 2),
+      requestsState = _useState16[0],
+      setRequestsState = _useState16[1];
+
+  var _useState17 = (0, _react.useState)({
     product: null,
     loading: false,
     error: null
   }),
-      _useState16 = _slicedToArray(_useState15, 2),
-      productModal = _useState16[0],
-      setProductModal = _useState16[1];
-
-  var _useState17 = (0, _react.useState)(false),
       _useState18 = _slicedToArray(_useState17, 2),
-      featuredProducts = _useState18[0],
-      setFeaturedProducts = _useState18[1];
+      productModal = _useState18[0],
+      setProductModal = _useState18[1];
+
+  var _useState19 = (0, _react.useState)(false),
+      _useState20 = _slicedToArray(_useState19, 2),
+      featuredProducts = _useState20[0],
+      setFeaturedProducts = _useState20[1];
 
   var categoryStateDefault = {
     loading: true,
@@ -151,15 +157,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     products: []
   };
 
-  var _useState19 = (0, _react.useState)(categoryStateDefault),
-      _useState20 = _slicedToArray(_useState19, 2),
-      categoryState = _useState20[0],
-      setCategoryState = _useState20[1];
-
-  var _useState21 = (0, _react.useState)(null),
+  var _useState21 = (0, _react.useState)(categoryStateDefault),
       _useState22 = _slicedToArray(_useState21, 2),
-      errors = _useState22[0],
-      setErrors = _useState22[1];
+      categoryState = _useState22[0],
+      setCategoryState = _useState22[1];
+
+  var _useState23 = (0, _react.useState)(null),
+      _useState24 = _slicedToArray(_useState23, 2),
+      errors = _useState24[0],
+      setErrors = _useState24[1];
   /**
    * Change category selected
    * @param {Object} category Category object
@@ -179,15 +185,19 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     setSortByValue(val);
   };
 
+  var handleChangeFilterByMenus = function handleChangeFilterByMenus(val) {
+    setFilterByMenus(val);
+  };
+
   var isMatchSearch = function isMatchSearch(name, description) {
     if (!searchValue) return true;
-    return name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
+    return name && name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description && description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
   };
 
   var isFeaturedSearch = function isFeaturedSearch(product) {
     if (product.featured) {
       if (!searchValue) return true;
-      return product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
+      return product.name && product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || product.description && product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
     }
 
     return false;
@@ -213,7 +223,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
       var _businessState$busine, _orderState$options;
 
-      var _businessState$busine2, _businessState$busine3, isFeatured, _categoryState, _businessState$busine4, _businessState$busine5, productsFiltered, _businessState$busine6, _productsFiltered, _businessState$busine7, _productsFiltered2, categoryKey, categoryState, pagination, parameters, where, searchConditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
+      var _businessState$busine2, _businessState$busine3, _businessState$busine4, isFeatured, _categoryState, _businessState$busine5, _businessState$busine6, _businessState$busine7, productsFiltered, _businessState$busine8, _businessState$busine9, _productsFiltered, _businessState$busine10, _businessState$busine11, _productsFiltered2, categoryKey, categoryState, pagination, parameters, where, searchConditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -224,9 +234,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 break;
               }
 
-              isFeatured = !!((_businessState$busine2 = businessState.business.categories) !== null && _businessState$busine2 !== void 0 && (_businessState$busine3 = _businessState$busine2.find(function (category) {
+              isFeatured = !!(businessState !== null && businessState !== void 0 && (_businessState$busine2 = businessState.business) !== null && _businessState$busine2 !== void 0 && (_businessState$busine3 = _businessState$busine2.categories) !== null && _businessState$busine3 !== void 0 && (_businessState$busine4 = _businessState$busine3.find(function (category) {
                 return category;
-              })) !== null && _businessState$busine3 !== void 0 && _businessState$busine3.products.filter(function (product) {
+              })) !== null && _businessState$busine4 !== void 0 && _businessState$busine4.products.filter(function (product) {
                 return product.featured;
               }).length);
               setFeaturedProducts(isFeatured);
@@ -235,21 +245,21 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               });
 
               if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
-                productsFiltered = (_businessState$busine4 = businessState.business.categories) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.find(function (category) {
+                productsFiltered = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.categories) === null || _businessState$busine6 === void 0 ? void 0 : (_businessState$busine7 = _businessState$busine6.find(function (category) {
                   return category.id === categorySelected.id;
-                })) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.products.filter(function (product) {
+                })) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.products.filter(function (product) {
                   return isMatchSearch(product.name, product.description);
                 });
                 _categoryState.products = productsFiltered || [];
               } else if (categorySelected.id === 'featured') {
-                _productsFiltered = (_businessState$busine6 = businessState.business.categories) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.reduce(function (products, category) {
+                _productsFiltered = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 ? void 0 : (_businessState$busine9 = _businessState$busine8.categories) === null || _businessState$busine9 === void 0 ? void 0 : _businessState$busine9.reduce(function (products, category) {
                   return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
                 }, []).filter(function (product) {
                   return isFeaturedSearch(product);
                 });
                 _categoryState.products = _productsFiltered || [];
               } else {
-                _productsFiltered2 = (_businessState$busine7 = businessState.business.categories) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.reduce(function (products, category) {
+                _productsFiltered2 = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.categories) === null || _businessState$busine11 === void 0 ? void 0 : _businessState$busine11.reduce(function (products, category) {
                   return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
                 }, []).filter(function (product) {
                   return isMatchSearch(product.name, product.description);
@@ -286,6 +296,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 page: newFetch ? 1 : pagination.currentPage + 1,
                 page_size: pagination.pageSize
               };
+
+              if (sortByValue) {
+                parameters.orderBy = sortByValue === 'a-z' ? 'name' : sortByValue;
+              }
+
               where = null;
               searchConditions = [];
 
@@ -338,18 +353,18 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 };
               }
 
-              _context.prev = 23;
+              _context.prev = 24;
               functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products();
               source = {};
               requestsState.products = source;
               setRequestsState(_objectSpread({}, requestsState));
-              productEndpoint = where ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
-              _context.next = 31;
+              productEndpoint = where.conditions.length > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
+              _context.next = 32;
               return productEndpoint.get({
                 cancelToken: source
               });
 
-            case 31:
+            case 32:
               _yield$productEndpoin = _context.sent;
               _yield$productEndpoin2 = _yield$productEndpoin.content;
               error = _yield$productEndpoin2.error;
@@ -366,7 +381,6 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                   loading: false,
                   products: newFetch ? _toConsumableArray(result) : [].concat(_toConsumableArray(categoryState.products), _toConsumableArray(result))
                 };
-                newcategoryState.products = sortProductsArray(sortByValue, newcategoryState.products);
                 categoriesState[categoryKey] = newcategoryState;
                 setCategoryState(_objectSpread({}, newcategoryState));
                 setCategoriesState(_objectSpread({}, categoriesState));
@@ -377,21 +391,20 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 setErrors(result);
               }
 
-              _context.next = 42;
+              _context.next = 43;
               break;
 
-            case 39:
-              _context.prev = 39;
-              _context.t0 = _context["catch"](23);
-              // if (err.constructor.name !== 'Cancel') {
-              setErrors([_context.t0.message]); // }
+            case 40:
+              _context.prev = 40;
+              _context.t0 = _context["catch"](24);
+              setErrors([_context.t0.message]);
 
-            case 42:
+            case 43:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[23, 39]]);
+      }, _callee, null, [[24, 40]]);
     }));
 
     return function getProducts(_x) {
@@ -463,7 +476,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (isInitialRender) {
       getProduct();
     }
-  }, [JSON.stringify((_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 ? void 0 : _businessState$busine8.id), isInitialRender]);
+  }, [JSON.stringify((_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id), isInitialRender]);
 
   var isValidMoment = function isValidMoment(date, format) {
     return (0, _dayjs.default)(date, format).format(format) === date;
@@ -471,7 +484,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result;
+      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result, _yield$ordering$busin3, menus;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -494,36 +507,46 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 parameters.timestamp = moment;
               }
 
-              _context3.next = 9;
+              if (filterByMenus) {
+                parameters.menu_id = filterByMenus;
+              }
+
+              _context3.next = 10;
               return ordering.businesses(slug).select(businessProps).parameters(parameters).get({
                 cancelToken: source
               });
 
-            case 9:
+            case 10:
               _yield$ordering$busin2 = _context3.sent;
               result = _yield$ordering$busin2.content.result;
-              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
-                business: result,
-                loading: false
-              }));
-              _context3.next = 17;
-              break;
+              _context3.next = 14;
+              return ordering.businesses(result.id).menus().get();
 
             case 14:
-              _context3.prev = 14;
+              _yield$ordering$busin3 = _context3.sent;
+              menus = _yield$ordering$busin3.content.result;
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                business: result,
+                loading: false,
+                menus: menus
+              }));
+              _context3.next = 22;
+              break;
+
+            case 19:
+              _context3.prev = 19;
               _context3.t0 = _context3["catch"](0);
-              // if (err.constructor.name !== 'Cancel') {
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
                 loading: false,
                 error: [_context3.t0.message]
-              })); // }
+              }));
 
-            case 17:
+            case 22:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 14]]);
+      }, _callee3, null, [[0, 19]]);
     }));
 
     return function getBusiness() {
@@ -552,7 +575,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (!orderState.loading && orderOptions && !languageState.loading) {
       getBusiness();
     }
-  }, [orderOptions, languageState.loading, slug]);
+  }, [orderOptions, languageState.loading, slug, filterByMenus]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading) {
       var _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14;
@@ -589,6 +612,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     categorySelected: categorySelected,
     searchValue: searchValue,
     sortByValue: sortByValue,
+    filterByMenus: filterByMenus,
     categoryState: categoryState,
     businessState: businessState,
     productModal: productModal,
@@ -596,6 +620,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     handleChangeCategory: handleChangeCategory,
     handleChangeSearch: handleChangeSearch,
     handleChangeSortBy: handleChangeSortBy,
+    handleChangeFilterByMenus: handleChangeFilterByMenus,
     getNextProducts: getProducts,
     updateProductModal: function updateProductModal(val) {
       return setProductModal(_objectSpread(_objectSpread({}, productModal), {}, {

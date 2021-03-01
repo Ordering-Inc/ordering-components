@@ -59,7 +59,7 @@ var LanguageSelector = function LanguageSelector(props) {
       ordering = _useApi2[0];
 
   var _useState = (0, _react.useState)({
-    loading: true,
+    loading: !languages,
     languages: languages,
     error: null
   }),
@@ -162,7 +162,8 @@ var LanguageSelector = function LanguageSelector(props) {
   (0, _react.useEffect)(function () {
     if ((languages === null || languages === void 0 ? void 0 : languages.length) > 0) {
       setLanguageState(_objectSpread(_objectSpread({}, languagesState), {}, {
-        loading: false
+        loading: false,
+        languages: languages
       }));
     } else {
       loadLanguages();
@@ -202,7 +203,7 @@ var LanguageSelector = function LanguageSelector(props) {
   }, [languages, languagesState]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     currentLanguage: props.handlerCustomChangeLanguage ? languageSelected === null || languageSelected === void 0 ? void 0 : languageSelected.code : languageState === null || languageState === void 0 ? void 0 : (_languageState$langua3 = languageState.language) === null || _languageState$langua3 === void 0 ? void 0 : _languageState$langua3.code,
-    languages: languagesState,
+    languagesState: languagesState,
     handleChangeLanguage: onChangeLanguage
   })));
 };

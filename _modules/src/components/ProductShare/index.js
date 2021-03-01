@@ -35,20 +35,22 @@ var ProductShare = function ProductShare(props) {
   var UIComponent = props.UIComponent,
       slug = props.slug,
       categoryId = props.categoryId,
-      productId = props.productId;
+      productId = props.productId,
+      defaultUrl = props.defaultUrl;
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       showShareButton = _useState2[0],
       setShowShareButton = _useState2[1];
 
-  var urlToShare = "".concat(window.location.origin, "/store/").concat(slug, "?category=").concat(categoryId, "&product=").concat(productId);
+  var urlToShare = defaultUrl || "".concat(window.location.origin, "/store/").concat(slug, "?category=").concat(categoryId, "&product=").concat(productId);
 
   var addToAnyScript = function addToAnyScript() {
     var script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = 'https://static.addtoany.com/menu/page.js';
     script.async = true;
+    script.defer = true;
     script.id = 'addthis_widget';
     document.body.appendChild(script);
   };
@@ -86,17 +88,17 @@ ProductShare.propTypes = {
   /**
    * Business slug
    */
-  slug: _propTypes.default.string.isRequired,
+  slug: _propTypes.default.string,
 
   /**
    * product category id
    */
-  categoryId: _propTypes.default.number.isRequired,
+  categoryId: _propTypes.default.number,
 
   /**
    * product id
    */
-  productId: _propTypes.default.number.isRequired,
+  productId: _propTypes.default.number,
 
   /**
    * Components types before business type filter

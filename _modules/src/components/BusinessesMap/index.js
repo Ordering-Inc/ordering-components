@@ -5,9 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.WrapperAnalytics = void 0;
+exports.BusinessesMap = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _EventContext = require("../../contexts/EventContext");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -27,44 +33,111 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-// import PropTypes from 'prop-types'
-var WrapperAnalytics = function WrapperAnalytics(Child) {
-  return function (props) {
-    var _useState = (0, _react.useState)(false),
-        _useState2 = _slicedToArray(_useState, 2),
-        analyticsReady = _useState2[0],
-        setAnalyticsReady = _useState2[1];
+var BusinessesMap = function BusinessesMap(props) {
+  var UIComponent = props.UIComponent,
+      businessList = props.businessList,
+      userLocation = props.userLocation,
+      setErrors = props.setErrors;
 
-    (0, _react.useEffect)(function () {
-      if (window.document.getElementById('google-analytics-sdk')) {
-        if (typeof ga !== 'undefined') {
-          setAnalyticsReady(true);
-        }
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
-        return;
-      }
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      businessLocations = _useState2[0],
+      setBusinessLocations = _useState2[1];
+  /**
+   * Getting necessary info for locate business on the map
+   */
 
-      var js = window.document.createElement('script');
-      js.id = 'google-analytics-sdk';
-      js.async = true;
-      js.defer = true;
-      js.src = 'https://www.google-analytics.com/analytics.js';
 
-      js.onload = function () {
-        setAnalyticsReady(true);
+  var getBusinessListLocations = function getBusinessListLocations() {
+    setBusinessLocations(businessList.map(function (business) {
+      return {
+        lat: business.location.lat,
+        lng: business.location.lng,
+        icon: business.logo,
+        slug: business.slug
       };
-
-      window.document.body.appendChild(js);
-      return function () {
-        js.onload = null;
-      };
-    }, []);
-    return /*#__PURE__*/_react.default.createElement(Child, _extends({}, props, {
-      analyticsReady: analyticsReady
     }));
   };
+  /**
+   * @param {business_slug} slug
+   * handler event when clicks business on the map
+   */
+
+
+  var onBusinessClick = function onBusinessClick(slug) {
+    events.emit('go_to_page', {
+      page: 'business',
+      params: {
+        store: slug
+      }
+    });
+  };
+
+  (0, _react.useEffect)(function () {
+    getBusinessListLocations();
+  }, [businessList]);
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    businessLocations: businessLocations,
+    userLocation: userLocation,
+    onBusinessClick: onBusinessClick,
+    setErrors: setErrors
+  })));
 };
 
-exports.WrapperAnalytics = WrapperAnalytics;
-WrapperAnalytics.propTypes = {};
-WrapperAnalytics.defaultProps = {};
+exports.BusinessesMap = BusinessesMap;
+BusinessesMap.propTypes = {
+  /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: _propTypes.default.elementType,
+
+  /**
+   *  Business list must contain location
+   */
+  businessList: _propTypes.default.array.isRequired,
+
+  /**
+    * User location is used for place center of the map
+    */
+  userLocation: _propTypes.default.object,
+
+  /**
+   * setter for map errors
+   */
+  setErrors: _propTypes.default.func,
+
+  /**
+   * Components types before order details
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+
+  /**
+   * Components types after order details
+   * Array of type components, the parent props will pass to these components
+   */
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+
+  /**
+   * Elements before order details
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
+
+  /**
+   * Elements after order details
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
+};
+BusinessesMap.defaultProps = {
+  businessList: [],
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
+};

@@ -81,21 +81,7 @@ var Cart = function Cart(props) {
   var offsetDisabled = function offsetDisabled(product) {
     var productMax = product.inventoried ? product.stock : maxCartProductConfig;
     return productMax - (product.balance - product.quantity);
-  }; // /**
-  //  * Clear all product of the cart
-  //  */
-  // const clearCart = (uuid) => {
-  //   clearCart(uuid)
-  //   // dispatchOrd⁄er({ type: ORDER_ACTIONS.CLEAR_PRODUCTS })
-  // }
-  // /**
-  //  * Remove a product of the cart
-  //  */
-  // const removeProduct = (product) => {
-  //   removeProduct(product)
-  //   dispatchOrder({ type: ORDER_ACTIONS.REMOVE_PRODUCT, productCode })
-  // }
-
+  };
   /**
    * Change product quantity of the cart
    */
@@ -107,7 +93,7 @@ var Cart = function Cart(props) {
     } else {
       updateProduct({
         id: product.id,
-        business_id: product.id,
+        business_id: product.business_id,
         code: product.code,
         quantity: quantity
       });
@@ -136,6 +122,10 @@ Cart.propTypes = {
   /**
    * Function to edit product behavior
    */
-  handleEditProduct: _propTypes.default.func
+  handleEditProduct: _propTypes.default.func,
+
+  /**
+   * String filter to fetch validation fields
+   */
+  validationFieldsType: _propTypes.default.string
 };
-Cart.defaultProps = {};
