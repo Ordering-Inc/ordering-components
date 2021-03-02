@@ -16,6 +16,7 @@ import { Cart } from './components/Cart'
 import { Checkout } from './components/Checkout'
 import { CheckPassword } from './components/CheckPassword'
 import { CouponControl } from './components/CouponControl'
+import { DashboardOrdersList } from './components/DashboardOrdersList'
 import { DragAndDrop } from './components/DragAndDrop'
 import { DriverTips } from './components/DriverTips'
 import { DriversList } from './components/DriversList'
@@ -110,6 +111,7 @@ export {
   Checkout,
   CheckPassword,
   CouponControl,
+  DashboardOrdersList,
   DragAndDrop,
   DriverTips,
   DriversList,
