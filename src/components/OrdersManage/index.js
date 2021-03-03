@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
-
+import { useEvent } from '../../contexts/EventContext'
 export const OrdersManage = (props) => {
   const {
     UIComponent,
@@ -15,6 +15,7 @@ export const OrdersManage = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ token, loading }] = useSession()
+  const [events] = useEvent()
 
   const requestsState = {}
   const [searchValue, setSearchValue] = useState(null)
@@ -281,11 +282,17 @@ export const OrdersManage = (props) => {
       })
       setDriversList({ ...driversList, drivers: drivers })
     }
+    const handleRegisterOrder = (order) => {
+      events.emit('order_added', order.id)
+    }
     socket.join('drivers')
     socket.on('drivers_update', handleUpdateDriver)
     socket.on('tracking_driver', handleTrackingDriver)
+    socket.join('orders')
+    socket.on('orders_register', handleRegisterOrder)
     return () => {
       socket.leave('drivers')
+      socket.leave('orders')
       socket.off('drivers_update', handleUpdateDriver)
       socket.off('tracking_driver', handleTrackingDriver)
     }

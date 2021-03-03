@@ -21,8 +21,6 @@ var _WebsocketContext = require("../../contexts/WebsocketContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
-var _EventContext = require("../../contexts/EventContext");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -94,10 +92,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configState = _useConfig2[0];
-
-  var _useEvent = (0, _EventContext.useEvent)(),
-      _useEvent2 = _slicedToArray(_useEvent, 1),
-      events = _useEvent2[0];
 
   var decimal = ((_configState$configs$ = configState.configs.format_number_decimal_length) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value) || 2;
 
@@ -859,11 +853,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
         return order.id === _order.id;
       });
       if (found) return;
-
-      if (!orderStatus || orderStatus.includes(0)) {
-        events.emit('order_added', _order.id);
-      }
-
       var totalPrice = getTotalPrice(_order);
 
       var order = _objectSpread(_objectSpread({}, _order), {}, {
@@ -943,10 +932,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
   (0, _react.useEffect)(function () {
     if (!session.user) return;
     socket.join('messages_orders');
-    socket.join('orders');
     return function () {
       socket.leave('messages_orders');
-      socket.leave('orders');
     };
   }, [socket, session]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

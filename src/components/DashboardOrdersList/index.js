@@ -4,8 +4,6 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { useConfig } from '../../contexts/ConfigContext'
-import { useEvent } from '../../contexts/EventContext'
-
 export const DashboardOrdersList = (props) => {
   const {
     UIComponent,
@@ -32,7 +30,6 @@ export const DashboardOrdersList = (props) => {
 
   const [ordering] = useApi()
   const [configState] = useConfig()
-  const [events] = useEvent()
   const decimal = configState.configs.format_number_decimal_length?.value || 2
   const [orderList, setOrderList] = useState({ loading: !orders, error: null, orders: [] })
   const [pagination, setPagination] = useState({
@@ -551,9 +548,6 @@ export const DashboardOrdersList = (props) => {
     const handleRegisterOrder = (_order) => {
       const found = orderList.orders.find(order => order.id === _order.id)
       if (found) return
-      if (!orderStatus || orderStatus.includes(0)) {
-        events.emit('order_added', _order.id)
-      }
       const totalPrice = getTotalPrice(_order)
       const order = { ..._order, status: 0, summary: { total: totalPrice } }
       let orders = []
@@ -614,10 +608,8 @@ export const DashboardOrdersList = (props) => {
   useEffect(() => {
     if (!session.user) return
     socket.join('messages_orders')
-    socket.join('orders')
     return () => {
       socket.leave('messages_orders')
-      socket.leave('orders')
     }
   }, [socket, session])
 
