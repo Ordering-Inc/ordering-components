@@ -312,10 +312,16 @@ var OrderDetails = function OrderDetails(props) {
       }));
     };
 
-    socket.join("orders_".concat(user.id));
+    if (!asDashboard) {
+      socket.join("orders_".concat(user.id));
+    }
+
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      socket.leave("orders_".concat(user.id));
+      if (!asDashboard) {
+        socket.leave("orders_".concat(user.id));
+      }
+
       socket.off('update_order', handleUpdateOrder);
     };
   }, [orderState.order, socket, loading]);
