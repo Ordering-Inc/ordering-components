@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
-import { useCustomer } from '../../contexts/CustomerContext'
 
 export const PhoneAutocomplete = (props) => {
   const {
@@ -14,7 +13,6 @@ export const PhoneAutocomplete = (props) => {
   const [ordering] = useApi()
   const [{ token }] = useSession()
 
-  const [, { setUserCustomer }] = useCustomer()
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
@@ -28,7 +26,6 @@ export const PhoneAutocomplete = (props) => {
     if (user[0]) {
       setCustomerState({ loading: false, result: user[0] })
       setOpenModal({ ...openModal, customer: true })
-      setUserCustomer(user[0])
     } else {
       setCustomerState({ loading: false, result: { error: false } })
     }
