@@ -701,7 +701,6 @@ var OrdersManage = function OrdersManage(props) {
   }, [socket, loading, driversList.drivers]);
   (0, _react.useEffect)(function () {
     var handleRegisterOrder = function handleRegisterOrder(order) {
-      console.log('new order');
       events.emit('order_added', order.id);
     };
 

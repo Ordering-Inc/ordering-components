@@ -157,7 +157,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
     }
 
     var numberParts = number.split(formatNumber.separator);
-    numberParts[0] = numberParts[0].replace(/(.)(?=(\d{3})+$)/g, '$1' + formatNumber.thousand);
+    numberParts[0] = numberParts[0].replace(/(.)(?=(\d{3})+$)/g, '$1' + formatNumber.thousand !== 'space' ? formatNumber.thousand : ' ');
     number = numberParts.join(formatNumber.separator);
     return number;
   };

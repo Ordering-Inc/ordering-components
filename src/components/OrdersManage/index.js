@@ -294,7 +294,6 @@ export const OrdersManage = (props) => {
 
   useEffect(() => {
     const handleRegisterOrder = (order) => {
-      console.log('new order')
       events.emit('order_added', order.id)
     }
     socket.join('orders')
