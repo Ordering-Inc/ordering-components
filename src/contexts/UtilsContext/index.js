@@ -112,7 +112,8 @@ export const UtilsProviders = ({ children }) => {
       number = number.replace(',', formatNumber.separator)
     }
     const numberParts = number.split(formatNumber.separator)
-    numberParts[0] = numberParts[0].replace(/(.)(?=(\d{3})+$)/g, '$1' + formatNumber.thousand !== 'space' ? formatNumber.thousand : ' ')
+    if (formatNumber.thousand === 'space') formatNumber.thousand = ' '
+    numberParts[0] = numberParts[0].replace(/(.)(?=(\d{3})+$)/g, '$1' + formatNumber.thousand)
     number = numberParts.join(formatNumber.separator)
     return number
   }
