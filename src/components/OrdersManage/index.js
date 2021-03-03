@@ -282,21 +282,28 @@ export const OrdersManage = (props) => {
       })
       setDriversList({ ...driversList, drivers: drivers })
     }
-    const handleRegisterOrder = (order) => {
-      events.emit('order_added', order.id)
-    }
     socket.join('drivers')
     socket.on('drivers_update', handleUpdateDriver)
     socket.on('tracking_driver', handleTrackingDriver)
-    socket.join('orders')
-    socket.on('orders_register', handleRegisterOrder)
     return () => {
       socket.leave('drivers')
-      socket.leave('orders')
       socket.off('drivers_update', handleUpdateDriver)
       socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [socket, loading, driversList.drivers])
+
+  useEffect(() => {
+    const handleRegisterOrder = (order) => {
+      console.log('new order')
+      events.emit('order_added', order.id)
+    }
+    socket.join('orders')
+    socket.on('orders_register', handleRegisterOrder)
+    return () => {
+      socket.leave('orders')
+      socket.off('orders_register', handleRegisterOrder)
+    }
+  }, [socket, loading])
 
   /**
    * Listening multi orders action start to change status
