@@ -67,8 +67,6 @@ var OrdersFilter = function OrdersFilter(props) {
     dateType: null,
     deliveryFromDatetime: null,
     deliveryEndDatetime: null,
-    isPendingOrder: false,
-    isPreOrder: false,
     businessIds: [],
     driverIds: [],
     cityIds: [],
@@ -320,27 +318,6 @@ var OrdersFilter = function OrdersFilter(props) {
     }));
   };
   /**
-   * Change isPendingOrder
-   * */
-
-
-  var handleChangeIsPendingOrder = function handleChangeIsPendingOrder() {
-    var _isPendingOrder = filterValues.isPendingOrder;
-    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      isPendingOrder: !_isPendingOrder
-    }));
-  };
-  /**
-   * Change isPreOrder
-  */
-
-
-  var handleChangeIsPreOrder = function handleChangeIsPreOrder() {
-    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      isPreOrder: !filterValues.isPreOrder
-    }));
-  };
-  /**
    * Reset filter values
   */
 
@@ -350,8 +327,6 @@ var OrdersFilter = function OrdersFilter(props) {
       groupTypes: [],
       deliveryFromDatetime: null,
       deliveryEndDatetime: null,
-      isPendingOrder: false,
-      isPreOrder: false,
       businessIds: [],
       driverIds: [],
       cityIds: [],
@@ -411,26 +386,6 @@ var OrdersFilter = function OrdersFilter(props) {
       driverIds: uniqueDriverIds
     }));
   }, [filterValues.groupTypes, singleDriverIds]);
-  (0, _react.useEffect)(function () {
-    var _statuses = _toConsumableArray(filterValues.statuses);
-
-    if (filterValues.isPendingOrder || filterValues.isPreOrder) {
-      if (!_statuses.includes(0)) {
-        _statuses.push(0);
-
-        setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-          statuses: _statuses
-        }));
-      }
-    } else {
-      _statuses = _statuses.filter(function (_status) {
-        return _status !== 0;
-      });
-      setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-        statuses: _statuses
-      }));
-    }
-  }, [filterValues.isPendingOrder, filterValues.isPreOrder]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     filterValues: filterValues,
     singleDriverIds: singleDriverIds,
@@ -444,9 +399,7 @@ var OrdersFilter = function OrdersFilter(props) {
     handleChangeOrderStatus: handleChangeOrderStatus,
     handleChangeDeliveryType: handleChangeDeliveryType,
     handleChangePaymethodType: handleChangePaymethodType,
-    handleResetFilterValues: handleResetFilterValues,
-    handleChangeIsPendingOrder: handleChangeIsPendingOrder,
-    handleChangeIsPreOrder: handleChangeIsPreOrder
+    handleResetFilterValues: handleResetFilterValues
   })));
 };
 

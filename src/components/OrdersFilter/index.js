@@ -16,8 +16,6 @@ export const OrdersFilter = (props) => {
     dateType: null,
     deliveryFromDatetime: null,
     deliveryEndDatetime: null,
-    isPendingOrder: false,
-    isPreOrder: false,
     businessIds: [],
     driverIds: [],
     cityIds: [],
@@ -174,19 +172,6 @@ export const OrdersFilter = (props) => {
     setFilterValues({ ...filterValues, paymethodIds: _paymethodIds })
   }
   /**
-   * Change isPendingOrder
-   * */
-  const handleChangeIsPendingOrder = () => {
-    const _isPendingOrder = filterValues.isPendingOrder
-    setFilterValues({ ...filterValues, isPendingOrder: !_isPendingOrder })
-  }
-  /**
-   * Change isPreOrder
-  */
-  const handleChangeIsPreOrder = () => {
-    setFilterValues({ ...filterValues, isPreOrder: !filterValues.isPreOrder })
-  }
-  /**
    * Reset filter values
   */
   const handleResetFilterValues = () => {
@@ -194,8 +179,6 @@ export const OrdersFilter = (props) => {
       groupTypes: [],
       deliveryFromDatetime: null,
       deliveryEndDatetime: null,
-      isPendingOrder: false,
-      isPreOrder: false,
       businessIds: [],
       driverIds: [],
       cityIds: [],
@@ -222,19 +205,6 @@ export const OrdersFilter = (props) => {
     setFilterValues({ ...filterValues, driverIds: uniqueDriverIds })
   }, [filterValues.groupTypes, singleDriverIds])
 
-  useEffect(() => {
-    let _statuses = [...filterValues.statuses]
-    if (filterValues.isPendingOrder || filterValues.isPreOrder) {
-      if (!_statuses.includes(0)) {
-        _statuses.push(0)
-        setFilterValues({ ...filterValues, statuses: _statuses })
-      }
-    } else {
-      _statuses = _statuses.filter((_status) => _status !== 0)
-      setFilterValues({ ...filterValues, statuses: _statuses })
-    }
-  }, [filterValues.isPendingOrder, filterValues.isPreOrder])
-
   return (
     <>
       {UIComponent && (
@@ -253,8 +223,6 @@ export const OrdersFilter = (props) => {
           handleChangeDeliveryType={handleChangeDeliveryType}
           handleChangePaymethodType={handleChangePaymethodType}
           handleResetFilterValues={handleResetFilterValues}
-          handleChangeIsPendingOrder={handleChangeIsPendingOrder}
-          handleChangeIsPreOrder={handleChangeIsPreOrder}
         />
       )}
     </>
