@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DashboardOrdersList = void 0;
+exports.DashboardOrderList = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -57,13 +57,15 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var DashboardOrdersList = function DashboardOrdersList(props) {
+var DashboardOrderList = function DashboardOrderList(props) {
   var _paginationSettings$p;
 
   var UIComponent = props.UIComponent,
       propsToFetch = props.propsToFetch,
       orders = props.orders,
+      isOnlyDelivery = props.isOnlyDelivery,
       initialPageSize = props.initialPageSize,
+      driverId = props.driverId,
       loadMorePageSize = props.loadMorePageSize,
       orderIds = props.orderIds,
       deletedOrderId = props.deletedOrderId,
@@ -287,6 +289,20 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                 }
               }
 
+              if (isOnlyDelivery) {
+                conditions.push({
+                  attribute: 'delivery_type',
+                  value: 1
+                });
+              }
+
+              if (driverId) {
+                conditions.push({
+                  attribute: 'driver_id',
+                  value: driverId
+                });
+              }
+
               if (searchValue) {
                 searchConditions = [];
 
@@ -408,13 +424,13 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                 functionFetch = ordering.setAccessToken(accessToken).orders().asDashboard().where(where);
               }
 
-              _context2.next = 14;
+              _context2.next = 16;
               return functionFetch.get(options);
 
-            case 14:
+            case 16:
               return _context2.abrupt("return", _context2.sent);
 
-            case 15:
+            case 17:
             case "end":
               return _context2.stop();
           }
@@ -629,21 +645,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
       orders: orders
     }));
-  }, [deletedOrderId]); // /**
-  //  * Listening search value change
-  //  */
-  // useEffect(() => {
-  //   if (searchValue === null) return
-  //   loadOrders()
-  // }, [searchValue])
-  // /**
-  //  * Listening  orderBy value change
-  //  */
-  // useEffect(() => {
-  //   if (orderList.loading || orderBy === null) return
-  //   loadOrders()
-  // }, [searchValue, orderBy])
-
+  }, [deletedOrderId]);
   /**
    * Listening sesssion and filter values change
    */
@@ -683,7 +685,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, [session, searchValue, orderBy, filterValues, orders]);
+  }, [session, searchValue, orderBy, filterValues, isOnlyDelivery, driverId, orders]);
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
 
@@ -836,8 +838,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
   })));
 };
 
-exports.DashboardOrdersList = DashboardOrdersList;
-DashboardOrdersList.propTypes = {
+exports.DashboardOrderList = DashboardOrderList;
+DashboardOrderList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -931,7 +933,7 @@ DashboardOrdersList.propTypes = {
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-DashboardOrdersList.defaultProps = {
+DashboardOrderList.defaultProps = {
   orderBy: 'id',
   orderDirection: 'desc',
   paginationSettings: {

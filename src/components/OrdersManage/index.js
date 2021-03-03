@@ -41,10 +41,6 @@ export const OrdersManage = (props) => {
    * Object to save businesses
    */
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
-  /**
-   * Object to save driver orders
-   */
-  const [driverOrdersModal, setDriverOrdersModal] = useState({ id: null, orders: [], loading: true, error: null })
 
   /**
    * Object to save selected order ids
@@ -96,13 +92,6 @@ export const OrdersManage = (props) => {
    */
   const handleChangeFilterValues = (types) => {
     setFilterValues(types)
-  }
-  /**
-   * Change driver id to get orders of a driver
-   * @param {string} driverId driver id
-   */
-  const handleChangeDriverOrdersModal = (driverId) => {
-    if (driverId !== driverOrdersModal.id) setDriverOrdersModal({ ...driverOrdersModal, id: driverId })
   }
 
   /**
@@ -258,40 +247,6 @@ export const OrdersManage = (props) => {
       })
     }
   }
-  /**
-   * Method to get orders assigned for selected driver from API
-   */
-  const getDriverOrders = async () => {
-    try {
-      setDriverOrdersModal({ ...driverOrdersModal, loading: true })
-
-      let where = null
-      const conditions = []
-
-      conditions.push({ attribute: 'status', value: [0, 3, 4, 7, 8, 9] })
-      conditions.push({ attribute: 'driver_id', value: driverOrdersModal.id })
-
-      where = {
-        conditions,
-        conector: 'AND'
-      }
-      const source = {}
-      requestsState.driverOrders = source
-      const { content: { result } } = await ordering.setAccessToken(token).orders().asDashboard().where(where).get({ cancelToken: source })
-      setDriverOrdersModal({
-        ...driverOrdersModal,
-        id: null,
-        loading: false,
-        orders: result
-      })
-    } catch (err) {
-      setDriverOrdersModal({
-        ...driverOrdersModal,
-        loading: false,
-        error: err.message
-      })
-    }
-  }
 
   /**
    * Listening driver change
@@ -353,11 +308,6 @@ export const OrdersManage = (props) => {
   }, [selectedOrderIds, startMulitOrderDelete])
 
   useEffect(() => {
-    if (driverOrdersModal.id === null) return
-    getDriverOrders()
-  }, [driverOrdersModal.id])
-
-  useEffect(() => {
     getDriverGroup()
     getDrivers()
     getPaymethods()
@@ -380,7 +330,6 @@ export const OrdersManage = (props) => {
           driversList={driversList}
           paymethodsList={paymethodsList}
           businessesList={businessesList}
-          driverOrders={driverOrdersModal}
           ordersStatusGroup={ordersStatusGroup}
           filterValues={filterValues}
           multiOrderUpdateStatus={updateStatus}
@@ -393,7 +342,6 @@ export const OrdersManage = (props) => {
           handleChangeSearch={handleChangeSearch}
           handleChangeFilterValues={handleChangeFilterValues}
           handleOrdersStatusGroupFilter={handleOrdersStatusGroupFilter}
-          handleChangeDriverOrdersModal={handleChangeDriverOrdersModal}
           handleChangeMultiOrdersStatus={handleChangeMultiOrdersStatus}
           handleDeleteMultiOrders={handleDeleteMultiOrders}
         />

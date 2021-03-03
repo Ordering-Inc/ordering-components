@@ -4,12 +4,14 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
-export const DashboardOrdersList = (props) => {
+export const DashboardOrderList = (props) => {
   const {
     UIComponent,
     propsToFetch,
     orders,
+    isOnlyDelivery,
     initialPageSize,
+    driverId,
     loadMorePageSize,
     orderIds,
     deletedOrderId,
@@ -131,6 +133,23 @@ export const DashboardOrdersList = (props) => {
           conditions.push({ attribute: 'status', value: orderStatus })
         }
       }
+    }
+
+    if (isOnlyDelivery) {
+      conditions.push(
+        {
+          attribute: 'delivery_type',
+          value: 1
+        }
+      )
+    }
+    if (driverId) {
+      conditions.push(
+        {
+          attribute: 'driver_id',
+          value: driverId
+        }
+      )
     }
 
     if (searchValue) {
@@ -383,21 +402,6 @@ export const DashboardOrdersList = (props) => {
     setOrderList({ ...orderList, orders })
   }, [deletedOrderId])
 
-  // /**
-  //  * Listening search value change
-  //  */
-  // useEffect(() => {
-  //   if (searchValue === null) return
-  //   loadOrders()
-  // }, [searchValue])
-  // /**
-  //  * Listening  orderBy value change
-  //  */
-  // useEffect(() => {
-  //   if (orderList.loading || orderBy === null) return
-  //   loadOrders()
-  // }, [searchValue, orderBy])
-
   /**
    * Listening sesssion and filter values change
    */
@@ -431,7 +435,7 @@ export const DashboardOrdersList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [session, searchValue, orderBy, filterValues, orders])
+  }, [session, searchValue, orderBy, filterValues, isOnlyDelivery, driverId, orders])
 
   useEffect(() => {
     if (orderList.loading) return
@@ -567,7 +571,7 @@ export const DashboardOrdersList = (props) => {
   )
 }
 
-DashboardOrdersList.propTypes = {
+DashboardOrderList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -648,7 +652,7 @@ DashboardOrdersList.propTypes = {
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-DashboardOrdersList.defaultProps = {
+DashboardOrderList.defaultProps = {
   orderBy: 'id',
   orderDirection: 'desc',
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },

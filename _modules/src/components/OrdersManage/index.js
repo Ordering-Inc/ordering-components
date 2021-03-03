@@ -27,15 +27,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -172,28 +172,14 @@ var OrdersManage = function OrdersManage(props) {
       businessesList = _useState24[0],
       setBusinessesList = _useState24[1];
   /**
-   * Object to save driver orders
-   */
-
-
-  var _useState25 = (0, _react.useState)({
-    id: null,
-    orders: [],
-    loading: true,
-    error: null
-  }),
-      _useState26 = _slicedToArray(_useState25, 2),
-      driverOrdersModal = _useState26[0],
-      setDriverOrdersModal = _useState26[1];
-  /**
    * Object to save selected order ids
    */
 
 
-  var _useState27 = (0, _react.useState)([]),
-      _useState28 = _slicedToArray(_useState27, 2),
-      selectedOrderIds = _useState28[0],
-      setSelectedOrderIds = _useState28[1];
+  var _useState25 = (0, _react.useState)([]),
+      _useState26 = _slicedToArray(_useState25, 2),
+      selectedOrderIds = _useState26[0],
+      setSelectedOrderIds = _useState26[1];
   /**
    * Save ids of orders selected
    * @param {string} orderId order id
@@ -255,17 +241,6 @@ var OrdersManage = function OrdersManage(props) {
 
   var handleChangeFilterValues = function handleChangeFilterValues(types) {
     setFilterValues(types);
-  };
-  /**
-   * Change driver id to get orders of a driver
-   * @param {string} driverId driver id
-   */
-
-
-  var handleChangeDriverOrdersModal = function handleChangeDriverOrdersModal(driverId) {
-    if (driverId !== driverOrdersModal.id) setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
-      id: driverId
-    }));
   };
   /**
    * save status for multi orders selected
@@ -665,75 +640,6 @@ var OrdersManage = function OrdersManage(props) {
     };
   }();
   /**
-   * Method to get orders assigned for selected driver from API
-   */
-
-
-  var getDriverOrders = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7() {
-      var where, conditions, source, _yield$ordering$setAc4, result;
-
-      return _regenerator.default.wrap(function _callee7$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              _context7.prev = 0;
-              setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
-                loading: true
-              }));
-              where = null;
-              conditions = [];
-              conditions.push({
-                attribute: 'status',
-                value: [0, 3, 4, 7, 8, 9]
-              });
-              conditions.push({
-                attribute: 'driver_id',
-                value: driverOrdersModal.id
-              });
-              where = {
-                conditions: conditions,
-                conector: 'AND'
-              };
-              source = {};
-              requestsState.driverOrders = source;
-              _context7.next = 11;
-              return ordering.setAccessToken(token).orders().asDashboard().where(where).get({
-                cancelToken: source
-              });
-
-            case 11:
-              _yield$ordering$setAc4 = _context7.sent;
-              result = _yield$ordering$setAc4.content.result;
-              setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
-                id: null,
-                loading: false,
-                orders: result
-              }));
-              _context7.next = 19;
-              break;
-
-            case 16:
-              _context7.prev = 16;
-              _context7.t0 = _context7["catch"](0);
-              setDriverOrdersModal(_objectSpread(_objectSpread({}, driverOrdersModal), {}, {
-                loading: false,
-                error: _context7.t0.message
-              }));
-
-            case 19:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, _callee7, null, [[0, 16]]);
-    }));
-
-    return function getDriverOrders() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  /**
    * Listening driver change
    */
 
@@ -804,10 +710,6 @@ var OrdersManage = function OrdersManage(props) {
     deleteOrder(selectedOrderIds[0]);
   }, [selectedOrderIds, startMulitOrderDelete]);
   (0, _react.useEffect)(function () {
-    if (driverOrdersModal.id === null) return;
-    getDriverOrders();
-  }, [driverOrdersModal.id]);
-  (0, _react.useEffect)(function () {
     getDriverGroup();
     getDrivers();
     getPaymethods();
@@ -824,7 +726,6 @@ var OrdersManage = function OrdersManage(props) {
     driversList: driversList,
     paymethodsList: paymethodsList,
     businessesList: businessesList,
-    driverOrders: driverOrdersModal,
     ordersStatusGroup: ordersStatusGroup,
     filterValues: filterValues,
     multiOrderUpdateStatus: updateStatus,
@@ -837,7 +738,6 @@ var OrdersManage = function OrdersManage(props) {
     handleChangeSearch: handleChangeSearch,
     handleChangeFilterValues: handleChangeFilterValues,
     handleOrdersStatusGroupFilter: handleOrdersStatusGroupFilter,
-    handleChangeDriverOrdersModal: handleChangeDriverOrdersModal,
     handleChangeMultiOrdersStatus: handleChangeMultiOrdersStatus,
     handleDeleteMultiOrders: handleDeleteMultiOrders
   })));
