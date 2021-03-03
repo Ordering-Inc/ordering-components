@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DashboardOrderList = void 0;
+exports.DashboardOrdersList = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -57,7 +57,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var DashboardOrderList = function DashboardOrderList(props) {
+var DashboardOrdersList = function DashboardOrdersList(props) {
   var _paginationSettings$p;
 
   var UIComponent = props.UIComponent,
@@ -838,8 +838,8 @@ var DashboardOrderList = function DashboardOrderList(props) {
   })));
 };
 
-exports.DashboardOrderList = DashboardOrderList;
-DashboardOrderList.propTypes = {
+exports.DashboardOrdersList = DashboardOrdersList;
+DashboardOrdersList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -933,7 +933,7 @@ DashboardOrderList.propTypes = {
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-DashboardOrderList.defaultProps = {
+DashboardOrdersList.defaultProps = {
   orderBy: 'id',
   orderDirection: 'desc',
   paginationSettings: {

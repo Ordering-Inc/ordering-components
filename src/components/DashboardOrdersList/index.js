@@ -4,7 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
-export const DashboardOrderList = (props) => {
+export const DashboardOrdersList = (props) => {
   const {
     UIComponent,
     propsToFetch,
@@ -571,7 +571,7 @@ export const DashboardOrderList = (props) => {
   )
 }
 
-DashboardOrderList.propTypes = {
+DashboardOrdersList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -652,7 +652,7 @@ DashboardOrderList.propTypes = {
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-DashboardOrderList.defaultProps = {
+DashboardOrdersList.defaultProps = {
   orderBy: 'id',
   orderDirection: 'desc',
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },
