@@ -3,6 +3,7 @@ import PropTypes, { string, object, number } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 export const DashboardOrdersList = (props) => {
   const {
@@ -29,6 +30,8 @@ export const DashboardOrdersList = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const [configState] = useConfig()
+  const decimal = configState.configs.format_number_decimal_length?.value || 2
   const [orderList, setOrderList] = useState({ loading: !orders, error: null, orders: [] })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
@@ -42,11 +45,73 @@ export const DashboardOrdersList = (props) => {
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [registerOrderId, setRegisterOrderId] = useState(null)
 
-  /**
-   * Reset registerOrderId
-   */
-  const handleResetNotification = () => {
-    setRegisterOrderId(null)
+  const getTaxPrice = (order, subTotalPrice) => {
+    let taxPrice = 0
+    if (order.tax_type === 2) {
+      if (order.discount > 0) {
+        taxPrice = (subTotalPrice - order.discount) * order?.tax / 100
+      } else {
+        taxPrice = subTotalPrice * order?.tax / 100
+      }
+    }
+    if (order.tax_type === 1) {
+      taxPrice = order.tax
+    }
+    return parseFloat(taxPrice.toFixed(decimal))
+  }
+
+  const getServiceFee = (order, subTotalPrice) => {
+    let serviceFee = 0
+    if (order.service_fee > 0) {
+      if (order.discount > 0) {
+        serviceFee = (subTotalPrice - order.discount) * order?.service_fee / 100
+      } else {
+        serviceFee = subTotalPrice * order?.service_fee / 100
+      }
+    }
+    return parseFloat(serviceFee.toFixed(decimal))
+  }
+
+  const getProductPrice = (product) => {
+    let subOptionPrice = 0
+    if (product.options.length > 0) {
+      for (const option of product.options) {
+        for (const suboption of option.suboptions) {
+          subOptionPrice += suboption.quantity * suboption.price
+        }
+      }
+    }
+
+    const productPrice = product.quantity * (product.price + subOptionPrice)
+    return parseFloat(productPrice.toFixed(decimal))
+  }
+
+  const getSubTotalPrice = (order) => {
+    let orderSubTotalPrice = 0
+    for (const product of order.products) {
+      orderSubTotalPrice += getProductPrice(product)
+    }
+    return parseFloat(orderSubTotalPrice.toFixed(decimal))
+  }
+
+  const getTotalPrice = (order) => {
+    const subTotalPrice = getSubTotalPrice(order)
+    let orderTotalPrice = subTotalPrice
+    if (order?.service_fee > 0) {
+      const taxPrice = getTaxPrice(order, subTotalPrice)
+      const serviceFee = getServiceFee(order, subTotalPrice)
+      orderTotalPrice += taxPrice + serviceFee
+    }
+    if (order?.delivery_zone_price > 0) {
+      orderTotalPrice += order.delivery_zone_price
+    }
+    if (order?.driver_tip > 0) {
+      orderTotalPrice += subTotalPrice * order.driver_tip / 100
+    }
+    if (order?.discount > 0) {
+      orderTotalPrice -= order.discount
+    }
+    return parseFloat(orderTotalPrice.toFixed(decimal))
   }
 
   const sortOrdersArray = (option, array) => {
@@ -488,7 +553,9 @@ export const DashboardOrdersList = (props) => {
       if (!orderStatus || orderStatus.includes(0)) {
         setRegisterOrderId(_order.id)
       }
-      const order = { ..._order, status: 0 }
+      const totalPrice = getTotalPrice(_order)
+      const order = { ..._order, status: 0, summary: { total: totalPrice } }
+      console.log(order)
       let orders = []
       if (orderStatus.includes(0) && isFilteredOrder(_order)) {
         orders = [order, ...orderList.orders]
@@ -564,7 +631,6 @@ export const DashboardOrdersList = (props) => {
           registerOrderId={registerOrderId}
           loadMoreOrders={loadMoreOrders}
           handleUpdateOrderStatus={handleUpdateOrderStatus}
-          handleResetNotification={handleResetNotification}
         />
       )}
     </>
