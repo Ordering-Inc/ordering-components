@@ -112,9 +112,7 @@ export const AddressForm = (props) => {
       return
     }
     if (userCustomerSetup) {
-      setUserCustomer({
-        id: userCustomerSetup
-      }, true)
+      setUserCustomer(userCustomerSetup, true)
     }
     setFormState({ ...formState, loading: true })
     try {

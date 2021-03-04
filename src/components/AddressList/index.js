@@ -72,9 +72,7 @@ export const AddressList = (props) => {
    */
   const handleSetDefault = async (address, userCustomerSetup) => {
     if (userCustomerSetup) {
-      setUserCustomer({
-        id: userCustomerSetup
-      }, true)
+      setUserCustomer(userCustomerSetup, true)
     }
     if (handleClickSetDefault) {
       return handleClickSetDefault(address)
