@@ -219,9 +219,12 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
   var getTotalPrice = function getTotalPrice(order) {
     var subTotalPrice = getSubTotalPrice(order);
     var orderTotalPrice = subTotalPrice;
-    var taxPrice = getTaxPrice(order, subTotalPrice);
-    var serviceFee = getServiceFee(order, subTotalPrice);
-    orderTotalPrice += taxPrice + serviceFee;
+
+    if ((order === null || order === void 0 ? void 0 : order.service_fee) > 0) {
+      var taxPrice = getTaxPrice(order, subTotalPrice);
+      var serviceFee = getServiceFee(order, subTotalPrice);
+      orderTotalPrice += taxPrice + serviceFee;
+    }
 
     if ((order === null || order === void 0 ? void 0 : order.delivery_zone_price) > 0) {
       orderTotalPrice += order.delivery_zone_price;

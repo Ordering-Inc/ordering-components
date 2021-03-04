@@ -95,9 +95,11 @@ export const DashboardOrdersList = (props) => {
   const getTotalPrice = (order) => {
     const subTotalPrice = getSubTotalPrice(order)
     let orderTotalPrice = subTotalPrice
-    const taxPrice = getTaxPrice(order, subTotalPrice)
-    const serviceFee = getServiceFee(order, subTotalPrice)
-    orderTotalPrice += taxPrice + serviceFee
+    if (order?.service_fee > 0) {
+      const taxPrice = getTaxPrice(order, subTotalPrice)
+      const serviceFee = getServiceFee(order, subTotalPrice)
+      orderTotalPrice += taxPrice + serviceFee
+    }
     if (order?.delivery_zone_price > 0) {
       orderTotalPrice += order.delivery_zone_price
     }
