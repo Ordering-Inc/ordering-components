@@ -140,7 +140,6 @@ export const BusinessList = (props) => {
       } else {
         businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
       }
-      businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
       setBusinessesList({
         ...businessesList,
         loading: false
