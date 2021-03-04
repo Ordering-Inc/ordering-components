@@ -17,8 +17,6 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _WebsocketContext = require("../../contexts/WebsocketContext");
-
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -26,14 +24,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -75,11 +65,10 @@ var DriversList = function DriversList(props) {
       _useState2 = _slicedToArray(_useState, 2),
       driverActionStatus = _useState2[0],
       setDriverActionStatus = _useState2[1];
-
-  var socket = (0, _WebsocketContext.useWebsocket)();
   /**
    * Get session
    */
+
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -212,60 +201,6 @@ var DriversList = function DriversList(props) {
     };
   }();
 
-  (0, _react.useEffect)(function () {
-    if (driversList.loading) return;
-
-    var handleUpdateDriver = function handleUpdateDriver(driver) {
-      var found = driversList.drivers.find(function (_driver) {
-        return _driver.id === driver.id;
-      });
-      var _drivers = [];
-
-      if (found) {
-        _drivers = driversList.drivers.filter(function (_driver) {
-          if (_driver.id === driver.id) {
-            Object.assign(_driver, driver);
-          }
-
-          return true;
-        });
-      } else {
-        _drivers = [].concat(_toConsumableArray(driversList.drivers), [driver]);
-      }
-
-      setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
-        drivers: _drivers
-      }));
-    };
-
-    var handleTrackingDriver = function handleTrackingDriver(trackingData) {
-      var drivers = [];
-      drivers = driversList.drivers.filter(function (_driver) {
-        if (_driver.id === trackingData.driver_id) {
-          _driver.location = trackingData.location;
-        }
-
-        return true;
-      });
-      setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
-        drivers: drivers
-      }));
-    };
-
-    socket.on('drivers_update', handleUpdateDriver);
-    socket.on('tracking_driver', handleTrackingDriver);
-    return function () {
-      socket.off('drivers_update', handleUpdateDriver);
-      socket.off('tracking_driver', handleTrackingDriver);
-    };
-  }, [socket]);
-  (0, _react.useEffect)(function () {
-    if (!session.user) return;
-    socket.join('drivers');
-    return function () {
-      socket.leave('drivers');
-    };
-  }, [socket, session]);
   (0, _react.useEffect)(function () {
     if (drivers) {
       setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {

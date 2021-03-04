@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const DriversList = (props) => {
   const {
@@ -15,7 +14,6 @@ export const DriversList = (props) => {
   const requestsState = {}
   const [driverActionStatus, setDriverActionStatus] = useState({ loading: true, error: null })
 
-  const socket = useWebsocket()
   /**
    * Get session
    */
@@ -74,52 +72,6 @@ export const DriversList = (props) => {
       })
     }
   }
-
-  useEffect(() => {
-    if (driversList.loading) return
-    const handleUpdateDriver = (driver) => {
-      const found = driversList.drivers.find(_driver => _driver.id === driver.id)
-      let _drivers = []
-      if (found) {
-        _drivers = driversList.drivers.filter(_driver => {
-          if (_driver.id === driver.id) {
-            Object.assign(_driver, driver)
-          }
-          return true
-        })
-      } else {
-        _drivers = [...driversList.drivers, driver]
-      }
-      setDriversList({
-        ...driversList,
-        drivers: _drivers
-      })
-    }
-    const handleTrackingDriver = (trackingData) => {
-      let drivers = []
-      drivers = driversList.drivers.filter(_driver => {
-        if (_driver.id === trackingData.driver_id) {
-          _driver.location = trackingData.location
-        }
-        return true
-      })
-      setDriversList({ ...driversList, drivers: drivers })
-    }
-    socket.on('drivers_update', handleUpdateDriver)
-    socket.on('tracking_driver', handleTrackingDriver)
-    return () => {
-      socket.off('drivers_update', handleUpdateDriver)
-      socket.off('tracking_driver', handleTrackingDriver)
-    }
-  }, [socket])
-
-  useEffect(() => {
-    if (!session.user) return
-    socket.join('drivers')
-    return () => {
-      socket.leave('drivers')
-    }
-  }, [socket, session])
 
   useEffect(() => {
     if (drivers) {
