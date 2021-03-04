@@ -9,15 +9,15 @@ export const CustomerProvider = ({ children, strategy }) => {
   })
 
   const getUserCustomerFromLocalStorage = async () => {
-    const userId = await strategy.getItem('user-customer', true)
-    if (userId) {
-      setState({ ...state, user: { id: userId } })
+    const user = await strategy.getItem('user-customer', true)
+    if (user) {
+      setState({ ...state, user })
     }
   }
 
   const setUserCustomer = async (user, isFromLocalStorage) => {
     if (isFromLocalStorage && user) {
-      await strategy.setItem('user-customer', user.id, true)
+      await strategy.setItem('user-customer', user, true)
     }
     setState({
       ...state,
