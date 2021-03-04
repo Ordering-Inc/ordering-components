@@ -240,9 +240,7 @@ var AddressForm = function AddressForm(props) {
 
             case 4:
               if (userCustomerSetup) {
-                setUserCustomer({
-                  id: userCustomerSetup
-                }, true);
+                setUserCustomer(userCustomerSetup, true);
               }
 
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {

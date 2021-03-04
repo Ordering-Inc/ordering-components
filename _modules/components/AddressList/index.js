@@ -188,9 +188,7 @@ var AddressList = function AddressList(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (userCustomerSetup) {
-                setUserCustomer({
-                  id: userCustomerSetup
-                }, true);
+                setUserCustomer(userCustomerSetup, true);
               }
 
               if (!handleClickSetDefault) {

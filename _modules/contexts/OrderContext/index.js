@@ -21,8 +21,6 @@ var _EventContext = require("../EventContext");
 
 var _ConfigContext = require("../ConfigContext");
 
-var _CustomerContext = require("../CustomerContext");
-
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
@@ -117,10 +115,6 @@ var OrderProvider = function OrderProvider(_ref) {
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configState = _useConfig2[0];
 
-  var _useCustomer = (0, _CustomerContext.useCustomer)(),
-      _useCustomer2 = _slicedToArray(_useCustomer, 1),
-      customerState = _useCustomer2[0];
-
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       session = _useSession2[0];
@@ -153,7 +147,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _customerState$user, customerIdFromLocalStorage, userCustomerId, options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, _options, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc3, _yield$ordering$setAc4, _error, _result, _err$message, message;
+      var customerFromLocalStorage, userCustomerId, options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, _options, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc3, _yield$ordering$setAc4, _error, _result, _err$message, message;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -171,12 +165,14 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context.sent;
-              userCustomerId = ((_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               options = {};
 
               if (userCustomerId) {
-                options.user_id = userCustomerId;
+                options.query = {
+                  user_id: userCustomerId
+                };
               }
 
               _context.next = 10;
@@ -560,7 +556,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(changes) {
-      var _customerState$user2, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, carts, options, _err$message2, message;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, carts, options, _err$message2, message;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -575,8 +571,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 3:
-              customerIdFromLocalStorage = _context5.sent;
-              userCustomerId = ((_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context5.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({}, changes), {}, {
                 user_id: userCustomerId || session.user.id
               });
@@ -648,7 +644,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var addProduct = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(product) {
-      var _customerState$user3, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
 
       return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
@@ -662,8 +658,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context6.sent;
-              userCustomerId = ((_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context6.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: product,
                 user_id: userCustomerId || session.user.id
@@ -725,7 +721,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var removeProduct = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(product) {
-      var _customerState$user4, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
 
       return _regenerator.default.wrap(function _callee7$(_context7) {
         while (1) {
@@ -739,8 +735,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context7.sent;
-              userCustomerId = ((_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context7.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: {
                   id: product.id,
@@ -805,7 +801,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var clearCart = /*#__PURE__*/function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8(uuid) {
-      var _customerState$user5, customerIdFromLocalStorage, userCustomerId, body, response, _yield$response$json, error, result;
+      var customerFromLocalStorage, userCustomerId, body, response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee8$(_context8) {
         while (1) {
@@ -819,8 +815,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context8.sent;
-              userCustomerId = ((_customerState$user5 = customerState.user) === null || _customerState$user5 === void 0 ? void 0 : _customerState$user5.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context8.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = JSON.stringify({
                 uuid: uuid,
                 user_id: userCustomerId || session.user.id
@@ -887,7 +883,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateProduct = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(product) {
-      var _customerState$user6, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, _yield$ordering$setAc12, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, _yield$ordering$setAc12, error, result;
 
       return _regenerator.default.wrap(function _callee9$(_context9) {
         while (1) {
@@ -901,8 +897,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context9.sent;
-              userCustomerId = ((_customerState$user6 = customerState.user) === null || _customerState$user6 === void 0 ? void 0 : _customerState$user6.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context9.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: product,
                 user_id: userCustomerId || session.user.id
@@ -965,7 +961,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(couponData) {
       var _state$carts$;
 
-      var _customerState$user7, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, _yield$ordering$setAc14, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, _yield$ordering$setAc14, error, result;
 
       return _regenerator.default.wrap(function _callee10$(_context10) {
         while (1) {
@@ -1003,8 +999,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 10:
-              customerIdFromLocalStorage = _context10.sent;
-              userCustomerId = ((_customerState$user7 = customerState.user) === null || _customerState$user7 === void 0 ? void 0 : _customerState$user7.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context10.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 business_id: couponData.business_id,
                 coupon: couponData.coupon,
@@ -1067,7 +1063,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(businessId, driverTipRate) {
       var _state$carts$2;
 
-      var _customerState$user8, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc15, _yield$ordering$setAc16, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc15, _yield$ordering$setAc16, error, result;
 
       return _regenerator.default.wrap(function _callee11$(_context11) {
         while (1) {
@@ -1105,8 +1101,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 10:
-              customerIdFromLocalStorage = _context11.sent;
-              userCustomerId = ((_customerState$user8 = customerState.user) === null || _customerState$user8 === void 0 ? void 0 : _customerState$user8.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context11.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 business_id: businessId,
                 driver_tip_rate: driverTipRate,
@@ -1167,7 +1163,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var placeCart = /*#__PURE__*/function () {
     var _ref13 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12(cardId, data) {
-      var _customerState$user9, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc17, _yield$ordering$setAc18, error, result, orderObject;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc17, _yield$ordering$setAc18, error, result, orderObject;
 
       return _regenerator.default.wrap(function _callee12$(_context12) {
         while (1) {
@@ -1181,8 +1177,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context12.sent;
-              userCustomerId = ((_customerState$user9 = customerState.user) === null || _customerState$user9 === void 0 ? void 0 : _customerState$user9.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context12.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({}, data), {}, {
                 user_id: userCustomerId || session.user.id
               });
@@ -1273,7 +1269,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var confirmCart = /*#__PURE__*/function () {
     var _ref14 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee13(cardId, data) {
-      var _customerState$user10, customerIdFromLocalStorage, userCustomerId, body, _yield$ordering$setAc19, _yield$ordering$setAc20, error, result, cart;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc19, _yield$ordering$setAc20, error, result, cart;
 
       return _regenerator.default.wrap(function _callee13$(_context13) {
         while (1) {
@@ -1287,8 +1283,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context13.sent;
-              userCustomerId = ((_customerState$user10 = customerState.user) === null || _customerState$user10 === void 0 ? void 0 : _customerState$user10.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context13.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({}, data), {}, {
                 user_id: userCustomerId || session.user.id
               });
@@ -1356,7 +1352,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var reorder = /*#__PURE__*/function () {
     var _ref15 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee14(orderId) {
-      var _customerState$user11, customerIdFromLocalStorage, userCustomerId, options, _yield$ordering$setAc21, _yield$ordering$setAc22, error, result;
+      var customerFromLocalStorage, userCustomerId, options, _yield$ordering$setAc21, _yield$ordering$setAc22, error, result;
 
       return _regenerator.default.wrap(function _callee14$(_context14) {
         while (1) {
@@ -1370,8 +1366,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 4:
-              customerIdFromLocalStorage = _context14.sent;
-              userCustomerId = ((_customerState$user11 = customerState.user) === null || _customerState$user11 === void 0 ? void 0 : _customerState$user11.id) || customerIdFromLocalStorage;
+              customerFromLocalStorage = _context14.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               options = {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()

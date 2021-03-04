@@ -56,7 +56,7 @@ var CustomerProvider = function CustomerProvider(_ref) {
 
   var getUserCustomerFromLocalStorage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var userId;
+      var user;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -65,13 +65,11 @@ var CustomerProvider = function CustomerProvider(_ref) {
               return strategy.getItem('user-customer', true);
 
             case 2:
-              userId = _context.sent;
+              user = _context.sent;
 
-              if (userId) {
+              if (user) {
                 setState(_objectSpread(_objectSpread({}, state), {}, {
-                  user: {
-                    id: userId
-                  }
+                  user: user
                 }));
               }
 
@@ -100,7 +98,7 @@ var CustomerProvider = function CustomerProvider(_ref) {
               }
 
               _context2.next = 3;
-              return strategy.setItem('user-customer', user.id, true);
+              return strategy.setItem('user-customer', user, true);
 
             case 3:
               setState(_objectSpread(_objectSpread({}, state), {}, {
