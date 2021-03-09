@@ -261,7 +261,6 @@ var BusinessList = function BusinessList(props) {
                 businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               }
 
-              businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false
               }));
@@ -278,11 +277,11 @@ var BusinessList = function BusinessList(props) {
                 totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
-              _context.next = 32;
+              _context.next = 31;
               break;
 
-            case 29:
-              _context.prev = 29;
+            case 28:
+              _context.prev = 28;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -292,12 +291,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 32:
+            case 31:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 29]]);
+      }, _callee, null, [[0, 28]]);
     }));
 
     return function getBusinesses(_x) {
