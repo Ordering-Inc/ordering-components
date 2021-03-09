@@ -5,7 +5,6 @@ import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
 import { useConfig } from '../ConfigContext'
-import { useCustomer } from '../CustomerContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -30,7 +29,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const socket = useWebsocket()
   const [events] = useEvent()
   const [configState] = useConfig()
-  const [customerState] = useCustomer()
   const [session] = useSession()
 
   const orderTypes = {
@@ -60,11 +58,13 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (!state.loading) {
         setState({ ...state, loading: true })
       }
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const options = {}
       if (userCustomerId) {
-        options.user_id = userCustomerId
+        options.query = {
+          user_id: userCustomerId
+        }
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().get(options)
       if (!error) {
@@ -249,8 +249,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    */
   const updateOrderOptions = async (changes) => {
     if (session.auth) {
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         ...changes,
         user_id: userCustomerId || session.user.id
@@ -293,8 +293,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const addProduct = async (product) => {
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
         user_id: userCustomerId || session.user.id
@@ -322,8 +322,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const removeProduct = async (product) => {
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product: {
           id: product.id,
@@ -354,8 +354,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const clearCart = async (uuid) => {
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = JSON.stringify({
         uuid,
         user_id: userCustomerId || session.user.id
@@ -381,8 +381,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const updateProduct = async (product) => {
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
         user_id: userCustomerId || session.user.id
@@ -418,8 +418,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     }
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         business_id: couponData.business_id,
         coupon: couponData.coupon,
@@ -455,8 +455,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     }
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         business_id: businessId,
         driver_tip_rate: driverTipRate,
@@ -483,8 +483,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const placeCart = async (cardId, data) => {
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         ...data,
         user_id: userCustomerId || session.user.id
@@ -527,8 +527,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const confirmCart = async (cardId, data) => {
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         ...data,
         user_id: userCustomerId || session.user.id
@@ -562,8 +562,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const reorder = async (orderId) => {
     try {
       setState({ ...state, loading: true })
-      const customerIdFromLocalStorage = await strategy.getItem('user-customer', true)
-      const userCustomerId = customerState.user?.id || customerIdFromLocalStorage
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const options = {
         headers: { 'X-Socket-Id-X': socket?.getId() },
         query: { user_id: userCustomerId || session.user.id }

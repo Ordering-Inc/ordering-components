@@ -9,6 +9,8 @@ export const OrderDetails = (props) => {
     orderId,
     propsToFetch,
     asDashboard,
+    hashKey,
+    userCustomerId,
     UIComponent
   } = props
 
@@ -23,7 +25,36 @@ export const OrderDetails = (props) => {
    * Method to format a price number
    * @param {Number} price
    */
-  const formatPrice = price => `$ ${price.toFixed(2)}`
+  const formatPrice = price => price && `$ ${price.toFixed(2)}`
+
+  /**
+   * Method to Load message for first time
+   */
+  const loadMessages = async () => {
+    try {
+      setMessages({ ...messages, loading: true })
+      const url = userCustomerId
+        ? `${ordering.root}/orders/${orderState.order?.id}/messages?mode=dashboard`
+        : `${ordering.root}/orders/${orderState.order?.id}/messages`
+      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const { error, result } = await response.json()
+      if (!error) {
+        setMessages({
+          messages: result,
+          loading: false,
+          error: null
+        })
+      } else {
+        setMessages({
+          ...messages,
+          loading: false,
+          error: result
+        })
+      }
+    } catch (error) {
+      setMessages({ ...messages, loading: false, error: [error.Messages] })
+    }
+  }
 
   /**
    * Method to send a message
@@ -74,6 +105,17 @@ export const OrderDetails = (props) => {
    * Method to get order from API
    */
   const getOrder = async () => {
+    const options = {}
+    if (hashKey) {
+      options.headers = {
+        'X-uuid-access-X': hashKey
+      }
+    }
+    if (userCustomerId) {
+      options.query = {
+        mode:'dashboard'
+      }
+    }
     try {
       setOrderState({
         ...orderState,
