@@ -33,7 +33,7 @@ export const PhoneAutocomplete = (props) => {
         name: user[0]?.name,
         lastname: user[0]?.lastname,
         phone: user[0]?.cellphone
-      })
+      }, true)
     } else {
       setCustomerState({ loading: false, result: { error: false } })
     }
