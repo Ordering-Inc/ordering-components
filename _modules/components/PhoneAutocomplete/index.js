@@ -131,7 +131,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                   name: (_user$2 = user[0]) === null || _user$2 === void 0 ? void 0 : _user$2.name,
                   lastname: (_user$3 = user[0]) === null || _user$3 === void 0 ? void 0 : _user$3.lastname,
                   phone: (_user$4 = user[0]) === null || _user$4 === void 0 ? void 0 : _user$4.cellphone
-                });
+                }, true);
               } else {
                 setCustomerState({
                   loading: false,
