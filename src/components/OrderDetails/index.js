@@ -8,8 +8,7 @@ export const OrderDetails = (props) => {
   const {
     orderId,
     hashKey,
-    UIComponent,
-    userCustomerId
+    UIComponent
   } = props
 
   const [{ user, token, loading }] = useSession()
@@ -36,10 +35,7 @@ export const OrderDetails = (props) => {
   const loadMessages = async () => {
     try {
       setMessages({ ...messages, loading: true })
-      const url = userCustomerId
-        ? `${ordering.root}/orders/${orderState.order?.id}/messages?mode=dashboard`
-        : `${ordering.root}/orders/${orderState.order?.id}/messages`
-      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages`, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({
@@ -112,11 +108,6 @@ export const OrderDetails = (props) => {
     if (hashKey) {
       options.headers = {
         'X-uuid-access-X': hashKey
-      }
-    }
-    if (userCustomerId) {
-      options.query = {
-        mode:'dashboard'
       }
     }
     try {
