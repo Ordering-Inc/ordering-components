@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 export const PhoneAutocomplete = (props) => {
   const {
@@ -17,6 +18,7 @@ export const PhoneAutocomplete = (props) => {
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
   const [customersPhones, setCustomersPhones] = useState({ users: [], loading: true, error: null })
+  const [, { setUserCustomer }] = useCustomer()
 
   /**
    * filter phones depending of phone input value and get user data
@@ -26,6 +28,12 @@ export const PhoneAutocomplete = (props) => {
     if (user[0]) {
       setCustomerState({ loading: false, result: user[0] })
       setOpenModal({ ...openModal, customer: true })
+      setUserCustomer({
+        id: user[0]?.id,
+        name: user[0]?.name,
+        lastname: user[0]?.lastname,
+        phone: user[0]?.cellphone
+      })
     } else {
       setCustomerState({ loading: false, result: { error: false } })
     }
