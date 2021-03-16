@@ -15,7 +15,9 @@ export const OrderList = (props) => {
     orderDirection,
     useDefualtSessionManager,
     paginationSettings,
-    asDashboard
+    asDashboard,
+    customArray,
+    userCustomerId
   } = props
 
   const [ordering] = useApi()
@@ -46,6 +48,9 @@ export const OrderList = (props) => {
       if (orderStatus) {
         options.query.where.push({ attribute: 'status', value: orderStatus })
       }
+    }
+    if (userCustomerId) {
+      options.query.where.push({ attribute: 'customer_id', value: parseInt(userCustomerId, 10) })
     }
     const source = {}
     requestsState.orders = source
@@ -93,10 +98,11 @@ export const OrderList = (props) => {
   }
 
   useEffect(() => {
-    if (orders) {
+    if (orders || customArray) {
       setOrderList({
         ...orderList,
-        orders
+        orders: orders?.lenght > 0 ? orders : customArray || [],
+        loading: false
       })
     } else {
       loadOrders()
