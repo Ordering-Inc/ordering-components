@@ -16,7 +16,8 @@ export const LoginForm = (props) => {
     useLoginByCellphone,
     useDefualtSessionManager,
     urlToRedirect,
-    allowedLevels
+    allowedLevels,
+    handleCustomLogin
   } = props
 
   const [ordering] = useApi()
@@ -43,6 +44,11 @@ export const LoginForm = (props) => {
    * @param {object} credentials Login credentials email/cellphone and password
    */
   const handleLoginClick = async (values) => {
+    if (handleCustomLogin) {
+      handleCustomLogin()
+      return
+    }
+
     try {
       const _credentials = {
         [loginTab]: values && values[loginTab] || credentials[loginTab],
@@ -145,7 +151,7 @@ export const LoginForm = (props) => {
           country_phone_code: `+${values.country_phone_code}`
         })
       })
-      const res = await response.json();
+      const res = await response.json()
       setVerifyPhoneState({
         ...verifyPhoneState,
         loading: false,
@@ -179,7 +185,7 @@ export const LoginForm = (props) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values)
       })
-      const res = await response.json();
+      const res = await response.json()
       if (!res?.error && res?.result?.id) {
         login({
           user: res?.result,
