@@ -13,7 +13,8 @@ export const SignupForm = (props) => {
     useChekoutFileds,
     handleButtonSignupClick,
     handleSuccessSignup,
-    externalPhoneNumber
+    externalPhoneNumber,
+    handleCustomSignup
   } = props
   const requestsState = {}
 
@@ -30,6 +31,10 @@ export const SignupForm = (props) => {
    * Default fuction for signup workflow
    */
   const handleSignupClick = async (values) => {
+    if (handleCustomSignup) {
+      handleCustomSignup()
+      return
+    }
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
@@ -122,7 +127,7 @@ export const SignupForm = (props) => {
           country_phone_code: `+${values.country_phone_code}`
         })
       })
-      const res = await response.json();
+      const res = await response.json()
       setVerifyPhoneState({
         ...verifyPhoneState,
         loading: false,
@@ -156,7 +161,7 @@ export const SignupForm = (props) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values)
       })
-      const res = await response.json();
+      const res = await response.json()
       if (!res?.error && res?.result?.id) {
         login({
           user: res?.result,
