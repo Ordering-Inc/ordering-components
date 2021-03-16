@@ -32,7 +32,7 @@ export const SignupForm = (props) => {
    */
   const handleSignupClick = async (values) => {
     if (handleCustomSignup) {
-      handleCustomSignup()
+      handleCustomSignup(values)
       return
     }
     try {
