@@ -57,7 +57,8 @@ var SignupForm = function SignupForm(props) {
       useChekoutFileds = props.useChekoutFileds,
       handleButtonSignupClick = props.handleButtonSignupClick,
       handleSuccessSignup = props.handleSuccessSignup,
-      externalPhoneNumber = props.externalPhoneNumber;
+      externalPhoneNumber = props.externalPhoneNumber,
+      handleCustomSignup = props.handleCustomSignup;
   var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -122,19 +123,28 @@ var SignupForm = function SignupForm(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              if (!handleCustomSignup) {
+                _context.next = 3;
+                break;
+              }
+
+              handleCustomSignup();
+              return _context.abrupt("return");
+
+            case 3:
+              _context.prev = 3;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.signup = source;
               data = values || signupData;
-              _context.next = 7;
+              _context.next = 10;
               return ordering.users().save(data, {
                 cancelToken: source
               });
 
-            case 7:
+            case 10:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -147,12 +157,12 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
-              _context.next = 15;
+              _context.next = 18;
               break;
 
-            case 12:
-              _context.prev = 12;
-              _context.t0 = _context["catch"](0);
+            case 15:
+              _context.prev = 15;
+              _context.t0 = _context["catch"](3);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setFormState({
@@ -164,12 +174,12 @@ var SignupForm = function SignupForm(props) {
                 });
               }
 
-            case 15:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 12]]);
+      }, _callee, null, [[3, 15]]);
     }));
 
     return function handleSignupClick(_x) {
