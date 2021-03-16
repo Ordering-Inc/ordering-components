@@ -68,7 +68,9 @@ var OrderList = function OrderList(props) {
       orderDirection = props.orderDirection,
       useDefualtSessionManager = props.useDefualtSessionManager,
       paginationSettings = props.paginationSettings,
-      asDashboard = props.asDashboard;
+      asDashboard = props.asDashboard,
+      customArray = props.customArray,
+      userCustomerId = props.userCustomerId;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -132,17 +134,24 @@ var OrderList = function OrderList(props) {
                 }
               }
 
+              if (userCustomerId) {
+                options.query.where.push({
+                  attribute: 'customer_id',
+                  value: parseInt(userCustomerId, 10)
+                });
+              }
+
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 8;
+              _context.next = 9;
               return functionFetch.get(options);
 
-            case 8:
+            case 9:
               return _context.abrupt("return", _context.sent);
 
-            case 9:
+            case 10:
             case "end":
               return _context.stop();
           }
@@ -227,9 +236,10 @@ var OrderList = function OrderList(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (orders) {
+    if (orders || customArray) {
       setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-        orders: orders
+        orders: (orders === null || orders === void 0 ? void 0 : orders.lenght) > 0 ? orders : customArray || [],
+        loading: false
       }));
     } else {
       loadOrders();
