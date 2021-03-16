@@ -128,7 +128,7 @@ var SignupForm = function SignupForm(props) {
                 break;
               }
 
-              handleCustomSignup();
+              handleCustomSignup(values);
               return _context.abrupt("return");
 
             case 3:

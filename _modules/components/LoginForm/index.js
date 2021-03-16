@@ -149,7 +149,7 @@ var LoginForm = function LoginForm(props) {
                 break;
               }
 
-              handleCustomLogin();
+              handleCustomLogin(values, loginTab);
               return _context.abrupt("return");
 
             case 3:
