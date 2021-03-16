@@ -45,7 +45,7 @@ export const LoginForm = (props) => {
    */
   const handleLoginClick = async (values) => {
     if (handleCustomLogin) {
-      handleCustomLogin()
+      handleCustomLogin(values, loginTab)
       return
     }
 
