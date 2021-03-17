@@ -34,8 +34,9 @@ export const OrderReview = (props) => {
         },
         body: JSON.stringify(body)
       })
-      onSaveReview && onSaveReview(response.content)
-      setFormState({ loading: false, result: response.content })
+      const { result, error } = await response.json()
+      onSaveReview && onSaveReview(response)
+      setFormState({ loading: false, result: result, error: error })
     } catch (err) {
       setFormState({
         result: {
