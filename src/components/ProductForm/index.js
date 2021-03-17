@@ -8,7 +8,8 @@ export const ProductForm = (props) => {
   const {
     UIComponent,
     useOrderContext,
-    onSave
+    onSave,
+    handleCustomSave
   } = props
 
   const requestsState = {}
@@ -320,6 +321,9 @@ export const ProductForm = (props) => {
    * Handle when click on save product
    */
   const handleSave = async () => {
+    if (handleCustomSave) {
+      handleCustomSave && handleCustomSave()
+    }
     const errors = checkErrors()
     if (Object.keys(errors).length === 0) {
       let successful = true

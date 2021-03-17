@@ -11,7 +11,8 @@ export const GoogleLoginButton = (props) => {
     responseType,
     handleSuccessGoogleLogin,
     initParams,
-    buttonStyle
+    buttonStyle,
+    handleGoogleLoginClick
   } = props
 
   // const [ordering] = useApi()
@@ -117,6 +118,9 @@ export const GoogleLoginButton = (props) => {
    * @param {object} result from Google
    */
   const handleSigninSuccess = async (res) => {
+    if (handleGoogleLoginClick) {
+      return handleGoogleLoginClick(res)
+    }
     const basicProfile = res.getBasicProfile()
     const authResponse = res.getAuthResponse()
     res.googleId = basicProfile.getId()

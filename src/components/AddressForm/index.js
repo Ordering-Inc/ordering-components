@@ -13,7 +13,8 @@ export const AddressForm = (props) => {
     address,
     useValidationFileds,
     onSaveAddress,
-    isSelectedAfterAdd
+    isSelectedAfterAdd,
+    onSaveCustomAddress
   } = props
 
   const [ordering] = useApi()
@@ -106,6 +107,10 @@ export const AddressForm = (props) => {
    * Update if address id exist or create if not
    */
   const saveAddress = async (values, userCustomerSetup) => {
+    if (onSaveCustomAddress) {
+      onSaveCustomAddress(values)
+      return
+    }
     if (!auth) {
       changeAddress({ ...values, ...formState.changes })
       onSaveAddress && onSaveAddress(formState.changes)
@@ -221,6 +226,10 @@ AddressForm.propTypes = {
    * Address id to edit and load from Ordering API
    */
   onSaveAddress: PropTypes.func,
+  /**
+   * Custom function
+   */
+  onSaveCustomAddress: PropTypes.func,
   /**
    * Components types before address form
    * Array of type components, the parent props will pass to these components
