@@ -34,7 +34,7 @@ export const BusinessesMap = (props) => {
    */
   const onBusinessClick = (slug) => {
     if (onBusinessCustomClick) {
-      return onBusinessCustomClick()
+      return onBusinessCustomClick(slug)
     }
     events.emit('go_to_page', { page: 'business', params: { store: slug } })
   }
@@ -76,7 +76,7 @@ BusinessesMap.propTypes = {
    */
   setErrors: PropTypes.func,
   /**
-   * Custom function
+   * handleCustomClick, function to get click event and return business slug without default behavior
    */
   onBusinessCustomClick: PropTypes.func,
   /**

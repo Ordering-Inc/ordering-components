@@ -73,7 +73,8 @@ export const CardForm = (props) => {
    */
   const handleSubmit = async (event) => {
     if (handleCustomSubmit) {
-      return handleCustomSubmit()
+      const card = elements?.getElement(CardElement)
+      return handleCustomSubmit(card)
     }
     setLoading(true)
     event.preventDefault()
@@ -161,7 +162,11 @@ CardForm.propTypes = {
   /**
    * method used for handle card token created
    */
-  handlerToken: PropTypes.func
+  handlerToken: PropTypes.func,
+  /**
+   * handleCustomClick, function to get click event and return card selected without default behavior
+   */
+  handleCustomSubmit: PropTypes.func
 }
 
 CardForm.defaultProps = {

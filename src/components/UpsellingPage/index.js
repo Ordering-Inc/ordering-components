@@ -108,5 +108,9 @@ UpsellingPage.propTypes = {
   /**
    * BusinessId is required when products is not defined
    */
-  businessId: PropTypes.number
+  businessId: PropTypes.number,
+  /**
+   * handleCustomClick, function to get click event and return product without default behavior
+   */
+  onSave: PropTypes.func
 }

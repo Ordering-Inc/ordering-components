@@ -103,7 +103,11 @@ OrderReview.propTypes = {
   /**
    * function that saves the order that will be reviewed
    */
-  handleSendReview: PropTypes.func
+  handleSendReview: PropTypes.func,
+  /**
+   * handleCustomClick, function to get click event and return scores without default behavior
+   */
+  handleCustomSendReview: PropTypes.func
 }
 
 OrderReview.defaultProps = {

@@ -198,6 +198,11 @@ GoogleLoginButton.propTypes = {
    */
   handleSigninSuccess: PropTypes.func,
   /**
+   * @param {google_response} res
+   * handleCustomClick, function to get click event and return google response without default behavior
+   */
+  handleGoogleLoginClick: PropTypes.func,
+  /**
    * Components types before Facebook login button
    * Array of type components, the parent props will pass to these components
    */

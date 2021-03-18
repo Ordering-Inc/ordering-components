@@ -35,6 +35,10 @@ export const OrderReviewExample = () => {
      */
     onSaveReview: (review) => console.log(review),
     /**
+    * handleCustomClick, function to get click event and return scores without default behavior
+    */
+    handleCustomSendReview: (stars) => console.log(stars),
+    /**
      * Components types before login form
      * Array of type components, the parent props will pass to these components
      */

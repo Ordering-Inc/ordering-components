@@ -78,7 +78,7 @@ ResetPassword.propTypes = {
    */
   random: PropTypes.string,
   /**
-   * Custom function
+   * handleCustomClick, function to get click event and return data without default behavior
    */
   handleCustomResetPassword: PropTypes.func,
   /**

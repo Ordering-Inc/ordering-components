@@ -95,7 +95,8 @@ ForgotPasswordForm.propTypes = {
    */
   defaultEmail: PropTypes.string,
   /**
-   * Custom function
+   * @param {form_data} data
+   * handleCustomClick, function to get click event and return data without default behavior
    */
   handleCustomForgotPasswordClick: PropTypes.func,
   /**
