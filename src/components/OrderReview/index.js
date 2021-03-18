@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 
 export const OrderReview = (props) => {
-  const { UIComponent, order, onSaveReview } = props
+  const { UIComponent, order, onSaveReview, handleCustomSendReview } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
@@ -14,6 +14,9 @@ export const OrderReview = (props) => {
    * Function that load and send the review order to ordering
    */
   const handleSendReview = async () => {
+    if (handleCustomSendReview) {
+      handleCustomSendReview && handleCustomSendReview(stars)
+    }
     setFormState({ ...formState, loading: true })
     try {
       const body = {
@@ -100,7 +103,11 @@ OrderReview.propTypes = {
   /**
    * function that saves the order that will be reviewed
    */
-  handleSendReview: PropTypes.func
+  handleSendReview: PropTypes.func,
+  /**
+   * handleCustomClick, function to get click event and return scores without default behavior
+   */
+  handleCustomSendReview: PropTypes.func
 }
 
 OrderReview.defaultProps = {

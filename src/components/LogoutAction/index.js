@@ -13,7 +13,8 @@ export const LogoutAction = (props) => {
     handleSuccessLogout,
     token,
     isNative,
-    useDefualtSessionManager
+    useDefualtSessionManager,
+    handleCustomLogoutClick
   } = props
 
   const [ordering] = useApi()
@@ -52,6 +53,9 @@ export const LogoutAction = (props) => {
    * Default fuction for logout workflow
    */
   const handleLogoutClick = async () => {
+    if (handleCustomLogoutClick) {
+      handleCustomLogoutClick && handleCustomLogoutClick()
+    }
     try {
       setFormState({ ...formState, loading: true })
       const accessToken = token || data.token
@@ -113,7 +117,11 @@ LogoutAction.propTypes = {
    * Enable/Disable default session manager
    * Remove user and token with default session manager
    */
-  useDefualtSessionManager: PropTypes.bool
+  useDefualtSessionManager: PropTypes.bool,
+  /**
+   * Custom function
+   */
+  handleCustomLogoutClick: PropTypes.func
 }
 
 LogoutAction.defaultProps = {

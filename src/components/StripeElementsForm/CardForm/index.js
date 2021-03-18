@@ -18,7 +18,8 @@ export const CardForm = (props) => {
     requirements,
     toSave,
     handleSource,
-    onNewCard
+    onNewCard,
+    handleCustomSubmit
   } = props
 
   const [{ user }] = useSession()
@@ -71,6 +72,10 @@ export const CardForm = (props) => {
    * @param {event} event
    */
   const handleSubmit = async (event) => {
+    if (handleCustomSubmit) {
+      const card = elements?.getElement(CardElement)
+      return handleCustomSubmit(card)
+    }
     setLoading(true)
     event.preventDefault()
     const card = elements?.getElement(CardElement)
@@ -157,7 +162,11 @@ CardForm.propTypes = {
   /**
    * method used for handle card token created
    */
-  handlerToken: PropTypes.func
+  handlerToken: PropTypes.func,
+  /**
+   * handleCustomClick, function to get click event and return card selected without default behavior
+   */
+  handleCustomSubmit: PropTypes.func
 }
 
 CardForm.defaultProps = {

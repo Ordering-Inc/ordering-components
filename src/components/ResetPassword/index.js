@@ -7,7 +7,8 @@ export const ResetPassword = (props) => {
     UIComponent,
     code,
     random,
-    handleSuccessResetPassword
+    handleSuccessResetPassword,
+    handleCustomResetPassword
   } = props
 
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
@@ -15,6 +16,9 @@ export const ResetPassword = (props) => {
   const [ordering] = useApi()
 
   const handleResetPassword = async () => {
+    if (handleCustomResetPassword) {
+      return handleCustomResetPassword(resetPasswordData)
+    }
     try {
       setFormState({ ...formState, loading: true })
       const { response } = await ordering.users().resetPassword(resetPasswordData)
@@ -73,6 +77,10 @@ ResetPassword.propTypes = {
    *  Random is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
    */
   random: PropTypes.string,
+  /**
+   * handleCustomClick, function to get click event and return data without default behavior
+   */
+  handleCustomResetPassword: PropTypes.func,
   /**
    * Components types before products list
    * Array of type components, the parent props will pass to these components

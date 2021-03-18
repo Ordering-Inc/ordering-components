@@ -9,7 +9,8 @@ export const OrderDetails = (props) => {
     orderId,
     hashKey,
     UIComponent,
-    userCustomerId
+    userCustomerId,
+    sendCustomMessage
   } = props
 
   const [{ user, token, loading }] = useSession()
@@ -64,6 +65,9 @@ export const OrderDetails = (props) => {
    * @param {string} spot
    */
   const sendMessage = async (spot) => {
+    if (sendCustomMessage) {
+      return sendCustomMessage(spot)
+    }
     try {
       setMessageErrors({
         ...messageErrors,
@@ -116,7 +120,7 @@ export const OrderDetails = (props) => {
     }
     if (userCustomerId) {
       options.query = {
-        mode:'dashboard'
+        mode: 'dashboard'
       }
     }
     try {

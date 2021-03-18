@@ -3,7 +3,13 @@ import PropTypes from 'prop-types'
 import { useEvent } from '../../contexts/EventContext'
 
 export const BusinessesMap = (props) => {
-  const { UIComponent, businessList, userLocation, setErrors } = props
+  const {
+    UIComponent,
+    businessList,
+    userLocation,
+    setErrors,
+    onBusinessCustomClick
+  } = props
 
   const [events] = useEvent()
   const [businessLocations, setBusinessLocations] = useState([])
@@ -27,6 +33,9 @@ export const BusinessesMap = (props) => {
    * handler event when clicks business on the map
    */
   const onBusinessClick = (slug) => {
+    if (onBusinessCustomClick) {
+      return onBusinessCustomClick(slug)
+    }
     events.emit('go_to_page', { page: 'business', params: { store: slug } })
   }
 
@@ -66,6 +75,10 @@ BusinessesMap.propTypes = {
    * setter for map errors
    */
   setErrors: PropTypes.func,
+  /**
+   * handleCustomClick, function to get click event and return business slug without default behavior
+   */
+  onBusinessCustomClick: PropTypes.func,
   /**
    * Components types before order details
    * Array of type components, the parent props will pass to these components

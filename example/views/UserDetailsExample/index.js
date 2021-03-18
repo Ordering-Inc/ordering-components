@@ -38,6 +38,12 @@ export const UserDetailsExample = () => {
      */
     onEditUserClick: () => { console.log('editing') },
     /**
+   * Function to change default user details behavior
+   * @param {Object} user Current user data
+   * @param {Object} changes Current form changes
+   */
+    handleButtonUpdateClick: (userResult, changes) => console.log(userResult, changes),
+    /**
      * Components types before user details
      * Array of type components, the parent props will pass to these components
      */

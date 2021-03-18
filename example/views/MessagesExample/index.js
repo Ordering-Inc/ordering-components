@@ -29,11 +29,10 @@ export const MessagesExample = () => {
      */
     orderId: 33,
     /**
-     * Custom handle for send message
-     */
-    // customHandleSend: () => {
-    //   console.log('customHandleSend')
-    // },
+   * @param {object} message
+   * handleCustomClick, function to get click event and return message without default behavior
+   */
+    customHandleSend: (message) => console.log('message sent', message),
     /**
      * Components types before [PUT HERE COMPONENT NAME]
      * Array of type components, the parent props will pass to these components

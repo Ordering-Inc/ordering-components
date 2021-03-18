@@ -23,6 +23,11 @@ export const ForgotPassword = () => {
      */
     handleSuccessForgotPassword: (email) => console.log('Forgot password with email', email),
     /**
+   * @param {form_data} data
+   * handleCustomClick, function to get click event and return data without default behavior
+   */
+    handleCustomForgotPasswordClick: (data) => console.log('Forgot password data', data),
+    /**
      * Default email to forgot password form
      */
     // defaultEmail: 'customer@ordering.co',
@@ -30,6 +35,7 @@ export const ForgotPassword = () => {
      * Components types before forgot password form
      * Array of type components, the parent props will pass to these components
      */
+
     beforeComponents: [TestComponent],
     /**
      * Components types after forgot password form
