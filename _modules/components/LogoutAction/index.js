@@ -59,7 +59,8 @@ var LogoutAction = function LogoutAction(props) {
       handleSuccessLogout = props.handleSuccessLogout,
       token = props.token,
       isNative = props.isNative,
-      useDefualtSessionManager = props.useDefualtSessionManager;
+      useDefualtSessionManager = props.useDefualtSessionManager,
+      handleCustomLogoutClick = props.handleCustomLogoutClick;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -124,15 +125,19 @@ var LogoutAction = function LogoutAction(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              if (handleCustomLogoutClick) {
+                handleCustomLogoutClick && handleCustomLogoutClick();
+              }
+
+              _context.prev = 1;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               accessToken = token || data.token;
-              _context.next = 5;
+              _context.next = 6;
               return ordering.setAccessToken(accessToken).users().logout();
 
-            case 5:
+            case 6:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -149,12 +154,12 @@ var LogoutAction = function LogoutAction(props) {
                 }
               }
 
-              _context.next = 13;
+              _context.next = 14;
               break;
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](0);
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](1);
               setFormState({
                 result: {
                   error: true,
@@ -163,12 +168,12 @@ var LogoutAction = function LogoutAction(props) {
                 loading: false
               });
 
-            case 13:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 10]]);
+      }, _callee, null, [[1, 11]]);
     }));
 
     return function handleLogoutClick() {
@@ -208,7 +213,12 @@ LogoutAction.propTypes = {
    * Enable/Disable default session manager
    * Remove user and token with default session manager
    */
-  useDefualtSessionManager: _propTypes.default.bool
+  useDefualtSessionManager: _propTypes.default.bool,
+
+  /**
+   * Custom function
+   */
+  handleCustomLogoutClick: _propTypes.default.func
 };
 LogoutAction.defaultProps = {
   useDefualtSessionManager: true

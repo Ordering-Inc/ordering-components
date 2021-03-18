@@ -50,7 +50,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderReview = function OrderReview(props) {
   var UIComponent = props.UIComponent,
       order = props.order,
-      onSaveReview = props.onSaveReview;
+      onSaveReview = props.onSaveReview,
+      handleCustomSendReview = props.handleCustomSendReview;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -87,16 +88,20 @@ var OrderReview = function OrderReview(props) {
 
   var handleSendReview = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _session$user, body, response;
+      var _session$user, body, response, _yield$response$json, result, error;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              if (handleCustomSendReview) {
+                handleCustomSendReview && handleCustomSendReview(stars);
+              }
+
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.prev = 1;
+              _context.prev = 2;
               body = {
                 order_id: order.id,
                 quality: stars.quality,
@@ -107,7 +112,7 @@ var OrderReview = function OrderReview(props) {
                 user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
                 business_id: order.business_id
               };
-              _context.next = 5;
+              _context.next = 6;
               return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
                 method: 'POST',
                 headers: {
@@ -117,19 +122,27 @@ var OrderReview = function OrderReview(props) {
                 body: JSON.stringify(body)
               });
 
-            case 5:
+            case 6:
               response = _context.sent;
-              onSaveReview && onSaveReview(response.content);
+              _context.next = 9;
+              return response.json();
+
+            case 9:
+              _yield$response$json = _context.sent;
+              result = _yield$response$json.result;
+              error = _yield$response$json.error;
+              onSaveReview && onSaveReview(response);
               setFormState({
                 loading: false,
-                result: response.content
+                result: result,
+                error: error
               });
-              _context.next = 13;
+              _context.next = 19;
               break;
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](1);
+            case 16:
+              _context.prev = 16;
+              _context.t0 = _context["catch"](2);
               setFormState({
                 result: {
                   error: true,
@@ -138,12 +151,12 @@ var OrderReview = function OrderReview(props) {
                 loading: false
               });
 
-            case 13:
+            case 19:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 10]]);
+      }, _callee, null, [[2, 16]]);
     }));
 
     return function handleSendReview() {
@@ -201,7 +214,12 @@ OrderReview.propTypes = {
   /**
    * function that saves the order that will be reviewed
    */
-  handleSendReview: _propTypes.default.func
+  handleSendReview: _propTypes.default.func,
+
+  /**
+   * handleCustomClick, function to get click event and return scores without default behavior
+   */
+  handleCustomSendReview: _propTypes.default.func
 };
 OrderReview.defaultProps = {
   order: {},

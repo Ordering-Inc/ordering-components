@@ -52,7 +52,8 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
   var UIComponent = props.UIComponent,
       defaultEmail = props.defaultEmail,
       handleButtonForgotPasswordClick = props.handleButtonForgotPasswordClick,
-      handleSuccessForgotPassword = props.handleSuccessForgotPassword;
+      handleSuccessForgotPassword = props.handleSuccessForgotPassword,
+      handleCustomForgotPasswordClick = props.handleCustomForgotPasswordClick;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -81,20 +82,30 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
 
   var handleForgotPasswordClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(data) {
-      var values, response;
+      var values, _values, response;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              if (!handleCustomForgotPasswordClick) {
+                _context.next = 3;
+                break;
+              }
+
+              values = data || formData;
+              return _context.abrupt("return", handleCustomForgotPasswordClick(values));
+
+            case 3:
+              _context.prev = 3;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              values = data || formData;
-              _context.next = 5;
-              return ordering.users().forgotPassword(values);
+              _values = data || formData;
+              _context.next = 8;
+              return ordering.users().forgotPassword(_values);
 
-            case 5:
+            case 8:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -107,12 +118,12 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
                 }
               }
 
-              _context.next = 13;
+              _context.next = 16;
               break;
 
-            case 10:
-              _context.prev = 10;
-              _context.t0 = _context["catch"](0);
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](3);
               setFormState({
                 result: {
                   error: true,
@@ -121,12 +132,12 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
                 loading: false
               });
 
-            case 13:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 10]]);
+      }, _callee, null, [[3, 13]]);
     }));
 
     return function handleForgotPasswordClick(_x) {
@@ -173,6 +184,12 @@ ForgotPasswordForm.propTypes = {
    * Default email to forgot password form
    */
   defaultEmail: _propTypes.default.string,
+
+  /**
+   * @param {form_data} data
+   * handleCustomClick, function to get click event and return data without default behavior
+   */
+  handleCustomForgotPasswordClick: _propTypes.default.func,
 
   /**
    * Components types before forgot password form

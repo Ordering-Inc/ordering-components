@@ -51,7 +51,8 @@ var CardForm = function CardForm(props) {
       requirements = props.requirements,
       toSave = props.toSave,
       handleSource = props.handleSource,
-      onNewCard = props.onNewCard;
+      onNewCard = props.onNewCard,
+      handleCustomSubmit = props.handleCustomSubmit;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -147,22 +148,31 @@ var CardForm = function CardForm(props) {
 
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(event) {
-      var card, result, _result;
+      var _card, card, result, _result;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              if (!handleCustomSubmit) {
+                _context2.next = 3;
+                break;
+              }
+
+              _card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
+              return _context2.abrupt("return", handleCustomSubmit(_card));
+
+            case 3:
               setLoading(true);
               event.preventDefault();
               card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
 
               if (requirements) {
-                _context2.next = 10;
+                _context2.next = 13;
                 break;
               }
 
-              _context2.next = 6;
+              _context2.next = 9;
               return stripe.createPaymentMethod({
                 type: 'card',
                 card: card,
@@ -173,7 +183,7 @@ var CardForm = function CardForm(props) {
                 }
               });
 
-            case 6:
+            case 9:
               result = _context2.sent;
 
               if (result.error) {
@@ -192,11 +202,11 @@ var CardForm = function CardForm(props) {
                 }); // props.handlerToken(result?.paymentMethod)
               }
 
-              _context2.next = 14;
+              _context2.next = 17;
               break;
 
-            case 10:
-              _context2.next = 12;
+            case 13:
+              _context2.next = 15;
               return stripe.confirmCardSetup(requirements, {
                 payment_method: {
                   card: card,
@@ -208,7 +218,7 @@ var CardForm = function CardForm(props) {
                 }
               });
 
-            case 12:
+            case 15:
               _result = _context2.sent;
 
               if (_result.error) {
@@ -220,7 +230,7 @@ var CardForm = function CardForm(props) {
                 toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
               }
 
-            case 14:
+            case 17:
             case "end":
               return _context2.stop();
           }
@@ -266,7 +276,12 @@ CardForm.propTypes = {
   /**
    * method used for handle card token created
    */
-  handlerToken: _propTypes.default.func
+  handlerToken: _propTypes.default.func,
+
+  /**
+   * handleCustomClick, function to get click event and return card selected without default behavior
+   */
+  handleCustomSubmit: _propTypes.default.func
 };
 CardForm.defaultProps = {
   autosave: true

@@ -63,7 +63,8 @@ var OrderDetails = function OrderDetails(props) {
   var orderId = props.orderId,
       hashKey = props.hashKey,
       UIComponent = props.UIComponent,
-      userCustomerId = props.userCustomerId;
+      userCustomerId = props.userCustomerId,
+      sendCustomMessage = props.sendCustomMessage;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -214,11 +215,19 @@ var OrderDetails = function OrderDetails(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.prev = 0;
+              if (!sendCustomMessage) {
+                _context2.next = 2;
+                break;
+              }
+
+              return _context2.abrupt("return", sendCustomMessage(spot));
+
+            case 2:
+              _context2.prev = 2;
               setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
                 loading: true
               }));
-              _context2.next = 4;
+              _context2.next = 6;
               return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order4 = orderState.order) === null || _orderState$order4 === void 0 ? void 0 : _orderState$order4.id, "/messages"), {
                 method: 'post',
                 headers: {
@@ -233,30 +242,30 @@ var OrderDetails = function OrderDetails(props) {
                 })
               });
 
-            case 4:
+            case 6:
               _yield$fetch = _context2.sent;
               status = _yield$fetch.status;
               setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
                 loading: false,
                 status: status
               }));
-              _context2.next = 12;
+              _context2.next = 14;
               break;
 
-            case 9:
-              _context2.prev = 9;
-              _context2.t0 = _context2["catch"](0);
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](2);
               setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 12:
+            case 14:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 9]]);
+      }, _callee2, null, [[2, 11]]);
     }));
 
     return function sendMessage(_x) {

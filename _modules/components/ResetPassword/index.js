@@ -49,7 +49,8 @@ var ResetPassword = function ResetPassword(props) {
   var UIComponent = props.UIComponent,
       code = props.code,
       random = props.random,
-      handleSuccessResetPassword = props.handleSuccessResetPassword;
+      handleSuccessResetPassword = props.handleSuccessResetPassword,
+      handleCustomResetPassword = props.handleCustomResetPassword;
 
   var _useState = (0, _react.useState)({
     loading: false,
@@ -82,14 +83,22 @@ var ResetPassword = function ResetPassword(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              if (!handleCustomResetPassword) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt("return", handleCustomResetPassword(resetPasswordData));
+
+            case 2:
+              _context.prev = 2;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.next = 4;
+              _context.next = 6;
               return ordering.users().resetPassword(resetPasswordData);
 
-            case 4:
+            case 6:
               _yield$ordering$users = _context.sent;
               response = _yield$ordering$users.response;
               result = response.data;
@@ -104,12 +113,12 @@ var ResetPassword = function ResetPassword(props) {
                 }
               }
 
-              _context.next = 14;
+              _context.next = 16;
               break;
 
-            case 11:
-              _context.prev = 11;
-              _context.t0 = _context["catch"](0);
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](2);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setFormState({
@@ -121,12 +130,12 @@ var ResetPassword = function ResetPassword(props) {
                 });
               }
 
-            case 14:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[2, 13]]);
     }));
 
     return function handleResetPassword() {
@@ -162,6 +171,11 @@ ResetPassword.propTypes = {
    *  Random is generated with the endpoint Users Forgot Password, injected on the link received on the Forgot Password email.
    */
   random: _propTypes.default.string,
+
+  /**
+   * handleCustomClick, function to get click event and return data without default behavior
+   */
+  handleCustomResetPassword: _propTypes.default.func,
 
   /**
    * Components types before products list

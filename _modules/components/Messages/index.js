@@ -230,6 +230,12 @@ Messages.propTypes = {
   handleClickSetDefault: _propTypes.default.func,
 
   /**
+   * @param {object} message
+   * handleCustomClick, function to get click event and return message without default behavior
+   */
+  customHandleSend: _propTypes.default.func,
+
+  /**
    * Components types before [PUT HERE COMPONENT NAME]
    * Array of type components, the parent props will pass to these components
    */

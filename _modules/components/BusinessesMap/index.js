@@ -37,7 +37,8 @@ var BusinessesMap = function BusinessesMap(props) {
   var UIComponent = props.UIComponent,
       businessList = props.businessList,
       userLocation = props.userLocation,
-      setErrors = props.setErrors;
+      setErrors = props.setErrors,
+      onBusinessCustomClick = props.onBusinessCustomClick;
 
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
@@ -69,6 +70,10 @@ var BusinessesMap = function BusinessesMap(props) {
 
 
   var onBusinessClick = function onBusinessClick(slug) {
+    if (onBusinessCustomClick) {
+      return onBusinessCustomClick(slug);
+    }
+
     events.emit('go_to_page', {
       page: 'business',
       params: {
@@ -109,6 +114,11 @@ BusinessesMap.propTypes = {
    * setter for map errors
    */
   setErrors: _propTypes.default.func,
+
+  /**
+   * handleCustomClick, function to get click event and return business slug without default behavior
+   */
+  onBusinessCustomClick: _propTypes.default.func,
 
   /**
    * Components types before order details

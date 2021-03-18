@@ -239,7 +239,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
     }
 
     if (unit.toUpperCase() === 'MI') {
-      var dist = distance * 1.621371;
+      var dist = distance * 0.621371;
 
       if (dist >= 1000) {
         return "".concat(parseShortenDistance(dist), " ").concat(t('MI', 'mi'));

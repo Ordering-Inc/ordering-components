@@ -59,7 +59,8 @@ var AddressForm = function AddressForm(props) {
       address = props.address,
       useValidationFileds = props.useValidationFileds,
       onSaveAddress = props.onSaveAddress,
-      isSelectedAfterAdd = props.isSelectedAfterAdd;
+      isSelectedAfterAdd = props.isSelectedAfterAdd,
+      onSaveCustomAddress = props.onSaveCustomAddress;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -229,8 +230,17 @@ var AddressForm = function AddressForm(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              if (!onSaveCustomAddress) {
+                _context2.next = 3;
+                break;
+              }
+
+              onSaveCustomAddress(values);
+              return _context2.abrupt("return");
+
+            case 3:
               if (auth) {
-                _context2.next = 4;
+                _context2.next = 7;
                 break;
               }
 
@@ -238,7 +248,7 @@ var AddressForm = function AddressForm(props) {
               onSaveAddress && onSaveAddress(formState.changes);
               return _context2.abrupt("return");
 
-            case 4:
+            case 7:
               if (userCustomerSetup) {
                 setUserCustomer(userCustomerSetup, true);
               }
@@ -246,13 +256,13 @@ var AddressForm = function AddressForm(props) {
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context2.prev = 6;
-              _context2.next = 9;
+              _context2.prev = 9;
+              _context2.next = 12;
               return ordering.users(userId).addresses((_addressState$address = addressState.address) === null || _addressState$address === void 0 ? void 0 : _addressState$address.id).save(_objectSpread(_objectSpread({}, values), formState.changes), {
                 accessToken: accessToken
               });
 
-            case 9:
+            case 12:
               _yield$ordering$users2 = _context2.sent;
               content = _yield$ordering$users2.content;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
@@ -275,24 +285,24 @@ var AddressForm = function AddressForm(props) {
                 }
               }
 
-              _context2.next = 18;
+              _context2.next = 21;
               break;
 
-            case 15:
-              _context2.prev = 15;
-              _context2.t0 = _context2["catch"](6);
+            case 18:
+              _context2.prev = 18;
+              _context2.t0 = _context2["catch"](9);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: false,
                 error: [_context2.t0.message],
                 address: {}
               }));
 
-            case 18:
+            case 21:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[6, 15]]);
+      }, _callee2, null, [[9, 18]]);
     }));
 
     return function saveAddress(_x3, _x4) {
@@ -368,6 +378,11 @@ AddressForm.propTypes = {
    * Address id to edit and load from Ordering API
    */
   onSaveAddress: _propTypes.default.func,
+
+  /**
+   * Custom function
+   */
+  onSaveCustomAddress: _propTypes.default.func,
 
   /**
    * Components types before address form

@@ -53,7 +53,8 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
       responseType = props.responseType,
       handleSuccessGoogleLogin = props.handleSuccessGoogleLogin,
       initParams = props.initParams,
-      buttonStyle = props.buttonStyle; // const [ordering] = useApi()
+      buttonStyle = props.buttonStyle,
+      handleGoogleLoginClick = props.handleGoogleLoginClick; // const [ordering] = useApi()
 
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
@@ -190,6 +191,14 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              if (!handleGoogleLoginClick) {
+                _context2.next = 2;
+                break;
+              }
+
+              return _context2.abrupt("return", handleGoogleLoginClick(res));
+
+            case 2:
               basicProfile = res.getBasicProfile();
               authResponse = res.getAuthResponse();
               res.googleId = basicProfile.getId();
@@ -208,7 +217,7 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
               handleSuccessGoogleLogin(basicProfile);
               onSuccess(res);
 
-            case 9:
+            case 11:
             case "end":
               return _context2.stop();
           }
@@ -281,6 +290,12 @@ GoogleLoginButton.propTypes = {
    * Function that return token of the user
    */
   handleSigninSuccess: _propTypes.default.func,
+
+  /**
+   * @param {google_response} res
+   * handleCustomClick, function to get click event and return google response without default behavior
+   */
+  handleGoogleLoginClick: _propTypes.default.func,
 
   /**
    * Components types before Facebook login button

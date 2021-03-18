@@ -54,7 +54,8 @@ var ProductForm = function ProductForm(props) {
 
   var UIComponent = props.UIComponent,
       useOrderContext = props.useOrderContext,
-      onSave = props.onSave;
+      onSave = props.onSave,
+      handleCustomSave = props.handleCustomSave;
   var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -483,48 +484,52 @@ var ProductForm = function ProductForm(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              if (handleCustomSave) {
+                handleCustomSave && handleCustomSave();
+              }
+
               errors = checkErrors();
 
               if (!(Object.keys(errors).length === 0)) {
-                _context2.next = 15;
+                _context2.next = 16;
                 break;
               }
 
               successful = true;
 
               if (!useOrderContext) {
-                _context2.next = 14;
+                _context2.next = 15;
                 break;
               }
 
               successful = false;
 
               if ((_props$productCart6 = props.productCart) === null || _props$productCart6 === void 0 ? void 0 : _props$productCart6.code) {
-                _context2.next = 11;
+                _context2.next = 12;
                 break;
               }
 
-              _context2.next = 8;
+              _context2.next = 9;
               return addProduct(productCart);
 
-            case 8:
+            case 9:
               successful = _context2.sent;
-              _context2.next = 14;
+              _context2.next = 15;
               break;
 
-            case 11:
-              _context2.next = 13;
+            case 12:
+              _context2.next = 14;
               return updateProduct(productCart);
 
-            case 13:
+            case 14:
               successful = _context2.sent;
 
-            case 14:
+            case 15:
               if (successful) {
                 onSave(productCart, !((_props$productCart7 = props.productCart) === null || _props$productCart7 === void 0 ? void 0 : _props$productCart7.code));
               }
 
-            case 15:
+            case 16:
             case "end":
               return _context2.stop();
           }
