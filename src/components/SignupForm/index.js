@@ -241,6 +241,10 @@ SignupForm.propTypes = {
    */
   useChekoutFileds: PropTypes.bool,
   /**
+   * Custom function
+   */
+  handleCustomSignup: PropTypes.func,
+  /**
    * Components types before signup form
    * Array of type components, the parent props will pass to these components
    */

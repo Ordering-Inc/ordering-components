@@ -18,7 +18,8 @@ export const CardForm = (props) => {
     requirements,
     toSave,
     handleSource,
-    onNewCard
+    onNewCard,
+    handleCustomSubmit
   } = props
 
   const [{ user }] = useSession()
@@ -71,6 +72,9 @@ export const CardForm = (props) => {
    * @param {event} event
    */
   const handleSubmit = async (event) => {
+    if (handleCustomSubmit) {
+      return handleCustomSubmit()
+    }
     setLoading(true)
     event.preventDefault()
     const card = elements?.getElement(CardElement)
