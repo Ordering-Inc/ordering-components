@@ -241,6 +241,14 @@ SignupForm.propTypes = {
    */
   useChekoutFileds: PropTypes.bool,
   /**
+   * Custom function
+   */
+  handleCustomSignup: PropTypes.func,
+  /**
+   * handleCustomClick, function to get click event and return reset password data without default behavior
+   */
+  handleCustomSendReview: PropTypes.func,
+  /**
    * Components types before signup form
    * Array of type components, the parent props will pass to these components
    */

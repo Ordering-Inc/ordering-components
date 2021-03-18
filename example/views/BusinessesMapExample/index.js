@@ -43,7 +43,12 @@ export const BusinessesMapExample = () => {
     /**
      * setter for map errors
      */
-    setErrors
+    setErrors,
+    /**
+     * @param {business_slug} slug
+     * handleCustomClick, function to get click event and return business slug without default behavior
+     */
+    onBusinessCustomClick: (slug) => console.log(slug)
   }
 
   return (

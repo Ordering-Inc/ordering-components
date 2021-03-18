@@ -29,6 +29,10 @@ export const ResetPasswordExample = (props) => {
      */
     handleSucessResetPassword: (result) => console.log('Your password has been changed successfully', result),
     /**
+      * handleCustomClick, function to get click event and return data without default behavior
+      */
+    handleCustomResetPassword: (resetPasswordData) => console.log(resetPasswordData),
+    /**
      * Components types before product share
      * Array of type components, the parent props will pass to these components
      */

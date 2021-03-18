@@ -168,7 +168,7 @@ export const UtilsProviders = ({ children }) => {
       unit = configState.configs.distance_unit?.value
     }
     if (unit.toUpperCase() === 'MI') {
-      const dist = distance * 1.621371
+      const dist = distance * 0.621371
       if (dist >= 1000) {
         return `${parseShortenDistance(dist)} ${t('MI', 'mi')}`
       }

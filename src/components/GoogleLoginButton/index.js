@@ -11,7 +11,8 @@ export const GoogleLoginButton = (props) => {
     responseType,
     handleSuccessGoogleLogin,
     initParams,
-    buttonStyle
+    buttonStyle,
+    handleGoogleLoginClick
   } = props
 
   // const [ordering] = useApi()
@@ -117,6 +118,9 @@ export const GoogleLoginButton = (props) => {
    * @param {object} result from Google
    */
   const handleSigninSuccess = async (res) => {
+    if (handleGoogleLoginClick) {
+      return handleGoogleLoginClick(res)
+    }
     const basicProfile = res.getBasicProfile()
     const authResponse = res.getAuthResponse()
     res.googleId = basicProfile.getId()
@@ -193,6 +197,11 @@ GoogleLoginButton.propTypes = {
    * Function that return token of the user
    */
   handleSigninSuccess: PropTypes.func,
+  /**
+   * @param {google_response} res
+   * handleCustomClick, function to get click event and return google response without default behavior
+   */
+  handleGoogleLoginClick: PropTypes.func,
   /**
    * Components types before Facebook login button
    * Array of type components, the parent props will pass to these components

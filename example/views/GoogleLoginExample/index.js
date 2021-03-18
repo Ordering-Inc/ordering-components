@@ -55,6 +55,11 @@ export const GoogleLoginExample = () => {
       theme: 'dark'
     },
     /**
+   * @param {google_response} res
+   * handleCustomClick, function to get click event and return google response without default behavior
+   */
+    handleGoogleLoginClick: (res) => console.log('Google response', res),
+    /**
      * Components types before Facebook login button
      * Array of type components, the parent props will pass to these components
      */

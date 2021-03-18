@@ -10,7 +10,8 @@ export const ForgotPasswordForm = (props) => {
     UIComponent,
     defaultEmail,
     handleButtonForgotPasswordClick,
-    handleSuccessForgotPassword
+    handleSuccessForgotPassword,
+    handleCustomForgotPasswordClick
   } = props
 
   const [ordering] = useApi()
@@ -21,6 +22,10 @@ export const ForgotPasswordForm = (props) => {
    * Default fuction for forgot password workflow
    */
   const handleForgotPasswordClick = async (data) => {
+    if (handleCustomForgotPasswordClick) {
+      const values = data || formData
+      return handleCustomForgotPasswordClick(values)
+    }
     try {
       setFormState({ ...formState, loading: true })
       const values = data || formData
@@ -89,6 +94,11 @@ ForgotPasswordForm.propTypes = {
    * Default email to forgot password form
    */
   defaultEmail: PropTypes.string,
+  /**
+   * @param {form_data} data
+   * handleCustomClick, function to get click event and return data without default behavior
+   */
+  handleCustomForgotPasswordClick: PropTypes.func,
   /**
    * Components types before forgot password form
    * Array of type components, the parent props will pass to these components
