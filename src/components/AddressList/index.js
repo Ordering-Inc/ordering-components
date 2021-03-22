@@ -48,7 +48,7 @@ export const AddressList = (props) => {
       setAddressList({
         loading: false,
         error: content.error ? content.result : null,
-        addresses: content.error ? [] : content.result
+        addresses: content.error ? [] : Array.isArray(content.result) ? content.result : []
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
