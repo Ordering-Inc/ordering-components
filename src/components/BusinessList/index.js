@@ -16,6 +16,7 @@ export const BusinessList = (props) => {
     isSortByReview,
     isSearchByName,
     isSearchByDescription,
+    isFeatured,
     propsToFetch,
     onBusinessClick
   } = props
@@ -66,6 +67,9 @@ export const BusinessList = (props) => {
       const conditions = []
       if (businessTypeSelected) {
         conditions.push({ attribute: businessTypeSelected, value: true })
+      }
+      if (isFeatured) {
+        conditions.push({ attribute: 'featured', value: true })
       }
 
       if (timeLimitValue) {
