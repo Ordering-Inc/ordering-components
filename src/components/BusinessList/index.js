@@ -16,6 +16,8 @@ export const BusinessList = (props) => {
     isSortByReview,
     isSearchByName,
     isSearchByDescription,
+    isFeatured,
+    customLocation,
     propsToFetch,
     onBusinessClick
   } = props
@@ -47,7 +49,9 @@ export const BusinessList = (props) => {
       setBusinessesList({ ...businessesList, loading: true })
 
       let parameters = {
-        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
+        location: !customLocation
+          ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
+          : `${customLocation.lat},${customLocation.lng}`,
         type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
       }
       if (!isSortByReview) {
@@ -66,6 +70,9 @@ export const BusinessList = (props) => {
       const conditions = []
       if (businessTypeSelected) {
         conditions.push({ attribute: businessTypeSelected, value: true })
+      }
+      if (isFeatured) {
+        conditions.push({ attribute: 'featured', value: true })
       }
 
       if (timeLimitValue) {
@@ -181,7 +188,7 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if (orderState.loading || !orderState.options?.address?.location) return
+    if (orderState.loading || (!orderState.options?.address?.location && !customLocation)) return
     getBusinesses(true)
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue])
 
