@@ -137,7 +137,7 @@ var AddressList = function AddressList(props) {
               setAddressList({
                 loading: false,
                 error: content.error ? content.result : null,
-                addresses: content.error ? [] : content.result
+                addresses: content.error ? [] : Array.isArray(content.result) ? content.result : []
               });
               _context.next = 14;
               break;
