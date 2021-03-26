@@ -52,6 +52,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  */
 var Checkout = function Checkout(props) {
   var businessId = props.businessId,
+      propsToFetch = props.propsToFetch,
       actionsBeforePlace = props.actionsBeforePlace,
       handleCustomClick = props.handleCustomClick,
       onPlaceOrderClick = props.onPlaceOrderClick,
@@ -113,41 +114,40 @@ var Checkout = function Checkout(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _props, _yield$ordering$busin, result;
+      var _yield$ordering$busin, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location'];
-              _context.next = 4;
-              return ordering.businesses(businessId).select(_props).get();
+              _context.next = 3;
+              return ordering.businesses(businessId).select(propsToFetch).get();
 
-            case 4:
+            case 3:
               _yield$ordering$busin = _context.sent;
               result = _yield$ordering$busin.content.result;
               setBusinessDetails(_objectSpread(_objectSpread({}, businessDetails), {}, {
                 loading: false,
                 business: result
               }));
-              _context.next = 12;
+              _context.next = 11;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 8:
+              _context.prev = 8;
               _context.t0 = _context["catch"](0);
               setBusinessDetails(_objectSpread(_objectSpread({}, businessDetails), {}, {
                 loading: false,
                 error: _context.t0
               }));
 
-            case 12:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 8]]);
     }));
 
     return function getBusiness() {
@@ -328,5 +328,6 @@ Checkout.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  propsToFetch: ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location']
 };
