@@ -179,8 +179,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       return
     }
 
+    const momentTimeStamp = state.options?.moment !== null ? dayjs.utc(state.options?.moment).unix() : null
+
     if (params && params?.address && !checkAddress(params?.address)) {
-      updateOrderOptions({ address_id: params?.address?.id })
+      updateOrderOptions({ address_id: params?.address?.id, moment: momentTimeStamp })
       return
     }
 
@@ -188,11 +190,11 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (addressId !== state.options.address_id) {
         return
       }
-      updateOrderOptions({ address_id: addressId })
+      updateOrderOptions({ address_id: addressId, moment: momentTimeStamp })
       return
     }
 
-    updateOrderOptions({ address_id: addressId })
+    updateOrderOptions({ address_id: addressId, moment: momentTimeStamp })
   }
 
   /**
