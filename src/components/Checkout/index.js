@@ -9,6 +9,7 @@ import { useApi } from '../../contexts/ApiContext'
 export const Checkout = (props) => {
   const {
     businessId,
+    propsToFetch,
     actionsBeforePlace,
     handleCustomClick,
     onPlaceOrderClick,
@@ -41,8 +42,7 @@ export const Checkout = (props) => {
    */
   const getBusiness = async () => {
     try {
-      const props = ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location']
-      const { content: { result } } = await ordering.businesses(businessId).select(props).get()
+      const { content: { result } } = await ordering.businesses(businessId).select(propsToFetch).get()
       setBusinessDetails({
         ...businessDetails,
         loading: false,
@@ -194,5 +194,6 @@ Checkout.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  propsToFetch: ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location']
 }
