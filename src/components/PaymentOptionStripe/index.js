@@ -44,11 +44,11 @@ export const PaymentOptionStripe = (props) => {
       const defaultCard = result?.find(card => card.default)
       if (defaultCard) {
         setCardDefault({
-          id: defaultCart.id,
+          id: defaultCard.id,
           type: 'card',
           card: {
-            brand: defaultCart.brand,
-            last4: defaultCart.last4
+            brand: defaultCard.brand,
+            last4: defaultCard.last4
           }
         })
       }
