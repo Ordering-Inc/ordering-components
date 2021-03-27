@@ -26,6 +26,7 @@ export const PaymentOptionStripe = (props) => {
   const [publicKey, setPublicKey] = useState(props.publicKey)
 
   const [cardSelected, setCardSelected] = useState(null)
+  const [cardDefault, setCardDefault] = useState(null)
   const [defaultCardSetActionStatus, setDefaultCardSetActionStatus] = useState({ loading: false, error: null })
 
   const requestState = {}
@@ -40,9 +41,9 @@ export const PaymentOptionStripe = (props) => {
       requestState.paymentCards = source
       // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
       const { content: { result } } = await ordering.setAccessToken(token).paymentCards(businessId, user.id).get({ cancelToken: source })
-      const defaultCart = result?.find(card => card.default)
-      if (defaultCart) {
-        setCardSelected({
+      const defaultCard = result?.find(card => card.default)
+      if (defaultCard) {
+        setCardDefault({
           id: defaultCart.id,
           type: 'card',
           card: {
@@ -104,7 +105,7 @@ export const PaymentOptionStripe = (props) => {
       const response = await fetch(functionFetch, requestOptions)
       const content = await response.json()
       if (!content.error) {
-        setCardSelected({
+        setCardDefault({
           id: card.id,
           type: 'card',
           card: {
@@ -171,6 +172,7 @@ export const PaymentOptionStripe = (props) => {
         <UIComponent
           {...props}
           cardSelected={cardSelected}
+          cardDefault={cardDefault}
           cardsList={cardsList}
           handleCardClick={handleCardClick}
           publicKey={publicKey}
