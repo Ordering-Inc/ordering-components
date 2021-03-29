@@ -91,13 +91,18 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
       cardSelected = _useState6[0],
       setCardSelected = _useState6[1];
 
-  var _useState7 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      cardDefault = _useState8[0],
+      setCardDefault = _useState8[1];
+
+  var _useState9 = (0, _react.useState)({
     loading: false,
     error: null
   }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      defaultCardSetActionStatus = _useState8[0],
-      setDefaultCardSetActionStatus = _useState8[1];
+      _useState10 = _slicedToArray(_useState9, 2),
+      defaultCardSetActionStatus = _useState10[0],
+      setDefaultCardSetActionStatus = _useState10[1];
 
   var requestState = {};
   /**
@@ -106,7 +111,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
 
   var getCards = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var source, _yield$ordering$setAc, result, defaultCart;
+      var source, _yield$ordering$setAc, result, defaultCard;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -127,17 +132,17 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
             case 6:
               _yield$ordering$setAc = _context.sent;
               result = _yield$ordering$setAc.content.result;
-              defaultCart = result === null || result === void 0 ? void 0 : result.find(function (card) {
+              defaultCard = result === null || result === void 0 ? void 0 : result.find(function (card) {
                 return card.default;
               });
 
-              if (defaultCart) {
-                setCardSelected({
-                  id: defaultCart.id,
+              if (defaultCard) {
+                setCardDefault({
+                  id: defaultCard.id,
                   type: 'card',
                   card: {
-                    brand: defaultCart.brand,
-                    last4: defaultCart.last4
+                    brand: defaultCard.brand,
+                    last4: defaultCard.last4
                   }
                 });
               }
@@ -258,7 +263,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
               content = _context3.sent;
 
               if (!content.error) {
-                setCardSelected({
+                setCardDefault({
                   id: card.id,
                   type: 'card',
                   card: {
@@ -376,6 +381,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
   }, [token]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cardSelected: cardSelected,
+    cardDefault: cardDefault,
     cardsList: cardsList,
     handleCardClick: handleCardClick,
     publicKey: publicKey,
