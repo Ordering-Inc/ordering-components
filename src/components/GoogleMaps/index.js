@@ -174,7 +174,9 @@ export const GoogleMaps = (props) => {
           })
           setGoogleMapMarker(marker)
         }
-        generateMarkers(map)
+        if (locations.length > 0) {
+          generateMarkers(map)
+        }
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center?.lat, center?.lng),
           map
