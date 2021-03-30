@@ -84,7 +84,7 @@ export const CardForm = (props) => {
 
     if (!requirements) {
       if (!stripe) {
-        setError(t('STRIPE_LOAD_ERROR', 'Stripe failed to load properly'))
+        setError(t('STRIPE_LOAD_ERROR', 'Failed to load Stripe properly'))
         return
       }
       const result = await stripe.createPaymentMethod({
