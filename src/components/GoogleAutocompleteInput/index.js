@@ -43,29 +43,31 @@ const AutocompleteInput = (props) => {
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace()
         let postalCode = null
-        for (const component of place.address_components) {
-          const addressType = component.types[0]
-          if (addressType === 'postal_code') {
-            postalCode = component.short_name
-            break
+        if (place.address_components) {
+          for (const component of place.address_components) {
+            const addressType = component.types[0]
+            if (addressType === 'postal_code') {
+              postalCode = component.short_name
+              break
+            }
           }
-        }
-        const address = {
-          address: place.formatted_address,
-          location: {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-          },
-          utc_offset: place.utc_offset_minutes,
-          map_data: {
-            library: 'google',
-            place_id: place.place_id
+          const address = {
+            address: place.formatted_address,
+            location: {
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng()
+            },
+            utc_offset: place.utc_offset_minutes,
+            map_data: {
+              library: 'google',
+              place_id: place.place_id
+            }
           }
+          if (postalCode) {
+            address.zipcode = postalCode
+          }
+          onChangeAddress(address)
         }
-        if (postalCode) {
-          address.zipcode = postalCode
-        }
-        onChangeAddress(address)
       })
     }
   }, [googleReady])
