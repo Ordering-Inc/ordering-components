@@ -114,7 +114,7 @@ export const CardForm = (props) => {
       }
     } else {
       if (!stripe) {
-        setError(t('STRIPE_LOAD_ERROR', 'Stripe failed to load properly'))
+        setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'))
         return
       }
       const result = await stripe.confirmCardSetup(
