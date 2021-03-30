@@ -207,9 +207,9 @@ export const UserFormDetails = (props) => {
   const isRequiredField = (fieldName) => {
     return useValidationFields &&
       !validationFields.loading &&
-      validationFields.fields?.checkout[fieldName] &&
-      validationFields.fields?.checkout[fieldName].enabled &&
-      validationFields.fields?.checkout[fieldName].required
+      validationFields.fields?.checkout?.[fieldName] &&
+      validationFields.fields?.checkout?.[fieldName]?.enabled &&
+      validationFields.fields?.checkout?.[fieldName]?.required
   }
 
   return (
