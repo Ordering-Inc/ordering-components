@@ -289,7 +289,10 @@ var GoogleMaps = function GoogleMaps(props) {
           setGoogleMapMarker(marker);
         }
 
-        generateMarkers(map);
+        if (locations.length > 0) {
+          generateMarkers(map);
+        }
+
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
           map: map
