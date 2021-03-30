@@ -161,6 +161,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    * Change order address
    */
   const changeAddress = async (addressId, params) => {
+    console.log(addressId, 'addressId')
     if (typeof addressId === 'object') {
       const optionsStorage = await strategy.getItem('options', true)
       const options = {
@@ -171,6 +172,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           ...addressId
         }
       }
+      console.log(optionsStorage, 'optionStorage')
+      console.log(options, 'options')
       await strategy.setItem('options', options, true)
       setState({
         ...state,
