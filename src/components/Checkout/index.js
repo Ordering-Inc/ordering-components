@@ -36,7 +36,7 @@ export const Checkout = (props) => {
   /**
    * Current cart
    */
-  const cart = orderState.carts[`businessId:${businessId}`]
+  const cart = orderState.carts?.[`businessId:${businessId}`]
   /**
    * Method to get business from API
    */
