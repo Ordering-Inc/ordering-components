@@ -20,7 +20,7 @@ export const CouponControl = (props) => {
   const couponDefault = (
     orderState?.carts &&
     businessId &&
-    orderState?.carts[`businessId:${businessId}`]?.coupon
+    orderState?.carts?.[`businessId:${businessId}`]?.coupon
   ) || null
 
   const [couponInput, setCouponInput] = useState(null)

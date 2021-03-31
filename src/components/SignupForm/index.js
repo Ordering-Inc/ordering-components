@@ -106,9 +106,9 @@ export const SignupForm = (props) => {
   const isRequiredField = (fieldName) => {
     return fieldName === 'password' || (useChekoutFileds &&
       !validationFields.loading &&
-      validationFields.fields?.checkout[fieldName] &&
-      validationFields.fields?.checkout[fieldName].enabled &&
-      validationFields.fields?.checkout[fieldName].required)
+      validationFields.fields?.checkout?.[fieldName] &&
+      validationFields.fields?.checkout?.[fieldName]?.enabled &&
+      validationFields.fields?.checkout?.[fieldName]?.required)
   }
 
   /**

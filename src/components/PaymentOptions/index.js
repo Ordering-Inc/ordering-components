@@ -18,7 +18,7 @@ export const PaymentOptions = (props) => {
 
   const [ordering] = useApi()
   const [orderState] = useOrder()
-  const orderTotal = orderState.carts[`businessId:${businessId}`]?.total || 0
+  const orderTotal = orderState.carts?.[`businessId:${businessId}`]?.total || 0
 
   const [paymethodsList, setPaymethodsList] = useState({ paymethods: [], loading: true, error: null })
   const [paymethodSelected, setPaymethodsSelected] = useState(null)

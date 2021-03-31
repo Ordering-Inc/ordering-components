@@ -45,8 +45,8 @@ export const DriverTips = (props) => {
   }
 
   useEffect(() => {
-    const orderDriverTipRate = orderState.carts[`businessId:${businessId}`]?.driver_tip_rate || 0
-    const orderDriverTip = orderState.carts[`businessId:${businessId}`]?.driver_tip || 0
+    const orderDriverTipRate = orderState.carts?.[`businessId:${businessId}`]?.driver_tip_rate || 0
+    const orderDriverTip = orderState.carts?.[`businessId:${businessId}`]?.driver_tip || 0
 
     setOptionSelected(orderDriverTipRate)
     setDriverTipAmount(orderDriverTip)
