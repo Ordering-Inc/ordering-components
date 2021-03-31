@@ -27,11 +27,8 @@ export const Analytics = (props) => {
     js.async = true
     js.defer = true
     js.src = 'https://www.google-analytics.com/analytics.js'
-    js.onload = function () {
+    js.onload = window?.ga && function () {
       setAnalyticsReady(true)
-      if (window.ga) {
-        return
-      }
       window.ga('create', trackId)
       window.ga('require', 'ec')
       window.ga('set', 'page', window.location.pathname)
