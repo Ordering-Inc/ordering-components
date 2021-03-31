@@ -8,6 +8,7 @@ import {
 
 import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
 
 /**
  * Component to manage card form for stripe elements form behavior without UI component
@@ -30,6 +31,7 @@ export const CardForm = (props) => {
 
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [, t] = useLanguage()
 
   /**
    * POST the token ID to backend.
@@ -81,6 +83,10 @@ export const CardForm = (props) => {
     const card = elements?.getElement(CardElement)
 
     if (!requirements) {
+      if (!stripe) {
+        setError(t('STRIPE_LOAD_ERROR', 'Failed to load Stripe properly'))
+        return
+      }
       const result = await stripe.createPaymentMethod({
         type: 'card',
         card: card,
@@ -107,6 +113,10 @@ export const CardForm = (props) => {
         // props.handlerToken(result?.paymentMethod)
       }
     } else {
+      if (!stripe) {
+        setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'))
+        return
+      }
       const result = await stripe.confirmCardSetup(
         requirements,
         {

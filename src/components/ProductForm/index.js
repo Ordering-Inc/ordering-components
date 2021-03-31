@@ -53,7 +53,7 @@ export const ProductForm = (props) => {
   /**
    * Current cart
    */
-  const cart = orderState.carts[`businessId:${props.businessId}`]
+  const cart = orderState.carts?.[`businessId:${props.businessId}`]
 
   /**
    * Product in cart

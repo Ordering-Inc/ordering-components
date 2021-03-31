@@ -97,9 +97,9 @@ export const AddressForm = (props) => {
   const isRequiredField = (fieldName) => {
     return useValidationFileds &&
       !validationFields.loading &&
-      validationFields.fields?.address[fieldName] &&
-      validationFields.fields?.address[fieldName].enabled &&
-      validationFields.fields?.address[fieldName].required
+      validationFields.fields?.address?.[fieldName] &&
+      validationFields.fields?.address?.[fieldName]?.enabled &&
+      validationFields.fields?.address?.[fieldName]?.required
   }
 
   /**

@@ -59,7 +59,8 @@ export const LoginForm = (props) => {
       if (!error) {
         if (useDefualtSessionManager) {
           if (allowedLevels && allowedLevels?.length > 0) {
-            const { level, session: { access_token } } = result
+            const { level, session } = result
+            const access_token = session?.access_token
             if (!allowedLevels.includes(level)) {
               try {
                 const { content: logoutResp } = await ordering.setAccessToken(access_token).users().logout()
@@ -87,7 +88,7 @@ export const LoginForm = (props) => {
           }
           login({
             user: result,
-            token: result.session.access_token
+            token: result.session?.access_token
           })
         }
         events.emit('userLogin', result)
