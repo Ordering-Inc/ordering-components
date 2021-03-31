@@ -363,7 +363,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
-      var optionsStorage, options, _params$address;
+      var optionsStorage, options, _configState$configs2, _configState$configs3, _params$address;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -372,7 +372,7 @@ var OrderProvider = function OrderProvider(_ref) {
               console.log(addressId, 'addressId');
 
               if (!(_typeof(addressId) === 'object')) {
-                _context2.next = 12;
+                _context2.next = 13;
                 break;
               }
 
@@ -384,20 +384,25 @@ var OrderProvider = function OrderProvider(_ref) {
               options = _objectSpread(_objectSpread(_objectSpread({}, state.options), optionsStorage), {}, {
                 address: _objectSpread(_objectSpread({}, optionsStorage === null || optionsStorage === void 0 ? void 0 : optionsStorage.address), addressId)
               });
+
+              if (!session.auth) {
+                options.type = orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value];
+              }
+
               console.log(optionsStorage, 'optionStorage');
               console.log(options, 'options');
-              _context2.next = 10;
+              _context2.next = 11;
               return strategy.setItem('options', options, true);
 
-            case 10:
+            case 11:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 options: options
               }));
               return _context2.abrupt("return");
 
-            case 12:
+            case 13:
               if (!(params && (params === null || params === void 0 ? void 0 : params.address) && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-                _context2.next = 15;
+                _context2.next = 16;
                 break;
               }
 
@@ -406,31 +411,31 @@ var OrderProvider = function OrderProvider(_ref) {
               });
               return _context2.abrupt("return");
 
-            case 15:
+            case 16:
               if (!(params && (params === null || params === void 0 ? void 0 : params.isEdit))) {
-                _context2.next = 20;
+                _context2.next = 21;
                 break;
               }
 
               if (!(addressId !== state.options.address_id)) {
-                _context2.next = 18;
+                _context2.next = 19;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 18:
+            case 19:
               updateOrderOptions({
                 address_id: addressId
               });
               return _context2.abrupt("return");
 
-            case 20:
+            case 21:
               updateOrderOptions({
                 address_id: addressId
               });
 
-            case 21:
+            case 22:
             case "end":
               return _context2.stop();
           }
@@ -1474,13 +1479,13 @@ var OrderProvider = function OrderProvider(_ref) {
     if (session.loading || configState.loading) return;
 
     if (!session.auth) {
-      var _configState$configs2, _configState$configs3;
+      var _configState$configs4, _configState$configs5;
 
       getOptionFromLocalStorage();
       setState(_objectSpread(_objectSpread({}, state), {}, {
         loading: false,
         options: {
-          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value],
+          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
           moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
           address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || {}
         }

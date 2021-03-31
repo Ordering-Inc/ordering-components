@@ -172,6 +172,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           ...addressId
         }
       }
+
+      if (!session.auth) {
+        options.type = orderTypes[configState?.configs?.default_order_type?.value]
+      }
       console.log(optionsStorage, 'optionStorage')
       console.log(options, 'options')
       await strategy.setItem('options', options, true)
