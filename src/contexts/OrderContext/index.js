@@ -637,7 +637,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     const handleOrderOptionUpdate = ({ carts, ...options }) => {
       const newCarts = {}
       carts.forEach(cart => {
-        newCarts?.[`businessId:${cart.business_id}`] = cart
+        newCarts[`businessId:${cart.business_id}`] = cart
       })
       const newState = {
         ...state,
