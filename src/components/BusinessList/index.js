@@ -27,6 +27,8 @@ export const BusinessList = (props) => {
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [timeLimitValue, setTimeLimitValue] = useState(null)
+  const [orderByValue, setOrderByValue] = useState(null)
+  const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
@@ -53,6 +55,12 @@ export const BusinessList = (props) => {
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : `${customLocation.lat},${customLocation.lng}`,
         type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
+      }
+      if (orderByValue) {
+        parameters = {
+          ...parameters,
+          orderBy: orderByValue
+        }
       }
       if (!isSortByReview) {
         const paginationParams = {
@@ -94,6 +102,16 @@ export const BusinessList = (props) => {
             }
           })
         }
+      }
+
+      if (maxDeliveryFee) {
+        conditions.push({
+          attribute: 'delivery_price',
+          value: {
+            condition: '<=',
+            value: maxDeliveryFee
+          }
+        })
       }
 
       if (searchValue) {
@@ -190,7 +208,7 @@ export const BusinessList = (props) => {
   useEffect(() => {
     if (orderState.loading || (!orderState.options?.address?.location && !customLocation)) return
     getBusinesses(true)
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
 
   /**
    * Listening initial filter
@@ -206,6 +224,13 @@ export const BusinessList = (props) => {
         break
       case 'search':
         handleChangeSearch(initialFilterValue)
+        break
+      case 'orderBy':
+        handleChangeOrderBy(initialFilterValue)
+        break
+      case 'maxDeliveryFee':
+        handleChangeMaxDeliveryFee(initialFilterValue)
+        break
     }
   }, [initialFilterKey, initialFilterValue])
 
@@ -272,6 +297,46 @@ export const BusinessList = (props) => {
     setTimeLimitValue(time)
   }
 
+  /**
+   * Change orderBy value
+   * @param {string} orderBy orderBy value
+   */
+  const handleChangeOrderBy = (orderBy) => {
+    if (orderBy !== orderByValue) {
+      setBusinessesList({
+        ...businessesList,
+        businesses: [],
+        loading: true
+      })
+    } else {
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
+    }
+    setOrderByValue(orderBy)
+  }
+
+  /**
+   * Change max delivery fee
+   * @param {number} deliveryFee max delivery fee
+   */
+  const handleChangeMaxDeliveryFee = (deliveryFee) => {
+    if (maxDeliveryFee !== deliveryFee) {
+      setBusinessesList({
+        ...businessesList,
+        businesses: [],
+        loading: true
+      })
+    } else {
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
+    }
+    setMaxDeliveryFee(deliveryFee)
+  }
+
   return (
     <>
       {
@@ -283,11 +348,15 @@ export const BusinessList = (props) => {
             searchValue={searchValue}
             timeLimitValue={timeLimitValue}
             businessTypeSelected={businessTypeSelected}
+            orderByValue={orderByValue}
+            maxDeliveryFee={maxDeliveryFee}
             getBusinesses={getBusinesses}
             handleChangeSearch={handleChangeSearch}
             handleChangeTimeLimit={handleChangeTimeLimit}
+            handleChangeOrderBy={handleChangeOrderBy}
             handleBusinessClick={handleBusinessClick}
             handleChangeBusinessType={handleChangeBusinessType}
+            handleChangeMaxDeliveryFee={handleChangeMaxDeliveryFee}
           />
         )
       }
