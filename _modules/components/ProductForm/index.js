@@ -50,7 +50,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ProductForm = function ProductForm(props) {
-  var _props$productCart, _cart$products, _cart$products2, _product$product, _product$product2, _product$product3, _product$product4;
+  var _props$productCart, _orderState$carts, _cart$products, _cart$products2, _product$product, _product$product2, _product$product3, _product$product4;
 
   var UIComponent = props.UIComponent,
       useOrderContext = props.useOrderContext,
@@ -130,7 +130,7 @@ var ProductForm = function ProductForm(props) {
    * Current cart
    */
 
-  var cart = orderState.carts["businessId:".concat(props.businessId)];
+  var cart = (_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts["businessId:".concat(props.businessId)];
   /**
    * Product in cart
    */

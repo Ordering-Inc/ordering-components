@@ -51,6 +51,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Checkout page behavior without UI component
  */
 var Checkout = function Checkout(props) {
+  var _orderState$carts;
+
   var businessId = props.businessId,
       propsToFetch = props.propsToFetch,
       actionsBeforePlace = props.actionsBeforePlace,
@@ -107,7 +109,7 @@ var Checkout = function Checkout(props) {
    */
 
 
-  var cart = orderState.carts["businessId:".concat(businessId)];
+  var cart = (_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts["businessId:".concat(businessId)];
   /**
    * Method to get business from API
    */

@@ -19,6 +19,8 @@ var _SessionContext = require("../../../contexts/SessionContext");
 
 var _ApiContext = require("../../../contexts/ApiContext");
 
+var _LanguageContext = require("../../../contexts/LanguageContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -74,6 +76,10 @@ var CardForm = function CardForm(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       loading = _useState4[0],
       setLoading = _useState4[1];
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
   /**
    * POST the token ID to backend.
    * @param {*string} param0 payment method id
@@ -168,11 +174,20 @@ var CardForm = function CardForm(props) {
               card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
 
               if (requirements) {
-                _context2.next = 13;
+                _context2.next = 16;
                 break;
               }
 
-              _context2.next = 9;
+              if (stripe) {
+                _context2.next = 10;
+                break;
+              }
+
+              setError(t('STRIPE_LOAD_ERROR', 'Failed to load Stripe properly'));
+              return _context2.abrupt("return");
+
+            case 10:
+              _context2.next = 12;
               return stripe.createPaymentMethod({
                 type: 'card',
                 card: card,
@@ -183,7 +198,7 @@ var CardForm = function CardForm(props) {
                 }
               });
 
-            case 9:
+            case 12:
               result = _context2.sent;
 
               if (result.error) {
@@ -202,11 +217,20 @@ var CardForm = function CardForm(props) {
                 }); // props.handlerToken(result?.paymentMethod)
               }
 
-              _context2.next = 17;
+              _context2.next = 23;
               break;
 
-            case 13:
-              _context2.next = 15;
+            case 16:
+              if (stripe) {
+                _context2.next = 19;
+                break;
+              }
+
+              setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'));
+              return _context2.abrupt("return");
+
+            case 19:
+              _context2.next = 21;
               return stripe.confirmCardSetup(requirements, {
                 payment_method: {
                   card: card,
@@ -218,7 +242,7 @@ var CardForm = function CardForm(props) {
                 }
               });
 
-            case 15:
+            case 21:
               _result = _context2.sent;
 
               if (_result.error) {
@@ -230,7 +254,7 @@ var CardForm = function CardForm(props) {
                 toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
               }
 
-            case 17:
+            case 23:
             case "end":
               return _context2.stop();
           }

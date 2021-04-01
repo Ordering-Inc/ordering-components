@@ -45,6 +45,8 @@ var Analytics = function Analytics(props) {
       setAnalyticsReady = _useState2[1];
 
   (0, _react.useEffect)(function () {
+    var _window;
+
     if (!trackId) {
       return;
     }
@@ -63,7 +65,7 @@ var Analytics = function Analytics(props) {
     js.defer = true;
     js.src = 'https://www.google-analytics.com/analytics.js';
 
-    js.onload = function () {
+    js.onload = ((_window = window) === null || _window === void 0 ? void 0 : _window.ga) && function () {
       setAnalyticsReady(true);
       window.ga('create', trackId);
       window.ga('require', 'ec');

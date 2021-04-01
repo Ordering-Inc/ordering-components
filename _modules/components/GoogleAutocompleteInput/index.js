@@ -73,43 +73,45 @@ var AutocompleteInput = function AutocompleteInput(props) {
         var place = autocomplete.getPlace();
         var postalCode = null;
 
-        var _iterator = _createForOfIteratorHelper(place.address_components),
-            _step;
+        if (place.address_components) {
+          var _iterator = _createForOfIteratorHelper(place.address_components),
+              _step;
 
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var component = _step.value;
-            var addressType = component.types[0];
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              var component = _step.value;
+              var addressType = component.types[0];
 
-            if (addressType === 'postal_code') {
-              postalCode = component.short_name;
-              break;
+              if (addressType === 'postal_code') {
+                postalCode = component.short_name;
+                break;
+              }
             }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
           }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
-        }
 
-        var address = {
-          address: place.formatted_address,
-          location: {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-          },
-          utc_offset: place.utc_offset_minutes,
-          map_data: {
-            library: 'google',
-            place_id: place.place_id
+          var address = {
+            address: place.formatted_address,
+            location: {
+              lat: place.geometry.location.lat(),
+              lng: place.geometry.location.lng()
+            },
+            utc_offset: place.utc_offset_minutes,
+            map_data: {
+              library: 'google',
+              place_id: place.place_id
+            }
+          };
+
+          if (postalCode) {
+            address.zipcode = postalCode;
           }
-        };
 
-        if (postalCode) {
-          address.zipcode = postalCode;
+          onChangeAddress(address);
         }
-
-        onChangeAddress(address);
       });
     }
   }, [googleReady]);

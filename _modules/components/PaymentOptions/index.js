@@ -51,7 +51,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage payment options behavior without UI component
  */
 var PaymentOptions = function PaymentOptions(props) {
-  var _orderState$carts$;
+  var _orderState$carts, _orderState$carts$;
 
   var isLoading = props.isLoading,
       paymethods = props.paymethods,
@@ -67,7 +67,7 @@ var PaymentOptions = function PaymentOptions(props) {
       _useOrder2 = _slicedToArray(_useOrder, 1),
       orderState = _useOrder2[0];
 
-  var orderTotal = ((_orderState$carts$ = orderState.carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.total) || 0;
+  var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts$ = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.total) || 0;
 
   var _useState = (0, _react.useState)({
     paymethods: [],

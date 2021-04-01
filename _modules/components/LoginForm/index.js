@@ -138,7 +138,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
-      var _credentials2, _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, level, access_token, _yield$ordering$setAc, logoutResp;
+      var _credentials2, _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -168,32 +168,33 @@ var LoginForm = function LoginForm(props) {
               result = _yield$ordering$users2.result;
 
               if (error) {
-                _context.next = 34;
+                _context.next = 35;
                 break;
               }
 
               if (!useDefualtSessionManager) {
-                _context.next = 31;
+                _context.next = 32;
                 break;
               }
 
               if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-                _context.next = 30;
+                _context.next = 31;
                 break;
               }
 
-              level = result.level, access_token = result.session.access_token;
+              level = result.level, session = result.session;
+              access_token = session === null || session === void 0 ? void 0 : session.access_token;
 
               if (allowedLevels.includes(level)) {
-                _context.next = 30;
+                _context.next = 31;
                 break;
               }
 
-              _context.prev = 17;
-              _context.next = 20;
+              _context.prev = 18;
+              _context.next = 21;
               return ordering.setAccessToken(access_token).users().logout();
 
-            case 20:
+            case 21:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
@@ -208,12 +209,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 29;
+              _context.next = 30;
               break;
 
-            case 26:
-              _context.prev = 26;
-              _context.t0 = _context["catch"](17);
+            case 27:
+              _context.prev = 27;
+              _context.t0 = _context["catch"](18);
               setFormState({
                 result: {
                   error: true,
@@ -222,16 +223,16 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 29:
+            case 30:
               return _context.abrupt("return");
 
-            case 30:
+            case 31:
               login({
                 user: result,
-                token: result.session.access_token
+                token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
 
-            case 31:
+            case 32:
               events.emit('userLogin', result);
 
               if (handleSuccessLogin) {
@@ -242,7 +243,7 @@ var LoginForm = function LoginForm(props) {
                 window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
               }
 
-            case 34:
+            case 35:
               setFormState({
                 result: {
                   error: error,
@@ -250,11 +251,11 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 40;
+              _context.next = 41;
               break;
 
-            case 37:
-              _context.prev = 37;
+            case 38:
+              _context.prev = 38;
               _context.t1 = _context["catch"](3);
               setFormState({
                 result: {
@@ -264,12 +265,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 40:
+            case 41:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 37], [17, 26]]);
+      }, _callee, null, [[3, 38], [18, 27]]);
     }));
 
     return function handleLoginClick(_x) {

@@ -90,10 +90,10 @@ var DriverTips = function DriverTips(props) {
   };
 
   (0, _react.useEffect)(function () {
-    var _orderState$carts$, _orderState$carts$2;
+    var _orderState$carts, _orderState$carts$, _orderState$carts2, _orderState$carts2$;
 
-    var orderDriverTipRate = ((_orderState$carts$ = orderState.carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.driver_tip_rate) || 0;
-    var orderDriverTip = ((_orderState$carts$2 = orderState.carts["businessId:".concat(businessId)]) === null || _orderState$carts$2 === void 0 ? void 0 : _orderState$carts$2.driver_tip) || 0;
+    var orderDriverTipRate = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts$ = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.driver_tip_rate) || 0;
+    var orderDriverTip = ((_orderState$carts2 = orderState.carts) === null || _orderState$carts2 === void 0 ? void 0 : (_orderState$carts2$ = _orderState$carts2["businessId:".concat(businessId)]) === null || _orderState$carts2$ === void 0 ? void 0 : _orderState$carts2$.driver_tip) || 0;
     setOptionSelected(orderDriverTipRate);
     setDriverTipAmount(orderDriverTip);
   }, [orderState]);
