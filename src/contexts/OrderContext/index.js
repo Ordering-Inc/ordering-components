@@ -71,7 +71,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         const { carts, ...options } = result
         state.carts = {}
         carts.forEach(cart => {
-          state.carts?.[`businessId:${cart.business_id}`] = cart
+          state.carts[`businessId:${cart.business_id}`] = cart
         })
         state.options = {
           ...state.options,
