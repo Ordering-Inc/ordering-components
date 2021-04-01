@@ -269,7 +269,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           const { carts, ...options } = result
           state.carts = {}
           carts.forEach(cart => {
-            state.carts?.[`businessId:${cart.business_id}`] = cart
+            state.carts[`businessId:${cart.business_id}`] = cart
           })
           state.options = {
             ...state.options,
@@ -305,7 +305,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
-        state.carts?.[`businessId:${result.business_id}`] = result
+        state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_added', product, result)
         events.emit('cart_updated', result)
         events.emit('product_added', product)
@@ -338,7 +338,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().removeProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
-        state.carts?.[`businessId:${result.business_id}`] = result
+        state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_removed', product, result)
         events.emit('cart_updated', result)
       } else {
@@ -367,7 +367,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const response = await fetch(`${ordering.root}/carts/clear`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
       const { error, result } = await response.json()
       if (!error) {
-        state.carts?.[`businessId:${result.business_id}`] = result
+        state.carts[`businessId:${result.business_id}`] = result
       } else {
         setAlert({ show: true, content: result })
       }
@@ -393,7 +393,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
-        state.carts?.[`businessId:${result.business_id}`] = result
+        state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_updated', product, result)
         events.emit('cart_updated', result)
       } else {
@@ -417,7 +417,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     if (typeof couponData.coupon === 'undefined') {
       throw new Error('`coupon` is required.')
     }
-    if (state.carts?.[`businessId:${couponData.business_id}`]?.coupon === couponData.coupon) {
+    if (state.carts[`businessId:${couponData.business_id}`]?.coupon === couponData.coupon) {
       return
     }
     try {
@@ -431,7 +431,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
-        state.carts?.[`businessId:${result.business_id}`] = result
+        state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_updated', result)
       } else {
         setAlert({ show: true, content: result })
@@ -454,7 +454,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     if (!driverTipRate && driverTipRate !== 0) {
       throw new Error('`driverTipRate` is required.')
     }
-    if (!state.carts?.[`businessId:${businessId}`] || state.carts?.[`businessId:${businessId}`]?.driver_tip_rate === driverTipRate) {
+    if (!state.carts[`businessId:${businessId}`] || state.carts[`businessId:${businessId}`]?.driver_tip_rate === driverTipRate) {
       return
     }
     try {
@@ -468,7 +468,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changeDriverTip(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
-        state.carts?.[`businessId:${result.business_id}`] = result
+        state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_updated', result)
       } else {
         setAlert({ show: true, content: result })
@@ -496,10 +496,10 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts(cardId).place(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         if (result.status !== 1) {
-          state.carts?.[`businessId:${result.business_id}`] = result
+          state.carts[`businessId:${result.business_id}`] = result
           events.emit('cart_updated', result)
         } else {
-          delete state.carts?.[`businessId:${result.business_id}`]
+          delete state.carts[`businessId:${result.business_id}`]
           const orderObject = {
             id: result.order.uuid,
             business: { name: result.business.name },
@@ -540,13 +540,13 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const { content: { error, result, cart } } = await ordering.setAccessToken(session.token).carts(cardId).confirm(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         if (result.status !== 1) {
-          state.carts?.[`businessId:${result.business_id}`] = result
+          state.carts[`businessId:${result.business_id}`] = result
           events.emit('cart_updated', result)
         } else {
-          delete state.carts?.[`businessId:${result.business_id}`]
+          delete state.carts[`businessId:${result.business_id}`]
         }
       } else if (cart) {
-        state.carts?.[`businessId:${cart.business_id}`] = cart
+        state.carts[`businessId:${cart.business_id}`] = cart
         events.emit('cart_updated', cart)
       }
       setState({ ...state, loading: false })
@@ -574,7 +574,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orders(orderId).reorder(options)
       if (!error) {
-        state.carts?.[`businessId:${result.business_id}`] = result
+        state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_added', result)
       } else {
         setAlert({ show: true, content: result })
@@ -623,12 +623,12 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   useEffect(() => {
     const handleCartUpdate = (cart) => {
       if (cart.status === 1) {
-        if (state.carts?.[`businessId:${cart.business_id}`]) {
-          delete state.carts?.[`businessId:${cart.business_id}`]
+        if (state.carts[`businessId:${cart.business_id}`]) {
+          delete state.carts[`businessId:${cart.business_id}`]
         }
       } else {
-        state.carts?.[`businessId:${cart.business_id}`] = {
-          ...state.carts?.[`businessId:${cart.business_id}`],
+        state.carts[`businessId:${cart.business_id}`] = {
+          ...state.carts[`businessId:${cart.business_id}`],
           ...cart
         }
       }
