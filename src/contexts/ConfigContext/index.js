@@ -62,6 +62,14 @@ export const ConfigProvider = ({ children }) => {
     guest_uuid_access: {
       key: 'guest_uuid_access',
       value: 1
+    },
+    dates_moment_format: {
+      key: 'dates_moment_format',
+      value: 'HH:mm'
+    },
+    dates_general_format: {
+      key: 'dates_general_format',
+      value: 'YYYY-MM-DD HH:mm:ss'
     }
   }
 
