@@ -121,7 +121,7 @@ export const UtilsProviders = ({ children }) => {
     const formatTime = options?.formatTime || configState.configs.format_time?.value || '24'
     const formatDate = {
       inputFormat: options?.inputFormat || ['YYYY-MM-DD HH:mm:ss', 'YYYY-MM-DD hh:mm:ss A', 'YYYY-MM-DD hh:mm:ss'],
-      outputFormat: options?.outputFormat || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
+      outputFormat: options?.outputFormat || configState.configs?.dates_general_format?.value || (formatTime === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ss A'),
       utc: typeof options?.utc === 'boolean' ? options?.utc : true
     }
     if (!dayjs(date, formatDate.inputFormat).isValid()) {
