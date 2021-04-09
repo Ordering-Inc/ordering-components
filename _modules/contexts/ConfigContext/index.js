@@ -122,6 +122,14 @@ var ConfigProvider = function ConfigProvider(_ref) {
     guest_uuid_access: {
       key: 'guest_uuid_access',
       value: 1
+    },
+    dates_moment_format: {
+      key: 'dates_moment_format',
+      value: 'MM/DD hh:mm'
+    },
+    dates_general_format: {
+      key: 'dates_general_format',
+      value: 'YYYY-MM-DD HH:mm:ss'
     }
   };
 
