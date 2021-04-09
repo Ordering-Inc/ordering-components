@@ -65,7 +65,7 @@ export const ConfigProvider = ({ children }) => {
     },
     dates_moment_format: {
       key: 'dates_moment_format',
-      value: 'HH:mm'
+      value: 'MM/DD hh:mm'
     },
     dates_general_format: {
       key: 'dates_general_format',
