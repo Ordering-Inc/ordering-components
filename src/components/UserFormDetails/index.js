@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
 
 /**
@@ -17,11 +18,13 @@ export const UserFormDetails = (props) => {
     user,
     useValidationFields,
     handleButtonUpdateClick,
-    handleSuccessUpdate
+    handleSuccessUpdate,
+    isCustomerMode
   } = props
 
   const [ordering] = useApi()
   const [session, { changeUser }] = useSession()
+  const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()
   const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
@@ -38,10 +41,17 @@ export const UserFormDetails = (props) => {
       ordering.setAccessToken(accessToken).users((useSessionUser && refreshSessionUser) ? session.user.id : userId).get({ cancelToken: source }).then((response) => {
         setUserState({ loading: false, result: response.content })
         if (response.content.result) {
-          changeUser({
-            ...session.user,
-            ...response.content.result
-          })
+          if (!isCustomerMode) {
+            changeUser({
+              ...session.user,
+              ...response.content.result
+            })
+          } else {
+            setUserCustomer({
+              ...customer.user,
+              ...response.content.result
+            }, true)
+          }
         }
       }).catch((err) => {
         if (err.constructor.name !== 'Cancel') {
@@ -122,13 +132,22 @@ export const UserFormDetails = (props) => {
             ...response.content
           }
         })
-        changeUser({
-          ...session.user,
-          ...response.content.result
-        })
+        if (!isCustomerMode) {
+          changeUser({
+            ...session.user,
+            ...response.content.result
+          })
+        } else {
+          setUserCustomer({
+            ...customer.user,
+            ...response.content.result
+          }, true)
+        }
+
         if (handleSuccessUpdate) {
           handleSuccessUpdate(response.content.result)
         }
+
         if (!image) {
           setIsEdit(!isEdit)
         }
