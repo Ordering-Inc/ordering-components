@@ -447,7 +447,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Apply coupon to cart
    */
-  const changeDriverTip = async (businessId, driverTipRate) => {
+  const changeDriverTip = async (businessId, driverTipRate, isFixedPrice) => {
     if (!businessId) {
       throw new Error('`businessId` is required.')
     }
@@ -463,7 +463,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         business_id: businessId,
-        driver_tip_rate: driverTipRate,
+        [isFixedPrice ? 'driver_tip' : 'driver_tip_rate']: driverTipRate,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changeDriverTip(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
