@@ -188,7 +188,12 @@ var AddressList = function AddressList(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (userCustomerSetup) {
-                setUserCustomer(userCustomerSetup, true);
+                setUserCustomer(_objectSpread(_objectSpread({}, userCustomerSetup), {}, {
+                  address: address === null || address === void 0 ? void 0 : address.address,
+                  address_notes: address === null || address === void 0 ? void 0 : address.address_notes,
+                  internal_number: address === null || address === void 0 ? void 0 : address.internal_number,
+                  zipcode: address === null || address === void 0 ? void 0 : address.zipcode
+                }), true);
               }
 
               if (!handleClickSetDefault) {

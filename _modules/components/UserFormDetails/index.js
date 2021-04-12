@@ -15,6 +15,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _CustomerContext = require("../../contexts/CustomerContext");
+
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -65,7 +67,8 @@ var UserFormDetails = function UserFormDetails(props) {
       user = props.user,
       useValidationFields = props.useValidationFields,
       handleButtonUpdateClick = props.handleButtonUpdateClick,
-      handleSuccessUpdate = props.handleSuccessUpdate;
+      handleSuccessUpdate = props.handleSuccessUpdate,
+      isCustomerMode = props.isCustomerMode;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -75,6 +78,11 @@ var UserFormDetails = function UserFormDetails(props) {
       _useSession2 = _slicedToArray(_useSession, 2),
       session = _useSession2[0],
       changeUser = _useSession2[1].changeUser;
+
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      customer = _useCustomer2[0],
+      setUserCustomer = _useCustomer2[1].setUserCustomer;
 
   var _useValidationsFields = (0, _ValidationsFieldsContext.useValidationFields)(),
       _useValidationsFields2 = _slicedToArray(_useValidationsFields, 1),
@@ -124,7 +132,11 @@ var UserFormDetails = function UserFormDetails(props) {
         });
 
         if (response.content.result) {
-          changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
+          if (!isCustomerMode) {
+            changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
+          } else {
+            setUserCustomer(_objectSpread(_objectSpread({}, customer.user), response.content.result), true);
+          }
         }
       }).catch(function (err) {
         if (err.constructor.name !== 'Cancel') {
@@ -232,7 +244,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   result: _objectSpread(_objectSpread({}, userState.result), response.content)
                 }));
-                changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
+
+                if (!isCustomerMode) {
+                  changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
+                } else {
+                  setUserCustomer(_objectSpread(_objectSpread({}, customer.user), response.content.result), true);
+                }
 
                 if (handleSuccessUpdate) {
                   handleSuccessUpdate(response.content.result);
