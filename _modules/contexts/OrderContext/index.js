@@ -1065,10 +1065,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var changeDriverTip = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(businessId, driverTipRate) {
+    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(businessId, driverTipRate, isFixedPrice) {
       var _state$carts$2;
 
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc15, _yield$ordering$setAc16, error, result;
+      var _body, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc15, _yield$ordering$setAc16, error, result;
 
       return _regenerator.default.wrap(function _callee11$(_context11) {
         while (1) {
@@ -1108,11 +1108,9 @@ var OrderProvider = function OrderProvider(_ref) {
             case 10:
               customerFromLocalStorage = _context11.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              body = {
-                business_id: businessId,
-                driver_tip_rate: driverTipRate,
-                user_id: userCustomerId || session.user.id
-              };
+              body = (_body = {
+                business_id: businessId
+              }, _defineProperty(_body, isFixedPrice ? 'driver_tip' : 'driver_tip_rate', driverTipRate), _defineProperty(_body, "user_id", userCustomerId || session.user.id), _body);
               _context11.next = 15;
               return ordering.setAccessToken(session.token).carts().changeDriverTip(body, {
                 headers: {
@@ -1157,7 +1155,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[6, 24]]);
     }));
 
-    return function changeDriverTip(_x11, _x12) {
+    return function changeDriverTip(_x11, _x12, _x13) {
       return _ref12.apply(this, arguments);
     };
   }();
@@ -1263,7 +1261,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee12, null, [[0, 24]]);
     }));
 
-    return function placeCart(_x13, _x14) {
+    return function placeCart(_x14, _x15) {
       return _ref13.apply(this, arguments);
     };
   }();
@@ -1346,7 +1344,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee13, null, [[0, 19]]);
     }));
 
-    return function confirmCart(_x15, _x16) {
+    return function confirmCart(_x16, _x17) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1427,7 +1425,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[0, 18]]);
     }));
 
-    return function reorder(_x17) {
+    return function reorder(_x18) {
       return _ref15.apply(this, arguments);
     };
   }();
