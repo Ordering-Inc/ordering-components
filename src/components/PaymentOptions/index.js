@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 
+const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal']
+
 /**
  * Component to manage payment options behavior without UI component
  */
@@ -85,7 +87,11 @@ export const PaymentOptions = (props) => {
   }
 
   useEffect(() => {
-    if (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected?.gateway)) {
+    if (
+      paymethodSelected &&
+      (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected?.gateway) ||
+      !paymethodsExisting.includes(paymethodSelected?.gateway))
+    ) {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
