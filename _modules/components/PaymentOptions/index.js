@@ -47,9 +47,11 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+var paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal'];
 /**
  * Component to manage payment options behavior without UI component
  */
+
 var PaymentOptions = function PaymentOptions(props) {
   var _orderState$carts, _orderState$carts$;
 
@@ -184,7 +186,7 @@ var PaymentOptions = function PaymentOptions(props) {
   };
 
   (0, _react.useEffect)(function () {
-    if (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway)) {
+    if (paymethodSelected && (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway) || !paymethodsExisting.includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway))) {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
