@@ -201,6 +201,78 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       return _ref2.apply(this, arguments);
     };
   }();
+
+  var dropDown = function dropDown(currentFocus, inp, arr, val, evt, closeAllLists, obj) {
+    currentFocus = -1;
+    var b;
+    var i;
+    /* create a DIV element that will contain the items (values): */
+
+    var a = document.createElement('DIV');
+    a = document.createElement('DIV');
+    a.setAttribute('id', obj.id + 'autocomplete-list');
+    a.setAttribute('class', 'autocomplete-items');
+    /* append the DIV element as a child of the autocomplete container: */
+
+    obj.parentNode.appendChild(a);
+    /* for each item in the array... */
+
+    for (i = 0; i < (arr === null || arr === void 0 ? void 0 : arr.length); i++) {
+      var _arr$i, _arr$i$cellphone, _arr$i$cellphone$subs;
+
+      /* check if the item starts with the same letters as the text field value: */
+      if (((_arr$i = arr[i]) === null || _arr$i === void 0 ? void 0 : (_arr$i$cellphone = _arr$i.cellphone) === null || _arr$i$cellphone === void 0 ? void 0 : (_arr$i$cellphone$subs = _arr$i$cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) === null || _arr$i$cellphone$subs === void 0 ? void 0 : _arr$i$cellphone$subs.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase())) {
+        var _arr$i2, _arr$i3;
+
+        var cellphone = (_arr$i2 = arr[i]) === null || _arr$i2 === void 0 ? void 0 : _arr$i2.cellphone;
+        /* create a DIV element for each matching element: */
+
+        b = document.createElement('DIV');
+        /* make the matching letters bold: */
+
+        b.innerHTML = '<strong>' + (cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) + '</strong>';
+        b.innerHTML += cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(val === null || val === void 0 ? void 0 : val.length); // insert name of the customer
+
+        b.innerHTML += ' (' + ((_arr$i3 = arr[i]) === null || _arr$i3 === void 0 ? void 0 : _arr$i3.name) + ')';
+        /* insert a input field that will hold the current array item's value: */
+
+        b.innerHTML += "<input type='hidden' value='" + cellphone + "'>";
+        /* execute a function when someone clicks on the item value (DIV element): */
+
+        b.addEventListener('click', function (e) {
+          /* insert the value for the autocomplete text field: */
+          inp.value = this.getElementsByTagName('input')[0].value;
+          setPhone(this.getElementsByTagName('input')[0].value);
+          filterPhones(arr, this.getElementsByTagName('input')[0].value);
+          /* close the list of autocompleted values,
+                (or any other open lists of autocompleted values: */
+
+          closeAllLists();
+        });
+        a.appendChild(b);
+      }
+    }
+    /* create a DIV element for add new users */
+
+
+    b = document.createElement('DIV');
+    b.innerHTML = '<strong>' + t('CREATE_CUSTOMER', 'Create new customer') + '</strong>';
+    b.innerHTML += "<input type='hidden' value='" + t('CREATE_CUSTOMER', 'Create new customer') + "'>";
+    b.addEventListener('click', function (e) {
+      if (evt.target.value.length === 10 || phone.length === 10) {
+        setOpenModal(_objectSpread(_objectSpread({}, openModal), {}, {
+          signup: true
+        }));
+      } else {
+        setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
+          error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters')
+        }));
+      }
+
+      closeAllLists();
+    });
+    a.appendChild(b);
+  };
   /**
    * @param {input} inp
    * @param {array of phones} arr
@@ -208,11 +280,42 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
    */
 
 
-  var autocomplete = function autocomplete(inp, arr) {
+  var autocomplete = function autocomplete(inp, arr, btn) {
     var currentFocus;
+
+    function addActive(x) {
+      /* a function to classify an item as "active": */
+      if (!x) return false;
+      /* start by removing the "active" class on all items: */
+
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = x.length - 1;
+      /* add class "autocomplete-active": */
+
+      x[currentFocus].classList.add('autocomplete-active');
+    }
+
+    function removeActive(x) {
+      /* a function to remove the "active" class from all autocomplete items: */
+      for (var i = 0; i < x.length; i++) {
+        x[i].classList.remove('autocomplete-active');
+      }
+    }
+
+    function closeAllLists(elmnt) {
+      /* close all autocomplete lists in the document,
+      except the one passed as an argument: */
+      var x = document.getElementsByClassName('autocomplete-items');
+
+      for (var i = 0; i < x.length; i++) {
+        if (elmnt !== x[i] && elmnt !== inp) {
+          x[i].parentNode.removeChild(x[i]);
+        }
+      }
+    }
+
     inp.addEventListener('input', function (evt) {
-      var b;
-      var i;
       var val = this.value;
       closeAllLists();
 
@@ -220,73 +323,17 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
         return false;
       }
 
-      currentFocus = -1;
-      /* create a DIV element that will contain the items (values): */
+      dropDown(currentFocus, inp, arr, val, evt, closeAllLists, this);
+    });
+    btn && btn.addEventListener('click', function (evt) {
+      var val = inp.value;
+      closeAllLists();
 
-      var a = document.createElement('DIV');
-      a = document.createElement('DIV');
-      a.setAttribute('id', this.id + 'autocomplete-list');
-      a.setAttribute('class', 'autocomplete-items');
-      /* append the DIV element as a child of the autocomplete container: */
-
-      this.parentNode.appendChild(a);
-      /* for each item in the array... */
-
-      for (i = 0; i < (arr === null || arr === void 0 ? void 0 : arr.length); i++) {
-        var _arr$i, _arr$i$cellphone, _arr$i$cellphone$subs;
-
-        /* check if the item starts with the same letters as the text field value: */
-        if (((_arr$i = arr[i]) === null || _arr$i === void 0 ? void 0 : (_arr$i$cellphone = _arr$i.cellphone) === null || _arr$i$cellphone === void 0 ? void 0 : (_arr$i$cellphone$subs = _arr$i$cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) === null || _arr$i$cellphone$subs === void 0 ? void 0 : _arr$i$cellphone$subs.toUpperCase()) === (val === null || val === void 0 ? void 0 : val.toUpperCase())) {
-          var _arr$i2, _arr$i3;
-
-          var cellphone = (_arr$i2 = arr[i]) === null || _arr$i2 === void 0 ? void 0 : _arr$i2.cellphone;
-          /* create a DIV element for each matching element: */
-
-          b = document.createElement('DIV');
-          /* make the matching letters bold: */
-
-          b.innerHTML = '<strong>' + (cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(0, val === null || val === void 0 ? void 0 : val.length)) + '</strong>';
-          b.innerHTML += cellphone === null || cellphone === void 0 ? void 0 : cellphone.substr(val === null || val === void 0 ? void 0 : val.length); // insert name of the customer
-
-          b.innerHTML += ' (' + ((_arr$i3 = arr[i]) === null || _arr$i3 === void 0 ? void 0 : _arr$i3.name) + ')';
-          /* insert a input field that will hold the current array item's value: */
-
-          b.innerHTML += "<input type='hidden' value='" + cellphone + "'>";
-          /* execute a function when someone clicks on the item value (DIV element): */
-
-          b.addEventListener('click', function (e) {
-            /* insert the value for the autocomplete text field: */
-            inp.value = this.getElementsByTagName('input')[0].value;
-            setPhone(this.getElementsByTagName('input')[0].value);
-            filterPhones(arr, this.getElementsByTagName('input')[0].value);
-            /* close the list of autocompleted values,
-                (or any other open lists of autocompleted values: */
-
-            closeAllLists();
-          });
-          a.appendChild(b);
-        }
+      if (!val) {
+        return false;
       }
-      /* create a DIV element for add new users */
 
-
-      b = document.createElement('DIV');
-      b.innerHTML = '<strong>' + t('CREATE_CUSTOMER', 'Create new customer') + '</strong>';
-      b.innerHTML += "<input type='hidden' value='" + t('CREATE_CUSTOMER', 'Create new customer') + "'>";
-      b.addEventListener('click', function (e) {
-        if (evt.target.value.length === 10) {
-          setOpenModal(_objectSpread(_objectSpread({}, openModal), {}, {
-            signup: true
-          }));
-        } else {
-          setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
-            error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters')
-          }));
-        }
-
-        closeAllLists();
-      });
-      a.appendChild(b);
+      dropDown(currentFocus, inp, arr, val, evt, closeAllLists, inp);
     });
     /* execute a function presses a key on the keyboard: */
 
@@ -320,49 +367,20 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
         }
       }
     });
-
-    function addActive(x) {
-      /* a function to classify an item as "active": */
-      if (!x) return false;
-      /* start by removing the "active" class on all items: */
-
-      removeActive(x);
-      if (currentFocus >= x.length) currentFocus = 0;
-      if (currentFocus < 0) currentFocus = x.length - 1;
-      /* add class "autocomplete-active": */
-
-      x[currentFocus].classList.add('autocomplete-active');
-    }
-
-    function removeActive(x) {
-      /* a function to remove the "active" class from all autocomplete items: */
-      for (var i = 0; i < x.length; i++) {
-        x[i].classList.remove('autocomplete-active');
-      }
-    }
-
-    function closeAllLists(elmnt) {
-      /* close all autocomplete lists in the document,
-      except the one passed as an argument: */
-      var x = document.getElementsByClassName('autocomplete-items');
-
-      for (var i = 0; i < x.length; i++) {
-        if (elmnt !== x[i] && elmnt !== inp) {
-          x[i].parentNode.removeChild(x[i]);
-        }
-      }
-    }
     /* execute a function when someone clicks in the document: */
 
-
     document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('phone-button')) {
+        return;
+      }
+
       closeAllLists(e.target);
     });
   };
 
   (0, _react.useEffect)(function () {
-    autocomplete(document.getElementById('phone-input'), customersPhones.users);
-  }, [customersPhones.users]);
+    autocomplete(document.getElementById('phone-input'), customersPhones.users, document.getElementById('phone-button'));
+  });
   (0, _react.useEffect)(function () {
     getUsers();
   }, []);
