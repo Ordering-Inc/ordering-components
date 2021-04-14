@@ -98,7 +98,7 @@ export const PhoneAutocomplete = (props) => {
     b.innerHTML = '<strong>' + t('CREATE_CUSTOMER', 'Create new customer') + '</strong>'
     b.innerHTML += "<input type='hidden' value='" + t('CREATE_CUSTOMER', 'Create new customer') + "'>"
     b.addEventListener('click', function (e) {
-      if (evt.target.value.length === 10) {
+      if (evt.target.value.length === 10 || phone.length === 10) {
         setOpenModal({ ...openModal, signup: true })
       } else {
         setCustomersPhones({ ...customersPhones, error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters') })
@@ -149,7 +149,7 @@ export const PhoneAutocomplete = (props) => {
       dropDown(currentFocus, inp, arr, val, evt, closeAllLists, this)
     })
 
-    btn.addEventListener('click', function (evt) {
+    btn && btn.addEventListener('click', function (evt) {
       const val = inp.value
       closeAllLists()
       if (!val) { return false }
