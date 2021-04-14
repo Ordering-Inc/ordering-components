@@ -55,93 +55,66 @@ export const PhoneAutocomplete = (props) => {
     }
   }
 
+  const dropDown = (currentFocus, inp, arr, val, evt, closeAllLists, obj) => {
+    currentFocus = -1
+    let b
+    let i
+    /* create a DIV element that will contain the items (values): */
+    let a = document.createElement('DIV')
+    a = document.createElement('DIV')
+    a.setAttribute('id', obj.id + 'autocomplete-list')
+    a.setAttribute('class', 'autocomplete-items')
+    /* append the DIV element as a child of the autocomplete container: */
+    obj.parentNode.appendChild(a)
+    /* for each item in the array... */
+    for (i = 0; i < arr?.length; i++) {
+      /* check if the item starts with the same letters as the text field value: */
+      if (arr[i]?.cellphone?.substr(0, val?.length)?.toUpperCase() === val?.toUpperCase()) {
+        const cellphone = arr[i]?.cellphone
+        /* create a DIV element for each matching element: */
+        b = document.createElement('DIV')
+        /* make the matching letters bold: */
+        b.innerHTML = '<strong>' + cellphone?.substr(0, val?.length) + '</strong>'
+        b.innerHTML += cellphone?.substr(val?.length)
+        // insert name of the customer
+        b.innerHTML += ' (' + arr[i]?.name + ')'
+        /* insert a input field that will hold the current array item's value: */
+        b.innerHTML += "<input type='hidden' value='" + cellphone + "'>"
+        /* execute a function when someone clicks on the item value (DIV element): */
+        b.addEventListener('click', function (e) {
+          /* insert the value for the autocomplete text field: */
+          inp.value = this.getElementsByTagName('input')[0].value
+          setPhone(this.getElementsByTagName('input')[0].value)
+          filterPhones(arr, this.getElementsByTagName('input')[0].value)
+          /* close the list of autocompleted values,
+                (or any other open lists of autocompleted values: */
+          closeAllLists()
+        })
+        a.appendChild(b)
+      }
+    }
+    /* create a DIV element for add new users */
+    b = document.createElement('DIV')
+    b.innerHTML = '<strong>' + t('CREATE_CUSTOMER', 'Create new customer') + '</strong>'
+    b.innerHTML += "<input type='hidden' value='" + t('CREATE_CUSTOMER', 'Create new customer') + "'>"
+    b.addEventListener('click', function (e) {
+      if (evt.target.value.length === 10 || phone.length === 10) {
+        setOpenModal({ ...openModal, signup: true })
+      } else {
+        setCustomersPhones({ ...customersPhones, error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters') })
+      }
+      closeAllLists()
+    })
+    a.appendChild(b)
+  }
+
   /**
    * @param {input} inp
    * @param {array of phones} arr
    * script for autocomplete functionality
    */
-  const autocomplete = (inp, arr) => {
+  const autocomplete = (inp, arr, btn) => {
     let currentFocus
-    inp.addEventListener('input', function (evt) {
-      let b
-      let i
-      const val = this.value
-      closeAllLists()
-      if (!val) { return false }
-      currentFocus = -1
-      /* create a DIV element that will contain the items (values): */
-      let a = document.createElement('DIV')
-      a = document.createElement('DIV')
-      a.setAttribute('id', this.id + 'autocomplete-list')
-      a.setAttribute('class', 'autocomplete-items')
-      /* append the DIV element as a child of the autocomplete container: */
-      this.parentNode.appendChild(a)
-      /* for each item in the array... */
-      for (i = 0; i < arr?.length; i++) {
-        /* check if the item starts with the same letters as the text field value: */
-        if (arr[i]?.cellphone?.substr(0, val?.length)?.toUpperCase() === val?.toUpperCase()) {
-          const cellphone = arr[i]?.cellphone
-          /* create a DIV element for each matching element: */
-          b = document.createElement('DIV')
-          /* make the matching letters bold: */
-          b.innerHTML = '<strong>' + cellphone?.substr(0, val?.length) + '</strong>'
-          b.innerHTML += cellphone?.substr(val?.length)
-          // insert name of the customer
-          b.innerHTML += ' (' + arr[i]?.name + ')'
-          /* insert a input field that will hold the current array item's value: */
-          b.innerHTML += "<input type='hidden' value='" + cellphone + "'>"
-          /* execute a function when someone clicks on the item value (DIV element): */
-          b.addEventListener('click', function (e) {
-            /* insert the value for the autocomplete text field: */
-            inp.value = this.getElementsByTagName('input')[0].value
-            setPhone(this.getElementsByTagName('input')[0].value)
-            filterPhones(arr, this.getElementsByTagName('input')[0].value)
-            /* close the list of autocompleted values,
-                (or any other open lists of autocompleted values: */
-            closeAllLists()
-          })
-          a.appendChild(b)
-        }
-      }
-      /* create a DIV element for add new users */
-      b = document.createElement('DIV')
-      b.innerHTML = '<strong>' + t('CREATE_CUSTOMER', 'Create new customer') + '</strong>'
-      b.innerHTML += "<input type='hidden' value='" + t('CREATE_CUSTOMER', 'Create new customer') + "'>"
-      b.addEventListener('click', function (e) {
-        if (evt.target.value.length === 10) {
-          setOpenModal({ ...openModal, signup: true })
-        } else {
-          setCustomersPhones({ ...customersPhones, error: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters') })
-        }
-        closeAllLists()
-      })
-      a.appendChild(b)
-    })
-    /* execute a function presses a key on the keyboard: */
-    inp.addEventListener('keydown', function (e) {
-      let x = document.getElementById(this.id + 'autocomplete-list')
-      if (x) x = x.getElementsByTagName('div')
-      if (e.keyCode === 40) {
-        /* If the arrow DOWN key is pressed,
-          increase the currentFocus variable: */
-        currentFocus++
-        /* and and make the current item more visible: */
-        addActive(x)
-      } else if (e.keyCode === 38) { // up
-        /* If the arrow UP key is pressed,
-          decrease the currentFocus variable: */
-        currentFocus--
-        /* and and make the current item more visible: */
-        addActive(x)
-      } else if (e.keyCode === 13) {
-        /* If the ENTER key is pressed, prevent the form from being submitted, */
-        e.preventDefault()
-        if (currentFocus > -1) {
-          /* and simulate a click on the "active" item: */
-          if (x) x[currentFocus].click()
-        }
-      }
-    })
     function addActive (x) {
       /* a function to classify an item as "active": */
       if (!x) return false
@@ -168,15 +141,59 @@ export const PhoneAutocomplete = (props) => {
         }
       }
     }
+
+    inp.addEventListener('input', function (evt) {
+      const val = this.value
+      closeAllLists()
+      if (!val) { return false }
+      dropDown(currentFocus, inp, arr, val, evt, closeAllLists, this)
+    })
+
+    btn && btn.addEventListener('click', function (evt) {
+      const val = inp.value
+      closeAllLists()
+      if (!val) { return false }
+      dropDown(currentFocus, inp, arr, val, evt, closeAllLists, inp)
+    })
+
+    /* execute a function presses a key on the keyboard: */
+    inp.addEventListener('keydown', function (e) {
+      let x = document.getElementById(this.id + 'autocomplete-list')
+      if (x) x = x.getElementsByTagName('div')
+      if (e.keyCode === 40) {
+        /* If the arrow DOWN key is pressed,
+          increase the currentFocus variable: */
+        currentFocus++
+        /* and and make the current item more visible: */
+        addActive(x)
+      } else if (e.keyCode === 38) { // up
+        /* If the arrow UP key is pressed,
+          decrease the currentFocus variable: */
+        currentFocus--
+        /* and and make the current item more visible: */
+        addActive(x)
+      } else if (e.keyCode === 13) {
+        /* If the ENTER key is pressed, prevent the form from being submitted, */
+        e.preventDefault()
+        if (currentFocus > -1) {
+          /* and simulate a click on the "active" item: */
+          if (x) x[currentFocus].click()
+        }
+      }
+    })
+
     /* execute a function when someone clicks in the document: */
     document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('phone-button')) {
+        return
+      }
       closeAllLists(e.target)
     })
   }
 
   useEffect(() => {
-    autocomplete(document.getElementById('phone-input'), customersPhones.users)
-  }, [customersPhones.users])
+    autocomplete(document.getElementById('phone-input'), customersPhones.users, document.getElementById('phone-button'))
+  })
 
   useEffect(() => {
     getUsers()

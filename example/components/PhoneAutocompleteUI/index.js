@@ -49,6 +49,7 @@ export const PhoneAutocompleteUI = (props) => {
             onChange={() => {}}
             ref={inputAutocomplete}
           />
+          <button id='phone-button' className='phone-button' type='button'>Phone Button</button>
         </div>
         {showError && <a style={{ color: 'red' }}>The Phone / Mobile must be 10 characters</a>}
       </form>
