@@ -130,6 +130,14 @@ var ConfigProvider = function ConfigProvider(_ref) {
     dates_general_format: {
       key: 'dates_general_format',
       value: 'YYYY-MM-DD HH:mm:ss'
+    },
+    location_default_latitude: {
+      key: 'location_default_latitude',
+      value: 40.7751052
+    },
+    location_default_longitude: {
+      key: 'location_default_longitude',
+      value: -73.9651148
     }
   };
 
