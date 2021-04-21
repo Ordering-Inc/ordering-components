@@ -339,8 +339,8 @@ export const BusinessAndProductList = (props) => {
       if (menusProps && isGetMenus) {
         const { content: { result: menus } } = await ordering
           .businesses(result.id)
-          .select(menusProps)
           .menus()
+          .select(menusProps)
           .get()
 
         data.menus = menus
