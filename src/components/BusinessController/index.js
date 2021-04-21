@@ -54,7 +54,7 @@ export const BusinessController = (props) => {
   }
   /**
    * Method to return business max offer to show
-   * @param {string} max offer
+   * @param {object} max offer
    */
   const getBusinessMaxOffer = (offers) => {
     if (!offers || !offers.length) return null
