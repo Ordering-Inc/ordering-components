@@ -42,6 +42,7 @@ export const BusinessAndProductList = (props) => {
 
   const [categoryState, setCategoryState] = useState(categoryStateDefault)
   const [errors, setErrors] = useState(null)
+  const [errorQuantityProducts, setErrorQuantityProducts] = useState(false)
 
   /**
    * Change category selected
@@ -323,6 +324,10 @@ export const BusinessAndProductList = (props) => {
         .parameters(parameters)
         .get({ cancelToken: source })
 
+      if (!result?.categories || result?.categories?.length === 0) {
+        setErrorQuantityProducts(true)
+      }
+
       const { content: { result: menus } } = await ordering
         .businesses(result.id)
         .menus()
@@ -415,6 +420,7 @@ export const BusinessAndProductList = (props) => {
           businessState={businessState}
           productModal={productModal}
           featuredProducts={featuredProducts}
+          errorQuantityProducts={errorQuantityProducts}
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
           handleChangeSortBy={handleChangeSortBy}
