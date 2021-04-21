@@ -72,6 +72,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       isInitialRender = props.isInitialRender,
       ordering = props.ordering,
       businessProps = props.businessProps,
+      menusProps = props.menusProps,
+      isGetMenus = props.isGetMenus,
       UIComponent = props.UIComponent;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
@@ -489,7 +491,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, _result$categories, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result, _yield$ordering$busin3, menus;
+      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, _result$categories, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -529,34 +531,43 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 setErrorQuantityProducts(true);
               }
 
-              _context3.next = 15;
-              return ordering.businesses(result.id).menus().get();
+              data = _objectSpread(_objectSpread({}, businessState), {}, {
+                business: result,
+                loading: false
+              });
 
-            case 15:
+              if (!(menusProps && isGetMenus)) {
+                _context3.next = 20;
+                break;
+              }
+
+              _context3.next = 17;
+              return ordering.businesses(result.id).select(menusProps).menus().get();
+
+            case 17:
               _yield$ordering$busin3 = _context3.sent;
               menus = _yield$ordering$busin3.content.result;
-              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
-                business: result,
-                loading: false,
-                menus: menus
-              }));
-              _context3.next = 23;
-              break;
+              data.menus = menus;
 
             case 20:
-              _context3.prev = 20;
+              setBusinessState(data);
+              _context3.next = 26;
+              break;
+
+            case 23:
+              _context3.prev = 23;
               _context3.t0 = _context3["catch"](0);
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
                 loading: false,
                 error: [_context3.t0.message]
               }));
 
-            case 23:
+            case 26:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 20]]);
+      }, _callee3, null, [[0, 23]]);
     }));
 
     return function getBusiness() {

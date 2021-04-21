@@ -146,6 +146,19 @@ var BusinessController = function BusinessController(props) {
     return (maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate_type) === 1 ? "".concat(maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate, "%") : parsePrice(maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate);
   };
   /**
+   * Method to return business max offer to show
+   * @param {object} max offer
+   */
+
+
+  var getBusinessMaxOffer = function getBusinessMaxOffer(offers) {
+    if (!offers || !offers.length) return null;
+    var maxOffer = offers.reduce(function (acc, cur) {
+      return acc.rate > cur.rate ? acc : cur;
+    });
+    return maxOffer;
+  };
+  /**
    * Method to format date
    * @param {object} time
    */
@@ -206,6 +219,7 @@ var BusinessController = function BusinessController(props) {
     formatDate: formatDate,
     formatNumber: formatNumber,
     getBusinessOffer: getBusinessOffer,
+    getBusinessMaxOffer: getBusinessMaxOffer,
     handleClick: handleCustomClick || onBusinessClick
   })));
 };
