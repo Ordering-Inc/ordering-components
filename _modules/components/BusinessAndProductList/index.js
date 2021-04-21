@@ -542,7 +542,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }
 
               _context3.next = 17;
-              return ordering.businesses(result.id).select(menusProps).menus().get();
+              return ordering.businesses(result.id).menus().select(menusProps).get();
 
             case 17:
               _yield$ordering$busin3 = _context3.sent;
