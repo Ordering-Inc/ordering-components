@@ -28,6 +28,10 @@ export const BusinessController = (props) => {
    * This must be containt a boolean to indicate if a business is close or not
    */
   const [isBusinessClose, setIsBusinessClose] = useState(false)
+   /**
+   * This must be contain max business offer if business has offers
+   */
+    const [businessMaxOffer, setBusinessMaxOffer] = useState(null)
   /**
    * Order context data
    */
@@ -50,6 +54,7 @@ export const BusinessController = (props) => {
   const getBusinessOffer = (offers) => {
     if (!offers || !offers.length) return null
     const maxOffer = offers.reduce((acc, cur) => (acc.rate > cur.rate) ? acc : cur)
+    setBusinessMaxOffer(maxOffer)
     return maxOffer?.rate_type === 1 ? `${maxOffer?.rate}%` : parsePrice(maxOffer?.rate)
   }
   /**
@@ -114,6 +119,7 @@ export const BusinessController = (props) => {
           formatDate={formatDate}
           formatNumber={formatNumber}
           getBusinessOffer={getBusinessOffer}
+          businessMaxOffer={businessMaxOffer}
           handleClick={handleCustomClick || onBusinessClick}
         />
       )}
