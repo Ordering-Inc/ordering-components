@@ -166,6 +166,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       _useState24 = _slicedToArray(_useState23, 2),
       errors = _useState24[0],
       setErrors = _useState24[1];
+
+  var _useState25 = (0, _react.useState)(false),
+      _useState26 = _slicedToArray(_useState25, 2),
+      errorQuantityProducts = _useState26[0],
+      setErrorQuantityProducts = _useState26[1];
   /**
    * Change category selected
    * @param {Object} category Category object
@@ -484,7 +489,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result, _yield$ordering$busin3, menus;
+      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, _result$categories, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result, _yield$ordering$busin3, menus;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -519,10 +524,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             case 10:
               _yield$ordering$busin2 = _context3.sent;
               result = _yield$ordering$busin2.content.result;
-              _context3.next = 14;
+
+              if (!(result === null || result === void 0 ? void 0 : result.categories) || (result === null || result === void 0 ? void 0 : (_result$categories = result.categories) === null || _result$categories === void 0 ? void 0 : _result$categories.length) === 0) {
+                setErrorQuantityProducts(true);
+              }
+
+              _context3.next = 15;
               return ordering.businesses(result.id).menus().get();
 
-            case 14:
+            case 15:
               _yield$ordering$busin3 = _context3.sent;
               menus = _yield$ordering$busin3.content.result;
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
@@ -530,23 +540,23 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 loading: false,
                 menus: menus
               }));
-              _context3.next = 22;
+              _context3.next = 23;
               break;
 
-            case 19:
-              _context3.prev = 19;
+            case 20:
+              _context3.prev = 20;
               _context3.t0 = _context3["catch"](0);
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
                 loading: false,
                 error: [_context3.t0.message]
               }));
 
-            case 22:
+            case 23:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 19]]);
+      }, _callee3, null, [[0, 20]]);
     }));
 
     return function getBusiness() {
@@ -617,6 +627,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     businessState: businessState,
     productModal: productModal,
     featuredProducts: featuredProducts,
+    errorQuantityProducts: errorQuantityProducts,
     handleChangeCategory: handleChangeCategory,
     handleChangeSearch: handleChangeSearch,
     handleChangeSortBy: handleChangeSortBy,
