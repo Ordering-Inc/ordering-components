@@ -17,6 +17,8 @@ export const BusinessAndProductList = (props) => {
     isInitialRender,
     ordering,
     businessProps,
+    menusProps,
+    isGetMenus,
     UIComponent
   } = props
 
@@ -328,17 +330,23 @@ export const BusinessAndProductList = (props) => {
         setErrorQuantityProducts(true)
       }
 
-      const { content: { result: menus } } = await ordering
-        .businesses(result.id)
-        .menus()
-        .get()
-
-      setBusinessState({
+      const data = {
         ...businessState,
         business: result,
-        loading: false,
-        menus
-      })
+        loading: false
+      }
+
+      if (menusProps && isGetMenus) {
+        const { content: { result: menus } } = await ordering
+          .businesses(result.id)
+          .select(menusProps)
+          .menus()
+          .get()
+
+        data.menus = menus
+      }
+
+      setBusinessState(data)
     } catch (err) {
       setBusinessState({
         ...businessState,

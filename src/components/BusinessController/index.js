@@ -53,6 +53,15 @@ export const BusinessController = (props) => {
     return maxOffer?.rate_type === 1 ? `${maxOffer?.rate}%` : parsePrice(maxOffer?.rate)
   }
   /**
+   * Method to return business max offer to show
+   * @param {object} max offer
+   */
+  const getBusinessMaxOffer = (offers) => {
+    if (!offers || !offers.length) return null
+    const maxOffer = offers.reduce((acc, cur) => (acc.rate > cur.rate) ? acc : cur)
+    return maxOffer
+  }
+  /**
    * Method to format date
    * @param {object} time
    */
@@ -114,6 +123,7 @@ export const BusinessController = (props) => {
           formatDate={formatDate}
           formatNumber={formatNumber}
           getBusinessOffer={getBusinessOffer}
+          getBusinessMaxOffer={getBusinessMaxOffer}
           handleClick={handleCustomClick || onBusinessClick}
         />
       )}
