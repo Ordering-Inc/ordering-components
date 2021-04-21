@@ -123,14 +123,6 @@ var ConfigProvider = function ConfigProvider(_ref) {
       key: 'guest_uuid_access',
       value: 1
     },
-    dates_moment_format: {
-      key: 'dates_moment_format',
-      value: 'MM/DD hh:mm'
-    },
-    dates_general_format: {
-      key: 'dates_general_format',
-      value: 'YYYY-MM-DD HH:mm:ss'
-    },
     location_default_latitude: {
       key: 'location_default_latitude',
       value: 40.7751052
@@ -143,7 +135,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
 
   var refreshConfigs = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _data, _data2, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, configsResult;
+      var _result$dates_moment_, _result$format_time, _result$dates_moment_2, _result$format_time2, _data, _data2, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, conditionalConfigs, configsResult;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -182,32 +174,42 @@ var ConfigProvider = function ConfigProvider(_ref) {
               data = null;
 
             case 21:
-              configsResult = _objectSpread(_objectSpread({}, customConfigs), {}, {
+              conditionalConfigs = {
+                dates_moment_format: {
+                  key: 'dates_moment_format',
+                  value: (result === null || result === void 0 ? void 0 : (_result$dates_moment_ = result.dates_moment_format) === null || _result$dates_moment_ === void 0 ? void 0 : _result$dates_moment_.value) || ((result === null || result === void 0 ? void 0 : (_result$format_time = result.format_time) === null || _result$format_time === void 0 ? void 0 : _result$format_time.value) === '24' ? 'MM/DD HH:mm' : 'MM/DD hh:mma')
+                },
+                dates_general_format: {
+                  key: 'dates_general_format',
+                  value: (result === null || result === void 0 ? void 0 : (_result$dates_moment_2 = result.dates_moment_format) === null || _result$dates_moment_2 === void 0 ? void 0 : _result$dates_moment_2.value) || ((result === null || result === void 0 ? void 0 : (_result$format_time2 = result.format_time) === null || _result$format_time2 === void 0 ? void 0 : _result$format_time2.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
+                }
+              };
+              configsResult = _objectSpread(_objectSpread(_objectSpread({}, customConfigs), {}, {
                 default_country_code: {
                   value: data && ((_data = data) === null || _data === void 0 ? void 0 : _data.country_code) || 'US',
                   calling_number: data && ((_data2 = data) === null || _data2 === void 0 ? void 0 : _data2.country_calling_code) || '+1'
                 }
-              }, result);
+              }, result), conditionalConfigs);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
                 configs: error ? {} : configsResult
               }));
-              _context.next = 28;
+              _context.next = 29;
               break;
 
-            case 25:
-              _context.prev = 25;
+            case 26:
+              _context.prev = 26;
               _context.t1 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 28:
+            case 29:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 25], [9, 18]]);
+      }, _callee, null, [[0, 26], [9, 18]]);
     }));
 
     return function refreshConfigs() {
