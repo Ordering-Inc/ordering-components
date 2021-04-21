@@ -127,9 +127,6 @@ export const BusinessAndProductList = (props) => {
         categoryState.products = productsFiltered || []
       }
       categoryState.products = sortProductsArray(sortByValue, categoryState.products)
-      if (categoryState?.products?.length === 0) {
-        setErrors(['ERROR DE PRODUCTS'])
-      }
       setCategoryState({ ...categoryState })
       return
     }
