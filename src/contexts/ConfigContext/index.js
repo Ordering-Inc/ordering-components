@@ -63,14 +63,6 @@ export const ConfigProvider = ({ children }) => {
       key: 'guest_uuid_access',
       value: 1
     },
-    dates_moment_format: {
-      key: 'dates_moment_format',
-      value: 'MM/DD hh:mm'
-    },
-    dates_general_format: {
-      key: 'dates_general_format',
-      value: 'YYYY-MM-DD HH:mm:ss'
-    },
     location_default_latitude: {
       key: 'location_default_latitude',
       value: 40.7751052
@@ -92,13 +84,26 @@ export const ConfigProvider = ({ children }) => {
       } catch (error) {
         data = null
       }
+      const conditionalConfigs = {
+        dates_moment_format: {
+          key: 'dates_moment_format',
+          value: result?.dates_moment_format?.value ||
+            (result?.format_time?.value === '24' ? 'MM/DD HH:mm' : 'MM/DD hh:mma')
+        },
+        dates_general_format: {
+          key: 'dates_general_format',
+          value: result?.dates_moment_format?.value ||
+          (result?.format_time?.value === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
+        },
+      }
       const configsResult = {
         ...customConfigs,
         default_country_code: {
           value: (data && data?.country_code) || 'US',
           calling_number: (data && data?.country_calling_code) || '+1'
         },
-        ...result
+        ...result,
+        ...conditionalConfigs
       }
       setState({
         ...state,
