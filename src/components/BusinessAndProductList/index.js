@@ -17,6 +17,8 @@ export const BusinessAndProductList = (props) => {
     isInitialRender,
     ordering,
     businessProps,
+    menusProps,
+    isGetMenus,
     UIComponent
   } = props
 
@@ -42,6 +44,7 @@ export const BusinessAndProductList = (props) => {
 
   const [categoryState, setCategoryState] = useState(categoryStateDefault)
   const [errors, setErrors] = useState(null)
+  const [errorQuantityProducts, setErrorQuantityProducts] = useState(false)
 
   /**
    * Change category selected
@@ -323,17 +326,27 @@ export const BusinessAndProductList = (props) => {
         .parameters(parameters)
         .get({ cancelToken: source })
 
-      const { content: { result: menus } } = await ordering
-        .businesses(result.id)
-        .menus()
-        .get()
+      if (!result?.categories || result?.categories?.length === 0) {
+        setErrorQuantityProducts(true)
+      }
 
-      setBusinessState({
+      const data = {
         ...businessState,
         business: result,
-        loading: false,
-        menus
-      })
+        loading: false
+      }
+
+      if (menusProps && isGetMenus) {
+        const { content: { result: menus } } = await ordering
+          .businesses(result.id)
+          .menus()
+          .select(menusProps)
+          .get()
+
+        data.menus = menus
+      }
+
+      setBusinessState(data)
     } catch (err) {
       setBusinessState({
         ...businessState,
@@ -415,6 +428,7 @@ export const BusinessAndProductList = (props) => {
           businessState={businessState}
           productModal={productModal}
           featuredProducts={featuredProducts}
+          errorQuantityProducts={errorQuantityProducts}
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
           handleChangeSortBy={handleChangeSortBy}

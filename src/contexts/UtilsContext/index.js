@@ -28,15 +28,6 @@ export const UtilsProviders = ({ children }) => {
   // const [localObject, setLocalObject] = useState({})
 
   const refreshLocalObject = () => {
-    const weekdays = [
-      t('DAY7', 'Sunday'),
-      t('DAY1', 'Monday'),
-      t('DAY2', 'Tuesday'),
-      t('DAY3', 'Wednesday'),
-      t('DAY4', 'Thursday'),
-      t('DAY5', 'Friday'),
-      t('DAY6', 'Saturday')
-    ]
     const months = [
       t('MONTH1', 'January'),
       t('MONTH2', 'February'),
@@ -51,10 +42,54 @@ export const UtilsProviders = ({ children }) => {
       t('MONTH11', 'November'),
       t('MONTH12', 'December')
     ]
+    const monthsShort = [
+      t('MONTHSHORT1', 'Jan' ),
+      t('MONTHSHORT2', 'Feb' ),
+      t('MONTHSHORT3', 'Mar' ),
+      t('MONTHSHORT4', 'Apr' ),
+      t('MONTHSHORT5', 'May' ),
+      t('MONTHSHORT6', 'Jun' ),
+      t('MONTHSHORT7', 'Jul' ),
+      t('MONTHSHORT8', 'Aug' ),
+      t('MONTHSHORT9', 'Sep' ),
+      t('MONTHSHORT10', 'Oct' ),
+      t('MONTHSHORT11', 'Nov' ),
+      t('MONTHSHORT12', 'Dec' )
+    ]
+    const weekdays = [
+      t('DAY7', 'Sunday'),
+      t('DAY1', 'Monday'),
+      t('DAY2', 'Tuesday'),
+      t('DAY3', 'Wednesday'),
+      t('DAY4', 'Thursday'),
+      t('DAY5', 'Friday'),
+      t('DAY6', 'Saturday')
+    ]
+    const weekdaysShort = [
+      t('DAYSHORT7', 'Sun' ),
+      t('DAYSHORT1', 'Mon' ),
+      t('DAYSHORT2', 'Tue' ),
+      t('DAYSHORT3', 'Wed' ),
+      t('DAYSHORT4', 'Thu' ),
+      t('DAYSHORT5', 'Fri' ),
+      t('DAYSHORT6', 'Sat' )
+    ]
+    const weekdaysMin = [
+      t('DAYMIN7', 'Su' ),
+      t('DAYMIN1', 'Mo' ),
+      t('DAYMIN2', 'Tu' ),
+      t('DAYMIN3', 'We' ),
+      t('DAYMIN4', 'Th' ),
+      t('DAYMIN5', 'Fr' ),
+      t('DAYMIN6', 'Sa' )
+    ]
     const localeObject = {
       name: 'auto', // name String
-      weekdays: weekdays, // weekdays Array
-      months: months, // months Array
+      months, // months Array
+      monthsShort, // monthsShort Array
+      weekdays, // weekdays Array
+      weekdaysShort, // weekdaysShort Array
+      weekdaysMin, // weekdaysMin Array
       ordinal: n => `${n}º`, // ordinal Function (number) => return number + output
       relativeTime: {
         // relative time format strings, keep %s %d as the same
