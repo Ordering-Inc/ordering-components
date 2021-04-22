@@ -13,17 +13,24 @@ export const BusinessList = (props) => {
     initialOrderType,
     initialFilterKey,
     initialFilterValue,
+    isOfferBusinesses,
     isSortByReview,
     isSearchByName,
     isSearchByDescription,
     isFeatured,
+    paginationSettings,
     customLocation,
     propsToFetch,
     onBusinessClick
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
-  const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: 10, totalItems: null, totalPages: null })
+  const [paginationProps, setPaginationProps] = useState({
+    currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
+    pageSize: paginationSettings.pageSize ?? 10,
+    totalItems: null,
+    totalPages: null
+  })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [timeLimitValue, setTimeLimitValue] = useState(null)
@@ -62,7 +69,7 @@ export const BusinessList = (props) => {
           orderBy: orderByValue
         }
       }
-      if (!isSortByReview) {
+      if (!isSortByReview && !isOfferBusinesses) {
         const paginationParams = {
           page: newFetch ? 1 : paginationProps.currentPage + 1,
           page_size: paginationProps.pageSize
@@ -162,6 +169,9 @@ export const BusinessList = (props) => {
       if (isSortByReview) {
         const _result = sortBusinesses(result, 'review')
         businessesList.businesses = _result
+      } else if (isOfferBusinesses) {
+        const offerBuesinesses = result.filter(_business => _business?.offers.length > 0)
+        businessesList.businesses = offerBuesinesses
       } else {
         businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
       }
