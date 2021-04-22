@@ -48,6 +48,8 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal'];
+var paymethodsNotAllowed = ['paypal_express', 'authorize'];
+var paymethodsCallcenterMode = ['cash', 'card_delivery'];
 /**
  * Component to manage payment options behavior without UI component
  */
@@ -58,6 +60,7 @@ var PaymentOptions = function PaymentOptions(props) {
   var isLoading = props.isLoading,
       paymethods = props.paymethods,
       businessId = props.businessId,
+      isCustomerMode = props.isCustomerMode,
       onPaymentChange = props.onPaymentChange,
       UIComponent = props.UIComponent;
 
@@ -92,9 +95,9 @@ var PaymentOptions = function PaymentOptions(props) {
 
   var parsePaymethods = function parsePaymethods(paymethods) {
     var _paymethods = paymethods && paymethods.filter(function (credentials) {
-      var _credentials$paymetho;
+      var _credentials$paymetho, _credentials$paymetho2, _credentials$paymetho3;
 
-      return !['paypal_express', 'authorize'].includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho = credentials.paymethod) === null || _credentials$paymetho === void 0 ? void 0 : _credentials$paymetho.gateway);
+      return isCustomerMode ? !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho = credentials.paymethod) === null || _credentials$paymetho === void 0 ? void 0 : _credentials$paymetho.gateway) && paymethodsCallcenterMode.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho2 = credentials.paymethod) === null || _credentials$paymetho2 === void 0 ? void 0 : _credentials$paymetho2.gateway) : !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho3 = credentials.paymethod) === null || _credentials$paymetho3 === void 0 ? void 0 : _credentials$paymetho3.gateway);
     }).map(function (credentials) {
       return _objectSpread(_objectSpread({}, credentials === null || credentials === void 0 ? void 0 : credentials.paymethod), {}, {
         sandbox: credentials === null || credentials === void 0 ? void 0 : credentials.sandbox,
