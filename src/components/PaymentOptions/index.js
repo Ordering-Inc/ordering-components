@@ -5,6 +5,8 @@ import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 
 const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal']
+const paymethodsNotAllowed = ['paypal_express', 'authorize']
+const paymethodsCallcenterMode = ['cash', 'card_delivery']
 
 /**
  * Component to manage payment options behavior without UI component
@@ -14,6 +16,7 @@ export const PaymentOptions = (props) => {
     isLoading,
     paymethods,
     businessId,
+    isCustomerMode,
     onPaymentChange,
     UIComponent
   } = props
@@ -28,7 +31,10 @@ export const PaymentOptions = (props) => {
 
   const parsePaymethods = (paymethods) => {
     const _paymethods = paymethods && paymethods
-      .filter(credentials => !['paypal_express', 'authorize'].includes(credentials?.paymethod?.gateway))
+      .filter(credentials => isCustomerMode
+        ? !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway) &&
+          paymethodsCallcenterMode.includes(credentials?.paymethod?.gateway)
+        : !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway))
       .map(credentials => {
         return {
           ...credentials?.paymethod,
