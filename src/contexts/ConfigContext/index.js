@@ -70,6 +70,18 @@ export const ConfigProvider = ({ children }) => {
     location_default_longitude: {
       key: 'location_default_longitude',
       value: -73.9651148
+    },
+    driver_tip_type: {
+      key: 'driver_tip_type',
+      value: 2 // 1: fixed, 2: percetaje
+    },
+    driver_tip_options: {
+      key: 'driver_tip_options',
+      value: [0, 10, 15, 20, 25]
+    },
+    driver_tip_use_custom: {
+      key: 'driver_tip_options',
+      value: 0 // 0: disabled, 1: enabled
     }
   }
 
