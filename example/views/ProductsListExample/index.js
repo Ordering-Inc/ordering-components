@@ -30,12 +30,12 @@ export const ProductsListExample = () => {
      * Elements before products list
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    beforeElements: [<p key>Test Element Before</p>],
+    beforeElements: [<p>Test Element Before</p>],
     /**
      * Elements after products list
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    afterElements: [<p key>Test Element After</p>]
+    afterElements: [<p>Test Element After</p>]
   }
 
   const [productsList, setProductsList] = useState({ products: [], loading: true, error: false })

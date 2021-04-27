@@ -36,12 +36,12 @@ export const DriverTipsExample = () => {
      * Elements before driver tips
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    beforeElements: [<p key>Test Element Before</p>],
+    beforeElements: [<p>Test Element Before</p>],
     /**
      * Elements after driver tips
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    afterElements: [<p key>Test Element After</p>]
+    afterElements: [<p>Test Element After</p>]
   }
   return <DriverTips {...props} />
 }
