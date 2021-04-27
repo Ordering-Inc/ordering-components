@@ -446,6 +446,7 @@ var OrderDetails = function OrderDetails(props) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         order: Object.assign(orderState.order, order)
       }));
+      loadMessages();
     };
 
     var handleTrackingDriver = function handleTrackingDriver(_ref6) {
