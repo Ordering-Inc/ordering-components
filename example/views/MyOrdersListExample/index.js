@@ -38,12 +38,12 @@ export const MyOrdersListExample = () => {
      * Elements before my orders list
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    beforeElements: [<p key>Test Element Before</p>],
+    beforeElements: [<p>Test Element Before</p>],
     /**
      * Elements after my orders list
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    afterElements: [<p key>Test Element After</p>]
+    afterElements: [<p>Test Element After</p>]
   }
 
   return <MyOrdersList {...props} />

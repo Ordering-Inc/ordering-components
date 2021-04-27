@@ -65,12 +65,12 @@ export const SessionManager = () => {
      * Elements before login form
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    beforeElements: [<p key>Test Element Before</p>],
+    beforeElements: [<p>Test Element Before</p>],
     /**
      * Elements after login form
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    afterElements: [<p key>Test Element After</p>],
+    afterElements: [<p>Test Element After</p>],
     /**
    * Url to signup page
    * Url to create element link to signup page
