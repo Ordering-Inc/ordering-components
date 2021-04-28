@@ -667,6 +667,7 @@ var OrderProvider = function OrderProvider(_ref) {
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: product,
+                business_id: product.business_id,
                 user_id: userCustomerId || session.user.id
               };
               _context6.next = 9;
@@ -906,6 +907,7 @@ var OrderProvider = function OrderProvider(_ref) {
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: product,
+                business_id: product.business_id,
                 user_id: userCustomerId || session.user.id
               };
               _context9.next = 9;
