@@ -9,6 +9,7 @@ export const DriverTips = (props) => {
   const {
     UIComponent,
     businessId,
+    isFixedPrice,
     useOrderContext
   } = props
 
@@ -35,9 +36,9 @@ export const DriverTips = (props) => {
    * @param {number} val
    */
   const handlerChangeOption = (driverTip) => {
-    driverTip = parseInt(driverTip)
+    driverTip = typeof driverTip === 'string' ? parseInt(driverTip) :driverTip
     if (useOrderContext) {
-      changeDriverTip(businessId, driverTip)
+      changeDriverTip(businessId, driverTip, isFixedPrice)
     } else {
       setOptionSelected(driverTip)
     }
@@ -48,7 +49,7 @@ export const DriverTips = (props) => {
     const orderDriverTipRate = orderState.carts?.[`businessId:${businessId}`]?.driver_tip_rate || 0
     const orderDriverTip = orderState.carts?.[`businessId:${businessId}`]?.driver_tip || 0
 
-    setOptionSelected(orderDriverTipRate)
+    setOptionSelected(isFixedPrice ? orderDriverTip : orderDriverTipRate)
     setDriverTipAmount(orderDriverTip)
   }, [orderState])
 
