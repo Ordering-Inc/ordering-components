@@ -16,14 +16,18 @@ export const AppleLoginExample = () => {
      */
     initParams: {
       clientId: 'co.ordering.logintest',
-      redirectURI: 'https://example-app.com/redirect',
+      redirectURI: 'https://e6b6ae1cf48a.ngrok.io/applelogin.html',
       responseType: 'code',
-      responseMode: 'query',
-      usePopup: false // or false defaults to false
+      responseMode: 'form_post',
+      state: 'state',
+      nonce: 'nonce',
+      usePopup: true // or false defaults to false
     },
     onSuccess: (data) => console.log(data),
 
     onFailure: (err) => console.log(err),
+
+    handleAppleLoginClick: (data) => console.log(data),
 
     beforeComponents: [TestComponent],
     /**
