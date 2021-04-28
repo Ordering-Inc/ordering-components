@@ -141,7 +141,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
       value: [0, 10, 15, 20, 25]
     },
     driver_tip_use_custom: {
-      key: 'driver_tip_options',
+      key: 'driver_tip_use_custom',
       value: 0 // 0: disabled, 1: enabled
 
     }
