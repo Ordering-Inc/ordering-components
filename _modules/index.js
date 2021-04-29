@@ -651,6 +651,12 @@ Object.defineProperty(exports, "Analytics", {
     return _Analitycs.Analytics;
   }
 });
+Object.defineProperty(exports, "AppleLogin", {
+  enumerable: true,
+  get: function get() {
+    return _AppleLogin.AppleLogin;
+  }
+});
 
 var _AddressDetails = require("./components/AddressDetails");
 
@@ -817,3 +823,5 @@ var _FloatingButton = require("./components/FloatingButton");
 var _ResetPassword = require("./components/ResetPassword");
 
 var _Analitycs = require("./components/Analitycs");
+
+var _AppleLogin = require("./components/AppleLogin");
