@@ -60,12 +60,12 @@ export const PaymentOptionPaypalExample = () => {
      * Elements before Payment options paypal
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    beforeElements: [<p key>Test Element Before</p>],
+    beforeElements: [<p>Test Element Before</p>],
     /**
      * Elements after Payment options paypal
      * Array of HTML/Components elements, these components will not get the parent props
      */
-    afterElements: [<p key>Test Element After</p>]
+    afterElements: [<p>Test Element After</p>]
   }
   return !loading && token && <PaymentOptionPaypal {...props} />
 }

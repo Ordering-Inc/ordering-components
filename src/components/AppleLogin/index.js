@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+<<<<<<< HEAD
 import { useConfig } from '../../contexts/ConfigContext'
 
 export const AppleLogin = (props) => {
@@ -19,6 +20,14 @@ export const AppleLogin = (props) => {
     nonce: 'nonce',
     usePopup: false // or true defaults to false
   }
+=======
+
+export const AppleLogin = (props) => {
+  const { UIComponent, initParams, onSuccess, onFailure, handleButtonAppleLoginClick } = props
+
+  const [ordering] = useApi()
+  const [formState, setFormState] = useState({ loading: false, result: { error: false } })
+>>>>>>> 6ad471e30e7a5538f34d18ab2aef85809f994553
 
   useEffect(() => {
     window.addEventListener('AppleIDSignInOnSuccess', (data) => {

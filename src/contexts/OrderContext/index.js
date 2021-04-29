@@ -301,6 +301,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
+        business_id: product.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
@@ -389,6 +390,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
+        business_id: product.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
