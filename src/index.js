@@ -58,6 +58,7 @@ import { OrderReview } from './components/OrderReview'
 import { CmsContent } from './components/CmsContent'
 import { PhoneAutocomplete } from './components/PhoneAutocomplete'
 import { BusinessesMap } from './components/BusinessesMap'
+import { AppleLogin } from './components/AppleLogin'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -86,6 +87,7 @@ export {
   AddressDetails,
   AddressForm,
   AddressList,
+  AppleLogin,
   BaseComponent,
   BusinessAndProductList,
   BusinessBasicInformation,
