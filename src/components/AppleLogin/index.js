@@ -1,17 +1,30 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useApi } from '../../contexts/ApiContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 export const AppleLogin = (props) => {
-  const { UIComponent, initParams, onSuccess, onFailure } = props
+  const { UIComponent, onSuccess, onFailure, handleButtonAppleLoginClick } = props
+
+  const [ordering] = useApi()
+  const [formState, setFormState] = useState({ loading: false, result: { error: false } })
+  const [{ configs }] = useConfig()
+
+  const initParams = {
+    clientId: configs?.apple_login_client_id?.value,
+    redirectURI: !window.location.origin.includes('localhost') ? window.location.href : 'https://example-app.com/redirect',
+    response_mode: 'fragment',
+    response_type: 'code',
+    state: 'state',
+    nonce: 'nonce',
+    usePopup: false // or true defaults to false
+  }
 
   useEffect(() => {
-    if (window.document.getElementById('apple-login')) {
-      return
-    }
-    document.addEventListener('AppleIDSignInOnSuccess', (data) => {
+    window.addEventListener('AppleIDSignInOnSuccess', (data) => {
       onSuccess(data)
     })
-    document.addEventListener('AppleIDSignInOnFailure', (error) => {
+    window.addEventListener('AppleIDSignInOnFailure', (error) => {
       onFailure(error)
     })
     createScriptApple()
@@ -26,6 +39,9 @@ export const AppleLogin = (props) => {
    * loading script of de Apple login sdk
    */
   const createScriptApple = () => {
+    if (window.document.getElementById('apple-login')) {
+      return
+    }
     const js = window.document.createElement('script')
     js.id = 'apple-login'
     js.src =
@@ -34,7 +50,45 @@ export const AppleLogin = (props) => {
     js.defer = true
 
     window.document.body.appendChild(js)
-    console.log(window.AppleID)
+  }
+
+  const handleAppleLoginClick = async (data) => {
+    if (handleButtonAppleLoginClick) {
+      handleButtonAppleLoginClick(data)
+      return
+    }
+
+    try {
+      setFormState({ ...formState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/apple`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          code: data.code
+        })
+      })
+      setFormState({
+        result: response.content,
+        loading: false
+      })
+      if (!response.content.error) {
+        if (onSuccess) {
+          onSuccess(response.content.result)
+        }
+      } else {
+        if (onFailure) {
+          onFailure(response.content.result)
+        }
+      }
+    } catch (err) {
+      setFormState({
+        result: {
+          error: true,
+          result: err.message
+        },
+        loading: false
+      })
+    }
   }
 
   /**
@@ -44,7 +98,6 @@ export const AppleLogin = (props) => {
     window.AppleID.auth.init(initParams)
 
     handleLoginApple()
-    console.log(window.AppleID)
   }
 
   /**
@@ -59,7 +112,7 @@ export const AppleLogin = (props) => {
     }
   }
 
-  return <>{UIComponent && <UIComponent {...props} initLoginApple={initLoginApple} />}</>
+  return <>{UIComponent && <UIComponent {...props} initLoginApple={initLoginApple} handleAppleLoginClick={handleAppleLoginClick} />}</>
 }
 
 AppleLogin.propTypes = {

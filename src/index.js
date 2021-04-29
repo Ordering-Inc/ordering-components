@@ -81,11 +81,13 @@ import { StripeRedirectForm } from './components/PaymentOptionStripeRedirect/Str
 import { FloatingButton } from './components/FloatingButton'
 import { ResetPassword } from './components/ResetPassword'
 import { Analytics } from './components/Analitycs'
+import { AppleLogin } from './components/AppleLogin'
 
 export {
   AddressDetails,
   AddressForm,
   AddressList,
+  AppleLogin,
   BaseComponent,
   BusinessAndProductList,
   BusinessBasicInformation,
