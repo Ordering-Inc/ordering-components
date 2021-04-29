@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 export const AppleLogin = (props) => {
-  const { UIComponent, initParams, onSuccess, onFailure, handleButtonAppleLoginClick } = props
+  const { UIComponent, onSuccess, onFailure, handleButtonAppleLoginClick } = props
 
   const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
+  const [{ configs }] = useConfig()
+
+  const initParams = {
+    clientId: configs?.apple_login_client_id?.value,
+    redirectURI: !window.location.origin.includes('localhost') ? window.location.href : 'https://example-app.com/redirect',
+    response_mode: 'fragment',
+    response_type: 'code',
+    state: 'state',
+    nonce: 'nonce',
+    usePopup: false // or true defaults to false
+  }
 
   useEffect(() => {
     window.addEventListener('AppleIDSignInOnSuccess', (data) => {
