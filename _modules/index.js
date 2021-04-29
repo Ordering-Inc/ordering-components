@@ -375,6 +375,12 @@ Object.defineProperty(exports, "BusinessesMap", {
     return _BusinessesMap.BusinessesMap;
   }
 });
+Object.defineProperty(exports, "AppleLogin", {
+  enumerable: true,
+  get: function get() {
+    return _AppleLogin.AppleLogin;
+  }
+});
 Object.defineProperty(exports, "ConfigContext", {
   enumerable: true,
   get: function get() {
@@ -771,6 +777,8 @@ var _CmsContent = require("./components/CmsContent");
 var _PhoneAutocomplete = require("./components/PhoneAutocomplete");
 
 var _BusinessesMap = require("./components/BusinessesMap");
+
+var _AppleLogin = require("./components/AppleLogin");
 
 var _ConfigContext = require("./contexts/ConfigContext");
 
