@@ -73,6 +73,8 @@ export const BusinessAndProductList = (props) => {
       (description && (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription))
   }
 
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
+
   const isFeaturedSearch = (product) => {
     if (product.featured) {
       if (!searchValue) return true
@@ -306,8 +308,6 @@ export const BusinessAndProductList = (props) => {
       getProduct()
     }
   }, [JSON.stringify(businessState.business?.id), isInitialRender])
-
-  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
 
   const getBusiness = async () => {
     try {
