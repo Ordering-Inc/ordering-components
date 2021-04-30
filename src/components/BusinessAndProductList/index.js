@@ -307,7 +307,7 @@ export const BusinessAndProductList = (props) => {
     }
   }, [JSON.stringify(businessState.business?.id), isInitialRender])
 
-  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
 
   const getBusiness = async () => {
     try {
