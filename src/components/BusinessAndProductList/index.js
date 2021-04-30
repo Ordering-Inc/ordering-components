@@ -157,6 +157,11 @@ export const BusinessAndProductList = (props) => {
       page_size: pagination.pageSize
     }
 
+    if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+      const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+      parameters.timestamp = moment
+    }
+
     if (sortByValue) {
       parameters.orderBy = sortByValue === 'a-z' ? 'name' : sortByValue
     }
@@ -267,6 +272,11 @@ export const BusinessAndProductList = (props) => {
         const parameters = {
           type: orderState.options?.type || 1,
           moment: orderState.options?.moment || null
+        }
+
+        if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+          const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+          parameters.timestamp = moment
         }
 
         const { content: { result } } = await ordering
