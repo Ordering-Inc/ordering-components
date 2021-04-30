@@ -9,10 +9,17 @@ export const BusinessTypeFilter = (props) => {
     UIComponent
   } = props
 
+  const [ordering] = useApi()
+
   /**
    * This property is used to set in state the current value
    */
   const [typeSelected, setTypeSelected] = useState(defaultBusinessType)
+
+  /**
+   * This state save the business type info from API
+   */
+  const [typesState, setTypesState] = useState({ loading: true, error: null, types: [], pagination: null })
 
   /**
    * Handle when select value changes
@@ -22,11 +29,58 @@ export const BusinessTypeFilter = (props) => {
     onChangeBusinessType(businessType)
   }
 
+  /**
+   * Method to get business types from API
+   */
+  const getBusinessTypes = async () => {
+    try {
+      const response = await fetch(`${ordering.root}/business_types`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+      const { error, result, pagination } = await response.json()
+      if (!error) {
+        result.unshift({ id: null, enabled: true, image: null, name: 'All' })
+        setTypesState({
+          ...typesState,
+          loading: false,
+          types: result,
+          pagination
+        })
+        return
+      }
+      setTypesState({
+        ...typesState,
+        loading: false,
+        error: result
+      })
+    } catch (error) {
+      setTypesState({
+        ...typesState,
+        loading: false,
+        error: [error || error?.toString() || error?.message]
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (businessTypes) {
+      setTypesState({
+        ...typesState,
+        loading: false,
+        types: businessTypes
+      })
+    } else {
+      getBusinessTypes()
+    }
+  }, [businessTypes])
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          typesState={typesState}
           businessTypes={businessTypes}
           currentTypeSelected={typeSelected}
           handleChangeBusinessType={handleChangeBusinessType}
