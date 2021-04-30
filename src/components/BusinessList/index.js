@@ -40,7 +40,7 @@ export const BusinessList = (props) => {
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
 
-  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
 
   const sortBusinesses = (array, option) => {
