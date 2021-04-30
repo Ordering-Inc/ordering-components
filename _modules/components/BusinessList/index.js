@@ -136,7 +136,7 @@ var BusinessList = function BusinessList(props) {
       setRequestsState = _useState16[1];
 
   var isValidMoment = function isValidMoment(date, format) {
-    return (0, _dayjs.default)(date, format).format(format) === date;
+    return _dayjs.default.utc(date, format).format(format) === date;
   };
 
   var rex = new RegExp(/^[A-Za-z0-9\s]+$/g);

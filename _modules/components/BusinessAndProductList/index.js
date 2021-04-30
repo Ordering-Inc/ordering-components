@@ -62,7 +62,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _businessState$busine12, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18;
+  var _businessState$busine12, _orderState$options26, _orderState$options27, _orderState$options28, _orderState$options29;
 
   var isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
@@ -201,6 +201,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     return name && name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description && description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
   };
 
+  var isValidMoment = function isValidMoment(date, format) {
+    return _dayjs.default.utc(date, format).format(format) === date;
+  };
+
   var isFeaturedSearch = function isFeaturedSearch(product) {
     if (product.featured) {
       if (!searchValue) return true;
@@ -228,9 +232,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _businessState$busine, _orderState$options;
+      var _businessState$busine, _orderState$options, _orderState$options2, _orderState$options3;
 
-      var _businessState$busine2, _businessState$busine3, _businessState$busine4, isFeatured, _categoryState, _businessState$busine5, _businessState$busine6, _businessState$busine7, productsFiltered, _businessState$busine8, _businessState$busine9, _productsFiltered, _businessState$busine10, _businessState$busine11, _productsFiltered2, categoryKey, categoryState, pagination, parameters, where, searchConditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
+      var _businessState$busine2, _businessState$busine3, _businessState$busine4, isFeatured, _categoryState, _businessState$busine5, _businessState$busine6, _businessState$busine7, productsFiltered, _businessState$busine8, _businessState$busine9, _productsFiltered, _businessState$busine10, _businessState$busine11, _productsFiltered2, categoryKey, categoryState, pagination, parameters, _orderState$options4, moment, where, searchConditions, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -304,6 +308,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 page_size: pagination.pageSize
               };
 
+              if (((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.moment) && isValidMoment((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.moment, 'YYYY-MM-DD HH:mm:ss')) {
+                moment = _dayjs.default.utc((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+                parameters.timestamp = moment;
+              }
+
               if (sortByValue) {
                 parameters.orderBy = sortByValue === 'a-z' ? 'name' : sortByValue;
               }
@@ -360,18 +369,18 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 };
               }
 
-              _context.prev = 24;
+              _context.prev = 25;
               functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : ordering.businesses(businessState.business.id).products();
               source = {};
               requestsState.products = source;
               setRequestsState(_objectSpread({}, requestsState));
               productEndpoint = where.conditions.length > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
-              _context.next = 32;
+              _context.next = 33;
               return productEndpoint.get({
                 cancelToken: source
               });
 
-            case 32:
+            case 33:
               _yield$productEndpoin = _context.sent;
               _yield$productEndpoin2 = _yield$productEndpoin.content;
               error = _yield$productEndpoin2.error;
@@ -398,20 +407,20 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 setErrors(result);
               }
 
-              _context.next = 43;
+              _context.next = 44;
               break;
 
-            case 40:
-              _context.prev = 40;
-              _context.t0 = _context["catch"](24);
+            case 41:
+              _context.prev = 41;
+              _context.t0 = _context["catch"](25);
               setErrors([_context.t0.message]);
 
-            case 43:
+            case 44:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[24, 40]]);
+      }, _callee, null, [[25, 41]]);
     }));
 
     return function getProducts(_x) {
@@ -421,14 +430,14 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getProduct = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _orderState$options2, _orderState$options3, source, parameters, _yield$ordering$busin, result, product;
+      var _orderState$options5, _orderState$options6, _orderState$options7, _orderState$options8, source, parameters, _orderState$options9, moment, _yield$ordering$busin, result, product;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (!(categoryId && productId && businessState.business.id)) {
-                _context2.next = 17;
+                _context2.next = 18;
                 break;
               }
 
@@ -439,15 +448,21 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               source = {};
               requestsState.product = source;
               parameters = {
-                type: ((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) || 1,
-                moment: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.moment) || null
+                type: ((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.type) || 1,
+                moment: ((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.moment) || null
               };
-              _context2.next = 8;
+
+              if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.moment) && isValidMoment((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment, 'YYYY-MM-DD HH:mm:ss')) {
+                moment = _dayjs.default.utc((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+                parameters.timestamp = moment;
+              }
+
+              _context2.next = 9;
               return ordering.businesses(businessState.business.id).categories(categoryId).products(productId).parameters(parameters).get({
                 cancelToken: source
               });
 
-            case 8:
+            case 9:
               _yield$ordering$busin = _context2.sent;
               result = _yield$ordering$busin.content.result;
               product = Array.isArray(result) ? null : result;
@@ -455,23 +470,23 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 product: product,
                 loading: false
               }));
-              _context2.next = 17;
+              _context2.next = 18;
               break;
 
-            case 14:
-              _context2.prev = 14;
+            case 15:
+              _context2.prev = 15;
               _context2.t0 = _context2["catch"](1);
               setProductModal(_objectSpread(_objectSpread({}, productModal), {}, {
                 loading: false,
                 error: [_context2.t0]
               }));
 
-            case 17:
+            case 18:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 14]]);
+      }, _callee2, null, [[1, 15]]);
     }));
 
     return function getProduct() {
@@ -485,13 +500,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     }
   }, [JSON.stringify((_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id), isInitialRender]);
 
-  var isValidMoment = function isValidMoment(date, format) {
-    return (0, _dayjs.default)(date, format).format(format) === date;
-  };
-
   var getBusiness = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, _orderState$options8, _orderState$options9, _result$categories, source, parameters, _orderState$options10, moment, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
+      var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18, _orderState$options19, _orderState$options20, _result$categories, source, parameters, _orderState$options21, moment, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -505,12 +516,12 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               requestsState.business = source;
               setRequestsState(_objectSpread({}, requestsState));
               parameters = {
-                type: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type) || 1,
-                location: ((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : _orderState$options5$.location) ? "".concat((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lat, ",").concat((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : (_orderState$options7$ = _orderState$options7.address) === null || _orderState$options7$ === void 0 ? void 0 : (_orderState$options7$2 = _orderState$options7$.location) === null || _orderState$options7$2 === void 0 ? void 0 : _orderState$options7$2.lng) : null
+                type: ((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type) || 1,
+                location: ((_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 ? void 0 : (_orderState$options12 = _orderState$options11.address) === null || _orderState$options12 === void 0 ? void 0 : _orderState$options12.location) ? "".concat((_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 ? void 0 : (_orderState$options14 = _orderState$options13.address) === null || _orderState$options14 === void 0 ? void 0 : (_orderState$options15 = _orderState$options14.location) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.lat, ",").concat((_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : (_orderState$options17 = _orderState$options16.address) === null || _orderState$options17 === void 0 ? void 0 : (_orderState$options18 = _orderState$options17.location) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.lng) : null
               };
 
-              if (((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.moment) && isValidMoment((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss')) {
-                moment = _dayjs.default.utc((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+              if (((_orderState$options19 = orderState.options) === null || _orderState$options19 === void 0 ? void 0 : _orderState$options19.moment) && isValidMoment((_orderState$options20 = orderState.options) === null || _orderState$options20 === void 0 ? void 0 : _orderState$options20.moment, 'YYYY-MM-DD HH:mm:ss')) {
+                moment = _dayjs.default.utc((_orderState$options21 = orderState.options) === null || _orderState$options21 === void 0 ? void 0 : _orderState$options21.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }
 
@@ -599,15 +610,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   }, [orderOptions, languageState.loading, slug, filterByMenus]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading) {
-      var _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14;
+      var _orderState$options22, _orderState$options23, _orderState$options24, _orderState$options25;
 
       setOrderOptions({
-        type: orderState === null || orderState === void 0 ? void 0 : (_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.type,
-        moment: orderState === null || orderState === void 0 ? void 0 : (_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : _orderState$options12.moment,
-        location: orderState === null || orderState === void 0 ? void 0 : (_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 ? void 0 : (_orderState$options14 = _orderState$options13.address) === null || _orderState$options14 === void 0 ? void 0 : _orderState$options14.location
+        type: orderState === null || orderState === void 0 ? void 0 : (_orderState$options22 = orderState.options) === null || _orderState$options22 === void 0 ? void 0 : _orderState$options22.type,
+        moment: orderState === null || orderState === void 0 ? void 0 : (_orderState$options23 = orderState.options) === null || _orderState$options23 === void 0 ? void 0 : _orderState$options23.moment,
+        location: orderState === null || orderState === void 0 ? void 0 : (_orderState$options24 = orderState.options) === null || _orderState$options24 === void 0 ? void 0 : (_orderState$options25 = _orderState$options24.address) === null || _orderState$options25 === void 0 ? void 0 : _orderState$options25.location
       });
     }
-  }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options15 = orderState.options) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.type, orderState === null || orderState === void 0 ? void 0 : (_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : _orderState$options16.moment, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : (_orderState$options17 = orderState.options) === null || _orderState$options17 === void 0 ? void 0 : (_orderState$options18 = _orderState$options17.address) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.location)]);
+  }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options26 = orderState.options) === null || _orderState$options26 === void 0 ? void 0 : _orderState$options26.type, orderState === null || orderState === void 0 ? void 0 : (_orderState$options27 = orderState.options) === null || _orderState$options27 === void 0 ? void 0 : _orderState$options27.moment, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : (_orderState$options28 = orderState.options) === null || _orderState$options28 === void 0 ? void 0 : (_orderState$options29 = _orderState$options28.address) === null || _orderState$options29 === void 0 ? void 0 : _orderState$options29.location)]);
   /**
    * Cancel business request
    */
