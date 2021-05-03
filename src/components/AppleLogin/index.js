@@ -4,18 +4,19 @@ import { useApi } from '../../contexts/ApiContext'
 import { useConfig } from '../../contexts/ConfigContext'
 
 export const AppleLogin = (props) => {
-  const { UIComponent, onSuccess, onFailure, handleButtonAppleLoginClick } = props
+  const { UIComponent, onSuccess, onFailure, initParams: initParamsCustom, handleButtonAppleLoginClick } = props
 
   const [ordering] = useApi()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [{ configs }] = useConfig()
 
-  const initParams = {
+  const initParams = initParamsCustom || {
     clientId: configs?.apple_login_client_id?.value,
     redirectURI: !window.location.origin.includes('localhost') ? window.location.href : 'https://example-app.com/redirect',
-    response_mode: 'fragment',
+    response_mode: 'form_post',
     response_type: 'code',
     state: 'state',
+    scope: 'name email',
     nonce: 'nonce',
     usePopup: false // or true defaults to false
   }
