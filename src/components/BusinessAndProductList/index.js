@@ -73,6 +73,8 @@ export const BusinessAndProductList = (props) => {
       (description && (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription))
   }
 
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
+
   const isFeaturedSearch = (product) => {
     if (product.featured) {
       if (!searchValue) return true
@@ -155,6 +157,11 @@ export const BusinessAndProductList = (props) => {
       type: orderState.options?.type || 1,
       page: newFetch ? 1 : pagination.currentPage + 1,
       page_size: pagination.pageSize
+    }
+
+    if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+      const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+      parameters.timestamp = moment
     }
 
     if (sortByValue) {
@@ -269,6 +276,11 @@ export const BusinessAndProductList = (props) => {
           moment: orderState.options?.moment || null
         }
 
+        if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+          const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+          parameters.timestamp = moment
+        }
+
         const { content: { result } } = await ordering
           .businesses(businessState.business.id)
           .categories(categoryId)
@@ -296,8 +308,6 @@ export const BusinessAndProductList = (props) => {
       getProduct()
     }
   }, [JSON.stringify(businessState.business?.id), isInitialRender])
-
-  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
 
   const getBusiness = async () => {
     try {
