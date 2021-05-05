@@ -250,7 +250,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
-                      value: !isSpecialCharacter ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter || (props === null || props === void 0 ? void 0 : props.isForceSearch) ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -260,7 +260,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
-                      value: !isSpecialCharacter ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter || (props === null || props === void 0 ? void 0 : props.isForceSearch) ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
