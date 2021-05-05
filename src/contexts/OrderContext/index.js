@@ -570,9 +570,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
+      const query = userCustomerId
+        ? { user_id: userCustomerId }
+        : null
       const options = {
-        headers: { 'X-Socket-Id-X': socket?.getId() },
-        query: { user_id: userCustomerId || session.user.id }
+        headers: { 'X-Socket-Id-X': socket?.getId() }
+      }
+      if (query) {
+        options.query = query
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orders(orderId).reorder(options)
       if (!error) {
