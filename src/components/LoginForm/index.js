@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import parsePhoneNumber from 'libphonenumber-js'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
@@ -55,7 +56,16 @@ export const LoginForm = (props) => {
         password: values && values?.password || credentials.password
       }
       setFormState({ ...formState, loading: true })
+
+      if (_credentials?.cellphone?.includes('+')) {
+        const parsedNumber = parsePhoneNumber(_credentials.cellphone)
+        const cellphone = parsedNumber?.nationalNumber
+
+        _credentials.cellphone = cellphone
+      }
+      
       const { content: { error, result } } = await ordering.users().auth(_credentials)
+      
       if (!error) {
         if (useDefualtSessionManager) {
           if (allowedLevels && allowedLevels?.length > 0) {
@@ -143,7 +153,7 @@ export const LoginForm = (props) => {
    */
   const sendVerifyPhoneCode = async (values) => {
     try {
-      setVerifyPhoneState({ ...verifyPhoneState, loading: true })
+      setVerifyPhoneState(verifyPhoneState => ({ ...verifyPhoneState, loading: true }))
       const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -153,19 +163,19 @@ export const LoginForm = (props) => {
         })
       })
       const res = await response.json()
-      setVerifyPhoneState({
+      setVerifyPhoneState(verifyPhoneState => ({
         ...verifyPhoneState,
         loading: false,
         result: res
-      })
+      }))
     } catch (error) {
-      setVerifyPhoneState({
+      setVerifyPhoneState(verifyPhoneState => ({
         ...verifyPhoneState,
         loading: false,
         result: {
           error: error.message
         }
-      })
+      }))
     }
   }
 
@@ -180,7 +190,7 @@ export const LoginForm = (props) => {
    */
   const checkVerifyPhoneCode = async (values) => {
     try {
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      setCheckPhoneCodeState(checkPhoneCodeState => ({ ...checkPhoneCodeState, loading: true }))
       const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -196,19 +206,19 @@ export const LoginForm = (props) => {
           handleSuccessLogin(res?.result)
         }
       }
-      setCheckPhoneCodeState({
+      setCheckPhoneCodeState(checkPhoneCodeState => ({
         ...checkPhoneCodeState,
         loading: false,
         result: res
-      })
+      }))
     } catch (error) {
-      setCheckPhoneCodeState({
+      setCheckPhoneCodeState(checkPhoneCodeState => ({
         ...checkPhoneCodeState,
         loading: false,
         result: {
           error: error.message
         }
-      })
+      }))
     }
   }
 
