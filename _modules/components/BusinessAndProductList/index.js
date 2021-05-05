@@ -626,7 +626,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   (0, _react.useEffect)(function () {
     var request = requestsState.business;
     return function () {
-      request && request.cancel();
+      request && request.cancel && request.cancel();
     };
   }, [requestsState.business]);
   /**
@@ -636,7 +636,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   (0, _react.useEffect)(function () {
     var request = requestsState.products;
     return function () {
-      request && request.cancel();
+      request && request.cancel && request.cancel();
     };
   }, [requestsState.products]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

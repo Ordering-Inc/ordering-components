@@ -229,16 +229,18 @@ var ProductForm = function ProductForm(props) {
 
     var subtotal = 0;
 
-    for (var i = 0; i < ((_product$product5 = product.product) === null || _product$product5 === void 0 ? void 0 : _product$product5.extras.length); i++) {
-      var _product$product5, _product$product6;
+    for (var i = 0; i < ((_product$product5 = product.product) === null || _product$product5 === void 0 ? void 0 : (_product$product5$ext = _product$product5.extras) === null || _product$product5$ext === void 0 ? void 0 : _product$product5$ext.length); i++) {
+      var _product$product5, _product$product5$ext, _product$product6;
 
       var extra = (_product$product6 = product.product) === null || _product$product6 === void 0 ? void 0 : _product$product6.extras[i];
 
-      for (var j = 0; j < extra.options.length; j++) {
+      for (var j = 0; j < ((_extra$options = extra.options) === null || _extra$options === void 0 ? void 0 : _extra$options.length); j++) {
+        var _extra$options;
+
         var option = extra.options[j];
 
-        for (var k = 0; k < option.suboptions.length; k++) {
-          var _productCart$options$, _productCart$options$2;
+        for (var k = 0; k < ((_option$suboptions = option.suboptions) === null || _option$suboptions === void 0 ? void 0 : _option$suboptions.length); k++) {
+          var _option$suboptions, _productCart$options$, _productCart$options$2;
 
           var suboption = option.suboptions[k];
 

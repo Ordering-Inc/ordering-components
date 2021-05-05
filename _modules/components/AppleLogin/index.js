@@ -53,6 +53,7 @@ var AppleLogin = function AppleLogin(props) {
   var UIComponent = props.UIComponent,
       onSuccess = props.onSuccess,
       onFailure = props.onFailure,
+      initParamsCustom = props.initParams,
       handleButtonAppleLoginClick = props.handleButtonAppleLoginClick;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -73,12 +74,13 @@ var AppleLogin = function AppleLogin(props) {
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configs = _useConfig2[0].configs;
 
-  var initParams = {
+  var initParams = initParamsCustom || {
     clientId: configs === null || configs === void 0 ? void 0 : (_configs$apple_login_ = configs.apple_login_client_id) === null || _configs$apple_login_ === void 0 ? void 0 : _configs$apple_login_.value,
     redirectURI: !window.location.origin.includes('localhost') ? window.location.href : 'https://example-app.com/redirect',
-    response_mode: 'fragment',
+    response_mode: 'form_post',
     response_type: 'code',
     state: 'state',
+    scope: 'name email',
     nonce: 'nonce',
     usePopup: false // or true defaults to false
 

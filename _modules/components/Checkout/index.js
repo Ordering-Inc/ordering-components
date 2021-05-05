@@ -165,22 +165,23 @@ var Checkout = function Checkout(props) {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
       var _cartResult$paymethod;
 
-      var paymethodData, payload, result, cartResult;
+      var paymethodData, _paymethodSelected$da, payload, result, cartResult;
+
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              paymethodData = paymethodSelected.data;
+              paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data;
 
               if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
                 paymethodData = {
-                  source_id: paymethodSelected.data.id
+                  source_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$da = paymethodSelected.data) === null || _paymethodSelected$da === void 0 ? void 0 : _paymethodSelected$da.id
                 };
               }
 
               payload = {
                 paymethod_id: paymethodSelected.paymethodId,
-                paymethod_data: paymethodSelected.data,
+                paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data,
                 offer_id: cart.offer_id,
                 amount: cart.total
               };
@@ -261,7 +262,7 @@ var Checkout = function Checkout(props) {
     if (cart && cart.status === 1) {
       var data = {
         paymethod_id: paymethodSelected.paymethodId,
-        paymethod_data: paymethodSelected.data,
+        paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data,
         delivery_zone_id: cart.delivery_zone_id,
         offer_id: cart.offer_id,
         amount: cart.total
