@@ -1357,7 +1357,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var reorder = /*#__PURE__*/function () {
     var _ref15 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee14(orderId) {
-      var customerFromLocalStorage, userCustomerId, options, _yield$ordering$setAc21, _yield$ordering$setAc22, error, result;
+      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc21, _yield$ordering$setAc22, error, result;
 
       return _regenerator.default.wrap(function _callee14$(_context14) {
         while (1) {
@@ -1373,18 +1373,23 @@ var OrderProvider = function OrderProvider(_ref) {
             case 4:
               customerFromLocalStorage = _context14.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              query = userCustomerId ? {
+                user_id: userCustomerId
+              } : null;
               options = {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-                },
-                query: {
-                  user_id: userCustomerId || session.user.id
                 }
               };
-              _context14.next = 9;
+
+              if (query) {
+                options.query = query;
+              }
+
+              _context14.next = 11;
               return ordering.setAccessToken(session.token).orders(orderId).reorder(options);
 
-            case 9:
+            case 11:
               _yield$ordering$setAc21 = _context14.sent;
               _yield$ordering$setAc22 = _yield$ordering$setAc21.content;
               error = _yield$ordering$setAc22.error;
@@ -1408,8 +1413,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: result
               });
 
-            case 18:
-              _context14.prev = 18;
+            case 20:
+              _context14.prev = 20;
               _context14.t0 = _context14["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1419,12 +1424,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context14.t0.message]
               });
 
-            case 22:
+            case 24:
             case "end":
               return _context14.stop();
           }
         }
-      }, _callee14, null, [[0, 18]]);
+      }, _callee14, null, [[0, 20]]);
     }));
 
     return function reorder(_x18) {
