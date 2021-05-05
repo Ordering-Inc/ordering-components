@@ -40,7 +40,7 @@ export const BusinessList = (props) => {
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
 
-  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
 
   const sortBusinesses = (array, option) => {
@@ -130,7 +130,7 @@ export const BusinessList = (props) => {
               attribute: 'name',
               value: {
                 condition: 'ilike',
-                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+                value: (!isSpecialCharacter || props?.isForceSearch) ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -141,7 +141,7 @@ export const BusinessList = (props) => {
               attribute: 'description',
               value: {
                 condition: 'ilike',
-                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+                value: (!isSpecialCharacter || props?.isForceSearch) ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )
