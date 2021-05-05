@@ -410,7 +410,7 @@ export const BusinessAndProductList = (props) => {
   useEffect(() => {
     const request = requestsState.business
     return () => {
-      request && request.cancel()
+      request && request.cancel && request.cancel()
     }
   }, [requestsState.business])
 
@@ -420,7 +420,7 @@ export const BusinessAndProductList = (props) => {
   useEffect(() => {
     const request = requestsState.products
     return () => {
-      request && request.cancel()
+      request && request.cancel && request.cancel()
     }
   }, [requestsState.products])
 

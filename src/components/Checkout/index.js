@@ -61,15 +61,15 @@ export const Checkout = (props) => {
    * Method to handle click on Place order
    */
   const handlerClickPlaceOrder = async () => {
-    let paymethodData = paymethodSelected.data
+    let paymethodData = paymethodSelected?.data
     if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
       paymethodData = {
-        source_id: paymethodSelected.data.id
+        source_id: paymethodSelected?.data?.id
       }
     }
     let payload = {
       paymethod_id: paymethodSelected.paymethodId,
-      paymethod_data: paymethodSelected.data,
+      paymethod_data: paymethodSelected?.data,
       offer_id: cart.offer_id,
       amount: cart.total
     }
@@ -123,7 +123,7 @@ export const Checkout = (props) => {
     if (cart && cart.status === 1) {
       const data = {
         paymethod_id: paymethodSelected.paymethodId,
-        paymethod_data: paymethodSelected.data,
+        paymethod_data: paymethodSelected?.data,
         delivery_zone_id: cart.delivery_zone_id,
         offer_id: cart.offer_id,
         amount: cart.total
