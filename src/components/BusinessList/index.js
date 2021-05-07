@@ -84,7 +84,13 @@ export const BusinessList = (props) => {
       let where = null
       const conditions = []
       if (businessTypeSelected) {
-        conditions.push({ attribute: businessTypeSelected, value: true })
+        conditions.push({
+          attribute: 'types',
+          conditions: [{
+            attribute: 'id',
+            value: businessTypeSelected
+          }]
+        })
       }
       if (isFeatured) {
         conditions.push({ attribute: 'featured', value: true })
