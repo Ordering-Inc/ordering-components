@@ -5,6 +5,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 
 export const Cart = (props) => {
   const {
+    cart,
     UIComponent,
     handleEditProduct
   } = props
@@ -50,7 +51,7 @@ export const Cart = (props) => {
    */
   const changeQuantity = (product, quantity) => {
     if (quantity === 0) {
-      removeProduct(product)
+      removeProduct(product, cart)
     } else {
       updateProduct({
         id: product.id,

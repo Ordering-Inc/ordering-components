@@ -330,9 +330,9 @@ export const ProductForm = (props) => {
       if (useOrderContext) {
         successful = false
         if (!props.productCart?.code) {
-          successful = await addProduct(productCart)
+          successful = await addProduct(productCart, cart)
         } else {
-          successful = await updateProduct(productCart)
+          successful = await updateProduct(productCart, cart)
         }
       }
       if (successful) {
