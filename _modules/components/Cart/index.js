@@ -32,7 +32,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Cart = function Cart(props) {
   var _stateConfig$order;
 
-  var UIComponent = props.UIComponent,
+  var cart = props.cart,
+      UIComponent = props.UIComponent,
       handleEditProduct = props.handleEditProduct;
   /**
    * Order context manager
@@ -89,7 +90,7 @@ var Cart = function Cart(props) {
 
   var changeQuantity = function changeQuantity(product, quantity) {
     if (quantity === 0) {
-      removeProduct(product);
+      removeProduct(product, cart);
     } else {
       updateProduct({
         id: product.id,
