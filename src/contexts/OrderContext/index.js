@@ -301,7 +301,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
-        business_id: product.businessId,
+        business_id: state.carts?.[`businessId:${product.businessId}`]?.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
@@ -333,7 +333,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         product: {
           id: product.id,
           code: product.code,
-          business_id: product.business_id
+          business_id: state.carts?.[`businessId:${product.business_id}`]?.business_id,
         },
         user_id: userCustomerId || session.user.id
       }
@@ -390,7 +390,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
-        business_id: product.business_id,
+        business_id: state.carts?.[`businessId:${product.business_id}`]?.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
