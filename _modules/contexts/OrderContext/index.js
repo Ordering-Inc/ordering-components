@@ -648,8 +648,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var addProduct = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(product) {
-      var _state$carts, _state$carts$, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(product, cart) {
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
 
       return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
@@ -667,7 +667,7 @@ var OrderProvider = function OrderProvider(_ref) {
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: product,
-                business_id: (_state$carts = state.carts) === null || _state$carts === void 0 ? void 0 : (_state$carts$ = _state$carts["businessId:".concat(product.businessId)]) === null || _state$carts$ === void 0 ? void 0 : _state$carts$.business_id,
+                business_id: cart.business_id,
                 user_id: userCustomerId || session.user.id
               };
               _context6.next = 9;
@@ -716,7 +716,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee6, null, [[0, 18]]);
     }));
 
-    return function addProduct(_x6) {
+    return function addProduct(_x6, _x7) {
       return _ref7.apply(this, arguments);
     };
   }();
@@ -726,8 +726,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var removeProduct = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(product) {
-      var _state$carts2, _state$carts2$, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(product, cart) {
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
 
       return _regenerator.default.wrap(function _callee7$(_context7) {
         while (1) {
@@ -749,7 +749,7 @@ var OrderProvider = function OrderProvider(_ref) {
                   code: product.code,
                   business_id: product.business_id
                 },
-                business_id: (_state$carts2 = state.carts) === null || _state$carts2 === void 0 ? void 0 : (_state$carts2$ = _state$carts2["businessId:".concat(product.businessId)]) === null || _state$carts2$ === void 0 ? void 0 : _state$carts2$.business_id,
+                business_id: cart.business_id,
                 user_id: userCustomerId || session.user.id
               };
               _context7.next = 9;
@@ -797,7 +797,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee7, null, [[0, 18]]);
     }));
 
-    return function removeProduct(_x7) {
+    return function removeProduct(_x8, _x9) {
       return _ref8.apply(this, arguments);
     };
   }();
@@ -879,7 +879,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee8, null, [[0, 20]]);
     }));
 
-    return function clearCart(_x8) {
+    return function clearCart(_x10) {
       return _ref9.apply(this, arguments);
     };
   }();
@@ -889,8 +889,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var updateProduct = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(product) {
-      var _state$carts3, _state$carts3$, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, _yield$ordering$setAc12, error, result;
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(product, cart) {
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, _yield$ordering$setAc12, error, result;
 
       return _regenerator.default.wrap(function _callee9$(_context9) {
         while (1) {
@@ -908,7 +908,7 @@ var OrderProvider = function OrderProvider(_ref) {
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: product,
-                business_id: (_state$carts3 = state.carts) === null || _state$carts3 === void 0 ? void 0 : (_state$carts3$ = _state$carts3["businessId:".concat(product.business_id)]) === null || _state$carts3$ === void 0 ? void 0 : _state$carts3$.business_id,
+                business_id: cart.business_id,
                 user_id: userCustomerId || session.user.id
               };
               _context9.next = 9;
@@ -956,7 +956,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee9, null, [[0, 18]]);
     }));
 
-    return function updateProduct(_x9) {
+    return function updateProduct(_x11, _x12) {
       return _ref10.apply(this, arguments);
     };
   }();
@@ -967,7 +967,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var applyCoupon = /*#__PURE__*/function () {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(couponData) {
-      var _state$carts$2;
+      var _state$carts$;
 
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, _yield$ordering$setAc14, error, result;
 
@@ -991,7 +991,7 @@ var OrderProvider = function OrderProvider(_ref) {
               throw new Error('`coupon` is required.');
 
             case 4:
-              if (!(((_state$carts$2 = state.carts["businessId:".concat(couponData.business_id)]) === null || _state$carts$2 === void 0 ? void 0 : _state$carts$2.coupon) === couponData.coupon)) {
+              if (!(((_state$carts$ = state.carts["businessId:".concat(couponData.business_id)]) === null || _state$carts$ === void 0 ? void 0 : _state$carts$.coupon) === couponData.coupon)) {
                 _context10.next = 6;
                 break;
               }
@@ -1058,7 +1058,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee10, null, [[6, 24]]);
     }));
 
-    return function applyCoupon(_x10) {
+    return function applyCoupon(_x13) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -1069,7 +1069,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeDriverTip = /*#__PURE__*/function () {
     var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(businessId, driverTipRate, isFixedPrice) {
-      var _state$carts$3;
+      var _state$carts$2;
 
       var _body, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc15, _yield$ordering$setAc16, error, result;
 
@@ -1093,7 +1093,7 @@ var OrderProvider = function OrderProvider(_ref) {
               throw new Error('`driverTipRate` is required.');
 
             case 4:
-              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts$3 = state.carts["businessId:".concat(businessId)]) === null || _state$carts$3 === void 0 ? void 0 : _state$carts$3.driver_tip_rate) === driverTipRate)) {
+              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts$2 = state.carts["businessId:".concat(businessId)]) === null || _state$carts$2 === void 0 ? void 0 : _state$carts$2.driver_tip_rate) === driverTipRate)) {
                 _context11.next = 6;
                 break;
               }
@@ -1158,7 +1158,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[6, 24]]);
     }));
 
-    return function changeDriverTip(_x11, _x12, _x13) {
+    return function changeDriverTip(_x14, _x15, _x16) {
       return _ref12.apply(this, arguments);
     };
   }();
@@ -1264,7 +1264,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee12, null, [[0, 24]]);
     }));
 
-    return function placeCart(_x14, _x15) {
+    return function placeCart(_x17, _x18) {
       return _ref13.apply(this, arguments);
     };
   }();
@@ -1347,7 +1347,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee13, null, [[0, 19]]);
     }));
 
-    return function confirmCart(_x16, _x17) {
+    return function confirmCart(_x19, _x20) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1433,7 +1433,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[0, 20]]);
     }));
 
-    return function reorder(_x18) {
+    return function reorder(_x21) {
       return _ref15.apply(this, arguments);
     };
   }();
