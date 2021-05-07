@@ -197,8 +197,11 @@ var BusinessList = function BusinessList(props) {
 
               if (businessTypeSelected) {
                 conditions.push({
-                  attribute: businessTypeSelected,
-                  value: true
+                  attribute: 'types',
+                  conditions: [{
+                    attribute: 'id',
+                    value: businessTypeSelected
+                  }]
                 });
               }
 
