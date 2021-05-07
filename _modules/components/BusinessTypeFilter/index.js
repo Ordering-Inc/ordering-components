@@ -166,7 +166,7 @@ var BusinessTypeFilter = function BusinessTypeFilter(props) {
     };
   }();
 
-  useEffect(function () {
+  (0, _react.useEffect)(function () {
     if (businessTypes) {
       setTypesState(_objectSpread(_objectSpread({}, typesState), {}, {
         loading: false,
