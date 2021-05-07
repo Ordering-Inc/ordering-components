@@ -747,8 +747,9 @@ var OrderProvider = function OrderProvider(_ref) {
                 product: {
                   id: product.id,
                   code: product.code,
-                  business_id: (_state$carts2 = state.carts) === null || _state$carts2 === void 0 ? void 0 : (_state$carts2$ = _state$carts2["businessId:".concat(product.business_id)]) === null || _state$carts2$ === void 0 ? void 0 : _state$carts2$.business_id
+                  business_id: product.business_id
                 },
+                business_id: (_state$carts2 = state.carts) === null || _state$carts2 === void 0 ? void 0 : (_state$carts2$ = _state$carts2["businessId:".concat(product.businessId)]) === null || _state$carts2$ === void 0 ? void 0 : _state$carts2$.business_id,
                 user_id: userCustomerId || session.user.id
               };
               _context7.next = 9;

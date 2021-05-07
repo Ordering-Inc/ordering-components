@@ -333,8 +333,9 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         product: {
           id: product.id,
           code: product.code,
-          business_id: state.carts?.[`businessId:${product.business_id}`]?.business_id,
+          business_id: product.business_id,
         },
+        business_id: state.carts?.[`businessId:${product.businessId}`]?.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().removeProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
