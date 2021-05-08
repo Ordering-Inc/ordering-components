@@ -153,7 +153,7 @@ export const LoginForm = (props) => {
    */
   const sendVerifyPhoneCode = async (values) => {
     try {
-      setVerifyPhoneState(verifyPhoneState => ({ ...verifyPhoneState, loading: true }))
+      setVerifyPhoneState({ ...verifyPhoneState, loading: true })
       const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -163,19 +163,20 @@ export const LoginForm = (props) => {
         })
       })
       const res = await response.json()
-      setVerifyPhoneState(verifyPhoneState => ({
+      setVerifyPhoneState({
         ...verifyPhoneState,
         loading: false,
         result: res
-      }))
+      })
+
     } catch (error) {
-      setVerifyPhoneState(verifyPhoneState => ({
+      setVerifyPhoneState({
         ...verifyPhoneState,
         loading: false,
         result: {
           error: error.message
         }
-      }))
+      })
     }
   }
 
@@ -190,7 +191,7 @@ export const LoginForm = (props) => {
    */
   const checkVerifyPhoneCode = async (values) => {
     try {
-      setCheckPhoneCodeState(checkPhoneCodeState => ({ ...checkPhoneCodeState, loading: true }))
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
       const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -206,19 +207,19 @@ export const LoginForm = (props) => {
           handleSuccessLogin(res?.result)
         }
       }
-      setCheckPhoneCodeState(checkPhoneCodeState => ({
+      setCheckPhoneCodeState({
         ...checkPhoneCodeState,
         loading: false,
         result: res
-      }))
+      })
     } catch (error) {
-      setCheckPhoneCodeState(checkPhoneCodeState => ({
+      setCheckPhoneCodeState({
         ...checkPhoneCodeState,
         loading: false,
         result: {
           error: error.message
         }
-      }))
+      })
     }
   }
 
