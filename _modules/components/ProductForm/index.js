@@ -512,7 +512,9 @@ var ProductForm = function ProductForm(props) {
               }
 
               _context2.next = 9;
-              return addProduct(productCart, cart);
+              return addProduct(productCart, cart || {
+                business_id: props.businessId
+              });
 
             case 9:
               successful = _context2.sent;

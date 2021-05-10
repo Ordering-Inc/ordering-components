@@ -97,7 +97,7 @@ var Cart = function Cart(props) {
         business_id: product.business_id,
         code: product.code,
         quantity: quantity
-      });
+      }, cart);
     }
   };
 
