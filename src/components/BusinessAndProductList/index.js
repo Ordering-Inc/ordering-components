@@ -201,23 +201,13 @@ export const BusinessAndProductList = (props) => {
     }
 
     if (categorySelected.id === 'featured') {
-      where = {
-        conditions: [
-          {
-            attribute: 'featured',
-            value: true
-          }
-        ]
-      }
+      parameters.params = 'features'
     }
 
     if (categorySelected.id === 'featured' && searchValue) {
+      parameters.params = 'features'
       where = {
         conditions: [
-          {
-            attribute: 'featured',
-            value: true
-          },
           {
             conditions: searchConditions,
             conector: 'OR'
