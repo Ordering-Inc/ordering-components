@@ -109,11 +109,9 @@ var UpsellingPage = function UpsellingPage(props) {
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return ordering.businesses(businessId).products().where([{
-                attribute: 'upselling',
-                value: true
-              }]).parameters({
-                type: 1
+              return ordering.businesses(businessId).products().parameters({
+                type: 1,
+                params: 'upsellings'
               }).get();
 
             case 3:
