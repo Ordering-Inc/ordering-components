@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import parsePhoneNumber from 'libphonenumber-js'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
@@ -55,7 +56,16 @@ export const LoginForm = (props) => {
         password: values && values?.password || credentials.password
       }
       setFormState({ ...formState, loading: true })
+
+      if (_credentials?.cellphone?.includes('+')) {
+        const parsedNumber = parsePhoneNumber(_credentials.cellphone)
+        const cellphone = parsedNumber?.nationalNumber
+
+        _credentials.cellphone = cellphone
+      }
+      
       const { content: { error, result } } = await ordering.users().auth(_credentials)
+      
       if (!error) {
         if (useDefualtSessionManager) {
           if (allowedLevels && allowedLevels?.length > 0) {
@@ -158,6 +168,7 @@ export const LoginForm = (props) => {
         loading: false,
         result: res
       })
+
     } catch (error) {
       setVerifyPhoneState({
         ...verifyPhoneState,
