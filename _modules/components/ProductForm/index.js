@@ -167,7 +167,7 @@ var ProductForm = function ProductForm(props) {
    * Max total product in cart by config
    */
 
-  var maxCartProductInventory = (((_product$product = product.product) === null || _product$product === void 0 ? void 0 : _product$product.inventoried) ? (_product$product2 = product.product) === null || _product$product2 === void 0 ? void 0 : _product$product2.quantity : undefined) - productBalance;
+  var maxCartProductInventory = ((_product$product = product.product) !== null && _product$product !== void 0 && _product$product.inventoried ? (_product$product2 = product.product) === null || _product$product2 === void 0 ? void 0 : _product$product2.quantity : undefined) - productBalance;
   /**
    * True if product is sold out
    */
@@ -244,7 +244,7 @@ var ProductForm = function ProductForm(props) {
 
           var suboption = option.suboptions[k];
 
-          if ((_productCart$options$ = productCart.options["id:".concat(option.id)]) === null || _productCart$options$ === void 0 ? void 0 : (_productCart$options$2 = _productCart$options$.suboptions["id:".concat(suboption.id)]) === null || _productCart$options$2 === void 0 ? void 0 : _productCart$options$2.selected) {
+          if ((_productCart$options$ = productCart.options["id:".concat(option.id)]) !== null && _productCart$options$ !== void 0 && (_productCart$options$2 = _productCart$options$.suboptions["id:".concat(suboption.id)]) !== null && _productCart$options$2 !== void 0 && _productCart$options$2.selected) {
             var suboptionState = productCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
             var quantity = option.allow_suboption_quantity ? suboptionState.quantity : 1;
             var price = option.with_half_option && suboption.half_price && suboptionState.position !== 'whole' ? suboption.half_price : suboption.price;
@@ -452,7 +452,7 @@ var ProductForm = function ProductForm(props) {
 
             var _option = options[key];
 
-            if ((_option$suboptions$ = _option.suboptions["id:".concat(option.respect_to)]) === null || _option$suboptions$ === void 0 ? void 0 : _option$suboptions$.selected) {
+            if ((_option$suboptions$ = _option.suboptions["id:".concat(option.respect_to)]) !== null && _option$suboptions$ !== void 0 && _option$suboptions$.selected) {
               evaluateRespectTo = true;
               break;
             }
@@ -506,7 +506,7 @@ var ProductForm = function ProductForm(props) {
 
               successful = false;
 
-              if ((_props$productCart6 = props.productCart) === null || _props$productCart6 === void 0 ? void 0 : _props$productCart6.code) {
+              if ((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code) {
                 _context2.next = 12;
                 break;
               }
@@ -530,7 +530,7 @@ var ProductForm = function ProductForm(props) {
 
             case 15:
               if (successful) {
-                onSave(productCart, !((_props$productCart7 = props.productCart) === null || _props$productCart7 === void 0 ? void 0 : _props$productCart7.code));
+                onSave(productCart, !((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code));
               }
 
             case 16:
@@ -587,7 +587,7 @@ var ProductForm = function ProductForm(props) {
 
           var _option = options[key];
 
-          if ((_option$suboptions$2 = _option.suboptions["id:".concat(option.respect_to)]) === null || _option$suboptions$2 === void 0 ? void 0 : _option$suboptions$2.selected) {
+          if ((_option$suboptions$2 = _option.suboptions["id:".concat(option.respect_to)]) !== null && _option$suboptions$2 !== void 0 && _option$suboptions$2.selected) {
             showOption = true;
             break;
           }
@@ -619,7 +619,7 @@ var ProductForm = function ProductForm(props) {
    */
 
   (0, _react.useEffect)(function () {
-    if ((product === null || product === void 0 ? void 0 : product.product) && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
+    if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
       var option = product.product.extras.map(function (extra) {
         return extra.options.find(function (option) {
           return option.min === 1 && option.max === 1 && option.suboptions.length === 1;

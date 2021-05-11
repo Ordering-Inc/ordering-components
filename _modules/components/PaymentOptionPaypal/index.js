@@ -69,7 +69,7 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
 
     if (!clientId) return;
 
-    if ((_window = window) === null || _window === void 0 ? void 0 : _window.paypal) {
+    if ((_window = window) !== null && _window !== void 0 && _window.paypal) {
       setIsSdkReady(true);
       return;
     }

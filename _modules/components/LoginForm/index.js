@@ -161,7 +161,7 @@ var LoginForm = function LoginForm(props) {
                 loading: true
               }));
 
-              if (_credentials === null || _credentials === void 0 ? void 0 : (_credentials$cellphon = _credentials.cellphone) === null || _credentials$cellphon === void 0 ? void 0 : _credentials$cellphon.includes('+')) {
+              if (_credentials !== null && _credentials !== void 0 && (_credentials$cellphon = _credentials.cellphone) !== null && _credentials$cellphon !== void 0 && _credentials$cellphon.includes('+')) {
                 parsedNumber = (0, _libphonenumberJs.default)(_credentials.cellphone);
                 cellphone = parsedNumber === null || parsedNumber === void 0 ? void 0 : parsedNumber.nationalNumber;
                 _credentials.cellphone = cellphone;
@@ -414,7 +414,7 @@ var LoginForm = function LoginForm(props) {
             case 7:
               res = _context3.sent;
 
-              if (!(res === null || res === void 0 ? void 0 : res.error) && (res === null || res === void 0 ? void 0 : (_res$result = res.result) === null || _res$result === void 0 ? void 0 : _res$result.id)) {
+              if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
                 login({
                   user: res === null || res === void 0 ? void 0 : res.result,
                   token: res === null || res === void 0 ? void 0 : (_res$result2 = res.result) === null || _res$result2 === void 0 ? void 0 : (_res$result2$session = _res$result2.session) === null || _res$result2$session === void 0 ? void 0 : _res$result2$session.access_token

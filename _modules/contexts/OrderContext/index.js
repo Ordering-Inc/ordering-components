@@ -279,7 +279,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 _options2.moment = _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix();
               }
 
-              if (localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id) {
+              if (localOptions !== null && localOptions !== void 0 && localOptions.address_id) {
                 _options2.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
               }
 
@@ -310,7 +310,7 @@ var OrderProvider = function OrderProvider(_ref) {
             case 53:
               _context.prev = 53;
               _context.t0 = _context["catch"](0);
-              message = (_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$message = _context.t0.message) === null || _err$message === void 0 ? void 0 : _err$message.includes('Internal error')) ? 'INTERNAL_ERROR' : _context.t0.message;
+              message = _context.t0 !== null && _context.t0 !== void 0 && (_err$message = _context.t0.message) !== null && _err$message !== void 0 && _err$message.includes('Internal error') ? 'INTERNAL_ERROR' : _context.t0.message;
               setAlert({
                 show: true,
                 content: [message]
@@ -338,7 +338,7 @@ var OrderProvider = function OrderProvider(_ref) {
     props.forEach(function (prop) {
       var _state$options, _state$options2;
 
-      if (((_state$options = state.options) === null || _state$options === void 0 ? void 0 : _state$options.address) && ((_state$options2 = state.options) === null || _state$options2 === void 0 ? void 0 : _state$options2.address[prop])) {
+      if ((_state$options = state.options) !== null && _state$options !== void 0 && _state$options.address && (_state$options2 = state.options) !== null && _state$options2 !== void 0 && _state$options2.address[prop]) {
         if (prop === 'location') {
           var _state$options3, _state$options4;
 
@@ -397,7 +397,7 @@ var OrderProvider = function OrderProvider(_ref) {
               return _context2.abrupt("return");
 
             case 10:
-              if (!(params && (params === null || params === void 0 ? void 0 : params.address) && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
+              if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
                 _context2.next = 13;
                 break;
               }
@@ -408,7 +408,7 @@ var OrderProvider = function OrderProvider(_ref) {
               return _context2.abrupt("return");
 
             case 13:
-              if (!(params && (params === null || params === void 0 ? void 0 : params.isEdit))) {
+              if (!(params && params !== null && params !== void 0 && params.isEdit)) {
                 _context2.next = 18;
                 break;
               }
@@ -620,7 +620,7 @@ var OrderProvider = function OrderProvider(_ref) {
             case 19:
               _context5.prev = 19;
               _context5.t0 = _context5["catch"](6);
-              message = (_context5.t0 === null || _context5.t0 === void 0 ? void 0 : (_err$message2 = _context5.t0.message) === null || _err$message2 === void 0 ? void 0 : _err$message2.includes('Internal error')) ? 'INTERNAL_ERROR' : _context5.t0.message;
+              message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
                 show: true,
                 content: [message]

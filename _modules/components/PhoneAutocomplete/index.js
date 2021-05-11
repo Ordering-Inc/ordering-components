@@ -149,7 +149,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   var onChangeNumber = function onChangeNumber(e) {
     var _e$target, _e$target$validity, _e$target2;
 
-    setPhone(((_e$target = e.target) === null || _e$target === void 0 ? void 0 : (_e$target$validity = _e$target.validity) === null || _e$target$validity === void 0 ? void 0 : _e$target$validity.valid) ? (_e$target2 = e.target) === null || _e$target2 === void 0 ? void 0 : _e$target2.value : phone);
+    setPhone((_e$target = e.target) !== null && _e$target !== void 0 && (_e$target$validity = _e$target.validity) !== null && _e$target$validity !== void 0 && _e$target$validity.valid ? (_e$target2 = e.target) === null || _e$target2 === void 0 ? void 0 : _e$target2.value : phone);
   };
   /**
    * Get users from API

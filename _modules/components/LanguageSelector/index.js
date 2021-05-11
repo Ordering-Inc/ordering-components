@@ -188,10 +188,10 @@ var LanguageSelector = function LanguageSelector(props) {
       });
       setLanguage(language);
       setLanguageSelected(language);
-    } else if (!(languageState === null || languageState === void 0 ? void 0 : (_languageState$langua = languageState.language) === null || _languageState$langua === void 0 ? void 0 : _languageState$langua.code) || !(languageSelected === null || languageSelected === void 0 ? void 0 : languageSelected.code)) {
+    } else if (!(languageState !== null && languageState !== void 0 && (_languageState$langua = languageState.language) !== null && _languageState$langua !== void 0 && _languageState$langua.code) || !(languageSelected !== null && languageSelected !== void 0 && languageSelected.code)) {
       var _languageState$langua2, _languagesState$langu;
 
-      var _language = (languageState === null || languageState === void 0 ? void 0 : (_languageState$langua2 = languageState.language) === null || _languageState$langua2 === void 0 ? void 0 : _languageState$langua2.code) ? languageState === null || languageState === void 0 ? void 0 : languageState.language : languagesState === null || languagesState === void 0 ? void 0 : (_languagesState$langu = languagesState.languages) === null || _languagesState$langu === void 0 ? void 0 : _languagesState$langu.find(function (language) {
+      var _language = languageState !== null && languageState !== void 0 && (_languageState$langua2 = languageState.language) !== null && _languageState$langua2 !== void 0 && _languageState$langua2.code ? languageState === null || languageState === void 0 ? void 0 : languageState.language : languagesState === null || languagesState === void 0 ? void 0 : (_languagesState$langu = languagesState.languages) === null || _languagesState$langu === void 0 ? void 0 : _languagesState$langu.find(function (language) {
         return language.default;
       });
 
