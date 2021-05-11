@@ -201,23 +201,13 @@ export const BusinessAndProductList = (props) => {
     }
 
     if (categorySelected.id === 'featured') {
-      where = {
-        conditions: [
-          {
-            attribute: 'featured',
-            value: true
-          }
-        ]
-      }
+      parameters.params = 'features'
     }
 
     if (categorySelected.id === 'featured' && searchValue) {
+      parameters.params = 'features'
       where = {
         conditions: [
-          {
-            attribute: 'featured',
-            value: true
-          },
           {
             conditions: searchConditions,
             conector: 'OR'
@@ -410,7 +400,7 @@ export const BusinessAndProductList = (props) => {
   useEffect(() => {
     const request = requestsState.business
     return () => {
-      request && request.cancel()
+      request && request.cancel && request.cancel()
     }
   }, [requestsState.business])
 
@@ -420,7 +410,7 @@ export const BusinessAndProductList = (props) => {
   useEffect(() => {
     const request = requestsState.products
     return () => {
-      request && request.cancel()
+      request && request.cancel && request.cancel()
     }
   }, [requestsState.products])
 

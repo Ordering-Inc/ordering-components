@@ -10,6 +10,7 @@ dayjs.extend(utc)
 export const BusinessList = (props) => {
   const {
     UIComponent,
+    initialBuisnessType,
     initialOrderType,
     initialFilterKey,
     initialFilterValue,
@@ -83,8 +84,14 @@ export const BusinessList = (props) => {
 
       let where = null
       const conditions = []
-      if (businessTypeSelected) {
-        conditions.push({ attribute: businessTypeSelected, value: true })
+      if (initialBuisnessType || businessTypeSelected) {
+        conditions.push({
+          attribute: 'types',
+          conditions: [{
+            attribute: 'id',
+            value: !initialBuisnessType ? businessTypeSelected : initialBuisnessType
+          }]
+        })
       }
       if (isFeatured) {
         conditions.push({ attribute: 'featured', value: true })
@@ -130,7 +137,7 @@ export const BusinessList = (props) => {
               attribute: 'name',
               value: {
                 condition: 'ilike',
-                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+                value: (!isSpecialCharacter || props?.isForceSearch) ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )
@@ -141,7 +148,7 @@ export const BusinessList = (props) => {
               attribute: 'description',
               value: {
                 condition: 'ilike',
-                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+                value: (!isSpecialCharacter || props?.isForceSearch) ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
               }
             }
           )

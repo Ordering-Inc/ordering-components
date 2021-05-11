@@ -294,14 +294,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Add product to cart
    */
-  const addProduct = async (product, businessId) => {
+  const addProduct = async (product, cart) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
-        business_id: businessId,
+        business_id: cart.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
@@ -324,7 +324,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Remove product to cart
    */
-  const removeProduct = async (product, businessId) => {
+  const removeProduct = async (product, cart) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -333,8 +333,9 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         product: {
           id: product.id,
           code: product.code,
-          business_id: businessId
+          business_id: product.business_id
         },
+        business_id: cart.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().removeProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
@@ -383,14 +384,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Update product to cart
    */
-  const updateProduct = async (product, businessId) => {
+  const updateProduct = async (product, cart) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
-        business_id: businessId,
+        business_id: cart.business_id,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
@@ -570,9 +571,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
+      const query = userCustomerId
+        ? { user_id: userCustomerId }
+        : null
       const options = {
-        headers: { 'X-Socket-Id-X': socket?.getId() },
-        query: { user_id: userCustomerId || session.user.id }
+        headers: { 'X-Socket-Id-X': socket?.getId() }
+      }
+      if (query) {
+        options.query = query
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orders(orderId).reorder(options)
       if (!error) {

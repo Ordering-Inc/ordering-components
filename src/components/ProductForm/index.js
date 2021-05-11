@@ -137,11 +137,11 @@ export const ProductForm = (props) => {
    */
   const getUnitTotal = (productCart) => {
     let subtotal = 0
-    for (let i = 0; i < product.product?.extras.length; i++) {
+    for (let i = 0; i < product.product?.extras?.length; i++) {
       const extra = product.product?.extras[i]
-      for (let j = 0; j < extra.options.length; j++) {
+      for (let j = 0; j < extra.options?.length; j++) {
         const option = extra.options[j]
-        for (let k = 0; k < option.suboptions.length; k++) {
+        for (let k = 0; k < option.suboptions?.length; k++) {
           const suboption = option.suboptions[k]
           if (productCart.options[`id:${option.id}`]?.suboptions[`id:${suboption.id}`]?.selected) {
             const suboptionState = productCart.options[`id:${option.id}`].suboptions[`id:${suboption.id}`]
@@ -330,9 +330,9 @@ export const ProductForm = (props) => {
       if (useOrderContext) {
         successful = false
         if (!props.productCart?.code) {
-          successful = await addProduct(productCart, props.businessId)
+          successful = await addProduct(productCart, (cart || { business_id: props.businessId }))
         } else {
-          successful = await updateProduct(productCart, props.businessId)
+          successful = await updateProduct(productCart, (cart || { business_id: props.businessId }))
         }
       }
       if (successful) {
