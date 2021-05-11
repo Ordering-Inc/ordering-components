@@ -294,14 +294,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Add product to cart
    */
-  const addProduct = async (product) => {
+  const addProduct = async (product, businessId) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
-        business_id: product.businessId,
+        business_id: businessId,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
@@ -324,7 +324,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Remove product to cart
    */
-  const removeProduct = async (product) => {
+  const removeProduct = async (product, businessId) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -333,7 +333,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         product: {
           id: product.id,
           code: product.code,
-          business_id: product.business_id
+          business_id: businessId
         },
         user_id: userCustomerId || session.user.id
       }
@@ -383,14 +383,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Update product to cart
    */
-  const updateProduct = async (product) => {
+  const updateProduct = async (product, businessId) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
         product,
-        business_id: product.business_id,
+        business_id: businessId,
         user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
