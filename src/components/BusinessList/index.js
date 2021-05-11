@@ -10,6 +10,7 @@ dayjs.extend(utc)
 export const BusinessList = (props) => {
   const {
     UIComponent,
+    initialBuisnessType,
     initialOrderType,
     initialFilterKey,
     initialFilterValue,
@@ -83,12 +84,12 @@ export const BusinessList = (props) => {
 
       let where = null
       const conditions = []
-      if (businessTypeSelected) {
+      if (initialBuisnessType || businessTypeSelected) {
         conditions.push({
           attribute: 'types',
           conditions: [{
             attribute: 'id',
-            value: businessTypeSelected
+            value: !initialBuisnessType ? businessTypeSelected : initialBuisnessType
           }]
         })
       }
