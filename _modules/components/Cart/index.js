@@ -25,14 +25,15 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var Cart = function Cart(props) {
   var _stateConfig$order;
 
-  var UIComponent = props.UIComponent,
+  var cart = props.cart,
+      UIComponent = props.UIComponent,
       handleEditProduct = props.handleEditProduct;
   /**
    * Order context manager
@@ -89,14 +90,14 @@ var Cart = function Cart(props) {
 
   var changeQuantity = function changeQuantity(product, quantity) {
     if (quantity === 0) {
-      removeProduct(product);
+      removeProduct(product, cart);
     } else {
       updateProduct({
         id: product.id,
         business_id: product.business_id,
         code: product.code,
         quantity: quantity
-      });
+      }, cart);
     }
   };
 
