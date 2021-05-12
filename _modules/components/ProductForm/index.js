@@ -523,7 +523,9 @@ var ProductForm = function ProductForm(props) {
 
             case 12:
               _context2.next = 14;
-              return updateProduct(productCart, cart);
+              return updateProduct(productCart, cart || {
+                business_id: props.businessId
+              });
 
             case 14:
               successful = _context2.sent;

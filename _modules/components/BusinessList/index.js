@@ -74,6 +74,7 @@ var BusinessList = function BusinessList(props) {
       isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
       isFeatured = props.isFeatured,
+      isDoordash = props.isDoordash,
       paginationSettings = props.paginationSettings,
       customLocation = props.customLocation,
       propsToFetch = props.propsToFetch,
@@ -370,8 +371,25 @@ var BusinessList = function BusinessList(props) {
     var _orderState$options9, _orderState$options9$;
 
     if (orderState.loading || !((_orderState$options9 = orderState.options) !== null && _orderState$options9 !== void 0 && (_orderState$options9$ = _orderState$options9.address) !== null && _orderState$options9$ !== void 0 && _orderState$options9$.location) && !customLocation) return;
-    getBusinesses(true);
+
+    if (!isDoordash) {
+      getBusinesses(true);
+    }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  (0, _react.useEffect)(function () {
+    var _orderState$options10, _orderState$options11;
+
+    if (orderState.loading || !((_orderState$options10 = orderState.options) !== null && _orderState$options10 !== void 0 && (_orderState$options11 = _orderState$options10.address) !== null && _orderState$options11 !== void 0 && _orderState$options11.location) && !customLocation) return;
+
+    if (isDoordash) {
+      getBusinesses(true);
+    }
+  }, [JSON.stringify(orderState.options.moment), JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  (0, _react.useLayoutEffect)(function () {
+    if (isDoordash) {
+      getBusinesses(true);
+    }
+  }, [window.location.pathname]);
   /**
    * Listening initial filter
    */
