@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
@@ -19,6 +19,7 @@ export const BusinessList = (props) => {
     isSearchByName,
     isSearchByDescription,
     isFeatured,
+    isDoordash,
     paginationSettings,
     customLocation,
     propsToFetch,
@@ -223,9 +224,24 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if (orderState.loading || (!orderState.options?.address?.location && !customLocation)) return
-    getBusinesses(true)
+    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
+    if (!isDoordash) {
+      getBusinesses(true)
+    }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
+
+  useEffect(() => {
+    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
+    if (isDoordash) {
+      getBusinesses(true)
+    }
+  }, [JSON.stringify(orderState.options.moment), JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
+
+  useLayoutEffect(() => {
+    if (isDoordash) {
+      getBusinesses(true)
+    }
+  }, [window.location.pathname])
 
   /**
    * Listening initial filter
