@@ -617,6 +617,15 @@ var ProductForm = function ProductForm(props) {
     checkErrors();
   }, [productCart]);
   /**
+   * Listening product changes
+   */
+
+  (0, _react.useEffect)(function () {
+    setProduct(_objectSpread(_objectSpread({}, product), {}, {
+      product: props.product
+    }));
+  }, [props.product]);
+  /**
    * Check if there is an option required with one suboption
    */
 

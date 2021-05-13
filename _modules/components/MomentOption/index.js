@@ -196,17 +196,23 @@ var MomentOption = function MomentOption(props) {
     var selected = (0, _dayjs.default)(scheduleSelected, 'YYYY-MM-DD HH:mm');
     var now = (0, _dayjs.default)();
     var secondsDiff = selected.diff(now, 'seconds');
+    var checkTime;
 
     if (secondsDiff <= 0) {
       handleAsap();
       return;
     }
 
-    var checkTime = setTimeout(function () {
-      handleAsap();
-    }, secondsDiff * 1000);
+    if (secondsDiff * 1000 < 36000) {
+      checkTime = setTimeout(function () {
+        handleAsap();
+      }, secondsDiff * 1000);
+    }
+
     return function () {
-      clearTimeout(checkTime);
+      if (typeof checkTime === 'number') {
+        clearTimeout(checkTime);
+      }
     };
   }, [scheduleSelected]);
   (0, _react.useEffect)(function () {
