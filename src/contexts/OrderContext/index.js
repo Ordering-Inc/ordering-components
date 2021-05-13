@@ -333,7 +333,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         product: {
           id: product.id,
           code: product.code,
-          business_id: product.business_id,
+          business_id: product.business_id
         },
         business_id: cart.business_id,
         user_id: userCustomerId || session.user.id

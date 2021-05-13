@@ -332,7 +332,7 @@ export const ProductForm = (props) => {
         if (!props.productCart?.code) {
           successful = await addProduct(productCart, (cart || { business_id: props.businessId }))
         } else {
-          successful = await updateProduct(productCart, cart)
+          successful = await updateProduct(productCart, (cart || { business_id: props.businessId }))
         }
       }
       if (successful) {
@@ -402,6 +402,13 @@ export const ProductForm = (props) => {
   useEffect(() => {
     checkErrors()
   }, [productCart])
+
+  /**
+   * Listening product changes
+   */
+  useEffect(() => {
+    setProduct({ ...product, product: props.product })
+  }, [props.product])
 
   /**
    * Check if there is an option required with one suboption
