@@ -404,6 +404,13 @@ export const ProductForm = (props) => {
   }, [productCart])
 
   /**
+   * Listening product changes
+   */
+  useEffect(() => {
+    setProduct({ ...product, product: props.product })
+  }, [props.product])
+
+  /**
    * Check if there is an option required with one suboption
    */
   useEffect(() => {
