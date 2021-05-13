@@ -332,7 +332,7 @@ export const ProductForm = (props) => {
         if (!props.productCart?.code) {
           successful = await addProduct(productCart, (cart || { business_id: props.businessId }))
         } else {
-          successful = await updateProduct(productCart, cart)
+          successful = await updateProduct(productCart, (cart || { business_id: props.businessId }))
         }
       }
       if (successful) {
