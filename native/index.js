@@ -70,6 +70,8 @@ import { ValidationFieldsContext, useValidationFields, ValidationFieldsProvider 
 import { WebsocketContext, WebsocketProvider, useWebsocket } from '../src/contexts/WebsocketContext'
 import { OrderingContext, OrderingProvider } from './src/contexts/OrderingContext'
 
+import { CODES } from '../src/constants/code-numbers'
+
 export {
   AddressDetails,
   AddressForm,
@@ -161,5 +163,7 @@ export {
   useWebsocket,
   ValidationFieldsContext,
   useValidationFields,
-  ValidationFieldsProvider
+  ValidationFieldsProvider,
+  // Constants
+  CODES
 }
