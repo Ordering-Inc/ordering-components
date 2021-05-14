@@ -7,6 +7,7 @@ import { useApi } from '../../contexts/ApiContext'
 export const ProductForm = (props) => {
   const {
     UIComponent,
+    buisinessProducts,
     useOrderContext,
     onSave,
     handleCustomSave
@@ -44,6 +45,16 @@ export const ProductForm = (props) => {
    * Order context manager
    */
   const [orderState, { addProduct, updateProduct }] = useOrder()
+
+  /**
+   * featured products that doesn't exist in the cart
+   */
+  const [featuredProducts, setFeaturedProducts] = useState({ products: [], loadding: false })
+  
+  /**
+   * products of the same category and doesn't exist in the cart
+   */
+   const [relatedProducts, setRelatedProducts] = useState({ products: [], loading: false })
 
   /**
    * Remove to balances in edit mode
@@ -388,6 +399,86 @@ export const ProductForm = (props) => {
   }
 
   /**
+   * Get the products of business
+   */
+  const getProducts = async () => {
+    try {
+      setRelatedProducts({ ...relatedProducts, loading: true })
+      setFeaturedProducts({ ...featuredProducts, loadding: true})
+      
+      const parameters = {
+        type: orderState.options?.type || 1
+      }
+      const { content: { result } } = await ordering
+        .businesses(product.product?.category?.business_id)
+        .products()
+        .parameters(parameters)
+        .get()
+      if (result?.length) {
+        getFeaturedProducts(result)
+        getRelatedProducts(result)
+      }
+    } catch (err) {
+      setErrors([err.message])
+      setRelatedProducts({ ...relatedProducts, loading: false })
+      setFeaturedProducts({ ...featuredProducts, loadding: false})
+    }
+  }
+
+  /**
+   * get featured products that doesn't exist in the cart
+   * @param {array} products
+   */
+  const getFeaturedProducts = (result) => {
+    const filteredFeaturedProducts = result.filter(product => product.featured)
+    const repeatProducts = cart?.products.filter(cartProduct => filteredFeaturedProducts.find(product => product.id === cartProduct.id))
+    if (repeatProducts.length) {
+      setFeaturedProducts({
+        loading: false,
+        products: filteredFeaturedProducts.filter(product => !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
+      })
+    } else {
+      setFeaturedProducts({ 
+        loading: false,
+        products: filteredFeaturedProducts
+      })
+    }
+  }
+
+  /**
+   * get the products in the same category and doesn't exist in the cart
+   * @param {array} products
+   */
+  const getRelatedProducts = (result) => {
+    const filteredRelatedProducts = result.filter(_product => _product.category_id === product.product.category_id)
+    const repeatProducts = cart?.products.filter(cartProduct => filteredRelatedProducts.find(product => product.id === cartProduct.id))
+    if (repeatProducts.length) {
+      setRelatedProducts({
+        loading: false,
+        products: filteredRelatedProducts.filter(product => !repeatProducts.find(repeatProduct => repeatProduct.id === product.id))
+      })
+    } else {
+      setRelatedProducts({
+        loading: false,
+        products: filteredRelatedProducts
+      })
+    }
+  }
+  
+  /**
+   * Listening product changes
+   */
+  useEffect(() => {
+    if (buisinessProducts && buisinessProducts.length) {
+      getFeaturedProducts(buisinessProducts)
+      getRelatedProducts(buisinessProducts)
+    } else {
+      if (!product.product || product.loading) return
+      getProducts()
+    }
+  }, [product?.product, product.loading, buisinessProducts])
+
+  /**
    * Init product cart when product changed
    */
   useEffect(() => {
@@ -402,6 +493,13 @@ export const ProductForm = (props) => {
   useEffect(() => {
     checkErrors()
   }, [productCart])
+
+  /**
+   * Listening product changes
+   */
+  useEffect(() => {
+    setProduct({ ...product, product: props.product })
+  }, [props.product])
 
   /**
    * Check if there is an option required with one suboption
@@ -471,6 +569,8 @@ export const ProductForm = (props) => {
             editMode={editMode}
             isSoldOut={isSoldOut}
             maxProductQuantity={maxProductQuantity}
+            relatedProducts={relatedProducts}
+            featuredProducts={featuredProducts}
             increment={increment}
             decrement={decrement}
             handleSave={handleSave}
