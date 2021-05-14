@@ -168,7 +168,7 @@ var MomentOption = function MomentOption(props) {
     if (useOrderContext) {
       var _orderStatus$options2;
 
-      if ((_orderStatus$options2 = orderStatus.options) === null || _orderStatus$options2 === void 0 ? void 0 : _orderStatus$options2.moment) {
+      if ((_orderStatus$options2 = orderStatus.options) !== null && _orderStatus$options2 !== void 0 && _orderStatus$options2.moment) {
         var _orderStatus$options3;
 
         var _currentDate2 = _dayjs.default.utc(validDate((_orderStatus$options3 = orderStatus.options) === null || _orderStatus$options3 === void 0 ? void 0 : _orderStatus$options3.moment)).local();
@@ -196,17 +196,23 @@ var MomentOption = function MomentOption(props) {
     var selected = (0, _dayjs.default)(scheduleSelected, 'YYYY-MM-DD HH:mm');
     var now = (0, _dayjs.default)();
     var secondsDiff = selected.diff(now, 'seconds');
+    var checkTime;
 
     if (secondsDiff <= 0) {
       handleAsap();
       return;
     }
 
-    var checkTime = setTimeout(function () {
-      handleAsap();
-    }, secondsDiff * 1000);
+    if (secondsDiff * 1000 < 36000) {
+      checkTime = setTimeout(function () {
+        handleAsap();
+      }, secondsDiff * 1000);
+    }
+
     return function () {
-      clearTimeout(checkTime);
+      if (typeof checkTime === 'number') {
+        clearTimeout(checkTime);
+      }
     };
   }, [scheduleSelected]);
   (0, _react.useEffect)(function () {

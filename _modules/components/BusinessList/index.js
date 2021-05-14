@@ -65,6 +65,7 @@ var BusinessList = function BusinessList(props) {
   var _paginationSettings$p;
 
   var UIComponent = props.UIComponent,
+      initialBuisnessType = props.initialBuisnessType,
       initialOrderType = props.initialOrderType,
       initialFilterKey = props.initialFilterKey,
       initialFilterValue = props.initialFilterValue,
@@ -73,6 +74,7 @@ var BusinessList = function BusinessList(props) {
       isSearchByName = props.isSearchByName,
       isSearchByDescription = props.isSearchByDescription,
       isFeatured = props.isFeatured,
+      isDoordash = props.isDoordash,
       paginationSettings = props.paginationSettings,
       customLocation = props.customLocation,
       propsToFetch = props.propsToFetch,
@@ -187,7 +189,7 @@ var BusinessList = function BusinessList(props) {
                 parameters = _objectSpread(_objectSpread({}, parameters), paginationParams);
               }
 
-              if (((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment) && isValidMoment((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss')) {
+              if ((_orderState$options4 = orderState.options) !== null && _orderState$options4 !== void 0 && _orderState$options4.moment && isValidMoment((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss')) {
                 moment = _dayjs.default.utc((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }
@@ -195,12 +197,12 @@ var BusinessList = function BusinessList(props) {
               where = null;
               conditions = [];
 
-              if (businessTypeSelected) {
+              if (initialBuisnessType || businessTypeSelected) {
                 conditions.push({
                   attribute: 'types',
                   conditions: [{
                     attribute: 'id',
-                    value: businessTypeSelected
+                    value: !initialBuisnessType ? businessTypeSelected : initialBuisnessType
                   }]
                 });
               }
@@ -253,7 +255,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
-                      value: !isSpecialCharacter || (props === null || props === void 0 ? void 0 : props.isForceSearch) ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter || props !== null && props !== void 0 && props.isForceSearch ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -263,7 +265,7 @@ var BusinessList = function BusinessList(props) {
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
-                      value: !isSpecialCharacter || (props === null || props === void 0 ? void 0 : props.isForceSearch) ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
+                      value: !isSpecialCharacter || props !== null && props !== void 0 && props.isForceSearch ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -368,9 +370,26 @@ var BusinessList = function BusinessList(props) {
   (0, _react.useEffect)(function () {
     var _orderState$options9, _orderState$options9$;
 
-    if (orderState.loading || !((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : (_orderState$options9$ = _orderState$options9.address) === null || _orderState$options9$ === void 0 ? void 0 : _orderState$options9$.location) && !customLocation) return;
-    getBusinesses(true);
+    if (orderState.loading || !((_orderState$options9 = orderState.options) !== null && _orderState$options9 !== void 0 && (_orderState$options9$ = _orderState$options9.address) !== null && _orderState$options9$ !== void 0 && _orderState$options9$.location) && !customLocation) return;
+
+    if (!isDoordash) {
+      getBusinesses(true);
+    }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  (0, _react.useEffect)(function () {
+    var _orderState$options10, _orderState$options11;
+
+    if (orderState.loading || !((_orderState$options10 = orderState.options) !== null && _orderState$options10 !== void 0 && (_orderState$options11 = _orderState$options10.address) !== null && _orderState$options11 !== void 0 && _orderState$options11.location) && !customLocation) return;
+
+    if (isDoordash) {
+      getBusinesses(true);
+    }
+  }, [JSON.stringify(orderState.options.moment), JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  (0, _react.useLayoutEffect)(function () {
+    if (isDoordash) {
+      getBusinesses(true);
+    }
+  }, [window.location.pathname]);
   /**
    * Listening initial filter
    */

@@ -122,7 +122,7 @@ var GoogleMaps = function GoogleMaps(props) {
         position: new window.google.maps.LatLng((_locations$i2 = locations[i]) === null || _locations$i2 === void 0 ? void 0 : _locations$i2.lat, (_locations$i3 = locations[i]) === null || _locations$i3 === void 0 ? void 0 : _locations$i3.lng),
         map: map,
         title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
-        icon: ((_locations$i5 = locations[i]) === null || _locations$i5 === void 0 ? void 0 : _locations$i5.icon) ? {
+        icon: (_locations$i5 = locations[i]) !== null && _locations$i5 !== void 0 && _locations$i5.icon ? {
           url: formatUrl || locations[i].icon,
           scaledSize: new window.google.maps.Size(45, 45)
         } : null
@@ -302,7 +302,7 @@ var GoogleMaps = function GoogleMaps(props) {
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
           map: map,
-          draggable: !!(mapControls === null || mapControls === void 0 ? void 0 : mapControls.isMarkerDraggable)
+          draggable: !!(mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable)
         });
         setGoogleMapMarker(marker);
       }
@@ -318,7 +318,7 @@ var GoogleMaps = function GoogleMaps(props) {
           events.emit('map_is_dragging', true);
         });
 
-        if (mapControls === null || mapControls === void 0 ? void 0 : mapControls.isMarkerDraggable) {
+        if (mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable) {
           window.google.maps.event.addListener(googleMap, 'drag', function () {
             googleMapMarker.setPosition(googleMap.getCenter());
             events.emit('map_is_dragging', true);

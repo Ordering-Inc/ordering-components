@@ -211,7 +211,7 @@ var Checkout = function Checkout(props) {
             case 11:
               result = _context2.sent;
 
-              if (!(result === null || result === void 0 ? void 0 : result.error)) {
+              if (!(result !== null && result !== void 0 && result.error)) {
                 _context2.next = 15;
                 break;
               }

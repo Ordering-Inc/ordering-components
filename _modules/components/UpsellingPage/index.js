@@ -77,8 +77,8 @@ var UpsellingPage = function UpsellingPage(props) {
       orderState = _useOrder2[0];
 
   (0, _react.useEffect)(function () {
-    if ((products === null || products === void 0 ? void 0 : products.length) || businessId) {
-      if (products === null || products === void 0 ? void 0 : products.length) {
+    if (products !== null && products !== void 0 && products.length || businessId) {
+      if (products !== null && products !== void 0 && products.length) {
         getUpsellingProducts(products);
       } else {
         getProducts();

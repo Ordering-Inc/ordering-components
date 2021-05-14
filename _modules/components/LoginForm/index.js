@@ -13,6 +13,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _libphonenumberJs = _interopRequireDefault(require("libphonenumber-js"));
+
 var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
@@ -138,7 +140,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
-      var _credentials2, _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
+      var _credentials2, _credentials$cellphon, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -158,27 +160,34 @@ var LoginForm = function LoginForm(props) {
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.next = 8;
+
+              if (_credentials !== null && _credentials !== void 0 && (_credentials$cellphon = _credentials.cellphone) !== null && _credentials$cellphon !== void 0 && _credentials$cellphon.includes('+')) {
+                parsedNumber = (0, _libphonenumberJs.default)(_credentials.cellphone);
+                cellphone = parsedNumber === null || parsedNumber === void 0 ? void 0 : parsedNumber.nationalNumber;
+                _credentials.cellphone = cellphone;
+              }
+
+              _context.next = 9;
               return ordering.users().auth(_credentials);
 
-            case 8:
+            case 9:
               _yield$ordering$users = _context.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               error = _yield$ordering$users2.error;
               result = _yield$ordering$users2.result;
 
               if (error) {
-                _context.next = 35;
+                _context.next = 36;
                 break;
               }
 
               if (!useDefualtSessionManager) {
-                _context.next = 32;
+                _context.next = 33;
                 break;
               }
 
               if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-                _context.next = 31;
+                _context.next = 32;
                 break;
               }
 
@@ -186,15 +195,15 @@ var LoginForm = function LoginForm(props) {
               access_token = session === null || session === void 0 ? void 0 : session.access_token;
 
               if (allowedLevels.includes(level)) {
-                _context.next = 31;
+                _context.next = 32;
                 break;
               }
 
-              _context.prev = 18;
-              _context.next = 21;
+              _context.prev = 19;
+              _context.next = 22;
               return ordering.setAccessToken(access_token).users().logout();
 
-            case 21:
+            case 22:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
@@ -209,12 +218,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 30;
+              _context.next = 31;
               break;
 
-            case 27:
-              _context.prev = 27;
-              _context.t0 = _context["catch"](18);
+            case 28:
+              _context.prev = 28;
+              _context.t0 = _context["catch"](19);
               setFormState({
                 result: {
                   error: true,
@@ -223,16 +232,16 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 30:
+            case 31:
               return _context.abrupt("return");
 
-            case 31:
+            case 32:
               login({
                 user: result,
                 token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
 
-            case 32:
+            case 33:
               events.emit('userLogin', result);
 
               if (handleSuccessLogin) {
@@ -243,7 +252,7 @@ var LoginForm = function LoginForm(props) {
                 window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
               }
 
-            case 35:
+            case 36:
               setFormState({
                 result: {
                   error: error,
@@ -251,11 +260,11 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 41;
+              _context.next = 42;
               break;
 
-            case 38:
-              _context.prev = 38;
+            case 39:
+              _context.prev = 39;
               _context.t1 = _context["catch"](3);
               setFormState({
                 result: {
@@ -265,12 +274,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 41:
+            case 42:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 38], [18, 27]]);
+      }, _callee, null, [[3, 39], [19, 28]]);
     }));
 
     return function handleLoginClick(_x) {
@@ -405,7 +414,7 @@ var LoginForm = function LoginForm(props) {
             case 7:
               res = _context3.sent;
 
-              if (!(res === null || res === void 0 ? void 0 : res.error) && (res === null || res === void 0 ? void 0 : (_res$result = res.result) === null || _res$result === void 0 ? void 0 : _res$result.id)) {
+              if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
                 login({
                   user: res === null || res === void 0 ? void 0 : res.result,
                   token: res === null || res === void 0 ? void 0 : (_res$result2 = res.result) === null || _res$result2 === void 0 ? void 0 : (_res$result2$session = _res$result2.session) === null || _res$result2$session === void 0 ? void 0 : _res$result2$session.access_token
