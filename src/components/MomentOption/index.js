@@ -119,15 +119,20 @@ export const MomentOption = (props) => {
     const selected = dayjs(scheduleSelected, 'YYYY-MM-DD HH:mm')
     const now = dayjs()
     const secondsDiff = selected.diff(now, 'seconds')
+    let checkTime
     if (secondsDiff <= 0) {
       handleAsap()
       return
     }
-    const checkTime = setTimeout(() => {
-      handleAsap()
-    }, secondsDiff * 1000)
+    if (secondsDiff * 1000 < 36000) {
+      checkTime = setTimeout(() => {
+        handleAsap()
+      }, secondsDiff * 1000)
+    }
     return () => {
-      clearTimeout(checkTime)
+      if (typeof checkTime === 'number') {
+        clearTimeout(checkTime)
+      }
     }
   }, [scheduleSelected])
 
