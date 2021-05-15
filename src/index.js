@@ -82,6 +82,7 @@ import { FloatingButton } from './components/FloatingButton'
 import { ResetPassword } from './components/ResetPassword'
 import { Analytics } from './components/Analitycs'
 import { AppleLogin } from './components/AppleLogin'
+import { CODES } from './constants/code-numbers'
 
 export {
   AddressDetails,
@@ -193,5 +194,7 @@ export {
   useValidationFields,
   CustomerContext,
   CustomerProvider,
-  useCustomer
+  useCustomer,
+  // Constants
+  CODES
 }
