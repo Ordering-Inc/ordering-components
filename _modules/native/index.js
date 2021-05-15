@@ -543,6 +543,12 @@ Object.defineProperty(exports, "OrderingProvider", {
     return _OrderingContext.OrderingProvider;
   }
 });
+Object.defineProperty(exports, "CODES", {
+  enumerable: true,
+  get: function get() {
+    return _codeNumbers.CODES;
+  }
+});
 
 var _AddressDetails = require("../src/components/AddressDetails");
 
@@ -681,3 +687,5 @@ var _ValidationsFieldsContext = require("../src/contexts/ValidationsFieldsContex
 var _WebsocketContext = require("../src/contexts/WebsocketContext");
 
 var _OrderingContext = require("./src/contexts/OrderingContext");
+
+var _codeNumbers = require("../src/constants/code-numbers");
