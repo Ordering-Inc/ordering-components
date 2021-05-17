@@ -78,7 +78,8 @@ var BusinessList = function BusinessList(props) {
       paginationSettings = props.paginationSettings,
       customLocation = props.customLocation,
       propsToFetch = props.propsToFetch,
-      onBusinessClick = props.onBusinessClick;
+      onBusinessClick = props.onBusinessClick,
+      windowPathname = props.windowPathname;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -389,7 +390,7 @@ var BusinessList = function BusinessList(props) {
     if (isDoordash) {
       getBusinesses(true);
     }
-  }, [window.location.pathname]);
+  }, [windowPathname]);
   /**
    * Listening initial filter
    */
