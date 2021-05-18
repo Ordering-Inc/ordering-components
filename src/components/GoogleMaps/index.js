@@ -81,7 +81,7 @@ export const GoogleMaps = (props) => {
 
       geocoder.geocode({ latLng: pos }, (results) => {
         let zipcode = null
-        if (results && results.length > 0) {
+        if (results && results.length > 0 && results?.[0]?.address_components) {
           for (const component of results[0].address_components) {
             const addressType = component.types[0]
             if (addressType === 'postal_code') {
