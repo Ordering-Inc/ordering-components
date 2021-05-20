@@ -157,7 +157,7 @@ export const LoginForm = (props) => {
   }
 
   useEffect(() => {
-    setIsReCaptchaEnable(configs &&
+    setIsReCaptchaEnable(props.isRecaptchaEnable && configs &&
       Object.keys(configs).length > 0 &&
       configs?.security_recaptcha_auth?.value === '1')
   }, [configs])
