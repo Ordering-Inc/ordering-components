@@ -687,7 +687,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       timeout = setTimeout(() => {
         if (state.loading) {
           refreshOrderOptions()
-          console.log('opciones refrescadas')
         }
       }, 10000)
     }
