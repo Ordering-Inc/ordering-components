@@ -688,7 +688,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         if (state.loading) {
           refreshOrderOptions()
         }
-      }, 10000)
+      }, 7000)
     }
     return () => {
       if (typeof timeout === 'number') {
