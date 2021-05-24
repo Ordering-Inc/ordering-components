@@ -683,7 +683,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
 
   useEffect(() => {
     let timeout
-    if (state.loading && session.auth && !languageState.loading) {
+    if (state.loading && !languageState.loading) {
       timeout = setTimeout(() => {
         if (state.loading && session.auth && !languageState.loading) {
           refreshOrderOptions()
