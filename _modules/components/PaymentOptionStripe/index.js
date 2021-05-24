@@ -374,7 +374,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     }
 
     return function () {
-      if (requestState.paymentCards) {
+      if (requestState.paymentCards && requestState.paymentCards.cancel) {
         requestState.paymentCards.cancel();
       }
     };

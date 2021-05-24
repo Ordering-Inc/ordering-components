@@ -79,41 +79,47 @@ var GpsButton = function GpsButton(props) {
         geocoder.geocode({
           location: location
         }, function (results, status) {
+          var _results$;
+
           setIsLoading(false);
           var postalCode = null;
 
-          var _iterator = _createForOfIteratorHelper(results[0].address_components),
-              _step;
+          if (results !== null && results !== void 0 && (_results$ = results[0]) !== null && _results$ !== void 0 && _results$.address_components) {
+            var _iterator = _createForOfIteratorHelper(results[0].address_components),
+                _step;
 
-          try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var component = _step.value;
-              var addressType = component.types[0];
+            try {
+              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                var component = _step.value;
+                var addressType = component.types[0];
 
-              if (addressType === 'postal_code') {
-                postalCode = component.short_name;
-                break;
+                if (addressType === 'postal_code') {
+                  postalCode = component.short_name;
+                  break;
+                }
               }
+            } catch (err) {
+              _iterator.e(err);
+            } finally {
+              _iterator.f();
             }
-          } catch (err) {
-            _iterator.e(err);
-          } finally {
-            _iterator.f();
-          }
 
-          if (status === 'OK') {
-            onAddress({
-              address: results[0].formatted_address,
-              location: location,
-              utc_offset: new Date().getTimezoneOffset(),
-              zipcode: postalCode,
-              map_data: {
-                library: 'google',
-                place_id: results[0].place_id
-              }
-            });
+            if (status === 'OK') {
+              onAddress({
+                address: results[0].formatted_address,
+                location: location,
+                utc_offset: new Date().getTimezoneOffset(),
+                zipcode: postalCode,
+                map_data: {
+                  library: 'google',
+                  place_id: results[0].place_id
+                }
+              });
+            } else {
+              onError && onError(t('ERROR_GPS_BUTTON', 'Error to get result with gps button'));
+            }
           } else {
-            onError && onError(t('ERROR_GPS_BUTTON', 'Error to get result with gps button'));
+            onError && onError(t('ERROR_NOT_FOUND_ADDRESS', 'The Address was not found'));
           }
         });
       } else {

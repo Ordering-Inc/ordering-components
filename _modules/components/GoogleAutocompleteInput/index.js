@@ -73,7 +73,7 @@ var AutocompleteInput = function AutocompleteInput(props) {
         var place = autocomplete.getPlace();
         var postalCode = null;
 
-        if (place.address_components) {
+        if (place !== null && place !== void 0 && place.address_components) {
           var _iterator = _createForOfIteratorHelper(place.address_components),
               _step;
 

@@ -173,9 +173,11 @@ var GoogleMaps = function GoogleMaps(props) {
       geocoder.geocode({
         latLng: pos
       }, function (results) {
+        var _results$;
+
         var zipcode = null;
 
-        if (results && results.length > 0) {
+        if (results && results.length > 0 && results !== null && results !== void 0 && (_results$ = results[0]) !== null && _results$ !== void 0 && _results$.address_components) {
           var _address$location, _address$location2;
 
           var _iterator = _createForOfIteratorHelper(results[0].address_components),
