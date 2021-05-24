@@ -160,7 +160,7 @@ export const PaymentOptionStripe = (props) => {
       }
     }
     return () => {
-      if (requestState.paymentCards) {
+      if (requestState.paymentCards && requestState.paymentCards.cancel) {
         requestState.paymentCards.cancel()
       }
     }

@@ -43,7 +43,7 @@ const AutocompleteInput = (props) => {
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace()
         let postalCode = null
-        if (place.address_components) {
+        if (place?.address_components) {
           for (const component of place.address_components) {
             const addressType = component.types[0]
             if (addressType === 'postal_code') {
