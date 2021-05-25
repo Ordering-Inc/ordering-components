@@ -1552,6 +1552,23 @@ var OrderProvider = function OrderProvider(_ref) {
       socket.leave("orderoptions_".concat(session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id));
     };
   }, [socket, session]);
+  (0, _react.useEffect)(function () {
+    var timeout;
+
+    if (state.loading && !languageState.loading) {
+      timeout = setTimeout(function () {
+        if (state.loading && session.auth && !languageState.loading) {
+          refreshOrderOptions();
+        }
+      }, 10000);
+    }
+
+    return function () {
+      if (typeof timeout === 'number') {
+        clearTimeout(timeout);
+      }
+    };
+  }, [state.loading]);
   var functions = {
     refreshOrderOptions: refreshOrderOptions,
     changeAddress: changeAddress,
