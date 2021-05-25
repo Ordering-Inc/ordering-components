@@ -681,6 +681,22 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     }
   }, [socket, session])
 
+  useEffect(() => {
+    let timeout
+    if (state.loading && !languageState.loading) {
+      timeout = setTimeout(() => {
+        if (state.loading && session.auth && !languageState.loading) {
+          refreshOrderOptions()
+        }
+      }, 10000)
+    }
+    return () => {
+      if (typeof timeout === 'number') {
+        clearTimeout(timeout)
+      }
+    }
+  }, [state.loading])
+
   const functions = {
     refreshOrderOptions,
     changeAddress,
