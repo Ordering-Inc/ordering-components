@@ -85,7 +85,12 @@ export const LoginForm = (props) => {
       }
       
       const { content: { error, result } } = await ordering.users().auth(_credentials)
-      
+
+      if (isReCaptchaEnable) {
+        window.grecaptcha.reset()
+        setReCaptchaValue(null)
+      }
+
       if (!error) {
         if (useDefualtSessionManager) {
           if (allowedLevels && allowedLevels?.length > 0) {
@@ -146,14 +151,6 @@ export const LoginForm = (props) => {
         loading: false
       })
     }
-  }
-
-  /**
-   * Update recaptcha value
-   * @param {string} value of recaptcha
-   */
-  const setReCaptcha = (value) => {
-    setReCaptchaValue(value)
   }
 
   useEffect(() => {
@@ -274,7 +271,7 @@ export const LoginForm = (props) => {
           handleSendVerifyCode={sendVerifyPhoneCode}
           handleCheckPhoneCode={checkVerifyPhoneCode}
           enableReCaptcha={isReCaptchaEnable}
-          handleReCaptcha={setReCaptcha}
+          handleReCaptcha={setReCaptchaValue}
         />
       )}
     </>
