@@ -222,18 +222,23 @@ var LoginForm = function LoginForm(props) {
               error = _yield$ordering$users2.error;
               result = _yield$ordering$users2.result;
 
+              if (isReCaptchaEnable) {
+                window.grecaptcha.reset();
+                setReCaptchaValue(null);
+              }
+
               if (error) {
-                _context.next = 43;
+                _context.next = 44;
                 break;
               }
 
               if (!useDefualtSessionManager) {
-                _context.next = 40;
+                _context.next = 41;
                 break;
               }
 
               if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-                _context.next = 39;
+                _context.next = 40;
                 break;
               }
 
@@ -241,15 +246,15 @@ var LoginForm = function LoginForm(props) {
               access_token = session === null || session === void 0 ? void 0 : session.access_token;
 
               if (allowedLevels.includes(level)) {
-                _context.next = 39;
+                _context.next = 40;
                 break;
               }
 
-              _context.prev = 26;
-              _context.next = 29;
+              _context.prev = 27;
+              _context.next = 30;
               return ordering.setAccessToken(access_token).users().logout();
 
-            case 29:
+            case 30:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
@@ -264,12 +269,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 38;
+              _context.next = 39;
               break;
 
-            case 35:
-              _context.prev = 35;
-              _context.t0 = _context["catch"](26);
+            case 36:
+              _context.prev = 36;
+              _context.t0 = _context["catch"](27);
               setFormState({
                 result: {
                   error: true,
@@ -278,16 +283,16 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 38:
+            case 39:
               return _context.abrupt("return");
 
-            case 39:
+            case 40:
               login({
                 user: result,
                 token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
 
-            case 40:
+            case 41:
               events.emit('userLogin', result);
 
               if (handleSuccessLogin) {
@@ -298,7 +303,7 @@ var LoginForm = function LoginForm(props) {
                 window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
               }
 
-            case 43:
+            case 44:
               setFormState({
                 result: {
                   error: error,
@@ -306,11 +311,11 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 49;
+              _context.next = 50;
               break;
 
-            case 46:
-              _context.prev = 46;
+            case 47:
+              _context.prev = 47;
               _context.t1 = _context["catch"](3);
               setFormState({
                 result: {
@@ -320,27 +325,18 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 49:
+            case 50:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 46], [26, 35]]);
+      }, _callee, null, [[3, 47], [27, 36]]);
     }));
 
     return function handleLoginClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Update recaptcha value
-   * @param {string} value of recaptcha
-   */
-
-
-  var setReCaptcha = function setReCaptcha(value) {
-    setReCaptchaValue(value);
-  };
 
   (0, _react.useEffect)(function () {
     var _configs$security_rec;
@@ -528,7 +524,7 @@ var LoginForm = function LoginForm(props) {
     handleSendVerifyCode: sendVerifyPhoneCode,
     handleCheckPhoneCode: checkVerifyPhoneCode,
     enableReCaptcha: isReCaptchaEnable,
-    handleReCaptcha: setReCaptcha
+    handleReCaptcha: setReCaptchaValue
   })));
 };
 
