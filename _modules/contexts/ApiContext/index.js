@@ -49,15 +49,23 @@ var ApiProvider = function ApiProvider(_ref) {
   var settings = _ref.settings,
       children = _ref.children;
 
-  var _useState = (0, _react.useState)(new _orderingApiSdk.Ordering(settings)),
+  var _useState = (0, _react.useState)(Object.assign(settings.api, {
+    project: settings.project,
+    appId: settings.app_id
+  })),
       _useState2 = _slicedToArray(_useState, 2),
-      ordering = _useState2[0],
-      setOrdering = _useState2[1];
+      apiSettings = _useState2[0],
+      setApiSettings = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(settings.language),
+  var _useState3 = (0, _react.useState)(new _orderingApiSdk.Ordering(apiSettings)),
       _useState4 = _slicedToArray(_useState3, 2),
-      language = _useState4[0],
-      setLanguage = _useState4[1];
+      ordering = _useState4[0],
+      setOrdering = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(settings.language),
+      _useState6 = _slicedToArray(_useState5, 2),
+      language = _useState6[0],
+      setLanguage = _useState6[1];
 
   var _setLanguage = function _setLanguage(languageCode) {
     if (languageCode === language) return;
@@ -65,9 +73,19 @@ var ApiProvider = function ApiProvider(_ref) {
   };
 
   (0, _react.useEffect)(function () {
+    setApiSettings(Object.assign(settings.api, {
+      project: settings.project,
+      appId: settings.app_id
+    }));
+    setOrdering(new _orderingApiSdk.Ordering(Object.assign(settings.api, {
+      project: settings.project,
+      appId: settings.app_id
+    })));
+  }, [settings]);
+  (0, _react.useEffect)(function () {
     if (ordering.language === language) return;
 
-    var _ordering = new _orderingApiSdk.Ordering(_objectSpread(_objectSpread({}, settings), {}, {
+    var _ordering = new _orderingApiSdk.Ordering(_objectSpread(_objectSpread({}, apiSettings), {}, {
       language: language
     }));
 
