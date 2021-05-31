@@ -51,7 +51,16 @@ export const LogoutAction = (props) => {
 
   useEffect(() => {
     if (configs?.google_login_client_id?.value && !isNative) {
-      insertGapiScript()
+      const js = window.document.createElement('script')
+      js.id = 'google-login'
+      js.src = 'https://apis.google.com/js/api.js'
+      js.async = true
+      js.defer = true
+      js.onload = () => {
+        window.gapi.load('auth2', () => { })
+      }
+      window.document.body.appendChild(js)
+
       return () => {
         const element = document.getElementById('google-login')
         if (element) {
@@ -60,21 +69,6 @@ export const LogoutAction = (props) => {
       }
     }
   }, [configs?.google_login_client_id?.value])
-
-  /**
-   * loading script for the google's api
-   */
-  const insertGapiScript = () => {
-    const js = window.document.createElement('script')
-    js.id = 'google-login'
-    js.src = 'https://apis.google.com/js/api.js'
-    js.async = true
-    js.defer = true
-    js.onload = () => {
-      window.gapi.load('auth2', () => { })
-    }
-    window.document.body.appendChild(js)
-  }
 
   /**
    * Default fuction for logout workflow
