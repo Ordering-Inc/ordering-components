@@ -23,15 +23,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -52,25 +52,44 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
       onRequest = props.onRequest,
       responseType = props.responseType,
       handleSuccessGoogleLogin = props.handleSuccessGoogleLogin,
+      handleSuccessGoogleLogout = props.handleSuccessGoogleLogout,
       initParams = props.initParams,
       buttonStyle = props.buttonStyle,
-      handleGoogleLoginClick = props.handleGoogleLoginClick; // const [ordering] = useApi()
+      handleGoogleLoginClick = props.handleGoogleLoginClick;
 
-  var _useState = (0, _react.useState)(false),
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+
+  var _useState = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      loaded = _useState2[0],
-      setLoaded = _useState2[1];
+      formState = _useState2[0],
+      setFormState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
+    loaded: false,
+    logged: false
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      googleStatus = _useState4[0],
+      setGoogleStatus = _useState4[1];
 
   var wasUnmounted = false;
   (0, _react.useEffect)(function () {
+    var element = document.getElementById('google-login');
+
+    if (element) {
+      element.parentNode.removeChild(element);
+    }
+
     insertGapiScript();
     return function () {
       wasUnmounted = true;
-      var element = document.getElementById('google-login');
-
-      if (element) {
-        element.parentNode.removeChild(element);
-      }
     };
   }, []);
   /**
@@ -97,6 +116,9 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
 
   var initializeGoogleSignIn = function initializeGoogleSignIn() {
     window.gapi.load('auth2', function () {
+      setGoogleStatus(_objectSpread(_objectSpread({}, googleStatus), {}, {
+        loaded: true
+      }));
       var GoogleAuth = window.gapi.auth2.getAuthInstance();
 
       if (!GoogleAuth) {
@@ -108,7 +130,6 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
                 switch (_context.prev = _context.next) {
                   case 0:
                     if (!wasUnmounted) {
-                      setLoaded(true);
                       signedIn = res.isSignedIn.get();
 
                       if (signedIn) {
@@ -127,26 +148,24 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
           return function (_x) {
             return _ref.apply(this, arguments);
           };
-        }(), function () {
-          setLoaded(true);
-        }).catch(function () {});
+        }()).catch(function () {});
       } else if (GoogleAuth.isSignedIn.get()) {
         if (!wasUnmounted) {
-          setLoaded(true);
           handleSigninSuccess(GoogleAuth.currentUser.get());
         }
-      } else if (!wasUnmounted) {
-        wasUnmounted && setLoaded(true);
       }
     });
-    window.gapi.load('signin2', function () {
-      if (!wasUnmounted) {
-        window.gapi.signin2.render('my-signin2', _objectSpread(_objectSpread({}, buttonStyle), {}, {
-          onsuccess: onSuccess,
-          onfailure: onFailure
-        }));
-      }
-    });
+
+    if (buttonStyle) {
+      window.gapi.load('signin2', function () {
+        if (!wasUnmounted) {
+          window.gapi.signin2.render('my-signin2', _objectSpread(_objectSpread({}, buttonStyle), {}, {
+            onsuccess: onSuccess,
+            onfailure: onFailure
+          }));
+        }
+      });
+    }
   };
   /**
    * handling response of google
@@ -159,9 +178,12 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
       e.preventDefault(); // to prevent submit if used within form
     }
 
-    if (loaded) {
+    if (googleStatus.loaded) {
       var GoogleAuth = window.gapi.auth2.getAuthInstance();
-      onRequest();
+
+      if (onRequest) {
+        onRequest();
+      }
 
       if (responseType === 'code') {
         GoogleAuth.grantOfflineAccess(initParams).then(function (res) {
@@ -171,34 +193,79 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
         });
       } else {
         GoogleAuth.signIn(initParams).then(function (res) {
-          return handleSigninSuccess(res);
+          setFormState({
+            loading: false,
+            result: {
+              error: false
+            }
+          });
+          setGoogleStatus(_objectSpread(_objectSpread({}, googleStatus), {}, {
+            logged: true
+          }));
+          handleSigninSuccess(res);
         }, function (err) {
-          return onFailure(err);
+          setFormState({
+            loading: false,
+            result: {
+              error: true,
+              result: 'Error login with Google'
+            }
+          });
+
+          if (onFailure) {
+            onFailure(err);
+          }
         });
       }
     }
   };
+
+  var signOut = function signOut(e) {
+    if (e) {
+      e.preventDefault(); // to prevent submit if used within form
+    }
+
+    if (googleStatus.loaded) {
+      var GoogleAuth = window.gapi.auth2.getAuthInstance();
+      GoogleAuth.signOut().then(GoogleAuth.disconnect().then(function () {
+        setFormState({
+          loading: false,
+          result: {
+            error: false
+          }
+        });
+        setGoogleStatus(_objectSpread(_objectSpread({}, googleStatus), {}, {
+          logged: false
+        }));
+
+        if (handleSuccessGoogleLogout) {
+          handleSuccessGoogleLogout();
+        }
+      }));
+    }
+  };
   /**
    * Function that return token of the user
-   * @param {object} result from Google
+   * @param {object} res from Google
    */
 
 
   var handleSigninSuccess = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(res) {
-      var basicProfile, authResponse;
+      var basicProfile, authResponse, response;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (!handleGoogleLoginClick) {
-                _context2.next = 2;
+                _context2.next = 3;
                 break;
               }
 
-              return _context2.abrupt("return", handleGoogleLoginClick(res));
+              handleGoogleLoginClick(res);
+              return _context2.abrupt("return");
 
-            case 2:
+            case 3:
               basicProfile = res.getBasicProfile();
               authResponse = res.getAuthResponse();
               res.googleId = basicProfile.getId();
@@ -212,17 +279,57 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
                 name: basicProfile.getName(),
                 givenName: basicProfile.getGivenName(),
                 familyName: basicProfile.getFamilyName()
-              }; // const response = await ordering.users().auth(res)
+              }; // login with backend
 
-              handleSuccessGoogleLogin(basicProfile);
-              onSuccess(res);
+              _context2.prev = 10;
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: true
+              }));
+              _context2.next = 14;
+              return ordering.users().authGoogle({
+                access_token: authResponse === null || authResponse === void 0 ? void 0 : authResponse.id_token
+              });
 
-            case 11:
+            case 14:
+              response = _context2.sent;
+              setFormState({
+                result: response.content,
+                loading: false
+              });
+
+              if (!response.content.error) {
+                if (handleSuccessGoogleLogin) {
+                  handleSuccessGoogleLogin(response.content.result);
+                }
+
+                if (onSuccess) {
+                  onSuccess(response);
+                }
+              } else {
+                signOut();
+              }
+
+              _context2.next = 23;
+              break;
+
+            case 19:
+              _context2.prev = 19;
+              _context2.t0 = _context2["catch"](10);
+              setFormState({
+                result: {
+                  error: true,
+                  result: _context2.t0.message
+                },
+                loading: false
+              });
+              signOut();
+
+            case 23:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2);
+      }, _callee2, null, [[10, 19]]);
     }));
 
     return function handleSigninSuccess(_x2) {
@@ -231,7 +338,10 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
   }();
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    signIn: signIn
+    formState: formState,
+    googleStatus: googleStatus,
+    signIn: signIn,
+    signOut: signOut
   })));
 };
 

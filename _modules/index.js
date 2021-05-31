@@ -135,6 +135,12 @@ Object.defineProperty(exports, "ForgotPasswordForm", {
     return _ForgotPasswordForm.ForgotPasswordForm;
   }
 });
+Object.defineProperty(exports, "GoogleLoginButton", {
+  enumerable: true,
+  get: function get() {
+    return _GoogleLoginButton.GoogleLoginButton;
+  }
+});
 Object.defineProperty(exports, "GoogleAutocompleteInput", {
   enumerable: true,
   get: function get() {
@@ -713,6 +719,8 @@ var _ExamineClick = require("./components/ExamineClick");
 var _FacebookLoginButton = require("./components/FacebookLoginButton");
 
 var _ForgotPasswordForm = require("./components/ForgotPasswordForm");
+
+var _GoogleLoginButton = require("./components/GoogleLoginButton");
 
 var _GoogleAutocompleteInput = require("./components/GoogleAutocompleteInput");
 
