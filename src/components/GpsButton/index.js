@@ -16,7 +16,7 @@ export const GpsButton = (props) => {
     onAddress
   } = props
 
-  const [ ,t] = useLanguage()
+  const [, t] = useLanguage()
   const [isLoading, setIsLoading] = useState(false)
   const isGoogleButton = typeof googleReady !== 'undefined'
 
@@ -38,26 +38,30 @@ export const GpsButton = (props) => {
         geocoder.geocode({ location }, (results, status) => {
           setIsLoading(false)
           let postalCode = null
-          for (const component of results[0].address_components) {
-            const addressType = component.types[0]
-            if (addressType === 'postal_code') {
-              postalCode = component.short_name
-              break
-            }
-          }
-          if (status === 'OK') {
-            onAddress({
-              address: results[0].formatted_address,
-              location,
-              utc_offset: (new Date()).getTimezoneOffset(),
-              zipcode: postalCode,
-              map_data: {
-                library: 'google',
-                place_id: results[0].place_id
+          if (results?.[0]?.address_components) {
+            for (const component of results[0].address_components) {
+              const addressType = component.types[0]
+              if (addressType === 'postal_code') {
+                postalCode = component.short_name
+                break
               }
-            })
+            }
+            if (status === 'OK') {
+              onAddress({
+                address: results[0].formatted_address,
+                location,
+                utc_offset: (new Date()).getTimezoneOffset(),
+                zipcode: postalCode,
+                map_data: {
+                  library: 'google',
+                  place_id: results[0].place_id
+                }
+              })
+            } else {
+              onError && onError(t('ERROR_GPS_BUTTON', 'Error to get result with gps button'))
+            }
           } else {
-            onError && onError(t('ERROR_GPS_BUTTON','Error to get result with gps button'))
+            onError && onError(t('ERROR_NOT_FOUND_ADDRESS', 'The Address was not found'))
           }
         })
       } else {
@@ -69,7 +73,7 @@ export const GpsButton = (props) => {
       }
     }, (err) => {
       setIsLoading(false)
-      onError && onError(t('ERROR_GPS_BUTTON',err.message))
+      onError && onError(t('ERROR_GPS_BUTTON', err.message))
     }, {
       timeout: 5000,
       enableHighAccuracy: true
