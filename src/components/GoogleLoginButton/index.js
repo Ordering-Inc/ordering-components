@@ -10,23 +10,25 @@ export const GoogleLoginButton = (props) => {
     onRequest,
     responseType,
     handleSuccessGoogleLogin,
+    handleSuccessGoogleLogout,
     initParams,
     buttonStyle,
     handleGoogleLoginClick
   } = props
 
-  // const [ordering] = useApi()
-  const [loaded, setLoaded] = useState(false)
+  const [ordering] = useApi()
+  const [formState, setFormState] = useState({ loading: false, result: { error: false } })
+  const [googleStatus, setGoogleStatus] = useState({ loaded: false, logged: false })
   let wasUnmounted = false
 
   useEffect(() => {
+    const element = document.getElementById('google-login')
+    if (element) {
+      element.parentNode.removeChild(element)
+    }
     insertGapiScript()
     return () => {
       wasUnmounted = true
-      const element = document.getElementById('google-login')
-      if (element) {
-        element.parentNode.removeChild(element)
-      }
     }
   }, [])
 
@@ -50,6 +52,7 @@ export const GoogleLoginButton = (props) => {
    */
   const initializeGoogleSignIn = () => {
     window.gapi.load('auth2', () => {
+      setGoogleStatus({ ...googleStatus, loaded: true })
       const GoogleAuth = window.gapi.auth2.getAuthInstance()
       if (!GoogleAuth) {
         window.gapi.auth2
@@ -57,35 +60,30 @@ export const GoogleLoginButton = (props) => {
           .then(
             async (res) => {
               if (!wasUnmounted) {
-                setLoaded(true)
                 const signedIn = res.isSignedIn.get()
                 if (signedIn) {
                   handleSigninSuccess(res.currentUser.get())
                 }
               }
-            },
-            () => {
-              setLoaded(true)
             }
           ).catch(() => {})
       } else if (GoogleAuth.isSignedIn.get()) {
         if (!wasUnmounted) {
-          setLoaded(true)
           handleSigninSuccess(GoogleAuth.currentUser.get())
         }
-      } else if (!wasUnmounted) {
-        wasUnmounted && setLoaded(true)
       }
     })
-    window.gapi.load('signin2', () => {
-      if (!wasUnmounted) {
-        window.gapi.signin2.render('my-signin2', {
-          ...buttonStyle,
-          onsuccess: onSuccess,
-          onfailure: onFailure
-        })
-      }
-    })
+    if (buttonStyle) {
+      window.gapi.load('signin2', () => {
+        if (!wasUnmounted) {
+          window.gapi.signin2.render('my-signin2', {
+            ...buttonStyle,
+            onsuccess: onSuccess,
+            onfailure: onFailure
+          })
+        }
+      })
+    }
   }
 
   /**
@@ -96,9 +94,11 @@ export const GoogleLoginButton = (props) => {
     if (e) {
       e.preventDefault() // to prevent submit if used within form
     }
-    if (loaded) {
+    if (googleStatus.loaded) {
       const GoogleAuth = window.gapi.auth2.getAuthInstance()
-      onRequest()
+      if (onRequest) {
+        onRequest()
+      }
       if (responseType === 'code') {
         GoogleAuth.grantOfflineAccess(initParams).then(
           (res) => onSuccess(res),
@@ -106,23 +106,52 @@ export const GoogleLoginButton = (props) => {
         )
       } else {
         GoogleAuth.signIn(initParams).then(
-          (res) => handleSigninSuccess(res),
-          (err) => onFailure(err)
+          (res) => {
+            setFormState({ loading: false, result: { error: false } })
+            setGoogleStatus({ ...googleStatus, logged: true })
+            handleSigninSuccess(res)
+          },
+          (err) => {
+            setFormState({ loading: false, result: { error: true, result: 'Error login with Google' } })
+            if (onFailure) {
+              onFailure(err)
+            }
+          }
         )
       }
     }
   }
 
+  const signOut = (e) => {
+    if (e) {
+      e.preventDefault() // to prevent submit if used within form
+    }
+    if (googleStatus.loaded) {
+      const GoogleAuth = window.gapi.auth2.getAuthInstance()
+
+      GoogleAuth.signOut().then(
+        GoogleAuth.disconnect().then(() => {
+          setFormState({ loading: false, result: { error: false } })
+          setGoogleStatus({ ...googleStatus, logged: false })
+          if (handleSuccessGoogleLogout) {
+            handleSuccessGoogleLogout()
+          }
+        })
+      )
+    }
+  }
   /**
    * Function that return token of the user
-   * @param {object} result from Google
+   * @param {object} res from Google
    */
   const handleSigninSuccess = async (res) => {
     if (handleGoogleLoginClick) {
-      return handleGoogleLoginClick(res)
+      handleGoogleLoginClick(res)
+      return
     }
     const basicProfile = res.getBasicProfile()
     const authResponse = res.getAuthResponse()
+
     res.googleId = basicProfile.getId()
     res.tokenObj = authResponse
     res.tokenId = authResponse.id_token
@@ -135,9 +164,35 @@ export const GoogleLoginButton = (props) => {
       givenName: basicProfile.getGivenName(),
       familyName: basicProfile.getFamilyName()
     }
-    // const response = await ordering.users().auth(res)
-    handleSuccessGoogleLogin(basicProfile)
-    onSuccess(res)
+
+    // login with backend
+    try {
+      setFormState({ ...formState, loading: true })
+      const response = await ordering.users().authGoogle({ access_token: authResponse?.id_token })
+      setFormState({
+        result: response.content,
+        loading: false
+      })
+      if (!response.content.error) {
+        if (handleSuccessGoogleLogin) {
+          handleSuccessGoogleLogin(response.content.result)
+        }
+        if (onSuccess) {
+          onSuccess(response)
+        }
+      } else {
+        signOut()
+      }
+    } catch (err) {
+      setFormState({
+        result: {
+          error: true,
+          result: err.message
+        },
+        loading: false
+      })
+      signOut()
+    }
   }
 
   return (
@@ -145,7 +200,10 @@ export const GoogleLoginButton = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          formState={formState}
+          googleStatus={googleStatus}
           signIn={signIn}
+          signOut={signOut}
         />
       )}
     </>
