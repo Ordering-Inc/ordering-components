@@ -1680,7 +1680,8 @@ var OrderProvider = function OrderProvider(_ref) {
     confirmCart: confirmCart,
     reorder: reorder,
     setAlert: setAlert,
-    setConfirm: setConfirm
+    setConfirm: setConfirm,
+    changePaymethod: changePaymethod
   };
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
@@ -1734,7 +1735,8 @@ var useOrder = function useOrder() {
     setAlert: warningMessage,
     setConfirm: warningMessage,
     changeDriverTip: warningMessage,
-    reorder: warningMessage
+    reorder: warningMessage,
+    changePaymethod: warningMessage
   };
   return orderManager || [{}, functionsPlaceholders];
 };
