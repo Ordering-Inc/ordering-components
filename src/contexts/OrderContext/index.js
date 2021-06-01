@@ -747,7 +747,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     confirmCart,
     reorder,
     setAlert,
-    setConfirm
+    setConfirm,
+    changePaymethod
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
@@ -796,7 +797,8 @@ export const useOrder = () => {
     setAlert: warningMessage,
     setConfirm: warningMessage,
     changeDriverTip: warningMessage,
-    reorder: warningMessage
+    reorder: warningMessage,
+    changePaymethod: warningMessage
   }
   return orderManager || [{}, functionsPlaceholders]
 }
