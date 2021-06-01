@@ -37,7 +37,7 @@ export const BusinessTypeFilter = (props) => {
     try {
       const response = await fetch(`${ordering.root}/business_types`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' }
       })
       const { error, result, pagination } = await response.json()
       if (!error) {

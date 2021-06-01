@@ -68,7 +68,7 @@ export const LanguageSelector = (props) => {
     }
     return () => {
       if (requestsState.languages) {
-        requestsState.languages.cancel()
+        requestsState.languages.cancel && requestsState.languages.cancel()
       }
     }
   }, [])
