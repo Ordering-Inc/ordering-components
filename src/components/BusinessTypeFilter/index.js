@@ -35,14 +35,13 @@ export const BusinessTypeFilter = (props) => {
    */
   const getBusinessTypes = async () => {
     try {
-      const response = await fetch(`${ordering.root}/business_types`, {
+      const response = await fetch(`${ordering.root}/business_types?where=[{"attribute":"enabled","value":true}]`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
       const { error, result, pagination } = await response.json()
       if (!error) {
-        const isSomeEnabled = result.some(category => category.enabled)
-        if (isSomeEnabled) {
+        if (result.length > 0) {
           result.unshift({ id: null, enabled: true, image: null, name: 'All' })
         }
         setTypesState({
