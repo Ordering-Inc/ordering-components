@@ -485,6 +485,41 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   }
 
   /**
+   * Change payment method
+   */
+  const changePaymethod = async (businessId, paymethodId, paymethodData) => {
+    if (!businessId) {
+      throw new Error('`businessId` is required.')
+    }
+    if (!paymethodId) {
+      throw new Error('`paymethodId` is required.')
+    }
+    if (!paymethodData) {
+      throw new Error('`paymethodData` is required.')
+    }
+    if (!state.carts[`businessId:${businessId}`] || state.carts[`businessId:${businessId}`]?.paymethodId === paymethodId) {
+      return
+    }
+    try {
+      setState({ ...state, loading: true })
+      const body = {
+        business_id: businessId,
+        paymethod_id: paymethodId,
+        paymethod_data: paymethodData
+      }
+      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changePaymethod(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      if (!error) {
+        state.carts[`businessId:${result.business_id}`] = result
+        events.emit('cart_updated', result)
+      }
+      setState({ ...state, loading: false })
+      return !error
+    } catch (err) {
+      return false
+    }
+  }
+
+  /**
    * Place cart
    */
   const placeCart = async (cardId, data) => {
@@ -712,7 +747,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     confirmCart,
     reorder,
     setAlert,
-    setConfirm
+    setConfirm,
+    changePaymethod
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
@@ -761,7 +797,8 @@ export const useOrder = () => {
     setAlert: warningMessage,
     setConfirm: warningMessage,
     changeDriverTip: warningMessage,
-    reorder: warningMessage
+    reorder: warningMessage,
+    changePaymethod: warningMessage
   }
   return orderManager || [{}, functionsPlaceholders]
 }
