@@ -41,7 +41,10 @@ export const BusinessTypeFilter = (props) => {
       })
       const { error, result, pagination } = await response.json()
       if (!error) {
-        result.unshift({ id: null, enabled: true, image: null, name: 'All' })
+        const isSomeEnabled = result.some(category => category.enabled)
+        if (isSomeEnabled) {
+          result.unshift({ id: null, enabled: true, image: null, name: 'All' })
+        }
         setTypesState({
           ...typesState,
           loading: false,
