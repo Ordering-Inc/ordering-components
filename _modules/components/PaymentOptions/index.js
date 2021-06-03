@@ -70,8 +70,9 @@ var PaymentOptions = function PaymentOptions(props) {
       ordering = _useApi2[0];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 1),
-      orderState = _useOrder2[0];
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      orderState = _useOrder2[0],
+      changePaymethod = _useOrder2[1].changePaymethod;
 
   var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts$ = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.total) || 0;
 
@@ -175,6 +176,10 @@ var PaymentOptions = function PaymentOptions(props) {
   };
 
   var handlePaymethodDataChange = function handlePaymethodDataChange(data) {
+    if (paymethodSelected && data) {
+      changePaymethod(businessId, paymethodSelected.id, JSON.stringify(data));
+    }
+
     setPaymethodData(data);
 
     if (paymethodSelected) {

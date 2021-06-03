@@ -101,7 +101,7 @@ var BusinessTypeFilter = function BusinessTypeFilter(props) {
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return fetch("".concat(ordering.root, "/business_types"), {
+              return fetch("".concat(ordering.root, "/business_types?where=[{\"attribute\":\"enabled\",\"value\":true}]"), {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json'
@@ -124,12 +124,15 @@ var BusinessTypeFilter = function BusinessTypeFilter(props) {
                 break;
               }
 
-              result.unshift({
-                id: null,
-                enabled: true,
-                image: null,
-                name: 'All'
-              });
+              if (result.length > 0) {
+                result.unshift({
+                  id: null,
+                  enabled: true,
+                  image: null,
+                  name: 'All'
+                });
+              }
+
               setTypesState(_objectSpread(_objectSpread({}, typesState), {}, {
                 loading: false,
                 types: result,
