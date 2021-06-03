@@ -575,7 +575,9 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         ...data,
         user_id: userCustomerId || session.user.id
       }
+      console.log('body', body)
       const { content: { error, result, cart } } = await ordering.setAccessToken(session.token).carts(cardId).confirm(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      console.log('testeo', error, result, cart)
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result
