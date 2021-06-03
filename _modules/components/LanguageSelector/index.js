@@ -171,7 +171,7 @@ var LanguageSelector = function LanguageSelector(props) {
 
     return function () {
       if (requestsState.languages) {
-        requestsState.languages.cancel();
+        requestsState.languages.cancel && requestsState.languages.cancel();
       }
     };
   }, []);
