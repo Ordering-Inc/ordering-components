@@ -1371,7 +1371,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var confirmCart = /*#__PURE__*/function () {
     var _ref15 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee14(cardId, data) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc21, _yield$ordering$setAc22, error, result, cart;
+      var customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
 
       return _regenerator.default.wrap(function _callee14$(_context14) {
         while (1) {
@@ -1390,21 +1390,37 @@ var OrderProvider = function OrderProvider(_ref) {
               body = _objectSpread(_objectSpread({}, data), {}, {
                 user_id: userCustomerId || session.user.id
               });
-              console.log('body', body);
+
+              if (!(body.user_id === userCustomerId)) {
+                _context14.next = 13;
+                break;
+              }
+
               _context14.next = 10;
-              return ordering.setAccessToken(session.token).carts(cardId).confirm(body, {
+              return ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
             case 10:
-              _yield$ordering$setAc21 = _context14.sent;
-              _yield$ordering$setAc22 = _yield$ordering$setAc21.content;
-              error = _yield$ordering$setAc22.error;
-              result = _yield$ordering$setAc22.result;
-              cart = _yield$ordering$setAc22.cart;
-              console.log('testeo', error, result, cart);
+              fetchurl = _context14.sent;
+              _context14.next = 16;
+              break;
+
+            case 13:
+              _context14.next = 15;
+              return ordering.setAccessToken(session.token).carts(cardId).confirm(body, {
+                headers: {
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+                }
+              });
+
+            case 15:
+              fetchurl = _context14.sent;
+
+            case 16:
+              _fetchurl = fetchurl, _fetchurl$content = _fetchurl.content, error = _fetchurl$content.error, result = _fetchurl$content.result, cart = _fetchurl$content.cart;
 
               if (!error) {
                 if (result.status !== 1) {
@@ -1426,8 +1442,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: result
               });
 
-            case 21:
-              _context14.prev = 21;
+            case 22:
+              _context14.prev = 22;
               _context14.t0 = _context14["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1437,12 +1453,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context14.t0.message]
               });
 
-            case 25:
+            case 26:
             case "end":
               return _context14.stop();
           }
         }
-      }, _callee14, null, [[0, 21]]);
+      }, _callee14, null, [[0, 22]]);
     }));
 
     return function confirmCart(_x22, _x23) {
@@ -1456,7 +1472,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var reorder = /*#__PURE__*/function () {
     var _ref16 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee15(orderId) {
-      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc23, _yield$ordering$setAc24, error, result;
+      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc21, _yield$ordering$setAc22, error, result;
 
       return _regenerator.default.wrap(function _callee15$(_context15) {
         while (1) {
@@ -1489,10 +1505,10 @@ var OrderProvider = function OrderProvider(_ref) {
               return ordering.setAccessToken(session.token).orders(orderId).reorder(options);
 
             case 11:
-              _yield$ordering$setAc23 = _context15.sent;
-              _yield$ordering$setAc24 = _yield$ordering$setAc23.content;
-              error = _yield$ordering$setAc24.error;
-              result = _yield$ordering$setAc24.result;
+              _yield$ordering$setAc21 = _context15.sent;
+              _yield$ordering$setAc22 = _yield$ordering$setAc21.content;
+              error = _yield$ordering$setAc22.error;
+              result = _yield$ordering$setAc22.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
