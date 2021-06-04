@@ -578,7 +578,13 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         ...data,
         user_id: userCustomerId || session.user.id
       }
-      const { content: { error, result, cart } } = await ordering.setAccessToken(session.token).carts(cardId).confirm(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      let fetchurl
+      if (body.user_id === userCustomerId) {
+        fetchurl = await ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      } else {
+        fetchurl = await ordering.setAccessToken(session.token).carts(cardId).confirm(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      }
+      const { content: { error, result, cart } } = fetchurl
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result
