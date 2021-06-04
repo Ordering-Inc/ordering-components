@@ -261,6 +261,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       try {
         setState({ ...state, loading: true })
+        state.loading = true
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()
@@ -279,6 +280,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           setAlert({ show: true, content: result })
         }
         setState({ ...state, loading: false })
+        state.loading = false
         return !error
       } catch (err) {
         const message = err?.message?.includes('Internal error')
@@ -286,6 +288,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           : err.message
         setAlert({ show: true, content: [message] })
         setState({ ...state, loading: false })
+        state.loading = false
         return false
       }
     }
@@ -675,7 +678,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           ...cart
         }
       }
-      setState({ ...state })
+      setState({ ...state, loading: false })
     }
     const handleOrderOptionUpdate = ({ carts, ...options }) => {
       const newCarts = {}
@@ -693,7 +696,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           ...newCarts
         }
       }
-      setState({ ...newState })
+      setState({ ...newState, loading: false })
     }
     socket.on('carts_update', handleCartUpdate)
     socket.on('order_options_update', handleOrderOptionUpdate)
@@ -715,22 +718,6 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       socket.leave(`orderoptions_${session?.user?.id}`)
     }
   }, [socket, session])
-
-  useEffect(() => {
-    let timeout
-    if (state.loading && !languageState.loading) {
-      timeout = setTimeout(() => {
-        if (state.loading && session.auth && !languageState.loading) {
-          refreshOrderOptions()
-        }
-      }, 10000)
-    }
-    return () => {
-      if (typeof timeout === 'number') {
-        clearTimeout(timeout)
-      }
-    }
-  }, [state.loading])
 
   const functions = {
     refreshOrderOptions,
