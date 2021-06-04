@@ -568,7 +568,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 25;
+                _context5.next = 28;
                 break;
               }
 
@@ -585,14 +585,15 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              _context5.next = 10;
+              state.loading = true;
+              _context5.next = 11;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
-            case 10:
+            case 11:
               _yield$ordering$setAc5 = _context5.sent;
               _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
               error = _yield$ordering$setAc6.error;
@@ -615,10 +616,11 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
+              state.loading = false;
               return _context5.abrupt("return", !error);
 
-            case 19:
-              _context5.prev = 19;
+            case 21:
+              _context5.prev = 21;
               _context5.t0 = _context5["catch"](6);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
@@ -628,14 +630,15 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
+              state.loading = false;
               return _context5.abrupt("return", false);
 
-            case 25:
+            case 28:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 19]]);
+      }, _callee5, null, [[6, 21]]);
     }));
 
     return function updateOrderOptions(_x5) {
@@ -1604,7 +1607,9 @@ var OrderProvider = function OrderProvider(_ref) {
         state.carts["businessId:".concat(cart.business_id)] = _objectSpread(_objectSpread({}, state.carts["businessId:".concat(cart.business_id)]), cart);
       }
 
-      setState(_objectSpread({}, state));
+      setState(_objectSpread(_objectSpread({}, state), {}, {
+        loading: false
+      }));
     };
 
     var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref18) {
@@ -1621,7 +1626,9 @@ var OrderProvider = function OrderProvider(_ref) {
         carts: _objectSpread(_objectSpread({}, state.carts), newCarts)
       });
 
-      setState(_objectSpread({}, newState));
+      setState(_objectSpread(_objectSpread({}, newState), {}, {
+        loading: false
+      }));
     };
 
     socket.on('carts_update', handleCartUpdate);
@@ -1648,23 +1655,6 @@ var OrderProvider = function OrderProvider(_ref) {
       socket.leave("orderoptions_".concat(session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id));
     };
   }, [socket, session]);
-  (0, _react.useEffect)(function () {
-    var timeout;
-
-    if (state.loading && !languageState.loading) {
-      timeout = setTimeout(function () {
-        if (state.loading && session.auth && !languageState.loading) {
-          refreshOrderOptions();
-        }
-      }, 10000);
-    }
-
-    return function () {
-      if (typeof timeout === 'number') {
-        clearTimeout(timeout);
-      }
-    };
-  }, [state.loading]);
   var functions = {
     refreshOrderOptions: refreshOrderOptions,
     changeAddress: changeAddress,
