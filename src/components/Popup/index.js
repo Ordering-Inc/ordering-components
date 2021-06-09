@@ -18,6 +18,7 @@ export const Popup = (props) => {
 
   const [root, setRoot] = useState()
   const [defaultOverflow, setDefaultOverflow] = useState()
+  const [defaultPaddingRight, setDefaultPaddingRight] = useState()
   const [isFirst, setIsFirst] = useState(false)
 
   /**
@@ -58,6 +59,7 @@ export const Popup = (props) => {
         modalRoot.remove()
       }
       window.document.body.style.overflow = defaultOverflow
+      window.document.body.style.paddingRight = defaultPaddingRight
     }
   }
 
@@ -72,6 +74,7 @@ export const Popup = (props) => {
         setRoot(modalRoot)
         setIsFirst(true)
         setDefaultOverflow(window.document.body.style.overflow)
+        setDefaultPaddingRight(window.document.body.style.paddingRight)
       } else {
         setRoot(modalRoot)
       }
@@ -83,7 +86,7 @@ export const Popup = (props) => {
      * Remove backdrop
      */
     return checkRemoveBackdrop
-  }, [open, isFirst, defaultOverflow])
+  }, [open, isFirst, defaultOverflow, defaultPaddingRight])
 
   const popupStyles = {
     position: 'fixed',
