@@ -67,7 +67,8 @@ var LoginForm = function LoginForm(props) {
       useDefualtSessionManager = props.useDefualtSessionManager,
       urlToRedirect = props.urlToRedirect,
       allowedLevels = props.allowedLevels,
-      handleCustomLogin = props.handleCustomLogin;
+      handleCustomLogin = props.handleCustomLogin,
+      notificationState = props.notificationState;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -213,10 +214,15 @@ var LoginForm = function LoginForm(props) {
                 _credentials.cellphone = cellphone;
               }
 
-              _context.next = 16;
+              if (notificationState !== null && notificationState !== void 0 && notificationState.notification_token) {
+                _credentials.notification_app = notificationState.notification_app;
+                _credentials.notification_token = notificationState.notification_token;
+              }
+
+              _context.next = 17;
               return ordering.users().auth(_credentials);
 
-            case 16:
+            case 17:
               _yield$ordering$users = _context.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               error = _yield$ordering$users2.error;
@@ -228,17 +234,17 @@ var LoginForm = function LoginForm(props) {
               }
 
               if (error) {
-                _context.next = 44;
+                _context.next = 45;
                 break;
               }
 
               if (!useDefualtSessionManager) {
-                _context.next = 41;
+                _context.next = 42;
                 break;
               }
 
               if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-                _context.next = 40;
+                _context.next = 41;
                 break;
               }
 
@@ -246,15 +252,15 @@ var LoginForm = function LoginForm(props) {
               access_token = session === null || session === void 0 ? void 0 : session.access_token;
 
               if (allowedLevels.includes(level)) {
-                _context.next = 40;
+                _context.next = 41;
                 break;
               }
 
-              _context.prev = 27;
-              _context.next = 30;
+              _context.prev = 28;
+              _context.next = 31;
               return ordering.setAccessToken(access_token).users().logout();
 
-            case 30:
+            case 31:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
@@ -269,12 +275,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 39;
+              _context.next = 40;
               break;
 
-            case 36:
-              _context.prev = 36;
-              _context.t0 = _context["catch"](27);
+            case 37:
+              _context.prev = 37;
+              _context.t0 = _context["catch"](28);
               setFormState({
                 result: {
                   error: true,
@@ -283,16 +289,16 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 39:
+            case 40:
               return _context.abrupt("return");
 
-            case 40:
+            case 41:
               login({
                 user: result,
                 token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
 
-            case 41:
+            case 42:
               events.emit('userLogin', result);
 
               if (handleSuccessLogin) {
@@ -303,7 +309,7 @@ var LoginForm = function LoginForm(props) {
                 window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
               }
 
-            case 44:
+            case 45:
               setFormState({
                 result: {
                   error: error,
@@ -311,11 +317,11 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 50;
+              _context.next = 51;
               break;
 
-            case 47:
-              _context.prev = 47;
+            case 48:
+              _context.prev = 48;
               _context.t1 = _context["catch"](3);
               setFormState({
                 result: {
@@ -325,12 +331,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 50:
+            case 51:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 47], [27, 36]]);
+      }, _callee, null, [[3, 48], [28, 37]]);
     }));
 
     return function handleLoginClick(_x) {
@@ -443,31 +449,38 @@ var LoginForm = function LoginForm(props) {
 
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
-      var _res$result, response, res, _res$result2, _res$result2$session;
+      var body, _res$result, response, res, _res$result2, _res$result2$session;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.prev = 0;
+              body = _objectSpread({}, values);
+              _context3.prev = 1;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: true
               }));
-              _context3.next = 4;
+
+              if (notificationState !== null && notificationState !== void 0 && notificationState.notification_token) {
+                body.notification_token = notificationState.notification_token;
+                body.notification_app = notificationState.notification_app;
+              }
+
+              _context3.next = 6;
               return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(values)
+                body: JSON.stringify(body)
               });
 
-            case 4:
+            case 6:
               response = _context3.sent;
-              _context3.next = 7;
+              _context3.next = 9;
               return response.json();
 
-            case 7:
+            case 9:
               res = _context3.sent;
 
               if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
@@ -485,12 +498,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false,
                 result: res
               }));
-              _context3.next = 15;
+              _context3.next = 17;
               break;
 
-            case 12:
-              _context3.prev = 12;
-              _context3.t0 = _context3["catch"](0);
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](1);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
@@ -498,12 +511,12 @@ var LoginForm = function LoginForm(props) {
                 }
               }));
 
-            case 15:
+            case 17:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 12]]);
+      }, _callee3, null, [[1, 14]]);
     }));
 
     return function checkVerifyPhoneCode(_x3) {

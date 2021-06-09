@@ -62,7 +62,8 @@ var SignupForm = function SignupForm(props) {
       handleButtonSignupClick = props.handleButtonSignupClick,
       handleSuccessSignup = props.handleSuccessSignup,
       externalPhoneNumber = props.externalPhoneNumber,
-      handleCustomSignup = props.handleCustomSignup;
+      handleCustomSignup = props.handleCustomSignup,
+      notificationState = props.notificationState;
   var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -179,18 +180,23 @@ var SignupForm = function SignupForm(props) {
               data.verification_code = reCaptchaValue;
 
             case 11:
-              _context.prev = 11;
+              if (notificationState !== null && notificationState !== void 0 && notificationState.notification_token) {
+                data.notification_token = notificationState.notification_token;
+                data.notification_app = notificationState.notification_app;
+              }
+
+              _context.prev = 12;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.signup = source;
-              _context.next = 17;
+              _context.next = 18;
               return ordering.users().save(data, {
                 cancelToken: source
               });
 
-            case 17:
+            case 18:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -203,12 +209,12 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
-              _context.next = 25;
+              _context.next = 26;
               break;
 
-            case 22:
-              _context.prev = 22;
-              _context.t0 = _context["catch"](11);
+            case 23:
+              _context.prev = 23;
+              _context.t0 = _context["catch"](12);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setFormState({
@@ -220,12 +226,12 @@ var SignupForm = function SignupForm(props) {
                 });
               }
 
-            case 25:
+            case 26:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[11, 22]]);
+      }, _callee, null, [[12, 23]]);
     }));
 
     return function handleSignupClick(_x) {
@@ -370,31 +376,38 @@ var SignupForm = function SignupForm(props) {
 
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
-      var _res$result, response, res, _res$result2, _res$result2$session;
+      var body, _res$result, response, res, _res$result2, _res$result2$session;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.prev = 0;
+              body = _objectSpread({}, values);
+              _context3.prev = 1;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: true
               }));
-              _context3.next = 4;
+
+              if (notificationState !== null && notificationState !== void 0 && notificationState.notification_token) {
+                body.notification_token = notificationState.notification_token;
+                body.notification_app = notificationState.notification_app;
+              }
+
+              _context3.next = 6;
               return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(values)
+                body: JSON.stringify(body)
               });
 
-            case 4:
+            case 6:
               response = _context3.sent;
-              _context3.next = 7;
+              _context3.next = 9;
               return response.json();
 
-            case 7:
+            case 9:
               res = _context3.sent;
 
               if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
@@ -412,12 +425,12 @@ var SignupForm = function SignupForm(props) {
                 loading: false,
                 result: res
               }));
-              _context3.next = 15;
+              _context3.next = 17;
               break;
 
-            case 12:
-              _context3.prev = 12;
-              _context3.t0 = _context3["catch"](0);
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](1);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
@@ -425,12 +438,12 @@ var SignupForm = function SignupForm(props) {
                 }
               }));
 
-            case 15:
+            case 17:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 12]]);
+      }, _callee3, null, [[1, 14]]);
     }));
 
     return function checkVerifyPhoneCode(_x3) {
