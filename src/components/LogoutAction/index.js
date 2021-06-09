@@ -73,26 +73,40 @@ export const LogoutAction = (props) => {
   /**
    * Default fuction for logout workflow
    */
-  const handleLogoutClick = async () => {
+  const handleLogoutClick = async (bodyParams) => {
     if (handleCustomLogoutClick) {
       handleCustomLogoutClick && handleCustomLogoutClick()
     }
     try {
       setFormState({ ...formState, loading: true })
       const accessToken = token || data.token
-      const response = await ordering.setAccessToken(accessToken).users().logout()
-      setFormState({
-        result: response.content,
-        loading: false
-      })
-      if (!response.content.error) {
+      const body = bodyParams && bodyParams?.notification_token ? {
+        notification_app: bodyParams?.notification_app,
+        notification_token: bodyParams?.notification_token,
+        token_notification: bodyParams?.notification_token,
+      } : null
+      const funtionFetch = body
+        ? ordering.setAccessToken(accessToken).users().logout(body)
+        : ordering.setAccessToken(accessToken).users().logout()
+      const { content: { error, result } } = await funtionFetch
+      if (!error) {
+        setFormState({
+          result: { error, result },
+          loading: false
+        })
         if (useDefualtSessionManager) {
           logout()
         }
         if (handleSuccessLogout) {
           handleSuccessLogout()
         }
+        return true
       }
+      setFormState({
+        result: { error, result },
+        loading: false
+      })
+      return false
     } catch (err) {
       setFormState({
         result: {
@@ -101,6 +115,7 @@ export const LogoutAction = (props) => {
         },
         loading: false
       })
+      return false
     }
   }
 
