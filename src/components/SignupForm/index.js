@@ -16,7 +16,8 @@ export const SignupForm = (props) => {
     handleButtonSignupClick,
     handleSuccessSignup,
     externalPhoneNumber,
-    handleCustomSignup
+    handleCustomSignup,
+    notificationState
   } = props
   const requestsState = {}
 
@@ -55,6 +56,11 @@ export const SignupForm = (props) => {
       } else {
         data.verification_code = reCaptchaValue
       }
+    }
+
+    if (notificationState?.notification_token) {
+      data.notification_token = notificationState.notification_token
+      data.notification_app = notificationState.notification_app
     }
     try {
       setFormState({ ...formState, loading: true })
@@ -188,12 +194,19 @@ export const SignupForm = (props) => {
    * @param {Object} values object with cellphone and country code values
    */
   const checkVerifyPhoneCode = async (values) => {
+    const body = {
+      ...values
+    }
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      if (notificationState?.notification_token) {
+        body.notification_token = notificationState.notification_token
+        body.notification_app = notificationState.notification_app
+      }
       const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values)
+        body: JSON.stringify(body)
       })
       const res = await response.json()
       if (!res?.error && res?.result?.id) {
