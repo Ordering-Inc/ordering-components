@@ -136,7 +136,7 @@ export const OrderList = (props) => {
           return valid
         })
       } else {
-        orders = [...orderList.orders, order]
+        orders = [order, ...orderList.orders]
         pagination.total++
         setPagination({
           ...pagination
