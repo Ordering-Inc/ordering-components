@@ -70,7 +70,8 @@ var OrderList = function OrderList(props) {
       paginationSettings = props.paginationSettings,
       asDashboard = props.asDashboard,
       customArray = props.customArray,
-      userCustomerId = props.userCustomerId;
+      userCustomerId = props.userCustomerId,
+      activeOrders = props.activeOrders;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -425,6 +426,18 @@ var OrderList = function OrderList(props) {
     };
   }();
 
+  (0, _react.useEffect)(function () {
+    var ordersSorted = orderList.orders.sort(function (a, b) {
+      if (activeOrders) {
+        return new Date(b.created_at) - new Date(a.created_at);
+      }
+
+      return new Date(a.created_at) - new Date(b.created_at);
+    });
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: ordersSorted
+    }));
+  }, [orderList]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderList: orderList,
     pagination: pagination,
