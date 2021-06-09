@@ -20,7 +20,8 @@ export const LoginForm = (props) => {
     useDefualtSessionManager,
     urlToRedirect,
     allowedLevels,
-    handleCustomLogin
+    handleCustomLogin,
+    notificationState
   } = props
 
   const [ordering] = useApi()
@@ -83,7 +84,12 @@ export const LoginForm = (props) => {
 
         _credentials.cellphone = cellphone
       }
-      
+
+      if (notificationState?.notification_token) {
+        _credentials.notification_app = notificationState.notification_app
+        _credentials.notification_token = notificationState.notification_token
+      }
+
       const { content: { error, result } } = await ordering.users().auth(_credentials)
 
       if (isReCaptchaEnable) {
@@ -221,12 +227,19 @@ export const LoginForm = (props) => {
    * @param {Object} values object with cellphone and country code values
    */
   const checkVerifyPhoneCode = async (values) => {
+    const body = {
+      ...values
+    }
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      if (notificationState?.notification_token) {
+        body.notification_token = notificationState.notification_token
+        body.notification_app = notificationState.notification_app
+      }
       const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values)
+        body: JSON.stringify(body)
       })
       const res = await response.json()
       if (!res?.error && res?.result?.id) {
