@@ -256,6 +256,9 @@ var OrderList = function OrderList(props) {
     if (orderList.loading) return;
 
     var handleUpdateOrder = function handleUpdateOrder(order) {
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        loading: true
+      }));
       var found = orderList.orders.find(function (_order) {
         return _order.id === order.id;
       });
@@ -285,7 +288,8 @@ var OrderList = function OrderList(props) {
       }
 
       setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-        orders: orders
+        orders: orders,
+        loading: false
       }));
     };
 
@@ -427,17 +431,19 @@ var OrderList = function OrderList(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    var ordersSorted = orderList.orders.sort(function (a, b) {
-      if (activeOrders) {
-        return new Date(b.created_at) - new Date(a.created_at);
-      }
+    if (!orderList.loading) {
+      var ordersSorted = orderList.orders.sort(function (a, b) {
+        if (activeOrders) {
+          return new Date(b.created_at) - new Date(a.created_at);
+        }
 
-      return new Date(a.created_at) - new Date(b.created_at);
-    });
-    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-      orders: ordersSorted
-    }));
-  }, [orderList]);
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        orders: ordersSorted
+      }));
+    }
+  }, [orderList.loading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderList: orderList,
     pagination: pagination,
