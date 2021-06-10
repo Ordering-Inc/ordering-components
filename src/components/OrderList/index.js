@@ -17,7 +17,8 @@ export const OrderList = (props) => {
     paginationSettings,
     asDashboard,
     customArray,
-    userCustomerId
+    userCustomerId,
+    activeOrders
   } = props
 
   const [ordering] = useApi()
@@ -117,6 +118,7 @@ export const OrderList = (props) => {
   useEffect(() => {
     if (orderList.loading) return
     const handleUpdateOrder = (order) => {
+      setOrderList({ ...orderList, loading: true })
       const found = orderList.orders.find(_order => _order.id === order.id)
       let orders = []
       if (found) {
@@ -136,7 +138,7 @@ export const OrderList = (props) => {
           return valid
         })
       } else {
-        orders = [...orderList.orders, order]
+        orders = [order, ...orderList.orders]
         pagination.total++
         setPagination({
           ...pagination
@@ -144,7 +146,8 @@ export const OrderList = (props) => {
       }
       setOrderList({
         ...orderList,
-        orders
+        orders,
+        loading: false
       })
     }
     socket.on('update_order', handleUpdateOrder)
@@ -212,6 +215,21 @@ export const OrderList = (props) => {
       }
     }
   }
+
+  useEffect(() => {
+    if (!orderList.loading) {
+      const ordersSorted = orderList.orders.sort((a, b) => {
+        if (activeOrders) {
+          return new Date(b.created_at) - new Date(a.created_at)
+        }
+        return new Date(a.created_at) - new Date(b.created_at)
+      })
+      setOrderList({
+        ...orderList,
+        orders: ordersSorted
+      })
+    }
+  }, [orderList.loading])
 
   return (
     <>
