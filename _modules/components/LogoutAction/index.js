@@ -143,8 +143,9 @@ var LogoutAction = function LogoutAction(props) {
    */
 
   var handleLogoutClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var accessToken, response;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(bodyParams) {
+      var accessToken, body, funtionFetch, _yield$funtionFetch, _yield$funtionFetch$c, error, result;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -158,31 +159,56 @@ var LogoutAction = function LogoutAction(props) {
                 loading: true
               }));
               accessToken = token || data.token;
-              _context.next = 6;
-              return ordering.setAccessToken(accessToken).users().logout();
+              body = bodyParams && bodyParams !== null && bodyParams !== void 0 && bodyParams.notification_token ? {
+                notification_app: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_app,
+                notification_token: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_token,
+                token_notification: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_token
+              } : null;
+              funtionFetch = body ? ordering.setAccessToken(accessToken).users().logout(body) : ordering.setAccessToken(accessToken).users().logout();
+              _context.next = 8;
+              return funtionFetch;
 
-            case 6:
-              response = _context.sent;
+            case 8:
+              _yield$funtionFetch = _context.sent;
+              _yield$funtionFetch$c = _yield$funtionFetch.content;
+              error = _yield$funtionFetch$c.error;
+              result = _yield$funtionFetch$c.result;
+
+              if (error) {
+                _context.next = 17;
+                break;
+              }
+
               setFormState({
-                result: response.content,
+                result: {
+                  error: error,
+                  result: result
+                },
                 loading: false
               });
 
-              if (!response.content.error) {
-                if (useDefualtSessionManager) {
-                  logout();
-                }
-
-                if (handleSuccessLogout) {
-                  handleSuccessLogout();
-                }
+              if (useDefualtSessionManager) {
+                logout();
               }
 
-              _context.next = 14;
-              break;
+              if (handleSuccessLogout) {
+                handleSuccessLogout();
+              }
 
-            case 11:
-              _context.prev = 11;
+              return _context.abrupt("return", true);
+
+            case 17:
+              setFormState({
+                result: {
+                  error: error,
+                  result: result
+                },
+                loading: false
+              });
+              return _context.abrupt("return", false);
+
+            case 21:
+              _context.prev = 21;
               _context.t0 = _context["catch"](1);
               setFormState({
                 result: {
@@ -191,16 +217,17 @@ var LogoutAction = function LogoutAction(props) {
                 },
                 loading: false
               });
+              return _context.abrupt("return", false);
 
-            case 14:
+            case 25:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 11]]);
+      }, _callee, null, [[1, 21]]);
     }));
 
-    return function handleLogoutClick() {
+    return function handleLogoutClick(_x) {
       return _ref.apply(this, arguments);
     };
   }();
