@@ -52,10 +52,15 @@ var Popup = function Popup(props) {
       defaultOverflow = _useState4[0],
       setDefaultOverflow = _useState4[1];
 
-  var _useState5 = (0, _react.useState)(false),
+  var _useState5 = (0, _react.useState)(),
       _useState6 = _slicedToArray(_useState5, 2),
-      isFirst = _useState6[0],
-      setIsFirst = _useState6[1];
+      defaultPaddingRight = _useState6[0],
+      setDefaultPaddingRight = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      isFirst = _useState8[0],
+      setIsFirst = _useState8[1];
   /**
    * Use onClose function when esc key was pressed
    * @param {Event} e Event when keydown
@@ -102,6 +107,7 @@ var Popup = function Popup(props) {
       }
 
       window.document.body.style.overflow = defaultOverflow;
+      window.document.body.style.paddingRight = defaultPaddingRight;
     }
   };
 
@@ -117,6 +123,7 @@ var Popup = function Popup(props) {
         setRoot(modalRoot);
         setIsFirst(true);
         setDefaultOverflow(window.document.body.style.overflow);
+        setDefaultPaddingRight(window.document.body.style.paddingRight);
       } else {
         setRoot(modalRoot);
       }
@@ -131,7 +138,7 @@ var Popup = function Popup(props) {
 
 
     return checkRemoveBackdrop;
-  }, [open, isFirst, defaultOverflow]);
+  }, [open, isFirst, defaultOverflow, defaultPaddingRight]);
   var popupStyles = {
     position: 'fixed',
     top: 0,
