@@ -200,12 +200,12 @@ export const OrderDetails = (props) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
     }
-    socket.join(`orders_${user?.id}`)
+    socket.join(`orders_${userCustomerId || user?.id}`)
     socket.join(`drivers_${orderState.order?.driver_id}`)
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
-      socket.leave(`orders_${user?.id}`)
+      socket.leave(`orders_${userCustomerId || user?.id}`)
       socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
@@ -230,9 +230,9 @@ export const OrderDetails = (props) => {
   }, [messages, socket, orderState.order?.status])
 
   useEffect(() => {
-    socket.join(`messages_orders_${user?.id}`)
+    socket.join(`messages_orders_${userCustomerId || user?.id}`)
     return () => {
-      socket.leave(`messages_orders_${user?.id}`)
+      socket.leave(`messages_orders_${userCustomerId || user?.id}`)
     }
   }, [socket])
 
