@@ -162,7 +162,7 @@ export const OrderList = (props) => {
     return () => {
       socket.leave(`orders_${userCustomerId || session?.user?.id}`)
     }
-  }, [socket, session])
+  }, [socket, session, userCustomerId])
 
   const loadMoreOrders = async () => {
     setOrderList({ ...orderList, loading: true })

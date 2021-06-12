@@ -210,7 +210,7 @@ export const OrderDetails = (props) => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket, loading])
+  }, [orderState.order, socket, loading, userCustomerId])
 
   useEffect(() => {
     if (messages.loading) return
@@ -227,14 +227,14 @@ export const OrderDetails = (props) => {
     return () => {
       socket.off('message', handleNewMessage)
     }
-  }, [messages, socket, orderState.order?.status])
+  }, [messages, socket, orderState.order?.status, userCustomerId])
 
   useEffect(() => {
     socket.join(`messages_orders_${userCustomerId || user?.id}`)
     return () => {
       socket.leave(`messages_orders_${userCustomerId || user?.id}`)
     }
-  }, [socket])
+  }, [socket, userCustomerId])
 
   return (
     <>
