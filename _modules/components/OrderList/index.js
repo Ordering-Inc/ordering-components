@@ -302,13 +302,13 @@ var OrderList = function OrderList(props) {
     var _session$user;
 
     if (!session.user) return;
-    socket.join("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id));
+    socket.join("orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id)));
     return function () {
       var _session$user2;
 
-      socket.leave("orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
+      socket.leave("orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id)));
     };
-  }, [socket, session]);
+  }, [socket, session, userCustomerId]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {

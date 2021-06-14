@@ -458,19 +458,19 @@ var OrderDetails = function OrderDetails(props) {
       setDriverLocation(newLocation);
     };
 
-    socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    socket.join("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
     socket.join("drivers_".concat((_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.driver_id));
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
       var _orderState$order10;
 
-      socket.leave("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.leave("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
       socket.leave("drivers_".concat((_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState.order, socket, loading]);
+  }, [orderState.order, socket, loading, userCustomerId]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
 
@@ -490,13 +490,13 @@ var OrderDetails = function OrderDetails(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket, (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.status]);
+  }, [messages, socket, (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.status, userCustomerId]);
   (0, _react.useEffect)(function () {
-    socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    socket.join("messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
     return function () {
-      socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.leave("messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
     };
-  }, [socket]);
+  }, [socket, userCustomerId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     order: orderState,
     driverLocation: driverLocation,

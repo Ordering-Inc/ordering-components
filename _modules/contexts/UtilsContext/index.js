@@ -100,7 +100,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
         future: t('RELATIVE_TIME_IN', 'in %s'),
         // e.g. in 2 hours, %s been replaced with 2hours
         past: t('RELATIVE_TIME_AGO', '%s ago'),
-        s: t('RELATIVE_TIME_FEW_SECONDS ', 'a few seconds'),
+        s: t('RELATIVE_TIME_FEW_SECONDS', 'a few seconds'),
         m: t('RELATIVE_TIME_MINUTES', 'a minute'),
         mm: t('RELATIVE_TIME_MINUTES', '%d minutes'),
         h: t('RELATIVE_TIME_HOUR', 'an hour'),

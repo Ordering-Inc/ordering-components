@@ -21,6 +21,8 @@ var _EventContext = require("../EventContext");
 
 var _ConfigContext = require("../ConfigContext");
 
+var _CustomerContext = require("../CustomerContext");
+
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
@@ -76,7 +78,7 @@ var OrderContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderContext = OrderContext;
 
 var OrderProvider = function OrderProvider(_ref) {
-  var _configState$configs, _configState$configs$;
+  var _configState$configs, _configState$configs$, _customerState$user5;
 
   var Alert = _ref.Alert,
       children = _ref.children,
@@ -118,6 +120,10 @@ var OrderProvider = function OrderProvider(_ref) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       session = _useSession2[0];
+
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+      _useCustomer2 = _slicedToArray(_useCustomer, 1),
+      customerState = _useCustomer2[0];
 
   var orderTypes = {
     delivery: 1,
@@ -1661,18 +1667,18 @@ var OrderProvider = function OrderProvider(_ref) {
    */
 
   (0, _react.useEffect)(function () {
-    var _session$user, _session$user2;
+    var _customerState$user, _session$user, _customerState$user2, _session$user2;
 
     if (!session.auth || session.loading) return;
-    socket.join("carts_".concat(session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id));
-    socket.join("orderoptions_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
+    socket.join("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id) || (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id)));
+    socket.join("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.id) || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id)));
     return function () {
-      var _session$user3, _session$user4;
+      var _customerState$user3, _session$user3, _customerState$user4, _session$user4;
 
-      socket.leave("carts_".concat(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id));
-      socket.leave("orderoptions_".concat(session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id));
+      socket.leave("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.id) || (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id)));
+      socket.leave("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id)));
     };
-  }, [socket, session]);
+  }, [socket, session, customerState === null || customerState === void 0 ? void 0 : (_customerState$user5 = customerState.user) === null || _customerState$user5 === void 0 ? void 0 : _customerState$user5.id]);
   var functions = {
     refreshOrderOptions: refreshOrderOptions,
     changeAddress: changeAddress,
