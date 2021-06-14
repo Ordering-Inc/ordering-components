@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useOrder } from '../../contexts/OrderContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useCustomer } from '../../contexts/CustomerContext'
+import { useApi, useCustomer, useOrder, useSession } from 'ordering-components'
 
 /**
  * Component to control a address list
@@ -70,7 +67,7 @@ export const AddressList = (props) => {
    * Function to make an address as default address
    * @param {object} address Address to make as default
    */
-  const handleSetDefault = async (address, userCustomerSetup) => {
+  const handleSetDefault = async (address, userCustomerSetup, sameAddress) => {
     if (userCustomerSetup) {
       setUserCustomer({
         ...userCustomerSetup,
@@ -82,6 +79,10 @@ export const AddressList = (props) => {
     }
     if (handleClickSetDefault) {
       return handleClickSetDefault(address)
+    }
+    if (sameAddress) {
+      changeAddress(address?.id)
+      return
     }
     try {
       setActionStatus({ ...actionStatus, loading: true })
