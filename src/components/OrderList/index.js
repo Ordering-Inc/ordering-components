@@ -158,11 +158,11 @@ export const OrderList = (props) => {
 
   useEffect(() => {
     if (!session.user) return
-    socket.join(`orders_${session?.user?.id}`)
+    socket.join(`orders_${userCustomerId || session?.user?.id}`)
     return () => {
-      socket.leave(`orders_${session?.user?.id}`)
+      socket.leave(`orders_${userCustomerId || session?.user?.id}`)
     }
-  }, [socket, session])
+  }, [socket, session, userCustomerId])
 
   const loadMoreOrders = async () => {
     setOrderList({ ...orderList, loading: true })

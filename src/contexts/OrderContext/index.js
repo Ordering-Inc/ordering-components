@@ -5,6 +5,7 @@ import { useWebsocket } from '../WebsocketContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
 import { useConfig } from '../ConfigContext'
+import { useCustomer } from '../CustomerContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -30,6 +31,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   const [events] = useEvent()
   const [configState] = useConfig()
   const [session] = useSession()
+  const [customerState] = useCustomer()
 
   const orderTypes = {
     delivery: 1,
@@ -717,13 +719,13 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
    */
   useEffect(() => {
     if (!session.auth || session.loading) return
-    socket.join(`carts_${session?.user?.id}`)
-    socket.join(`orderoptions_${session?.user?.id}`)
+    socket.join(`carts_${customerState?.user?.id || session?.user?.id}`)
+    socket.join(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
     return () => {
-      socket.leave(`carts_${session?.user?.id}`)
-      socket.leave(`orderoptions_${session?.user?.id}`)
+      socket.leave(`carts_${customerState?.user?.id || session?.user?.id}`)
+      socket.leave(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
     }
-  }, [socket, session])
+  }, [socket, session, customerState?.user?.id])
 
   const functions = {
     refreshOrderOptions,
