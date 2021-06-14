@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useCustomer } from '../../contexts/CustomerContext'
+import { useEvent } from '../../contexts/EventContext'
 
 /**
  * Component to manage Checkout page behavior without UI component
@@ -21,10 +23,14 @@ export const Checkout = (props) => {
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
 
+  const [userCustomer, { deleteUserCustomer }] = useCustomer()
+
+  const [events] = useEvent()
+
   /**
    * Order context
    */
-  const [orderState, { placeCart }] = useOrder()
+  const [orderState, { placeCart, refreshOrderOptions }] = useOrder()
   /**
    * Object to save an object with business information
    */
@@ -106,6 +112,11 @@ export const Checkout = (props) => {
     }
     setPlacing(false)
     onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
+    if (userCustomer?.user?.id) {
+      deleteUserCustomer(true)
+      refreshOrderOptions()
+      events.emit('go_to_page', { page: 'home' })
+    }
   }
 
   const handlePaymethodChange = (paymethod) => {

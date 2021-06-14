@@ -25,6 +25,8 @@ export const OrderDetails = (props) => {
 
   const propsToFetch = ['header', 'slug']
 
+  const requestsState = {}
+
   /**
    * Method to format a price number
    * @param {Number} price
@@ -112,6 +114,9 @@ export const OrderDetails = (props) => {
    * Method to get order from API
    */
   const getOrder = async () => {
+    const source = {}
+    requestsState.order = source
+    requestsState.business = source
     const options = {}
     if (hashKey) {
       options.headers = {
@@ -124,12 +129,12 @@ export const OrderDetails = (props) => {
       }
     }
     try {
-      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get(options)
+      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get({ ...options, cancelToken: source })
       const order = error ? null : result
       const err = error ? result : null
       let businessData = null
       try {
-        const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get()
+        const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
         content.error && err.push(content.result[0])
       } catch (e) {
@@ -181,6 +186,15 @@ export const OrderDetails = (props) => {
       })
     } else {
       getOrder()
+    }
+
+    return () => {
+      if (requestsState.orders) {
+        requestsState.orders.cancel()
+      }
+      if (requestsState.business) {
+        requestsState.business.cancel()
+      }
     }
   }, [])
 
