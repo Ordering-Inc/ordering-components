@@ -120,6 +120,7 @@ var OrderDetails = function OrderDetails(props) {
       setMessagesReadList = _useState10[1];
 
   var propsToFetch = ['header', 'slug'];
+  var requestsState = {};
   /**
    * Method to format a price number
    * @param {Number} price
@@ -289,12 +290,15 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, order, err, businessData, _yield$ordering$setAc3, content, _orderState$error;
+      var source, options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, order, err, businessData, _yield$ordering$setAc3, content, _orderState$error;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
+              source = {};
+              requestsState.order = source;
+              requestsState.business = source;
               options = {};
 
               if (hashKey) {
@@ -309,11 +313,13 @@ var OrderDetails = function OrderDetails(props) {
                 };
               }
 
-              _context3.prev = 3;
-              _context3.next = 6;
-              return ordering.setAccessToken(token).orders(orderId).get(options);
+              _context3.prev = 6;
+              _context3.next = 9;
+              return ordering.setAccessToken(token).orders(orderId).get(_objectSpread(_objectSpread({}, options), {}, {
+                cancelToken: source
+              }));
 
-            case 6:
+            case 9:
               _yield$ordering$setAc = _context3.sent;
               _yield$ordering$setAc2 = _yield$ordering$setAc.content;
               error = _yield$ordering$setAc2.error;
@@ -321,47 +327,49 @@ var OrderDetails = function OrderDetails(props) {
               order = error ? null : result;
               err = error ? result : null;
               businessData = null;
-              _context3.prev = 13;
-              _context3.next = 16;
-              return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get();
+              _context3.prev = 16;
+              _context3.next = 19;
+              return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({
+                cancelToken: source
+              });
 
-            case 16:
+            case 19:
               _yield$ordering$setAc3 = _context3.sent;
               content = _yield$ordering$setAc3.content;
               businessData = content.result;
               content.error && err.push(content.result[0]);
-              _context3.next = 25;
+              _context3.next = 28;
               break;
 
-            case 22:
-              _context3.prev = 22;
-              _context3.t0 = _context3["catch"](13);
+            case 25:
+              _context3.prev = 25;
+              _context3.t0 = _context3["catch"](16);
               err.push(_context3.t0.message);
 
-            case 25:
+            case 28:
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 order: order,
                 businessData: businessData,
                 error: err
               }));
-              _context3.next = 31;
+              _context3.next = 34;
               break;
 
-            case 28:
-              _context3.prev = 28;
-              _context3.t1 = _context3["catch"](3);
+            case 31:
+              _context3.prev = 31;
+              _context3.t1 = _context3["catch"](6);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: _context3.t1.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context3.t1 === null || _context3.t1 === void 0 ? void 0 : _context3.t1.message) : ['ERROR']
               }));
 
-            case 31:
+            case 34:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[3, 28], [13, 22]]);
+      }, _callee3, null, [[6, 31], [16, 25]]);
     }));
 
     return function getOrder() {
@@ -431,6 +439,16 @@ var OrderDetails = function OrderDetails(props) {
     } else {
       getOrder();
     }
+
+    return function () {
+      if (requestsState.orders) {
+        requestsState.orders.cancel();
+      }
+
+      if (requestsState.business) {
+        requestsState.business.cancel();
+      }
+    };
   }, []);
   (0, _react.useEffect)(function () {
     var _orderState$order9;

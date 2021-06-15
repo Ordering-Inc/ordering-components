@@ -180,7 +180,7 @@ var AddressList = function AddressList(props) {
    */
 
   var handleSetDefault = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(address, userCustomerSetup) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(address, userCustomerSetup, sameAddress) {
       var _yield$ordering$setAc2, content;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
@@ -204,16 +204,25 @@ var AddressList = function AddressList(props) {
               return _context2.abrupt("return", handleClickSetDefault(address));
 
             case 3:
-              _context2.prev = 3;
+              if (!sameAddress) {
+                _context2.next = 6;
+                break;
+              }
+
+              changeAddress(address === null || address === void 0 ? void 0 : address.id);
+              return _context2.abrupt("return");
+
+            case 6:
+              _context2.prev = 6;
               setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: true
               }));
-              _context2.next = 7;
+              _context2.next = 10;
               return ordering.setAccessToken(accessToken).users(userId).addresses(address.id).save({
                 default: true
               });
 
-            case 7:
+            case 10:
               _yield$ordering$setAc2 = _context2.sent;
               content = _yield$ordering$setAc2.content;
               setActionStatus({
@@ -234,26 +243,26 @@ var AddressList = function AddressList(props) {
                 setAddressList(_objectSpread({}, addressList));
               }
 
-              _context2.next = 16;
+              _context2.next = 19;
               break;
 
-            case 13:
-              _context2.prev = 13;
-              _context2.t0 = _context2["catch"](3);
+            case 16:
+              _context2.prev = 16;
+              _context2.t0 = _context2["catch"](6);
               setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 16:
+            case 19:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[3, 13]]);
+      }, _callee2, null, [[6, 16]]);
     }));
 
-    return function handleSetDefault(_x, _x2) {
+    return function handleSetDefault(_x, _x2, _x3) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -324,7 +333,7 @@ var AddressList = function AddressList(props) {
       }, _callee3, null, [[2, 12]]);
     }));
 
-    return function handleDelete(_x3) {
+    return function handleDelete(_x4) {
       return _ref3.apply(this, arguments);
     };
   }();
