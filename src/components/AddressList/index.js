@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useApi, useCustomer, useOrder, useSession } from 'ordering-components'
+import { useSession } from '../../contexts/SessionContext'
+import { useOrder } from '../../contexts/OrderContext'
+import { useApi } from '../../contexts/ApiContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 /**
  * Component to control a address list
