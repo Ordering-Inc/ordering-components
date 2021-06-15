@@ -14,24 +14,33 @@ export const PhoneAutocomplete = (props) => {
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
   const [customersPhones, setCustomersPhones] = useState({ users: [], loading: false, error: null })
 
-   /**
+  /**
    * Get users from API
    */
   const getUsers = async () => {
     setCustomersPhones({ ...customersPhones, loading: true })
+    const conditions = [{
+      attribute: 'cellphone',
+      value: {
+        condition: 'ilike',
+        value: encodeURI(`%${phone}%`)
+      }
+    },
+    {
+      attribute: 'phone',
+      value: {
+        condition: 'ilike',
+        value: encodeURI(`%${phone}%`)
+      }
+    }]
     try {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
-        .where([
-          {
-            attribute: 'cellphone',
-            value: {
-              condition: 'ilike',
-              value: encodeURI(`%${phone}%`)
-            }
-          }
-        ])
+        .where({
+          conditions,
+          conector: 'OR'
+        })
         .get()
       setCustomersPhones({ ...customersPhones, users: result, loading: false })
     } catch (e) {
