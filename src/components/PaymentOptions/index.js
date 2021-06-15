@@ -131,7 +131,7 @@ export const PaymentOptions = (props) => {
         })
       }
     }
-  }, [isLoading])
+  }, [isLoading, businessId])
 
   return (
     <>

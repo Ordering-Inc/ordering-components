@@ -70,7 +70,7 @@ export const AddressList = (props) => {
    * Function to make an address as default address
    * @param {object} address Address to make as default
    */
-  const handleSetDefault = async (address, userCustomerSetup) => {
+  const handleSetDefault = async (address, userCustomerSetup, sameAddress) => {
     if (userCustomerSetup) {
       setUserCustomer({
         ...userCustomerSetup,
@@ -82,6 +82,10 @@ export const AddressList = (props) => {
     }
     if (handleClickSetDefault) {
       return handleClickSetDefault(address)
+    }
+    if (sameAddress) {
+      changeAddress(address?.id)
+      return
     }
     try {
       setActionStatus({ ...actionStatus, loading: true })
