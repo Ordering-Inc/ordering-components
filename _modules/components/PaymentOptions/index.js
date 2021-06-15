@@ -223,7 +223,7 @@ var PaymentOptions = function PaymentOptions(props) {
         }));
       }
     }
-  }, [isLoading]);
+  }, [isLoading, businessId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderTotal: orderTotal,
     paymethodsList: paymethodsList,
