@@ -9,6 +9,7 @@ import { useApi } from '../../contexts/ApiContext'
 export const Checkout = (props) => {
   const {
     businessId,
+    cartState,
     propsToFetch,
     actionsBeforePlace,
     handleCustomClick,
@@ -42,11 +43,22 @@ export const Checkout = (props) => {
    */
   const getBusiness = async () => {
     try {
-      const { content: { result } } = await ordering.businesses(businessId).select(propsToFetch).get()
+      const { content: { result, error } } = await ordering.businesses(businessId).select(propsToFetch).get()
+      if (!error && cartState.cart?.paymethod_id) {
+        const paymethodSelected = result?.paymethods?.find(paymethod => paymethod?.paymethod_id === cartState.cart?.paymethod_id)
+        handlePaymethodChange({
+          paymethodId: paymethodSelected?.paymethod?.id,
+          gateway: paymethodSelected?.paymethod?.gateway,
+          paymethod: paymethodSelected?.paymethod,
+          data: cart?.paymethod_data,
+          id: paymethodSelected?.paymethod?.id
+        })
+      }
       setBusinessDetails({
         ...businessDetails,
         loading: false,
-        business: result
+        business: result,
+        error
       })
     } catch (error) {
       setBusinessDetails({
