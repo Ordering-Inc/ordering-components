@@ -6,7 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 /**
  * Component to manage Checkout page behavior without UI component
  */
- export const Checkout = (props) => {
+export const Checkout = (props) => {
   const {
     businessId,
     cartState,
