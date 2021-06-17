@@ -49,7 +49,12 @@ export const Checkout = (props) => {
         handlePaymethodChange({
           paymethodId: paymethodSelected?.paymethod?.id,
           gateway: paymethodSelected?.paymethod?.gateway,
-          paymethod: paymethodSelected?.paymethod,
+          paymethod: {
+            ...paymethodSelected?.paymethod,
+            credentials: {
+              ...paymethodSelected?.data
+            }
+          },
           data: cart?.paymethod_data,
           id: paymethodSelected?.paymethod?.id
         })
