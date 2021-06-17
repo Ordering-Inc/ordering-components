@@ -418,7 +418,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Apply coupon to cart
    */
-  const applyCoupon = async (couponData) => {
+  const applyCoupon = async (couponData, customParams) => {
     if (!couponData.business_id) {
       throw new Error('`business_id` is required.')
     }
@@ -428,8 +428,30 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     if (state.carts[`businessId:${couponData.business_id}`]?.coupon === couponData.coupon) {
       return
     }
+
     try {
       setState({ ...state, loading: true })
+      if (customParams) {
+        const response = await fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/' + 'vcoupon.php', {
+          method: 'POST',
+          body: {
+            userId: customParams.userId,
+            businessId: customParams.businessId,
+            couponId: couponData.coupon
+          },
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': '*'
+          }
+        })
+        const { result } = await response.json()
+        if (result.message !== 'Cup\u00f3n v\u00e1lido') {
+          setAlert({ show: true, content: result.message })
+          setState({ ...state, loading: false })
+          return
+        }
+      }
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
