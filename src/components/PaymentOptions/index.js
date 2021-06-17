@@ -77,8 +77,13 @@ export const PaymentOptions = (props) => {
    * @param {Object} val object with information of payment method selected
    */
   const handlePaymethodClick = (paymethod, isPopupMethod) => {
+    const paymentsDirect = ['paypal']
     if (isPopupMethod) {
-      setPaymethodsSelected(null)
+      if (paymentsDirect.includes(paymethod?.gateway)) {
+        setPaymethodsSelected(paymethod)
+      } else {
+        setPaymethodsSelected(null)
+      }
       setIsOpenMethod({
         ...isOpenMethod,
         paymethod
@@ -125,7 +130,7 @@ export const PaymentOptions = (props) => {
     if (paymethodSelected) {
       changePaymethod(businessId, paymethodSelected.id, JSON.stringify(paymethodData))
     }
-  }, [paymethodSelected])
+  }, [paymethodSelected, paymethodData])
 
   useEffect(() => {
     if (
@@ -138,7 +143,7 @@ export const PaymentOptions = (props) => {
         id: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
-        data: {}
+        data: paymethodData
       })
     } else if (paymethodSelected === null && onPaymentChange) {
       onPaymentChange(null)
