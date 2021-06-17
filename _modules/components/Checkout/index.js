@@ -142,7 +142,9 @@ var Checkout = function Checkout(props) {
                 handlePaymethodChange({
                   paymethodId: _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa = _paymethodSelected.paymethod) === null || _paymethodSelected$pa === void 0 ? void 0 : _paymethodSelected$pa.id,
                   gateway: _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa2 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.gateway,
-                  paymethod: _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : _paymethodSelected.paymethod,
+                  paymethod: _objectSpread(_objectSpread({}, _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : _paymethodSelected.paymethod), {}, {
+                    credentials: _objectSpread({}, _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : _paymethodSelected.data)
+                  }),
                   data: cart === null || cart === void 0 ? void 0 : cart.paymethod_data,
                   id: _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id
                 });
