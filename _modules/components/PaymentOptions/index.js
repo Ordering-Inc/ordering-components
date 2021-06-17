@@ -179,8 +179,15 @@ var PaymentOptions = function PaymentOptions(props) {
 
 
   var handlePaymethodClick = function handlePaymethodClick(paymethod, isPopupMethod) {
+    var paymentsDirect = ['paypal'];
+
     if (isPopupMethod) {
-      setPaymethodsSelected(null);
+      if (paymentsDirect.includes(paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway)) {
+        setPaymethodsSelected(paymethod);
+      } else {
+        setPaymethodsSelected(null);
+      }
+
       setIsOpenMethod(_objectSpread(_objectSpread({}, isOpenMethod), {}, {
         paymethod: paymethod
       }));
@@ -232,7 +239,7 @@ var PaymentOptions = function PaymentOptions(props) {
     if (paymethodSelected) {
       changePaymethod(businessId, paymethodSelected.id, JSON.stringify(paymethodData));
     }
-  }, [paymethodSelected]);
+  }, [paymethodSelected, paymethodData]);
   (0, _react.useEffect)(function () {
     if (paymethodSelected && (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway) || !paymethodsExisting.includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway))) {
       onPaymentChange && onPaymentChange({
@@ -240,7 +247,7 @@ var PaymentOptions = function PaymentOptions(props) {
         id: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
-        data: {}
+        data: paymethodData
       });
     } else if (paymethodSelected === null && onPaymentChange) {
       onPaymentChange(null);
