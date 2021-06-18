@@ -63,7 +63,8 @@ var SignupForm = function SignupForm(props) {
       handleSuccessSignup = props.handleSuccessSignup,
       externalPhoneNumber = props.externalPhoneNumber,
       handleCustomSignup = props.handleCustomSignup,
-      notificationState = props.notificationState;
+      notificationState = props.notificationState,
+      isCustomerMode = props.isCustomerMode;
   var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -141,7 +142,7 @@ var SignupForm = function SignupForm(props) {
 
   var handleSignupClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
-      var data, source, response;
+      var data, newData, source, response;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -185,18 +186,30 @@ var SignupForm = function SignupForm(props) {
                 data.notification_app = notificationState.notification_app;
               }
 
-              _context.prev = 12;
+              if (isCustomerMode) {
+                data.phone = data.cellphone;
+                delete data.country_phone_code;
+              }
+
+              newData = Object.fromEntries(Object.entries(data).filter(function (_ref2) {
+                var _ref3 = _slicedToArray(_ref2, 2),
+                    _ = _ref3[0],
+                    v = _ref3[1];
+
+                return v != '';
+              }));
+              _context.prev = 14;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.signup = source;
-              _context.next = 18;
-              return ordering.users().save(data, {
+              _context.next = 20;
+              return ordering.users().save(newData, {
                 cancelToken: source
               });
 
-            case 18:
+            case 20:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -209,12 +222,12 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
-              _context.next = 26;
+              _context.next = 28;
               break;
 
-            case 23:
-              _context.prev = 23;
-              _context.t0 = _context["catch"](12);
+            case 25:
+              _context.prev = 25;
+              _context.t0 = _context["catch"](14);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setFormState({
@@ -226,12 +239,12 @@ var SignupForm = function SignupForm(props) {
                 });
               }
 
-            case 26:
+            case 28:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[12, 23]]);
+      }, _callee, null, [[14, 25]]);
     }));
 
     return function handleSignupClick(_x) {
@@ -300,7 +313,7 @@ var SignupForm = function SignupForm(props) {
 
 
   var sendVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
       var response, res;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -355,7 +368,7 @@ var SignupForm = function SignupForm(props) {
     }));
 
     return function sendVerifyPhoneCode(_x2) {
-      return _ref2.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
@@ -375,7 +388,7 @@ var SignupForm = function SignupForm(props) {
 
 
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
       var body, _res$result, response, res, _res$result2, _res$result2$session;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
@@ -447,7 +460,7 @@ var SignupForm = function SignupForm(props) {
     }));
 
     return function checkVerifyPhoneCode(_x3) {
-      return _ref3.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
