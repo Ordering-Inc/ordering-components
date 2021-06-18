@@ -434,11 +434,11 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (customParams) {
         const response = await fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/' + 'vcoupon2.php', {
           method: 'POST',
-          body: {
+          body: JSON.stringify({
             userId: customParams.userId,
             businessId: customParams.businessId,
             couponId: couponData.coupon
-          },
+          }),
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded',
