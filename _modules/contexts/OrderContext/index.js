@@ -978,7 +978,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(couponData, customParams) {
       var _state$carts$;
 
-      var response, _yield$response$json2, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, _yield$ordering$setAc14, error, result;
+      var response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, _yield$ordering$setAc14, error, result;
 
       return _regenerator.default.wrap(function _callee10$(_context10) {
         while (1) {
@@ -1014,7 +1014,7 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
 
               if (!customParams) {
-                _context10.next = 21;
+                _context10.next = 20;
                 break;
               }
 
@@ -1039,12 +1039,11 @@ var OrderProvider = function OrderProvider(_ref) {
               return response.json();
 
             case 14:
-              _yield$response$json2 = _context10.sent;
-              _result2 = _yield$response$json2.result;
+              _result2 = _context10.sent;
               console.log(_result2);
 
               if (!(_result2.message !== "Cup\xF3n v\xE1lido")) {
-                _context10.next = 21;
+                _context10.next = 20;
                 break;
               }
 
@@ -1057,11 +1056,11 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context10.abrupt("return");
 
-            case 21:
-              _context10.next = 23;
+            case 20:
+              _context10.next = 22;
               return strategy.getItem('user-customer', true);
 
-            case 23:
+            case 22:
               customerFromLocalStorage = _context10.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
@@ -1069,14 +1068,14 @@ var OrderProvider = function OrderProvider(_ref) {
                 coupon: couponData.coupon,
                 user_id: userCustomerId || session.user.id
               };
-              _context10.next = 28;
+              _context10.next = 27;
               return ordering.setAccessToken(session.token).carts().applyCoupon(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
-            case 28:
+            case 27:
               _yield$ordering$setAc13 = _context10.sent;
               _yield$ordering$setAc14 = _yield$ordering$setAc13.content;
               error = _yield$ordering$setAc14.error;
@@ -1097,20 +1096,20 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context10.abrupt("return", !error);
 
-            case 37:
-              _context10.prev = 37;
+            case 36:
+              _context10.prev = 36;
               _context10.t0 = _context10["catch"](6);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context10.abrupt("return", false);
 
-            case 41:
+            case 40:
             case "end":
               return _context10.stop();
           }
         }
-      }, _callee10, null, [[6, 37]]);
+      }, _callee10, null, [[6, 36]]);
     }));
 
     return function applyCoupon(_x13, _x14) {
