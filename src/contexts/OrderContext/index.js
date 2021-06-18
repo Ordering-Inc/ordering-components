@@ -432,7 +432,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     try {
       setState({ ...state, loading: true })
       if (customParams) {
-        const response = await fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/' + 'vcoupon2.php', {
+        const response = await fetch('https://alsea-plugins.ordering.co/alseaplatform/' + 'vcoupon2.php', {
           method: 'POST',
           body: JSON.stringify({
             userId: customParams.userId,
