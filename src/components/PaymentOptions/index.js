@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 
 const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal']
 const paymethodsNotAllowed = ['paypal_express', 'authorize']
-const paymethodsCallcenterMode = ['cash', 'card_delivery']
+const paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
 
 /**
  * Component to manage payment options behavior without UI component
@@ -18,7 +17,6 @@ export const PaymentOptions = (props) => {
     businessId,
     isCustomerMode,
     onPaymentChange,
-    paymethodsCallCenterCustom,
     paymethodsCustom,
     UIComponent
   } = props
@@ -36,7 +34,7 @@ export const PaymentOptions = (props) => {
     const _paymethods = paymethods && paymethods
       .filter(credentials => isCustomerMode
         ? !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway) &&
-        paymethodsCallCenterCustom ? paymethodsCallCenterCustom.includes(credentials?.paymethod?.gateway) : paymethodsCallcenterMode.includes(credentials?.paymethod?.gateway)
+          paymethodsCallcenterMode.includes(credentials?.paymethod?.gateway)
         : !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway))
       .map(credentials => {
         return {
@@ -101,7 +99,7 @@ export const PaymentOptions = (props) => {
 
   const handlePaymethodDataChange = (data) => {
     setPaymethodData(data)
-    if (!!Object.keys(data).length) {
+    if (Object.keys(data).length) {
       const paymethod = props.paySelected || isOpenMethod.paymethod
       setPaymethodsSelected(paymethod)
       onPaymentChange && onPaymentChange({
