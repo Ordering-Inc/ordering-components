@@ -418,7 +418,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
   /**
    * Apply coupon to cart
    */
-  const applyCoupon = async (couponData) => {
+  const applyCoupon = async (couponData, customParams) => {
     if (!couponData.business_id) {
       throw new Error('`business_id` is required.')
     }
@@ -428,8 +428,31 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
     if (state.carts[`businessId:${couponData.business_id}`]?.coupon === couponData.coupon) {
       return
     }
+
     try {
       setState({ ...state, loading: true })
+      if (customParams) {
+        const response = await fetch('https://alsea-plugins.ordering.co/alseaplatform/' + 'vcoupon2.php', {
+          method: 'POST',
+          body: JSON.stringify({
+            userId: customParams.userId,
+            businessId: customParams.businessId,
+            couponId: couponData.coupon
+          }),
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': '*'
+          }
+        })
+        const result = await response.json()
+
+        if (result.message !== 'Cup\u00f3n v\u00e1lido') {
+          setAlert({ show: true, content: result.message })
+          setState({ ...state, loading: false })
+          return
+        }
+      }
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
@@ -437,15 +460,28 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         coupon: couponData.coupon,
         user_id: userCustomerId || session.user.id
       }
-      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
-      if (!error) {
-        state.carts[`businessId:${result.business_id}`] = result
-        events.emit('cart_updated', result)
+      let result
+      if (customParams) {
+        const responseApi = await fetch(`https://alsea-api-production.ordering.co/v400/es-419-1/alsea/business/${customParams.businessId}/offers/${couponData.coupon}?business_id=${customParams.businessId}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Control-Allow-Origin': '*'
+          }
+        })
+        result = await responseApi.json()
       } else {
-        setAlert({ show: true, content: result })
+        result = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      }
+      if (!result.error) {
+        state.carts[`businessId:${result.result.business_id}`] = result.result
+        events.emit('cart_updated', result.result)
+      } else {
+        setAlert({ show: true, content: result.result })
       }
       setState({ ...state, loading: false })
-      return !error
+      return !result.error
     } catch (err) {
       setState({ ...state, loading: false })
       return false
