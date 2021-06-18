@@ -446,6 +446,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
           }
         })
         const { result } = await response.json()
+        console.log(result)
         if (result.message !== 'Cup\u00f3n v\u00e1lido') {
           setAlert({ show: true, content: result.message })
           setState({ ...state, loading: false })
