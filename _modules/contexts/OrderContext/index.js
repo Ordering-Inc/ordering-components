@@ -1021,11 +1021,11 @@ var OrderProvider = function OrderProvider(_ref) {
               _context10.next = 11;
               return fetch('https://alsea-plugins-staging.ordering.co/alseaplatform/' + 'vcoupon2.php', {
                 method: 'POST',
-                body: {
+                body: JSON.stringify({
                   userId: customParams.userId,
                   businessId: customParams.businessId,
                   couponId: couponData.coupon
-                },
+                }),
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/x-www-form-urlencoded',
