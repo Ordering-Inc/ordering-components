@@ -17,7 +17,8 @@ export const SignupForm = (props) => {
     handleSuccessSignup,
     externalPhoneNumber,
     handleCustomSignup,
-    notificationState
+    notificationState,
+    isCustomerMode
   } = props
   const requestsState = {}
 
@@ -62,11 +63,17 @@ export const SignupForm = (props) => {
       data.notification_token = notificationState.notification_token
       data.notification_app = notificationState.notification_app
     }
+
+    if (isCustomerMode) {
+      data.phone = data.cellphone
+      delete data.country_phone_code
+    }
+    const newData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != ''))
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
       requestsState.signup = source
-      const response = await ordering.users().save(data, { cancelToken: source })
+      const response = await ordering.users().save(newData, { cancelToken: source })
       setFormState({
         result: response.content,
         loading: false
