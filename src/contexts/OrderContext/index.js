@@ -462,7 +462,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       let result
       if (customParams) {
-        const responseApi = await fetch(`https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-stating/business/${customParams.businessId}/offers/${couponData.coupon}?business_id=${customParams.businessId}`, {
+        const responseApi = await fetch(`https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-staging/business/${customParams.businessId}/offers/${couponData.coupon}?business_id=${customParams.businessId}`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
