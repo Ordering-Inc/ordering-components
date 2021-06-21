@@ -1074,7 +1074,7 @@ var OrderProvider = function OrderProvider(_ref) {
               }
 
               _context10.next = 27;
-              return fetch("https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-stating/business/".concat(customParams.businessId, "/offers/").concat(couponData.coupon, "?business_id=").concat(customParams.businessId), {
+              return fetch("https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-staging/business/".concat(customParams.businessId, "/offers/").concat(couponData.coupon, "?business_id=").concat(customParams.businessId), {
                 method: 'GET',
                 headers: {
                   Accept: 'application/json',
