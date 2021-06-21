@@ -49,7 +49,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal'];
 var paymethodsNotAllowed = ['paypal_express', 'authorize'];
-var paymethodsCallcenterMode = ['cash', 'card_delivery'];
+var paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon'];
 /**
  * Component to manage payment options behavior without UI component
  */
@@ -62,7 +62,7 @@ var PaymentOptions = function PaymentOptions(props) {
       businessId = props.businessId,
       isCustomerMode = props.isCustomerMode,
       onPaymentChange = props.onPaymentChange,
-      paymethodsCallCenterCustom = props.paymethodsCallCenterCustom,
+      paymethodsCustom = props.paymethodsCustom,
       UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -95,11 +95,18 @@ var PaymentOptions = function PaymentOptions(props) {
       paymethodData = _useState6[0],
       setPaymethodData = _useState6[1];
 
+  var _useState7 = (0, _react.useState)({
+    paymethod: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      isOpenMethod = _useState8[0],
+      setIsOpenMethod = _useState8[1];
+
   var parsePaymethods = function parsePaymethods(paymethods) {
     var _paymethods = paymethods && paymethods.filter(function (credentials) {
-      var _credentials$paymetho, _credentials$paymetho2, _credentials$paymetho3, _credentials$paymetho4;
+      var _credentials$paymetho, _credentials$paymetho2, _credentials$paymetho3;
 
-      return isCustomerMode ? !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho = credentials.paymethod) === null || _credentials$paymetho === void 0 ? void 0 : _credentials$paymetho.gateway) && paymethodsCallCenterCustom ? paymethodsCallCenterCustom.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho2 = credentials.paymethod) === null || _credentials$paymetho2 === void 0 ? void 0 : _credentials$paymetho2.gateway) : paymethodsCallcenterMode.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho3 = credentials.paymethod) === null || _credentials$paymetho3 === void 0 ? void 0 : _credentials$paymetho3.gateway) : !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho4 = credentials.paymethod) === null || _credentials$paymetho4 === void 0 ? void 0 : _credentials$paymetho4.gateway);
+      return isCustomerMode ? !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho = credentials.paymethod) === null || _credentials$paymetho === void 0 ? void 0 : _credentials$paymetho.gateway) && paymethodsCallcenterMode.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho2 = credentials.paymethod) === null || _credentials$paymetho2 === void 0 ? void 0 : _credentials$paymetho2.gateway) : !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho3 = credentials.paymethod) === null || _credentials$paymetho3 === void 0 ? void 0 : _credentials$paymetho3.gateway);
     }).map(function (credentials) {
       return _objectSpread(_objectSpread({}, credentials === null || credentials === void 0 ? void 0 : credentials.paymethod), {}, {
         sandbox: credentials === null || credentials === void 0 ? void 0 : credentials.sandbox,
@@ -170,21 +177,54 @@ var PaymentOptions = function PaymentOptions(props) {
    */
 
 
-  var handlePaymethodClick = function handlePaymethodClick(paymethod) {
+  var handlePaymethodClick = function handlePaymethodClick(paymethod, isPopupMethod) {
+    var paymentsDirect = ['paypal'];
+
+    if (isPopupMethod) {
+      if (paymentsDirect.includes(paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway)) {
+        setPaymethodsSelected(paymethod);
+      } else {
+        setPaymethodsSelected(null);
+      }
+
+      setIsOpenMethod(_objectSpread(_objectSpread({}, isOpenMethod), {}, {
+        paymethod: paymethod
+      }));
+      handlePaymethodDataChange({});
+      return;
+    }
+
+    if (paymethodsCustom) {
+      paymethodsCustom(paymethod);
+    }
+
     setPaymethodsSelected(paymethod);
+    setIsOpenMethod({
+      paymethod: paymethod
+    });
     handlePaymethodDataChange({});
   };
 
   var handlePaymethodDataChange = function handlePaymethodDataChange(data) {
-    if (paymethodSelected && data) {
-      changePaymethod(businessId, paymethodSelected.id, JSON.stringify(data));
-    }
-
     setPaymethodData(data);
+
+    if (Object.keys(data).length) {
+      var paymethod = props.paySelected || isOpenMethod.paymethod;
+      setPaymethodsSelected(paymethod);
+      onPaymentChange && onPaymentChange({
+        paymethodId: paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
+        id: paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
+        gateway: paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway,
+        paymethod: paymethod,
+        data: data
+      });
+      return;
+    }
 
     if (paymethodSelected) {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
+        id: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
         data: data
@@ -195,12 +235,18 @@ var PaymentOptions = function PaymentOptions(props) {
   };
 
   (0, _react.useEffect)(function () {
+    if (paymethodSelected) {
+      changePaymethod(businessId, paymethodSelected.id, JSON.stringify(paymethodData));
+    }
+  }, [paymethodSelected, paymethodData]);
+  (0, _react.useEffect)(function () {
     if (paymethodSelected && (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway) || !paymethodsExisting.includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway))) {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
+        id: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
-        data: {}
+        data: paymethodData
       });
     } else if (paymethodSelected === null && onPaymentChange) {
       onPaymentChange(null);
@@ -226,9 +272,11 @@ var PaymentOptions = function PaymentOptions(props) {
   }, [isLoading, businessId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderTotal: orderTotal,
+    isOpenMethod: isOpenMethod,
     paymethodsList: paymethodsList,
     paymethodSelected: paymethodSelected,
     paymethodData: paymethodData,
+    setPaymethodData: setPaymethodData,
     handlePaymethodClick: handlePaymethodClick,
     handlePaymethodDataChange: handlePaymethodDataChange
   })));
