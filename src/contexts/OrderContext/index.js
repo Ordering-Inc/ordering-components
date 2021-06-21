@@ -464,10 +464,14 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       if (customParams) {
         const responseApi = await fetch(`https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-staging/business/${customParams.businessId}/offers/${couponData.coupon}?business_id=${customParams.businessId}`, {
           method: 'GET',
+<<<<<<< HEAD
           headers: {
             Authorization: `Bearer ${session.token}`,
             'Content-Type': 'application/json'
           }
+=======
+          mode: 'no-cors'
+>>>>>>> 30ab577e863bb7f544e29ad0d9186cdc41eb3a5f
         })
         result = await responseApi.json()
       } else {
