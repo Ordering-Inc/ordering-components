@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 
 const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal']
 const paymethodsNotAllowed = ['paypal_express', 'authorize']
-const paymethodsCallcenterMode = ['cash', 'card_delivery']
+const paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
 
 /**
  * Component to manage payment options behavior without UI component
@@ -18,7 +17,7 @@ export const PaymentOptions = (props) => {
     businessId,
     isCustomerMode,
     onPaymentChange,
-    paymethodsCallCenterCustom,
+    paymethodsCustom,
     UIComponent
   } = props
 
@@ -29,12 +28,13 @@ export const PaymentOptions = (props) => {
   const [paymethodsList, setPaymethodsList] = useState({ paymethods: [], loading: true, error: null })
   const [paymethodSelected, setPaymethodsSelected] = useState(null)
   const [paymethodData, setPaymethodData] = useState({})
+  const [isOpenMethod, setIsOpenMethod] = useState({ paymethod: null })
 
   const parsePaymethods = (paymethods) => {
     const _paymethods = paymethods && paymethods
       .filter(credentials => isCustomerMode
         ? !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway) &&
-        paymethodsCallCenterCustom ? paymethodsCallCenterCustom.includes(credentials?.paymethod?.gateway) : paymethodsCallcenterMode.includes(credentials?.paymethod?.gateway)
+          paymethodsCallcenterMode.includes(credentials?.paymethod?.gateway)
         : !paymethodsNotAllowed.includes(credentials?.paymethod?.gateway))
       .map(credentials => {
         return {
@@ -74,19 +74,47 @@ export const PaymentOptions = (props) => {
    * Method to set payment option selected by user
    * @param {Object} val object with information of payment method selected
    */
-  const handlePaymethodClick = (paymethod) => {
+  const handlePaymethodClick = (paymethod, isPopupMethod) => {
+    const paymentsDirect = ['paypal']
+    if (isPopupMethod) {
+      if (paymentsDirect.includes(paymethod?.gateway)) {
+        setPaymethodsSelected(paymethod)
+      } else {
+        setPaymethodsSelected(null)
+      }
+      setIsOpenMethod({
+        ...isOpenMethod,
+        paymethod
+      })
+      handlePaymethodDataChange({})
+      return
+    }
+    if (paymethodsCustom) {
+      paymethodsCustom(paymethod)
+    }
     setPaymethodsSelected(paymethod)
+    setIsOpenMethod({ paymethod })
     handlePaymethodDataChange({})
   }
 
   const handlePaymethodDataChange = (data) => {
-    if (paymethodSelected && data) {
-      changePaymethod(businessId, paymethodSelected.id, JSON.stringify(data))
-    }
     setPaymethodData(data)
+    if (Object.keys(data).length) {
+      const paymethod = props.paySelected || isOpenMethod.paymethod
+      setPaymethodsSelected(paymethod)
+      onPaymentChange && onPaymentChange({
+        paymethodId: paymethod?.id,
+        id: paymethod?.id,
+        gateway: paymethod?.gateway,
+        paymethod: paymethod,
+        data
+      })
+      return
+    }
     if (paymethodSelected) {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
+        id: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
         data
@@ -97,6 +125,12 @@ export const PaymentOptions = (props) => {
   }
 
   useEffect(() => {
+    if (paymethodSelected) {
+      changePaymethod(businessId, paymethodSelected.id, JSON.stringify(paymethodData))
+    }
+  }, [paymethodSelected, paymethodData])
+
+  useEffect(() => {
     if (
       paymethodSelected &&
       (['card_delivery', 'cash', 'stripe_redirect'].includes(paymethodSelected?.gateway) ||
@@ -104,9 +138,10 @@ export const PaymentOptions = (props) => {
     ) {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
+        id: paymethodSelected.id,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
-        data: {}
+        data: paymethodData
       })
     } else if (paymethodSelected === null && onPaymentChange) {
       onPaymentChange(null)
@@ -139,9 +174,11 @@ export const PaymentOptions = (props) => {
         <UIComponent
           {...props}
           orderTotal={orderTotal}
+          isOpenMethod={isOpenMethod}
           paymethodsList={paymethodsList}
           paymethodSelected={paymethodSelected}
           paymethodData={paymethodData}
+          setPaymethodData={setPaymethodData}
           handlePaymethodClick={handlePaymethodClick}
           handlePaymethodDataChange={handlePaymethodDataChange}
         />
