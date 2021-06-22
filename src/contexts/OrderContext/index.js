@@ -471,7 +471,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         })
         result = await responseApi.json()
       } else {
-        result = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+        const { content } = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+        result = content
       }
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
