@@ -462,17 +462,17 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       }
       let result
       if (customParams) {
-        const responseApi = await fetch(`https://alsea-api-production.ordering.co/v400/es-419-1/alsea/business/${customParams.businessId}/offers/${couponData.coupon}?business_id=${customParams.businessId}`, {
+        const responseApi = await fetch(`https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-staging/business/${customParams.businessId}/offers/${couponData.coupon}?business_id=${customParams.businessId}`, {
           method: 'GET',
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': '*'
+            Authorization: `Bearer ${session.token}`,
+            'Content-Type': 'application/json'
           }
         })
         result = await responseApi.json()
       } else {
-        result = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+        const { content } = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+        result = content
       }
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
