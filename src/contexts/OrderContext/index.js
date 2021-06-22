@@ -473,10 +473,13 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
       } else {
         result = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       }
+      console.log(result)
       if (!result.error) {
+        console.log('entra?')
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
       } else {
+        console.log('error?')
         setAlert({ show: true, content: result.result })
       }
       setState({ ...state, loading: false })
