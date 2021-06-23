@@ -82,6 +82,10 @@ export const ConfigProvider = ({ children }) => {
     driver_tip_use_custom: {
       key: 'driver_tip_use_custom',
       value: 0 // 0: disabled, 1: enabled
+    },
+    validation_phone_number_lib: {
+      key: 'validation_phone_number_lib',
+      value: 1 // 0: disabled, 1: enabled
     }
   }
 
