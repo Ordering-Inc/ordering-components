@@ -448,7 +448,8 @@ var OrderList = function OrderList(props) {
     orderList: orderList,
     pagination: pagination,
     loadMoreOrders: loadMoreOrders,
-    goToPage: goToPage
+    goToPage: goToPage,
+    loadOrders: loadOrders
   })));
 };
 
