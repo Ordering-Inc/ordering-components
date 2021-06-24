@@ -58,7 +58,7 @@ export const CouponControl = (props) => {
   }
 
   useEffect(() => {
-    if (price < 1) {
+    if (price < 0) {
       handleRemoveCouponClick()
       setConfirm({ ...confirm, open: true, content: t('COUPON_TOTAL_ERROR', 'The total value of the cart with discount must be at least 1$'), error: true })
     }
