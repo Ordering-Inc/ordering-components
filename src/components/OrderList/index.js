@@ -240,6 +240,7 @@ export const OrderList = (props) => {
           pagination={pagination}
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
+          loadOrders={loadOrders}
         />
       )}
     </>
