@@ -116,11 +116,11 @@ var CouponControl = function CouponControl(props) {
   };
 
   (0, _react.useEffect)(function () {
-    if (price < 1) {
+    if (price < 0) {
       handleRemoveCouponClick();
       setConfirm(_objectSpread(_objectSpread({}, confirm), {}, {
         open: true,
-        content: t('COUPON_TOTAL_ERROR', 'The total value of the cart with discount must be at least 1$'),
+        content: t('COUPON_TOTAL_ERROR', 'The total value of the cart with discount must be positive'),
         error: true
       }));
     }
