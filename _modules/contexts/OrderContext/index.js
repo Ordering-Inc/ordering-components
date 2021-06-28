@@ -86,7 +86,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var Alert = _ref.Alert,
       children = _ref.children,
-      strategy = _ref.strategy;
+      strategy = _ref.strategy,
+      isAlsea = _ref.isAlsea;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -1017,7 +1018,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: true
               }));
 
-              if (!customParams) {
+              if (!(customParams && isAlsea)) {
                 _context10.next = 19;
                 break;
               }
@@ -1052,7 +1053,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
               setAlert({
                 show: true,
-                content: _result2.message
+                content: [_result2.message]
               });
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
