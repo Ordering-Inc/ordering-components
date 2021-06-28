@@ -979,10 +979,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var applyCoupon = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(couponData, customParams) {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(couponData) {
       var _state$carts$;
 
-      var response, _result2, customerFromLocalStorage, userCustomerId, body, result, responseApi, _yield$ordering$setAc13, content;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, _yield$ordering$setAc14, error, result;
 
       return _regenerator.default.wrap(function _callee10$(_context10) {
         while (1) {
@@ -1016,54 +1016,10 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-
-              if (!customParams) {
-                _context10.next = 19;
-                break;
-              }
-
-              _context10.next = 11;
-              return fetch('https://alsea-plugins.ordering.co/alseaplatform/' + 'vcoupon2.php', {
-                method: 'POST',
-                body: JSON.stringify({
-                  userId: customParams.userId,
-                  businessId: customParams.businessId,
-                  couponId: couponData.coupon
-                }),
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/x-www-form-urlencoded',
-                  'Access-Control-Allow-Origin': '*'
-                }
-              });
-
-            case 11:
-              response = _context10.sent;
-              _context10.next = 14;
-              return response.json();
-
-            case 14:
-              _result2 = _context10.sent;
-
-              if (!(_result2.message !== "Cup\xF3n v\xE1lido")) {
-                _context10.next = 19;
-                break;
-              }
-
-              setAlert({
-                show: true,
-                content: _result2.message
-              });
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              return _context10.abrupt("return");
-
-            case 19:
-              _context10.next = 21;
+              _context10.next = 10;
               return strategy.getItem('user-customer', true);
 
-            case 21:
+            case 10:
               customerFromLocalStorage = _context10.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
@@ -1071,77 +1027,51 @@ var OrderProvider = function OrderProvider(_ref) {
                 coupon: couponData.coupon,
                 user_id: userCustomerId || session.user.id
               };
-
-              if (!customParams) {
-                _context10.next = 33;
-                break;
-              }
-
-              _context10.next = 27;
-              return fetch("https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-staging/business/".concat(customParams.businessId, "/offers/").concat(couponData.coupon, "?business_id=").concat(customParams.businessId), {
-                method: 'GET',
-                headers: {
-                  Authorization: "Bearer ".concat(session.token),
-                  'Content-Type': 'application/json'
-                }
-              });
-
-            case 27:
-              responseApi = _context10.sent;
-              _context10.next = 30;
-              return responseApi.json();
-
-            case 30:
-              result = _context10.sent;
-              _context10.next = 38;
-              break;
-
-            case 33:
-              _context10.next = 35;
+              _context10.next = 15;
               return ordering.setAccessToken(session.token).carts().applyCoupon(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
-            case 35:
+            case 15:
               _yield$ordering$setAc13 = _context10.sent;
-              content = _yield$ordering$setAc13.content;
-              result = content;
+              _yield$ordering$setAc14 = _yield$ordering$setAc13.content;
+              error = _yield$ordering$setAc14.error;
+              result = _yield$ordering$setAc14.result;
 
-            case 38:
-              if (!result.error) {
-                state.carts["businessId:".concat(result.result.business_id)] = result.result;
-                events.emit('cart_updated', result.result);
+              if (!error) {
+                state.carts["businessId:".concat(result.result.business_id)] = result;
+                events.emit('cart_updated', result);
               } else {
                 setAlert({
                   show: true,
-                  content: result.result
+                  content: result
                 });
               }
 
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              return _context10.abrupt("return", !result.error);
+              return _context10.abrupt("return", !error);
 
-            case 43:
-              _context10.prev = 43;
+            case 24:
+              _context10.prev = 24;
               _context10.t0 = _context10["catch"](6);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context10.abrupt("return", false);
 
-            case 47:
+            case 28:
             case "end":
               return _context10.stop();
           }
         }
-      }, _callee10, null, [[6, 43]]);
+      }, _callee10, null, [[6, 24]]);
     }));
 
-    return function applyCoupon(_x13, _x14) {
+    return function applyCoupon(_x13) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -1154,7 +1084,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(businessId, driverTipRate, isFixedPrice) {
       var _state$carts$2;
 
-      var _body, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
+      var _body, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc15, _yield$ordering$setAc16, error, result;
 
       return _regenerator.default.wrap(function _callee11$(_context11) {
         while (1) {
@@ -1205,10 +1135,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 15:
-              _yield$ordering$setAc14 = _context11.sent;
-              _yield$ordering$setAc15 = _yield$ordering$setAc14.content;
-              error = _yield$ordering$setAc15.error;
-              result = _yield$ordering$setAc15.result;
+              _yield$ordering$setAc15 = _context11.sent;
+              _yield$ordering$setAc16 = _yield$ordering$setAc15.content;
+              error = _yield$ordering$setAc16.error;
+              result = _yield$ordering$setAc16.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -1241,7 +1171,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[6, 24]]);
     }));
 
-    return function changeDriverTip(_x15, _x16, _x17) {
+    return function changeDriverTip(_x14, _x15, _x16) {
       return _ref12.apply(this, arguments);
     };
   }();
@@ -1254,7 +1184,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref13 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12(businessId, paymethodId, paymethodData) {
       var _state$carts$3;
 
-      var body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result;
+      var body, _yield$ordering$setAc17, _yield$ordering$setAc18, error, result;
 
       return _regenerator.default.wrap(function _callee12$(_context12) {
         while (1) {
@@ -1309,10 +1239,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 13:
-              _yield$ordering$setAc16 = _context12.sent;
-              _yield$ordering$setAc17 = _yield$ordering$setAc16.content;
-              error = _yield$ordering$setAc17.error;
-              result = _yield$ordering$setAc17.result;
+              _yield$ordering$setAc17 = _context12.sent;
+              _yield$ordering$setAc18 = _yield$ordering$setAc17.content;
+              error = _yield$ordering$setAc18.error;
+              result = _yield$ordering$setAc18.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -1337,7 +1267,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee12, null, [[8, 22]]);
     }));
 
-    return function changePaymethod(_x18, _x19, _x20) {
+    return function changePaymethod(_x17, _x18, _x19) {
       return _ref13.apply(this, arguments);
     };
   }();
@@ -1348,7 +1278,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var placeCart = /*#__PURE__*/function () {
     var _ref14 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee13(cardId, data) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result, orderObject;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc19, _yield$ordering$setAc20, error, result, orderObject;
 
       return _regenerator.default.wrap(function _callee13$(_context13) {
         while (1) {
@@ -1375,10 +1305,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 9:
-              _yield$ordering$setAc18 = _context13.sent;
-              _yield$ordering$setAc19 = _yield$ordering$setAc18.content;
-              error = _yield$ordering$setAc19.error;
-              result = _yield$ordering$setAc19.result;
+              _yield$ordering$setAc19 = _context13.sent;
+              _yield$ordering$setAc20 = _yield$ordering$setAc19.content;
+              error = _yield$ordering$setAc20.error;
+              result = _yield$ordering$setAc20.result;
 
               if (error) {
                 _context13.next = 17;
@@ -1443,7 +1373,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee13, null, [[0, 24]]);
     }));
 
-    return function placeCart(_x21, _x22) {
+    return function placeCart(_x20, _x21) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1544,7 +1474,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[0, 22]]);
     }));
 
-    return function confirmCart(_x23, _x24) {
+    return function confirmCart(_x22, _x23) {
       return _ref15.apply(this, arguments);
     };
   }();
@@ -1555,7 +1485,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var reorder = /*#__PURE__*/function () {
     var _ref16 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee15(orderId) {
-      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc20, _yield$ordering$setAc21, error, result;
+      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc21, _yield$ordering$setAc22, error, result;
 
       return _regenerator.default.wrap(function _callee15$(_context15) {
         while (1) {
@@ -1588,10 +1518,10 @@ var OrderProvider = function OrderProvider(_ref) {
               return ordering.setAccessToken(session.token).orders(orderId).reorder(options);
 
             case 11:
-              _yield$ordering$setAc20 = _context15.sent;
-              _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
-              error = _yield$ordering$setAc21.error;
-              result = _yield$ordering$setAc21.result;
+              _yield$ordering$setAc21 = _context15.sent;
+              _yield$ordering$setAc22 = _yield$ordering$setAc21.content;
+              error = _yield$ordering$setAc22.error;
+              result = _yield$ordering$setAc22.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -1630,7 +1560,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee15, null, [[0, 20]]);
     }));
 
-    return function reorder(_x25) {
+    return function reorder(_x24) {
       return _ref16.apply(this, arguments);
     };
   }();
