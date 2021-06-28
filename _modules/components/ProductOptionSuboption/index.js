@@ -66,12 +66,11 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
   };
   /**
    * Select/unselect the suboption
-   * @param {boolean} isSelected native prop
    */
 
 
-  var toggleSelect = function toggleSelect(isSelected) {
-    if (!state.selected && option.limit_suboptions_by_max && balance === option.max && !isSelected) {
+  var toggleSelect = function toggleSelect() {
+    if (state.selected && option.limit_suboptions_by_max && balance === option.max) {
       return;
     }
 
