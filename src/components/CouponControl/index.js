@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 
 /**
  * Component to manage coupon form behavior without UI component
@@ -16,6 +17,7 @@ export const CouponControl = (props) => {
   const [orderState, { applyCoupon }] = useOrder()
   const [confirm, setConfirm] = useState({ open: false, content: null, error: false })
   const [, t] = useLanguage()
+  const [{ user }] = useCustomer()
 
   const couponDefault = (
     orderState?.carts &&
@@ -29,10 +31,20 @@ export const CouponControl = (props) => {
    * method to manage coupon apply button
    */
   const handleButtonApplyClick = () => {
-    applyCoupon({
-      business_id: businessId,
-      coupon: couponInput
-    })
+    if (user?.id) { // Callcenter
+      applyCoupon({
+        business_id: businessId,
+        coupon: couponInput
+      }, {
+        businessId,
+        userId: user?.id
+      })
+    } else {
+      applyCoupon({
+        business_id: businessId,
+        coupon: couponInput
+      })
+    }
   }
 
   /**
