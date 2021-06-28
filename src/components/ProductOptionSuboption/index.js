@@ -44,7 +44,7 @@ export const ProductOptionSuboption = (props) => {
    * @param {boolean} isSelected native prop
    */
   const toggleSelect = (isSelected) => {
-    if (!state.selected && option.limit_suboptions_by_max && balance === option.max && !isSelected) {
+    if (state.selected && option.limit_suboptions_by_max && balance === option.max && !isSelected) {
       return
     }
     changeState({
