@@ -33,7 +33,7 @@ export const ProductForm = (props) => {
   /**
    * Suboption by default when there is only one
    */
-  const [defaultSubOption, setDefaultSubOption] = useState(null)
+  const [defaultSubOptions, setDefaultSubOptions] = useState([])
 
   /**
    * Edit mode
@@ -267,6 +267,51 @@ export const ProductForm = (props) => {
     }
   }
 
+  const handleChangeSuboptionDefault = (defaultOptions) => {
+    const newProductCart = JSON.parse(JSON.stringify(productCart))
+    if (!newProductCart.options) {
+      newProductCart.options = {}
+    }
+    defaultOptions.map(({ option, state, suboption }) => {
+      if (!newProductCart.options[`id:${option.id}`]) {
+        newProductCart.options[`id:${option.id}`] = {
+          id: option.id,
+          name: option.name,
+          suboptions: {}
+        }
+      }
+      if (!state.selected) {
+        delete newProductCart.options[`id:${option.id}`].suboptions[`id:${suboption.id}`]
+        removeRelatedOptions(newProductCart, suboption.id)
+      } else {
+        if (option.min === option.max && option.min === 1) {
+          const suboptions = newProductCart.options[`id:${option.id}`].suboptions
+          if (suboptions) {
+            Object.keys(suboptions).map(suboptionKey => removeRelatedOptions(newProductCart, parseInt(suboptionKey.split(':')[1])))
+          }
+          if (newProductCart.options[`id:${option.id}`]) {
+            newProductCart.options[`id:${option.id}`].suboptions = {}
+          }
+        }
+        newProductCart.options[`id:${option.id}`].suboptions[`id:${suboption.id}`] = state
+      }
+
+      let newBalance = Object.keys(newProductCart.options[`id:${option.id}`].suboptions).length
+      if (option.limit_suboptions_by_max) {
+        newBalance = Object.values(newProductCart.options[`id:${option.id}`].suboptions).reduce((count, suboption) => {
+          return count + suboption.quantity
+        }, 0)
+      }
+
+      if (newBalance <= option.max) {
+        newProductCart.options[`id:${option.id}`].balance = newBalance
+        newProductCart.unitTotal = getUnitTotal(newProductCart)
+        newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
+      }
+    })
+    setProductCart(newProductCart)
+  }
+
   /**
    * Change product state with new comment state
    * @param {object} e Product comment
@@ -415,27 +460,37 @@ export const ProductForm = (props) => {
    */
   useEffect(() => {
     if (product?.product && Object.keys(product?.product).length) {
-      const option = product.product.extras.map(extra => extra.options.find(
+      const options = product.product.extras.map(extra => extra.options.filter(
         option => option.min === 1 && option.max === 1 && option.suboptions.length === 1
       ))[0]
-      if (!option) {
+      if (!options?.length) {
         return
       }
-      const suboption = option.suboptions[0]
-      const price = option.with_half_option && suboption.half_price && suboption?.position !== 'whole'
-        ? suboption.half_price
-        : suboption.price
+      const suboptions = options.map(option => option.suboptions[0])
 
-      const state = {
-        id: suboption.id,
-        name: suboption.name,
-        position: suboption.position || 'whole',
-        price,
-        quantity: 1,
-        selected: true,
-        total: price
-      }
-      setDefaultSubOption({ state, suboption, option })
+      const states = suboptions.map((suboption, i) => {
+        const price = options[i].with_half_option && suboption.half_price && suboption?.position !== 'whole'
+          ? suboption.half_price
+          : suboption.price
+
+        return {
+          id: suboption.id,
+          name: suboption.name,
+          position: suboption.position || 'whole',
+          price,
+          quantity: 1,
+          selected: true,
+          total: price
+        }
+      })
+      const defaultOptions = options.map((option, i) => {
+        return {
+          option: option,
+          suboption: suboptions[i],
+          state: states[i]
+        }
+      })
+      setDefaultSubOptions(defaultOptions)
     }
   }, [product.product])
 
@@ -443,11 +498,10 @@ export const ProductForm = (props) => {
    * Check if defaultSubOption has content to set product Cart
    */
   useEffect(() => {
-    if (defaultSubOption) {
-      const { state, suboption, option } = defaultSubOption
-      handleChangeSuboptionState(state, suboption, option)
+    if (defaultSubOptions?.length) {
+      handleChangeSuboptionDefault(defaultSubOptions)
     }
-  }, [defaultSubOption])
+  }, [defaultSubOptions])
 
   /**
    * Load product on component mounted
