@@ -460,13 +460,21 @@ export const ProductForm = (props) => {
    */
   useEffect(() => {
     if (product?.product && Object.keys(product?.product).length) {
-      const options = product.product.extras.map(extra => extra.options.filter(
-        option => option.min === 1 && option.max === 1 && option.suboptions.length === 1
-      ))[0]
+      const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
+        option => (
+          option.min === 1 &&
+          option.max === 1 &&
+          option.suboptions.filter(suboption => suboption.enabled).length === 1
+        )
+      )))
+
       if (!options?.length) {
         return
       }
-      const suboptions = options.map(option => option.suboptions[0])
+
+      const suboptions = []
+        .concat(...options.map(option => option.suboptions))
+        .filter(suboption => suboption.enabled)
 
       const states = suboptions.map((suboption, i) => {
         const price = options[i].with_half_option && suboption.half_price && suboption?.position !== 'whole'
