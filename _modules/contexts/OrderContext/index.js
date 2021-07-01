@@ -1049,7 +1049,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
               setAlert({
                 show: true,
-                content: _result2.message === 'Not Found' ? ['ERROR_INVALID_COUPON'] : [_result2.message]
+                content: _result2.message === 'Not found' ? ['ERROR_INVALID_COUPON'] : [_result2.message]
               });
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
