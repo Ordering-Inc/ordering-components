@@ -448,7 +448,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
         const result = await response.json()
 
         if (result.message !== 'Cup\u00f3n v\u00e1lido') {
-          setAlert({ show: true, content: [result.message] })
+          setAlert({ show: true, content: result.message === 'Not found' ? ['ERROR_INVALID_COUPON'] : [result.message] })
           setState({ ...state, loading: false })
           return
         }
@@ -460,12 +460,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
         coupon: couponData.coupon,
         user_id: userCustomerId || session.user.id
       }
-      let result
       const { content } = await ordering
         .setAccessToken(session.token)
         .carts()
         .applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
-      result = content
+      const result = content
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
