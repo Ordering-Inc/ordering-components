@@ -27,6 +27,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -100,10 +108,10 @@ var ProductForm = function ProductForm(props) {
    */
 
 
-  var _useState7 = (0, _react.useState)(null),
+  var _useState7 = (0, _react.useState)([]),
       _useState8 = _slicedToArray(_useState7, 2),
-      defaultSubOption = _useState8[0],
-      setDefaultSubOption = _useState8[1];
+      defaultSubOptions = _useState8[0],
+      setDefaultSubOptions = _useState8[1];
   /**
    * Edit mode
    */
@@ -411,6 +419,64 @@ var ProductForm = function ProductForm(props) {
       setProductCart(newProductCart);
     }
   };
+
+  var handleChangeSuboptionDefault = function handleChangeSuboptionDefault(defaultOptions) {
+    var newProductCart = JSON.parse(JSON.stringify(productCart));
+
+    if (!newProductCart.options) {
+      newProductCart.options = {};
+    }
+
+    defaultOptions.map(function (_ref2) {
+      var option = _ref2.option,
+          state = _ref2.state,
+          suboption = _ref2.suboption;
+
+      if (!newProductCart.options["id:".concat(option.id)]) {
+        newProductCart.options["id:".concat(option.id)] = {
+          id: option.id,
+          name: option.name,
+          suboptions: {}
+        };
+      }
+
+      if (!state.selected) {
+        delete newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
+        removeRelatedOptions(newProductCart, suboption.id);
+      } else {
+        if (option.min === option.max && option.min === 1) {
+          var suboptions = newProductCart.options["id:".concat(option.id)].suboptions;
+
+          if (suboptions) {
+            Object.keys(suboptions).map(function (suboptionKey) {
+              return removeRelatedOptions(newProductCart, parseInt(suboptionKey.split(':')[1]));
+            });
+          }
+
+          if (newProductCart.options["id:".concat(option.id)]) {
+            newProductCart.options["id:".concat(option.id)].suboptions = {};
+          }
+        }
+
+        newProductCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)] = state;
+      }
+
+      var newBalance = Object.keys(newProductCart.options["id:".concat(option.id)].suboptions).length;
+
+      if (option.limit_suboptions_by_max) {
+        newBalance = Object.values(newProductCart.options["id:".concat(option.id)].suboptions).reduce(function (count, suboption) {
+          return count + suboption.quantity;
+        }, 0);
+      }
+
+      if (newBalance <= option.max) {
+        newProductCart.options["id:".concat(option.id)].balance = newBalance;
+        newProductCart.unitTotal = getUnitTotal(newProductCart);
+        newProductCart.total = newProductCart.unitTotal * newProductCart.quantity;
+      }
+    });
+    setProductCart(newProductCart);
+  };
   /**
    * Change product state with new comment state
    * @param {object} e Product comment
@@ -479,7 +545,7 @@ var ProductForm = function ProductForm(props) {
 
 
   var handleSave = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
       var errors, successful, _props$productCart6, _props$productCart7;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
@@ -544,7 +610,7 @@ var ProductForm = function ProductForm(props) {
     }));
 
     return function handleSave() {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
@@ -631,32 +697,46 @@ var ProductForm = function ProductForm(props) {
 
   (0, _react.useEffect)(function () {
     if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-      var option = product.product.extras.map(function (extra) {
-        return extra.options.find(function (option) {
-          return option.min === 1 && option.max === 1 && option.suboptions.length === 1;
-        });
-      })[0];
+      var _ref4, _ref5;
 
-      if (!option) {
+      var options = (_ref4 = []).concat.apply(_ref4, _toConsumableArray(product.product.extras.map(function (extra) {
+        return extra.options.filter(function (option) {
+          return option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
+            return suboption.enabled;
+          }).length === 1;
+        });
+      })));
+
+      if (!(options !== null && options !== void 0 && options.length)) {
         return;
       }
 
-      var suboption = option.suboptions[0];
-      var price = option.with_half_option && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
-      var state = {
-        id: suboption.id,
-        name: suboption.name,
-        position: suboption.position || 'whole',
-        price: price,
-        quantity: 1,
-        selected: true,
-        total: price
-      };
-      setDefaultSubOption({
-        state: state,
-        suboption: suboption,
-        option: option
+      var suboptions = (_ref5 = []).concat.apply(_ref5, _toConsumableArray(options.map(function (option) {
+        return option.suboptions;
+      }))).filter(function (suboption) {
+        return suboption.enabled;
       });
+
+      var states = suboptions.map(function (suboption, i) {
+        var price = options[i].with_half_option && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+        return {
+          id: suboption.id,
+          name: suboption.name,
+          position: suboption.position || 'whole',
+          price: price,
+          quantity: 1,
+          selected: true,
+          total: price
+        };
+      });
+      var defaultOptions = options.map(function (option, i) {
+        return {
+          option: option,
+          suboption: suboptions[i],
+          state: states[i]
+        };
+      });
+      setDefaultSubOptions(defaultOptions);
     }
   }, [product.product]);
   /**
@@ -664,13 +744,10 @@ var ProductForm = function ProductForm(props) {
    */
 
   (0, _react.useEffect)(function () {
-    if (defaultSubOption) {
-      var state = defaultSubOption.state,
-          suboption = defaultSubOption.suboption,
-          option = defaultSubOption.option;
-      handleChangeSuboptionState(state, suboption, option);
+    if (defaultSubOptions !== null && defaultSubOptions !== void 0 && defaultSubOptions.length) {
+      handleChangeSuboptionDefault(defaultSubOptions);
     }
-  }, [defaultSubOption]);
+  }, [defaultSubOptions]);
   /**
    * Load product on component mounted
    */

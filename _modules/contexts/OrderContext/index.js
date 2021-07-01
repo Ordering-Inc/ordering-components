@@ -983,7 +983,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10(couponData, customParams) {
       var _state$carts$;
 
-      var response, _result2, customerFromLocalStorage, userCustomerId, body, result, _yield$ordering$setAc13, content;
+      var response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, content, result;
 
       return _regenerator.default.wrap(function _callee10$(_context10) {
         while (1) {
@@ -1053,7 +1053,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
               setAlert({
                 show: true,
-                content: [_result2.message]
+                content: _result2.message === 'Not found' ? ['ERROR_INVALID_COUPON'] : [_result2.message]
               });
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
