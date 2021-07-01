@@ -448,7 +448,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
         const result = await response.json()
 
         if (result.message !== 'Cup\u00f3n v\u00e1lido') {
-          setAlert({ show: true, content: result.message === 'Not Found' ? ['ERROR_INVALID_COUPON'] : [result.message] })
+          setAlert({ show: true, content: result.message === 'Not found' ? ['ERROR_INVALID_COUPON'] : [result.message] })
           setState({ ...state, loading: false })
           return
         }
