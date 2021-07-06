@@ -25,6 +25,7 @@ import { ConfigsExample } from './components/ConfigsExample'
 import { LanguagesExample } from './components/LanguagesExample'
 import { PopupExample } from './views/PopupExample'
 import { MyOrdersExample } from './views/MyOrdersExample'
+import { OrderChangeExample } from './views/OrderChangeExample'
 import { MyOrdersListExample } from './views/MyOrdersListExample'
 import { BusinessReviewsExample } from './views/BusinessReviewsExample'
 import { MomentOptionExample } from './views/MomentOptionExample'
@@ -142,6 +143,9 @@ export default function App () {
             </Route>
             <Route path='/my_orders_list'>
               <MyOrdersListExample />
+            </Route>
+            <Route path='/order_change'>
+              <OrderChangeExample />
             </Route>
             <Route path='/business_reviews'>
               <BusinessReviewsExample />
