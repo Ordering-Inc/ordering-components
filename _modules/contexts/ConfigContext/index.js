@@ -149,6 +149,10 @@ var ConfigProvider = function ConfigProvider(_ref) {
       key: 'validation_phone_number_lib',
       value: 1 // 0: disabled, 1: enabled
 
+    },
+    add_product_with_one_click: {
+      key: 'add_product_with_one_click',
+      value: false
     }
   };
 
