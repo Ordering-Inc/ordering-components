@@ -25,7 +25,7 @@ export const OrderChange = (props) => {
 
   const handleUpdateStateOrder = async (body = {}) => {
     setOrderState({ ...orderState, loading: true });
-    const { comments, min, hour, action } = body;
+    const { comments, min, hour, action, orderId } = body;
     const prepared_in = hour * 60 + parseInt(min);
 
     try {
@@ -38,10 +38,7 @@ export const OrderChange = (props) => {
 
       const {
         content: { error, result },
-      } = await ordering
-        .setAccessToken(token)
-        .orders(route.order.id)
-        .save(bodyToSend);
+      } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
 
       if (!error) {
         setOrderState({ ...orderState, loading: false, order: result });
@@ -57,19 +54,19 @@ export const OrderChange = (props) => {
     } catch (err) {
       console.log(err);
     }
-
-    return (
-      <>
-        {UIComponent && (
-          <UIComponent
-            {...props}
-            orderState={orderState}
-            updateStateOrder={handleUpdateStateOrder}
-          />
-        )}
-      </>
-    );
   };
+
+  return (
+    <>
+      {UIComponent && (
+        <UIComponent
+          {...props}
+          orderState={orderState}
+          updateStateOrder={handleUpdateStateOrder}
+        />
+      )}
+    </>
+  );
 };
 
 OrderChange.propTypes = {
