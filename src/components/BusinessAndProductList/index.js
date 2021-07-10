@@ -73,7 +73,7 @@ export const BusinessAndProductList = (props) => {
       (description && (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription))
   }
 
-  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
+  const isValidMoment = (date, format) => moment.utc(date, format).format(format) === date
 
   const isFeaturedSearch = (product) => {
     if (product.featured) {
@@ -253,7 +253,7 @@ export const BusinessAndProductList = (props) => {
   }
 
   const getProduct = async () => {
-    if (categoryId && productId && businessState.business.id) {
+    if ((categoryId && productId && businessState.business.id) || (props.product?.businessId && props.product?.categoryId && props.product?.id)) {
       try {
         setProductModal({
           ...productModal,
@@ -272,9 +272,9 @@ export const BusinessAndProductList = (props) => {
         }
 
         const { content: { result } } = await ordering
-          .businesses(businessState.business.id)
-          .categories(categoryId)
-          .products(productId)
+          .businesses(businessState.business.id || props.product?.businessId)
+          .categories(categoryId || props.product?.categoryId)
+          .products(productId || props.product?.id)
           .parameters(parameters)
           .get({ cancelToken: source })
         const product = Array.isArray(result) ? null : result
@@ -383,6 +383,24 @@ export const BusinessAndProductList = (props) => {
       getBusiness()
     }
   }, [orderOptions, languageState.loading, slug, filterByMenus])
+
+  /**
+   * getBusiness if orderState is loading the first time when is rendered
+   */
+  useEffect(() => {
+    if (props.product && !orderState.loading && !Object.keys(businessState.business).length) {
+      getBusiness()
+    }
+  }, [orderState.loading])
+
+  /**
+   * getProduct when login after guest
+   */
+  useEffect(() => {
+    if (props.product?.businessId && props.product?.categoryId && props.product?.id && !orderState.loading) {
+      getProduct()
+    }
+  }, [props.product])
 
   useEffect(() => {
     if (!orderState.loading) {
