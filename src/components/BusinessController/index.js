@@ -39,6 +39,8 @@ export const BusinessController = (props) => {
   /**
    * Method to get business from SDK
    */
+
+  const [businessWillCloseSoonMinutes, setBusinessWillCloseSoonMinutes] = useState(null)
   const getBusiness = async () => {
     const { content: { result } } = await ordering.businesses(businessId).select(businessAttributes).get()
     setBusinessObject(result)
@@ -90,6 +92,12 @@ export const BusinessController = (props) => {
     const hour = timeToCloseFormatted?.split(':')[0]
     const minute = timeToCloseFormatted?.split(':')[1]
     const result = currentHour > hour || (currentHour === hour && currentMinute >= minute)
+    const timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000
+    if (timeDifference <= 30 && timeDifference > 0) {
+      setBusinessWillCloseSoonMinutes(timeDifference)
+    } else {
+      setBusinessWillCloseSoonMinutes(null)
+    }
     if (timeToCloseFormatted) {
       setIsBusinessClose(result)
     }
@@ -125,6 +133,7 @@ export const BusinessController = (props) => {
           getBusinessOffer={getBusinessOffer}
           getBusinessMaxOffer={getBusinessMaxOffer}
           handleClick={handleCustomClick || onBusinessClick}
+          businessWillCloseSoonMinutes={businessWillCloseSoonMinutes}
         />
       )}
     </>
