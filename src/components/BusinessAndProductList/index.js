@@ -73,7 +73,7 @@ export const BusinessAndProductList = (props) => {
       (description && (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription))
   }
 
-  const isValidMoment = (date, format) => moment.utc(date, format).format(format) === date
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
 
   const isFeaturedSearch = (product) => {
     if (product.featured) {
@@ -388,7 +388,7 @@ export const BusinessAndProductList = (props) => {
    * getBusiness if orderState is loading the first time when is rendered
    */
   useEffect(() => {
-    if (props.product && !orderState.loading && !Object.keys(businessState.business).length) {
+    if (props.product && !orderState.loading && !Object.keys(businessState.business)?.length) {
       getBusiness()
     }
   }, [orderState.loading])
