@@ -13,10 +13,11 @@ export const OrderDetails = (props) => {
     sendCustomMessage
   } = props
 
+  console.log(user)
   const [{ user, token, loading }] = useSession()
   const accessToken = props.accessToken || token
   const [ordering] = useApi()
-  const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: null, businessData: {}, driversGroupsData: [], loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
@@ -133,6 +134,7 @@ export const OrderDetails = (props) => {
       const order = error ? null : result
       const err = error ? result : null
       let businessData = null
+      let driversGroupData = null
       try {
         const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
@@ -140,11 +142,23 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
+
+      if(user.level === 2 && order.delivery_type === 1) {
+        try {
+          const { content } =  await ordering.setAccessToken(token).driversgroups().get();
+          driversGroupData = content.result
+          content.error && err.push(content.result[0])
+        } catch(e) {
+          err.push(e.message)
+        }
+      }
+
       setOrderState({
         ...orderState,
         loading: false,
         order,
         businessData,
+        driversGroupsData: !driversGroupData ? {} : driversGroupData,
         error: err
       })
     } catch (e) {
