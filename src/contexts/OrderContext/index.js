@@ -22,7 +22,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children, strategy }) => {
+export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -431,8 +431,8 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
 
     try {
       setState({ ...state, loading: true })
-      if (customParams) {
-        const response = await fetch('https://alsea-plugins.ordering.co/alseaplatform/' + 'vcoupon2.php', {
+      if (customParams && isAlsea) {
+        const response = await fetch('https://alsea-plugins.ordering.co/alseaplatform/vcoupon2.php', {
           method: 'POST',
           body: JSON.stringify({
             userId: customParams.userId,
@@ -448,7 +448,7 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         const result = await response.json()
 
         if (result.message !== 'Cup\u00f3n v\u00e1lido') {
-          setAlert({ show: true, content: result.message })
+          setAlert({ show: true, content: result.message === 'Not found' ? ['ERROR_INVALID_COUPON'] : [result.message] })
           setState({ ...state, loading: false })
           return
         }
@@ -460,20 +460,11 @@ export const OrderProvider = ({ Alert, children, strategy }) => {
         coupon: couponData.coupon,
         user_id: userCustomerId || session.user.id
       }
-      let result
-      if (customParams) {
-        const responseApi = await fetch(`https://alsea-api-staging.ordering.co/v400/es-419-1/alsea-staging/business/${customParams.businessId}/offers/${couponData.coupon}?business_id=${customParams.businessId}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${session.token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-        result = await responseApi.json()
-      } else {
-        const { content } = await ordering.setAccessToken(session.token).carts().applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
-        result = content
-      }
+      const { content } = await ordering
+        .setAccessToken(session.token)
+        .carts()
+        .applyCoupon(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+      const result = content
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
