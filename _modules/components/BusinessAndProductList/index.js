@@ -55,7 +55,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -423,13 +423,15 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getProduct = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var _orderState$options5, _orderState$options6, _orderState$options7, _orderState$options8, source, parameters, _orderState$options9, moment, _yield$ordering$busin, result, product;
+      var _props$product, _props$product2, _props$product3;
+
+      var _orderState$options5, _orderState$options6, _orderState$options7, _orderState$options8, _props$product4, _props$product5, _props$product6, source, parameters, _orderState$options9, moment, _yield$ordering$busin, result, product;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (!(categoryId && productId && businessState.business.id)) {
+              if (!(categoryId && productId && businessState.business.id || (_props$product = props.product) !== null && _props$product !== void 0 && _props$product.businessId && (_props$product2 = props.product) !== null && _props$product2 !== void 0 && _props$product2.categoryId && (_props$product3 = props.product) !== null && _props$product3 !== void 0 && _props$product3.id)) {
                 _context2.next = 18;
                 break;
               }
@@ -451,7 +453,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }
 
               _context2.next = 9;
-              return ordering.businesses(businessState.business.id).categories(categoryId).products(productId).parameters(parameters).get({
+              return ordering.businesses(businessState.business.id || ((_props$product4 = props.product) === null || _props$product4 === void 0 ? void 0 : _props$product4.businessId)).categories(categoryId || ((_props$product5 = props.product) === null || _props$product5 === void 0 ? void 0 : _props$product5.categoryId)).products(productId || ((_props$product6 = props.product) === null || _props$product6 === void 0 ? void 0 : _props$product6.id)).parameters(parameters).get({
                 cancelToken: source
               });
 
@@ -601,6 +603,28 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       getBusiness();
     }
   }, [orderOptions, languageState.loading, slug, filterByMenus]);
+  /**
+   * getBusiness if orderState is loading the first time when is rendered
+   */
+
+  (0, _react.useEffect)(function () {
+    var _Object$keys;
+
+    if (props.product && !orderState.loading && !((_Object$keys = Object.keys(businessState.business)) !== null && _Object$keys !== void 0 && _Object$keys.length)) {
+      getBusiness();
+    }
+  }, [orderState.loading]);
+  /**
+   * getProduct when login after guest
+   */
+
+  (0, _react.useEffect)(function () {
+    var _props$product7, _props$product8, _props$product9;
+
+    if ((_props$product7 = props.product) !== null && _props$product7 !== void 0 && _props$product7.businessId && (_props$product8 = props.product) !== null && _props$product8 !== void 0 && _props$product8.categoryId && (_props$product9 = props.product) !== null && _props$product9 !== void 0 && _props$product9.id && !orderState.loading) {
+      getProduct();
+    }
+  }, [props.product]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading) {
       var _orderState$options22, _orderState$options23, _orderState$options24, _orderState$options25;

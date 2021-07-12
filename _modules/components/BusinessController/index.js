@@ -39,7 +39,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -103,6 +103,11 @@ var BusinessController = function BusinessController(props) {
    * Method to get business from SDK
    */
 
+
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      businessWillCloseSoonMinutes = _useState8[0],
+      setBusinessWillCloseSoonMinutes = _useState8[1];
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -190,6 +195,8 @@ var BusinessController = function BusinessController(props) {
     var hour = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
     var minute = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
     var result = currentHour > hour || currentHour === hour && currentMinute >= minute;
+    var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
+    setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
 
     if (timeToCloseFormatted) {
       setIsBusinessClose(result);
@@ -220,7 +227,8 @@ var BusinessController = function BusinessController(props) {
     formatNumber: formatNumber,
     getBusinessOffer: getBusinessOffer,
     getBusinessMaxOffer: getBusinessMaxOffer,
-    handleClick: handleCustomClick || onBusinessClick
+    handleClick: handleCustomClick || onBusinessClick,
+    businessWillCloseSoonMinutes: businessWillCloseSoonMinutes
   })));
 };
 
