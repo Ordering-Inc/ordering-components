@@ -36,11 +36,20 @@ export const BusinessController = (props) => {
    * formatPrice function
    */
   const [{ parsePrice }] = useUtils()
+
+  /**
+   * time when business is going to close
+   */
+  const [timeToClose, setTimeToClose] = useState(null)
+
+  /**
+   * timer in minutes when the business is going to close
+   */
+  const [businessWillCloseSoonMinutes, setBusinessWillCloseSoonMinutes] = useState(null)
+
   /**
    * Method to get business from SDK
    */
-
-  const [businessWillCloseSoonMinutes, setBusinessWillCloseSoonMinutes] = useState(null)
   const getBusiness = async () => {
     const { content: { result } } = await ordering.businesses(businessId).select(businessAttributes).get()
     setBusinessObject(result)
@@ -81,20 +90,15 @@ export const BusinessController = (props) => {
     return Math.round(num * 1e2) / 1e2
   }
 
-  /**
-   * Business time to close formatted
-   */
-  const timeToCloseFormatted = formatDate(businessObject?.today?.lapses[0]?.close || null)
-
   useEffect(() => {
     const currentHour = currentTime?.split(':')[0]
     const currentMinute = currentTime?.split(':')[1]
-    const hour = timeToCloseFormatted?.split(':')[0]
-    const minute = timeToCloseFormatted?.split(':')[1]
+    const hour = timeToClose?.split(':')[0]
+    const minute = timeToClose?.split(':')[1]
     const result = currentHour > hour || (currentHour === hour && currentMinute >= minute)
     const timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000
     setBusinessWillCloseSoonMinutes((timeDifference <= 30 && timeDifference > 0) ? timeDifference : null)
-    if (timeToCloseFormatted) {
+    if (timeToClose) {
       setIsBusinessClose(result)
     }
   }, [currentTime])
@@ -103,7 +107,22 @@ export const BusinessController = (props) => {
     const interval = setInterval(() => {
       const currentHour = new Date().getHours()
       const currentMinute = new Date().getMinutes()
+      const currentDay = new Date().getDate()
+      const currentMonth = new Date().getMonth()
+      const currentYear = new Date().getFullYear()
       setCurrentTime(`${currentHour}:${currentMinute}`)
+      for (let i = 0; i < businessObject?.today?.lapses?.length; i++) {
+        const timeToOpenFormatted = formatDate(businessObject?.today?.lapses[i]?.open || null)
+        const timeToCloseFormatted = formatDate(businessObject?.today?.lapses[i]?.close || null)
+        const hourClose = timeToCloseFormatted?.split(':')[0]
+        const minuteClose = timeToCloseFormatted?.split(':')[1]
+        const hourOpen = timeToOpenFormatted?.split(':')[0]
+        const minuteOpen = timeToOpenFormatted?.split(':')[1]
+        // range of most recent open-close business lapsus
+        if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
+          setTimeToClose(formatDate(businessObject?.today?.lapses[i]?.close))
+        }
+      }
     }, 1000)
     return () => clearInterval(interval)
   }, [])
