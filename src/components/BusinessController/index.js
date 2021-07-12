@@ -93,11 +93,7 @@ export const BusinessController = (props) => {
     const minute = timeToCloseFormatted?.split(':')[1]
     const result = currentHour > hour || (currentHour === hour && currentMinute >= minute)
     const timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000
-    if (timeDifference <= 30 && timeDifference > 0) {
-      setBusinessWillCloseSoonMinutes(timeDifference)
-    } else {
-      setBusinessWillCloseSoonMinutes(null)
-    }
+    setBusinessWillCloseSoonMinutes((timeDifference <= 30 && timeDifference > 0) ? timeDifference : null)
     if (timeToCloseFormatted) {
       setIsBusinessClose(result)
     }
