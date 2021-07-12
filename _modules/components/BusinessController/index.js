@@ -104,6 +104,11 @@ var BusinessController = function BusinessController(props) {
    */
 
 
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      businessWillCloseSoonMinutes = _useState8[0],
+      setBusinessWillCloseSoonMinutes = _useState8[1];
+
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var _yield$ordering$busin, result;
@@ -190,6 +195,8 @@ var BusinessController = function BusinessController(props) {
     var hour = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
     var minute = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
     var result = currentHour > hour || currentHour === hour && currentMinute >= minute;
+    var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
+    setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
 
     if (timeToCloseFormatted) {
       setIsBusinessClose(result);
@@ -220,7 +227,8 @@ var BusinessController = function BusinessController(props) {
     formatNumber: formatNumber,
     getBusinessOffer: getBusinessOffer,
     getBusinessMaxOffer: getBusinessMaxOffer,
-    handleClick: handleCustomClick || onBusinessClick
+    handleClick: handleCustomClick || onBusinessClick,
+    businessWillCloseSoonMinutes: businessWillCloseSoonMinutes
   })));
 };
 
