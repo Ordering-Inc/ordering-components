@@ -44,8 +44,6 @@ function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "und
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var BusinessController = function BusinessController(props) {
-  var _businessObject$today, _businessObject$today2;
-
   var business = props.business,
       businessId = props.businessId,
       businessAttributes = props.businessAttributes,
@@ -100,14 +98,27 @@ var BusinessController = function BusinessController(props) {
       _useUtils2 = _slicedToArray(_useUtils, 1),
       parsePrice = _useUtils2[0].parsePrice;
   /**
-   * Method to get business from SDK
+   * time when business is going to close
    */
 
 
   var _useState7 = (0, _react.useState)(null),
       _useState8 = _slicedToArray(_useState7, 2),
-      businessWillCloseSoonMinutes = _useState8[0],
-      setBusinessWillCloseSoonMinutes = _useState8[1];
+      timeToClose = _useState8[0],
+      setTimeToClose = _useState8[1];
+  /**
+   * timer in minutes when the business is going to close
+   */
+
+
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      businessWillCloseSoonMinutes = _useState10[0],
+      setBusinessWillCloseSoonMinutes = _useState10[1];
+  /**
+   * Method to get business from SDK
+   */
+
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -183,22 +194,17 @@ var BusinessController = function BusinessController(props) {
   var formatNumber = function formatNumber(num) {
     return Math.round(num * 1e2) / 1e2;
   };
-  /**
-   * Business time to close formatted
-   */
 
-
-  var timeToCloseFormatted = formatDate((businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today = businessObject.today) === null || _businessObject$today === void 0 ? void 0 : (_businessObject$today2 = _businessObject$today.lapses[0]) === null || _businessObject$today2 === void 0 ? void 0 : _businessObject$today2.close) || null);
   (0, _react.useEffect)(function () {
     var currentHour = currentTime === null || currentTime === void 0 ? void 0 : currentTime.split(':')[0];
     var currentMinute = currentTime === null || currentTime === void 0 ? void 0 : currentTime.split(':')[1];
-    var hour = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
-    var minute = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
+    var hour = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[0];
+    var minute = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[1];
     var result = currentHour > hour || currentHour === hour && currentMinute >= minute;
     var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
     setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
 
-    if (timeToCloseFormatted) {
+    if (timeToClose) {
       setIsBusinessClose(result);
     }
   }, [currentTime]);
@@ -206,7 +212,27 @@ var BusinessController = function BusinessController(props) {
     var interval = setInterval(function () {
       var currentHour = new Date().getHours();
       var currentMinute = new Date().getMinutes();
+      var currentDay = new Date().getDate();
+      var currentMonth = new Date().getMonth();
+      var currentYear = new Date().getFullYear();
       setCurrentTime("".concat(currentHour, ":").concat(currentMinute));
+
+      for (var i = 0; i < (businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today = businessObject.today) === null || _businessObject$today === void 0 ? void 0 : (_businessObject$today2 = _businessObject$today.lapses) === null || _businessObject$today2 === void 0 ? void 0 : _businessObject$today2.length); i++) {
+        var _businessObject$today, _businessObject$today2, _businessObject$today3, _businessObject$today4, _businessObject$today5, _businessObject$today6;
+
+        var timeToOpenFormatted = formatDate((businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today3 = businessObject.today) === null || _businessObject$today3 === void 0 ? void 0 : (_businessObject$today4 = _businessObject$today3.lapses[i]) === null || _businessObject$today4 === void 0 ? void 0 : _businessObject$today4.open) || null);
+        var timeToCloseFormatted = formatDate((businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today5 = businessObject.today) === null || _businessObject$today5 === void 0 ? void 0 : (_businessObject$today6 = _businessObject$today5.lapses[i]) === null || _businessObject$today6 === void 0 ? void 0 : _businessObject$today6.close) || null);
+        var hourClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
+        var minuteClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
+        var hourOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[0];
+        var minuteOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[1]; // range of most recent open-close business lapses
+
+        if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
+          var _businessObject$today7, _businessObject$today8;
+
+          setTimeToClose(formatDate(businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today7 = businessObject.today) === null || _businessObject$today7 === void 0 ? void 0 : (_businessObject$today8 = _businessObject$today7.lapses[i]) === null || _businessObject$today8 === void 0 ? void 0 : _businessObject$today8.close));
+        }
+      }
     }, 1000);
     return function () {
       return clearInterval(interval);

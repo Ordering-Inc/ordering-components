@@ -82,6 +82,7 @@ var OrderDetails = function OrderDetails(props) {
   var _useState = (0, _react.useState)({
     order: null,
     businessData: {},
+    driversGroupsData: [],
     loading: !props.order,
     error: null
   }),
@@ -274,13 +275,145 @@ var OrderDetails = function OrderDetails(props) {
     };
   }();
   /**
+  * Method to update status order to ready for pickup
+  */
+
+
+  var handleReadyForPickUp = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var bodyToSend, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
+
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              bodyToSend = {
+                status: 4
+              };
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: true
+              }));
+              _context3.next = 5;
+              return ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
+
+            case 5:
+              _yield$ordering$setAc = _context3.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              result = _yield$ordering$setAc2.result;
+              error = _yield$ordering$setAc2.error;
+
+              if (!error) {
+                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                  order: result,
+                  loading: false
+                }));
+              }
+
+              if (error) {
+                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                  loading: false,
+                  error: result[0]
+                }));
+              }
+
+              _context3.next = 16;
+              break;
+
+            case 13:
+              _context3.prev = 13;
+              _context3.t0 = _context3["catch"](0);
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                error: _context3.t0.message
+              }));
+
+            case 16:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 13]]);
+    }));
+
+    return function handleReadyForPickUp() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to assign a driver for order
+   */
+
+
+  var handleAssignDriver = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(e) {
+      var bodyToSend, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result;
+
+      return _regenerator.default.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              bodyToSend = {
+                driver_id: e
+              };
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: true
+              }));
+              _context4.next = 5;
+              return ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
+
+            case 5:
+              _yield$ordering$setAc3 = _context4.sent;
+              _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
+              error = _yield$ordering$setAc4.error;
+              result = _yield$ordering$setAc4.result;
+
+              if (!error) {
+                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                  order: result,
+                  loading: false
+                }));
+              }
+
+              if (error) {
+                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                  loading: false,
+                  error: result[0]
+                }));
+              }
+
+              _context4.next = 16;
+              break;
+
+            case 13:
+              _context4.prev = 13;
+              _context4.t0 = _context4["catch"](0);
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                error: _context4.t0.message
+              }));
+
+            case 16:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[0, 13]]);
+    }));
+
+    return function handleAssignDriver(_x2) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  /**
    * handler send message with spot info
    * @param {number} param0
    */
 
 
-  var handlerSubmitSpotNumber = function handlerSubmitSpotNumber(_ref3) {
-    var spot = _ref3.spot;
+  var handlerSubmitSpotNumber = function handlerSubmitSpotNumber(_ref5) {
+    var spot = _ref5.spot;
     sendMessage(spot);
   };
   /**
@@ -289,12 +422,12 @@ var OrderDetails = function OrderDetails(props) {
 
 
   var getOrder = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var source, options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, order, err, businessData, _yield$ordering$setAc3, content, _orderState$error;
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
+      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupData, _yield$ordering$setAc7, content, _yield$ordering$setAc8, _content, _orderState$error;
 
-      return _regenerator.default.wrap(function _callee3$(_context3) {
+      return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               source = {};
               requestsState.order = source;
@@ -313,83 +446,108 @@ var OrderDetails = function OrderDetails(props) {
                 };
               }
 
-              _context3.prev = 6;
-              _context3.next = 9;
+              _context5.prev = 6;
+              _context5.next = 9;
               return ordering.setAccessToken(token).orders(orderId).get(_objectSpread(_objectSpread({}, options), {}, {
                 cancelToken: source
               }));
 
             case 9:
-              _yield$ordering$setAc = _context3.sent;
-              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
-              error = _yield$ordering$setAc2.error;
-              result = _yield$ordering$setAc2.result;
+              _yield$ordering$setAc5 = _context5.sent;
+              _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
+              error = _yield$ordering$setAc6.error;
+              result = _yield$ordering$setAc6.result;
               order = error ? null : result;
               err = error ? result : null;
               businessData = null;
-              _context3.prev = 16;
-              _context3.next = 19;
+              driversGroupData = {};
+              _context5.prev = 17;
+              _context5.next = 20;
               return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({
                 cancelToken: source
               });
 
-            case 19:
-              _yield$ordering$setAc3 = _context3.sent;
-              content = _yield$ordering$setAc3.content;
+            case 20:
+              _yield$ordering$setAc7 = _context5.sent;
+              content = _yield$ordering$setAc7.content;
               businessData = content.result;
               content.error && err.push(content.result[0]);
-              _context3.next = 28;
+              _context5.next = 29;
               break;
 
-            case 25:
-              _context3.prev = 25;
-              _context3.t0 = _context3["catch"](16);
-              err.push(_context3.t0.message);
+            case 26:
+              _context5.prev = 26;
+              _context5.t0 = _context5["catch"](17);
+              err.push(_context5.t0.message);
 
-            case 28:
+            case 29:
+              if (!(user.level === 2 && order.delivery_type === 1)) {
+                _context5.next = 42;
+                break;
+              }
+
+              _context5.prev = 30;
+              _context5.next = 33;
+              return ordering.setAccessToken(token).driversgroups().get();
+
+            case 33:
+              _yield$ordering$setAc8 = _context5.sent;
+              _content = _yield$ordering$setAc8.content;
+              driversGroupData = _content.result;
+              _content.error && err.push(_content.result[0]);
+              _context5.next = 42;
+              break;
+
+            case 39:
+              _context5.prev = 39;
+              _context5.t1 = _context5["catch"](30);
+              err.push(_context5.t1.message);
+
+            case 42:
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 order: order,
                 businessData: businessData,
+                driversGroupsData: driversGroupsData,
                 error: err
               }));
-              _context3.next = 34;
+              _context5.next = 48;
               break;
 
-            case 31:
-              _context3.prev = 31;
-              _context3.t1 = _context3["catch"](6);
+            case 45:
+              _context5.prev = 45;
+              _context5.t2 = _context5["catch"](6);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                error: _context3.t1.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context3.t1 === null || _context3.t1 === void 0 ? void 0 : _context3.t1.message) : ['ERROR']
+                error: _context5.t2.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context5.t2 === null || _context5.t2 === void 0 ? void 0 : _context5.t2.message) : ['ERROR']
               }));
 
-            case 34:
+            case 48:
             case "end":
-              return _context3.stop();
+              return _context5.stop();
           }
         }
-      }, _callee3, null, [[6, 31], [16, 25]]);
+      }, _callee5, null, [[6, 45], [17, 26], [30, 39]]);
     }));
 
     return function getOrder() {
-      return _ref4.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
 
   var readMessages = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
       var _messages$messages, _messages$messages2;
 
       var messageId, _orderState$order6, response, _yield$response$json2, result;
 
-      return _regenerator.default.wrap(function _callee4$(_context4) {
+      return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
               messageId = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages[(messages === null || messages === void 0 ? void 0 : (_messages$messages2 = messages.messages) === null || _messages$messages2 === void 0 ? void 0 : _messages$messages2.length) - 1]) === null || _messages$messages === void 0 ? void 0 : _messages$messages.id;
-              _context4.prev = 1;
-              _context4.next = 4;
+              _context6.prev = 1;
+              _context6.next = 4;
               return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.id, "/messages/").concat(messageId, "/read"), {
                 method: 'GET',
                 headers: {
@@ -399,32 +557,32 @@ var OrderDetails = function OrderDetails(props) {
               });
 
             case 4:
-              response = _context4.sent;
-              _context4.next = 7;
+              response = _context6.sent;
+              _context6.next = 7;
               return response.json();
 
             case 7:
-              _yield$response$json2 = _context4.sent;
+              _yield$response$json2 = _context6.sent;
               result = _yield$response$json2.result;
               setMessagesReadList(result);
-              _context4.next = 15;
+              _context6.next = 15;
               break;
 
             case 12:
-              _context4.prev = 12;
-              _context4.t0 = _context4["catch"](1);
-              console.log(_context4.t0.message);
+              _context6.prev = 12;
+              _context6.t0 = _context6["catch"](1);
+              console.log(_context6.t0.message);
 
             case 15:
             case "end":
-              return _context4.stop();
+              return _context6.stop();
           }
         }
-      }, _callee4, null, [[1, 12]]);
+      }, _callee6, null, [[1, 12]]);
     }));
 
     return function readMessages() {
-      return _ref5.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
 
@@ -467,8 +625,8 @@ var OrderDetails = function OrderDetails(props) {
       loadMessages();
     };
 
-    var handleTrackingDriver = function handleTrackingDriver(_ref6) {
-      var location = _ref6.location;
+    var handleTrackingDriver = function handleTrackingDriver(_ref8) {
+      var location = _ref8.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
         lng: 144.7729561
@@ -520,7 +678,9 @@ var OrderDetails = function OrderDetails(props) {
     driverLocation: driverLocation,
     messageErrors: messageErrors,
     formatPrice: formatPrice,
+    handleAssignDriver: handleAssignDriver,
     handlerSubmit: handlerSubmitSpotNumber,
+    handleReadyForPickUp: handleReadyForPickUp,
     messages: messages,
     setMessages: setMessages,
     readMessages: readMessages,
