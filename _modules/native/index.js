@@ -195,6 +195,12 @@ Object.defineProperty(exports, "MyOrdersList", {
     return _MyOrdersList.MyOrdersList;
   }
 });
+Object.defineProperty(exports, "OrderChange", {
+  enumerable: true,
+  get: function get() {
+    return _OrderChange.OrderChange;
+  }
+});
 Object.defineProperty(exports, "OrderList", {
   enumerable: true,
   get: function get() {
@@ -613,6 +619,8 @@ var _MomentOption = require("../src/components/MomentOption");
 var _MyOrders = require("../src/components/MyOrders");
 
 var _MyOrdersList = require("../src/components/MyOrdersList");
+
+var _OrderChange = require("../src/components/OrderChange");
 
 var _OrderList = require("../src/components/OrderList");
 

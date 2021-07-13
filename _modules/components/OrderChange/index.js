@@ -5,13 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ForgotPasswordForm = void 0;
+exports.OrderChange = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
@@ -45,201 +47,161 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Component to manage forgot password behavior without UI component
- */
-var ForgotPasswordForm = function ForgotPasswordForm(props) {
-  var UIComponent = props.UIComponent,
-      defaultEmail = props.defaultEmail,
-      handleButtonForgotPasswordClick = props.handleButtonForgotPasswordClick,
-      handleSuccessForgotPassword = props.handleSuccessForgotPassword,
-      handleCustomForgotPasswordClick = props.handleCustomForgotPasswordClick;
+var OrderChange = function OrderChange(props) {
+  var UIComponent = props.UIComponent;
+
+  var _useState = (0, _react.useState)({
+    order: null,
+    loading: false,
+    error: null
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      orderState = _useState2[0],
+      setOrderState = _useState2[1];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
-
-  var _useState = (0, _react.useState)({
-    loading: false,
-    result: {
-      error: false
-    }
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      formState = _useState2[0],
-      setFormState = _useState2[1];
-
-  var _useState3 = (0, _react.useState)({
-    email: defaultEmail || ''
-  }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      formData = _useState4[0],
-      setFormData = _useState4[1];
   /**
-   * Default fuction for forgot password workflow
+   * Get token from context
    */
 
 
-  var handleForgotPasswordClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(data) {
-      var values, _values, response;
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
+
+  var requestsState = {};
+  /**
+   * Method to update  orders state from API
+   */
+
+  var handleUpdateStateOrder = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var body,
+          comments,
+          min,
+          hour,
+          action,
+          orderId,
+          prepared_in,
+          source,
+          bodyToSend,
+          _yield$ordering$setAc,
+          _yield$ordering$setAc2,
+          _error,
+          result,
+          _args = arguments;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (!handleCustomForgotPasswordClick) {
-                _context.next = 3;
-                break;
-              }
-
-              values = data || formData;
-              return _context.abrupt("return", handleCustomForgotPasswordClick(values));
-
-            case 3:
-              _context.prev = 3;
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              body = _args.length > 0 && _args[0] !== undefined ? _args[0] : {};
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: true
               }));
-              _values = data || formData;
-              _context.next = 8;
-              return ordering.users().forgotPassword(_values);
-
-            case 8:
-              response = _context.sent;
-              setFormState({
-                result: response.content,
-                loading: false
-              });
-
-              if (!response.content.error) {
-                if (handleSuccessForgotPassword) {
-                  handleSuccessForgotPassword(formData.email);
-                }
-              }
-
-              _context.next = 16;
-              break;
+              comments = body.comments, min = body.min, hour = body.hour, action = body.action, orderId = body.orderId;
+              prepared_in = hour * 60 + parseInt(min);
+              _context.prev = 4;
+              source = {};
+              requestsState.order = source;
+              bodyToSend = {};
+              if (action === "accept") bodyToSend.prepared_in = prepared_in;
+              if (action === "reject") bodyToSend.comment = comments;
+              bodyToSend.status = action === "accept" ? 7 : 5;
+              _context.next = 13;
+              return ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
 
             case 13:
-              _context.prev = 13;
-              _context.t0 = _context["catch"](3);
-              setFormState({
-                result: {
-                  error: true,
-                  result: _context.t0.message
-                },
-                loading: false
-              });
+              _yield$ordering$setAc = _context.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              _error = _yield$ordering$setAc2.error;
+              result = _yield$ordering$setAc2.result;
 
-            case 16:
+              if (!_error) {
+                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                  loading: false,
+                  order: result
+                }));
+              }
+
+              if (_error) {
+                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                  loading: false,
+                  error: _error,
+                  order: result[0]
+                }));
+              }
+
+              _context.next = 24;
+              break;
+
+            case 21:
+              _context.prev = 21;
+              _context.t0 = _context["catch"](4);
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                error: error,
+                order: _context.t0.message
+              }));
+
+            case 24:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 13]]);
+      }, _callee, null, [[4, 21]]);
     }));
 
-    return function handleForgotPasswordClick(_x) {
+    return function handleUpdateStateOrder() {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Update form data data
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var hanldeChangeInput = function hanldeChangeInput(e) {
-    setFormData(_objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, e.target.name, e.target.value)));
-  };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    formState: formState,
-    formData: formData,
-    hanldeChangeInput: hanldeChangeInput,
-    handleButtonForgotPasswordClick: handleButtonForgotPasswordClick || handleForgotPasswordClick
+    orderState: orderState,
+    updateStateOrder: handleUpdateStateOrder
   })));
 };
 
-exports.ForgotPasswordForm = ForgotPasswordForm;
-ForgotPasswordForm.propTypes = {
+exports.OrderChange = OrderChange;
+OrderChange.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Function to change default forgot password behavior
+   * This must be contains orderId to fetch
    */
-  handleButtonForgotPasswordClick: _propTypes.default.func,
+  orderId: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
 
   /**
-   * Function to get forgot password success event
-   * @param {string} email Email to which it was sent
-   */
-  handleSuccessForgotPassword: _propTypes.default.func,
-
-  /**
-   * Default email to forgot password form
-   */
-  defaultEmail: _propTypes.default.string,
-
-  /**
-   * @param {form_data} data
-   * handleCustomClick, function to get click event and return data without default behavior
-   */
-  handleCustomForgotPasswordClick: _propTypes.default.func,
-
-  /**
-   * Components types before forgot password form
+   * Components types before my orders list
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after forgot password form
+   * Components types after my orders list
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before forgot password form
+   * Elements before my orders list
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after forgot password form
+   * Elements after my orders list
    * Array of HTML/Components elements, these components will not get the parent props
    */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Url to signup page
-   * Url to create element link to signup page
-   */
-  linkToSignup: _propTypes.default.string,
-
-  /**
-   * Url to login page
-   * Url to create element link to login
-   */
-  linkToLogin: _propTypes.default.string,
-
-  /**
-   * Element to custom link to signup
-   * You can provide de link element as react router Link or your custom Anchor to signup page
-   */
-  elementLinkToSignup: _propTypes.default.element,
-
-  /**
-   * Element to custo link to Login
-   * You can provide de link element as react router Link or your custom Anchor to login page
-   */
-  elementLinkToLogin: _propTypes.default.element
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-ForgotPasswordForm.defaultProps = {
+OrderChange.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
