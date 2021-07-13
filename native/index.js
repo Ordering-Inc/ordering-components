@@ -29,6 +29,7 @@ import { MenuControl } from '../src/components/MenuControl'
 import { Messages } from '../src/components/Messages'
 import { MomentOption } from '../src/components/MomentOption'
 import { MyOrders } from '../src/components/MyOrders'
+import { MyOrdersList } from '../src/components/MyOrdersList'
 import { OrderChange } from '../src/components/OrderChange';
 import { OrderList } from '../src/components/OrderList'
 import { OrderTypeControl } from '../src/components/OrderTypeControl'
