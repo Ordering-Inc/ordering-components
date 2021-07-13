@@ -105,7 +105,7 @@ export const OrderDetails = (props) => {
   /**
    * Method to assign a driver for order
    */
-  const handleAssignDriver = (e) => {
+  const handleAssignDriver = async (e) => {
     try{
       const bodyToSend = { driver_id: e};
       setOrderState({ ...orderState, loading: true})
@@ -120,7 +120,6 @@ export const OrderDetails = (props) => {
     } catch(err) {
       setOrderState( { ...orderState, loading: false, error: err.message })
     }
-   
   }
 
   /**
