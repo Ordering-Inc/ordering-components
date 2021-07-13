@@ -103,6 +103,25 @@ export const OrderDetails = (props) => {
   }
 
   /**
+   * Method to update status order to ready for pickup
+   */
+  const handleReadyForPickUp = async () => {
+    try {
+      const bodyToSend = { status: 4}
+      const { content: { result, error } } = await  ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
+      if (!error) {
+        setOrderState( {...orderState, order: result, loading: false})
+      }
+  
+      if (error) {
+        setOrderState( { ...orderState, loading: false, error: result[0]})
+      }
+    } catch(err) {
+      setOrderState( { ...orderState, loading: false, error: err.message })
+    }
+  };
+
+  /**
    * Method to assign a driver for order
    */
   const handleAssignDriver = async (e) => {
@@ -294,6 +313,7 @@ export const OrderDetails = (props) => {
           formatPrice={formatPrice}
           handleAssignDriver={handleAssignDriver}
           handlerSubmit={handlerSubmitSpotNumber}
+          handleReadyForPickUp={handleReadyForPickUp}
           messages={messages}
           setMessages={setMessages}
           readMessages={readMessages}
