@@ -110,6 +110,9 @@ export const Home = () => {
         </li>
         <h2>O</h2>
         <li>
+        <Link to='/order_change'>Order Change</Link>
+        </li>
+        <li>
           <Link to='/order_context_advanced'>Order context advanced</Link>
         </li>
         <li>
