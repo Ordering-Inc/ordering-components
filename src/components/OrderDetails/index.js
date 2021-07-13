@@ -13,7 +13,6 @@ export const OrderDetails = (props) => {
     sendCustomMessage
   } = props
 
-  console.log(user)
   const [{ user, token, loading }] = useSession()
   const accessToken = props.accessToken || token
   const [ordering] = useApi()
@@ -101,6 +100,27 @@ export const OrderDetails = (props) => {
         error: [e.message]
       })
     }
+  }
+
+  /**
+   * Method to assign a driver for order
+   */
+  const handleAssignDriver = (e) => {
+    try{
+      const bodyToSend = { driver_id: e};
+      setOrderState({ ...orderState, loading: true})
+          const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
+      if (!error) {
+        setOrderState( {...orderState, order: result, loading: false})
+      }
+  
+      if (error) {
+        setOrderState( { ...orderState, loading: false, error: result[0]})
+      }
+    } catch(err) {
+      setOrderState( { ...orderState, loading: false, error: err.message })
+    }
+   
   }
 
   /**
@@ -273,6 +293,7 @@ export const OrderDetails = (props) => {
           driverLocation={driverLocation}
           messageErrors={messageErrors}
           formatPrice={formatPrice}
+          handleAssignDriver={handleAssignDriver}
           handlerSubmit={handlerSubmitSpotNumber}
           messages={messages}
           setMessages={setMessages}
