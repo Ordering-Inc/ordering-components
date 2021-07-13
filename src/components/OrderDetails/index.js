@@ -108,6 +108,7 @@ export const OrderDetails = (props) => {
   const handleReadyForPickUp = async () => {
     try {
       const bodyToSend = { status: 4}
+      setOrderState({ ...orderState, loading: true})
       const { content: { result, error } } = await  ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
       if (!error) {
         setOrderState( {...orderState, order: result, loading: false})
