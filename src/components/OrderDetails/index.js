@@ -173,7 +173,7 @@ export const OrderDetails = (props) => {
       const order = error ? null : result
       const err = error ? result : null
       let businessData = null
-      let driversGroupData = null
+      let driversGroupData = {}
       try {
         const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
@@ -192,12 +192,13 @@ export const OrderDetails = (props) => {
         }
       }
 
+
       setOrderState({
         ...orderState,
         loading: false,
         order,
         businessData,
-        driversGroupsData: !driversGroupData ? {} : driversGroupData,
+        driversGroupsData,
         error: err
       })
     } catch (e) {

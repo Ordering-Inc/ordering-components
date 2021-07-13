@@ -5630,9 +5630,9 @@ optionator@^0.8.3:
     type-check "~0.3.2"
     word-wrap "~1.2.3"
 
-"ordering-api-sdk@github:Ordering-Inc/ordering-api-sdk#feature/add-drivergroupsApi":
+"ordering-api-sdk@github:Ordering-Inc/ordering-api-sdk#release":
   version "0.0.4"
-  resolved "https://codeload.github.com/Ordering-Inc/ordering-api-sdk/tar.gz/364e743f1cd68a4ac1211d6651d074edd1e6ac88"
+  resolved "https://codeload.github.com/Ordering-Inc/ordering-api-sdk/tar.gz/dd6f85a93c92586b3802065effb8e6526d674313"
   dependencies:
     "@babel/runtime" "^7.10.4"
 
