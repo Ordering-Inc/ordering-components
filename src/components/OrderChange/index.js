@@ -52,7 +52,12 @@ export const OrderChange = (props) => {
         });
       }
     } catch (err) {
-      console.log(err);
+      setOrderState({
+        ...orderState,
+        loading: false,
+        error: error,
+        order: err.message 
+      });
     }
   };
 

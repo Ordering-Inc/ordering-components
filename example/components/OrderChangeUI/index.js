@@ -1,11 +1,14 @@
-import React from "react";
-
-import { SingleOrderCardUI } from "../SingleOrderCardUI";
-import { SingleOrderCard } from "../../../src/components/SingleOrderCard";
+import React, {useState} from "react";
 
 export const OrderChangeUI = (props) => {
-  const { beforeComponents, afterComponents, beforeElements, afterElements } =
+  const {order, beforeComponents, afterComponents, beforeElements, afterElements } =
     props;
+  const [status, setStatus] = useState('Pending')
+
+    const changeStatus = (action) => {
+      if(action === 'accept') setStatus('Accepted by Bussines')
+      if(action === 'reject') setStatus('Rejected by Bussines')
+    }
 
   return (
     <>
@@ -17,26 +20,27 @@ export const OrderChangeUI = (props) => {
         <BeforeComponent key={i} {...props} />
       ))}
 
-      <h1 style={{ textTransform: "capitalize" }}>{orderType} order</h1>
+      <h1 style={{ textTransform: "capitalize" }}>order</h1>
 
-      {order.length > 0 &&
-        order.map((order) => (
-          <div
-            className="orders"
-            key={order.id}
-            style={{
-              border: "1px solid gray",
-              padding: "20px",
-              width: "200px",
-            }}
-          >
-            <SingleOrderCard
-              UIComponent={SingleOrderCardUI}
-              order={order}
-              orderType={orderType}
-            />
+      {order && Object.keys(order).length > 0 && (
+        <>
+          <br />
+          <br />
+          <div className='order-card'>
+            <div style={{ background: 'green', padding: '10px', color: 'white', textAlign: 'center' }}>
+              <h3>Order Number #{order.uuid || order.id}</h3>
+            </div>
+            <h2>Status: <span style={{ fontWeight: 'lighter' }}> {status}</span></h2>
           </div>
-        ))}
+          <br />
+          <br />
+          <button onClick={() => changeStatus('accept')}>Accept</button>
+          <button onClick={() => changeStatus('reject')}>Reject</button>
+          </>
+
+      )}
+
+
 
       {afterComponents.map((AfterComponent, i) => (
         <AfterComponent key={i} {...props} />
