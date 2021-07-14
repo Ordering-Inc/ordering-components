@@ -20,7 +20,7 @@ export const OrderDetails = (props) => {
   const [ordering] = useApi()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
-  const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: null, businessData: {}, driversGroupsData: [], loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
@@ -107,6 +107,46 @@ export const OrderDetails = (props) => {
   }
 
   /**
+   * Method to update status order to ready for pickup
+   */
+  const handleReadyForPickUp = async () => {
+    try {
+      const bodyToSend = { status: 4 }
+      setOrderState({ ...orderState, loading: true })
+      const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
+      if (!error) {
+        setOrderState({ ...orderState, order: result, loading: false })
+      }
+
+      if (error) {
+        setOrderState({ ...orderState, loading: false, error: result[0] })
+      }
+    } catch (err) {
+      setOrderState({ ...orderState, loading: false, error: err.message })
+    }
+  }
+
+  /**
+     * Method to assign a driver for order
+     */
+  const handleAssignDriver = async (e) => {
+    try {
+      const bodyToSend = { driver_id: e }
+      setOrderState({ ...orderState, loading: true })
+      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
+      if (!error) {
+        setOrderState({ ...orderState, order: result, loading: false })
+      }
+
+      if (error) {
+        setOrderState({ ...orderState, loading: false, error: result[0] })
+      }
+    } catch (err) {
+      setOrderState({ ...orderState, loading: false, error: err.message })
+    }
+  }
+
+  /**
    * handler send message with spot info
    * @param {number} param0
    */
@@ -137,6 +177,7 @@ export const OrderDetails = (props) => {
       const order = error ? null : result
       const err = error ? result : null
       let businessData = null
+      let driversGroupsData = {}
       try {
         const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
@@ -144,11 +185,21 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
+      if (user.level === 2 && order.delivery_type === 1) {
+        try {
+          const { content } = await ordering.setAccessToken(token).driversgroups().get()
+          driversGroupsData = content.result
+          content.error && err.push(content.result[0])
+        } catch (e) {
+          err.push(e.message)
+        }
+      }
       setOrderState({
         ...orderState,
         loading: false,
         order,
         businessData,
+        driversGroupsData,
         error: err
       })
     } catch (e) {
@@ -265,7 +316,9 @@ export const OrderDetails = (props) => {
           driverLocation={driverLocation}
           messageErrors={messageErrors}
           formatPrice={formatPrice}
+          handleAssignDriver={handleAssignDriver}
           handlerSubmit={handlerSubmitSpotNumber}
+          handleReadyForPickUp={handleReadyForPickUp}
           messages={messages}
           setMessages={setMessages}
           readMessages={readMessages}

@@ -23,7 +23,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
+export const OrderProvider = ({ Alert, children, strategy, isAlsea, theme }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -784,6 +784,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
       {
         Alert && (
           <Alert
+            colors={theme?.colors}
             open={alert.show}
             title={t('ERROR', 'Error')}
             onAccept={() => setAlert({ show: false })}
