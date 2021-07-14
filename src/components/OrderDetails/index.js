@@ -173,7 +173,7 @@ export const OrderDetails = (props) => {
       const order = error ? null : result
       const err = error ? result : null
       let businessData = null
-      let driversGroupData = {}
+      let driversGroupsData = {}
       try {
         const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
@@ -184,7 +184,7 @@ export const OrderDetails = (props) => {
       if(user.level === 2 && order.delivery_type === 1) {
         try {
           const { content } =  await ordering.setAccessToken(token).driversgroups().get();
-          driversGroupData = content.result
+          driversGroupsData = content.result
           content.error && err.push(content.result[0])
         } catch(e) {
           err.push(e.message)
