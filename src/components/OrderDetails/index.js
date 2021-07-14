@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export const OrderDetails = (props) => {
   const {
@@ -16,6 +18,8 @@ export const OrderDetails = (props) => {
   const [{ user, token, loading }] = useSession()
   const accessToken = props.accessToken || token
   const [ordering] = useApi()
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
   const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
@@ -202,12 +206,14 @@ export const OrderDetails = (props) => {
     if (orderState.loading || loading) return
     const handleUpdateOrder = (order) => {
       if (order?.id !== orderState.order?.id) return
+      showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'))
       delete order.total
       delete order.subtotal
       setOrderState({
         ...orderState,
         order: Object.assign(orderState.order, order)
       })
+
       loadMessages()
     }
     const handleTrackingDriver = ({ location }) => {
