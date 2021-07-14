@@ -87,7 +87,8 @@ var OrderProvider = function OrderProvider(_ref) {
   var Alert = _ref.Alert,
       children = _ref.children,
       strategy = _ref.strategy,
-      isAlsea = _ref.isAlsea;
+      isAlsea = _ref.isAlsea,
+      theme = _ref.theme;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -1749,6 +1750,7 @@ var OrderProvider = function OrderProvider(_ref) {
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
     value: [copyState, functions]
   }, Alert && /*#__PURE__*/_react.default.createElement(Alert, {
+    colors: theme === null || theme === void 0 ? void 0 : theme.colors,
     open: alert.show,
     title: t('ERROR', 'Error'),
     onAccept: function onAccept() {
