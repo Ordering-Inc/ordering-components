@@ -135,11 +135,17 @@ export const BusinessController = (props) => {
     }
   }, [])
 
+  const updateBusiness = async (businessId, updateParams = {}) => {
+    const { content: { result } } = await ordering.businesses(businessId).save(updateParams)
+    setBusinessObject(result)
+  }
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          updateBusiness={updateBusiness}
           orderState={orderState}
           isBusinessClose={isBusinessClose}
           business={businessObject}
