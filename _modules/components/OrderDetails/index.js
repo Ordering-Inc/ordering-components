@@ -53,7 +53,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -423,7 +423,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
-      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupData, _yield$ordering$setAc7, content, _yield$ordering$setAc8, _content, _orderState$error;
+      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupsData, _yield$ordering$setAc7, content, _yield$ordering$setAc8, _content, _orderState$error;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -460,7 +460,7 @@ var OrderDetails = function OrderDetails(props) {
               order = error ? null : result;
               err = error ? result : null;
               businessData = null;
-              driversGroupData = {};
+              driversGroupsData = {};
               _context5.prev = 17;
               _context5.next = 20;
               return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({
@@ -493,7 +493,7 @@ var OrderDetails = function OrderDetails(props) {
             case 33:
               _yield$ordering$setAc8 = _context5.sent;
               _content = _yield$ordering$setAc8.content;
-              driversGroupData = _content.result;
+              driversGroupsData = _content.result;
               _content.error && err.push(_content.result[0]);
               _context5.next = 42;
               break;
