@@ -54,7 +54,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
   var Alert = _ref.Alert,
       settings = _ref.settings,
       isAlsea = _ref.isAlsea,
-      children = _ref.children;
+      children = _ref.children,
+      theme = _ref.theme;
   var webStrategy = new _webStrategy.WebStrategy();
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
@@ -73,7 +74,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,
     Alert: Alert,
-    isAlsea: isAlsea
+    isAlsea: isAlsea,
+    theme: theme
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
     strategy: webStrategy
   }, children))))))))))));
