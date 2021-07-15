@@ -53,8 +53,12 @@ export const BusinessController = (props) => {
   const getBusiness = async () => {
     setBusinessState({...businessState, loading: true})
     try {
-      const { content: { result } } = await ordering.businesses(businessId).select(businessAttributes).get()
-      setBusinessState({...businessState, business: result, loading: false})
+      const { content: { result, error } } = await ordering.businesses(businessId).select(businessAttributes).get()
+      if (!error) {
+        setBusinessState({...businessState, business: result, loading: false})
+      } else {
+        setBusinessState({...businessState, business: result[0], loading: false, error})
+      }
     } catch (err) {
       setBusinessState({...businessState, loading: false, error: err.message})
     }
@@ -143,8 +147,13 @@ export const BusinessController = (props) => {
   const updateBusiness = async (businessId, updateParams = {}) => {
     setBusinessState({...businessState, loading: true})
     try {
-      const { content: { result } } = await ordering.businesses(businessId).save(updateParams)
-      setBusinessState({...businessState, business: result, loading: false})
+      const { content: { result, error } } = await ordering.businesses(businessId).save(updateParams)
+
+      if (!error) {
+        setBusinessState({...businessState, business: result, loading: false})
+      } else {
+        setBusinessState({...businessState, business: result[0], loading: false, error})
+      }
     } catch (err) {
       setBusinessState({...businessState, loading: false, error: err.message})
     }
