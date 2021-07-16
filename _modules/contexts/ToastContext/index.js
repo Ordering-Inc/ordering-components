@@ -5,19 +5,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ProductsList = void 0;
+exports.useToast = useToast;
+exports.ToastProvider = exports.ToastContext = exports.ToastType = void 0;
 
-var _react = _interopRequireWildcard(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var React = _interopRequireWildcard(require("react"));
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -31,74 +26,53 @@ function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "und
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var ProductsList = function ProductsList(props) {
-  var categories = props.categories,
-      UIComponent = props.UIComponent;
+// Defines the three kinds of message that are displayed
+var ToastType = {
+  Info: 'INFO',
+  Error: 'ERROR',
+  Success: 'SUCCESS'
+}; // Creates the toast context
 
-  var _useState = (0, _react.useState)(categories),
-      _useState2 = _slicedToArray(_useState, 2),
-      categoriesFiltered = _useState2[0],
-      setCategoriesFiltered = _useState2[1];
+exports.ToastType = ToastType;
+var ToastContext = /*#__PURE__*/React.createContext(null);
+exports.ToastContext = ToastContext;
 
-  (0, _react.useEffect)(function () {
-    setCategoriesFiltered(categories.filter(function (category) {
-      return category.id;
-    }));
-  }, [categories]);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    categories: categoriesFiltered
-  })));
-};
+var ToastProvider = function ToastProvider(_ref) {
+  var children = _ref.children;
 
-exports.ProductsList = ProductsList;
-ProductsList.propTypes = {
-  /**
-   * UI Component, this must be containt all graphic elements and use parent props
-   */
-  UIComponent: _propTypes.default.elementType,
+  // Calls setToastConfig in order to control the toast
+  // toastConfig is null by default so the toast is hidden
+  var _React$useState = React.useState(null),
+      _React$useState2 = _slicedToArray(_React$useState, 2),
+      toastConfig = _React$useState2[0],
+      setToastConfig = _React$useState2[1];
 
-  /**
-   * productslist, this must be contains an object with products, loading and error data
-   */
-  productsList: _propTypes.default.object,
+  var showToast = function showToast(type, message) {
+    var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 3000;
+    setToastConfig({
+      type: type,
+      message: message,
+      duration: duration
+    });
+  };
 
-  /**
-   * categories, this must be contains an array of products categories
-   */
-  categories: _propTypes.default.arrayOf(_propTypes.default.object),
+  var hideToast = function hideToast() {
+    // Sets toast config to null in order to hide the toast
+    setToastConfig(null);
+  };
 
-  /**
-   * flag shows categories with products or only products
-   */
-  isAllCategory: _propTypes.default.bool,
+  return /*#__PURE__*/React.createElement(ToastContext.Provider, {
+    value: [toastConfig, {
+      showToast: showToast,
+      hideToast: hideToast
+    }]
+  }, children);
+}; // hook context
 
-  /**
-   * Components types before products list
-   * Array of type components, the parent props will pass to these components
-   */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
-  /**
-   * Components types after products list
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+exports.ToastProvider = ToastProvider;
 
-  /**
-   * Elements before products list
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Elements after products list
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
-};
-ProductsList.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
-};
+function useToast() {
+  var toastManager = React.useContext(ToastContext);
+  return toastManager || [{}, function () {}];
+}
