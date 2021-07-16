@@ -10,6 +10,7 @@ import { EventProvider } from '../EventContext'
 import { UtilsProviders } from '../UtilsContext'
 import { ValidationFieldsProvider } from '../ValidationsFieldsContext'
 import { CustomerProvider } from '../CustomerContext'
+import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
 
 /**
@@ -32,19 +33,21 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
           <LanguageProvider strategy={webStrategy}>
             <ConfigProvider>
               <UtilsProviders>
-                <ValidationFieldsProvider>
-                  <SessionProvider strategy={webStrategy}>
-                    <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}>
-                      <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
-                        <BusinessProvider>
-                          <CustomerProvider strategy={webStrategy}>
-                            {children}
-                          </CustomerProvider>
-                        </BusinessProvider>
-                      </OrderProvider>
-                    </WebsocketProvider>
-                  </SessionProvider>
-                </ValidationFieldsProvider>
+                <ToastProvider>
+                  <ValidationFieldsProvider>
+                    <SessionProvider strategy={webStrategy}>
+                      <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}>
+                        <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
+                          <BusinessProvider>
+                            <CustomerProvider strategy={webStrategy}>
+                              {children}
+                            </CustomerProvider>
+                          </BusinessProvider>
+                        </OrderProvider>
+                      </WebsocketProvider>
+                    </SessionProvider>
+                  </ValidationFieldsProvider>
+                </ToastProvider>
               </UtilsProviders>
             </ConfigProvider>
           </LanguageProvider>
