@@ -24,7 +24,7 @@ export const OrderingContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const OrderingProvider = ({ Alert, settings, isAlsea, children, theme }) => {
+export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
   const webStrategy = new WebStrategy()
   return (
     <OrderingContext.Provider>
@@ -37,7 +37,7 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children, theme }) 
                   <ValidationFieldsProvider>
                     <SessionProvider strategy={webStrategy}>
                       <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}>
-                        <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea} theme={theme}>
+                        <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
                           <BusinessProvider>
                             <CustomerProvider strategy={webStrategy}>
                               {children}

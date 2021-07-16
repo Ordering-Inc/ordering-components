@@ -20,6 +20,7 @@ export const BusinessList = (props) => {
     isSearchByDescription,
     isFeatured,
     isDoordash,
+    asDashboard,
     paginationSettings,
     customLocation,
     propsToFetch,
@@ -171,8 +172,12 @@ export const BusinessList = (props) => {
       const source = {}
       requestsState.businesses = source
       setRequestsState({ ...requestsState })
-      const fetchEndpoint = where
+      const fetchEndpoint = where && asDashboard
+        ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard()
+        : where && !asDashboard
         ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
+        : !where && asDashboard
+        ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
         : ordering.businesses().select(propsToFetch).parameters(parameters)
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
       if (isSortByReview) {
