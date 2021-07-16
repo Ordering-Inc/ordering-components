@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export const OrderDetails = (props) => {
   const {
@@ -16,6 +18,8 @@ export const OrderDetails = (props) => {
   const [{ user, token, loading }] = useSession()
   const accessToken = props.accessToken || token
   const [ordering] = useApi()
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
   const [orderState, setOrderState] = useState({ order: null, businessData: {}, driversGroupsData: [], loading: !props.order, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
@@ -102,46 +106,46 @@ export const OrderDetails = (props) => {
     }
   }
 
-   /**
+  /**
    * Method to update status order to ready for pickup
    */
-    const handleReadyForPickUp = async () => {
-      try {
-        const bodyToSend = { status: 4}
-        setOrderState({ ...orderState, loading: true})
-        const { content: { result, error } } = await  ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
-        if (!error) {
-          setOrderState( {...orderState, order: result, loading: false})
-        }
-  
-        if (error) {
-          setOrderState( { ...orderState, loading: false, error: result[0]})
-        }
-      } catch(err) {
-        setOrderState( { ...orderState, loading: false, error: err.message })
+  const handleReadyForPickUp = async () => {
+    try {
+      const bodyToSend = { status: 4 }
+      setOrderState({ ...orderState, loading: true })
+      const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
+      if (!error) {
+        setOrderState({ ...orderState, order: result, loading: false })
       }
-    };
-  
-    /**
+
+      if (error) {
+        setOrderState({ ...orderState, loading: false, error: result[0] })
+      }
+    } catch (err) {
+      setOrderState({ ...orderState, loading: false, error: err.message })
+    }
+  }
+
+  /**
      * Method to assign a driver for order
      */
-    const handleAssignDriver = async (e) => {
-      try{
-        const bodyToSend = { driver_id: e};
-        setOrderState({ ...orderState, loading: true})
-            const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
-        if (!error) {
-          setOrderState( {...orderState, order: result, loading: false})
-        }
-  
-        if (error) {
-          setOrderState( { ...orderState, loading: false, error: result[0]})
-        }
-      } catch(err) {
-        setOrderState( { ...orderState, loading: false, error: err.message })
+  const handleAssignDriver = async (e) => {
+    try {
+      const bodyToSend = { driver_id: e }
+      setOrderState({ ...orderState, loading: true })
+      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
+      if (!error) {
+        setOrderState({ ...orderState, order: result, loading: false })
       }
+
+      if (error) {
+        setOrderState({ ...orderState, loading: false, error: result[0] })
+      }
+    } catch (err) {
+      setOrderState({ ...orderState, loading: false, error: err.message })
     }
-  
+  }
+
   /**
    * handler send message with spot info
    * @param {number} param0
@@ -181,12 +185,12 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
-      if(user.level === 2 && order.delivery_type === 1) {
+      if (user.level === 2 && order.delivery_type === 1) {
         try {
-          const { content } =  await ordering.setAccessToken(token).driversgroups().get();
+          const { content } = await ordering.setAccessToken(token).driversgroups().get()
           driversGroupsData = content.result
           content.error && err.push(content.result[0])
-        } catch(e) {
+        } catch (e) {
           err.push(e.message)
         }
       }
@@ -253,12 +257,14 @@ export const OrderDetails = (props) => {
     if (orderState.loading || loading) return
     const handleUpdateOrder = (order) => {
       if (order?.id !== orderState.order?.id) return
+      showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'))
       delete order.total
       delete order.subtotal
       setOrderState({
         ...orderState,
         order: Object.assign(orderState.order, order)
       })
+
       loadMessages()
     }
     const handleTrackingDriver = ({ location }) => {
