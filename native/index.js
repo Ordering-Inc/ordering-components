@@ -40,7 +40,7 @@ import { PaymentOptionCash } from '../src/components/PaymentOptionCash'
 import { PaymentOptionStripe } from '../src/components/PaymentOptionStripe'
 import { PaymentOptionStripeDirect } from '../src/components/PaymentOptionStripeDirect'
 import { PaymentOptionStripeRedirect } from '../src/components/PaymentOptionStripeRedirect'
-import { MessageList } from "../src/components/MessageList"
+import { MessageList } from '../src/components/MessageList'
 
 import { ProductForm } from '../src/components/ProductForm'
 import { ProductImages } from '../src/components/ProductImages'

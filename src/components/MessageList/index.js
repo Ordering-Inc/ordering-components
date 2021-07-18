@@ -5,7 +5,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
-export const OrderList = (props) => {
+export const MessageList = (props) => {
   const {
     UIComponent,
     orders,
@@ -19,7 +19,6 @@ export const OrderList = (props) => {
     customArray,
     userCustomerId,
     activeOrders,
-    userCustomerId,
   } = props
 
   const [ordering] = useApi()
@@ -31,6 +30,7 @@ export const OrderList = (props) => {
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [session] = useSession()
   const socket = useWebsocket()
+  const [messagesReadList, setMessagesReadList] = useState(false)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -229,6 +229,7 @@ export const OrderList = (props) => {
           : `${ordering.root}/orders/${orderId}/messages`
         const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
         const { error, result } = await response.json()
+        console.log(result)
         if (!error) {
           setMessages({
             messages: result,
@@ -286,6 +287,25 @@ export const OrderList = (props) => {
         })
       }
     }
+
+
+    const readMessages = async (orderId) => {
+      const messageId = messages?.messages[messages?.messages?.length - 1]?.id
+      try {
+        const response = await fetch(`${ordering.root}/orders/${orderId}/messages/${messageId}/read`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        const { result } = await response.json()
+  
+        setMessagesReadList(result)
+      } catch (e) {
+        console.log(e.message)
+      }
+    }
   
       /**
    * handler send message with spot info
@@ -310,8 +330,6 @@ export const OrderList = (props) => {
     }
   }, [orderList.loading])
 
-
-
   return (
     <>
       {UIComponent && (
@@ -323,14 +341,18 @@ export const OrderList = (props) => {
           goToPage={goToPage}
           loadOrders={loadOrders}
           loadMessages={loadMessages}
-          handlerSubmitSpotNumber={handlerSubmitSpotNumber}
+          handlerSubmit={handlerSubmitSpotNumber}
+          messages={messages}
+          setMessages={setMessages}
+          readMessages={readMessages}
+          messagesReadList={messagesReadList}
         />
       )}
     </>
   )
 }
 
-OrderList.propTypes = {
+MessageList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -415,7 +437,7 @@ OrderList.propTypes = {
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-OrderList.defaultProps = {
+MessageList.defaultProps = {
   orderBy: 'id',
   orderDirection: 'desc',
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },
