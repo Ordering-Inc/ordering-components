@@ -27,7 +27,7 @@ export const MessageList = (props) => {
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
   })
-  const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
+  const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [session] = useSession()
   const socket = useWebsocket()
   const [messagesReadList, setMessagesReadList] = useState(false)
@@ -224,12 +224,10 @@ export const MessageList = (props) => {
      const loadMessages = async (orderId) => {
       try {
         setMessages({ ...messages, loading: true })
-        const url = userCustomerId
-          ? `${ordering.root}/orders/${orderId}/messages?mode=dashboard`
-          : `${ordering.root}/orders/${orderId}/messages`
+        const url = `${ordering.root}/orders/${orderId}/messages?mode=dashboard`
+         
         const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
         const { error, result } = await response.json()
-        console.log(result)
         if (!error) {
           setMessages({
             messages: result,
