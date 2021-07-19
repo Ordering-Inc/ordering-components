@@ -4,6 +4,8 @@ import PropTypes, { object, number } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import { ToastType, useToast } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export const OrderList = (props) => {
   const {
@@ -22,13 +24,15 @@ export const OrderList = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const [session] = useSession()
+  const [, { showToast }] = useToast()
+  const socket = useWebsocket()
+  const [, t] = useLanguage()
   const [orderList, setOrderList] = useState({ loading: !orders, error: null, orders: [] })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
   })
-  const [session] = useSession()
-  const socket = useWebsocket()
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -121,6 +125,7 @@ export const OrderList = (props) => {
       setOrderList({ ...orderList, loading: true })
       const found = orderList.orders.find(_order => _order.id === order.id)
       let orders = []
+      showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id))
       if (found) {
         orders = orderList.orders.filter(_order => {
           if (_order.id === order.id) {

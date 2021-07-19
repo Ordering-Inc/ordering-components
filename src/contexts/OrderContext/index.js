@@ -6,6 +6,7 @@ import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
 import { useConfig } from '../ConfigContext'
 import { useCustomer } from '../CustomerContext'
+import { ToastType, useToast } from '../ToastContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -32,6 +33,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
   const [configState] = useConfig()
   const [session] = useSession()
   const [customerState] = useCustomer()
+  const [, { showToast }] = useToast()
 
   const orderTypes = {
     delivery: 1,
@@ -703,6 +705,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
    */
   useEffect(() => {
     const handleCartUpdate = (cart) => {
+      showToast(ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'))
       if (cart.status === 1) {
         if (state.carts[`businessId:${cart.business_id}`]) {
           delete state.carts[`businessId:${cart.business_id}`]
@@ -716,6 +719,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
       setState({ ...state, loading: false })
     }
     const handleOrderOptionUpdate = ({ carts, ...options }) => {
+      showToast(ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'))
       const newCarts = {}
       carts.forEach(cart => {
         newCarts[`businessId:${cart.business_id}`] = cart
