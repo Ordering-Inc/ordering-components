@@ -15,7 +15,7 @@ export const SearchOrders = (props) => {
   } = props;
 
   const [{ token }] = useSession();
-  const [{ loading, configs }] = useConfig();
+  const [{ configs }] = useConfig();
   const [ordering] = useApi();
 
   const [businesses, setBusinesses] = useState({
@@ -29,11 +29,6 @@ export const SearchOrders = (props) => {
     error: null,
   });
   const [drivers, setDrivers] = useState({
-    data: [],
-    loading: false,
-    error: null,
-  });
-  const [deliveryTypes, setDeliveryTypes] = useState({
     data: [],
     loading: false,
     error: null,
@@ -133,22 +128,11 @@ export const SearchOrders = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   setDeliveryTypes({ ...deliveryTypes, loading: true, error: null });
-  //   if (!loading) {
-  //     setDeliveryTypes({
-  //       ...deliveryTypes,
-  //       data: configs?.order_types_allowed,
-  //       loading: false
-  //     });
-  //   }
-  // }, [loading]);
-
   useEffect(() => {
     if (fetchAll) {
       getBusinesses();
-      getDrivers();
       getCities();
+      getDrivers();
     }
   }, []);
 
@@ -157,8 +141,12 @@ export const SearchOrders = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          options={{ businesses, cities, drivers, deliveryTypes }}
-          deliveryTypes={configs?.order_types_allowed}
+          options={{
+            businesses,
+            cities,
+            drivers,
+            deliveryTypes: configs?.order_types_allowed,
+          }}
           getBusinesses={getBusinesses}
           getDrivers={getDrivers}
           getCities={getCities}
