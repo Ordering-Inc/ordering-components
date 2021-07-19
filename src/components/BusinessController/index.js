@@ -19,7 +19,7 @@ export const BusinessController = (props) => {
   /**
    * This must be containt business object data
    */
-  const [businessObject, setBusinessObject] = useState(business)
+  const [businessState, setBusinessState] = useState({business, loading: false, error: null})
   /**
    * This must be containt local time for check if business is close
    */
@@ -51,8 +51,17 @@ export const BusinessController = (props) => {
    * Method to get business from SDK
    */
   const getBusiness = async () => {
-    const { content: { result } } = await ordering.businesses(businessId).select(businessAttributes).get()
-    setBusinessObject(result)
+    setBusinessState({...businessState, loading: true})
+    try {
+      const { content: { result, error } } = await ordering.businesses(businessId).select(businessAttributes).get()
+      if (!error) {
+        setBusinessState({...businessState, business: result, loading: false})
+      } else {
+        setBusinessState({...businessState, business: result[0], loading: false, error})
+      }
+    } catch (err) {
+      setBusinessState({...businessState, loading: false, error: err.message})
+    }
   }
   /**
    * Method to return business offert to show
@@ -111,16 +120,16 @@ export const BusinessController = (props) => {
       const currentMonth = new Date().getMonth()
       const currentYear = new Date().getFullYear()
       setCurrentTime(`${currentHour}:${currentMinute}`)
-      for (let i = 0; i < businessObject?.today?.lapses?.length; i++) {
-        const timeToOpenFormatted = formatDate(businessObject?.today?.lapses[i]?.open || null)
-        const timeToCloseFormatted = formatDate(businessObject?.today?.lapses[i]?.close || null)
+      for (let i = 0; i < businessState.business?.today?.lapses?.length; i++) {
+        const timeToOpenFormatted = formatDate(businessState.business?.today?.lapses[i]?.open || null)
+        const timeToCloseFormatted = formatDate(businessState.business?.today?.lapses[i]?.close || null)
         const hourClose = timeToCloseFormatted?.split(':')[0]
         const minuteClose = timeToCloseFormatted?.split(':')[1]
         const hourOpen = timeToOpenFormatted?.split(':')[0]
         const minuteOpen = timeToOpenFormatted?.split(':')[1]
         // range of most recent open-close business lapses
         if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
-          setTimeToClose(formatDate(businessObject?.today?.lapses[i]?.close))
+          setTimeToClose(formatDate(businessState.business?.today?.lapses[i]?.close))
         }
       }
     }, 1000)
@@ -129,20 +138,37 @@ export const BusinessController = (props) => {
 
   useEffect(() => {
     if (business) {
-      setBusinessObject(business)
+      setBusinessState({...businessState, business})
     } else {
       getBusiness()
     }
   }, [])
+
+  const updateBusiness = async (businessId, updateParams = {}) => {
+    setBusinessState({...businessState, loading: true})
+    try {
+      const { content: { result, error } } = await ordering.businesses(businessId).save(updateParams)
+
+      if (!error) {
+        setBusinessState({...businessState, business: result, loading: false})
+      } else {
+        setBusinessState({...businessState, business: result[0], loading: false, error})
+      }
+    } catch (err) {
+      setBusinessState({...businessState, loading: false, error: err.message})
+    }
+  }
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          updateBusiness={updateBusiness}
           orderState={orderState}
           isBusinessClose={isBusinessClose}
-          business={businessObject}
+          businessState={businessState}
+          business={businessState.business}
           formatDate={formatDate}
           formatNumber={formatNumber}
           getBusinessOffer={getBusinessOffer}

@@ -9,6 +9,7 @@ import { ApiProvider } from '../../../../src/contexts/ApiContext'
 import { EventProvider } from '../../../../src/contexts/EventContext'
 import { UtilsProviders } from '../../../../src/contexts/UtilsContext'
 import { ValidationFieldsProvider } from '../../../../src/contexts/ValidationsFieldsContext'
+import { ToastProvider } from '../../../../src/contexts/ToastContext'
 import { NativeStrategy } from '../../NativeStrategy'
 
 /**
@@ -31,17 +32,19 @@ export const OrderingProvider = ({ Alert, settings, children }) => {
           <LanguageProvider strategy={nativeStrategy}>
             <ConfigProvider>
               <UtilsProviders>
-                <ValidationFieldsProvider>
-                  <SessionProvider strategy={nativeStrategy}>
-                    <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
-                      <OrderProvider strategy={nativeStrategy} Alert={Alert}>
-                        <BusinessProvider>
-                          {children}
-                        </BusinessProvider>
-                      </OrderProvider>
-                    </WebsocketProvider>
-                  </SessionProvider>
-                </ValidationFieldsProvider>
+                <ToastProvider>
+                  <ValidationFieldsProvider>
+                    <SessionProvider strategy={nativeStrategy}>
+                      <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
+                        <OrderProvider strategy={nativeStrategy} Alert={Alert}>
+                          <BusinessProvider>
+                            {children}
+                          </BusinessProvider>
+                        </OrderProvider>
+                      </WebsocketProvider>
+                    </SessionProvider>
+                  </ValidationFieldsProvider>
+                </ToastProvider>
               </UtilsProviders>
             </ConfigProvider>
           </LanguageProvider>
