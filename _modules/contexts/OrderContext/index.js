@@ -23,6 +23,8 @@ var _ConfigContext = require("../ConfigContext");
 
 var _CustomerContext = require("../CustomerContext");
 
+var _ToastContext = require("../ToastContext");
+
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
@@ -129,6 +131,10 @@ var OrderProvider = function OrderProvider(_ref) {
   var _useCustomer = (0, _CustomerContext.useCustomer)(),
       _useCustomer2 = _slicedToArray(_useCustomer, 1),
       customerState = _useCustomer2[0];
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
 
   var orderTypes = {
     delivery: 1,
@@ -1671,6 +1677,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
   (0, _react.useEffect)(function () {
     var handleCartUpdate = function handleCartUpdate(cart) {
+      showToast(_ToastContext.ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'));
+
       if (cart.status === 1) {
         if (state.carts["businessId:".concat(cart.business_id)]) {
           delete state.carts["businessId:".concat(cart.business_id)];
@@ -1688,6 +1696,7 @@ var OrderProvider = function OrderProvider(_ref) {
       var carts = _ref18.carts,
           options = _objectWithoutProperties(_ref18, _excluded3);
 
+      showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
       var newCarts = {};
       carts.forEach(function (cart) {
         newCarts["businessId:".concat(cart.business_id)] = cart;

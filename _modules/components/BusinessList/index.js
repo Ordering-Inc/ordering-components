@@ -75,6 +75,7 @@ var BusinessList = function BusinessList(props) {
       isSearchByDescription = props.isSearchByDescription,
       isFeatured = props.isFeatured,
       isDoordash = props.isDoordash,
+      asDashboard = props.asDashboard,
       paginationSettings = props.paginationSettings,
       customLocation = props.customLocation,
       propsToFetch = props.propsToFetch,
@@ -287,7 +288,7 @@ var BusinessList = function BusinessList(props) {
               source = {};
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
-              fetchEndpoint = where ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters);
+              fetchEndpoint = where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : !where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard() : ordering.businesses().select(propsToFetch).parameters(parameters);
               _context.next = 20;
               return fetchEndpoint.get({
                 cancelToken: source

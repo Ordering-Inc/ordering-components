@@ -31,6 +31,8 @@ var _ValidationsFieldsContext = require("../ValidationsFieldsContext");
 
 var _CustomerContext = require("../CustomerContext");
 
+var _ToastContext = require("../ToastContext");
+
 var _webStrategy = require("../../webStrategy");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -63,7 +65,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: webStrategy
-  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
+  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     settings: Object.assign(settings.socket, {
@@ -76,7 +78,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
     isAlsea: isAlsea
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
     strategy: webStrategy
-  }, children))))))))))));
+  }, children)))))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

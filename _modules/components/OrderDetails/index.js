@@ -19,6 +19,10 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 
+var _ToastContext = require("../../contexts/ToastContext");
+
+var _LanguageContext = require("../../contexts/LanguageContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -78,6 +82,14 @@ var OrderDetails = function OrderDetails(props) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
 
   var _useState = (0, _react.useState)({
     order: null,
@@ -275,8 +287,8 @@ var OrderDetails = function OrderDetails(props) {
     };
   }();
   /**
-  * Method to update status order to ready for pickup
-  */
+   * Method to update status order to ready for pickup
+   */
 
 
   var handleReadyForPickUp = /*#__PURE__*/function () {
@@ -341,8 +353,8 @@ var OrderDetails = function OrderDetails(props) {
     };
   }();
   /**
-   * Method to assign a driver for order
-   */
+     * Method to assign a driver for order
+     */
 
 
   var handleAssignDriver = /*#__PURE__*/function () {
@@ -617,6 +629,7 @@ var OrderDetails = function OrderDetails(props) {
       var _orderState$order8;
 
       if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order8 = orderState.order) === null || _orderState$order8 === void 0 ? void 0 : _orderState$order8.id)) return;
+      showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER', 'Updating order...'));
       delete order.total;
       delete order.subtotal;
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
