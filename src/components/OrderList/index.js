@@ -33,6 +33,7 @@ export const OrderList = (props) => {
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
   })
+  const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -99,6 +100,32 @@ export const OrderList = (props) => {
       if (err.constructor.name !== 'Cancel') {
         setOrderList({ ...orderList, loading: false, error: [err.message] })
       }
+    }
+  }
+
+
+  const loadMessages = async (orderId) => {
+    try {
+      setMessages({ ...messages, loading: true })
+      const url = `${ordering.root}/orders/${orderId}/messages?mode=dashboard`
+
+      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const { error, result } = await response.json()
+      if (!error) {
+        setMessages({
+          messages: result,
+          loading: false,
+          error: null
+        })
+      } else {
+        setMessages({
+          ...messages,
+          loading: false,
+          error: result
+        })
+      }
+    } catch (error) {
+      setMessages({ ...messages, loading: false, error: [error.Messages] })
     }
   }
 
@@ -246,6 +273,9 @@ export const OrderList = (props) => {
           loadMoreOrders={loadMoreOrders}
           goToPage={goToPage}
           loadOrders={loadOrders}
+          loadMessages={loadMessages}
+          messages={messages}
+          setMessages={setMessages}
         />
       )}
     </>
