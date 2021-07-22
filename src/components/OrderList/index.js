@@ -52,7 +52,7 @@ export const OrderList = (props) => {
         options.query.where.push({ attribute: 'id', value: orderIds })
       }
       if (orderStatus) {
-        const searchByStatus = otherStatus.length > 0 ? otherStatus :  orderStatus
+        const searchByStatus = otherStatus?.length > 0 ? otherStatus :  orderStatus
         options.query.where.push({ attribute: 'status', value: searchByStatus })
       }
     }
