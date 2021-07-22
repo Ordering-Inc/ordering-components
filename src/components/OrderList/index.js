@@ -198,10 +198,10 @@ export const OrderList = (props) => {
     }
   }, [socket, session, userCustomerId])
 
-  const loadMoreOrders = async () => {
-    setOrderList({ ...orderList, loading: true })
+  const loadMoreOrders = async (searchByOtherStatus) => {
+    setOrderList({ ...orderList, loading: true });
     try {
-      const response = await getOrders(pagination.currentPage + 1)
+      const response = await getOrders(pagination.currentPage + 1, searchByOtherStatus)
       setOrderList({
         loading: false,
         orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
