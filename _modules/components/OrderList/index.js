@@ -121,6 +121,11 @@ var OrderList = function OrderList(props) {
       messages = _useState6[0],
       setMessages = _useState6[1];
 
+  var _useState7 = (0, _react.useState)([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      updateOtherStatus = _useState8[0],
+      setUpdateOtherStatus = _useState8[1];
+
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
 
@@ -372,7 +377,7 @@ var OrderList = function OrderList(props) {
             Object.assign(_order, order);
           }
 
-          var valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status));
+          var valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status)) || updateOtherStatus.length === 0 || updateOtherStatus.includes(parseInt(_order.status));
 
           if (!valid) {
             pagination.total--;
@@ -552,7 +557,8 @@ var OrderList = function OrderList(props) {
     loadOrders: loadOrders,
     loadMessages: loadMessages,
     messages: messages,
-    setMessages: setMessages
+    setMessages: setMessages,
+    setUpdateOtherStatus: setUpdateOtherStatus
   })));
 };
 

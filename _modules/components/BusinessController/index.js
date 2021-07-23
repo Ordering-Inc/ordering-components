@@ -278,11 +278,13 @@ var BusinessController = function BusinessController(props) {
     };
   }, []);
   (0, _react.useEffect)(function () {
-    if (business) {
+    var _businessState$busine13;
+
+    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: business
       }));
-    } else {
+    } else if (!business) {
       getBusiness();
     }
   }, []);
