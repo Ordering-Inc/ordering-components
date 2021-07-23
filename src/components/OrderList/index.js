@@ -34,6 +34,7 @@ export const OrderList = (props) => {
     pageSize: paginationSettings.pageSize ?? 10
   })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
+  const [updateOtherStatus, setUpdateOtherStatus] = useState([])
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -162,7 +163,7 @@ export const OrderList = (props) => {
             delete order.subtotal
             Object.assign(_order, order)
           }
-          const valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status))
+          const valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status)) || updateOtherStatus.length === 0 || updateOtherStatus.includes(parseInt(_order.status))
           if (!valid) {
             pagination.total--
             setPagination({
@@ -278,6 +279,7 @@ export const OrderList = (props) => {
           loadMessages={loadMessages}
           messages={messages}
           setMessages={setMessages}
+          setUpdateOtherStatus={setUpdateOtherStatus}
         />
       )}
     </>
