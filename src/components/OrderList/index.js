@@ -34,16 +34,17 @@ export const OrderList = (props) => {
     pageSize: paginationSettings.pageSize ?? 10
   })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
+  const [updateOtherStatus, setUpdateOtherStatus] = useState([])
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
 
-  const getOrders = async (page, otherStatus = []) => {
+  const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
     const options = {
       query: {
         orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
         page: page,
-        page_size: paginationSettings.pageSize
+        page_size: pageSize
       }
     }
     if (orderIds || orderStatus) {
@@ -68,7 +69,8 @@ export const OrderList = (props) => {
     return await functionFetch.get(options)
   }
 
-  const loadOrders = async (isNextPage, searchByOtherStatus) => {
+  const loadOrders = async (isNextPage, searchByOtherStatus, keepOrders= false) => {
+    const pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize
     if (!session.token) {
       setOrderList({
         ...orderList,
@@ -82,7 +84,7 @@ export const OrderList = (props) => {
         loading: true
       })
       const nextPage = !isNextPage ? pagination.currentPage + 1 : 1
-      const response = await getOrders(nextPage, searchByOtherStatus)
+      const response = await getOrders(nextPage, searchByOtherStatus, pageSize)
       setOrderList({
         loading: false,
         orders: response.content.error ? [] : response.content.result,
@@ -162,7 +164,7 @@ export const OrderList = (props) => {
             delete order.subtotal
             Object.assign(_order, order)
           }
-          const valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status))
+          const valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status)) || updateOtherStatus.length === 0 || updateOtherStatus.includes(parseInt(_order.status))
           if (!valid) {
             pagination.total--
             setPagination({
@@ -278,6 +280,7 @@ export const OrderList = (props) => {
           loadMessages={loadMessages}
           messages={messages}
           setMessages={setMessages}
+          setUpdateOtherStatus={setUpdateOtherStatus}
         />
       )}
     </>
