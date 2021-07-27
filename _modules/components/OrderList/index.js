@@ -132,6 +132,7 @@ var OrderList = function OrderList(props) {
   var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(page) {
       var otherStatus,
+          pageSize,
           options,
           searchByStatus,
           source,
@@ -142,11 +143,12 @@ var OrderList = function OrderList(props) {
           switch (_context.prev = _context.next) {
             case 0:
               otherStatus = _args.length > 1 && _args[1] !== undefined ? _args[1] : [];
+              pageSize = _args.length > 2 && _args[2] !== undefined ? _args[2] : paginationSettings.pageSize;
               options = {
                 query: {
                   orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
                   page: page,
-                  page_size: paginationSettings.pageSize
+                  page_size: pageSize
                 }
               };
 
@@ -180,13 +182,13 @@ var OrderList = function OrderList(props) {
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 10;
+              _context.next = 11;
               return functionFetch.get(options);
 
-            case 10:
+            case 11:
               return _context.abrupt("return", _context.sent);
 
-            case 11:
+            case 12:
             case "end":
               return _context.stop();
           }
@@ -201,13 +203,20 @@ var OrderList = function OrderList(props) {
 
   var loadOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(isNextPage, searchByOtherStatus) {
-      var nextPage, response;
+      var keepOrders,
+          pageSize,
+          nextPage,
+          response,
+          _args2 = arguments;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              keepOrders = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : false;
+              pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize;
+
               if (session.token) {
-                _context2.next = 3;
+                _context2.next = 5;
                 break;
               }
 
@@ -216,16 +225,16 @@ var OrderList = function OrderList(props) {
               }));
               return _context2.abrupt("return");
 
-            case 3:
-              _context2.prev = 3;
+            case 5:
+              _context2.prev = 5;
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: true
               }));
               nextPage = !isNextPage ? pagination.currentPage + 1 : 1;
-              _context2.next = 8;
-              return getOrders(nextPage, searchByOtherStatus);
+              _context2.next = 10;
+              return getOrders(nextPage, searchByOtherStatus, pageSize);
 
-            case 8:
+            case 10:
               response = _context2.sent;
               setOrderList({
                 loading: false,
@@ -244,12 +253,12 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 16;
+              _context2.next = 18;
               break;
 
-            case 13:
-              _context2.prev = 13;
-              _context2.t0 = _context2["catch"](3);
+            case 15:
+              _context2.prev = 15;
+              _context2.t0 = _context2["catch"](5);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -258,12 +267,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 16:
+            case 18:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[3, 13]]);
+      }, _callee2, null, [[5, 15]]);
     }));
 
     return function loadOrders(_x2, _x3) {
