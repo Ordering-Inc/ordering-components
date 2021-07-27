@@ -39,12 +39,12 @@ export const OrderList = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
 
-  const getOrders = async (page, otherStatus = []) => {
+  const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
     const options = {
       query: {
         orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
         page: page,
-        page_size: paginationSettings.pageSize
+        page_size: pageSize
       }
     }
     if (orderIds || orderStatus) {
@@ -69,7 +69,8 @@ export const OrderList = (props) => {
     return await functionFetch.get(options)
   }
 
-  const loadOrders = async (isNextPage, searchByOtherStatus) => {
+  const loadOrders = async (isNextPage, searchByOtherStatus, keepOrders= false) => {
+    const pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize
     if (!session.token) {
       setOrderList({
         ...orderList,
@@ -83,7 +84,7 @@ export const OrderList = (props) => {
         loading: true
       })
       const nextPage = !isNextPage ? pagination.currentPage + 1 : 1
-      const response = await getOrders(nextPage, searchByOtherStatus)
+      const response = await getOrders(nextPage, searchByOtherStatus, pageSize)
       setOrderList({
         loading: false,
         orders: response.content.error ? [] : response.content.result,
