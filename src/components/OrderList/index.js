@@ -69,7 +69,7 @@ export const OrderList = (props) => {
     return await functionFetch.get(options)
   }
 
-  const loadOrders = async (isNextPage, searchByOtherStatus, keepOrders= false) => {
+  const loadOrders = async (isNextPage, searchByOtherStatus, keepOrders = false) => {
     const pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize
     if (!session.token) {
       setOrderList({
@@ -92,7 +92,7 @@ export const OrderList = (props) => {
       })
       if (!response.content.error) {
         setPagination({
-          currentPage: response.content.pagination.current_page,
+          currentPage: keepOrders ? pagination.currentPage : response.content.pagination.current_page,
           pageSize: response.content.pagination.page_size,
           totalPages: response.content.pagination.total_pages,
           total: response.content.pagination.total,
