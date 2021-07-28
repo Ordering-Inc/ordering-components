@@ -244,7 +244,7 @@ var OrderList = function OrderList(props) {
 
               if (!response.content.error) {
                 setPagination({
-                  currentPage: response.content.pagination.current_page,
+                  currentPage: keepOrders ? pagination.currentPage : response.content.pagination.current_page,
                   pageSize: response.content.pagination.page_size,
                   totalPages: response.content.pagination.total_pages,
                   total: response.content.pagination.total,
