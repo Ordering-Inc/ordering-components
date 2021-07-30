@@ -246,10 +246,10 @@ var OrderList = function OrderList(props) {
                 setPagination({
                   currentPage: keepOrders ? pagination.currentPage : response.content.pagination.current_page,
                   pageSize: response.content.pagination.page_size,
-                  totalPages: response.content.pagination.total_pages,
-                  total: response.content.pagination.total,
-                  from: response.content.pagination.from,
-                  to: response.content.pagination.to
+                  totalPages: keepOrders ? pagination.totalPages : response.content.pagination.total_pages,
+                  total: keepOrders ? pagination.total : response.content.pagination.total,
+                  from: keepOrders ? 1 : response.content.pagination.from,
+                  to: keepOrders ? pagination.to : response.content.pagination.to
                 });
               }
 
