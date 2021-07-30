@@ -287,12 +287,12 @@ var OrderDetails = function OrderDetails(props) {
     };
   }();
   /**
-   * Method to update status order to ready for pickup
+   * Method to update differents orders status 
    */
 
 
-  var handleReadyForPickUp = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+  var handleChangeOrderStatus = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(status) {
       var bodyToSend, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
@@ -301,7 +301,7 @@ var OrderDetails = function OrderDetails(props) {
             case 0:
               _context3.prev = 0;
               bodyToSend = {
-                status: 4
+                status: status
               };
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: true
@@ -348,7 +348,7 @@ var OrderDetails = function OrderDetails(props) {
       }, _callee3, null, [[0, 13]]);
     }));
 
-    return function handleReadyForPickUp() {
+    return function handleChangeOrderStatus(_x2) {
       return _ref3.apply(this, arguments);
     };
   }();
@@ -414,7 +414,7 @@ var OrderDetails = function OrderDetails(props) {
       }, _callee4, null, [[0, 13]]);
     }));
 
-    return function handleAssignDriver(_x2) {
+    return function handleAssignDriver(_x3) {
       return _ref4.apply(this, arguments);
     };
   }();
@@ -693,7 +693,7 @@ var OrderDetails = function OrderDetails(props) {
     formatPrice: formatPrice,
     handleAssignDriver: handleAssignDriver,
     handlerSubmit: handlerSubmitSpotNumber,
-    handleReadyForPickUp: handleReadyForPickUp,
+    handleChangeOrderStatus: handleChangeOrderStatus,
     messages: messages,
     setMessages: setMessages,
     readMessages: readMessages,
