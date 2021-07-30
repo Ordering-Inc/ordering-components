@@ -26,16 +26,31 @@ export const OrderChange = (props) => {
   const handleUpdateStateOrder = async (body = {}) => {
     setOrderState({ ...orderState, loading: true });
     const { comments, min, hour, action, orderId } = body;
-    const prepared_in = hour * 60 + parseInt(min);
+    const time = hour * 60 + parseInt(min);
+
+    const orderStatus = {
+      acceptByBusiness: {
+        prepared_in: time,
+        status: 7,
+      },
+      rejectByBusiness: {
+        comment: comments,
+        status: 5,
+      },
+      acceptByDriver: {
+        delivered_in: time,
+        status: 8,
+      },
+      rejectByDriver: {
+        comment: comments,
+        status: 6,
+      },
+    };
 
     try {
       const source = {};
       requestsState.order = source;
-      const bodyToSend = {};
-      if (action === "accept") bodyToSend.prepared_in = prepared_in;
-      if (action === "reject") bodyToSend.comment = comments;
-      bodyToSend.status = action === "accept" ? 7 : 5;
-
+      const bodyToSend = orderStatus[action] || {};
       const {
         content: { error, result },
       } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
@@ -56,7 +71,7 @@ export const OrderChange = (props) => {
         ...orderState,
         loading: false,
         error: error,
-        order: err.message 
+        order: err.message,
       });
     }
   };
