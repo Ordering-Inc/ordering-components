@@ -84,7 +84,8 @@ var OrderChange = function OrderChange(props) {
           hour,
           action,
           orderId,
-          prepared_in,
+          time,
+          orderStatus,
           source,
           bodyToSend,
           _yield$ordering$setAc,
@@ -102,18 +103,33 @@ var OrderChange = function OrderChange(props) {
                 loading: true
               }));
               comments = body.comments, min = body.min, hour = body.hour, action = body.action, orderId = body.orderId;
-              prepared_in = hour * 60 + parseInt(min);
-              _context.prev = 4;
+              time = hour * 60 + parseInt(min);
+              orderStatus = {
+                acceptByBusiness: {
+                  prepared_in: time,
+                  status: 7
+                },
+                rejectByBusiness: {
+                  comment: comments,
+                  status: 5
+                },
+                acceptByDriver: {
+                  delivered_in: time,
+                  status: 8
+                },
+                rejectByDriver: {
+                  comment: comments,
+                  status: 6
+                }
+              };
+              _context.prev = 5;
               source = {};
               requestsState.order = source;
-              bodyToSend = {};
-              if (action === "accept") bodyToSend.prepared_in = prepared_in;
-              if (action === "reject") bodyToSend.comment = comments;
-              bodyToSend.status = action === "accept" ? 7 : 5;
-              _context.next = 13;
+              bodyToSend = orderStatus[action] || {};
+              _context.next = 11;
               return ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
 
-            case 13:
+            case 11:
               _yield$ordering$setAc = _context.sent;
               _yield$ordering$setAc2 = _yield$ordering$setAc.content;
               _error = _yield$ordering$setAc2.error;
@@ -134,24 +150,24 @@ var OrderChange = function OrderChange(props) {
                 }));
               }
 
-              _context.next = 24;
+              _context.next = 22;
               break;
 
-            case 21:
-              _context.prev = 21;
-              _context.t0 = _context["catch"](4);
+            case 19:
+              _context.prev = 19;
+              _context.t0 = _context["catch"](5);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: error,
                 order: _context.t0.message
               }));
 
-            case 24:
+            case 22:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[4, 21]]);
+      }, _callee, null, [[5, 19]]);
     }));
 
     return function handleUpdateStateOrder() {
