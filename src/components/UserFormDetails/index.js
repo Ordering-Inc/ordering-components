@@ -234,46 +234,49 @@ export const UserFormDetails = (props) => {
       validationFields.fields?.checkout?.[fieldName]?.enabled &&
       validationFields.fields?.checkout?.[fieldName]?.required
   }
-
+ 
   const handleToggleAvalaibleStatusDriver = async (newValue) => {
     try {
-      setUserState({ ...userState, loading: true })
-      console.log(newValue)
-      const response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ available: newValue }, {
-        accessToken: accessToken
-      })
-      
+      setUserState({ ...userState, loading: true });
+      const response = await ordering
+        .users(props?.userData?.id || userState.result.result.id)
+        .save(
+          { available: newValue },
+          {
+            accessToken: accessToken,
+          }
+        );
+
       if (response.content.error) {
-        setUserState({ ...userState, loading: false})
+        setUserState({ ...userState, loading: false });
         showToast(
           ToastType.Error,
-          t(response.content.result[0], 'Some error has ocurred'),
-          );
+          t(response.content.result[0], "Some error has ocurred")
+        );
       }
-        
-        if (!response.content.error) {
-        setUserState({ ...userState, result: { ...response.content }, loading: false, })
+
+      if (!response.content.error) {
+        setUserState({
+          ...userState,
+          result: { ...response.content },
+          loading: false,
+        });
         showToast(
           ToastType.Success,
-           t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated'),
+          t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated')
         );
       }
     } catch (err) {
-      
       setUserState({
-            loading: false,
-            result: {
-              error: true,
-              result: err.message
-            }
-      })
-              showToast(
-          ToastType.Error,
-          t(err.message, 'Some error has ocurred'),
-          );
-          
+        loading: false,
+        result: {
+          error: true,
+          result: err.message
+        },
+      });
+      showToast(ToastType.Error, t(err.message, "Some error has ocurred"));
     }
-  }
+  };
 
   return (
     <>
