@@ -21,9 +21,9 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _OrderContext = require("../../contexts/OrderContext");
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33,11 +33,11 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -55,7 +55,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -80,7 +80,8 @@ var BusinessList = function BusinessList(props) {
       customLocation = props.customLocation,
       propsToFetch = props.propsToFetch,
       onBusinessClick = props.onBusinessClick,
-      windowPathname = props.windowPathname;
+      windowPathname = props.windowPathname,
+      currentPageParam = props.currentPageParam;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -161,8 +162,8 @@ var BusinessList = function BusinessList(props) {
 
 
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, paginationParams, _orderState$options6, moment, where, conditions, _orderState$options7, _orderState$options8, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch, specificPagination, prev) {
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, paginationParams, _orderState$options6, moment, where, conditions, _orderState$options7, _orderState$options8, searchConditions, isSpecialCharacter, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -285,16 +286,24 @@ var BusinessList = function BusinessList(props) {
                 };
               }
 
+              if (specificPagination || currentPageParam) {
+                _paginationParams = {
+                  page: specificPagination || currentPageParam,
+                  page_size: paginationProps.pageSize
+                };
+                parameters = _objectSpread(_objectSpread({}, parameters), _paginationParams);
+              }
+
               source = {};
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : !where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard() : ordering.businesses().select(propsToFetch).parameters(parameters);
-              _context.next = 20;
+              _context.next = 21;
               return fetchEndpoint.get({
                 cancelToken: source
               });
 
-            case 20:
+            case 21:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               result = _yield$fetchEndpoint$2.result;
@@ -309,7 +318,7 @@ var BusinessList = function BusinessList(props) {
                 });
                 businessesList.businesses = offerBuesinesses;
               } else {
-                businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
+                businessesList.businesses = newFetch ? result : prev ? [].concat(_toConsumableArray(result), _toConsumableArray(businessesList.businesses)) : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               }
 
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -328,11 +337,11 @@ var BusinessList = function BusinessList(props) {
                 totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
-              _context.next = 34;
+              _context.next = 35;
               break;
 
-            case 31:
-              _context.prev = 31;
+            case 32:
+              _context.prev = 32;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -342,15 +351,15 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 34:
+            case 35:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 31]]);
+      }, _callee, null, [[0, 32]]);
     }));
 
-    return function getBusinesses(_x) {
+    return function getBusinesses(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -375,7 +384,7 @@ var BusinessList = function BusinessList(props) {
     if (orderState.loading || !((_orderState$options9 = orderState.options) !== null && _orderState$options9 !== void 0 && (_orderState$options9$ = _orderState$options9.address) !== null && _orderState$options9$ !== void 0 && _orderState$options9$.location) && !customLocation) return;
 
     if (!isDoordash) {
-      getBusinesses(true);
+      getBusinesses(true, currentPageParam);
     }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
   (0, _react.useEffect)(function () {
