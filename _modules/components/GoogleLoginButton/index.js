@@ -252,7 +252,7 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
 
   var handleSigninSuccess = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(res) {
-      var basicProfile, authResponse, response;
+      var authResponse, response;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -266,31 +266,18 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
               return _context2.abrupt("return");
 
             case 3:
-              basicProfile = res.getBasicProfile();
-              authResponse = res.getAuthResponse();
-              res.googleId = basicProfile.getId();
-              res.tokenObj = authResponse;
-              res.tokenId = authResponse.id_token;
-              res.accessToken = authResponse.access_token;
-              res.profileObj = {
-                googleId: basicProfile.getId(),
-                imageUrl: basicProfile.getImageUrl(),
-                email: basicProfile.getEmail(),
-                name: basicProfile.getName(),
-                givenName: basicProfile.getGivenName(),
-                familyName: basicProfile.getFamilyName()
-              }; // login with backend
+              authResponse = res.getAuthResponse(); // login with backend
 
-              _context2.prev = 10;
+              _context2.prev = 4;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context2.next = 14;
+              _context2.next = 8;
               return ordering.users().authGoogle({
                 access_token: authResponse === null || authResponse === void 0 ? void 0 : authResponse.id_token
               });
 
-            case 14:
+            case 8:
               response = _context2.sent;
               setFormState({
                 result: response.content,
@@ -309,12 +296,12 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
                 signOut();
               }
 
-              _context2.next = 23;
+              _context2.next = 17;
               break;
 
-            case 19:
-              _context2.prev = 19;
-              _context2.t0 = _context2["catch"](10);
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](4);
               setFormState({
                 result: {
                   error: true,
@@ -324,12 +311,12 @@ var GoogleLoginButton = function GoogleLoginButton(props) {
               });
               signOut();
 
-            case 23:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[10, 19]]);
+      }, _callee2, null, [[4, 13]]);
     }));
 
     return function handleSigninSuccess(_x2) {

@@ -80,7 +80,8 @@ var BusinessList = function BusinessList(props) {
       customLocation = props.customLocation,
       propsToFetch = props.propsToFetch,
       onBusinessClick = props.onBusinessClick,
-      windowPathname = props.windowPathname;
+      windowPathname = props.windowPathname,
+      currentPageParam = props.currentPageParam;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -161,8 +162,8 @@ var BusinessList = function BusinessList(props) {
 
 
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, paginationParams, _orderState$options6, moment, where, conditions, _orderState$options7, _orderState$options8, searchConditions, isSpecialCharacter, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch, specificPagination, prev) {
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, _orderState$options5, parameters, paginationParams, _orderState$options6, moment, where, conditions, _orderState$options7, _orderState$options8, searchConditions, isSpecialCharacter, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -285,16 +286,24 @@ var BusinessList = function BusinessList(props) {
                 };
               }
 
+              if (specificPagination || currentPageParam) {
+                _paginationParams = {
+                  page: specificPagination || currentPageParam,
+                  page_size: paginationProps.pageSize
+                };
+                parameters = _objectSpread(_objectSpread({}, parameters), _paginationParams);
+              }
+
               source = {};
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : !where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard() : ordering.businesses().select(propsToFetch).parameters(parameters);
-              _context.next = 20;
+              _context.next = 21;
               return fetchEndpoint.get({
                 cancelToken: source
               });
 
-            case 20:
+            case 21:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               result = _yield$fetchEndpoint$2.result;
@@ -309,7 +318,7 @@ var BusinessList = function BusinessList(props) {
                 });
                 businessesList.businesses = offerBuesinesses;
               } else {
-                businessesList.businesses = newFetch ? result : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
+                businessesList.businesses = newFetch ? result : prev ? [].concat(_toConsumableArray(result), _toConsumableArray(businessesList.businesses)) : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               }
 
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -328,11 +337,11 @@ var BusinessList = function BusinessList(props) {
                 totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
-              _context.next = 34;
+              _context.next = 35;
               break;
 
-            case 31:
-              _context.prev = 31;
+            case 32:
+              _context.prev = 32;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -342,15 +351,15 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 34:
+            case 35:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 31]]);
+      }, _callee, null, [[0, 32]]);
     }));
 
-    return function getBusinesses(_x) {
+    return function getBusinesses(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -375,7 +384,7 @@ var BusinessList = function BusinessList(props) {
     if (orderState.loading || !((_orderState$options9 = orderState.options) !== null && _orderState$options9 !== void 0 && (_orderState$options9$ = _orderState$options9.address) !== null && _orderState$options9$ !== void 0 && _orderState$options9$.location) && !customLocation) return;
 
     if (!isDoordash) {
-      getBusinesses(true);
+      getBusinesses(true, currentPageParam);
     }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
   (0, _react.useEffect)(function () {
