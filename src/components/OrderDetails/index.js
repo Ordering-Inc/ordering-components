@@ -114,12 +114,10 @@ export const OrderDetails = (props) => {
       const bodyToSend = { status }
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
-      if (!error) {
-        setOrderState({ ...orderState, order: result, loading: false })
-      }
-
+      
       if (error) {
-        setOrderState({ ...orderState, loading: false, error: result[0] })
+        setOrderState({ ...orderState, error: result[0] })
+        showToast(ToastType.Error, t(result[0], result[0]))
       }
     } catch (err) {
       setOrderState({ ...orderState, loading: false, error: err.message })
@@ -134,12 +132,10 @@ export const OrderDetails = (props) => {
       const bodyToSend = { driver_id: e }
       setOrderState({ ...orderState, loading: true })
       const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
-      if (!error) {
-        setOrderState({ ...orderState, order: result, loading: false })
-      }
-
+    
       if (error) {
-        setOrderState({ ...orderState, loading: false, error: result[0] })
+        setOrderState({ ...orderState, error: result[0] })
+        showToast(ToastType.Error, t(result[0], result[0]))
       }
     } catch (err) {
       setOrderState({ ...orderState, loading: false, error: err.message })
