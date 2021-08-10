@@ -12,6 +12,7 @@ export const OrderDetails = (props) => {
     hashKey,
     UIComponent,
     userCustomerId,
+    driverAndBusinessId,
     sendCustomMessage
   } = props
 
@@ -43,7 +44,7 @@ export const OrderDetails = (props) => {
   const loadMessages = async () => {
     try {
       setMessages({ ...messages, loading: true })
-      const url = userCustomerId
+      const url = (userCustomerId || driverAndBusinessId)
         ? `${ordering.root}/orders/${orderState.order?.id}/messages?mode=dashboard`
         : `${ordering.root}/orders/${orderState.order?.id}/messages`
       const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
@@ -127,7 +128,7 @@ export const OrderDetails = (props) => {
   /**
      * Method to assign a driver for order
      */
-  const handleAssignDriver = async (e) => {
+   const handleAssignDriver = async (e) => {
     try {
       const bodyToSend = { driver_id: e }
       setOrderState({ ...orderState, loading: true })
@@ -163,11 +164,12 @@ export const OrderDetails = (props) => {
         'X-uuid-access-X': hashKey
       }
     }
-    if (userCustomerId) {
+    if (userCustomerId || driverAndBusinessId) {
       options.query = {
         mode: 'dashboard'
       }
     }
+
     try {
       const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get({ ...options, cancelToken: source })
       const order = error ? null : result
