@@ -23,9 +23,9 @@ var _ToastContext = require("../../contexts/ToastContext");
 
 var _LanguageContext = require("../../contexts/LanguageContext");
 
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,7 +39,7 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -68,6 +68,7 @@ var OrderDetails = function OrderDetails(props) {
       hashKey = props.hashKey,
       UIComponent = props.UIComponent,
       userCustomerId = props.userCustomerId,
+      driverAndBusinessId = props.driverAndBusinessId,
       sendCustomMessage = props.sendCustomMessage;
 
   var _useSession = (0, _SessionContext.useSession)(),
@@ -159,7 +160,7 @@ var OrderDetails = function OrderDetails(props) {
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: true
               }));
-              url = userCustomerId ? "".concat(ordering.root, "/orders/").concat((_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.id, "/messages?mode=dashboard") : "".concat(ordering.root, "/orders/").concat((_orderState$order3 = orderState.order) === null || _orderState$order3 === void 0 ? void 0 : _orderState$order3.id, "/messages");
+              url = userCustomerId || driverAndBusinessId ? "".concat(ordering.root, "/orders/").concat((_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.id, "/messages?mode=dashboard") : "".concat(ordering.root, "/orders/").concat((_orderState$order3 = orderState.order) === null || _orderState$order3 === void 0 ? void 0 : _orderState$order3.id, "/messages");
               _context.next = 5;
               return fetch(url, {
                 method: 'GET',
@@ -288,6 +289,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   /**
    * Method to update differents orders status 
+   * In businessApp & driverApp it's not necessary update orderState 'cause the socket do it. If send driverAndBusinessId the socket it's going to update the state
    */
 
 
@@ -315,7 +317,7 @@ var OrderDetails = function OrderDetails(props) {
               result = _yield$ordering$setAc2.result;
               error = _yield$ordering$setAc2.error;
 
-              if (!error) {
+              if (!error && !driverAndBusinessId) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                   order: result,
                   loading: false
@@ -324,9 +326,10 @@ var OrderDetails = function OrderDetails(props) {
 
               if (error) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  loading: false,
-                  error: result[0]
+                  error: result[0],
+                  loading: false
                 }));
+                showToast(_ToastContext.ToastType.Error, t(result[0], result[0]));
               }
 
               _context3.next = 16;
@@ -354,6 +357,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   /**
      * Method to assign a driver for order
+     *  Socket is going to update the state if sent driverAndBusinessId (driver and business Apps)
      */
 
 
@@ -381,7 +385,7 @@ var OrderDetails = function OrderDetails(props) {
               error = _yield$ordering$setAc4.error;
               result = _yield$ordering$setAc4.result;
 
-              if (!error) {
+              if (!error && !driverAndBusinessId) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                   order: result,
                   loading: false
@@ -390,9 +394,10 @@ var OrderDetails = function OrderDetails(props) {
 
               if (error) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  loading: false,
-                  error: result[0]
+                  error: result[0],
+                  loading: false
                 }));
+                showToast(_ToastContext.ToastType.Error, t(result[0], result[0]));
               }
 
               _context4.next = 16;
@@ -452,7 +457,7 @@ var OrderDetails = function OrderDetails(props) {
                 };
               }
 
-              if (userCustomerId) {
+              if (userCustomerId || driverAndBusinessId) {
                 options.query = {
                   mode: 'dashboard'
                 };
