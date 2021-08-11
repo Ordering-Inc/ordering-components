@@ -149,22 +149,7 @@ export const GoogleLoginButton = (props) => {
       handleGoogleLoginClick(res)
       return
     }
-    const basicProfile = res.getBasicProfile()
     const authResponse = res.getAuthResponse()
-
-    res.googleId = basicProfile.getId()
-    res.tokenObj = authResponse
-    res.tokenId = authResponse.id_token
-    res.accessToken = authResponse.access_token
-    res.profileObj = {
-      googleId: basicProfile.getId(),
-      imageUrl: basicProfile.getImageUrl(),
-      email: basicProfile.getEmail(),
-      name: basicProfile.getName(),
-      givenName: basicProfile.getGivenName(),
-      familyName: basicProfile.getFamilyName()
-    }
-
     // login with backend
     try {
       setFormState({ ...formState, loading: true })

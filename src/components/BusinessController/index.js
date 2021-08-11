@@ -137,9 +137,9 @@ export const BusinessController = (props) => {
   }, [])
 
   useEffect(() => {
-    if (business) {
+    if (business && business?.id !== businessState?.business?.id) {
       setBusinessState({...businessState, business})
-    } else {
+    } else if (!business) {
       getBusiness()
     }
   }, [])

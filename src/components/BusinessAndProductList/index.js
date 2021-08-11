@@ -98,12 +98,14 @@ export const BusinessAndProductList = (props) => {
 
   const getProducts = async (newFetch) => {
     if (!businessState?.business?.lazy_load_products_recommended) {
-      const isFeatured = !!businessState?.business?.categories?.find(
-        category => category
-      )?.products.filter(
-        product => product.featured
-      ).length
-      setFeaturedProducts(isFeatured)
+        businessState?.business?.categories?.map(
+          category => {
+            category?.products?.map( product => {
+              if (product.featured) {
+                setFeaturedProducts(true)
+              }
+            }) 
+          });
       const categoryState = {
         ...categoryStateDefault,
         loading: false

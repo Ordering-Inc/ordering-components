@@ -107,11 +107,11 @@ export const OrderDetails = (props) => {
   }
 
   /**
-   * Method to update status order to ready for pickup
+   * Method to update differents orders status 
    */
-  const handleReadyForPickUp = async () => {
+  const handleChangeOrderStatus = async (status) => {
     try {
-      const bodyToSend = { status: 4 }
+      const bodyToSend = { status }
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
       if (!error) {
@@ -318,7 +318,7 @@ export const OrderDetails = (props) => {
           formatPrice={formatPrice}
           handleAssignDriver={handleAssignDriver}
           handlerSubmit={handlerSubmitSpotNumber}
-          handleReadyForPickUp={handleReadyForPickUp}
+          handleChangeOrderStatus={handleChangeOrderStatus}
           messages={messages}
           setMessages={setMessages}
           readMessages={readMessages}

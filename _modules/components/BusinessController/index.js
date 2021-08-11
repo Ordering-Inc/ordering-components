@@ -27,6 +27,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -59,10 +65,14 @@ var BusinessController = function BusinessController(props) {
    */
 
 
-  var _useState = (0, _react.useState)(business),
+  var _useState = (0, _react.useState)({
+    business: business,
+    loading: false,
+    error: null
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      businessObject = _useState2[0],
-      setBusinessObject = _useState2[1];
+      businessState = _useState2[0],
+      setBusinessState = _useState2[1];
   /**
    * This must be containt local time for check if business is close
    */
@@ -122,26 +132,55 @@ var BusinessController = function BusinessController(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$busin, result;
+      var _yield$ordering$busin, _yield$ordering$busin2, result, error;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: true
+              }));
+              _context.prev = 1;
+              _context.next = 4;
               return ordering.businesses(businessId).select(businessAttributes).get();
 
-            case 2:
+            case 4:
               _yield$ordering$busin = _context.sent;
-              result = _yield$ordering$busin.content.result;
-              setBusinessObject(result);
+              _yield$ordering$busin2 = _yield$ordering$busin.content;
+              result = _yield$ordering$busin2.result;
+              error = _yield$ordering$busin2.error;
 
-            case 5:
+              if (!error) {
+                setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                  business: result,
+                  loading: false
+                }));
+              } else {
+                setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                  business: result[0],
+                  loading: false,
+                  error: error
+                }));
+              }
+
+              _context.next = 14;
+              break;
+
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](1);
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: false,
+                error: _context.t0.message
+              }));
+
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[1, 11]]);
     }));
 
     return function getBusiness() {
@@ -217,20 +256,20 @@ var BusinessController = function BusinessController(props) {
       var currentYear = new Date().getFullYear();
       setCurrentTime("".concat(currentHour, ":").concat(currentMinute));
 
-      for (var i = 0; i < (businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today = businessObject.today) === null || _businessObject$today === void 0 ? void 0 : (_businessObject$today2 = _businessObject$today.lapses) === null || _businessObject$today2 === void 0 ? void 0 : _businessObject$today2.length); i++) {
-        var _businessObject$today, _businessObject$today2, _businessObject$today3, _businessObject$today4, _businessObject$today5, _businessObject$today6;
+      for (var i = 0; i < ((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : (_businessState$busine2 = _businessState$busine.today) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.lapses) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.length); i++) {
+        var _businessState$busine, _businessState$busine2, _businessState$busine3, _businessState$busine4, _businessState$busine5, _businessState$busine6, _businessState$busine7, _businessState$busine8, _businessState$busine9;
 
-        var timeToOpenFormatted = formatDate((businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today3 = businessObject.today) === null || _businessObject$today3 === void 0 ? void 0 : (_businessObject$today4 = _businessObject$today3.lapses[i]) === null || _businessObject$today4 === void 0 ? void 0 : _businessObject$today4.open) || null);
-        var timeToCloseFormatted = formatDate((businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today5 = businessObject.today) === null || _businessObject$today5 === void 0 ? void 0 : (_businessObject$today6 = _businessObject$today5.lapses[i]) === null || _businessObject$today6 === void 0 ? void 0 : _businessObject$today6.close) || null);
+        var timeToOpenFormatted = formatDate(((_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.today) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.lapses[i]) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.open) || null);
+        var timeToCloseFormatted = formatDate(((_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : (_businessState$busine8 = _businessState$busine7.today) === null || _businessState$busine8 === void 0 ? void 0 : (_businessState$busine9 = _businessState$busine8.lapses[i]) === null || _businessState$busine9 === void 0 ? void 0 : _businessState$busine9.close) || null);
         var hourClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
         var minuteClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
         var hourOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[0];
         var minuteOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[1]; // range of most recent open-close business lapses
 
         if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
-          var _businessObject$today7, _businessObject$today8;
+          var _businessState$busine10, _businessState$busine11, _businessState$busine12;
 
-          setTimeToClose(formatDate(businessObject === null || businessObject === void 0 ? void 0 : (_businessObject$today7 = businessObject.today) === null || _businessObject$today7 === void 0 ? void 0 : (_businessObject$today8 = _businessObject$today7.lapses[i]) === null || _businessObject$today8 === void 0 ? void 0 : _businessObject$today8.close));
+          setTimeToClose(formatDate((_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.today) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.lapses[i]) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.close));
         }
       }
     }, 1000);
@@ -239,16 +278,87 @@ var BusinessController = function BusinessController(props) {
     };
   }, []);
   (0, _react.useEffect)(function () {
-    if (business) {
-      setBusinessObject(business);
-    } else {
+    var _businessState$busine13;
+
+    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id)) {
+      setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+        business: business
+      }));
+    } else if (!business) {
       getBusiness();
     }
   }, []);
+
+  var updateBusiness = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(businessId) {
+      var updateParams,
+          _yield$ordering$busin3,
+          _yield$ordering$busin4,
+          result,
+          error,
+          _args2 = arguments;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              updateParams = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : {};
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: true
+              }));
+              _context2.prev = 2;
+              _context2.next = 5;
+              return ordering.businesses(businessId).save(updateParams);
+
+            case 5:
+              _yield$ordering$busin3 = _context2.sent;
+              _yield$ordering$busin4 = _yield$ordering$busin3.content;
+              result = _yield$ordering$busin4.result;
+              error = _yield$ordering$busin4.error;
+
+              if (!error) {
+                setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                  business: result,
+                  loading: false
+                }));
+              } else {
+                setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                  business: result[0],
+                  loading: false,
+                  error: error
+                }));
+              }
+
+              _context2.next = 15;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](2);
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                loading: false,
+                error: _context2.t0.message
+              }));
+
+            case 15:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[2, 12]]);
+    }));
+
+    return function updateBusiness(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    updateBusiness: updateBusiness,
     orderState: orderState,
     isBusinessClose: isBusinessClose,
-    business: businessObject,
+    businessState: businessState,
+    business: businessState.business,
     formatDate: formatDate,
     formatNumber: formatNumber,
     getBusinessOffer: getBusinessOffer,

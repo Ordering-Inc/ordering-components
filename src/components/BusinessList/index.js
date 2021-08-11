@@ -25,7 +25,8 @@ export const BusinessList = (props) => {
     customLocation,
     propsToFetch,
     onBusinessClick,
-    windowPathname
+    windowPathname,
+    currentPageParam
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -57,7 +58,7 @@ export const BusinessList = (props) => {
    * Get businesses by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
    */
-  const getBusinesses = async (newFetch) => {
+  const getBusinesses = async (newFetch, specificPagination, prev) => {
     try {
       setBusinessesList({ ...businessesList, loading: true })
 
@@ -169,16 +170,24 @@ export const BusinessList = (props) => {
         }
       }
 
+      if (specificPagination || currentPageParam) {
+        const paginationParams = {
+          page: specificPagination || currentPageParam,
+          page_size: paginationProps.pageSize
+        }
+        parameters = { ...parameters, ...paginationParams }
+      }
+
       const source = {}
       requestsState.businesses = source
       setRequestsState({ ...requestsState })
       const fetchEndpoint = where && asDashboard
         ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard()
         : where && !asDashboard
-        ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
-        : !where && asDashboard
-        ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
-        : ordering.businesses().select(propsToFetch).parameters(parameters)
+          ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
+          : !where && asDashboard
+            ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
+            : ordering.businesses().select(propsToFetch).parameters(parameters)
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
       if (isSortByReview) {
         const _result = sortBusinesses(result, 'review')
@@ -187,7 +196,7 @@ export const BusinessList = (props) => {
         const offerBuesinesses = result.filter(_business => _business?.offers.length > 0)
         businessesList.businesses = offerBuesinesses
       } else {
-        businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
+        businessesList.businesses = newFetch ? result : (prev ? [...result, ...businessesList.businesses] : [...businessesList.businesses, ...result])
       }
       setBusinessesList({
         ...businessesList,
@@ -232,7 +241,7 @@ export const BusinessList = (props) => {
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
     if (!isDoordash) {
-      getBusinesses(true)
+      getBusinesses(true, currentPageParam)
     }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
 
