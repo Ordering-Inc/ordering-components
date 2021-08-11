@@ -122,7 +122,7 @@ export const OrderDetails = (props) => {
       }
 
       if (error) {
-        setOrderState({ ...orderState, error: result[0] })
+        setOrderState({ ...orderState, error: result[0], loading: false  })
         showToast(ToastType.Error, t(result[0], result[0]))
       }
     } catch (err) {
@@ -145,7 +145,7 @@ export const OrderDetails = (props) => {
       }
 
       if (error) {
-        setOrderState({ ...orderState, error: result[0] })
+        setOrderState({ ...orderState, error: result[0], loading: false })
         showToast(ToastType.Error, t(result[0], result[0]))
       }
     } catch (err) {
