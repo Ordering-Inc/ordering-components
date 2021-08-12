@@ -10,7 +10,7 @@ export const ProductForm = (props) => {
     useOrderContext,
     onSave,
     handleCustomSave,
-    isCustom
+    isStarbucks
   } = props
 
   const requestsState = {}
@@ -509,7 +509,7 @@ export const ProductForm = (props) => {
     }
   }, [product.product])
 
-  if (isCustom) {
+  if (isStarbucks) {
     useEffect(() => {
       if (product?.product && Object.keys(product?.product).length) {
         const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
