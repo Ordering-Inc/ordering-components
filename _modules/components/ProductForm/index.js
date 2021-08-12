@@ -63,7 +63,8 @@ var ProductForm = function ProductForm(props) {
   var UIComponent = props.UIComponent,
       useOrderContext = props.useOrderContext,
       onSave = props.onSave,
-      handleCustomSave = props.handleCustomSave;
+      handleCustomSave = props.handleCustomSave,
+      isStarbucks = props.isStarbucks;
   var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -112,6 +113,15 @@ var ProductForm = function ProductForm(props) {
       _useState8 = _slicedToArray(_useState7, 2),
       defaultSubOptions = _useState8[0],
       setDefaultSubOptions = _useState8[1];
+  /**
+   * Custom Suboption by default
+   */
+
+
+  var _useState9 = (0, _react.useState)([]),
+      _useState10 = _slicedToArray(_useState9, 2),
+      customDefaultSubOptions = _useState10[0],
+      setCustomDefaultSubOptions = _useState10[1];
   /**
    * Edit mode
    */
@@ -737,11 +747,61 @@ var ProductForm = function ProductForm(props) {
         };
       });
       setDefaultSubOptions(defaultOptions);
+      setCustomDefaultSubOptions(defaultOptions);
     }
   }, [product.product]);
+
+  if (isStarbucks) {
+    (0, _react.useEffect)(function () {
+      if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
+        var _ref6, _ref7;
+
+        var options = (_ref6 = []).concat.apply(_ref6, _toConsumableArray(product.product.extras.map(function (extra) {
+          return extra.options.filter(function (option) {
+            return option.name === 'Tamaño' && option.suboptions.filter(function (suboption) {
+              return suboption.name === 'Grande (16oz - 437ml)';
+            }).length === 1;
+          });
+        })));
+
+        if (!(options !== null && options !== void 0 && options.length)) {
+          return;
+        }
+
+        var suboptions = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(options.map(function (option) {
+          return option.suboptions;
+        }))).filter(function (suboption) {
+          return suboption.name === 'Grande (16oz - 437ml)';
+        }); // console.log(suboptions)
+
+
+        var states = suboptions.map(function (suboption, i) {
+          var price = options[i].with_half_option && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+          return {
+            id: suboption.id,
+            name: suboption.name,
+            position: suboption.position || 'whole',
+            price: price,
+            quantity: 1,
+            selected: true,
+            total: price
+          };
+        });
+        var defaultOptions = options.map(function (option, i) {
+          return {
+            option: option,
+            suboption: suboptions[i],
+            state: states[i]
+          };
+        });
+        setDefaultSubOptions([].concat(_toConsumableArray(customDefaultSubOptions), _toConsumableArray(defaultOptions)));
+      }
+    }, [customDefaultSubOptions]);
+  }
   /**
    * Check if defaultSubOption has content to set product Cart
    */
+
 
   (0, _react.useEffect)(function () {
     if (defaultSubOptions !== null && defaultSubOptions !== void 0 && defaultSubOptions.length) {
