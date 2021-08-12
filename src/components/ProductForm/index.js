@@ -9,7 +9,8 @@ export const ProductForm = (props) => {
     UIComponent,
     useOrderContext,
     onSave,
-    handleCustomSave
+    handleCustomSave,
+    isCustom
   } = props
 
   const requestsState = {}
@@ -34,6 +35,11 @@ export const ProductForm = (props) => {
    * Suboption by default when there is only one
    */
   const [defaultSubOptions, setDefaultSubOptions] = useState([])
+  
+  /**
+   * Custom Suboption by default
+   */
+   const [customDefaultSubOptions, setCustomDefaultSubOptions] = useState([])
 
   /**
    * Edit mode
@@ -499,9 +505,53 @@ export const ProductForm = (props) => {
         }
       })
       setDefaultSubOptions(defaultOptions)
+      setCustomDefaultSubOptions(defaultOptions)
     }
   }, [product.product])
 
+  if (isCustom) {
+    useEffect(() => {
+      if (product?.product && Object.keys(product?.product).length) {
+        const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
+          option => (
+            option.name === 'Tamaño' &&
+            option.suboptions.filter(suboption => suboption.name === 'Grande (16oz - 437ml)').length === 1
+          )
+        )))
+        if (!options?.length) {
+          return
+        }
+        const suboptions = []
+          .concat(...options.map(option => option.suboptions))
+          .filter(suboption => suboption.name === 'Grande (16oz - 437ml)')
+        // console.log(suboptions)
+
+        const states = suboptions.map((suboption, i) => {
+          const price = options[i].with_half_option && suboption.half_price && suboption?.position !== 'whole'
+            ? suboption.half_price
+            : suboption.price
+
+          return {
+            id: suboption.id,
+            name: suboption.name,
+            position: suboption.position || 'whole',
+            price,
+            quantity: 1,
+            selected: true,
+            total: price
+          }
+        })
+        const defaultOptions = options.map((option, i) => {
+          return {
+            option: option,
+            suboption: suboptions[i],
+            state: states[i]
+          }
+        })
+        setDefaultSubOptions([...customDefaultSubOptions , ...defaultOptions])
+      }
+    }, [ customDefaultSubOptions])
+  }
   /**
    * Check if defaultSubOption has content to set product Cart
    */
