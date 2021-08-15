@@ -35,6 +35,7 @@ export const OrderList = (props) => {
   })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [updateOtherStatus, setUpdateOtherStatus] = useState([])
+  const [sortBy, setSortBy] = useState({param: orderBy, direction: orderDirection})
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -42,7 +43,7 @@ export const OrderList = (props) => {
   const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
     const options = {
       query: {
-        orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
+        orderBy: (sortBy.direction === 'desc' ? '-' : '') + sortBy.param,
         page: page,
         page_size: pageSize
       }
@@ -267,11 +268,16 @@ export const OrderList = (props) => {
     }
   }, [orderList.loading])
 
+  useEffect(() => {
+    loadOrders(true, [])
+  }, [sortBy])
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          setSortBy={setSortBy}
           orderList={orderList}
           pagination={pagination}
           loadMoreOrders={loadMoreOrders}
