@@ -20,7 +20,8 @@ export const OrderList = (props) => {
     asDashboard,
     customArray,
     userCustomerId,
-    activeOrders
+    activeOrders,
+    businessAndDriverApp
   } = props
 
   const [ordering] = useApi()
@@ -135,21 +136,26 @@ export const OrderList = (props) => {
   }
 
   useEffect(() => {
-    if (orders || customArray) {
-      setOrderList({
-        ...orderList,
-        orders: orders?.lenght > 0 ? orders : customArray || [],
-        loading: false
-      })
+    if(!businessAndDriverApp) {
+      if (orders || customArray) {
+        setOrderList({
+          ...orderList,
+          orders: orders?.lenght > 0 ? orders : customArray || [],
+          loading: false
+        })
+      } else {
+        loadOrders()
+      }
     } else {
-      loadOrders()
+      loadOrders(true, [])
     }
+
     return () => {
       if (requestsState.orders) {
         requestsState.orders.cancel()
       }
     }
-  }, [session])
+  }, [session, sortBy])
 
   useEffect(() => {
     if (orderList.loading) return
@@ -267,10 +273,6 @@ export const OrderList = (props) => {
       })
     }
   }, [orderList.loading])
-
-  useEffect(() => {
-    loadOrders(true, [])
-  }, [sortBy])
 
   return (
     <>
