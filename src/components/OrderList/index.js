@@ -44,7 +44,7 @@ export const OrderList = (props) => {
   const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
     const options = {
       query: {
-        orderBy: (sortBy.direction === 'desc' ? '-' : '') + sortBy.param,
+        orderBy: businessAndDriverApp ? (sortBy.direction === 'desc' ? '-' : '') + sortBy.param : (orderDirection === 'desc' ? '-' : '') + orderBy,
         page: page,
         page_size: pageSize
       }
@@ -136,18 +136,14 @@ export const OrderList = (props) => {
   }
 
   useEffect(() => {
-    if(!businessAndDriverApp) {
-      if (orders || customArray) {
-        setOrderList({
-          ...orderList,
-          orders: orders?.lenght > 0 ? orders : customArray || [],
-          loading: false
-        })
-      } else {
-        loadOrders()
-      }
+    if (orders || customArray) {
+      setOrderList({
+        ...orderList,
+        orders: orders?.lenght > 0 ? orders : customArray || [],
+        loading: false
+      })
     } else {
-      loadOrders(true, [])
+      loadOrders()
     }
 
     return () => {
@@ -155,7 +151,7 @@ export const OrderList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [session, sortBy])
+  }, [session])
 
   useEffect(() => {
     if (orderList.loading) return
@@ -273,6 +269,12 @@ export const OrderList = (props) => {
       })
     }
   }, [orderList.loading])
+
+  useEffect(() => {
+    if(businessAndDriverApp) {
+      loadOrders(true, [])
+    }
+  }, [sortBy])
 
   return (
     <>
