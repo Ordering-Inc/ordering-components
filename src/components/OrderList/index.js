@@ -271,7 +271,7 @@ export const OrderList = (props) => {
   }, [orderList.loading])
 
   /**
-   * When the sorting is dynamic, the orders are reloaded by changing the sorting parameters
+   * This effect is used to reload orders with dynamic params, using `isDynamicSort` as validation
    */
   useEffect(() => {
     if(isDynamicSort) {
