@@ -722,7 +722,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       setState({ ...state, loading: false })
     }
     const handleOrderOptionUpdate = ({ carts, ...options }) => {
-      showToast(ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'))
+      if (!isDisableToast) {
+        showToast(ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'))
+      }
+
       const newCarts = {}
       carts.forEach(cart => {
         newCarts[`businessId:${cart.business_id}`] = cart
