@@ -85,7 +85,8 @@ var OrderProvider = function OrderProvider(_ref) {
   var Alert = _ref.Alert,
       children = _ref.children,
       strategy = _ref.strategy,
-      isAlsea = _ref.isAlsea;
+      isAlsea = _ref.isAlsea,
+      isDisableToast = _ref.isDisableToast;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -1673,7 +1674,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
   (0, _react.useEffect)(function () {
     var handleCartUpdate = function handleCartUpdate(cart) {
-      showToast(_ToastContext.ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'));
+      if (!isDisableToast) {
+        showToast(_ToastContext.ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'));
+      }
 
       if (cart.status === 1) {
         if (state.carts["businessId:".concat(cart.business_id)]) {
@@ -1692,7 +1695,10 @@ var OrderProvider = function OrderProvider(_ref) {
       var carts = _ref18.carts,
           options = _objectWithoutProperties(_ref18, ["carts"]);
 
-      showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
+      if (!isDisableToast) {
+        showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
+      }
+
       var newCarts = {};
       carts.forEach(function (cart) {
         newCarts["businessId:".concat(cart.business_id)] = cart;

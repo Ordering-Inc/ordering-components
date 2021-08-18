@@ -53,7 +53,8 @@ exports.OrderingContext = OrderingContext;
 var OrderingProvider = function OrderingProvider(_ref) {
   var Alert = _ref.Alert,
       settings = _ref.settings,
-      children = _ref.children;
+      children = _ref.children,
+      isDisableToast = _ref.isDisableToast;
   var nativeStrategy = new _NativeStrategy.NativeStrategy();
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
@@ -70,7 +71,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: nativeStrategy,
-    Alert: Alert
+    Alert: Alert,
+    isDisableToast: isDisableToast
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children))))))))))));
 };
 
