@@ -23,7 +23,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
+export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -705,7 +705,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
    */
   useEffect(() => {
     const handleCartUpdate = (cart) => {
-      showToast(ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'))
+      if (!isDisableToast) {
+        showToast(ToastType.Info, t('UPDATING_CART_INFO', 'Updating cart information...'))
+      }
+
       if (cart.status === 1) {
         if (state.carts[`businessId:${cart.business_id}`]) {
           delete state.carts[`businessId:${cart.business_id}`]
@@ -719,7 +722,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
       setState({ ...state, loading: false })
     }
     const handleOrderOptionUpdate = ({ carts, ...options }) => {
-      showToast(ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'))
+      if (!isDisableToast) {
+        showToast(ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'))
+      }
+
       const newCarts = {}
       carts.forEach(cart => {
         newCarts[`businessId:${cart.business_id}`] = cart
