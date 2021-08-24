@@ -13,7 +13,8 @@ export const OrderDetails = (props) => {
     UIComponent,
     userCustomerId,
     driverAndBusinessId,
-    sendCustomMessage
+    sendCustomMessage,
+    keepJoinRoomOrder
   } = props
 
   const [{ user, token, loading }] = useSession()
@@ -284,7 +285,7 @@ export const OrderDetails = (props) => {
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
-      socket.leave(`orders_${userCustomerId || user?.id}`)
+      if(!keepJoinRoomOrder)  socket.leave(`orders_${userCustomerId || user?.id}`)
       socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
