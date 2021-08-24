@@ -109,7 +109,7 @@ export const UtilsProviders = ({ children }) => {
       },
       meridiem: (hour, minute, isLowercase) => {
         // OPTIONAL, AM/PM
-        return hour > 12 ? t('PM', 'PM') : t('AM', 'AM')
+        return hour >= 12 ? t('PM', 'PM') : t('AM', 'AM')
       }
     }
     dayjs.locale('auto', localeObject)
