@@ -73,8 +73,9 @@ var Messages = function Messages(props) {
   var accessToken = props.accessToken || token;
 
   var _useState = (0, _react.useState)({
-    business: true,
     administrator: true,
+    business: true,
+    customer: true,
     driver: true
   }),
       _useState2 = _slicedToArray(_useState, 2),
@@ -124,7 +125,7 @@ var Messages = function Messages(props) {
                 loading: true,
                 error: null
               });
-              _canRead = [3];
+              _canRead = [];
 
               if (canRead.administrator) {
                 _canRead.push(0);
@@ -132,6 +133,10 @@ var Messages = function Messages(props) {
 
               if (canRead.business) {
                 _canRead.push(2);
+              }
+
+              if (canRead.customer) {
+                _canRead.push(3);
               }
 
               if (canRead.driver) {
@@ -149,7 +154,7 @@ var Messages = function Messages(props) {
                 body.file = image;
               }
 
-              _context.next = 12;
+              _context.next = 13;
               return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
                 method: 'POST',
                 headers: {
@@ -159,12 +164,12 @@ var Messages = function Messages(props) {
                 body: JSON.stringify(body)
               });
 
-            case 12:
+            case 13:
               response = _context.sent;
-              _context.next = 15;
+              _context.next = 16;
               return response.json();
 
-            case 15:
+            case 16:
               _yield$response$json = _context.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
@@ -179,23 +184,23 @@ var Messages = function Messages(props) {
                 loading: false,
                 error: error ? result : null
               });
-              _context.next = 25;
+              _context.next = 26;
               break;
 
-            case 22:
-              _context.prev = 22;
+            case 23:
+              _context.prev = 23;
               _context.t0 = _context["catch"](2);
               setSendMessages({
                 loading: false,
                 error: [_context.t0.Messages]
               });
 
-            case 25:
+            case 26:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 22]]);
+      }, _callee, null, [[2, 23]]);
     }));
 
     return function handleSend() {

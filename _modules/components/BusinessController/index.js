@@ -55,6 +55,7 @@ var BusinessController = function BusinessController(props) {
       businessAttributes = props.businessAttributes,
       onBusinessClick = props.onBusinessClick,
       handleCustomClick = props.handleCustomClick,
+      isDisabledInterval = props.isDisabledInterval,
       UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -248,34 +249,36 @@ var BusinessController = function BusinessController(props) {
     }
   }, [currentTime]);
   (0, _react.useEffect)(function () {
-    var interval = setInterval(function () {
-      var currentHour = new Date().getHours();
-      var currentMinute = new Date().getMinutes();
-      var currentDay = new Date().getDate();
-      var currentMonth = new Date().getMonth();
-      var currentYear = new Date().getFullYear();
-      setCurrentTime("".concat(currentHour, ":").concat(currentMinute));
+    if (!isDisabledInterval) {
+      var interval = setInterval(function () {
+        var currentHour = new Date().getHours();
+        var currentMinute = new Date().getMinutes();
+        var currentDay = new Date().getDate();
+        var currentMonth = new Date().getMonth();
+        var currentYear = new Date().getFullYear();
+        setCurrentTime("".concat(currentHour, ":").concat(currentMinute));
 
-      for (var i = 0; i < ((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : (_businessState$busine2 = _businessState$busine.today) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.lapses) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.length); i++) {
-        var _businessState$busine, _businessState$busine2, _businessState$busine3, _businessState$busine4, _businessState$busine5, _businessState$busine6, _businessState$busine7, _businessState$busine8, _businessState$busine9;
+        for (var i = 0; i < ((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : (_businessState$busine2 = _businessState$busine.today) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.lapses) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.length); i++) {
+          var _businessState$busine, _businessState$busine2, _businessState$busine3, _businessState$busine4, _businessState$busine5, _businessState$busine6, _businessState$busine7, _businessState$busine8, _businessState$busine9;
 
-        var timeToOpenFormatted = formatDate(((_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.today) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.lapses[i]) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.open) || null);
-        var timeToCloseFormatted = formatDate(((_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : (_businessState$busine8 = _businessState$busine7.today) === null || _businessState$busine8 === void 0 ? void 0 : (_businessState$busine9 = _businessState$busine8.lapses[i]) === null || _businessState$busine9 === void 0 ? void 0 : _businessState$busine9.close) || null);
-        var hourClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
-        var minuteClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
-        var hourOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[0];
-        var minuteOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[1]; // range of most recent open-close business lapses
+          var timeToOpenFormatted = formatDate(((_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.today) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.lapses[i]) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.open) || null);
+          var timeToCloseFormatted = formatDate(((_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : (_businessState$busine8 = _businessState$busine7.today) === null || _businessState$busine8 === void 0 ? void 0 : (_businessState$busine9 = _businessState$busine8.lapses[i]) === null || _businessState$busine9 === void 0 ? void 0 : _businessState$busine9.close) || null);
+          var hourClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
+          var minuteClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
+          var hourOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[0];
+          var minuteOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[1]; // range of most recent open-close business lapses
 
-        if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
-          var _businessState$busine10, _businessState$busine11, _businessState$busine12;
+          if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
+            var _businessState$busine10, _businessState$busine11, _businessState$busine12;
 
-          setTimeToClose(formatDate((_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.today) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.lapses[i]) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.close));
+            setTimeToClose(formatDate((_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.today) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.lapses[i]) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.close));
+          }
         }
-      }
-    }, 1000);
-    return function () {
-      return clearInterval(interval);
-    };
+      }, 1000);
+      return function () {
+        return clearInterval(interval);
+      };
+    }
   }, []);
   (0, _react.useEffect)(function () {
     var _businessState$busine13;
