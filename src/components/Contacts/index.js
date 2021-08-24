@@ -8,15 +8,19 @@ export const Contacts = (props) => {
     UIComponent,
     firstFetch,
     businessProps,
+    customerProps, // not used because it stops sending "quialfication"
+    driverProps,
+    businessConditions,
+    customerConditions,
+    driverConditions,
     sortParams,
     paginationSettings,
-    conditions,
     conditionsConector,
   } = props;
 
-  const where = {
-    conditions: conditions,
-    conector: conditionsConector,
+  const params = {
+    orderBy:
+      (sortParams.orderDirection === 'desc' ? '-' : '') + sortParams.orderBy,
   };
 
   const [{ token }] = useSession();
@@ -34,19 +38,27 @@ export const Contacts = (props) => {
       paginationSettings.page >= 1
         ? paginationSettings.page - 1
         : 1,
-    pageSize: paginationSettings.page_size ?? 2,
+    pageSize: paginationSettings.pageSize ?? 6,
   });
 
   /**
    * Method to get businesses from SDK
    */
   const getBusinesses = async (nextPage) => {
-    setContacts({ data: nextPage ? contacts.data : [], loading: true, error: null });
+    setContacts({
+      data: nextPage ? contacts.data : [],
+      loading: true,
+      error: null,
+    });
 
+    const where = {
+      conditions: businessConditions,
+      conector: conditionsConector,
+    };
     const pageFetch = {
-      page: nextPage ? pagination.currentPage + 1 : pagination.currentPage,
-      page_size: pagination.pageSize
-    }
+      page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
+      page_size: pagination.pageSize || paginationSettings.pageSize,
+    };
 
     try {
       const {
@@ -54,21 +66,25 @@ export const Contacts = (props) => {
       } = await ordering
         .businesses()
         .select(businessProps)
-        .parameters(sortParams)
+        .parameters(params)
         .where(where)
         .asDashboard()
-        .get({query: pageFetch});
+        .get({ query: pageFetch });
 
       if (!error) {
-        setContacts({ ...contacts, data: nextPage ? contacts.data.concat(result) : result, loading: false });
+        setContacts({
+          ...contacts,
+          data: nextPage ? contacts.data.concat(result) : result,
+          loading: false,
+        });
         setPagination({
-          currentPage: pageConfig.current_page,
-          pageSize: pageConfig.page_size,
-          totalPages: pageConfig.total_pages,
-          total: pageConfig.total,
-          from: pageConfig.from,
-          to: pageConfig.to
-        })
+          currentPage: pageConfig?.current_page,
+          pageSize: pageConfig?.page_size,
+          totalPages: pageConfig?.total_pages,
+          total: pageConfig?.total,
+          from: pageConfig?.from,
+          to: pageConfig?.to,
+        });
       } else {
         setContacts({ ...contacts, loading: false, error: result[0] });
       }
@@ -80,21 +96,45 @@ export const Contacts = (props) => {
   /**
    * Method to get customers from SDK
    */
-   const getCustomers = async (nextPage) => {
-    setContacts({ data: nextPage ? contacts.data : [], loading: true, error: null });
+  const getCustomers = async (nextPage) => {
+    setContacts({
+      data: nextPage ? contacts.data : [],
+      loading: true,
+      error: null,
+    });
 
+    const where = {
+      conditions: customerConditions,
+      conector: conditionsConector,
+    };
     const pageFetch = {
-      page: nextPage ? pagination.currentPage + 1 : pagination.currentPage,
-      page_size: pagination.pageSize
-    }
+      page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
+      page_size: pagination.pageSize || paginationSettings.pageSize,
+    };
 
     try {
       const {
-        content: { result, error },
-      } = await ordering.setAccessToken(token).users().where([{ attribute: 'level', value: [3] }]).get({query: pageFetch});
+        content: { result, error, pagination: pageConfig },
+      } = await ordering
+        .setAccessToken(token)
+        .users()
+        .where(where)
+        .get({ query: pageFetch });
 
       if (!error) {
-        setContacts({ ...contacts, data: nextPage ? contacts.data.concat(result) : result, loading: false });
+        setContacts({
+          ...contacts,
+          data: nextPage ? contacts.data.concat(result) : result,
+          loading: false,
+        });
+        setPagination({
+          currentPage: pageConfig?.current_page,
+          pageSize: pageConfig?.page_size,
+          totalPages: pageConfig?.total_pages,
+          total: pageConfig?.total,
+          from: pageConfig?.from,
+          to: pageConfig?.to,
+        });
       } else {
         setContacts({ ...contacts, loading: false, error: result[0] });
       }
@@ -107,20 +147,45 @@ export const Contacts = (props) => {
    * Method to get drivers from SDK
    */
   const getDrivers = async (nextPage) => {
-    setContacts({ data: nextPage ? contacts.data : [], loading: true, error: null });
+    setContacts({
+      data: nextPage ? contacts.data : [],
+      loading: true,
+      error: null,
+    });
 
+    const where = {
+      conditions: driverConditions,
+      conector: conditionsConector,
+    };
     const pageFetch = {
-      page: nextPage ? pagination.currentPage + 1 : pagination.currentPage,
-      page_size: pagination.pageSize
-    }
+      page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
+      page_size: pagination.pageSize || paginationSettings.pageSize,
+    };
 
     try {
       const {
-        content: { result, error },
-      } = await ordering.setAccessToken(token).users().where([{ attribute: 'level', value: [4] }]).get({query: pageFetch});
+        content: { result, error, pagination: pageConfig },
+      } = await ordering
+        .setAccessToken(token)
+        .users()
+        .select(driverProps)
+        .where(where)
+        .get({ query: pageFetch });
 
       if (!error) {
-        setContacts({ ...contacts, data: nextPage ? contacts.data.concat(result) : result, loading: false });
+        setContacts({
+          ...contacts,
+          data: nextPage ? contacts.data.concat(result) : result,
+          loading: false,
+        });
+        setPagination({
+          currentPage: pageConfig?.current_page,
+          pageSize: pageConfig?.page_size,
+          totalPages: pageConfig?.total_pages,
+          total: pageConfig?.total,
+          from: pageConfig?.from,
+          to: pageConfig?.to,
+        });
       } else {
         setContacts({ ...contacts, loading: false, error: result[0] });
       }
@@ -130,32 +195,32 @@ export const Contacts = (props) => {
   };
 
   const loadMore = async (key) => {
-    switch(key) {
+    switch (key) {
       case 2:
         getBusinesses(true);
         break;
       case 3:
-        getCustomers(true)
+        getCustomers(true);
         break;
       case 4:
         getDrivers(true);
         break;
     }
-  }
+  };
 
   useEffect(() => {
-    switch(firstFetch) {
+    switch (firstFetch) {
       case 'businesses':
         getBusinesses();
         break;
       case 'customers':
-        getCustomers()
+        getCustomers();
         break;
       case 'drivers':
         getDrivers();
         break;
       default:
-        setContacts({...contacts, loading: false})
+        setContacts({ ...contacts, loading: false });
     }
   }, []);
 
@@ -183,29 +248,49 @@ Contacts.propTypes = {
   UIComponent: PropTypes.elementType,
 
   /**
-   * 
-   */
-  firstFetch: PropTypes.string,
-
-  /**
-   * falta
+   * Initial page configuration
    */
   paginationSettings: PropTypes.object,
 
   /**
+   * First data fetched
+   */
+  firstFetch: PropTypes.string,
+
+  /**
    * Array of business props to fetch
    */
-   businessProps: PropTypes.arrayOf(string),
+  businessProps: PropTypes.arrayOf(string),
 
   /**
-   * Object of params to fetch
+   * Array of customer props to fetch
    */
-   sortParams: PropTypes.object,
+  customerProps: PropTypes.arrayOf(string),
 
   /**
-   * Array of conditions to fetch
+   * Array of driver props to fetch
    */
-  conditions: PropTypes.arrayOf(object),
+  driverProps: PropTypes.arrayOf(string),
+
+  /**
+   * Object parameters to sort the fetch
+   */
+  sortParams: PropTypes.object,
+
+  /**
+   * Array of conditions to fetch businesses
+   */
+  businessConditions: PropTypes.arrayOf(object),
+
+  /**
+   * Array of conditions to fetch customers
+   */
+  customerConditions: PropTypes.arrayOf(object),
+
+  /**
+   * Array of conditions to fetch drivers
+   */
+  driverConditions: PropTypes.arrayOf(object),
 
   /**
    * String that indicates the conector type of the conditions to fetch
@@ -214,15 +299,34 @@ Contacts.propTypes = {
 };
 
 Contacts.defaultProps = {
+  paginationSettings: { page: 1, pageSize: 6, controlType: 'infinity' },
   firstFetch: 'businesses',
   businessProps: ['id', 'name', 'logo'],
-  paginationSettings: { page: 1, pageSize: 2, controlType: 'infinity' },
+  customerProps: [
+    'id',
+    'name',
+    'lastname',
+    'photo',
+    'assigned_orders_count',
+    'qualification', // do not select qualification
+    'level',
+  ],
+  driverProps: [
+    'id',
+    'name',
+    'lastname',
+    'photo',
+    'assigned_orders_count',
+    'level',
+  ],
   sortParams: {
-    orderBy: 'last_direct_message_at',
+    orderBy: 'name',
     orderDirection: 'asc',
   },
-  conditions: [
+  businessConditions: [
     { attribute: 'enabled', value: { condition: '=', value: 'true' } },
   ],
+  customerConditions: [{ attribute: 'level', value: [3] }],
+  driverConditions: [{ attribute: 'level', value: [4] }],
   conditionsConector: 'AND',
 };
