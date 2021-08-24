@@ -16,7 +16,7 @@ export const Messages = (props) => {
   const [{ token }] = useSession()
   const accessToken = props.accessToken || token
 
-  const [canRead, setCanRead] = useState({ business: true, administrator: true, driver: true })
+  const [canRead, setCanRead] = useState({ administrator: true, business: true, customer: true, driver: true })
   const [message, setMessage] = useState('')
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
   const [image, setImage] = useState(null)
@@ -29,12 +29,15 @@ export const Messages = (props) => {
     }
     try {
       setSendMessages({ loading: true, error: null })
-      const _canRead = [3]
+      const _canRead = []
       if (canRead.administrator) {
         _canRead.push(0)
       }
       if (canRead.business) {
         _canRead.push(2)
+      }
+      if (canRead.customer) {
+        _canRead.push(3)
       }
       if (canRead.driver) {
         _canRead.push(4)
