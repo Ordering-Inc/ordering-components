@@ -11,6 +11,7 @@ export const BusinessController = (props) => {
     businessAttributes,
     onBusinessClick,
     handleCustomClick,
+    isDisabledInterval,
     UIComponent
   } = props
 
@@ -113,27 +114,29 @@ export const BusinessController = (props) => {
   }, [currentTime])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const currentHour = new Date().getHours()
-      const currentMinute = new Date().getMinutes()
-      const currentDay = new Date().getDate()
-      const currentMonth = new Date().getMonth()
-      const currentYear = new Date().getFullYear()
-      setCurrentTime(`${currentHour}:${currentMinute}`)
-      for (let i = 0; i < businessState.business?.today?.lapses?.length; i++) {
-        const timeToOpenFormatted = formatDate(businessState.business?.today?.lapses[i]?.open || null)
-        const timeToCloseFormatted = formatDate(businessState.business?.today?.lapses[i]?.close || null)
-        const hourClose = timeToCloseFormatted?.split(':')[0]
-        const minuteClose = timeToCloseFormatted?.split(':')[1]
-        const hourOpen = timeToOpenFormatted?.split(':')[0]
-        const minuteOpen = timeToOpenFormatted?.split(':')[1]
-        // range of most recent open-close business lapses
-        if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
-          setTimeToClose(formatDate(businessState.business?.today?.lapses[i]?.close))
+    if (!isDisabledInterval) {
+      const interval = setInterval(() => {
+        const currentHour = new Date().getHours()
+        const currentMinute = new Date().getMinutes()
+        const currentDay = new Date().getDate()
+        const currentMonth = new Date().getMonth()
+        const currentYear = new Date().getFullYear()
+        setCurrentTime(`${currentHour}:${currentMinute}`)
+        for (let i = 0; i < businessState.business?.today?.lapses?.length; i++) {
+          const timeToOpenFormatted = formatDate(businessState.business?.today?.lapses[i]?.open || null)
+          const timeToCloseFormatted = formatDate(businessState.business?.today?.lapses[i]?.close || null)
+          const hourClose = timeToCloseFormatted?.split(':')[0]
+          const minuteClose = timeToCloseFormatted?.split(':')[1]
+          const hourOpen = timeToOpenFormatted?.split(':')[0]
+          const minuteOpen = timeToOpenFormatted?.split(':')[1]
+          // range of most recent open-close business lapses
+          if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
+            setTimeToClose(formatDate(businessState.business?.today?.lapses[i]?.close))
+          }
         }
-      }
-    }, 1000)
-    return () => clearInterval(interval)
+      }, 1000)
+      return () => clearInterval(interval)
+    }
   }, [])
 
   useEffect(() => {
