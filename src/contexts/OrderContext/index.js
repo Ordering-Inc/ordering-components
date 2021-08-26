@@ -706,7 +706,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
     if (configTypes?.length > 0 && state.options.type && !configTypes.includes(state.options.type)) {
       const validDefaultValue = configTypes.includes(configState?.configs?.default_order_type?.type)
       updateOrderOptions(validDefaultValue ? { type: configState?.configs?.default_order_type?.type } : { type: configTypes[0] })
-      setAlert({ show: true, content: t('ORDER_TYPE_CHANGED', 'the order type config has changed') })
+      setAlert({ show: true, title: t('INFORMATION', 'Information'), content: t('ORDER_TYPE_CHANGED', 'the order type config has changed') })
     }
   }, [configTypes?.length, state.options.type])
 
@@ -795,7 +795,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea }) => {
         Alert && (
           <Alert
             open={alert.show}
-            title={t('ERROR', 'Error')}
+            title={alert.title || t('ERROR', 'Error')}
             onAccept={() => setAlert({ show: false })}
             onClose={() => setAlert({ show: false })}
             content={alert.content}
