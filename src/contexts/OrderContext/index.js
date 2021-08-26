@@ -35,6 +35,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const [customerState] = useCustomer()
   const [, { showToast }] = useToast()
 
+  const configTypes = configState?.configs?.order_types_allowed?.value.split('|').map(value => Number(value)) || []
+
   const orderTypes = {
     delivery: 1,
     pickup: 2,
@@ -700,6 +702,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
   }, [session.auth, session.loading, configState])
 
+  useEffect(() => {
+    if (configTypes?.length > 0 && state.options.type && !configTypes.includes(state.options.type)) {
+      const validDefaultValue = configTypes.includes(configState?.configs?.default_order_type?.type)
+      updateOrderOptions(validDefaultValue ? { type: configState?.configs?.default_order_type?.type } : { type: configTypes[0] })
+      setAlert({ show: true, title: t('INFORMATION', 'Information'), content: t('ORDER_TYPE_CHANGED', 'the order type config has changed') })
+    }
+  }, [configTypes?.length, state.options.type])
+
   /**
    * Update carts from sockets
    */
@@ -791,7 +801,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         Alert && (
           <Alert
             open={alert.show}
-            title={t('ERROR', 'Error')}
+            title={alert.title || t('ERROR', 'Error')}
             onAccept={() => setAlert({ show: false })}
             onClose={() => setAlert({ show: false })}
             content={alert.content}
