@@ -80,7 +80,7 @@ var OrderContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderContext = OrderContext;
 
 var OrderProvider = function OrderProvider(_ref) {
-  var _configState$configs, _configState$configs$, _customerState$user5;
+  var _configState$configs, _configState$configs$, _configState$configs2, _configState$configs3, _customerState$user5;
 
   var Alert = _ref.Alert,
       children = _ref.children,
@@ -133,6 +133,9 @@ var OrderProvider = function OrderProvider(_ref) {
       _useToast2 = _slicedToArray(_useToast, 2),
       showToast = _useToast2[1].showToast;
 
+  var configTypes = (configState === null || configState === void 0 ? void 0 : (_configState$configs = configState.configs) === null || _configState$configs === void 0 ? void 0 : (_configState$configs$ = _configState$configs.order_types_allowed) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value.split('|').map(function (value) {
+    return Number(value);
+  })) || [];
   var orderTypes = {
     delivery: 1,
     pickup: 2,
@@ -144,7 +147,7 @@ var OrderProvider = function OrderProvider(_ref) {
   var _useState5 = (0, _react.useState)({
     loading: true,
     options: {
-      type: orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs = configState.configs) === null || _configState$configs === void 0 ? void 0 : (_configState$configs$ = _configState$configs.default_order_type) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value],
+      type: orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value],
       moment: null
     },
     carts: {},
@@ -377,7 +380,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
-      var optionsStorage, options, _configState$configs2, _configState$configs3, _params$address;
+      var optionsStorage, options, _configState$configs4, _configState$configs5, _params$address;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -398,7 +401,7 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
               if (!session.auth) {
-                options.type = orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value];
+                options.type = orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value];
               }
 
               _context2.next = 8;
@@ -1655,19 +1658,36 @@ var OrderProvider = function OrderProvider(_ref) {
     if (session.loading || configState.loading) return;
 
     if (!session.auth) {
-      var _configState$configs4, _configState$configs5;
+      var _configState$configs6, _configState$configs7;
 
       getOptionFromLocalStorage();
       setState(_objectSpread(_objectSpread({}, state), {}, {
         loading: false,
         options: {
-          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
+          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 ? void 0 : (_configState$configs7 = _configState$configs6.default_order_type) === null || _configState$configs7 === void 0 ? void 0 : _configState$configs7.value],
           moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
           address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || {}
         }
       }));
     }
   }, [session.auth, session.loading, configState]);
+  (0, _react.useEffect)(function () {
+    if ((configTypes === null || configTypes === void 0 ? void 0 : configTypes.length) > 0 && state.options.type && !configTypes.includes(state.options.type)) {
+      var _configState$configs8, _configState$configs9, _configState$configs10, _configState$configs11;
+
+      var validDefaultValue = configTypes.includes(configState === null || configState === void 0 ? void 0 : (_configState$configs8 = configState.configs) === null || _configState$configs8 === void 0 ? void 0 : (_configState$configs9 = _configState$configs8.default_order_type) === null || _configState$configs9 === void 0 ? void 0 : _configState$configs9.type);
+      updateOrderOptions(validDefaultValue ? {
+        type: configState === null || configState === void 0 ? void 0 : (_configState$configs10 = configState.configs) === null || _configState$configs10 === void 0 ? void 0 : (_configState$configs11 = _configState$configs10.default_order_type) === null || _configState$configs11 === void 0 ? void 0 : _configState$configs11.type
+      } : {
+        type: configTypes[0]
+      });
+      setAlert({
+        show: true,
+        title: t('INFORMATION', 'Information'),
+        content: t('ORDER_TYPE_CHANGED', 'the order type config has changed')
+      });
+    }
+  }, [configTypes === null || configTypes === void 0 ? void 0 : configTypes.length, state.options.type]);
   /**
    * Update carts from sockets
    */
@@ -1761,7 +1781,7 @@ var OrderProvider = function OrderProvider(_ref) {
     value: [copyState, functions]
   }, Alert && /*#__PURE__*/_react.default.createElement(Alert, {
     open: alert.show,
-    title: t('ERROR', 'Error'),
+    title: alert.title || t('ERROR', 'Error'),
     onAccept: function onAccept() {
       return setAlert({
         show: false

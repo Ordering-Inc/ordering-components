@@ -69,7 +69,8 @@ var OrderDetails = function OrderDetails(props) {
       UIComponent = props.UIComponent,
       userCustomerId = props.userCustomerId,
       driverAndBusinessId = props.driverAndBusinessId,
-      sendCustomMessage = props.sendCustomMessage;
+      sendCustomMessage = props.sendCustomMessage,
+      isDisabledOrdersRoom = props.isDisabledOrdersRoom;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -652,14 +653,14 @@ var OrderDetails = function OrderDetails(props) {
       setDriverLocation(newLocation);
     };
 
-    socket.join("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
+    if (!isDisabledOrdersRoom) socket.join("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
     socket.join("drivers_".concat((_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.driver_id));
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
       var _orderState$order10;
 
-      socket.leave("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
+      if (!isDisabledOrdersRoom) socket.leave("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
       socket.leave("drivers_".concat((_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
