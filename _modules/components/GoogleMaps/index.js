@@ -135,7 +135,17 @@ var GoogleMaps = function GoogleMaps(props) {
           marker.addListener('click', function () {
             var _locations$i6;
 
-            return onBusinessClick((_locations$i6 = locations[i]) === null || _locations$i6 === void 0 ? void 0 : _locations$i6.slug);
+            if ((_locations$i6 = locations[i]) !== null && _locations$i6 !== void 0 && _locations$i6.markerPopup) {
+              var _locations$i7;
+
+              var infowindow = new window.google.maps.InfoWindow();
+              infowindow.setContent((_locations$i7 = locations[i]) === null || _locations$i7 === void 0 ? void 0 : _locations$i7.markerPopup);
+              infowindow.open(map, marker);
+            } else {
+              var _locations$i8;
+
+              onBusinessClick((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.slug);
+            }
           });
           bounds.extend(marker.position);
           setMarkers(function (markers) {
@@ -350,7 +360,7 @@ var GoogleMaps = function GoogleMaps(props) {
       googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
-  }, [location]);
+  }, [location, locations === null || locations === void 0 ? void 0 : locations.length]);
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       var interval = setInterval(function () {
