@@ -54,7 +54,15 @@ export const GoogleMaps = (props) => {
       if (businessMap) {
         const isNear = validateResult(googleMap, marker, marker.getPosition())
         if (isNear) {
-          marker.addListener('click', () => onBusinessClick(locations[i]?.slug))
+          marker.addListener('click', () => {
+            if (locations[i]?.markerPopup) {
+              const infowindow = new window.google.maps.InfoWindow()
+              infowindow.setContent(locations[i]?.markerPopup)
+              infowindow.open(map, marker)
+            } else {
+              onBusinessClick(locations[i]?.slug)
+            }
+          })
           bounds.extend(marker.position)
           setMarkers(markers => [...markers, marker])
           businessesNear = businessesNear + 1
@@ -235,7 +243,7 @@ export const GoogleMaps = (props) => {
       googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center?.lat, center?.lng))
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
     }
-  }, [location])
+  }, [location, locations?.length])
 
   useEffect(() => {
     if (!businessMap) {
