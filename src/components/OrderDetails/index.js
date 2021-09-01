@@ -196,18 +196,6 @@ export const OrderDetails = (props) => {
       }
       if (user.level === 2 && order.delivery_type === 1) {
         try {
-          // const { content } = await ordering.setAccessToken(token).driversgroups().get()
-          // const response = await fetch(`https://apiv4.ordering.co/v400/en/reactdemo/controls/orders/${orderId}`, {
-          //   method: 'GET',
-          //   headers: {
-          //     'Content-Type': 'application/json',
-          //     Authorization: `Bearer ${token}`,
-          //     Accept: 'application/json',
-          // },
-          // })
-          // const RESPUESTA = await response.json()
-
-        
           const response = await ordering.setAccessToken(token).controls(orderId).get()
           if(!response.error) driversGroupsData = response.result.drivers
           if(response.error) showToast(ToastType.Error, t(`${response.result[0]}`, `${response.result[0]}`))
