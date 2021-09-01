@@ -441,7 +441,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
-      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupsData, _yield$ordering$setAc7, content, _yield$ordering$setAc8, _content, _orderState$error;
+      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupsData, _yield$ordering$setAc7, content, response, _orderState$error;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -500,28 +500,27 @@ var OrderDetails = function OrderDetails(props) {
 
             case 29:
               if (!(user.level === 2 && order.delivery_type === 1)) {
-                _context5.next = 42;
+                _context5.next = 41;
                 break;
               }
 
               _context5.prev = 30;
               _context5.next = 33;
-              return ordering.setAccessToken(token).driversgroups().get();
+              return ordering.setAccessToken(token).controls(orderId).get();
 
             case 33:
-              _yield$ordering$setAc8 = _context5.sent;
-              _content = _yield$ordering$setAc8.content;
-              driversGroupsData = _content.result;
-              _content.error && err.push(_content.result[0]);
-              _context5.next = 42;
+              response = _context5.sent;
+              if (!response.error) driversGroupsData = response.result.drivers;
+              if (response.error) showToast(_ToastContext.ToastType.Error, t("".concat(response.result[0]), "".concat(response.result[0])));
+              _context5.next = 41;
               break;
 
-            case 39:
-              _context5.prev = 39;
+            case 38:
+              _context5.prev = 38;
               _context5.t1 = _context5["catch"](30);
               err.push(_context5.t1.message);
 
-            case 42:
+            case 41:
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 order: order,
@@ -529,23 +528,23 @@ var OrderDetails = function OrderDetails(props) {
                 driversGroupsData: driversGroupsData,
                 error: err
               }));
-              _context5.next = 48;
+              _context5.next = 47;
               break;
 
-            case 45:
-              _context5.prev = 45;
+            case 44:
+              _context5.prev = 44;
               _context5.t2 = _context5["catch"](6);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: _context5.t2.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context5.t2 === null || _context5.t2 === void 0 ? void 0 : _context5.t2.message) : ['ERROR']
               }));
 
-            case 48:
+            case 47:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 45], [17, 26], [30, 39]]);
+      }, _callee5, null, [[6, 44], [17, 26], [30, 38]]);
     }));
 
     return function getOrder() {
