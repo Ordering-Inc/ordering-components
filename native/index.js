@@ -16,6 +16,7 @@ import { Cart } from '../src/components/Cart'
 import { Checkout } from '../src/components/Checkout'
 import { CmsContent } from '../src/components/CmsContent'
 import { CouponControl } from '../src/components/CouponControl'
+import { Contacts } from './components/Contacts'
 import { DragAndDrop } from '../src/components/DragAndDrop'
 import { DriverTips } from '../src/components/DriverTips'
 import { ExamineClick } from '../src/components/ExamineClick'
@@ -93,6 +94,7 @@ export {
   Checkout,
   CmsContent,
   CouponControl,
+  Contacts,
   DragAndDrop,
   DriverTips,
   ExamineClick,

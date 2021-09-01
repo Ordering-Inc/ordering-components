@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes, { string, object } from 'prop-types';
 import { useSession } from '../../contexts/SessionContext';
 import { useApi } from '../../contexts/ApiContext';
+import { useWebsocket } from '../../contexts/WebsocketContext';
 
 export const Contacts = (props) => {
   const {
     UIComponent,
     firstFetch,
+    orderProps,
     businessProps,
     customerProps, // not used because it stops sending "quialfication"
     driverProps,
@@ -19,13 +21,19 @@ export const Contacts = (props) => {
   } = props;
 
   const params = {
-    orderBy:
-      (sortParams.orderDirection === 'desc' ? '-' : '') + sortParams.orderBy,
+    orderBy: (sortParams.direction === 'desc' ? '-' : '') + sortParams.param,
   };
 
-  const [{ token }] = useSession();
+  const [{ token, user }] = useSession();
   const [ordering] = useApi();
+  const socket = useWebsocket();
 
+  const [sortBy, setSortBy] = useState(sortParams);
+  const [orders, setOrders] = useState({
+    data: [],
+    loading: true,
+    error: null,
+  });
   const [contacts, setContacts] = useState({
     data: [],
     loading: true,
@@ -40,6 +48,53 @@ export const Contacts = (props) => {
         : 1,
     pageSize: paginationSettings.pageSize ?? 6,
   });
+
+  const getOrders = async (nextPage) => {
+    setOrders({
+      data: nextPage ? orders.data : [],
+      loading: true,
+      error: null,
+    });
+
+    const parameters = {
+      orderBy: (sortBy.direction === 'desc' ? '-' : '') + sortBy.param,
+    };
+    const pageFetch = {
+      page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
+      page_size: pagination.pageSize || paginationSettings.pageSize,
+    };
+
+    try {
+      const {
+        content: { result, error, pagination: pageConfig },
+      } = await ordering
+        .orders()
+        // .select(orderProps)
+        .parameters(parameters)
+        .asDashboard()
+        .get({ query: pageFetch });
+
+      if (!error) {
+        setOrders({
+          ...orders,
+          data: nextPage ? orders.data.concat(result) : result,
+          loading: false,
+        });
+        setPagination({
+          currentPage: pageConfig?.current_page,
+          pageSize: pageConfig?.page_size,
+          totalPages: pageConfig?.total_pages,
+          total: pageConfig?.total,
+          from: pageConfig?.from,
+          to: pageConfig?.to,
+        });
+      } else {
+        setOrders({ ...orders, loading: false, error: result[0] });
+      }
+    } catch (err) {
+      setOrders({ ...orders, loading: false, error: err.message });
+    }
+  };
 
   /**
    * Method to get businesses from SDK
@@ -205,6 +260,8 @@ export const Contacts = (props) => {
       case 4:
         getDrivers(true);
         break;
+      default:
+        getOrders(true);
     }
   };
 
@@ -220,15 +277,93 @@ export const Contacts = (props) => {
         getDrivers();
         break;
       default:
-        setContacts({ ...contacts, loading: false });
+        getOrders();
     }
   }, []);
+
+  useEffect(() => {
+    if (!orders.loading) {
+      getOrders();
+    }
+  }, [sortBy]);
+
+  useEffect(() => {
+    if (!token) return;
+    socket.join(`messages_orders_${user?.id}`);
+    return () => {
+      socket.leave(`messages_orders_${user?.id}`);
+    };
+  }, []);
+
+  const handleMessage = async (message) => {
+    const { order_id: orderId } = message;
+    setOrders({ ...orders, loading: false });
+    // console.log(orderList.loading);
+    if (!orders.loading) {
+      console.log('chao');
+      return null;
+    } else {
+      console.log('entre');
+      return null;
+    }
+    const order = orders.data.find((order, index) => {
+      console.log(
+        `${order.id} - ${orderId} ${parseInt(order.id) === parseInt(orderId)}`
+      );
+      if (order.id === orderId) {
+        console.log('lo encontre');
+        // const { orders } = orderList
+        // console.log(order.unread_count)
+        // order.unread_count += 1
+        // console.log({id: order.id, unread: order.unread})
+        // orders.splice(index, 1)
+        // orders.shift(order)
+        // setOrderList({...orderList, orders, loading: false})
+        return true;
+      }
+
+      return false;
+    });
+    // console.log(order)
+
+    // if (!order) {
+    //   console.log('entre')
+    //   try {
+    //     const { content: { result, error } } = await ordering.setAccessToken(accessToken).orders(orderId).asDashboard().get()
+
+    //     if (!error) {
+    //       console.log('fetch')
+    //       const { orders } = orderList
+    //       orders.shift(result)
+    //       setOrderList({...orderList, orders, loading: false})
+    //     } else {
+    //       console.log('error')
+    //     }
+
+    //   } catch (err) {
+    //     console.log('err')
+    //     setOrderList({...orderList, loading: false})
+    //   }
+    // }
+  };
+
+  useEffect(() => {
+    // console.log(orders.loading);
+
+    socket.on('message', (message) => handleMessage(message));
+
+    return () => {
+      socket.off('message');
+    };
+  }, [orders]);
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          orders={orders}
+          setSortBy={setSortBy}
           contacts={contacts}
           pagination={pagination}
           getBusinesses={getBusinesses}
@@ -301,6 +436,13 @@ Contacts.propTypes = {
 Contacts.defaultProps = {
   paginationSettings: { page: 1, pageSize: 6, controlType: 'infinity' },
   firstFetch: 'businesses',
+  orderProps: [
+    'id',
+    'business',
+    'unread_count',
+    'delivery_datetime_utc',
+    'status',
+  ],
   businessProps: ['id', 'name', 'logo'],
   customerProps: [
     'id',
@@ -320,8 +462,8 @@ Contacts.defaultProps = {
     'level',
   ],
   sortParams: {
-    orderBy: 'name',
-    orderDirection: 'asc',
+    param: 'name',
+    direction: 'asc',
   },
   businessConditions: [
     { attribute: 'enabled', value: { condition: '=', value: 'true' } },
