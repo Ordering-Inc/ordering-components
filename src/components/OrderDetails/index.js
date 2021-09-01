@@ -197,8 +197,11 @@ export const OrderDetails = (props) => {
       if (user.level === 2 && order.delivery_type === 1) {
         try {
           const { response: { data } } = await ordering.setAccessToken(token).controls(orderId).get()
-          if(!data.error) driversGroupsData = data.result.drivers;
-          if(data.error) showToast(ToastType.Error, t(`${data.result[0]}`, `${data.result[0]}`))
+          if (!data.error) {
+            driversGroupsData = data.result.drivers
+          } else if (data.error) {
+            showToast(ToastType.Error, t(`${data.result[0]}`, `${data.result[0]}`))
+          }
         } catch (e) {
           err.push(e.message)
         }
