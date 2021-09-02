@@ -289,30 +289,43 @@ var OrderDetails = function OrderDetails(props) {
     };
   }();
   /**
-   * Method to update differents orders status 
+   * Method to update differents orders status
    * In businessApp & driverApp it's not necessary update orderState 'cause the socket do it. If send driverAndBusinessId the socket it's going to update the state
    */
 
 
   var handleChangeOrderStatus = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(status) {
-      var bodyToSend, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
+      var isAcceptOrReject,
+          bodyToSend,
+          _yield$ordering$setAc,
+          _yield$ordering$setAc2,
+          result,
+          error,
+          _args3 = arguments;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.prev = 0;
-              bodyToSend = {
-                status: status
-              };
+              isAcceptOrReject = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : {};
+              _context3.prev = 1;
+
+              if (Object.keys(isAcceptOrReject).length > 0) {
+                bodyToSend = isAcceptOrReject;
+              } else {
+                bodyToSend = {
+                  status: status
+                };
+              }
+
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: true
               }));
-              _context3.next = 5;
+              _context3.next = 6;
               return ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
 
-            case 5:
+            case 6:
               _yield$ordering$setAc = _context3.sent;
               _yield$ordering$setAc2 = _yield$ordering$setAc.content;
               result = _yield$ordering$setAc2.result;
@@ -333,23 +346,23 @@ var OrderDetails = function OrderDetails(props) {
                 showToast(_ToastContext.ToastType.Error, t(result[0], result[0]));
               }
 
-              _context3.next = 16;
+              _context3.next = 17;
               break;
 
-            case 13:
-              _context3.prev = 13;
-              _context3.t0 = _context3["catch"](0);
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](1);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: _context3.t0.message
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 13]]);
+      }, _callee3, null, [[1, 14]]);
     }));
 
     return function handleChangeOrderStatus(_x2) {

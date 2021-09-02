@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _WebsocketContext = require("../../contexts/WebsocketContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -52,6 +54,7 @@ var Contacts = function Contacts(props) {
 
   var UIComponent = props.UIComponent,
       firstFetch = props.firstFetch,
+      orderProps = props.orderProps,
       businessProps = props.businessProps,
       customerProps = props.customerProps,
       driverProps = props.driverProps,
@@ -62,45 +65,148 @@ var Contacts = function Contacts(props) {
       paginationSettings = props.paginationSettings,
       conditionsConector = props.conditionsConector;
   var params = {
-    orderBy: (sortParams.orderDirection === 'desc' ? '-' : '') + sortParams.orderBy
+    orderBy: (sortParams.direction === 'desc' ? '-' : '') + sortParams.param
   };
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      token = _useSession2$.token,
+      user = _useSession2$.user;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState = (0, _react.useState)({
+  var socket = (0, _WebsocketContext.useWebsocket)();
+
+  var _useState = (0, _react.useState)(sortParams),
+      _useState2 = _slicedToArray(_useState, 2),
+      sortBy = _useState2[0],
+      setSortBy = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isConnected = _useState4[0],
+      setIsConnected = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     data: [],
     loading: true,
     error: null
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      contacts = _useState2[0],
-      setContacts = _useState2[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      orders = _useState6[0],
+      setOrders = _useState6[1];
 
-  var _useState3 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
+    data: [],
+    loading: true,
+    error: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      contacts = _useState8[0],
+      setContacts = _useState8[1];
+
+  var _useState9 = (0, _react.useState)({
     currentPage: paginationSettings.controlType === 'pages' && paginationSettings.page && paginationSettings.page >= 1 ? paginationSettings.page - 1 : 1,
     pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 6
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      pagination = _useState4[0],
-      setPagination = _useState4[1];
+      _useState10 = _slicedToArray(_useState9, 2),
+      pagination = _useState10[0],
+      setPagination = _useState10[1];
+
+  var getOrders = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(nextPage) {
+      var parameters, pageFetch, _yield$ordering$order, _yield$ordering$order2, result, error, pageConfig, hash;
+
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              setOrders({
+                data: nextPage ? orders.data : [],
+                loading: true,
+                error: null
+              });
+              parameters = {
+                orderBy: (sortBy.direction === 'desc' ? '-' : '') + sortBy.param
+              };
+              pageFetch = {
+                page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
+                page_size: pagination.pageSize || paginationSettings.pageSize
+              };
+              _context.prev = 3;
+              _context.next = 6;
+              return ordering.orders().parameters(parameters).asDashboard().get({
+                query: pageFetch
+              });
+
+            case 6:
+              _yield$ordering$order = _context.sent;
+              _yield$ordering$order2 = _yield$ordering$order.content;
+              result = _yield$ordering$order2.result;
+              error = _yield$ordering$order2.error;
+              pageConfig = _yield$ordering$order2.pagination;
+
+              if (!error) {
+                hash = {};
+                setOrders(_objectSpread(_objectSpread({}, orders), {}, {
+                  data: nextPage ? orders.data.concat(result).filter(function (order) {
+                    return hash[order === null || order === void 0 ? void 0 : order.id] ? false : hash[order === null || order === void 0 ? void 0 : order.id] = true;
+                  }) : result,
+                  loading: false
+                }));
+                setPagination({
+                  currentPage: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.current_page,
+                  pageSize: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.page_size,
+                  totalPages: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.total_pages,
+                  total: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.total,
+                  from: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.from,
+                  to: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.to
+                });
+              } else {
+                setOrders(_objectSpread(_objectSpread({}, orders), {}, {
+                  loading: false,
+                  error: result[0]
+                }));
+              }
+
+              _context.next = 17;
+              break;
+
+            case 14:
+              _context.prev = 14;
+              _context.t0 = _context["catch"](3);
+              setOrders(_objectSpread(_objectSpread({}, orders), {}, {
+                loading: false,
+                error: _context.t0.message
+              }));
+
+            case 17:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[3, 14]]);
+    }));
+
+    return function getOrders(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
   /**
    * Method to get businesses from SDK
    */
 
 
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(nextPage) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(nextPage) {
       var where, pageFetch, _yield$ordering$busin, _yield$ordering$busin2, result, error, pageConfig;
 
-      return _regenerator.default.wrap(function _callee$(_context) {
+      return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               setContacts({
                 data: nextPage ? contacts.data : [],
@@ -115,100 +221,18 @@ var Contacts = function Contacts(props) {
                 page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
                 page_size: pagination.pageSize || paginationSettings.pageSize
               };
-              _context.prev = 3;
-              _context.next = 6;
+              _context2.prev = 3;
+              _context2.next = 6;
               return ordering.businesses().select(businessProps).parameters(params).where(where).asDashboard().get({
                 query: pageFetch
               });
 
             case 6:
-              _yield$ordering$busin = _context.sent;
+              _yield$ordering$busin = _context2.sent;
               _yield$ordering$busin2 = _yield$ordering$busin.content;
               result = _yield$ordering$busin2.result;
               error = _yield$ordering$busin2.error;
               pageConfig = _yield$ordering$busin2.pagination;
-
-              if (!error) {
-                setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
-                  data: nextPage ? contacts.data.concat(result) : result,
-                  loading: false
-                }));
-                setPagination({
-                  currentPage: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.current_page,
-                  pageSize: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.page_size,
-                  totalPages: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.total_pages,
-                  total: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.total,
-                  from: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.from,
-                  to: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.to
-                });
-              } else {
-                setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
-                  loading: false,
-                  error: result[0]
-                }));
-              }
-
-              _context.next = 17;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](3);
-              setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
-                loading: false,
-                error: _context.t0.message
-              }));
-
-            case 17:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, null, [[3, 14]]);
-    }));
-
-    return function getBusinesses(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to get customers from SDK
-   */
-
-
-  var getCustomers = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(nextPage) {
-      var where, pageFetch, _yield$ordering$setAc, _yield$ordering$setAc2, result, error, pageConfig;
-
-      return _regenerator.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              setContacts({
-                data: nextPage ? contacts.data : [],
-                loading: true,
-                error: null
-              });
-              where = {
-                conditions: customerConditions,
-                conector: conditionsConector
-              };
-              pageFetch = {
-                page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
-                page_size: pagination.pageSize || paginationSettings.pageSize
-              };
-              _context2.prev = 3;
-              _context2.next = 6;
-              return ordering.setAccessToken(token).users().where(where).get({
-                query: pageFetch
-              });
-
-            case 6:
-              _yield$ordering$setAc = _context2.sent;
-              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
-              result = _yield$ordering$setAc2.result;
-              error = _yield$ordering$setAc2.error;
-              pageConfig = _yield$ordering$setAc2.pagination;
 
               if (!error) {
                 setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
@@ -249,18 +273,18 @@ var Contacts = function Contacts(props) {
       }, _callee2, null, [[3, 14]]);
     }));
 
-    return function getCustomers(_x2) {
+    return function getBusinesses(_x2) {
       return _ref2.apply(this, arguments);
     };
   }();
   /**
-   * Method to get drivers from SDK
+   * Method to get customers from SDK
    */
 
 
-  var getDrivers = /*#__PURE__*/function () {
+  var getCustomers = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(nextPage) {
-      var where, pageFetch, _yield$ordering$setAc3, _yield$ordering$setAc4, result, error, pageConfig;
+      var where, pageFetch, _yield$ordering$setAc, _yield$ordering$setAc2, result, error, pageConfig;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -272,7 +296,7 @@ var Contacts = function Contacts(props) {
                 error: null
               });
               where = {
-                conditions: driverConditions,
+                conditions: customerConditions,
                 conector: conditionsConector
               };
               pageFetch = {
@@ -281,16 +305,16 @@ var Contacts = function Contacts(props) {
               };
               _context3.prev = 3;
               _context3.next = 6;
-              return ordering.setAccessToken(token).users().select(driverProps).where(where).get({
+              return ordering.setAccessToken(token).users().where(where).get({
                 query: pageFetch
               });
 
             case 6:
-              _yield$ordering$setAc3 = _context3.sent;
-              _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
-              result = _yield$ordering$setAc4.result;
-              error = _yield$ordering$setAc4.error;
-              pageConfig = _yield$ordering$setAc4.pagination;
+              _yield$ordering$setAc = _context3.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              result = _yield$ordering$setAc2.result;
+              error = _yield$ordering$setAc2.error;
+              pageConfig = _yield$ordering$setAc2.pagination;
 
               if (!error) {
                 setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
@@ -331,43 +355,192 @@ var Contacts = function Contacts(props) {
       }, _callee3, null, [[3, 14]]);
     }));
 
-    return function getDrivers(_x3) {
+    return function getCustomers(_x3) {
       return _ref3.apply(this, arguments);
     };
   }();
+  /**
+   * Method to get drivers from SDK
+   */
 
-  var loadMore = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(key) {
+
+  var getDrivers = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(nextPage) {
+      var where, pageFetch, _yield$ordering$setAc3, _yield$ordering$setAc4, result, error, pageConfig;
+
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              _context4.t0 = key;
-              _context4.next = _context4.t0 === 2 ? 3 : _context4.t0 === 3 ? 5 : _context4.t0 === 4 ? 7 : 9;
+              setContacts({
+                data: nextPage ? contacts.data : [],
+                loading: true,
+                error: null
+              });
+              where = {
+                conditions: driverConditions,
+                conector: conditionsConector
+              };
+              pageFetch = {
+                page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
+                page_size: pagination.pageSize || paginationSettings.pageSize
+              };
+              _context4.prev = 3;
+              _context4.next = 6;
+              return ordering.setAccessToken(token).users().select(driverProps).where(where).get({
+                query: pageFetch
+              });
+
+            case 6:
+              _yield$ordering$setAc3 = _context4.sent;
+              _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
+              result = _yield$ordering$setAc4.result;
+              error = _yield$ordering$setAc4.error;
+              pageConfig = _yield$ordering$setAc4.pagination;
+
+              if (!error) {
+                setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
+                  data: nextPage ? contacts.data.concat(result) : result,
+                  loading: false
+                }));
+                setPagination({
+                  currentPage: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.current_page,
+                  pageSize: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.page_size,
+                  totalPages: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.total_pages,
+                  total: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.total,
+                  from: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.from,
+                  to: pageConfig === null || pageConfig === void 0 ? void 0 : pageConfig.to
+                });
+              } else {
+                setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
+                  loading: false,
+                  error: result[0]
+                }));
+              }
+
+              _context4.next = 17;
               break;
 
-            case 3:
-              getBusinesses(true);
-              return _context4.abrupt("break", 9);
+            case 14:
+              _context4.prev = 14;
+              _context4.t0 = _context4["catch"](3);
+              setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
+                loading: false,
+                error: _context4.t0.message
+              }));
 
-            case 5:
-              getCustomers(true);
-              return _context4.abrupt("break", 9);
-
-            case 7:
-              getDrivers(true);
-              return _context4.abrupt("break", 9);
-
-            case 9:
+            case 17:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4);
+      }, _callee4, null, [[3, 14]]);
     }));
 
-    return function loadMore(_x4) {
+    return function getDrivers(_x4) {
       return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var messageRead = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(orderId) {
+      var _yield$ordering$order3, _yield$ordering$order4, result, error;
+
+      return _regenerator.default.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              setOrders(_objectSpread(_objectSpread({}, orders), {}, {
+                loading: true
+              }));
+              _context5.prev = 1;
+              _context5.next = 4;
+              return ordering.orders(orderId).save({
+                unread_count: 0
+              });
+
+            case 4:
+              _yield$ordering$order3 = _context5.sent;
+              _yield$ordering$order4 = _yield$ordering$order3.content;
+              result = _yield$ordering$order4.result;
+              error = _yield$ordering$order4.error;
+
+              if (!error) {
+                orders.data.forEach(function (order, index, array) {
+                  if (order.id === orderId) {
+                    array.splice(index, 1, result);
+                    setOrders(_objectSpread(_objectSpread({}, orders), {}, {
+                      data: array,
+                      loading: false
+                    }));
+                  }
+                });
+              } else {
+                setOrders(_objectSpread(_objectSpread({}, orders), {}, {
+                  loading: false,
+                  error: result[0]
+                }));
+              }
+
+              _context5.next = 14;
+              break;
+
+            case 11:
+              _context5.prev = 11;
+              _context5.t0 = _context5["catch"](1);
+              setOrders(_objectSpread(_objectSpread({}, orders), {}, {
+                loading: false,
+                error: _context5.t0.message
+              }));
+
+            case 14:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 11]]);
+    }));
+
+    return function messageRead(_x5) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  var loadMore = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(key) {
+      return _regenerator.default.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.t0 = key;
+              _context6.next = _context6.t0 === 2 ? 3 : _context6.t0 === 3 ? 5 : _context6.t0 === 4 ? 7 : 9;
+              break;
+
+            case 3:
+              getBusinesses(true);
+              return _context6.abrupt("break", 10);
+
+            case 5:
+              getCustomers(true);
+              return _context6.abrupt("break", 10);
+
+            case 7:
+              getDrivers(true);
+              return _context6.abrupt("break", 10);
+
+            case 9:
+              getOrders(true);
+
+            case 10:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6);
+    }));
+
+    return function loadMore(_x6) {
+      return _ref6.apply(this, arguments);
     };
   }();
 
@@ -386,17 +559,103 @@ var Contacts = function Contacts(props) {
         break;
 
       default:
-        setContacts(_objectSpread(_objectSpread({}, contacts), {}, {
-          loading: false
-        }));
+        getOrders();
     }
   }, []);
+  (0, _react.useEffect)(function () {
+    if (!orders.loading) {
+      getOrders();
+    }
+  }, [sortBy]);
+  (0, _react.useEffect)(function () {
+    if (!token) return;
+    socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    return function () {
+      socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    };
+  }, [user]);
+  var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(message) {
+      var orderId, _yield$ordering$setAc5, _yield$ordering$setAc6, result, error;
+
+      return _regenerator.default.wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              orderId = message.order_id;
+              _context7.prev = 1;
+              _context7.next = 4;
+              return ordering.setAccessToken(token).orders(orderId).asDashboard().get();
+
+            case 4:
+              _yield$ordering$setAc5 = _context7.sent;
+              _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
+              result = _yield$ordering$setAc6.result;
+              error = _yield$ordering$setAc6.error;
+
+              if (!error) {
+                setOrders(function (prevOrders) {
+                  var data = prevOrders.data;
+                  var order = prevOrders.data.find(function (order, index) {
+                    if (order.id === parseInt(orderId)) {
+                      data.splice(index, 1);
+                      data.unshift(result);
+                      return true;
+                    }
+
+                    return false;
+                  });
+
+                  if (!order) {
+                    data.unshift(result);
+                  }
+
+                  return _objectSpread(_objectSpread({}, prevOrders), {}, {
+                    data: data
+                  });
+                });
+              }
+
+              _context7.next = 14;
+              break;
+
+            case 11:
+              _context7.prev = 11;
+              _context7.t0 = _context7["catch"](1);
+              return _context7.abrupt("return", null);
+
+            case 14:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[1, 11]]);
+    }));
+
+    return function (_x7) {
+      return _ref7.apply(this, arguments);
+    };
+  }(), []);
+  (0, _react.useEffect)(function () {
+    if (!isConnected) {
+      socket.on('message', handleMessage);
+      setIsConnected(true);
+    }
+
+    return function () {
+      socket.off('message');
+    };
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    orders: orders,
+    setSortBy: setSortBy,
     contacts: contacts,
     pagination: pagination,
     getBusinesses: getBusinesses,
     getCustomers: getCustomers,
     getDrivers: getDrivers,
+    messageRead: messageRead,
     loadMore: loadMore
   })));
 };
@@ -465,13 +724,14 @@ Contacts.defaultProps = {
     controlType: 'infinity'
   },
   firstFetch: 'businesses',
+  orderProps: ['id', 'business', 'unread_count', 'delivery_datetime_utc', 'status'],
   businessProps: ['id', 'name', 'logo'],
   customerProps: ['id', 'name', 'lastname', 'photo', 'assigned_orders_count', 'qualification', // do not select qualification
   'level'],
   driverProps: ['id', 'name', 'lastname', 'photo', 'assigned_orders_count', 'level'],
   sortParams: {
-    orderBy: 'name',
-    orderDirection: 'asc'
+    param: 'name',
+    direction: 'asc'
   },
   businessConditions: [{
     attribute: 'enabled',

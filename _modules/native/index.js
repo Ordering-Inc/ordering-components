@@ -111,6 +111,12 @@ Object.defineProperty(exports, "CouponControl", {
     return _CouponControl.CouponControl;
   }
 });
+Object.defineProperty(exports, "Contacts", {
+  enumerable: true,
+  get: function get() {
+    return _Contacts.Contacts;
+  }
+});
 Object.defineProperty(exports, "DragAndDrop", {
   enumerable: true,
   get: function get() {
@@ -615,6 +621,8 @@ var _Checkout = require("../src/components/Checkout");
 var _CmsContent = require("../src/components/CmsContent");
 
 var _CouponControl = require("../src/components/CouponControl");
+
+var _Contacts = require("./components/Contacts");
 
 var _DragAndDrop = require("../src/components/DragAndDrop");
 
