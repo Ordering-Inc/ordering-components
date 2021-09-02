@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes, { string, object } from 'prop-types';
 import { useSession } from '../../contexts/SessionContext';
 import { useApi } from '../../contexts/ApiContext';
@@ -29,6 +29,7 @@ export const Contacts = (props) => {
   const socket = useWebsocket();
 
   const [sortBy, setSortBy] = useState(sortParams);
+  const [isConnected, setIsConnected] = useState(false)
   const [orders, setOrders] = useState({
     data: [],
     loading: true,
@@ -69,15 +70,15 @@ export const Contacts = (props) => {
         content: { result, error, pagination: pageConfig },
       } = await ordering
         .orders()
-        // .select(orderProps)
         .parameters(parameters)
         .asDashboard()
         .get({ query: pageFetch });
 
       if (!error) {
+        let hash = {}
         setOrders({
           ...orders,
-          data: nextPage ? orders.data.concat(result) : result,
+          data: nextPage ? orders.data.concat(result).filter(order => hash[order?.id] ? false : (hash[order?.id] = true)) : result,
           loading: false,
         });
         setPagination({
@@ -249,6 +250,30 @@ export const Contacts = (props) => {
     }
   };
 
+  const messageRead = async (orderId) => {
+    setOrders({...orders, loading: true})
+    try {
+      const {
+        content: { result, error },
+      } = await ordering
+        .orders(orderId)
+        .save({ unread_count: 0 });
+      
+      if (!error) {
+        orders.data.forEach((order, index, array) => {
+          if (order.id === orderId) {
+            array.splice(index, 1, result)
+            setOrders({...orders, data: array, loading: false})
+          }
+        })
+      } else {
+        setOrders({ ...orders, loading: false, error: result[0] });
+      }
+    } catch(err) {
+        setOrders({ ...orders, loading: false, error: err.message });
+    }
+  }
+
   const loadMore = async (key) => {
     switch (key) {
       case 2:
@@ -290,72 +315,54 @@ export const Contacts = (props) => {
   useEffect(() => {
     if (!token) return;
     socket.join(`messages_orders_${user?.id}`);
+    socket.join(`orders_${user?.id}`)
     return () => {
       socket.leave(`messages_orders_${user?.id}`);
     };
-  }, []);
+  }, [user]);
 
-  const handleMessage = async (message) => {
+  const handleMessage = useCallback(async (message) => {
     const { order_id: orderId } = message;
-    setOrders({ ...orders, loading: false });
-    // console.log(orderList.loading);
-    if (!orders.loading) {
-      console.log('chao');
-      return null;
-    } else {
-      console.log('entre');
+
+    try {
+      const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).asDashboard().get()
+
+      if (!error) {
+        setOrders((prevOrders => {
+          const { data } = prevOrders
+
+          const order = prevOrders.data.find((order, index) => {
+            if (order.id === parseInt(orderId)) {
+              data.splice(index, 1)
+              data.unshift(result)
+              return true
+            }
+
+            return false
+          });
+    
+          if (!order) {
+            data.unshift(result)
+          }
+
+          return {...prevOrders, data};
+        }))
+      }
+    } catch (err) {
       return null;
     }
-    const order = orders.data.find((order, index) => {
-      console.log(
-        `${order.id} - ${orderId} ${parseInt(order.id) === parseInt(orderId)}`
-      );
-      if (order.id === orderId) {
-        console.log('lo encontre');
-        // const { orders } = orderList
-        // console.log(order.unread_count)
-        // order.unread_count += 1
-        // console.log({id: order.id, unread: order.unread})
-        // orders.splice(index, 1)
-        // orders.shift(order)
-        // setOrderList({...orderList, orders, loading: false})
-        return true;
-      }
-
-      return false;
-    });
-    // console.log(order)
-
-    // if (!order) {
-    //   console.log('entre')
-    //   try {
-    //     const { content: { result, error } } = await ordering.setAccessToken(accessToken).orders(orderId).asDashboard().get()
-
-    //     if (!error) {
-    //       console.log('fetch')
-    //       const { orders } = orderList
-    //       orders.shift(result)
-    //       setOrderList({...orderList, orders, loading: false})
-    //     } else {
-    //       console.log('error')
-    //     }
-
-    //   } catch (err) {
-    //     console.log('err')
-    //     setOrderList({...orderList, loading: false})
-    //   }
-    // }
-  };
+  }, [])
 
   useEffect(() => {
-    // console.log(orders.loading);
-
-    socket.on('message', (message) => handleMessage(message));
+    if (!isConnected) {
+      socket.on('message', handleMessage);
+      setIsConnected(true)
+    }
 
     return () => {
       socket.off('message');
     };
-  }, [orders]);
+  }, []);
 
   return (
     <>
@@ -369,6 +376,7 @@ export const Contacts = (props) => {
           getBusinesses={getBusinesses}
           getCustomers={getCustomers}
           getDrivers={getDrivers}
+          messageRead={messageRead}
           loadMore={loadMore}
         />
       )}
