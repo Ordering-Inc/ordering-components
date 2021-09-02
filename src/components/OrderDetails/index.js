@@ -109,21 +109,25 @@ export const OrderDetails = (props) => {
   }
 
   /**
-   * Method to update differents orders status 
-   * In businessApp & driverApp it's not necessary update orderState 'cause the socket do it. If send driverAndBusinessId the socket it's going to update the state
-   */
-  const handleChangeOrderStatus = async (status) => {
+   * Method to update differents orders status
+  */
+  const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
-      const bodyToSend = { status }
+      let bodyToSend
+      if (Object.keys(isAcceptOrReject).length > 0) {
+        bodyToSend = isAcceptOrReject
+      } else {
+        bodyToSend = { status }
+      }
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
 
-      if (!error && !driverAndBusinessId) {
-        setOrderState({ ...orderState, order: result, loading: false });
+      if (!error) {
+        setOrderState({ ...orderState, order: result, loading: false })
       }
 
       if (error) {
-        setOrderState({ ...orderState, error: result[0], loading: false  })
+        setOrderState({ ...orderState, error: result[0], loading: false })
         showToast(ToastType.Error, t(result[0], result[0]))
       }
     } catch (err) {
@@ -133,15 +137,13 @@ export const OrderDetails = (props) => {
 
   /**
      * Method to assign a driver for order
-     *  Socket is going to update the state if sent driverAndBusinessId (driver and business Apps)
-     */
-   const handleAssignDriver = async (e) => {
+  */
+  const handleAssignDriver = async (e) => {
     try {
       const bodyToSend = { driver_id: e }
       setOrderState({ ...orderState, loading: true })
       const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
-    
-      if (!error && !driverAndBusinessId) {
+      if (!error) {
         setOrderState({ ...orderState, order: result, loading: false })
       }
 

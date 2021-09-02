@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes, { string, object } from 'prop-types';
 import { useSession } from '../../contexts/SessionContext';
 import { useApi } from '../../contexts/ApiContext';
+import { useWebsocket } from '../../contexts/WebsocketContext';
 
 export const Contacts = (props) => {
   const {
     UIComponent,
     firstFetch,
+    orderProps,
     businessProps,
     customerProps, // not used because it stops sending "quialfication"
     driverProps,
@@ -19,13 +21,20 @@ export const Contacts = (props) => {
   } = props;
 
   const params = {
-    orderBy:
-      (sortParams.orderDirection === 'desc' ? '-' : '') + sortParams.orderBy,
+    orderBy: (sortParams.direction === 'desc' ? '-' : '') + sortParams.param,
   };
 
-  const [{ token }] = useSession();
+  const [{ token, user }] = useSession();
   const [ordering] = useApi();
+  const socket = useWebsocket();
 
+  const [sortBy, setSortBy] = useState(sortParams);
+  const [isConnected, setIsConnected] = useState(false)
+  const [orders, setOrders] = useState({
+    data: [],
+    loading: true,
+    error: null,
+  });
   const [contacts, setContacts] = useState({
     data: [],
     loading: true,
@@ -40,6 +49,53 @@ export const Contacts = (props) => {
         : 1,
     pageSize: paginationSettings.pageSize ?? 6,
   });
+
+  const getOrders = async (nextPage) => {
+    setOrders({
+      data: nextPage ? orders.data : [],
+      loading: true,
+      error: null,
+    });
+
+    const parameters = {
+      orderBy: (sortBy.direction === 'desc' ? '-' : '') + sortBy.param,
+    };
+    const pageFetch = {
+      page: nextPage ? pagination.currentPage + 1 : paginationSettings.page,
+      page_size: pagination.pageSize || paginationSettings.pageSize,
+    };
+
+    try {
+      const {
+        content: { result, error, pagination: pageConfig },
+      } = await ordering
+        .orders()
+        .parameters(parameters)
+        .asDashboard()
+        .get({ query: pageFetch });
+
+      if (!error) {
+        let hash = {}
+        setOrders({
+          ...orders,
+          data: nextPage ? orders.data.concat(result).filter(order => hash[order?.id] ? false : (hash[order?.id] = true)) : result,
+          loading: false,
+        });
+        setPagination({
+          currentPage: pageConfig?.current_page,
+          pageSize: pageConfig?.page_size,
+          totalPages: pageConfig?.total_pages,
+          total: pageConfig?.total,
+          from: pageConfig?.from,
+          to: pageConfig?.to,
+        });
+      } else {
+        setOrders({ ...orders, loading: false, error: result[0] });
+      }
+    } catch (err) {
+      setOrders({ ...orders, loading: false, error: err.message });
+    }
+  };
 
   /**
    * Method to get businesses from SDK
@@ -194,6 +250,30 @@ export const Contacts = (props) => {
     }
   };
 
+  const messageRead = async (orderId) => {
+    setOrders({...orders, loading: true})
+    try {
+      const {
+        content: { result, error },
+      } = await ordering
+        .orders(orderId)
+        .save({ unread_count: 0 });
+      
+      if (!error) {
+        orders.data.forEach((order, index, array) => {
+          if (order.id === orderId) {
+            array.splice(index, 1, result)
+            setOrders({...orders, data: array, loading: false})
+          }
+        })
+      } else {
+        setOrders({ ...orders, loading: false, error: result[0] });
+      }
+    } catch(err) {
+        setOrders({ ...orders, loading: false, error: err.message });
+    }
+  }
+
   const loadMore = async (key) => {
     switch (key) {
       case 2:
@@ -205,6 +285,8 @@ export const Contacts = (props) => {
       case 4:
         getDrivers(true);
         break;
+      default:
+        getOrders(true);
     }
   };
 
@@ -220,8 +302,66 @@ export const Contacts = (props) => {
         getDrivers();
         break;
       default:
-        setContacts({ ...contacts, loading: false });
+        getOrders();
     }
+  }, []);
+
+  useEffect(() => {
+    if (!orders.loading) {
+      getOrders();
+    }
+  }, [sortBy]);
+
+  useEffect(() => {
+    if (!token) return;
+    socket.join(`messages_orders_${user?.id}`);
+    socket.join(`orders_${user?.id}`)
+    return () => {
+      socket.leave(`messages_orders_${user?.id}`);
+    };
+  }, [user]);
+
+  const handleMessage = useCallback(async (message) => {
+    const { order_id: orderId } = message;
+
+    try {
+      const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).asDashboard().get()
+
+      if (!error) {
+        setOrders((prevOrders => {
+          const { data } = prevOrders
+
+          const order = prevOrders.data.find((order, index) => {
+            if (order.id === parseInt(orderId)) {
+              data.splice(index, 1)
+              data.unshift(result)
+              return true
+            }
+
+            return false
+          });
+    
+          if (!order) {
+            data.unshift(result)
+          }
+
+          return {...prevOrders, data};
+        }))
+      }
+    } catch (err) {
+      return null;
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isConnected) {
+      socket.on('message', handleMessage);
+      setIsConnected(true)
+    }
+
+    return () => {
+      socket.off('message');
+    };
   }, []);
 
   return (
@@ -229,11 +369,14 @@ export const Contacts = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orders={orders}
+          setSortBy={setSortBy}
           contacts={contacts}
           pagination={pagination}
           getBusinesses={getBusinesses}
           getCustomers={getCustomers}
           getDrivers={getDrivers}
+          messageRead={messageRead}
           loadMore={loadMore}
         />
       )}
@@ -301,6 +444,13 @@ Contacts.propTypes = {
 Contacts.defaultProps = {
   paginationSettings: { page: 1, pageSize: 6, controlType: 'infinity' },
   firstFetch: 'businesses',
+  orderProps: [
+    'id',
+    'business',
+    'unread_count',
+    'delivery_datetime_utc',
+    'status',
+  ],
   businessProps: ['id', 'name', 'logo'],
   customerProps: [
     'id',
@@ -320,8 +470,8 @@ Contacts.defaultProps = {
     'level',
   ],
   sortParams: {
-    orderBy: 'name',
-    orderDirection: 'asc',
+    param: 'name',
+    direction: 'asc',
   },
   businessConditions: [
     { attribute: 'enabled', value: { condition: '=', value: 'true' } },
