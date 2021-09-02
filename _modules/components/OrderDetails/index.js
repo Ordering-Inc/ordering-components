@@ -290,8 +290,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   /**
    * Method to update differents orders status
-   * In businessApp & driverApp it's not necessary update orderState 'cause the socket do it. If send driverAndBusinessId the socket it's going to update the state
-   */
+  */
 
 
   var handleChangeOrderStatus = /*#__PURE__*/function () {
@@ -331,7 +330,7 @@ var OrderDetails = function OrderDetails(props) {
               result = _yield$ordering$setAc2.result;
               error = _yield$ordering$setAc2.error;
 
-              if (!error && !driverAndBusinessId) {
+              if (!error) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                   order: result,
                   loading: false
@@ -371,8 +370,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   /**
      * Method to assign a driver for order
-     *  Socket is going to update the state if sent driverAndBusinessId (driver and business Apps)
-     */
+  */
 
 
   var handleAssignDriver = /*#__PURE__*/function () {
@@ -399,7 +397,7 @@ var OrderDetails = function OrderDetails(props) {
               error = _yield$ordering$setAc4.error;
               result = _yield$ordering$setAc4.result;
 
-              if (!error && !driverAndBusinessId) {
+              if (!error) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                   order: result,
                   loading: false
