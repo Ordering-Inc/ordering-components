@@ -132,15 +132,27 @@ var GoogleMaps = function GoogleMaps(props) {
         var isNear = validateResult(googleMap, marker, marker.getPosition());
 
         if (isNear) {
+          var _locations$;
+
+          if (i === 0 && (_locations$ = locations[0]) !== null && _locations$ !== void 0 && _locations$.markerPopup) {
+            var _locations$2;
+
+            var infowindow = new window.google.maps.InfoWindow();
+            infowindow.setContent((_locations$2 = locations[0]) === null || _locations$2 === void 0 ? void 0 : _locations$2.markerPopup);
+            infowindow.open(map, marker);
+          }
+
           marker.addListener('click', function () {
             var _locations$i6;
 
             if ((_locations$i6 = locations[i]) !== null && _locations$i6 !== void 0 && _locations$i6.markerPopup) {
               var _locations$i7;
 
-              var infowindow = new window.google.maps.InfoWindow();
-              infowindow.setContent((_locations$i7 = locations[i]) === null || _locations$i7 === void 0 ? void 0 : _locations$i7.markerPopup);
-              infowindow.open(map, marker);
+              var _infowindow = new window.google.maps.InfoWindow();
+
+              _infowindow.setContent((_locations$i7 = locations[i]) === null || _locations$i7 === void 0 ? void 0 : _locations$i7.markerPopup);
+
+              _infowindow.open(map, marker);
             } else {
               var _locations$i8;
 
