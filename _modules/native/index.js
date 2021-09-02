@@ -622,7 +622,7 @@ var _CmsContent = require("../src/components/CmsContent");
 
 var _CouponControl = require("../src/components/CouponControl");
 
-var _Contacts = require("./components/Contacts");
+var _Contacts = require("../src/components/Contacts");
 
 var _DragAndDrop = require("../src/components/DragAndDrop");
 
