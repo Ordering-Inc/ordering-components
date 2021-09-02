@@ -54,6 +54,11 @@ export const GoogleMaps = (props) => {
       if (businessMap) {
         const isNear = validateResult(googleMap, marker, marker.getPosition())
         if (isNear) {
+          if(i === 0 && locations[0]?.markerPopup){
+            const infowindow = new window.google.maps.InfoWindow()
+            infowindow.setContent(locations[0]?.markerPopup)
+            infowindow.open(map, marker)
+            }
           marker.addListener('click', () => {
             if (locations[i]?.markerPopup) {
               const infowindow = new window.google.maps.InfoWindow()
