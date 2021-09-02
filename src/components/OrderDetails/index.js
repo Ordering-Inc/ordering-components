@@ -110,8 +110,7 @@ export const OrderDetails = (props) => {
 
   /**
    * Method to update differents orders status
-   * In businessApp & driverApp it's not necessary update orderState 'cause the socket do it. If send driverAndBusinessId the socket it's going to update the state
-   */
+  */
   const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
       let bodyToSend
@@ -123,7 +122,7 @@ export const OrderDetails = (props) => {
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
 
-      if (!error && !driverAndBusinessId) {
+      if (!error) {
         setOrderState({ ...orderState, order: result, loading: false })
       }
 
@@ -138,15 +137,13 @@ export const OrderDetails = (props) => {
 
   /**
      * Method to assign a driver for order
-     *  Socket is going to update the state if sent driverAndBusinessId (driver and business Apps)
-     */
-   const handleAssignDriver = async (e) => {
+  */
+  const handleAssignDriver = async (e) => {
     try {
       const bodyToSend = { driver_id: e }
       setOrderState({ ...orderState, loading: true })
       const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
-    
-      if (!error && !driverAndBusinessId) {
+      if (!error) {
         setOrderState({ ...orderState, order: result, loading: false })
       }
 
