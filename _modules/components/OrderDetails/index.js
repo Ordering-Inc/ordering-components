@@ -57,7 +57,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -441,7 +441,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
-      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupsData, _yield$ordering$setAc7, content, response, _orderState$error;
+      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupsData, _yield$ordering$setAc7, content, _yield$ordering$setAc8, data, _orderState$error;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -500,7 +500,7 @@ var OrderDetails = function OrderDetails(props) {
 
             case 29:
               if (!(user.level === 2 && order.delivery_type === 1)) {
-                _context5.next = 41;
+                _context5.next = 44;
                 break;
               }
 
@@ -509,18 +509,28 @@ var OrderDetails = function OrderDetails(props) {
               return ordering.setAccessToken(token).controls(orderId).get();
 
             case 33:
-              response = _context5.sent;
-              if (!response.error) driversGroupsData = response.result.drivers;
-              if (response.error) showToast(_ToastContext.ToastType.Error, t("".concat(response.result[0]), "".concat(response.result[0])));
-              _context5.next = 41;
-              break;
+              _yield$ordering$setAc8 = _context5.sent;
+              data = _yield$ordering$setAc8.response.data;
+
+              if (!data.error) {
+                _context5.next = 38;
+                break;
+              }
+
+              showToast(_ToastContext.ToastType.Error, t("".concat(data.result[0]), "".concat(data.result[0])));
+              return _context5.abrupt("return");
 
             case 38:
-              _context5.prev = 38;
+              driversGroupsData = data.result.drivers;
+              _context5.next = 44;
+              break;
+
+            case 41:
+              _context5.prev = 41;
               _context5.t1 = _context5["catch"](30);
               err.push(_context5.t1.message);
 
-            case 41:
+            case 44:
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 order: order,
@@ -528,23 +538,23 @@ var OrderDetails = function OrderDetails(props) {
                 driversGroupsData: driversGroupsData,
                 error: err
               }));
-              _context5.next = 47;
+              _context5.next = 50;
               break;
 
-            case 44:
-              _context5.prev = 44;
+            case 47:
+              _context5.prev = 47;
               _context5.t2 = _context5["catch"](6);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: _context5.t2.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context5.t2 === null || _context5.t2 === void 0 ? void 0 : _context5.t2.message) : ['ERROR']
               }));
 
-            case 47:
+            case 50:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 44], [17, 26], [30, 38]]);
+      }, _callee5, null, [[6, 47], [17, 26], [30, 41]]);
     }));
 
     return function getOrder() {
