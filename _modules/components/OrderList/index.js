@@ -416,9 +416,23 @@ var OrderList = function OrderList(props) {
       }));
     };
 
+    var handleAddNewOrder = function handleAddNewOrder(order) {
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        loading: true
+      }));
+      showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id));
+      var newOrder = [order].concat(_toConsumableArray(orderList.orders));
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        orders: newOrder,
+        loading: false
+      }));
+    };
+
+    socket.on('orders_register', handleAddNewOrder);
     socket.on('update_order', handleUpdateOrder);
     return function () {
       socket.off('update_order', handleUpdateOrder);
+      socket.off('orders_register', handleAddNewOrder);
     };
   }, [orderList.orders, pagination, socket]);
   (0, _react.useEffect)(function () {

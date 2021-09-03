@@ -442,105 +442,41 @@ var Contacts = function Contacts(props) {
     };
   }();
 
-  var messageRead = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(orderId) {
-      var _yield$ordering$order3, _yield$ordering$order4, result, error;
-
+  var loadMore = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(key) {
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                loading: true
-              }));
-              _context5.prev = 1;
-              _context5.next = 4;
-              return ordering.orders(orderId).save({
-                unread_count: 0
-              });
-
-            case 4:
-              _yield$ordering$order3 = _context5.sent;
-              _yield$ordering$order4 = _yield$ordering$order3.content;
-              result = _yield$ordering$order4.result;
-              error = _yield$ordering$order4.error;
-
-              if (!error) {
-                orders.data.forEach(function (order, index, array) {
-                  if (order.id === orderId) {
-                    array.splice(index, 1, result);
-                    setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                      data: array,
-                      loading: false
-                    }));
-                  }
-                });
-              } else {
-                setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                  loading: false,
-                  error: result[0]
-                }));
-              }
-
-              _context5.next = 14;
-              break;
-
-            case 11:
-              _context5.prev = 11;
-              _context5.t0 = _context5["catch"](1);
-              setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                loading: false,
-                error: _context5.t0.message
-              }));
-
-            case 14:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5, null, [[1, 11]]);
-    }));
-
-    return function messageRead(_x5) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-
-  var loadMore = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(key) {
-      return _regenerator.default.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              _context6.t0 = key;
-              _context6.next = _context6.t0 === 2 ? 3 : _context6.t0 === 3 ? 5 : _context6.t0 === 4 ? 7 : 9;
+              _context5.t0 = key;
+              _context5.next = _context5.t0 === 2 ? 3 : _context5.t0 === 3 ? 5 : _context5.t0 === 4 ? 7 : 9;
               break;
 
             case 3:
               getBusinesses(true);
-              return _context6.abrupt("break", 10);
+              return _context5.abrupt("break", 10);
 
             case 5:
               getCustomers(true);
-              return _context6.abrupt("break", 10);
+              return _context5.abrupt("break", 10);
 
             case 7:
               getDrivers(true);
-              return _context6.abrupt("break", 10);
+              return _context5.abrupt("break", 10);
 
             case 9:
               getOrders(true);
 
             case 10:
             case "end":
-              return _context6.stop();
+              return _context5.stop();
           }
         }
-      }, _callee6);
+      }, _callee5);
     }));
 
-    return function loadMore(_x6) {
-      return _ref6.apply(this, arguments);
+    return function loadMore(_x5) {
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -573,23 +509,24 @@ var Contacts = function Contacts(props) {
     socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
     return function () {
       socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.leave("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
     };
   }, [user]);
   var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(message) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(message) {
       var orderId, _yield$ordering$setAc5, _yield$ordering$setAc6, result, error;
 
-      return _regenerator.default.wrap(function _callee7$(_context7) {
+      return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context7.prev = _context7.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
               orderId = message.order_id;
-              _context7.prev = 1;
-              _context7.next = 4;
+              _context6.prev = 1;
+              _context6.next = 4;
               return ordering.setAccessToken(token).orders(orderId).asDashboard().get();
 
             case 4:
-              _yield$ordering$setAc5 = _context7.sent;
+              _yield$ordering$setAc5 = _context6.sent;
               _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
               result = _yield$ordering$setAc6.result;
               error = _yield$ordering$setAc6.error;
@@ -617,45 +554,64 @@ var Contacts = function Contacts(props) {
                 });
               }
 
-              _context7.next = 14;
+              _context6.next = 14;
               break;
 
             case 11:
-              _context7.prev = 11;
-              _context7.t0 = _context7["catch"](1);
-              return _context7.abrupt("return", null);
+              _context6.prev = 11;
+              _context6.t0 = _context6["catch"](1);
+              return _context6.abrupt("return", null);
 
             case 14:
             case "end":
-              return _context7.stop();
+              return _context6.stop();
           }
         }
-      }, _callee7, null, [[1, 11]]);
+      }, _callee6, null, [[1, 11]]);
     }));
 
-    return function (_x7) {
-      return _ref7.apply(this, arguments);
+    return function (_x6) {
+      return _ref6.apply(this, arguments);
     };
   }(), []);
+  var handleUpdateOrder = (0, _react.useCallback)(function (order) {
+    var id = order.id,
+        status = order.status;
+    setOrders(function (prevOrders) {
+      var data = prevOrders.data;
+      data.forEach(function (_order) {
+        if (_order.id === id && _order.status !== status) {
+          delete order.total;
+          delete order.subtotal;
+          Object.assign(_order, order);
+        }
+      });
+      return _objectSpread(_objectSpread({}, prevOrders), {}, {
+        data: data
+      });
+    });
+  }, []);
   (0, _react.useEffect)(function () {
     if (!isConnected) {
       socket.on('message', handleMessage);
+      socket.on('update_order', handleUpdateOrder);
       setIsConnected(true);
     }
 
     return function () {
-      socket.off('message');
+      socket.off('message', handleMessage);
+      socket.off('update_order', handleUpdateOrder);
     };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orders: orders,
+    setOrders: setOrders,
     setSortBy: setSortBy,
     contacts: contacts,
     pagination: pagination,
     getBusinesses: getBusinesses,
     getCustomers: getCustomers,
     getDrivers: getDrivers,
-    messageRead: messageRead,
     loadMore: loadMore
   })));
 };
