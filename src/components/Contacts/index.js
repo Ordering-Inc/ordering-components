@@ -296,8 +296,8 @@ export const Contacts = (props) => {
     socket.join(ordersRoom)
 
     return () => {
-      socket.leave(`messages_orders_${user?.id}`)
-      socket.leave(`orders_${user?.id}`)
+      socket.leave(messagesOrdersRoom)
+      socket.leave(ordersRoom)
     }
   }, [user])
 
