@@ -436,14 +436,13 @@ var OrderList = function OrderList(props) {
     };
   }, [orderList.orders, pagination, socket]);
   (0, _react.useEffect)(function () {
-    var _session$user;
+    var _session$user, _session$user2;
 
     if (!session.user) return;
-    socket.join("orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id)));
+    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
+    socket.join(ordersRoom);
     return function () {
-      var _session$user2;
-
-      socket.leave("orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id)));
+      socket.leave(ordersRoom);
     };
   }, [socket, session, userCustomerId]);
 

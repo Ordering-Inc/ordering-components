@@ -672,14 +672,15 @@ var OrderDetails = function OrderDetails(props) {
       setDriverLocation(newLocation);
     };
 
-    if (!isDisabledOrdersRoom) socket.join("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
+    var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
+    if (!isDisabledOrdersRoom) socket.join(ordersRoom);
     socket.join("drivers_".concat((_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.driver_id));
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
       var _orderState$order10;
 
-      if (!isDisabledOrdersRoom) socket.leave("orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
+      if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
       socket.leave("drivers_".concat((_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
@@ -706,10 +707,11 @@ var OrderDetails = function OrderDetails(props) {
     };
   }, [messages, socket, (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.status, userCustomerId]);
   (0, _react.useEffect)(function () {
-    socket.join("messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
+    var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
+    socket.join(messagesOrdersRoom);
     return function () {
       // neccesary refactor
-      if (!isDisabledOrdersRoom) socket.leave("messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
+      if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom);
     };
   }, [socket, userCustomerId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
