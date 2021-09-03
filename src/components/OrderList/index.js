@@ -189,9 +189,26 @@ export const OrderList = (props) => {
         loading: false
       })
     }
+
+    const handleAddNewOrder = (order) => {
+      setOrderList({
+        ...orderList,
+        loading: true
+      })
+      showToast(ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id))
+      const newOrder = [order, ...orderList.orders]
+      setOrderList({
+        ...orderList,
+        orders: newOrder,
+        loading: false
+      })
+    }
+
+    socket.on('orders_register', handleAddNewOrder)
     socket.on('update_order', handleUpdateOrder)
     return () => {
       socket.off('update_order', handleUpdateOrder)
+      socket.off('orders_register', handleAddNewOrder)
     }
   }, [orderList.orders, pagination, socket])
 
