@@ -19,15 +19,15 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -45,7 +45,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -442,105 +442,41 @@ var Contacts = function Contacts(props) {
     };
   }();
 
-  var messageRead = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(orderId) {
-      var _yield$ordering$order3, _yield$ordering$order4, result, error;
-
+  var loadMore = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(key) {
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
-              setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                loading: true
-              }));
-              _context5.prev = 1;
-              _context5.next = 4;
-              return ordering.orders(orderId).save({
-                unread_count: 0
-              });
-
-            case 4:
-              _yield$ordering$order3 = _context5.sent;
-              _yield$ordering$order4 = _yield$ordering$order3.content;
-              result = _yield$ordering$order4.result;
-              error = _yield$ordering$order4.error;
-
-              if (!error) {
-                orders.data.forEach(function (order, index, array) {
-                  if (order.id === orderId) {
-                    array.splice(index, 1, result);
-                    setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                      data: array,
-                      loading: false
-                    }));
-                  }
-                });
-              } else {
-                setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                  loading: false,
-                  error: result[0]
-                }));
-              }
-
-              _context5.next = 14;
-              break;
-
-            case 11:
-              _context5.prev = 11;
-              _context5.t0 = _context5["catch"](1);
-              setOrders(_objectSpread(_objectSpread({}, orders), {}, {
-                loading: false,
-                error: _context5.t0.message
-              }));
-
-            case 14:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5, null, [[1, 11]]);
-    }));
-
-    return function messageRead(_x5) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-
-  var loadMore = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(key) {
-      return _regenerator.default.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              _context6.t0 = key;
-              _context6.next = _context6.t0 === 2 ? 3 : _context6.t0 === 3 ? 5 : _context6.t0 === 4 ? 7 : 9;
+              _context5.t0 = key;
+              _context5.next = _context5.t0 === 2 ? 3 : _context5.t0 === 3 ? 5 : _context5.t0 === 4 ? 7 : 9;
               break;
 
             case 3:
               getBusinesses(true);
-              return _context6.abrupt("break", 10);
+              return _context5.abrupt("break", 10);
 
             case 5:
               getCustomers(true);
-              return _context6.abrupt("break", 10);
+              return _context5.abrupt("break", 10);
 
             case 7:
               getDrivers(true);
-              return _context6.abrupt("break", 10);
+              return _context5.abrupt("break", 10);
 
             case 9:
               getOrders(true);
 
             case 10:
             case "end":
-              return _context6.stop();
+              return _context5.stop();
           }
         }
-      }, _callee6);
+      }, _callee5);
     }));
 
-    return function loadMore(_x6) {
-      return _ref6.apply(this, arguments);
+    return function loadMore(_x5) {
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -573,23 +509,24 @@ var Contacts = function Contacts(props) {
     socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
     return function () {
       socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.leave("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
     };
   }, [user]);
   var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(message) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(message) {
       var orderId, _yield$ordering$setAc5, _yield$ordering$setAc6, result, error;
 
-      return _regenerator.default.wrap(function _callee7$(_context7) {
+      return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context7.prev = _context7.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
               orderId = message.order_id;
-              _context7.prev = 1;
-              _context7.next = 4;
+              _context6.prev = 1;
+              _context6.next = 4;
               return ordering.setAccessToken(token).orders(orderId).asDashboard().get();
 
             case 4:
-              _yield$ordering$setAc5 = _context7.sent;
+              _yield$ordering$setAc5 = _context6.sent;
               _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
               result = _yield$ordering$setAc6.result;
               error = _yield$ordering$setAc6.error;
@@ -617,45 +554,64 @@ var Contacts = function Contacts(props) {
                 });
               }
 
-              _context7.next = 14;
+              _context6.next = 14;
               break;
 
             case 11:
-              _context7.prev = 11;
-              _context7.t0 = _context7["catch"](1);
-              return _context7.abrupt("return", null);
+              _context6.prev = 11;
+              _context6.t0 = _context6["catch"](1);
+              return _context6.abrupt("return", null);
 
             case 14:
             case "end":
-              return _context7.stop();
+              return _context6.stop();
           }
         }
-      }, _callee7, null, [[1, 11]]);
+      }, _callee6, null, [[1, 11]]);
     }));
 
-    return function (_x7) {
-      return _ref7.apply(this, arguments);
+    return function (_x6) {
+      return _ref6.apply(this, arguments);
     };
   }(), []);
+  var handleUpdateOrder = (0, _react.useCallback)(function (order) {
+    var id = order.id,
+        status = order.status;
+    setOrders(function (prevOrders) {
+      var data = prevOrders.data;
+      data.forEach(function (_order) {
+        if (_order.id === id && _order.status !== status) {
+          delete order.total;
+          delete order.subtotal;
+          Object.assign(_order, order);
+        }
+      });
+      return _objectSpread(_objectSpread({}, prevOrders), {}, {
+        data: data
+      });
+    });
+  }, []);
   (0, _react.useEffect)(function () {
     if (!isConnected) {
       socket.on('message', handleMessage);
+      socket.on('update_order', handleUpdateOrder);
       setIsConnected(true);
     }
 
     return function () {
-      socket.off('message');
+      socket.off('message', handleMessage);
+      socket.off('update_order', handleUpdateOrder);
     };
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orders: orders,
+    setOrders: setOrders,
     setSortBy: setSortBy,
     contacts: contacts,
     pagination: pagination,
     getBusinesses: getBusinesses,
     getCustomers: getCustomers,
     getDrivers: getDrivers,
-    messageRead: messageRead,
     loadMore: loadMore
   })));
 };
