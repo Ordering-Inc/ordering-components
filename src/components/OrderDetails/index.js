@@ -111,7 +111,7 @@ export const OrderDetails = (props) => {
   /**
    * Method to update differents orders status
   */
-  const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
+   const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
       const bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : { status }
 
@@ -286,12 +286,13 @@ export const OrderDetails = (props) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
     }
-   if (!isDisabledOrdersRoom) socket.join(`orders_${userCustomerId || user?.id}`)
+    const ordersRoom = user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
+    if (!isDisabledOrdersRoom) socket.join(ordersRoom)
     socket.join(`drivers_${orderState.order?.driver_id}`)
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
-      if (!isDisabledOrdersRoom) socket.leave(`orders_${userCustomerId || user?.id}`)
+      if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
       socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
@@ -316,10 +317,11 @@ export const OrderDetails = (props) => {
   }, [messages, socket, orderState.order?.status, userCustomerId])
 
   useEffect(() => {
-    socket.join(`messages_orders_${userCustomerId || user?.id}`)
+    const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${userCustomerId || user?.id}`
+    socket.join(messagesOrdersRoom)
     return () => {
-      // neccesary refactor
-      if (!isDisabledOrdersRoom) socket.leave(`messages_orders_${userCustomerId || user?.id}`)
+        // neccesary refactor
+        if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
     }
   }, [socket, userCustomerId])
 
