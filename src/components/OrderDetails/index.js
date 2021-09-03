@@ -286,12 +286,12 @@ export const OrderDetails = (props) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
     }
-    if(!isDisabledOrdersRoom) socket.join(`orders_${userCustomerId || user?.id}`)
+   if (!isDisabledOrdersRoom) socket.join(`orders_${userCustomerId || user?.id}`)
     socket.join(`drivers_${orderState.order?.driver_id}`)
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
-      if(!isDisabledOrdersRoom)  socket.leave(`orders_${userCustomerId || user?.id}`)
+      if (!isDisabledOrdersRoom) socket.leave(`orders_${userCustomerId || user?.id}`)
       socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
@@ -318,7 +318,8 @@ export const OrderDetails = (props) => {
   useEffect(() => {
     socket.join(`messages_orders_${userCustomerId || user?.id}`)
     return () => {
-      socket.leave(`messages_orders_${userCustomerId || user?.id}`)
+      // neccesary refactor
+      if (!isDisabledOrdersRoom) socket.leave(`messages_orders_${userCustomerId || user?.id}`)
     }
   }, [socket, userCustomerId])
 
