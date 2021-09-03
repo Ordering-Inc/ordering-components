@@ -113,12 +113,8 @@ export const OrderDetails = (props) => {
   */
   const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
-      let bodyToSend
-      if (Object.keys(isAcceptOrReject).length > 0) {
-        bodyToSend = isAcceptOrReject
-      } else {
-        bodyToSend = { status }
-      }
+      const bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : { status }
+
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
 
@@ -127,11 +123,15 @@ export const OrderDetails = (props) => {
       }
 
       if (error) {
-        setOrderState({ ...orderState, error: result[0], loading: false })
-        showToast(ToastType.Error, t(result[0], result[0]))
+        const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
+        const defaultMessage = message !== 'INTERNAL_ERROR' ? message : 'Server Error, please wait, we are working to fix it'
+
+        setOrderState({ ...orderState, error: message, loading: false })
+        showToast(ToastType.Error, t(message.toUpperCase(), defaultMessage.replaceAll('_', ' ')))
       }
     } catch (err) {
       setOrderState({ ...orderState, loading: false, error: err.message })
+      showToast(ToastType.Error, t(err.message.replaceAll(' ', '_').toUpperCase(), err.message))
     }
   }
 
