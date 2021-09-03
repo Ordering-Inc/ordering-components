@@ -55,7 +55,7 @@ export const OrderList = (props) => {
         options.query.where.push({ attribute: 'id', value: orderIds })
       }
       if (orderStatus) {
-        const searchByStatus = otherStatus?.length > 0 ? otherStatus :  orderStatus
+        const searchByStatus = otherStatus?.length > 0 ? otherStatus : orderStatus
         options.query.where.push({ attribute: 'status', value: searchByStatus })
       }
     }
@@ -108,7 +108,6 @@ export const OrderList = (props) => {
       }
     }
   }
-
 
   const loadMessages = async (orderId) => {
     try {
@@ -214,14 +213,15 @@ export const OrderList = (props) => {
 
   useEffect(() => {
     if (!session.user) return
-    socket.join(`orders_${userCustomerId || session?.user?.id}`)
+    const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${userCustomerId || session?.user?.id}`
+    socket.join(ordersRoom)
     return () => {
-      socket.leave(`orders_${userCustomerId || session?.user?.id}`)
+      socket.leave(ordersRoom)
     }
   }, [socket, session, userCustomerId])
 
   const loadMoreOrders = async (searchByOtherStatus) => {
-    setOrderList({ ...orderList, loading: true });
+    setOrderList({ ...orderList, loading: true })
     try {
       const response = await getOrders(pagination.currentPage + 1, searchByOtherStatus)
       setOrderList({
@@ -291,7 +291,7 @@ export const OrderList = (props) => {
    * This effect is used to reload orders with dynamic params, using `isDynamicSort` as validation
    */
   useEffect(() => {
-    if(isDynamicSort) {
+    if (isDynamicSort) {
       loadOrders(true, [])
     }
   }, [sortBy])

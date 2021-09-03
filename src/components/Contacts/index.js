@@ -289,19 +289,20 @@ export const Contacts = (props) => {
   }, [sortBy]);
 
   useEffect(() => {
-    if (!token) return;
-
-    socket.join(`messages_orders_${user?.id}`);
-    socket.join(`orders_${user?.id}`)
+    if (!token) return
+    const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
+    const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`
+    socket.join(messagesOrdersRoom)
+    socket.join(ordersRoom)
 
     return () => {
-      socket.leave(`messages_orders_${user?.id}`);
+      socket.leave(`messages_orders_${user?.id}`)
       socket.leave(`orders_${user?.id}`)
-    };
-  }, [user]);
+    }
+  }, [user])
 
   const handleMessage = useCallback(async (message) => {
-    const { order_id: orderId } = message;
+    const { order_id: orderId } = message
 
     try {
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).asDashboard().get()
