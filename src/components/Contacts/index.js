@@ -250,30 +250,6 @@ export const Contacts = (props) => {
     }
   };
 
-  const messageRead = async (orderId) => {
-    setOrders({...orders, loading: true})
-    try {
-      const {
-        content: { result, error },
-      } = await ordering
-        .orders(orderId)
-        .save({ unread_count: 0 });
-      
-      if (!error) {
-        orders.data.forEach((order, index, array) => {
-          if (order.id === orderId) {
-            array.splice(index, 1, result)
-            setOrders({...orders, data: array, loading: false})
-          }
-        })
-      } else {
-        setOrders({ ...orders, loading: false, error: result[0] });
-      }
-    } catch(err) {
-        setOrders({ ...orders, loading: false, error: err.message });
-    }
-  }
-
   const loadMore = async (key) => {
     switch (key) {
       case 2:
@@ -314,10 +290,13 @@ export const Contacts = (props) => {
 
   useEffect(() => {
     if (!token) return;
+
     socket.join(`messages_orders_${user?.id}`);
     socket.join(`orders_${user?.id}`)
+
     return () => {
       socket.leave(`messages_orders_${user?.id}`);
+      socket.leave(`orders_${user?.id}`)
     };
   }, [user]);
 
@@ -353,14 +332,34 @@ export const Contacts = (props) => {
     }
   }, [])
 
+  const handleUpdateOrder = useCallback((order) => {
+    const { id, status } = order;
+
+    setOrders((prevOrders => {
+      const { data } = prevOrders
+
+      data.forEach(_order => {
+        if (_order.id === id && _order.status !== status) {
+          delete order.total
+          delete order.subtotal
+          Object.assign(_order, order)
+        }
+      })
+
+      return {...prevOrders, data};
+    }));
+  }, [])
+
   useEffect(() => {
     if (!isConnected) {
       socket.on('message', handleMessage);
+      socket.on('update_order', handleUpdateOrder)
       setIsConnected(true)
     }
 
     return () => {
-      socket.off('message');
+      socket.off('message', handleMessage);
+      socket.off('update_order', handleUpdateOrder)
     };
   }, []);
 
@@ -370,13 +369,13 @@ export const Contacts = (props) => {
         <UIComponent
           {...props}
           orders={orders}
+          setOrders={setOrders}
           setSortBy={setSortBy}
           contacts={contacts}
           pagination={pagination}
           getBusinesses={getBusinesses}
           getCustomers={getCustomers}
           getDrivers={getDrivers}
-          messageRead={messageRead}
           loadMore={loadMore}
         />
       )}
