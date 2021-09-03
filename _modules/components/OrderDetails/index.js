@@ -301,6 +301,8 @@ var OrderDetails = function OrderDetails(props) {
           _yield$ordering$setAc2,
           result,
           error,
+          message,
+          defaultMessage,
           _args3 = arguments;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
@@ -309,15 +311,9 @@ var OrderDetails = function OrderDetails(props) {
             case 0:
               isAcceptOrReject = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : {};
               _context3.prev = 1;
-
-              if (Object.keys(isAcceptOrReject).length > 0) {
-                bodyToSend = isAcceptOrReject;
-              } else {
-                bodyToSend = {
-                  status: status
-                };
-              }
-
+              bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : {
+                status: status
+              };
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: true
               }));
@@ -338,14 +334,16 @@ var OrderDetails = function OrderDetails(props) {
               }
 
               if (error) {
+                message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR';
+                defaultMessage = message !== 'INTERNAL_ERROR' ? message : 'Server Error, please wait, we are working to fix it';
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  error: result[0],
+                  error: message,
                   loading: false
                 }));
-                showToast(_ToastContext.ToastType.Error, t(result[0], result[0]));
+                showToast(_ToastContext.ToastType.Error, t(message.toUpperCase(), defaultMessage.replaceAll('_', ' ')));
               }
 
-              _context3.next = 17;
+              _context3.next = 18;
               break;
 
             case 14:
@@ -355,8 +353,9 @@ var OrderDetails = function OrderDetails(props) {
                 loading: false,
                 error: _context3.t0.message
               }));
+              showToast(_ToastContext.ToastType.Error, t(_context3.t0.message.replaceAll(' ', '_').toUpperCase(), _context3.t0.message));
 
-            case 17:
+            case 18:
             case "end":
               return _context3.stop();
           }
@@ -709,7 +708,8 @@ var OrderDetails = function OrderDetails(props) {
   (0, _react.useEffect)(function () {
     socket.join("messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
     return function () {
-      socket.leave("messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
+      // neccesary refactor
+      if (!isDisabledOrdersRoom) socket.leave("messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id)));
     };
   }, [socket, userCustomerId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
