@@ -505,11 +505,13 @@ var Contacts = function Contacts(props) {
   }, [sortBy]);
   (0, _react.useEffect)(function () {
     if (!token) return;
-    socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-    socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id);
+    var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id);
+    socket.join(messagesOrdersRoom);
+    socket.join(ordersRoom);
     return function () {
-      socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-      socket.leave("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.leave(messagesOrdersRoom);
+      socket.leave(ordersRoom);
     };
   }, [user]);
   var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
