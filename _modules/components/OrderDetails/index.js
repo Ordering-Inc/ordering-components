@@ -509,7 +509,7 @@ var OrderDetails = function OrderDetails(props) {
               err.push(_context5.t0.message);
 
             case 29:
-              if (!(user.level === 2 && order.delivery_type === 1)) {
+              if (!((user.level === 2 || user.level === 0) && order.delivery_type === 1)) {
                 _context5.next = 44;
                 break;
               }
