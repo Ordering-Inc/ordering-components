@@ -196,7 +196,7 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
-      if (user.level === 2 && order.delivery_type === 1) {
+      if ((user.level === 2 || user.level === 0) && order.delivery_type === 1) {
         try {
           const { response: { data } } = await ordering.setAccessToken(token).controls(orderId).get()
 
