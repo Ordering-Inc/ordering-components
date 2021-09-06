@@ -20,7 +20,7 @@ export const BusinessController = (props) => {
   /**
    * This must be containt business object data
    */
-  const [businessState, setBusinessState] = useState({business, loading: false, error: null})
+  const [businessState, setBusinessState] = useState({ business, loading: false, error: null })
   /**
    * This must be containt local time for check if business is close
    */
@@ -52,16 +52,16 @@ export const BusinessController = (props) => {
    * Method to get business from SDK
    */
   const getBusiness = async () => {
-    setBusinessState({...businessState, loading: true})
+    setBusinessState({ ...businessState, loading: true })
     try {
       const { content: { result, error } } = await ordering.businesses(businessId).select(businessAttributes).get()
       if (!error) {
-        setBusinessState({...businessState, business: result, loading: false})
+        setBusinessState({ ...businessState, business: result, loading: false })
       } else {
-        setBusinessState({...businessState, business: result[0], loading: false, error})
+        setBusinessState({ ...businessState, business: result[0], loading: false, error })
       }
     } catch (err) {
-      setBusinessState({...businessState, loading: false, error: err.message})
+      setBusinessState({ ...businessState, loading: false, error: err.message })
     }
   }
   /**
@@ -105,11 +105,13 @@ export const BusinessController = (props) => {
     const currentMinute = currentTime?.split(':')[1]
     const hour = timeToClose?.split(':')[0]
     const minute = timeToClose?.split(':')[1]
-    const result = currentHour > hour || (currentHour === hour && currentMinute >= minute)
-    const timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000
-    setBusinessWillCloseSoonMinutes((timeDifference <= 30 && timeDifference > 0) ? timeDifference : null)
-    if (timeToClose) {
-      setIsBusinessClose(result)
+    if (hour) {
+      const result = parseInt(currentHour) > parseInt(hour)
+      const timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000
+      setBusinessWillCloseSoonMinutes((timeDifference <= 30 && timeDifference > 0) ? timeDifference : null)
+      if (timeToClose) {
+        setIsBusinessClose(result)
+      }
     }
   }, [currentTime])
 
@@ -141,24 +143,24 @@ export const BusinessController = (props) => {
 
   useEffect(() => {
     if (business && business?.id !== businessState?.business?.id) {
-      setBusinessState({...businessState, business})
+      setBusinessState({ ...businessState, business })
     } else if (!business) {
       getBusiness()
     }
   }, [])
 
   const updateBusiness = async (businessId, updateParams = {}) => {
-    setBusinessState({...businessState, loading: true})
+    setBusinessState({ ...businessState, loading: true })
     try {
       const { content: { result, error } } = await ordering.businesses(businessId).save(updateParams)
 
       if (!error) {
-        setBusinessState({...businessState, business: result, loading: false})
+        setBusinessState({ ...businessState, business: result, loading: false })
       } else {
-        setBusinessState({...businessState, business: result[0], loading: false, error})
+        setBusinessState({ ...businessState, business: result[0], loading: false, error })
       }
     } catch (err) {
-      setBusinessState({...businessState, loading: false, error: err.message})
+      setBusinessState({ ...businessState, loading: false, error: err.message })
     }
   }
 
