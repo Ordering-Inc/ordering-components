@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useSession } from '../../contexts/SessionContext'
 import PropTypes from 'prop-types'
+import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
 export const OrderReview = (props) => {
@@ -81,6 +81,7 @@ export const OrderReview = (props) => {
           handleSendReview={handleSendReview}
           handleChangeInput={handleChangeInput}
           handleChangeRating={handleChangeRating}
+          setStars={setStars}
         />
       )}
     </>
