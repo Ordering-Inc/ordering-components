@@ -4,7 +4,6 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
-
 dayjs.extend(utc)
 
 export const BusinessList = (props) => {
@@ -26,7 +25,8 @@ export const BusinessList = (props) => {
     propsToFetch,
     onBusinessClick,
     windowPathname,
-    currentPageParam
+    currentPageParam,
+    franchiseId
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -99,6 +99,10 @@ export const BusinessList = (props) => {
       }
       if (isFeatured) {
         conditions.push({ attribute: 'featured', value: true })
+      }
+
+      if (franchiseId) {
+        conditions.push({ attribute: 'franchise_id', value: franchiseId })
       }
 
       if (timeLimitValue) {
