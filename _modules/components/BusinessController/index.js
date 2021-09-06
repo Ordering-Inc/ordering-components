@@ -45,7 +45,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -240,12 +240,15 @@ var BusinessController = function BusinessController(props) {
     var currentMinute = currentTime === null || currentTime === void 0 ? void 0 : currentTime.split(':')[1];
     var hour = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[0];
     var minute = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[1];
-    var result = currentHour > hour || currentHour === hour && currentMinute >= minute;
-    var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
-    setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
 
-    if (timeToClose) {
-      setIsBusinessClose(result);
+    if (hour) {
+      var result = parseInt(currentHour) > parseInt(hour);
+      var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
+      setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
+
+      if (timeToClose) {
+        setIsBusinessClose(result);
+      }
     }
   }, [currentTime]);
   (0, _react.useEffect)(function () {
