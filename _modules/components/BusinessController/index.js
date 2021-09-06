@@ -240,12 +240,15 @@ var BusinessController = function BusinessController(props) {
     var currentMinute = currentTime === null || currentTime === void 0 ? void 0 : currentTime.split(':')[1];
     var hour = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[0];
     var minute = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[1];
-    var result = currentHour > hour || currentHour === hour && currentMinute >= minute;
-    var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
-    setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
 
-    if (timeToClose) {
-      setIsBusinessClose(result);
+    if (hour) {
+      var result = parseInt(currentHour) > parseInt(hour);
+      var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
+      setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
+
+      if (timeToClose) {
+        setIsBusinessClose(result);
+      }
     }
   }, [currentTime]);
   (0, _react.useEffect)(function () {
