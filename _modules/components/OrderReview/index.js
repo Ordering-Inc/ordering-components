@@ -11,9 +11,9 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _SessionContext = require("../../contexts/SessionContext");
-
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
@@ -190,7 +190,8 @@ var OrderReview = function OrderReview(props) {
     formState: formState,
     handleSendReview: handleSendReview,
     handleChangeInput: handleChangeInput,
-    handleChangeRating: handleChangeRating
+    handleChangeRating: handleChangeRating,
+    setStars: setStars
   })));
 };
 
