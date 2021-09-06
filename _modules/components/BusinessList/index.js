@@ -55,7 +55,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -81,7 +81,8 @@ var BusinessList = function BusinessList(props) {
       propsToFetch = props.propsToFetch,
       onBusinessClick = props.onBusinessClick,
       windowPathname = props.windowPathname,
-      currentPageParam = props.currentPageParam;
+      currentPageParam = props.currentPageParam,
+      franchiseId = props.franchiseId;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -217,6 +218,13 @@ var BusinessList = function BusinessList(props) {
                 });
               }
 
+              if (franchiseId) {
+                conditions.push({
+                  attribute: 'franchise_id',
+                  value: franchiseId
+                });
+              }
+
               if (timeLimitValue) {
                 if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.type) === 1) {
                   conditions.push({
@@ -298,12 +306,12 @@ var BusinessList = function BusinessList(props) {
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : !where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard() : ordering.businesses().select(propsToFetch).parameters(parameters);
-              _context.next = 21;
+              _context.next = 22;
               return fetchEndpoint.get({
                 cancelToken: source
               });
 
-            case 21:
+            case 22:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               result = _yield$fetchEndpoint$2.result;
@@ -337,11 +345,11 @@ var BusinessList = function BusinessList(props) {
                 totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
-              _context.next = 35;
+              _context.next = 36;
               break;
 
-            case 32:
-              _context.prev = 32;
+            case 33:
+              _context.prev = 33;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -351,12 +359,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 35:
+            case 36:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 32]]);
+      }, _callee, null, [[0, 33]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
