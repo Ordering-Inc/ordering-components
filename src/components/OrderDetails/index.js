@@ -12,7 +12,7 @@ export const OrderDetails = (props) => {
     hashKey,
     UIComponent,
     userCustomerId,
-    getDrivers,
+    isFetchDrivers,
     driverAndBusinessId,
     sendCustomMessage,
     isDisabledOrdersRoom
@@ -197,7 +197,7 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
-      if (getDrivers) {
+      if (isFetchDrivers) {
         try {
           const { response: { data } } = await ordering.setAccessToken(token).controls(orderId).get()
 
