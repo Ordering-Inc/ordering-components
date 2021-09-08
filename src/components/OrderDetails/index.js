@@ -12,6 +12,7 @@ export const OrderDetails = (props) => {
     hashKey,
     UIComponent,
     userCustomerId,
+    isFetchDrivers,
     driverAndBusinessId,
     sendCustomMessage,
     isDisabledOrdersRoom
@@ -196,7 +197,7 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
-      if ((user.level === 2 || user.level === 0) && order.delivery_type === 1) {
+      if (isFetchDrivers) {
         try {
           const { response: { data } } = await ordering.setAccessToken(token).controls(orderId).get()
 
