@@ -54,7 +54,8 @@ var CardForm = function CardForm(props) {
       toSave = props.toSave,
       handleSource = props.handleSource,
       onNewCard = props.onNewCard,
-      handleCustomSubmit = props.handleCustomSubmit;
+      handleCustomSubmit = props.handleCustomSubmit,
+      isSplitForm = props.isSplitForm;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -173,21 +174,25 @@ var CardForm = function CardForm(props) {
               event.preventDefault();
               card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
 
+              if (isSplitForm) {
+                card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardNumberElement);
+              }
+
               if (requirements) {
-                _context2.next = 16;
+                _context2.next = 17;
                 break;
               }
 
               if (stripe) {
-                _context2.next = 10;
+                _context2.next = 11;
                 break;
               }
 
               setError(t('STRIPE_LOAD_ERROR', 'Failed to load Stripe properly'));
               return _context2.abrupt("return");
 
-            case 10:
-              _context2.next = 12;
+            case 11:
+              _context2.next = 13;
               return stripe.createPaymentMethod({
                 type: 'card',
                 card: card,
@@ -198,7 +203,7 @@ var CardForm = function CardForm(props) {
                 }
               });
 
-            case 12:
+            case 13:
               result = _context2.sent;
 
               if (result.error) {
@@ -217,20 +222,20 @@ var CardForm = function CardForm(props) {
                 }); // props.handlerToken(result?.paymentMethod)
               }
 
-              _context2.next = 23;
+              _context2.next = 24;
               break;
 
-            case 16:
+            case 17:
               if (stripe) {
-                _context2.next = 19;
+                _context2.next = 20;
                 break;
               }
 
               setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'));
               return _context2.abrupt("return");
 
-            case 19:
-              _context2.next = 21;
+            case 20:
+              _context2.next = 22;
               return stripe.confirmCardSetup(requirements, {
                 payment_method: {
                   card: card,
@@ -242,7 +247,7 @@ var CardForm = function CardForm(props) {
                 }
               });
 
-            case 21:
+            case 22:
               _result = _context2.sent;
 
               if (_result.error) {
@@ -254,7 +259,7 @@ var CardForm = function CardForm(props) {
                 toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
               }
 
-            case 23:
+            case 24:
             case "end":
               return _context2.stop();
           }
