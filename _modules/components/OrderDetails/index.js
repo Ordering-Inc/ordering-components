@@ -68,6 +68,7 @@ var OrderDetails = function OrderDetails(props) {
       hashKey = props.hashKey,
       UIComponent = props.UIComponent,
       userCustomerId = props.userCustomerId,
+      isFetchDrivers = props.isFetchDrivers,
       driverAndBusinessId = props.driverAndBusinessId,
       sendCustomMessage = props.sendCustomMessage,
       isDisabledOrdersRoom = props.isDisabledOrdersRoom;
@@ -509,7 +510,7 @@ var OrderDetails = function OrderDetails(props) {
               err.push(_context5.t0.message);
 
             case 29:
-              if (!((user.level === 2 || user.level === 0) && order.delivery_type === 1)) {
+              if (!isFetchDrivers) {
                 _context5.next = 44;
                 break;
               }
