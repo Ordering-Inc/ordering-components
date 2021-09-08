@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   CardElement,
+  CardNumberElement,
   useElements,
   useStripe
 } from '@stripe/react-stripe-js'
@@ -20,7 +21,8 @@ export const CardForm = (props) => {
     toSave,
     handleSource,
     onNewCard,
-    handleCustomSubmit
+    handleCustomSubmit,
+    isSplitForm
   } = props
 
   const [{ user }] = useSession()
@@ -80,7 +82,11 @@ export const CardForm = (props) => {
     }
     setLoading(true)
     event.preventDefault()
-    const card = elements?.getElement(CardElement)
+    let card = elements?.getElement(CardElement)
+    
+    if (isSplitForm) {
+      card = elements?.getElement(CardNumberElement)
+    }
 
     if (!requirements) {
       if (!stripe) {
