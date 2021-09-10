@@ -229,11 +229,12 @@ var BusinessController = function BusinessController(props) {
   };
 
   (0, _react.useEffect)(function () {
+    var timeout = null;
+    var timeoutCloseSoon = null;
+
     if (!isDisabledInterval) {
       var _businessState$busine, _businessState$busine2, _businessState$busine3, _businessState$busine4;
 
-      var timeout = null;
-      var timeoutCloseSoon = null;
       var currentDate = (0, _dayjs.default)().tz((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.timezone);
       var lapse = (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.today) === null || _businessState$busine3 === void 0 ? void 0 : (_businessState$busine4 = _businessState$busine3.lapses) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.find(function (lapse) {
         var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
@@ -262,12 +263,12 @@ var BusinessController = function BusinessController(props) {
           setIsBusinessClose(true);
         }, timeToClose);
       }
-
-      return function () {
-        timeout && clearTimeout(timeout);
-        intervalCloseSoon && clearTimeout(intervalCloseSoon);
-      };
     }
+
+    return function () {
+      timeout && clearTimeout(timeout);
+      timeoutCloseSoon && clearTimeout(timeoutCloseSoon);
+    };
   }, []);
   (0, _react.useEffect)(function () {
     var timeout = null;
