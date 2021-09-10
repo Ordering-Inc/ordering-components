@@ -110,7 +110,7 @@ export const BusinessController = (props) => {
         return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix()
       });
 
-      if (Object.keys(lapse) > 0) {
+      if (lapse && Object.keys(lapse) > 0) {
         const to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute)
         const timeToClose = (to.unix() - currentDate.unix()) * 1000
 
