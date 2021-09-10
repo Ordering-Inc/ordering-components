@@ -99,9 +99,9 @@ export const BusinessController = (props) => {
   }
 
   useEffect(() => {
+    let timeout = null
+    let timeoutCloseSoon = null
     if (!isDisabledInterval) {
-      let timeout = null
-      let timeoutCloseSoon = null
       const currentDate = dayjs().tz(businessState.business?.timezone);
 
       const lapse = businessState.business?.today?.lapses?.find(lapse => {
@@ -134,10 +134,10 @@ export const BusinessController = (props) => {
         }, timeToClose);
       }
 
-      return () => {
-        timeout && clearTimeout(timeout)
-        intervalCloseSoon && clearTimeout(intervalCloseSoon)
-      }
+    }
+    return () => {
+      timeout && clearTimeout(timeout)
+      timeoutCloseSoon && clearTimeout(timeoutCloseSoon)
     }
   }, [])
 
