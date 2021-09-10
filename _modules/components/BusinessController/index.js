@@ -19,6 +19,12 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _UtilsContext = require("../../contexts/UtilsContext");
 
+var _dayjs = _interopRequireDefault(require("dayjs"));
+
+var _timezone = _interopRequireDefault(require("dayjs/plugin/timezone"));
+
+var _isBetween = _interopRequireDefault(require("dayjs/plugin/isBetween"));
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -49,6 +55,10 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+_dayjs.default.extend(_timezone.default);
+
+_dayjs.default.extend(_isBetween.default);
+
 var BusinessController = function BusinessController(props) {
   var business = props.business,
       businessId = props.businessId,
@@ -56,6 +66,7 @@ var BusinessController = function BusinessController(props) {
       onBusinessClick = props.onBusinessClick,
       handleCustomClick = props.handleCustomClick,
       isDisabledInterval = props.isDisabledInterval,
+      minutesToCloseSoon = props.minutesToCloseSoon,
       UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -75,23 +86,14 @@ var BusinessController = function BusinessController(props) {
       businessState = _useState2[0],
       setBusinessState = _useState2[1];
   /**
-   * This must be containt local time for check if business is close
-   */
-
-
-  var _useState3 = (0, _react.useState)(null),
-      _useState4 = _slicedToArray(_useState3, 2),
-      currentTime = _useState4[0],
-      setCurrentTime = _useState4[1];
-  /**
    * This must be containt a boolean to indicate if a business is close or not
    */
 
 
-  var _useState5 = (0, _react.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      isBusinessClose = _useState6[0],
-      setIsBusinessClose = _useState6[1];
+  var _useState3 = (0, _react.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isBusinessClose = _useState4[0],
+      setIsBusinessClose = _useState4[1];
   /**
    * Order context data
    */
@@ -109,23 +111,14 @@ var BusinessController = function BusinessController(props) {
       _useUtils2 = _slicedToArray(_useUtils, 1),
       parsePrice = _useUtils2[0].parsePrice;
   /**
-   * time when business is going to close
-   */
-
-
-  var _useState7 = (0, _react.useState)(null),
-      _useState8 = _slicedToArray(_useState7, 2),
-      timeToClose = _useState8[0],
-      setTimeToClose = _useState8[1];
-  /**
    * timer in minutes when the business is going to close
    */
 
 
-  var _useState9 = (0, _react.useState)(null),
-      _useState10 = _slicedToArray(_useState9, 2),
-      businessWillCloseSoonMinutes = _useState10[0],
-      setBusinessWillCloseSoonMinutes = _useState10[1];
+  var _useState5 = (0, _react.useState)(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      businessWillCloseSoonMinutes = _useState6[0],
+      setBusinessWillCloseSoonMinutes = _useState6[1];
   /**
    * Method to get business from SDK
    */
@@ -236,57 +229,63 @@ var BusinessController = function BusinessController(props) {
   };
 
   (0, _react.useEffect)(function () {
-    var currentHour = currentTime === null || currentTime === void 0 ? void 0 : currentTime.split(':')[0];
-    var currentMinute = currentTime === null || currentTime === void 0 ? void 0 : currentTime.split(':')[1];
-    var hour = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[0];
-    var minute = timeToClose === null || timeToClose === void 0 ? void 0 : timeToClose.split(':')[1];
-
-    if (hour) {
-      var result = parseInt(currentHour) > parseInt(hour);
-      var timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000;
-      setBusinessWillCloseSoonMinutes(timeDifference <= 30 && timeDifference > 0 ? timeDifference : null);
-
-      if (timeToClose) {
-        setIsBusinessClose(result);
-      }
-    }
-  }, [currentTime]);
-  (0, _react.useEffect)(function () {
     if (!isDisabledInterval) {
-      var interval = setInterval(function () {
-        var currentHour = new Date().getHours();
-        var currentMinute = new Date().getMinutes();
-        var currentDay = new Date().getDate();
-        var currentMonth = new Date().getMonth();
-        var currentYear = new Date().getFullYear();
-        setCurrentTime("".concat(currentHour, ":").concat(currentMinute));
+      var _businessState$busine, _businessState$busine2, _businessState$busine3, _businessState$busine4;
 
-        for (var i = 0; i < ((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : (_businessState$busine2 = _businessState$busine.today) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.lapses) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.length); i++) {
-          var _businessState$busine, _businessState$busine2, _businessState$busine3, _businessState$busine4, _businessState$busine5, _businessState$busine6, _businessState$busine7, _businessState$busine8, _businessState$busine9;
+      var timeout = null;
+      var timeoutCloseSoon = null;
+      var currentDate = (0, _dayjs.default)().tz((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.timezone);
+      var lapse = (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.today) === null || _businessState$busine3 === void 0 ? void 0 : (_businessState$busine4 = _businessState$busine3.lapses) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.find(function (lapse) {
+        var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
+        var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
+        return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix();
+      });
 
-          var timeToOpenFormatted = formatDate(((_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.today) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.lapses[i]) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.open) || null);
-          var timeToCloseFormatted = formatDate(((_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : (_businessState$busine8 = _businessState$busine7.today) === null || _businessState$busine8 === void 0 ? void 0 : (_businessState$busine9 = _businessState$busine8.lapses[i]) === null || _businessState$busine9 === void 0 ? void 0 : _businessState$busine9.close) || null);
-          var hourClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[0];
-          var minuteClose = timeToCloseFormatted === null || timeToCloseFormatted === void 0 ? void 0 : timeToCloseFormatted.split(':')[1];
-          var hourOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[0];
-          var minuteOpen = timeToOpenFormatted === null || timeToOpenFormatted === void 0 ? void 0 : timeToOpenFormatted.split(':')[1]; // range of most recent open-close business lapses
+      if (Object.keys(lapse) > 0) {
+        var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
+        var timeToClose = (to.unix() - currentDate.unix()) * 1000;
 
-          if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
-            var _businessState$busine10, _businessState$busine11, _businessState$busine12;
-
-            setTimeToClose(formatDate((_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.today) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.lapses[i]) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.close));
-          }
+        if (timeToClose <= minutesToCloseSoon * 60000 && timeToClose > 0) {
+          setBusinessWillCloseSoonMinutes(timeToClose / 60000);
+        } else if (timeToClose > minutesToCloseSoon * 60000) {
+          timeoutCloseSoon = setTimeout(function () {
+            setBusinessWillCloseSoonMinutes(minutesToCloseSoon);
+          }, timeToClose - minutesToCloseSoon * 60000);
         }
-      }, 1000);
+
+        timeout = setTimeout(function () {
+          setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+            business: _objectSpread(_objectSpread({}, businessState.business), {}, {
+              open: false
+            })
+          }));
+          setIsBusinessClose(true);
+        }, timeToClose);
+      }
+
       return function () {
-        return clearInterval(interval);
+        timeout && clearTimeout(timeout);
+        intervalCloseSoon && clearTimeout(intervalCloseSoon);
       };
     }
   }, []);
   (0, _react.useEffect)(function () {
-    var _businessState$busine13;
+    var timeout = null;
 
-    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id)) {
+    if (businessWillCloseSoonMinutes) {
+      timeout = setTimeout(function () {
+        setBusinessWillCloseSoonMinutes(businessWillCloseSoonMinutes - 1);
+      }, 60000);
+    }
+
+    return function () {
+      timeout && clearTimeout(timeout);
+    };
+  }, [businessWillCloseSoonMinutes]);
+  (0, _react.useEffect)(function () {
+    var _businessState$busine5;
+
+    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: business
       }));
@@ -434,5 +433,6 @@ BusinessController.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  minutesToCloseSoon: 30
 };
