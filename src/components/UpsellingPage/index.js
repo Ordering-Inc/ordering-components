@@ -41,7 +41,7 @@ export const UpsellingPage = (props) => {
       const { content: { result } } = await ordering
         .businesses(businessId)
         .products()
-        .parameters({ type: 1, params: 'upsellings' })
+        .parameters({ type: orderState.options.type, params: 'upsellings' })
         .get()
       setBusinessProducts(result)
       getUpsellingProducts(result)

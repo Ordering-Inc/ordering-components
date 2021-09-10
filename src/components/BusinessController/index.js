@@ -4,6 +4,13 @@ import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useUtils } from '../../contexts/UtilsContext'
 
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import isBetween from 'dayjs/plugin/isBetween'
+
+dayjs.extend(timezone)
+dayjs.extend(isBetween)
+
 export const BusinessController = (props) => {
   const {
     business,
@@ -12,6 +19,7 @@ export const BusinessController = (props) => {
     onBusinessClick,
     handleCustomClick,
     isDisabledInterval,
+    minutesToCloseSoon,
     UIComponent
   } = props
 
@@ -21,10 +29,6 @@ export const BusinessController = (props) => {
    * This must be containt business object data
    */
   const [businessState, setBusinessState] = useState({ business, loading: false, error: null })
-  /**
-   * This must be containt local time for check if business is close
-   */
-  const [currentTime, setCurrentTime] = useState(null)
   /**
    * This must be containt a boolean to indicate if a business is close or not
    */
@@ -37,12 +41,6 @@ export const BusinessController = (props) => {
    * formatPrice function
    */
   const [{ parsePrice }] = useUtils()
-
-  /**
-   * time when business is going to close
-   */
-  const [timeToClose, setTimeToClose] = useState(null)
-
   /**
    * timer in minutes when the business is going to close
    */
@@ -101,45 +99,61 @@ export const BusinessController = (props) => {
   }
 
   useEffect(() => {
-    const currentHour = currentTime?.split(':')[0]
-    const currentMinute = currentTime?.split(':')[1]
-    const hour = timeToClose?.split(':')[0]
-    const minute = timeToClose?.split(':')[1]
-    if (hour) {
-      const result = parseInt(currentHour) > parseInt(hour)
-      const timeDifference = (new Date(null, null, null, hour, minute) - new Date(null, null, null, currentHour, currentMinute)) / 60000
-      setBusinessWillCloseSoonMinutes((timeDifference <= 30 && timeDifference > 0) ? timeDifference : null)
-      if (timeToClose) {
-        setIsBusinessClose(result)
+    if (!isDisabledInterval) {
+      let timeout = null
+      let timeoutCloseSoon = null
+      const currentDate = dayjs().tz(businessState.business?.timezone);
+
+      const lapse = businessState.business?.today?.lapses?.find(lapse => {
+        const from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute)
+        const to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute)
+        return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix()
+      });
+
+      if (Object.keys(lapse) > 0) {
+        const to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute)
+        const timeToClose = (to.unix() - currentDate.unix()) * 1000
+
+        if (timeToClose <= minutesToCloseSoon * 60000 && timeToClose > 0) {
+          setBusinessWillCloseSoonMinutes(timeToClose / 60000)
+        } else if (timeToClose > minutesToCloseSoon * 60000) {
+          timeoutCloseSoon = setTimeout(() => {
+            setBusinessWillCloseSoonMinutes(minutesToCloseSoon)
+          }, (timeToClose - (minutesToCloseSoon * 60000)));
+        }
+
+        timeout = setTimeout(() => {
+          setBusinessState({
+            ...businessState,
+            business: {
+              ...businessState.business,
+              open: false
+            }
+          })
+          setIsBusinessClose(true)
+        }, timeToClose);
+      }
+
+      return () => {
+        timeout && clearTimeout(timeout)
+        intervalCloseSoon && clearTimeout(intervalCloseSoon)
       }
     }
-  }, [currentTime])
+  }, [])
 
   useEffect(() => {
-    if (!isDisabledInterval) {
-      const interval = setInterval(() => {
-        const currentHour = new Date().getHours()
-        const currentMinute = new Date().getMinutes()
-        const currentDay = new Date().getDate()
-        const currentMonth = new Date().getMonth()
-        const currentYear = new Date().getFullYear()
-        setCurrentTime(`${currentHour}:${currentMinute}`)
-        for (let i = 0; i < businessState.business?.today?.lapses?.length; i++) {
-          const timeToOpenFormatted = formatDate(businessState.business?.today?.lapses[i]?.open || null)
-          const timeToCloseFormatted = formatDate(businessState.business?.today?.lapses[i]?.close || null)
-          const hourClose = timeToCloseFormatted?.split(':')[0]
-          const minuteClose = timeToCloseFormatted?.split(':')[1]
-          const hourOpen = timeToOpenFormatted?.split(':')[0]
-          const minuteOpen = timeToOpenFormatted?.split(':')[1]
-          // range of most recent open-close business lapses
-          if (new Date() < new Date(currentYear, currentMonth, currentDay, hourClose, minuteClose) && new Date() > new Date(currentYear, currentMonth, currentDay, hourOpen, minuteOpen)) {
-            setTimeToClose(formatDate(businessState.business?.today?.lapses[i]?.close))
-          }
-        }
-      }, 1000)
-      return () => clearInterval(interval)
+    let timeout = null
+
+    if (businessWillCloseSoonMinutes) {
+      timeout = setTimeout(() => {
+        setBusinessWillCloseSoonMinutes(businessWillCloseSoonMinutes - 1)
+      }, 60000);
     }
-  }, [])
+
+    return () => {
+      timeout && clearTimeout(timeout)
+    }
+  }, [businessWillCloseSoonMinutes])
 
   useEffect(() => {
     if (business && business?.id !== businessState?.business?.id) {
@@ -237,5 +251,6 @@ BusinessController.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  minutesToCloseSoon: 30
 }
