@@ -110,7 +110,7 @@ var UpsellingPage = function UpsellingPage(props) {
               _context.prev = 0;
               _context.next = 3;
               return ordering.businesses(businessId).products().parameters({
-                type: 1,
+                type: orderState.options.type,
                 params: 'upsellings'
               }).get();
 
