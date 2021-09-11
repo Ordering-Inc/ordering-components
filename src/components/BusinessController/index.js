@@ -113,8 +113,6 @@ export const BusinessController = (props) => {
         });
       }
 
-      console.log(`businessId: ${businessState.business?.id} - lapse:  `, lapse, currentDate)
-
       if (lapse) {
         const to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute)
         const timeToClose = (to.unix() - currentDate.unix()) * 1000
