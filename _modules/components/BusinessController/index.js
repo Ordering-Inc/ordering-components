@@ -229,20 +229,25 @@ var BusinessController = function BusinessController(props) {
   };
 
   (0, _react.useEffect)(function () {
-    var timeout = null;
-    var timeoutCloseSoon = null;
-
     if (!isDisabledInterval) {
-      var _businessState$busine, _businessState$busine2, _businessState$busine3, _businessState$busine4;
+      var _businessState$busine, _businessState$busine2, _businessState$busine3;
 
+      var timeout = null;
+      var timeoutCloseSoon = null;
       var currentDate = (0, _dayjs.default)().tz((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.timezone);
-      var lapse = (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : (_businessState$busine3 = _businessState$busine2.today) === null || _businessState$busine3 === void 0 ? void 0 : (_businessState$busine4 = _businessState$busine3.lapses) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.find(function (lapse) {
-        var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
-        var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
-        return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix();
-      });
+      var lapse = null;
 
-      if (lapse && Object.keys(lapse) > 0) {
+      if ((_businessState$busine2 = businessState.business) !== null && _businessState$busine2 !== void 0 && (_businessState$busine3 = _businessState$busine2.today) !== null && _businessState$busine3 !== void 0 && _businessState$busine3.enabled) {
+        var _businessState$busine4, _businessState$busine5, _businessState$busine6;
+
+        lapse = (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.today) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.lapses) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.find(function (lapse) {
+          var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
+          var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
+          return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix();
+        });
+      }
+
+      if (lapse) {
         var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
         var timeToClose = (to.unix() - currentDate.unix()) * 1000;
 
@@ -263,12 +268,12 @@ var BusinessController = function BusinessController(props) {
           setIsBusinessClose(true);
         }, timeToClose);
       }
-    }
 
-    return function () {
-      timeout && clearTimeout(timeout);
-      timeoutCloseSoon && clearTimeout(timeoutCloseSoon);
-    };
+      return function () {
+        timeout && clearTimeout(timeout);
+        timeoutCloseSoon && clearTimeout(timeoutCloseSoon);
+      };
+    }
   }, []);
   (0, _react.useEffect)(function () {
     var timeout = null;
@@ -284,9 +289,9 @@ var BusinessController = function BusinessController(props) {
     };
   }, [businessWillCloseSoonMinutes]);
   (0, _react.useEffect)(function () {
-    var _businessState$busine5;
+    var _businessState$busine7;
 
-    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id)) {
+    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: business
       }));
