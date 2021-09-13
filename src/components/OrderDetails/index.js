@@ -117,7 +117,7 @@ export const OrderDetails = (props) => {
       const bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : { status }
 
       setOrderState({ ...orderState, loading: true })
-      const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
+      const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId || props?.order?.id).save(bodyToSend)
 
       if (!error) {
         setOrderState({ ...orderState, order: result, loading: false })
@@ -143,7 +143,7 @@ export const OrderDetails = (props) => {
     try {
       const bodyToSend = { driver_id: e }
       setOrderState({ ...orderState, loading: true })
-      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
+      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId || props?.order?.id).save(bodyToSend)
       if (!error) {
         setOrderState({ ...orderState, order: result, loading: false })
       }
@@ -321,8 +321,8 @@ export const OrderDetails = (props) => {
     const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${userCustomerId || user?.id}`
     socket.join(messagesOrdersRoom)
     return () => {
-        // neccesary refactor
-        if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
+      // neccesary refactor
+      if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
     }
   }, [socket, userCustomerId])
 
