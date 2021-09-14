@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useStripe } from '@stripe/react-stripe-js'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useLanguage } from '../../contexts/LanguageContext'
+import { useSession } from '../../contexts/SessionContext'
 
 /**
  * Component to manage Checkout page behavior without UI component
  */
 export const Checkout = (props) => {
   const {
+    isEnabledStripe,
     businessId,
     cartState,
     propsToFetch,
@@ -17,10 +21,16 @@ export const Checkout = (props) => {
     UIComponent
   } = props
 
+  const payMethodsWithStripe = ['stripe', 'stripe_connect', 'stripe_direct', 'google_pay', 'microsoft_pay', 'apple_pay']
+
   const [ordering] = useApi()
+  const [{ token }] = useSession()
+  const [, t] = useLanguage()
+  const stripe = isEnabledStripe ? useStripe() : null;
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
+  const [paymentRequest, setPaymentRequest] = useState(null);
 
   /**
    * Order context
@@ -77,13 +87,15 @@ export const Checkout = (props) => {
   /**
    * Method to handle click on Place order
    */
-  const handlerClickPlaceOrder = async () => {
+  const handlerClickPlaceOrder = async (sourceId) => {
     let paymethodData = paymethodSelected?.data
-    if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
+
+    if (payMethodsWithStripe.includes(paymethodSelected.paymethod.gateway)) {
       paymethodData = {
-        source_id: paymethodSelected?.data?.id
+        source_id: paymethodSelected?.data?.id || sourceId
       }
     }
+
     let payload = {
       paymethod_id: paymethodSelected.paymethodId,
       paymethod_data: paymethodSelected?.data,
@@ -129,6 +141,41 @@ export const Checkout = (props) => {
     setPaymethodSelected(paymethod)
   }
 
+  const handlePay = async (e) => {
+    try {
+      const response = await fetch(`${ordering.root}/carts/change_paymethod`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          business_id: cart.business_id,
+          paymethod_data: JSON.stringify({
+            id: e.paymentMethod.id,
+            type: e.paymentMethod.type,
+            source_id: e.paymentMethod.id,
+            card: {
+              brand: e.paymentMethod.card.brand,
+              last4: e.paymentMethod.card.last4
+            }
+          }),
+          paymethod_id: paymethodSelected.paymethodId
+        })
+      });
+      const { error } = await response.json()
+
+      if (!error) {
+        e.complete('success')
+        handlerClickPlaceOrder(e.paymentMethod.id)
+      } else {
+        e.complete('fail');
+      }
+    } catch(err) {
+      e.complete('fail')
+    }
+  }
+
   useEffect(() => {
     getBusiness()
   }, [businessId])
@@ -149,12 +196,36 @@ export const Checkout = (props) => {
     }
   }, [cart])
 
+  useEffect(() => {
+    if (stripe) {
+      const pr = stripe.paymentRequest({
+        country: 'US',
+        currency: 'usd',
+        total: {
+          label: t('CART_TOTAL', 'Total'),
+          amount: cart.total * 100,
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
+
+      // Check the availability of the Payment Request API.
+      pr.canMakePayment().then(result => {
+        if (result) {
+          setPaymentRequest(pr);
+          pr.on('paymentmethod', handlePay);
+        }
+      });
+    }
+  }, [stripe, paymethodSelected]);
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
           cart={cart}
+          paymentRequest={paymentRequest}
           placing={placing}
           errors={errors}
           orderOptions={orderState.options}
