@@ -23,7 +23,8 @@ export const OrderDetails = (props) => {
   const [ordering] = useApi()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
-  const [orderState, setOrderState] = useState({ order: null, businessData: {}, driversGroupsData: [], loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
+  const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false})
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
@@ -115,7 +116,7 @@ export const OrderDetails = (props) => {
    const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
       const bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : { status }
-
+      
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
 
@@ -189,7 +190,6 @@ export const OrderDetails = (props) => {
       const order = error ? null : result
       const err = error ? result : null
       let businessData = null
-      let driversGroupsData = {}
       try {
         const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
@@ -197,25 +197,11 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
-      if (isFetchDrivers) {
-        try {
-          const { response: { data } } = await ordering.setAccessToken(token).controls(orderId).get()
-
-          if (data.error) {
-            showToast(ToastType.Error, t(`${data.result[0]}`, `${data.result[0]}`))
-            return
-          }
-          driversGroupsData = data.result.drivers
-        } catch (e) {
-          err.push(e.message)
-        }
-      }
       setOrderState({
         ...orderState,
         loading: false,
         order,
         businessData,
-        driversGroupsData,
         error: err
       })
     } catch (e) {
@@ -245,6 +231,26 @@ export const OrderDetails = (props) => {
     }
   }
 
+  const getDrivers = async () => {
+    try {
+      setDrivers({ ...drivers, loadingDriver: true })
+      const { response: { data } } = await ordering.setAccessToken(token).controls(orderId).get()
+
+      if (data.error) {
+        showToast(ToastType.Error, t(`${data.result[0]}`, `${data.result[0]}`))
+        return
+      }
+
+      setDrivers({
+        ...drivers,
+        loadingDriver: false,
+        drivers: data.result.drivers
+      })
+    } catch (e) {
+      setDrivers({ ...drivers, loadingDriver: false })
+    }
+  }
+
   useEffect(() => {
     !orderState.loading && loadMessages()
   }, [orderId, orderState?.order?.status, orderState.loading])
@@ -257,6 +263,10 @@ export const OrderDetails = (props) => {
       })
     } else {
       getOrder()
+    }
+
+    if (isFetchDrivers) {
+      getDrivers()
     }
 
     return () => {
@@ -339,6 +349,7 @@ export const OrderDetails = (props) => {
           handlerSubmit={handlerSubmitSpotNumber}
           handleChangeOrderStatus={handleChangeOrderStatus}
           messages={messages}
+          drivers={drivers}
           setMessages={setMessages}
           readMessages={readMessages}
           messagesReadList={messagesReadList}
