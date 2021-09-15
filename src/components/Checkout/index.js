@@ -169,10 +169,22 @@ export const Checkout = (props) => {
         e.complete('success')
         handlerClickPlaceOrder(e.paymentMethod.id)
       } else {
-        e.complete('fail');
+        e.complete('fail')
       }
     } catch(err) {
       e.complete('fail')
+    }
+  }
+
+  const verifyPR = async (pr) => {
+    try {
+      const result = await pr.canMakePayment()
+      if (result) {
+        setPaymentRequest(pr)
+        pr.on('paymentmethod', handlePay)
+      }
+    } catch (err) {
+      setPaymentRequest(null)
     }
   }
 
@@ -210,12 +222,7 @@ export const Checkout = (props) => {
       });
 
       // Check the availability of the Payment Request API.
-      pr.canMakePayment().then(result => {
-        if (result) {
-          setPaymentRequest(pr);
-          pr.on('paymentmethod', handlePay);
-        }
-      });
+      verifyPR(pr)
     }
   }, [stripe, paymethodSelected]);
 
