@@ -23,9 +23,11 @@ export const GoogleMaps = (props) => {
   const [events] = useEvent()
   const divRef = useRef()
   const [googleMap, setGoogleMap] = useState(null)
-  const [googleMapMarker, setGoogleMapMarker] = useState(null)
   const [markers, setMarkers] = useState([])
+  const [googleMapMarker, setGoogleMapMarker] = useState(null)
   const [boundMap, setBoundMap] = useState(null)
+
+  const markerRef = useRef()
 
   const location = fixedLocation || props.location
   const center = { lat: location?.lat, lng: location?.lng }
@@ -54,11 +56,12 @@ export const GoogleMaps = (props) => {
       if (businessMap) {
         const isNear = validateResult(googleMap, marker, marker.getPosition())
         if (isNear) {
-          if(i === 0 && locations[0]?.markerPopup){
+          if (i === 0 && locations[0]?.markerPopup) {
             const infowindow = new window.google.maps.InfoWindow()
             infowindow.setContent(locations[0]?.markerPopup)
             infowindow.open(map, marker)
-            }
+            markerRef.current = infowindow
+          }
           marker.addListener('click', () => {
             if (locations[i]?.markerPopup) {
               const infowindow = new window.google.maps.InfoWindow()
@@ -241,6 +244,9 @@ export const GoogleMaps = (props) => {
   useEffect(() => {
     if (googleReady) {
       if (businessMap && googleMap) {
+        if (markerRef.current) {
+          markerRef.current.close && markerRef.current.close()
+        }
         generateMarkers(googleMap)
       }
       center.lat = location?.lat
