@@ -97,7 +97,6 @@ var OrderDetails = function OrderDetails(props) {
   var _useState = (0, _react.useState)({
     order: null,
     businessData: {},
-    driversGroupsData: [],
     loading: !props.order,
     error: null
   }),
@@ -106,34 +105,42 @@ var OrderDetails = function OrderDetails(props) {
       setOrderState = _useState2[1];
 
   var _useState3 = (0, _react.useState)({
+    drivers: [],
+    loadingDriver: false
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      drivers = _useState4[0],
+      setDrivers = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     status: null,
     loading: false,
     error: null
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      messageErrors = _useState4[0],
-      setMessageErrors = _useState4[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      messageErrors = _useState6[0],
+      setMessageErrors = _useState6[1];
 
-  var _useState5 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
     loading: true,
     error: null,
     messages: []
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      messages = _useState6[0],
-      setMessages = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      messages = _useState8[0],
+      setMessages = _useState8[1];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
 
-  var _useState7 = (0, _react.useState)(((_props$order = props.order) === null || _props$order === void 0 ? void 0 : (_props$order$driver = _props$order.driver) === null || _props$order$driver === void 0 ? void 0 : _props$order$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
-      _useState8 = _slicedToArray(_useState7, 2),
-      driverLocation = _useState8[0],
-      setDriverLocation = _useState8[1];
-
-  var _useState9 = (0, _react.useState)(false),
+  var _useState9 = (0, _react.useState)(((_props$order = props.order) === null || _props$order === void 0 ? void 0 : (_props$order$driver = _props$order.driver) === null || _props$order$driver === void 0 ? void 0 : _props$order$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
       _useState10 = _slicedToArray(_useState9, 2),
-      messagesReadList = _useState10[0],
-      setMessagesReadList = _useState10[1];
+      driverLocation = _useState10[0],
+      setDriverLocation = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      messagesReadList = _useState12[0],
+      setMessagesReadList = _useState12[1];
 
   var propsToFetch = ['header', 'slug'];
   var requestsState = {};
@@ -452,7 +459,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5() {
-      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, driversGroupsData, _yield$ordering$setAc7, content, _yield$ordering$setAc8, data, _orderState$error;
+      var source, options, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, order, err, businessData, _yield$ordering$setAc7, content, _orderState$error;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -489,83 +496,49 @@ var OrderDetails = function OrderDetails(props) {
               order = error ? null : result;
               err = error ? result : null;
               businessData = null;
-              driversGroupsData = {};
-              _context5.prev = 17;
-              _context5.next = 20;
+              _context5.prev = 16;
+              _context5.next = 19;
               return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({
                 cancelToken: source
               });
 
-            case 20:
+            case 19:
               _yield$ordering$setAc7 = _context5.sent;
               content = _yield$ordering$setAc7.content;
               businessData = content.result;
               content.error && err.push(content.result[0]);
-              _context5.next = 29;
+              _context5.next = 28;
               break;
 
-            case 26:
-              _context5.prev = 26;
-              _context5.t0 = _context5["catch"](17);
+            case 25:
+              _context5.prev = 25;
+              _context5.t0 = _context5["catch"](16);
               err.push(_context5.t0.message);
 
-            case 29:
-              if (!isFetchDrivers) {
-                _context5.next = 44;
-                break;
-              }
-
-              _context5.prev = 30;
-              _context5.next = 33;
-              return ordering.setAccessToken(token).controls(orderId).get();
-
-            case 33:
-              _yield$ordering$setAc8 = _context5.sent;
-              data = _yield$ordering$setAc8.response.data;
-
-              if (!data.error) {
-                _context5.next = 38;
-                break;
-              }
-
-              showToast(_ToastContext.ToastType.Error, t("".concat(data.result[0]), "".concat(data.result[0])));
-              return _context5.abrupt("return");
-
-            case 38:
-              driversGroupsData = data.result.drivers;
-              _context5.next = 44;
-              break;
-
-            case 41:
-              _context5.prev = 41;
-              _context5.t1 = _context5["catch"](30);
-              err.push(_context5.t1.message);
-
-            case 44:
+            case 28:
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 order: order,
                 businessData: businessData,
-                driversGroupsData: driversGroupsData,
                 error: err
               }));
-              _context5.next = 50;
+              _context5.next = 34;
               break;
 
-            case 47:
-              _context5.prev = 47;
-              _context5.t2 = _context5["catch"](6);
+            case 31:
+              _context5.prev = 31;
+              _context5.t1 = _context5["catch"](6);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                error: _context5.t2.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context5.t2 === null || _context5.t2 === void 0 ? void 0 : _context5.t2.message) : ['ERROR']
+                error: _context5.t1.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context5.t1 === null || _context5.t1 === void 0 ? void 0 : _context5.t1.message) : ['ERROR']
               }));
 
-            case 50:
+            case 34:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 47], [17, 26], [30, 41]]);
+      }, _callee5, null, [[6, 31], [16, 25]]);
     }));
 
     return function getOrder() {
@@ -624,6 +597,61 @@ var OrderDetails = function OrderDetails(props) {
     };
   }();
 
+  var getDrivers = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7() {
+      var _yield$ordering$setAc8, data;
+
+      return _regenerator.default.wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.prev = 0;
+              setDrivers(_objectSpread(_objectSpread({}, drivers), {}, {
+                loadingDriver: true
+              }));
+              _context7.next = 4;
+              return ordering.setAccessToken(token).controls(orderId).get();
+
+            case 4:
+              _yield$ordering$setAc8 = _context7.sent;
+              data = _yield$ordering$setAc8.response.data;
+
+              if (!data.error) {
+                _context7.next = 9;
+                break;
+              }
+
+              showToast(_ToastContext.ToastType.Error, t("".concat(data.result[0]), "".concat(data.result[0])));
+              return _context7.abrupt("return");
+
+            case 9:
+              setDrivers(_objectSpread(_objectSpread({}, drivers), {}, {
+                loadingDriver: false,
+                drivers: data.result.drivers
+              }));
+              _context7.next = 15;
+              break;
+
+            case 12:
+              _context7.prev = 12;
+              _context7.t0 = _context7["catch"](0);
+              setDrivers(_objectSpread(_objectSpread({}, drivers), {}, {
+                loadingDriver: false
+              }));
+
+            case 15:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[0, 12]]);
+    }));
+
+    return function getDrivers() {
+      return _ref8.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
   }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.status, orderState.loading]);
@@ -634,6 +662,10 @@ var OrderDetails = function OrderDetails(props) {
       }));
     } else {
       getOrder();
+    }
+
+    if (isFetchDrivers) {
+      getDrivers();
     }
 
     return function () {
@@ -664,8 +696,8 @@ var OrderDetails = function OrderDetails(props) {
       loadMessages();
     };
 
-    var handleTrackingDriver = function handleTrackingDriver(_ref8) {
-      var location = _ref8.location;
+    var handleTrackingDriver = function handleTrackingDriver(_ref9) {
+      var location = _ref9.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
         lng: 144.7729561
@@ -724,6 +756,7 @@ var OrderDetails = function OrderDetails(props) {
     handlerSubmit: handlerSubmitSpotNumber,
     handleChangeOrderStatus: handleChangeOrderStatus,
     messages: messages,
+    drivers: drivers,
     setMessages: setMessages,
     readMessages: readMessages,
     messagesReadList: messagesReadList
