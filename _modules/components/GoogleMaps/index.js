@@ -78,21 +78,22 @@ var GoogleMaps = function GoogleMaps(props) {
       googleMap = _useState2[0],
       setGoogleMap = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(null),
+  var _useState3 = (0, _react.useState)([]),
       _useState4 = _slicedToArray(_useState3, 2),
-      googleMapMarker = _useState4[0],
-      setGoogleMapMarker = _useState4[1];
+      markers = _useState4[0],
+      setMarkers = _useState4[1];
 
-  var _useState5 = (0, _react.useState)([]),
+  var _useState5 = (0, _react.useState)(null),
       _useState6 = _slicedToArray(_useState5, 2),
-      markers = _useState6[0],
-      setMarkers = _useState6[1];
+      googleMapMarker = _useState6[0],
+      setGoogleMapMarker = _useState6[1];
 
   var _useState7 = (0, _react.useState)(null),
       _useState8 = _slicedToArray(_useState7, 2),
       boundMap = _useState8[0],
       setBoundMap = _useState8[1];
 
+  var markerRef = (0, _react.useRef)();
   var location = fixedLocation || props.location;
   var center = {
     lat: location === null || location === void 0 ? void 0 : location.lat,
@@ -140,6 +141,7 @@ var GoogleMaps = function GoogleMaps(props) {
             var infowindow = new window.google.maps.InfoWindow();
             infowindow.setContent((_locations$2 = locations[0]) === null || _locations$2 === void 0 ? void 0 : _locations$2.markerPopup);
             infowindow.open(map, marker);
+            markerRef.current = infowindow;
           }
 
           marker.addListener('click', function () {
@@ -364,6 +366,10 @@ var GoogleMaps = function GoogleMaps(props) {
   (0, _react.useEffect)(function () {
     if (googleReady) {
       if (businessMap && googleMap) {
+        if (markerRef.current) {
+          markerRef.current.close && markerRef.current.close();
+        }
+
         generateMarkers(googleMap);
       }
 
