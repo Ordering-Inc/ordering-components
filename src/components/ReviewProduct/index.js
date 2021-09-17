@@ -14,6 +14,9 @@ export const ReviewProduct = (props) => {
   const [, { showToast }] = useToast()
   const [formState, setFormState] = useState({ loading: false, changes: [], result: { error: false } })
 
+  /**
+   * Function to update product review
+   */
   const handleChangeFormState = (changes) => {
     const _changes = [...changes]
     setFormState({ ...formState, changes: _changes })
