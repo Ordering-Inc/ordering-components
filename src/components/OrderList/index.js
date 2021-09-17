@@ -150,7 +150,7 @@ export const OrderList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [session])
+  }, [])
 
   useEffect(() => {
     if (orderList.loading) return
