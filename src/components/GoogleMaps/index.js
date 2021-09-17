@@ -248,8 +248,8 @@ export const GoogleMaps = (props) => {
   useEffect(() => {
     if (googleReady) {
       if (businessMap && googleMap) {
-        if (markerRef.current) {
-          markerRef.current.close()
+        if (markerRef?.current) {
+          markerRef?.current?.close && markerRef.current.close()
         }
         markers.forEach(marker => {
           marker.setMap(null)
