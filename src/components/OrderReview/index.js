@@ -2,12 +2,16 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { ToastType, useToast } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export const OrderReview = (props) => {
-  const { UIComponent, order, onSaveReview, handleCustomSendReview } = props
+  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
+  const [, t] = useLanguage()
+  const [, { showToast }] = useToast()
   const [stars, setStars] = useState({ quality: 1, punctiality: 1, service: 1, packaging: 1, comments: '' })
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   /**
@@ -40,6 +44,7 @@ export const OrderReview = (props) => {
       const { result, error } = await response.json()
       onSaveReview && onSaveReview(response)
       setFormState({ loading: false, result: result, error: error })
+      if (!error && isToast) showToast(ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'))
     } catch (err) {
       setFormState({
         result: {
@@ -97,6 +102,10 @@ OrderReview.propTypes = {
    * Getting the order that can be review
   */
   order: PropTypes.object,
+  /**
+   * Enable to show/hide toast
+   */
+  isToast: PropTypes.bool,
   /**
     * Response of ordering that contains de review
    */
