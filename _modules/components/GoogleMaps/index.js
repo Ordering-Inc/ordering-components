@@ -31,14 +31,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -107,6 +99,7 @@ var GoogleMaps = function GoogleMaps(props) {
   var generateMarkers = function generateMarkers(map) {
     var bounds = new window.google.maps.LatLngBounds();
     var businessesNear = 0;
+    var locationMarkers = [];
 
     var _loop = function _loop(i) {
       var _locations$i2, _locations$i3, _locations$i4, _locations$i5;
@@ -162,23 +155,23 @@ var GoogleMaps = function GoogleMaps(props) {
             }
           });
           bounds.extend(marker.position);
-          setMarkers(function (markers) {
-            return [].concat(_toConsumableArray(markers), [marker]);
-          });
+          locationMarkers.push(marker);
           businessesNear = businessesNear + 1;
         } else {
           marker.setMap(null);
         }
       } else {
         bounds.extend(marker.position);
-        setMarkers(function (markers) {
-          return [].concat(_toConsumableArray(markers), [marker]);
-        });
+        locationMarkers.push(marker);
       }
     };
 
     for (var i = 0; i < locations.length; i++) {
       _loop(i);
+    }
+
+    if (locationMarkers.length > 0) {
+      setMarkers(locationMarkers);
     }
 
     businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
@@ -366,10 +359,15 @@ var GoogleMaps = function GoogleMaps(props) {
   (0, _react.useEffect)(function () {
     if (googleReady) {
       if (businessMap && googleMap) {
-        if (markerRef.current) {
-          markerRef.current.close && markerRef.current.close();
+        if (markerRef !== null && markerRef !== void 0 && markerRef.current) {
+          var _markerRef$current;
+
+          (markerRef === null || markerRef === void 0 ? void 0 : (_markerRef$current = markerRef.current) === null || _markerRef$current === void 0 ? void 0 : _markerRef$current.close) && markerRef.current.close();
         }
 
+        markers.forEach(function (marker) {
+          marker.setMap(null);
+        });
         generateMarkers(googleMap);
       }
 
@@ -378,7 +376,7 @@ var GoogleMaps = function GoogleMaps(props) {
       googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
-  }, [location, locations === null || locations === void 0 ? void 0 : locations.length]);
+  }, [location, locations]);
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       var interval = setInterval(function () {

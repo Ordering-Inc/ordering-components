@@ -373,7 +373,7 @@ var OrderList = function OrderList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, [session]);
+  }, []);
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
 

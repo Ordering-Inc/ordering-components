@@ -699,6 +699,18 @@ Object.defineProperty(exports, "ReCaptcha", {
     return _ReCaptcha.ReCaptcha;
   }
 });
+Object.defineProperty(exports, "ReviewProduct", {
+  enumerable: true,
+  get: function get() {
+    return _ReviewProduct.ReviewProduct;
+  }
+});
+Object.defineProperty(exports, "ReviewDriver", {
+  enumerable: true,
+  get: function get() {
+    return _ReviewDriver.ReviewDriver;
+  }
+});
 Object.defineProperty(exports, "CODES", {
   enumerable: true,
   get: function get() {
@@ -881,5 +893,9 @@ var _Analitycs = require("./components/Analitycs");
 var _AppleLogin = require("./components/AppleLogin");
 
 var _ReCaptcha = require("./components/ReCaptcha");
+
+var _ReviewProduct = require("./components/ReviewProduct");
+
+var _ReviewDriver = require("./components/ReviewDriver");
 
 var _codeNumbers = require("./constants/code-numbers");
