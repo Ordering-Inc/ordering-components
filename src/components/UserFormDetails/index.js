@@ -31,8 +31,9 @@ export const UserFormDetails = (props) => {
   const [isEdit, setIsEdit] = useState(false)
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
+  const [isAvailableLoading, setIsAvailableLoading] = useState(false)
   const [, { showToast }] = useToast()
-    const [, t] = useLanguage()
+  const [, t] = useLanguage()
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -234,47 +235,41 @@ export const UserFormDetails = (props) => {
       validationFields.fields?.checkout?.[fieldName]?.enabled &&
       validationFields.fields?.checkout?.[fieldName]?.required
   }
- 
+
   const handleToggleAvalaibleStatusDriver = async (newValue) => {
     try {
-      setUserState({ ...userState, loading: true });
+      setIsAvailableLoading(true)
       const response = await ordering
         .users(props?.userData?.id || userState.result.result.id)
         .save(
           { available: newValue },
           {
-            accessToken: accessToken,
+            accessToken: accessToken
           }
-        );
+        )
 
       if (response.content.error) {
-        setUserState({ ...userState, loading: false });
+        setIsAvailableLoading(false)
         showToast(
           ToastType.Error,
-          t(response.content.result[0], "Some error has ocurred")
-        );
+          t(response.content.result[0], response.content.result[0])
+        )
       }
 
       if (!response.content.error) {
         setUserState({
           ...userState,
-          result: { ...response.content },
-          loading: false,
-        });
+          result: { ...response.content }
+        })
+        setIsAvailableLoading(false)
         showToast(
           ToastType.Success,
           t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated')
-        );
+        )
       }
     } catch (err) {
-      setUserState({
-        loading: false,
-        result: {
-          error: true,
-          result: err.message
-        },
-      });
-      showToast(ToastType.Error, t(err.message, "Some error has ocurred"));
+      setIsAvailableLoading(false)
+      showToast(ToastType.Error, t(err.message, err.message));
     }
   };
 
@@ -288,6 +283,7 @@ export const UserFormDetails = (props) => {
           formState={formState}
           userState={userState}
           validationFields={validationFields}
+          isAvailableLoading={isAvailableLoading}
           showField={showField}
           setFormState={setFormState}
           isRequiredField={isRequiredField}
