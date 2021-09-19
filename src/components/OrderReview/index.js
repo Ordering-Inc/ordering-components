@@ -12,7 +12,7 @@ export const OrderReview = (props) => {
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
-  const [stars, setStars] = useState({ quality: 1, punctiality: 1, service: 1, packaging: 1, comments: '' })
+  const [stars, setStars] = useState({ quality: 0, punctiality: 0, service: 0, packaging: 0, comments: '' })
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   /**
    * Function that load and send the review order to ordering
