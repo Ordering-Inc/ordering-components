@@ -50,6 +50,8 @@ import { ProductOptionSuboption } from '../src/components/ProductOptionSuboption
 import { ProductsList } from '../src/components/ProductsList'
 import { ProductsListing } from '../src/components/ProductsListing'
 import { ResetPassword } from '../src/components/ResetPassword'
+import { ReviewDriver } from '../src/components/ReviewDriver'
+import { ReviewProduct } from '../src/components/ReviewProduct'
 import { SearchOptions } from '../src/components/SearchOptions'
 import { SignupForm } from '../src/components/SignupForm'
 import { SingleBusinessCard } from '../src/components/SingleBusinessCard'
@@ -127,6 +129,8 @@ export {
   ProductsList,
   ProductsListing,
   ResetPassword,
+  ReviewDriver,
+  ReviewProduct,
   SearchOptions,
   SignupForm,
   SingleBusinessCard,
