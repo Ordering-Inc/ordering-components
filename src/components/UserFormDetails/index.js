@@ -234,37 +234,41 @@ export const UserFormDetails = (props) => {
       validationFields.fields?.checkout?.[fieldName]?.enabled &&
       validationFields.fields?.checkout?.[fieldName]?.required
   }
- 
+
   const handleToggleAvalaibleStatusDriver = async (newValue) => {
     try {
-      setUserState({ ...userState, loading: true });
+      setUserState({ ...userState, loading: true })
       const response = await ordering
         .users(props?.userData?.id || userState.result.result.id)
         .save(
           { available: newValue },
           {
-            accessToken: accessToken,
+            accessToken: accessToken
           }
-        );
+        )
 
       if (response.content.error) {
-        setUserState({ ...userState, loading: false });
+        setUserState({ ...userState, loading: false })
         showToast(
           ToastType.Error,
-          t(response.content.result[0], "Some error has ocurred")
-        );
+          t(response.content.result[0], 'Some error has ocurred')
+        )
       }
 
       if (!response.content.error) {
         setUserState({
           ...userState,
           result: { ...response.content },
-          loading: false,
-        });
+          loading: false
+        })
+        changeUser({
+          ...session.user,
+          ...response.content.result
+        })
         showToast(
           ToastType.Success,
           t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated')
-        );
+        )
       }
     } catch (err) {
       setUserState({
@@ -272,11 +276,11 @@ export const UserFormDetails = (props) => {
         result: {
           error: true,
           result: err.message
-        },
-      });
-      showToast(ToastType.Error, t(err.message, "Some error has ocurred"));
+        }
+      })
+      showToast(ToastType.Error, t(err.message, 'Some error has ocurred'))
     }
-  };
+  }
 
   return (
     <>
