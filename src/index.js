@@ -86,6 +86,8 @@ import { ResetPassword } from './components/ResetPassword'
 import { Analytics } from './components/Analitycs'
 import { AppleLogin } from './components/AppleLogin'
 import { ReCaptcha } from './components/ReCaptcha'
+import { ReviewProduct } from './components/ReviewProduct'
+import { ReviewDriver } from './components/ReviewDriver'
 import { CODES } from './constants/code-numbers'
 
 export {
@@ -164,6 +166,8 @@ export {
   CmsContent,
   FloatingButton,
   ResetPassword,
+  ReviewProduct,
+  ReviewDriver,
   Analytics,
   ReCaptcha,
   // Contexts

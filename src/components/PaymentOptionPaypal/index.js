@@ -10,6 +10,7 @@ export const PaymentOptionPaypal = (props) => {
   const {
     body,
     clientId,
+    currency,
     btnStyle,
     UIComponent,
     handlerChangePaypal
@@ -26,7 +27,7 @@ export const PaymentOptionPaypal = (props) => {
     }
     const script = document.createElement('script')
     script.type = 'text/javascript'
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=${currency}`
     script.async = true
     script.onload = () => {
       setIsSdkReady(true)
@@ -136,6 +137,7 @@ PaymentOptionPaypal.propTypes = {
 }
 
 PaymentOptionPaypal.defaultProps = {
+  currency: 'USD',
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

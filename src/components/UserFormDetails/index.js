@@ -249,29 +249,40 @@ export const UserFormDetails = (props) => {
         )
 
       if (response.content.error) {
-        setIsAvailableLoading(false)
-        showToast(
-          ToastType.Error,
-          t(response.content.result[0], response.content.result[0])
-        )
+        setUserState({
+          ...userState,
+          result: {
+            result: ...userState.result,
+            error: [response.content.result[0]]
+          }
+        })
       }
 
       if (!response.content.error) {
         setUserState({
           ...userState,
-          result: { ...response.content }
+          result: {
+            ...response.content,
+            error: false
+          }
         })
-        setIsAvailableLoading(false)
-        showToast(
-          ToastType.Success,
-          t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated')
-        )
+        changeUser({
+          ...session.user,
+          ...response.content.result
+        })
       }
-    } catch (err) {
+
       setIsAvailableLoading(false)
-      showToast(ToastType.Error, t(err.message, err.message));
+    } catch (err) {
+      setUserState({
+        result: {
+          result: (useSessionUser && !refreshSessionUser) ? session.user : user,
+          error: [err.message]
+        }
+      })
+      setIsAvailableLoading(false)
     }
-  };
+  }
 
   return (
     <>

@@ -302,8 +302,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
 
   /**
    * Add product to cart
+   * @param {object} product product for add
+   * @param {object} cart cart of the product
+   * @param {boolean} isQuickAddProduct option to add product when clicks
    */
-  const addProduct = async (product, cart) => {
+  const addProduct = async (product, cart, isQuickAddProduct) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -319,6 +322,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         events.emit('cart_product_added', product, result)
         events.emit('cart_updated', result)
         events.emit('product_added', product)
+        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
       } else {
         setAlert({ show: true, content: result })
       }
