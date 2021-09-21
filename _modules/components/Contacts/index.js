@@ -85,10 +85,14 @@ var Contacts = function Contacts(props) {
       sortBy = _useState2[0],
       setSortBy = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(false),
+  var _useState3 = (0, _react.useState)({
+    data: [],
+    loading: true,
+    error: null
+  }),
       _useState4 = _slicedToArray(_useState3, 2),
-      isConnected = _useState4[0],
-      setIsConnected = _useState4[1];
+      orders = _useState4[0],
+      setOrders = _useState4[1];
 
   var _useState5 = (0, _react.useState)({
     data: [],
@@ -96,25 +100,16 @@ var Contacts = function Contacts(props) {
     error: null
   }),
       _useState6 = _slicedToArray(_useState5, 2),
-      orders = _useState6[0],
-      setOrders = _useState6[1];
+      contacts = _useState6[0],
+      setContacts = _useState6[1];
 
   var _useState7 = (0, _react.useState)({
-    data: [],
-    loading: true,
-    error: null
-  }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      contacts = _useState8[0],
-      setContacts = _useState8[1];
-
-  var _useState9 = (0, _react.useState)({
     currentPage: paginationSettings.controlType === 'pages' && paginationSettings.page && paginationSettings.page >= 1 ? paginationSettings.page - 1 : 1,
     pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 6
   }),
-      _useState10 = _slicedToArray(_useState9, 2),
-      pagination = _useState10[0],
-      setPagination = _useState10[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      pagination = _useState8[0],
+      setPagination = _useState8[1];
 
   var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(nextPage) {
@@ -180,7 +175,7 @@ var Contacts = function Contacts(props) {
               _context.t0 = _context["catch"](3);
               setOrders(_objectSpread(_objectSpread({}, orders), {}, {
                 loading: false,
-                error: _context.t0.message
+                error: [_context.t0.message]
               }));
 
             case 17:
@@ -513,7 +508,7 @@ var Contacts = function Contacts(props) {
       socket.leave(messagesOrdersRoom);
       socket.leave(ordersRoom);
     };
-  }, [user]);
+  }, [socket]);
   var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(message) {
       var orderId, _yield$ordering$setAc5, _yield$ordering$setAc6, result, error;
@@ -594,17 +589,13 @@ var Contacts = function Contacts(props) {
     });
   }, []);
   (0, _react.useEffect)(function () {
-    if (!isConnected) {
-      socket.on('message', handleMessage);
-      socket.on('update_order', handleUpdateOrder);
-      setIsConnected(true);
-    }
-
+    socket.on('message', handleMessage);
+    socket.on('update_order', handleUpdateOrder);
     return function () {
       socket.off('message', handleMessage);
       socket.off('update_order', handleUpdateOrder);
     };
-  }, []);
+  }, [socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orders: orders,
     setOrders: setOrders,

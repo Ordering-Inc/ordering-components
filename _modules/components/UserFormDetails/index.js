@@ -390,7 +390,7 @@ var UserFormDetails = function UserFormDetails(props) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   loading: false
                 }));
-                showToast(_ToastContext.ToastType.Error, t(response.content.result[0], "Some error has ocurred"));
+                showToast(_ToastContext.ToastType.Error, t(response.content.result[0], 'Some error has ocurred'));
               }
 
               if (!response.content.error) {
@@ -398,6 +398,7 @@ var UserFormDetails = function UserFormDetails(props) {
                   result: _objectSpread({}, response.content),
                   loading: false
                 }));
+                changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
                 showToast(_ToastContext.ToastType.Success, t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated'));
               }
 
@@ -414,7 +415,7 @@ var UserFormDetails = function UserFormDetails(props) {
                   result: _context2.t0.message
                 }
               });
-              showToast(_ToastContext.ToastType.Error, t(_context2.t0.message, "Some error has ocurred"));
+              showToast(_ToastContext.ToastType.Error, t(_context2.t0.message, 'Some error has ocurred'));
 
             case 13:
             case "end":

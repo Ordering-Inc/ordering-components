@@ -56,7 +56,8 @@ var OrderReview = function OrderReview(props) {
       order = props.order,
       onSaveReview = props.onSaveReview,
       handleCustomSendReview = props.handleCustomSendReview,
-      isToast = props.isToast;
+      isToast = props.isToast,
+      defaultStar = props.defaultStar;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -75,10 +76,10 @@ var OrderReview = function OrderReview(props) {
       showToast = _useToast2[1].showToast;
 
   var _useState = (0, _react.useState)({
-    quality: 1,
-    punctiality: 1,
-    service: 1,
-    packaging: 1,
+    quality: defaultStar,
+    punctiality: defaultStar,
+    service: defaultStar,
+    packaging: defaultStar,
     comments: ''
   }),
       _useState2 = _slicedToArray(_useState, 2),
@@ -227,6 +228,11 @@ OrderReview.propTypes = {
   isToast: _propTypes.default.bool,
 
   /**
+   * Setting as default value for stars
+   */
+  defaultStar: _propTypes.default.number,
+
+  /**
     * Response of ordering that contains de review
    */
   onSaveReview: _propTypes.default.func,
@@ -242,6 +248,7 @@ OrderReview.propTypes = {
   handleCustomSendReview: _propTypes.default.func
 };
 OrderReview.defaultProps = {
+  defaultStar: 1,
   order: {},
   beforeComponents: [],
   afterComponents: [],

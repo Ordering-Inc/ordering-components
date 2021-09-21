@@ -53,7 +53,8 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
 
   var _useState = (0, _react.useState)({
     loading: true,
-    fields: {}
+    fields: {},
+    error: false
   }),
       _useState2 = _slicedToArray(_useState, 2),
       state = _useState2[0],
@@ -108,7 +109,8 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
               _context.prev = 13;
               _context.t0 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
+                loading: false,
+                error: [_context.t0.message]
               }));
 
             case 16:
