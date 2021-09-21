@@ -10,7 +10,7 @@ export const Contacts = (props) => {
     firstFetch,
     orderProps,
     businessProps,
-    customerProps, // not used because it stops sending "quialfication"
+    customerProps, // don't use because it prevents fetch "qualification"
     driverProps,
     businessConditions,
     customerConditions,
@@ -29,7 +29,6 @@ export const Contacts = (props) => {
   const socket = useWebsocket();
 
   const [sortBy, setSortBy] = useState(sortParams);
-  const [isConnected, setIsConnected] = useState(false)
   const [orders, setOrders] = useState({
     data: [],
     loading: true,
@@ -75,10 +74,16 @@ export const Contacts = (props) => {
         .get({ query: pageFetch });
 
       if (!error) {
-        let hash = {}
+        let hash = {};
         setOrders({
           ...orders,
-          data: nextPage ? orders.data.concat(result).filter(order => hash[order?.id] ? false : (hash[order?.id] = true)) : result,
+          data: nextPage
+            ? orders.data
+                .concat(result)
+                .filter((order) =>
+                  hash[order?.id] ? false : (hash[order?.id] = true)
+                )
+            : result,
           loading: false,
         });
         setPagination({
@@ -93,7 +98,7 @@ export const Contacts = (props) => {
         setOrders({ ...orders, loading: false, error: result[0] });
       }
     } catch (err) {
-      setOrders({ ...orders, loading: false, error: err.message });
+      setOrders({ ...orders, loading: false, error: [err.message] });
     }
   };
 
@@ -289,80 +294,86 @@ export const Contacts = (props) => {
   }, [sortBy]);
 
   useEffect(() => {
-    if (!token) return
-    const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
-    const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`
-    socket.join(messagesOrdersRoom)
-    socket.join(ordersRoom)
+    if (!token) return;
+
+    const messagesOrdersRoom =
+      user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`;
+    const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`;
+
+    socket.join(messagesOrdersRoom);
+    socket.join(ordersRoom);
 
     return () => {
-      socket.leave(messagesOrdersRoom)
-      socket.leave(ordersRoom)
-    }
-  }, [user])
+      socket.leave(messagesOrdersRoom);
+      socket.leave(ordersRoom);
+    };
+  }, [socket]);
 
   const handleMessage = useCallback(async (message) => {
-    const { order_id: orderId } = message
+    const { order_id: orderId } = message;
 
     try {
-      const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).asDashboard().get()
+      const {
+        content: { result, error },
+      } = await ordering
+        .setAccessToken(token)
+        .orders(orderId)
+        .asDashboard()
+        .get();
 
       if (!error) {
-        setOrders((prevOrders => {
-          const { data } = prevOrders
+        setOrders((prevOrders) => {
+          const { data } = prevOrders;
 
           const order = prevOrders.data.find((order, index) => {
             if (order.id === parseInt(orderId)) {
-              data.splice(index, 1)
-              data.unshift(result)
-              return true
+              data.splice(index, 1);
+              data.unshift(result);
+              return true;
             }
 
-            return false
+            return false;
           });
-    
+
           if (!order) {
-            data.unshift(result)
+            data.unshift(result);
           }
 
-          return {...prevOrders, data};
-        }))
+          return { ...prevOrders, data };
+        });
       }
     } catch (err) {
       return null;
     }
-  }, [])
+  }, []);
 
   const handleUpdateOrder = useCallback((order) => {
     const { id, status } = order;
 
-    setOrders((prevOrders => {
-      const { data } = prevOrders
+    setOrders((prevOrders) => {
+      const { data } = prevOrders;
 
-      data.forEach(_order => {
+      data.forEach((_order) => {
         if (_order.id === id && _order.status !== status) {
-          delete order.total
-          delete order.subtotal
-          Object.assign(_order, order)
+          delete order.total;
+          delete order.subtotal;
+          Object.assign(_order, order);
         }
-      })
+      });
 
-      return {...prevOrders, data};
-    }));
-  }, [])
+      return { ...prevOrders, data };
+    });
+  }, []);
 
   useEffect(() => {
-    if (!isConnected) {
-      socket.on('message', handleMessage);
-      socket.on('update_order', handleUpdateOrder)
-      setIsConnected(true)
-    }
+    socket.on('message', handleMessage);
+    socket.on('update_order', handleUpdateOrder);
 
     return () => {
       socket.off('message', handleMessage);
-      socket.off('update_order', handleUpdateOrder)
+      socket.off('update_order', handleUpdateOrder);
     };
-  }, []);
+  }, [socket]);
 
   return (
     <>
