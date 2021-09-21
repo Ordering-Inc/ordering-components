@@ -4,8 +4,6 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useCustomer } from '../../contexts/CustomerContext'
 import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
-import { useLanguage } from '../../contexts/LanguageContext'
 
 /**
  * Component to manage user form details behavior without UI component
@@ -32,8 +30,6 @@ export const UserFormDetails = (props) => {
   const [userState, setUserState] = useState({ loading: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [isAvailableLoading, setIsAvailableLoading] = useState(false)
-  const [, { showToast }] = useToast()
-  const [, t] = useLanguage()
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
