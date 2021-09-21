@@ -6,13 +6,13 @@ import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export const OrderReview = (props) => {
-  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast } = props
+  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast, defaultStar } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
-  const [stars, setStars] = useState({ quality: 1, punctiality: 1, service: 1, packaging: 1, comments: '' })
+  const [stars, setStars] = useState({ quality: defaultStar, punctiality: defaultStar, service: defaultStar, packaging: defaultStar, comments: '' })
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   /**
    * Function that load and send the review order to ordering
@@ -107,6 +107,10 @@ OrderReview.propTypes = {
    */
   isToast: PropTypes.bool,
   /**
+   * Setting as default value for stars
+   */
+  defaultStar: PropTypes.number,
+  /**
     * Response of ordering that contains de review
    */
   onSaveReview: PropTypes.func,
@@ -121,6 +125,7 @@ OrderReview.propTypes = {
 }
 
 OrderReview.defaultProps = {
+  defaultStar: 1,
   order: {},
   beforeComponents: [],
   afterComponents: [],
