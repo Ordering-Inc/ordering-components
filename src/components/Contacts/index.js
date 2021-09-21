@@ -93,7 +93,7 @@ export const Contacts = (props) => {
         setOrders({ ...orders, loading: false, error: result[0] });
       }
     } catch (err) {
-      setOrders({ ...orders, loading: false, error: err.message });
+      setOrders({ ...orders, loading: false, error: [err.message] });
     }
   };
 
