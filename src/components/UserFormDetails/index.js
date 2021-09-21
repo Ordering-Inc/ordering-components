@@ -252,7 +252,7 @@ export const UserFormDetails = (props) => {
         setUserState({
           ...userState,
           result: {
-            result: ...userState.result,
+            ...userState.result,
             error: [response.content.result[0]]
           }
         })
