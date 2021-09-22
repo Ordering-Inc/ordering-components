@@ -208,6 +208,11 @@ export const OrderList = props => {
           ...pagination
         })
       }
+      setOrderList({
+        ...orderList,
+        orders,
+        loading: false
+      })
     }
 
     const handleAddNewOrder = (order) => {
