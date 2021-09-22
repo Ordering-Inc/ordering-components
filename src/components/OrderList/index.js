@@ -7,7 +7,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
-export const OrderList = (props) => {
+export const OrderList = props => {
   const {
     UIComponent,
     orders,
@@ -29,7 +29,11 @@ export const OrderList = (props) => {
   const [, { showToast }] = useToast()
   const socket = useWebsocket()
   const [, t] = useLanguage()
-  const [orderList, setOrderList] = useState({ loading: !orders, error: null, orders: [] })
+  const [orderList, setOrderList] = useState({
+    loading: !orders,
+    error: null,
+    orders: []
+  })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
@@ -44,7 +48,7 @@ export const OrderList = (props) => {
   const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
     const options = {
       query: {
-        orderBy: `${(sortBy.direction === 'desc' ? '-' : '')}${sortBy.param}`,
+        orderBy: `${sortBy.direction === 'desc' ? '-' : ''}${sortBy.param}`,
         page: page,
         page_size: pageSize
       }
@@ -71,8 +75,14 @@ export const OrderList = (props) => {
     return await functionFetch.get(options)
   }
 
-  const loadOrders = async (isNextPage, searchByOtherStatus, keepOrders = false) => {
-    const pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize
+  const loadOrders = async (
+    isNextPage,
+    searchByOtherStatus,
+    keepOrders = false
+  ) => {
+    const pageSize = keepOrders
+      ? paginationSettings.pageSize * pagination.currentPage
+      : paginationSettings.pageSize
     if (!session.token) {
       setOrderList({
         ...orderList,
@@ -87,17 +97,33 @@ export const OrderList = (props) => {
       })
       const nextPage = !isNextPage ? pagination.currentPage + 1 : 1
       const response = await getOrders(nextPage, searchByOtherStatus, pageSize)
-      setOrderList({
-        loading: false,
-        orders: response.content.error ? [] : response.content.result,
-        error: response.content.error ? response.content.result : null
-      })
+      if (searchByOtherStatus) {
+        setOrderList({
+          loading: false,
+          orders: response.content.error
+            ? []
+            : [...response.content.result, ...orderList.orders],
+          error: response.content.error ? response.content.result : null
+        })
+      } else {
+        setOrderList({
+          loading: false,
+          orders: response.content.error ? [] : response.content.result,
+          error: response.content.error ? response.content.result : null
+        })
+      }
       if (!response.content.error) {
         setPagination({
-          currentPage: keepOrders ? pagination.currentPage : response.content.pagination.current_page,
+          currentPage: keepOrders
+            ? pagination.currentPage
+            : response.content.pagination.current_page,
           pageSize: response.content.pagination.page_size,
-          totalPages: keepOrders ? pagination.totalPages : response.content.pagination.total_pages,
-          total: keepOrders ? pagination.total : response.content.pagination.total,
+          totalPages: keepOrders
+            ? pagination.totalPages
+            : response.content.pagination.total_pages,
+          total: keepOrders
+            ? pagination.total
+            : response.content.pagination.total,
           from: keepOrders ? 1 : response.content.pagination.from,
           to: keepOrders ? pagination.to : response.content.pagination.to
         })
@@ -150,7 +176,7 @@ export const OrderList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [session])
+  }, [])
 
   useEffect(() => {
     if (orderList.loading) return
@@ -246,7 +272,7 @@ export const OrderList = (props) => {
     }
   }
 
-  const goToPage = async (page) => {
+  const goToPage = async page => {
     setOrderList({ ...orderList, loading: true })
     try {
       const response = await getOrders(page)
@@ -338,10 +364,16 @@ OrderList.propTypes = {
    */
   accessToken: (props, propName) => {
     if (props[propName] !== undefined && typeof props[propName] !== 'string') {
-      return new Error(`Invalid prop \`${propName}\` of type \`${typeof props[propName]}\` supplied to \`UserProfile\`, expected \`object\`.`)
+      return new Error(
+        `Invalid prop \`${propName}\` of type \`${typeof props[
+          propName
+        ]}\` supplied to \`UserProfile\`, expected \`object\`.`
+      )
     }
     if (props[propName] === undefined && !props.useDefualtSessionManager) {
-      return new Error(`Invalid prop \`${propName}\` is required when \`useDefualtSessionManager\` is false.`)
+      return new Error(
+        `Invalid prop \`${propName}\` is required when \`useDefualtSessionManager\` is false.`
+      )
     }
   },
   /**
