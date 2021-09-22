@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OrderReview = void 0;
+exports.ReviewProduct = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -29,15 +29,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -51,13 +59,10 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var OrderReview = function OrderReview(props) {
+var ReviewProduct = function ReviewProduct(props) {
   var UIComponent = props.UIComponent,
       order = props.order,
-      onSaveReview = props.onSaveReview,
-      handleCustomSendReview = props.handleCustomSendReview,
-      isToast = props.isToast,
-      defaultStar = props.defaultStar;
+      isToast = props.isToast;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -76,142 +81,122 @@ var OrderReview = function OrderReview(props) {
       showToast = _useToast2[1].showToast;
 
   var _useState = (0, _react.useState)({
-    quality: defaultStar,
-    punctiality: defaultStar,
-    service: defaultStar,
-    packaging: defaultStar,
-    comments: ''
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      stars = _useState2[0],
-      setStars = _useState2[1];
-
-  var _useState3 = (0, _react.useState)({
     loading: false,
+    changes: [],
     result: {
       error: false
     }
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
+      _useState2 = _slicedToArray(_useState, 2),
+      formState = _useState2[0],
+      setFormState = _useState2[1];
   /**
-   * Function that load and send the review order to ordering
+   * Function to update product review
    */
 
 
-  var handleSendReview = /*#__PURE__*/function () {
+  var handleChangeFormState = function handleChangeFormState(changes) {
+    var _changes = _toConsumableArray(changes);
+
+    setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+      changes: _changes
+    }));
+  };
+  /**
+   * Function that load and send the product review to ordering
+   */
+
+
+  var handleSendProductReview = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _session$user, body, response, _yield$response$json, result, error;
+      var response, _yield$response$json, result, error;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (handleCustomSendReview) {
-                handleCustomSendReview && handleCustomSendReview(stars);
-              }
-
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.prev = 2;
-              body = {
-                order_id: order.id,
-                quality: stars.quality,
-                delivery: stars.punctiality,
-                service: stars.service,
-                package: stars.packaging,
-                comment: stars.comments,
-                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
-                business_id: order.business_id
-              };
-              _context.next = 6;
-              return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
+              _context.prev = 1;
+              _context.next = 4;
+              return fetch("".concat(ordering.root, "/orders/").concat(order === null || order === void 0 ? void 0 : order.id, "/product_reviews"), {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(session.token),
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(body)
+                body: JSON.stringify({
+                  reviews: JSON.stringify(formState === null || formState === void 0 ? void 0 : formState.changes)
+                })
               });
 
-            case 6:
+            case 4:
               response = _context.sent;
-              _context.next = 9;
+              _context.next = 7;
               return response.json();
 
-            case 9:
+            case 7:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
               error = _yield$response$json.error;
-              onSaveReview && onSaveReview(response);
-              setFormState({
-                loading: false,
-                result: result,
-                error: error
-              });
-              if (!error && isToast) showToast(_ToastContext.ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'));
-              _context.next = 20;
+
+              if (!error) {
+                setFormState({
+                  loading: false,
+                  changes: [],
+                  result: {
+                    result: result,
+                    error: false
+                  }
+                });
+                if (isToast) showToast(_ToastContext.ToastType.Success, t('PRODUCT_REVIEW_SUCCESS_CONTENT', 'Thank you, Product review successfully submitted!'));
+              } else {
+                setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                  loading: false,
+                  result: {
+                    result: result,
+                    error: true
+                  }
+                }));
+              }
+
+              _context.next = 16;
               break;
 
-            case 17:
-              _context.prev = 17;
-              _context.t0 = _context["catch"](2);
-              setFormState({
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](1);
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
                   error: true,
                   result: _context.t0.message
                 },
                 loading: false
-              });
+              }));
 
-            case 20:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 17]]);
+      }, _callee, null, [[1, 13]]);
     }));
 
-    return function handleSendReview() {
+    return function handleSendProductReview() {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Rating the product
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var handleChangeRating = function handleChangeRating(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, _defineProperty({}, e.target.name, parseInt(e.target.value))));
-  };
-  /**
-   * Rating the product with comments
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var handleChangeInput = function handleChangeInput(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, {
-      comments: e.target.value
-    }));
-  };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    stars: stars,
-    order: order,
     formState: formState,
-    handleSendReview: handleSendReview,
-    handleChangeInput: handleChangeInput,
-    handleChangeRating: handleChangeRating,
-    setStars: setStars
+    handleChangeFormState: handleChangeFormState,
+    handleSendProductReview: handleSendProductReview
   })));
 };
 
-exports.OrderReview = OrderReview;
-OrderReview.propTypes = {
+exports.ReviewProduct = ReviewProduct;
+ReviewProduct.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -228,27 +213,30 @@ OrderReview.propTypes = {
   isToast: _propTypes.default.bool,
 
   /**
-   * Setting as default value for stars
+   * Components types before payment option cash
+   * Array of type components, the parent props will pass to these components
    */
-  defaultStar: _propTypes.default.number,
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-    * Response of ordering that contains de review
+   * Components types after payment option cash
+   * Array of type components, the parent props will pass to these components
    */
-  onSaveReview: _propTypes.default.func,
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * function that saves the order that will be reviewed
+   * Elements before payment option cash
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  handleSendReview: _propTypes.default.func,
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * handleCustomClick, function to get click event and return scores without default behavior
+   * Elements after payment option cash
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  handleCustomSendReview: _propTypes.default.func
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-OrderReview.defaultProps = {
-  defaultStar: 1,
+ReviewProduct.defaultProps = {
   order: {},
   beforeComponents: [],
   afterComponents: [],

@@ -49,6 +49,7 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
 
   var body = props.body,
       clientId = props.clientId,
+      currency = props.currency,
       btnStyle = props.btnStyle,
       UIComponent = props.UIComponent,
       handlerChangePaypal = props.handlerChangePaypal;
@@ -76,7 +77,7 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
 
     var script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = "https://www.paypal.com/sdk/js?client-id=".concat(clientId);
+    script.src = "https://www.paypal.com/sdk/js?client-id=".concat(clientId, "&currency=").concat(currency);
     script.async = true;
 
     script.onload = function () {
@@ -274,6 +275,7 @@ PaymentOptionPaypal.propTypes = {
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
 PaymentOptionPaypal.defaultProps = {
+  currency: 'USD',
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

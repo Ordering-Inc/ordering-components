@@ -245,11 +245,20 @@ var OrderList = function OrderList(props) {
 
             case 10:
               response = _context2.sent;
-              setOrderList({
-                loading: false,
-                orders: response.content.error ? [] : response.content.result,
-                error: response.content.error ? response.content.result : null
-              });
+
+              if (searchByOtherStatus) {
+                setOrderList({
+                  loading: false,
+                  orders: response.content.error ? [] : [].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)),
+                  error: response.content.error ? response.content.result : null
+                });
+              } else {
+                setOrderList({
+                  loading: false,
+                  orders: response.content.error ? [] : response.content.result,
+                  error: response.content.error ? response.content.result : null
+                });
+              }
 
               if (!response.content.error) {
                 setPagination({
@@ -373,7 +382,7 @@ var OrderList = function OrderList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, [session]);
+  }, []);
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
 
