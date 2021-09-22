@@ -418,6 +418,11 @@ var OrderList = function OrderList(props) {
         pagination.total++;
         setPagination(_objectSpread({}, pagination));
       }
+
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        orders: orders,
+        loading: false
+      }));
     };
 
     var handleAddNewOrder = function handleAddNewOrder(order) {
