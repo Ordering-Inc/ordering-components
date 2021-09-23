@@ -445,10 +445,16 @@ var OrderList = function OrderList(props) {
     };
   }, [orderList.orders, pagination, socket]);
   (0, _react.useEffect)(function () {
-    var _session$user, _session$user2;
+    var _session$user3, _session$user4;
 
     if (!session.user) return;
-    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id));
+    socket.on('disconnect', function (reason) {
+      var _session$user, _session$user2;
+
+      var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id);
+      socket.join(ordersRoom);
+    });
+    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id));
     socket.join(ordersRoom);
     return function () {
       socket.leave(ordersRoom);
