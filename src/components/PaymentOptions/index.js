@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 
-const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal']
+const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal', 'google_pay', 'apple_pay', 'microsoft_pay']
 const paymethodsNotAllowed = ['paypal_express', 'authorize']
 const paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
 
@@ -20,6 +20,8 @@ export const PaymentOptions = (props) => {
     paymethodsCustom,
     UIComponent
   } = props
+
+  const excludeGateways = ['google_pay', 'apple_pay', 'microsoft_pay'];
 
   const [ordering] = useApi()
   const [orderState, { changePaymethod }] = useOrder()
@@ -124,8 +126,19 @@ export const PaymentOptions = (props) => {
     }
   }
 
+  const choosePaymentMethod = (paymethod, data) => {
+    setPaymethodsSelected(paymethod)
+    onPaymentChange?.(data ? {
+      paymethodId: paymethod?.id,
+      id: paymethod?.id,
+      gateway: paymethod?.gateway,
+      paymethod: paymethod,
+      data
+    }: null)
+  }
+
   useEffect(() => {
-    if (paymethodSelected) {
+    if (paymethodSelected && (!excludeGateways.includes(paymethodSelected?.gateway) || Object.keys(paymethodData).length)) {
       changePaymethod(businessId, paymethodSelected.id, JSON.stringify(paymethodData))
     }
   }, [paymethodSelected, paymethodData])
@@ -181,6 +194,7 @@ export const PaymentOptions = (props) => {
           setPaymethodData={setPaymethodData}
           handlePaymethodClick={handlePaymethodClick}
           handlePaymethodDataChange={handlePaymethodDataChange}
+          choosePaymentMethod={choosePaymentMethod}
         />
       )}
     </>
