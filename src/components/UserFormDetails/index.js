@@ -27,9 +27,8 @@ export const UserFormDetails = (props) => {
   const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()
   const [isEdit, setIsEdit] = useState(false)
-  const [userState, setUserState] = useState({ loading: false, result: { error: false } })
+  const [userState, setUserState] = useState({ loading: false, loadingDriver: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
-  const [isAvailableLoading, setIsAvailableLoading] = useState(false)
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -234,7 +233,7 @@ export const UserFormDetails = (props) => {
 
   const handleToggleAvalaibleStatusDriver = async (newValue) => {
     try {
-      setIsAvailableLoading(true)
+      setUserState({ ...userState, loadingDriver: true })
       const response = await ordering
         .users(props?.userData?.id || userState.result.result.id)
         .save(
@@ -247,36 +246,33 @@ export const UserFormDetails = (props) => {
       if (response.content.error) {
         setUserState({
           ...userState,
-          result: {
-            ...userState.result,
-            error: [response.content.result[0]]
-          }
+          loadingDriver: false,
+          result: { ...userState.result, error: response.content.result[0] }
         })
       }
 
       if (!response.content.error) {
         setUserState({
           ...userState,
-          result: {
-            ...response.content,
-            error: false
-          }
+          loadingDriver: false,
+          result: { ...response.content }
         })
         changeUser({
           ...session.user,
           ...response.content.result
         })
       }
-
-      setIsAvailableLoading(false)
     } catch (err) {
-      setUserState({
-        result: {
-          result: (useSessionUser && !refreshSessionUser) ? session.user : user,
-          error: [err.message]
-        }
-      })
-      setIsAvailableLoading(false)
+      if (err.constructor.name !== 'Cancel') {
+        setUserState({
+          ...userState,
+          loadingDriver: false,
+          result: {
+            error: true,
+            result: err.message
+          }
+        })
+      }
     }
   }
 
@@ -290,7 +286,6 @@ export const UserFormDetails = (props) => {
           formState={formState}
           userState={userState}
           validationFields={validationFields}
-          isAvailableLoading={isAvailableLoading}
           showField={showField}
           setFormState={setFormState}
           isRequiredField={isRequiredField}
