@@ -187,11 +187,16 @@ export const OrderList = props => {
       showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id))
       if (found) {
         orders = orderList.orders.filter(_order => {
+          if (_order.id === order.id && _order?.driver?.id !== order?.driver?.id && session?.user?.level === 4) {
+            return false
+          }
+
           if (_order.id === order.id) {
             delete order.total
             delete order.subtotal
             Object.assign(_order, order)
           }
+
           const valid = orderStatus.length === 0 || orderStatus.includes(parseInt(_order.status)) || updateOtherStatus.length === 0 || updateOtherStatus.includes(parseInt(_order.status))
           if (!valid) {
             pagination.total--
@@ -235,7 +240,7 @@ export const OrderList = props => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('orders_register', handleAddNewOrder)
     }
-  }, [orderList.orders, pagination, socket])
+  }, [orderList.orders, pagination, socket, session])
 
   useEffect(() => {
     if (!session.user) return
