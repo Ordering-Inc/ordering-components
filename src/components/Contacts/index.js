@@ -300,6 +300,13 @@ export const Contacts = (props) => {
       user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`;
     const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`;
 
+    socket.on('disconnect', (reason) => {
+      socket.join(
+        user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
+      );
+      socket.join(user?.level === 0 ? 'orders' : `orders_${user?.id}`);
+    });
+
     socket.join(messagesOrdersRoom);
     socket.join(ordersRoom);
 
@@ -307,7 +314,7 @@ export const Contacts = (props) => {
       socket.leave(messagesOrdersRoom);
       socket.leave(ordersRoom);
     };
-  }, [socket]);
+  }, [socket, user]);
 
   const handleMessage = useCallback(async (message) => {
     const { order_id: orderId } = message;
