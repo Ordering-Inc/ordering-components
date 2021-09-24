@@ -247,7 +247,7 @@ export const UserFormDetails = (props) => {
         setUserState({
           ...userState,
           loadingDriver: false,
-          result: { ...userState.result, error: response.content.result[0] }
+          result: { ...userState.result, error: response.content.result }
         })
       }
 
