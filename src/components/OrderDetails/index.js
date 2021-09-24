@@ -24,12 +24,13 @@ export const OrderDetails = (props) => {
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
-  const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false})
+  const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
+  const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null})
 
   const propsToFetch = ['header', 'slug']
 
@@ -113,10 +114,10 @@ export const OrderDetails = (props) => {
   /**
    * Method to update differents orders status
   */
-   const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
+  const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
       const bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : { status }
-      
+
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
 
@@ -134,6 +135,20 @@ export const OrderDetails = (props) => {
     } catch (err) {
       setOrderState({ ...orderState, loading: false, error: err.message })
       showToast(ToastType.Error, t(err.message.replaceAll(' ', '_').toUpperCase(), err.message))
+    }
+  }
+
+  const updateDriverPosition = async (newLocation = {}) => {
+    try {
+      setDriverLocation({ ...driverUpdateLocation, loading: true })
+      const { content: { error, result } } = await ordering.setAccessToken(token).users(user?.id).driverLocations().save(newLocation)
+      if (error) {
+        setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, error: [result[0] || result || t('ERROR_UPDATING_POSITION', 'Error updating position')] })
+      } else {
+        setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, newLocation: { ...newLocation, ...result } })
+      }
+    } catch (error) {
+      setDriverUpdateLocation({ ...driverUpdateLocation, error: [error.message] })
     }
   }
 
@@ -331,8 +346,8 @@ export const OrderDetails = (props) => {
     const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${userCustomerId || user?.id}`
     socket.join(messagesOrdersRoom)
     return () => {
-        // neccesary refactor
-        if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
+      // neccesary refactor
+      if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
     }
   }, [socket, userCustomerId])
 
@@ -342,6 +357,7 @@ export const OrderDetails = (props) => {
         <UIComponent
           {...props}
           order={orderState}
+          updateDriverPosition={updateDriverPosition}
           driverLocation={driverLocation}
           messageErrors={messageErrors}
           formatPrice={formatPrice}
@@ -353,6 +369,8 @@ export const OrderDetails = (props) => {
           setMessages={setMessages}
           readMessages={readMessages}
           messagesReadList={messagesReadList}
+          driverUpdateLocation={driverUpdateLocation}
+          setDriverUpdateLocation={setDriverUpdateLocation}
         />
       )}
     </>
