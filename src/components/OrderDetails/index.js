@@ -148,7 +148,7 @@ export const OrderDetails = (props) => {
         setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, newLocation: { ...newLocation, ...result } })
       }
     } catch (error) {
-      setDriverUpdateLocation({ ...driverUpdateLocation, error: [error.message] })
+      setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, error: [error.message] })
     }
   }
 
