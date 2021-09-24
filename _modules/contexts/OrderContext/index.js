@@ -380,7 +380,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
-      var optionsStorage, options, _configState$configs4, _configState$configs5, _params$address;
+      var optionsStorage, options, _state$options6, _params$address;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -401,7 +401,7 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
               if (!session.auth) {
-                options.type = orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value];
+                options.type = state === null || state === void 0 ? void 0 : (_state$options6 = state.options) === null || _state$options6 === void 0 ? void 0 : _state$options6.type;
               }
 
               _context2.next = 8;
@@ -1662,13 +1662,13 @@ var OrderProvider = function OrderProvider(_ref) {
     if (session.loading || configState.loading) return;
 
     if (!session.auth) {
-      var _configState$configs6, _configState$configs7;
+      var _configState$configs4, _configState$configs5;
 
       getOptionFromLocalStorage();
       setState(_objectSpread(_objectSpread({}, state), {}, {
         loading: false,
         options: {
-          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 ? void 0 : (_configState$configs7 = _configState$configs6.default_order_type) === null || _configState$configs7 === void 0 ? void 0 : _configState$configs7.value],
+          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
           moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
           address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || {}
         }
@@ -1677,11 +1677,11 @@ var OrderProvider = function OrderProvider(_ref) {
   }, [session.auth, session.loading, configState]);
   (0, _react.useEffect)(function () {
     if ((configTypes === null || configTypes === void 0 ? void 0 : configTypes.length) > 0 && state.options.type && !configTypes.includes(state.options.type)) {
-      var _configState$configs8, _configState$configs9, _configState$configs10, _configState$configs11;
+      var _configState$configs6, _configState$configs7, _configState$configs8, _configState$configs9;
 
-      var validDefaultValue = configTypes.includes(configState === null || configState === void 0 ? void 0 : (_configState$configs8 = configState.configs) === null || _configState$configs8 === void 0 ? void 0 : (_configState$configs9 = _configState$configs8.default_order_type) === null || _configState$configs9 === void 0 ? void 0 : _configState$configs9.type);
+      var validDefaultValue = configTypes.includes(configState === null || configState === void 0 ? void 0 : (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 ? void 0 : (_configState$configs7 = _configState$configs6.default_order_type) === null || _configState$configs7 === void 0 ? void 0 : _configState$configs7.type);
       updateOrderOptions(validDefaultValue ? {
-        type: configState === null || configState === void 0 ? void 0 : (_configState$configs10 = configState.configs) === null || _configState$configs10 === void 0 ? void 0 : (_configState$configs11 = _configState$configs10.default_order_type) === null || _configState$configs11 === void 0 ? void 0 : _configState$configs11.type
+        type: configState === null || configState === void 0 ? void 0 : (_configState$configs8 = configState.configs) === null || _configState$configs8 === void 0 ? void 0 : (_configState$configs9 = _configState$configs8.default_order_type) === null || _configState$configs9 === void 0 ? void 0 : _configState$configs9.type
       } : {
         type: configTypes[0]
       });

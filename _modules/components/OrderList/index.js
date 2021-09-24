@@ -398,6 +398,12 @@ var OrderList = function OrderList(props) {
 
       if (found) {
         orders = orderList.orders.filter(function (_order) {
+          var _order$driver, _order$driver2, _session$user;
+
+          if (_order.id === order.id && (_order === null || _order === void 0 ? void 0 : (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (order === null || order === void 0 ? void 0 : (_order$driver2 = order.driver) === null || _order$driver2 === void 0 ? void 0 : _order$driver2.id) && (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
+            return false;
+          }
+
           if (_order.id === order.id) {
             delete order.total;
             delete order.subtotal;
@@ -443,18 +449,18 @@ var OrderList = function OrderList(props) {
       socket.off('update_order', handleUpdateOrder);
       socket.off('orders_register', handleAddNewOrder);
     };
-  }, [orderList.orders, pagination, socket]);
+  }, [orderList.orders, pagination, socket, session]);
   (0, _react.useEffect)(function () {
-    var _session$user3, _session$user4;
+    var _session$user4, _session$user5;
 
     if (!session.user) return;
     socket.on('disconnect', function (reason) {
-      var _session$user, _session$user2;
+      var _session$user2, _session$user3;
 
-      var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id);
+      var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
       socket.join(ordersRoom);
     });
-    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id));
+    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id));
     socket.join(ordersRoom);
     return function () {
       socket.leave(ordersRoom);

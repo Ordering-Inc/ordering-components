@@ -535,7 +535,7 @@ var Contacts = function Contacts(props) {
               if (!error) {
                 setOrders(function (prevOrders) {
                   var data = prevOrders.data;
-                  var order = prevOrders.data.find(function (order, index) {
+                  var order = data.find(function (order, index) {
                     if (order.id === parseInt(orderId)) {
                       data.splice(index, 1);
                       data.unshift(result);
@@ -575,31 +575,64 @@ var Contacts = function Contacts(props) {
       return _ref6.apply(this, arguments);
     };
   }(), []);
-  var handleUpdateOrder = (0, _react.useCallback)(function (order) {
-    var id = order.id,
-        status = order.status;
-    setOrders(function (prevOrders) {
-      var data = prevOrders.data;
-      data.forEach(function (_order) {
-        if (_order.id === id && _order.status !== status) {
-          delete order.total;
-          delete order.subtotal;
-          Object.assign(_order, order);
+  var handleOrder = (0, _react.useCallback)( /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7(order) {
+      var id, status, driver;
+      return _regenerator.default.wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              id = order.id, status = order.status, driver = order.driver;
+              setOrders(function (prevOrders) {
+                var data = prevOrders.data;
+                var newOrder = data.find(function (_order, index) {
+                  if (_order.id === id) {
+                    var _order$driver;
+
+                    if (_order.status !== status) {
+                      delete order.total;
+                      delete order.subtotal;
+                      Object.assign(_order, order);
+                    } else if ((_order === null || _order === void 0 ? void 0 : (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (driver === null || driver === void 0 ? void 0 : driver.id) && (user === null || user === void 0 ? void 0 : user.level) === 4) {
+                      data.splice(index, 1);
+                    }
+
+                    return true;
+                  }
+
+                  return false;
+                });
+
+                if (!newOrder) {
+                  data.unshift(order);
+                }
+
+                return _objectSpread(_objectSpread({}, prevOrders), {}, {
+                  data: data
+                });
+              });
+
+            case 2:
+            case "end":
+              return _context7.stop();
+          }
         }
-      });
-      return _objectSpread(_objectSpread({}, prevOrders), {}, {
-        data: data
-      });
-    });
-  }, []);
+      }, _callee7);
+    }));
+
+    return function (_x7) {
+      return _ref7.apply(this, arguments);
+    };
+  }(), []);
   (0, _react.useEffect)(function () {
     socket.on('message', handleMessage);
-    socket.on('update_order', handleUpdateOrder);
+    socket.on('orders_register', handleOrder);
+    socket.on('update_order', handleOrder);
     return function () {
       socket.off('message', handleMessage);
-      socket.off('update_order', handleUpdateOrder);
+      socket.off('update_order', handleOrder);
     };
-  }, [socket]);
+  }, [socket, user]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orders: orders,
     setOrders: setOrders,
