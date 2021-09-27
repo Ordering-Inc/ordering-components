@@ -300,6 +300,13 @@ export const Contacts = (props) => {
       user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`;
     const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`;
 
+    socket.on('disconnect', (reason) => {
+      socket.join(
+        user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
+      );
+      socket.join(user?.level === 0 ? 'orders' : `orders_${user?.id}`);
+    });
+
     socket.join(messagesOrdersRoom);
     socket.join(ordersRoom);
 
@@ -307,7 +314,7 @@ export const Contacts = (props) => {
       socket.leave(messagesOrdersRoom);
       socket.leave(ordersRoom);
     };
-  }, [socket]);
+  }, [socket, user]);
 
   const handleMessage = useCallback(async (message) => {
     const { order_id: orderId } = message;
@@ -325,7 +332,7 @@ export const Contacts = (props) => {
         setOrders((prevOrders) => {
           const { data } = prevOrders;
 
-          const order = prevOrders.data.find((order, index) => {
+          const order = data.find((order, index) => {
             if (order.id === parseInt(orderId)) {
               data.splice(index, 1);
               data.unshift(result);
@@ -347,19 +354,31 @@ export const Contacts = (props) => {
     }
   }, []);
 
-  const handleUpdateOrder = useCallback((order) => {
-    const { id, status } = order;
+  const handleOrder = useCallback(async (order) => {
+    const { id, status, driver } = order;
 
     setOrders((prevOrders) => {
       const { data } = prevOrders;
 
-      data.forEach((_order) => {
-        if (_order.id === id && _order.status !== status) {
-          delete order.total;
-          delete order.subtotal;
-          Object.assign(_order, order);
+      const newOrder = data.find((_order, index) => {
+        if (_order.id === id) {
+          if (_order.status !== status) {
+            delete order.total;
+            delete order.subtotal;
+            Object.assign(_order, order);
+          } else if (_order?.driver?.id !== driver?.id && user?.level === 4) {
+            data.splice(index, 1);
+          }
+
+          return true;
         }
+
+        return false;
       });
+
+      if (!newOrder) {
+        data.unshift(order);
+      }
 
       return { ...prevOrders, data };
     });
@@ -367,13 +386,14 @@ export const Contacts = (props) => {
 
   useEffect(() => {
     socket.on('message', handleMessage);
-    socket.on('update_order', handleUpdateOrder);
+    socket.on('orders_register', handleOrder);
+    socket.on('update_order', handleOrder);
 
     return () => {
       socket.off('message', handleMessage);
-      socket.off('update_order', handleUpdateOrder);
+      socket.off('update_order', handleOrder);
     };
-  }, [socket]);
+  }, [socket, user]);
 
   return (
     <>

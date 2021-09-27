@@ -179,7 +179,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
 
       if (!session.auth) {
-        options.type = orderTypes[configState?.configs?.default_order_type?.value]
+        options.type = state?.options?.type
       }
       await strategy.setItem('options', options, true)
       setState({
