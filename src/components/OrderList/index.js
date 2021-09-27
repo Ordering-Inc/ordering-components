@@ -6,6 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import dayjs from 'dayjs'
 
 export const OrderList = props => {
   const {
@@ -311,9 +312,9 @@ export const OrderList = props => {
     if (!orderList.loading) {
       const ordersSorted = orderList.orders.sort((a, b) => {
         if (activeOrders) {
-          return new Date(b.created_at) - new Date(a.created_at)
+          return dayjs(b.created_at).unix() - dayjs(a.created_at).unix()
         }
-        return new Date(a.created_at) - new Date(b.created_at)
+        return dayjs(a.created_at).unix() - dayjs(b.created_at).unix()
       })
       setOrderList({
         ...orderList,
