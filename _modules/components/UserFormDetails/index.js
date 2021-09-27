@@ -19,12 +19,6 @@ var _CustomerContext = require("../../contexts/CustomerContext");
 
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
 
-var _ToastContext = require("../../contexts/ToastContext");
-
-var _LanguageContext = require("../../contexts/LanguageContext");
-
-var _excluded = ["photo"];
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -57,7 +51,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -101,6 +95,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
   var _useState3 = (0, _react.useState)({
     loading: false,
+    loadingDriver: false,
     result: {
       error: false
     }
@@ -119,14 +114,6 @@ var UserFormDetails = function UserFormDetails(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       formState = _useState6[0],
       setFormState = _useState6[1];
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
-
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
 
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
@@ -230,7 +217,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
             case 8:
               response = _context.sent;
-              _formState$changes = formState.changes, photo = _formState$changes.photo, _changes = _objectWithoutProperties(_formState$changes, _excluded);
+              _formState$changes = formState.changes, photo = _formState$changes.photo, _changes = _objectWithoutProperties(_formState$changes, ["photo"]);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : _changes,
                 result: response.content,
@@ -376,7 +363,7 @@ var UserFormDetails = function UserFormDetails(props) {
             case 0:
               _context2.prev = 0;
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
-                loading: true
+                loadingDriver: true
               }));
               _context2.next = 4;
               return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData3 = props.userData) === null || _props$userData3 === void 0 ? void 0 : _props$userData3.id) || userState.result.result.id).save({
@@ -390,36 +377,39 @@ var UserFormDetails = function UserFormDetails(props) {
 
               if (response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
-                  loading: false
+                  loadingDriver: false,
+                  result: _objectSpread(_objectSpread({}, userState.result), {}, {
+                    error: response.content.result
+                  })
                 }));
-                showToast(_ToastContext.ToastType.Error, t(response.content.result[0], 'Some error has ocurred'));
               }
 
               if (!response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
-                  result: _objectSpread({}, response.content),
-                  loading: false
+                  loadingDriver: false,
+                  result: _objectSpread({}, response.content)
                 }));
                 changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
-                showToast(_ToastContext.ToastType.Success, t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated'));
               }
 
-              _context2.next = 13;
+              _context2.next = 12;
               break;
 
             case 9:
               _context2.prev = 9;
               _context2.t0 = _context2["catch"](0);
-              setUserState({
-                loading: false,
-                result: {
-                  error: true,
-                  result: _context2.t0.message
-                }
-              });
-              showToast(_ToastContext.ToastType.Error, t(_context2.t0.message, 'Some error has ocurred'));
 
-            case 13:
+              if (_context2.t0.constructor.name !== 'Cancel') {
+                setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                  loadingDriver: false,
+                  result: {
+                    error: true,
+                    result: _context2.t0.message
+                  }
+                }));
+              }
+
+            case 12:
             case "end":
               return _context2.stop();
           }
