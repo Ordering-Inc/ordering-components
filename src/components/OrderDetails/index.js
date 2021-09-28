@@ -129,12 +129,12 @@ export const OrderDetails = (props) => {
         const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
         const defaultMessage = message !== 'INTERNAL_ERROR' ? message : 'Server Error, please wait, we are working to fix it'
 
-        setOrderState({ ...orderState, error: message, loading: false })
-        showToast(ToastType.Error, t(message.toUpperCase(), defaultMessage.replaceAll('_', ' ')))
+        setOrderState({ ...orderState, error: [defaultMessage], loading: false })
+        showToast(ToastType.Error, t(message.toUpperCase(), defaultMessage))
       }
     } catch (err) {
-      setOrderState({ ...orderState, loading: false, error: err.message })
-      showToast(ToastType.Error, t(err.message.replaceAll(' ', '_').toUpperCase(), err.message))
+      setOrderState({ ...orderState, loading: false, error: [err.message] })
+      showToast(ToastType.Error, t(err.message.toUpperCase(), err.message))
     }
   }
 
