@@ -125,7 +125,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
   };
 
   var parsePrice = function parsePrice(value) {
-    var _configState$configs$, _configState$configs$2, _configState$configs$3, _configState$configs$4, _configState$configs$5;
+    var _configState$configs$, _configState$configs$2, _configState$configs$3, _configState$configs$4, _configState$configs$5, _formatNumber$currenc;
 
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var formatNumber = {
@@ -137,7 +137,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
     };
     var number = parseNumber(value, formatNumber);
 
-    if (formatNumber.currencyPosition === 'left') {
+    if (((_formatNumber$currenc = formatNumber.currencyPosition) === null || _formatNumber$currenc === void 0 ? void 0 : _formatNumber$currenc.toLowerCase()) === 'left') {
       number = formatNumber.currency + ' ' + number;
     } else {
       number = number + ' ' + formatNumber.currency;

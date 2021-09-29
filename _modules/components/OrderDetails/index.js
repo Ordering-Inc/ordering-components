@@ -354,10 +354,10 @@ var OrderDetails = function OrderDetails(props) {
                 message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR';
                 defaultMessage = message !== 'INTERNAL_ERROR' ? message : 'Server Error, please wait, we are working to fix it';
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  error: message,
+                  error: [defaultMessage],
                   loading: false
                 }));
-                showToast(_ToastContext.ToastType.Error, t(message.toUpperCase(), defaultMessage.replaceAll('_', ' ')));
+                showToast(_ToastContext.ToastType.Error, t(message.toUpperCase(), defaultMessage));
               }
 
               _context3.next = 18;
@@ -368,9 +368,9 @@ var OrderDetails = function OrderDetails(props) {
               _context3.t0 = _context3["catch"](1);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                error: _context3.t0.message
+                error: [_context3.t0.message]
               }));
-              showToast(_ToastContext.ToastType.Error, t(_context3.t0.message.replaceAll(' ', '_').toUpperCase(), _context3.t0.message));
+              showToast(_ToastContext.ToastType.Error, t(_context3.t0.message.toUpperCase(), _context3.t0.message));
 
             case 18:
             case "end":
