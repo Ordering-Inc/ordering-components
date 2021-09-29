@@ -124,7 +124,7 @@ export const UtilsProviders = ({ children }) => {
       currencyPosition: options?.currencyPosition || configState.configs.currency_position?.value || 'left'
     }
     let number = parseNumber(value, formatNumber)
-    if (formatNumber.currencyPosition === 'left') {
+    if (formatNumber.currencyPosition?.toLowerCase() === 'left') {
       number = formatNumber.currency + ' ' + number
     } else {
       number = number + ' ' + formatNumber.currency
