@@ -71,7 +71,7 @@ export const CumulativeOrders = (props) => {
     error: null,
   });
 
-  const getPending = async (isNextPage, status) => {
+  const getPending = async (isNextPage) => {
     setPending({
       ...pending,
       loading: true,
@@ -82,7 +82,7 @@ export const CumulativeOrders = (props) => {
         orderBy: sortBy,
         page_size: paginationSettings.pageSize,
         page: isNextPage ? pending.pagination.currentPage + 1 : 1,
-        where: [{ attribute: 'status', value: status ?? orderStatus.pending }],
+        where: [{ attribute: 'status', value: orderStatus.pending }],
       },
     };
 
@@ -99,24 +99,21 @@ export const CumulativeOrders = (props) => {
         let hash = {};
         setPending({
           ...pending,
-          orders:
-            isNextPage || status
-              ? pending.orders
-                  .concat(result)
-                  .filter((order) =>
-                    hash[order?.id] ? false : (hash[order?.id] = true)
-                  )
-              : result,
-          pagination: !!status
-            ? pending.pagination
-            : {
-                currentPage: pagination.current_page,
-                pageSize: pagination.page_size,
-                totalPages: pagination.total_pages,
-                total: pagination.total,
-                from: pagination.from,
-                to: pagination.to,
-              },
+          orders: isNextPage
+            ? pending.orders
+                .concat(result)
+                .filter((order) =>
+                  hash[order?.id] ? false : (hash[order?.id] = true)
+                )
+            : result,
+          pagination: {
+            currentPage: pagination.current_page,
+            pageSize: pagination.page_size,
+            totalPages: pagination.total_pages,
+            total: pagination.total,
+            from: pagination.from,
+            to: pagination.to,
+          },
           loading: false,
         });
       } else {
@@ -127,7 +124,7 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const getInProgress = async (isNextPage, status) => {
+  const getInProgress = async (isNextPage) => {
     setInProgress({
       ...inProgress,
       loading: true,
@@ -138,9 +135,7 @@ export const CumulativeOrders = (props) => {
         orderBy: sortBy,
         page_size: paginationSettings.pageSize,
         page: isNextPage ? inProgress.pagination.currentPage + 1 : 1,
-        where: [
-          { attribute: 'status', value: status ?? orderStatus.inProgress },
-        ],
+        where: [{ attribute: 'status', value: orderStatus.inProgress }],
       },
     };
 
@@ -157,24 +152,21 @@ export const CumulativeOrders = (props) => {
         let hash = {};
         setInProgress({
           ...inProgress,
-          orders:
-            isNextPage || !!status
-              ? inProgress.orders
-                  .concat(result)
-                  .filter((order) =>
-                    hash[order?.id] ? false : (hash[order?.id] = true)
-                  )
-              : result,
-          pagination: !!status
-            ? inProgress.pagination
-            : {
-                currentPage: pagination.current_page,
-                pageSize: pagination.page_size,
-                totalPages: pagination.total_pages,
-                total: pagination.total,
-                from: pagination.from,
-                to: pagination.to,
-              },
+          orders: isNextPage
+            ? inProgress.orders
+                .concat(result)
+                .filter((order) =>
+                  hash[order?.id] ? false : (hash[order?.id] = true)
+                )
+            : result,
+          pagination: {
+            currentPage: pagination.current_page,
+            pageSize: pagination.page_size,
+            totalPages: pagination.total_pages,
+            total: pagination.total,
+            from: pagination.from,
+            to: pagination.to,
+          },
           loading: false,
         });
       } else {
@@ -185,7 +177,7 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const getCompleted = async (isNextPage, status) => {
+  const getCompleted = async (isNextPage) => {
     setCompleted({
       ...completed,
       loading: true,
@@ -196,9 +188,7 @@ export const CumulativeOrders = (props) => {
         orderBy: sortBy,
         page_size: paginationSettings.pageSize,
         page: isNextPage ? completed.pagination.currentPage + 1 : 1,
-        where: [
-          { attribute: 'status', value: status ?? orderStatus.completed },
-        ],
+        where: [{ attribute: 'status', value: orderStatus.completed }],
       },
     };
 
@@ -215,24 +205,21 @@ export const CumulativeOrders = (props) => {
         let hash = {};
         setCompleted({
           ...completed,
-          orders:
-            isNextPage || !!status
-              ? completed.orders
-                  .concat(result)
-                  .filter((order) =>
-                    hash[order?.id] ? false : (hash[order?.id] = true)
-                  )
-              : result,
-          pagination: !!status
-            ? completed.pagination
-            : {
-                currentPage: pagination.current_page,
-                pageSize: pagination.page_size,
-                totalPages: pagination.total_pages,
-                total: pagination.total,
-                from: pagination.from,
-                to: pagination.to,
-              },
+          orders: isNextPage
+            ? completed.orders
+                .concat(result)
+                .filter((order) =>
+                  hash[order?.id] ? false : (hash[order?.id] = true)
+                )
+            : result,
+          pagination: {
+            currentPage: pagination.current_page,
+            pageSize: pagination.page_size,
+            totalPages: pagination.total_pages,
+            total: pagination.total,
+            from: pagination.from,
+            to: pagination.to,
+          },
           loading: false,
         });
       } else {
@@ -243,7 +230,7 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const getCancelled = async (isNextPage, status) => {
+  const getCancelled = async (isNextPage) => {
     setCancelled({
       ...cancelled,
       loading: true,
@@ -254,9 +241,7 @@ export const CumulativeOrders = (props) => {
         orderBy: sortBy,
         page_size: paginationSettings.pageSize,
         page: isNextPage ? cancelled.pagination.currentPage + 1 : 1,
-        where: [
-          { attribute: 'status', value: status ?? orderStatus.cancelled },
-        ],
+        where: [{ attribute: 'status', value: orderStatus.cancelled }],
       },
     };
 
@@ -273,24 +258,21 @@ export const CumulativeOrders = (props) => {
         let hash = {};
         setCancelled({
           ...cancelled,
-          orders:
-            isNextPage || !!status
-              ? cancelled.orders
-                  .concat(result)
-                  .filter((order) =>
-                    hash[order?.id] ? false : (hash[order?.id] = true)
-                  )
-              : result,
-          pagination: !!status
-            ? cancelled.pagination
-            : {
-                currentPage: pagination.current_page,
-                pageSize: pagination.page_size,
-                totalPages: pagination.total_pages,
-                total: pagination.total,
-                from: pagination.from,
-                to: pagination.to,
-              },
+          orders: isNextPage
+            ? cancelled.orders
+                .concat(result)
+                .filter((order) =>
+                  hash[order?.id] ? false : (hash[order?.id] = true)
+                )
+            : result,
+          pagination: {
+            currentPage: pagination.current_page,
+            pageSize: pagination.page_size,
+            totalPages: pagination.total_pages,
+            total: pagination.total,
+            from: pagination.from,
+            to: pagination.to,
+          },
           loading: false,
         });
       } else {
@@ -301,26 +283,26 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const loadOrders = (tab, isNextPage, isRefresh, status) => {
+  const loadOrders = (tab, isNextPage, isRefresh) => {
     switch (tab) {
       case 'pending':
         if (isNextPage || isRefresh || !pending.pagination?.total) {
-          getPending(isNextPage, status);
+          getPending(isNextPage);
         }
         break;
       case 'inProgress':
         if (isNextPage || isRefresh || !inProgress.pagination?.total) {
-          getInProgress(isNextPage, status);
+          getInProgress(isNextPage);
         }
         break;
       case 'completed':
         if (isNextPage || isRefresh || !completed.pagination?.total) {
-          getCompleted(isNextPage, status);
+          getCompleted(isNextPage);
         }
         break;
       case 'cancelled':
         if (isNextPage || isRefresh || !cancelled.pagination?.total) {
-          getCancelled(isNextPage, status);
+          getCancelled(isNextPage);
         }
         break;
     }
