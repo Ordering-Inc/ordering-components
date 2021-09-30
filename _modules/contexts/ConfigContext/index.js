@@ -158,7 +158,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
 
   var refreshConfigs = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _result$dates_moment_, _result$format_time, _result$dates_moment_2, _result$format_time2, _data, _data2, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, conditionalConfigs, configsResult;
+      var _result$dates_moment_, _result$format_time, _result$dates_general, _result$format_time2, _data, _data2, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, conditionalConfigs, configsResult;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -204,7 +204,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
                 },
                 dates_general_format: {
                   key: 'dates_general_format',
-                  value: (result === null || result === void 0 ? void 0 : (_result$dates_moment_2 = result.dates_moment_format) === null || _result$dates_moment_2 === void 0 ? void 0 : _result$dates_moment_2.value) || ((result === null || result === void 0 ? void 0 : (_result$format_time2 = result.format_time) === null || _result$format_time2 === void 0 ? void 0 : _result$format_time2.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
+                  value: (result === null || result === void 0 ? void 0 : (_result$dates_general = result.dates_general_format) === null || _result$dates_general === void 0 ? void 0 : _result$dates_general.value) || ((result === null || result === void 0 ? void 0 : (_result$format_time2 = result.format_time) === null || _result$format_time2 === void 0 ? void 0 : _result$format_time2.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
                 }
               };
               configsResult = _objectSpread(_objectSpread(_objectSpread({}, customConfigs), {}, {

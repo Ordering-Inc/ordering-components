@@ -122,8 +122,9 @@ var OrderProvider = function OrderProvider(_ref) {
       configState = _useConfig2[0];
 
   var _useSession = (0, _SessionContext.useSession)(),
-      _useSession2 = _slicedToArray(_useSession, 1),
-      session = _useSession2[0];
+      _useSession2 = _slicedToArray(_useSession, 2),
+      session = _useSession2[0],
+      logout = _useSession2[1].logout;
 
   var _useCustomer = (0, _CustomerContext.useCustomer)(),
       _useCustomer2 = _slicedToArray(_useCustomer, 1),
@@ -215,6 +216,10 @@ var OrderProvider = function OrderProvider(_ref) {
                   show: true,
                   content: result
                 });
+
+                if ((result === null || result === void 0 ? void 0 : result[0]) === 'You do not have permission.') {
+                  session.auth && logout();
+                }
               }
 
               _context.next = 18;
