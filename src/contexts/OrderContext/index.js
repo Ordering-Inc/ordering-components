@@ -31,7 +31,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const socket = useWebsocket()
   const [events] = useEvent()
   const [configState] = useConfig()
-  const [session] = useSession()
+  const [session, { logout }] = useSession()
   const [customerState] = useCustomer()
   const [, { showToast }] = useToast()
 
@@ -86,6 +86,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       if (error) {
         setAlert({ show: true, content: result })
+        if (result?.[0] === 'You do not have permission.') {
+          session.auth && logout()
+        }
       }
       const localOptions = await strategy.getItem('options', true)
       if (localOptions) {

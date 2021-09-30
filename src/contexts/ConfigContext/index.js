@@ -112,7 +112,7 @@ export const ConfigProvider = ({ children }) => {
         },
         dates_general_format: {
           key: 'dates_general_format',
-          value: result?.dates_moment_format?.value ||
+          value: result?.dates_general_format?.value ||
           (result?.format_time?.value === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
         },
       }
