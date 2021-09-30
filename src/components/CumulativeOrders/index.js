@@ -284,6 +284,15 @@ export const CumulativeOrders = (props) => {
   };
 
   const loadOrders = (tab, isNextPage, isRefresh) => {
+    if (isRefresh) {
+      setActiveStatus(
+        Object.entries(orderStatus).reduce(
+          (total, [key, value]) => total.concat(value),
+          []
+        )
+      );
+    }
+
     switch (tab) {
       case 'pending':
         if (isNextPage || isRefresh || !pending.pagination?.total) {
