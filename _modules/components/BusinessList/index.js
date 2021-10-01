@@ -141,6 +141,10 @@ var BusinessList = function BusinessList(props) {
       requestsState = _useState16[0],
       setRequestsState = _useState16[1];
 
+  var _useConfig = useConfig(),
+      _useConfig2 = _slicedToArray(_useConfig, 2),
+      refreshConfigs = _useConfig2[1].refreshConfigs;
+
   var isValidMoment = function isValidMoment(date, format) {
     return _dayjs.default.utc(date, format).format(format) === date;
   };
@@ -170,7 +174,8 @@ var BusinessList = function BusinessList(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              refreshConfigs();
+              _context.prev = 1;
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: true
               }));
@@ -306,12 +311,12 @@ var BusinessList = function BusinessList(props) {
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : !where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard() : ordering.businesses().select(propsToFetch).parameters(parameters);
-              _context.next = 22;
+              _context.next = 23;
               return fetchEndpoint.get({
                 cancelToken: source
               });
 
-            case 22:
+            case 23:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               result = _yield$fetchEndpoint$2.result;
@@ -345,12 +350,12 @@ var BusinessList = function BusinessList(props) {
                 totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
-              _context.next = 36;
+              _context.next = 37;
               break;
 
-            case 33:
-              _context.prev = 33;
-              _context.t0 = _context["catch"](0);
+            case 34:
+              _context.prev = 34;
+              _context.t0 = _context["catch"](1);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -359,12 +364,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 36:
+            case 37:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 33]]);
+      }, _callee, null, [[1, 34]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
