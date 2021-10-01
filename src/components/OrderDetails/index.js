@@ -125,12 +125,12 @@ export const OrderDetails = (props) => {
       }
       if (error) {
         const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
-        const defaultMessage = message !== 'INTERNAL_ERROR' ? message : 'Server Error, please wait, we are working to fix it'
+        const defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error')
 
         setOrderState({ ...orderState, error: [defaultMessage], loading: false })
       }
     } catch (err) {
-      setOrderState({ ...orderState, loading: false, error: [err?.message || 'Network Error'] })
+      setOrderState({ ...orderState, loading: false, error: [err?.message || t('NETWORK_ERROR', 'Network Error')] })
     }
   }
 
@@ -144,7 +144,7 @@ export const OrderDetails = (props) => {
         setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, newLocation: { ...newLocation, ...result } })
       }
     } catch (error) {
-      setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, error: [error?.message || 'Network Error'] })
+      setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, error: [error?.message || t('NETWORK_ERROR', 'Network Error')] })
     }
   }
 
