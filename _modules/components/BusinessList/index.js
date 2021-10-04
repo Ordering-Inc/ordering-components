@@ -69,6 +69,7 @@ var BusinessList = function BusinessList(props) {
   var UIComponent = props.UIComponent,
       initialBuisnessType = props.initialBuisnessType,
       initialOrderType = props.initialOrderType,
+      initialOrderByValue = props.initialOrderByValue,
       initialFilterKey = props.initialFilterKey,
       initialFilterValue = props.initialFilterValue,
       isOfferBusinesses = props.isOfferBusinesses,
@@ -120,7 +121,7 @@ var BusinessList = function BusinessList(props) {
       timeLimitValue = _useState10[0],
       setTimeLimitValue = _useState10[1];
 
-  var _useState11 = (0, _react.useState)(null),
+  var _useState11 = (0, _react.useState)(initialOrderByValue !== null && initialOrderByValue !== void 0 ? initialOrderByValue : null),
       _useState12 = _slicedToArray(_useState11, 2),
       orderByValue = _useState12[0],
       setOrderByValue = _useState12[1];
