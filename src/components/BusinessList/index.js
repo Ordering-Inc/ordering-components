@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useConfig } from '../../contexts/ConfigContext'
 dayjs.extend(utc)
 
 export const BusinessList = (props) => {
@@ -44,7 +45,7 @@ export const BusinessList = (props) => {
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
-  const [,{ refreshConfigs }] = useConfig()
+  const [, { refreshConfigs }] = useConfig()
 
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
