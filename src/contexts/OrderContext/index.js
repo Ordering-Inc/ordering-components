@@ -31,7 +31,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const socket = useWebsocket()
   const [events] = useEvent()
   const [configState] = useConfig()
-  const [session] = useSession()
+  const [session, { logout }] = useSession()
   const [customerState] = useCustomer()
   const [, { showToast }] = useToast()
 
@@ -86,6 +86,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       if (error) {
         setAlert({ show: true, content: result })
+        if (result?.[0] === 'You do not have permission.') {
+          session.auth && logout()
+        }
       }
       const localOptions = await strategy.getItem('options', true)
       if (localOptions) {
@@ -179,7 +182,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
 
       if (!session.auth) {
-        options.type = orderTypes[configState?.configs?.default_order_type?.value]
+        options.type = state?.options?.type
       }
       await strategy.setItem('options', options, true)
       setState({
@@ -302,8 +305,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
 
   /**
    * Add product to cart
+   * @param {object} product product for add
+   * @param {object} cart cart of the product
+   * @param {boolean} isQuickAddProduct option to add product when clicks
    */
-  const addProduct = async (product, cart) => {
+  const addProduct = async (product, cart, isQuickAddProduct) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -319,6 +325,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         events.emit('cart_product_added', product, result)
         events.emit('cart_updated', result)
         events.emit('product_added', product)
+        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
       } else {
         setAlert({ show: true, content: result })
       }

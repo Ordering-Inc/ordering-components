@@ -17,6 +17,7 @@ import { Checkout } from '../src/components/Checkout'
 import { CmsContent } from '../src/components/CmsContent'
 import { CouponControl } from '../src/components/CouponControl'
 import { Contacts } from '../src/components/Contacts'
+import { CumulativeOrders } from '../src/components/CumulativeOrders'
 import { DragAndDrop } from '../src/components/DragAndDrop'
 import { DriverTips } from '../src/components/DriverTips'
 import { ExamineClick } from '../src/components/ExamineClick'
@@ -50,6 +51,8 @@ import { ProductOptionSuboption } from '../src/components/ProductOptionSuboption
 import { ProductsList } from '../src/components/ProductsList'
 import { ProductsListing } from '../src/components/ProductsListing'
 import { ResetPassword } from '../src/components/ResetPassword'
+import { ReviewDriver } from '../src/components/ReviewDriver'
+import { ReviewProduct } from '../src/components/ReviewProduct'
 import { SearchOptions } from '../src/components/SearchOptions'
 import { SignupForm } from '../src/components/SignupForm'
 import { SingleBusinessCard } from '../src/components/SingleBusinessCard'
@@ -95,6 +98,7 @@ export {
   CmsContent,
   CouponControl,
   Contacts,
+  CumulativeOrders,
   DragAndDrop,
   DriverTips,
   ExamineClick,
@@ -127,6 +131,8 @@ export {
   ProductsList,
   ProductsListing,
   ResetPassword,
+  ReviewDriver,
+  ReviewProduct,
   SearchOptions,
   SignupForm,
   SingleBusinessCard,

@@ -23,9 +23,11 @@ export const GoogleMaps = (props) => {
   const [events] = useEvent()
   const divRef = useRef()
   const [googleMap, setGoogleMap] = useState(null)
-  const [googleMapMarker, setGoogleMapMarker] = useState(null)
   const [markers, setMarkers] = useState([])
+  const [googleMapMarker, setGoogleMapMarker] = useState(null)
   const [boundMap, setBoundMap] = useState(null)
+
+  const markerRef = useRef()
 
   const location = fixedLocation || props.location
   const center = { lat: location?.lat, lng: location?.lng }
@@ -37,6 +39,7 @@ export const GoogleMaps = (props) => {
   const generateMarkers = (map) => {
     const bounds = new window.google.maps.LatLngBounds()
     let businessesNear = 0
+    const locationMarkers = []
     for (let i = 0; i < locations.length; i++) {
       let formatUrl = null
       if (i === 1 || businessMap) {
@@ -54,11 +57,12 @@ export const GoogleMaps = (props) => {
       if (businessMap) {
         const isNear = validateResult(googleMap, marker, marker.getPosition())
         if (isNear) {
-          if(i === 0 && locations[0]?.markerPopup){
+          if (i === 0 && locations[0]?.markerPopup) {
             const infowindow = new window.google.maps.InfoWindow()
             infowindow.setContent(locations[0]?.markerPopup)
             infowindow.open(map, marker)
-            }
+            markerRef.current = infowindow
+          }
           marker.addListener('click', () => {
             if (locations[i]?.markerPopup) {
               const infowindow = new window.google.maps.InfoWindow()
@@ -69,15 +73,18 @@ export const GoogleMaps = (props) => {
             }
           })
           bounds.extend(marker.position)
-          setMarkers(markers => [...markers, marker])
+          locationMarkers.push(marker)
           businessesNear = businessesNear + 1
         } else {
           marker.setMap(null)
         }
       } else {
         bounds.extend(marker.position)
-        setMarkers(markers => [...markers, marker])
+        locationMarkers.push(marker)
       }
+    }
+    if (locationMarkers.length > 0) {
+      setMarkers(locationMarkers)
     }
     businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES')
     map.fitBounds(bounds)
@@ -241,6 +248,12 @@ export const GoogleMaps = (props) => {
   useEffect(() => {
     if (googleReady) {
       if (businessMap && googleMap) {
+        if (markerRef?.current) {
+          markerRef?.current?.close && markerRef.current.close()
+        }
+        markers.forEach(marker => {
+          marker.setMap(null)
+        })
         generateMarkers(googleMap)
       }
       center.lat = location?.lat
@@ -248,7 +261,7 @@ export const GoogleMaps = (props) => {
       googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center?.lat, center?.lng))
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
     }
-  }, [location, locations?.length])
+  }, [location, locations])
 
   useEffect(() => {
     if (!businessMap) {

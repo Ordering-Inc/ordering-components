@@ -44,6 +44,7 @@ export const BusinessList = (props) => {
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
+  const [,{ refreshConfigs }] = useConfig()
 
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
@@ -59,6 +60,7 @@ export const BusinessList = (props) => {
    * @param {boolean} newFetch Make a new request or next page
    */
   const getBusinesses = async (newFetch, specificPagination, prev) => {
+    refreshConfigs()
     try {
       setBusinessesList({ ...businessesList, loading: true })
 

@@ -4,8 +4,6 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useCustomer } from '../../contexts/CustomerContext'
 import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
-import { useLanguage } from '../../contexts/LanguageContext'
 
 /**
  * Component to manage user form details behavior without UI component
@@ -29,10 +27,8 @@ export const UserFormDetails = (props) => {
   const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()
   const [isEdit, setIsEdit] = useState(false)
-  const [userState, setUserState] = useState({ loading: false, result: { error: false } })
+  const [userState, setUserState] = useState({ loading: false, loadingDriver: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
-  const [, { showToast }] = useToast()
-    const [, t] = useLanguage()
   const requestsState = {}
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -234,49 +230,51 @@ export const UserFormDetails = (props) => {
       validationFields.fields?.checkout?.[fieldName]?.enabled &&
       validationFields.fields?.checkout?.[fieldName]?.required
   }
- 
+
   const handleToggleAvalaibleStatusDriver = async (newValue) => {
     try {
-      setUserState({ ...userState, loading: true });
+      setUserState({ ...userState, loadingDriver: true })
       const response = await ordering
         .users(props?.userData?.id || userState.result.result.id)
         .save(
           { available: newValue },
           {
-            accessToken: accessToken,
+            accessToken: accessToken
           }
-        );
+        )
 
       if (response.content.error) {
-        setUserState({ ...userState, loading: false });
-        showToast(
-          ToastType.Error,
-          t(response.content.result[0], "Some error has ocurred")
-        );
+        setUserState({
+          ...userState,
+          loadingDriver: false,
+          result: { ...userState.result, error: response.content.result }
+        })
       }
 
       if (!response.content.error) {
         setUserState({
           ...userState,
-          result: { ...response.content },
-          loading: false,
-        });
-        showToast(
-          ToastType.Success,
-          t('AVAILABLE_STATE_IS_UPDATED', 'Available state is updated')
-        );
+          loadingDriver: false,
+          result: { ...response.content }
+        })
+        changeUser({
+          ...session.user,
+          ...response.content.result
+        })
       }
     } catch (err) {
-      setUserState({
-        loading: false,
-        result: {
-          error: true,
-          result: err.message
-        },
-      });
-      showToast(ToastType.Error, t(err.message, "Some error has ocurred"));
+      if (err.constructor.name !== 'Cancel') {
+        setUserState({
+          ...userState,
+          loadingDriver: false,
+          result: {
+            error: true,
+            result: err.message
+          }
+        })
+      }
     }
-  };
+  }
 
   return (
     <>

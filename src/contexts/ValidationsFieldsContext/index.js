@@ -5,7 +5,7 @@ export const ValidationFieldsContext = createContext()
 
 export const ValidationFieldsProvider = ({ children }) => {
   const [ordering] = useApi()
-  const [state, setState] = useState({ loading: true, fields: {} })
+  const [state, setState] = useState({ loading: true, fields: {}, error: false })
 
   const convertArrayToObject = (result, fields) => {
     result.forEach((field) => {
@@ -36,7 +36,7 @@ export const ValidationFieldsProvider = ({ children }) => {
         }
       })
     } catch (err) {
-      setState({ ...state, loading: false })
+      setState({ ...state, loading: false, error: [err.message] })
     }
   }
 

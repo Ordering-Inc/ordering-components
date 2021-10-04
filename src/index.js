@@ -16,6 +16,7 @@ import { Cart } from './components/Cart'
 import { Checkout } from './components/Checkout'
 import { CouponControl } from './components/CouponControl'
 import { Contacts } from './components/Contacts'
+import { CumulativeOrders } from './components/CumulativeOrders'
 import { DragAndDrop } from './components/DragAndDrop'
 import { DriverTips } from './components/DriverTips'
 import { ExamineClick } from './components/ExamineClick'
@@ -86,6 +87,8 @@ import { ResetPassword } from './components/ResetPassword'
 import { Analytics } from './components/Analitycs'
 import { AppleLogin } from './components/AppleLogin'
 import { ReCaptcha } from './components/ReCaptcha'
+import { ReviewProduct } from './components/ReviewProduct'
+import { ReviewDriver } from './components/ReviewDriver'
 import { CODES } from './constants/code-numbers'
 
 export {
@@ -108,6 +111,7 @@ export {
   Checkout,
   CouponControl,
   Contacts,
+  CumulativeOrders,
   DragAndDrop,
   DriverTips,
   ExamineClick,
@@ -164,6 +168,8 @@ export {
   CmsContent,
   FloatingButton,
   ResetPassword,
+  ReviewProduct,
+  ReviewDriver,
   Analytics,
   ReCaptcha,
   // Contexts
