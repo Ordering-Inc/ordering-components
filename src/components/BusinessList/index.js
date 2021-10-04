@@ -12,6 +12,7 @@ export const BusinessList = (props) => {
     UIComponent,
     initialBuisnessType,
     initialOrderType,
+    initialOrderByValue,
     initialFilterKey,
     initialFilterValue,
     isOfferBusinesses,
@@ -40,7 +41,7 @@ export const BusinessList = (props) => {
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [timeLimitValue, setTimeLimitValue] = useState(null)
-  const [orderByValue, setOrderByValue] = useState(null)
+  const [orderByValue, setOrderByValue] = useState(initialOrderByValue ?? null)
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
