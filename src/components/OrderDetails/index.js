@@ -306,7 +306,7 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
 
-      loadMessages()
+      // loadMessages()
     }
     const handleTrackingDriver = ({ location }) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
