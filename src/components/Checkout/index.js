@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 /**
  * Component to manage Checkout page behavior without UI component
@@ -18,6 +19,7 @@ export const Checkout = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const [,{ refreshConfigs }] = useConfig()
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
@@ -42,6 +44,7 @@ export const Checkout = (props) => {
    * Method to get business from API
    */
   const getBusiness = async () => {
+    refreshConfigs()
     try {
       const { content: { result, error } } = await ordering.businesses(businessId).select(propsToFetch).get()
       if (!error && cartState.cart?.paymethod_id) {

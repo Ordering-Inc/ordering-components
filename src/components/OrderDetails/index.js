@@ -30,7 +30,7 @@ export const OrderDetails = (props) => {
   const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
-  const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null})
+  const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
 
   const propsToFetch = ['header', 'slug']
 
@@ -117,24 +117,20 @@ export const OrderDetails = (props) => {
   const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
       const bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : { status }
-
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
 
       if (!error) {
         setOrderState({ ...orderState, order: result, loading: false })
       }
-
       if (error) {
         const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
-        const defaultMessage = message !== 'INTERNAL_ERROR' ? message : 'Server Error, please wait, we are working to fix it'
+        const defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error')
 
         setOrderState({ ...orderState, error: [defaultMessage], loading: false })
-        showToast(ToastType.Error, t(message.toUpperCase(), defaultMessage))
       }
     } catch (err) {
-      setOrderState({ ...orderState, loading: false, error: [err.message] })
-      showToast(ToastType.Error, t(err.message.toUpperCase(), err.message))
+      setOrderState({ ...orderState, loading: false, error: [err?.message || t('NETWORK_ERROR', 'Network Error')] })
     }
   }
 
@@ -148,7 +144,7 @@ export const OrderDetails = (props) => {
         setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, newLocation: { ...newLocation, ...result } })
       }
     } catch (error) {
-      setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, error: [error.message] })
+      setDriverUpdateLocation({ ...driverUpdateLocation, loading: false, error: [error?.message || t('NETWORK_ERROR', 'Network Error')] })
     }
   }
 
