@@ -286,6 +286,9 @@ export const OrderDetails = (props) => {
         ...orderState,
         order: props.order
       })
+      if (isFetchDrivers) {
+        getDrivers(props.order?.id ?? orderId)
+      }
     } else {
       getOrder()
     }
