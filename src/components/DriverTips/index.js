@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 /**
  * Component to manage driver tips behavior without UI component
@@ -9,7 +10,6 @@ export const DriverTips = (props) => {
   const {
     UIComponent,
     businessId,
-    isFixedPrice,
     useOrderContext
   } = props
 
@@ -21,7 +21,10 @@ export const DriverTips = (props) => {
    * Order context
    */
   const [orderState, { changeDriverTip }] = useOrder()
-
+  /**
+   * Config context
+   */
+  const [{ configs }] = useConfig()
   /**
    * Save percentage selected by user
    */
@@ -35,8 +38,8 @@ export const DriverTips = (props) => {
    * handler when user change driver tip option
    * @param {number} val
    */
-  const handlerChangeOption = (driverTip) => {
-    driverTip = typeof driverTip === 'string' ? parseInt(driverTip) :driverTip
+  const handlerChangeOption = (driverTip, isFixedPrice = props.isFixedPrice) => {
+    driverTip = typeof driverTip === 'string' ? parseInt(driverTip) : driverTip
     if (useOrderContext) {
       changeDriverTip(businessId, driverTip, isFixedPrice)
     } else {
@@ -48,6 +51,7 @@ export const DriverTips = (props) => {
   useEffect(() => {
     const orderDriverTipRate = orderState.carts?.[`businessId:${businessId}`]?.driver_tip_rate || 0
     const orderDriverTip = orderState.carts?.[`businessId:${businessId}`]?.driver_tip || 0
+    const isFixedPrice = parseInt(configs?.driver_tip_type?.value, 10) === 1 // 1 - fixed, 2 - percentage
 
     setOptionSelected(isFixedPrice ? orderDriverTip : orderDriverTipRate)
     setDriverTipAmount(orderDriverTip)
