@@ -720,6 +720,12 @@ var OrderDetails = function OrderDetails(props) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         order: props.order
       }));
+
+      if (isFetchDrivers) {
+        var _props$order$id, _props$order2;
+
+        getDrivers((_props$order$id = (_props$order2 = props.order) === null || _props$order2 === void 0 ? void 0 : _props$order2.id) !== null && _props$order$id !== void 0 ? _props$order$id : orderId);
+      }
     } else {
       getOrder();
     }
