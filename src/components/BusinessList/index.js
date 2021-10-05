@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useConfig } from '../../contexts/ConfigContext'
 dayjs.extend(utc)
 
 export const BusinessList = (props) => {
@@ -11,6 +12,7 @@ export const BusinessList = (props) => {
     UIComponent,
     initialBuisnessType,
     initialOrderType,
+    initialOrderByValue,
     initialFilterKey,
     initialFilterValue,
     isOfferBusinesses,
@@ -39,12 +41,12 @@ export const BusinessList = (props) => {
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [timeLimitValue, setTimeLimitValue] = useState(null)
-  const [orderByValue, setOrderByValue] = useState(null)
+  const [orderByValue, setOrderByValue] = useState(initialOrderByValue ?? null)
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [requestsState, setRequestsState] = useState({})
-  const [,{ refreshConfigs }] = useConfig()
+  const [, { refreshConfigs }] = useConfig()
 
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
