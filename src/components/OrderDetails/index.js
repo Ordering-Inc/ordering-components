@@ -24,7 +24,7 @@ export const OrderDetails = (props) => {
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
-  const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false })
+  const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const socket = useWebsocket()
@@ -155,21 +155,27 @@ export const OrderDetails = (props) => {
   /**
      * Method to assign a driver for order
   */
-  const handleAssignDriver = async (e) => {
+  const handleAssignDriver = async (driverId) => {
     try {
-      const bodyToSend = { driver_id: e }
+      const bodyToSend = { driver_id: driverId }
       setOrderState({ ...orderState, loading: true })
-      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).save(bodyToSend)
-      if (!error) {
-        setOrderState({ ...orderState, order: result, loading: false })
-      }
+      const { content: { error, result } } = await ordering
+        .setAccessToken(token)
+        .orders(orderState?.order?.id ?? orderId)
+        .save(bodyToSend)
 
-      if (error) {
-        setOrderState({ ...orderState, error: result[0], loading: false })
-        showToast(ToastType.Error, t(result[0], result[0]))
-      }
-    } catch (err) {
-      setOrderState({ ...orderState, loading: false, error: err.message })
+        setOrderState({
+          ...orderState,
+          loading: false,
+          order: result,
+          error: error ? result : null
+        })
+    } catch (e) {
+      setOrderState({
+        ...orderState,
+        loading: false,
+        error: e?.message ? drivers.error?.push(e?.message) : ['ERROR']
+      })
     }
   }
 
@@ -212,6 +218,11 @@ export const OrderDetails = (props) => {
       } catch (e) {
         err.push(e.message)
       }
+
+      if (isFetchDrivers) {
+        getDrivers(order?.id ?? orderId)
+      }
+
       setOrderState({
         ...orderState,
         loading: false,
@@ -246,23 +257,26 @@ export const OrderDetails = (props) => {
     }
   }
 
-  const getDrivers = async () => {
+  const getDrivers = async (orderId) => {
     try {
       setDrivers({ ...drivers, loadingDriver: true })
-      const { response: { data } } = await ordering.setAccessToken(token).controls(orderId).get()
-
-      if (data.error) {
-        showToast(ToastType.Error, t(`${data.result[0]}`, `${data.result[0]}`))
-        return
-      }
+      const { content: { error, result } } = await ordering
+        .setAccessToken(token)
+        .controls(orderId)
+        .get()
 
       setDrivers({
         ...drivers,
         loadingDriver: false,
-        drivers: data.result.drivers
+        drivers: result.drivers,
+        error: error ? result : null
       })
     } catch (e) {
-      setDrivers({ ...drivers, loadingDriver: false })
+      setDrivers({
+        ...drivers,
+        loadingDriver: false,
+        error: e?.message ? drivers.error?.push(e?.message) : ['ERROR']
+      })
     }
   }
 
@@ -278,10 +292,6 @@ export const OrderDetails = (props) => {
       })
     } else {
       getOrder()
-    }
-
-    if (isFetchDrivers) {
-      getDrivers()
     }
 
     return () => {
