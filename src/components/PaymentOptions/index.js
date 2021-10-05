@@ -115,6 +115,7 @@ export const PaymentOptions = (props) => {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
         id: paymethodSelected.id,
+        name: paymethodSelected.name,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
         data
@@ -139,6 +140,7 @@ export const PaymentOptions = (props) => {
       onPaymentChange && onPaymentChange({
         paymethodId: paymethodSelected.id,
         id: paymethodSelected.id,
+        name: paymethodSelected.name,
         gateway: paymethodSelected.gateway,
         paymethod: paymethodSelected,
         data: paymethodData
