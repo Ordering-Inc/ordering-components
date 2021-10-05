@@ -352,15 +352,14 @@ var OrderDetails = function OrderDetails(props) {
 
               if (error) {
                 message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR';
-                defaultMessage = message !== 'INTERNAL_ERROR' ? message : 'Server Error, please wait, we are working to fix it';
+                defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error');
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                   error: [defaultMessage],
                   loading: false
                 }));
-                showToast(_ToastContext.ToastType.Error, t(message.toUpperCase(), defaultMessage));
               }
 
-              _context3.next = 18;
+              _context3.next = 17;
               break;
 
             case 14:
@@ -368,11 +367,10 @@ var OrderDetails = function OrderDetails(props) {
               _context3.t0 = _context3["catch"](1);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                error: [_context3.t0.message]
+                error: [(_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message) || t('NETWORK_ERROR', 'Network Error')]
               }));
-              showToast(_ToastContext.ToastType.Error, t(_context3.t0.message.toUpperCase(), _context3.t0.message));
 
-            case 18:
+            case 17:
             case "end":
               return _context3.stop();
           }
@@ -432,7 +430,7 @@ var OrderDetails = function OrderDetails(props) {
               _context4.t0 = _context4["catch"](1);
               setDriverUpdateLocation(_objectSpread(_objectSpread({}, driverUpdateLocation), {}, {
                 loading: false,
-                error: [_context4.t0.message]
+                error: [(_context4.t0 === null || _context4.t0 === void 0 ? void 0 : _context4.t0.message) || t('NETWORK_ERROR', 'Network Error')]
               }));
 
             case 15:
