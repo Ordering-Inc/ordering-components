@@ -23,9 +23,9 @@ var _ToastContext = require("../../contexts/ToastContext");
 
 var _LanguageContext = require("../../contexts/LanguageContext");
 
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35,11 +35,11 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -57,12 +57,12 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri, _orderState$order7, _orderState$order11;
+  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri, _orderState$order9, _orderState$order13;
 
   var orderId = props.orderId,
       hashKey = props.hashKey,
@@ -106,7 +106,8 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useState3 = (0, _react.useState)({
     drivers: [],
-    loadingDriver: false
+    loadingDriver: false,
+    error: null
   }),
       _useState4 = _slicedToArray(_useState3, 2),
       drivers = _useState4[0],
@@ -313,6 +314,8 @@ var OrderDetails = function OrderDetails(props) {
   var handleChangeOrderStatus = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(status) {
       var isAcceptOrReject,
+          _orderState$order$id,
+          _orderState$order6,
           bodyToSend,
           _yield$ordering$setAc,
           _yield$ordering$setAc2,
@@ -335,7 +338,7 @@ var OrderDetails = function OrderDetails(props) {
                 loading: true
               }));
               _context3.next = 6;
-              return ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
+              return ordering.setAccessToken(token).orders((_orderState$order$id = (_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.id) !== null && _orderState$order$id !== void 0 ? _orderState$order$id : orderId).save(bodyToSend);
 
             case 6:
               _yield$ordering$setAc = _context3.sent;
@@ -451,8 +454,8 @@ var OrderDetails = function OrderDetails(props) {
 
 
   var handleAssignDriver = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(e) {
-      var bodyToSend, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(driverId) {
+      var _orderState$order$id2, _orderState$order7, bodyToSend, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, _drivers$error;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -460,52 +463,41 @@ var OrderDetails = function OrderDetails(props) {
             case 0:
               _context5.prev = 0;
               bodyToSend = {
-                driver_id: e
+                driver_id: driverId
               };
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: true
               }));
               _context5.next = 5;
-              return ordering.setAccessToken(token).orders(orderId).save(bodyToSend);
+              return ordering.setAccessToken(token).orders((_orderState$order$id2 = orderState === null || orderState === void 0 ? void 0 : (_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.id) !== null && _orderState$order$id2 !== void 0 ? _orderState$order$id2 : orderId).save(bodyToSend);
 
             case 5:
               _yield$ordering$setAc5 = _context5.sent;
               _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
               error = _yield$ordering$setAc6.error;
               result = _yield$ordering$setAc6.result;
-
-              if (!error) {
-                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  order: result,
-                  loading: false
-                }));
-              }
-
-              if (error) {
-                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  error: result[0],
-                  loading: false
-                }));
-                showToast(_ToastContext.ToastType.Error, t(result[0], result[0]));
-              }
-
-              _context5.next = 16;
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                order: result,
+                error: error ? result : null
+              }));
+              _context5.next = 15;
               break;
 
-            case 13:
-              _context5.prev = 13;
+            case 12:
+              _context5.prev = 12;
               _context5.t0 = _context5["catch"](0);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                error: _context5.t0.message
+                error: _context5.t0 !== null && _context5.t0 !== void 0 && _context5.t0.message ? (_drivers$error = drivers.error) === null || _drivers$error === void 0 ? void 0 : _drivers$error.push(_context5.t0 === null || _context5.t0 === void 0 ? void 0 : _context5.t0.message) : ['ERROR']
               }));
 
-            case 16:
+            case 15:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[0, 13]]);
+      }, _callee5, null, [[0, 12]]);
     }));
 
     return function handleAssignDriver(_x3) {
@@ -529,7 +521,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var getOrder = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6() {
-      var source, options, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result, order, err, businessData, _yield$ordering$setAc9, content, _orderState$error;
+      var source, options, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result, order, err, businessData, _yield$ordering$setAc9, content, _order$id, _orderState$error;
 
       return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
@@ -586,29 +578,33 @@ var OrderDetails = function OrderDetails(props) {
               err.push(_context6.t0.message);
 
             case 28:
+              if (isFetchDrivers) {
+                getDrivers((_order$id = order === null || order === void 0 ? void 0 : order.id) !== null && _order$id !== void 0 ? _order$id : orderId);
+              }
+
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 order: order,
                 businessData: businessData,
                 error: err
               }));
-              _context6.next = 34;
+              _context6.next = 35;
               break;
 
-            case 31:
-              _context6.prev = 31;
+            case 32:
+              _context6.prev = 32;
               _context6.t1 = _context6["catch"](6);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
                 error: _context6.t1.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context6.t1 === null || _context6.t1 === void 0 ? void 0 : _context6.t1.message) : ['ERROR']
               }));
 
-            case 34:
+            case 35:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[6, 31], [16, 25]]);
+      }, _callee6, null, [[6, 32], [16, 25]]);
     }));
 
     return function getOrder() {
@@ -620,7 +616,7 @@ var OrderDetails = function OrderDetails(props) {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7() {
       var _messages$messages, _messages$messages2;
 
-      var messageId, _orderState$order6, response, _yield$response$json2, result;
+      var messageId, _orderState$order8, response, _yield$response$json2, result;
 
       return _regenerator.default.wrap(function _callee7$(_context7) {
         while (1) {
@@ -629,7 +625,7 @@ var OrderDetails = function OrderDetails(props) {
               messageId = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages[(messages === null || messages === void 0 ? void 0 : (_messages$messages2 = messages.messages) === null || _messages$messages2 === void 0 ? void 0 : _messages$messages2.length) - 1]) === null || _messages$messages === void 0 ? void 0 : _messages$messages.id;
               _context7.prev = 1;
               _context7.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order6 = orderState.order) === null || _orderState$order6 === void 0 ? void 0 : _orderState$order6.id, "/messages/").concat(messageId, "/read"), {
+              return fetch("".concat(ordering.root, "/orders/").concat((_orderState$order8 = orderState.order) === null || _orderState$order8 === void 0 ? void 0 : _orderState$order8.id, "/messages/").concat(messageId, "/read"), {
                 method: 'GET',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -668,8 +664,8 @@ var OrderDetails = function OrderDetails(props) {
   }();
 
   var getDrivers = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8() {
-      var _yield$ordering$setAc10, data;
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8(orderId) {
+      var _yield$ordering$setAc10, _yield$ordering$setAc11, error, result, _drivers$error2;
 
       return _regenerator.default.wrap(function _callee8$(_context8) {
         while (1) {
@@ -684,47 +680,41 @@ var OrderDetails = function OrderDetails(props) {
 
             case 4:
               _yield$ordering$setAc10 = _context8.sent;
-              data = _yield$ordering$setAc10.response.data;
-
-              if (!data.error) {
-                _context8.next = 9;
-                break;
-              }
-
-              showToast(_ToastContext.ToastType.Error, t("".concat(data.result[0]), "".concat(data.result[0])));
-              return _context8.abrupt("return");
-
-            case 9:
+              _yield$ordering$setAc11 = _yield$ordering$setAc10.content;
+              error = _yield$ordering$setAc11.error;
+              result = _yield$ordering$setAc11.result;
               setDrivers(_objectSpread(_objectSpread({}, drivers), {}, {
                 loadingDriver: false,
-                drivers: data.result.drivers
+                drivers: result.drivers,
+                error: error ? result : null
               }));
-              _context8.next = 15;
+              _context8.next = 14;
               break;
 
-            case 12:
-              _context8.prev = 12;
+            case 11:
+              _context8.prev = 11;
               _context8.t0 = _context8["catch"](0);
               setDrivers(_objectSpread(_objectSpread({}, drivers), {}, {
-                loadingDriver: false
+                loadingDriver: false,
+                error: _context8.t0 !== null && _context8.t0 !== void 0 && _context8.t0.message ? (_drivers$error2 = drivers.error) === null || _drivers$error2 === void 0 ? void 0 : _drivers$error2.push(_context8.t0 === null || _context8.t0 === void 0 ? void 0 : _context8.t0.message) : ['ERROR']
               }));
 
-            case 15:
+            case 14:
             case "end":
               return _context8.stop();
           }
         }
-      }, _callee8, null, [[0, 12]]);
+      }, _callee8, null, [[0, 11]]);
     }));
 
-    return function getDrivers() {
+    return function getDrivers(_x4) {
       return _ref9.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
-  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.status, orderState.loading]);
+  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.status, orderState.loading]);
   (0, _react.useEffect)(function () {
     if (props.order) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -732,10 +722,6 @@ var OrderDetails = function OrderDetails(props) {
       }));
     } else {
       getOrder();
-    }
-
-    if (isFetchDrivers) {
-      getDrivers();
     }
 
     return function () {
@@ -749,21 +735,20 @@ var OrderDetails = function OrderDetails(props) {
     };
   }, []);
   (0, _react.useEffect)(function () {
-    var _orderState$order9;
+    var _orderState$order11;
 
     if (orderState.loading || loading) return;
 
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _orderState$order8;
+      var _orderState$order10;
 
-      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order8 = orderState.order) === null || _orderState$order8 === void 0 ? void 0 : _orderState$order8.id)) return;
+      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.id)) return;
       showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER', 'Updating order...'));
       delete order.total;
       delete order.subtotal;
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         order: Object.assign(orderState.order, order)
-      }));
-      loadMessages();
+      })); // loadMessages()
     };
 
     var handleTrackingDriver = function handleTrackingDriver(_ref10) {
@@ -777,14 +762,14 @@ var OrderDetails = function OrderDetails(props) {
 
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     if (!isDisabledOrdersRoom) socket.join(ordersRoom);
-    socket.join("drivers_".concat((_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.driver_id));
+    socket.join("drivers_".concat((_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.driver_id));
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      var _orderState$order10;
+      var _orderState$order12;
 
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
-      socket.leave("drivers_".concat((_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.driver_id));
+      socket.leave("drivers_".concat((_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
@@ -808,7 +793,7 @@ var OrderDetails = function OrderDetails(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket, (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.status, userCustomerId]);
+  }, [messages, socket, (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.status, userCustomerId]);
   (0, _react.useEffect)(function () {
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     socket.join(messagesOrdersRoom);
