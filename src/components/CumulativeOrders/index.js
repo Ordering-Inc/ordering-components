@@ -12,7 +12,7 @@ import { ToastType, useToast } from '../../contexts/ToastContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 export const CumulativeOrders = (props) => {
-  const { UIComponent, paginationSettings, firstFetch, sortBy } = props;
+  const { UIComponent, paginationSettings, firstFetch, sortBy, limit } = props;
   const orderStatus = {
     pending: [0, 13],
     inProgress: [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
@@ -36,65 +36,53 @@ export const CumulativeOrders = (props) => {
   );
   const [pending, setPending] = useState({
     orders: [],
-    pagination: {
-      currentPage: paginationSettings.initialPage,
-      pageSize: paginationSettings.pageSize,
-    },
     loading: false,
     error: null,
+    isLoadMoreOrder: true,
   });
   const [inProgress, setInProgress] = useState({
     orders: [],
-    pagination: {
-      currentPage: paginationSettings.initialPage,
-      pageSize: paginationSettings.pageSize,
-    },
     loading: false,
     error: null,
   });
   const [completed, setCompleted] = useState({
     orders: [],
-    pagination: {
-      currentPage: paginationSettings.initialPage,
-      pageSize: paginationSettings.pageSize,
-    },
     loading: false,
     error: null,
   });
   const [cancelled, setCancelled] = useState({
     orders: [],
-    pagination: {
-      currentPage: paginationSettings.initialPage,
-      pageSize: paginationSettings.pageSize,
-    },
     loading: false,
     error: null,
   });
 
-  const getPending = async (isNextPage) => {
+  const getPending = async (isNextPage, fetchByTags, isClean, isRefresh) => {
     setPending({
       ...pending,
+      orders: isClean ? [] : pending.orders,
       loading: true,
     });
+
+    const ordersToIgnore = isRefresh ? [] :pending?.orders?.map(order => order?.id);
 
     const options = {
       query: {
         orderBy: sortBy,
-        page_size: paginationSettings.pageSize,
-        page: isNextPage ? pending.pagination.currentPage + 1 : 1,
-        where: [{ attribute: 'status', value: orderStatus.pending }],
+        where: [ { attribute: 'id', value: { condition: '!=', value: ordersToIgnore } },
+        { attribute: 'status', value: fetchByTags ?? orderStatus.pending }],
+        limit
       },
     };
-
+    
     try {
       const {
-        content: { result, pagination, error },
+        content: { result, error },
       } = await ordering
-        .setAccessToken(token)
-        .orders()
-        .asDashboard()
-        .get(options);
-
+      .setAccessToken(token)
+      .orders()
+      .asDashboard()
+      .get(options);
+   
       if (!error) {
         let hash = {};
         setPending({
@@ -102,18 +90,8 @@ export const CumulativeOrders = (props) => {
           orders: isNextPage
             ? pending.orders
                 .concat(result)
-                .filter((order) =>
-                  hash[order?.id] ? false : (hash[order?.id] = true)
-                )
             : result,
-          pagination: {
-            currentPage: pagination.current_page,
-            pageSize: pagination.page_size,
-            totalPages: pagination.total_pages,
-            total: pagination.total,
-            from: pagination.from,
-            to: pagination.to,
-          },
+          isLoadMoreOrder: limit === result.length,
           loading: false,
         });
       } else {
@@ -124,24 +102,27 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const getInProgress = async (isNextPage) => {
+  const getInProgress = async (isNextPage, fetchByTags, isClean, isRefresh) => {
     setInProgress({
       ...inProgress,
+      orders: isClean ? [] : pending.orders,
       loading: true,
     });
+
+    const ordersToIgnore = isRefresh ? [] :inProgress?.orders?.map(order => order?.id);
 
     const options = {
       query: {
         orderBy: sortBy,
-        page_size: paginationSettings.pageSize,
-        page: isNextPage ? inProgress.pagination.currentPage + 1 : 1,
-        where: [{ attribute: 'status', value: orderStatus.inProgress }],
+        where: [ { attribute: 'id', value: { condition: '!=', value: ordersToIgnore } },
+        { attribute: 'status', value: fetchByTags ?? orderStatus.inProgress }],
+        limit
       },
     };
 
     try {
       const {
-        content: { result, pagination, error },
+        content: { result, error },
       } = await ordering
         .setAccessToken(token)
         .orders()
@@ -159,14 +140,7 @@ export const CumulativeOrders = (props) => {
                   hash[order?.id] ? false : (hash[order?.id] = true)
                 )
             : result,
-          pagination: {
-            currentPage: pagination.current_page,
-            pageSize: pagination.page_size,
-            totalPages: pagination.total_pages,
-            total: pagination.total,
-            from: pagination.from,
-            to: pagination.to,
-          },
+            isLoadMoreOrder: limit === result.length,
           loading: false,
         });
       } else {
@@ -177,24 +151,28 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const getCompleted = async (isNextPage) => {
+  const getCompleted = async (isNextPage, fetchByTags, isClean, isRefresh) => {
     setCompleted({
       ...completed,
+      orders: isClean ? [] : pending.orders,
       loading: true,
     });
-
+   
+    const ordersToIgnore = isRefresh ? [] : completed?.orders?.map(order => order?.id);
+  
     const options = {
       query: {
         orderBy: sortBy,
-        page_size: paginationSettings.pageSize,
-        page: isNextPage ? completed.pagination.currentPage + 1 : 1,
-        where: [{ attribute: 'status', value: orderStatus.completed }],
+        where: [ { attribute: 'id', value: { condition: '!=', value: ordersToIgnore } },
+        { attribute: 'status', value: fetchByTags ?? orderStatus.completed }],
+        limit
       },
     };
 
+
     try {
       const {
-        content: { result, pagination, error },
+        content: { result, error },
       } = await ordering
         .setAccessToken(token)
         .orders()
@@ -212,14 +190,7 @@ export const CumulativeOrders = (props) => {
                   hash[order?.id] ? false : (hash[order?.id] = true)
                 )
             : result,
-          pagination: {
-            currentPage: pagination.current_page,
-            pageSize: pagination.page_size,
-            totalPages: pagination.total_pages,
-            total: pagination.total,
-            from: pagination.from,
-            to: pagination.to,
-          },
+            isLoadMoreOrder: limit === result.length,
           loading: false,
         });
       } else {
@@ -230,24 +201,27 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const getCancelled = async (isNextPage) => {
+  const getCancelled = async (isNextPage, fetchByTags, isClean, isRefresh) => {
     setCancelled({
       ...cancelled,
+      orders: isClean ? [] : pending.orders,
       loading: true,
     });
+
+    const ordersToIgnore = isRefresh ? [] : cancelled?.orders?.map(order => order?.id);
 
     const options = {
       query: {
         orderBy: sortBy,
-        page_size: paginationSettings.pageSize,
-        page: isNextPage ? cancelled.pagination.currentPage + 1 : 1,
-        where: [{ attribute: 'status', value: orderStatus.cancelled }],
+        where: [ { attribute: 'id', value: { condition: '!=', value: ordersToIgnore } },
+        { attribute: 'status', value: fetchByTags ?? orderStatus.cancelled }],
+        limit
       },
     };
 
     try {
       const {
-        content: { result, pagination, error },
+        content: { result, error },
       } = await ordering
         .setAccessToken(token)
         .orders()
@@ -265,14 +239,6 @@ export const CumulativeOrders = (props) => {
                   hash[order?.id] ? false : (hash[order?.id] = true)
                 )
             : result,
-          pagination: {
-            currentPage: pagination.current_page,
-            pageSize: pagination.page_size,
-            totalPages: pagination.total_pages,
-            total: pagination.total,
-            from: pagination.from,
-            to: pagination.to,
-          },
           loading: false,
         });
       } else {
@@ -283,7 +249,7 @@ export const CumulativeOrders = (props) => {
     }
   };
 
-  const loadOrders = (tab, isNextPage, isRefresh) => {
+  const loadOrders = (tab, isNextPage, isRefresh, tags, isCleanOrders) => {
     if (isRefresh) {
       setActiveStatus(
         Object.entries(orderStatus).reduce(
@@ -296,29 +262,29 @@ export const CumulativeOrders = (props) => {
     switch (tab) {
       case 'pending':
         if (isNextPage || isRefresh || !pending.pagination?.total) {
-          getPending(isNextPage);
+          getPending(isNextPage, tags, isCleanOrders, isRefresh);
         }
         break;
       case 'inProgress':
         if (isNextPage || isRefresh || !inProgress.pagination?.total) {
-          getInProgress(isNextPage);
+          getInProgress(isNextPage, tags, isCleanOrders, isRefresh);
         }
         break;
       case 'completed':
         if (isNextPage || isRefresh || !completed.pagination?.total) {
-          getCompleted(isNextPage);
+          getCompleted(isNextPage, tags, isCleanOrders, isRefresh);
         }
         break;
       case 'cancelled':
         if (isNextPage || isRefresh || !cancelled.pagination?.total) {
-          getCancelled(isNextPage);
+          getCancelled(isNextPage, tags, isCleanOrders, isRefresh);
         }
         break;
     }
   };
 
   useEffect(() => {
-    loadOrders(firstFetch);
+    loadOrders(firstFetch, false, false, orderStatus.pending, limit);
   }, []);
 
   useEffect(() => {
