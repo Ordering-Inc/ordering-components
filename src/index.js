@@ -16,7 +16,7 @@ import { Cart } from './components/Cart'
 import { Checkout } from './components/Checkout'
 import { CouponControl } from './components/CouponControl'
 import { Contacts } from './components/Contacts'
-import { CumulativeOrders } from './components/CumulativeOrders'
+import { OrderListGroups } from './components/OrderListGroups'
 import { DragAndDrop } from './components/DragAndDrop'
 import { DriverTips } from './components/DriverTips'
 import { ExamineClick } from './components/ExamineClick'
@@ -111,7 +111,7 @@ export {
   Checkout,
   CouponControl,
   Contacts,
-  CumulativeOrders,
+  OrderListGroups,
   DragAndDrop,
   DriverTips,
   ExamineClick,
