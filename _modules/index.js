@@ -111,10 +111,10 @@ Object.defineProperty(exports, "Contacts", {
     return _Contacts.Contacts;
   }
 });
-Object.defineProperty(exports, "CumulativeOrders", {
+Object.defineProperty(exports, "OrderListGroups", {
   enumerable: true,
   get: function get() {
-    return _CumulativeOrders.CumulativeOrders;
+    return _OrderListGroups.OrderListGroups;
   }
 });
 Object.defineProperty(exports, "DragAndDrop", {
@@ -760,7 +760,7 @@ var _CouponControl = require("./components/CouponControl");
 
 var _Contacts = require("./components/Contacts");
 
-var _CumulativeOrders = require("./components/CumulativeOrders");
+var _OrderListGroups = require("./components/OrderListGroups");
 
 var _DragAndDrop = require("./components/DragAndDrop");
 
