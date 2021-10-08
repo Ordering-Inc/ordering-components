@@ -149,13 +149,13 @@ var OrderListGroups = function OrderListGroups(props) {
 
   var getOrders = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref5) {
-      var page, _ref5$pageSize, pageSize, orderStatus, options, source, functionFetch;
+      var page, _ref5$pageSize, pageSize, orderStatus, newFetch, options, source, functionFetch;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              page = _ref5.page, _ref5$pageSize = _ref5.pageSize, pageSize = _ref5$pageSize === void 0 ? paginationSettings.pageSize : _ref5$pageSize, orderStatus = _ref5.orderStatus;
+              page = _ref5.page, _ref5$pageSize = _ref5.pageSize, pageSize = _ref5$pageSize === void 0 ? paginationSettings.pageSize : _ref5$pageSize, orderStatus = _ref5.orderStatus, newFetch = _ref5.newFetch;
               options = {
                 query: {
                   orderBy: orderBy,
@@ -170,6 +170,21 @@ var OrderListGroups = function OrderListGroups(props) {
                   attribute: 'status',
                   value: orderStatus
                 });
+
+                if (ordersGroup[currentTabSelected].orders.length > 0 && !newFetch) {
+                  options.query = _objectSpread(_objectSpread({}, options.query), {}, {
+                    page: 1
+                  });
+                  options.query.where.push({
+                    attribute: 'id',
+                    value: {
+                      condition: '!=',
+                      value: ordersGroup[currentTabSelected].orders.map(function (o) {
+                        return o.id;
+                      })
+                    }
+                  });
+                }
               }
 
               source = {};
@@ -237,7 +252,8 @@ var OrderListGroups = function OrderListGroups(props) {
               return getOrders({
                 page: (_ = 1) !== null && _ !== void 0 ? _ : nextPage,
                 pageSize: pageSize,
-                orderStatus: ordersGroup[currentTabSelected].currentFilter
+                orderStatus: ordersGroup[currentTabSelected].currentFilter,
+                newFetch: newFetch
               });
 
             case 9:
@@ -246,7 +262,6 @@ var OrderListGroups = function OrderListGroups(props) {
               error = _yield$getOrders$cont.error;
               result = _yield$getOrders$cont.result;
               pagination = _yield$getOrders$cont.pagination;
-              console.log('load orders', error, result, pagination);
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: false,
                 orders: error ? [] : result,
@@ -260,11 +275,11 @@ var OrderListGroups = function OrderListGroups(props) {
                   to: pagination.to
                 })
               }))));
-              _context2.next = 21;
+              _context2.next = 20;
               break;
 
-            case 18:
-              _context2.prev = 18;
+            case 17:
+              _context2.prev = 17;
               _context2.t0 = _context2["catch"](4);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
@@ -274,12 +289,12 @@ var OrderListGroups = function OrderListGroups(props) {
                 }))));
               }
 
-            case 21:
+            case 20:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[4, 18]]);
+      }, _callee2, null, [[4, 17]]);
     }));
 
     return function loadOrders() {
@@ -313,7 +328,7 @@ var OrderListGroups = function OrderListGroups(props) {
               pagination = _yield$getOrders2$con.pagination;
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: false,
-                orders: error ? ordersGroup[currentTabSelected].orders : ordersGroup[currentTabSelected].orders.concat(result),
+                orders: error ? sortOrders(ordersGroup[currentTabSelected].orders) : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
                 error: error ? result : null,
                 pagination: !error ? _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
                   currentPage: pagination.current_page,
@@ -444,17 +459,30 @@ var OrderListGroups = function OrderListGroups(props) {
 
   var actionOrderToTab = function actionOrderToTab(order, status, type) {
     var orderList = ordersGroup[status].orders;
-    var orders = type === 'add' ? [order].concat(_toConsumableArray(orderList)) : orderList.filter(function (_order) {
-      return _order.id !== order.id;
-    });
+    var orders;
+
+    if (type === 'update') {
+      var indexToUpdate = orderList.findIndex(function (o) {
+        return o.id === order.id;
+      });
+      orderList[indexToUpdate] = order;
+      orders = orderList;
+    } else {
+      orders = type === 'add' ? [order].concat(_toConsumableArray(orderList)) : orderList.filter(function (_order) {
+        return _order.id !== order.id;
+      });
+    }
+
     ordersGroup[status].orders = sortOrders(orders);
-    ordersGroup[status].pagination = _objectSpread(_objectSpread({}, ordersGroup[status].pagination), {}, {
-      total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
-    });
+
+    if (type !== 'update') {
+      ordersGroup[status].pagination = _objectSpread(_objectSpread({}, ordersGroup[status].pagination), {}, {
+        total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
+      });
+    }
   };
 
   (0, _react.useEffect)(function () {
-    console.log('inside 1');
     loadOrders({
       newFetch: !!currentFilters
     });
@@ -482,8 +510,18 @@ var OrderListGroups = function OrderListGroups(props) {
         if (orderFound) break;
       }
 
-      if (!orderFound) return;
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id));
+
+      if (!orderFound) {
+        var _getStatusById;
+
+        if (!(order !== null && order !== void 0 && order.products) || !(order !== null && order !== void 0 && order.summary) || !(order !== null && order !== void 0 && order.status) || !(order !== null && order !== void 0 && order.customer) || !(order !== null && order !== void 0 && order.business) || !(order !== null && order !== void 0 && order.paymethod) || !(order !== null && order !== void 0 && order.total) || !(order !== null && order !== void 0 && order.subtotal)) return;
+        delete order.total;
+        delete order.subtotal;
+        var currentFilter = ordersGroup[(_getStatusById = getStatusById(order === null || order === void 0 ? void 0 : order.status)) !== null && _getStatusById !== void 0 ? _getStatusById : ''].currentFilter;
+        !currentFilter.includes(order.status) ? actionOrderToTab(order, getStatusById(order === null || order === void 0 ? void 0 : order.status), 'remove') : actionOrderToTab(order, getStatusById(order === null || order === void 0 ? void 0 : order.status), 'add');
+        return;
+      }
 
       if (orderFound.id === order.id && ((_orderFound = orderFound) === null || _orderFound === void 0 ? void 0 : (_orderFound$driver = _orderFound.driver) === null || _orderFound$driver === void 0 ? void 0 : _orderFound$driver.id) !== (order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) && (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
         actionOrderToTab(orderFound, getStatusById(orderFound.status), 'remove');
@@ -497,24 +535,35 @@ var OrderListGroups = function OrderListGroups(props) {
       if (!(order !== null && order !== void 0 && order.status) && (order === null || order === void 0 ? void 0 : order.status) !== 0) {
         Object.assign(orderFound, order);
       } else {
-        var _orderFound2;
+        var _getStatusById2, _getStatusById3, _orderFound2;
 
-        var newOrderStatus = getStatusById(order === null || order === void 0 ? void 0 : order.status);
-        var currentOrderStatus = getStatusById((_orderFound2 = orderFound) === null || _orderFound2 === void 0 ? void 0 : _orderFound2.status);
+        var newOrderStatus = (_getStatusById2 = getStatusById(order === null || order === void 0 ? void 0 : order.status)) !== null && _getStatusById2 !== void 0 ? _getStatusById2 : '';
+        var currentOrderStatus = (_getStatusById3 = getStatusById((_orderFound2 = orderFound) === null || _orderFound2 === void 0 ? void 0 : _orderFound2.status)) !== null && _getStatusById3 !== void 0 ? _getStatusById3 : '';
+        var _currentFilter = ordersGroup[newOrderStatus].currentFilter;
+        Object.assign(orderFound, order);
 
         if (newOrderStatus !== currentOrderStatus) {
-          Object.assign(orderFound, order);
           actionOrderToTab(orderFound, currentOrderStatus, 'remove');
-          actionOrderToTab(orderFound, newOrderStatus, 'add');
+
+          if (_currentFilter.includes(orderFound.status)) {
+            actionOrderToTab(orderFound, newOrderStatus, 'add');
+          }
+        } else {
+          !_currentFilter.includes(orderFound.status) ? actionOrderToTab(orderFound, newOrderStatus, 'remove') : actionOrderToTab(orderFound, newOrderStatus, 'update');
         }
       }
     };
 
     var handleAddNewOrder = function handleAddNewOrder(order) {
-      console.log('handleAddNewOrder', order);
+      var _getStatusById4;
+
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id));
-      var status = getStatusById(order === null || order === void 0 ? void 0 : order.status);
-      actionOrderToTab(order, status, 'add');
+      var status = (_getStatusById4 = getStatusById(order === null || order === void 0 ? void 0 : order.status)) !== null && _getStatusById4 !== void 0 ? _getStatusById4 : '';
+      var currentFilter = ordersGroup[status].currentFilter;
+
+      if (currentFilter.includes(order.status)) {
+        actionOrderToTab(order, status, 'add');
+      }
     };
 
     socket.on('orders_register', handleAddNewOrder);
