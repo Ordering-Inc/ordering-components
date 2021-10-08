@@ -70,8 +70,13 @@ export const OrderListGroups = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
 
-  const getOrders = async ({ page, pageSize = paginationSettings.pageSize, orderStatus }) => {
-    const options = {
+  const getOrders = async ({
+    page,
+    pageSize = paginationSettings.pageSize,
+    orderStatus,
+    newFetch
+  }) => {
+    let options = {
       query: {
         orderBy,
         page: page,
@@ -81,6 +86,20 @@ export const OrderListGroups = (props) => {
     if (orderStatus) {
       options.query.where = []
       options.query.where.push({ attribute: 'status', value: orderStatus })
+
+      if (ordersGroup[currentTabSelected].orders.length > 0 && !newFetch) {
+        options.query = {
+          ...options.query,
+          page: 1
+        }
+        options.query.where.push({
+          attribute: 'id',
+          value: {
+            condition: '!=',
+            value: ordersGroup[currentTabSelected].orders.map((o) => o.id)
+          }
+        })
+      }
     }
 
     const source = {}
@@ -120,9 +139,9 @@ export const OrderListGroups = (props) => {
       const { content: { error, result, pagination } } = await getOrders({
         page: 1 ?? nextPage,
         pageSize,
-        orderStatus: ordersGroup[currentTabSelected].currentFilter
+        orderStatus: ordersGroup[currentTabSelected].currentFilter,
+        newFetch
       })
-      console.log('load orders', error, result, pagination);
 
       setOrdersGroup({
         ...ordersGroup,
@@ -176,8 +195,8 @@ export const OrderListGroups = (props) => {
           ...ordersGroup[currentTabSelected],
           loading: false,
           orders: error
-            ? ordersGroup[currentTabSelected].orders
-            : ordersGroup[currentTabSelected].orders.concat(result),
+            ? sortOrders(ordersGroup[currentTabSelected].orders)
+            : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
           error: error ? result : null,
           pagination: !error
             ? {
@@ -262,19 +281,29 @@ export const OrderListGroups = (props) => {
 
   const actionOrderToTab = (order, status, type) => {
     const orderList = ordersGroup[status].orders
-    let orders = type === 'add'
-      ? [order, ...orderList]
-      : orderList.filter((_order) => _order.id !== order.id)
+    let orders
+
+    if (type === 'update') {
+      const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
+      orderList[indexToUpdate] = order
+      orders = orderList
+    } else {
+      orders = type === 'add'
+        ? [order, ...orderList]
+        : orderList.filter((_order) => _order.id !== order.id)
+    }
 
     ordersGroup[status].orders = sortOrders(orders)
-    ordersGroup[status].pagination = {
-      ...ordersGroup[status].pagination,
-      total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
+
+    if (type !== 'update') {
+      ordersGroup[status].pagination = {
+        ...ordersGroup[status].pagination,
+        total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
+      }
     }
   }
 
   useEffect(() => {
-    console.log('inside 1');
     loadOrders({ newFetch: !!currentFilters })
   }, [currentTabSelected])
 
@@ -296,12 +325,34 @@ export const OrderListGroups = (props) => {
         if (orderFound) break
       }
 
-      if (!orderFound) return
-
       showToast(
         ToastType.Info,
         t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id)
       )
+
+      if (!orderFound) {
+        if (
+          !order?.products ||
+          !order?.summary ||
+          !order?.status ||
+          !order?.customer ||
+          !order?.business ||
+          !order?.paymethod ||
+          !order?.total ||
+          !order?.subtotal
+        ) return
+
+        delete order.total
+        delete order.subtotal
+
+        const currentFilter = ordersGroup[getStatusById(order?.status) ?? ''].currentFilter
+
+        !currentFilter.includes(order.status)
+          ? actionOrderToTab(order, getStatusById(order?.status), 'remove')
+          : actionOrderToTab(order, getStatusById(order?.status), 'add')
+
+        return
+      }
 
       if (
         orderFound.id === order.id &&
@@ -319,25 +370,36 @@ export const OrderListGroups = (props) => {
       if (!order?.status && order?.status !== 0) {
         Object.assign(orderFound, order)
       } else {
-        const newOrderStatus = getStatusById(order?.status)
-        const currentOrderStatus = getStatusById(orderFound?.status)
+        const newOrderStatus = getStatusById(order?.status) ?? ''
+        const currentOrderStatus = getStatusById(orderFound?.status) ?? ''
+
+        const currentFilter = ordersGroup[newOrderStatus].currentFilter
+        Object.assign(orderFound, order)
 
         if (newOrderStatus !== currentOrderStatus) {
-          Object.assign(orderFound, order)
           actionOrderToTab(orderFound, currentOrderStatus, 'remove')
-          actionOrderToTab(orderFound, newOrderStatus, 'add')
+
+          if (currentFilter.includes(orderFound.status)) {
+            actionOrderToTab(orderFound, newOrderStatus, 'add')
+          }
+        } else {
+          !currentFilter.includes(orderFound.status)
+            ? actionOrderToTab(orderFound, newOrderStatus, 'remove')
+            : actionOrderToTab(orderFound, newOrderStatus, 'update')
         }
       }
     }
 
     const handleAddNewOrder = (order) => {
-      console.log('handleAddNewOrder', order);
       showToast(
         ToastType.Info,
         t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id)
       )
-      const status = getStatusById(order?.status)
-      actionOrderToTab(order, status, 'add')
+      const status = getStatusById(order?.status) ?? ''
+      const currentFilter = ordersGroup[status].currentFilter
+      if (currentFilter.includes(order.status)) {
+        actionOrderToTab(order, status, 'add')
+      }
     }
 
     socket.on('orders_register', handleAddNewOrder)
