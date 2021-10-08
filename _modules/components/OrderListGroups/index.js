@@ -104,7 +104,7 @@ var OrderListGroups = function OrderListGroups(props) {
     }
   };
 
-  var _ref = _react.useState < any > {
+  var _useState = (0, _react.useState)({
     pending: _objectSpread(_objectSpread({}, orderStructure), {}, {
       defaultFilter: ordersGroupStatus['pending'],
       currentFilter: ordersGroupStatus['pending']
@@ -121,42 +121,42 @@ var OrderListGroups = function OrderListGroups(props) {
       defaultFilter: ordersGroupStatus['cancelled'],
       currentFilter: ordersGroupStatus['cancelled']
     })
-  },
-      _ref2 = _slicedToArray(_ref, 2),
-      ordersGroup = _ref2[0],
-      setOrdersGroup = _ref2[1];
-
-  var _useState = (0, _react.useState)('pending'),
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      currentTabSelected = _useState2[0],
-      setCurrentTabSelected = _useState2[1];
+      ordersGroup = _useState2[0],
+      setOrdersGroup = _useState2[1];
 
-  var _ref3 = _react.useState < any > {
+  var _useState3 = (0, _react.useState)('pending'),
+      _useState4 = _slicedToArray(_useState3, 2),
+      currentTabSelected = _useState4[0],
+      setCurrentTabSelected = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     loading: false,
     error: null,
     messages: []
-  },
-      _ref4 = _slicedToArray(_ref3, 2),
-      messages = _ref4[0],
-      setMessages = _ref4[1];
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      messages = _useState6[0],
+      setMessages = _useState6[1];
 
-  var _useState3 = (0, _react.useState)(null),
-      _useState4 = _slicedToArray(_useState3, 2),
-      currentFilters = _useState4[0],
-      setCurrentFilters = _useState4[1];
+  var _useState7 = (0, _react.useState)(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      currentFilters = _useState8[0],
+      setCurrentFilters = _useState8[1];
 
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
 
   var getOrders = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref5) {
-      var page, _ref5$pageSize, pageSize, orderStatus, newFetch, options, source, functionFetch;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
+      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, source, functionFetch;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              page = _ref5.page, _ref5$pageSize = _ref5.pageSize, pageSize = _ref5$pageSize === void 0 ? paginationSettings.pageSize : _ref5$pageSize, orderStatus = _ref5.orderStatus, newFetch = _ref5.newFetch;
+              page = _ref.page, _ref$pageSize = _ref.pageSize, pageSize = _ref$pageSize === void 0 ? paginationSettings.pageSize : _ref$pageSize, orderStatus = _ref.orderStatus, newFetch = _ref.newFetch;
               options = {
                 query: {
                   orderBy: orderBy,
@@ -207,15 +207,15 @@ var OrderListGroups = function OrderListGroups(props) {
     }));
 
     return function getOrders(_x) {
-      return _ref6.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
 
   var loadOrders = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
       var _ordersGroup$currentT;
 
-      var _ref8,
+      var _ref4,
           isNextPage,
           newFetch,
           pageSize,
@@ -233,7 +233,7 @@ var OrderListGroups = function OrderListGroups(props) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _ref8 = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : {}, isNextPage = _ref8.isNextPage, newFetch = _ref8.newFetch;
+              _ref4 = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : {}, isNextPage = _ref4.isNextPage, newFetch = _ref4.newFetch;
 
               if (!(!newFetch && (ordersGroup[currentTabSelected].pagination.currentPage > 0 && ordersGroup[currentTabSelected].pagination.currentPage === ordersGroup[currentTabSelected].pagination.totalPages || ordersGroup[currentTabSelected].orders.length > 0 && ((_ordersGroup$currentT = ordersGroup[currentTabSelected].pagination) === null || _ordersGroup$currentT === void 0 ? void 0 : _ordersGroup$currentT.totalPages) > 0))) {
                 _context2.next = 3;
@@ -299,12 +299,12 @@ var OrderListGroups = function OrderListGroups(props) {
     }));
 
     return function loadOrders() {
-      return _ref7.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
       var _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _err$message2;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
@@ -363,12 +363,12 @@ var OrderListGroups = function OrderListGroups(props) {
     }));
 
     return function loadMoreOrders() {
-      return _ref9.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
   var loadMessages = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(orderId) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(orderId) {
       var url, response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee4$(_context4) {
@@ -432,7 +432,7 @@ var OrderListGroups = function OrderListGroups(props) {
     }));
 
     return function loadMessages(_x2) {
-      return _ref10.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
 
