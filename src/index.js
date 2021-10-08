@@ -16,7 +16,7 @@ import { Cart } from './components/Cart'
 import { Checkout } from './components/Checkout'
 import { CouponControl } from './components/CouponControl'
 import { Contacts } from './components/Contacts'
-import { OrderListGroups } from './components/OrderListGroups'
+import { CumulativeOrders } from './components/CumulativeOrders'
 import { DragAndDrop } from './components/DragAndDrop'
 import { DriverTips } from './components/DriverTips'
 import { ExamineClick } from './components/ExamineClick'
@@ -58,6 +58,7 @@ import { UpsellingPage } from './components/UpsellingPage'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
 import { OrderDetails } from './components/OrderDetails'
 import { OrderReview } from './components/OrderReview'
+import { OrderListGroups } from './components/OrderListGroups'
 import { CmsContent } from './components/CmsContent'
 import { PhoneAutocomplete } from './components/PhoneAutocomplete'
 import { BusinessesMap } from './components/BusinessesMap'
@@ -111,6 +112,7 @@ export {
   Checkout,
   CouponControl,
   Contacts,
+  CumulativeOrders,
   OrderListGroups,
   DragAndDrop,
   DriverTips,
