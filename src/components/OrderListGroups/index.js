@@ -42,7 +42,7 @@ export const OrderListGroups = (props) => {
     }
   }
 
-  const [ordersGroup, setOrdersGroup] = useState<any>({
+  const [ordersGroup, setOrdersGroup] = useState({
     pending: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus['pending'],
@@ -65,7 +65,7 @@ export const OrderListGroups = (props) => {
     },
   })
   const [currentTabSelected, setCurrentTabSelected] = useState('pending')
-  const [messages, setMessages] = useState<any>({ loading: false, error: null, messages: [] })
+  const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
