@@ -37,7 +37,8 @@ export const OrderListGroups = (props) => {
       currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
       ? paginationSettings.initialPage - 1
       : 0,
-      pageSize: paginationSettings.pageSize ?? 10
+      pageSize: paginationSettings.pageSize ?? 10,
+      total: null
     }
   }
 
@@ -341,7 +342,6 @@ export const OrderListGroups = (props) => {
           !order?.total ||
           !order?.subtotal
         ) return
-
         delete order.total
         delete order.subtotal
 
@@ -379,7 +379,12 @@ export const OrderListGroups = (props) => {
         if (newOrderStatus !== currentOrderStatus) {
           actionOrderToTab(orderFound, currentOrderStatus, 'remove')
 
-          if (currentFilter.includes(orderFound.status)) {
+          const total = ordersGroup[newOrderStatus].pagination.total ?? null
+
+          if (
+            currentFilter.includes(orderFound.status) &&
+            total !== null
+          ) {
             actionOrderToTab(orderFound, newOrderStatus, 'add')
           }
         } else {
