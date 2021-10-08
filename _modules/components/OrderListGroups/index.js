@@ -99,7 +99,8 @@ var OrderListGroups = function OrderListGroups(props) {
     orders: [],
     pagination: {
       currentPage: paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1 ? paginationSettings.initialPage - 1 : 0,
-      pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10
+      pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
+      total: null
     }
   };
 
@@ -543,9 +544,12 @@ var OrderListGroups = function OrderListGroups(props) {
         Object.assign(orderFound, order);
 
         if (newOrderStatus !== currentOrderStatus) {
-          actionOrderToTab(orderFound, currentOrderStatus, 'remove');
+          var _ordersGroup$newOrder;
 
-          if (_currentFilter.includes(orderFound.status)) {
+          actionOrderToTab(orderFound, currentOrderStatus, 'remove');
+          var total = (_ordersGroup$newOrder = ordersGroup[newOrderStatus].pagination.total) !== null && _ordersGroup$newOrder !== void 0 ? _ordersGroup$newOrder : null;
+
+          if (_currentFilter.includes(orderFound.status) && total !== null) {
             actionOrderToTab(orderFound, newOrderStatus, 'add');
           }
         } else {
