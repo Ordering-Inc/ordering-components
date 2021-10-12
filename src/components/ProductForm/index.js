@@ -324,19 +324,11 @@ export const ProductForm = (props) => {
    */
   const handleChangeCommentState = (e) => {
     const comment = e.target.value
-    if (comment.replace(/\s/g, '').length) {
-      productCart.comment = comment
-      setProductCart({
-        ...productCart,
-        comment: productCart.comment
-      })
-    } else {
-      productCart.comment = ''
-      setProductCart({
-        ...productCart,
-        comment: ''
-      })
-    }
+    productCart.comment = comment.trim()
+    setProductCart({
+      ...productCart,
+      comment: productCart.comment
+    })
   }
 
   /**
