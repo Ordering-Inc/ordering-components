@@ -323,11 +323,11 @@ export const ProductForm = (props) => {
    * @param {object} e Product comment
    */
   const handleChangeCommentState = (e) => {
-    const comment = e.target.value
+    const comment = e.target.value ?? ''
     productCart.comment = comment.trim()
     setProductCart({
       ...productCart,
-      comment: productCart.comment
+      comment: comment.trim()
     })
   }
 
