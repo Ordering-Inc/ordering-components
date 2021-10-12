@@ -17,7 +17,6 @@ import { Checkout } from '../src/components/Checkout'
 import { CmsContent } from '../src/components/CmsContent'
 import { CouponControl } from '../src/components/CouponControl'
 import { Contacts } from '../src/components/Contacts'
-import { CumulativeOrders } from '../src/components/CumulativeOrders'
 import { DragAndDrop } from '../src/components/DragAndDrop'
 import { DriverTips } from '../src/components/DriverTips'
 import { ExamineClick } from '../src/components/ExamineClick'
@@ -34,6 +33,7 @@ import { MyOrders } from '../src/components/MyOrders'
 import { MyOrdersList } from '../src/components/MyOrdersList'
 import { OrderChange } from '../src/components/OrderChange';
 import { OrderList } from '../src/components/OrderList'
+import { OrderListGroups } from '../src/components/OrderListGroups'
 import { OrderTypeControl } from '../src/components/OrderTypeControl'
 import { OrderDetails } from '../src/components/OrderDetails'
 import { OrderReview } from '../src/components/OrderReview'
@@ -98,7 +98,7 @@ export {
   CmsContent,
   CouponControl,
   Contacts,
-  CumulativeOrders,
+  OrderListGroups,
   DragAndDrop,
   DriverTips,
   ExamineClick,
