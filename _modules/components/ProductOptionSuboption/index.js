@@ -85,7 +85,7 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
 
 
   var increment = function increment() {
-    if (option.limit_suboptions_by_max && balance === option.max) {
+    if (option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
       return;
     }
 
