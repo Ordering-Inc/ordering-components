@@ -111,12 +111,6 @@ Object.defineProperty(exports, "Contacts", {
     return _Contacts.Contacts;
   }
 });
-Object.defineProperty(exports, "CumulativeOrders", {
-  enumerable: true,
-  get: function get() {
-    return _CumulativeOrders.CumulativeOrders;
-  }
-});
 Object.defineProperty(exports, "DragAndDrop", {
   enumerable: true,
   get: function get() {
@@ -373,6 +367,12 @@ Object.defineProperty(exports, "OrderReview", {
   enumerable: true,
   get: function get() {
     return _OrderReview.OrderReview;
+  }
+});
+Object.defineProperty(exports, "OrderListGroups", {
+  enumerable: true,
+  get: function get() {
+    return _OrderListGroups.OrderListGroups;
   }
 });
 Object.defineProperty(exports, "CmsContent", {
@@ -760,8 +760,6 @@ var _CouponControl = require("./components/CouponControl");
 
 var _Contacts = require("./components/Contacts");
 
-var _CumulativeOrders = require("./components/CumulativeOrders");
-
 var _DragAndDrop = require("./components/DragAndDrop");
 
 var _DriverTips = require("./components/DriverTips");
@@ -843,6 +841,8 @@ var _WrapperGoogleMaps = require("./components/WrapperGoogleMaps");
 var _OrderDetails = require("./components/OrderDetails");
 
 var _OrderReview = require("./components/OrderReview");
+
+var _OrderListGroups = require("./components/OrderListGroups");
 
 var _CmsContent = require("./components/CmsContent");
 

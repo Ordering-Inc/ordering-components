@@ -117,12 +117,6 @@ Object.defineProperty(exports, "Contacts", {
     return _Contacts.Contacts;
   }
 });
-Object.defineProperty(exports, "CumulativeOrders", {
-  enumerable: true,
-  get: function get() {
-    return _CumulativeOrders.CumulativeOrders;
-  }
-});
 Object.defineProperty(exports, "DragAndDrop", {
   enumerable: true,
   get: function get() {
@@ -217,6 +211,12 @@ Object.defineProperty(exports, "OrderList", {
   enumerable: true,
   get: function get() {
     return _OrderList.OrderList;
+  }
+});
+Object.defineProperty(exports, "OrderListGroups", {
+  enumerable: true,
+  get: function get() {
+    return _OrderListGroups.OrderListGroups;
   }
 });
 Object.defineProperty(exports, "OrderTypeControl", {
@@ -642,8 +642,6 @@ var _CouponControl = require("../src/components/CouponControl");
 
 var _Contacts = require("../src/components/Contacts");
 
-var _CumulativeOrders = require("../src/components/CumulativeOrders");
-
 var _DragAndDrop = require("../src/components/DragAndDrop");
 
 var _DriverTips = require("../src/components/DriverTips");
@@ -675,6 +673,8 @@ var _MyOrdersList = require("../src/components/MyOrdersList");
 var _OrderChange = require("../src/components/OrderChange");
 
 var _OrderList = require("../src/components/OrderList");
+
+var _OrderListGroups = require("../src/components/OrderListGroups");
 
 var _OrderTypeControl = require("../src/components/OrderTypeControl");
 
