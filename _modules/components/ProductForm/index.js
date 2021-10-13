@@ -494,10 +494,12 @@ var ProductForm = function ProductForm(props) {
 
 
   var handleChangeCommentState = function handleChangeCommentState(e) {
-    var comment = e.target.value;
-    productCart.comment = comment;
+    var _e$target$value;
+
+    var comment = (_e$target$value = e.target.value) !== null && _e$target$value !== void 0 ? _e$target$value : '';
+    productCart.comment = comment.trim();
     setProductCart(_objectSpread(_objectSpread({}, productCart), {}, {
-      comment: productCart.comment
+      comment: comment.trim()
     }));
   };
   /**

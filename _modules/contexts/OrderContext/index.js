@@ -385,21 +385,23 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
-      var optionsStorage, options, _state$options6, _params$address;
+      var optionsStorage, options, _state$options6, _params$address, _err$message2, message;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              _context2.prev = 0;
+
               if (!(_typeof(addressId) === 'object')) {
-                _context2.next = 10;
+                _context2.next = 11;
                 break;
               }
 
-              _context2.next = 3;
+              _context2.next = 4;
               return strategy.getItem('options', true);
 
-            case 3:
+            case 4:
               optionsStorage = _context2.sent;
               options = _objectSpread(_objectSpread(_objectSpread({}, state.options), optionsStorage), {}, {
                 address: _objectSpread(_objectSpread({}, optionsStorage === null || optionsStorage === void 0 ? void 0 : optionsStorage.address), addressId)
@@ -409,18 +411,18 @@ var OrderProvider = function OrderProvider(_ref) {
                 options.type = state === null || state === void 0 ? void 0 : (_state$options6 = state.options) === null || _state$options6 === void 0 ? void 0 : _state$options6.type;
               }
 
-              _context2.next = 8;
+              _context2.next = 9;
               return strategy.setItem('options', options, true);
 
-            case 8:
+            case 9:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 options: options
               }));
               return _context2.abrupt("return");
 
-            case 10:
+            case 11:
               if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-                _context2.next = 13;
+                _context2.next = 14;
                 break;
               }
 
@@ -429,36 +431,50 @@ var OrderProvider = function OrderProvider(_ref) {
               });
               return _context2.abrupt("return");
 
-            case 13:
+            case 14:
               if (!(params && params !== null && params !== void 0 && params.isEdit)) {
-                _context2.next = 18;
+                _context2.next = 19;
                 break;
               }
 
               if (!(addressId !== state.options.address_id)) {
-                _context2.next = 16;
+                _context2.next = 17;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 16:
+            case 17:
               updateOrderOptions({
                 address_id: addressId
               });
               return _context2.abrupt("return");
 
-            case 18:
+            case 19:
               updateOrderOptions({
                 address_id: addressId
               });
+              _context2.next = 27;
+              break;
 
-            case 19:
+            case 22:
+              _context2.prev = 22;
+              _context2.t0 = _context2["catch"](0);
+              message = _context2.t0 !== null && _context2.t0 !== void 0 && (_err$message2 = _context2.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context2.t0.message;
+              setAlert({
+                show: true,
+                content: [message]
+              });
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+
+            case 27:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2);
+      }, _callee2, null, [[0, 22]]);
     }));
 
     return function changeAddress(_x, _x2) {
@@ -583,7 +599,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(changes) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, carts, options, _err$message2, message;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, carts, options, _err$message3, message;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -644,7 +660,7 @@ var OrderProvider = function OrderProvider(_ref) {
             case 21:
               _context5.prev = 21;
               _context5.t0 = _context5["catch"](6);
-              message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
+              message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message3 = _context5.t0.message) !== null && _err$message3 !== void 0 && _err$message3.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
                 show: true,
                 content: [message]

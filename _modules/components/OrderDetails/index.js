@@ -62,7 +62,7 @@ function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "und
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order$driver, _orderState$order, _orderState$order$dri, _orderState$order9, _orderState$order13;
+  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order9, _orderState$order13;
 
   var orderId = props.orderId,
       hashKey = props.hashKey,
@@ -95,7 +95,7 @@ var OrderDetails = function OrderDetails(props) {
       t = _useLanguage2[1];
 
   var _useState = (0, _react.useState)({
-    order: null,
+    order: (_props$order = props.order) !== null && _props$order !== void 0 ? _props$order : null,
     businessData: {},
     loading: !props.order,
     error: null
@@ -133,7 +133,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var socket = (0, _WebsocketContext.useWebsocket)();
 
-  var _useState9 = (0, _react.useState)(((_props$order = props.order) === null || _props$order === void 0 ? void 0 : (_props$order$driver = _props$order.driver) === null || _props$order$driver === void 0 ? void 0 : _props$order$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
+  var _useState9 = (0, _react.useState)(((_props$order2 = props.order) === null || _props$order2 === void 0 ? void 0 : (_props$order2$driver = _props$order2.driver) === null || _props$order2$driver === void 0 ? void 0 : _props$order2$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
       _useState10 = _slicedToArray(_useState9, 2),
       driverLocation = _useState10[0],
       setDriverLocation = _useState10[1];
@@ -722,9 +722,9 @@ var OrderDetails = function OrderDetails(props) {
       }));
 
       if (isFetchDrivers) {
-        var _props$order$id, _props$order2;
+        var _props$order$id, _props$order3;
 
-        getDrivers((_props$order$id = (_props$order2 = props.order) === null || _props$order2 === void 0 ? void 0 : _props$order2.id) !== null && _props$order$id !== void 0 ? _props$order$id : orderId);
+        getDrivers((_props$order$id = (_props$order3 = props.order) === null || _props$order3 === void 0 ? void 0 : _props$order3.id) !== null && _props$order$id !== void 0 ? _props$order$id : orderId);
       }
     } else {
       getOrder();
