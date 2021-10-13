@@ -35,11 +35,11 @@ export const ProductForm = (props) => {
    * Suboption by default when there is only one
    */
   const [defaultSubOptions, setDefaultSubOptions] = useState([])
-  
+
   /**
    * Custom Suboption by default
    */
-   const [customDefaultSubOptions, setCustomDefaultSubOptions] = useState([])
+  const [customDefaultSubOptions, setCustomDefaultSubOptions] = useState([])
 
   /**
    * Edit mode
@@ -323,11 +323,11 @@ export const ProductForm = (props) => {
    * @param {object} e Product comment
    */
   const handleChangeCommentState = (e) => {
-    const comment = e.target.value
-    productCart.comment = comment
+    const comment = e.target.value ?? ''
+    productCart.comment = comment.trim()
     setProductCart({
       ...productCart,
-      comment: productCart.comment
+      comment: comment.trim()
     })
   }
 
@@ -548,9 +548,9 @@ export const ProductForm = (props) => {
             state: states[i]
           }
         })
-        setDefaultSubOptions([...customDefaultSubOptions , ...defaultOptions])
+        setDefaultSubOptions([...customDefaultSubOptions, ...defaultOptions])
       }
-    }, [ customDefaultSubOptions])
+    }, [customDefaultSubOptions])
   }
   /**
    * Check if defaultSubOption has content to set product Cart

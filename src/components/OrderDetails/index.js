@@ -23,7 +23,7 @@ export const OrderDetails = (props) => {
   const [ordering] = useApi()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
-  const [orderState, setOrderState] = useState({ order: null, businessData: {}, loading: !props.order, error: null })
+  const [orderState, setOrderState] = useState({ order: props.order ?? null, businessData: {}, loading: !props.order, error: null })
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
