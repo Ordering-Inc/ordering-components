@@ -64,6 +64,10 @@ var ApiProvider = function ApiProvider(_ref) {
     setLanguage(languageCode);
   };
 
+  var _setOrderingState = function _setOrderingState(values) {
+    setOrdering(new _orderingApiSdk.Ordering(_objectSpread({}, values)));
+  };
+
   (0, _react.useEffect)(function () {
     if (ordering.language === language) return;
 
@@ -75,7 +79,7 @@ var ApiProvider = function ApiProvider(_ref) {
   }, [language]);
   var functions = {
     setLanguage: _setLanguage,
-    setOrdering: setOrdering
+    setOrdering: _setOrderingState
   };
   return /*#__PURE__*/_react.default.createElement(ApiContext.Provider, {
     value: [ordering, functions]
