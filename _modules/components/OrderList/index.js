@@ -78,7 +78,8 @@ var OrderList = function OrderList(props) {
       customArray = props.customArray,
       userCustomerId = props.userCustomerId,
       activeOrders = props.activeOrders,
-      isDynamicSort = props.isDynamicSort;
+      isDynamicSort = props.isDynamicSort,
+      businessId = props.businessId;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -189,17 +190,24 @@ var OrderList = function OrderList(props) {
                 });
               }
 
+              if (businessId) {
+                options.query.where.push({
+                  attribute: 'business_id',
+                  value: parseInt(businessId, 10)
+                });
+              }
+
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 11;
+              _context.next = 12;
               return functionFetch.get(options);
 
-            case 11:
+            case 12:
               return _context.abrupt("return", _context.sent);
 
-            case 12:
+            case 13:
             case "end":
               return _context.stop();
           }
