@@ -69,7 +69,7 @@ export const OrderList = props => {
       options.query.where.push({ attribute: 'customer_id', value: parseInt(userCustomerId, 10) })
     }
     if (businessId) {
-      options.query.where.push({ attribute: 'business_id', value: businessId })
+      options.query.where.push({ attribute: 'business_id', value: parseInt(businessId, 10) })
     }
     const source = {}
     requestsState.orders = source
