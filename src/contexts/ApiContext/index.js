@@ -30,7 +30,8 @@ export const ApiProvider = ({ settings, children }) => {
   }, [language])
 
   const functions = {
-    setLanguage: _setLanguage
+    setLanguage: _setLanguage,
+    setOrdering
   }
 
   return (

@@ -19,7 +19,8 @@ export const BusinessAndProductList = (props) => {
     businessProps,
     menusProps,
     isGetMenus,
-    UIComponent
+    UIComponent,
+    location
   } = props
 
   const [orderState] = useOrder()
@@ -100,41 +101,41 @@ export const BusinessAndProductList = (props) => {
     if (!businessState?.business?.lazy_load_products_recommended) {
         businessState?.business?.categories?.map(
           category => {
-            category?.products?.map( product => {
+            category?.products?.map(product => {
               if (product.featured) {
                 setFeaturedProducts(true)
               }
-            }) 
-          });
-      const categoryState = {
-        ...categoryStateDefault,
-        loading: false
-      }
-      if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
-        const productsFiltered = businessState?.business?.categories?.find(
-          category => category.id === categorySelected.id
-        )?.products.filter(
-          product => isMatchSearch(product.name, product.description)
-        )
-        categoryState.products = productsFiltered || []
-      } else if (categorySelected.id === 'featured') {
-        const productsFiltered = businessState?.business?.categories?.reduce(
-          (products, category) => [...products, ...category.products], []
-        ).filter(
-          product => isFeaturedSearch(product)
-        )
-        categoryState.products = productsFiltered || []
-      } else {
-        const productsFiltered = businessState?.business?.categories?.reduce(
-          (products, category) => [...products, ...category.products], []
-        ).filter(
-          product => isMatchSearch(product.name, product.description)
-        )
-        categoryState.products = productsFiltered || []
-      }
-      categoryState.products = sortProductsArray(sortByValue, categoryState.products)
-      setCategoryState({ ...categoryState })
-      return
+            })
+          })
+        const categoryState = {
+          ...categoryStateDefault,
+          loading: false
+        }
+        if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
+          const productsFiltered = businessState?.business?.categories?.find(
+            category => category.id === categorySelected.id
+          )?.products.filter(
+            product => isMatchSearch(product.name, product.description)
+          )
+          categoryState.products = productsFiltered || []
+        } else if (categorySelected.id === 'featured') {
+          const productsFiltered = businessState?.business?.categories?.reduce(
+            (products, category) => [...products, ...category.products], []
+          ).filter(
+            product => isFeaturedSearch(product)
+          )
+          categoryState.products = productsFiltered || []
+        } else {
+          const productsFiltered = businessState?.business?.categories?.reduce(
+            (products, category) => [...products, ...category.products], []
+          ).filter(
+            product => isMatchSearch(product.name, product.description)
+          )
+          categoryState.products = productsFiltered || []
+        }
+        categoryState.products = sortProductsArray(sortByValue, categoryState.products)
+        setCategoryState({ ...categoryState })
+        return
     }
 
     const categoryKey = searchValue
@@ -309,9 +310,11 @@ export const BusinessAndProductList = (props) => {
       setRequestsState({ ...requestsState })
       const parameters = {
         type: orderState.options?.type || 1,
-        location: orderState.options?.address?.location
-          ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
-          : null
+        location: location
+          ? `${location?.lat},${location?.lng}`
+          : orderState.options?.address?.location
+            ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
+            : null
       }
       if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
         const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
