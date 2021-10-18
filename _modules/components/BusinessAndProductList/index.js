@@ -55,7 +55,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -74,7 +74,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       businessProps = props.businessProps,
       menusProps = props.menusProps,
       isGetMenus = props.isGetMenus,
-      UIComponent = props.UIComponent;
+      UIComponent = props.UIComponent,
+      location = props.location;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -515,7 +516,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               setRequestsState(_objectSpread({}, requestsState));
               parameters = {
                 type: ((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type) || 1,
-                location: (_orderState$options11 = orderState.options) !== null && _orderState$options11 !== void 0 && (_orderState$options12 = _orderState$options11.address) !== null && _orderState$options12 !== void 0 && _orderState$options12.location ? "".concat((_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 ? void 0 : (_orderState$options14 = _orderState$options13.address) === null || _orderState$options14 === void 0 ? void 0 : (_orderState$options15 = _orderState$options14.location) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.lat, ",").concat((_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : (_orderState$options17 = _orderState$options16.address) === null || _orderState$options17 === void 0 ? void 0 : (_orderState$options18 = _orderState$options17.location) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.lng) : null
+                location: location ? "".concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng) : (_orderState$options11 = orderState.options) !== null && _orderState$options11 !== void 0 && (_orderState$options12 = _orderState$options11.address) !== null && _orderState$options12 !== void 0 && _orderState$options12.location ? "".concat((_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 ? void 0 : (_orderState$options14 = _orderState$options13.address) === null || _orderState$options14 === void 0 ? void 0 : (_orderState$options15 = _orderState$options14.location) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.lat, ",").concat((_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : (_orderState$options17 = _orderState$options16.address) === null || _orderState$options17 === void 0 ? void 0 : (_orderState$options18 = _orderState$options17.location) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.lng) : null
               };
 
               if ((_orderState$options19 = orderState.options) !== null && _orderState$options19 !== void 0 && _orderState$options19.moment && isValidMoment((_orderState$options20 = orderState.options) === null || _orderState$options20 === void 0 ? void 0 : _orderState$options20.moment, 'YYYY-MM-DD HH:mm:ss')) {
