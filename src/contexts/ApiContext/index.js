@@ -20,6 +20,10 @@ export const ApiProvider = ({ settings, children }) => {
     setLanguage(languageCode)
   }
 
+  const _setOrderingState = (values) => {
+    setOrdering(new Ordering({ ...values }))
+  }
+
   useEffect(() => {
     if (ordering.language === language) return
     const _ordering = new Ordering({
@@ -31,7 +35,7 @@ export const ApiProvider = ({ settings, children }) => {
 
   const functions = {
     setLanguage: _setLanguage,
-    setOrdering
+    setOrdering: _setOrderingState
   }
 
   return (
