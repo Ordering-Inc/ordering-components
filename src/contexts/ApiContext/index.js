@@ -33,6 +33,10 @@ export const ApiProvider = ({ settings, children }) => {
     setOrdering(_ordering)
   }, [language])
 
+  useEffect(() => {
+    _setOrderingState(settings)
+  }, [settings?.project])
+
   const functions = {
     setLanguage: _setLanguage,
     setOrdering: _setOrderingState
