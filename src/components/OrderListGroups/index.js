@@ -11,7 +11,7 @@ export const OrderListGroups = (props) => {
     orderBy,
     useDefualtSessionManager,
     paginationSettings,
-    asDashboard,
+    asDashboard
   } = props
 
   const [ordering] = useApi()
@@ -26,8 +26,8 @@ export const OrderListGroups = (props) => {
     pending: [0, 13],
     inProgress: [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
     completed: [1, 11, 15],
-    cancelled: [2, 5, 6, 10, 12, 16, 17],
-  };
+    cancelled: [2, 5, 6, 10, 12, 16, 17]
+  }
 
   const orderStructure = {
     loading: false,
@@ -35,8 +35,8 @@ export const OrderListGroups = (props) => {
     orders: [],
     pagination: {
       currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
-      ? paginationSettings.initialPage - 1
-      : 0,
+        ? paginationSettings.initialPage - 1
+        : 0,
       pageSize: paginationSettings.pageSize ?? 10,
       total: null
     }
@@ -45,24 +45,24 @@ export const OrderListGroups = (props) => {
   const [ordersGroup, setOrdersGroup] = useState({
     pending: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['pending'],
-      currentFilter: ordersGroupStatus['pending'],
+      defaultFilter: ordersGroupStatus.pending,
+      currentFilter: ordersGroupStatus.pending
     },
     inProgress: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['inProgress'],
-      currentFilter: ordersGroupStatus['inProgress'],
+      defaultFilter: ordersGroupStatus.inProgress,
+      currentFilter: ordersGroupStatus.inProgress
     },
     completed: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['completed'],
-      currentFilter: ordersGroupStatus['completed'],
+      defaultFilter: ordersGroupStatus.completed,
+      currentFilter: ordersGroupStatus.completed
     },
     cancelled: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['cancelled'],
-      currentFilter: ordersGroupStatus['cancelled'],
-    },
+      defaultFilter: ordersGroupStatus.cancelled,
+      currentFilter: ordersGroupStatus.cancelled
+    }
   })
   const [currentTabSelected, setCurrentTabSelected] = useState('pending')
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
@@ -77,7 +77,7 @@ export const OrderListGroups = (props) => {
     orderStatus,
     newFetch
   }) => {
-    let options = {
+    const options = {
       query: {
         orderBy,
         page: page,
@@ -169,7 +169,7 @@ export const OrderListGroups = (props) => {
           [currentTabSelected]: {
             ...ordersGroup[currentTabSelected],
             loading: false,
-            error: [err?.message ?? 'ERROR'],
+            error: [err?.message ?? 'ERROR']
           }
         })
       }
@@ -219,7 +219,7 @@ export const OrderListGroups = (props) => {
           [currentTabSelected]: {
             ...ordersGroup[currentTabSelected],
             loading: false,
-            error: [err?.message ?? 'ERROR'],
+            error: [err?.message ?? 'ERROR']
           }
         })
       }
@@ -307,6 +307,18 @@ export const OrderListGroups = (props) => {
     }
   }
 
+  const handleClickOrder = (orderAux) => {
+    const order = {
+      ...orderAux,
+      showNotification: false
+    }
+    const status = getStatusById(order?.status)
+    const orderList = ordersGroup[status].orders
+    const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
+    orderList[indexToUpdate] = order
+    ordersGroup[status].orders = sortOrders(orderList)
+  }
+
   useEffect(() => {
     loadOrders({ newFetch: !!currentFilters })
   }, [currentTabSelected])
@@ -324,7 +336,7 @@ export const OrderListGroups = (props) => {
       let orderFound = null
 
       for (let i = 0; i < ordersStatusArray.length; i++) {
-        const status = ordersStatusArray[i];
+        const status = ordersStatusArray[i]
         orderFound = ordersGroup[status].orders.find((_order) => _order.id === order.id)
         if (orderFound) break
       }
@@ -454,6 +466,7 @@ export const OrderListGroups = (props) => {
           loadOrders={loadOrders}
           loadMessages={loadMessages}
           loadMoreOrders={loadMoreOrders}
+          handleClickOrder={handleClickOrder}
         />
       )}
     </>
