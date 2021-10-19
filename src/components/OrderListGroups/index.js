@@ -4,6 +4,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const OrderListGroups = (props) => {
   const {
@@ -16,6 +17,7 @@ export const OrderListGroups = (props) => {
 
   const [ordering] = useApi()
   const [session] = useSession()
+  const [events] = useEvent()
   const socket = useWebsocket()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
@@ -396,6 +398,7 @@ export const OrderListGroups = (props) => {
     }
 
     const handleAddNewOrder = (order) => {
+      events.emit('order_added', order)
       showToast(
         ToastType.Info,
         t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id)
