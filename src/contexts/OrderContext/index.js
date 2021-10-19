@@ -170,49 +170,42 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * Change order address
    */
   const changeAddress = async (addressId, params) => {
-    try {
-      if (typeof addressId === 'object') {
-        const optionsStorage = await strategy.getItem('options', true)
-        const options = {
-          ...state.options,
-          ...optionsStorage,
-          address: {
-            ...optionsStorage?.address,
-            ...addressId
-          }
+    if (typeof addressId === 'object') {
+      const optionsStorage = await strategy.getItem('options', true)
+      const options = {
+        ...state.options,
+        ...optionsStorage,
+        address: {
+          ...optionsStorage?.address,
+          ...addressId
         }
-        if (!session.auth) {
-          options.type = state?.options?.type
-        }
-        await strategy.setItem('options', options, true)
-        setState({
-          ...state,
-          options
-        })
-        return
       }
 
-      if (params && params?.address && !checkAddress(params?.address)) {
-        updateOrderOptions({ address_id: params?.address?.id })
-        return
+      if (!session.auth) {
+        options.type = state?.options?.type
       }
-
-      if (params && params?.isEdit) {
-        if (addressId !== state.options.address_id) {
-          return
-        }
-        updateOrderOptions({ address_id: addressId })
-        return
-      }
-
-      updateOrderOptions({ address_id: addressId })
-    } catch (err) {
-      const message = err?.message?.includes('Internal error')
-        ? 'INTERNAL_ERROR'
-        : err.message
-      setAlert({ show: true, content: [message] })
-      setState({ ...state, loading: false })
+      await strategy.setItem('options', options, true)
+      setState({
+        ...state,
+        options
+      })
+      return
     }
+
+    if (params && params?.address && !checkAddress(params?.address)) {
+      updateOrderOptions({ address_id: params?.address?.id })
+      return
+    }
+
+    if (params && params?.isEdit) {
+      if (addressId !== state.options.address_id) {
+        return
+      }
+      updateOrderOptions({ address_id: addressId })
+      return
+    }
+
+    updateOrderOptions({ address_id: addressId })
   }
 
   /**
