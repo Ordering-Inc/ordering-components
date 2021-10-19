@@ -77,6 +77,9 @@ var ApiProvider = function ApiProvider(_ref) {
 
     setOrdering(_ordering);
   }, [language]);
+  (0, _react.useEffect)(function () {
+    _setOrderingState(settings);
+  }, [settings === null || settings === void 0 ? void 0 : settings.project]);
   var functions = {
     setLanguage: _setLanguage,
     setOrdering: _setOrderingState
