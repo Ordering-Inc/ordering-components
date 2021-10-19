@@ -280,10 +280,13 @@ export const OrderListGroups = (props) => {
     return status
   }
 
-  const actionOrderToTab = (order, status, type) => {
+  const actionOrderToTab = (orderAux, status, type) => {
     const orderList = ordersGroup[status].orders
     let orders
-
+    const order = {
+      ...orderAux,
+      showNotification: true
+    }
     if (type === 'update') {
       const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
       orderList[indexToUpdate] = order
