@@ -106,20 +106,20 @@ var OrderListGroups = function OrderListGroups(props) {
 
   var _useState = (0, _react.useState)({
     pending: _objectSpread(_objectSpread({}, orderStructure), {}, {
-      defaultFilter: ordersGroupStatus['pending'],
-      currentFilter: ordersGroupStatus['pending']
+      defaultFilter: ordersGroupStatus.pending,
+      currentFilter: ordersGroupStatus.pending
     }),
     inProgress: _objectSpread(_objectSpread({}, orderStructure), {}, {
-      defaultFilter: ordersGroupStatus['inProgress'],
-      currentFilter: ordersGroupStatus['inProgress']
+      defaultFilter: ordersGroupStatus.inProgress,
+      currentFilter: ordersGroupStatus.inProgress
     }),
     completed: _objectSpread(_objectSpread({}, orderStructure), {}, {
-      defaultFilter: ordersGroupStatus['completed'],
-      currentFilter: ordersGroupStatus['completed']
+      defaultFilter: ordersGroupStatus.completed,
+      currentFilter: ordersGroupStatus.completed
     }),
     cancelled: _objectSpread(_objectSpread({}, orderStructure), {}, {
-      defaultFilter: ordersGroupStatus['cancelled'],
-      currentFilter: ordersGroupStatus['cancelled']
+      defaultFilter: ordersGroupStatus.cancelled,
+      currentFilter: ordersGroupStatus.cancelled
     })
   }),
       _useState2 = _slicedToArray(_useState, 2),
@@ -458,9 +458,13 @@ var OrderListGroups = function OrderListGroups(props) {
     return status;
   };
 
-  var actionOrderToTab = function actionOrderToTab(order, status, type) {
+  var actionOrderToTab = function actionOrderToTab(orderAux, status, type) {
     var orderList = ordersGroup[status].orders;
     var orders;
+
+    var order = _objectSpread(_objectSpread({}, orderAux), {}, {
+      showNotification: true
+    });
 
     if (type === 'update') {
       var indexToUpdate = orderList.findIndex(function (o) {
@@ -481,6 +485,22 @@ var OrderListGroups = function OrderListGroups(props) {
         total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
       });
     }
+  };
+
+  var handleClickOrder = function handleClickOrder(orderAux) {
+    var order = _objectSpread(_objectSpread({}, orderAux), {}, {
+      showNotification: false
+    });
+
+    var status = getStatusById(order === null || order === void 0 ? void 0 : order.status);
+    var orderList = ordersGroup[status].orders;
+    var indexToUpdate = orderList.findIndex(function (o) {
+      return o.id === order.id;
+    });
+    orderList[indexToUpdate] = order;
+    setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, status, _objectSpread(_objectSpread({}, ordersGroup[status]), {}, {
+      orders: sortOrders(orderList)
+    }))));
   };
 
   (0, _react.useEffect)(function () {
@@ -610,7 +630,8 @@ var OrderListGroups = function OrderListGroups(props) {
     setMessages: setMessages,
     loadOrders: loadOrders,
     loadMessages: loadMessages,
-    loadMoreOrders: loadMoreOrders
+    loadMoreOrders: loadMoreOrders,
+    handleClickOrder: handleClickOrder
   })));
 };
 
