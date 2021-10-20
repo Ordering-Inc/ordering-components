@@ -316,7 +316,13 @@ export const OrderListGroups = (props) => {
     const orderList = ordersGroup[status].orders
     const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
     orderList[indexToUpdate] = order
-    ordersGroup[status].orders = sortOrders(orderList)
+    setOrdersGroup({
+      ...ordersGroup,
+      [status]: {
+        ...ordersGroup[status],
+        orders: sortOrders(orderList)
+      }
+    })
   }
 
   useEffect(() => {
