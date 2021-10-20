@@ -24,10 +24,10 @@ export const OrderListGroups = (props) => {
   const ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
-    pending: orderGroupStatusCustom?.pending || [0, 13],
-    inProgress: orderGroupStatusCustom?.inProgress || [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
-    completed: orderGroupStatusCustom?.completed || [1, 11, 15],
-    cancelled: orderGroupStatusCustom?.cancelled || [2, 5, 6, 10, 12, 16, 17]
+    pending: orderGroupStatusCustom?.pending ?? [0, 13],
+    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
+    completed: orderGroupStatusCustom?.completed ?? [1, 11, 15],
+    cancelled: orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
   }
 
   const orderStructure = {
