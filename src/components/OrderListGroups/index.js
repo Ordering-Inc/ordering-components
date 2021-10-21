@@ -4,6 +4,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const OrderListGroups = (props) => {
   const {
@@ -12,10 +13,12 @@ export const OrderListGroups = (props) => {
     useDefualtSessionManager,
     paginationSettings,
     asDashboard,
+    orderGroupStatusCustom
   } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
+  const [events] = useEvent()
   const socket = useWebsocket()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
@@ -23,11 +26,11 @@ export const OrderListGroups = (props) => {
   const ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
-    pending: [0, 13],
-    inProgress: [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
-    completed: [1, 11, 15],
-    cancelled: [2, 5, 6, 10, 12, 16, 17],
-  };
+    pending: orderGroupStatusCustom?.pending ?? [0, 13],
+    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
+    completed: orderGroupStatusCustom?.completed ?? [1, 11, 15],
+    cancelled: orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
+  }
 
   const orderStructure = {
     loading: false,
@@ -35,8 +38,8 @@ export const OrderListGroups = (props) => {
     orders: [],
     pagination: {
       currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
-      ? paginationSettings.initialPage - 1
-      : 0,
+        ? paginationSettings.initialPage - 1
+        : 0,
       pageSize: paginationSettings.pageSize ?? 10,
       total: null
     }
@@ -45,24 +48,24 @@ export const OrderListGroups = (props) => {
   const [ordersGroup, setOrdersGroup] = useState({
     pending: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['pending'],
-      currentFilter: ordersGroupStatus['pending'],
+      defaultFilter: ordersGroupStatus.pending,
+      currentFilter: ordersGroupStatus.pending
     },
     inProgress: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['inProgress'],
-      currentFilter: ordersGroupStatus['inProgress'],
+      defaultFilter: ordersGroupStatus.inProgress,
+      currentFilter: ordersGroupStatus.inProgress
     },
     completed: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['completed'],
-      currentFilter: ordersGroupStatus['completed'],
+      defaultFilter: ordersGroupStatus.completed,
+      currentFilter: ordersGroupStatus.completed
     },
     cancelled: {
       ...orderStructure,
-      defaultFilter: ordersGroupStatus['cancelled'],
-      currentFilter: ordersGroupStatus['cancelled'],
-    },
+      defaultFilter: ordersGroupStatus.cancelled,
+      currentFilter: ordersGroupStatus.cancelled
+    }
   })
   const [currentTabSelected, setCurrentTabSelected] = useState('pending')
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
@@ -77,7 +80,7 @@ export const OrderListGroups = (props) => {
     orderStatus,
     newFetch
   }) => {
-    let options = {
+    const options = {
       query: {
         orderBy,
         page: page,
@@ -169,7 +172,7 @@ export const OrderListGroups = (props) => {
           [currentTabSelected]: {
             ...ordersGroup[currentTabSelected],
             loading: false,
-            error: [err?.message ?? 'ERROR'],
+            error: [err?.message ?? 'ERROR']
           }
         })
       }
@@ -187,7 +190,8 @@ export const OrderListGroups = (props) => {
     try {
       const { content: { error, result, pagination } } = await getOrders({
         page: ordersGroup[currentTabSelected].pagination.currentPage + 1,
-        orderStatus: ordersGroup[currentTabSelected].currentFilter
+        orderStatus: ordersGroup[currentTabSelected].currentFilter,
+        newFetch: true
       })
 
       setOrdersGroup({
@@ -219,7 +223,7 @@ export const OrderListGroups = (props) => {
           [currentTabSelected]: {
             ...ordersGroup[currentTabSelected],
             loading: false,
-            error: [err?.message ?? 'ERROR'],
+            error: [err?.message ?? 'ERROR']
           }
         })
       }
@@ -280,10 +284,13 @@ export const OrderListGroups = (props) => {
     return status
   }
 
-  const actionOrderToTab = (order, status, type) => {
+  const actionOrderToTab = (orderAux, status, type) => {
     const orderList = ordersGroup[status].orders
     let orders
-
+    const order = {
+      ...orderAux,
+      showNotification: true
+    }
     if (type === 'update') {
       const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
       orderList[indexToUpdate] = order
@@ -304,6 +311,24 @@ export const OrderListGroups = (props) => {
     }
   }
 
+  const handleClickOrder = (orderAux) => {
+    const order = {
+      ...orderAux,
+      showNotification: false
+    }
+    const status = getStatusById(order?.status)
+    const orderList = ordersGroup[status].orders
+    const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
+    orderList[indexToUpdate] = order
+    setOrdersGroup({
+      ...ordersGroup,
+      [status]: {
+        ...ordersGroup[status],
+        orders: sortOrders(orderList)
+      }
+    })
+  }
+
   useEffect(() => {
     loadOrders({ newFetch: !!currentFilters })
   }, [currentTabSelected])
@@ -321,7 +346,7 @@ export const OrderListGroups = (props) => {
       let orderFound = null
 
       for (let i = 0; i < ordersStatusArray.length; i++) {
-        const status = ordersStatusArray[i];
+        const status = ordersStatusArray[i]
         orderFound = ordersGroup[status].orders.find((_order) => _order.id === order.id)
         if (orderFound) break
       }
@@ -396,6 +421,7 @@ export const OrderListGroups = (props) => {
     }
 
     const handleAddNewOrder = (order) => {
+      events.emit('order_added', order)
       showToast(
         ToastType.Info,
         t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id)
@@ -451,6 +477,7 @@ export const OrderListGroups = (props) => {
           loadOrders={loadOrders}
           loadMessages={loadMessages}
           loadMoreOrders={loadMoreOrders}
+          handleClickOrder={handleClickOrder}
         />
       )}
     </>
