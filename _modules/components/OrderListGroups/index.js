@@ -21,6 +21,8 @@ var _ToastContext = require("../../contexts/ToastContext");
 
 var _LanguageContext = require("../../contexts/LanguageContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -60,13 +62,14 @@ function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "und
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderListGroups = function OrderListGroups(props) {
-  var _paginationSettings$p;
+  var _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _paginationSettings$p;
 
   var UIComponent = props.UIComponent,
       orderBy = props.orderBy,
       useDefualtSessionManager = props.useDefualtSessionManager,
       paginationSettings = props.paginationSettings,
-      asDashboard = props.asDashboard;
+      asDashboard = props.asDashboard,
+      orderGroupStatusCustom = props.orderGroupStatusCustom;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -75,6 +78,10 @@ var OrderListGroups = function OrderListGroups(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       session = _useSession2[0];
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
   var socket = (0, _WebsocketContext.useWebsocket)();
 
@@ -88,10 +95,10 @@ var OrderListGroups = function OrderListGroups(props) {
 
   var ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled'];
   var ordersGroupStatus = {
-    pending: [0, 13],
-    inProgress: [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
-    completed: [1, 11, 15],
-    cancelled: [2, 5, 6, 10, 12, 16, 17]
+    pending: (_orderGroupStatusCust = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust !== void 0 ? _orderGroupStatusCust : [0, 13],
+    inProgress: (_orderGroupStatusCust2 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust2 !== void 0 ? _orderGroupStatusCust2 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
+    completed: (_orderGroupStatusCust3 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust3 !== void 0 ? _orderGroupStatusCust3 : [1, 11, 15],
+    cancelled: (_orderGroupStatusCust4 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.cancelled) !== null && _orderGroupStatusCust4 !== void 0 ? _orderGroupStatusCust4 : [2, 5, 6, 10, 12, 16, 17]
   };
   var orderStructure = {
     loading: false,
@@ -318,7 +325,8 @@ var OrderListGroups = function OrderListGroups(props) {
               _context3.next = 4;
               return getOrders({
                 page: ordersGroup[currentTabSelected].pagination.currentPage + 1,
-                orderStatus: ordersGroup[currentTabSelected].currentFilter
+                orderStatus: ordersGroup[currentTabSelected].currentFilter,
+                newFetch: true
               });
 
             case 4:
@@ -581,6 +589,7 @@ var OrderListGroups = function OrderListGroups(props) {
     var handleAddNewOrder = function handleAddNewOrder(order) {
       var _getStatusById4;
 
+      events.emit('order_added', order);
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id));
       var status = (_getStatusById4 = getStatusById(order === null || order === void 0 ? void 0 : order.status)) !== null && _getStatusById4 !== void 0 ? _getStatusById4 : '';
       var currentFilter = ordersGroup[status].currentFilter;
