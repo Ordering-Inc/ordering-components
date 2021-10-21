@@ -4,6 +4,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const OrderListGroups = (props) => {
   const {
@@ -11,11 +12,13 @@ export const OrderListGroups = (props) => {
     orderBy,
     useDefualtSessionManager,
     paginationSettings,
-    asDashboard
+    asDashboard,
+    orderGroupStatusCustom
   } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
+  const [events] = useEvent()
   const socket = useWebsocket()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
@@ -23,10 +26,10 @@ export const OrderListGroups = (props) => {
   const ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
-    pending: [0, 13],
-    inProgress: [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
-    completed: [1, 11, 15],
-    cancelled: [2, 5, 6, 10, 12, 16, 17]
+    pending: orderGroupStatusCustom?.pending ?? [0, 13],
+    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
+    completed: orderGroupStatusCustom?.completed ?? [1, 11, 15],
+    cancelled: orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
   }
 
   const orderStructure = {
@@ -187,7 +190,8 @@ export const OrderListGroups = (props) => {
     try {
       const { content: { error, result, pagination } } = await getOrders({
         page: ordersGroup[currentTabSelected].pagination.currentPage + 1,
-        orderStatus: ordersGroup[currentTabSelected].currentFilter
+        orderStatus: ordersGroup[currentTabSelected].currentFilter,
+        newFetch: true
       })
 
       setOrdersGroup({
@@ -417,6 +421,7 @@ export const OrderListGroups = (props) => {
     }
 
     const handleAddNewOrder = (order) => {
+      events.emit('order_added', order)
       showToast(
         ToastType.Info,
         t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id)
