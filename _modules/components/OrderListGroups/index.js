@@ -272,7 +272,7 @@ var OrderListGroups = function OrderListGroups(props) {
               pagination = _yield$getOrders$cont.pagination;
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: false,
-                orders: error ? [] : result,
+                orders: error ? sortOrders(ordersGroup[currentTabSelected].orders) : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
                 error: error ? result : null,
                 pagination: _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
                   currentPage: pagination.current_page,
