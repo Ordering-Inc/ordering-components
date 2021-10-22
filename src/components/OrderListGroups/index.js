@@ -152,7 +152,9 @@ export const OrderListGroups = (props) => {
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           loading: false,
-          orders: error ? [] : result,
+          orders: error
+            ? sortOrders(ordersGroup[currentTabSelected].orders)
+            : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
           error: error ? result : null,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
