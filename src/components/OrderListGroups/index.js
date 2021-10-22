@@ -268,10 +268,10 @@ export const OrderListGroups = (props) => {
 
   const getStatusById = (id) => {
     if (!id && id !== 0) return
-    const pending = [0, 13]
-    const inProgress = [3, 4, 7, 8, 9, 14, 18, 19, 20, 21]
-    const completed = [1, 11, 15]
-    const cancelled = [2, 5, 6, 10, 12, 16, 17]
+    const pending = orderGroupStatusCustom?.pending ?? [0, 13]
+    const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21]
+    const completed = orderGroupStatusCustom?.completed ?? [1, 11, 15]
+    const cancelled = orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
 
     const status = pending.includes(id)
       ? 'pending'
