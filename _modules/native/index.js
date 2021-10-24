@@ -656,7 +656,7 @@ var _Contacts = require("../src/components/Contacts");
 
 var _DragAndDrop = require("../src/components/DragAndDrop");
 
-var _DriverList = require("./components/DriverList");
+var _DriverList = require("./src/components/DriverList");
 
 var _DriverTips = require("../src/components/DriverTips");
 
