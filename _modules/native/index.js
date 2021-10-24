@@ -696,7 +696,7 @@ var _OrderDetails = require("../src/components/OrderDetails");
 
 var _OrderReview = require("../src/components/OrderReview");
 
-var _PaymethodList = require("./components/PaymethodList");
+var _PaymethodList = require("../src/components/PaymethodList");
 
 var _PaymentOptions = require("../src/components/PaymentOptions");
 
