@@ -18,6 +18,7 @@ import { CmsContent } from '../src/components/CmsContent'
 import { CouponControl } from '../src/components/CouponControl'
 import { Contacts } from '../src/components/Contacts'
 import { DragAndDrop } from '../src/components/DragAndDrop'
+import { DriverList } from './components/DriverList'
 import { DriverTips } from '../src/components/DriverTips'
 import { ExamineClick } from '../src/components/ExamineClick'
 import { FloatingButton } from '../src/components/FloatingButton'
@@ -37,6 +38,7 @@ import { OrderListGroups } from '../src/components/OrderListGroups'
 import { OrderTypeControl } from '../src/components/OrderTypeControl'
 import { OrderDetails } from '../src/components/OrderDetails'
 import { OrderReview } from '../src/components/OrderReview'
+import { PaymethodList } from './components/PaymethodList'
 import { PaymentOptions } from '../src/components/PaymentOptions'
 import { PaymentOptionCash } from '../src/components/PaymentOptionCash'
 import { PaymentOptionStripe } from '../src/components/PaymentOptionStripe'
@@ -100,6 +102,7 @@ export {
   Contacts,
   OrderListGroups,
   DragAndDrop,
+  DriverList,
   DriverTips,
   ExamineClick,
   FloatingButton,
@@ -118,6 +121,7 @@ export {
   OrderChange,
   OrderDetails,
   OrderReview,
+  PaymethodList,
   PaymentOptions,
   PaymentOptionCash,
   PaymentOptionStripe,
