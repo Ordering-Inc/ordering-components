@@ -29,7 +29,7 @@ export const DriverList = (props) => {
         loading: true
       })
       const where = [{ attribute: 'level', value: '4' }]
-      const { content: { error, result, pagination } } = await ordering.users().select(propsToFetch).where(where).get()
+      const { content: { error, result } } = await ordering.users().select(propsToFetch).where(where).get()
       if (!error) {
         setDriverList({
           ...driverList,

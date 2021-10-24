@@ -107,7 +107,6 @@ export const OrderListGroups = (props) => {
             }
           })
         }
-
       }
     }
 
@@ -163,10 +162,10 @@ export const OrderListGroups = (props) => {
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
-    
+
     const functionFetch = asDashboard
-    ? ordering.setAccessToken(accessToken).orders().asDashboard()
-    : ordering.setAccessToken(accessToken).orders()
+      ? ordering.setAccessToken(accessToken).orders().asDashboard()
+      : ordering.setAccessToken(accessToken).orders()
     return await functionFetch.get(options)
   }
 
