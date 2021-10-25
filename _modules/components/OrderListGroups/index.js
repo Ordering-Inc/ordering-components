@@ -57,7 +57,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -272,7 +272,7 @@ var OrderListGroups = function OrderListGroups(props) {
               pagination = _yield$getOrders$cont.pagination;
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: false,
-                orders: error ? [] : result,
+                orders: error ? sortOrders(ordersGroup[currentTabSelected].orders) : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
                 error: error ? result : null,
                 pagination: _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
                   currentPage: pagination.current_page,
@@ -457,11 +457,13 @@ var OrderListGroups = function OrderListGroups(props) {
   };
 
   var getStatusById = function getStatusById(id) {
+    var _orderGroupStatusCust5, _orderGroupStatusCust6, _orderGroupStatusCust7, _orderGroupStatusCust8;
+
     if (!id && id !== 0) return;
-    var pending = [0, 13];
-    var inProgress = [3, 4, 7, 8, 9, 14, 18, 19, 20, 21];
-    var completed = [1, 11, 15];
-    var cancelled = [2, 5, 6, 10, 12, 16, 17];
+    var pending = (_orderGroupStatusCust5 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust5 !== void 0 ? _orderGroupStatusCust5 : [0, 13];
+    var inProgress = (_orderGroupStatusCust6 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust6 !== void 0 ? _orderGroupStatusCust6 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21];
+    var completed = (_orderGroupStatusCust7 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust7 !== void 0 ? _orderGroupStatusCust7 : [1, 11, 15];
+    var cancelled = (_orderGroupStatusCust8 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.cancelled) !== null && _orderGroupStatusCust8 !== void 0 ? _orderGroupStatusCust8 : [2, 5, 6, 10, 12, 16, 17];
     var status = pending.includes(id) ? 'pending' : inProgress.includes(id) ? 'inProgress' : completed.includes(id) ? 'completed' : 'cancelled';
     return status;
   };

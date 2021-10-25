@@ -45,7 +45,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -191,7 +191,7 @@ var Checkout = function Checkout(props) {
 
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(paymentOptions) {
       var _cartResult$paymethod;
 
       var paymethodData, _paymethodSelected$da, payload, result, cartResult;
@@ -231,7 +231,7 @@ var Checkout = function Checkout(props) {
 
             case 7:
               payload = _objectSpread(_objectSpread({}, payload), {}, {
-                paymethod_data: paymethodData
+                paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
               });
               setPlacing(true);
               _context2.next = 11;
@@ -271,7 +271,7 @@ var Checkout = function Checkout(props) {
       }, _callee2);
     }));
 
-    return function handlerClickPlaceOrder() {
+    return function handlerClickPlaceOrder(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
