@@ -20,7 +20,7 @@ export const DriverList = (props) => {
   const [driverList, setDriverList] = useState({ drivers: [], loading: true, error: null })
 
   /**
-   * Method to get cities from API
+   * Method to get drivers from API
    */
   const getDriverList = async () => {
     try {
