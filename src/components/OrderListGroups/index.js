@@ -345,6 +345,7 @@ export const OrderListGroups = (props) => {
     if (ordersGroup[currentTabSelected].loading) return
 
     const handleUpdateOrder = (order) => {
+      events.emit('order_updated', order)
       let orderFound = null
 
       for (let i = 0; i < ordersStatusArray.length; i++) {
