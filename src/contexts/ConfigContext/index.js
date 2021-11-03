@@ -93,7 +93,7 @@ export const ConfigProvider = ({ children }) => {
     },
     use_parent_category1: {
       key: 'use_parent_category',
-      value: 'true'
+      value: '0'
     }
   }
 
