@@ -152,12 +152,19 @@ var OrderListGroups = function OrderListGroups(props) {
       currentFilters = _useState8[0],
       setCurrentFilters = _useState8[1];
 
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      filtered = _useState10[0],
+      setFiltered = _useState10[1];
+
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
 
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
-      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, source, functionFetch;
+      var _filtered$date, _filtered$date3;
+
+      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _filtered$date2, _filtered$date4, source, functionFetch;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -171,10 +178,10 @@ var OrderListGroups = function OrderListGroups(props) {
                   page_size: pageSize
                 }
               };
+              options.query.where = [];
 
               if (orderStatus) {
-                options.query.where = [];
-                options.query.where.push({
+                if (!(filtered !== null && filtered !== void 0 && filtered.state)) options.query.where.push({
                   attribute: 'status',
                   value: orderStatus
                 });
@@ -183,29 +190,97 @@ var OrderListGroups = function OrderListGroups(props) {
                   options.query = _objectSpread(_objectSpread({}, options.query), {}, {
                     page: 1
                   });
-                  options.query.where.push({
-                    attribute: 'id',
-                    value: {
-                      condition: '!=',
-                      value: ordersGroup[currentTabSelected].orders.map(function (o) {
-                        return o.id;
-                      })
-                    }
-                  });
+
+                  if (!(filtered !== null && filtered !== void 0 && filtered.id)) {
+                    options.query.where.push({
+                      attribute: 'id',
+                      value: {
+                        condition: '!=',
+                        value: ordersGroup[currentTabSelected].orders.map(function (o) {
+                          return o.id;
+                        })
+                      }
+                    });
+                  }
                 }
+              }
+
+              if (filtered !== null && filtered !== void 0 && filtered.id) {
+                options.query.where.push({
+                  attribute: 'id',
+                  value: filtered.id
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && filtered.state) {
+                options.query.where.push({
+                  attribute: 'status',
+                  value: filtered.state
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && filtered.city) {
+                options.query.where.push({
+                  attribute: 'business',
+                  conditions: [{
+                    attribute: 'city_id',
+                    value: filtered === null || filtered === void 0 ? void 0 : filtered.city
+                  }]
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && filtered.paymethod) {
+                options.query.where.push({
+                  attribute: 'paymethod_id',
+                  value: filtered.paymethod
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && filtered.driver) {
+                options.query.where.push({
+                  attribute: 'driver_id',
+                  value: filtered === null || filtered === void 0 ? void 0 : filtered.driver
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && filtered.delivery_type) {
+                options.query.where.push({
+                  attribute: 'delivery_type',
+                  value: filtered === null || filtered === void 0 ? void 0 : filtered.delivery_type
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && (_filtered$date = filtered.date) !== null && _filtered$date !== void 0 && _filtered$date.from) {
+                options.query.where.push({
+                  attribute: 'delivery_datetime',
+                  value: {
+                    condition: '>=',
+                    value: filtered === null || filtered === void 0 ? void 0 : (_filtered$date2 = filtered.date) === null || _filtered$date2 === void 0 ? void 0 : _filtered$date2.from
+                  }
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && (_filtered$date3 = filtered.date) !== null && _filtered$date3 !== void 0 && _filtered$date3.to) {
+                options.query.where.push({
+                  attribute: 'delivery_datetime',
+                  value: {
+                    condition: '<=',
+                    value: filtered === null || filtered === void 0 ? void 0 : (_filtered$date4 = filtered.date) === null || _filtered$date4 === void 0 ? void 0 : _filtered$date4.to
+                  }
+                });
               }
 
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 9;
+              _context.next = 18;
               return functionFetch.get(options);
 
-            case 9:
+            case 18:
               return _context.abrupt("return", _context.sent);
 
-            case 10:
+            case 19:
             case "end":
               return _context.stop();
           }
@@ -531,6 +606,7 @@ var OrderListGroups = function OrderListGroups(props) {
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _orderFound, _orderFound$driver, _order$driver, _session$user;
 
+      events.emit('order_updated', order);
       var orderFound = null;
 
       for (var i = 0; i < ordersStatusArray.length; i++) {
@@ -630,6 +706,12 @@ var OrderListGroups = function OrderListGroups(props) {
       request && request.cancel && request.cancel();
     };
   }, [requestsState.orders]);
+  (0, _react.useEffect)(function () {
+    if (!filtered) return;
+    loadOrders({
+      newFetch: true
+    });
+  }, [filtered]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     currentFilters: currentFilters,
     setCurrentFilters: setCurrentFilters,
@@ -642,7 +724,9 @@ var OrderListGroups = function OrderListGroups(props) {
     loadOrders: loadOrders,
     loadMessages: loadMessages,
     loadMoreOrders: loadMoreOrders,
-    handleClickOrder: handleClickOrder
+    handleClickOrder: handleClickOrder,
+    filtered: filtered,
+    onFiltered: setFiltered
   })));
 };
 

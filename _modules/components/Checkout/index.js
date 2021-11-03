@@ -191,7 +191,7 @@ var Checkout = function Checkout(props) {
 
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(paymentOptions) {
       var _cartResult$paymethod;
 
       var paymethodData, _paymethodSelected$da, payload, result, cartResult;
@@ -231,7 +231,7 @@ var Checkout = function Checkout(props) {
 
             case 7:
               payload = _objectSpread(_objectSpread({}, payload), {}, {
-                paymethod_data: paymethodData
+                paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
               });
               setPlacing(true);
               _context2.next = 11;
@@ -271,7 +271,7 @@ var Checkout = function Checkout(props) {
       }, _callee2);
     }));
 
-    return function handlerClickPlaceOrder() {
+    return function handlerClickPlaceOrder(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
