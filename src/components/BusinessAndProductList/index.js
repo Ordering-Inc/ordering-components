@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 dayjs.extend(utc)
 
@@ -24,6 +25,7 @@ export const BusinessAndProductList = (props) => {
   } = props
 
   const [orderState] = useOrder()
+  const [{ configs }] = useConfig()
   const [languageState, t] = useLanguage()
 
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
@@ -46,6 +48,9 @@ export const BusinessAndProductList = (props) => {
   const [categoryState, setCategoryState] = useState(categoryStateDefault)
   const [errors, setErrors] = useState(null)
   const [errorQuantityProducts, setErrorQuantityProducts] = useState(false)
+
+  const isUseParentCategory = configs?.use_parent_category?.value === 'true'
+    || configs?.use_parent_category?.value === '1'
 
   /**
    * Change category selected
@@ -97,45 +102,62 @@ export const BusinessAndProductList = (props) => {
     return array
   }
 
-  const getProducts = async (newFetch) => {
+  const subCategoriesList = []
+
+  const iterateCategories = (categories) => {
+    categories.forEach(category => {
+      subCategoriesList.push(category)
+      iterateCategories(category.subcategories)
+    });
+  }
+
+  const getProducts = async ({ isNextPage, newFetch } = {}) => {
     if (!businessState?.business?.lazy_load_products_recommended) {
-        businessState?.business?.categories?.map(
-          category => {
-            category?.products?.map(product => {
-              if (product.featured) {
-                setFeaturedProducts(true)
-              }
-            })
-          })
-        const categoryState = {
-          ...categoryStateDefault,
-          loading: false
+      for (let i = 0; i < businessState?.business?.categories?.length ?? 0; i++) {
+        const category = businessState?.business?.categories[i]
+        const isFeatured = category?.products?.some((product) => product.featured)
+        if (isFeatured) {
+          setFeaturedProducts(isFeatured)
+          break
         }
-        if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
-          const productsFiltered = businessState?.business?.categories?.find(
-            category => category.id === categorySelected.id
-          )?.products.filter(
-            product => isMatchSearch(product.name, product.description)
-          )
-          categoryState.products = productsFiltered || []
-        } else if (categorySelected.id === 'featured') {
-          const productsFiltered = businessState?.business?.categories?.reduce(
-            (products, category) => [...products, ...category.products], []
-          ).filter(
-            product => isFeaturedSearch(product)
-          )
-          categoryState.products = productsFiltered || []
-        } else {
-          const productsFiltered = businessState?.business?.categories?.reduce(
-            (products, category) => [...products, ...category.products], []
-          ).filter(
-            product => isMatchSearch(product.name, product.description)
-          )
-          categoryState.products = productsFiltered || []
-        }
-        categoryState.products = sortProductsArray(sortByValue, categoryState.products)
-        setCategoryState({ ...categoryState })
-        return
+      }
+      const categoryState = {
+        ...categoryStateDefault,
+        loading: false
+      }
+      if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
+        iterateCategories(businessState?.business?.categories)
+        const categoriesList = [].concat(...businessState?.business?.categories.map(category => category.children))
+        const categories = isUseParentCategory ? categoriesList : businessState?.business?.categories
+        const parentCategory = categories?.find(category => category.category_id === categorySelected.id) ?? {}
+        const categoryFinded = subCategoriesList.find(subCat => subCat.id === parentCategory.category_id)  ?? {}
+
+        const productsFiltered = businessState?.business?.categories
+          ?.find(category => category.id === (isUseParentCategory ? parentCategory?.parent_category_id : categorySelected.id))
+          ?.products
+          .filter(product => isUseParentCategory
+            ? (categoryFinded?.children?.some(cat => cat.category_id === product?.category_id) && isMatchSearch(product.name, product.description))
+            : isMatchSearch(product.name, product.description))
+
+        categoryState.products = productsFiltered || []
+      } else if (categorySelected.id === 'featured') {
+        const productsFiltered = businessState?.business?.categories?.reduce(
+          (products, category) => [...products, ...category.products], []
+        ).filter(
+          product => isFeaturedSearch(product)
+        )
+        categoryState.products = productsFiltered || []
+      } else {
+        const productsFiltered = businessState?.business?.categories?.reduce(
+          (products, category) => [...products, ...category.products], []
+        ).filter(
+          product => isMatchSearch(product.name, product.description)
+        )
+        categoryState.products = productsFiltered || []
+      }
+      categoryState.products = sortProductsArray(sortByValue, categoryState.products)
+      setCategoryState({ ...categoryState })
+      return
     }
 
     const categoryKey = searchValue
@@ -146,10 +168,15 @@ export const BusinessAndProductList = (props) => {
           ? `categoryId:${categorySelected.id}`
           : 'all'
 
-    const categoryState = categoriesState[categoryKey] || categoryStateDefault
+    const categoryState = categoriesState[categoryKey] ?? categoryStateDefault
     categoryState.products = sortProductsArray(sortByValue, categoryState.products)
     const pagination = categoryState.pagination
-    if (!newFetch && pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) {
+    if (!newFetch && !isNextPage &&
+      (
+        (pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) ||
+        categoryState.products.length > 0 && pagination.totalPages > 0
+      )
+    ) {
       setCategoryState({ ...categoryState, loading: false })
       return
     }
@@ -157,8 +184,8 @@ export const BusinessAndProductList = (props) => {
     setCategoryState({ ...categoryState, loading: true })
 
     const parameters = {
-      type: orderState.options?.type || 1,
-      page: newFetch ? 1 : pagination.currentPage + 1,
+      type: orderState.options?.type ?? 1,
+      page: (!isNextPage || newFetch) ? 1 : pagination.currentPage + 1,
       page_size: pagination.pageSize
     }
 
@@ -223,15 +250,47 @@ export const BusinessAndProductList = (props) => {
     try {
       const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
         ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
-        : ordering.businesses(businessState.business.id).products()
+        : !isUseParentCategory
+          ? ordering.businesses(businessState.business.id).products()
+          : ordering.businesses(businessState.business.id).categories()
       const source = {}
       requestsState.products = source
       setRequestsState({ ...requestsState })
-      const productEndpoint = where.conditions.length > 0
+      let productEndpoint = where.conditions.length > 0
         ? functionFetch.parameters(parameters).where(where)
         : functionFetch.parameters(parameters)
       const { content: { error, result, pagination } } = await productEndpoint.get({ cancelToken: source })
-      if (!error) {
+
+      let featuresResponse = null
+      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+        parameters.params = 'features'
+        productEndpoint = where.conditions.length > 0
+          ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where)
+          : ordering.businesses(businessState.business.id).products().parameters(parameters)
+        try {
+          featuresResponse = await productEndpoint.get({ cancelToken: source })
+          if (!featuresResponse?.content?.error) {
+            const oldFeatured = categoriesState?.featured
+            const featureState = {
+              pagination: {
+                ...categoryState.pagination,
+                currentPage: featuresResponse?.content?.pagination?.current_page,
+                totalItems: featuresResponse?.content?.pagination?.total,
+                totalPages: featuresResponse?.content?.pagination?.total_pages
+              },
+              loading: false,
+              products: newFetch
+                ? [...featuresResponse?.content?.result]
+                : [...oldFeatured.products, ...featuresResponse?.content?.result]
+            }
+            categoriesState.featured = featureState
+          }
+        } catch (err) {
+          setErrors([err.message])
+        }
+      }
+
+      if (!error && (categorySelected.id && categorySelected.id !== 'featured' || !isUseParentCategory)) {
         const newcategoryState = {
           pagination: {
             ...categoryState.pagination,
@@ -246,7 +305,37 @@ export const BusinessAndProductList = (props) => {
         categoriesState[categoryKey] = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
-        setFeaturedProducts(!!categoriesState.all.products.find(product => product.featured))
+
+        const isFeatured = categoriesState.all.products.some(product => product.featured)
+          || categoriesState?.featured?.products?.some(product => product.featured)
+        setFeaturedProducts(isFeatured)
+      } else if (!error && isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+        const productsList = [].concat(...result.map(category => category?.products)).filter(item => item)
+        const productsListFeatured = featuresResponse?.content?.result ?? []
+        const newcategoryState = {
+          pagination: {
+            ...categoryState.pagination,
+            currentPage: categorySelected.id === 'featured'
+              ? featuresResponse?.content?.pagination?.current_page
+              : pagination.current_page,
+            totalItems: categorySelected.id === 'featured'
+              ? featuresResponse?.content?.pagination?.total
+              : pagination.total,
+            totalPages: categorySelected.id === 'featured'
+              ? featuresResponse?.content?.pagination?.total_pages
+              : pagination.total_pages
+          },
+          loading: false,
+          products: newFetch ? [...productsList] : [...categoryState.products, ...productsListFeatured, ...productsList]
+        }
+
+        categoriesState[categoryKey] = newcategoryState
+        setCategoryState({ ...newcategoryState })
+        setCategoriesState({ ...categoriesState })
+
+        const isFeatured = categoriesState.all.products.some(product => product.featured)
+          || categoriesState?.featured?.products?.some(product => product.featured)
+        setFeaturedProducts(isFeatured)
       } else {
         setErrors(result)
       }
@@ -363,20 +452,20 @@ export const BusinessAndProductList = (props) => {
 
   useEffect(() => {
     if (!businessState.loading) {
-      getProducts(true)
+      getProducts({ newFetch: true })
     }
   }, [businessState])
 
   useEffect(() => {
-    getProducts(!!searchValue)
+    getProducts({ newFetch: !!searchValue })
   }, [searchValue])
 
   useEffect(() => {
-    getProducts(!!searchValue)
+    getProducts({ newFetch: !!searchValue })
   }, [categorySelected.id])
 
   useEffect(() => {
-    getProducts(!!searchValue)
+    getProducts({ newFetch: !!searchValue })
   }, [sortByValue])
 
   useEffect(() => {
@@ -452,6 +541,7 @@ export const BusinessAndProductList = (props) => {
           productModal={productModal}
           featuredProducts={featuredProducts}
           errorQuantityProducts={errorQuantityProducts}
+          categoriesState={categoriesState}
           handleChangeCategory={handleChangeCategory}
           handleChangeSearch={handleChangeSearch}
           handleChangeSortBy={handleChangeSortBy}

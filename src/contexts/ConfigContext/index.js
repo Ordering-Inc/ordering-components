@@ -89,7 +89,11 @@ export const ConfigProvider = ({ children }) => {
     },
     add_product_with_one_click: {
       key: 'add_product_with_one_click',
-      value: false 
+      value: false
+    },
+    use_parent_category1: {
+      key: 'use_parent_category',
+      value: 'true'
     }
   }
 
