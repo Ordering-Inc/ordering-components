@@ -17,6 +17,7 @@ import { Checkout } from './components/Checkout'
 import { CouponControl } from './components/CouponControl'
 import { Contacts } from './components/Contacts'
 import { DragAndDrop } from './components/DragAndDrop'
+import { DriverList } from './components/DriverList'
 import { DriverTips } from './components/DriverTips'
 import { ExamineClick } from './components/ExamineClick'
 import { FacebookLoginButton } from './components/FacebookLoginButton'
@@ -74,6 +75,7 @@ import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
 import { CustomerContext, CustomerProvider, useCustomer } from './contexts/CustomerContext'
 import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { ToastContext, ToastProvider, useToast, ToastType } from './contexts/ToastContext'
+import { PaymethodList } from './components/PaymethodList'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionPaypal } from './components/PaymentOptionPaypal'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
@@ -113,6 +115,7 @@ export {
   Contacts,
   OrderListGroups,
   DragAndDrop,
+  DriverList,
   DriverTips,
   ExamineClick,
   FacebookLoginButton,
@@ -135,6 +138,7 @@ export {
   OrderTypeControl,
   Messages,
   PaymentOptions,
+  PaymethodList,
   Popup,
   ProductComponent,
   ProductForm,

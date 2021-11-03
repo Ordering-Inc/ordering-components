@@ -19,7 +19,7 @@ export const Checkout = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [,{ refreshConfigs }] = useConfig()
+  const [, { refreshConfigs }] = useConfig()
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
@@ -80,7 +80,7 @@ export const Checkout = (props) => {
   /**
    * Method to handle click on Place order
    */
-  const handlerClickPlaceOrder = async () => {
+  const handlerClickPlaceOrder = async (paymentOptions) => {
     let paymethodData = paymethodSelected?.data
     if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
       paymethodData = {
@@ -108,7 +108,10 @@ export const Checkout = (props) => {
 
     payload = {
       ...payload,
-      paymethod_data: paymethodData
+      paymethod_data: {
+        ...paymethodData,
+        ...paymentOptions
+      }
     }
 
     setPlacing(true)

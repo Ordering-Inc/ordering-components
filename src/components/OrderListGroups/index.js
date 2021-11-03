@@ -70,6 +70,7 @@ export const OrderListGroups = (props) => {
   const [currentTabSelected, setCurrentTabSelected] = useState('pending')
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
+  const [filtered, setFiltered] = useState(null)
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -87,23 +88,75 @@ export const OrderListGroups = (props) => {
         page_size: pageSize
       }
     }
+
+    options.query.where = []
     if (orderStatus) {
-      options.query.where = []
-      options.query.where.push({ attribute: 'status', value: orderStatus })
+      if (!filtered?.state) options.query.where.push({ attribute: 'status', value: orderStatus })
 
       if (ordersGroup[currentTabSelected].orders.length > 0 && !newFetch) {
         options.query = {
           ...options.query,
           page: 1
         }
-        options.query.where.push({
-          attribute: 'id',
-          value: {
-            condition: '!=',
-            value: ordersGroup[currentTabSelected].orders.map((o) => o.id)
-          }
-        })
+        if (!filtered?.id) {
+          options.query.where.push({
+            attribute: 'id',
+            value: {
+              condition: '!=',
+              value: ordersGroup[currentTabSelected].orders.map((o) => o.id)
+            }
+          })
+        }
       }
+    }
+
+    if (filtered?.id) {
+      options.query.where.push({ attribute: 'id', value: filtered.id })
+    }
+
+    if (filtered?.state) {
+      options.query.where.push({ attribute: 'status', value: filtered.state })
+    }
+
+    if (filtered?.city) {
+      options.query.where.push({
+        attribute: 'business',
+        conditions: [{
+          attribute: 'city_id',
+          value: filtered?.city
+        }]
+      })
+    }
+
+    if (filtered?.paymethod) {
+      options.query.where.push({ attribute: 'paymethod_id', value: filtered.paymethod })
+    }
+
+    if (filtered?.driver) {
+      options.query.where.push({ attribute: 'driver_id', value: filtered?.driver })
+    }
+
+    if (filtered?.delivery_type) {
+      options.query.where.push({ attribute: 'delivery_type', value: filtered?.delivery_type })
+    }
+
+    if (filtered?.date?.from) {
+      options.query.where.push({
+        attribute: 'delivery_datetime',
+        value: {
+          condition: '>=',
+          value: filtered?.date?.from
+        }
+      })
+    }
+    if (filtered?.date?.to) {
+      options.query.where.push({
+        attribute: 'delivery_datetime',
+        value: {
+          condition: '<=',
+          value: filtered?.date?.to
+        }
+      })
     }
 
     const source = {}
@@ -345,6 +398,7 @@ export const OrderListGroups = (props) => {
     if (ordersGroup[currentTabSelected].loading) return
 
     const handleUpdateOrder = (order) => {
+      events.emit('order_updated', order)
       let orderFound = null
 
       for (let i = 0; i < ordersStatusArray.length; i++) {
@@ -463,6 +517,11 @@ export const OrderListGroups = (props) => {
     }
   }, [requestsState.orders])
 
+  useEffect(() => {
+    if (!filtered) return
+    loadOrders({ newFetch: true })
+  }, [filtered])
+
   return (
     <>
       {UIComponent && (
@@ -480,6 +539,8 @@ export const OrderListGroups = (props) => {
           loadMessages={loadMessages}
           loadMoreOrders={loadMoreOrders}
           handleClickOrder={handleClickOrder}
+          filtered={filtered}
+          onFiltered={setFiltered}
         />
       )}
     </>
