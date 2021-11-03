@@ -38,6 +38,7 @@ export const BusinessAndProductList = (props) => {
   const [requestsState, setRequestsState] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
   const [featuredProducts, setFeaturedProducts] = useState(false)
+  const [openCategories, setOpenCategories] = useState({ values: [] })
 
   const categoryStateDefault = {
     loading: true,
@@ -57,7 +58,23 @@ export const BusinessAndProductList = (props) => {
    * @param {Object} category Category object
    */
   const handleChangeCategory = (category) => {
-    if (category?.id === categorySelected?.id) return
+    if (category?.subcategories?.length) {
+      if (!category?.parent_category_id) {
+        openCategories.values = []
+      }
+      if (openCategories.values.includes(category.id)) {
+        openCategories.values = openCategories.values.filter(categoryId => categoryId !== category.id)
+      } else {
+        openCategories.values.push(category.id)
+      }
+      setOpenCategories({
+        ...openCategories,
+        values: openCategories.values
+      })
+    }
+    if (category?.id === null) {
+      setOpenCategories({ ...openCategories, values: [] })
+    }
     setCategorySelected(category)
   }
 
@@ -539,6 +556,7 @@ export const BusinessAndProductList = (props) => {
           categoryState={categoryState}
           businessState={businessState}
           productModal={productModal}
+          openCategories={openCategories.values}
           featuredProducts={featuredProducts}
           errorQuantityProducts={errorQuantityProducts}
           categoriesState={categoriesState}
