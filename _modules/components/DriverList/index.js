@@ -5,13 +5,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CmsContent = void 0;
+exports.DriverList = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
@@ -46,147 +46,150 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage login behavior without UI component
+ * Component to manage drivers behavior without UI component
  */
-var CmsContent = function CmsContent(props) {
-  var UIComponent = props.UIComponent,
-      pageSlug = props.pageSlug,
-      onNotFound = props.onNotFound;
-  /**
-   * Array to save the body of the page
-   */
-
-  var _useState = (0, _react.useState)({
-    body: null,
-    loading: false,
-    error: null
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      cmsState = _useState2[0],
-      setCmsState = _useState2[1];
+var DriverList = function DriverList(props) {
+  var drivers = props.drivers,
+      UIComponent = props.UIComponent,
+      propsToFetch = props.propsToFetch;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
-
-  var requestsState = {};
   /**
-   * Method used to get the page by slug
+   * Array to save drivers
    */
 
-  var getPage = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(slug) {
-      var source, _yield$ordering$pages, _yield$ordering$pages2, error, result;
+
+  var _useState = (0, _react.useState)({
+    drivers: [],
+    loading: true,
+    error: null
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      driverList = _useState2[0],
+      setDriverList = _useState2[1];
+  /**
+   * Method to get drivers from API
+   */
+
+
+  var getDriverList = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var where, _yield$ordering$users, _yield$ordering$users2, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+              _context.prev = 0;
+              setDriverList(_objectSpread(_objectSpread({}, driverList), {}, {
                 loading: true
               }));
-              _context.prev = 1;
-              source = {};
-              requestsState.page = source;
-              _context.next = 6;
-              return ordering.pages(slug).get({
-                cancelToken: source
-              });
+              where = [{
+                attribute: 'level',
+                value: '4'
+              }];
+              _context.next = 5;
+              return ordering.users().select(propsToFetch).where(where).get();
 
-            case 6:
-              _yield$ordering$pages = _context.sent;
-              _yield$ordering$pages2 = _yield$ordering$pages.content;
-              error = _yield$ordering$pages2.error;
-              result = _yield$ordering$pages2.result;
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                loading: false
-              }));
+            case 5:
+              _yield$ordering$users = _context.sent;
+              _yield$ordering$users2 = _yield$ordering$users.content;
+              error = _yield$ordering$users2.error;
+              result = _yield$ordering$users2.result;
 
               if (!error) {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  body: result.body
+                setDriverList(_objectSpread(_objectSpread({}, driverList), {}, {
+                  loading: false,
+                  drivers: result
                 }));
               } else {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+                setDriverList(_objectSpread(_objectSpread({}, driverList), {}, {
+                  loading: false,
                   error: result
                 }));
-                onNotFound && onNotFound(pageSlug);
               }
 
-              _context.next = 17;
+              _context.next = 15;
               break;
 
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](1);
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](0);
+              setDriverList(_objectSpread(_objectSpread({}, driverList), {}, {
+                loading: false,
+                error: [_context.t0 || (_context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.toString()) || (_context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message)]
+              }));
 
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  loading: false,
-                  error: [_context.t0.message]
-                }));
-              }
-
-            case 17:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee, null, [[0, 12]]);
     }));
 
-    return function getPage(_x) {
+    return function getDriverList() {
       return _ref.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    getPage(pageSlug);
-    return function () {
-      if (requestsState.page) {
-        requestsState.page.cancel();
-      }
-    };
+    if (drivers) {
+      setDriverList(_objectSpread(_objectSpread({}, driverList), {}, {
+        loading: false,
+        drivers: drivers
+      }));
+    } else {
+      getDriverList();
+    }
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    cmsState: cmsState
+    driverList: driverList
   })));
 };
 
-exports.CmsContent = CmsContent;
-CmsContent.propTypes = {
+exports.DriverList = DriverList;
+DriverList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Components types before login form
+   * Array of business props to fetch
+   */
+  propsToFetch: _propTypes.default.arrayOf(_propTypes.string),
+
+  /**
+   * Components types before my orders
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after login form
+   * Components types after my orders
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before login form
+   * Elements before my orders
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after login form
+   * Elements after my orders
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-CmsContent.defaultProps = {
+DriverList.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'address_notes', 'dropdown_option_id', 'dropdown_option', 'location', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname']
 };

@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CmsContent = void 0;
+exports.GoogleIdentityButton = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -45,146 +45,185 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Component to manage login behavior without UI component
- */
-var CmsContent = function CmsContent(props) {
+var GoogleIdentityButton = function GoogleIdentityButton(props) {
   var UIComponent = props.UIComponent,
-      pageSlug = props.pageSlug,
-      onNotFound = props.onNotFound;
-  /**
-   * Array to save the body of the page
-   */
-
-  var _useState = (0, _react.useState)({
-    body: null,
-    loading: false,
-    error: null
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      cmsState = _useState2[0],
-      setCmsState = _useState2[1];
+      handleSuccessGoogleLogin = props.handleSuccessGoogleLogin,
+      handleGoogleLoginClick = props.handleGoogleLoginClick;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var requestsState = {};
+  var _useState = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      formState = _useState2[0],
+      setFormState = _useState2[1];
+
+  (0, _react.useEffect)(function () {
+    var element = document.getElementById('google-identity');
+
+    if (element) {
+      element.parentNode.removeChild(element);
+    }
+
+    insertGapiScript();
+  }, []);
   /**
-   * Method used to get the page by slug
+   * loading script for the google's api
    */
 
-  var getPage = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(slug) {
-      var source, _yield$ordering$pages, _yield$ordering$pages2, error, result;
+  var insertGapiScript = function insertGapiScript() {
+    var js = window.document.createElement('script');
+    js.id = 'google-identity';
+    js.src = 'https://accounts.google.com/gsi/client';
+    js.async = true;
+    js.defer = true;
+    window.document.body.appendChild(js);
+  };
+  /**
+   * Function that return token of the user
+   * @param {object} res from Google
+   */
 
+
+  var handleSigninSuccess = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(token) {
+      var response;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+              if (!handleGoogleLoginClick) {
+                _context.next = 3;
+                break;
+              }
+
+              handleGoogleLoginClick(token);
+              return _context.abrupt("return");
+
+            case 3:
+              _context.prev = 3;
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
-              _context.prev = 1;
-              source = {};
-              requestsState.page = source;
-              _context.next = 6;
-              return ordering.pages(slug).get({
-                cancelToken: source
+              _context.next = 7;
+              return ordering.users().authGoogle({
+                access_token: token
               });
 
-            case 6:
-              _yield$ordering$pages = _context.sent;
-              _yield$ordering$pages2 = _yield$ordering$pages.content;
-              error = _yield$ordering$pages2.error;
-              result = _yield$ordering$pages2.result;
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+            case 7:
+              response = _context.sent;
+              setFormState({
+                result: response.content,
                 loading: false
-              }));
+              });
 
-              if (!error) {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  body: result.body
-                }));
+              if (!response.content.error) {
+                if (handleSuccessGoogleLogin) {
+                  handleSuccessGoogleLogin(response.content.result);
+                }
               } else {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  error: result
-                }));
-                onNotFound && onNotFound(pageSlug);
+                setFormState({
+                  result: {
+                    error: true,
+                    result: response.content
+                  },
+                  loading: false
+                });
               }
 
-              _context.next = 17;
+              _context.next = 15;
               break;
 
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](1);
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](3);
+              setFormState({
+                result: {
+                  error: true,
+                  result: _context.t0.message
+                },
+                loading: false
+              });
 
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  loading: false,
-                  error: [_context.t0.message]
-                }));
-              }
-
-            case 17:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee, null, [[3, 12]]);
     }));
 
-    return function getPage(_x) {
+    return function handleSigninSuccess(_x) {
       return _ref.apply(this, arguments);
     };
   }();
 
-  (0, _react.useEffect)(function () {
-    getPage(pageSlug);
-    return function () {
-      if (requestsState.page) {
-        requestsState.page.cancel();
-      }
-    };
-  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    cmsState: cmsState
+    formState: formState,
+    handleSigninSuccess: handleSigninSuccess
   })));
 };
 
-exports.CmsContent = CmsContent;
-CmsContent.propTypes = {
+exports.GoogleIdentityButton = GoogleIdentityButton;
+GoogleIdentityButton.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Components types before login form
+   * property to get response code if type "code"
+   */
+  handleSuccessGoogleLogin: _propTypes.default.func,
+
+  /**
+   * loading script for the google's api
+   */
+  insertGapiScript: _propTypes.default.func,
+
+  /**
+   * Function that return token of the user
+   */
+  handleSigninSuccess: _propTypes.default.func,
+
+  /**
+   * @param {google_response} res
+   * handleCustomClick, function to get click event and return google response without default behavior
+   */
+  handleGoogleLoginClick: _propTypes.default.func,
+
+  /**
+   * Components types before Facebook login button
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after login form
+   * Components types after Facebook login button
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before login form
+   * Elements before Facebook login button
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after login form
+   * Elements after Facebook login button
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-CmsContent.defaultProps = {
+GoogleIdentityButton.defaultProps = {
+  responseType: '',
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

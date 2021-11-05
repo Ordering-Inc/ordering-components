@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CmsContent = void 0;
+exports.PaymethodList = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -14,6 +14,8 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -46,145 +48,163 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage login behavior without UI component
+ * Component to manage paymethods behavior without UI component
  */
-var CmsContent = function CmsContent(props) {
-  var UIComponent = props.UIComponent,
-      pageSlug = props.pageSlug,
-      onNotFound = props.onNotFound;
-  /**
-   * Array to save the body of the page
-   */
-
-  var _useState = (0, _react.useState)({
-    body: null,
-    loading: false,
-    error: null
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      cmsState = _useState2[0],
-      setCmsState = _useState2[1];
+var PaymethodList = function PaymethodList(props) {
+  var paymethods = props.paymethods,
+      UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var requestsState = {};
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2$ = _useSession2[0],
+      token = _useSession2$.token,
+      loading = _useSession2$.loading;
   /**
-   * Method used to get the page by slug
+   * Array to save paymethods
    */
 
-  var getPage = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(slug) {
-      var source, _yield$ordering$pages, _yield$ordering$pages2, error, result;
+
+  var _useState = (0, _react.useState)({
+    paymethods: [],
+    loading: true,
+    error: null
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      paymethodList = _useState2[0],
+      setPaymethodList = _useState2[1];
+  /**
+   * Method to get paymethods from API
+   */
+
+
+  var getPaymethods = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var requestOptions, functionFetch, response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+              if (!loading) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 2:
+              _context.prev = 2;
+              setPaymethodList(_objectSpread(_objectSpread({}, paymethodList), {}, {
                 loading: true
               }));
-              _context.prev = 1;
-              source = {};
-              requestsState.page = source;
-              _context.next = 6;
-              return ordering.pages(slug).get({
-                cancelToken: source
-              });
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              functionFetch = "".concat(ordering.root, "/paymethods");
+              _context.next = 8;
+              return fetch(functionFetch, requestOptions);
 
-            case 6:
-              _yield$ordering$pages = _context.sent;
-              _yield$ordering$pages2 = _yield$ordering$pages.content;
-              error = _yield$ordering$pages2.error;
-              result = _yield$ordering$pages2.result;
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                loading: false
-              }));
+            case 8:
+              response = _context.sent;
+              _context.next = 11;
+              return response.json();
+
+            case 11:
+              _yield$response$json = _context.sent;
+              error = _yield$response$json.error;
+              result = _yield$response$json.result;
 
               if (!error) {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  body: result.body
+                setPaymethodList(_objectSpread(_objectSpread({}, paymethodList), {}, {
+                  loading: false,
+                  paymethods: result
                 }));
               } else {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
+                setPaymethodList(_objectSpread(_objectSpread({}, paymethodList), {}, {
+                  loading: false,
                   error: result
                 }));
-                onNotFound && onNotFound(pageSlug);
               }
 
-              _context.next = 17;
+              _context.next = 20;
               break;
 
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](1);
-
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  loading: false,
-                  error: [_context.t0.message]
-                }));
-              }
-
             case 17:
+              _context.prev = 17;
+              _context.t0 = _context["catch"](2);
+              setPaymethodList(_objectSpread(_objectSpread({}, paymethodList), {}, {
+                loading: false,
+                error: _context.t0
+              }));
+
+            case 20:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee, null, [[2, 17]]);
     }));
 
-    return function getPage(_x) {
+    return function getPaymethods() {
       return _ref.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    getPage(pageSlug);
-    return function () {
-      if (requestsState.page) {
-        requestsState.page.cancel();
-      }
-    };
+    if (paymethods) {
+      setPaymethodList(_objectSpread(_objectSpread({}, paymethodList), {}, {
+        loading: false,
+        paymethods: paymethods
+      }));
+    } else {
+      getPaymethods();
+    }
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    cmsState: cmsState
+    paymethodList: paymethodList
   })));
 };
 
-exports.CmsContent = CmsContent;
-CmsContent.propTypes = {
+exports.PaymethodList = PaymethodList;
+PaymethodList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Components types before login form
+   * Components types before my orders
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after login form
+   * Components types after my orders
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before login form
+   * Elements before my orders
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after login form
+   * Elements after my orders
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-CmsContent.defaultProps = {
+PaymethodList.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
