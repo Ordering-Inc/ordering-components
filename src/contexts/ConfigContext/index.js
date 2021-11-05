@@ -94,6 +94,14 @@ export const ConfigProvider = ({ children }) => {
     use_parent_category1: {
       key: 'use_parent_category',
       value: '0'
+    },
+    android_app_id: {
+      key: 'android_app_id',
+      value: null
+    },
+    ios_app_id: {
+      key: 'ios_app_id',
+      value: null
     }
   }
 
