@@ -89,7 +89,19 @@ export const ConfigProvider = ({ children }) => {
     },
     add_product_with_one_click: {
       key: 'add_product_with_one_click',
-      value: false 
+      value: false
+    },
+    use_parent_category1: {
+      key: 'use_parent_category',
+      value: '0'
+    },
+    android_app_id: {
+      key: 'android_app_id',
+      value: null
+    },
+    ios_app_id: {
+      key: 'ios_app_id',
+      value: null
     }
   }
 
