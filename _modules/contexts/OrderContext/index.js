@@ -1628,9 +1628,11 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
 
-  var getOptionFromLocalStorage = /*#__PURE__*/function () {
+  var setOptionFromLocalStorage = /*#__PURE__*/function () {
     var _ref17 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee16() {
-      var options;
+      var _configState$configs4, _configState$configs5, _state$options7;
+
+      var optionsLocalStorage;
       return _regenerator.default.wrap(function _callee16$(_context16) {
         while (1) {
           switch (_context16.prev = _context16.next) {
@@ -1639,8 +1641,15 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('options', true);
 
             case 2:
-              options = _context16.sent;
-              return _context16.abrupt("return", options);
+              optionsLocalStorage = _context16.sent;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false,
+                options: {
+                  type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
+                  moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
+                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {}
+                }
+              }));
 
             case 4:
             case "end":
@@ -1650,7 +1659,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16);
     }));
 
-    return function getOptionFromLocalStorage() {
+    return function setOptionFromLocalStorage() {
       return _ref17.apply(this, arguments);
     };
   }();
@@ -1666,17 +1675,7 @@ var OrderProvider = function OrderProvider(_ref) {
     if (session.loading || configState.loading) return;
 
     if (!session.auth) {
-      var _configState$configs4, _configState$configs5, _state$options7;
-
-      var optionsLocalStorage = getOptionFromLocalStorage();
-      setState(_objectSpread(_objectSpread({}, state), {}, {
-        loading: false,
-        options: {
-          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
-          moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
-          address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {}
-        }
-      }));
+      setOptionFromLocalStorage();
     }
   }, [session.auth, session.loading, configState]);
   (0, _react.useEffect)(function () {
