@@ -130,7 +130,7 @@ export const BusinessAndProductList = (props) => {
   const subCategoriesList = []
 
   const iterateCategories = (categories) => {
-    categories.forEach(category => {
+    categories?.forEach(category => {
       subCategoriesList.push(category)
       iterateCategories(category.subcategories)
     });
@@ -258,19 +258,19 @@ export const BusinessAndProductList = (props) => {
         ? ordering.businesses(businessState.business.id).products()
         : ordering.businesses(businessState.business.id).categories()
 
-    let productEndpoint = where.conditions.length > 0
+    let productEndpoint = where?.conditions?.length > 0
       ? functionFetch.parameters(parameters).where(where)
       : functionFetch.parameters(parameters)
 
-    promises.push(await productEndpoint.get({ cancelToken: source }))
+    promises.push(await productEndpoint.get())
 
     if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
       parameters.params = 'features'
-      productEndpoint = where.conditions.length > 0
+      productEndpoint = where?.conditions?.length > 0
         ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where)
         : ordering.businesses(businessState.business.id).products().parameters(parameters)
 
-      promises.push(await productEndpoint.get({ cancelToken: source }))
+      promises.push(await productEndpoint.get())
     }
 
     return promises
@@ -282,7 +282,7 @@ export const BusinessAndProductList = (props) => {
       !newFetch &&
       ((curCategoryState.pagination.currentPage > 0 &&
         curCategoryState.pagination.currentPage === curCategoryState.pagination.totalPages) ||
-        (curCategoryState.products.length > 0 && curCategoryState.pagination.totalPages > 0))
+        (curCategoryState?.products?.length > 0 && curCategoryState.pagination.totalPages > 0))
     ) {
       setCategoryState({ ...curCategoryState, loading: false })
       return
@@ -311,7 +311,7 @@ export const BusinessAndProductList = (props) => {
       if (featuredRes?.content?.error) {
         errorsList.push(featuredRes?.content?.result[0])
       }
-      if (errorsList.length) {
+      if (errorsList?.length) {
         setErrors(errorsList[0])
         setCategoryState({ ...curCategoryState, loading: false })
         return
@@ -343,9 +343,7 @@ export const BusinessAndProductList = (props) => {
             totalPages: pagination.total_pages
           },
           loading: false,
-          products: newFetch
-            ? result
-            : curCategoryState.products.concat(result)
+          products: result
         }
 
         categoriesState[categoryKey] = newcategoryState
@@ -418,7 +416,7 @@ export const BusinessAndProductList = (props) => {
       if (featuredRes?.content?.error) {
         errorsList.push(featuredRes?.content?.result[0])
       }
-      if (errorsList.length) {
+      if (errorsList?.length) {
         setErrors(errorsList[0])
         setCategoryState({ ...curCategoryState, loading: false })
         return
