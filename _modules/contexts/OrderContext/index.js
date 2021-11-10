@@ -29,6 +29,10 @@ var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 
+var _excluded = ["carts"],
+    _excluded2 = ["carts"],
+    _excluded3 = ["carts"];
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -203,7 +207,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc2.result;
 
               if (!error) {
-                carts = result.carts, _options = _objectWithoutProperties(result, ["carts"]);
+                carts = result.carts, _options = _objectWithoutProperties(result, _excluded);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -622,7 +626,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc6.result;
 
               if (!error) {
-                carts = result.carts, options = _objectWithoutProperties(result, ["carts"]);
+                carts = result.carts, options = _objectWithoutProperties(result, _excluded2);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -1624,14 +1628,11 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
 
-  var _useState7 = (0, _react.useState)(null),
-      _useState8 = _slicedToArray(_useState7, 2),
-      optionsLocalStorage = _useState8[0],
-      setOptionsLocalStorage = _useState8[1];
-
-  var getOptionFromLocalStorage = /*#__PURE__*/function () {
+  var setOptionFromLocalStorage = /*#__PURE__*/function () {
     var _ref17 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee16() {
-      var options;
+      var _configState$configs4, _configState$configs5, _state$options7;
+
+      var optionsLocalStorage;
       return _regenerator.default.wrap(function _callee16$(_context16) {
         while (1) {
           switch (_context16.prev = _context16.next) {
@@ -1640,8 +1641,15 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('options', true);
 
             case 2:
-              options = _context16.sent;
-              setOptionsLocalStorage(options);
+              optionsLocalStorage = _context16.sent;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false,
+                options: {
+                  type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
+                  moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
+                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {}
+                }
+              }));
 
             case 4:
             case "end":
@@ -1651,7 +1659,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16);
     }));
 
-    return function getOptionFromLocalStorage() {
+    return function setOptionFromLocalStorage() {
       return _ref17.apply(this, arguments);
     };
   }();
@@ -1667,17 +1675,7 @@ var OrderProvider = function OrderProvider(_ref) {
     if (session.loading || configState.loading) return;
 
     if (!session.auth) {
-      var _configState$configs4, _configState$configs5, _state$options7;
-
-      getOptionFromLocalStorage();
-      setState(_objectSpread(_objectSpread({}, state), {}, {
-        loading: false,
-        options: {
-          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
-          moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
-          address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {}
-        }
-      }));
+      setOptionFromLocalStorage();
     }
   }, [session.auth, session.loading, configState]);
   (0, _react.useEffect)(function () {
@@ -1722,7 +1720,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
     var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref18) {
       var carts = _ref18.carts,
-          options = _objectWithoutProperties(_ref18, ["carts"]);
+          options = _objectWithoutProperties(_ref18, _excluded3);
 
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));

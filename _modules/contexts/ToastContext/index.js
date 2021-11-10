@@ -5,8 +5,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.ToastType = exports.ToastProvider = exports.ToastContext = void 0;
 exports.useToast = useToast;
-exports.ToastProvider = exports.ToastContext = exports.ToastType = void 0;
 
 var React = _interopRequireWildcard(require("react"));
 

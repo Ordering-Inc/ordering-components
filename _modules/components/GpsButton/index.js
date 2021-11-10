@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GoogleGpsButton = exports.GpsButton = void 0;
+exports.GpsButton = exports.GoogleGpsButton = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
