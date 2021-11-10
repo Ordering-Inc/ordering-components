@@ -10,6 +10,7 @@ import { EventProvider } from '../../../../src/contexts/EventContext'
 import { UtilsProviders } from '../../../../src/contexts/UtilsContext'
 import { ValidationFieldsProvider } from '../../../../src/contexts/ValidationsFieldsContext'
 import { ToastProvider } from '../../../../src/contexts/ToastContext'
+import { CustomerProvider } from '../../../../src/contexts/CustomerContext'
 import { NativeStrategy } from '../../NativeStrategy'
 
 /**
@@ -38,7 +39,9 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast }) 
                       <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
                         <OrderProvider strategy={nativeStrategy} Alert={Alert} isDisableToast={isDisableToast}>
                           <BusinessProvider>
-                            {children}
+                            <CustomerProvider strategy={nativeStrategy}>
+                              {children}
+                            </CustomerProvider>
                           </BusinessProvider>
                         </OrderProvider>
                       </WebsocketProvider>
