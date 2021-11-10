@@ -274,7 +274,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   var subCategoriesList = [];
 
   var iterateCategories = function iterateCategories(categories) {
-    categories.forEach(function (category) {
+    categories === null || categories === void 0 ? void 0 : categories.forEach(function (category) {
       subCategoriesList.push(category);
       iterateCategories(category.subcategories);
     });
@@ -375,9 +375,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getLazyProducts = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(_ref4) {
-      var _orderState$options$t, _orderState$options, _orderState$options2, _orderState$options3;
+      var _orderState$options$t, _orderState$options, _orderState$options2, _orderState$options3, _where, _where$conditions;
 
-      var page, _ref4$pageSize, pageSize, parameters, _orderState$options4, moment, where, searchConditions, source, promises, functionFetch, productEndpoint;
+      var page, _ref4$pageSize, pageSize, parameters, _orderState$options4, moment, where, searchConditions, source, promises, functionFetch, productEndpoint, _where2, _where2$conditions;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -448,12 +448,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               requestsState.products = source;
               promises = [];
               functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : !isUseParentCategory ? ordering.businesses(businessState.business.id).products() : ordering.businesses(businessState.business.id).categories();
-              productEndpoint = where.conditions.length > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
+              productEndpoint = ((_where = where) === null || _where === void 0 ? void 0 : (_where$conditions = _where.conditions) === null || _where$conditions === void 0 ? void 0 : _where$conditions.length) > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
               _context2.t0 = promises;
               _context2.next = 18;
-              return productEndpoint.get({
-                cancelToken: source
-              });
+              return productEndpoint.get();
 
             case 18:
               _context2.t1 = _context2.sent;
@@ -466,12 +464,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }
 
               parameters.params = 'features';
-              productEndpoint = where.conditions.length > 0 ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where) : ordering.businesses(businessState.business.id).products().parameters(parameters);
+              productEndpoint = ((_where2 = where) === null || _where2 === void 0 ? void 0 : (_where2$conditions = _where2.conditions) === null || _where2$conditions === void 0 ? void 0 : _where2$conditions.length) > 0 ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where) : ordering.businesses(businessState.business.id).products().parameters(parameters);
               _context2.t2 = promises;
               _context2.next = 26;
-              return productEndpoint.get({
-                cancelToken: source
-              });
+              return productEndpoint.get();
 
             case 26:
               _context2.t3 = _context2.sent;
@@ -496,7 +492,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var loadProducts = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
-      var _categoriesState$cate, _businessState$busine14;
+      var _categoriesState$cate, _curCategoryState$pro, _businessState$busine14;
 
       var _ref7,
           newFetch,
@@ -561,7 +557,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               _ref7 = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : {}, newFetch = _ref7.newFetch;
               curCategoryState = (_categoriesState$cate = categoriesState[categoryKey]) !== null && _categoriesState$cate !== void 0 ? _categoriesState$cate : categoryStateDefault;
 
-              if (!(!newFetch && (curCategoryState.pagination.currentPage > 0 && curCategoryState.pagination.currentPage === curCategoryState.pagination.totalPages || curCategoryState.products.length > 0 && curCategoryState.pagination.totalPages > 0))) {
+              if (!(!newFetch && (curCategoryState.pagination.currentPage > 0 && curCategoryState.pagination.currentPage === curCategoryState.pagination.totalPages || (curCategoryState === null || curCategoryState === void 0 ? void 0 : (_curCategoryState$pro = curCategoryState.products) === null || _curCategoryState$pro === void 0 ? void 0 : _curCategoryState$pro.length) > 0 && curCategoryState.pagination.totalPages > 0))) {
                 _context3.next = 5;
                 break;
               }
@@ -610,7 +606,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 errorsList.push(featuredRes === null || featuredRes === void 0 ? void 0 : (_featuredRes$content2 = featuredRes.content) === null || _featuredRes$content2 === void 0 ? void 0 : _featuredRes$content2.result[0]);
               }
 
-              if (!errorsList.length) {
+              if (!(errorsList !== null && errorsList !== void 0 && errorsList.length)) {
                 _context3.next = 26;
                 break;
               }
@@ -644,7 +640,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     totalPages: pagination.total_pages
                   }),
                   loading: false,
-                  products: newFetch ? result : curCategoryState.products.concat(result)
+                  products: result
                 };
                 categoriesState[categoryKey] = newcategoryState;
                 categoryState = newcategoryState;
@@ -747,7 +743,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 errorsList.push(featuredRes === null || featuredRes === void 0 ? void 0 : (_featuredRes$content21 = featuredRes.content) === null || _featuredRes$content21 === void 0 ? void 0 : _featuredRes$content21.result[0]);
               }
 
-              if (!errorsList.length) {
+              if (!(errorsList !== null && errorsList !== void 0 && errorsList.length)) {
                 _context4.next = 17;
                 break;
               }
