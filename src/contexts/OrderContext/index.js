@@ -679,11 +679,17 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
   }
 
-  const [optionsLocalStorage, setOptionsLocalStorage] = useState(null)
-
-  const getOptionFromLocalStorage = async () => {
-    const options = await strategy.getItem('options', true)
-    setOptionsLocalStorage(options)
+  const setOptionFromLocalStorage = async () => {
+    const optionsLocalStorage = await strategy.getItem('options', true)
+    setState({
+      ...state,
+      loading: false,
+      options: {
+        type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
+        moment: optionsLocalStorage?.moment || null,
+        address: optionsLocalStorage?.address || state?.options?.address || {}
+      }
+    })
   }
 
   useEffect(() => {
@@ -696,16 +702,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   useEffect(() => {
     if (session.loading || configState.loading) return
     if (!session.auth) {
-      getOptionFromLocalStorage()
-      setState({
-        ...state,
-        loading: false,
-        options: {
-          type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
-          moment: optionsLocalStorage?.moment || null,
-          address: optionsLocalStorage?.address || state?.options?.address || {}
-        }
-      })
+      setOptionFromLocalStorage()
     }
   }, [session.auth, session.loading, configState])
 
