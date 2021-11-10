@@ -29,9 +29,13 @@ var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+var _excluded = ["carts"],
+    _excluded2 = ["carts"],
+    _excluded3 = ["carts"];
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41,7 +45,7 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -59,7 +63,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -203,7 +207,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc2.result;
 
               if (!error) {
-                carts = result.carts, _options = _objectWithoutProperties(result, ["carts"]);
+                carts = result.carts, _options = _objectWithoutProperties(result, _excluded);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -622,7 +626,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc6.result;
 
               if (!error) {
-                carts = result.carts, options = _objectWithoutProperties(result, ["carts"]);
+                carts = result.carts, options = _objectWithoutProperties(result, _excluded2);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -1624,14 +1628,11 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
 
-  var _useState7 = (0, _react.useState)(null),
-      _useState8 = _slicedToArray(_useState7, 2),
-      optionsLocalStorage = _useState8[0],
-      setOptionsLocalStorage = _useState8[1];
-
-  var getOptionFromLocalStorage = /*#__PURE__*/function () {
+  var setOptionFromLocalStorage = /*#__PURE__*/function () {
     var _ref17 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee16() {
-      var options;
+      var _configState$configs4, _configState$configs5, _state$options7;
+
+      var optionsLocalStorage;
       return _regenerator.default.wrap(function _callee16$(_context16) {
         while (1) {
           switch (_context16.prev = _context16.next) {
@@ -1640,8 +1641,15 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.getItem('options', true);
 
             case 2:
-              options = _context16.sent;
-              setOptionsLocalStorage(options);
+              optionsLocalStorage = _context16.sent;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false,
+                options: {
+                  type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
+                  moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
+                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {}
+                }
+              }));
 
             case 4:
             case "end":
@@ -1651,7 +1659,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16);
     }));
 
-    return function getOptionFromLocalStorage() {
+    return function setOptionFromLocalStorage() {
       return _ref17.apply(this, arguments);
     };
   }();
@@ -1667,17 +1675,7 @@ var OrderProvider = function OrderProvider(_ref) {
     if (session.loading || configState.loading) return;
 
     if (!session.auth) {
-      var _configState$configs4, _configState$configs5, _state$options7;
-
-      getOptionFromLocalStorage();
-      setState(_objectSpread(_objectSpread({}, state), {}, {
-        loading: false,
-        options: {
-          type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
-          moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
-          address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {}
-        }
-      }));
+      setOptionFromLocalStorage();
     }
   }, [session.auth, session.loading, configState]);
   (0, _react.useEffect)(function () {
@@ -1722,7 +1720,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
     var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref18) {
       var carts = _ref18.carts,
-          options = _objectWithoutProperties(_ref18, ["carts"]);
+          options = _objectWithoutProperties(_ref18, _excluded3);
 
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
