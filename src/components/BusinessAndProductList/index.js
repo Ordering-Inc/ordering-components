@@ -46,9 +46,17 @@ export const BusinessAndProductList = (props) => {
     products: []
   }
 
-  const [categoryState, setCategoryState] = useState(categoryStateDefault)
+  let [categoryState, setCategoryState] = useState(categoryStateDefault)
   const [errors, setErrors] = useState(null)
   const [errorQuantityProducts, setErrorQuantityProducts] = useState(false)
+
+  const categoryKey = searchValue
+    ? 'search'
+    : categorySelected.id === 'featured'
+      ? 'featured'
+      : categorySelected.id
+        ? `categoryId:${categorySelected.id}`
+        : 'all'
 
   const isUseParentCategory = configs?.use_parent_category?.value === 'true'
     || configs?.use_parent_category?.value === '1'
@@ -128,82 +136,58 @@ export const BusinessAndProductList = (props) => {
     });
   }
 
-  const getProducts = async ({ isNextPage, newFetch } = {}) => {
-    if (!businessState?.business?.lazy_load_products_recommended) {
-      for (let i = 0; i < businessState?.business?.categories?.length ?? 0; i++) {
-        const category = businessState?.business?.categories[i]
-        const isFeatured = category?.products?.some((product) => product.featured)
-        if (isFeatured) {
-          setFeaturedProducts(isFeatured)
-          break
-        }
+  const getProducts = async () => {
+    for (let i = 0; i < businessState?.business?.categories?.length ?? 0; i++) {
+      const category = businessState?.business?.categories[i]
+      const isFeatured = category?.products?.some((product) => product.featured)
+      if (isFeatured) {
+        setFeaturedProducts(isFeatured)
+        break
       }
-      const categoryState = {
-        ...categoryStateDefault,
-        loading: false
-      }
-      if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
-        iterateCategories(businessState?.business?.categories)
-        const categoriesList = [].concat(...businessState?.business?.categories.map(category => category.children))
-        const categories = isUseParentCategory ? categoriesList : businessState?.business?.categories
-        const parentCategory = categories?.find(category => category.category_id === categorySelected.id) ?? {}
-        const categoryFinded = subCategoriesList.find(subCat => subCat.id === parentCategory.category_id)  ?? {}
-
-        const productsFiltered = businessState?.business?.categories
-          ?.find(category => category.id === (isUseParentCategory ? parentCategory?.parent_category_id : categorySelected.id))
-          ?.products
-          .filter(product => isUseParentCategory
-            ? (categoryFinded?.children?.some(cat => cat.category_id === product?.category_id) && isMatchSearch(product.name, product.description))
-            : isMatchSearch(product.name, product.description))
-
-        categoryState.products = productsFiltered || []
-      } else if (categorySelected.id === 'featured') {
-        const productsFiltered = businessState?.business?.categories?.reduce(
-          (products, category) => [...products, ...category.products], []
-        ).filter(
-          product => isFeaturedSearch(product)
-        )
-        categoryState.products = productsFiltered || []
-      } else {
-        const productsFiltered = businessState?.business?.categories?.reduce(
-          (products, category) => [...products, ...category.products], []
-        ).filter(
-          product => isMatchSearch(product.name, product.description)
-        )
-        categoryState.products = productsFiltered || []
-      }
-      categoryState.products = sortProductsArray(sortByValue, categoryState.products)
-      setCategoryState({ ...categoryState })
-      return
     }
+    const categoryState = {
+      ...categoryStateDefault,
+      loading: false
+    }
+    if (categorySelected.id !== 'featured' && categorySelected.id !== null) {
+      iterateCategories(businessState?.business?.categories)
+      const categoriesList = [].concat(...businessState?.business?.categories.map(category => category.children))
+      const categories = isUseParentCategory ? categoriesList : businessState?.business?.categories
+      const parentCategory = categories?.find(category => category.category_id === categorySelected.id) ?? {}
+      const categoryFinded = subCategoriesList.find(subCat => subCat.id === parentCategory.category_id)  ?? {}
 
-    const categoryKey = searchValue
-      ? 'search'
-      : categorySelected.id === 'featured'
-        ? 'featured'
-        : categorySelected.id
-          ? `categoryId:${categorySelected.id}`
-          : 'all'
+      const productsFiltered = businessState?.business?.categories
+        ?.find(category => category.id === (isUseParentCategory ? parentCategory?.parent_category_id : categorySelected.id))
+        ?.products
+        .filter(product => isUseParentCategory
+          ? (categoryFinded?.children?.some(cat => cat.category_id === product?.category_id) && isMatchSearch(product.name, product.description))
+          : isMatchSearch(product.name, product.description))
 
-    const categoryState = categoriesState[categoryKey] ?? categoryStateDefault
-    categoryState.products = sortProductsArray(sortByValue, categoryState.products)
-    const pagination = categoryState.pagination
-    if (!newFetch && !isNextPage &&
-      (
-        (pagination.currentPage > 0 && pagination.currentPage === pagination.totalPages) ||
-        categoryState.products.length > 0 && pagination.totalPages > 0
+      categoryState.products = productsFiltered || []
+    } else if (categorySelected.id === 'featured') {
+      const productsFiltered = businessState?.business?.categories?.reduce(
+        (products, category) => [...products, ...category.products], []
+      ).filter(
+        product => isFeaturedSearch(product)
       )
-    ) {
-      setCategoryState({ ...categoryState, loading: false })
-      return
+      categoryState.products = productsFiltered || []
+    } else {
+      const productsFiltered = businessState?.business?.categories?.reduce(
+        (products, category) => [...products, ...category.products], []
+      ).filter(
+        product => isMatchSearch(product.name, product.description)
+      )
+      categoryState.products = productsFiltered || []
     }
+    categoryState.products = sortProductsArray(sortByValue, categoryState.products)
+    setCategoryState({ ...categoryState })
+  }
 
-    setCategoryState({ ...categoryState, loading: true })
-
+  const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
       type: orderState.options?.type ?? 1,
-      page: (!isNextPage || newFetch) ? 1 : pagination.currentPage + 1,
-      page_size: pagination.pageSize
+      page,
+      page_size: pageSize
     }
 
     if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
@@ -264,86 +248,139 @@ export const BusinessAndProductList = (props) => {
       }
     }
 
-    try {
-      const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
-        ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
-        : !isUseParentCategory
-          ? ordering.businesses(businessState.business.id).products()
-          : ordering.businesses(businessState.business.id).categories()
-      const source = {}
-      requestsState.products = source
-      setRequestsState({ ...requestsState })
-      let productEndpoint = where.conditions.length > 0
-        ? functionFetch.parameters(parameters).where(where)
-        : functionFetch.parameters(parameters)
-      const { content: { error, result, pagination } } = await productEndpoint.get({ cancelToken: source })
+    const source = {}
+    requestsState.products = source
+    let promises = []
 
-      let featuresResponse = null
-      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
-        parameters.params = 'features'
-        productEndpoint = where.conditions.length > 0
-          ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where)
-          : ordering.businesses(businessState.business.id).products().parameters(parameters)
-        try {
-          featuresResponse = await productEndpoint.get({ cancelToken: source })
-          if (!featuresResponse?.content?.error) {
-            const oldFeatured = categoriesState?.featured
-            const featureState = {
-              pagination: {
-                ...categoryState.pagination,
-                currentPage: featuresResponse?.content?.pagination?.current_page,
-                totalItems: featuresResponse?.content?.pagination?.total,
-                totalPages: featuresResponse?.content?.pagination?.total_pages
-              },
-              loading: false,
-              products: newFetch
-                ? [...featuresResponse?.content?.result]
-                : [...oldFeatured.products, ...featuresResponse?.content?.result]
-            }
-            categoriesState.featured = featureState
-          }
-        } catch (err) {
-          setErrors([err.message])
-        }
+    const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
+      ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
+      : !isUseParentCategory
+        ? ordering.businesses(businessState.business.id).products()
+        : ordering.businesses(businessState.business.id).categories()
+
+    let productEndpoint = where.conditions.length > 0
+      ? functionFetch.parameters(parameters).where(where)
+      : functionFetch.parameters(parameters)
+
+    promises.push(await productEndpoint.get({ cancelToken: source }))
+
+    if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+      parameters.params = 'features'
+      productEndpoint = where.conditions.length > 0
+        ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where)
+        : ordering.businesses(businessState.business.id).products().parameters(parameters)
+
+      promises.push(await productEndpoint.get({ cancelToken: source }))
+    }
+
+    return promises
+  }
+
+  const loadProducts = async ({ newFetch } = {}) => {
+    const curCategoryState = categoriesState[categoryKey] ?? categoryStateDefault
+    if (
+      !newFetch &&
+      ((curCategoryState.pagination.currentPage > 0 &&
+        curCategoryState.pagination.currentPage === curCategoryState.pagination.totalPages) ||
+        (curCategoryState.products.length > 0 && curCategoryState.pagination.totalPages > 0))
+    ) {
+      setCategoryState({ ...curCategoryState, loading: false })
+      return
+    }
+
+    const isLazy = !!businessState?.business?.lazy_load_products_recommended
+
+    if (!isLazy) {
+      getProducts()
+      return
+    }
+
+    const pageSize = categoryStateDefault.pagination.pageSize
+
+    try {
+      setCategoryState({ ...curCategoryState, loading: true })
+      const [lazyRes, featuredRes] = await getLazyProducts({ page: 1, pageSize })
+
+      const { content: { error, result, pagination } } = lazyRes
+
+      const errorsList = []
+
+      if (error) {
+        errorsList.push(result[0])
+      }
+      if (featuredRes?.content?.error) {
+        errorsList.push(featuredRes?.content?.result[0])
+      }
+      if (errorsList.length) {
+        setErrors(errorsList[0])
+        setCategoryState({ ...curCategoryState, loading: false })
+        return
       }
 
-      if (!error && (categorySelected.id && categorySelected.id !== 'featured' || !isUseParentCategory)) {
+      if (featuredRes?.content?.result?.length) {
+        const oldFeatured = categoriesState?.featured
+        const featureState = {
+          pagination: {
+            ...oldFeatured?.pagination,
+            currentPage: featuredRes?.content?.pagination?.current_page,
+            totalItems: featuredRes?.content?.pagination?.total,
+            totalPages: featuredRes?.content?.pagination?.total_pages
+          },
+          loading: false,
+          products: newFetch
+            ? [...featuredRes?.content?.result]
+            : oldFeatured?.products?.concat(featuredRes?.content?.result)
+        }
+        categoriesState.featured = featureState
+      }
+
+      if ((categorySelected.id && categorySelected.id !== 'featured') || !isUseParentCategory) {
         const newcategoryState = {
           pagination: {
-            ...categoryState.pagination,
+            ...curCategoryState.pagination,
             currentPage: pagination.current_page,
             totalItems: pagination.total,
             totalPages: pagination.total_pages
           },
           loading: false,
-          products: newFetch ? [...result] : [...categoryState.products, ...result]
+          products: newFetch
+            ? result
+            : curCategoryState.products.concat(result)
         }
 
         categoriesState[categoryKey] = newcategoryState
+        categoryState = newcategoryState
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
         const isFeatured = categoriesState.all.products.some(product => product.featured)
           || categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
-      } else if (!error && isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+      }
+
+      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
         const productsList = [].concat(...result.map(category => category?.products)).filter(item => item)
-        const productsListFeatured = featuresResponse?.content?.result ?? []
+        const productsListFeatured = featuredRes?.content?.result ?? []
+        const paginationData = categorySelected.id === 'featured'
+          ? categoriesState?.featured?.pagination ?? {}
+          : curCategoryState?.pagination ?? {}
         const newcategoryState = {
           pagination: {
-            ...categoryState.pagination,
+            ...paginationData,
             currentPage: categorySelected.id === 'featured'
-              ? featuresResponse?.content?.pagination?.current_page
+              ? featuredRes?.content?.pagination?.current_page
               : pagination.current_page,
             totalItems: categorySelected.id === 'featured'
-              ? featuresResponse?.content?.pagination?.total
+              ? featuredRes?.content?.pagination?.total
               : pagination.total,
             totalPages: categorySelected.id === 'featured'
-              ? featuresResponse?.content?.pagination?.total_pages
+              ? featuredRes?.content?.pagination?.total_pages
               : pagination.total_pages
           },
           loading: false,
-          products: newFetch ? [...productsList] : [...categoryState.products, ...productsListFeatured, ...productsList]
+          products: categorySelected.id === 'featured'
+            ? productsListFeatured
+            : [...productsListFeatured, ...curCategoryState.products.concat(productsList)]
         }
 
         categoriesState[categoryKey] = newcategoryState
@@ -353,11 +390,118 @@ export const BusinessAndProductList = (props) => {
         const isFeatured = categoriesState.all.products.some(product => product.featured)
           || categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
-      } else {
-        setErrors(result)
       }
     } catch (err) {
-      setErrors([err.message])
+      if (err?.constructor?.name !== 'Cancel') {
+        setErrors([err?.message ?? 'ERROR'])
+        setCategoryState({ ...curCategoryState, loading: false })
+      }
+    }
+  }
+
+  const loadMoreProducts = async () => {
+    const curCategoryState = categoriesState[categoryKey]
+    setCategoryState({ ...curCategoryState, loading: true })
+
+    try {
+      const [lazyRes, featuredRes] = await getLazyProducts({
+        page: curCategoryState.pagination.currentPage + 1,
+      })
+
+      const { content: { error, result, pagination } } = lazyRes
+
+      const errorsList = []
+
+      if (error) {
+        errorsList.push(result[0])
+      }
+      if (featuredRes?.content?.error) {
+        errorsList.push(featuredRes?.content?.result[0])
+      }
+      if (errorsList.length) {
+        setErrors(errorsList[0])
+        setCategoryState({ ...curCategoryState, loading: false })
+        return
+      }
+
+      if (featuredRes) {
+        const oldFeatured = categoriesState?.featured
+        const featureState = {
+          pagination: {
+            ...oldFeatured.pagination,
+            currentPage: featuredRes?.content?.pagination?.current_page,
+            totalItems: featuredRes?.content?.pagination?.total,
+            totalPages: featuredRes?.content?.pagination?.total_pages
+          },
+          loading: false,
+          products: [...oldFeatured.products, ...featuredRes?.content?.result]
+        }
+        categoriesState.featured = featureState
+      }
+
+      if ((categorySelected.id && categorySelected.id !== 'featured') || !isUseParentCategory) {
+        const newcategoryState = {
+          pagination: {
+            ...curCategoryState.pagination,
+            currentPage: pagination.current_page,
+            totalItems: pagination.total,
+            totalPages: pagination.total_pages
+          },
+          loading: false,
+          products: curCategoryState.products.concat(result)
+        }
+
+        categoriesState[categoryKey] = newcategoryState
+        categoryState = newcategoryState
+        setCategoryState({ ...newcategoryState })
+        setCategoriesState({ ...categoriesState })
+
+        const isFeatured = categoriesState.all.products.some(product => product.featured)
+          || categoriesState?.featured?.products?.some(product => product.featured)
+        setFeaturedProducts(isFeatured)
+      }
+
+      if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
+        const productsList = [].concat(...result.map(category => category?.products)).filter(item => item)
+        const productsListFeatured = featuredRes?.content?.result ?? []
+        const paginationData = categorySelected.id === 'featured'
+          ? categoriesState?.featured?.pagination ?? {}
+          : curCategoryState.pagination ?? {}
+        const newcategoryState = {
+          pagination: {
+            ...paginationData,
+            currentPage: categorySelected.id === 'featured'
+              ? featuredRes?.content?.pagination?.current_page
+              : pagination.current_page,
+            totalItems: categorySelected.id === 'featured'
+              ? featuredRes?.content?.pagination?.total
+              : pagination.total,
+            totalPages: categorySelected.id === 'featured'
+              ? featuredRes?.content?.pagination?.total_pages
+              : pagination.total_pages
+          },
+          loading: false,
+          products: categorySelected.id === 'featured'
+            ? productsListFeatured
+            : [...productsListFeatured, ...curCategoryState.products.concat(productsList)]
+        }
+
+        categoriesState[categoryKey] = newcategoryState
+        categoryState = newcategoryState
+        setCategoryState({ ...newcategoryState })
+        setCategoriesState({ ...categoriesState })
+
+        const isFeatured = categoriesState.all.products.some(product => product.featured)
+          || categoriesState?.featured?.products?.some(product => product.featured)
+        setFeaturedProducts(isFeatured)
+      }
+
+      setCategoryState({ ...categoryState, loading: false })
+    } catch (err) {
+      if (err?.constructor?.name !== 'Cancel') {
+        setErrors([err?.message ?? 'ERROR'])
+        setCategoryState({ ...curCategoryState, loading: false })
+      }
     }
   }
 
@@ -469,24 +613,24 @@ export const BusinessAndProductList = (props) => {
 
   useEffect(() => {
     if (!businessState.loading) {
-      getProducts({ newFetch: true })
+      loadProducts({ newFetch: true })
     }
   }, [businessState])
 
   useEffect(() => {
-    getProducts({ newFetch: !!searchValue })
+    loadProducts({ newFetch: !!searchValue })
   }, [searchValue])
 
   useEffect(() => {
-    getProducts({ newFetch: !!searchValue })
+    loadProducts({ newFetch: !!searchValue })
   }, [categorySelected.id])
 
   useEffect(() => {
-    getProducts({ newFetch: !!searchValue })
+    loadProducts({ newFetch: !!searchValue })
   }, [sortByValue])
 
   useEffect(() => {
-    getProducts()
+    loadProducts()
   }, [slug])
 
   useEffect(() => {
@@ -564,7 +708,7 @@ export const BusinessAndProductList = (props) => {
           handleChangeSearch={handleChangeSearch}
           handleChangeSortBy={handleChangeSortBy}
           handleChangeFilterByMenus={handleChangeFilterByMenus}
-          getNextProducts={getProducts}
+          getNextProducts={loadMoreProducts}
           updateProductModal={(val) => setProductModal({ ...productModal, product: val })}
         />
       )}
