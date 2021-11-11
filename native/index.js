@@ -44,7 +44,7 @@ import { PaymentOptionCash } from '../src/components/PaymentOptionCash'
 import { PaymentOptionStripe } from '../src/components/PaymentOptionStripe'
 import { PaymentOptionStripeDirect } from '../src/components/PaymentOptionStripeDirect'
 import { PaymentOptionStripeRedirect } from '../src/components/PaymentOptionStripeRedirect'
-
+import { PhoneAutocomplete } from '../src/components/PhoneAutocomplete'
 import { ProductForm } from '../src/components/ProductForm'
 import { ProductImages } from '../src/components/ProductImages'
 import { ProductIngredient } from '../src/components/ProductIngredient'
@@ -68,6 +68,7 @@ import { UpsellingPage } from '../src/components/UpsellingPage'
 import { ApiContext, ApiProvider, useApi } from '../src/contexts/ApiContext'
 import { BusinessContext, BusinessProvider, useBusiness } from '../src/contexts/BusinessContext'
 import { ConfigContext, ConfigProvider, useConfig } from '../src/contexts/ConfigContext'
+import { CustomerContext, CustomerProvider, useCustomer } from '../src/contexts/CustomerContext'
 import { EventContext, EventProvider, useEvent } from '../src/contexts/EventContext'
 import { LanguageContext, LanguageProvider, useLanguage } from '../src/contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from '../src/contexts/OrderContext'
@@ -127,6 +128,7 @@ export {
   PaymentOptionStripe,
   PaymentOptionStripeDirect,
   PaymentOptionStripeRedirect,
+  PhoneAutocomplete,
   ProductForm,
   ProductImages,
   ProductIngredient,
@@ -156,6 +158,9 @@ export {
   ConfigContext,
   ConfigProvider,
   useConfig,
+  CustomerContext,
+  CustomerProvider,
+  useCustomer,
   EventContext,
   EventProvider,
   useEvent,
