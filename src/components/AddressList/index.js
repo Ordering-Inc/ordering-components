@@ -64,7 +64,7 @@ export const AddressList = (props) => {
         requestsState.list.cancel()
       }
     }
-  }, [])
+  }, [userId])
 
   /**
    * Function to make an address as default address
