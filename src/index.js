@@ -26,6 +26,7 @@ import { GoogleLoginButton } from './components/GoogleLoginButton'
 import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
 import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
 import { GpsButton, GoogleGpsButton } from './components/GpsButton'
+import { GoogleIdentityButton } from './components/GoogleIdentity'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
 import { LogoutAction } from './components/LogoutAction'
@@ -126,6 +127,7 @@ export {
   GoogleMapsMap,
   GpsButton,
   GoogleGpsButton,
+  GoogleIdentityButton,
   LanguageSelector,
   LoginForm,
   LogoutAction,
