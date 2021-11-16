@@ -13,7 +13,10 @@ export const OrderListGroups = (props) => {
     useDefualtSessionManager,
     paginationSettings,
     asDashboard,
-    orderGroupStatusCustom
+    orderGroupStatusCustom,
+    onOrdersDeleted,
+    customOrderTypes,
+    customPaymethods
   } = props
 
   const [ordering] = useApi()
@@ -71,6 +74,8 @@ export const OrderListGroups = (props) => {
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
   const [filtered, setFiltered] = useState(null)
+  const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
+  const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
 
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -111,7 +116,7 @@ export const OrderListGroups = (props) => {
     }
 
     if (filtered?.id) {
-      options.query.where.push({ attribute: 'id', value: filtered.id })
+      options.query.where.push({ attribute: 'id', value: parseInt(filtered.id, 10) })
     }
 
     if (filtered?.state) {
@@ -128,16 +133,57 @@ export const OrderListGroups = (props) => {
       })
     }
 
-    if (filtered?.paymethod) {
-      options.query.where.push({ attribute: 'paymethod_id', value: filtered.paymethod })
+    if (filtered?.paymethod || customPaymethods) {
+      let paymethodResult = controlsState
+      if (!controlsState.paymethods.length) {
+        paymethodResult = await getControls()
+      }
+      options.query.where.push({
+        attribute: 'paymethod_id',
+        value: (!!filtered?.paymethod && filtered?.paymethod) || paymethodResult?.paymethods
+      })
     }
 
     if (filtered?.driver) {
       options.query.where.push({ attribute: 'driver_id', value: filtered?.driver })
     }
 
-    if (filtered?.delivery_type) {
-      options.query.where.push({ attribute: 'delivery_type', value: filtered?.delivery_type })
+    if (filtered?.driver_groups) {
+      options.query.where.push({ attribute: 'driver_id', value: filtered?.driver_groups?.drivers })
+    }
+
+    if (filtered?.customer?.email || filtered?.customer?.phone) {
+      const customerOptions = []
+      if (filtered?.customer?.email) {
+        customerOptions.push({
+          attribute: 'email',
+          value: {
+            condition: 'ilike',
+            value: encodeURI(`%${filtered?.customer?.email}%`)
+          }
+        })
+      }
+      if (filtered?.customer?.phone) {
+        customerOptions.push({
+          attribute: 'cellphone',
+          value: {
+            condition: 'ilike',
+            value: encodeURI(`%${filtered?.customer?.phone}%`)
+          }
+        })
+      }
+
+      options.query.where.push({
+        attribute: 'customer',
+        conditions: customerOptions
+      })
+    }
+
+    if (filtered?.delivery_type || customOrderTypes) {
+      options.query.where.push({
+        attribute: 'delivery_type',
+        value: (!!filtered?.delivery_type && filtered?.delivery_type) || customOrderTypes
+      })
     }
 
     if (filtered?.date?.from) {
@@ -167,6 +213,32 @@ export const OrderListGroups = (props) => {
       ? ordering.setAccessToken(accessToken).orders().asDashboard()
       : ordering.setAccessToken(accessToken).orders()
     return await functionFetch.get(options)
+  }
+
+  const getControls = async () => {
+    try {
+      setControlsState({ ...controlsState, loading: true })
+      const { content: { error, result } } = await ordering
+        .setAccessToken(accessToken)
+        .controls()
+        .get()
+      const obj = {
+        ...controlsState,
+        loading: false,
+        paymethods: result?.paymethods
+          ?.filter((p) => customPaymethods?.includes(p.name))
+          ?.map((pay) => pay.id),
+        error: error ? result : null
+      }
+      setControlsState(obj)
+      return obj
+    } catch (e) {
+      setControlsState({
+        ...controlsState,
+        loading: false,
+        error: e?.message ? controlsState.error?.push(e?.message) : ['ERROR']
+      })
+    }
   }
 
   const loadOrders = async ({ isNextPage, newFetch } = {}) => {
@@ -206,8 +278,12 @@ export const OrderListGroups = (props) => {
           ...ordersGroup[currentTabSelected],
           loading: false,
           orders: error
-            ? sortOrders(ordersGroup[currentTabSelected].orders)
-            : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
+            ? newFetch
+              ? []
+              : sortOrders(ordersGroup[currentTabSelected].orders)
+            : newFetch
+              ? sortOrders(result)
+              :sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
           error: error ? result : null,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
@@ -310,6 +386,49 @@ export const OrderListGroups = (props) => {
     }
   }
 
+  const deleteOrders = async (orderIds) => {
+    try {
+      setOrdersDeleted({ ...ordersDeleted, loading: true })
+      let errorState = []
+
+      if (orderIds.length === 1) {
+        const { content: { error } } = await ordering.setAccessToken(accessToken).orders(orderIds[0]).delete()
+        errorState.push({ error, id: orderIds[0] })
+      } else if (orderIds.length > 1) {
+        for (let id of orderIds) {
+          const { content: { error: multiError } } = await ordering.setAccessToken(accessToken).orders(id).delete()
+          errorState.push({ error: multiError, id })
+        }
+      }
+
+      const isError = errorState.some((e) => e.error);
+      const idsDeleted = errorState.map((obj) => !obj.error && obj.id);
+
+      onOrdersDeleted && onOrdersDeleted({ isError, list: idsDeleted })
+      setOrdersDeleted({ ...ordersDeleted, loading: false })
+      setOrdersGroup({
+        ...ordersGroup,
+        [currentTabSelected]: {
+          ...ordersGroup[currentTabSelected],
+          orders: idsDeleted.length
+            ? sortOrders(ordersGroup[currentTabSelected].orders.filter((order) => !idsDeleted.includes(order.id)))
+            : sortOrders(ordersGroup[currentTabSelected].orders)
+        }
+      })
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setOrdersGroup({
+          ...ordersGroup,
+          [currentTabSelected]: {
+            ...ordersGroup[currentTabSelected],
+            loading: false,
+            error: [err?.message ?? 'ERROR']
+          }
+        })
+      }
+    }
+  }
+
   const sortOrders = (orders, sortBy = 'desc') => {
     const ordersSorted = orders.sort((a, b) => {
       if (sortBy === 'desc') {
@@ -393,6 +512,11 @@ export const OrderListGroups = (props) => {
       loadOrders({ newFetch: !!currentFilters })
     }
   }, [currentFilters])
+
+  useEffect(() => {
+    if (!filtered) return
+    loadOrders({ newFetch: true })
+  }, [filtered])
 
   useEffect(() => {
     if (ordersGroup[currentTabSelected].loading) return
@@ -517,11 +641,6 @@ export const OrderListGroups = (props) => {
     }
   }, [requestsState.orders])
 
-  useEffect(() => {
-    if (!filtered) return
-    loadOrders({ newFetch: true })
-  }, [filtered])
-
   return (
     <>
       {UIComponent && (
@@ -534,8 +653,11 @@ export const OrderListGroups = (props) => {
           ordersGroup={ordersGroup}
           setOrdersGroup={setOrdersGroup}
           messages={messages}
+          ordersDeleted={ordersDeleted}
+          setOrdersDeleted={setOrdersDeleted}
           setMessages={setMessages}
           loadOrders={loadOrders}
+          deleteOrders={deleteOrders}
           loadMessages={loadMessages}
           loadMoreOrders={loadMoreOrders}
           handleClickOrder={handleClickOrder}
