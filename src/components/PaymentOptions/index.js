@@ -50,6 +50,7 @@ export const PaymentOptions = (props) => {
    * Method to get payment options from API
    */
   const getPaymentOptions = async () => {
+    setPaymethodsList({ ...paymethodsList, loading: true })
     try {
       const { content: { error, result } } = await ordering.businesses(businessId).get()
       if (!error) {
@@ -57,8 +58,8 @@ export const PaymentOptions = (props) => {
       }
       setPaymethodsList({
         ...paymethodsList,
-        error: error ? result : null,
         loading: false,
+        error: error ? result : null,
         paymethods: error ? [] : parsePaymethods(result.paymethods)
       })
     } catch (error) {
@@ -151,11 +152,10 @@ export const PaymentOptions = (props) => {
   }, [paymethodSelected])
 
   useEffect(() => {
-    if (isLoading) return
     if (paymethods) {
       setPaymethodsList({
         ...paymethodsList,
-        loading: false,
+        loading: isLoading,
         paymethods: parsePaymethods(paymethods)
       })
     } else {
