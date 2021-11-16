@@ -37,6 +37,7 @@ import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
 import { OrderList } from './components/OrderList'
 import { OrderTypeControl } from './components/OrderTypeControl'
+import { OrdersControlFilters } from './components/OrdersControlFilters'
 import { PaymentOptions } from './components/PaymentOptions'
 import { Popup } from './components/Popup'
 import { ProductComponent } from './components/ProductComponent'
@@ -138,6 +139,7 @@ export {
   MyOrdersList,
   OrderList,
   OrderTypeControl,
+  OrdersControlFilters,
   Messages,
   PaymentOptions,
   PaymethodList,
