@@ -39,6 +39,8 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.it
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -69,7 +71,10 @@ var OrderListGroups = function OrderListGroups(props) {
       useDefualtSessionManager = props.useDefualtSessionManager,
       paginationSettings = props.paginationSettings,
       asDashboard = props.asDashboard,
-      orderGroupStatusCustom = props.orderGroupStatusCustom;
+      orderGroupStatusCustom = props.orderGroupStatusCustom,
+      onOrdersDeleted = props.onOrdersDeleted,
+      customOrderTypes = props.customOrderTypes,
+      customPaymethods = props.customPaymethods;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -157,14 +162,32 @@ var OrderListGroups = function OrderListGroups(props) {
       filtered = _useState10[0],
       setFiltered = _useState10[1];
 
+  var _useState11 = (0, _react.useState)({
+    loading: false,
+    error: null,
+    result: []
+  }),
+      _useState12 = _slicedToArray(_useState11, 2),
+      ordersDeleted = _useState12[0],
+      setOrdersDeleted = _useState12[1];
+
+  var _useState13 = (0, _react.useState)({
+    loading: true,
+    error: null,
+    paymethods: []
+  }),
+      _useState14 = _slicedToArray(_useState13, 2),
+      controlsState = _useState14[0],
+      setControlsState = _useState14[1];
+
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
 
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
-      var _filtered$date, _filtered$date3;
+      var _filtered$customer, _filtered$customer2, _filtered$date, _filtered$date3;
 
-      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _filtered$date2, _filtered$date4, source, functionFetch;
+      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer5, customerOptions, _filtered$customer4, _filtered$customer6, _filtered$date2, _filtered$date4, source, functionFetch;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -208,7 +231,7 @@ var OrderListGroups = function OrderListGroups(props) {
               if (filtered !== null && filtered !== void 0 && filtered.id) {
                 options.query.where.push({
                   attribute: 'id',
-                  value: filtered.id
+                  value: parseInt(filtered.id, 10)
                 });
               }
 
@@ -229,13 +252,31 @@ var OrderListGroups = function OrderListGroups(props) {
                 });
               }
 
-              if (filtered !== null && filtered !== void 0 && filtered.paymethod) {
-                options.query.where.push({
-                  attribute: 'paymethod_id',
-                  value: filtered.paymethod
-                });
+              if (!(filtered !== null && filtered !== void 0 && filtered.paymethod || customPaymethods)) {
+                _context.next = 14;
+                break;
               }
 
+              paymethodResult = controlsState;
+
+              if (controlsState.paymethods.length) {
+                _context.next = 13;
+                break;
+              }
+
+              _context.next = 12;
+              return getControls();
+
+            case 12:
+              paymethodResult = _context.sent;
+
+            case 13:
+              options.query.where.push({
+                attribute: 'paymethod_id',
+                value: !!(filtered !== null && filtered !== void 0 && filtered.paymethod) && (filtered === null || filtered === void 0 ? void 0 : filtered.paymethod) || ((_paymethodResult = paymethodResult) === null || _paymethodResult === void 0 ? void 0 : _paymethodResult.paymethods)
+              });
+
+            case 14:
               if (filtered !== null && filtered !== void 0 && filtered.driver) {
                 options.query.where.push({
                   attribute: 'driver_id',
@@ -243,10 +284,46 @@ var OrderListGroups = function OrderListGroups(props) {
                 });
               }
 
-              if (filtered !== null && filtered !== void 0 && filtered.delivery_type) {
+              if (filtered !== null && filtered !== void 0 && filtered.driver_groups) {
+                options.query.where.push({
+                  attribute: 'driver_id',
+                  value: filtered === null || filtered === void 0 ? void 0 : (_filtered$driver_grou = filtered.driver_groups) === null || _filtered$driver_grou === void 0 ? void 0 : _filtered$driver_grou.drivers
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && (_filtered$customer = filtered.customer) !== null && _filtered$customer !== void 0 && _filtered$customer.email || filtered !== null && filtered !== void 0 && (_filtered$customer2 = filtered.customer) !== null && _filtered$customer2 !== void 0 && _filtered$customer2.phone) {
+                customerOptions = [];
+
+                if (filtered !== null && filtered !== void 0 && (_filtered$customer3 = filtered.customer) !== null && _filtered$customer3 !== void 0 && _filtered$customer3.email) {
+                  customerOptions.push({
+                    attribute: 'email',
+                    value: {
+                      condition: 'ilike',
+                      value: encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer4 = filtered.customer) === null || _filtered$customer4 === void 0 ? void 0 : _filtered$customer4.email, "%"))
+                    }
+                  });
+                }
+
+                if (filtered !== null && filtered !== void 0 && (_filtered$customer5 = filtered.customer) !== null && _filtered$customer5 !== void 0 && _filtered$customer5.phone) {
+                  customerOptions.push({
+                    attribute: 'cellphone',
+                    value: {
+                      condition: 'ilike',
+                      value: encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer6 = filtered.customer) === null || _filtered$customer6 === void 0 ? void 0 : _filtered$customer6.phone, "%"))
+                    }
+                  });
+                }
+
+                options.query.where.push({
+                  attribute: 'customer',
+                  conditions: customerOptions
+                });
+              }
+
+              if (filtered !== null && filtered !== void 0 && filtered.delivery_type || customOrderTypes) {
                 options.query.where.push({
                   attribute: 'delivery_type',
-                  value: filtered === null || filtered === void 0 ? void 0 : filtered.delivery_type
+                  value: !!(filtered !== null && filtered !== void 0 && filtered.delivery_type) && (filtered === null || filtered === void 0 ? void 0 : filtered.delivery_type) || customOrderTypes
                 });
               }
 
@@ -274,13 +351,13 @@ var OrderListGroups = function OrderListGroups(props) {
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 18;
+              _context.next = 26;
               return functionFetch.get(options);
 
-            case 18:
+            case 26:
               return _context.abrupt("return", _context.sent);
 
-            case 19:
+            case 27:
             case "end":
               return _context.stop();
           }
@@ -293,11 +370,64 @@ var OrderListGroups = function OrderListGroups(props) {
     };
   }();
 
-  var loadOrders = /*#__PURE__*/function () {
+  var getControls = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var _result$paymethods, _result$paymethods$fi, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, obj, _controlsState$error;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setControlsState(_objectSpread(_objectSpread({}, controlsState), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return ordering.setAccessToken(accessToken).controls().get();
+
+            case 4:
+              _yield$ordering$setAc = _context2.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              error = _yield$ordering$setAc2.error;
+              result = _yield$ordering$setAc2.result;
+              obj = _objectSpread(_objectSpread({}, controlsState), {}, {
+                loading: false,
+                paymethods: result === null || result === void 0 ? void 0 : (_result$paymethods = result.paymethods) === null || _result$paymethods === void 0 ? void 0 : (_result$paymethods$fi = _result$paymethods.filter(function (p) {
+                  return customPaymethods === null || customPaymethods === void 0 ? void 0 : customPaymethods.includes(p.name);
+                })) === null || _result$paymethods$fi === void 0 ? void 0 : _result$paymethods$fi.map(function (pay) {
+                  return pay.id;
+                }),
+                error: error ? result : null
+              });
+              setControlsState(obj);
+              return _context2.abrupt("return", obj);
+
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](0);
+              setControlsState(_objectSpread(_objectSpread({}, controlsState), {}, {
+                loading: false,
+                error: _context2.t0 !== null && _context2.t0 !== void 0 && _context2.t0.message ? (_controlsState$error = controlsState.error) === null || _controlsState$error === void 0 ? void 0 : _controlsState$error.push(_context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message) : ['ERROR']
+              }));
+
+            case 16:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 13]]);
+    }));
+
+    return function getControls() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var loadOrders = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
       var _ordersGroup$currentT;
 
-      var _ref4,
+      var _ref5,
           isNextPage,
           newFetch,
           pageSize,
@@ -309,29 +439,29 @@ var OrderListGroups = function OrderListGroups(props) {
           result,
           pagination,
           _err$message,
-          _args2 = arguments;
+          _args3 = arguments;
 
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _ref4 = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : {}, isNextPage = _ref4.isNextPage, newFetch = _ref4.newFetch;
+              _ref5 = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : {}, isNextPage = _ref5.isNextPage, newFetch = _ref5.newFetch;
 
               if (!(!newFetch && (ordersGroup[currentTabSelected].pagination.currentPage > 0 && ordersGroup[currentTabSelected].pagination.currentPage === ordersGroup[currentTabSelected].pagination.totalPages || ordersGroup[currentTabSelected].orders.length > 0 && ((_ordersGroup$currentT = ordersGroup[currentTabSelected].pagination) === null || _ordersGroup$currentT === void 0 ? void 0 : _ordersGroup$currentT.totalPages) > 0))) {
-                _context2.next = 3;
+                _context3.next = 3;
                 break;
               }
 
-              return _context2.abrupt("return");
+              return _context3.abrupt("return");
 
             case 3:
               pageSize = paginationSettings.pageSize;
-              _context2.prev = 4;
+              _context3.prev = 4;
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: true
               }))));
               nextPage = !isNextPage ? ordersGroup[currentTabSelected].pagination.currentPage + 1 : 1;
-              _context2.next = 9;
+              _context3.next = 9;
               return getOrders({
                 page: (_ = 1) !== null && _ !== void 0 ? _ : nextPage,
                 pageSize: pageSize,
@@ -340,14 +470,14 @@ var OrderListGroups = function OrderListGroups(props) {
               });
 
             case 9:
-              _yield$getOrders = _context2.sent;
+              _yield$getOrders = _context3.sent;
               _yield$getOrders$cont = _yield$getOrders.content;
               error = _yield$getOrders$cont.error;
               result = _yield$getOrders$cont.result;
               pagination = _yield$getOrders$cont.pagination;
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: false,
-                orders: error ? sortOrders(ordersGroup[currentTabSelected].orders) : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
+                orders: error ? newFetch ? [] : sortOrders(ordersGroup[currentTabSelected].orders) : newFetch ? sortOrders(result) : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
                 error: error ? result : null,
                 pagination: _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
                   currentPage: pagination.current_page,
@@ -358,46 +488,46 @@ var OrderListGroups = function OrderListGroups(props) {
                   to: pagination.to
                 })
               }))));
-              _context2.next = 20;
+              _context3.next = 20;
               break;
 
             case 17:
-              _context2.prev = 17;
-              _context2.t0 = _context2["catch"](4);
+              _context3.prev = 17;
+              _context3.t0 = _context3["catch"](4);
 
-              if (_context2.t0.constructor.name !== 'Cancel') {
+              if (_context3.t0.constructor.name !== 'Cancel') {
                 setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                   loading: false,
-                  error: [(_err$message = _context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message) !== null && _err$message !== void 0 ? _err$message : 'ERROR']
+                  error: [(_err$message = _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message) !== null && _err$message !== void 0 ? _err$message : 'ERROR']
                 }))));
               }
 
             case 20:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, null, [[4, 17]]);
+      }, _callee3, null, [[4, 17]]);
     }));
 
     return function loadOrders() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4() {
       var _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _err$message2;
 
-      return _regenerator.default.wrap(function _callee3$(_context3) {
+      return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: true
               }))));
-              _context3.prev = 1;
-              _context3.next = 4;
+              _context4.prev = 1;
+              _context4.next = 4;
               return getOrders({
                 page: ordersGroup[currentTabSelected].pagination.currentPage + 1,
                 orderStatus: ordersGroup[currentTabSelected].currentFilter,
@@ -405,7 +535,7 @@ var OrderListGroups = function OrderListGroups(props) {
               });
 
             case 4:
-              _yield$getOrders2 = _context3.sent;
+              _yield$getOrders2 = _context4.sent;
               _yield$getOrders2$con = _yield$getOrders2.content;
               error = _yield$getOrders2$con.error;
               result = _yield$getOrders2$con.result;
@@ -423,47 +553,47 @@ var OrderListGroups = function OrderListGroups(props) {
                   to: pagination.to
                 }) : ordersGroup[currentTabSelected].pagination
               }))));
-              _context3.next = 15;
+              _context4.next = 15;
               break;
 
             case 12:
-              _context3.prev = 12;
-              _context3.t0 = _context3["catch"](1);
+              _context4.prev = 12;
+              _context4.t0 = _context4["catch"](1);
 
-              if (_context3.t0.constructor.name !== 'Cancel') {
+              if (_context4.t0.constructor.name !== 'Cancel') {
                 setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                   loading: false,
-                  error: [(_err$message2 = _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message) !== null && _err$message2 !== void 0 ? _err$message2 : 'ERROR']
+                  error: [(_err$message2 = _context4.t0 === null || _context4.t0 === void 0 ? void 0 : _context4.t0.message) !== null && _err$message2 !== void 0 ? _err$message2 : 'ERROR']
                 }))));
               }
 
             case 15:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3, null, [[1, 12]]);
+      }, _callee4, null, [[1, 12]]);
     }));
 
     return function loadMoreOrders() {
-      return _ref5.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
 
   var loadMessages = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(orderId) {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(orderId) {
       var url, response, _yield$response$json, error, result;
 
-      return _regenerator.default.wrap(function _callee4$(_context4) {
+      return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
-              _context4.prev = 0;
+              _context5.prev = 0;
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: true
               }));
               url = "".concat(ordering.root, "/orders/").concat(orderId, "/messages?mode=dashboard");
-              _context4.next = 5;
+              _context5.next = 5;
               return fetch(url, {
                 method: 'GET',
                 headers: {
@@ -473,12 +603,12 @@ var OrderListGroups = function OrderListGroups(props) {
               });
 
             case 5:
-              response = _context4.sent;
-              _context4.next = 8;
+              response = _context5.sent;
+              _context5.next = 8;
               return response.json();
 
             case 8:
-              _yield$response$json = _context4.sent;
+              _yield$response$json = _context5.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
 
@@ -495,27 +625,155 @@ var OrderListGroups = function OrderListGroups(props) {
                 }));
               }
 
-              _context4.next = 17;
+              _context5.next = 17;
               break;
 
             case 14:
-              _context4.prev = 14;
-              _context4.t0 = _context4["catch"](0);
+              _context5.prev = 14;
+              _context5.t0 = _context5["catch"](0);
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: false,
-                error: [_context4.t0.Messages]
+                error: [_context5.t0.Messages]
               }));
 
             case 17:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
         }
-      }, _callee4, null, [[0, 14]]);
+      }, _callee5, null, [[0, 14]]);
     }));
 
     return function loadMessages(_x2) {
-      return _ref6.apply(this, arguments);
+      return _ref7.apply(this, arguments);
+    };
+  }();
+
+  var deleteOrders = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(orderIds) {
+      var errorState, _yield$ordering$setAc3, error, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
+
+      return _regenerator.default.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.prev = 0;
+              setOrdersDeleted(_objectSpread(_objectSpread({}, ordersDeleted), {}, {
+                loading: true
+              }));
+              errorState = [];
+
+              if (!(orderIds.length === 1)) {
+                _context6.next = 11;
+                break;
+              }
+
+              _context6.next = 6;
+              return ordering.setAccessToken(accessToken).orders(orderIds[0]).delete();
+
+            case 6:
+              _yield$ordering$setAc3 = _context6.sent;
+              error = _yield$ordering$setAc3.content.error;
+              errorState.push({
+                error: error,
+                id: orderIds[0]
+              });
+              _context6.next = 32;
+              break;
+
+            case 11:
+              if (!(orderIds.length > 1)) {
+                _context6.next = 32;
+                break;
+              }
+
+              _iterator = _createForOfIteratorHelper(orderIds);
+              _context6.prev = 13;
+
+              _iterator.s();
+
+            case 15:
+              if ((_step = _iterator.n()).done) {
+                _context6.next = 24;
+                break;
+              }
+
+              id = _step.value;
+              _context6.next = 19;
+              return ordering.setAccessToken(accessToken).orders(id).delete();
+
+            case 19:
+              _yield$ordering$setAc4 = _context6.sent;
+              multiError = _yield$ordering$setAc4.content.error;
+              errorState.push({
+                error: multiError,
+                id: id
+              });
+
+            case 22:
+              _context6.next = 15;
+              break;
+
+            case 24:
+              _context6.next = 29;
+              break;
+
+            case 26:
+              _context6.prev = 26;
+              _context6.t0 = _context6["catch"](13);
+
+              _iterator.e(_context6.t0);
+
+            case 29:
+              _context6.prev = 29;
+
+              _iterator.f();
+
+              return _context6.finish(29);
+
+            case 32:
+              isError = errorState.some(function (e) {
+                return e.error;
+              });
+              idsDeleted = errorState.map(function (obj) {
+                return !obj.error && obj.id;
+              });
+              onOrdersDeleted && onOrdersDeleted({
+                isError: isError,
+                list: idsDeleted
+              });
+              setOrdersDeleted(_objectSpread(_objectSpread({}, ordersDeleted), {}, {
+                loading: false
+              }));
+              setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
+                orders: idsDeleted.length ? sortOrders(ordersGroup[currentTabSelected].orders.filter(function (order) {
+                  return !idsDeleted.includes(order.id);
+                })) : sortOrders(ordersGroup[currentTabSelected].orders)
+              }))));
+              _context6.next = 42;
+              break;
+
+            case 39:
+              _context6.prev = 39;
+              _context6.t1 = _context6["catch"](0);
+
+              if (_context6.t1.constructor.name !== 'Cancel') {
+                setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
+                  loading: false,
+                  error: [(_err$message3 = _context6.t1 === null || _context6.t1 === void 0 ? void 0 : _context6.t1.message) !== null && _err$message3 !== void 0 ? _err$message3 : 'ERROR']
+                }))));
+              }
+
+            case 42:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[0, 39], [13, 26, 29, 32]]);
+    }));
+
+    return function deleteOrders(_x3) {
+      return _ref8.apply(this, arguments);
     };
   }();
 
@@ -600,6 +858,12 @@ var OrderListGroups = function OrderListGroups(props) {
       });
     }
   }, [currentFilters]);
+  (0, _react.useEffect)(function () {
+    if (!filtered) return;
+    loadOrders({
+      newFetch: true
+    });
+  }, [filtered]);
   (0, _react.useEffect)(function () {
     if (ordersGroup[currentTabSelected].loading) return;
 
@@ -706,12 +970,6 @@ var OrderListGroups = function OrderListGroups(props) {
       request && request.cancel && request.cancel();
     };
   }, [requestsState.orders]);
-  (0, _react.useEffect)(function () {
-    if (!filtered) return;
-    loadOrders({
-      newFetch: true
-    });
-  }, [filtered]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     currentFilters: currentFilters,
     setCurrentFilters: setCurrentFilters,
@@ -720,8 +978,11 @@ var OrderListGroups = function OrderListGroups(props) {
     ordersGroup: ordersGroup,
     setOrdersGroup: setOrdersGroup,
     messages: messages,
+    ordersDeleted: ordersDeleted,
+    setOrdersDeleted: setOrdersDeleted,
     setMessages: setMessages,
     loadOrders: loadOrders,
+    deleteOrders: deleteOrders,
     loadMessages: loadMessages,
     loadMoreOrders: loadMoreOrders,
     handleClickOrder: handleClickOrder,

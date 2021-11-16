@@ -739,7 +739,7 @@ var OrderDetails = function OrderDetails(props) {
         requestsState.business.cancel();
       }
     };
-  }, []);
+  }, [props.order]);
   (0, _react.useEffect)(function () {
     var _orderState$order11;
 

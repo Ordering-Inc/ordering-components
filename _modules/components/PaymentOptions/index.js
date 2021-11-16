@@ -129,11 +129,14 @@ var PaymentOptions = function PaymentOptions(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
-              _context.next = 3;
+              setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
+                loading: true
+              }));
+              _context.prev = 1;
+              _context.next = 4;
               return ordering.businesses(businessId).get();
 
-            case 3:
+            case 4:
               _yield$ordering$busin = _context.sent;
               _yield$ordering$busin2 = _yield$ordering$busin.content;
               error = _yield$ordering$busin2.error;
@@ -144,27 +147,27 @@ var PaymentOptions = function PaymentOptions(props) {
               }
 
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
-                error: error ? result : null,
                 loading: false,
+                error: error ? result : null,
                 paymethods: error ? [] : parsePaymethods(result.paymethods)
               }));
-              _context.next = 14;
+              _context.next = 15;
               break;
 
-            case 11:
-              _context.prev = 11;
-              _context.t0 = _context["catch"](0);
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](1);
               setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[1, 12]]);
     }));
 
     return function getPaymentOptions() {
@@ -255,11 +258,9 @@ var PaymentOptions = function PaymentOptions(props) {
     }
   }, [paymethodSelected]);
   (0, _react.useEffect)(function () {
-    if (isLoading) return;
-
     if (paymethods) {
       setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
-        loading: false,
+        loading: isLoading,
         paymethods: parsePaymethods(paymethods)
       }));
     } else {
