@@ -36,6 +36,7 @@ import { OrderChange } from '../src/components/OrderChange'
 import { OrderList } from '../src/components/OrderList'
 import { OrderListGroups } from '../src/components/OrderListGroups'
 import { OrderTypeControl } from '../src/components/OrderTypeControl'
+import { OrdersControlFilters } from '../src/components/OrdersControlFilters'
 import { OrderDetails } from '../src/components/OrderDetails'
 import { OrderReview } from '../src/components/OrderReview'
 import { PaymethodList } from '../src/components/PaymethodList'
@@ -119,6 +120,7 @@ export {
   MyOrdersList,
   OrderList,
   OrderTypeControl,
+  OrdersControlFilters,
   OrderChange,
   OrderDetails,
   OrderReview,

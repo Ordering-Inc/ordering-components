@@ -301,7 +301,7 @@ export const OrderDetails = (props) => {
         requestsState.business.cancel()
       }
     }
-  }, [])
+  }, [props.order])
 
   useEffect(() => {
     if (orderState.loading || loading) return
