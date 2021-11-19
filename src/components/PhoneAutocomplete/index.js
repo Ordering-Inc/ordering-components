@@ -4,7 +4,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 
 export const PhoneAutocomplete = (props) => {
-  const { UIComponent } = props
+  const { UIComponent, isIos } = props
 
   const [ordering] = useApi()
   const [{ token }] = useSession()
@@ -23,14 +23,14 @@ export const PhoneAutocomplete = (props) => {
       attribute: 'cellphone',
       value: {
         condition: 'ilike',
-        value: encodeURI(`%${phone}%`)
+        value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
       }
     },
     {
       attribute: 'phone',
       value: {
         condition: 'ilike',
-        value: encodeURI(`%${phone}%`)
+        value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
       }
     }]
     try {
