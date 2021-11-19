@@ -16,7 +16,8 @@ export const GoogleMaps = (props) => {
     handleChangeAddressMap,
     maxLimitLocation,
     businessMap,
-    onBusinessClick
+    onBusinessClick,
+    isFranchise
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -56,7 +57,7 @@ export const GoogleMaps = (props) => {
       })
       if (businessMap) {
         const isNear = validateResult(googleMap, marker, marker.getPosition())
-        if (isNear) {
+        if (isNear || isFranchise) {
           if (i === 0 && locations[0]?.markerPopup) {
             const infowindow = new window.google.maps.InfoWindow()
             infowindow.setContent(locations[0]?.markerPopup)
