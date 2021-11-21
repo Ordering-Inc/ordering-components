@@ -169,7 +169,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Change order address
    */
-  const changeAddress = async (addressId, params) => {
+  const changeAddress = async (addressId, params, aditionalUpdates = {}) => {
     if (typeof addressId === 'object') {
       const optionsStorage = await strategy.getItem('options', true)
       const options = {
@@ -180,7 +180,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           ...addressId
         }
       }
-
       if (!session.auth) {
         options.type = state?.options?.type
       }
@@ -204,8 +203,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       updateOrderOptions({ address_id: addressId })
       return
     }
-
-    updateOrderOptions({ address_id: addressId })
+    updateOrderOptions({ address_id: addressId, ...aditionalUpdates })
   }
 
   /**
@@ -268,6 +266,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         ...changes,
         user_id: userCustomerId || session.user.id
       }
+      console.log('body', body)
       try {
         setState({ ...state, loading: true })
         state.loading = true
