@@ -266,7 +266,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         ...changes,
         user_id: userCustomerId || session.user.id
       }
-      console.log('body', body)
       try {
         setState({ ...state, loading: true })
         state.loading = true
