@@ -61,19 +61,23 @@ var CustomerProvider = function CustomerProvider(_ref) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              _context.next = 3;
               return strategy.getItem('user-customer', true);
 
-            case 2:
+            case 3:
               user = _context.sent;
 
               if (user) {
                 setState(_objectSpread(_objectSpread({}, state), {}, {
-                  user: user
+                  user: user,
+                  loading: false
                 }));
               }
 
-            case 4:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -93,19 +97,23 @@ var CustomerProvider = function CustomerProvider(_ref) {
           switch (_context2.prev = _context2.next) {
             case 0:
               if (!(isFromLocalStorage && user)) {
-                _context2.next = 3;
+                _context2.next = 4;
                 break;
               }
 
-              _context2.next = 3;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
               return strategy.setItem('user-customer', user, true);
 
-            case 3:
+            case 4:
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                user: user
+                user: user,
+                loading: false
               }));
 
-            case 4:
+            case 5:
             case "end":
               return _context2.stop();
           }
@@ -125,19 +133,23 @@ var CustomerProvider = function CustomerProvider(_ref) {
           switch (_context3.prev = _context3.next) {
             case 0:
               if (!isFromLocalStorage) {
-                _context3.next = 3;
+                _context3.next = 4;
                 break;
               }
 
-              _context3.next = 3;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              _context3.next = 4;
               return strategy.removeItem('user-customer');
 
-            case 3:
+            case 4:
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                user: null
+                user: null,
+                loading: false
               }));
 
-            case 4:
+            case 5:
             case "end":
               return _context3.stop();
           }
