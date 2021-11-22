@@ -13,7 +13,9 @@ export const CustomerProvider = ({ children, strategy }) => {
     const user = await strategy.getItem('user-customer', true)
     if (user) {
       setState({ ...state, user, loading: false })
+      return
     }
+    setState({ ...state, loading: false })
   }
 
   const setUserCustomer = async (user, isFromLocalStorage) => {
