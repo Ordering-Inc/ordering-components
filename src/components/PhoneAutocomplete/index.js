@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
-
+import { useOrder } from '../../contexts/OrderContext'
 export const PhoneAutocomplete = (props) => {
-  const { UIComponent } = props
+  const { UIComponent, isIos, businessSlug } = props
 
   const [ordering] = useApi()
   const [{ token }] = useSession()
-
+  const [, { changeAddress }] = useOrder()
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
   const [customersPhones, setCustomersPhones] = useState({ users: [], loading: false, error: null })
-
+  const [businessAddress, setBusinessAddress] = useState(null)
+  const [alertState, setAlertState] = useState({ open: true, content: [] })
   /**
    * Get users from API
    */
@@ -23,14 +24,14 @@ export const PhoneAutocomplete = (props) => {
       attribute: 'cellphone',
       value: {
         condition: 'ilike',
-        value: encodeURI(`%${phone}%`)
+        value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
       }
     },
     {
       attribute: 'phone',
       value: {
         condition: 'ilike',
-        value: encodeURI(`%${phone}%`)
+        value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
       }
     }]
     try {
@@ -47,6 +48,61 @@ export const PhoneAutocomplete = (props) => {
       setCustomersPhones({ ...customersPhones, loading: false, error: e.message })
     }
   }
+  /**
+   * fetch business to get its address
+   */
+  const getBusiness = async () => {
+    const { content: { result, error } } = await ordering
+      .businesses('mcbonalds')
+      .select([
+        'address',
+        'location',
+        'distance'
+      ])
+      .parameters()
+      .get()
+    if (error) {
+      setAlertState({ open: true, content: result })
+      return
+    }
+    setBusinessAddress(result)
+  }
+
+  const setBusinessAddressToUser = async (userId, onRedirect) => {
+    if (!businessAddress) return
+    try {
+      const { content: { result: resultAddresses, error } } = await ordering.users(userId).addresses().get()
+      if (error) {
+        setAlertState({ open: true, content: resultAddresses })
+        return
+      }
+      const userBusinessAddress = resultAddresses.find((address) => address.address === businessAddress.address || address.location === businessAddress.location)
+      let addressId = userBusinessAddress?.id
+      if (!userBusinessAddress) {
+        const response = await ordering.users(userId).addresses().save({ address: businessAddress.address, location: businessAddress.location })
+        if (response.content.error) {
+          setAlertState({ open: true, content: response.content.result })
+          return
+        }
+        addressId = response.content.result.id
+      }
+      const addressResponse = await ordering.users(userId).addresses(addressId).save({ default: true })
+      if (addressResponse.content.error) {
+        setAlertState({ open: true, content: addressResponse.content.result })
+        return
+      }
+      changeAddress(addressResponse.content.result.id, {
+        address: addressResponse.content.result,
+        isEdit: false
+      }, { type: 3 })
+      onRedirect && onRedirect()
+    } catch (err) {
+      setAlertState({
+        open: true,
+        content: err.message
+      })
+    }
+  }
 
   useEffect(() => {
     if (
@@ -61,6 +117,12 @@ export const PhoneAutocomplete = (props) => {
     }
   }, [phone])
 
+  useEffect(() => {
+    if (businessSlug) {
+      getBusiness()
+    }
+  }, [businessSlug])
+
   return (
     <>
       {UIComponent && (
@@ -74,6 +136,8 @@ export const PhoneAutocomplete = (props) => {
           openModal={openModal}
           setOpenModal={setOpenModal}
           setCustomerState={setCustomerState}
+          setBusinessAddressToUser={setBusinessAddressToUser}
+          alertState={alertState}
         />
       )}
     </>
