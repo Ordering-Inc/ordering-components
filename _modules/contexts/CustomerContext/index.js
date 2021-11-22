@@ -70,14 +70,23 @@ var CustomerProvider = function CustomerProvider(_ref) {
             case 3:
               user = _context.sent;
 
-              if (user) {
-                setState(_objectSpread(_objectSpread({}, state), {}, {
-                  user: user,
-                  loading: false
-                }));
+              if (!user) {
+                _context.next = 7;
+                break;
               }
 
-            case 5:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                user: user,
+                loading: false
+              }));
+              return _context.abrupt("return");
+
+            case 7:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+
+            case 8:
             case "end":
               return _context.stop();
           }
