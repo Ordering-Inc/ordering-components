@@ -389,21 +389,28 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
-      var optionsStorage, options, _state$options6, _params$address;
+      var aditionalUpdates,
+          optionsStorage,
+          options,
+          _state$options6,
+          _params$address,
+          _args2 = arguments;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              aditionalUpdates = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : {};
+
               if (!(_typeof(addressId) === 'object')) {
-                _context2.next = 10;
+                _context2.next = 11;
                 break;
               }
 
-              _context2.next = 3;
+              _context2.next = 4;
               return strategy.getItem('options', true);
 
-            case 3:
+            case 4:
               optionsStorage = _context2.sent;
               options = _objectSpread(_objectSpread(_objectSpread({}, state.options), optionsStorage), {}, {
                 address: _objectSpread(_objectSpread({}, optionsStorage === null || optionsStorage === void 0 ? void 0 : optionsStorage.address), addressId)
@@ -413,18 +420,18 @@ var OrderProvider = function OrderProvider(_ref) {
                 options.type = state === null || state === void 0 ? void 0 : (_state$options6 = state.options) === null || _state$options6 === void 0 ? void 0 : _state$options6.type;
               }
 
-              _context2.next = 8;
+              _context2.next = 9;
               return strategy.setItem('options', options, true);
 
-            case 8:
+            case 9:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 options: options
               }));
               return _context2.abrupt("return");
 
-            case 10:
+            case 11:
               if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-                _context2.next = 13;
+                _context2.next = 14;
                 break;
               }
 
@@ -433,31 +440,31 @@ var OrderProvider = function OrderProvider(_ref) {
               });
               return _context2.abrupt("return");
 
-            case 13:
+            case 14:
               if (!(params && params !== null && params !== void 0 && params.isEdit)) {
-                _context2.next = 18;
+                _context2.next = 19;
                 break;
               }
 
               if (!(addressId !== state.options.address_id)) {
-                _context2.next = 16;
+                _context2.next = 17;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 16:
+            case 17:
               updateOrderOptions({
                 address_id: addressId
               });
               return _context2.abrupt("return");
 
-            case 18:
-              updateOrderOptions({
-                address_id: addressId
-              });
-
             case 19:
+              updateOrderOptions(_objectSpread({
+                address_id: addressId
+              }, aditionalUpdates));
+
+            case 20:
             case "end":
               return _context2.stop();
           }
