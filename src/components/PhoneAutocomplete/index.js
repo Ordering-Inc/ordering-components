@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useCustomer } from '../../contexts/CustomerContext'
 export const PhoneAutocomplete = (props) => {
   const { UIComponent, isIos, businessSlug } = props
 
   const [ordering] = useApi()
   const [{ token }] = useSession()
   const [, { changeAddress }] = useOrder()
+  const [, { setLoadingCustomer }] = useCustomer()
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
@@ -70,6 +72,7 @@ export const PhoneAutocomplete = (props) => {
 
   const setBusinessAddressToUser = async (userId, onRedirect) => {
     if (!businessAddress) return
+    setLoadingCustomer(true)
     try {
       const { content: { result: resultAddresses, error } } = await ordering.users(userId).addresses().get()
       if (error) {
@@ -91,16 +94,18 @@ export const PhoneAutocomplete = (props) => {
         setAlertState({ open: true, content: addressResponse.content.result })
         return
       }
-      changeAddress(addressResponse.content.result.id, {
+      await changeAddress(addressResponse.content.result.id, {
         address: addressResponse.content.result,
         isEdit: false
       }, { type: 3 })
       onRedirect && onRedirect()
+      setLoadingCustomer(false)
     } catch (err) {
       setAlertState({
         open: true,
         content: err.message
       })
+      setLoadingCustomer(false)
     }
   }
 
