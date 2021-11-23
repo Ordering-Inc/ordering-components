@@ -42,7 +42,12 @@ export const CustomerProvider = ({ children, strategy }) => {
     })
   }
 
+  const setLoadingCustomer = (value) => {
+    setState({ ...state, loading: value })
+  }
+
   const functions = {
+    setLoadingCustomer,
     setUserCustomer,
     deleteUserCustomer
   }

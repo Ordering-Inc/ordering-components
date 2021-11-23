@@ -192,7 +192,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
 
     if (params && params?.address && !checkAddress(params?.address)) {
-      updateOrderOptions({ address_id: params?.address?.id })
+      updateOrderOptions({ address_id: params?.address?.id, ...aditionalUpdates })
       return
     }
 
