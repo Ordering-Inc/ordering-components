@@ -171,7 +171,14 @@ var CustomerProvider = function CustomerProvider(_ref) {
     };
   }();
 
+  var setLoadingCustomer = function setLoadingCustomer(value) {
+    setState(_objectSpread(_objectSpread({}, state), {}, {
+      loading: value
+    }));
+  };
+
   var functions = {
+    setLoadingCustomer: setLoadingCustomer,
     setUserCustomer: setUserCustomer,
     deleteUserCustomer: deleteUserCustomer
   };
