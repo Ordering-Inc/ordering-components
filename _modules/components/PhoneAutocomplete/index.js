@@ -19,6 +19,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _OrderContext = require("../../contexts/OrderContext");
 
+var _CustomerContext = require("../../contexts/CustomerContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -65,6 +67,10 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       changeAddress = _useOrder2[1].changeAddress;
+
+  var _useCustomer = (0, _CustomerContext.useCustomer)(),
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      setLoadingCustomer = _useCustomer2[1].setLoadingCustomer;
 
   var _useState = (0, _react.useState)(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -241,18 +247,19 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               return _context3.abrupt("return");
 
             case 2:
-              _context3.prev = 2;
-              _context3.next = 5;
+              setLoadingCustomer(true);
+              _context3.prev = 3;
+              _context3.next = 6;
               return ordering.users(userId).addresses().get();
 
-            case 5:
+            case 6:
               _yield$ordering$users = _context3.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               resultAddresses = _yield$ordering$users2.result;
               error = _yield$ordering$users2.error;
 
               if (!error) {
-                _context3.next = 12;
+                _context3.next = 13;
                 break;
               }
 
@@ -262,28 +269,28 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 12:
+            case 13:
               userBusinessAddress = resultAddresses.find(function (address) {
                 return address.address === businessAddress.address || address.location === businessAddress.location;
               });
               addressId = userBusinessAddress === null || userBusinessAddress === void 0 ? void 0 : userBusinessAddress.id;
 
               if (userBusinessAddress) {
-                _context3.next = 22;
+                _context3.next = 23;
                 break;
               }
 
-              _context3.next = 17;
+              _context3.next = 18;
               return ordering.users(userId).addresses().save({
                 address: businessAddress.address,
                 location: businessAddress.location
               });
 
-            case 17:
+            case 18:
               response = _context3.sent;
 
               if (!response.content.error) {
-                _context3.next = 21;
+                _context3.next = 22;
                 break;
               }
 
@@ -293,20 +300,20 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 21:
+            case 22:
               addressId = response.content.result.id;
 
-            case 22:
-              _context3.next = 24;
+            case 23:
+              _context3.next = 25;
               return ordering.users(userId).addresses(addressId).save({
                 default: true
               });
 
-            case 24:
+            case 25:
               addressResponse = _context3.sent;
 
               if (!addressResponse.content.error) {
-                _context3.next = 28;
+                _context3.next = 29;
                 break;
               }
 
@@ -316,31 +323,36 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 28:
-              changeAddress(addressResponse.content.result.id, {
+            case 29:
+              _context3.next = 31;
+              return changeAddress(addressResponse.content.result.id, {
                 address: addressResponse.content.result,
                 isEdit: false
               }, {
                 type: 3
               });
+
+            case 31:
               onRedirect && onRedirect();
-              _context3.next = 35;
+              setLoadingCustomer(false);
+              _context3.next = 39;
               break;
 
-            case 32:
-              _context3.prev = 32;
-              _context3.t0 = _context3["catch"](2);
+            case 35:
+              _context3.prev = 35;
+              _context3.t0 = _context3["catch"](3);
               setAlertState({
                 open: true,
                 content: _context3.t0.message
               });
+              setLoadingCustomer(false);
 
-            case 35:
+            case 39:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[2, 32]]);
+      }, _callee3, null, [[3, 35]]);
     }));
 
     return function setBusinessAddressToUser(_x, _x2) {
