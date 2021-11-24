@@ -29,13 +29,9 @@ var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 
-var _excluded = ["carts"],
-    _excluded2 = ["carts"],
-    _excluded3 = ["carts"];
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,7 +41,7 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -63,7 +59,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -131,8 +127,9 @@ var OrderProvider = function OrderProvider(_ref) {
       logout = _useSession2[1].logout;
 
   var _useCustomer = (0, _CustomerContext.useCustomer)(),
-      _useCustomer2 = _slicedToArray(_useCustomer, 1),
-      customerState = _useCustomer2[0];
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      customerState = _useCustomer2[0],
+      setUserCustomer = _useCustomer2[1].setUserCustomer;
 
   var _useToast = (0, _ToastContext.useToast)(),
       _useToast2 = _slicedToArray(_useToast, 2),
@@ -207,7 +204,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc2.result;
 
               if (!error) {
-                carts = result.carts, _options = _objectWithoutProperties(result, _excluded);
+                carts = result.carts, _options = _objectWithoutProperties(result, ["carts"]);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -389,28 +386,21 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
-      var aditionalUpdates,
-          optionsStorage,
-          options,
-          _state$options6,
-          _params$address,
-          _args2 = arguments;
+      var optionsStorage, options, _state$options6, _params$address;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              aditionalUpdates = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : {};
-
               if (!(_typeof(addressId) === 'object')) {
-                _context2.next = 11;
+                _context2.next = 10;
                 break;
               }
 
-              _context2.next = 4;
+              _context2.next = 3;
               return strategy.getItem('options', true);
 
-            case 4:
+            case 3:
               optionsStorage = _context2.sent;
               options = _objectSpread(_objectSpread(_objectSpread({}, state.options), optionsStorage), {}, {
                 address: _objectSpread(_objectSpread({}, optionsStorage === null || optionsStorage === void 0 ? void 0 : optionsStorage.address), addressId)
@@ -420,18 +410,18 @@ var OrderProvider = function OrderProvider(_ref) {
                 options.type = state === null || state === void 0 ? void 0 : (_state$options6 = state.options) === null || _state$options6 === void 0 ? void 0 : _state$options6.type;
               }
 
-              _context2.next = 9;
+              _context2.next = 8;
               return strategy.setItem('options', options, true);
 
-            case 9:
+            case 8:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 options: options
               }));
               return _context2.abrupt("return");
 
-            case 11:
+            case 10:
               if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-                _context2.next = 14;
+                _context2.next = 13;
                 break;
               }
 
@@ -440,31 +430,31 @@ var OrderProvider = function OrderProvider(_ref) {
               }, aditionalUpdates));
               return _context2.abrupt("return");
 
-            case 14:
+            case 13:
               if (!(params && params !== null && params !== void 0 && params.isEdit)) {
-                _context2.next = 19;
+                _context2.next = 18;
                 break;
               }
 
               if (!(addressId !== state.options.address_id)) {
-                _context2.next = 17;
+                _context2.next = 16;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 17:
+            case 16:
               updateOrderOptions({
                 address_id: addressId
               });
               return _context2.abrupt("return");
 
-            case 19:
-              updateOrderOptions(_objectSpread({
+            case 18:
+              updateOrderOptions({
                 address_id: addressId
-              }, aditionalUpdates));
+              });
 
-            case 20:
+            case 19:
             case "end":
               return _context2.stop();
           }
@@ -633,7 +623,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc6.result;
 
               if (!error) {
-                carts = result.carts, options = _objectWithoutProperties(result, _excluded2);
+                carts = result.carts, options = _objectWithoutProperties(result, ["carts"]);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -1671,6 +1661,46 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
 
+  var setUserCustomerOptions = /*#__PURE__*/function () {
+    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee17(params) {
+      var addressId, type, customer, options;
+      return _regenerator.default.wrap(function _callee17$(_context17) {
+        while (1) {
+          switch (_context17.prev = _context17.next) {
+            case 0:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              addressId = params.addressId, type = params.type, customer = params.customer;
+              options = {
+                address_id: addressId,
+                type: type
+              };
+              _context17.next = 5;
+              return setUserCustomer(customer, true);
+
+            case 5:
+              _context17.next = 7;
+              return updateOrderOptions(options);
+
+            case 7:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+
+            case 8:
+            case "end":
+              return _context17.stop();
+          }
+        }
+      }, _callee17);
+    }));
+
+    return function setUserCustomerOptions(_x27) {
+      return _ref18.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     if (session.loading || languageState.loading) return;
 
@@ -1725,9 +1755,9 @@ var OrderProvider = function OrderProvider(_ref) {
       }));
     };
 
-    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref18) {
-      var carts = _ref18.carts,
-          options = _objectWithoutProperties(_ref18, _excluded3);
+    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref19) {
+      var carts = _ref19.carts,
+          options = _objectWithoutProperties(_ref19, ["carts"]);
 
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
@@ -1788,7 +1818,8 @@ var OrderProvider = function OrderProvider(_ref) {
     reorder: reorder,
     setAlert: setAlert,
     setConfirm: setConfirm,
-    changePaymethod: changePaymethod
+    changePaymethod: changePaymethod,
+    setUserCustomerOptions: setUserCustomerOptions
   };
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
