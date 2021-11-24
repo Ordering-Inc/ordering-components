@@ -70,8 +70,8 @@ export const AddressList = (props) => {
    * Function to make an address as default address
    * @param {object} address Address to make as default
    */
-  const handleSetDefault = async (address, userCustomerSetup, sameAddress) => {
-    if (userCustomerSetup) {
+  const handleSetDefault = async (address, userCustomerSetup, sameAddress, dontSetUserCustomer) => {
+    if (userCustomerSetup && !dontSetUserCustomer) {
       setUserCustomer({
         ...userCustomerSetup,
         address: address?.address,
