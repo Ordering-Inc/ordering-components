@@ -32,7 +32,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const [events] = useEvent()
   const [configState] = useConfig()
   const [session, { logout }] = useSession()
-  const [customerState] = useCustomer()
+  const [customerState, { setUserCustomer }] = useCustomer()
   const [, { showToast }] = useToast()
 
   const configTypes = configState?.configs?.order_types_allowed?.value.split('|').map(value => Number(value)) || []
@@ -169,7 +169,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Change order address
    */
-  const changeAddress = async (addressId, params, aditionalUpdates = {}) => {
+  const changeAddress = async (addressId, params) => {
     if (typeof addressId === 'object') {
       const optionsStorage = await strategy.getItem('options', true)
       const options = {
@@ -203,7 +203,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       updateOrderOptions({ address_id: addressId })
       return
     }
-    updateOrderOptions({ address_id: addressId, ...aditionalUpdates })
+    updateOrderOptions({ address_id: addressId })
   }
 
   /**
@@ -690,6 +690,21 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     })
   }
 
+  const setUserCustomerOptions = async (params) => {
+    setState({
+      ...state,
+      loading: true
+    })
+    const { addressId, type, customer } = params
+    const options = { address_id: addressId, type }
+    await setUserCustomer(customer, true)
+    await updateOrderOptions(options)
+    setState({
+      ...state,
+      loading: false
+    })
+  }
+
   useEffect(() => {
     if (session.loading || languageState.loading) return
     if (session.auth) {
@@ -792,7 +807,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     reorder,
     setAlert,
     setConfirm,
-    changePaymethod
+    changePaymethod,
+    setUserCustomerOptions
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
