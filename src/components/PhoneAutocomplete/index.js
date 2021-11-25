@@ -3,14 +3,13 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
-import { useCustomer } from '../../contexts/CustomerContext'
+
 export const PhoneAutocomplete = (props) => {
   const { UIComponent, isIos, businessSlug } = props
 
   const [ordering] = useApi()
   const [{ token }] = useSession()
-  const [, { changeAddress }] = useOrder()
-  const [, { setLoadingCustomer }] = useCustomer()
+  const [, { setUserCustomerOptions }] = useOrder()
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
@@ -70,11 +69,10 @@ export const PhoneAutocomplete = (props) => {
     setBusinessAddress(result)
   }
 
-  const setBusinessAddressToUser = async (userId, onRedirect) => {
+  const setBusinessAddressToUser = async (user, onRedirect) => {
     if (!businessAddress) return
-    setLoadingCustomer(true)
     try {
-      const { content: { result: resultAddresses, error } } = await ordering.users(userId).addresses().get()
+      const { content: { result: resultAddresses, error } } = await ordering.users(user.id).addresses().get()
       if (error) {
         setAlertState({ open: true, content: resultAddresses })
         return
@@ -82,30 +80,25 @@ export const PhoneAutocomplete = (props) => {
       const userBusinessAddress = resultAddresses.find((address) => address.address === businessAddress.address || address.location === businessAddress.location)
       let addressId = userBusinessAddress?.id
       if (!userBusinessAddress) {
-        const response = await ordering.users(userId).addresses().save({ address: businessAddress.address, location: businessAddress.location })
+        const response = await ordering.users(user.id).addresses().save({ address: businessAddress.address, location: businessAddress.location })
         if (response.content.error) {
           setAlertState({ open: true, content: response.content.result })
           return
         }
         addressId = response.content.result.id
       }
-      const addressResponse = await ordering.users(userId).addresses(addressId).save({ default: true })
+      const addressResponse = await ordering.users(user.id).addresses(addressId).save({ default: true })
       if (addressResponse.content.error) {
         setAlertState({ open: true, content: addressResponse.content.result })
         return
       }
-      await changeAddress(addressResponse.content.result.id, {
-        address: addressResponse.content.result,
-        isEdit: false
-      }, { type: 3 })
+      await setUserCustomerOptions({ addressId: addressResponse.content.result.id, type: 3, customer: user })
       onRedirect && onRedirect()
-      setLoadingCustomer(false)
     } catch (err) {
       setAlertState({
         open: true,
         content: err.message
       })
-      setLoadingCustomer(false)
     }
   }
 

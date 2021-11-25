@@ -37,13 +37,13 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                   <ValidationFieldsProvider>
                     <SessionProvider strategy={webStrategy}>
                       <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}>
-                        <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
-                          <BusinessProvider>
-                            <CustomerProvider strategy={webStrategy}>
+                        <CustomerProvider strategy={webStrategy}>
+                          <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
+                            <BusinessProvider>
                               {children}
-                            </CustomerProvider>
-                          </BusinessProvider>
-                        </OrderProvider>
+                            </BusinessProvider>
+                          </OrderProvider>
+                        </CustomerProvider>
                       </WebsocketProvider>
                     </SessionProvider>
                   </ValidationFieldsProvider>
