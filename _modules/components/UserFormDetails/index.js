@@ -182,7 +182,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(changes, isImage, image) {
-      var response, _props$userData, _formState$changes, photo, _changes, _props$userData2;
+      var response, _props$userData, _formState$changes, photo, _changes, _props$userData2, _changes$setCustomerI;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -251,7 +251,7 @@ var UserFormDetails = function UserFormDetails(props) {
                 if (!isCustomerMode) {
                   changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
                 } else {
-                  setUserCustomer(_objectSpread(_objectSpread({}, customer.user), response.content.result), true);
+                  setUserCustomer(_objectSpread(_objectSpread({}, customer.user), response.content.result), (_changes$setCustomerI = changes === null || changes === void 0 ? void 0 : changes.setCustomerInLocal) !== null && _changes$setCustomerI !== void 0 ? _changes$setCustomerI : true);
                 }
 
                 if (handleSuccessUpdate) {

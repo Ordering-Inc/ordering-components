@@ -71,13 +71,13 @@ var OrderingProvider = function OrderingProvider(_ref) {
     settings: Object.assign(settings.socket, {
       project: settings.project
     })
+  }, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
+    strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: nativeStrategy,
     Alert: Alert,
     isDisableToast: isDisableToast
-  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
-    strategy: nativeStrategy
-  }, children)))))))))))));
+  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children)))))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

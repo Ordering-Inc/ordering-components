@@ -180,14 +180,14 @@ var AddressList = function AddressList(props) {
    */
 
   var handleSetDefault = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(address, userCustomerSetup, sameAddress) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(address, userCustomerSetup, sameAddress, dontSetUserCustomer) {
       var _yield$ordering$setAc2, content;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (userCustomerSetup) {
+              if (userCustomerSetup && !dontSetUserCustomer) {
                 setUserCustomer(_objectSpread(_objectSpread({}, userCustomerSetup), {}, {
                   address: address === null || address === void 0 ? void 0 : address.address,
                   address_notes: address === null || address === void 0 ? void 0 : address.address_notes,
@@ -262,7 +262,7 @@ var AddressList = function AddressList(props) {
       }, _callee2, null, [[6, 16]]);
     }));
 
-    return function handleSetDefault(_x, _x2, _x3) {
+    return function handleSetDefault(_x, _x2, _x3, _x4) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -333,7 +333,7 @@ var AddressList = function AddressList(props) {
       }, _callee3, null, [[2, 12]]);
     }));
 
-    return function handleDelete(_x4) {
+    return function handleDelete(_x5) {
       return _ref3.apply(this, arguments);
     };
   }();

@@ -72,13 +72,13 @@ var OrderingProvider = function OrderingProvider(_ref) {
       project: settings.project,
       appId: settings.app_id
     })
+  }, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
+    strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,
     Alert: Alert,
     isAlsea: isAlsea
-  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
-    strategy: webStrategy
-  }, children)))))))))))));
+  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children)))))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

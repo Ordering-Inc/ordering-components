@@ -131,8 +131,9 @@ var OrderProvider = function OrderProvider(_ref) {
       logout = _useSession2[1].logout;
 
   var _useCustomer = (0, _CustomerContext.useCustomer)(),
-      _useCustomer2 = _slicedToArray(_useCustomer, 1),
-      customerState = _useCustomer2[0];
+      _useCustomer2 = _slicedToArray(_useCustomer, 2),
+      customerState = _useCustomer2[0],
+      setUserCustomer = _useCustomer2[1].setUserCustomer;
 
   var _useToast = (0, _ToastContext.useToast)(),
       _useToast2 = _slicedToArray(_useToast, 2),
@@ -389,28 +390,21 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeAddress = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(addressId, params) {
-      var aditionalUpdates,
-          optionsStorage,
-          options,
-          _state$options6,
-          _params$address,
-          _args2 = arguments;
+      var optionsStorage, options, _state$options6, _params$address;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              aditionalUpdates = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : {};
-
               if (!(_typeof(addressId) === 'object')) {
-                _context2.next = 11;
+                _context2.next = 10;
                 break;
               }
 
-              _context2.next = 4;
+              _context2.next = 3;
               return strategy.getItem('options', true);
 
-            case 4:
+            case 3:
               optionsStorage = _context2.sent;
               options = _objectSpread(_objectSpread(_objectSpread({}, state.options), optionsStorage), {}, {
                 address: _objectSpread(_objectSpread({}, optionsStorage === null || optionsStorage === void 0 ? void 0 : optionsStorage.address), addressId)
@@ -420,18 +414,18 @@ var OrderProvider = function OrderProvider(_ref) {
                 options.type = state === null || state === void 0 ? void 0 : (_state$options6 = state.options) === null || _state$options6 === void 0 ? void 0 : _state$options6.type;
               }
 
-              _context2.next = 9;
+              _context2.next = 8;
               return strategy.setItem('options', options, true);
 
-            case 9:
+            case 8:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 options: options
               }));
               return _context2.abrupt("return");
 
-            case 11:
+            case 10:
               if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-                _context2.next = 14;
+                _context2.next = 13;
                 break;
               }
 
@@ -440,31 +434,31 @@ var OrderProvider = function OrderProvider(_ref) {
               }, aditionalUpdates));
               return _context2.abrupt("return");
 
-            case 14:
+            case 13:
               if (!(params && params !== null && params !== void 0 && params.isEdit)) {
-                _context2.next = 19;
+                _context2.next = 18;
                 break;
               }
 
               if (!(addressId !== state.options.address_id)) {
-                _context2.next = 17;
+                _context2.next = 16;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 17:
+            case 16:
               updateOrderOptions({
                 address_id: addressId
               });
               return _context2.abrupt("return");
 
-            case 19:
-              updateOrderOptions(_objectSpread({
+            case 18:
+              updateOrderOptions({
                 address_id: addressId
-              }, aditionalUpdates));
+              });
 
-            case 20:
+            case 19:
             case "end":
               return _context2.stop();
           }
@@ -1671,6 +1665,46 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
 
+  var setUserCustomerOptions = /*#__PURE__*/function () {
+    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee17(params) {
+      var addressId, type, customer, options;
+      return _regenerator.default.wrap(function _callee17$(_context17) {
+        while (1) {
+          switch (_context17.prev = _context17.next) {
+            case 0:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              addressId = params.addressId, type = params.type, customer = params.customer;
+              options = {
+                address_id: addressId,
+                type: type
+              };
+              _context17.next = 5;
+              return setUserCustomer(customer, true);
+
+            case 5:
+              _context17.next = 7;
+              return updateOrderOptions(options);
+
+            case 7:
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+
+            case 8:
+            case "end":
+              return _context17.stop();
+          }
+        }
+      }, _callee17);
+    }));
+
+    return function setUserCustomerOptions(_x27) {
+      return _ref18.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     if (session.loading || languageState.loading) return;
 
@@ -1725,9 +1759,9 @@ var OrderProvider = function OrderProvider(_ref) {
       }));
     };
 
-    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref18) {
-      var carts = _ref18.carts,
-          options = _objectWithoutProperties(_ref18, _excluded3);
+    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref19) {
+      var carts = _ref19.carts,
+          options = _objectWithoutProperties(_ref19, _excluded3);
 
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
@@ -1788,7 +1822,8 @@ var OrderProvider = function OrderProvider(_ref) {
     reorder: reorder,
     setAlert: setAlert,
     setConfirm: setConfirm,
-    changePaymethod: changePaymethod
+    changePaymethod: changePaymethod,
+    setUserCustomerOptions: setUserCustomerOptions
   };
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
