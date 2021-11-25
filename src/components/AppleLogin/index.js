@@ -22,17 +22,17 @@ export const AppleLogin = (props) => {
   }
 
   useEffect(() => {
-    window.addEventListener('AppleIDSignInOnSuccess', (data) => {
+    const AppleIDSignInOnSuccess = document.addEventListener('AppleIDSignInOnSuccess', (data) => {
       onSuccess(data)
     })
-    window.addEventListener('AppleIDSignInOnFailure', (error) => {
+    const AppleIDSignInOnFailure = document.addEventListener('AppleIDSignInOnFailure', (error) => {
       onFailure(error)
     })
     createScriptApple()
 
     return () => {
-      document.removeEventListener('AppleIDSignInOnSuccess')
-      document.removeEventListener('AppleIDSignInOnFailure')
+      document.removeEventListener('AppleIDSignInOnSuccess', AppleIDSignInOnSuccess)
+      document.removeEventListener('AppleIDSignInOnFailure', AppleIDSignInOnFailure)
     }
   }, [])
 
