@@ -141,7 +141,7 @@ export const UserFormDetails = (props) => {
           setUserCustomer({
             ...customer.user,
             ...response.content.result
-          }, true)
+          }, changes?.setCustomerInLocal ?? true)
         }
 
         if (handleSuccessUpdate) {
