@@ -48,7 +48,7 @@ export const OrderListGroups = (props) => {
     }
   }
 
-  const [ordersGroup, setOrdersGroup] = useState({
+  let [ordersGroup, setOrdersGroup] = useState({
     pending: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus.pending,
@@ -241,17 +241,35 @@ export const OrderListGroups = (props) => {
     }
   }
 
-  const loadOrders = async ({ isNextPage, newFetch } = {}) => {
+  const loadOrders = async ({ newFetch, newFetchCurrent } = {}) => {
     if (
-      !newFetch &&
-      (
-        (ordersGroup[currentTabSelected].pagination.currentPage > 0 &&
-        ordersGroup[currentTabSelected].pagination.currentPage === ordersGroup[currentTabSelected].pagination.totalPages) ||
-        ordersGroup[currentTabSelected].orders.length > 0 &&
-        ordersGroup[currentTabSelected].pagination?.totalPages > 0
-      )
+      !(newFetch || newFetchCurrent) &&
+      ordersGroup[currentTabSelected].pagination.currentPage === ordersGroup[currentTabSelected].pagination.totalPages &&
+      ordersGroup[currentTabSelected].orders.total !== null
     ) {
       return
+    }
+
+    if (newFetch) {
+      ordersStatusArray.map(tab => {
+        ordersGroup = {
+          ...ordersGroup,
+          [tab]: {
+            ...orderStructure,
+            defaultFilter: ordersGroupStatus[tab],
+            currentFilter: ordersGroup[tab].currentFilter
+          }
+        }
+      })
+    } else if (newFetchCurrent) {
+      ordersGroup = {
+        ...ordersGroup,
+        [currentTabSelected]: {
+          ...orderStructure,
+          defaultFilter: ordersGroupStatus[currentTabSelected],
+          currentFilter: ordersGroup[currentTabSelected].currentFilter
+        }
+      }
     }
 
     const pageSize = paginationSettings.pageSize
@@ -264,9 +282,8 @@ export const OrderListGroups = (props) => {
           loading: true
         }
       })
-      const nextPage = !isNextPage ? ordersGroup[currentTabSelected].pagination.currentPage + 1 : 1
       const { content: { error, result, pagination } } = await getOrders({
-        page: 1 ?? nextPage,
+        page: 1,
         pageSize,
         orderStatus: ordersGroup[currentTabSelected].currentFilter,
         newFetch
@@ -278,10 +295,10 @@ export const OrderListGroups = (props) => {
           ...ordersGroup[currentTabSelected],
           loading: false,
           orders: error
-            ? newFetch
+            ? (newFetch || newFetchCurrent)
               ? []
               : sortOrders(ordersGroup[currentTabSelected].orders)
-            : newFetch
+            : (newFetch || newFetchCurrent)
               ? sortOrders(result)
               :sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
           error: error ? result : null,
@@ -504,12 +521,14 @@ export const OrderListGroups = (props) => {
   }
 
   useEffect(() => {
-    loadOrders({ newFetch: !!currentFilters })
+    loadOrders({
+      newFetchCurrent: ordersGroup[currentTabSelected]?.pagination?.total === null
+    })
   }, [currentTabSelected])
 
   useEffect(() => {
     if (currentFilters) {
-      loadOrders({ newFetch: !!currentFilters })
+      loadOrders({ newFetchCurrent: true })
     }
   }, [currentFilters])
 
