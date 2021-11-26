@@ -214,9 +214,9 @@ export const UserFormDetails = (props) => {
    */
   const showField = (fieldName) => {
     return !useValidationFields ||
-      (!validationFields.loading && !validationFields.fields?.checkout[fieldName]) ||
-      (!validationFields.loading && validationFields.fields?.checkout[fieldName] &&
-        validationFields.fields?.checkout[fieldName].enabled)
+      (!validationFields.loading && !validationFields.fields?.checkout?.[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.checkout?.[fieldName] &&
+        validationFields.fields?.checkout?.[fieldName]?.enabled)
   }
 
   /**
