@@ -385,8 +385,8 @@ var GoogleMaps = function GoogleMaps(props) {
         if (googleReady) {
           var driverLocation = locations[0];
           var newLocation = new window.google.maps.LatLng(driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lat, driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lng);
-          markers[0].setPosition(newLocation);
-          markers.forEach(function (marker) {
+          (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newLocation);
+          (markers === null || markers === void 0 ? void 0 : markers.length) > 0 && markers.forEach(function (marker) {
             return boundMap.extend(marker.position);
           });
           googleMap.fitBounds(boundMap);

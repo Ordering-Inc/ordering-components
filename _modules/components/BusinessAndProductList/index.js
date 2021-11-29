@@ -274,10 +274,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   var subCategoriesList = [];
 
   var iterateCategories = function iterateCategories(categories) {
-    categories === null || categories === void 0 ? void 0 : categories.forEach(function (category) {
+    return (categories === null || categories === void 0 ? void 0 : categories.length) > 0 && (categories === null || categories === void 0 ? void 0 : categories.forEach(function (category) {
       subCategoriesList.push(category);
       iterateCategories(category.subcategories);
-    });
+    }));
   };
 
   var getProducts = /*#__PURE__*/function () {
