@@ -58,8 +58,8 @@ export const BusinessAndProductList = (props) => {
         ? `categoryId:${categorySelected.id}`
         : 'all'
 
-  const isUseParentCategory = configs?.use_parent_category?.value === 'true'
-    || configs?.use_parent_category?.value === '1'
+  const isUseParentCategory = configs?.use_parent_category?.value === 'true' ||
+    configs?.use_parent_category?.value === '1'
 
   /**
    * Change category selected
@@ -130,10 +130,12 @@ export const BusinessAndProductList = (props) => {
   const subCategoriesList = []
 
   const iterateCategories = (categories) => {
-    categories?.forEach(category => {
-      subCategoriesList.push(category)
-      iterateCategories(category.subcategories)
-    });
+    return (
+      categories?.length > 0 && categories?.forEach(category => {
+        subCategoriesList.push(category)
+        iterateCategories(category.subcategories)
+      })
+    )
   }
 
   const getProducts = async () => {
@@ -154,7 +156,7 @@ export const BusinessAndProductList = (props) => {
       const categoriesList = [].concat(...businessState?.business?.categories.map(category => category.children))
       const categories = isUseParentCategory ? categoriesList : businessState?.business?.categories
       const parentCategory = categories?.find(category => category.category_id === categorySelected.id) ?? {}
-      const categoryFinded = subCategoriesList.find(subCat => subCat.id === parentCategory.category_id)  ?? {}
+      const categoryFinded = subCategoriesList.find(subCat => subCat.id === parentCategory.category_id) ?? {}
 
       const productsFiltered = businessState?.business?.categories
         ?.find(category => category.id === (isUseParentCategory ? parentCategory?.parent_category_id : categorySelected.id))
@@ -250,7 +252,7 @@ export const BusinessAndProductList = (props) => {
 
     const source = {}
     requestsState.products = source
-    let promises = []
+    const promises = []
 
     const functionFetch = categorySelected.id && categorySelected.id !== 'featured'
       ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
@@ -351,8 +353,8 @@ export const BusinessAndProductList = (props) => {
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
-        const isFeatured = categoriesState.all.products.some(product => product.featured)
-          || categoriesState?.featured?.products?.some(product => product.featured)
+        const isFeatured = categoriesState.all.products.some(product => product.featured) ||
+          categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
       }
 
@@ -385,8 +387,8 @@ export const BusinessAndProductList = (props) => {
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
-        const isFeatured = categoriesState.all.products.some(product => product.featured)
-          || categoriesState?.featured?.products?.some(product => product.featured)
+        const isFeatured = categoriesState.all.products.some(product => product.featured) ||
+          categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
       }
     } catch (err) {
@@ -403,7 +405,7 @@ export const BusinessAndProductList = (props) => {
 
     try {
       const [lazyRes, featuredRes] = await getLazyProducts({
-        page: curCategoryState.pagination.currentPage + 1,
+        page: curCategoryState.pagination.currentPage + 1
       })
 
       const { content: { error, result, pagination } } = lazyRes
@@ -454,8 +456,8 @@ export const BusinessAndProductList = (props) => {
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
-        const isFeatured = categoriesState.all.products.some(product => product.featured)
-          || categoriesState?.featured?.products?.some(product => product.featured)
+        const isFeatured = categoriesState.all.products.some(product => product.featured) ||
+          categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
       }
 
@@ -489,8 +491,8 @@ export const BusinessAndProductList = (props) => {
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
-        const isFeatured = categoriesState.all.products.some(product => product.featured)
-          || categoriesState?.featured?.products?.some(product => product.featured)
+        const isFeatured = categoriesState.all.products.some(product => product.featured) ||
+          categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
       }
 
