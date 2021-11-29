@@ -271,8 +271,8 @@ export const GoogleMaps = (props) => {
         if (googleReady) {
           const driverLocation = locations[0]
           const newLocation = new window.google.maps.LatLng(driverLocation?.lat, driverLocation?.lng)
-          markers[0].setPosition(newLocation)
-          markers.forEach(marker => boundMap.extend(marker.position))
+          markers?.[0] && markers[0].setPosition(newLocation)
+          markers?.length > 0 && markers.forEach(marker => boundMap.extend(marker.position))
           googleMap.fitBounds(boundMap)
         }
       }, 1000)
