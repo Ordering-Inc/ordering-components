@@ -544,10 +544,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
     try {
       setState({ ...state, loading: true })
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
       const body = {
         business_id: businessId,
         paymethod_id: paymethodId,
-        paymethod_data: paymethodData
+        paymethod_data: paymethodData,
+        user_id: userCustomerId ?? session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changePaymethod(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
