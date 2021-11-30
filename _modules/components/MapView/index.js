@@ -5,15 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CmsContent = void 0;
+exports.MapView = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
 var _ApiContext = require("../../contexts/ApiContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
@@ -23,11 +23,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -45,148 +47,96 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Component to manage login behavior without UI component
- */
-var CmsContent = function CmsContent(props) {
-  var UIComponent = props.UIComponent,
-      pageSlug = props.pageSlug,
-      onNotFound = props.onNotFound;
-  /**
-   * Array to save the body of the page
-   */
-
-  var _useState = (0, _react.useState)({
-    body: null,
-    loading: false,
-    error: null
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      cmsState = _useState2[0],
-      setCmsState = _useState2[1];
+var MapView = function MapView(props) {
+  var UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var requestsState = {};
-  /**
-   * Method used to get the page by slug
-   */
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      auth = _useSession2[0].auth;
 
-  var getPage = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(slug) {
-      var source, _yield$ordering$pages, _yield$ordering$pages2, error, result;
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      businessMarkers = _useState2[0],
+      setBusinessMarkers = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(true),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isLoadingBusinessMarkers = _useState4[0],
+      setIsLoadingBusinessMakers = _useState4[1];
+
+  var _useState5 = (0, _react.useState)([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      markerGroups = _useState6[0],
+      setMarkerGroups = _useState6[1];
+
+  var _useState7 = (0, _react.useState)([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      customerMarkerGroups = _useState8[0],
+      setCustomerMarkerGroups = _useState8[1];
+
+  var getBusinessLocations = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var markerGroups, customerMarkerGroups, options, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                loading: true
-              }));
-              _context.prev = 1;
-              source = {};
-              requestsState.page = source;
+              markerGroups = {};
+              customerMarkerGroups = {};
+              setIsLoadingBusinessMakers(true);
+              options = {
+                query: {
+                  where: [{
+                    attribute: 'status',
+                    value: [0, 13, 7, 4, 3, 8, 9, 14, 18, 19, 20, 21]
+                  }]
+                }
+              };
               _context.next = 6;
-              return ordering.pages(slug).get({
-                cancelToken: source
-              });
+              return ordering.setAccessToken(auth).orders().asDashboard().get(options);
 
             case 6:
-              _yield$ordering$pages = _context.sent;
-              _yield$ordering$pages2 = _yield$ordering$pages.content;
-              error = _yield$ordering$pages2.error;
-              result = _yield$ordering$pages2.result;
-              setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                loading: false
-              }));
+              _yield$ordering$setAc = _context.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              result = _yield$ordering$setAc2.result;
+              error = _yield$ordering$setAc2.error;
 
               if (!error) {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  body: result.body
-                }));
-              } else {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  error: result
-                }));
-                onNotFound && onNotFound(pageSlug);
+                result.map(function (order) {
+                  markerGroups[order === null || order === void 0 ? void 0 : order.business_id] = markerGroups !== null && markerGroups !== void 0 && markerGroups[order === null || order === void 0 ? void 0 : order.business_id] ? [].concat(_toConsumableArray(markerGroups[order === null || order === void 0 ? void 0 : order.business_id]), [order]) : [order];
+                  customerMarkerGroups[order === null || order === void 0 ? void 0 : order.customer_id] = customerMarkerGroups !== null && customerMarkerGroups !== void 0 && customerMarkerGroups[order === null || order === void 0 ? void 0 : order.customer_id] ? [].concat(_toConsumableArray(customerMarkerGroups[order === null || order === void 0 ? void 0 : order.customer_id]), [order]) : [order];
+                });
+                setMarkerGroups(markerGroups);
+                setCustomerMarkerGroups(customerMarkerGroups);
+                setIsLoadingBusinessMakers(false);
+                setBusinessMarkers(result);
               }
 
-              _context.next = 17;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](1);
-
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setCmsState(_objectSpread(_objectSpread({}, cmsState), {}, {
-                  loading: false,
-                  error: [_context.t0.message]
-                }));
-              }
-
-            case 17:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee);
     }));
 
-    return function getPage(_x) {
+    return function getBusinessLocations() {
       return _ref.apply(this, arguments);
     };
   }();
 
-  (0, _react.useEffect)(function () {
-    getPage(pageSlug);
-    return function () {
-      if (requestsState.page) {
-        requestsState.page.cancel();
-      }
-    };
-  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    cmsState: cmsState
+    businessMarkers: businessMarkers,
+    customerMarkerGroups: customerMarkerGroups,
+    isLoadingBusinessMarkers: isLoadingBusinessMarkers,
+    markerGroups: markerGroups,
+    getBusinessLocations: getBusinessLocations
   })));
 };
 
-exports.CmsContent = CmsContent;
-CmsContent.propTypes = {
-  /**
-   * UI Component, this must be containt all graphic elements and use parent props
-   */
-  UIComponent: _propTypes.default.elementType,
-
-  /**
-   * Components types before login form
-   * Array of type components, the parent props will pass to these components
-   */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Components types after login form
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Elements before login form
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Elements after login form
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
-};
-CmsContent.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
-};
+exports.MapView = MapView;

@@ -327,6 +327,12 @@ Object.defineProperty(exports, "MainSearch", {
     return _MainSearch.MainSearch;
   }
 });
+Object.defineProperty(exports, "MapView", {
+  enumerable: true,
+  get: function get() {
+    return _MapView.MapView;
+  }
+});
 Object.defineProperty(exports, "MenuControl", {
   enumerable: true,
   get: function get() {
@@ -879,6 +885,8 @@ var _CmsContent = require("./components/CmsContent");
 var _PhoneAutocomplete = require("./components/PhoneAutocomplete");
 
 var _BusinessesMap = require("./components/BusinessesMap");
+
+var _MapView = require("./components/MapView");
 
 var _ConfigContext = require("./contexts/ConfigContext");
 

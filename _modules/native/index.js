@@ -255,6 +255,12 @@ Object.defineProperty(exports, "MainSearch", {
     return _MainSearch.MainSearch;
   }
 });
+Object.defineProperty(exports, "MapView", {
+  enumerable: true,
+  get: function get() {
+    return _MapView.MapView;
+  }
+});
 Object.defineProperty(exports, "MenuControl", {
   enumerable: true,
   get: function get() {
@@ -779,6 +785,8 @@ var _StripeRedirectForm = require("../src/components/PaymentOptionStripeRedirect
 var _UserFormDetails = require("../src/components/UserFormDetails");
 
 var _UpsellingPage = require("../src/components/UpsellingPage");
+
+var _MapView = require("../src/components/MapView");
 
 var _ApiContext = require("../src/contexts/ApiContext");
 
