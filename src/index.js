@@ -64,6 +64,7 @@ import { OrderListGroups } from './components/OrderListGroups'
 import { CmsContent } from './components/CmsContent'
 import { PhoneAutocomplete } from './components/PhoneAutocomplete'
 import { BusinessesMap } from './components/BusinessesMap'
+import { MapView } from './components/MapView'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
@@ -180,6 +181,7 @@ export {
   ReviewDriver,
   Analytics,
   ReCaptcha,
+  MapView,
   // Contexts
   ConfigContext,
   ConfigProvider,
