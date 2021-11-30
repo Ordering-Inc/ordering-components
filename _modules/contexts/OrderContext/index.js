@@ -1249,7 +1249,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref13 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12(businessId, paymethodId, paymethodData) {
       var _state$carts$3;
 
-      var body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result;
 
       return _regenerator.default.wrap(function _callee12$(_context12) {
         while (1) {
@@ -1291,19 +1291,26 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
+              _context12.next = 12;
+              return strategy.getItem('user-customer', true);
+
+            case 12:
+              customerFromLocalStorage = _context12.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 business_id: businessId,
                 paymethod_id: paymethodId,
-                paymethod_data: paymethodData
+                paymethod_data: paymethodData,
+                user_id: userCustomerId !== null && userCustomerId !== void 0 ? userCustomerId : session.user.id
               };
-              _context12.next = 13;
+              _context12.next = 17;
               return ordering.setAccessToken(session.token).carts().changePaymethod(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
-            case 13:
+            case 17:
               _yield$ordering$setAc16 = _context12.sent;
               _yield$ordering$setAc17 = _yield$ordering$setAc16.content;
               error = _yield$ordering$setAc17.error;
@@ -1319,17 +1326,17 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context12.abrupt("return", !error);
 
-            case 22:
-              _context12.prev = 22;
+            case 26:
+              _context12.prev = 26;
               _context12.t0 = _context12["catch"](8);
               return _context12.abrupt("return", false);
 
-            case 25:
+            case 29:
             case "end":
               return _context12.stop();
           }
         }
-      }, _callee12, null, [[8, 22]]);
+      }, _callee12, null, [[8, 26]]);
     }));
 
     return function changePaymethod(_x20, _x21, _x22) {
