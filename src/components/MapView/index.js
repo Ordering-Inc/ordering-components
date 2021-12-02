@@ -11,6 +11,7 @@ export const MapView = (props) => {
   const [isLoadingBusinessMarkers, setIsLoadingBusinessMakers] = useState(true)
   const [markerGroups, setMarkerGroups] = useState([])
   const [customerMarkerGroups, setCustomerMarkerGroups] = useState([])
+  const [alertState, setAlertState] = useState({ open: false, content: [], key: null })
 
   const getBusinessLocations = async () => {
     const markerGroups = {}
@@ -36,6 +37,9 @@ export const MapView = (props) => {
       setCustomerMarkerGroups(customerMarkerGroups)
       setIsLoadingBusinessMakers(false)
       setBusinessMarkers(result)
+    } else {
+      setAlertState(result)
+      setIsLoadingBusinessMakers(false)
     }
   }
 
@@ -50,6 +54,8 @@ export const MapView = (props) => {
             isLoadingBusinessMarkers={isLoadingBusinessMarkers}
             markerGroups={markerGroups}
             getBusinessLocations={getBusinessLocations}
+            alertState={alertState}
+            setAlertState={setAlertState}
           />
         )
       }
