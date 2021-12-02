@@ -455,5 +455,6 @@ OrderList.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  isAsCustomer: false
 }
