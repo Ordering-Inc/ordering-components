@@ -85,9 +85,9 @@ export const AddressForm = (props) => {
    */
   const showField = (fieldName) => {
     return !useValidationFileds ||
-      (!validationFields.loading && !validationFields.fields?.address[fieldName]) ||
-      (!validationFields.loading && validationFields.fields?.address[fieldName] &&
-        validationFields.fields?.address[fieldName].enabled)
+      (!validationFields.loading && !validationFields.fields?.address?.[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.address?.[fieldName] &&
+        validationFields.fields?.address?.[fieldName]?.enabled)
   }
 
   /**

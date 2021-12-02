@@ -141,9 +141,9 @@ export const SignupForm = (props) => {
    */
   const showField = (fieldName) => {
     return !useChekoutFileds ||
-      (!validationFields.loading && !validationFields.fields?.checkout[fieldName]) ||
-      (!validationFields.loading && validationFields.fields?.checkout[fieldName] &&
-        validationFields.fields?.checkout[fieldName].enabled)
+      (!validationFields.loading && !validationFields.fields?.checkout?.[fieldName]) ||
+      (!validationFields.loading && validationFields.fields?.checkout?.[fieldName] &&
+        validationFields.fields?.checkout?.[fieldName]?.enabled)
   }
 
   /**
