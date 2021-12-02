@@ -250,10 +250,10 @@ export const OrderList = props => {
   useEffect(() => {
     if (!session.user) return
     socket.on('disconnect', (reason) => {
-      const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
+      const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
       socket.join(ordersRoom)
     })
-    const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${userCustomerId || session?.user?.id}`
+    const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
     return () => {
       socket.leave(ordersRoom)
@@ -455,5 +455,6 @@ OrderList.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  isAsCustomer: false
 }
