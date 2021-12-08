@@ -17,7 +17,7 @@ export const GoogleMaps = (props) => {
     maxLimitLocation,
     businessMap,
     onBusinessClick,
-    setIsBusinessNear
+    setNearBusinessList
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -87,8 +87,14 @@ export const GoogleMaps = (props) => {
     if (locationMarkers.length > 0) {
       setMarkers(locationMarkers)
     }
+    if (setNearBusinessList) {
+      const franchiseSlugs = []
+      for (const locationMarker of locationMarkers) {
+        franchiseSlugs.push(locationMarker?.title)
+      }
+      setNearBusinessList(franchiseSlugs)
+    }
     businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES')
-    setIsBusinessNear && setIsBusinessNear(businessesNear !== 0)
     map.fitBounds(bounds)
     setBoundMap(bounds)
   }
