@@ -39,7 +39,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -54,7 +54,7 @@ var GoogleMaps = function GoogleMaps(props) {
       maxLimitLocation = props.maxLimitLocation,
       businessMap = props.businessMap,
       onBusinessClick = props.onBusinessClick,
-      setIsBusinessNear = props.setIsBusinessNear;
+      setNearBusinessList = props.setNearBusinessList;
 
   var _useUtils = (0, _UtilsContext.useUtils)(),
       _useUtils2 = _slicedToArray(_useUtils, 1),
@@ -175,8 +175,27 @@ var GoogleMaps = function GoogleMaps(props) {
       setMarkers(locationMarkers);
     }
 
+    if (setNearBusinessList) {
+      var franchiseSlugs = [];
+
+      var _iterator = _createForOfIteratorHelper(locationMarkers),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var locationMarker = _step.value;
+          franchiseSlugs.push(locationMarker === null || locationMarker === void 0 ? void 0 : locationMarker.title);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      setNearBusinessList(franchiseSlugs);
+    }
+
     businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
-    setIsBusinessNear && setIsBusinessNear(businessesNear !== 0);
     map.fitBounds(bounds);
     setBoundMap(bounds);
   };
@@ -199,12 +218,12 @@ var GoogleMaps = function GoogleMaps(props) {
         if (results && results.length > 0 && results !== null && results !== void 0 && (_results$ = results[0]) !== null && _results$ !== void 0 && _results$.address_components) {
           var _address$location, _address$location2;
 
-          var _iterator = _createForOfIteratorHelper(results[0].address_components),
-              _step;
+          var _iterator2 = _createForOfIteratorHelper(results[0].address_components),
+              _step2;
 
           try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var component = _step.value;
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              var component = _step2.value;
               var addressType = component.types[0];
 
               if (addressType === 'postal_code') {
@@ -213,9 +232,9 @@ var GoogleMaps = function GoogleMaps(props) {
               }
             }
           } catch (err) {
-            _iterator.e(err);
+            _iterator2.e(err);
           } finally {
-            _iterator.f();
+            _iterator2.f();
           }
 
           var address = {

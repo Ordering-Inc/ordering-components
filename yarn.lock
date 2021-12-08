@@ -5833,6 +5833,7 @@
     "word-wrap" "~1.2.3"
 
 "ordering-api-sdk@github:Ordering-Inc/ordering-api-sdk#release":
+  "integrity" "sha512-CC7N4cHA9GHgyd3T/JW06Sr5Og4Hmoi+BJA+y5+4VORQ7s7KvTr4X97kle7ZEp9UcHrocFLxczGnHJJrQoO42Q=="
   "resolved" "git+ssh://git@github.com/Ordering-Inc/ordering-api-sdk.git#cf8465cb4bc9fd09eb3df1e836d1d0bb2ba1207b"
   "version" "0.0.4"
   dependencies:
