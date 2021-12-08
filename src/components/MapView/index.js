@@ -6,7 +6,7 @@ export const MapView = (props) => {
   const { UIComponent } = props
 
   const [ordering] = useApi()
-  const [{ auth }] = useSession()
+  const [{ token }] = useSession()
   const [businessMarkers, setBusinessMarkers] = useState([])
   const [isLoadingBusinessMarkers, setIsLoadingBusinessMakers] = useState(true)
   const [markerGroups, setMarkerGroups] = useState([])
@@ -27,7 +27,7 @@ export const MapView = (props) => {
         ]
       }
     }
-    const { content: { result, error } } = await ordering.setAccessToken(auth).orders().asDashboard().get(options)
+    const { content: { result, error } } = await ordering.setAccessToken(token).orders().asDashboard().get(options)
     if (!error) {
       result.map(order => {
         markerGroups[order?.business_id] = markerGroups?.[order?.business_id] ? [...markerGroups[order?.business_id], order] : [order]
