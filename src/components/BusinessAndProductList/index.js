@@ -400,7 +400,7 @@ export const BusinessAndProductList = (props) => {
   }
 
   const loadMoreProducts = async () => {
-    const curCategoryState = categoriesState[categoryKey]
+    const curCategoryState = categoriesState[categoryKey] ?? categoryStateDefault
     setCategoryState({ ...curCategoryState, loading: true })
 
     try {
