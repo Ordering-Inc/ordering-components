@@ -54,7 +54,7 @@ var GoogleMaps = function GoogleMaps(props) {
       maxLimitLocation = props.maxLimitLocation,
       businessMap = props.businessMap,
       onBusinessClick = props.onBusinessClick,
-      setIsBusinessNear = props.setIsBusinessNear;
+      setNearBusinessList = props.setNearBusinessList;
 
   var _useUtils = (0, _UtilsContext.useUtils)(),
       _useUtils2 = _slicedToArray(_useUtils, 1),
@@ -175,8 +175,27 @@ var GoogleMaps = function GoogleMaps(props) {
       setMarkers(locationMarkers);
     }
 
+    if (setNearBusinessList) {
+      var franchiseSlugs = [];
+
+      var _iterator = _createForOfIteratorHelper(locationMarkers),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var locationMarker = _step.value;
+          franchiseSlugs.push(locationMarker === null || locationMarker === void 0 ? void 0 : locationMarker.title);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      setNearBusinessList(franchiseSlugs);
+    }
+
     businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
-    setIsBusinessNear && setIsBusinessNear(businessesNear !== 0);
     map.fitBounds(bounds);
     setBoundMap(bounds);
   };
@@ -199,12 +218,12 @@ var GoogleMaps = function GoogleMaps(props) {
         if (results && results.length > 0 && results !== null && results !== void 0 && (_results$ = results[0]) !== null && _results$ !== void 0 && _results$.address_components) {
           var _address$location, _address$location2;
 
-          var _iterator = _createForOfIteratorHelper(results[0].address_components),
-              _step;
+          var _iterator2 = _createForOfIteratorHelper(results[0].address_components),
+              _step2;
 
           try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var component = _step.value;
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              var component = _step2.value;
               var addressType = component.types[0];
 
               if (addressType === 'postal_code') {
@@ -213,9 +232,9 @@ var GoogleMaps = function GoogleMaps(props) {
               }
             }
           } catch (err) {
-            _iterator.e(err);
+            _iterator2.e(err);
           } finally {
-            _iterator.f();
+            _iterator2.f();
           }
 
           var address = {

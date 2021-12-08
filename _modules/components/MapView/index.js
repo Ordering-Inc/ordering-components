@@ -56,7 +56,7 @@ var MapView = function MapView(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      auth = _useSession2[0].auth;
+      token = _useSession2[0].token;
 
   var _useState = (0, _react.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -107,7 +107,7 @@ var MapView = function MapView(props) {
                 }
               };
               _context.next = 6;
-              return ordering.setAccessToken(auth).orders().asDashboard().get(options);
+              return ordering.setAccessToken(token).orders().asDashboard().get(options);
 
             case 6:
               _yield$ordering$setAc = _context.sent;
