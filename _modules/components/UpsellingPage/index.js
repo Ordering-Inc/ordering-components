@@ -153,11 +153,11 @@ var UpsellingPage = function UpsellingPage(props) {
     var upsellingProductsfiltered = result.filter(function (product) {
       return product.upselling;
     });
-    var repeatProducts = cartProducts.filter(function (cartProduct) {
+    var repeatProducts = cartProducts && (cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.filter(function (cartProduct) {
       return upsellingProductsfiltered.find(function (product) {
         return product.id === cartProduct.id;
       });
-    });
+    }));
 
     if (repeatProducts.length) {
       setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
