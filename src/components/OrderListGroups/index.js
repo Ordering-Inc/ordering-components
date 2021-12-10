@@ -245,7 +245,7 @@ export const OrderListGroups = (props) => {
     if (
       !(newFetch || newFetchCurrent) &&
       ordersGroup[currentTabSelected].pagination.currentPage === ordersGroup[currentTabSelected].pagination.totalPages &&
-      ordersGroup[currentTabSelected].orders.total !== null
+      ordersGroup[currentTabSelected].pagination.total !== null
     ) {
       return
     }

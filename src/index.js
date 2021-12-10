@@ -49,6 +49,7 @@ import { ProductOption } from './components/ProductOption'
 import { ProductOptionSuboption } from './components/ProductOptionSuboption'
 import { ProductsList } from './components/ProductsList'
 import { ProductsListing } from './components/ProductsListing'
+import { PromotionsController } from './components/PromotionsController'
 import { Messages } from './components/Messages'
 import { SearchOptions } from './components/SearchOptions'
 import { SignupForm } from './components/SignupForm'
@@ -154,6 +155,7 @@ export {
   ProductOptionSuboption,
   ProductsList,
   ProductsListing,
+  PromotionsController,
   SearchOptions,
   SignupForm,
   SingleBusinessCard,
