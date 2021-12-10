@@ -4,6 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 
 export const PromotionsController = (props) => {
   const {
+    paramsToFetch,
     paginationSettings,
     UIComponent,
   } = props
@@ -24,8 +25,8 @@ export const PromotionsController = (props) => {
     }
   })
 
-  const getOffers = async ({ page = 1, pageSize = paginationSettings.pageSize }) => {
-    const url = `${ordering.root}/offers?page=${page}&page_size=${pageSize}`
+  const getOffers = async ({ page, pageSize = paginationSettings.pageSize }) => {
+    const url = `${ordering.root}/offers?page=${page}&page_size=${pageSize}&params=${paramsToFetch.join()}`
 
     const response = await fetch(url, {
       method: 'GET',
@@ -47,7 +48,7 @@ export const PromotionsController = (props) => {
 
     try {
       setOffersState({ ...offersState, loading: true })
-      const { error, result, pagination } = await getOffers()
+      const { error, result, pagination } = await getOffers({ page: 1 })
       setOffersState({
         ...offersState,
         loading: false,
@@ -124,6 +125,38 @@ export const PromotionsController = (props) => {
 }
 
 PromotionsController.defaultProps = {
+  paramsToFetch: [
+    'id',
+    'name',
+    'description',
+    'businesses',
+    'sites',
+    'image',
+    'end',
+    'start',
+    'paymethods',
+    'type',
+    'minimum',
+    'rate_type',
+    'rate',
+    'coupon',
+    'limit',
+    'enabled',
+    'label',
+    'rank',
+    'condition_type',
+    'target',
+    'max_discount',
+    'stackable',
+    'auto',
+    'public',
+    'limit_per_user',
+    'user_order_count',
+    'user_order_count_condition',
+    'valid_from_after_user_last_order_minutes',
+    'valid_until_after_user_last_order_minutes',
+    'include_products_with_offer'
+  ],
   paginationSettings: {
     initialPage: 1,
     pageSize: 10,
