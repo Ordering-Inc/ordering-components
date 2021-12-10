@@ -48,7 +48,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PromotionsController = function PromotionsController(props) {
   var _paginationSettings$p;
 
-  var paginationSettings = props.paginationSettings,
+  var paramsToFetch = props.paramsToFetch,
+      paginationSettings = props.paginationSettings,
       UIComponent = props.UIComponent;
 
   var _useSession = (0, _SessionContext.useSession)(),
@@ -75,14 +76,14 @@ var PromotionsController = function PromotionsController(props) {
 
   var getOffers = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
-      var _ref$page, page, _ref$pageSize, pageSize, url, response;
+      var page, _ref$pageSize, pageSize, url, response;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _ref$page = _ref.page, page = _ref$page === void 0 ? 1 : _ref$page, _ref$pageSize = _ref.pageSize, pageSize = _ref$pageSize === void 0 ? paginationSettings.pageSize : _ref$pageSize;
-              url = "".concat(ordering.root, "/offers?page=").concat(page, "&page_size=").concat(pageSize);
+              page = _ref.page, _ref$pageSize = _ref.pageSize, pageSize = _ref$pageSize === void 0 ? paginationSettings.pageSize : _ref$pageSize;
+              url = "".concat(ordering.root, "/offers?page=").concat(page, "&page_size=").concat(pageSize, "&params=").concat(paramsToFetch.join());
               _context.next = 4;
               return fetch(url, {
                 method: 'GET',
@@ -136,7 +137,9 @@ var PromotionsController = function PromotionsController(props) {
                 loading: true
               }));
               _context2.next = 6;
-              return getOffers();
+              return getOffers({
+                page: 1
+              });
 
             case 6:
               _yield$getOffers = _context2.sent;
@@ -250,6 +253,7 @@ var PromotionsController = function PromotionsController(props) {
 
 exports.PromotionsController = PromotionsController;
 PromotionsController.defaultProps = {
+  paramsToFetch: ['id', 'name', 'description', 'businesses', 'sites', 'image', 'end', 'start', 'paymethods', 'type', 'minimum', 'rate_type', 'rate', 'coupon', 'limit', 'enabled', 'label', 'rank', 'condition_type', 'target', 'max_discount', 'stackable', 'auto', 'public', 'limit_per_user', 'user_order_count', 'user_order_count_condition', 'valid_from_after_user_last_order_minutes', 'valid_until_after_user_last_order_minutes', 'include_products_with_offer'],
   paginationSettings: {
     initialPage: 1,
     pageSize: 10,
