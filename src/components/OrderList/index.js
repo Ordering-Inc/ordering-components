@@ -38,7 +38,8 @@ export const OrderList = props => {
   })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
-    pageSize: paginationSettings.pageSize ?? 10
+    pageSize: paginationSettings.pageSize ?? 10,
+    total: null
   })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [updateOtherStatus, setUpdateOtherStatus] = useState([])
@@ -85,6 +86,13 @@ export const OrderList = props => {
     searchByOtherStatus,
     keepOrders = false
   ) => {
+    if (
+      pagination?.currentPage === pagination?.totalPages &&
+      pagination?.total !== null
+    ) {
+      return
+    }
+
     const pageSize = keepOrders
       ? paginationSettings.pageSize * pagination.currentPage
       : paginationSettings.pageSize
@@ -312,6 +320,17 @@ export const OrderList = props => {
     }
   }
 
+  const sortOrders = (orders, sortBy = 'desc') => {
+    const ordersSorted = orders.sort((a, b) => {
+      if (sortBy === 'desc') {
+        return b.id - a.id
+      }
+      return a.id - b.id
+    })
+
+    return ordersSorted
+  }
+
   useEffect(() => {
     if (!orderList.loading) {
       const ordersSorted = orderList.orders.sort((a, b) => {
@@ -341,6 +360,7 @@ export const OrderList = props => {
       {UIComponent && (
         <UIComponent
           {...props}
+          sortOrders={sortOrders}
           setSortBy={setSortBy}
           orderList={orderList}
           pagination={pagination}
