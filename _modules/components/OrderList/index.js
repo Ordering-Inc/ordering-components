@@ -110,7 +110,8 @@ var OrderList = function OrderList(props) {
 
   var _useState3 = (0, _react.useState)({
     currentPage: paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1 ? paginationSettings.initialPage - 1 : 0,
-    pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10
+    pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
+    total: null
   }),
       _useState4 = _slicedToArray(_useState3, 2),
       pagination = _useState4[0],
@@ -232,10 +233,19 @@ var OrderList = function OrderList(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               keepOrders = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : false;
+
+              if (!((pagination === null || pagination === void 0 ? void 0 : pagination.currentPage) === (pagination === null || pagination === void 0 ? void 0 : pagination.totalPages) && (pagination === null || pagination === void 0 ? void 0 : pagination.total) !== null)) {
+                _context2.next = 3;
+                break;
+              }
+
+              return _context2.abrupt("return");
+
+            case 3:
               pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize;
 
               if (session.token) {
-                _context2.next = 5;
+                _context2.next = 7;
                 break;
               }
 
@@ -244,16 +254,16 @@ var OrderList = function OrderList(props) {
               }));
               return _context2.abrupt("return");
 
-            case 5:
-              _context2.prev = 5;
+            case 7:
+              _context2.prev = 7;
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: true
               }));
               nextPage = !isNextPage ? pagination.currentPage + 1 : 1;
-              _context2.next = 10;
+              _context2.next = 12;
               return getOrders(nextPage, searchByOtherStatus, pageSize);
 
-            case 10:
+            case 12:
               response = _context2.sent;
 
               if (searchByOtherStatus) {
@@ -281,12 +291,12 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 18;
+              _context2.next = 20;
               break;
 
-            case 15:
-              _context2.prev = 15;
-              _context2.t0 = _context2["catch"](5);
+            case 17:
+              _context2.prev = 17;
+              _context2.t0 = _context2["catch"](7);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -295,12 +305,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 18:
+            case 20:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[5, 15]]);
+      }, _callee2, null, [[7, 17]]);
     }));
 
     return function loadOrders(_x2, _x3) {
@@ -597,6 +607,18 @@ var OrderList = function OrderList(props) {
     };
   }();
 
+  var sortOrders = function sortOrders(orders) {
+    var sortBy = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'desc';
+    var ordersSorted = orders.sort(function (a, b) {
+      if (sortBy === 'desc') {
+        return b.id - a.id;
+      }
+
+      return a.id - b.id;
+    });
+    return ordersSorted;
+  };
+
   (0, _react.useEffect)(function () {
     if (!orderList.loading) {
       var ordersSorted = orderList.orders.sort(function (a, b) {
@@ -621,6 +643,7 @@ var OrderList = function OrderList(props) {
     }
   }, [sortBy]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    sortOrders: sortOrders,
     setSortBy: setSortBy,
     orderList: orderList,
     pagination: pagination,
