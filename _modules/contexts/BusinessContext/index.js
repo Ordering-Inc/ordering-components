@@ -71,7 +71,7 @@ var BusinessProvider = function BusinessProvider(_ref) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var businessParams = ['header', 'logo', 'name', 'slug'];
+  var businessParams = ['header', 'logo', 'name', 'slug', 'address', 'location', 'distance'];
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(id) {

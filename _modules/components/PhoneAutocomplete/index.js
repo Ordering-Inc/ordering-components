@@ -19,6 +19,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _OrderContext = require("../../contexts/OrderContext");
 
+var _BusinessContext = require("../../contexts/BusinessContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -60,11 +62,17 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       setUserCustomerOptions = _useOrder2[1].setUserCustomerOptions;
+
+  var _useBusiness = (0, _BusinessContext.useBusiness)(),
+      _useBusiness2 = _slicedToArray(_useBusiness, 1),
+      businessState = _useBusiness2[0];
 
   var _useState = (0, _react.useState)(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -225,34 +233,40 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     };
   }();
 
-  var setBusinessAddressToUser = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(user, onRedirect) {
-      var _yield$ordering$users, _yield$ordering$users2, resultAddresses, error, userBusinessAddress, addressId, response, addressResponse;
+  var setGuestOptions = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(_ref3) {
+      var _businessState$busine;
+
+      var customer, _ref3$type, type, onRedirect, businessObj, userObj, _yield$ordering$users, _yield$ordering$users2, resultAddresses, error, userAddressFinded, addressId, response, addressResponse;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              if (businessAddress) {
-                _context3.next = 2;
+              customer = _ref3.customer, _ref3$type = _ref3.type, type = _ref3$type === void 0 ? 3 : _ref3$type, onRedirect = _ref3.onRedirect;
+              businessObj = (_businessState$busine = businessState === null || businessState === void 0 ? void 0 : businessState.business) !== null && _businessState$busine !== void 0 ? _businessState$busine : businessAddress;
+              userObj = customer !== null && customer !== void 0 ? customer : user;
+
+              if (!(!businessObj || !(userObj !== null && userObj !== void 0 && userObj.id))) {
+                _context3.next = 5;
                 break;
               }
 
               return _context3.abrupt("return");
 
-            case 2:
-              _context3.prev = 2;
-              _context3.next = 5;
-              return ordering.users(user.id).addresses().get();
-
             case 5:
+              _context3.prev = 5;
+              _context3.next = 8;
+              return ordering.users(userObj.id).addresses().get();
+
+            case 8:
               _yield$ordering$users = _context3.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               resultAddresses = _yield$ordering$users2.result;
               error = _yield$ordering$users2.error;
 
               if (!error) {
-                _context3.next = 12;
+                _context3.next = 15;
                 break;
               }
 
@@ -262,28 +276,28 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 12:
-              userBusinessAddress = resultAddresses.find(function (address) {
-                return address.address === businessAddress.address || address.location === businessAddress.location;
+            case 15:
+              userAddressFinded = resultAddresses.find(function (address) {
+                return address.address === businessObj.address && address.location === businessObj.location;
               });
-              addressId = userBusinessAddress === null || userBusinessAddress === void 0 ? void 0 : userBusinessAddress.id;
+              addressId = userAddressFinded === null || userAddressFinded === void 0 ? void 0 : userAddressFinded.id;
 
-              if (userBusinessAddress) {
-                _context3.next = 22;
+              if (userAddressFinded) {
+                _context3.next = 25;
                 break;
               }
 
-              _context3.next = 17;
-              return ordering.users(user.id).addresses().save({
-                address: businessAddress.address,
-                location: businessAddress.location
+              _context3.next = 20;
+              return ordering.users(userObj.id).addresses().save({
+                address: businessObj.address,
+                location: businessObj.location
               });
 
-            case 17:
+            case 20:
               response = _context3.sent;
 
               if (!response.content.error) {
-                _context3.next = 21;
+                _context3.next = 24;
                 break;
               }
 
@@ -293,20 +307,20 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 21:
+            case 24:
               addressId = response.content.result.id;
 
-            case 22:
-              _context3.next = 24;
-              return ordering.users(user.id).addresses(addressId).save({
+            case 25:
+              _context3.next = 27;
+              return ordering.users(userObj.id).addresses(addressId).save({
                 default: true
               });
 
-            case 24:
+            case 27:
               addressResponse = _context3.sent;
 
               if (!addressResponse.content.error) {
-                _context3.next = 28;
+                _context3.next = 31;
                 break;
               }
 
@@ -316,37 +330,37 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 28:
-              _context3.next = 30;
+            case 31:
+              _context3.next = 33;
               return setUserCustomerOptions({
                 addressId: addressResponse.content.result.id,
-                type: 3,
-                customer: user
+                type: type,
+                customer: userObj
               });
 
-            case 30:
+            case 33:
               onRedirect && onRedirect();
-              _context3.next = 36;
+              _context3.next = 39;
               break;
 
-            case 33:
-              _context3.prev = 33;
-              _context3.t0 = _context3["catch"](2);
+            case 36:
+              _context3.prev = 36;
+              _context3.t0 = _context3["catch"](5);
               setAlertState({
                 open: true,
                 content: _context3.t0.message
               });
 
-            case 36:
+            case 39:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[2, 33]]);
+      }, _callee3, null, [[5, 36]]);
     }));
 
-    return function setBusinessAddressToUser(_x, _x2) {
-      return _ref3.apply(this, arguments);
+    return function setGuestOptions(_x) {
+      return _ref4.apply(this, arguments);
     };
   }();
 
@@ -364,7 +378,9 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     }
   }, [phone]);
   (0, _react.useEffect)(function () {
-    if (businessSlug) {
+    var _businessState$busine2;
+
+    if (businessSlug && !(businessState !== null && businessState !== void 0 && (_businessState$busine2 = businessState.business) !== null && _businessState$busine2 !== void 0 && _businessState$busine2.id)) {
       getBusiness();
     }
   }, [businessSlug]);
@@ -379,7 +395,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     openModal: openModal,
     setOpenModal: setOpenModal,
     setCustomerState: setCustomerState,
-    setBusinessAddressToUser: setBusinessAddressToUser,
+    setBusinessAddressToUser: setGuestOptions,
     alertState: alertState
   })));
 };
