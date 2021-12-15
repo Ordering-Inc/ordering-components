@@ -519,7 +519,9 @@ var ProductForm = function ProductForm(props) {
         var _productCart$options$4;
 
         var suboptions = (_productCart$options$4 = productCart.options["id:".concat(option.id)]) === null || _productCart$options$4 === void 0 ? void 0 : _productCart$options$4.suboptions;
-        var quantity = suboptions ? Object.keys(suboptions).length : 0;
+        var quantity = suboptions ? option.limit_suboptions_by_max ? Object.values(suboptions).reduce(function (count, suboption) {
+          return count + suboption.quantity;
+        }, 0) : Object.keys(suboptions).length : 0;
         var evaluateRespectTo = false;
 
         if (option.respect_to && productCart.options) {

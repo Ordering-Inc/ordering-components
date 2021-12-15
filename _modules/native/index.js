@@ -441,6 +441,12 @@ Object.defineProperty(exports, "ProductsListing", {
     return _ProductsListing.ProductsListing;
   }
 });
+Object.defineProperty(exports, "PromotionsController", {
+  enumerable: true,
+  get: function get() {
+    return _PromotionsController.PromotionsController;
+  }
+});
 Object.defineProperty(exports, "ResetPassword", {
   enumerable: true,
   get: function get() {
@@ -761,6 +767,8 @@ var _ProductOptionSuboption = require("../src/components/ProductOptionSuboption"
 var _ProductsList = require("../src/components/ProductsList");
 
 var _ProductsListing = require("../src/components/ProductsListing");
+
+var _PromotionsController = require("../src/components/PromotionsController");
 
 var _ResetPassword = require("../src/components/ResetPassword");
 

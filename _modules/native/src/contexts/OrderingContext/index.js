@@ -53,6 +53,8 @@ var OrderingContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderingContext = OrderingContext;
 
 var OrderingProvider = function OrderingProvider(_ref) {
+  var _settings$businessSlu;
+
   var Alert = _ref.Alert,
       settings = _ref.settings,
       children = _ref.children,
@@ -77,7 +79,9 @@ var OrderingProvider = function OrderingProvider(_ref) {
     strategy: nativeStrategy,
     Alert: Alert,
     isDisableToast: isDisableToast
-  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children)))))))))))));
+  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, {
+    businessId: (_settings$businessSlu = settings === null || settings === void 0 ? void 0 : settings.businessSlug) !== null && _settings$businessSlu !== void 0 ? _settings$businessSlu : settings === null || settings === void 0 ? void 0 : settings.businessId
+  }, children)))))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

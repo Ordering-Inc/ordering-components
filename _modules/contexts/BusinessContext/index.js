@@ -11,6 +11,8 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _ApiContext = require("../ApiContext");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -53,20 +55,78 @@ var BusinessContext = /*#__PURE__*/(0, _react.createContext)();
 exports.BusinessContext = BusinessContext;
 
 var BusinessProvider = function BusinessProvider(_ref) {
-  var children = _ref.children;
+  var children = _ref.children,
+      businessId = _ref.businessId;
 
   var _useState = (0, _react.useState)({
-    business: {}
+    business: {},
+    loading: false,
+    error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
       state = _useState2[0],
       setState = _useState2[1];
 
-  var setBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(business) {
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+
+  var businessParams = ['header', 'logo', 'name', 'slug', 'address', 'location', 'distance'];
+
+  var getBusiness = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(id) {
+      var _yield$ordering$busin, _yield$ordering$busin2, result, error;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              _context.next = 4;
+              return ordering.businesses(id).select(businessParams).get();
+
+            case 4:
+              _yield$ordering$busin = _context.sent;
+              _yield$ordering$busin2 = _yield$ordering$busin.content;
+              result = _yield$ordering$busin2.result;
+              error = _yield$ordering$busin2.error;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false,
+                business: error ? {} : result,
+                error: error ? result[0] : null
+              }));
+              _context.next = 14;
+              break;
+
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false,
+                error: _context.t0.message
+              }));
+
+            case 14:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 11]]);
+    }));
+
+    return function getBusiness(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var setBusiness = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(business) {
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
             case 0:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 business: business
@@ -74,14 +134,14 @@ var BusinessProvider = function BusinessProvider(_ref) {
 
             case 1:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }));
 
-    return function setBusiness(_x) {
-      return _ref2.apply(this, arguments);
+    return function setBusiness(_x2) {
+      return _ref3.apply(this, arguments);
     };
   }();
 
@@ -89,6 +149,11 @@ var BusinessProvider = function BusinessProvider(_ref) {
   var functions = {
     setBusiness: setBusiness
   };
+  (0, _react.useEffect)(function () {
+    if (businessId) {
+      getBusiness(businessId);
+    }
+  }, [businessId]);
   return /*#__PURE__*/_react.default.createElement(BusinessContext.Provider, {
     value: [copyState, functions]
   }, children);
