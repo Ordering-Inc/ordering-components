@@ -13,7 +13,6 @@ export const PhoneAutocomplete = (props) => {
   const [, { setUserCustomerOptions }] = useOrder()
   const [businessState] = useBusiness()
 
-  const [ordering] = useApi()
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
