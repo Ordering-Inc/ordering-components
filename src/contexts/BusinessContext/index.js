@@ -20,7 +20,7 @@ export const BusinessProvider = ({ children, businessId }) => {
   })
 
   const [ordering] = useApi()
-  const businessParams = ['header', 'logo', 'name', 'slug', 'address', 'location', 'distance']
+  const businessParams = ['header', 'logo', 'name', 'slug', 'address', 'location', 'distance', 'address_notes', 'zipcode', 'internal_number']
 
   const getBusiness = async (id) => {
     try {
