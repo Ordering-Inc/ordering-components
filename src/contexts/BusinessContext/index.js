@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
+import { useApi } from '../ApiContext'
 
 /**
  * Create BusinessContext
@@ -11,10 +12,33 @@ export const BusinessContext = createContext()
  * This provider has a reducer for manage business state
  * @param {props} props
  */
-export const BusinessProvider = ({ children }) => {
+export const BusinessProvider = ({ children, businessId }) => {
   const [state, setState] = useState({
-    business: {}
+    business: {},
+    loading: false,
+    error: null
   })
+
+  const [ordering] = useApi()
+  const businessParams = ['header', 'logo', 'name', 'slug', 'address', 'location', 'distance']
+
+  const getBusiness = async (id) => {
+    try {
+      setState({ ...state, loading: true })
+      const { content: { result, error } } = await ordering.businesses(id)
+        .select(businessParams)
+        .get()
+
+      setState({
+        ...state,
+        loading: false,
+        business: error ? {} : result,
+        error: error ? result[0] : null
+      })
+    } catch (err) {
+      setState({ ...state, loading: false, error: err.message })
+    }
+  }
 
   const setBusiness = async (business) => {
     setState({ ...state, business })
@@ -24,6 +48,12 @@ export const BusinessProvider = ({ children }) => {
   const functions = {
     setBusiness
   }
+
+  useEffect(() => {
+    if (businessId) {
+      getBusiness(businessId)
+    }
+  }, [businessId])
 
   return (
     <BusinessContext.Provider value={[copyState, functions]}>

@@ -53,6 +53,7 @@ import { ProductOption } from '../src/components/ProductOption'
 import { ProductOptionSuboption } from '../src/components/ProductOptionSuboption'
 import { ProductsList } from '../src/components/ProductsList'
 import { ProductsListing } from '../src/components/ProductsListing'
+import { PromotionsController } from '../src/components/PromotionsController'
 import { ResetPassword } from '../src/components/ResetPassword'
 import { ReviewDriver } from '../src/components/ReviewDriver'
 import { ReviewProduct } from '../src/components/ReviewProduct'
@@ -139,6 +140,7 @@ export {
   ProductOptionSuboption,
   ProductsList,
   ProductsListing,
+  PromotionsController,
   ResetPassword,
   ReviewDriver,
   ReviewProduct,
