@@ -10,7 +10,7 @@ export const PhoneAutocomplete = (props) => {
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
-  const [, { setUserCustomerOptions }] = useOrder()
+  const [orderState, { setUserCustomerOptions }] = useOrder()
   const [businessState] = useBusiness()
 
   const [phone, setPhone] = useState('')
@@ -19,6 +19,7 @@ export const PhoneAutocomplete = (props) => {
   const [customersPhones, setCustomersPhones] = useState({ users: [], loading: false, error: null })
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
+  const [optionsState, setOptionsState] = useState({ loading: false })
   /**
    * Get users from API
    */
@@ -72,38 +73,68 @@ export const PhoneAutocomplete = (props) => {
     setBusinessAddress(result)
   }
 
+  const checkAddress = (address1, address2) => {
+    const props = ['address', 'location']
+    const values = []
+    props.forEach(prop => {
+      if (address1 && address1[prop]) {
+        if (prop === 'location') {
+          values.push(address2[prop].lat === address1[prop].lat &&
+            address2[prop].lng === address1[prop].lng)
+        } else {
+          values.push(address2[prop] === address1[prop])
+        }
+      } else {
+        values.push(!address2[prop])
+      }
+    })
+    return values.every(value => value)
+  }
+
   const setGuestOptions = async ({ customer, type = 3, onRedirect }) => {
     const businessObj = businessState?.business ?? businessAddress
     const userObj = customer ?? user
     if (!businessObj || !userObj?.id) return
     try {
+      setOptionsState({ ...optionsState, loading: true })
       const { content: { result: resultAddresses, error } } = await ordering.users(userObj.id).addresses().get()
       if (error) {
         setAlertState({ open: true, content: resultAddresses })
         return
       }
-      const userAddressFinded = resultAddresses.find((address) => address.address === businessObj.address && address.location === businessObj.location)
-      let addressId = userAddressFinded?.id
-      if (!userAddressFinded) {
+      const userAddressFinded = resultAddresses.find((address) => address?.location && checkAddress(businessObj, address) && address)
+      let addressSelected = userAddressFinded ?? null
+
+      if (!addressSelected?.id) {
         const response = await ordering.users(userObj.id).addresses().save({ address: businessObj.address, location: businessObj.location })
         if (response.content.error) {
           setAlertState({ open: true, content: response.content.result })
           return
         }
-        addressId = response.content.result.id
+        addressSelected = response.content.result ?? null
+        const addressResponse = await ordering.users(userObj.id).addresses(addressSelected?.id).save({ default: true })
+        if (addressResponse.content.error) {
+          setAlertState({ open: true, content: addressResponse.content.result })
+          return
+        }
       }
-      const addressResponse = await ordering.users(userObj.id).addresses(addressId).save({ default: true })
-      if (addressResponse.content.error) {
-        setAlertState({ open: true, content: addressResponse.content.result })
-        return
+
+      let options = { type }
+      if (addressSelected && !checkAddress(orderState?.options?.address, addressSelected)) {
+        options.address_id = addressSelected?.id
       }
-      await setUserCustomerOptions({ addressId: addressResponse.content.result.id, type, customer: userObj })
+
+      if (options?.address_id || user?.id !== customer?.id) {
+        await setUserCustomerOptions({ options, customer: userObj })
+      }
       onRedirect && onRedirect()
+      setOptionsState({ ...optionsState, loading: false })
     } catch (err) {
       setAlertState({
         open: true,
         content: err.message
       })
+      setOptionsState({ ...optionsState, loading: false })
     }
   }
 
@@ -141,6 +172,8 @@ export const PhoneAutocomplete = (props) => {
           setCustomerState={setCustomerState}
           setBusinessAddressToUser={setGuestOptions}
           alertState={alertState}
+          optionsState={optionsState}
+          checkAddress={checkAddress}
         />
       )}
     </>
