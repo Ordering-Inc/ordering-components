@@ -116,7 +116,13 @@ export const OrderListGroups = (props) => {
     }
 
     if (filtered?.id) {
-      options.query.where.push({ attribute: 'id', value: parseInt(filtered.id, 10) })
+      options.query.where.push({
+        attribute: 'id',
+        value: {
+          condition: 'ilike',
+          value: encodeURI(`%${filtered?.id}%`)
+        }
+      })
     }
 
     if (filtered?.state) {
@@ -300,7 +306,7 @@ export const OrderListGroups = (props) => {
               : sortOrders(ordersGroup[currentTabSelected].orders)
             : (newFetch || newFetchCurrent)
               ? sortOrders(result)
-              :sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
+              : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
           error: error ? result : null,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
@@ -406,20 +412,20 @@ export const OrderListGroups = (props) => {
   const deleteOrders = async (orderIds) => {
     try {
       setOrdersDeleted({ ...ordersDeleted, loading: true })
-      let errorState = []
+      const errorState = []
 
       if (orderIds.length === 1) {
         const { content: { error } } = await ordering.setAccessToken(accessToken).orders(orderIds[0]).delete()
         errorState.push({ error, id: orderIds[0] })
       } else if (orderIds.length > 1) {
-        for (let id of orderIds) {
+        for (const id of orderIds) {
           const { content: { error: multiError } } = await ordering.setAccessToken(accessToken).orders(id).delete()
           errorState.push({ error: multiError, id })
         }
       }
 
-      const isError = errorState.some((e) => e.error);
-      const idsDeleted = errorState.map((obj) => !obj.error && obj.id);
+      const isError = errorState.some((e) => e.error)
+      const idsDeleted = errorState.map((obj) => !obj.error && obj.id)
 
       onOrdersDeleted && onOrdersDeleted({ isError, list: idsDeleted })
       setOrdersDeleted({ ...ordersDeleted, loading: false })
@@ -552,20 +558,21 @@ export const OrderListGroups = (props) => {
 
       showToast(
         ToastType.Info,
-        t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id)
+        t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id),
+        1000
       )
 
       if (!orderFound) {
         if (
           !order?.products ||
           !order?.summary ||
-          !order?.status ||
+          typeof order?.status !== 'number' ||
           !order?.customer ||
           !order?.business ||
-          !order?.paymethod ||
-          !order?.total ||
-          !order?.subtotal
-        ) return
+          !order?.paymethod
+        ) {
+          return
+        }
         delete order.total
         delete order.subtotal
 
@@ -623,7 +630,8 @@ export const OrderListGroups = (props) => {
       events.emit('order_added', order)
       showToast(
         ToastType.Info,
-        t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id)
+        t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id),
+        1000
       )
       const status = getStatusById(order?.status) ?? ''
       const currentFilter = ordersGroup[status].currentFilter

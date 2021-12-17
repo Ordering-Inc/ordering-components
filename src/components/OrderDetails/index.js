@@ -160,12 +160,12 @@ export const OrderDetails = (props) => {
         .orders(orderState?.order?.id ?? orderId)
         .save(bodyToSend)
 
-        setOrderState({
-          ...orderState,
-          loading: false,
-          order: result,
-          error: error ? result : null
-        })
+      setOrderState({
+        ...orderState,
+        loading: false,
+        order: result,
+        error: error ? result : null
+      })
     } catch (e) {
       setOrderState({
         ...orderState,
@@ -307,7 +307,7 @@ export const OrderDetails = (props) => {
     if (orderState.loading || loading) return
     const handleUpdateOrder = (order) => {
       if (order?.id !== orderState.order?.id) return
-      showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'))
+      showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000)
       delete order.total
       delete order.subtotal
       setOrderState({
