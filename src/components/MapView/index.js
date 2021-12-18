@@ -1,21 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const MapView = (props) => {
   const { UIComponent } = props
 
   const [ordering] = useApi()
-  const [{ token }] = useSession()
+  const [session] = useSession()
+  const [events] = useEvent()
   const [businessMarkers, setBusinessMarkers] = useState([])
   const [isLoadingBusinessMarkers, setIsLoadingBusinessMakers] = useState(true)
-  const [markerGroups, setMarkerGroups] = useState([])
-  const [customerMarkerGroups, setCustomerMarkerGroups] = useState([])
+  const [markerGroups, setMarkerGroups] = useState({})
+  const [customerMarkerGroups, setCustomerMarkerGroups] = useState({})
   const [alertState, setAlertState] = useState({ open: false, content: [], key: null })
 
   const getBusinessLocations = async () => {
-    const markerGroups = {}
-    const customerMarkerGroups = {}
+    const markerGroupsObject = {}
+    const customerMarkerGroupsObject = {}
     setIsLoadingBusinessMakers(true)
     const options = {
       query: {
@@ -27,14 +29,14 @@ export const MapView = (props) => {
         ]
       }
     }
-    const { content: { result, error } } = await ordering.setAccessToken(token).orders().asDashboard().get(options)
+    const { content: { result, error } } = await ordering.setAccessToken(session.token).orders().asDashboard().get(options)
     if (!error) {
       result.map(order => {
-        markerGroups[order?.business_id] = markerGroups?.[order?.business_id] ? [...markerGroups[order?.business_id], order] : [order]
-        customerMarkerGroups[order?.customer_id] = customerMarkerGroups?.[order?.customer_id] ? [...customerMarkerGroups[order?.customer_id], order] : [order]
+        markerGroupsObject[order?.business_id] = markerGroupsObject?.[order?.business_id] ? [...markerGroupsObject[order?.business_id], order] : [order]
+        customerMarkerGroupsObject[order?.customer_id] = customerMarkerGroupsObject?.[order?.customer_id] ? [...customerMarkerGroupsObject[order?.customer_id], order] : [order]
       })
-      setMarkerGroups(markerGroups)
-      setCustomerMarkerGroups(customerMarkerGroups)
+      setMarkerGroups(markerGroupsObject)
+      setCustomerMarkerGroups(customerMarkerGroupsObject)
       setIsLoadingBusinessMakers(false)
       setBusinessMarkers(result)
     } else {
@@ -42,6 +44,35 @@ export const MapView = (props) => {
       setIsLoadingBusinessMakers(false)
     }
   }
+
+  useEffect(() => {
+    const handleUpdateOrder = (order) => {
+      getBusinessLocations()
+      // setIsLoadingBusinessMakers(true)
+      // console.log('emited', order)
+      // console.log('same driver', order?.driver_id, session?.user?.id)
+      // const markers = markerGroups?.[order?.business_id] ?? []
+      // const customerMakers = customerMarkerGroups?.[order?.customer_id] ?? []
+      // console.log('groups', markerGroups)
+      // setMarkerGroups({
+      //   ...markerGroups,
+      //   [order?.business_id]: order?.driver_id !== session?.user?.id ? markers.filter(_order => order?.id === _order?.id) : [...markers, order]
+      // })
+      // markerGroups[order?.business_id] = order?.driver_id !== session?.user?.id ? markers.filter(_order => order?.id === _order?.id) : [...markers, order]
+      // setCustomerMarkerGroups({
+      //   ...customerMarkerGroups,
+      //   [order?.customer_id]: order?.driver_id !== session?.user?.id ? customerMakers.filter(_order => order?.id === _order?.id) : [...customerMakers, order]
+      // })
+      // customerMarkerGroups[order?.customer_id] = order?.driver_id !== session?.user?.id ? customerMakers.filter(_order => order?.id === _order?.id) : [...customerMakers, order]
+      // setIsLoadingBusinessMakers(false)
+    }
+    events.on('order_updated', handleUpdateOrder)
+    events.on('order_added', handleUpdateOrder)
+    return () => {
+      events.off('order_updated', handleUpdateOrder)
+      events.off('order_added', handleUpdateOrder)
+    }
+  }, [])
 
   return (
     <>
@@ -56,6 +87,8 @@ export const MapView = (props) => {
             getBusinessLocations={getBusinessLocations}
             alertState={alertState}
             setAlertState={setAlertState}
+            setMarkerGroups={setMarkerGroups}
+            setCustomerMarkerGroups={setCustomerMarkerGroups}
           />
         )
       }

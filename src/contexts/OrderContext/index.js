@@ -695,18 +695,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   const setUserCustomerOptions = async (params) => {
-    setState({
-      ...state,
-      loading: true
-    })
-    const { addressId, type, customer } = params
-    const options = { address_id: addressId, type }
-    await setUserCustomer(customer, true)
+    setState({ ...state, loading: true })
+    const options = params.options ?? {}
+    await setUserCustomer(params.customer ?? {}, true)
     await updateOrderOptions(options)
-    setState({
-      ...state,
-      loading: false
-    })
+    setState({ ...state, loading: false })
   }
 
   useEffect(() => {
