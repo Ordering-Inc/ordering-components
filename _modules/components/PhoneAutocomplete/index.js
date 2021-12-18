@@ -21,15 +21,15 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _BusinessContext = require("../../contexts/BusinessContext");
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -47,7 +47,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -68,6 +68,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
+      orderState = _useOrder2[0],
       setUserCustomerOptions = _useOrder2[1].setUserCustomerOptions;
 
   var _useBusiness = (0, _BusinessContext.useBusiness)(),
@@ -118,6 +119,13 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       _useState12 = _slicedToArray(_useState11, 2),
       alertState = _useState12[0],
       setAlertState = _useState12[1];
+
+  var _useState13 = (0, _react.useState)({
+    loading: false
+  }),
+      _useState14 = _slicedToArray(_useState13, 2),
+      optionsState = _useState14[0],
+      setOptionsState = _useState14[1];
   /**
    * Get users from API
    */
@@ -233,11 +241,30 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     };
   }();
 
+  var checkAddress = function checkAddress(address1, address2) {
+    var props = ['address', 'location'];
+    var values = [];
+    props.forEach(function (prop) {
+      if (address1 && address1[prop]) {
+        if (prop === 'location') {
+          values.push(address2[prop].lat === address1[prop].lat && address2[prop].lng === address1[prop].lng);
+        } else {
+          values.push(address2[prop] === address1[prop]);
+        }
+      } else {
+        values.push(!address2[prop]);
+      }
+    });
+    return values.every(function (value) {
+      return value;
+    });
+  };
+
   var setGuestOptions = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(_ref3) {
       var _businessState$busine;
 
-      var customer, _ref3$type, type, onRedirect, businessObj, userObj, _yield$ordering$users, _yield$ordering$users2, resultAddresses, error, userAddressFinded, addressId, response, addressResponse;
+      var customer, _ref3$type, type, onRedirect, businessObj, userObj, _addressSelected, _orderState$options, _yield$ordering$users, _yield$ordering$users2, resultAddresses, error, userAddressFinded, addressSelected, _response$content$res, _addressSelected2, response, addressResponse, options, _addressSelected3;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -256,17 +283,20 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 
             case 5:
               _context3.prev = 5;
-              _context3.next = 8;
+              setOptionsState(_objectSpread(_objectSpread({}, optionsState), {}, {
+                loading: true
+              }));
+              _context3.next = 9;
               return ordering.users(userObj.id).addresses().get();
 
-            case 8:
+            case 9:
               _yield$ordering$users = _context3.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               resultAddresses = _yield$ordering$users2.result;
               error = _yield$ordering$users2.error;
 
               if (!error) {
-                _context3.next = 15;
+                _context3.next = 16;
                 break;
               }
 
@@ -276,28 +306,28 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 15:
+            case 16:
               userAddressFinded = resultAddresses.find(function (address) {
-                return address.address === businessObj.address && address.location === businessObj.location;
+                return (address === null || address === void 0 ? void 0 : address.location) && checkAddress(businessObj, address) && address;
               });
-              addressId = userAddressFinded === null || userAddressFinded === void 0 ? void 0 : userAddressFinded.id;
+              addressSelected = userAddressFinded !== null && userAddressFinded !== void 0 ? userAddressFinded : null;
 
-              if (userAddressFinded) {
-                _context3.next = 25;
+              if ((_addressSelected = addressSelected) !== null && _addressSelected !== void 0 && _addressSelected.id) {
+                _context3.next = 32;
                 break;
               }
 
-              _context3.next = 20;
+              _context3.next = 21;
               return ordering.users(userObj.id).addresses().save({
                 address: businessObj.address,
                 location: businessObj.location
               });
 
-            case 20:
+            case 21:
               response = _context3.sent;
 
               if (!response.content.error) {
-                _context3.next = 24;
+                _context3.next = 25;
                 break;
               }
 
@@ -307,20 +337,18 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 24:
-              addressId = response.content.result.id;
-
             case 25:
-              _context3.next = 27;
-              return ordering.users(userObj.id).addresses(addressId).save({
+              addressSelected = (_response$content$res = response.content.result) !== null && _response$content$res !== void 0 ? _response$content$res : null;
+              _context3.next = 28;
+              return ordering.users(userObj.id).addresses((_addressSelected2 = addressSelected) === null || _addressSelected2 === void 0 ? void 0 : _addressSelected2.id).save({
                 default: true
               });
 
-            case 27:
+            case 28:
               addressResponse = _context3.sent;
 
               if (!addressResponse.content.error) {
-                _context3.next = 31;
+                _context3.next = 32;
                 break;
               }
 
@@ -330,33 +358,51 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
               });
               return _context3.abrupt("return");
 
-            case 31:
-              _context3.next = 33;
+            case 32:
+              options = {
+                type: type
+              };
+
+              if (addressSelected && !checkAddress(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.address, addressSelected)) {
+                options.address_id = (_addressSelected3 = addressSelected) === null || _addressSelected3 === void 0 ? void 0 : _addressSelected3.id;
+              }
+
+              if (!(options !== null && options !== void 0 && options.address_id || (user === null || user === void 0 ? void 0 : user.id) !== (customer === null || customer === void 0 ? void 0 : customer.id))) {
+                _context3.next = 37;
+                break;
+              }
+
+              _context3.next = 37;
               return setUserCustomerOptions({
-                addressId: addressResponse.content.result.id,
-                type: type,
+                options: options,
                 customer: userObj
               });
 
-            case 33:
+            case 37:
               onRedirect && onRedirect();
-              _context3.next = 39;
+              setOptionsState(_objectSpread(_objectSpread({}, optionsState), {}, {
+                loading: false
+              }));
+              _context3.next = 45;
               break;
 
-            case 36:
-              _context3.prev = 36;
+            case 41:
+              _context3.prev = 41;
               _context3.t0 = _context3["catch"](5);
               setAlertState({
                 open: true,
                 content: _context3.t0.message
               });
+              setOptionsState(_objectSpread(_objectSpread({}, optionsState), {}, {
+                loading: false
+              }));
 
-            case 39:
+            case 45:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[5, 36]]);
+      }, _callee3, null, [[5, 41]]);
     }));
 
     return function setGuestOptions(_x) {
@@ -396,7 +442,9 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     setOpenModal: setOpenModal,
     setCustomerState: setCustomerState,
     setBusinessAddressToUser: setGuestOptions,
-    alertState: alertState
+    alertState: alertState,
+    optionsState: optionsState,
+    checkAddress: checkAddress
   })));
 };
 

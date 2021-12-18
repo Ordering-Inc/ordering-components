@@ -15,9 +15,11 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+var _EventContext = require("../../contexts/EventContext");
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27,7 +29,7 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
@@ -43,7 +45,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -56,7 +58,11 @@ var MapView = function MapView(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      session = _useSession2[0];
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
   var _useState = (0, _react.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -68,12 +74,12 @@ var MapView = function MapView(props) {
       isLoadingBusinessMarkers = _useState4[0],
       setIsLoadingBusinessMakers = _useState4[1];
 
-  var _useState5 = (0, _react.useState)([]),
+  var _useState5 = (0, _react.useState)({}),
       _useState6 = _slicedToArray(_useState5, 2),
       markerGroups = _useState6[0],
       setMarkerGroups = _useState6[1];
 
-  var _useState7 = (0, _react.useState)([]),
+  var _useState7 = (0, _react.useState)({}),
       _useState8 = _slicedToArray(_useState7, 2),
       customerMarkerGroups = _useState8[0],
       setCustomerMarkerGroups = _useState8[1];
@@ -89,14 +95,14 @@ var MapView = function MapView(props) {
 
   var getBusinessLocations = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var markerGroups, customerMarkerGroups, options, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
+      var markerGroupsObject, customerMarkerGroupsObject, options, _yield$ordering$setAc, _yield$ordering$setAc2, result, error;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              markerGroups = {};
-              customerMarkerGroups = {};
+              markerGroupsObject = {};
+              customerMarkerGroupsObject = {};
               setIsLoadingBusinessMakers(true);
               options = {
                 query: {
@@ -107,7 +113,7 @@ var MapView = function MapView(props) {
                 }
               };
               _context.next = 6;
-              return ordering.setAccessToken(token).orders().asDashboard().get(options);
+              return ordering.setAccessToken(session.token).orders().asDashboard().get(options);
 
             case 6:
               _yield$ordering$setAc = _context.sent;
@@ -117,11 +123,11 @@ var MapView = function MapView(props) {
 
               if (!error) {
                 result.map(function (order) {
-                  markerGroups[order === null || order === void 0 ? void 0 : order.business_id] = markerGroups !== null && markerGroups !== void 0 && markerGroups[order === null || order === void 0 ? void 0 : order.business_id] ? [].concat(_toConsumableArray(markerGroups[order === null || order === void 0 ? void 0 : order.business_id]), [order]) : [order];
-                  customerMarkerGroups[order === null || order === void 0 ? void 0 : order.customer_id] = customerMarkerGroups !== null && customerMarkerGroups !== void 0 && customerMarkerGroups[order === null || order === void 0 ? void 0 : order.customer_id] ? [].concat(_toConsumableArray(customerMarkerGroups[order === null || order === void 0 ? void 0 : order.customer_id]), [order]) : [order];
+                  markerGroupsObject[order === null || order === void 0 ? void 0 : order.business_id] = markerGroupsObject !== null && markerGroupsObject !== void 0 && markerGroupsObject[order === null || order === void 0 ? void 0 : order.business_id] ? [].concat(_toConsumableArray(markerGroupsObject[order === null || order === void 0 ? void 0 : order.business_id]), [order]) : [order];
+                  customerMarkerGroupsObject[order === null || order === void 0 ? void 0 : order.customer_id] = customerMarkerGroupsObject !== null && customerMarkerGroupsObject !== void 0 && customerMarkerGroupsObject[order === null || order === void 0 ? void 0 : order.customer_id] ? [].concat(_toConsumableArray(customerMarkerGroupsObject[order === null || order === void 0 ? void 0 : order.customer_id]), [order]) : [order];
                 });
-                setMarkerGroups(markerGroups);
-                setCustomerMarkerGroups(customerMarkerGroups);
+                setMarkerGroups(markerGroupsObject);
+                setCustomerMarkerGroups(customerMarkerGroupsObject);
                 setIsLoadingBusinessMakers(false);
                 setBusinessMarkers(result);
               } else {
@@ -142,6 +148,34 @@ var MapView = function MapView(props) {
     };
   }();
 
+  (0, _react.useEffect)(function () {
+    var handleUpdateOrder = function handleUpdateOrder(order) {
+      getBusinessLocations(); // setIsLoadingBusinessMakers(true)
+      // console.log('emited', order)
+      // console.log('same driver', order?.driver_id, session?.user?.id)
+      // const markers = markerGroups?.[order?.business_id] ?? []
+      // const customerMakers = customerMarkerGroups?.[order?.customer_id] ?? []
+      // console.log('groups', markerGroups)
+      // setMarkerGroups({
+      //   ...markerGroups,
+      //   [order?.business_id]: order?.driver_id !== session?.user?.id ? markers.filter(_order => order?.id === _order?.id) : [...markers, order]
+      // })
+      // markerGroups[order?.business_id] = order?.driver_id !== session?.user?.id ? markers.filter(_order => order?.id === _order?.id) : [...markers, order]
+      // setCustomerMarkerGroups({
+      //   ...customerMarkerGroups,
+      //   [order?.customer_id]: order?.driver_id !== session?.user?.id ? customerMakers.filter(_order => order?.id === _order?.id) : [...customerMakers, order]
+      // })
+      // customerMarkerGroups[order?.customer_id] = order?.driver_id !== session?.user?.id ? customerMakers.filter(_order => order?.id === _order?.id) : [...customerMakers, order]
+      // setIsLoadingBusinessMakers(false)
+    };
+
+    events.on('order_updated', handleUpdateOrder);
+    events.on('order_added', handleUpdateOrder);
+    return function () {
+      events.off('order_updated', handleUpdateOrder);
+      events.off('order_added', handleUpdateOrder);
+    };
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     businessMarkers: businessMarkers,
     customerMarkerGroups: customerMarkerGroups,
@@ -149,7 +183,9 @@ var MapView = function MapView(props) {
     markerGroups: markerGroups,
     getBusinessLocations: getBusinessLocations,
     alertState: alertState,
-    setAlertState: setAlertState
+    setAlertState: setAlertState,
+    setMarkerGroups: setMarkerGroups,
+    setCustomerMarkerGroups: setCustomerMarkerGroups
   })));
 };
 
