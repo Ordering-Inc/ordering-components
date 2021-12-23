@@ -429,9 +429,9 @@ var OrderProvider = function OrderProvider(_ref) {
                 break;
               }
 
-              updateOrderOptions(_objectSpread({
+              updateOrderOptions({
                 address_id: params === null || params === void 0 ? void 0 : (_params$address = params.address) === null || _params$address === void 0 ? void 0 : _params$address.id
-              }, aditionalUpdates));
+              });
               return _context2.abrupt("return");
 
             case 13:

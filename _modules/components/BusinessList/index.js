@@ -23,6 +23,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
+var _SessionContext = require("../../contexts/SessionContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -139,6 +141,10 @@ var BusinessList = function BusinessList(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
+
   var _useState15 = (0, _react.useState)({}),
       _useState16 = _slicedToArray(_useState15, 2),
       requestsState = _useState16[0],
@@ -147,6 +153,11 @@ var BusinessList = function BusinessList(props) {
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 2),
       refreshConfigs = _useConfig2[1].refreshConfigs;
+
+  var _useState17 = (0, _react.useState)(false),
+      _useState18 = _slicedToArray(_useState17, 2),
+      franchiseEnabled = _useState18[0],
+      setFranchiseEnabled = _useState18[1];
 
   var isValidMoment = function isValidMoment(date, format) {
     return _dayjs.default.utc(date, format).format(format) === date;
@@ -380,6 +391,65 @@ var BusinessList = function BusinessList(props) {
     };
   }();
   /**
+   * Get franchise info from API
+   */
+
+
+  var getFranchise = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var requestOptions, functionFetch, response, _yield$response$json, result;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setFranchiseEnabled(false);
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              functionFetch = "".concat(ordering.root, "/franchises/").concat(franchiseId);
+              _context2.next = 6;
+              return fetch(functionFetch, requestOptions);
+
+            case 6:
+              response = _context2.sent;
+              _context2.next = 9;
+              return response.json();
+
+            case 9:
+              _yield$response$json = _context2.sent;
+              result = _yield$response$json.result;
+              if (result !== null && result !== void 0 && result.enabled) setFranchiseEnabled(result === null || result === void 0 ? void 0 : result.enabled);else setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+                loading: false
+              }));
+              _context2.next = 17;
+              break;
+
+            case 14:
+              _context2.prev = 14;
+              _context2.t0 = _context2["catch"](0);
+              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+                loading: false
+              }));
+
+            case 17:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 14]]);
+    }));
+
+    return function getFranchise() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  /**
    * Cancel businesses request
    */
 
@@ -399,7 +469,7 @@ var BusinessList = function BusinessList(props) {
 
     if (orderState.loading || !((_orderState$options9 = orderState.options) !== null && _orderState$options9 !== void 0 && (_orderState$options9$ = _orderState$options9.address) !== null && _orderState$options9$ !== void 0 && _orderState$options9$.location) && !customLocation) return;
 
-    if (!isDoordash) {
+    if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
     }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
@@ -408,15 +478,20 @@ var BusinessList = function BusinessList(props) {
 
     if (orderState.loading || !((_orderState$options10 = orderState.options) !== null && _orderState$options10 !== void 0 && (_orderState$options11 = _orderState$options10.address) !== null && _orderState$options11 !== void 0 && _orderState$options11.location) && !customLocation) return;
 
-    if (isDoordash) {
+    if (isDoordash || franchiseEnabled) {
       getBusinesses(true);
     }
-  }, [JSON.stringify(orderState.options.moment), JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  }, [JSON.stringify(orderState.options.moment), franchiseEnabled, JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
   (0, _react.useLayoutEffect)(function () {
     if (isDoordash) {
       getBusinesses(true);
     }
   }, [windowPathname]);
+  (0, _react.useEffect)(function () {
+    if (franchiseId) {
+      getFranchise();
+    }
+  }, [franchiseId]);
   /**
    * Listening initial filter
    */
@@ -564,7 +639,8 @@ var BusinessList = function BusinessList(props) {
     handleChangeOrderBy: handleChangeOrderBy,
     handleBusinessClick: handleBusinessClick,
     handleChangeBusinessType: handleChangeBusinessType,
-    handleChangeMaxDeliveryFee: handleChangeMaxDeliveryFee
+    handleChangeMaxDeliveryFee: handleChangeMaxDeliveryFee,
+    franchiseEnabled: franchiseEnabled
   })));
 };
 
