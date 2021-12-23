@@ -5,6 +5,7 @@ import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useSession } from '../../contexts/SessionContext'
 dayjs.extend(utc)
 
 export const BusinessList = (props) => {
@@ -45,8 +46,10 @@ export const BusinessList = (props) => {
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
+  const [{ token }] = useSession()
   const [requestsState, setRequestsState] = useState({})
   const [, { refreshConfigs }] = useConfig()
+  const [franchiseEnabled, setFranchiseEnabled] = useState(false)
 
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
@@ -234,6 +237,30 @@ export const BusinessList = (props) => {
   }
 
   /**
+   * Get franchise info from API
+   */
+  const getFranchise = async () => {
+    try {
+      setFranchiseEnabled(false)
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const functionFetch = `${ordering.root}/franchises/${franchiseId}`
+
+      const response = await fetch(functionFetch, requestOptions)
+      const { result } = await response.json()
+      if (result?.enabled) setFranchiseEnabled(result?.enabled)
+      else setBusinessesList({ ...businessesList, loading: false })
+    } catch (err) {
+      setBusinessesList({ ...businessesList, loading: false })
+    }
+  }
+
+  /**
    * Cancel businesses request
    */
   useEffect(() => {
@@ -248,23 +275,29 @@ export const BusinessList = (props) => {
    */
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
-    if (!isDoordash) {
+    if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
 
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
-    if (isDoordash) {
+    if (isDoordash || franchiseEnabled) {
       getBusinesses(true)
     }
-  }, [JSON.stringify(orderState.options.moment), JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
+  }, [JSON.stringify(orderState.options.moment), franchiseEnabled, JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
 
   useLayoutEffect(() => {
     if (isDoordash) {
       getBusinesses(true)
     }
   }, [windowPathname])
+
+  useEffect(() => {
+    if (franchiseId) {
+      getFranchise()
+    }
+  }, [franchiseId])
 
   /**
    * Listening initial filter
@@ -413,6 +446,7 @@ export const BusinessList = (props) => {
             handleBusinessClick={handleBusinessClick}
             handleChangeBusinessType={handleChangeBusinessType}
             handleChangeMaxDeliveryFee={handleChangeMaxDeliveryFee}
+            franchiseEnabled={franchiseEnabled}
           />
         )
       }
