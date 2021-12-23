@@ -23,14 +23,6 @@ export const AddressList = (props) => {
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
 
-  if (!userId) {
-    throw new Error('`userId` must provide from props or use SessionProviver to wrappe the app.')
-  }
-
-  if (!accessToken) {
-    throw new Error('`accessToken` must provide from props or use SessionProviver to wrappe the app.')
-  }
-
   const [addressList, setAddressList] = useState({ loading: true, error: null, addresses: [] })
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [, { changeAddress }] = useOrder()
