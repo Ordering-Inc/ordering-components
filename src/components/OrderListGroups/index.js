@@ -10,6 +10,7 @@ export const OrderListGroups = (props) => {
   const {
     UIComponent,
     orderBy,
+    isIos,
     useDefualtSessionManager,
     paginationSettings,
     asDashboard,
@@ -120,7 +121,7 @@ export const OrderListGroups = (props) => {
         attribute: 'id',
         value: {
           condition: 'ilike',
-          value: encodeURI(`%${filtered?.id}%`)
+          value: isIos ? `%${filtered?.id}%` : encodeURI(`%${filtered?.id}%`)
         }
       })
     }
@@ -165,7 +166,7 @@ export const OrderListGroups = (props) => {
           attribute: 'email',
           value: {
             condition: 'ilike',
-            value: encodeURI(`%${filtered?.customer?.email}%`)
+            value: isIos ? `%${filtered?.customer?.email}%` : encodeURI(`%${filtered?.customer?.email}%`)
           }
         })
       }
@@ -174,7 +175,7 @@ export const OrderListGroups = (props) => {
           attribute: 'cellphone',
           value: {
             condition: 'ilike',
-            value: encodeURI(`%${filtered?.customer?.phone}%`)
+            value: isIos ? `%${filtered?.customer?.phone}%` : encodeURI(`%${filtered?.customer?.phone}%`)
           }
         })
       }
