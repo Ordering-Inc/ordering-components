@@ -68,6 +68,7 @@ var OrderListGroups = function OrderListGroups(props) {
 
   var UIComponent = props.UIComponent,
       orderBy = props.orderBy,
+      isIos = props.isIos,
       useDefualtSessionManager = props.useDefualtSessionManager,
       paginationSettings = props.paginationSettings,
       asDashboard = props.asDashboard,
@@ -187,7 +188,7 @@ var OrderListGroups = function OrderListGroups(props) {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(_ref) {
       var _filtered$customer, _filtered$customer2, _filtered$date, _filtered$date3;
 
-      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer5, customerOptions, _filtered$customer4, _filtered$customer6, _filtered$date2, _filtered$date4, source, functionFetch;
+      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer6, customerOptions, _filtered$customer4, _filtered$customer5, _filtered$customer7, _filtered$customer8, _filtered$date2, _filtered$date4, source, functionFetch;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -233,7 +234,7 @@ var OrderListGroups = function OrderListGroups(props) {
                   attribute: 'id',
                   value: {
                     condition: 'ilike',
-                    value: encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : filtered.id, "%"))
+                    value: isIos ? "%".concat(filtered === null || filtered === void 0 ? void 0 : filtered.id, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : filtered.id, "%"))
                   }
                 });
               }
@@ -302,17 +303,17 @@ var OrderListGroups = function OrderListGroups(props) {
                     attribute: 'email',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer4 = filtered.customer) === null || _filtered$customer4 === void 0 ? void 0 : _filtered$customer4.email, "%"))
+                      value: isIos ? "%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer4 = filtered.customer) === null || _filtered$customer4 === void 0 ? void 0 : _filtered$customer4.email, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer5 = filtered.customer) === null || _filtered$customer5 === void 0 ? void 0 : _filtered$customer5.email, "%"))
                     }
                   });
                 }
 
-                if (filtered !== null && filtered !== void 0 && (_filtered$customer5 = filtered.customer) !== null && _filtered$customer5 !== void 0 && _filtered$customer5.phone) {
+                if (filtered !== null && filtered !== void 0 && (_filtered$customer6 = filtered.customer) !== null && _filtered$customer6 !== void 0 && _filtered$customer6.phone) {
                   customerOptions.push({
                     attribute: 'cellphone',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer6 = filtered.customer) === null || _filtered$customer6 === void 0 ? void 0 : _filtered$customer6.phone, "%"))
+                      value: isIos ? "%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer7 = filtered.customer) === null || _filtered$customer7 === void 0 ? void 0 : _filtered$customer7.phone, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : (_filtered$customer8 = filtered.customer) === null || _filtered$customer8 === void 0 ? void 0 : _filtered$customer8.phone, "%"))
                     }
                   });
                 }
