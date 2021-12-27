@@ -5,7 +5,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
-
+import { useConfig } from '../../contexts/ConfigContext'
 export const OrderListGroups = (props) => {
   const {
     UIComponent,
@@ -25,7 +25,8 @@ export const OrderListGroups = (props) => {
   const socket = useWebsocket()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
-
+  const [{ configs }] = useConfig()
+  const isLogisticActivated = configs?.logistic_module?.value
   const ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
@@ -91,7 +92,6 @@ export const OrderListGroups = (props) => {
   const [logisticOrdersFetched, setlogisticOrdersFetched] = useState(false)
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
-
   const getOrders = async ({
     page,
     pageSize = paginationSettings.pageSize,
@@ -105,7 +105,6 @@ export const OrderListGroups = (props) => {
         page_size: pageSize
       }
     }
-
     options.query.where = []
     if (orderStatus) {
       if (!filtered?.state) {
@@ -585,7 +584,6 @@ export const OrderListGroups = (props) => {
             t('SPECIFIC_ORDER_REJECTED', 'Your rejected the order number _NUMBER_').replace('_NUMBER_', order?.order?.id ?? order?.id)
           )
         }
-        console.log('order acepted or rejected', result)
         return
       }
       showToast(ToastType.Error, result)
@@ -724,11 +722,11 @@ export const OrderListGroups = (props) => {
   const handleAddAssignRequest = useCallback(
     (order) => {
       setlogisticOrders(prevState => ({ ...prevState, orders: sortOrders([...prevState.orders, order]) }))
-      showToast(
-        ToastType.Info,
-        t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
-        1000
-      )
+      // showToast(
+      //   ToastType.Info,
+      //   t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
+      //   1000
+      // )
     },
     []
   )
@@ -742,11 +740,11 @@ export const OrderListGroups = (props) => {
           ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), expired: true }])
           : sortOrders(prevState.orders)
       }))
-      showToast(
-        ToastType.Info,
-        t('SPECIFIC_LOGISTIC_ORDER_REMOVED', 'Logisitc order _NUMBER_ has been removed').replace('_NUMBER_', order?.order?.id ?? order.id),
-        1000
-      )
+      // showToast(
+      //   ToastType.Info,
+      //   t('SPECIFIC_LOGISTIC_ORDER_REMOVED', 'Logisitc order _NUMBER_ has been removed').replace('_NUMBER_', order?.order?.id ?? order.id),
+      //   1000
+      // )
     },
     []
   )
@@ -760,11 +758,11 @@ export const OrderListGroups = (props) => {
           ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), ...order }])
           : sortOrders(prevState.orders)
       }))
-      showToast(
-        ToastType.Info,
-        t('SPECIFIC_LOGISTIC_ORDER_UPDATED', 'Your logisitc order number _NUMBER_ has updated').replace('_NUMBER_', order?.order?.id ?? order.id),
-        1000
-      )
+      // showToast(
+      //   ToastType.Info,
+      //   t('SPECIFIC_LOGISTIC_ORDER_UPDATED', 'Your logisitc order number _NUMBER_ has updated').replace('_NUMBER_', order?.order?.id ?? order.id),
+      //   1000
+      // )
     },
     []
   )
@@ -778,11 +776,13 @@ export const OrderListGroups = (props) => {
       console.log('ordergroups_update', order)
     }
 
-    socket.on('request_register', handleAddAssignRequest)
-    socket.on('ordergroups_register', handleAddOrderGroups)
-    socket.on('request_update', handleUpdateAssignRequest)
-    socket.on('ordergroups_update', handleUpdateOrderGroups)
-    socket.on('request_cancel', handleDeleteAssignRequest)
+    if (isLogisticActivated) {
+      socket.on('request_register', handleAddAssignRequest)
+      socket.on('ordergroups_register', handleAddOrderGroups)
+      socket.on('request_update', handleUpdateAssignRequest)
+      socket.on('ordergroups_update', handleUpdateOrderGroups)
+      socket.on('request_cancel', handleDeleteAssignRequest)
+    }
     return () => {
       socket.off('request_register')
       socket.off('ordergroups_register')
@@ -790,9 +790,7 @@ export const OrderListGroups = (props) => {
       socket.off('ordergroups_update')
       socket.off('request_cancel')
     }
-  }, [socket, session])
-
-  console.log('logistic_orders por fuera', logisticOrders.orders)
+  }, [socket, session, isLogisticActivated])
 
   useEffect(() => {
     if (!session.user) return
@@ -850,6 +848,7 @@ export const OrderListGroups = (props) => {
           handleClickLogisticOrder={handleClickLogisticOrder}
           filtered={filtered}
           onFiltered={setFiltered}
+          isLogisticActivated={isLogisticActivated}
         />
       )}
     </>
