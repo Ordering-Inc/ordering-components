@@ -268,8 +268,8 @@ export const OrderListGroups = (props) => {
           ...ordersGroup,
           [tab]: {
             ...orderStructure,
-            defaultFilter: ordersGroup[tab].currentFilter,
-            currentFilter: ordersGroup?.[tab]?.currentFilter
+            defaultFilter: ordersGroupStatus[tab],
+            currentFilter: ordersGroup[tab].currentFilter
           }
         }
       })
@@ -716,11 +716,6 @@ export const OrderListGroups = (props) => {
   const handleAddAssignRequest = useCallback(
     (order) => {
       setlogisticOrders(prevState => ({ ...prevState, orders: sortOrders([...prevState.orders, order]) }))
-      // showToast(
-      //   ToastType.Info,
-      //   t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
-      //   1000
-      // )
     },
     []
   )
@@ -733,11 +728,6 @@ export const OrderListGroups = (props) => {
           ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), expired: true }])
           : sortOrders(prevState.orders)
       }))
-      // showToast(
-      //   ToastType.Info,
-      //   t('SPECIFIC_LOGISTIC_ORDER_REMOVED', 'Logisitc order _NUMBER_ has been removed').replace('_NUMBER_', order?.order?.id ?? order.id),
-      //   1000
-      // )
     },
     []
   )
@@ -750,36 +740,20 @@ export const OrderListGroups = (props) => {
           ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), ...order }])
           : sortOrders(prevState.orders)
       }))
-      // showToast(
-      //   ToastType.Info,
-      //   t('SPECIFIC_LOGISTIC_ORDER_UPDATED', 'Your logisitc order number _NUMBER_ has updated').replace('_NUMBER_', order?.order?.id ?? order.id),
-      //   1000
-      // )
     },
     []
   )
 
   useEffect(() => {
-    const handleAddOrderGroups = (order) => {
-      console.log('ordergroups_register', order)
-    }
-
-    const handleUpdateOrderGroups = (order) => {
-      console.log('ordergroups_update', order)
-    }
 
     if (isLogisticActivated) {
       socket.on('request_register', handleAddAssignRequest)
-      socket.on('ordergroups_register', handleAddOrderGroups)
       socket.on('request_update', handleUpdateAssignRequest)
-      socket.on('ordergroups_update', handleUpdateOrderGroups)
       socket.on('request_cancel', handleDeleteAssignRequest)
     }
     return () => {
       socket.off('request_register')
-      socket.off('ordergroups_register')
       socket.off('request_update')
-      socket.off('ordergroups_update')
       socket.off('request_cancel')
     }
   }, [socket, session, isLogisticActivated])
