@@ -75,14 +75,7 @@ export const OrderListGroups = (props) => {
   const [logisticOrders, setlogisticOrders] = useState({
     loading: false,
     error: null,
-    orders: [],
-    pagination: {
-      currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
-        ? paginationSettings.initialPage - 1
-        : 0,
-      pageSize: paginationSettings.pageSize ?? 10,
-      total: null
-    }
+    orders: []
   })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
@@ -275,7 +268,7 @@ export const OrderListGroups = (props) => {
           ...ordersGroup,
           [tab]: {
             ...orderStructure,
-            defaultFilter: typeof ordersGroupStatus === 'string' ? ordersGroupStatus : ordersGroupStatus[tab],
+            defaultFilter: ordersGroup[tab].currentFilter,
             currentFilter: ordersGroup?.[tab]?.currentFilter
           }
         }
@@ -479,7 +472,7 @@ export const OrderListGroups = (props) => {
       }
       setlogisticOrders({ loading: false, orders: [], error: result })
     } catch (err) {
-      console.log(err)
+      setlogisticOrders({ loading: false, orders: [], error: err.message })
     }
   }
 
@@ -588,7 +581,8 @@ export const OrderListGroups = (props) => {
       }
       showToast(ToastType.Error, result)
     } catch (err) {
-      console.log(err)
+      setlogisticOrders({ ...logisticOrders, error: err.message })
+      showToast(ToastType.Error, err.message)
     }
   }
 
@@ -733,7 +727,6 @@ export const OrderListGroups = (props) => {
 
   const handleDeleteAssignRequest = useCallback(
     (order) => {
-      console.log('order_deleted', order)
       setlogisticOrders(prevState => ({
         ...prevState,
         orders: prevState.orders.some(_order => _order?.id === order?.id)
@@ -751,7 +744,6 @@ export const OrderListGroups = (props) => {
 
   const handleUpdateAssignRequest = useCallback(
     (order) => {
-      console.log('order_updated', order)
       setlogisticOrders(prevState => ({
         ...prevState,
         orders: prevState.orders.some(_order => _order?.id === order?.id)
