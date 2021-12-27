@@ -6,6 +6,7 @@ import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useConfig } from '../../contexts/ConfigContext'
+
 export const OrderListGroups = (props) => {
   const {
     UIComponent,
@@ -72,11 +73,7 @@ export const OrderListGroups = (props) => {
     }
   })
   const [currentTabSelected, setCurrentTabSelected] = useState('pending')
-  const [logisticOrders, setlogisticOrders] = useState({
-    loading: false,
-    error: null,
-    orders: null
-  })
+  const [logisticOrders, setlogisticOrders] = useState({ loading: false, error: null, orders: null })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
   const [filtered, setFiltered] = useState(null)
