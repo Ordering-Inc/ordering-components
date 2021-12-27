@@ -75,14 +75,13 @@ export const OrderListGroups = (props) => {
   const [logisticOrders, setlogisticOrders] = useState({
     loading: false,
     error: null,
-    orders: []
+    orders: null
   })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
   const [filtered, setFiltered] = useState(null)
   const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
-  const [logisticOrdersFetched, setlogisticOrdersFetched] = useState(false)
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
   const getOrders = async ({
@@ -466,8 +465,7 @@ export const OrderListGroups = (props) => {
       const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
       const { result, error } = await response.json()
       if (!error) {
-        setlogisticOrders({ ...logisticOrdersFetched, loading: false, orders: result })
-        setlogisticOrdersFetched(true)
+        setlogisticOrders({ ...logisticOrders, loading: false, orders: result })
         return
       }
       setlogisticOrders({ loading: false, orders: [], error: result })
@@ -588,7 +586,7 @@ export const OrderListGroups = (props) => {
 
   useEffect(() => {
     if (currentTabSelected === 'logisticOrders') {
-      loadLogisticOrders(logisticOrdersFetched)
+      loadLogisticOrders(!!logisticOrders?.orders)
     } else {
       loadOrders({
         newFetchCurrent: ordersGroup[currentTabSelected]?.pagination?.total === null
@@ -745,7 +743,6 @@ export const OrderListGroups = (props) => {
   )
 
   useEffect(() => {
-
     if (isLogisticActivated) {
       socket.on('request_register', handleAddAssignRequest)
       socket.on('request_update', handleUpdateAssignRequest)
