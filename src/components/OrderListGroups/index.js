@@ -711,6 +711,11 @@ export const OrderListGroups = (props) => {
   const handleAddAssignRequest = useCallback(
     (order) => {
       setlogisticOrders(prevState => ({ ...prevState, orders: sortOrders([...prevState.orders, order]) }))
+      showToast(
+        ToastType.Info,
+        t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
+        1000
+      )
     },
     []
   )
@@ -735,6 +740,11 @@ export const OrderListGroups = (props) => {
           ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), ...order }])
           : sortOrders(prevState.orders)
       }))
+      showToast(
+        ToastType.Info,
+        t('SPECIFIC_LOGISTIC_ORDER_UPDATED', 'Your logisitc order number _NUMBER_ has updated').replace('_NUMBER_', order?.order?.id ?? order.id),
+        1000
+      )
     },
     []
   )
