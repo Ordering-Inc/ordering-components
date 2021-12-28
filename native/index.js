@@ -56,6 +56,7 @@ import { ProductsList } from '../src/components/ProductsList'
 import { ProductsListing } from '../src/components/ProductsListing'
 import { PromotionsController } from '../src/components/PromotionsController'
 import { ResetPassword } from '../src/components/ResetPassword'
+import { ReviewCustomer } from '../src/components/ReviewCustomer'
 import { ReviewDriver } from '../src/components/ReviewDriver'
 import { ReviewProduct } from '../src/components/ReviewProduct'
 import { SearchOptions } from '../src/components/SearchOptions'
@@ -144,6 +145,7 @@ export {
   ProductsListing,
   PromotionsController,
   ResetPassword,
+  ReviewCustomer,
   ReviewDriver,
   ReviewProduct,
   SearchOptions,
