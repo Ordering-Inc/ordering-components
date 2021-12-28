@@ -549,6 +549,12 @@ Object.defineProperty(exports, "ResetPassword", {
     return _ResetPassword.ResetPassword;
   }
 });
+Object.defineProperty(exports, "ReviewCustomer", {
+  enumerable: true,
+  get: function get() {
+    return _ReviewCustomer.ReviewCustomer;
+  }
+});
 Object.defineProperty(exports, "ReviewDriver", {
   enumerable: true,
   get: function get() {
@@ -949,6 +955,8 @@ var _Analitycs = require("./components/Analitycs");
 var _AppleLogin = require("./components/AppleLogin");
 
 var _ReCaptcha = require("./components/ReCaptcha");
+
+var _ReviewCustomer = require("./components/ReviewCustomer");
 
 var _ReviewProduct = require("./components/ReviewProduct");
 
