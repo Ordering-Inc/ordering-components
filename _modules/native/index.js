@@ -339,6 +339,12 @@ Object.defineProperty(exports, "OrderTypeControl", {
     return _OrderTypeControl.OrderTypeControl;
   }
 });
+Object.defineProperty(exports, "OrderVerticalList", {
+  enumerable: true,
+  get: function get() {
+    return _OrderVerticalList.OrderVerticalList;
+  }
+});
 Object.defineProperty(exports, "OrderingContext", {
   enumerable: true,
   get: function get() {
@@ -737,6 +743,8 @@ var _OrderTypeControl = require("../src/components/OrderTypeControl");
 var _OrdersControlFilters = require("../src/components/OrdersControlFilters");
 
 var _OrderDetails = require("../src/components/OrderDetails");
+
+var _OrderVerticalList = require("../src/components/OrderVerticalList");
 
 var _OrderReview = require("../src/components/OrderReview");
 

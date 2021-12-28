@@ -405,6 +405,12 @@ Object.defineProperty(exports, "OrderTypeControl", {
     return _OrderTypeControl.OrderTypeControl;
   }
 });
+Object.defineProperty(exports, "OrderVerticalList", {
+  enumerable: true,
+  get: function get() {
+    return _OrderVerticalList.OrderVerticalList;
+  }
+});
 Object.defineProperty(exports, "OrderingContext", {
   enumerable: true,
   get: function get() {
@@ -883,6 +889,8 @@ var _UpsellingPage = require("./components/UpsellingPage");
 var _WrapperGoogleMaps = require("./components/WrapperGoogleMaps");
 
 var _OrderDetails = require("./components/OrderDetails");
+
+var _OrderVerticalList = require("./components/OrderVerticalList");
 
 var _OrderReview = require("./components/OrderReview");
 
