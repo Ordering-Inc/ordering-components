@@ -94,6 +94,7 @@ import { ResetPassword } from './components/ResetPassword'
 import { Analytics } from './components/Analitycs'
 import { AppleLogin } from './components/AppleLogin'
 import { ReCaptcha } from './components/ReCaptcha'
+import { ReviewCustomer } from './components/ReviewCustomer'
 import { ReviewProduct } from './components/ReviewProduct'
 import { ReviewDriver } from './components/ReviewDriver'
 import { CODES } from './constants/code-numbers'
@@ -181,6 +182,7 @@ export {
   CmsContent,
   FloatingButton,
   ResetPassword,
+  ReviewCustomer,
   ReviewProduct,
   ReviewDriver,
   Analytics,
