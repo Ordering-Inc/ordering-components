@@ -345,6 +345,12 @@ Object.defineProperty(exports, "ResetPassword", {
     return _ResetPassword.ResetPassword;
   }
 });
+Object.defineProperty(exports, "ReviewCustomer", {
+  enumerable: true,
+  get: function get() {
+    return _ReviewCustomer.ReviewCustomer;
+  }
+});
 Object.defineProperty(exports, "ReviewDriver", {
   enumerable: true,
   get: function get() {
@@ -771,6 +777,8 @@ var _ProductsListing = require("../src/components/ProductsListing");
 var _PromotionsController = require("../src/components/PromotionsController");
 
 var _ResetPassword = require("../src/components/ResetPassword");
+
+var _ReviewCustomer = require("../src/components/ReviewCustomer");
 
 var _ReviewDriver = require("../src/components/ReviewDriver");
 
