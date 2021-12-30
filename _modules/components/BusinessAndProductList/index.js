@@ -130,37 +130,33 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       categoriesState = _useState12[0],
       setCategoriesState = _useState12[1];
 
-  var _useState13 = (0, _react.useState)(),
+  var _useState13 = (0, _react.useState)({}),
       _useState14 = _slicedToArray(_useState13, 2),
       orderOptions = _useState14[0],
       setOrderOptions = _useState14[1];
 
-  var _useState15 = (0, _react.useState)({}),
-      _useState16 = _slicedToArray(_useState15, 2),
-      requestsState = _useState16[0],
-      setRequestsState = _useState16[1];
-
-  var _useState17 = (0, _react.useState)({
+  var _useState15 = (0, _react.useState)({
     product: null,
     loading: false,
     error: null
   }),
+      _useState16 = _slicedToArray(_useState15, 2),
+      productModal = _useState16[0],
+      setProductModal = _useState16[1];
+
+  var _useState17 = (0, _react.useState)(false),
       _useState18 = _slicedToArray(_useState17, 2),
-      productModal = _useState18[0],
-      setProductModal = _useState18[1];
+      featuredProducts = _useState18[0],
+      setFeaturedProducts = _useState18[1];
 
-  var _useState19 = (0, _react.useState)(false),
-      _useState20 = _slicedToArray(_useState19, 2),
-      featuredProducts = _useState20[0],
-      setFeaturedProducts = _useState20[1];
-
-  var _useState21 = (0, _react.useState)({
+  var _useState19 = (0, _react.useState)({
     values: []
   }),
-      _useState22 = _slicedToArray(_useState21, 2),
-      openCategories = _useState22[0],
-      setOpenCategories = _useState22[1];
+      _useState20 = _slicedToArray(_useState19, 2),
+      openCategories = _useState20[0],
+      setOpenCategories = _useState20[1];
 
+  var requestsState = {};
   var categoryStateDefault = {
     loading: true,
     pagination: {
@@ -173,20 +169,20 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     products: []
   };
 
-  var _useState23 = (0, _react.useState)(categoryStateDefault),
+  var _useState21 = (0, _react.useState)(categoryStateDefault),
+      _useState22 = _slicedToArray(_useState21, 2),
+      categoryState = _useState22[0],
+      setCategoryState = _useState22[1];
+
+  var _useState23 = (0, _react.useState)(null),
       _useState24 = _slicedToArray(_useState23, 2),
-      categoryState = _useState24[0],
-      setCategoryState = _useState24[1];
+      errors = _useState24[0],
+      setErrors = _useState24[1];
 
-  var _useState25 = (0, _react.useState)(null),
+  var _useState25 = (0, _react.useState)(false),
       _useState26 = _slicedToArray(_useState25, 2),
-      errors = _useState26[0],
-      setErrors = _useState26[1];
-
-  var _useState27 = (0, _react.useState)(false),
-      _useState28 = _slicedToArray(_useState27, 2),
-      errorQuantityProducts = _useState28[0],
-      setErrorQuantityProducts = _useState28[1];
+      errorQuantityProducts = _useState26[0],
+      setErrorQuantityProducts = _useState26[1];
 
   var categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
   var isUseParentCategory = (configs === null || configs === void 0 ? void 0 : (_configs$use_parent_c = configs.use_parent_category) === null || _configs$use_parent_c === void 0 ? void 0 : _configs$use_parent_c.value) === 'true' || (configs === null || configs === void 0 ? void 0 : (_configs$use_parent_c2 = configs.use_parent_category) === null || _configs$use_parent_c2 === void 0 ? void 0 : _configs$use_parent_c2.value) === '1';
@@ -940,7 +936,6 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }));
               source = {};
               requestsState.business = source;
-              setRequestsState(_objectSpread({}, requestsState));
               parameters = {
                 type: ((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.type) || 1,
                 location: location ? "".concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng) : (_orderState$options11 = orderState.options) !== null && _orderState$options11 !== void 0 && (_orderState$options12 = _orderState$options11.address) !== null && _orderState$options12 !== void 0 && _orderState$options12.location ? "".concat((_orderState$options13 = orderState.options) === null || _orderState$options13 === void 0 ? void 0 : (_orderState$options14 = _orderState$options13.address) === null || _orderState$options14 === void 0 ? void 0 : (_orderState$options15 = _orderState$options14.location) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.lat, ",").concat((_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : (_orderState$options17 = _orderState$options16.address) === null || _orderState$options17 === void 0 ? void 0 : (_orderState$options18 = _orderState$options17.location) === null || _orderState$options18 === void 0 ? void 0 : _orderState$options18.lng) : null
@@ -955,12 +950,12 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                 parameters.menu_id = filterByMenus;
               }
 
-              _context6.next = 10;
+              _context6.next = 9;
               return ordering.businesses(slug).select(businessProps).parameters(parameters).get({
                 cancelToken: source
               });
 
-            case 10:
+            case 9:
               _yield$ordering$busin2 = _context6.sent;
               result = _yield$ordering$busin2.content.result;
 
@@ -974,37 +969,37 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               });
 
               if (!(menusProps && isGetMenus)) {
-                _context6.next = 20;
+                _context6.next = 19;
                 break;
               }
 
-              _context6.next = 17;
+              _context6.next = 16;
               return ordering.businesses(result.id).menus().select(menusProps).get();
 
-            case 17:
+            case 16:
               _yield$ordering$busin3 = _context6.sent;
               menus = _yield$ordering$busin3.content.result;
               data.menus = menus;
 
-            case 20:
+            case 19:
               setBusinessState(data);
-              _context6.next = 26;
+              _context6.next = 25;
               break;
 
-            case 23:
-              _context6.prev = 23;
+            case 22:
+              _context6.prev = 22;
               _context6.t0 = _context6["catch"](0);
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
                 loading: false,
                 error: [_context6.t0.message]
               }));
 
-            case 26:
+            case 25:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[0, 23]]);
+      }, _callee6, null, [[0, 22]]);
     }));
 
     return function getBusiness() {
