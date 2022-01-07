@@ -378,7 +378,7 @@ var GoogleMaps = function GoogleMaps(props) {
     }
   }, [googleMapMarker, googleMap, location]);
   (0, _react.useEffect)(function () {
-    if (googleReady) {
+    if (googleReady && location) {
       if (businessMap && googleMap) {
         if (markerRef !== null && markerRef !== void 0 && markerRef.current) {
           var _markerRef$current;
