@@ -254,7 +254,7 @@ export const GoogleMaps = (props) => {
   }, [googleMapMarker, googleMap, location])
 
   useEffect(() => {
-    if (googleReady) {
+    if (googleReady && location) {
       if (businessMap && googleMap) {
         if (markerRef?.current) {
           markerRef?.current?.close && markerRef.current.close()
