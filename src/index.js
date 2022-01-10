@@ -60,6 +60,7 @@ import { UserFormDetails } from './components/UserFormDetails'
 import { UpsellingPage } from './components/UpsellingPage'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
 import { OrderDetails } from './components/OrderDetails'
+import { OrderVerticalList } from './components/OrderVerticalList'
 import { OrderReview } from './components/OrderReview'
 import { OrderListGroups } from './components/OrderListGroups'
 import { CmsContent } from './components/CmsContent'
@@ -143,6 +144,7 @@ export {
   OrderList,
   OrderTypeControl,
   OrdersControlFilters,
+  OrderVerticalList,
   Messages,
   PaymentOptions,
   PaymethodList,

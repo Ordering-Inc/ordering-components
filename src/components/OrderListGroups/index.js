@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 export const OrderListGroups = (props) => {
   const {
     UIComponent,
     orderBy,
+    isIos,
     useDefualtSessionManager,
     paginationSettings,
     asDashboard,
@@ -25,7 +27,8 @@ export const OrderListGroups = (props) => {
   const socket = useWebsocket()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
-
+  const [{ configs }] = useConfig()
+  const isLogisticActivated = configs?.logistic_module?.value
   const ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
@@ -71,15 +74,14 @@ export const OrderListGroups = (props) => {
     }
   })
   const [currentTabSelected, setCurrentTabSelected] = useState('pending')
+  const [logisticOrders, setlogisticOrders] = useState({ loading: false, error: null, orders: null })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
   const [filtered, setFiltered] = useState(null)
   const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
-
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
-
   const getOrders = async ({
     page,
     pageSize = paginationSettings.pageSize,
@@ -93,10 +95,11 @@ export const OrderListGroups = (props) => {
         page_size: pageSize
       }
     }
-
     options.query.where = []
     if (orderStatus) {
-      if (!filtered?.state) options.query.where.push({ attribute: 'status', value: orderStatus })
+      if (!filtered?.state) {
+        options.query.where.push({ attribute: 'status', value: orderStatus })
+      }
 
       if (ordersGroup[currentTabSelected].orders.length > 0 && !newFetch) {
         options.query = {
@@ -120,7 +123,7 @@ export const OrderListGroups = (props) => {
         attribute: 'id',
         value: {
           condition: 'ilike',
-          value: encodeURI(`%${filtered?.id}%`)
+          value: isIos ? `%${filtered?.id}%` : encodeURI(`%${filtered?.id}%`)
         }
       })
     }
@@ -165,7 +168,7 @@ export const OrderListGroups = (props) => {
           attribute: 'email',
           value: {
             condition: 'ilike',
-            value: encodeURI(`%${filtered?.customer?.email}%`)
+            value: isIos ? `%${filtered?.customer?.email}%` : encodeURI(`%${filtered?.customer?.email}%`)
           }
         })
       }
@@ -174,7 +177,7 @@ export const OrderListGroups = (props) => {
           attribute: 'cellphone',
           value: {
             condition: 'ilike',
-            value: encodeURI(`%${filtered?.customer?.phone}%`)
+            value: isIos ? `%${filtered?.customer?.phone}%` : encodeURI(`%${filtered?.customer?.phone}%`)
           }
         })
       }
@@ -273,7 +276,7 @@ export const OrderListGroups = (props) => {
         [currentTabSelected]: {
           ...orderStructure,
           defaultFilter: ordersGroupStatus[currentTabSelected],
-          currentFilter: ordersGroup[currentTabSelected].currentFilter
+          currentFilter: ordersGroup[currentTabSelected]?.currentFilter
         }
       }
     }
@@ -291,7 +294,7 @@ export const OrderListGroups = (props) => {
       const { content: { error, result, pagination } } = await getOrders({
         page: 1,
         pageSize,
-        orderStatus: ordersGroup[currentTabSelected].currentFilter,
+        orderStatus: ordersGroup[currentTabSelected]?.currentFilter,
         newFetch
       })
 
@@ -344,7 +347,7 @@ export const OrderListGroups = (props) => {
     try {
       const { content: { error, result, pagination } } = await getOrders({
         page: ordersGroup[currentTabSelected].pagination.currentPage + 1,
-        orderStatus: ordersGroup[currentTabSelected].currentFilter,
+        orderStatus: ordersGroup[currentTabSelected]?.currentFilter,
         newFetch: true
       })
 
@@ -452,6 +455,23 @@ export const OrderListGroups = (props) => {
     }
   }
 
+  const loadLogisticOrders = async (isAlreadyFetched) => {
+    if (isAlreadyFetched) return
+    try {
+      setlogisticOrders({ ...logisticOrders, loading: true })
+      const url = `${ordering.root}/drivers/${session.user?.id}/assign_requests`
+      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const { result, error } = await response.json()
+      if (!error) {
+        setlogisticOrders({ ...logisticOrders, loading: false, orders: result })
+        return
+      }
+      setlogisticOrders({ loading: false, orders: [], error: result })
+    } catch (err) {
+      setlogisticOrders({ loading: false, orders: [], error: err.message })
+    }
+  }
+
   const sortOrders = (orders, sortBy = 'desc') => {
     const ordersSorted = orders.sort((a, b) => {
       if (sortBy === 'desc') {
@@ -468,7 +488,7 @@ export const OrderListGroups = (props) => {
     const pending = orderGroupStatusCustom?.pending ?? [0, 13]
     const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21]
     const completed = orderGroupStatusCustom?.completed ?? [1, 11, 15]
-    const cancelled = orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
+    // const cancelled = orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
 
     const status = pending.includes(id)
       ? 'pending'
@@ -526,10 +546,50 @@ export const OrderListGroups = (props) => {
     })
   }
 
+  const handleClickLogisticOrder = async (status, orderId) => {
+    try {
+      const response = await fetch(`${ordering.root}/drivers/${session.user?.id}/assign_requests/${orderId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({
+          status,
+          user_id: session.user?.id
+        })
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        const order = logisticOrders.orders.find(order => order.id === orderId)
+        const newOrders = sortOrders(logisticOrders.orders.filter(_order => _order?.id !== orderId))
+        setlogisticOrders({ ...logisticOrders, orders: newOrders })
+        if (status === 1) {
+          handleClickOrder(order?.order)
+          showToast(
+            ToastType.Success,
+            t('SPECIFIC_ORDER_ACCEPTED', 'Your accepted the order number _NUMBER_').replace('_NUMBER_', order?.order?.id ?? order?.id)
+          )
+        } else {
+          showToast(
+            ToastType.Info,
+            t('SPECIFIC_ORDER_REJECTED', 'Your rejected the order number _NUMBER_').replace('_NUMBER_', order?.order?.id ?? order?.id)
+          )
+        }
+        return
+      }
+      showToast(ToastType.Error, result)
+    } catch (err) {
+      setlogisticOrders({ ...logisticOrders, error: err.message })
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
   useEffect(() => {
-    loadOrders({
-      newFetchCurrent: ordersGroup[currentTabSelected]?.pagination?.total === null
-    })
+    if (currentTabSelected === 'logisticOrders') {
+      loadLogisticOrders(!!logisticOrders?.orders)
+    } else {
+      loadOrders({
+        newFetchCurrent: ordersGroup[currentTabSelected]?.pagination?.total === null
+      })
+    }
   }, [currentTabSelected])
 
   useEffect(() => {
@@ -544,15 +604,16 @@ export const OrderListGroups = (props) => {
   }, [filtered])
 
   useEffect(() => {
-    if (ordersGroup[currentTabSelected].loading) return
+    if (ordersGroup[currentTabSelected]?.loading) return
 
     const handleUpdateOrder = (order) => {
       events.emit('order_updated', order)
       let orderFound = null
-
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
-        orderFound = ordersGroup[status].orders.find((_order) => _order.id === order.id)
+        if (order?.products) {
+          orderFound = ordersGroup[status].orders.find((_order) => _order.id === order.id)
+        }
         if (orderFound) break
       }
 
@@ -576,7 +637,7 @@ export const OrderListGroups = (props) => {
         delete order.total
         delete order.subtotal
 
-        const currentFilter = ordersGroup[getStatusById(order?.status) ?? ''].currentFilter
+        const currentFilter = ordersGroup[getStatusById(order?.status) ?? '']?.currentFilter
 
         !currentFilter.includes(order.status)
           ? actionOrderToTab(order, getStatusById(order?.status), 'remove')
@@ -604,7 +665,7 @@ export const OrderListGroups = (props) => {
         const newOrderStatus = getStatusById(order?.status) ?? ''
         const currentOrderStatus = getStatusById(orderFound?.status) ?? ''
 
-        const currentFilter = ordersGroup[newOrderStatus].currentFilter
+        const currentFilter = ordersGroup[newOrderStatus]?.currentFilter
         Object.assign(orderFound, order)
 
         if (newOrderStatus !== currentOrderStatus) {
@@ -634,7 +695,7 @@ export const OrderListGroups = (props) => {
         1000
       )
       const status = getStatusById(order?.status) ?? ''
-      const currentFilter = ordersGroup[status].currentFilter
+      const currentFilter = ordersGroup[status]?.currentFilter
       if (currentFilter.includes(order.status)) {
         actionOrderToTab(order, status, 'add')
       }
@@ -648,16 +709,82 @@ export const OrderListGroups = (props) => {
     }
   }, [ordersGroup, socket, session])
 
+  const handleAddAssignRequest = useCallback(
+    (order) => {
+      setlogisticOrders(prevState => ({ ...prevState, orders: sortOrders([...prevState.orders, order]) }))
+      showToast(
+        ToastType.Info,
+        t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
+        1000
+      )
+    },
+    []
+  )
+
+  const handleDeleteAssignRequest = useCallback(
+    (order) => {
+      setlogisticOrders(prevState => ({
+        ...prevState,
+        orders: prevState.orders.some(_order => _order?.id === order?.id)
+          ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), expired: true }])
+          : sortOrders(prevState.orders)
+      }))
+    },
+    []
+  )
+
+  const handleUpdateAssignRequest = useCallback(
+    (order) => {
+      setlogisticOrders(prevState => ({
+        ...prevState,
+        orders: prevState.orders.some(_order => _order?.id === order?.id)
+          ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), ...order }])
+          : sortOrders(prevState.orders)
+      }))
+      showToast(
+        ToastType.Info,
+        t('SPECIFIC_LOGISTIC_ORDER_UPDATED', 'Your logisitc order number _NUMBER_ has updated').replace('_NUMBER_', order?.order?.id ?? order.id),
+        1000
+      )
+    },
+    []
+  )
+
+  useEffect(() => {
+    if (isLogisticActivated) {
+      socket.on('request_register', handleAddAssignRequest)
+      socket.on('request_update', handleUpdateAssignRequest)
+      socket.on('request_cancel', handleDeleteAssignRequest)
+    }
+    return () => {
+      socket.off('request_register')
+      socket.off('request_update')
+      socket.off('request_cancel')
+    }
+  }, [socket, session, isLogisticActivated])
+
   useEffect(() => {
     if (!session.user) return
     socket.on('disconnect', () => {
       const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
       socket.join(ordersRoom)
+      const requestsRoom = `requests_${session?.user?.id}`
+      socket.join(requestsRoom)
+      const groupsRoom = `ordergroups_${session?.user?.id}`
+      socket.join(groupsRoom)
     })
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
+    const requestsRoom = `requests_${session?.user?.id}`
+    const groupsRoom = `ordergroups_${session?.user?.id}`
+
     socket.join(ordersRoom)
+    socket.join(requestsRoom)
+    socket.join(groupsRoom)
+
     return () => {
       socket.leave(ordersRoom)
+      socket.leave(requestsRoom)
+      socket.leave(groupsRoom)
     }
   }, [socket, session])
 
@@ -667,7 +794,6 @@ export const OrderListGroups = (props) => {
       request && request.cancel && request.cancel()
     }
   }, [requestsState.orders])
-
   return (
     <>
       {UIComponent && (
@@ -679,17 +805,21 @@ export const OrderListGroups = (props) => {
           setCurrentTabSelected={setCurrentTabSelected}
           ordersGroup={ordersGroup}
           setOrdersGroup={setOrdersGroup}
+          logisticOrders={logisticOrders}
           messages={messages}
           ordersDeleted={ordersDeleted}
           setOrdersDeleted={setOrdersDeleted}
           setMessages={setMessages}
           loadOrders={loadOrders}
+          loadLogisticOrders={loadLogisticOrders}
           deleteOrders={deleteOrders}
           loadMessages={loadMessages}
           loadMoreOrders={loadMoreOrders}
           handleClickOrder={handleClickOrder}
+          handleClickLogisticOrder={handleClickLogisticOrder}
           filtered={filtered}
           onFiltered={setFiltered}
+          isLogisticActivated={isLogisticActivated}
         />
       )}
     </>

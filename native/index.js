@@ -38,6 +38,7 @@ import { OrderListGroups } from '../src/components/OrderListGroups'
 import { OrderTypeControl } from '../src/components/OrderTypeControl'
 import { OrdersControlFilters } from '../src/components/OrdersControlFilters'
 import { OrderDetails } from '../src/components/OrderDetails'
+import { OrderVerticalList } from '../src/components/OrderVerticalList'
 import { OrderReview } from '../src/components/OrderReview'
 import { PaymethodList } from '../src/components/PaymethodList'
 import { PaymentOptions } from '../src/components/PaymentOptions'
@@ -105,6 +106,7 @@ export {
   CouponControl,
   Contacts,
   OrderListGroups,
+  OrderVerticalList,
   DragAndDrop,
   DriverList,
   DriverTips,

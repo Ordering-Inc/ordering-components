@@ -34,11 +34,11 @@ export const BusinessAndProductList = (props) => {
   const [filterByMenus, setFilterByMenus] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: true, error: null })
   const [categoriesState, setCategoriesState] = useState({})
-  const [orderOptions, setOrderOptions] = useState()
-  const [requestsState, setRequestsState] = useState({})
+  const [orderOptions, setOrderOptions] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
   const [featuredProducts, setFeaturedProducts] = useState(false)
   const [openCategories, setOpenCategories] = useState({ values: [] })
+  const requestsState = {}
 
   const categoryStateDefault = {
     loading: true,
@@ -557,7 +557,6 @@ export const BusinessAndProductList = (props) => {
       setBusinessState({ ...businessState, loading: true })
       const source = {}
       requestsState.business = source
-      setRequestsState({ ...requestsState })
       const parameters = {
         type: orderState.options?.type || 1,
         location: location
