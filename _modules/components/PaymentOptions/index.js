@@ -266,10 +266,6 @@ var PaymentOptions = function PaymentOptions(props) {
     } else {
       if (businessId) {
         getPaymentOptions();
-      } else {
-        setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
-          loading: false
-        }));
       }
     }
   }, [isLoading, businessId]);
