@@ -21,18 +21,6 @@ Object.defineProperty(exports, "AddressList", {
     return _AddressList.AddressList;
   }
 });
-Object.defineProperty(exports, "ApiContext", {
-  enumerable: true,
-  get: function get() {
-    return _ApiContext.ApiContext;
-  }
-});
-Object.defineProperty(exports, "ApiProvider", {
-  enumerable: true,
-  get: function get() {
-    return _ApiContext.ApiProvider;
-  }
-});
 Object.defineProperty(exports, "BusinessAndProductList", {
   enumerable: true,
   get: function get() {
@@ -45,28 +33,22 @@ Object.defineProperty(exports, "BusinessBasicInformation", {
     return _BusinessBasicInformation.BusinessBasicInformation;
   }
 });
-Object.defineProperty(exports, "BusinessContext", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessContext.BusinessContext;
-  }
-});
 Object.defineProperty(exports, "BusinessController", {
   enumerable: true,
   get: function get() {
     return _BusinessController.BusinessController;
   }
 });
-Object.defineProperty(exports, "BusinessInformation", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessInformation.BusinessInformation;
-  }
-});
 Object.defineProperty(exports, "BusinessList", {
   enumerable: true,
   get: function get() {
     return _BusinessList.BusinessList;
+  }
+});
+Object.defineProperty(exports, "BusinessInformation", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessInformation.BusinessInformation;
   }
 });
 Object.defineProperty(exports, "BusinessProductsCategories", {
@@ -79,12 +61,6 @@ Object.defineProperty(exports, "BusinessProductsSearch", {
   enumerable: true,
   get: function get() {
     return _BusinessProductsSearch.BusinessProductsSearch;
-  }
-});
-Object.defineProperty(exports, "BusinessProvider", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessContext.BusinessProvider;
   }
 });
 Object.defineProperty(exports, "BusinessReviews", {
@@ -103,12 +79,6 @@ Object.defineProperty(exports, "BusinessTypeFilter", {
   enumerable: true,
   get: function get() {
     return _BusinessTypeFilter.BusinessTypeFilter;
-  }
-});
-Object.defineProperty(exports, "CODES", {
-  enumerable: true,
-  get: function get() {
-    return _codeNumbers.CODES;
   }
 });
 Object.defineProperty(exports, "CardForm", {
@@ -135,40 +105,16 @@ Object.defineProperty(exports, "CmsContent", {
     return _CmsContent.CmsContent;
   }
 });
-Object.defineProperty(exports, "ConfigContext", {
-  enumerable: true,
-  get: function get() {
-    return _ConfigContext.ConfigContext;
-  }
-});
-Object.defineProperty(exports, "ConfigProvider", {
-  enumerable: true,
-  get: function get() {
-    return _ConfigContext.ConfigProvider;
-  }
-});
-Object.defineProperty(exports, "Contacts", {
-  enumerable: true,
-  get: function get() {
-    return _Contacts.Contacts;
-  }
-});
 Object.defineProperty(exports, "CouponControl", {
   enumerable: true,
   get: function get() {
     return _CouponControl.CouponControl;
   }
 });
-Object.defineProperty(exports, "CustomerContext", {
+Object.defineProperty(exports, "Contacts", {
   enumerable: true,
   get: function get() {
-    return _CustomerContext.CustomerContext;
-  }
-});
-Object.defineProperty(exports, "CustomerProvider", {
-  enumerable: true,
-  get: function get() {
-    return _CustomerContext.CustomerProvider;
+    return _Contacts.Contacts;
   }
 });
 Object.defineProperty(exports, "DragAndDrop", {
@@ -189,18 +135,6 @@ Object.defineProperty(exports, "DriverTips", {
     return _DriverTips.DriverTips;
   }
 });
-Object.defineProperty(exports, "EventContext", {
-  enumerable: true,
-  get: function get() {
-    return _EventContext.EventContext;
-  }
-});
-Object.defineProperty(exports, "EventProvider", {
-  enumerable: true,
-  get: function get() {
-    return _EventContext.EventProvider;
-  }
-});
 Object.defineProperty(exports, "ExamineClick", {
   enumerable: true,
   get: function get() {
@@ -217,18 +151,6 @@ Object.defineProperty(exports, "ForgotPasswordForm", {
   enumerable: true,
   get: function get() {
     return _ForgotPasswordForm.ForgotPasswordForm;
-  }
-});
-Object.defineProperty(exports, "LanguageContext", {
-  enumerable: true,
-  get: function get() {
-    return _LanguageContext.LanguageContext;
-  }
-});
-Object.defineProperty(exports, "LanguageProvider", {
-  enumerable: true,
-  get: function get() {
-    return _LanguageContext.LanguageProvider;
   }
 });
 Object.defineProperty(exports, "LanguageSelector", {
@@ -253,12 +175,6 @@ Object.defineProperty(exports, "MainSearch", {
   enumerable: true,
   get: function get() {
     return _MainSearch.MainSearch;
-  }
-});
-Object.defineProperty(exports, "MapView", {
-  enumerable: true,
-  get: function get() {
-    return _MapView.MapView;
   }
 });
 Object.defineProperty(exports, "MenuControl", {
@@ -297,18 +213,6 @@ Object.defineProperty(exports, "OrderChange", {
     return _OrderChange.OrderChange;
   }
 });
-Object.defineProperty(exports, "OrderContext", {
-  enumerable: true,
-  get: function get() {
-    return _OrderContext.OrderContext;
-  }
-});
-Object.defineProperty(exports, "OrderDetails", {
-  enumerable: true,
-  get: function get() {
-    return _OrderDetails.OrderDetails;
-  }
-});
 Object.defineProperty(exports, "OrderList", {
   enumerable: true,
   get: function get() {
@@ -321,10 +225,28 @@ Object.defineProperty(exports, "OrderListGroups", {
     return _OrderListGroups.OrderListGroups;
   }
 });
-Object.defineProperty(exports, "OrderProvider", {
+Object.defineProperty(exports, "OrderTypeControl", {
   enumerable: true,
   get: function get() {
-    return _OrderContext.OrderProvider;
+    return _OrderTypeControl.OrderTypeControl;
+  }
+});
+Object.defineProperty(exports, "OrdersControlFilters", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersControlFilters.OrdersControlFilters;
+  }
+});
+Object.defineProperty(exports, "OrderDetails", {
+  enumerable: true,
+  get: function get() {
+    return _OrderDetails.OrderDetails;
+  }
+});
+Object.defineProperty(exports, "OrderVerticalList", {
+  enumerable: true,
+  get: function get() {
+    return _OrderVerticalList.OrderVerticalList;
   }
 });
 Object.defineProperty(exports, "OrderReview", {
@@ -333,28 +255,16 @@ Object.defineProperty(exports, "OrderReview", {
     return _OrderReview.OrderReview;
   }
 });
-Object.defineProperty(exports, "OrderTypeControl", {
+Object.defineProperty(exports, "PaymethodList", {
   enumerable: true,
   get: function get() {
-    return _OrderTypeControl.OrderTypeControl;
+    return _PaymethodList.PaymethodList;
   }
 });
-Object.defineProperty(exports, "OrderingContext", {
+Object.defineProperty(exports, "PaymentOptions", {
   enumerable: true,
   get: function get() {
-    return _OrderingContext.OrderingContext;
-  }
-});
-Object.defineProperty(exports, "OrderingProvider", {
-  enumerable: true,
-  get: function get() {
-    return _OrderingContext.OrderingProvider;
-  }
-});
-Object.defineProperty(exports, "OrdersControlFilters", {
-  enumerable: true,
-  get: function get() {
-    return _OrdersControlFilters.OrdersControlFilters;
+    return _PaymentOptions.PaymentOptions;
   }
 });
 Object.defineProperty(exports, "PaymentOptionCash", {
@@ -379,18 +289,6 @@ Object.defineProperty(exports, "PaymentOptionStripeRedirect", {
   enumerable: true,
   get: function get() {
     return _PaymentOptionStripeRedirect.PaymentOptionStripeRedirect;
-  }
-});
-Object.defineProperty(exports, "PaymentOptions", {
-  enumerable: true,
-  get: function get() {
-    return _PaymentOptions.PaymentOptions;
-  }
-});
-Object.defineProperty(exports, "PaymethodList", {
-  enumerable: true,
-  get: function get() {
-    return _PaymethodList.PaymethodList;
   }
 });
 Object.defineProperty(exports, "PhoneAutocomplete", {
@@ -477,18 +375,6 @@ Object.defineProperty(exports, "SearchOptions", {
     return _SearchOptions.SearchOptions;
   }
 });
-Object.defineProperty(exports, "SessionContext", {
-  enumerable: true,
-  get: function get() {
-    return _SessionContext.SessionContext;
-  }
-});
-Object.defineProperty(exports, "SessionProvider", {
-  enumerable: true,
-  get: function get() {
-    return _SessionContext.SessionProvider;
-  }
-});
 Object.defineProperty(exports, "SignupForm", {
   enumerable: true,
   get: function get() {
@@ -525,22 +411,10 @@ Object.defineProperty(exports, "StripeRedirectForm", {
     return _StripeRedirectForm.StripeRedirectForm;
   }
 });
-Object.defineProperty(exports, "ToastContext", {
+Object.defineProperty(exports, "UserFormDetails", {
   enumerable: true,
   get: function get() {
-    return _ToastContext.ToastContext;
-  }
-});
-Object.defineProperty(exports, "ToastProvider", {
-  enumerable: true,
-  get: function get() {
-    return _ToastContext.ToastProvider;
-  }
-});
-Object.defineProperty(exports, "ToastType", {
-  enumerable: true,
-  get: function get() {
-    return _ToastContext.ToastType;
+    return _UserFormDetails.UserFormDetails;
   }
 });
 Object.defineProperty(exports, "UpsellingPage", {
@@ -549,10 +423,154 @@ Object.defineProperty(exports, "UpsellingPage", {
     return _UpsellingPage.UpsellingPage;
   }
 });
-Object.defineProperty(exports, "UserFormDetails", {
+Object.defineProperty(exports, "MapView", {
   enumerable: true,
   get: function get() {
-    return _UserFormDetails.UserFormDetails;
+    return _MapView.MapView;
+  }
+});
+Object.defineProperty(exports, "ApiContext", {
+  enumerable: true,
+  get: function get() {
+    return _ApiContext.ApiContext;
+  }
+});
+Object.defineProperty(exports, "ApiProvider", {
+  enumerable: true,
+  get: function get() {
+    return _ApiContext.ApiProvider;
+  }
+});
+Object.defineProperty(exports, "useApi", {
+  enumerable: true,
+  get: function get() {
+    return _ApiContext.useApi;
+  }
+});
+Object.defineProperty(exports, "BusinessContext", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessContext.BusinessContext;
+  }
+});
+Object.defineProperty(exports, "BusinessProvider", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessContext.BusinessProvider;
+  }
+});
+Object.defineProperty(exports, "useBusiness", {
+  enumerable: true,
+  get: function get() {
+    return _BusinessContext.useBusiness;
+  }
+});
+Object.defineProperty(exports, "ConfigContext", {
+  enumerable: true,
+  get: function get() {
+    return _ConfigContext.ConfigContext;
+  }
+});
+Object.defineProperty(exports, "ConfigProvider", {
+  enumerable: true,
+  get: function get() {
+    return _ConfigContext.ConfigProvider;
+  }
+});
+Object.defineProperty(exports, "useConfig", {
+  enumerable: true,
+  get: function get() {
+    return _ConfigContext.useConfig;
+  }
+});
+Object.defineProperty(exports, "CustomerContext", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.CustomerContext;
+  }
+});
+Object.defineProperty(exports, "CustomerProvider", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.CustomerProvider;
+  }
+});
+Object.defineProperty(exports, "useCustomer", {
+  enumerable: true,
+  get: function get() {
+    return _CustomerContext.useCustomer;
+  }
+});
+Object.defineProperty(exports, "EventContext", {
+  enumerable: true,
+  get: function get() {
+    return _EventContext.EventContext;
+  }
+});
+Object.defineProperty(exports, "EventProvider", {
+  enumerable: true,
+  get: function get() {
+    return _EventContext.EventProvider;
+  }
+});
+Object.defineProperty(exports, "useEvent", {
+  enumerable: true,
+  get: function get() {
+    return _EventContext.useEvent;
+  }
+});
+Object.defineProperty(exports, "LanguageContext", {
+  enumerable: true,
+  get: function get() {
+    return _LanguageContext.LanguageContext;
+  }
+});
+Object.defineProperty(exports, "LanguageProvider", {
+  enumerable: true,
+  get: function get() {
+    return _LanguageContext.LanguageProvider;
+  }
+});
+Object.defineProperty(exports, "useLanguage", {
+  enumerable: true,
+  get: function get() {
+    return _LanguageContext.useLanguage;
+  }
+});
+Object.defineProperty(exports, "OrderContext", {
+  enumerable: true,
+  get: function get() {
+    return _OrderContext.OrderContext;
+  }
+});
+Object.defineProperty(exports, "OrderProvider", {
+  enumerable: true,
+  get: function get() {
+    return _OrderContext.OrderProvider;
+  }
+});
+Object.defineProperty(exports, "useOrder", {
+  enumerable: true,
+  get: function get() {
+    return _OrderContext.useOrder;
+  }
+});
+Object.defineProperty(exports, "SessionContext", {
+  enumerable: true,
+  get: function get() {
+    return _SessionContext.SessionContext;
+  }
+});
+Object.defineProperty(exports, "SessionProvider", {
+  enumerable: true,
+  get: function get() {
+    return _SessionContext.SessionProvider;
+  }
+});
+Object.defineProperty(exports, "useSession", {
+  enumerable: true,
+  get: function get() {
+    return _SessionContext.useSession;
   }
 });
 Object.defineProperty(exports, "UtilsContext", {
@@ -567,10 +585,22 @@ Object.defineProperty(exports, "UtilsProviders", {
     return _UtilsContext.UtilsProviders;
   }
 });
+Object.defineProperty(exports, "useUtils", {
+  enumerable: true,
+  get: function get() {
+    return _UtilsContext.useUtils;
+  }
+});
 Object.defineProperty(exports, "ValidationFieldsContext", {
   enumerable: true,
   get: function get() {
     return _ValidationsFieldsContext.ValidationFieldsContext;
+  }
+});
+Object.defineProperty(exports, "useValidationFields", {
+  enumerable: true,
+  get: function get() {
+    return _ValidationsFieldsContext.useValidationFields;
   }
 });
 Object.defineProperty(exports, "ValidationFieldsProvider", {
@@ -591,52 +621,40 @@ Object.defineProperty(exports, "WebsocketProvider", {
     return _WebsocketContext.WebsocketProvider;
   }
 });
-Object.defineProperty(exports, "useApi", {
+Object.defineProperty(exports, "useWebsocket", {
   enumerable: true,
   get: function get() {
-    return _ApiContext.useApi;
+    return _WebsocketContext.useWebsocket;
   }
 });
-Object.defineProperty(exports, "useBusiness", {
+Object.defineProperty(exports, "OrderingContext", {
   enumerable: true,
   get: function get() {
-    return _BusinessContext.useBusiness;
+    return _OrderingContext.OrderingContext;
   }
 });
-Object.defineProperty(exports, "useConfig", {
+Object.defineProperty(exports, "OrderingProvider", {
   enumerable: true,
   get: function get() {
-    return _ConfigContext.useConfig;
+    return _OrderingContext.OrderingProvider;
   }
 });
-Object.defineProperty(exports, "useCustomer", {
+Object.defineProperty(exports, "ToastType", {
   enumerable: true,
   get: function get() {
-    return _CustomerContext.useCustomer;
+    return _ToastContext.ToastType;
   }
 });
-Object.defineProperty(exports, "useEvent", {
+Object.defineProperty(exports, "ToastContext", {
   enumerable: true,
   get: function get() {
-    return _EventContext.useEvent;
+    return _ToastContext.ToastContext;
   }
 });
-Object.defineProperty(exports, "useLanguage", {
+Object.defineProperty(exports, "ToastProvider", {
   enumerable: true,
   get: function get() {
-    return _LanguageContext.useLanguage;
-  }
-});
-Object.defineProperty(exports, "useOrder", {
-  enumerable: true,
-  get: function get() {
-    return _OrderContext.useOrder;
-  }
-});
-Object.defineProperty(exports, "useSession", {
-  enumerable: true,
-  get: function get() {
-    return _SessionContext.useSession;
+    return _ToastContext.ToastProvider;
   }
 });
 Object.defineProperty(exports, "useToast", {
@@ -645,22 +663,10 @@ Object.defineProperty(exports, "useToast", {
     return _ToastContext.useToast;
   }
 });
-Object.defineProperty(exports, "useUtils", {
+Object.defineProperty(exports, "CODES", {
   enumerable: true,
   get: function get() {
-    return _UtilsContext.useUtils;
-  }
-});
-Object.defineProperty(exports, "useValidationFields", {
-  enumerable: true,
-  get: function get() {
-    return _ValidationsFieldsContext.useValidationFields;
-  }
-});
-Object.defineProperty(exports, "useWebsocket", {
-  enumerable: true,
-  get: function get() {
-    return _WebsocketContext.useWebsocket;
+    return _codeNumbers.CODES;
   }
 });
 
@@ -743,6 +749,8 @@ var _OrderTypeControl = require("../src/components/OrderTypeControl");
 var _OrdersControlFilters = require("../src/components/OrdersControlFilters");
 
 var _OrderDetails = require("../src/components/OrderDetails");
+
+var _OrderVerticalList = require("../src/components/OrderVerticalList");
 
 var _OrderReview = require("../src/components/OrderReview");
 
