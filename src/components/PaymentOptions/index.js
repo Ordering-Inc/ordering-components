@@ -155,7 +155,7 @@ export const PaymentOptions = (props) => {
     if (paymethods) {
       setPaymethodsList({
         ...paymethodsList,
-        loading: !!!parsePaymethods(paymethods)?.length,
+        loading: isLoading,
         paymethods: parsePaymethods(paymethods)
       })
     } else {
