@@ -161,11 +161,6 @@ export const PaymentOptions = (props) => {
     } else {
       if (businessId) {
         getPaymentOptions()
-      } else {
-        setPaymethodsList({
-          ...paymethodsList,
-          loading: false
-        })
       }
     }
   }, [isLoading, businessId])
