@@ -101,7 +101,7 @@ export const OrderListGroups = (props) => {
         options.query.where.push({ attribute: 'status', value: orderStatus })
       }
 
-      if (ordersGroup[currentTabSelected].orders.length > 0 && !newFetch) {
+      if (ordersGroup[currentTabSelected]?.orders?.length > 0 && !newFetch) {
         options.query = {
           ...options.query,
           page: 1
@@ -111,7 +111,7 @@ export const OrderListGroups = (props) => {
             attribute: 'id',
             value: {
               condition: '!=',
-              value: ordersGroup[currentTabSelected].orders.map((o) => o.id)
+              value: ordersGroup[currentTabSelected]?.orders.map((o) => o.id)
             }
           })
         }
@@ -306,10 +306,10 @@ export const OrderListGroups = (props) => {
           orders: error
             ? (newFetch || newFetchCurrent)
               ? []
-              : sortOrders(ordersGroup[currentTabSelected].orders)
+              : sortOrders(ordersGroup[currentTabSelected]?.orders)
             : (newFetch || newFetchCurrent)
               ? sortOrders(result)
-              : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
+              : sortOrders(ordersGroup[currentTabSelected]?.orders.concat(result)),
           error: error ? result : null,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
@@ -357,8 +357,8 @@ export const OrderListGroups = (props) => {
           ...ordersGroup[currentTabSelected],
           loading: false,
           orders: error
-            ? sortOrders(ordersGroup[currentTabSelected].orders)
-            : sortOrders(ordersGroup[currentTabSelected].orders.concat(result)),
+            ? sortOrders(ordersGroup[currentTabSelected]?.orders)
+            : sortOrders(ordersGroup[currentTabSelected]?.orders?.concat(result)),
           error: error ? result : null,
           pagination: !error
             ? {
@@ -437,8 +437,8 @@ export const OrderListGroups = (props) => {
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           orders: idsDeleted.length
-            ? sortOrders(ordersGroup[currentTabSelected].orders.filter((order) => !idsDeleted.includes(order.id)))
-            : sortOrders(ordersGroup[currentTabSelected].orders)
+            ? sortOrders(ordersGroup[currentTabSelected]?.orders?.filter((order) => !idsDeleted.includes(order.id)))
+            : sortOrders(ordersGroup[currentTabSelected]?.orders)
         }
       })
     } catch (err) {
@@ -473,7 +473,7 @@ export const OrderListGroups = (props) => {
   }
 
   const sortOrders = (orders, sortBy = 'desc') => {
-    const ordersSorted = orders.sort((a, b) => {
+    const ordersSorted = orders?.sort((a, b) => {
       if (sortBy === 'desc') {
         return b.id - a.id
       }
@@ -502,7 +502,7 @@ export const OrderListGroups = (props) => {
   }
 
   const actionOrderToTab = (orderAux, status, type) => {
-    const orderList = ordersGroup[status].orders
+    const orderList = ordersGroup[status]?.orders
     let orders
     const order = {
       ...orderAux,
@@ -533,17 +533,35 @@ export const OrderListGroups = (props) => {
       ...orderAux,
       showNotification: false
     }
-    const status = getStatusById(order?.status)
-    const orderList = ordersGroup[status].orders
-    const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
-    orderList[indexToUpdate] = order
-    setOrdersGroup({
-      ...ordersGroup,
-      [status]: {
-        ...ordersGroup[status],
-        orders: sortOrders(orderList)
-      }
-    })
+    const ordersGroups = order?.order_group?.orders
+    if (!ordersGroups) {
+      const status = getStatusById(order?.status)
+      const orderList = ordersGroup[status]?.orders
+      const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
+      orderList[indexToUpdate] = order
+      setOrdersGroup({
+        ...ordersGroup,
+        [status]: {
+          ...ordersGroup[status],
+          orders: sortOrders(orderList)
+        }
+      })
+    } else {
+      const status = getStatusById(order?.order_group?.orders?.[0]?.status)
+      let orderList
+      ordersGroups.map(order => {
+        orderList = ordersGroup[status]?.orders
+        const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
+        orderList[indexToUpdate] = order
+      })
+      setOrdersGroup({
+        ...ordersGroup,
+        [status]: {
+          ...ordersGroup[status],
+          orders: sortOrders(orderList)
+        }
+      })
+    }
   }
 
   const handleClickLogisticOrder = async (status, orderId) => {
@@ -558,11 +576,11 @@ export const OrderListGroups = (props) => {
       })
       const { result, error } = await response.json()
       if (!error) {
-        const order = logisticOrders.orders.find(order => order.id === orderId)
-        const newOrders = sortOrders(logisticOrders.orders.filter(_order => _order?.id !== orderId))
+        const order = logisticOrders?.orders?.find(order => order?.id === orderId)
+        const newOrders = sortOrders(logisticOrders?.orders?.filter(_order => _order?.id !== orderId))
         setlogisticOrders({ ...logisticOrders, orders: newOrders })
         if (status === 1) {
-          handleClickOrder(order?.order)
+          handleClickOrder(order?.order ?? order)
           showToast(
             ToastType.Success,
             t('SPECIFIC_ORDER_ACCEPTED', 'Your accepted the order number _NUMBER_').replace('_NUMBER_', order?.order?.id ?? order?.id)
@@ -612,7 +630,7 @@ export const OrderListGroups = (props) => {
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
         if (order?.products) {
-          orderFound = ordersGroup[status].orders.find((_order) => _order.id === order.id)
+          orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === order.id)
         }
         if (orderFound) break
       }
@@ -711,7 +729,7 @@ export const OrderListGroups = (props) => {
 
   const handleAddAssignRequest = useCallback(
     (order) => {
-      setlogisticOrders(prevState => ({ ...prevState, orders: sortOrders([...prevState.orders, order]) }))
+      setlogisticOrders(prevState => ({ ...prevState, orders: sortOrders([...prevState?.orders, order]) }))
       showToast(
         ToastType.Info,
         t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
@@ -725,9 +743,9 @@ export const OrderListGroups = (props) => {
     (order) => {
       setlogisticOrders(prevState => ({
         ...prevState,
-        orders: prevState.orders.some(_order => _order?.id === order?.id)
-          ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), expired: true }])
-          : sortOrders(prevState.orders)
+        orders: prevState?.orders?.some(_order => _order?.id === order?.id)
+          ? sortOrders([...prevState?.orders?.filter(_order => _order?.id !== order?.id), { ...prevState?.orders?.find(_order => _order?.id === order?.id), expired: true }])
+          : sortOrders(prevState?.orders)
       }))
     },
     []
@@ -737,9 +755,9 @@ export const OrderListGroups = (props) => {
     (order) => {
       setlogisticOrders(prevState => ({
         ...prevState,
-        orders: prevState.orders.some(_order => _order?.id === order?.id)
-          ? sortOrders([...prevState.orders.filter(_order => _order?.id !== order?.id), { ...prevState.orders.find(_order => _order?.id === order?.id), ...order }])
-          : sortOrders(prevState.orders)
+        orders: prevState?.orders?.some(_order => _order?.id === order?.id)
+          ? sortOrders([...prevState?.orders?.filter(_order => _order?.id !== order?.id), { ...prevState?.orders?.find(_order => _order?.id === order?.id), ...order }])
+          : sortOrders(prevState?.orders)
       }))
       showToast(
         ToastType.Info,
@@ -789,11 +807,11 @@ export const OrderListGroups = (props) => {
   }, [socket, session])
 
   useEffect(() => {
-    const request = requestsState.orders
+    const request = requestsState?.orders
     return () => {
       request && request.cancel && request.cancel()
     }
-  }, [requestsState.orders])
+  }, [requestsState?.orders])
   return (
     <>
       {UIComponent && (
