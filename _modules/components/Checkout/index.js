@@ -15,9 +15,13 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _OrderContext = require("../../contexts/OrderContext");
 
+var _ConfigContext = require("../../contexts/ConfigContext");
+
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _ConfigContext = require("../../contexts/ConfigContext");
+var _SessionContext = require("../../contexts/SessionContext");
+
+var _ToastContext = require("../../contexts/ToastContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -90,33 +94,72 @@ var Checkout = function Checkout(props) {
       orderState = _useOrder2[0],
       placeCart = _useOrder2[1].placeCart;
   /**
-   * Object to save an object with business information
+   * Session content
+   */
+
+
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
+  /**
+   * Toast state
+   */
+
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+  /**
+   * Comment state
    */
 
 
   var _useState5 = (0, _react.useState)({
+    loading: false,
+    result: null,
+    error: null
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      commentState = _useState6[0],
+      setCommentState = _useState6[1];
+  /**
+   * Object to save an object with business information
+   */
+
+
+  var _useState7 = (0, _react.useState)({
     business: null,
     loading: true,
     error: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      businessDetails = _useState6[0],
-      setBusinessDetails = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      businessDetails = _useState8[0],
+      setBusinessDetails = _useState8[1];
   /**
    * This must be contains an object with info about paymente selected
    */
 
 
-  var _useState7 = (0, _react.useState)(null),
-      _useState8 = _slicedToArray(_useState7, 2),
-      paymethodSelected = _useState8[0],
-      setPaymethodSelected = _useState8[1];
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      paymethodSelected = _useState10[0],
+      setPaymethodSelected = _useState10[1];
   /**
    * Current cart
    */
 
 
   var cart = (_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts["businessId:".concat(businessId)];
+  /**
+   * Timeout for update cart comment
+   */
+
+  var timeout = null;
+  /**
+   * Cart comment stagged
+   */
+
+  var previousComment;
   /**
    * Method to get business from API
    */
@@ -279,6 +322,88 @@ var Checkout = function Checkout(props) {
   var handlePaymethodChange = function handlePaymethodChange(paymethod) {
     setPaymethodSelected(paymethod);
   };
+  /**
+   * change comment for cart
+   */
+
+
+  var handleChangeComment = function handleChangeComment(value) {
+    try {
+      if (previousComment !== value) {
+        clearTimeout(timeout);
+        timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+          var uuid, response, _yield$response$json, result, error;
+
+          return _regenerator.default.wrap(function _callee3$(_context3) {
+            while (1) {
+              switch (_context3.prev = _context3.next) {
+                case 0:
+                  setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
+                    loading: true
+                  }));
+                  uuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
+                  _context3.next = 4;
+                  return fetch("".concat(ordering.root, "/carts/").concat(uuid), {
+                    'Content-Type': 'application/json',
+                    method: 'PUT',
+                    body: JSON.stringify({
+                      comment: value
+                    }),
+                    headers: {
+                      'Content-Type': 'application/json',
+                      Authorization: "Bearer ".concat(token)
+                    }
+                  });
+
+                case 4:
+                  response = _context3.sent;
+                  _context3.next = 7;
+                  return response.json();
+
+                case 7:
+                  _yield$response$json = _context3.sent;
+                  result = _yield$response$json.result;
+                  error = _yield$response$json.error;
+
+                  if (!error) {
+                    _context3.next = 14;
+                    break;
+                  }
+
+                  setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
+                    loading: false,
+                    error: true,
+                    result: result
+                  }));
+                  showToast(_ToastContext.ToastType.Error, result);
+                  return _context3.abrupt("return");
+
+                case 14:
+                  setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
+                    loading: false,
+                    error: null,
+                    result: result
+                  }));
+
+                case 15:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          }, _callee3);
+        })), 750);
+      }
+
+      previousComment = value;
+    } catch (err) {
+      setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
+        loading: false,
+        error: true,
+        result: err.message
+      }));
+      showToast(_ToastContext.ToastType.Error, err.message);
+    }
+  };
 
   (0, _react.useEffect)(function () {
     getBusiness();
@@ -306,8 +431,10 @@ var Checkout = function Checkout(props) {
     orderOptions: orderState.options,
     paymethodSelected: paymethodSelected,
     businessDetails: businessDetails,
+    commentState: commentState,
     handlePaymethodChange: handlePaymethodChange,
-    handlerClickPlaceOrder: handlerClickPlaceOrder
+    handlerClickPlaceOrder: handlerClickPlaceOrder,
+    handleChangeComment: handleChangeComment
   })));
 };
 

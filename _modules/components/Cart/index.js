@@ -95,6 +95,14 @@ var Cart = function Cart(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
   /**
+   * Toast state
+   */
+
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+  /**
    * Comment state
    */
 
@@ -107,14 +115,6 @@ var Cart = function Cart(props) {
       _useState2 = _slicedToArray(_useState, 2),
       commentState = _useState2[0],
       setCommentState = _useState2[1];
-  /**
-   * Toast state
-   */
-
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
   /**
    * Total product in cart
    */
@@ -259,12 +259,12 @@ var Cart = function Cart(props) {
     orderState: orderState,
     clearCart: clearCart,
     removeProduct: removeProduct,
+    commentState: commentState,
     changeQuantity: changeQuantity,
     getProductMax: getProductMax,
     offsetDisabled: offsetDisabled,
     handleEditProduct: handleEditProduct,
-    handleChangeComment: handleChangeComment,
-    commentState: commentState
+    handleChangeComment: handleChangeComment
   })));
 };
 
