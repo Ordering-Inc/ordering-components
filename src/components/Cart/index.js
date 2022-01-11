@@ -93,6 +93,9 @@ export const Cart = (props) => {
     }
   }
 
+  /**
+   * change comment for cart
+   */
   const handleChangeComment = (value) => {
     try {
       if (previousComment !== value) {
