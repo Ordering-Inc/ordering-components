@@ -70,14 +70,6 @@ BusinessMenuListing.propTypes = {
    */
   businessId: PropTypes.number,
   /**
-   * Enable/disable search by name
-   */
-  isSearchByName: PropTypes.bool,
-  /**
-   * Enable/disable search by description
-   */
-  isSearchByDescription: PropTypes.bool,
-  /**
    * Components types before products listing
    * Array of type components, the parent props will pass to these components
    */
@@ -100,8 +92,6 @@ BusinessMenuListing.propTypes = {
 }
 
 BusinessMenuListing.defaultProps = {
-  isSearchByName: true,
-  isSearchByDescription: true,
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
