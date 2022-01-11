@@ -34,10 +34,13 @@ export const Cart = (props) => {
   const [{ token }] = useSession()
 
   /**
-   * comment state
+   * Comment state
    */
   const [commentState, setCommentState] = useState({ loading: false, result: null, error: null })
 
+  /**
+   * Toast state
+   */
   const [, { showToast }] = useToast()
 
   /**
