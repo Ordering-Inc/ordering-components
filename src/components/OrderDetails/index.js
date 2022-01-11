@@ -5,6 +5,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const OrderDetails = (props) => {
   const {
@@ -23,6 +24,8 @@ export const OrderDetails = (props) => {
   const [ordering] = useApi()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
+  const [events] = useEvent()
+
   const [orderState, setOrderState] = useState({ order: props.order ?? null, businessData: {}, loading: !props.order, error: null })
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
@@ -359,6 +362,19 @@ export const OrderDetails = (props) => {
       if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
     }
   }, [socket, userCustomerId])
+
+  useEffect(() => {
+    const handleCustomerReviewed = (review) => {
+      setOrderState({
+        ...orderState,
+        order: { ...orderState.order, user_review: review }
+      })
+    }
+    events.on('customer_reviewed', handleCustomerReviewed)
+    return () => {
+      events.off('customer_reviewed', handleCustomerReviewed)
+    }
+  }, [orderState])
 
   return (
     <>
