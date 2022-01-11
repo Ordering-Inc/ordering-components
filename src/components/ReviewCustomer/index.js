@@ -4,6 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const ReviewCustomer = (props) => {
   const {
@@ -15,6 +16,8 @@ export const ReviewCustomer = (props) => {
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
+  const [events] = useEvent()
+
   const [reviewState, setReviewState] = useState({
     qualification: 0,
     comment: '',
@@ -41,6 +44,7 @@ export const ReviewCustomer = (props) => {
       if (!error) {
         setActionState({ ...reviewState, loading: false })
         showToast(ToastType.Success, t('CUSTOMER_REVIEW_SUCCESS_CONTENT', 'Thank you, Customer review successfully submitted!'))
+        events.emit('customer_reviewed', result)
         props.onClose && props.onClose()
       } else {
         setActionState({ loading: false, error: result })

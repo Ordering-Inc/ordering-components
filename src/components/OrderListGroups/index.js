@@ -812,6 +812,27 @@ export const OrderListGroups = (props) => {
       request && request.cancel && request.cancel()
     }
   }, [requestsState?.orders])
+
+  useEffect(() => {
+    const handleCustomerReviewed = (review) => {
+      let orderFound = null
+      for (let i = 0; i < ordersStatusArray.length; i++) {
+        const status = ordersStatusArray[i]
+        orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === review.order_id)
+        if (orderFound) break
+      }
+      if (orderFound) {
+        const newOrderStatus = getStatusById(orderFound?.status) ?? ''
+        orderFound.user_review = review
+        actionOrderToTab(orderFound, newOrderStatus, 'update')
+      }
+    }
+    events.on('customer_reviewed', handleCustomerReviewed)
+    return () => {
+      events.off('customer_reviewed', handleCustomerReviewed)
+    }
+  }, [ordersGroup])
+
   return (
     <>
       {UIComponent && (
