@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
-import { useApi } from '../../contexts/ApiContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useApi } from '../../contexts/ApiContext'
+import { useSession } from '../../contexts/SessionContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
 
 /**
  * Component to manage Checkout page behavior without UI component
@@ -29,6 +31,18 @@ export const Checkout = (props) => {
    */
   const [orderState, { placeCart }] = useOrder()
   /**
+   * Session content
+   */
+  const [{ token }] = useSession()
+  /**
+   * Toast state
+   */
+  const [, { showToast }] = useToast()
+  /**
+   * Comment state
+   */
+  const [commentState, setCommentState] = useState({ loading: false, result: null, error: null })
+  /**
    * Object to save an object with business information
    */
   const [businessDetails, setBusinessDetails] = useState({ business: null, loading: true, error: null })
@@ -40,6 +54,15 @@ export const Checkout = (props) => {
    * Current cart
    */
   const cart = orderState.carts?.[`businessId:${businessId}`]
+  /**
+   * Timeout for update cart comment
+   */
+  let timeout = null
+  /**
+   * Cart comment stagged
+   */
+  let previousComment
+
   /**
    * Method to get business from API
    */
@@ -135,6 +158,43 @@ export const Checkout = (props) => {
     setPaymethodSelected(paymethod)
   }
 
+  /**
+   * change comment for cart
+   */
+  const handleChangeComment = (value) => {
+    try {
+      if (previousComment !== value) {
+        clearTimeout(timeout)
+        timeout = setTimeout(async function () {
+          setCommentState({ ...commentState, loading: true })
+          const uuid = cart?.uuid
+          const response = await fetch(`${ordering.root}/carts/${uuid}`, {
+            'Content-Type': 'application/json',
+            method: 'PUT',
+            body: JSON.stringify({
+              comment: value
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            }
+          })
+          const { result, error } = await response.json()
+          if (error) {
+            setCommentState({ ...commentState, loading: false, error: true, result })
+            showToast(ToastType.Error, result)
+            return
+          }
+          setCommentState({ ...commentState, loading: false, error: null, result })
+        }, 750)
+      }
+      previousComment = value
+    } catch (err) {
+      setCommentState({ ...commentState, loading: false, error: true, result: err.message })
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
   useEffect(() => {
     getBusiness()
   }, [businessId])
@@ -166,8 +226,10 @@ export const Checkout = (props) => {
           orderOptions={orderState.options}
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
+          commentState={commentState}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
+          handleChangeComment={handleChangeComment}
         />
       )}
     </>
