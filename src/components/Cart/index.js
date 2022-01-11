@@ -34,14 +34,14 @@ export const Cart = (props) => {
   const [{ token }] = useSession()
 
   /**
-   * Comment state
-   */
-  const [commentState, setCommentState] = useState({ loading: false, result: null, error: null })
-
-  /**
    * Toast state
    */
   const [, { showToast }] = useToast()
+
+  /**
+   * Comment state
+   */
+  const [commentState, setCommentState] = useState({ loading: false, result: null, error: null })
 
   /**
    * Total product in cart
@@ -139,12 +139,12 @@ export const Cart = (props) => {
           orderState={orderState}
           clearCart={clearCart}
           removeProduct={removeProduct}
+          commentState={commentState}
           changeQuantity={changeQuantity}
           getProductMax={getProductMax}
           offsetDisabled={offsetDisabled}
           handleEditProduct={handleEditProduct}
           handleChangeComment={handleChangeComment}
-          commentState={commentState}
         />
       )}
     </>
