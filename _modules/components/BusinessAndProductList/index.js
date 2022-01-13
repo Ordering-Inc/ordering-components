@@ -404,7 +404,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     attribute: 'name',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(searchValue, "%"))
+                      value: props !== null && props !== void 0 && props.isForceSearch ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
@@ -414,7 +414,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     attribute: 'description',
                     value: {
                       condition: 'ilike',
-                      value: encodeURI("%".concat(searchValue, "%"))
+                      value: props !== null && props !== void 0 && props.isForceSearch ? "%".concat(searchValue, "%") : encodeURI("%".concat(searchValue, "%"))
                     }
                   });
                 }
