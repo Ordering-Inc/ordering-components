@@ -49,7 +49,7 @@ export const BusinessAndProductList = (props) => {
   let [categoryState, setCategoryState] = useState(categoryStateDefault)
   const [errors, setErrors] = useState(null)
   const [errorQuantityProducts, setErrorQuantityProducts] = useState(false)
-
+  
   const categoryKey = searchValue
     ? 'search'
     : categorySelected.id === 'featured'
@@ -210,7 +210,7 @@ export const BusinessAndProductList = (props) => {
             attribute: 'name',
             value: {
               condition: 'ilike',
-              value: encodeURI(`%${searchValue}%`)
+              value: props?.isForceSearch ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
             }
           }
         )
@@ -221,7 +221,7 @@ export const BusinessAndProductList = (props) => {
             attribute: 'description',
             value: {
               condition: 'ilike',
-              value: encodeURI(`%${searchValue}%`)
+              value: props?.isForceSearch ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
             }
           }
         )
