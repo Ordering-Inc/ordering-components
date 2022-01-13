@@ -49,7 +49,6 @@ export const BusinessAndProductList = (props) => {
   let [categoryState, setCategoryState] = useState(categoryStateDefault)
   const [errors, setErrors] = useState(null)
   const [errorQuantityProducts, setErrorQuantityProducts] = useState(false)
-  const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   
   const categoryKey = searchValue
     ? 'search'
@@ -205,14 +204,13 @@ export const BusinessAndProductList = (props) => {
     let where = null
     const searchConditions = []
     if (searchValue) {
-      const isSpecialCharacter = rex.test(searchValue)
       if (isSearchByName) {
         searchConditions.push(
           {
             attribute: 'name',
             value: {
               condition: 'ilike',
-              value: (!isSpecialCharacter || props?.isForceSearch) ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+              value: props?.isForceSearch ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
             }
           }
         )
@@ -223,7 +221,7 @@ export const BusinessAndProductList = (props) => {
             attribute: 'description',
             value: {
               condition: 'ilike',
-              value: (!isSpecialCharacter || props?.isForceSearch) ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+              value: props?.isForceSearch ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
             }
           }
         )
