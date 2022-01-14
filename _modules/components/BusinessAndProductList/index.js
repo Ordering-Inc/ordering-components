@@ -961,6 +961,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
               if (!(result !== null && result !== void 0 && result.categories) || (result === null || result === void 0 ? void 0 : (_result$categories = result.categories) === null || _result$categories === void 0 ? void 0 : _result$categories.length) === 0) {
                 setErrorQuantityProducts(true);
+              } else {
+                setErrorQuantityProducts(false);
               }
 
               data = _objectSpread(_objectSpread({}, businessState), {}, {
