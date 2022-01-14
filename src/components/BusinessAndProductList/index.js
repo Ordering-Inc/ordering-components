@@ -582,6 +582,8 @@ export const BusinessAndProductList = (props) => {
 
       if (!result?.categories || result?.categories?.length === 0) {
         setErrorQuantityProducts(true)
+      } else {
+        setErrorQuantityProducts(false)
       }
 
       const data = {
