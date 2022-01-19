@@ -188,11 +188,11 @@ var BusinessList = function BusinessList(props) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              refreshConfigs();
-              _context.prev = 1;
+              _context.prev = 0;
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: true
               }));
+              refreshConfigs();
               parameters = {
                 location: !customLocation ? "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng) : "".concat(customLocation.lat, ",").concat(customLocation.lng),
                 type: !initialOrderType ? ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1 : initialOrderType
@@ -348,9 +348,6 @@ var BusinessList = function BusinessList(props) {
                 businessesList.businesses = newFetch ? result : prev ? [].concat(_toConsumableArray(result), _toConsumableArray(businessesList.businesses)) : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
               }
 
-              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-                loading: false
-              }));
               nextPageItems = 0;
 
               if (pagination.current_page !== pagination.total_pages) {
@@ -364,12 +361,15 @@ var BusinessList = function BusinessList(props) {
                 totalItems: pagination.total,
                 nextPageItems: nextPageItems
               }));
+              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+                loading: false
+              }));
               _context.next = 37;
               break;
 
             case 34:
               _context.prev = 34;
-              _context.t0 = _context["catch"](1);
+              _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -383,7 +383,7 @@ var BusinessList = function BusinessList(props) {
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 34]]);
+      }, _callee, null, [[0, 34]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
