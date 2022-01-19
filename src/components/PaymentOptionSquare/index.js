@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import propTypes from 'prop-types'
-import { useLanguage, useSession, useOrder } from 'ordering-components'
+import { useLanguage } from '../../contexts/LanguageContext'
+import { useSession } from '../../contexts/SessionContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const PaymentOptionSquare = (props) => {
   const {
