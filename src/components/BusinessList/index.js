@@ -65,10 +65,9 @@ export const BusinessList = (props) => {
    * @param {boolean} newFetch Make a new request or next page
    */
   const getBusinesses = async (newFetch, specificPagination, prev) => {
-    refreshConfigs()
     try {
       setBusinessesList({ ...businessesList, loading: true })
-
+      refreshConfigs()
       let parameters = {
         location: !customLocation
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
@@ -209,10 +208,6 @@ export const BusinessList = (props) => {
       } else {
         businessesList.businesses = newFetch ? result : (prev ? [...result, ...businessesList.businesses] : [...businessesList.businesses, ...result])
       }
-      setBusinessesList({
-        ...businessesList,
-        loading: false
-      })
       let nextPageItems = 0
       if (pagination.current_page !== pagination.total_pages) {
         const remainingItems = pagination.total - businessesList.businesses.length
@@ -224,6 +219,10 @@ export const BusinessList = (props) => {
         totalPages: pagination.total_pages,
         totalItems: pagination.total,
         nextPageItems
+      })
+      setBusinessesList({
+        ...businessesList,
+        loading: false
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
