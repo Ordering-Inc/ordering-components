@@ -69,21 +69,27 @@ export const Checkout = (props) => {
   const getBusiness = async () => {
     refreshConfigs()
     try {
-      const { content: { result, error } } = await ordering.businesses(businessId).select(propsToFetch).get()
+      let parameters = {
+        type: orderState.options?.type
+      }
+
+      const { content: { result, error } } = await ordering.businesses(businessId).select(propsToFetch).parameters(parameters).get()
       if (!error && cartState.cart?.paymethod_id) {
         const paymethodSelected = result?.paymethods?.find(paymethod => paymethod?.paymethod_id === cartState.cart?.paymethod_id)
-        handlePaymethodChange({
-          paymethodId: paymethodSelected?.paymethod?.id,
-          gateway: paymethodSelected?.paymethod?.gateway,
-          paymethod: {
-            ...paymethodSelected?.paymethod,
-            credentials: {
-              ...paymethodSelected?.data
-            }
-          },
-          data: cart?.paymethod_data,
-          id: paymethodSelected?.paymethod?.id
-        })
+        if (paymethodSelected?.paymethod?.id) {
+          handlePaymethodChange({
+            paymethodId: paymethodSelected?.paymethod?.id,
+            gateway: paymethodSelected?.paymethod?.gateway,
+            paymethod: {
+              ...paymethodSelected?.paymethod,
+              credentials: {
+                ...paymethodSelected?.data
+              }
+            },
+            data: cart?.paymethod_data,
+            id: paymethodSelected?.paymethod?.id
+          })
+        }
       }
       setBusinessDetails({
         ...businessDetails,
