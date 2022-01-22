@@ -240,6 +240,7 @@ export const OrderDetails = (props) => {
 
   const readMessages = async () => {
     const messageId = messages?.messages[messages?.messages?.length - 1]?.id
+    if (!messageId) return
     try {
       const response = await fetch(`${ordering.root}/orders/${orderState.order?.id}/messages/${messageId}/read`, {
         method: 'GET',
@@ -287,6 +288,7 @@ export const OrderDetails = (props) => {
     if (props.order) {
       setOrderState({
         ...orderState,
+        loading: false,
         order: props.order
       })
       if (isFetchDrivers) {
