@@ -100,15 +100,15 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           const userId = userCustomerId || session.user.id
           const addressesResponse = await ordering.setAccessToken(session.token).users(userId).addresses().where(conditions).get()
           let address = addressesResponse.content.result.find(address => {
-            localOptions.address.internal_number = localOptions.address?.internal_number || null
-            localOptions.address.zipcode = localOptions.address?.zipcode || null
-            localOptions.address.address_notes = localOptions.address?.address_notes || null
+            localOptions.address.internal_number = localOptions?.address?.internal_number || null
+            localOptions.address.zipcode = localOptions?.address?.zipcode || null
+            localOptions.address.address_notes = localOptions?.address?.address_notes || null
 
-            return address.location.lat === localOptions.address.location.lat &&
-              address.location.lng === localOptions.address.location.lng &&
-              address.internal_number === localOptions.address.internal_number &&
-              address.zipcode === localOptions.address.zipcode &&
-              address.address_notes === localOptions.address.address_notes
+            return address?.location?.lat === localOptions?.address?.location?.lat &&
+              address?.location?.lng === localOptions?.address?.location?.lng &&
+              address?.internal_number === localOptions?.address?.internal_number &&
+              address?.zipcode === localOptions?.address?.zipcode &&
+              address?.address_notes === localOptions?.address?.address_notes
           })
           if (!address) {
             Object.keys(localOptions.address).forEach(key => localOptions.address[key] === null && delete localOptions.address[key])
