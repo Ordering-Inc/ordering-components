@@ -34,6 +34,7 @@ export const OrderDetails = (props) => {
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
+  const [forceUpdate, setForceUpdate] = useState(null)
 
   const propsToFetch = ['header', 'slug']
 
@@ -127,10 +128,19 @@ export const OrderDetails = (props) => {
         setOrderState({ ...orderState, order: result, loading: false })
       }
       if (error) {
-        const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
-        const defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error')
+        setForceUpdate(null)
+        if (result[0] == 'outside pickup area, insert reasons to force update') {
+            setOrderState({ ...orderState, loading: false })
+            setForceUpdate(9)
+        } else if (result[0] == 'outside delivery area, insert reasons to force update') {
+            setOrderState({ ...orderState, loading: false })
+            setForceUpdate(11)
+        } else {
+          const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
+          const defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error')
 
-        setOrderState({ ...orderState, error: [defaultMessage], loading: false })
+          setOrderState({ ...orderState, error: [defaultMessage], loading: false })
+        }
       }
     } catch (err) {
       setOrderState({ ...orderState, loading: false, error: [err?.message || t('NETWORK_ERROR', 'Network Error')] })
@@ -396,6 +406,7 @@ export const OrderDetails = (props) => {
           messagesReadList={messagesReadList}
           driverUpdateLocation={driverUpdateLocation}
           setDriverUpdateLocation={setDriverUpdateLocation}
+          forceUpdate={forceUpdate}
         />
       )}
     </>
