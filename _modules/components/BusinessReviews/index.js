@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -27,9 +27,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -41,7 +41,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -55,27 +55,33 @@ var BusinessReviews = function BusinessReviews(props) {
       ordering = _useApi2[0];
 
   var requestsState = {};
+
+  var _useState = (0, _react.useState)(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      searchValue = _useState2[0],
+      setSearchValue = _useState2[1];
   /**
    * businessReviewsList, this must be contain a reviews, loading and error to send UIComponent
    */
 
-  var _useState = (0, _react.useState)({
+
+  var _useState3 = (0, _react.useState)({
     reviews: [],
     loading: true,
     error: null
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      businessReviewsList = _useState2[0],
-      setBusinessReviewsList = _useState2[1];
+      _useState4 = _slicedToArray(_useState3, 2),
+      businessReviewsList = _useState4[0],
+      setBusinessReviewsList = _useState4[1];
   /**
    * ReviewsList, this must be contain an original array of business reviews
    */
 
 
-  var _useState3 = (0, _react.useState)(reviews),
-      _useState4 = _slicedToArray(_useState3, 2),
-      reviewsList = _useState4[0],
-      setReviewsList = _useState4[1];
+  var _useState5 = (0, _react.useState)(reviews),
+      _useState6 = _slicedToArray(_useState5, 2),
+      reviewsList = _useState6[0],
+      setReviewsList = _useState6[1];
   /**
    * Method to change filter value for business reviews
    * @param {Number} val
@@ -152,14 +158,23 @@ var BusinessReviews = function BusinessReviews(props) {
     };
   }();
 
+  var handleChangeSearch = function handleChangeSearch(search) {
+    setSearchValue(search);
+  };
+
+  var sortReviews = function sortReviews(reviews) {
+    return reviews.sort(function (a, b) {
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+  };
+
   (0, _react.useEffect)(function () {
-    if (reviews) {
-      reviews.length && reviews.sort(function (a, b) {
-        return new Date(b.created_at) - new Date(a.created_at);
-      });
+    if ((reviews === null || reviews === void 0 ? void 0 : reviews.length) > 0) {
       setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
         loading: false,
-        reviews: reviews
+        reviews: sortReviews(reviews.filter(function (r) {
+          return r.comment;
+        }))
       }));
     } else {
       getBusiness();
@@ -171,9 +186,29 @@ var BusinessReviews = function BusinessReviews(props) {
       }
     };
   }, []);
+  (0, _react.useEffect)(function () {
+    if (!(reviews !== null && reviews !== void 0 && reviews.length)) return;
+    var reviewsListing = sortReviews(reviews.filter(function (r) {
+      return r.comment;
+    }));
+
+    if (!searchValue) {
+      setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
+        reviews: reviewsListing
+      }));
+    } else {
+      setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
+        reviews: reviewsListing.filter(function (item) {
+          return item.comment.toLowerCase().includes(searchValue.toLowerCase());
+        })
+      }));
+    }
+  }, [searchValue]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    searchValue: searchValue,
     reviewsList: businessReviewsList,
-    handleClickOption: onChangeOption
+    handleClickOption: onChangeOption,
+    handleChangeSearch: handleChangeSearch
   })));
 };
 
