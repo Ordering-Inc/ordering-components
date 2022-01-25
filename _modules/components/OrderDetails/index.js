@@ -158,7 +158,22 @@ var OrderDetails = function OrderDetails(props) {
       driverUpdateLocation = _useState14[0],
       setDriverUpdateLocation = _useState14[1];
 
+  var _useState15 = (0, _react.useState)(null),
+      _useState16 = _slicedToArray(_useState15, 2),
+      forceUpdate = _useState16[0],
+      setForceUpdate = _useState16[1];
+
   var propsToFetch = ['header', 'slug'];
+  var deliveryMessages = {
+    delivery: {
+      text: 'outside delivery area, insert reasons to force update',
+      value: 11
+    },
+    pickup: {
+      text: 'outside pickup area, insert reasons to force update',
+      value: 9
+    }
+  };
   var requestsState = {};
   /**
    * Method to format a price number
@@ -327,6 +342,7 @@ var OrderDetails = function OrderDetails(props) {
           _yield$ordering$setAc2,
           result,
           error,
+          selected,
           message,
           defaultMessage,
           _args3 = arguments;
@@ -360,12 +376,22 @@ var OrderDetails = function OrderDetails(props) {
               }
 
               if (error) {
-                message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR';
-                defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error');
-                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  error: [defaultMessage],
-                  loading: false
-                }));
+                selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery : result.includes(deliveryMessages.pickup.text) ? deliveryMessages.pickup : null;
+
+                if (selected) {
+                  setForceUpdate(null);
+                  setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                    loading: false
+                  }));
+                  setForceUpdate(selected.value);
+                } else {
+                  message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR';
+                  defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error');
+                  setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                    error: [defaultMessage],
+                    loading: false
+                  }));
+                }
               }
 
               _context3.next = 17;
@@ -853,7 +879,8 @@ var OrderDetails = function OrderDetails(props) {
     readMessages: readMessages,
     messagesReadList: messagesReadList,
     driverUpdateLocation: driverUpdateLocation,
-    setDriverUpdateLocation: setDriverUpdateLocation
+    setDriverUpdateLocation: setDriverUpdateLocation,
+    forceUpdate: forceUpdate
   })));
 };
 
