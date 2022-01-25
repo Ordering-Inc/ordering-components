@@ -38,6 +38,17 @@ export const OrderDetails = (props) => {
 
   const propsToFetch = ['header', 'slug']
 
+  const deliveryMessages = {
+    delivery: {
+      text: 'outside delivery area, insert reasons to force update',
+      value: 11
+    },
+    pickup: {
+      text: 'outside pickup area, insert reasons to force update',
+      value: 9
+    },
+  }
+
   const requestsState = {}
 
   /**
@@ -128,13 +139,14 @@ export const OrderDetails = (props) => {
         setOrderState({ ...orderState, order: result, loading: false })
       }
       if (error) {
-        setForceUpdate(null)
-        if (result[0] == 'outside pickup area, insert reasons to force update') {
-            setOrderState({ ...orderState, loading: false })
-            setForceUpdate(9)
-        } else if (result[0] == 'outside delivery area, insert reasons to force update') {
-            setOrderState({ ...orderState, loading: false })
-            setForceUpdate(11)
+        const selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery 
+                            : result.includes(deliveryMessages.pickup.text) 
+                              ? deliveryMessages.pickup 
+                              : null
+        if (selected) {
+          setForceUpdate(null)
+          setOrderState({ ...orderState, loading: false })
+          setForceUpdate(selected.value)
         } else {
           const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
           const defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error')
