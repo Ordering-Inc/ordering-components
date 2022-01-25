@@ -45,6 +45,7 @@ export const OrderList = props => {
   const [updateOtherStatus, setUpdateOtherStatus] = useState([])
   const [sortBy, setSortBy] = useState({ param: orderBy, direction: orderDirection })
 
+  const profileMessage = props.profileMessages
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
 
@@ -332,7 +333,8 @@ export const OrderList = props => {
   }
 
   useEffect(() => {
-    if (!orderList.loading) {
+    if (profileMessage) return
+    if (!orderList.loading && orderBy !== 'last_direct_message_at') {
       const ordersSorted = orderList.orders.sort((a, b) => {
         if (activeOrders) {
           return dayjs(b.created_at).unix() - dayjs(a.created_at).unix()
@@ -344,7 +346,7 @@ export const OrderList = props => {
         orders: ordersSorted
       })
     }
-  }, [orderList.loading])
+  }, [orderList.loading, orderBy])
 
   /**
    * This effect is used to reload orders with dynamic params, using `isDynamicSort` as validation
