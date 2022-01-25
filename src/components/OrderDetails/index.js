@@ -34,8 +34,20 @@ export const OrderDetails = (props) => {
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
+  const [forceUpdate, setForceUpdate] = useState(null)
 
   const propsToFetch = ['header', 'slug']
+
+  const deliveryMessages = {
+    delivery: {
+      text: 'outside delivery area, insert reasons to force update',
+      value: 11
+    },
+    pickup: {
+      text: 'outside pickup area, insert reasons to force update',
+      value: 9
+    },
+  }
 
   const requestsState = {}
 
@@ -127,10 +139,20 @@ export const OrderDetails = (props) => {
         setOrderState({ ...orderState, order: result, loading: false })
       }
       if (error) {
-        const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
-        const defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error')
+        const selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery 
+                            : result.includes(deliveryMessages.pickup.text) 
+                              ? deliveryMessages.pickup 
+                              : null
+        if (selected) {
+          setForceUpdate(null)
+          setOrderState({ ...orderState, loading: false })
+          setForceUpdate(selected.value)
+        } else {
+          const message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR'
+          const defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error')
 
-        setOrderState({ ...orderState, error: [defaultMessage], loading: false })
+          setOrderState({ ...orderState, error: [defaultMessage], loading: false })
+        }
       }
     } catch (err) {
       setOrderState({ ...orderState, loading: false, error: [err?.message || t('NETWORK_ERROR', 'Network Error')] })
@@ -398,6 +420,7 @@ export const OrderDetails = (props) => {
           messagesReadList={messagesReadList}
           driverUpdateLocation={driverUpdateLocation}
           setDriverUpdateLocation={setDriverUpdateLocation}
+          forceUpdate={forceUpdate}
         />
       )}
     </>
