@@ -11,6 +11,7 @@ export const BusinessReviews = (props) => {
 
   const [ordering] = useApi()
   const requestsState = {}
+  const [searchValue, setSearchValue] = useState(null);
 
   /**
    * businessReviewsList, this must be contain a reviews, loading and error to send UIComponent
@@ -70,16 +71,22 @@ export const BusinessReviews = (props) => {
     }
   }
 
+  const handleChangeSearch = (search) => {
+    setSearchValue(search)
+  }
+
+  const sortReviews = (reviews) => {
+    return reviews.sort((a, b) => {
+      return new Date(b.created_at) - new Date(a.created_at)
+    })
+  }
+
   useEffect(() => {
-    if (reviews) {
-      reviews.length &&
-      reviews.sort((a, b) => {
-        return new Date(b.created_at) - new Date(a.created_at)
-      })
+    if (reviews?.length > 0) {
       setBusinessReviewsList({
         ...businessReviewsList,
         loading: false,
-        reviews
+        reviews: sortReviews(reviews.filter(r => r.comment))
       })
     } else {
       getBusiness()
@@ -91,13 +98,31 @@ export const BusinessReviews = (props) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!reviews?.length) return
+    const reviewsListing = sortReviews(reviews.filter(r => r.comment))
+    if (!searchValue) {
+      setBusinessReviewsList({
+        ...businessReviewsList,
+        reviews: reviewsListing
+      })
+    } else {
+      setBusinessReviewsList({
+        ...businessReviewsList,
+        reviews: reviewsListing.filter(item => item.comment.toLowerCase().includes(searchValue.toLowerCase()))
+      })
+    }
+  }, [searchValue]);
+
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          searchValue={searchValue}
           reviewsList={businessReviewsList}
           handleClickOption={onChangeOption}
+          handleChangeSearch={handleChangeSearch}
         />
       )}
     </>
