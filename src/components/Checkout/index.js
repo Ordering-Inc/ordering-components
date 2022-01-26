@@ -5,7 +5,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
-
+import { useLanguage } from '../../contexts/LanguageContext'
 /**
  * Component to manage Checkout page behavior without UI component
  */
@@ -27,6 +27,10 @@ export const Checkout = (props) => {
   const [errors, setErrors] = useState(null)
 
   /**
+   * Language context
+   */
+  const [, t] = useLanguage()
+  /**
    * Order context
    */
   const [orderState, { placeCart }] = useOrder()
@@ -38,6 +42,14 @@ export const Checkout = (props) => {
    * Toast state
    */
   const [, { showToast }] = useToast()
+  /**
+   * Delivery Instructions options
+   */
+  const [instructionsOptions, setInstructionsOptions] = useState({ loading: false, result: [{ id: null, enabled: true, name: t('EITHER_WAY', 'Either way') }], error: null })
+  /**
+   * Delivery instructions selected
+   */
+  const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
   /**
    * Comment state
    */
@@ -69,7 +81,7 @@ export const Checkout = (props) => {
   const getBusiness = async () => {
     refreshConfigs()
     try {
-      let parameters = {
+      const parameters = {
         type: orderState.options?.type
       }
 
@@ -201,6 +213,50 @@ export const Checkout = (props) => {
     }
   }
 
+  const getDeliveryOptions = async () => {
+    try {
+      const response = await fetch(`${ordering.root}/delivery_options`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${token}`
+        }
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        setInstructionsOptions({ loading: false, result: [...instructionsOptions.result, ...result] })
+        return
+      }
+      setInstructionsOptions({ loading: false, error: true, result })
+      showToast(ToastType.Error, result)
+    } catch (err) {
+      setInstructionsOptions({ loading: false, error: true, result: err.message })
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
+  const handleChangeDeliveryOption = async (value) => {
+    try {
+      const response = await fetch(`${ordering.root}/carts/${cart?.uuid}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${token}`
+        },
+        body: JSON.stringify({
+          delivery_option_id: value
+        })
+      })
+      const { result, error } = await response.json()
+      setDeliveryOptionSelected(result?.delivery_option_id)
+      if (error) {
+        showToast(ToastType.Error, result)
+      }
+    } catch (err) {
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
   useEffect(() => {
     getBusiness()
   }, [businessId])
@@ -221,6 +277,16 @@ export const Checkout = (props) => {
     }
   }, [cart])
 
+  useEffect(() => {
+    if (deliveryOptionSelected === undefined) {
+      setDeliveryOptionSelected(cart?.delivery_option_id)
+    }
+  }, [cart?.delivery_option_id])
+
+  useEffect(() => {
+    getDeliveryOptions()
+  }, [])
+
   return (
     <>
       {UIComponent && (
@@ -233,9 +299,12 @@ export const Checkout = (props) => {
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
           commentState={commentState}
+          instructionsOptions={instructionsOptions}
+          deliveryOptionSelected={deliveryOptionSelected}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
           handleChangeComment={handleChangeComment}
+          handleChangeDeliveryOption={handleChangeDeliveryOption}
         />
       )}
     </>
