@@ -859,7 +859,11 @@ var OrderListGroups = function OrderListGroups(props) {
 
               setlogisticOrders(_objectSpread(_objectSpread({}, logisticOrders), {}, {
                 loading: false,
-                orders: result
+                orders: result.filter(function (order) {
+                  var _order$order_group, _order$order_group$or;
+
+                  return !(order !== null && order !== void 0 && order.order_group && (order === null || order === void 0 ? void 0 : (_order$order_group = order.order_group) === null || _order$order_group === void 0 ? void 0 : (_order$order_group$or = _order$order_group.orders) === null || _order$order_group$or === void 0 ? void 0 : _order$order_group$or.length) === 0);
+                })
               }));
               return _context7.abrupt("return");
 
@@ -950,13 +954,13 @@ var OrderListGroups = function OrderListGroups(props) {
   };
 
   var handleClickOrder = function handleClickOrder(orderAux) {
-    var _order$order_group;
+    var _order$order_group2;
 
     var order = _objectSpread(_objectSpread({}, orderAux), {}, {
       showNotification: false
     });
 
-    var ordersGroups = order === null || order === void 0 ? void 0 : (_order$order_group = order.order_group) === null || _order$order_group === void 0 ? void 0 : _order$order_group.orders;
+    var ordersGroups = order === null || order === void 0 ? void 0 : (_order$order_group2 = order.order_group) === null || _order$order_group2 === void 0 ? void 0 : _order$order_group2.orders;
 
     if (!ordersGroups) {
       var _ordersGroup$status2;
@@ -971,9 +975,9 @@ var OrderListGroups = function OrderListGroups(props) {
         orders: sortOrders(orderList)
       }))));
     } else {
-      var _order$order_group2, _order$order_group2$o, _order$order_group2$o2;
+      var _order$order_group3, _order$order_group3$o, _order$order_group3$o2;
 
-      var _status = getStatusById(order === null || order === void 0 ? void 0 : (_order$order_group2 = order.order_group) === null || _order$order_group2 === void 0 ? void 0 : (_order$order_group2$o = _order$order_group2.orders) === null || _order$order_group2$o === void 0 ? void 0 : (_order$order_group2$o2 = _order$order_group2$o[0]) === null || _order$order_group2$o2 === void 0 ? void 0 : _order$order_group2$o2.status);
+      var _status = getStatusById(order === null || order === void 0 ? void 0 : (_order$order_group3 = order.order_group) === null || _order$order_group3 === void 0 ? void 0 : (_order$order_group3$o = _order$order_group3.orders) === null || _order$order_group3$o === void 0 ? void 0 : (_order$order_group3$o2 = _order$order_group3$o[0]) === null || _order$order_group3$o2 === void 0 ? void 0 : _order$order_group3$o2.status);
 
       var _orderList;
 
