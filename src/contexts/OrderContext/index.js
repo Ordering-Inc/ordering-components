@@ -489,6 +489,43 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
   }
 
+  const applyOffer = async (offerData) => {
+    if (!offerData.business_id) {
+      throw new Error('`business_id` is required.')
+    }
+    if (typeof offerData.coupon === 'undefined') {
+      throw new Error('`coupon` is required.')
+    }
+    try {
+      setState({ ...state, loading: true })
+      const response = await fetch(`${ordering.root}/carts/add_offer`, {
+        method: 'POST',
+        body: JSON.stringify({
+          user_id: offerData.userId,
+          business_id: offerData.business_id,
+          coupon: offerData.coupon,
+          force: offerData.force ?? false
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.token}`
+        }
+      })
+      const result = await response.json()
+      if (!result.error) {
+        state.carts[`businessId:${result.result.business_id}`] = result.result
+        events.emit('cart_updated', result.result)
+      } else {
+        setAlert({ show: true, content: result.result })
+      }
+      setState({ ...state, loading: false })
+      return !result.error
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return false
+    }
+  }
+
   /**
    * Apply coupon to cart
    */
@@ -798,6 +835,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     updateProduct,
     clearCart,
     applyCoupon,
+    applyOffer,
     changeDriverTip,
     placeCart,
     confirmCart,
