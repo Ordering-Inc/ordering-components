@@ -463,7 +463,7 @@ export const OrderListGroups = (props) => {
       const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
       const { result, error } = await response.json()
       if (!error) {
-        setlogisticOrders({ ...logisticOrders, loading: false, orders: result })
+        setlogisticOrders({ ...logisticOrders, loading: false, orders: result.filter(order => !(order?.order_group && order?.order_group?.orders?.length === 0)) })
         return
       }
       setlogisticOrders({ loading: false, orders: [], error: result })
