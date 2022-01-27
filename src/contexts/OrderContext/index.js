@@ -502,7 +502,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         method: 'POST',
         body: JSON.stringify({
           userId: offerData.userId,
-          businessId: offerData.businessId,
+          businessId: offerData.business_id,
           coupon: offerData.coupon,
           force: offerData.force ?? false
         }),
