@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useConfig, useEvent, useLanguage, useApi, useWebsocket, ToastType, useToast, useSession } from 'ordering-components/native'
+import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
+import { ToastType, useToast } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
+import { useEvent } from '../../contexts/EventContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 export const OrderListGroups = (props) => {
   const {
