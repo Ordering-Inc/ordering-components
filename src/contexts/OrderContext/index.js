@@ -501,8 +501,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const response = await fetch(`${ordering.root}/carts/add_offer`, {
         method: 'POST',
         body: JSON.stringify({
-          userId: offerData.userId,
-          businessId: offerData.business_id,
+          user_id: offerData.userId,
+          business_id: offerData.business_id,
           coupon: offerData.coupon,
           force: offerData.force ?? false
         }),
