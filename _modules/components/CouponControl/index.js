@@ -17,6 +17,8 @@ var _LanguageContext = require("../../contexts/LanguageContext");
 
 var _CustomerContext = require("../../contexts/CustomerContext");
 
+var _ConfigContext = require("../../contexts/ConfigContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -53,10 +55,16 @@ var CouponControl = function CouponControl(props) {
       price = props.price,
       UIComponent = props.UIComponent;
 
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
+
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       orderState = _useOrder2[0],
-      applyCoupon = _useOrder2[1].applyCoupon;
+      _useOrder2$ = _useOrder2[1],
+      applyCoupon = _useOrder2$.applyCoupon,
+      applyOffer = _useOrder2$.applyOffer;
 
   var _useState = (0, _react.useState)({
     open: false,
@@ -87,19 +95,29 @@ var CouponControl = function CouponControl(props) {
 
 
   var handleButtonApplyClick = function handleButtonApplyClick() {
-    if (user !== null && user !== void 0 && user.id) {
-      // Callcenter
-      applyCoupon({
-        business_id: businessId,
-        coupon: couponInput
-      }, {
-        businessId: businessId,
-        userId: user === null || user === void 0 ? void 0 : user.id
-      });
+    var _configs$advanced_off;
+
+    if (!(configs !== null && configs !== void 0 && (_configs$advanced_off = configs.advanced_offers_module) !== null && _configs$advanced_off !== void 0 && _configs$advanced_off.value)) {
+      if (user !== null && user !== void 0 && user.id) {
+        // Callcenter
+        applyCoupon({
+          business_id: businessId,
+          coupon: couponInput
+        }, {
+          businessId: businessId,
+          userId: user === null || user === void 0 ? void 0 : user.id
+        });
+      } else {
+        applyCoupon({
+          business_id: businessId,
+          coupon: couponInput
+        });
+      }
     } else {
-      applyCoupon({
+      applyOffer({
         business_id: businessId,
-        coupon: couponInput
+        coupon: couponInput,
+        force: true
       });
     }
   };
