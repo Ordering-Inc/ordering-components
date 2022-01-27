@@ -493,9 +493,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     if (!offerData.business_id) {
       throw new Error('`business_id` is required.')
     }
-    if (!offerData.offer_id) {
-      throw new Error('`offer_id` is required.')
-    }
     if (typeof offerData.coupon === 'undefined') {
       throw new Error('`coupon` is required.')
     }
@@ -838,6 +835,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     updateProduct,
     clearCart,
     applyCoupon,
+    addOffer,
     changeDriverTip,
     placeCart,
     confirmCart,
