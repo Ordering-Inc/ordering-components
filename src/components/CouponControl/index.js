@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useCustomer } from '../../contexts/CustomerContext'
+import { useConfig } from '../../contexts/ConfigContext'
 
 /**
  * Component to manage coupon form behavior without UI component
@@ -14,7 +15,8 @@ export const CouponControl = (props) => {
     UIComponent
   } = props
 
-  const [orderState, { applyCoupon }] = useOrder()
+  const [{ configs }] = useConfig()
+  const [orderState, { applyCoupon, applyOffer }] = useOrder()
   const [confirm, setConfirm] = useState({ open: false, content: null, error: false })
   const [, t] = useLanguage()
   const [{ user }] = useCustomer()
@@ -31,18 +33,26 @@ export const CouponControl = (props) => {
    * method to manage coupon apply button
    */
   const handleButtonApplyClick = () => {
-    if (user?.id) { // Callcenter
-      applyCoupon({
-        business_id: businessId,
-        coupon: couponInput
-      }, {
-        businessId,
-        userId: user?.id
-      })
+    if (!configs?.advanced_offers_module?.value) {
+      if (user?.id) { // Callcenter
+        applyCoupon({
+          business_id: businessId,
+          coupon: couponInput
+        }, {
+          businessId,
+          userId: user?.id
+        })
+      } else {
+        applyCoupon({
+          business_id: businessId,
+          coupon: couponInput
+        })
+      }
     } else {
-      applyCoupon({
+      applyOffer({
         business_id: businessId,
-        coupon: couponInput
+        coupon: couponInput,
+        force: true
       })
     }
   }
