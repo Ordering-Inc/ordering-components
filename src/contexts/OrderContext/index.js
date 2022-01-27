@@ -489,7 +489,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
   }
 
-  const addOffer = async (offerData) => {
+  const applyOffer = async (offerData) => {
     if (!offerData.business_id) {
       throw new Error('`business_id` is required.')
     }
@@ -835,7 +835,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     updateProduct,
     clearCart,
     applyCoupon,
-    addOffer,
+    applyOffer,
     changeDriverTip,
     placeCart,
     confirmCart,
