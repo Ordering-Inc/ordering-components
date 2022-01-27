@@ -1169,8 +1169,8 @@ var OrderProvider = function OrderProvider(_ref) {
               return fetch("".concat(ordering.root, "/carts/add_offer"), {
                 method: 'POST',
                 body: JSON.stringify({
-                  userId: offerData.userId,
-                  businessId: offerData.business_id,
+                  user_id: offerData.userId,
+                  business_id: offerData.business_id,
                   coupon: offerData.coupon,
                   force: (_offerData$force = offerData.force) !== null && _offerData$force !== void 0 ? _offerData$force : false
                 }),
