@@ -69,7 +69,8 @@ var Cart = function Cart(props) {
       _useOrder2$ = _useOrder2[1],
       updateProduct = _useOrder2$.updateProduct,
       removeProduct = _useOrder2$.removeProduct,
-      clearCart = _useOrder2$.clearCart;
+      clearCart = _useOrder2$.clearCart,
+      removeOffer = _useOrder2$.removeOffer;
   /**
    * Config context manager
    */
@@ -253,6 +254,17 @@ var Cart = function Cart(props) {
       showToast(_ToastContext.ToastType.Error, err.message);
     }
   };
+  /**
+   * method to manage remove coupon assigned
+   */
+
+
+  var handleRemoveOfferClick = function handleRemoveOfferClick(id) {
+    removeOffer({
+      business_id: cart === null || cart === void 0 ? void 0 : cart.business_id,
+      offer_id: id
+    });
+  };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     carts: orderState.carts,
@@ -264,7 +276,8 @@ var Cart = function Cart(props) {
     getProductMax: getProductMax,
     offsetDisabled: offsetDisabled,
     handleEditProduct: handleEditProduct,
-    handleChangeComment: handleChangeComment
+    handleChangeComment: handleChangeComment,
+    handleRemoveOfferClick: handleRemoveOfferClick
   })));
 };
 
