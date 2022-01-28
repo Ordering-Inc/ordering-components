@@ -16,7 +16,7 @@ export const Cart = (props) => {
   /**
    * Order context manager
    */
-  const [orderState, { updateProduct, removeProduct, clearCart }] = useOrder()
+  const [orderState, { updateProduct, removeProduct, clearCart, removeOffer }] = useOrder()
 
   /**
    * Config context manager
@@ -130,6 +130,16 @@ export const Cart = (props) => {
     }
   }
 
+  /**
+   * method to manage remove coupon assigned
+   */
+  const handleRemoveOfferClick = (id) => {
+    removeOffer({
+      business_id: cart?.business_id,
+      offer_id: id
+    })
+  }
+
   return (
     <>
       {UIComponent && (
@@ -145,6 +155,7 @@ export const Cart = (props) => {
           offsetDisabled={offsetDisabled}
           handleEditProduct={handleEditProduct}
           handleChangeComment={handleChangeComment}
+          handleRemoveOfferClick={handleRemoveOfferClick}
         />
       )}
     </>
