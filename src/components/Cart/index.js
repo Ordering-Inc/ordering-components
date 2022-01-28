@@ -131,7 +131,7 @@ export const Cart = (props) => {
   }
 
   /**
-   * method to manage remove coupon assigned
+   * method to manage remove offer assigned
    */
   const handleRemoveOfferClick = (id) => {
     removeOffer({
