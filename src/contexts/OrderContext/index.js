@@ -104,14 +104,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             localOptions.address.zipcode = localOptions.address?.zipcode || null
             localOptions.address.address_notes = localOptions.address?.address_notes || null
 
-            return address.location.lat === localOptions.address.location.lat &&
-              address.location.lng === localOptions.address.location.lng &&
-              address.internal_number === localOptions.address.internal_number &&
-              address.zipcode === localOptions.address.zipcode &&
-              address.address_notes === localOptions.address.address_notes
+            return address?.location?.lat === localOptions?.address?.location.lat &&
+              address?.location?.lng === localOptions?.address?.location?.lng &&
+              address?.internal_number === localOptions?.address?.internal_number &&
+              address?.zipcode === localOptions?.address?.zipcode &&
+              address?.address_notes === localOptions?.address?.address_notes
           })
           if (!address) {
-            Object.keys(localOptions.address).forEach(key => localOptions.address[key] === null && delete localOptions.address[key])
+            Object.keys(localOptions.address).forEach(key => localOptions?.address?.[key] === null && delete localOptions?.address?.[key])
             const { content: { error, result } } = await ordering.setAccessToken(session.token).users(userId).addresses().save(localOptions.address)
             if (!error) {
               address = result
@@ -152,15 +152,15 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     const props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number']
     const values = []
     props.forEach(prop => {
-      if (state.options?.address && state.options?.address[prop]) {
+      if (state.options?.address && state.options?.address?.[prop]) {
         if (prop === 'location') {
-          values.push(address[prop].lat === state.options?.address[prop].lat &&
-            address[prop].lng === state.options?.address[prop].lng)
+          values.push(address?.[prop]?.lat === state.options?.address?.[prop]?.lat &&
+            address?.[prop]?.lng === state.options?.address?.[prop]?.lng)
         } else {
-          values.push(address[prop] === state.options?.address[prop])
+          values.push(address?.[prop] === state.options?.address?.[prop])
         }
       } else {
-        values.push(!address[prop])
+        values.push(!address?.[prop])
       }
     })
     return values.every(value => value)
@@ -564,7 +564,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Apply coupon to cart
    */
-  const changeDriverTip = async (businessId, driverTipRate, isFixedPrice) => {
+  const changeDriverTip = async (businessId, driverTipRate = 0, isFixedPrice) => {
     if (!businessId) {
       throw new Error('`businessId` is required.')
     }
