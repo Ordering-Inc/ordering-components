@@ -29,21 +29,25 @@ var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 
+var _excluded = ["carts"],
+    _excluded2 = ["carts"],
+    _excluded3 = ["carts"];
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -59,7 +63,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -204,7 +208,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc2.result;
 
               if (!error) {
-                carts = result.carts, _options = _objectWithoutProperties(result, ["carts"]);
+                carts = result.carts, _options = _objectWithoutProperties(result, _excluded);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -252,12 +256,12 @@ var OrderProvider = function OrderProvider(_ref) {
             case 26:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
-                var _localOptions$address2, _localOptions$address3, _localOptions$address4;
+                var _localOptions$address2, _localOptions$address3, _localOptions$address4, _address$location, _localOptions$address5, _address$location2, _localOptions$address6, _localOptions$address7, _localOptions$address8, _localOptions$address9, _localOptions$address10;
 
                 localOptions.address.internal_number = ((_localOptions$address2 = localOptions.address) === null || _localOptions$address2 === void 0 ? void 0 : _localOptions$address2.internal_number) || null;
                 localOptions.address.zipcode = ((_localOptions$address3 = localOptions.address) === null || _localOptions$address3 === void 0 ? void 0 : _localOptions$address3.zipcode) || null;
                 localOptions.address.address_notes = ((_localOptions$address4 = localOptions.address) === null || _localOptions$address4 === void 0 ? void 0 : _localOptions$address4.address_notes) || null;
-                return address.location.lat === localOptions.address.location.lat && address.location.lng === localOptions.address.location.lng && address.internal_number === localOptions.address.internal_number && address.zipcode === localOptions.address.zipcode && address.address_notes === localOptions.address.address_notes;
+                return (address === null || address === void 0 ? void 0 : (_address$location = address.location) === null || _address$location === void 0 ? void 0 : _address$location.lat) === (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address5 = localOptions.address) === null || _localOptions$address5 === void 0 ? void 0 : _localOptions$address5.location.lat) && (address === null || address === void 0 ? void 0 : (_address$location2 = address.location) === null || _address$location2 === void 0 ? void 0 : _address$location2.lng) === (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address6 = localOptions.address) === null || _localOptions$address6 === void 0 ? void 0 : (_localOptions$address7 = _localOptions$address6.location) === null || _localOptions$address7 === void 0 ? void 0 : _localOptions$address7.lng) && (address === null || address === void 0 ? void 0 : address.internal_number) === (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address8 = localOptions.address) === null || _localOptions$address8 === void 0 ? void 0 : _localOptions$address8.internal_number) && (address === null || address === void 0 ? void 0 : address.zipcode) === (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address9 = localOptions.address) === null || _localOptions$address9 === void 0 ? void 0 : _localOptions$address9.zipcode) && (address === null || address === void 0 ? void 0 : address.address_notes) === (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address10 = localOptions.address) === null || _localOptions$address10 === void 0 ? void 0 : _localOptions$address10.address_notes);
               });
 
               if (address) {
@@ -266,7 +270,9 @@ var OrderProvider = function OrderProvider(_ref) {
               }
 
               Object.keys(localOptions.address).forEach(function (key) {
-                return localOptions.address[key] === null && delete localOptions.address[key];
+                var _localOptions$address11, _localOptions$address12;
+
+                return (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address11 = localOptions.address) === null || _localOptions$address11 === void 0 ? void 0 : _localOptions$address11[key]) === null && (localOptions === null || localOptions === void 0 ? true : (_localOptions$address12 = localOptions.address) === null || _localOptions$address12 === void 0 ? true : delete _localOptions$address12[key]);
               });
               _context.next = 32;
               return ordering.setAccessToken(session.token).users(userId).addresses().save(localOptions.address);
@@ -359,20 +365,20 @@ var OrderProvider = function OrderProvider(_ref) {
     var props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number'];
     var values = [];
     props.forEach(function (prop) {
-      var _state$options, _state$options2;
+      var _state$options, _state$options2, _state$options2$addre;
 
-      if ((_state$options = state.options) !== null && _state$options !== void 0 && _state$options.address && (_state$options2 = state.options) !== null && _state$options2 !== void 0 && _state$options2.address[prop]) {
+      if ((_state$options = state.options) !== null && _state$options !== void 0 && _state$options.address && (_state$options2 = state.options) !== null && _state$options2 !== void 0 && (_state$options2$addre = _state$options2.address) !== null && _state$options2$addre !== void 0 && _state$options2$addre[prop]) {
         if (prop === 'location') {
-          var _state$options3, _state$options4;
+          var _address$prop, _state$options3, _state$options3$addre, _state$options3$addre2, _address$prop2, _state$options4, _state$options4$addre, _state$options4$addre2;
 
-          values.push(address[prop].lat === ((_state$options3 = state.options) === null || _state$options3 === void 0 ? void 0 : _state$options3.address[prop].lat) && address[prop].lng === ((_state$options4 = state.options) === null || _state$options4 === void 0 ? void 0 : _state$options4.address[prop].lng));
+          values.push((address === null || address === void 0 ? void 0 : (_address$prop = address[prop]) === null || _address$prop === void 0 ? void 0 : _address$prop.lat) === ((_state$options3 = state.options) === null || _state$options3 === void 0 ? void 0 : (_state$options3$addre = _state$options3.address) === null || _state$options3$addre === void 0 ? void 0 : (_state$options3$addre2 = _state$options3$addre[prop]) === null || _state$options3$addre2 === void 0 ? void 0 : _state$options3$addre2.lat) && (address === null || address === void 0 ? void 0 : (_address$prop2 = address[prop]) === null || _address$prop2 === void 0 ? void 0 : _address$prop2.lng) === ((_state$options4 = state.options) === null || _state$options4 === void 0 ? void 0 : (_state$options4$addre = _state$options4.address) === null || _state$options4$addre === void 0 ? void 0 : (_state$options4$addre2 = _state$options4$addre[prop]) === null || _state$options4$addre2 === void 0 ? void 0 : _state$options4$addre2.lng));
         } else {
-          var _state$options5;
+          var _state$options5, _state$options5$addre;
 
-          values.push(address[prop] === ((_state$options5 = state.options) === null || _state$options5 === void 0 ? void 0 : _state$options5.address[prop]));
+          values.push((address === null || address === void 0 ? void 0 : address[prop]) === ((_state$options5 = state.options) === null || _state$options5 === void 0 ? void 0 : (_state$options5$addre = _state$options5.address) === null || _state$options5$addre === void 0 ? void 0 : _state$options5$addre[prop]));
         }
       } else {
-        values.push(!address[prop]);
+        values.push(!(address !== null && address !== void 0 && address[prop]));
       }
     });
     return values.every(function (value) {
@@ -623,7 +629,7 @@ var OrderProvider = function OrderProvider(_ref) {
               result = _yield$ordering$setAc6.result;
 
               if (!error) {
-                carts = result.carts, options = _objectWithoutProperties(result, ["carts"]);
+                carts = result.carts, options = _objectWithoutProperties(result, _excluded2);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
@@ -1313,60 +1319,73 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var changeDriverTip = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee13(businessId, driverTipRate, isFixedPrice) {
+    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee13(businessId) {
       var _state$carts$2;
 
-      var _body, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
+      var driverTipRate,
+          isFixedPrice,
+          _body,
+          customerFromLocalStorage,
+          userCustomerId,
+          body,
+          _yield$ordering$setAc14,
+          _yield$ordering$setAc15,
+          error,
+          result,
+          _args13 = arguments;
 
       return _regenerator.default.wrap(function _callee13$(_context13) {
         while (1) {
           switch (_context13.prev = _context13.next) {
             case 0:
+              driverTipRate = _args13.length > 1 && _args13[1] !== undefined ? _args13[1] : 0;
+              isFixedPrice = _args13.length > 2 ? _args13[2] : undefined;
+
               if (businessId) {
-                _context13.next = 2;
+                _context13.next = 4;
                 break;
               }
 
               throw new Error('`businessId` is required.');
 
-            case 2:
+            case 4:
               if (!(!driverTipRate && driverTipRate !== 0)) {
-                _context13.next = 4;
+                _context13.next = 6;
                 break;
               }
 
               throw new Error('`driverTipRate` is required.');
 
-            case 4:
+            case 6:
               if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts$2 = state.carts["businessId:".concat(businessId)]) === null || _state$carts$2 === void 0 ? void 0 : _state$carts$2.driver_tip_rate) === driverTipRate)) {
-                _context13.next = 6;
+                _context13.next = 8;
                 break;
               }
 
               return _context13.abrupt("return");
 
-            case 6:
-              _context13.prev = 6;
+            case 8:
+              _context13.prev = 8;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              _context13.next = 10;
+              _context13.next = 12;
               return strategy.getItem('user-customer', true);
 
-            case 10:
+            case 12:
               customerFromLocalStorage = _context13.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = (_body = {
                 business_id: businessId
               }, _defineProperty(_body, isFixedPrice ? 'driver_tip' : 'driver_tip_rate', driverTipRate), _defineProperty(_body, "user_id", userCustomerId || session.user.id), _body);
-              _context13.next = 15;
+              _context13.next = 17;
               return ordering.setAccessToken(session.token).carts().changeDriverTip(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
-            case 15:
+            case 17:
               _yield$ordering$setAc14 = _context13.sent;
               _yield$ordering$setAc15 = _yield$ordering$setAc14.content;
               error = _yield$ordering$setAc15.error;
@@ -1387,23 +1406,23 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context13.abrupt("return", !error);
 
-            case 24:
-              _context13.prev = 24;
-              _context13.t0 = _context13["catch"](6);
+            case 26:
+              _context13.prev = 26;
+              _context13.t0 = _context13["catch"](8);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context13.abrupt("return", false);
 
-            case 28:
+            case 30:
             case "end":
               return _context13.stop();
           }
         }
-      }, _callee13, null, [[6, 24]]);
+      }, _callee13, null, [[8, 26]]);
     }));
 
-    return function changeDriverTip(_x19, _x20, _x21) {
+    return function changeDriverTip(_x19) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1506,7 +1525,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[8, 26]]);
     }));
 
-    return function changePaymethod(_x22, _x23, _x24) {
+    return function changePaymethod(_x20, _x21, _x22) {
       return _ref15.apply(this, arguments);
     };
   }();
@@ -1612,7 +1631,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee15, null, [[0, 24]]);
     }));
 
-    return function placeCart(_x25, _x26) {
+    return function placeCart(_x23, _x24) {
       return _ref16.apply(this, arguments);
     };
   }();
@@ -1713,7 +1732,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16, null, [[0, 22]]);
     }));
 
-    return function confirmCart(_x27, _x28) {
+    return function confirmCart(_x25, _x26) {
       return _ref17.apply(this, arguments);
     };
   }();
@@ -1799,7 +1818,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee17, null, [[0, 20]]);
     }));
 
-    return function reorder(_x29) {
+    return function reorder(_x27) {
       return _ref18.apply(this, arguments);
     };
   }();
@@ -1873,7 +1892,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee19);
     }));
 
-    return function setUserCustomerOptions(_x30) {
+    return function setUserCustomerOptions(_x28) {
       return _ref20.apply(this, arguments);
     };
   }();
@@ -1934,7 +1953,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
     var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref21) {
       var carts = _ref21.carts,
-          options = _objectWithoutProperties(_ref21, ["carts"]);
+          options = _objectWithoutProperties(_ref21, _excluded3);
 
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
