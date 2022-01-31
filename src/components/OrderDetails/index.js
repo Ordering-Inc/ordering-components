@@ -131,7 +131,7 @@ export const OrderDetails = (props) => {
   */
   const handleChangeOrderStatus = async (status, isAcceptOrReject = {}) => {
     try {
-      const bodyToSend = Object.keys(isAcceptOrReject).length > 0 ? isAcceptOrReject : { status }
+      const bodyToSend = Object.keys(isAcceptOrReject || {}).length > 0 ? isAcceptOrReject : { status }
       setOrderState({ ...orderState, loading: true })
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderState.order?.id ?? orderId).save(bodyToSend)
 

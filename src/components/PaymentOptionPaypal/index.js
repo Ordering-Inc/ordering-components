@@ -137,6 +137,7 @@ PaymentOptionPaypal.propTypes = {
 }
 
 PaymentOptionPaypal.defaultProps = {
+  body: {},
   currency: 'USD',
   beforeComponents: [],
   afterComponents: [],
