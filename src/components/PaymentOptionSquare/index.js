@@ -9,7 +9,8 @@ export const PaymentOptionSquare = (props) => {
     UIComponent,
     cartTotal,
     onPlaceOrderClick,
-    body
+    body,
+    data
   } = props
 
   const [, t] = useLanguage()
@@ -68,8 +69,8 @@ export const PaymentOptionSquare = (props) => {
 
   const initPaymentObject = async () => {
     const payments = window.Square.payments(
-      'sandbox-sq0idb-rMLAce87hOfpGvokZCygEw',
-      'L1NGAY5M6KJRX'
+      data?.application_id,
+      data?.location_id
     )
     setPayments(payments)
   }
