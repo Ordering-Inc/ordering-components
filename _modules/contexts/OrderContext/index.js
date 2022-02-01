@@ -1943,7 +1943,18 @@ var OrderProvider = function OrderProvider(_ref) {
           delete state.carts["businessId:".concat(cart.business_id)];
         }
       } else {
-        state.carts["businessId:".concat(cart.business_id)] = _objectSpread(_objectSpread({}, state.carts["businessId:".concat(cart.business_id)]), cart);
+        var cartFinded = Object.values(state.carts).find(function (_cart) {
+          return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === (cart === null || cart === void 0 ? void 0 : cart.uuid);
+        });
+        var oldBusinessId = cartFinded === null || cartFinded === void 0 ? void 0 : cartFinded.business_id;
+        var newBusinessId = cart === null || cart === void 0 ? void 0 : cart.business_id;
+
+        if (!oldBusinessId || oldBusinessId === newBusinessId) {
+          state.carts["businessId:".concat(cart.business_id)] = _objectSpread(_objectSpread({}, state.carts["businessId:".concat(cart.business_id)]), cart);
+        } else {
+          delete state.carts["businessId:".concat(oldBusinessId)];
+          state.carts["businessId:".concat(newBusinessId)] = cart;
+        }
       }
 
       setState(_objectSpread(_objectSpread({}, state), {}, {
