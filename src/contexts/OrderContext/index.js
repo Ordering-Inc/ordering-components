@@ -810,9 +810,18 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           delete state.carts[`businessId:${cart.business_id}`]
         }
       } else {
-        state.carts[`businessId:${cart.business_id}`] = {
-          ...state.carts[`businessId:${cart.business_id}`],
-          ...cart
+        const cartFinded = Object.values(state.carts).find(_cart => _cart?.uuid === cart?.uuid)
+        const oldBusinessId = cartFinded?.business_id
+        const newBusinessId = cart?.business_id
+
+        if (!oldBusinessId || oldBusinessId === newBusinessId) {
+          state.carts[`businessId:${cart.business_id}`] = {
+            ...state.carts[`businessId:${cart.business_id}`],
+            ...cart
+          }
+        } else {
+          delete state.carts[`businessId:${oldBusinessId}`]
+          state.carts[`businessId:${newBusinessId}`] = cart
         }
       }
       setState({ ...state, loading: false })
