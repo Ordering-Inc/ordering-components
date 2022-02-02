@@ -40,8 +40,8 @@ export const FacebookPixel = (props) => {
   }
 
   useEffect(() => {
-    init()
-  }, [])
+    if(trackId) init()
+  }, [trackId])
 
   const handleProductAdded = (product) => {
     fbq('track', 'AddToCart', {
