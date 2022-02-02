@@ -33,7 +33,7 @@ export const FacebookPixel = (props) => {
       s = b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t, s);
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js')
-
+ 
     fbq('init', trackId)
     fbq('track', 'PageView')
     setFacebookPixelReady(true)
@@ -56,7 +56,7 @@ export const FacebookPixel = (props) => {
   const handleOrderPlaced = (order) => {
     fbq('track', 'Purchase', {
       content_ids: [order.id],
-      value: order.total,
+      value: order.total, 
       currency: configs?.stripe_currency?.value ?? 'USD',
     })
   }
@@ -84,14 +84,14 @@ export const FacebookPixel = (props) => {
   const handlePaymentInfo = (payment) => {
     fbq('track', 'AddPaymentInfo', {
       content_category: payment?.gateway,
-      content_ids: [payment?.id]
+      content_ids: payment?.id
     })
   }
 
   const handlechangeView = (pageName) => {
     fbq('track', 'ViewContent', {
       content_name: pageName?.page,
-      contents: [pageName?.params]
+      contents: [pageName?.params] 
     })
   }
 
@@ -107,7 +107,7 @@ export const FacebookPixel = (props) => {
     }
 
     return () => {
-      if (facebookPixelReady) {
+      if(facebookPixelReady){
         events.off('userLogin', handleLoginUser)
         events.off('change_view', handlechangeView)
         events.off('product_added', handleProductAdded)
@@ -128,8 +128,10 @@ export const FacebookPixel = (props) => {
 
 FacebookPixel.propTypes = {
   /**
-   * Your Google Analytics trackId
+   * Your Facebook pixels trackId
    * @see trackId What is trackID ? https://developers.google.com/analytics/devguides/collection/analyticsjs
    */
   trackId: PropTypes.string.isRequired
 }
+
+FacebookPixel.defaultProps = {}
