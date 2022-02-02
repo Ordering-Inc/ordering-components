@@ -26,6 +26,9 @@ export const AddressDetails = (props) => {
   const [location, setLocation] = useState(null)
   const [logo, setLogo] = useState(null)
   const [ordering] = useApi()
+  const businessId = props.uuid
+    ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
+    : props.businessId
   /**
    * Method to format google url for business location
    */
@@ -42,7 +45,7 @@ export const AddressDetails = (props) => {
     try {
       const source = {}
       requestsState.business = source
-      const { content: { result } } = await ordering.businesses(props.businessId).select(['location', 'logo']).get({ cancelToken: source })
+      const { content: { result } } = await ordering.businesses(businessId).select(['location', 'logo']).get({ cancelToken: source })
       setLogo(result.logo)
       setLocation(result.location)
     } catch (err) {
@@ -50,7 +53,7 @@ export const AddressDetails = (props) => {
   }
 
   useEffect(() => {
-    if (props.location && props.businessLogo) {
+    if (props.location && props.businessLogo && !props.uuid) {
       setLocation(props.location)
       setLogo(props.businessLogo)
     } else {
@@ -61,7 +64,7 @@ export const AddressDetails = (props) => {
         requestsState.business.cancel()
       }
     }
-  }, [])
+  }, [businessId])
 
   return (
     <>

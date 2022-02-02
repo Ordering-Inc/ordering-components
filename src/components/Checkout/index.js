@@ -11,7 +11,6 @@ import { useLanguage } from '../../contexts/LanguageContext'
  */
 export const Checkout = (props) => {
   const {
-    businessId,
     cartState,
     propsToFetch,
     actionsBeforePlace,
@@ -62,6 +61,10 @@ export const Checkout = (props) => {
    * This must be contains an object with info about paymente selected
    */
   const [paymethodSelected, setPaymethodSelected] = useState(null)
+
+  const businessId = props.uuid
+    ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
+    : props.businessId
   /**
    * Current cart
    */

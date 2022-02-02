@@ -766,6 +766,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     })
   }
 
+  const setStateValues = (values) => {
+    setState({ ...state, ...values })
+  }
+
   const setUserCustomerOptions = async (params) => {
     setState({ ...state, loading: true })
     const options = params.options ?? {}
@@ -888,7 +892,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setAlert,
     setConfirm,
     changePaymethod,
-    setUserCustomerOptions
+    setUserCustomerOptions,
+    setStateValues
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
@@ -938,7 +943,8 @@ export const useOrder = () => {
     setConfirm: warningMessage,
     changeDriverTip: warningMessage,
     reorder: warningMessage,
-    changePaymethod: warningMessage
+    changePaymethod: warningMessage,
+    setStateValues: warningMessage
   }
   return orderManager || [{}, functionsPlaceholders]
 }
