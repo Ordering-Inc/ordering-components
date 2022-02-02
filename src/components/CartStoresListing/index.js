@@ -96,17 +96,13 @@ export const CartStoresListing = (props) => {
   }, [cartStoresList])
 
   return (
-    <>
-      {UIComponent && (
-        <UIComponent
-          {...props}
-          storesState={state}
-          businessIdSelect={businessIdSelect}
-          changeStoreState={changeStoreState}
-          handleCartStoreChange={handleCartStoreChange}
-        />
-      )}
-    </>
+    <UIComponent
+      {...props}
+      storesState={state}
+      businessIdSelect={businessIdSelect}
+      changeStoreState={changeStoreState}
+      handleCartStoreChange={handleCartStoreChange}
+    />
   )
 }
 
@@ -116,34 +112,7 @@ CartStoresListing.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   * cartuuid to fetch allowed businesses
-   */
-   cartuuid: PropTypes.string.isRequired,
-  /**
-   * Components types before Facebook login button
-   * Array of type components, the parent props will pass to these components
-   */
-  beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
-  /**
-   * Components types after Facebook login button
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: PropTypes.arrayOf(PropTypes.elementType),
-  /**
-   * Elements before Facebook login button
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: PropTypes.arrayOf(PropTypes.element),
-  /**
-   * Elements after Facebook login button
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: PropTypes.arrayOf(PropTypes.element)
-}
-
-CartStoresListing.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
+  * cartuuid to fetch allowed businesses
+  */
+  cartuuid: PropTypes.string.isRequired,
 }

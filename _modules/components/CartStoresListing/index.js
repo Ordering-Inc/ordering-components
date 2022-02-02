@@ -221,12 +221,12 @@ var CartStoresListing = function CartStoresListing(props) {
       }
     };
   }, [cartStoresList]);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+  return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     storesState: state,
     businessIdSelect: businessIdSelect,
     changeStoreState: changeStoreState,
     handleCartStoreChange: handleCartStoreChange
-  })));
+  }));
 };
 
 exports.CartStoresListing = CartStoresListing;
@@ -237,37 +237,7 @@ CartStoresListing.propTypes = {
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * cartuuid to fetch allowed businesses
-   */
-  cartuuid: _propTypes.default.string.isRequired,
-
-  /**
-   * Components types before Facebook login button
-   * Array of type components, the parent props will pass to these components
-   */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Components types after Facebook login button
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Elements before Facebook login button
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Elements after Facebook login button
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
-};
-CartStoresListing.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
+  * cartuuid to fetch allowed businesses
+  */
+  cartuuid: _propTypes.default.string.isRequired
 };
