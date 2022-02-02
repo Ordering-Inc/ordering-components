@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const ProductForm = (props) => {
   const {
@@ -16,6 +17,10 @@ export const ProductForm = (props) => {
   const requestsState = {}
 
   const [ordering] = useApi()
+  /**
+   * Events context
+  */
+  const [events] = useEvent()
   /**
    * Original product state
    */
@@ -389,6 +394,9 @@ export const ProductForm = (props) => {
           successful = await addProduct(productCart, (cart || { business_id: props.businessId }))
         } else {
           successful = await updateProduct(productCart, (cart || { business_id: props.businessId }))
+          if (successful) {
+            events.emit('product_edited')
+          }
         }
       }
       if (successful) {

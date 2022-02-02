@@ -5,7 +5,7 @@ import { useValidationFields } from '../../contexts/ValidationsFieldsContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useLanguage } from '../../contexts/LanguageContext'
-
+import { useEvent } from '../../contexts/EventContext'
 /**
  * Component to manage signup behavior without UI component
  */
@@ -22,6 +22,7 @@ export const SignupForm = (props) => {
   } = props
   const requestsState = {}
 
+  const [events] = useEvent()
   const [ordering] = useApi()
   const [, t] = useLanguage()
   const [, { login }] = useSession()
@@ -68,7 +69,7 @@ export const SignupForm = (props) => {
       data.phone = data.cellphone
       delete data.country_phone_code
     }
-    const newData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v != ''))
+    const newData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ''))
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
@@ -79,6 +80,7 @@ export const SignupForm = (props) => {
         loading: false
       })
       if (!response.content.error) {
+        events.emit('singup_user', response.content.result)
         if (handleSuccessSignup) {
           handleSuccessSignup(response.content.result)
         }

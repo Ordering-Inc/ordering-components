@@ -14,7 +14,7 @@ import { BusinessReviews } from './components/BusinessReviews'
 import { BusinessSortControl } from './components/BusinessSortControl'
 import { BusinessTypeFilter } from './components/BusinessTypeFilter'
 import { Cart } from './components/Cart'
-import { CartStoresListing } from '../src/components/CartStoresListing'
+import { CartStoresListing } from './components/CartStoresListing'
 import { Checkout } from './components/Checkout'
 import { CouponControl } from './components/CouponControl'
 import { Contacts } from './components/Contacts'
@@ -23,6 +23,7 @@ import { DriverList } from './components/DriverList'
 import { DriverTips } from './components/DriverTips'
 import { ExamineClick } from './components/ExamineClick'
 import { FacebookLoginButton } from './components/FacebookLoginButton'
+import { FacebookPixel } from './components/FacebookPixel'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
 import { GoogleLoginButton } from './components/GoogleLoginButton'
 import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
@@ -130,6 +131,7 @@ export {
   DriverTips,
   ExamineClick,
   FacebookLoginButton,
+  FacebookPixel,
   GoogleLoginButton,
   ForgotPasswordForm,
   GoogleAutocompleteInput,

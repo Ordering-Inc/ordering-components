@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useEvent } from '../../contexts/EventContext'
 
 const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal']
 const paymethodsNotAllowed = ['paypal_express', 'authorize']
@@ -21,6 +22,7 @@ export const PaymentOptions = (props) => {
     UIComponent
   } = props
 
+  const [events] = useEvent()
   const [ordering] = useApi()
   const [orderState, { changePaymethod }] = useOrder()
   const orderTotal = orderState.carts?.[`businessId:${businessId}`]?.total || 0
@@ -77,6 +79,7 @@ export const PaymentOptions = (props) => {
    */
   const handlePaymethodClick = (paymethod, isPopupMethod) => {
     const paymentsDirect = ['paypal']
+    events.emit('add_payment_option', paymethod)
     if (isPopupMethod) {
       if (paymentsDirect.includes(paymethod?.gateway)) {
         setPaymethodsSelected(paymethod)
