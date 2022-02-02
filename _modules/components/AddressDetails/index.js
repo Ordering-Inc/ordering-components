@@ -49,7 +49,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage address details behavior without UI component
  */
 var AddressDetails = function AddressDetails(props) {
-  var _configs$google_maps_;
+  var _configs$google_maps_, _Object$values$find$b, _Object$values$find;
 
   var apiKey = props.apiKey,
       UIComponent = props.UIComponent,
@@ -86,10 +86,13 @@ var AddressDetails = function AddressDetails(props) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
+    return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
+  })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
   /**
    * Method to format google url for business location
    */
-
 
   var formatUrl = function formatUrl(location) {
     var _orderState$options, _orderState$options$a, _mapConfigs$mapSize, _mapConfigs$mapSize2, _mapConfigs$mapSize3, _mapConfigs$mapSize4;
@@ -114,7 +117,7 @@ var AddressDetails = function AddressDetails(props) {
               source = {};
               requestsState.business = source;
               _context.next = 5;
-              return ordering.businesses(props.businessId).select(['location', 'logo']).get({
+              return ordering.businesses(businessId).select(['location', 'logo']).get({
                 cancelToken: source
               });
 
@@ -144,7 +147,7 @@ var AddressDetails = function AddressDetails(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (props.location && props.businessLogo) {
+    if (props.location && props.businessLogo && !props.uuid) {
       setLocation(props.location);
       setLogo(props.businessLogo);
     } else {
@@ -156,7 +159,7 @@ var AddressDetails = function AddressDetails(props) {
         requestsState.business.cancel();
       }
     };
-  }, []);
+  }, [businessId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     googleMapsUrl: formatUrl(location)
   })));

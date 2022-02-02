@@ -1859,6 +1859,10 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
 
+  var setStateValues = function setStateValues(values) {
+    setState(_objectSpread(_objectSpread({}, state), values));
+  };
+
   var setUserCustomerOptions = /*#__PURE__*/function () {
     var _ref20 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee19(params) {
       var _params$options, _params$customer;
@@ -2028,7 +2032,8 @@ var OrderProvider = function OrderProvider(_ref) {
     setAlert: setAlert,
     setConfirm: setConfirm,
     changePaymethod: changePaymethod,
-    setUserCustomerOptions: setUserCustomerOptions
+    setUserCustomerOptions: setUserCustomerOptions,
+    setStateValues: setStateValues
   };
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
@@ -2083,7 +2088,8 @@ var useOrder = function useOrder() {
     setConfirm: warningMessage,
     changeDriverTip: warningMessage,
     reorder: warningMessage,
-    changePaymethod: warningMessage
+    changePaymethod: warningMessage,
+    setStateValues: warningMessage
   };
   return orderManager || [{}, functionsPlaceholders];
 };

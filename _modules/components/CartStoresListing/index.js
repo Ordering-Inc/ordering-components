@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.UpsellingPage = void 0;
+exports.CartStoresListing = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -14,6 +14,8 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
 
 var _OrderContext = require("../../contexts/OrderContext");
 
@@ -25,15 +27,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -47,173 +49,195 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var UpsellingPage = function UpsellingPage(props) {
-  var _Object$values$find$b, _Object$values$find;
-
+var CartStoresListing = function CartStoresListing(props) {
   var UIComponent = props.UIComponent,
-      products = props.products,
-      cartProducts = props.cartProducts,
-      onSave = props.onSave;
-
-  var _useState = (0, _react.useState)({
-    products: [],
-    loading: true,
-    error: false
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      upsellingProducts = _useState2[0],
-      setUpsellingProducts = _useState2[1];
-
-  var _useState3 = (0, _react.useState)([]),
-      _useState4 = _slicedToArray(_useState3, 2),
-      businessProducts = _useState4[0],
-      setBusinessProducts = _useState4[1];
+      cartuuid = props.cartuuid,
+      cartStoresList = props.cartStoresList;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 1),
-      orderState = _useOrder2[0];
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      orderState = _useOrder2[0],
+      setStateValues = _useOrder2[1].setStateValues;
 
-  var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
-    return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
-  })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
-  (0, _react.useEffect)(function () {
-    if (products !== null && products !== void 0 && products.length || businessId) {
-      if (products !== null && products !== void 0 && products.length && !props.uuid) {
-        getUpsellingProducts(products);
-      } else {
-        getProducts();
-      }
-    } else {
-      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
-        error: true,
-        message: 'BusinessId is required when products is not defined'
-      }));
-    }
-  }, [businessId]);
-  (0, _react.useEffect)(function () {
-    if (!upsellingProducts.loading) {
-      getUpsellingProducts(businessProducts);
-    }
-  }, [orderState.loading]);
-  /**
-   * getting products if array of product is not defined
-   */
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
 
-  var getProducts = /*#__PURE__*/function () {
+  var _useState = (0, _react.useState)(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      businessIdSelect = _useState2[0],
+      setBusinessIdSelect = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
+    loading: !cartStoresList,
+    result: null,
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      state = _useState4[0],
+      setState = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
+    loading: false,
+    result: null,
+    error: null
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      changeStoreState = _useState6[0],
+      setChangeStore = _useState6[1];
+
+  var requestsState = {};
+
+  var getCartStores = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$ordering$busin, result;
+      var source, _yield$ordering$setAc, _yield$ordering$setAc2, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _context.next = 3;
-              return ordering.businesses(businessId).products().parameters({
-                type: orderState.options.type,
-                params: 'upsellings'
-              }).get();
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              source = {};
+              requestsState.businesses = source;
+              _context.next = 6;
+              return ordering.setAccessToken(token).carts(cartuuid).getBusinesses({
+                cancelToken: source
+              });
 
-            case 3:
-              _yield$ordering$busin = _context.sent;
-              result = _yield$ordering$busin.content.result;
-              setBusinessProducts(result);
-              getUpsellingProducts(result);
-              _context.next = 12;
+            case 6:
+              _yield$ordering$setAc = _context.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              error = _yield$ordering$setAc2.error;
+              result = _yield$ordering$setAc2.result;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                result: error ? [error] : result,
+                error: error ? true : null,
+                loading: false
+              }));
+              _context.next = 16;
               break;
 
-            case 9:
-              _context.prev = 9;
+            case 13:
+              _context.prev = 13;
               _context.t0 = _context["catch"](0);
-              setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
-                loading: false,
-                error: _context.t0
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                error: [_context.t0],
+                loading: false
               }));
 
-            case 12:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 9]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
-    return function getProducts() {
+    return function getCartStores() {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   *
-   * filt products if they are already in the cart
-   * @param {array} cartProducts
-   */
 
+  var handleCartStoreChange = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(businessId) {
+      var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result;
 
-  var getUpsellingProducts = function getUpsellingProducts(result) {
-    var upsellingProductsfiltered = result.filter(function (product) {
-      return product.upselling;
-    });
-    var repeatProducts = cartProducts && (cartProducts === null || cartProducts === void 0 ? void 0 : cartProducts.filter(function (cartProduct) {
-      return upsellingProductsfiltered.find(function (product) {
-        return product.id === cartProduct.id;
-      });
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              setBusinessIdSelect(businessId);
+              _context2.prev = 1;
+              setChangeStore(_objectSpread(_objectSpread({}, changeStoreState), {}, {
+                loading: true
+              }));
+              _context2.next = 5;
+              return ordering.setAccessToken(token).carts(cartuuid).set({
+                business_id: businessId
+              });
+
+            case 5:
+              _yield$ordering$setAc3 = _context2.sent;
+              _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
+              error = _yield$ordering$setAc4.error;
+              result = _yield$ordering$setAc4.result;
+
+              if (!error) {
+                setStateValues({
+                  carts: _objectSpread(_objectSpread({}, orderState.carts), {}, _defineProperty({}, "businessId:".concat(result.business_id), result))
+                });
+              }
+
+              setChangeStore(_objectSpread(_objectSpread({}, state), {}, {
+                result: error ? [error] : result,
+                error: error ? true : null,
+                loading: false
+              }));
+              _context2.next = 16;
+              break;
+
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](1);
+              setChangeStore(_objectSpread(_objectSpread({}, state), {}, {
+                error: [_context2.t0],
+                loading: false
+              }));
+
+            case 16:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 13]]);
     }));
 
-    if (repeatProducts.length) {
-      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
-        loading: false,
-        products: upsellingProductsfiltered.filter(function (product) {
-          return !product.inventoried && !repeatProducts.find(function (repeatProduct) {
-            return repeatProduct.id === product.id;
-          });
-        })
-      }));
+    return function handleCartStoreChange(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  (0, _react.useEffect)(function () {
+    if (!cartStoresList) {
+      getCartStores();
     } else {
-      setUpsellingProducts(_objectSpread(_objectSpread({}, upsellingProducts), {}, {
-        loading: false,
-        products: upsellingProductsfiltered
+      setState(_objectSpread(_objectSpread({}, state), {}, {
+        result: cartStoresList,
+        error: null,
+        loading: false
       }));
     }
-  };
-  /**
-   * Function for confirm that the productForm now can be displayed
-   * @param {product} product
-   */
 
-
-  var handleFormProduct = function handleFormProduct(product) {
-    onSave(product);
-  };
-
+    return function () {
+      if (requestsState.businesses) {
+        requestsState.businesses.cancel();
+      }
+    };
+  }, [cartStoresList]);
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    upsellingProducts: upsellingProducts,
-    handleFormProduct: handleFormProduct
+    storesState: state,
+    businessIdSelect: businessIdSelect,
+    changeStoreState: changeStoreState,
+    handleCartStoreChange: handleCartStoreChange
   }));
 };
 
-exports.UpsellingPage = UpsellingPage;
-UpsellingPage.propTypes = {
+exports.CartStoresListing = CartStoresListing;
+CartStoresListing.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-    * upselling products that do not repeat in the cart
-   */
-  upsellingProducts: _propTypes.default.array,
-
-  /**
-   * BusinessId is required when products is not defined
-   */
-  businessId: _propTypes.default.number,
-
-  /**
-   * handleCustomClick, function to get click event and return product without default behavior
-   */
-  onSave: _propTypes.default.func
+  * cartuuid to fetch allowed businesses
+  */
+  cartuuid: _propTypes.default.string.isRequired
 };
