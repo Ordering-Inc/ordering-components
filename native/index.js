@@ -14,6 +14,7 @@ import { BusinessSortControl } from '../src/components/BusinessSortControl'
 import { BusinessTypeFilter } from '../src/components/BusinessTypeFilter'
 import { CardForm } from '../src/components/StripeElementsForm/CardForm'
 import { Cart } from '../src/components/Cart'
+import { CartStoresListing } from '../src/components/CartStoresListing'
 import { Checkout } from '../src/components/Checkout'
 import { CmsContent } from '../src/components/CmsContent'
 import { CouponControl } from '../src/components/CouponControl'
@@ -103,6 +104,7 @@ export {
   BusinessTypeFilter,
   CardForm,
   Cart,
+  CartStoresListing,
   Checkout,
   CmsContent,
   CouponControl,

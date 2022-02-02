@@ -5,15 +5,20 @@ import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 
 export const UpsellingPage = (props) => {
-  const { UIComponent, businessId, products, cartProducts, onSave } = props
+  const { UIComponent, products, cartProducts, onSave } = props
 
   const [upsellingProducts, setUpsellingProducts] = useState({ products: [], loading: true, error: false })
   const [businessProducts, setBusinessProducts] = useState([])
   const [ordering] = useApi()
   const [orderState] = useOrder()
+
+  const businessId = props.uuid
+    ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
+    : props.businessId
+
   useEffect(() => {
     if (products?.length || businessId) {
-      if (products?.length) {
+      if (products?.length && !props.uuid) {
         getUpsellingProducts(products)
       } else {
         getProducts()
@@ -25,7 +30,7 @@ export const UpsellingPage = (props) => {
         message: 'BusinessId is required when products is not defined'
       })
     }
-  }, [])
+  }, [businessId])
 
   useEffect(() => {
     if (!upsellingProducts.loading) {
