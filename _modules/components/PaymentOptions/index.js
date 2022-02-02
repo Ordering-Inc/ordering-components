@@ -17,6 +17,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -64,6 +66,10 @@ var PaymentOptions = function PaymentOptions(props) {
       onPaymentChange = props.onPaymentChange,
       paymethodsCustom = props.paymethodsCustom,
       UIComponent = props.UIComponent;
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -182,6 +188,7 @@ var PaymentOptions = function PaymentOptions(props) {
 
   var handlePaymethodClick = function handlePaymethodClick(paymethod, isPopupMethod) {
     var paymentsDirect = ['paypal'];
+    events.emit('add_payment_option', paymethod);
 
     if (isPopupMethod) {
       if (paymentsDirect.includes(paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway)) {

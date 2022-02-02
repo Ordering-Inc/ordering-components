@@ -19,6 +19,8 @@ var _ConfigContext = require("../../contexts/ConfigContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -70,6 +72,14 @@ var ProductForm = function ProductForm(props) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+  /**
+   * Events context
+  */
+
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
   /**
    * Original product state
    */
@@ -573,14 +583,14 @@ var ProductForm = function ProductForm(props) {
               errors = checkErrors();
 
               if (!(Object.keys(errors).length === 0)) {
-                _context2.next = 16;
+                _context2.next = 17;
                 break;
               }
 
               successful = true;
 
               if (!useOrderContext) {
-                _context2.next = 15;
+                _context2.next = 16;
                 break;
               }
 
@@ -598,7 +608,7 @@ var ProductForm = function ProductForm(props) {
 
             case 9:
               successful = _context2.sent;
-              _context2.next = 15;
+              _context2.next = 16;
               break;
 
             case 12:
@@ -610,12 +620,16 @@ var ProductForm = function ProductForm(props) {
             case 14:
               successful = _context2.sent;
 
-            case 15:
+              if (successful) {
+                events.emit('product_edited');
+              }
+
+            case 16:
               if (successful) {
                 onSave(productCart, !((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code));
               }
 
-            case 16:
+            case 17:
             case "end":
               return _context2.stop();
           }
