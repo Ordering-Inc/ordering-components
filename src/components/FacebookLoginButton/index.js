@@ -101,6 +101,9 @@ export const FacebookLoginButton = (props) => {
     if (window.FB) {
       setFormState({ ...formState, loading: true })
       window.FB.login((response) => {
+        window.FB.api('/me/permissions', (response) => { // only for tests
+          console.log(response)
+        })
         if (response.status === 'connected') {
           setFormState({ loading: false, result: { error: false } })
           setFacebookStatus({ ...facebookStatus, logged: true })
@@ -108,7 +111,7 @@ export const FacebookLoginButton = (props) => {
         } else {
           setFormState({ loading: false, result: { error: true, result: 'Error login with Facebook' } })
         }
-      })
+      }, { scope: 'email', auth_type: 'rerequest', return_scopes: true })
     }
   }
 
