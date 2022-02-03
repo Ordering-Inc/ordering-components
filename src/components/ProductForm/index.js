@@ -395,7 +395,7 @@ export const ProductForm = (props) => {
         } else {
           successful = await updateProduct(productCart, (cart || { business_id: props.businessId }))
           if (successful) {
-            events.emit('product_edited')
+            events.emit('product_edited', productCart)
           }
         }
       }
