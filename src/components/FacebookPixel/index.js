@@ -71,7 +71,7 @@ export const FacebookPixel = (props) => {
   const handleOrderPlaced = (order) => {
     fbq('track', 'Purchase', {
       content_ids: [order.id],
-      value: product?.total,
+      value: order?.total,
       currency: configs?.stripe_currency?.value ?? 'USD',
     })
   }
