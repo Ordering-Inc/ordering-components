@@ -33,14 +33,16 @@ export const FacebookPixel = (props) => {
       s = b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t, s);
     })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js')
- 
+
     fbq('init', trackId)
     fbq('track', 'PageView')
     setFacebookPixelReady(true)
   }
 
   useEffect(() => {
-    if(trackId) init()
+    if (trackId) {
+      init()
+    }
   }, [trackId])
 
   const handleProductAdded = (product) => {
@@ -49,20 +51,29 @@ export const FacebookPixel = (props) => {
       content_ids: [product?.id],
       content_name: product?.name,
       currency: configs?.stripe_currency?.value ?? 'USD',
-      value: product?.price
+      value: product?.total ?? product?.price,
+      quantity: product?.quantity
+    })
+  }
+
+  
+  const handleProductEdited = (product) => {
+    fbq('track', 'CustomizeProduct', {
+      content_category: product?.category?.name,
+      content_ids: [product?.id],
+      content_name: product?.name,
+      currency: configs?.stripe_currency?.value ?? 'USD',
+      value: product?.total ?? product?.price,
+      quantity: product?.quantity
     })
   }
 
   const handleOrderPlaced = (order) => {
     fbq('track', 'Purchase', {
       content_ids: [order.id],
-      value: order.total, 
+      value: product?.total,
       currency: configs?.stripe_currency?.value ?? 'USD',
     })
-  }
-
-  const handleProductEdited = () => {
-    fbq('track', 'CustomizeProduct')
   }
 
   const handleSignupUser = (user) => {
@@ -91,7 +102,7 @@ export const FacebookPixel = (props) => {
   const handlechangeView = (pageName) => {
     fbq('track', 'ViewContent', {
       content_name: pageName?.page,
-      contents: [pageName?.params] 
+      contents: [pageName?.params]
     })
   }
 
@@ -107,7 +118,7 @@ export const FacebookPixel = (props) => {
     }
 
     return () => {
-      if(facebookPixelReady){
+      if (facebookPixelReady) {
         events.off('userLogin', handleLoginUser)
         events.off('change_view', handlechangeView)
         events.off('product_added', handleProductAdded)
