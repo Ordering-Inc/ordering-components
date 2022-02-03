@@ -76,33 +76,45 @@ var FacebookPixel = function FacebookPixel(props) {
   };
 
   (0, _react.useEffect)(function () {
-    if (trackId) init();
+    if (trackId) {
+      init();
+    }
   }, [trackId]);
 
   var handleProductAdded = function handleProductAdded(product) {
-    var _product$category, _configs$stripe_curre, _configs$stripe_curre2;
+    var _product$category, _configs$stripe_curre, _configs$stripe_curre2, _product$total;
 
     fbq('track', 'AddToCart', {
       content_category: product === null || product === void 0 ? void 0 : (_product$category = product.category) === null || _product$category === void 0 ? void 0 : _product$category.name,
       content_ids: [product === null || product === void 0 ? void 0 : product.id],
       content_name: product === null || product === void 0 ? void 0 : product.name,
       currency: (_configs$stripe_curre = configs === null || configs === void 0 ? void 0 : (_configs$stripe_curre2 = configs.stripe_currency) === null || _configs$stripe_curre2 === void 0 ? void 0 : _configs$stripe_curre2.value) !== null && _configs$stripe_curre !== void 0 ? _configs$stripe_curre : 'USD',
-      value: product === null || product === void 0 ? void 0 : product.price
+      value: (_product$total = product === null || product === void 0 ? void 0 : product.total) !== null && _product$total !== void 0 ? _product$total : product === null || product === void 0 ? void 0 : product.price,
+      quantity: product === null || product === void 0 ? void 0 : product.quantity
+    });
+  };
+
+  var handleProductEdited = function handleProductEdited(product) {
+    var _product$category2, _configs$stripe_curre3, _configs$stripe_curre4, _product$total2;
+
+    fbq('track', 'CustomizeProduct', {
+      content_category: product === null || product === void 0 ? void 0 : (_product$category2 = product.category) === null || _product$category2 === void 0 ? void 0 : _product$category2.name,
+      content_ids: [product === null || product === void 0 ? void 0 : product.id],
+      content_name: product === null || product === void 0 ? void 0 : product.name,
+      currency: (_configs$stripe_curre3 = configs === null || configs === void 0 ? void 0 : (_configs$stripe_curre4 = configs.stripe_currency) === null || _configs$stripe_curre4 === void 0 ? void 0 : _configs$stripe_curre4.value) !== null && _configs$stripe_curre3 !== void 0 ? _configs$stripe_curre3 : 'USD',
+      value: (_product$total2 = product === null || product === void 0 ? void 0 : product.total) !== null && _product$total2 !== void 0 ? _product$total2 : product === null || product === void 0 ? void 0 : product.price,
+      quantity: product === null || product === void 0 ? void 0 : product.quantity
     });
   };
 
   var handleOrderPlaced = function handleOrderPlaced(order) {
-    var _configs$stripe_curre3, _configs$stripe_curre4;
+    var _configs$stripe_curre5, _configs$stripe_curre6;
 
     fbq('track', 'Purchase', {
       content_ids: [order.id],
-      value: order.total,
-      currency: (_configs$stripe_curre3 = configs === null || configs === void 0 ? void 0 : (_configs$stripe_curre4 = configs.stripe_currency) === null || _configs$stripe_curre4 === void 0 ? void 0 : _configs$stripe_curre4.value) !== null && _configs$stripe_curre3 !== void 0 ? _configs$stripe_curre3 : 'USD'
+      value: order === null || order === void 0 ? void 0 : order.total,
+      currency: (_configs$stripe_curre5 = configs === null || configs === void 0 ? void 0 : (_configs$stripe_curre6 = configs.stripe_currency) === null || _configs$stripe_curre6 === void 0 ? void 0 : _configs$stripe_curre6.value) !== null && _configs$stripe_curre5 !== void 0 ? _configs$stripe_curre5 : 'USD'
     });
-  };
-
-  var handleProductEdited = function handleProductEdited() {
-    fbq('track', 'CustomizeProduct');
   };
 
   var handleSignupUser = function handleSignupUser(user) {

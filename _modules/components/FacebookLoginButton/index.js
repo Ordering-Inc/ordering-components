@@ -204,6 +204,11 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
         loading: true
       }));
       window.FB.login(function (response) {
+        window.FB.api('/me/permissions', function (response) {
+          // only for tests
+          console.log(response);
+        });
+
         if (response.status === 'connected') {
           setFormState({
             loading: false,
@@ -224,6 +229,10 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
             }
           });
         }
+      }, {
+        scope: 'email',
+        auth_type: 'rerequest',
+        return_scopes: true
       });
     }
   };

@@ -621,7 +621,7 @@ var ProductForm = function ProductForm(props) {
               successful = _context2.sent;
 
               if (successful) {
-                events.emit('product_edited');
+                events.emit('product_edited', productCart);
               }
 
             case 16:
