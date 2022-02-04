@@ -55,12 +55,13 @@ export const CartStoresListing = (props) => {
         .set({ business_id: businessId })
 
       if (!error) {
-        setStateValues({
-          carts: {
-            ...orderState.carts,
-            [`businessId:${result.business_id}`]: result
-          }
-        })
+        let carts = orderState.carts
+        const cartFinded = Object.values(orderState?.carts ?? {}).find(_cart => _cart?.uuid === result.uuid)
+        if (cartFinded) {
+          delete carts[`businessId:${cartFinded?.business_id}`]
+        }
+        carts[`businessId:${result?.business_id}`] = result
+        setStateValues({ carts })
       }
       setChangeStore({
         ...state,
@@ -68,6 +69,9 @@ export const CartStoresListing = (props) => {
         error: error ? true : null,
         loading: false
       })
+      if (!error) {
+        props.onClose && props.onClose()
+      }
     } catch(err) {
       setChangeStore({
         ...state,
