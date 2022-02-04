@@ -147,7 +147,7 @@ var CartStoresListing = function CartStoresListing(props) {
 
   var handleCartStoreChange = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(businessId) {
-      var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result;
+      var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, _orderState$carts, carts, cartFinded;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -170,8 +170,18 @@ var CartStoresListing = function CartStoresListing(props) {
               result = _yield$ordering$setAc4.result;
 
               if (!error) {
+                carts = orderState.carts;
+                cartFinded = Object.values((_orderState$carts = orderState === null || orderState === void 0 ? void 0 : orderState.carts) !== null && _orderState$carts !== void 0 ? _orderState$carts : {}).find(function (_cart) {
+                  return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === result.uuid;
+                });
+
+                if (cartFinded) {
+                  delete carts["businessId:".concat(cartFinded === null || cartFinded === void 0 ? void 0 : cartFinded.business_id)];
+                }
+
+                carts["businessId:".concat(result === null || result === void 0 ? void 0 : result.business_id)] = result;
                 setStateValues({
-                  carts: _objectSpread(_objectSpread({}, orderState.carts), {}, _defineProperty({}, "businessId:".concat(result.business_id), result))
+                  carts: carts
                 });
               }
 
@@ -180,23 +190,28 @@ var CartStoresListing = function CartStoresListing(props) {
                 error: error ? true : null,
                 loading: false
               }));
-              _context2.next = 16;
+
+              if (!error) {
+                props.onClose && props.onClose();
+              }
+
+              _context2.next = 17;
               break;
 
-            case 13:
-              _context2.prev = 13;
+            case 14:
+              _context2.prev = 14;
               _context2.t0 = _context2["catch"](1);
               setChangeStore(_objectSpread(_objectSpread({}, state), {}, {
                 error: [_context2.t0],
                 loading: false
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 13]]);
+      }, _callee2, null, [[1, 14]]);
     }));
 
     return function handleCartStoreChange(_x) {
