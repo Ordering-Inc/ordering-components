@@ -104,10 +104,10 @@ export const SessionProvider = ({ children, strategy }) => {
   }, [])
 
   useEffect(() => {
-    if (state.token) {
+    if (state.token && state.auth) {
       saveEmail()
     }
-  }, [state.token])
+  }, [state.token, state.auth])
 
   const functions = {
     login,

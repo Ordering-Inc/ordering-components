@@ -325,10 +325,10 @@ var SessionProvider = function SessionProvider(_ref) {
     setValuesFromLocalStorage();
   }, []);
   (0, _react.useEffect)(function () {
-    if (state.token) {
+    if (state.token && state.auth) {
       saveEmail();
     }
-  }, [state.token]);
+  }, [state.token, state.auth]);
   var functions = {
     login: login,
     logout: logout,
