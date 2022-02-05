@@ -15,7 +15,8 @@ export const FacebookLoginButton = (props) => {
     domain,
     handleButtonFacebookLoginClick,
     handleSuccessFacebookLogin,
-    handleSuccessFacebookLogout
+    handleSuccessFacebookLogout,
+    setUserEmail
   } = props
 
   const [ordering] = useApi()
@@ -62,7 +63,7 @@ export const FacebookLoginButton = (props) => {
    * Default fuction for login/signup with Facebook workflow
    * @param {object} Result from facebook
    */
-  const handleFacebookLoginClick = async (facebookResponse) => {
+  const handleFacebookLoginClick = async (facebookResponse, userInfo) => {
     if (handleButtonFacebookLoginClick) {
       handleButtonFacebookLoginClick(facebookResponse)
       return
@@ -77,6 +78,7 @@ export const FacebookLoginButton = (props) => {
       })
       if (!response.content.error) {
         if (handleSuccessFacebookLogin) {
+          setUserEmail && setUserEmail(userInfo?.email)
           handleSuccessFacebookLogin(response.content.result)
         }
       } else {
@@ -102,13 +104,15 @@ export const FacebookLoginButton = (props) => {
       setFormState({ ...formState, loading: true })
       window.FB.login((response) => {
         if (response.status === 'connected') {
-          setFormState({ loading: false, result: { error: false } })
-          setFacebookStatus({ ...facebookStatus, logged: true })
-          handleFacebookLoginClick(response)
+          window.FB.api('/me?fields=name,email', (userInfo) => {
+            setFormState({ loading: false, result: { error: false } })
+            setFacebookStatus({ ...facebookStatus, logged: true })
+            handleFacebookLoginClick(response, userInfo)
+          }, { scope: 'email' })
         } else {
           setFormState({ loading: false, result: { error: true, result: 'Error login with Facebook' } })
         }
-      })
+      }, { scope: 'email', auth_type: 'rerequest', return_scopes: true })
     }
   }
 

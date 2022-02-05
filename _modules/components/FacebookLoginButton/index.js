@@ -57,7 +57,8 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
       domain = props.domain,
       handleButtonFacebookLoginClick = props.handleButtonFacebookLoginClick,
       handleSuccessFacebookLogin = props.handleSuccessFacebookLogin,
-      handleSuccessFacebookLogout = props.handleSuccessFacebookLogout;
+      handleSuccessFacebookLogout = props.handleSuccessFacebookLogout,
+      setUserEmail = props.setUserEmail;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -126,7 +127,7 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
    */
 
   var handleFacebookLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(facebookResponse) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(facebookResponse, userInfo) {
       var _facebookResponse$aut, response;
 
       return _regenerator.default.wrap(function _callee$(_context) {
@@ -160,6 +161,7 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
 
               if (!response.content.error) {
                 if (handleSuccessFacebookLogin) {
+                  setUserEmail && setUserEmail(userInfo === null || userInfo === void 0 ? void 0 : userInfo.email);
                   handleSuccessFacebookLogin(response.content.result);
                 }
               } else {
@@ -188,7 +190,7 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
       }, _callee, null, [[3, 12]]);
     }));
 
-    return function handleFacebookLoginClick(_x) {
+    return function handleFacebookLoginClick(_x, _x2) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -205,16 +207,20 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
       }));
       window.FB.login(function (response) {
         if (response.status === 'connected') {
-          setFormState({
-            loading: false,
-            result: {
-              error: false
-            }
+          window.FB.api('/me?fields=name,email', function (userInfo) {
+            setFormState({
+              loading: false,
+              result: {
+                error: false
+              }
+            });
+            setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
+              logged: true
+            }));
+            handleFacebookLoginClick(response, userInfo);
+          }, {
+            scope: 'email'
           });
-          setFacebookStatus(_objectSpread(_objectSpread({}, facebookStatus), {}, {
-            logged: true
-          }));
-          handleFacebookLoginClick(response);
         } else {
           setFormState({
             loading: false,
@@ -224,6 +230,10 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
             }
           });
         }
+      }, {
+        scope: 'email',
+        auth_type: 'rerequest',
+        return_scopes: true
       });
     }
   };
