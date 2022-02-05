@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useApi } from '../ApiContext'
+import { useOrder } from '../OrderContext'
 /**
  * Create SessionContext
  * This context will manage the session internally and provide an easy interface
@@ -20,7 +21,7 @@ export const SessionProvider = ({ children, strategy }) => {
   })
 
   const [ordering] = useApi()
-
+  const [{ options }] = useOrder()
   const setValuesFromLocalStorage = async () => {
     const { auth, token, user } = await getValuesFromLocalStorage()
     setState({
@@ -104,10 +105,10 @@ export const SessionProvider = ({ children, strategy }) => {
   }, [])
 
   useEffect(() => {
-    if (state.token && state.auth) {
+    if (state.token && state.auth && options?.user_id === state?.user?.id) {
       saveEmail()
     }
-  }, [state.token, state.auth])
+  }, [state.token, state.auth, options?.user_id])
 
   const functions = {
     login,
