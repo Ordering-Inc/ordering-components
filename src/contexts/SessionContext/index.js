@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
+import { useApi } from '../ApiContext'
 /**
  * Create SessionContext
  * This context will manage the session internally and provide an easy interface
@@ -18,6 +18,8 @@ export const SessionProvider = ({ children, strategy }) => {
     user: null,
     loading: true
   })
+
+  const [ordering] = useApi()
 
   const setValuesFromLocalStorage = async () => {
     const { auth, token, user } = await getValuesFromLocalStorage()
@@ -84,6 +86,12 @@ export const SessionProvider = ({ children, strategy }) => {
     }
   }
 
+  const saveEmail = async () => {
+    await ordering.users(state?.user?.id).save({ email: 'testcorreo@gmail.com' }, {
+      accessToken: state.token
+    })
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       checkLocalStorage()
@@ -94,6 +102,12 @@ export const SessionProvider = ({ children, strategy }) => {
   useEffect(() => {
     setValuesFromLocalStorage()
   }, [])
+
+  useEffect(() => {
+    if (!state.user?.email && state.token) {
+      saveEmail()
+    }
+  }, [state.token])
 
   const functions = {
     login,
@@ -113,5 +127,5 @@ export const SessionProvider = ({ children, strategy }) => {
  */
 export const useSession = () => {
   const sessionManager = useContext(SessionContext)
-  return sessionManager || [{}, () => {}]
+  return sessionManager || [{}, () => { }]
 }
