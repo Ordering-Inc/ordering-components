@@ -104,7 +104,7 @@ export const SessionProvider = ({ children, strategy }) => {
   }, [])
 
   useEffect(() => {
-    if (!state.user?.email && state.token) {
+    if (state.token) {
       saveEmail()
     }
   }, [state.token])

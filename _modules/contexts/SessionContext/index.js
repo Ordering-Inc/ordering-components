@@ -325,9 +325,7 @@ var SessionProvider = function SessionProvider(_ref) {
     setValuesFromLocalStorage();
   }, []);
   (0, _react.useEffect)(function () {
-    var _state$user2;
-
-    if (!((_state$user2 = state.user) !== null && _state$user2 !== void 0 && _state$user2.email) && state.token) {
+    if (state.token) {
       saveEmail();
     }
   }, [state.token]);
