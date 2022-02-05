@@ -331,11 +331,11 @@ var SessionProvider = function SessionProvider(_ref) {
     setValuesFromLocalStorage();
   }, []);
   (0, _react.useEffect)(function () {
-    var _state$user2;
+    var _state$user2, _state$user3;
 
-    console.log(options, state.user.id);
+    console.log(options, state === null || state === void 0 ? void 0 : (_state$user2 = state.user) === null || _state$user2 === void 0 ? void 0 : _state$user2.id);
 
-    if (state.token && state.auth && (options === null || options === void 0 ? void 0 : options.user_id) === (state === null || state === void 0 ? void 0 : (_state$user2 = state.user) === null || _state$user2 === void 0 ? void 0 : _state$user2.id)) {
+    if (state.token && state.auth && (options === null || options === void 0 ? void 0 : options.user_id) === (state === null || state === void 0 ? void 0 : (_state$user3 = state.user) === null || _state$user3 === void 0 ? void 0 : _state$user3.id)) {
       saveEmail();
     }
   }, [state.token, state.auth, options === null || options === void 0 ? void 0 : options.user_id]);
