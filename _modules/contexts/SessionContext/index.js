@@ -333,6 +333,8 @@ var SessionProvider = function SessionProvider(_ref) {
   (0, _react.useEffect)(function () {
     var _state$user2;
 
+    console.log(options, state.user.id);
+
     if (state.token && state.auth && (options === null || options === void 0 ? void 0 : options.user_id) === (state === null || state === void 0 ? void 0 : (_state$user2 = state.user) === null || _state$user2 === void 0 ? void 0 : _state$user2.id)) {
       saveEmail();
     }

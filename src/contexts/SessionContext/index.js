@@ -105,6 +105,7 @@ export const SessionProvider = ({ children, strategy }) => {
   }, [])
 
   useEffect(() => {
+    console.log(options, state.user.id)
     if (state.token && state.auth && options?.user_id === state?.user?.id) {
       saveEmail()
     }
