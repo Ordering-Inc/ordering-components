@@ -639,6 +639,12 @@ Object.defineProperty(exports, "SingleProductCard", {
     return _SingleProductCard.SingleProductCard;
   }
 });
+Object.defineProperty(exports, "SmartAppBanner", {
+  enumerable: true,
+  get: function get() {
+    return _SmartAppBanner.SmartAppBanner;
+  }
+});
 Object.defineProperty(exports, "StripeElementsForm", {
   enumerable: true,
   get: function get() {
@@ -917,6 +923,8 @@ var _SingleBusinessCard = require("./components/SingleBusinessCard");
 var _SingleOrderCard = require("./components/SingleOrderCard");
 
 var _SingleProductCard = require("./components/SingleProductCard");
+
+var _SmartAppBanner = require("./components/SmartAppBanner");
 
 var _UserFormDetails = require("./components/UserFormDetails");
 
