@@ -59,6 +59,7 @@ import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
 import { SingleOrderCard } from './components/SingleOrderCard'
 import { SingleProductCard } from './components/SingleProductCard'
+import { SmartAppBanner } from './components/SmartAppBanner'
 import { UserFormDetails } from './components/UserFormDetails'
 import { UpsellingPage } from './components/UpsellingPage'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
@@ -171,6 +172,7 @@ export {
   SingleBusinessCard,
   SingleOrderCard,
   SingleProductCard,
+  SmartAppBanner,
   UserFormDetails,
   UpsellingPage,
   WrapperGoogleMaps,
