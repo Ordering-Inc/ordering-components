@@ -30,8 +30,7 @@ export const SmartAppBanner = (props) => {
         }
       }
     ]
-    metas.map(meta => {
-      if (!meta?.id) return
+    metas.filter(meta => meta?.id).map(meta => {
       const metaElement = document.createElement('meta')
       metaElement.name = meta.name
       metaElement.content = `app-id=${meta.id}`
