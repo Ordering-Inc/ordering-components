@@ -14,24 +14,29 @@ export const SmartAppBanner = (props) => {
 
   useEffect(() => {
     if (!configs) return
-    if (storeAndroidId || configs?.android_app_id?.value) {
-      const metaGoogle = document.createElement('meta')
-      metaGoogle.name = 'google-play-app'
-      metaGoogle.content = `app-id=${storeAndroidId || configs?.android_app_id?.value}`
-      document.getElementsByTagName('head')[0].appendChild(metaGoogle)
-    }
-    if (storeAppleId || configs?.ios_app_id?.value) {
-      const metaIos = document.createElement('meta')
-      metaIos.name = 'apple-itunes-app'
-      metaIos.content = `app-id=${storeAppleId || configs?.ios_app_id?.value}`
-      document.getElementsByTagName('head')[0].appendChild(metaIos)
-    }
-    if (storeKindleId || configs?.kindle_app_id?.value) {
-      const metaKindle = document.createElement('meta')
-      metaKindle.name = 'kindle-fire-app'
-      metaKindle.content = `app-id=${storeKindleId || configs?.kindle_app_id?.value}`
-      document.getElementsByTagName('head')[0].appendChild(metaKindle)
-    }
+    const metas = [
+      {
+        google: {
+          name: 'google-play-app',
+          id: storeAndroidId || configs?.android_app_id?.value
+        },
+        apple: {
+          name: 'apple-itunes-app',
+          id: storeAppleId || configs?.ios_app_id?.value
+        },
+        kindle: {
+          name: 'kindle-fire-app',
+          id: storeKindleId || configs?.kindle_app_id?.value
+        }
+      }
+    ]
+    metas.map(meta => {
+      if (!meta?.id) return
+      const metaElement = document.createElement('meta')
+      metaElement.name = meta.name
+      metaElement.content = `app-id=${meta.id}`
+      document.getElementsByTagName('head')[0].appendChild(metaElement)
+    })
   }, [configs])
 
   return (
