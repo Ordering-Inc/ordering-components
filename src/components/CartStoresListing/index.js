@@ -105,11 +105,13 @@ export const CartStoresListing = (props) => {
     if (!searchValue) {
       setState({
         ...state,
+        loading: false,
         result: state.original
       })
     } else {
       setState({
         ...state,
+        loading: false,
         result: state.original?.length
           ? state.original.filter(business => business.name.toLowerCase().includes(searchValue.toLowerCase()))
           : null
