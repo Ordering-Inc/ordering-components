@@ -104,12 +104,14 @@ export const BusinessReviews = (props) => {
     if (!searchValue) {
       setBusinessReviewsList({
         ...businessReviewsList,
-        reviews: reviewsListing
+        reviews: reviewsListing,
+        loading: false
       })
     } else {
       setBusinessReviewsList({
         ...businessReviewsList,
-        reviews: reviewsListing.filter(item => item.comment.toLowerCase().includes(searchValue.toLowerCase()))
+        reviews: reviewsListing.filter(item => item.comment.toLowerCase().includes(searchValue.toLowerCase())),
+        loading: false
       })
     }
   }, [searchValue]);
