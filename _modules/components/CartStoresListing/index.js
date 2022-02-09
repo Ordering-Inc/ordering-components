@@ -69,26 +69,32 @@ var CartStoresListing = function CartStoresListing(props) {
 
   var _useState = (0, _react.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
-      businessIdSelect = _useState2[0],
-      setBusinessIdSelect = _useState2[1];
+      searchValue = _useState2[0],
+      setSearchValue = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({
-    loading: !cartStoresList,
-    result: null,
-    error: null
-  }),
+  var _useState3 = (0, _react.useState)(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      state = _useState4[0],
-      setState = _useState4[1];
+      businessIdSelect = _useState4[0],
+      setBusinessIdSelect = _useState4[1];
 
   var _useState5 = (0, _react.useState)({
+    loading: !cartStoresList,
+    result: null,
+    error: null,
+    original: null
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      state = _useState6[0],
+      setState = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
     loading: false,
     result: null,
     error: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      changeStoreState = _useState6[0],
-      setChangeStore = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      changeStoreState = _useState8[0],
+      setChangeStore = _useState8[1];
 
   var requestsState = {};
 
@@ -118,6 +124,7 @@ var CartStoresListing = function CartStoresListing(props) {
               result = _yield$ordering$setAc2.result;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 result: error ? [error] : result,
+                original: error ? [error] : result,
                 error: error ? true : null,
                 loading: false
               }));
@@ -236,11 +243,28 @@ var CartStoresListing = function CartStoresListing(props) {
       }
     };
   }, [cartStoresList]);
+  (0, _react.useEffect)(function () {
+    if (!searchValue) {
+      setState(_objectSpread(_objectSpread({}, state), {}, {
+        result: state.original
+      }));
+    } else {
+      var _state$original;
+
+      setState(_objectSpread(_objectSpread({}, state), {}, {
+        result: (_state$original = state.original) !== null && _state$original !== void 0 && _state$original.length ? state.original.filter(function (business) {
+          return business.name.toLowerCase().includes(searchValue.toLowerCase());
+        }) : null
+      }));
+    }
+  }, [searchValue]);
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     storesState: state,
     businessIdSelect: businessIdSelect,
+    searchValue: searchValue,
     changeStoreState: changeStoreState,
-    handleCartStoreChange: handleCartStoreChange
+    handleCartStoreChange: handleCartStoreChange,
+    handleChangeSearch: setSearchValue
   }));
 };
 
