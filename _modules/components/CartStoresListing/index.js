@@ -246,12 +246,14 @@ var CartStoresListing = function CartStoresListing(props) {
   (0, _react.useEffect)(function () {
     if (!searchValue) {
       setState(_objectSpread(_objectSpread({}, state), {}, {
+        loading: false,
         result: state.original
       }));
     } else {
       var _state$original;
 
       setState(_objectSpread(_objectSpread({}, state), {}, {
+        loading: false,
         result: (_state$original = state.original) !== null && _state$original !== void 0 && _state$original.length ? state.original.filter(function (business) {
           return business.name.toLowerCase().includes(searchValue.toLowerCase());
         }) : null

@@ -194,13 +194,15 @@ var BusinessReviews = function BusinessReviews(props) {
 
     if (!searchValue) {
       setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
-        reviews: reviewsListing
+        reviews: reviewsListing,
+        loading: false
       }));
     } else {
       setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
         reviews: reviewsListing.filter(function (item) {
           return item.comment.toLowerCase().includes(searchValue.toLowerCase());
-        })
+        }),
+        loading: false
       }));
     }
   }, [searchValue]);
