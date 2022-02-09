@@ -16,18 +16,16 @@ export const SmartAppBanner = (props) => {
     if (!configs) return
     const metas = [
       {
-        google: {
-          name: 'google-play-app',
-          id: storeAndroidId || configs?.android_app_id?.value
-        },
-        apple: {
-          name: 'apple-itunes-app',
-          id: storeAppleId || configs?.ios_app_id?.value
-        },
-        kindle: {
-          name: 'kindle-fire-app',
-          id: storeKindleId || configs?.kindle_app_id?.value
-        }
+        name: 'google-play-app',
+        id: storeAndroidId || configs?.android_app_id?.value
+      },
+      {
+        name: 'apple-itunes-app',
+        id: storeAppleId || configs?.ios_app_id?.value
+      },
+      {
+        name: 'kindle-fire-app',
+        id: storeKindleId || configs?.kindle_app_id?.value
       }
     ]
     metas.filter(meta => meta?.id).map(meta => {
