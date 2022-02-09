@@ -15,8 +15,9 @@ export const CartStoresListing = (props) => {
   const [orderState, { setStateValues }] = useOrder()
   const [{ token }] = useSession()
 
+  const [searchValue, setSearchValue] = useState(null);
   const [businessIdSelect, setBusinessIdSelect] = useState(null);
-  const [state, setState] = useState({ loading: !cartStoresList, result: null, error: null })
+  const [state, setState] = useState({ loading: !cartStoresList, result: null, error: null, original: null })
   const [changeStoreState, setChangeStore] = useState({ loading: false, result: null, error: null })
   const requestsState = {}
 
@@ -33,6 +34,7 @@ export const CartStoresListing = (props) => {
       setState({
         ...state,
         result: error ? [error] : result,
+        original: error ? [error] : result,
         error: error ? true : null,
         loading: false
       })
@@ -99,13 +101,31 @@ export const CartStoresListing = (props) => {
     }
   }, [cartStoresList])
 
+  useEffect(() => {
+    if (!searchValue) {
+      setState({
+        ...state,
+        result: state.original
+      })
+    } else {
+      setState({
+        ...state,
+        result: state.original?.length
+          ? state.original.filter(business => business.name.toLowerCase().includes(searchValue.toLowerCase()))
+          : null
+      })
+    }
+  }, [searchValue]);
+
   return (
     <UIComponent
       {...props}
       storesState={state}
       businessIdSelect={businessIdSelect}
+      searchValue={searchValue}
       changeStoreState={changeStoreState}
       handleCartStoreChange={handleCartStoreChange}
+      handleChangeSearch={setSearchValue}
     />
   )
 }
