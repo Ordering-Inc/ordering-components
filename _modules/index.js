@@ -483,6 +483,12 @@ Object.defineProperty(exports, "PaymentOptionStripeRedirect", {
     return _PaymentOptionStripeRedirect.PaymentOptionStripeRedirect;
   }
 });
+Object.defineProperty(exports, "PaymentOptionWallet", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionWallet.PaymentOptionWallet;
+  }
+});
 Object.defineProperty(exports, "PaymentOptions", {
   enumerable: true,
   get: function get() {
@@ -711,6 +717,12 @@ Object.defineProperty(exports, "ValidationFieldsProvider", {
     return _ValidationsFieldsContext.ValidationFieldsProvider;
   }
 });
+Object.defineProperty(exports, "WalletList", {
+  enumerable: true,
+  get: function get() {
+    return _WalletList.WalletList;
+  }
+});
 Object.defineProperty(exports, "WebsocketContext", {
   enumerable: true,
   get: function get() {
@@ -890,6 +902,8 @@ var _OrdersControlFilters = require("./components/OrdersControlFilters");
 
 var _PaymentOptions = require("./components/PaymentOptions");
 
+var _PaymentOptionWallet = require("./components/PaymentOptionWallet");
+
 var _Popup = require("./components/Popup");
 
 var _ProductComponent = require("./components/ProductComponent");
@@ -1009,5 +1023,7 @@ var _ReviewCustomer = require("./components/ReviewCustomer");
 var _ReviewProduct = require("./components/ReviewProduct");
 
 var _ReviewDriver = require("./components/ReviewDriver");
+
+var _WalletList = require("./components/WalletList");
 
 var _codeNumbers = require("./constants/code-numbers");
