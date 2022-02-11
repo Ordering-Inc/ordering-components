@@ -112,10 +112,7 @@ export const PaymentOptionWallet = (props) => {
       const { error, result } = await response.json()
       if (!error) {
         let carts = orderState.carts
-        carts[`businessId:${result.business_id}`] = {
-          ...carts[`businessId:${result.business_id}`],
-          ...result
-        }
+        carts[`businessId:${result.business_id}`] = result
         setStateValues({ carts })
       }
     } catch (err) {
@@ -140,10 +137,7 @@ export const PaymentOptionWallet = (props) => {
       const { error, result } = await response.json()
       if (!error) {
         let carts = orderState.carts
-        carts[`businessId:${result.business_id}`] = {
-          ...carts[`businessId:${result.business_id}`],
-          ...result
-        }
+        carts[`businessId:${result.business_id}`] = result
         setStateValues({ carts })
       }
     } catch (err) {
