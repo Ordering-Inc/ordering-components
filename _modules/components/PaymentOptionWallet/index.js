@@ -225,7 +225,7 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
 
               if (!error) {
                 carts = orderState.carts;
-                carts["businessId:".concat(result.business_id)] = _objectSpread(_objectSpread({}, carts["businessId:".concat(result.business_id)]), result);
+                carts["businessId:".concat(result.business_id)] = result;
                 setStateValues({
                   carts: carts
                 });
@@ -285,7 +285,7 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
 
               if (!error) {
                 carts = orderState.carts;
-                carts["businessId:".concat(result.business_id)] = _objectSpread(_objectSpread({}, carts["businessId:".concat(result.business_id)]), result);
+                carts["businessId:".concat(result.business_id)] = result;
                 setStateValues({
                   carts: carts
                 });
