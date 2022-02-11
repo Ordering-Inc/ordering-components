@@ -42,6 +42,7 @@ import { OrderList } from './components/OrderList'
 import { OrderTypeControl } from './components/OrderTypeControl'
 import { OrdersControlFilters } from './components/OrdersControlFilters'
 import { PaymentOptions } from './components/PaymentOptions'
+import { PaymentOptionWallet } from './components/PaymentOptionWallet'
 import { Popup } from './components/Popup'
 import { ProductComponent } from './components/ProductComponent'
 import { ProductForm } from './components/ProductForm'
@@ -102,6 +103,7 @@ import { ReCaptcha } from './components/ReCaptcha'
 import { ReviewCustomer } from './components/ReviewCustomer'
 import { ReviewProduct } from './components/ReviewProduct'
 import { ReviewDriver } from './components/ReviewDriver'
+import { WalletList } from './components/WalletList'
 import { CODES } from './constants/code-numbers'
 
 export {
@@ -155,6 +157,7 @@ export {
   OrderVerticalList,
   Messages,
   PaymentOptions,
+  PaymentOptionWallet,
   PaymethodList,
   Popup,
   ProductComponent,
@@ -198,6 +201,7 @@ export {
   Analytics,
   ReCaptcha,
   MapView,
+  WalletList,
   // Contexts
   ConfigContext,
   ConfigProvider,
