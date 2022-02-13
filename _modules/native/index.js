@@ -850,7 +850,7 @@ var _UpsellingPage = require("../src/components/UpsellingPage");
 
 var _MapView = require("../src/components/MapView");
 
-var _WalletList = require("./components/WalletList");
+var _WalletList = require("../src/components/WalletList");
 
 var _ApiContext = require("../src/contexts/ApiContext");
 

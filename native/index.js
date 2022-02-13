@@ -73,7 +73,7 @@ import { StripeRedirectForm } from '../src/components/PaymentOptionStripeRedirec
 import { UserFormDetails } from '../src/components/UserFormDetails'
 import { UpsellingPage } from '../src/components/UpsellingPage'
 import { MapView } from '../src/components/MapView'
-import { WalletList } from './components/WalletList'
+import { WalletList } from '../src/components/WalletList'
 import { ApiContext, ApiProvider, useApi } from '../src/contexts/ApiContext'
 import { BusinessContext, BusinessProvider, useBusiness } from '../src/contexts/BusinessContext'
 import { ConfigContext, ConfigProvider, useConfig } from '../src/contexts/ConfigContext'
