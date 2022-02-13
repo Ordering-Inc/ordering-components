@@ -802,7 +802,7 @@ var _PaymentOptionStripeDirect = require("../src/components/PaymentOptionStripeD
 
 var _PaymentOptionStripeRedirect = require("../src/components/PaymentOptionStripeRedirect");
 
-var _PaymentOptionWallet = require("./components/PaymentOptionWallet");
+var _PaymentOptionWallet = require("../src/components/PaymentOptionWallet");
 
 var _PhoneAutocomplete = require("../src/components/PhoneAutocomplete");
 
