@@ -34,6 +34,7 @@ import { Messages } from '../src/components/Messages'
 import { MomentOption } from '../src/components/MomentOption'
 import { MyOrders } from '../src/components/MyOrders'
 import { MyOrdersList } from '../src/components/MyOrdersList'
+import { NewOrderNotification } from '../src/components/NewOrderNotification'
 import { OrderChange } from '../src/components/OrderChange'
 import { OrderList } from '../src/components/OrderList'
 import { OrderListGroups } from '../src/components/OrderListGroups'
@@ -129,6 +130,7 @@ export {
   MomentOption,
   MyOrders,
   MyOrdersList,
+  NewOrderNotification,
   OrderList,
   OrderTypeControl,
   OrdersControlFilters,
