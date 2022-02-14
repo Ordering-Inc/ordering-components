@@ -303,6 +303,12 @@ Object.defineProperty(exports, "MyOrdersList", {
     return _MyOrdersList.MyOrdersList;
   }
 });
+Object.defineProperty(exports, "NewOrderNotification", {
+  enumerable: true,
+  get: function get() {
+    return _NewOrderNotification.NewOrderNotification;
+  }
+});
 Object.defineProperty(exports, "OrderChange", {
   enumerable: true,
   get: function get() {
@@ -766,6 +772,8 @@ var _MyOrders = require("../src/components/MyOrders");
 
 var _MyOrdersList = require("../src/components/MyOrdersList");
 
+var _NewOrderNotification = require("../src/components/NewOrderNotification");
+
 var _OrderChange = require("../src/components/OrderChange");
 
 var _OrderList = require("../src/components/OrderList");
@@ -794,7 +802,7 @@ var _PaymentOptionStripeDirect = require("../src/components/PaymentOptionStripeD
 
 var _PaymentOptionStripeRedirect = require("../src/components/PaymentOptionStripeRedirect");
 
-var _PaymentOptionWallet = require("./components/PaymentOptionWallet");
+var _PaymentOptionWallet = require("../src/components/PaymentOptionWallet");
 
 var _PhoneAutocomplete = require("../src/components/PhoneAutocomplete");
 
@@ -842,7 +850,7 @@ var _UpsellingPage = require("../src/components/UpsellingPage");
 
 var _MapView = require("../src/components/MapView");
 
-var _WalletList = require("./components/WalletList");
+var _WalletList = require("../src/components/WalletList");
 
 var _ApiContext = require("../src/contexts/ApiContext");
 
