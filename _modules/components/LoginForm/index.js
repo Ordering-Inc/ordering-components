@@ -380,10 +380,15 @@ var LoginForm = function LoginForm(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: false
+                }
+              }));
               setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
                 loading: true
               }));
-              _context2.next = 4;
+              _context2.next = 5;
               return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
                 method: 'POST',
                 headers: {
@@ -395,22 +400,22 @@ var LoginForm = function LoginForm(props) {
                 })
               });
 
-            case 4:
+            case 5:
               response = _context2.sent;
-              _context2.next = 7;
+              _context2.next = 8;
               return response.json();
 
-            case 7:
+            case 8:
               res = _context2.sent;
               setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
                 loading: false,
                 result: res
               }));
-              _context2.next = 14;
+              _context2.next = 15;
               break;
 
-            case 11:
-              _context2.prev = 11;
+            case 12:
+              _context2.prev = 12;
               _context2.t0 = _context2["catch"](0);
               setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
                 loading: false,
@@ -419,12 +424,12 @@ var LoginForm = function LoginForm(props) {
                 }
               }));
 
-            case 14:
+            case 15:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee2, null, [[0, 12]]);
     }));
 
     return function sendVerifyPhoneCode(_x2) {
