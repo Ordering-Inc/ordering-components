@@ -190,6 +190,7 @@ export const LoginForm = (props) => {
    */
   const sendVerifyPhoneCode = async (values) => {
     try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: false } })
       setVerifyPhoneState({ ...verifyPhoneState, loading: true })
       const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
