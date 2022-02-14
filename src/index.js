@@ -38,6 +38,7 @@ import { MenuControl } from './components/MenuControl'
 import { MomentOption } from './components/MomentOption'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
+import { NewOrderNotification } from './components/NewOrderNotification'
 import { OrderList } from './components/OrderList'
 import { OrderTypeControl } from './components/OrderTypeControl'
 import { OrdersControlFilters } from './components/OrdersControlFilters'
@@ -151,6 +152,7 @@ export {
   MomentOption,
   MyOrders,
   MyOrdersList,
+  NewOrderNotification,
   OrderList,
   OrderTypeControl,
   OrdersControlFilters,

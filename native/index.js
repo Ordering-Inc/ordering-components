@@ -34,6 +34,7 @@ import { Messages } from '../src/components/Messages'
 import { MomentOption } from '../src/components/MomentOption'
 import { MyOrders } from '../src/components/MyOrders'
 import { MyOrdersList } from '../src/components/MyOrdersList'
+import { NewOrderNotification } from '../src/components/NewOrderNotification'
 import { OrderChange } from '../src/components/OrderChange'
 import { OrderList } from '../src/components/OrderList'
 import { OrderListGroups } from '../src/components/OrderListGroups'
@@ -48,7 +49,7 @@ import { PaymentOptionCash } from '../src/components/PaymentOptionCash'
 import { PaymentOptionStripe } from '../src/components/PaymentOptionStripe'
 import { PaymentOptionStripeDirect } from '../src/components/PaymentOptionStripeDirect'
 import { PaymentOptionStripeRedirect } from '../src/components/PaymentOptionStripeRedirect'
-import { PaymentOptionWallet } from './components/PaymentOptionWallet'
+import { PaymentOptionWallet } from '../src/components/PaymentOptionWallet'
 import { PhoneAutocomplete } from '../src/components/PhoneAutocomplete'
 import { ProductForm } from '../src/components/ProductForm'
 import { ProductImages } from '../src/components/ProductImages'
@@ -72,7 +73,7 @@ import { StripeRedirectForm } from '../src/components/PaymentOptionStripeRedirec
 import { UserFormDetails } from '../src/components/UserFormDetails'
 import { UpsellingPage } from '../src/components/UpsellingPage'
 import { MapView } from '../src/components/MapView'
-import { WalletList } from './components/WalletList'
+import { WalletList } from '../src/components/WalletList'
 import { ApiContext, ApiProvider, useApi } from '../src/contexts/ApiContext'
 import { BusinessContext, BusinessProvider, useBusiness } from '../src/contexts/BusinessContext'
 import { ConfigContext, ConfigProvider, useConfig } from '../src/contexts/ConfigContext'
@@ -129,6 +130,7 @@ export {
   MomentOption,
   MyOrders,
   MyOrdersList,
+  NewOrderNotification,
   OrderList,
   OrderTypeControl,
   OrdersControlFilters,
