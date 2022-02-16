@@ -126,7 +126,7 @@ var WalletList = function WalletList(props) {
               setTransactions(_objectSpread(_objectSpread({}, transactions), {}, {
                 loading: false,
                 error: error ? result : null,
-                list: error ? null : _objectSpread(_objectSpread({}, transactions.list), {}, _defineProperty({}, "wallet:".concat(walletId), result))
+                list: _objectSpread(_objectSpread({}, transactions.list), {}, _defineProperty({}, "wallet:".concat(walletId), error ? null : result))
               }));
               _context.next = 18;
               break;
