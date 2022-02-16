@@ -35,9 +35,9 @@ export const WalletList = (props) => {
         ...transactions,
         loading: false,
         error: error ? result : null,
-        list: error ? null : {
+        list: {
           ...transactions.list,
-          [`wallet:${walletId}`]: result
+          [`wallet:${walletId}`]: error ? null : result
         }
       })
     } catch (err) {
