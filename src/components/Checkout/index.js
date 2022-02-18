@@ -135,7 +135,7 @@ export const Checkout = (props) => {
       paymethod_id: paymethodSelected.paymethodId,
       paymethod_data: paymethodSelected?.data,
       offer_id: cart.offer_id,
-      amount: cart.balance,
+      amount: cart?.balance ?? cart?.total,
     }
 
     if (orderState.options.type === 1) {
@@ -274,7 +274,7 @@ export const Checkout = (props) => {
         paymethod_data: paymethodSelected?.data,
         delivery_zone_id: cart.delivery_zone_id,
         offer_id: cart.offer_id,
-        amount: cart.balance,
+        amount: cart?.balance ?? cart?.total,
       }
       onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart)
     }
