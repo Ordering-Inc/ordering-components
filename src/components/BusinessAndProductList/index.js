@@ -49,7 +49,7 @@ export const BusinessAndProductList = (props) => {
   let [categoryState, setCategoryState] = useState(categoryStateDefault)
   const [errors, setErrors] = useState(null)
   const [errorQuantityProducts, setErrorQuantityProducts] = useState(false)
-  
+
   const categoryKey = searchValue
     ? 'search'
     : categorySelected.id === 'featured'
@@ -100,8 +100,14 @@ export const BusinessAndProductList = (props) => {
 
   const isMatchSearch = (name, description) => {
     if (!searchValue) return true
-    return (name && (name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName)) ||
-      (description && (description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription))
+    return (
+      name && (name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByName)
+    ) ||
+      (
+        description && (description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByDescription)
+      )
   }
 
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
@@ -109,8 +115,14 @@ export const BusinessAndProductList = (props) => {
   const isFeaturedSearch = (product) => {
     if (product.featured) {
       if (!searchValue) return true
-      return (product.name && (product.name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName)) ||
-        (product.description && (product.description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription))
+      return (
+        product.name && (product.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByName)
+      ) ||
+        (
+          product.description && (product.description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByDescription)
+        )
     }
     return false
   }
