@@ -87,7 +87,8 @@ var BusinessList = function BusinessList(props) {
       onBusinessClick = props.onBusinessClick,
       windowPathname = props.windowPathname,
       currentPageParam = props.currentPageParam,
-      franchiseId = props.franchiseId;
+      franchiseId = props.franchiseId,
+      businessId = props.businessId;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -244,6 +245,13 @@ var BusinessList = function BusinessList(props) {
                 });
               }
 
+              if (businessId) {
+                conditions.push({
+                  attribute: typeof businessId === 'string' ? 'slug' : 'id',
+                  value: businessId
+                });
+              }
+
               if (timeLimitValue) {
                 if (((_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.type) === 1) {
                   conditions.push({
@@ -325,12 +333,12 @@ var BusinessList = function BusinessList(props) {
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : !where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard() : ordering.businesses().select(propsToFetch).parameters(parameters);
-              _context.next = 23;
+              _context.next = 24;
               return fetchEndpoint.get({
                 cancelToken: source
               });
 
-            case 23:
+            case 24:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               result = _yield$fetchEndpoint$2.result;
@@ -364,11 +372,11 @@ var BusinessList = function BusinessList(props) {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false
               }));
-              _context.next = 37;
+              _context.next = 38;
               break;
 
-            case 34:
-              _context.prev = 34;
+            case 35:
+              _context.prev = 35;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -378,12 +386,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 37:
+            case 38:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 34]]);
+      }, _callee, null, [[0, 35]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
