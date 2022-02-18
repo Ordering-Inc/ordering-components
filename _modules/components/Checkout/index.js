@@ -287,7 +287,7 @@ var Checkout = function Checkout(props) {
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(paymentOptions) {
-      var _cartResult$paymethod;
+      var _cart$balance, _cartResult$paymethod;
 
       var paymethodData, _paymethodSelected$da, payload, result, cartResult;
 
@@ -307,7 +307,7 @@ var Checkout = function Checkout(props) {
                 paymethod_id: paymethodSelected.paymethodId,
                 paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data,
                 offer_id: cart.offer_id,
-                amount: cart.balance
+                amount: (_cart$balance = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance !== void 0 ? _cart$balance : cart === null || cart === void 0 ? void 0 : cart.total
               };
 
               if (orderState.options.type === 1) {
@@ -595,12 +595,14 @@ var Checkout = function Checkout(props) {
 
   (0, _react.useEffect)(function () {
     if (cart && cart.status === 1) {
+      var _cart$balance2;
+
       var data = {
         paymethod_id: paymethodSelected.paymethodId,
         paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data,
         delivery_zone_id: cart.delivery_zone_id,
         offer_id: cart.offer_id,
-        amount: cart.balance
+        amount: (_cart$balance2 = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance2 !== void 0 ? _cart$balance2 : cart === null || cart === void 0 ? void 0 : cart.total
       };
       onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart);
     }
