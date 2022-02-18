@@ -29,7 +29,8 @@ export const BusinessList = (props) => {
     onBusinessClick,
     windowPathname,
     currentPageParam,
-    franchiseId
+    franchiseId,
+    businessId
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -109,6 +110,13 @@ export const BusinessList = (props) => {
 
       if (franchiseId) {
         conditions.push({ attribute: 'franchise_id', value: franchiseId })
+      }
+
+      if (businessId) {
+        conditions.push({
+          attribute: typeof businessId === 'string' ? 'slug' : 'id',
+          value: businessId
+        })
       }
 
       if (timeLimitValue) {
