@@ -27,7 +27,7 @@ export const GoogleMaps = (props) => {
   const [markers, setMarkers] = useState([])
   const [googleMapMarker, setGoogleMapMarker] = useState(null)
   const [boundMap, setBoundMap] = useState(null)
-
+  const [userActivity, setUserActivity] = useState(false)
   const markerRef = useRef()
 
   const location = fixedLocation || props.location
@@ -274,21 +274,23 @@ export const GoogleMaps = (props) => {
   useEffect(() => {
     if (!businessMap) {
       const interval = setInterval(() => {
-        if (googleReady) {
+        if (googleReady && !userActivity) {
           const driverLocation = locations[0]
           const newLocation = new window.google.maps.LatLng(driverLocation?.lat, driverLocation?.lng)
           markers?.[0] && markers[0].setPosition(newLocation)
           markers?.length > 0 && markers.forEach(marker => boundMap.extend(marker.position))
           googleMap.fitBounds(boundMap)
         }
-      }, 1000)
+        setUserActivity(false)
+      }, 5000)
       return () => clearInterval(interval)
     }
-  }, [locations])
+  }, [locations, userActivity])
 
   return (
     googleReady && (
       <div
+        onMouseOver={() => setUserActivity(true)}
         id='map'
         ref={divRef}
         style={{ width: '70%', height: '50%', position: 'absolute' }}
