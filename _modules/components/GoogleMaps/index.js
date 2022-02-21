@@ -86,6 +86,11 @@ var GoogleMaps = function GoogleMaps(props) {
       boundMap = _useState8[0],
       setBoundMap = _useState8[1];
 
+  var _useState9 = (0, _react.useState)(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      userActivity = _useState10[0],
+      setUserActivity = _useState10[1];
+
   var markerRef = (0, _react.useRef)();
   var location = fixedLocation || props.location;
   var center = {
@@ -401,7 +406,7 @@ var GoogleMaps = function GoogleMaps(props) {
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       var interval = setInterval(function () {
-        if (googleReady) {
+        if (googleReady && !userActivity) {
           var driverLocation = locations[0];
           var newLocation = new window.google.maps.LatLng(driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lat, driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lng);
           (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newLocation);
@@ -410,13 +415,18 @@ var GoogleMaps = function GoogleMaps(props) {
           });
           googleMap.fitBounds(boundMap);
         }
-      }, 1000);
+
+        setUserActivity(false);
+      }, 5000);
       return function () {
         return clearInterval(interval);
       };
     }
-  }, [locations]);
+  }, [locations, userActivity]);
   return googleReady && /*#__PURE__*/_react.default.createElement("div", {
+    onMouseOver: function onMouseOver() {
+      return setUserActivity(true);
+    },
     id: "map",
     ref: divRef,
     style: {
