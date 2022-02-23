@@ -105,7 +105,7 @@ export const PaymentOptionWallet = (props) => {
           },
           body: JSON.stringify({
             wallet_id: wallet.id,
-            amount: wallet.balance
+            // amount: wallet.balance
           })
         }
       )
