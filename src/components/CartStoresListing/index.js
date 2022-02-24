@@ -3,20 +3,23 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const CartStoresListing = (props) => {
   const {
     UIComponent,
     cartuuid,
-    cartStoresList
+    cartStoresList,
+    pageChangeStore
   } = props
 
   const [ordering] = useApi()
   const [orderState, { setStateValues }] = useOrder()
   const [{ token }] = useSession()
+  const [events] = useEvent()
 
-  const [searchValue, setSearchValue] = useState(null);
-  const [businessIdSelect, setBusinessIdSelect] = useState(null);
+  const [searchValue, setSearchValue] = useState(null)
+  const [businessIdSelect, setBusinessIdSelect] = useState(null)
   const [state, setState] = useState({ loading: !cartStoresList, result: null, error: null, original: null })
   const [changeStoreState, setChangeStore] = useState({ loading: false, result: null, error: null })
   const requestsState = {}
@@ -57,13 +60,17 @@ export const CartStoresListing = (props) => {
         .set({ business_id: businessId })
 
       if (!error) {
-        let carts = orderState.carts
+        const carts = orderState.carts
         const cartFinded = Object.values(orderState?.carts ?? {}).find(_cart => _cart?.uuid === result.uuid)
         if (cartFinded) {
           delete carts[`businessId:${cartFinded?.business_id}`]
         }
         carts[`businessId:${result?.business_id}`] = result
         setStateValues({ carts })
+        const route = window.location.pathname
+        if (route.includes('/store/') && pageChangeStore) {
+          events.emit('go_to_page', { page: pageChangeStore, params: { store: result?.business?.slug } })
+        }
       }
       setChangeStore({
         ...state,
@@ -74,7 +81,7 @@ export const CartStoresListing = (props) => {
       if (!error) {
         props.onClose && props.onClose()
       }
-    } catch(err) {
+    } catch (err) {
       setChangeStore({
         ...state,
         error: [err],
@@ -117,7 +124,7 @@ export const CartStoresListing = (props) => {
           : null
       })
     }
-  }, [searchValue]);
+  }, [searchValue])
 
   return (
     <UIComponent
