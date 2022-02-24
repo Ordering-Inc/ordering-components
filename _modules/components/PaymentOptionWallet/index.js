@@ -208,8 +208,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                   Authorization: "Bearer ".concat(token)
                 },
                 body: JSON.stringify({
-                  wallet_id: wallet.id,
-                  amount: wallet.balance
+                  wallet_id: wallet.id // amount: wallet.balance
+
                 })
               });
 

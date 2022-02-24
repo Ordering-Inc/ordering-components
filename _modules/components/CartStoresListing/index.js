@@ -19,6 +19,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _OrderContext = require("../../contexts/OrderContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -52,7 +54,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var CartStoresListing = function CartStoresListing(props) {
   var UIComponent = props.UIComponent,
       cartuuid = props.cartuuid,
-      cartStoresList = props.cartStoresList;
+      cartStoresList = props.cartStoresList,
+      pageChangeStore = props.pageChangeStore;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -66,6 +69,10 @@ var CartStoresListing = function CartStoresListing(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
   var _useState = (0, _react.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
@@ -154,7 +161,7 @@ var CartStoresListing = function CartStoresListing(props) {
 
   var handleCartStoreChange = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(businessId) {
-      var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, _orderState$carts, carts, cartFinded;
+      var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, _orderState$carts, carts, cartFinded, route, _result$business;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -190,6 +197,16 @@ var CartStoresListing = function CartStoresListing(props) {
                 setStateValues({
                   carts: carts
                 });
+                route = window.location.pathname;
+
+                if (route.includes('/store/') && pageChangeStore) {
+                  events.emit('go_to_page', {
+                    page: pageChangeStore,
+                    params: {
+                      store: result === null || result === void 0 ? void 0 : (_result$business = result.business) === null || _result$business === void 0 ? void 0 : _result$business.slug
+                    }
+                  });
+                }
               }
 
               setChangeStore(_objectSpread(_objectSpread({}, state), {}, {
