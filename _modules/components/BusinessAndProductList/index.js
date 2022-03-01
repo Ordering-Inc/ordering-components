@@ -252,7 +252,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   };
 
   var sortProductsArray = function sortProductsArray(option, array) {
-    if (option === 'rank') {
+    if (option === 'rank' || option === null) {
       return array.sort(function (a, b) {
         return b.rank - a.rank;
       });
