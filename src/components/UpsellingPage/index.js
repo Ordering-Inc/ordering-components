@@ -108,7 +108,7 @@ UpsellingPage.propTypes = {
   /**
     * upselling products that do not repeat in the cart
    */
-  upsellingProducts: PropTypes.array,
+  products: PropTypes.array,
   /**
    * BusinessId is required when products is not defined
    */
