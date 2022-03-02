@@ -78,7 +78,7 @@ export const PaymentOptions = (props) => {
    * @param {Object} val object with information of payment method selected
    */
   const handlePaymethodClick = (paymethod, isPopupMethod) => {
-    const paymentsDirect = ['paypal']
+    const paymentsDirect = ['paypal', 'square']
     events.emit('add_payment_option', paymethod)
     if (isPopupMethod) {
       if (paymentsDirect.includes(paymethod?.gateway)) {
