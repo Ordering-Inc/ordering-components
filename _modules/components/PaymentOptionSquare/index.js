@@ -201,8 +201,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
 
               eventHandler = /*#__PURE__*/function () {
                 var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(e) {
-                  var result, _yield$placeCart, error, resultApi;
-
+                  var result, response;
                   return _regenerator.default.wrap(function _callee2$(_context2) {
                     while (1) {
                       switch (_context2.prev = _context2.next) {
@@ -217,7 +216,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           result = _context2.sent;
 
                           if (!(result.status === 'OK')) {
-                            _context2.next = 17;
+                            _context2.next = 15;
                             break;
                           }
 
@@ -228,25 +227,25 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           return placeCart(body.cartUuid, params);
 
                         case 10:
-                          _yield$placeCart = _context2.sent;
-                          error = _yield$placeCart.error;
-                          resultApi = _yield$placeCart.result;
+                          response = _context2.sent;
 
-                          if (error) {
-                            _context2.next = 16;
+                          if (!(!(response !== null && response !== void 0 && response.error) && response !== null && response !== void 0 && response.result)) {
+                            _context2.next = 14;
                             break;
                           }
 
-                          onPlaceOrderClick(null, null, resultApi);
+                          onPlaceOrderClick(null, null, response === null || response === void 0 ? void 0 : response.result);
                           return _context2.abrupt("return");
 
-                        case 16:
-                          setAlertState({
-                            open: true,
-                            content: resultApi
-                          });
+                        case 14:
+                          if (response !== null && response !== void 0 && response.result) {
+                            setAlertState({
+                              open: true,
+                              content: response === null || response === void 0 ? void 0 : response.result
+                            });
+                          }
 
-                        case 17:
+                        case 15:
                           if (result.status === 'INVALID') {
                             setAlertState({
                               open: true,
@@ -256,26 +255,26 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                             });
                           }
 
-                          _context2.next = 23;
+                          _context2.next = 21;
                           break;
 
-                        case 20:
-                          _context2.prev = 20;
+                        case 18:
+                          _context2.prev = 18;
                           _context2.t0 = _context2["catch"](2);
                           setAlertState({
                             open: true,
                             content: _context2.t0.message
                           });
 
-                        case 23:
+                        case 21:
                           setIsLoadingPlace(false);
 
-                        case 24:
+                        case 22:
                         case "end":
                           return _context2.stop();
                       }
                     }
-                  }, _callee2, null, [[2, 20]]);
+                  }, _callee2, null, [[2, 18]]);
                 }));
 
                 return function eventHandler(_x) {
@@ -316,8 +315,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
 
               eventHandler = /*#__PURE__*/function () {
                 var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(e) {
-                  var result, _yield$placeCart2, error, resultApi, resultConfirm;
-
+                  var result, response, resultConfirm;
                   return _regenerator.default.wrap(function _callee4$(_context4) {
                     while (1) {
                       switch (_context4.prev = _context4.next) {
@@ -333,7 +331,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           result = _context4.sent;
 
                           if (!(result.status === 'OK')) {
-                            _context4.next = 23;
+                            _context4.next = 21;
                             break;
                           }
 
@@ -345,63 +343,63 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           return placeCart(body.cartUuid, params);
 
                         case 10:
-                          _yield$placeCart2 = _context4.sent;
-                          error = _yield$placeCart2.error;
-                          resultApi = _yield$placeCart2.result;
+                          response = _context4.sent;
 
-                          if (error) {
-                            _context4.next = 22;
-                            break;
-                          }
-
-                          _context4.next = 16;
-                          return confirmCart(body.cartUuid);
-
-                        case 16:
-                          resultConfirm = _context4.sent;
-
-                          if (resultConfirm.error) {
+                          if (!(!(response !== null && response !== void 0 && response.error) && response !== null && response !== void 0 && response.result)) {
                             _context4.next = 20;
                             break;
                           }
 
-                          onPlaceOrderClick(null, null, resultConfirm.result);
+                          _context4.next = 14;
+                          return confirmCart(body.cartUuid);
+
+                        case 14:
+                          resultConfirm = _context4.sent;
+
+                          if (!(!(resultConfirm !== null && resultConfirm !== void 0 && resultConfirm.error) && resultConfirm !== null && resultConfirm !== void 0 && resultConfirm.result)) {
+                            _context4.next = 18;
+                            break;
+                          }
+
+                          onPlaceOrderClick(null, null, resultConfirm === null || resultConfirm === void 0 ? void 0 : resultConfirm.result);
                           return _context4.abrupt("return");
 
-                        case 20:
+                        case 18:
                           setAlertState({
                             open: true,
                             content: resultConfirm
                           });
                           return _context4.abrupt("return");
 
-                        case 22:
-                          setAlertState({
-                            open: true,
-                            content: resultApi
-                          });
+                        case 20:
+                          if (response !== null && response !== void 0 && response.result) {
+                            setAlertState({
+                              open: true,
+                              content: response === null || response === void 0 ? void 0 : response.result
+                            });
+                          }
 
-                        case 23:
-                          _context4.next = 28;
+                        case 21:
+                          _context4.next = 26;
                           break;
 
-                        case 25:
-                          _context4.prev = 25;
+                        case 23:
+                          _context4.prev = 23;
                           _context4.t0 = _context4["catch"](1);
                           setAlertState({
                             open: true,
                             content: _context4.t0.message
                           });
 
-                        case 28:
+                        case 26:
                           setIsLoadingPlace(false);
 
-                        case 29:
+                        case 27:
                         case "end":
                           return _context4.stop();
                       }
                     }
-                  }, _callee4, null, [[1, 25]]);
+                  }, _callee4, null, [[1, 23]]);
                 }));
 
                 return function eventHandler(_x2) {
@@ -427,16 +425,26 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
 
   var initGiftCard = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee7() {
-      var giftCard, eventHandler, _eventHandler, giftCardButton;
-
+      var giftCard, eventHandler, giftCardButton;
       return _regenerator.default.wrap(function _callee7$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
             case 0:
-              _eventHandler = function _eventHandler3() {
-                _eventHandler = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(e) {
-                  var result, _yield$placeCart3, error, resultApi;
+              setIsLoadingMethod(true);
+              _context7.next = 3;
+              return payments.giftCard();
 
+            case 3:
+              giftCard = _context7.sent;
+              _context7.next = 6;
+              return giftCard.attach('#gift-card-container');
+
+            case 6:
+              setIsLoadingMethod(false);
+
+              eventHandler = /*#__PURE__*/function () {
+                var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(e) {
+                  var result, response;
                   return _regenerator.default.wrap(function _callee6$(_context6) {
                     while (1) {
                       switch (_context6.prev = _context6.next) {
@@ -451,7 +459,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           result = _context6.sent;
 
                           if (!(result.status === 'OK')) {
-                            _context6.next = 17;
+                            _context6.next = 15;
                             break;
                           }
 
@@ -462,68 +470,56 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           return placeCart(body.cartUuid, params);
 
                         case 10:
-                          _yield$placeCart3 = _context6.sent;
-                          error = _yield$placeCart3.error;
-                          resultApi = _yield$placeCart3.result;
+                          response = _context6.sent;
 
-                          if (error) {
-                            _context6.next = 16;
+                          if (!(!(response !== null && response !== void 0 && response.error) && response !== null && response !== void 0 && response.result)) {
+                            _context6.next = 14;
                             break;
                           }
 
-                          onPlaceOrderClick(null, null, resultApi);
+                          onPlaceOrderClick(null, null, response === null || response === void 0 ? void 0 : response.result);
                           return _context6.abrupt("return");
 
-                        case 16:
-                          setAlertState({
-                            open: true,
-                            content: resultApi
-                          });
+                        case 14:
+                          if (response !== null && response !== void 0 && response.result) {
+                            setAlertState({
+                              open: true,
+                              content: response === null || response === void 0 ? void 0 : response.result
+                            });
+                          }
 
-                        case 17:
-                          _context6.next = 22;
+                        case 15:
+                          _context6.next = 20;
                           break;
 
-                        case 19:
-                          _context6.prev = 19;
+                        case 17:
+                          _context6.prev = 17;
                           _context6.t0 = _context6["catch"](2);
                           setAlertState({
                             open: true,
                             content: _context6.t0.message
                           });
 
-                        case 22:
+                        case 20:
                           setIsLoadingPlace(false);
 
-                        case 23:
+                        case 21:
                         case "end":
                           return _context6.stop();
                       }
                     }
-                  }, _callee6, null, [[2, 19]]);
+                  }, _callee6, null, [[2, 17]]);
                 }));
-                return _eventHandler.apply(this, arguments);
-              };
 
-              eventHandler = function _eventHandler2(_x3) {
-                return _eventHandler.apply(this, arguments);
-              };
+                return function eventHandler(_x3) {
+                  return _ref7.apply(this, arguments);
+                };
+              }();
 
-              setIsLoadingMethod(true);
-              _context7.next = 5;
-              return payments.giftCard();
-
-            case 5:
-              giftCard = _context7.sent;
-              _context7.next = 8;
-              return giftCard.attach('#gift-card-container');
-
-            case 8:
-              setIsLoadingMethod(false);
               giftCardButton = document.getElementById('gift-card-button');
               giftCardButton.addEventListener('click', eventHandler);
 
-            case 11:
+            case 10:
             case "end":
               return _context7.stop();
           }
@@ -537,7 +533,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
   }();
 
   var initDigitalWallets = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8() {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee8() {
       var paymentRequest;
       return _regenerator.default.wrap(function _callee8$(_context8) {
         while (1) {
@@ -564,12 +560,12 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
     }));
 
     return function initDigitalWallets() {
-      return _ref7.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
 
   var applePay = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10() {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee10() {
       var applePay, eventHandler, applePayButtonTarget;
       return _regenerator.default.wrap(function _callee10$(_context10) {
         while (1) {
@@ -584,8 +580,8 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
               setIsLoadingMethod(false);
 
               eventHandler = /*#__PURE__*/function () {
-                var _ref9 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(e) {
-                  var result, _yield$placeCart4, error, resultApi;
+                var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(e) {
+                  var result, _yield$placeCart, error, resultApi;
 
                   return _regenerator.default.wrap(function _callee9$(_context9) {
                     while (1) {
@@ -611,9 +607,9 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           return placeCart(body.cartUuid, params);
 
                         case 9:
-                          _yield$placeCart4 = _context9.sent;
-                          error = _yield$placeCart4.error;
-                          resultApi = _yield$placeCart4.result;
+                          _yield$placeCart = _context9.sent;
+                          error = _yield$placeCart.error;
+                          resultApi = _yield$placeCart.result;
                           console.log(resultApi);
 
                           if (!error) {
@@ -641,7 +637,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                 }));
 
                 return function eventHandler(_x4) {
-                  return _ref9.apply(this, arguments);
+                  return _ref10.apply(this, arguments);
                 };
               }();
 
@@ -657,12 +653,12 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
     }));
 
     return function applePay() {
-      return _ref8.apply(this, arguments);
+      return _ref9.apply(this, arguments);
     };
   }();
 
   var googlePay = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12() {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee12() {
       var googlePay, eventHandler, googlePayButtonTarget;
       return _regenerator.default.wrap(function _callee12$(_context12) {
         while (1) {
@@ -681,8 +677,8 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
               setIsLoadingMethod(false);
 
               eventHandler = /*#__PURE__*/function () {
-                var _ref11 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(e) {
-                  var result, _yield$placeCart5, error, resultApi;
+                var _ref12 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee11(e) {
+                  var result, _yield$placeCart2, error, resultApi;
 
                   return _regenerator.default.wrap(function _callee11$(_context11) {
                     while (1) {
@@ -708,9 +704,9 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           return placeCart(body.cartUuid, params);
 
                         case 9:
-                          _yield$placeCart5 = _context11.sent;
-                          error = _yield$placeCart5.error;
-                          resultApi = _yield$placeCart5.result;
+                          _yield$placeCart2 = _context11.sent;
+                          error = _yield$placeCart2.error;
+                          resultApi = _yield$placeCart2.result;
                           console.log(resultApi);
 
                           if (!error) {
@@ -738,7 +734,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                 }));
 
                 return function eventHandler(_x5) {
-                  return _ref11.apply(this, arguments);
+                  return _ref12.apply(this, arguments);
                 };
               }();
 
@@ -754,7 +750,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
     }));
 
     return function googlePay() {
-      return _ref10.apply(this, arguments);
+      return _ref11.apply(this, arguments);
     };
   }();
 

@@ -49,7 +49,7 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal'];
+var paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal', 'square'];
 var paymethodsNotAllowed = ['paypal_express', 'authorize'];
 var paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon'];
 /**
@@ -187,7 +187,7 @@ var PaymentOptions = function PaymentOptions(props) {
 
 
   var handlePaymethodClick = function handlePaymethodClick(paymethod, isPopupMethod) {
-    var paymentsDirect = ['paypal'];
+    var paymentsDirect = ['paypal', 'square'];
     events.emit('add_payment_option', paymethod);
 
     if (isPopupMethod) {
