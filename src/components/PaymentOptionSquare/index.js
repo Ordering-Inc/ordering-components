@@ -89,15 +89,17 @@ export const PaymentOptionSquare = (props) => {
         const result = await card.tokenize()
         if (result.status === 'OK') {
           params.paymethod_data = { token: result.token }
-          const { error, result: resultApi } = await placeCart(body.cartUuid, params)
-          if (!error) {
-            onPlaceOrderClick(null, null, resultApi)
+          const response = await placeCart(body.cartUuid, params)
+          if (!response?.error && response?.result) {
+            onPlaceOrderClick(null, null, response?.result)
             return
           }
-          setAlertState({
-            open: true,
-            content: resultApi
-          })
+          if (response?.result) {
+            setAlertState({
+              open: true,
+              content: response?.result
+            })
+          }
         }
         if (result.status === 'INVALID') {
           setAlertState({
@@ -113,6 +115,7 @@ export const PaymentOptionSquare = (props) => {
       }
       setIsLoadingPlace(false)
     }
+
     const cardButton = document.getElementById('card-button')
     cardButton.addEventListener('click', eventHandler)
   }
@@ -131,11 +134,11 @@ export const PaymentOptionSquare = (props) => {
         if (result.status === 'OK') {
           setIsLoadingPlace(true)
           params.paymethod_data = { token: result.token }
-          const { error, result: resultApi } = await placeCart(body.cartUuid, params)
-          if (!error) {
+          const response = await placeCart(body.cartUuid, params)
+          if (!response?.error && response?.result) {
             const resultConfirm = await confirmCart(body.cartUuid)
-            if (!resultConfirm.error) {
-              onPlaceOrderClick(null, null, resultConfirm.result)
+            if (!resultConfirm?.error && resultConfirm?.result) {
+              onPlaceOrderClick(null, null, resultConfirm?.result)
               return
             }
             setAlertState({
@@ -144,10 +147,12 @@ export const PaymentOptionSquare = (props) => {
             })
             return
           }
-          setAlertState({
-            open: true,
-            content: resultApi
-          })
+          if (response?.result) {
+            setAlertState({
+              open: true,
+              content: response?.result
+            })
+          }
         }
       } catch (e) {
         setAlertState({
@@ -166,22 +171,24 @@ export const PaymentOptionSquare = (props) => {
     const giftCard = await payments.giftCard()
     await giftCard.attach('#gift-card-container')
     setIsLoadingMethod(false)
-    async function eventHandler (e) {
+    const eventHandler = async (e) => {
       e.preventDefault()
       setIsLoadingPlace(true)
       try {
         const result = await giftCard.tokenize()
         if (result.status === 'OK') {
           params.paymethod_data = { token: result.token }
-          const { error, result: resultApi } = await placeCart(body.cartUuid, params)
-          if (!error) {
-            onPlaceOrderClick(null, null, resultApi)
+          const response = await placeCart(body.cartUuid, params)
+          if (!response?.error && response?.result) {
+            onPlaceOrderClick(null, null, response?.result)
             return
           }
-          setAlertState({
-            open: true,
-            content: resultApi
-          })
+          if (response?.result) {
+            setAlertState({
+              open: true,
+              content: response?.result
+            })
+          }
         }
       } catch (e) {
         setAlertState({
