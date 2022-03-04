@@ -79,7 +79,8 @@ var OrderList = function OrderList(props) {
       userCustomerId = props.userCustomerId,
       activeOrders = props.activeOrders,
       isDynamicSort = props.isDynamicSort,
-      businessId = props.businessId;
+      businessId = props.businessId,
+      franchiseId = props.franchiseId;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -199,17 +200,27 @@ var OrderList = function OrderList(props) {
                 });
               }
 
+              if (franchiseId) {
+                options.query.where.push({
+                  attribute: 'ref_business',
+                  conditions: [{
+                    attribute: 'franchise_id',
+                    value: parseInt(franchiseId, 10)
+                  }]
+                });
+              }
+
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 12;
+              _context.next = 13;
               return functionFetch.get(options);
 
-            case 12:
+            case 13:
               return _context.abrupt("return", _context.sent);
 
-            case 13:
+            case 14:
             case "end":
               return _context.stop();
           }

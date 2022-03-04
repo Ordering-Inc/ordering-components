@@ -90,7 +90,8 @@ var OrderProvider = function OrderProvider(_ref) {
       children = _ref.children,
       strategy = _ref.strategy,
       isAlsea = _ref.isAlsea,
-      isDisableToast = _ref.isDisableToast;
+      isDisableToast = _ref.isDisableToast,
+      franchiseId = _ref.franchiseId;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -198,10 +199,16 @@ var OrderProvider = function OrderProvider(_ref) {
                 };
               }
 
-              _context.next = 10;
+              if (franchiseId) {
+                options.query = _objectSpread(_objectSpread({}, options.query), {}, {
+                  franchise_id: franchiseId
+                });
+              }
+
+              _context.next = 11;
               return ordering.setAccessToken(session.token).orderOptions().get(options);
 
-            case 10:
+            case 11:
               _yield$ordering$setAc = _context.sent;
               _yield$ordering$setAc2 = _yield$ordering$setAc.content;
               error = _yield$ordering$setAc2.error;
@@ -227,21 +234,21 @@ var OrderProvider = function OrderProvider(_ref) {
                 }
               }
 
-              _context.next = 18;
+              _context.next = 19;
               return strategy.getItem('options', true);
 
-            case 18:
+            case 19:
               localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 50;
+                _context.next = 51;
                 break;
               }
 
               _options2 = {};
 
               if (!(Object.keys(localOptions.address).length > 0)) {
-                _context.next = 42;
+                _context.next = 43;
                 break;
               }
 
@@ -250,10 +257,10 @@ var OrderProvider = function OrderProvider(_ref) {
                 value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
               userId = userCustomerId || session.user.id;
-              _context.next = 26;
+              _context.next = 27;
               return ordering.setAccessToken(session.token).users(userId).addresses().where(conditions).get();
 
-            case 26:
+            case 27:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
                 var _localOptions$address2, _localOptions$address3, _localOptions$address4, _address$location, _localOptions$address5, _address$location2, _localOptions$address6, _localOptions$address7, _localOptions$address8, _localOptions$address9, _localOptions$address10;
@@ -265,7 +272,7 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
               if (address) {
-                _context.next = 39;
+                _context.next = 40;
                 break;
               }
 
@@ -274,10 +281,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
                 return (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address11 = localOptions.address) === null || _localOptions$address11 === void 0 ? void 0 : _localOptions$address11[key]) === null && (localOptions === null || localOptions === void 0 ? true : (_localOptions$address12 = localOptions.address) === null || _localOptions$address12 === void 0 ? true : delete _localOptions$address12[key]);
               });
-              _context.next = 32;
+              _context.next = 33;
               return ordering.setAccessToken(session.token).users(userId).addresses().save(localOptions.address);
 
-            case 32:
+            case 33:
               _yield$ordering$setAc3 = _context.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               _error = _yield$ordering$setAc4.error;
@@ -287,19 +294,19 @@ var OrderProvider = function OrderProvider(_ref) {
                 address = _result;
               }
 
-              _context.next = 41;
+              _context.next = 42;
               break;
 
-            case 39:
-              _context.next = 41;
+            case 40:
+              _context.next = 42;
               return ordering.setAccessToken(session.token).users(userId).addresses(address.id).save({
                 default: true
               });
 
-            case 41:
+            case 42:
               address && (_options2.address_id = address.id);
 
-            case 42:
+            case 43:
               if (localOptions.type) {
                 _options2.type = localOptions.type;
               }
@@ -320,24 +327,24 @@ var OrderProvider = function OrderProvider(_ref) {
                 }));
               }
 
-              _context.next = 48;
+              _context.next = 49;
               return strategy.removeItem('options');
 
-            case 48:
-              _context.next = 51;
+            case 49:
+              _context.next = 52;
               break;
 
-            case 50:
+            case 51:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 51:
-              _context.next = 58;
+            case 52:
+              _context.next = 59;
               break;
 
-            case 53:
-              _context.prev = 53;
+            case 54:
+              _context.prev = 54;
               _context.t0 = _context["catch"](0);
               message = _context.t0 !== null && _context.t0 !== void 0 && (_err$message = _context.t0.message) !== null && _err$message !== void 0 && _err$message.includes('Internal error') ? 'INTERNAL_ERROR' : _context.t0.message;
               setAlert({
@@ -348,12 +355,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: false
               }));
 
-            case 58:
+            case 59:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 53]]);
+      }, _callee, null, [[0, 54]]);
     }));
 
     return function refreshOrderOptions() {
