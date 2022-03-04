@@ -23,7 +23,8 @@ export const OrderList = props => {
     userCustomerId,
     activeOrders,
     isDynamicSort,
-    businessId
+    businessId,
+    franchiseId
   } = props
 
   const [ordering] = useApi()
@@ -72,6 +73,9 @@ export const OrderList = props => {
     }
     if (businessId) {
       options.query.where.push({ attribute: 'business_id', value: parseInt(businessId, 10) })
+    }
+    if (franchiseId) {
+      options.query.where.push({ attribute : 'ref_business', conditions: [{ attribute: 'franchise_id', value: parseInt(franchiseId, 10) }]})
     }
     const source = {}
     requestsState.orders = source
