@@ -38,8 +38,10 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast }) 
                     <SessionProvider strategy={nativeStrategy}>
                       <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
                         <CustomerProvider strategy={nativeStrategy}>
-                          <OrderProvider strategy={nativeStrategy} Alert={Alert} isDisableToast={isDisableToast}>
-                            <BusinessProvider businessId={settings?.businessSlug ?? settings?.businessId}>
+                          <OrderProvider strategy={nativeStrategy} Alert={Alert} isDisableToast={isDisableToast} franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}>
+                            <BusinessProvider
+                              businessId={settings?.businessSlug ?? settings?.businessId}
+                            >
                               {children}
                             </BusinessProvider>
                           </OrderProvider>
