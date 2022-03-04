@@ -23,7 +23,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast }) => {
+export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast, franchiseId }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -70,6 +70,12 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (userCustomerId) {
         options.query = {
           user_id: userCustomerId
+        }
+      }
+      if (franchiseId) {
+        options.query = {
+          ...options.query,
+          franchise_id: franchiseId
         }
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().get(options)
