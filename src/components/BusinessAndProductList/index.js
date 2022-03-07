@@ -129,6 +129,9 @@ export const BusinessAndProductList = (props) => {
 
   const sortProductsArray = (option, array) => {
     if (option === 'rank' || option === null) {
+      return array.sort((a, b) => a.rank - b.rank)
+    }
+    if (option === 'rank_desc') {
       return array.sort((a, b) => b.rank - a.rank)
     }
     if (option === 'a-z') {
