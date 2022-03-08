@@ -17,7 +17,8 @@ export const GoogleMaps = (props) => {
     maxLimitLocation,
     businessMap,
     onBusinessClick,
-    setNearBusinessList
+    setNearBusinessList,
+    noDistanceValidation
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -55,7 +56,7 @@ export const GoogleMaps = (props) => {
           scaledSize: new window.google.maps.Size(45, 45)
         } : null
       })
-      if (businessMap) {
+      if (businessMap && !noDistanceValidation) {
         const isNear = validateResult(googleMap, marker, marker.getPosition())
         if (isNear) {
           if (i === 0 && locations[0]?.markerPopup) {
