@@ -723,6 +723,12 @@ Object.defineProperty(exports, "ValidationFieldsProvider", {
     return _ValidationsFieldsContext.ValidationFieldsProvider;
   }
 });
+Object.defineProperty(exports, "VerifyEmail", {
+  enumerable: true,
+  get: function get() {
+    return _VerifyEmail.VerifyEmail;
+  }
+});
 Object.defineProperty(exports, "WalletList", {
   enumerable: true,
   get: function get() {
@@ -1031,6 +1037,8 @@ var _ReviewCustomer = require("./components/ReviewCustomer");
 var _ReviewProduct = require("./components/ReviewProduct");
 
 var _ReviewDriver = require("./components/ReviewDriver");
+
+var _VerifyEmail = require("./components/VerifyEmail");
 
 var _WalletList = require("./components/WalletList");
 

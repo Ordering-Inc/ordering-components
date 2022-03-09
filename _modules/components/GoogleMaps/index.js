@@ -54,7 +54,8 @@ var GoogleMaps = function GoogleMaps(props) {
       maxLimitLocation = props.maxLimitLocation,
       businessMap = props.businessMap,
       onBusinessClick = props.onBusinessClick,
-      setNearBusinessList = props.setNearBusinessList;
+      setNearBusinessList = props.setNearBusinessList,
+      noDistanceValidation = props.noDistanceValidation;
 
   var _useUtils = (0, _UtilsContext.useUtils)(),
       _useUtils2 = _slicedToArray(_useUtils, 1),
@@ -128,7 +129,7 @@ var GoogleMaps = function GoogleMaps(props) {
         } : null
       });
 
-      if (businessMap) {
+      if (businessMap && !noDistanceValidation) {
         var isNear = validateResult(googleMap, marker, marker.getPosition());
 
         if (isNear) {
