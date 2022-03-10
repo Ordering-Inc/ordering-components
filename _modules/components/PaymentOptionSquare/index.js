@@ -48,7 +48,8 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
       cartTotal = props.cartTotal,
       onPlaceOrderClick = props.onPlaceOrderClick,
       body = props.body,
-      data = props.data;
+      data = props.data,
+      setCreateOrder = props.setCreateOrder;
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
@@ -208,36 +209,37 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                         case 0:
                           e.preventDefault();
                           setIsLoadingPlace(true);
-                          _context2.prev = 2;
-                          _context2.next = 5;
+                          setCreateOrder(true);
+                          _context2.prev = 3;
+                          _context2.next = 6;
                           return card.tokenize();
 
-                        case 5:
+                        case 6:
                           result = _context2.sent;
 
                           if (!(result.status === 'OK')) {
-                            _context2.next = 15;
+                            _context2.next = 16;
                             break;
                           }
 
                           params.paymethod_data = {
                             token: result.token
                           };
-                          _context2.next = 10;
+                          _context2.next = 11;
                           return placeCart(body.cartUuid, params);
 
-                        case 10:
+                        case 11:
                           response = _context2.sent;
 
                           if (!(!(response !== null && response !== void 0 && response.error) && response !== null && response !== void 0 && response.result)) {
-                            _context2.next = 14;
+                            _context2.next = 15;
                             break;
                           }
 
                           onPlaceOrderClick(null, null, response === null || response === void 0 ? void 0 : response.result);
                           return _context2.abrupt("return");
 
-                        case 14:
+                        case 15:
                           if (response !== null && response !== void 0 && response.result) {
                             setAlertState({
                               open: true,
@@ -245,7 +247,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                             });
                           }
 
-                        case 15:
+                        case 16:
                           if (result.status === 'INVALID') {
                             setAlertState({
                               open: true,
@@ -255,26 +257,27 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                             });
                           }
 
-                          _context2.next = 21;
+                          _context2.next = 22;
                           break;
 
-                        case 18:
-                          _context2.prev = 18;
-                          _context2.t0 = _context2["catch"](2);
+                        case 19:
+                          _context2.prev = 19;
+                          _context2.t0 = _context2["catch"](3);
                           setAlertState({
                             open: true,
                             content: _context2.t0.message
                           });
 
-                        case 21:
+                        case 22:
+                          setCreateOrder(false);
                           setIsLoadingPlace(false);
 
-                        case 22:
+                        case 24:
                         case "end":
                           return _context2.stop();
                       }
                     }
-                  }, _callee2, null, [[2, 18]]);
+                  }, _callee2, null, [[3, 19]]);
                 }));
 
                 return function eventHandler(_x) {
@@ -331,47 +334,48 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           result = _context4.sent;
 
                           if (!(result.status === 'OK')) {
-                            _context4.next = 21;
+                            _context4.next = 22;
                             break;
                           }
 
                           setIsLoadingPlace(true);
+                          setCreateOrder(true);
                           params.paymethod_data = {
                             token: result.token
                           };
-                          _context4.next = 10;
+                          _context4.next = 11;
                           return placeCart(body.cartUuid, params);
 
-                        case 10:
+                        case 11:
                           response = _context4.sent;
 
                           if (!(!(response !== null && response !== void 0 && response.error) && response !== null && response !== void 0 && response.result)) {
-                            _context4.next = 20;
+                            _context4.next = 21;
                             break;
                           }
 
-                          _context4.next = 14;
+                          _context4.next = 15;
                           return confirmCart(body.cartUuid);
 
-                        case 14:
+                        case 15:
                           resultConfirm = _context4.sent;
 
                           if (!(!(resultConfirm !== null && resultConfirm !== void 0 && resultConfirm.error) && resultConfirm !== null && resultConfirm !== void 0 && resultConfirm.result)) {
-                            _context4.next = 18;
+                            _context4.next = 19;
                             break;
                           }
 
                           onPlaceOrderClick(null, null, resultConfirm === null || resultConfirm === void 0 ? void 0 : resultConfirm.result);
                           return _context4.abrupt("return");
 
-                        case 18:
+                        case 19:
                           setAlertState({
                             open: true,
                             content: resultConfirm
                           });
                           return _context4.abrupt("return");
 
-                        case 20:
+                        case 21:
                           if (response !== null && response !== void 0 && response.result) {
                             setAlertState({
                               open: true,
@@ -379,27 +383,28 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                             });
                           }
 
-                        case 21:
-                          _context4.next = 26;
+                        case 22:
+                          _context4.next = 27;
                           break;
 
-                        case 23:
-                          _context4.prev = 23;
+                        case 24:
+                          _context4.prev = 24;
                           _context4.t0 = _context4["catch"](1);
                           setAlertState({
                             open: true,
                             content: _context4.t0.message
                           });
 
-                        case 26:
-                          setIsLoadingPlace(false);
-
                         case 27:
+                          setIsLoadingPlace(false);
+                          setCreateOrder(false);
+
+                        case 29:
                         case "end":
                           return _context4.stop();
                       }
                     }
-                  }, _callee4, null, [[1, 23]]);
+                  }, _callee4, null, [[1, 24]]);
                 }));
 
                 return function eventHandler(_x2) {
@@ -451,36 +456,37 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                         case 0:
                           e.preventDefault();
                           setIsLoadingPlace(true);
-                          _context6.prev = 2;
-                          _context6.next = 5;
+                          setCreateOrder(true);
+                          _context6.prev = 3;
+                          _context6.next = 6;
                           return giftCard.tokenize();
 
-                        case 5:
+                        case 6:
                           result = _context6.sent;
 
                           if (!(result.status === 'OK')) {
-                            _context6.next = 15;
+                            _context6.next = 16;
                             break;
                           }
 
                           params.paymethod_data = {
                             token: result.token
                           };
-                          _context6.next = 10;
+                          _context6.next = 11;
                           return placeCart(body.cartUuid, params);
 
-                        case 10:
+                        case 11:
                           response = _context6.sent;
 
                           if (!(!(response !== null && response !== void 0 && response.error) && response !== null && response !== void 0 && response.result)) {
-                            _context6.next = 14;
+                            _context6.next = 15;
                             break;
                           }
 
                           onPlaceOrderClick(null, null, response === null || response === void 0 ? void 0 : response.result);
                           return _context6.abrupt("return");
 
-                        case 14:
+                        case 15:
                           if (response !== null && response !== void 0 && response.result) {
                             setAlertState({
                               open: true,
@@ -488,27 +494,28 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                             });
                           }
 
-                        case 15:
-                          _context6.next = 20;
+                        case 16:
+                          _context6.next = 21;
                           break;
 
-                        case 17:
-                          _context6.prev = 17;
-                          _context6.t0 = _context6["catch"](2);
+                        case 18:
+                          _context6.prev = 18;
+                          _context6.t0 = _context6["catch"](3);
                           setAlertState({
                             open: true,
                             content: _context6.t0.message
                           });
 
-                        case 20:
-                          setIsLoadingPlace(false);
-
                         case 21:
+                          setIsLoadingPlace(false);
+                          setCreateOrder(false);
+
+                        case 23:
                         case "end":
                           return _context6.stop();
                       }
                     }
-                  }, _callee6, null, [[2, 17]]);
+                  }, _callee6, null, [[3, 18]]);
                 }));
 
                 return function eventHandler(_x3) {
