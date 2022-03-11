@@ -512,10 +512,10 @@ export const ProductForm = (props) => {
         }
       })
       let suboptionsArray = []
-      options.map((option, i) => {
+      options.map((option) => {
         const defaultSuboptions = option.suboptions
           .filter(suboption => suboption?.enabled && (suboption?.preselected || option?.suboptions?.length === 1))
-          .map((suboption, i) => {
+          .map((suboption) => {
             return {
               option: option,
               suboption: suboption,
