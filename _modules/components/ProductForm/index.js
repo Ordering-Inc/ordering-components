@@ -731,7 +731,9 @@ var ProductForm = function ProductForm(props) {
         return extra.options.filter(function (option) {
           return option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
             return suboption.enabled;
-          }).length === 1;
+          }).length === 1 || option.suboptions.filter(function (suboption) {
+            return suboption.preselected;
+          }).length > 0;
         });
       })));
 
@@ -746,7 +748,9 @@ var ProductForm = function ProductForm(props) {
       });
 
       var states = suboptions.map(function (suboption, i) {
-        var price = options[i].with_half_option && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
+        var _options$i;
+
+        var price = (_options$i = options[i]) !== null && _options$i !== void 0 && _options$i.with_half_option && suboption !== null && suboption !== void 0 && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
         return {
           id: suboption.id,
           name: suboption.name,
@@ -757,15 +761,25 @@ var ProductForm = function ProductForm(props) {
           total: price
         };
       });
-      var defaultOptions = options.map(function (option, i) {
-        return {
-          option: option,
-          suboption: suboptions[i],
-          state: states[i]
-        };
+      var suboptionsArray = [];
+      options.map(function (option) {
+        var defaultSuboptions = option.suboptions.filter(function (suboption) {
+          var _option$suboptions2;
+
+          return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 ? void 0 : (_option$suboptions2 = option.suboptions) === null || _option$suboptions2 === void 0 ? void 0 : _option$suboptions2.length) === 1);
+        }).map(function (suboption) {
+          return {
+            option: option,
+            suboption: suboption,
+            state: states.find(function (state) {
+              return (state === null || state === void 0 ? void 0 : state.id) === (suboption === null || suboption === void 0 ? void 0 : suboption.id);
+            })
+          };
+        });
+        suboptionsArray = [].concat(_toConsumableArray(suboptionsArray), _toConsumableArray(defaultSuboptions));
       });
-      setDefaultSubOptions(defaultOptions);
-      setCustomDefaultSubOptions(defaultOptions);
+      setDefaultSubOptions(suboptionsArray);
+      setCustomDefaultSubOptions(suboptionsArray);
     }
   }, [product.product]);
 
