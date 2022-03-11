@@ -481,9 +481,10 @@ export const ProductForm = (props) => {
     if (product?.product && Object.keys(product?.product).length) {
       const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
         option => (
-          option.min === 1 &&
-          option.max === 1 &&
-          option.suboptions.filter(suboption => suboption.enabled).length === 1
+          (option.min === 1 &&
+            option.max === 1 &&
+            option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
+          option.suboptions.filter(suboption => suboption.preselected).length > 0
         )
       )))
 
@@ -496,7 +497,7 @@ export const ProductForm = (props) => {
         .filter(suboption => suboption.enabled)
 
       const states = suboptions.map((suboption, i) => {
-        const price = options[i].with_half_option && suboption.half_price && suboption?.position !== 'whole'
+        const price = options[i]?.with_half_option && suboption?.half_price && suboption?.position !== 'whole'
           ? suboption.half_price
           : suboption.price
 
@@ -510,15 +511,21 @@ export const ProductForm = (props) => {
           total: price
         }
       })
-      const defaultOptions = options.map((option, i) => {
-        return {
-          option: option,
-          suboption: suboptions[i],
-          state: states[i]
-        }
+      let suboptionsArray = []
+      options.map((option, i) => {
+        const defaultSuboptions = option.suboptions
+          .filter(suboption => suboption?.enabled && (suboption?.preselected || option?.suboptions?.length === 1))
+          .map((suboption, i) => {
+            return {
+              option: option,
+              suboption: suboption,
+              state: states.find(state => state?.id === suboption?.id)
+            }
+          })
+        suboptionsArray = [...suboptionsArray, ...defaultSuboptions]
       })
-      setDefaultSubOptions(defaultOptions)
-      setCustomDefaultSubOptions(defaultOptions)
+      setDefaultSubOptions(suboptionsArray)
+      setCustomDefaultSubOptions(suboptionsArray)
     }
   }, [product.product])
 
