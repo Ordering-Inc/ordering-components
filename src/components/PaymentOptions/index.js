@@ -111,6 +111,7 @@ export const PaymentOptions = (props) => {
         id: paymethod?.id,
         gateway: paymethod?.gateway,
         paymethod: paymethod,
+        credentials : paymethod?.credentials ?? null,
         data
       })
       return
