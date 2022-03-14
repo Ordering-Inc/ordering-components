@@ -489,7 +489,7 @@ var BusinessList = function BusinessList(props) {
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true);
     }
-  }, [JSON.stringify(orderState.options.moment), franchiseEnabled, JSON.stringify(orderState.options.address), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
   (0, _react.useLayoutEffect)(function () {
     if (isDoordash) {
       getBusinesses(true);

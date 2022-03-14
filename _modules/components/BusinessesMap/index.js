@@ -54,10 +54,16 @@ var BusinessesMap = function BusinessesMap(props) {
 
 
   var getBusinessListLocations = function getBusinessListLocations() {
-    setBusinessLocations(businessList.map(function (business) {
+    setBusinessLocations(businessList === null || businessList === void 0 ? void 0 : businessList.filter(function (business) {
+      var _business$location, _business$location2;
+
+      return (business === null || business === void 0 ? void 0 : (_business$location = business.location) === null || _business$location === void 0 ? void 0 : _business$location.lat) && (business === null || business === void 0 ? void 0 : (_business$location2 = business.location) === null || _business$location2 === void 0 ? void 0 : _business$location2.lng);
+    }).map(function (business) {
+      var _business$location3, _business$location4;
+
       return {
-        lat: business.location.lat,
-        lng: business.location.lng,
+        lat: business === null || business === void 0 ? void 0 : (_business$location3 = business.location) === null || _business$location3 === void 0 ? void 0 : _business$location3.lat,
+        lng: business === null || business === void 0 ? void 0 : (_business$location4 = business.location) === null || _business$location4 === void 0 ? void 0 : _business$location4.lng,
         icon: business.logo,
         slug: business.slug
       };
