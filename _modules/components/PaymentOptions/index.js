@@ -219,6 +219,8 @@ var PaymentOptions = function PaymentOptions(props) {
     setPaymethodData(data);
 
     if (Object.keys(data).length) {
+      var _paymethod$credential;
+
       var paymethod = props.paySelected || isOpenMethod.paymethod;
       setPaymethodsSelected(paymethod);
       onPaymentChange && onPaymentChange({
@@ -226,6 +228,7 @@ var PaymentOptions = function PaymentOptions(props) {
         id: paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
         gateway: paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway,
         paymethod: paymethod,
+        credentials: (_paymethod$credential = paymethod === null || paymethod === void 0 ? void 0 : paymethod.credentials) !== null && _paymethod$credential !== void 0 ? _paymethod$credential : null,
         data: data
       });
       return;
