@@ -18,10 +18,10 @@ export const BusinessesMap = (props) => {
    * Getting necessary info for locate business on the map
    */
   const getBusinessListLocations = () => {
-    setBusinessLocations(businessList.map(business => {
+    setBusinessLocations(businessList?.filter(business => business?.location?.lat && business?.location?.lng).map(business => {
       return {
-        lat: business.location.lat,
-        lng: business.location.lng,
+        lat: business?.location?.lat,
+        lng: business?.location?.lng,
         icon: business.logo,
         slug: business.slug
       }
