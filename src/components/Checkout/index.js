@@ -126,16 +126,22 @@ export const Checkout = (props) => {
    */
   const handlerClickPlaceOrder = async (paymentOptions) => {
     let paymethodData = paymethodSelected?.data
-    if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
+    if (paymethodSelected?.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = {
         source_id: paymethodSelected?.data?.id
       }
     }
     let payload = {
-      paymethod_id: paymethodSelected.paymethodId,
-      paymethod_data: paymethodSelected?.data,
       offer_id: cart.offer_id,
       amount: cart?.balance ?? cart?.total,
+    }
+
+    if (paymethodSelected?.paymethod) {
+      payload = {
+        ...payload,
+        paymethod_id: paymethodSelected?.paymethodId,
+        paymethod_data: paymethodSelected?.data,
+      }
     }
 
     if (orderState.options.type === 1) {
