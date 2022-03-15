@@ -287,7 +287,7 @@ var Checkout = function Checkout(props) {
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(paymentOptions) {
-      var _cart$balance, _cartResult$paymethod;
+      var _paymethodSelected$pa5, _cart$balance, _cartResult$paymethod;
 
       var paymethodData, _paymethodSelected$da, payload, result, cartResult;
 
@@ -297,18 +297,23 @@ var Checkout = function Checkout(props) {
             case 0:
               paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data;
 
-              if (['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected.paymethod.gateway)) {
+              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa5 = paymethodSelected.paymethod) === null || _paymethodSelected$pa5 === void 0 ? void 0 : _paymethodSelected$pa5.gateway)) {
                 paymethodData = {
                   source_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$da = paymethodSelected.data) === null || _paymethodSelected$da === void 0 ? void 0 : _paymethodSelected$da.id
                 };
               }
 
               payload = {
-                paymethod_id: paymethodSelected.paymethodId,
-                paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data,
                 offer_id: cart.offer_id,
                 amount: (_cart$balance = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance !== void 0 ? _cart$balance : cart === null || cart === void 0 ? void 0 : cart.total
               };
+
+              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
+                payload = _objectSpread(_objectSpread({}, payload), {}, {
+                  paymethod_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.paymethodId,
+                  paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data
+                });
+              }
 
               if (orderState.options.type === 1) {
                 payload = _objectSpread(_objectSpread({}, payload), {}, {
@@ -317,48 +322,48 @@ var Checkout = function Checkout(props) {
               }
 
               if (!handleCustomClick) {
-                _context2.next = 7;
+                _context2.next = 8;
                 break;
               }
 
               handleCustomClick(payload, paymethodSelected, cart);
               return _context2.abrupt("return");
 
-            case 7:
+            case 8:
               payload = _objectSpread(_objectSpread({}, payload), {}, {
                 paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
               });
               setPlacing(true);
-              _context2.next = 11;
+              _context2.next = 12;
               return placeCart(cart.uuid, payload);
 
-            case 11:
+            case 12:
               result = _context2.sent;
 
               if (!(result !== null && result !== void 0 && result.error)) {
-                _context2.next = 15;
+                _context2.next = 16;
                 break;
               }
 
               setErrors(result === null || result === void 0 ? void 0 : result.result);
               return _context2.abrupt("return");
 
-            case 15:
+            case 16:
               cartResult = result === null || result === void 0 ? void 0 : result.result;
 
               if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-                _context2.next = 19;
+                _context2.next = 20;
                 break;
               }
 
-              _context2.next = 19;
+              _context2.next = 20;
               return actionsBeforePlace(paymethodSelected, result.result);
 
-            case 19:
+            case 20:
               setPlacing(false);
               onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
 
-            case 21:
+            case 22:
             case "end":
               return _context2.stop();
           }
