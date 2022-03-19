@@ -26,7 +26,7 @@ export const UserFormDetails = (props) => {
   const [session, { changeUser }] = useSession()
   const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()
-  const [isEdit, setIsEdit] = useState(false)
+  const [isEdit, setIsEdit] = useState(!!props?.isEdit)
   const [userState, setUserState] = useState({ loading: false, loadingDriver: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const requestsState = {}
