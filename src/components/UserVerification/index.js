@@ -5,7 +5,7 @@ import { useApi } from '../../contexts/ApiContext'
 /**
  * Component to manage login behavior without UI component
  */
-export const VerifyEmail = (props) => {
+export const UserVerification = (props) => {
   const {
     UIComponent
   } = props
@@ -14,6 +14,15 @@ export const VerifyEmail = (props) => {
   const [{ user, token }, { changeUser }] = useSession()
 
   const [verifyEmailState, setVerifyEmailState] = useState({
+    loadingSendCode: false,
+    resultSendCode: null,
+    errorSendCode: null,
+    loadingCheckCode: false,
+    resultCheckCode: null,
+    errorCheckCode: null,
+  })
+
+  const [verifyPhoneState, setVerifyPhoneState] = useState({
     loadingSendCode: false,
     resultSendCode: null,
     errorSendCode: null,
@@ -106,12 +115,104 @@ export const VerifyEmail = (props) => {
   /**
    * function for clean errors state
    */
-  const cleanErrorsState = () => {
+  const cleanErrorsState = (value) => {
+    if (value === 'phone') {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        errorCheckCode: null,
+        errorSendCode: null
+      })
+      return
+    }
     setVerifyEmailState({
       ...verifyEmailState,
       errorCheckCode: null,
       errorSendCode: null
     })
+  }
+
+// ----------------------------------------------------------------------------------------------------
+
+  /**
+   * function to send verify code with twilio
+   * @param {Object} values object with cellphone and country code values
+   */
+   const sendVerifyPhoneCode = async (values) => {
+    try {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loadingSendCode: true,
+        errorCheckCode: false
+      })
+      const response = await fetch(`${ordering.root}/codes/generate`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: values?.type ?? 2,
+          channel: values?.channel ?? 2,
+          size: values?.size ?? 4,
+          cellphone: values?.cellphone,
+          country_phone_code: values?.country_phone_code,
+        })
+      })
+      const { error, result } = await response.json()
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loadingSendCode: false,
+        resultSendCode: error ? null : result,
+        errorSendCode: error
+          ? typeof result === 'string' ? [result] : result
+          : null
+      })
+    } catch (error) {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loadingSendCode: false,
+        errorSendCode: [error.message]
+      })
+    }
+  }
+
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+  const checkVerifyPhoneCode = async (values) => {
+    try {
+      setVerifyPhoneState({ ...verifyPhoneState, loadingCheckCode: true })
+      const response = await fetch(`${ordering.root}/users/${user?.id}/verify`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          channel: values?.channel ?? 2,
+          code: values?.code
+        })
+      })
+      const { error, result } = await response.json()
+      if (result?.id && !error) {
+        changeUser({ ...user, ...result})
+      }
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loadingCheckCode: false,
+        resultCheckCode: error ? null : result,
+        errorSendCode: error
+          ? typeof result === 'string' ? [result] : result
+          : null
+      })
+    } catch (error) {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loadingCheckCode: false,
+        errorCheckCode: [error.message]
+      })
+    }
   }
 
   return (
@@ -120,9 +221,12 @@ export const VerifyEmail = (props) => {
         <UIComponent
           {...props}
           verifyEmailState={verifyEmailState}
-          cleanErrorsState={cleanErrorsState}
+          verifyPhoneState={verifyPhoneState}
           sendVerifyEmailCode={sendVerifyEmailCode}
+          sendVerifyPhoneCode={sendVerifyPhoneCode}
           checkVerifyEmailCode={checkVerifyEmailCode}
+          checkVerifyPhoneCode={checkVerifyPhoneCode}
+          cleanErrorsState={cleanErrorsState}
         />
       )}
     </>

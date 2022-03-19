@@ -104,7 +104,7 @@ import { ReCaptcha } from './components/ReCaptcha'
 import { ReviewCustomer } from './components/ReviewCustomer'
 import { ReviewProduct } from './components/ReviewProduct'
 import { ReviewDriver } from './components/ReviewDriver'
-import { VerifyEmail } from './components/VerifyEmail'
+import { UserVerification } from './components/UserVerification'
 import { WalletList } from './components/WalletList'
 import { CODES } from './constants/code-numbers'
 
@@ -204,7 +204,7 @@ export {
   Analytics,
   ReCaptcha,
   MapView,
-  VerifyEmail,
+  UserVerification,
   WalletList,
   // Contexts
   ConfigContext,
