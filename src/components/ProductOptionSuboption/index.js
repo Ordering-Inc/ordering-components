@@ -10,7 +10,8 @@ export const ProductOptionSuboption = (props) => {
     balance,
     option,
     suboption,
-    onChange
+    onChange,
+    isOrigin
   } = props
 
   /**
@@ -43,7 +44,8 @@ export const ProductOptionSuboption = (props) => {
    * Select/unselect the suboption
    */
   const toggleSelect = () => {
-    if (state.selected && option.limit_suboptions_by_max && balance === option.max) {
+    const selectStatus = isOrigin ? !state.selected : state.selected
+    if (selectStatus && option.limit_suboptions_by_max && balance === option.max) {
       return
     }
     changeState({
