@@ -131,8 +131,6 @@ export const UserVerification = (props) => {
     })
   }
 
-// ----------------------------------------------------------------------------------------------------
-
   /**
    * function to send verify code with twilio
    * @param {Object} values object with cellphone and country code values
