@@ -27,7 +27,8 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
       balance = props.balance,
       option = props.option,
       suboption = props.suboption,
-      onChange = props.onChange;
+      onChange = props.onChange,
+      isOrigin = props.isOrigin;
   /**
    * Predefine default values for suboption state
    */
@@ -70,7 +71,9 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
 
 
   var toggleSelect = function toggleSelect() {
-    if (state.selected && option.limit_suboptions_by_max && balance === option.max) {
+    var selectStatus = isOrigin ? !state.selected : state.selected;
+
+    if (selectStatus && option.limit_suboptions_by_max && balance === option.max) {
       return;
     }
 

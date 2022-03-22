@@ -90,7 +90,7 @@ var UserFormDetails = function UserFormDetails(props) {
       _useValidationsFields2 = _slicedToArray(_useValidationsFields, 1),
       validationFields = _useValidationsFields2[0];
 
-  var _useState = (0, _react.useState)(false),
+  var _useState = (0, _react.useState)(!!(props !== null && props !== void 0 && props.isEdit)),
       _useState2 = _slicedToArray(_useState, 2),
       isEdit = _useState2[0],
       setIsEdit = _useState2[1];

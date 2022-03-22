@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.VerifyEmail = void 0;
+exports.UserVerification = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -46,9 +46,9 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage login behavior without UI component
+ * Component to manage User Verification behavior without UI component
  */
-var VerifyEmail = function VerifyEmail(props) {
+var UserVerification = function UserVerification(props) {
   var UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -73,6 +73,18 @@ var VerifyEmail = function VerifyEmail(props) {
       _useState2 = _slicedToArray(_useState, 2),
       verifyEmailState = _useState2[0],
       setVerifyEmailState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
+    loadingSendCode: false,
+    resultSendCode: null,
+    errorSendCode: null,
+    loadingCheckCode: false,
+    resultCheckCode: null,
+    errorCheckCode: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      verifyPhoneState = _useState4[0],
+      setVerifyPhoneState = _useState4[1];
   /**
    * function to send verify code for email
    * @param {Object} values object with type, channel, size, email values
@@ -221,19 +233,175 @@ var VerifyEmail = function VerifyEmail(props) {
    */
 
 
-  var cleanErrorsState = function cleanErrorsState() {
+  var cleanErrorsState = function cleanErrorsState(value) {
+    if (value === 'phone') {
+      setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+        errorCheckCode: null,
+        errorSendCode: null
+      }));
+      return;
+    }
+
     setVerifyEmailState(_objectSpread(_objectSpread({}, verifyEmailState), {}, {
       errorCheckCode: null,
       errorSendCode: null
     }));
   };
+  /**
+   * function to send verify code with twilio
+   * @param {Object} values object with cellphone and country code values
+   */
+
+
+  var sendVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
+      var _values$type2, _values$channel3, _values$size2, response, _yield$response$json3, error, result;
+
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loadingSendCode: true,
+                errorCheckCode: false
+              }));
+              _context3.next = 4;
+              return fetch("".concat(ordering.root, "/codes/generate"), {
+                method: 'POST',
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  type: (_values$type2 = values === null || values === void 0 ? void 0 : values.type) !== null && _values$type2 !== void 0 ? _values$type2 : 2,
+                  channel: (_values$channel3 = values === null || values === void 0 ? void 0 : values.channel) !== null && _values$channel3 !== void 0 ? _values$channel3 : 2,
+                  size: (_values$size2 = values === null || values === void 0 ? void 0 : values.size) !== null && _values$size2 !== void 0 ? _values$size2 : 4,
+                  cellphone: values === null || values === void 0 ? void 0 : values.cellphone,
+                  country_phone_code: values === null || values === void 0 ? void 0 : values.country_phone_code
+                })
+              });
+
+            case 4:
+              response = _context3.sent;
+              _context3.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json3 = _context3.sent;
+              error = _yield$response$json3.error;
+              result = _yield$response$json3.result;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loadingSendCode: false,
+                resultSendCode: error ? null : result,
+                errorSendCode: error ? typeof result === 'string' ? [result] : result : null
+              }));
+              _context3.next = 16;
+              break;
+
+            case 13:
+              _context3.prev = 13;
+              _context3.t0 = _context3["catch"](0);
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loadingSendCode: false,
+                errorSendCode: [_context3.t0.message]
+              }));
+
+            case 16:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 13]]);
+    }));
+
+    return function sendVerifyPhoneCode(_x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+
+
+  var checkVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(values) {
+      var _values$channel4, response, _yield$response$json4, error, result;
+
+      return _regenerator.default.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loadingCheckCode: true
+              }));
+              _context4.next = 4;
+              return fetch("".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/verify"), {
+                method: 'POST',
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  channel: (_values$channel4 = values === null || values === void 0 ? void 0 : values.channel) !== null && _values$channel4 !== void 0 ? _values$channel4 : 2,
+                  code: values === null || values === void 0 ? void 0 : values.code
+                })
+              });
+
+            case 4:
+              response = _context4.sent;
+              _context4.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json4 = _context4.sent;
+              error = _yield$response$json4.error;
+              result = _yield$response$json4.result;
+
+              if (result !== null && result !== void 0 && result.id && !error) {
+                changeUser(_objectSpread(_objectSpread({}, user), result));
+              }
+
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loadingCheckCode: false,
+                resultCheckCode: error ? null : result,
+                errorSendCode: error ? typeof result === 'string' ? [result] : result : null
+              }));
+              _context4.next = 17;
+              break;
+
+            case 14:
+              _context4.prev = 14;
+              _context4.t0 = _context4["catch"](0);
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loadingCheckCode: false,
+                errorCheckCode: [_context4.t0.message]
+              }));
+
+            case 17:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[0, 14]]);
+    }));
+
+    return function checkVerifyPhoneCode(_x4) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     verifyEmailState: verifyEmailState,
-    cleanErrorsState: cleanErrorsState,
+    verifyPhoneState: verifyPhoneState,
     sendVerifyEmailCode: sendVerifyEmailCode,
-    checkVerifyEmailCode: checkVerifyEmailCode
+    sendVerifyPhoneCode: sendVerifyPhoneCode,
+    checkVerifyEmailCode: checkVerifyEmailCode,
+    checkVerifyPhoneCode: checkVerifyPhoneCode,
+    cleanErrorsState: cleanErrorsState
   })));
 };
 
-exports.VerifyEmail = VerifyEmail;
+exports.UserVerification = UserVerification;
