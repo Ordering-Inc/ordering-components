@@ -3,7 +3,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 
 /**
- * Component to manage login behavior without UI component
+ * Component to manage User Verification behavior without UI component
  */
 export const UserVerification = (props) => {
   const {
