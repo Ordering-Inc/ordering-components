@@ -24,7 +24,7 @@ export const OrderingContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const OrderingProvider = ({ Alert, settings, children, isDisableToast }) => {
+export const OrderingProvider = ({ Alert, settings, children, isDisableToast, isDisabledDefaultOpts }) => {
   const nativeStrategy = new NativeStrategy()
   return (
     <OrderingContext.Provider>
@@ -38,7 +38,13 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast }) 
                     <SessionProvider strategy={nativeStrategy}>
                       <WebsocketProvider settings={Object.assign(settings.socket, { project: settings.project })}>
                         <CustomerProvider strategy={nativeStrategy}>
-                          <OrderProvider strategy={nativeStrategy} Alert={Alert} isDisableToast={isDisableToast} franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}>
+                          <OrderProvider
+                            isDisabledDefaultOpts={isDisabledDefaultOpts}
+                            strategy={nativeStrategy}
+                            Alert={Alert}
+                            isDisableToast={isDisableToast}
+                            franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                          >
                             <BusinessProvider
                               businessId={settings?.businessSlug ?? settings?.businessId}
                             >
