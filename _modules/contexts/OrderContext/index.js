@@ -91,7 +91,8 @@ var OrderProvider = function OrderProvider(_ref) {
       strategy = _ref.strategy,
       isAlsea = _ref.isAlsea,
       isDisableToast = _ref.isDisableToast,
-      franchiseId = _ref.franchiseId;
+      franchiseId = _ref.franchiseId,
+      isDisabledDefaultOpts = _ref.isDisabledDefaultOpts;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -153,7 +154,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var _useState5 = (0, _react.useState)({
     loading: true,
-    options: {
+    options: isDisabledDefaultOpts ? {
+      type: null,
+      moment: null
+    } : {
       type: orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value],
       moment: null
     },
@@ -1846,7 +1850,10 @@ var OrderProvider = function OrderProvider(_ref) {
               optionsLocalStorage = _context18.sent;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
-                options: {
+                options: isDisabledDefaultOpts ? {
+                  type: null,
+                  moment: null
+                } : {
                   type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
                   moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
                   address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {}
