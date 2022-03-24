@@ -23,7 +23,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast, franchiseId }) => {
+export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast, franchiseId, isDisabledDefaultOpts }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -47,10 +47,12 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
 
   const [state, setState] = useState({
     loading: true,
-    options: {
-      type: orderTypes[configState?.configs?.default_order_type?.value],
-      moment: null
-    },
+    options: isDisabledDefaultOpts
+      ? { type: null, moment: null }
+      : {
+        type: orderTypes[configState?.configs?.default_order_type?.value],
+        moment: null
+      },
     carts: {},
     confirmAlert,
     alert
@@ -764,7 +766,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setState({
       ...state,
       loading: false,
-      options: {
+      options: isDisabledDefaultOpts
+      ? { type: null, moment: null }
+      : {
         type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
         moment: optionsLocalStorage?.moment || null,
         address: optionsLocalStorage?.address || state?.options?.address || {}
