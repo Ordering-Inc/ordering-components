@@ -429,6 +429,17 @@ export const ProductForm = (props) => {
     })
   }
 
+  const handleChangeProductCartQuantity = (quantity) => {
+    if (maxProductQuantity <= 0 || quantity >= maxProductQuantity) {
+      return
+    }
+    productCart.quantity = quantity || 0
+    productCart.total = productCart.unitTotal * productCart.quantity
+    setProductCart({
+      ...productCart
+    })
+  }
+
   /**
    * Check if option must show
    * @param {object} option Option to check
@@ -612,6 +623,7 @@ export const ProductForm = (props) => {
             maxProductQuantity={maxProductQuantity}
             increment={increment}
             decrement={decrement}
+            handleChangeProductCartQuantity={handleChangeProductCartQuantity}
             handleSave={handleSave}
             showOption={showOption}
             handleChangeIngredientState={handleChangeIngredientState}
