@@ -663,6 +663,16 @@ var ProductForm = function ProductForm(props) {
     productCart.total = productCart.unitTotal * productCart.quantity;
     setProductCart(_objectSpread({}, productCart));
   };
+
+  var handleChangeProductCartQuantity = function handleChangeProductCartQuantity(quantity) {
+    if (maxProductQuantity <= 0 || quantity >= maxProductQuantity) {
+      return;
+    }
+
+    productCart.quantity = quantity || 0;
+    productCart.total = productCart.unitTotal * productCart.quantity;
+    setProductCart(_objectSpread({}, productCart));
+  };
   /**
    * Check if option must show
    * @param {object} option Option to check
@@ -868,6 +878,7 @@ var ProductForm = function ProductForm(props) {
     maxProductQuantity: maxProductQuantity,
     increment: increment,
     decrement: decrement,
+    handleChangeProductCartQuantity: handleChangeProductCartQuantity,
     handleSave: handleSave,
     showOption: showOption,
     handleChangeIngredientState: handleChangeIngredientState,
