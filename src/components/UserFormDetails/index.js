@@ -276,6 +276,17 @@ export const UserFormDetails = (props) => {
     }
   }
 
+  const handleChangePromotions = (enabled) => {
+    console.log(enabled)
+    setFormState({
+      ...formState,
+      changes: {
+        ...formState.changes,
+        settings: { notification: { newsletter: enabled, promotions: enabled }, sms: { newsletter: enabled, promotions: enabled } }
+      }
+    })
+  }
+
   return (
     <>
       {UIComponent && (
@@ -294,6 +305,7 @@ export const UserFormDetails = (props) => {
           handlechangeImage={handlechangeImage}
           toggleIsEdit={() => setIsEdit(!isEdit)}
           handleToggleAvalaibleStatusDriver={handleToggleAvalaibleStatusDriver}
+          handleChangePromotions={handleChangePromotions}
         />
       )}
     </>
