@@ -277,7 +277,6 @@ export const UserFormDetails = (props) => {
   }
 
   const handleChangePromotions = (enabled) => {
-    console.log(enabled)
     setFormState({
       ...formState,
       changes: {
