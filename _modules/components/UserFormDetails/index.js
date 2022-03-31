@@ -424,6 +424,23 @@ var UserFormDetails = function UserFormDetails(props) {
     };
   }();
 
+  var handleChangePromotions = function handleChangePromotions(enabled) {
+    setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+      changes: _objectSpread(_objectSpread({}, formState.changes), {}, {
+        settings: {
+          notification: {
+            newsletter: enabled,
+            promotions: enabled
+          },
+          sms: {
+            newsletter: enabled,
+            promotions: enabled
+          }
+        }
+      })
+    }));
+  };
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     isEdit: isEdit,
     cleanFormState: cleanFormState,
@@ -439,7 +456,8 @@ var UserFormDetails = function UserFormDetails(props) {
     toggleIsEdit: function toggleIsEdit() {
       return setIsEdit(!isEdit);
     },
-    handleToggleAvalaibleStatusDriver: handleToggleAvalaibleStatusDriver
+    handleToggleAvalaibleStatusDriver: handleToggleAvalaibleStatusDriver,
+    handleChangePromotions: handleChangePromotions
   })));
 };
 

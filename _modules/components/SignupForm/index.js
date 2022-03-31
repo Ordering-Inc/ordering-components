@@ -141,6 +141,11 @@ var SignupForm = function SignupForm(props) {
       _useState12 = _slicedToArray(_useState11, 2),
       isReCaptchaEnable = _useState12[0],
       setIsReCaptchaEnable = _useState12[1];
+
+  var _useState13 = (0, _react.useState)(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      promotionsEnabled = _useState14[0],
+      setPromotionsEnabled = _useState14[1];
   /**
    * Default fuction for signup workflow
    */
@@ -192,6 +197,19 @@ var SignupForm = function SignupForm(props) {
                 data.notification_app = notificationState.notification_app;
               }
 
+              if (promotionsEnabled) {
+                data.settings = {
+                  notification: {
+                    newsletter: true,
+                    promotions: true
+                  },
+                  sms: {
+                    newsletter: true,
+                    promotions: true
+                  }
+                };
+              }
+
               if (isCustomerMode) {
                 data.phone = data.cellphone;
                 delete data.country_phone_code;
@@ -204,18 +222,18 @@ var SignupForm = function SignupForm(props) {
 
                 return v !== '';
               }));
-              _context.prev = 14;
+              _context.prev = 15;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.signup = source;
-              _context.next = 20;
+              _context.next = 21;
               return ordering.users().save(newData, {
                 cancelToken: source
               });
 
-            case 20:
+            case 21:
               response = _context.sent;
               setFormState({
                 result: response.content,
@@ -230,12 +248,12 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
-              _context.next = 28;
+              _context.next = 29;
               break;
 
-            case 25:
-              _context.prev = 25;
-              _context.t0 = _context["catch"](14);
+            case 26:
+              _context.prev = 26;
+              _context.t0 = _context["catch"](15);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setFormState({
@@ -247,12 +265,12 @@ var SignupForm = function SignupForm(props) {
                 });
               }
 
-            case 28:
+            case 29:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[14, 25]]);
+      }, _callee, null, [[15, 26]]);
     }));
 
     return function handleSignupClick(_x) {
@@ -471,6 +489,14 @@ var SignupForm = function SignupForm(props) {
       return _ref5.apply(this, arguments);
     };
   }();
+  /**
+   * function to change promotions enabled
+   */
+
+
+  var handleChangePromotions = function handleChangePromotions() {
+    setPromotionsEnabled(!promotionsEnabled);
+  };
 
   (0, _react.useEffect)(function () {
     return function () {
@@ -493,7 +519,8 @@ var SignupForm = function SignupForm(props) {
     handleSendVerifyCode: sendVerifyPhoneCode,
     handleCheckPhoneCode: checkVerifyPhoneCode,
     enableReCaptcha: isReCaptchaEnable,
-    handleReCaptcha: setReCaptcha
+    handleReCaptcha: setReCaptcha,
+    handleChangePromotions: handleChangePromotions
   })));
 };
 
