@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useCustomer } from '../../contexts/CustomerContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
 
 /**
@@ -23,14 +25,19 @@ export const UserFormDetails = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
   const [session, { changeUser }] = useSession()
   const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()
   const [isEdit, setIsEdit] = useState(!!props?.isEdit)
+  const [isVerifiedPhone, setIsVerifiedPhone] = useState(false)
   const [userState, setUserState] = useState({ loading: false, loadingDriver: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
-  const requestsState = {}
+  const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
+  const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
 
+  const requestsState = {}
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
@@ -276,6 +283,80 @@ export const UserFormDetails = (props) => {
     }
   }
 
+  /**
+   * function to send verify code with twilio
+   * @param {Object} values object with cellphone and country code values
+   */
+  const sendVerifyPhoneCode = async (values) => {
+    setIsVerifiedPhone(false)
+    try {
+      setVerifyPhoneState({ ...verifyPhoneState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cellphone: values.cellphone,
+          country_phone_code: `+${values.country_phone_code}`
+        })
+      })
+      const res = await response.json()
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setVerifyPhoneState({
+        ...verifyPhoneState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
+
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+  const checkVerifyPhoneCode = async (values) => {
+    const body = {
+      ...values
+    }
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      const res = await response.json()
+      if (!res?.error && res?.result?.id) {
+        setIsVerifiedPhone(true)
+        showToast(ToastType.Info, t('PHONE_VERIFIED', 'Phone number has been verified!'), 1000)
+      }
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: res
+      })
+    } catch (error) {
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
+
+  const handleSetCheckPhoneCodeState = (data) => {
+    const values = data || { loading: false, result: { error: false } }
+    setCheckPhoneCodeState(values)
+  }
+
   return (
     <>
       {UIComponent && (
@@ -286,6 +367,7 @@ export const UserFormDetails = (props) => {
           formState={formState}
           userState={userState}
           validationFields={validationFields}
+          isVerifiedPhone={isVerifiedPhone}
           showField={showField}
           setFormState={setFormState}
           isRequiredField={isRequiredField}
@@ -294,6 +376,11 @@ export const UserFormDetails = (props) => {
           handlechangeImage={handlechangeImage}
           toggleIsEdit={() => setIsEdit(!isEdit)}
           handleToggleAvalaibleStatusDriver={handleToggleAvalaibleStatusDriver}
+          handleSendVerifyCode={sendVerifyPhoneCode}
+          handleCheckPhoneCode={checkVerifyPhoneCode}
+          verifyPhoneState={verifyPhoneState}
+          checkPhoneCodeState={checkPhoneCodeState}
+          setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
         />
       )}
     </>
