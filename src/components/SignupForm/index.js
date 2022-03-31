@@ -35,7 +35,7 @@ export const SignupForm = (props) => {
   const [{ configs }] = useConfig()
   const [reCaptchaValue, setReCaptchaValue] = useState(null)
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
-
+  const [promotionsEnabled, setPromotionsEnabled] = useState(false)
   /**
    * Default fuction for signup workflow
    */
@@ -63,6 +63,10 @@ export const SignupForm = (props) => {
     if (notificationState?.notification_token) {
       data.notification_token = notificationState.notification_token
       data.notification_app = notificationState.notification_app
+    }
+
+    if (promotionsEnabled) {
+      data.settings = { notification: { newsletter: true, promotions: true }, sms: { newsletter: true, promotions: true } }
     }
 
     if (isCustomerMode) {
@@ -243,6 +247,13 @@ export const SignupForm = (props) => {
     }
   }
 
+  /**
+   * function to change promotions enabled
+   */
+  const handleChangePromotions = () => {
+    setPromotionsEnabled(!promotionsEnabled)
+  }
+
   useEffect(() => {
     return () => {
       if (requestsState.signup) {
@@ -270,6 +281,7 @@ export const SignupForm = (props) => {
           handleCheckPhoneCode={checkVerifyPhoneCode}
           enableReCaptcha={isReCaptchaEnable}
           handleReCaptcha={setReCaptcha}
+          handleChangePromotions={handleChangePromotions}
         />
       )}
     </>
