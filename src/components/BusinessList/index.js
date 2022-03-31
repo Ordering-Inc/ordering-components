@@ -34,6 +34,7 @@ export const BusinessList = (props) => {
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
+  const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: false, error: null, lengthError: true })
   const [paginationProps, setPaginationProps] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10,
@@ -51,7 +52,8 @@ export const BusinessList = (props) => {
   const [requestsState, setRequestsState] = useState({})
   const [, { refreshConfigs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
-
+  const [filters, setFilters] = useState({ business_types: [] })
+  const [termValue, setTermValue] = useState('')
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
 
@@ -330,6 +332,12 @@ export const BusinessList = (props) => {
     }
   }, [initialFilterKey, initialFilterValue])
 
+  useEffect(() => {
+    if (termValue) {
+      handleSearchbusinessAndProducts(termValue)
+    }
+  }, [termValue])
+
   /**
    * Default behavior business click
    * @param {object} business Business clicked
@@ -433,6 +441,72 @@ export const BusinessList = (props) => {
     setMaxDeliveryFee(deliveryFee)
   }
 
+  const handleChangeTermValue = (val) => {
+    console.log('val', val)
+    setTermValue(val)
+  }
+
+  const handleChangeFilters = (filterName, filterValue) => {
+    setFilters({
+      ...filters,
+      [filterName]: filterValue
+    })
+  }
+
+  const handleSearchbusinessAndProducts = async () => {
+    try {
+      if (termValue?.length < 3) {
+        setBusinessesSearchList({
+          ...businessesSearchList,
+          lengthError: true
+        })
+        return
+      }
+      let filtParams = ''
+      Object.keys(filters).map(key => {
+        if ((!filters[key] && filters[key] !== 0) || filters[key] === 'default' || filters[key]?.length === 0) return
+        Array.isArray(filters[key]) ? filtParams = filtParams + `&${key}=[${filters[key]}]` : filtParams = filtParams + `&${key}=${filters[key]}`
+      })
+      setBusinessesSearchList({
+        ...businessesSearchList,
+        loading: true,
+        lengthError: false
+      })
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const location = { lat: orderState.options?.address?.location?.lat, lng: orderState.options?.address?.location?.lng }
+      const response = await fetch(`${ordering.root}/search?term=${termValue}&order_type_id=${orderState?.options?.type}&location=${JSON.stringify(location)}${filtParams}`, requestOptions)
+      const { result, error } = await response.json()
+      if (error) {
+        setBusinessesSearchList({
+          businesses: [],
+          loading: false,
+          error: result,
+          lengthError: false
+        })
+        return
+      }
+      setBusinessesSearchList({
+        ...businessesSearchList,
+        businesses: result,
+        loading: false,
+        lengthError: false
+      })
+    } catch (err) {
+      setBusinessesSearchList({
+        businesses: [],
+        loading: false,
+        error: err.message,
+        lengthError: false
+      })
+    }
+  }
+
   return (
     <>
       {
@@ -454,6 +528,11 @@ export const BusinessList = (props) => {
             handleChangeBusinessType={handleChangeBusinessType}
             handleChangeMaxDeliveryFee={handleChangeMaxDeliveryFee}
             franchiseEnabled={franchiseEnabled}
+            businessesSearchList={businessesSearchList}
+            handleChangeFilters={handleChangeFilters}
+            filters={filters}
+            termValue={termValue}
+            handleChangeTermValue={handleChangeTermValue}
           />
         )
       }
