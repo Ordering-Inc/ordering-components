@@ -357,6 +357,16 @@ export const UserFormDetails = (props) => {
     setCheckPhoneCodeState(values)
   }
 
+  const handleChangePromotions = (enabled) => {
+    setFormState({
+      ...formState,
+      changes: {
+        ...formState.changes,
+        settings: { notification: { newsletter: enabled, promotions: enabled }, sms: { newsletter: enabled, promotions: enabled } }
+      }
+    })
+  }
+
   return (
     <>
       {UIComponent && (
@@ -381,6 +391,7 @@ export const UserFormDetails = (props) => {
           verifyPhoneState={verifyPhoneState}
           checkPhoneCodeState={checkPhoneCodeState}
           setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
+          handleChangePromotions={handleChangePromotions}
         />
       )}
     </>
