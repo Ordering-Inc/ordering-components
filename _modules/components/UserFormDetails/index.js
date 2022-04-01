@@ -17,6 +17,10 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _CustomerContext = require("../../contexts/CustomerContext");
 
+var _ToastContext = require("../../contexts/ToastContext");
+
+var _LanguageContext = require("../../contexts/LanguageContext");
+
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
 
 var _excluded = ["photo"];
@@ -76,6 +80,14 @@ var UserFormDetails = function UserFormDetails(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
+
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
       session = _useSession2[0],
@@ -95,27 +107,52 @@ var UserFormDetails = function UserFormDetails(props) {
       isEdit = _useState2[0],
       setIsEdit = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({
+  var _useState3 = (0, _react.useState)(false),
+      _useState4 = _slicedToArray(_useState3, 2),
+      isVerifiedPhone = _useState4[0],
+      setIsVerifiedPhone = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     loading: false,
     loadingDriver: false,
     result: {
       error: false
     }
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      userState = _useState4[0],
-      setUserState = _useState4[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      userState = _useState6[0],
+      setUserState = _useState6[1];
 
-  var _useState5 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
     loading: false,
     changes: {},
     result: {
       error: false
     }
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      formState = _useState6[0],
-      setFormState = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      formState = _useState8[0],
+      setFormState = _useState8[1];
+
+  var _useState9 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState10 = _slicedToArray(_useState9, 2),
+      verifyPhoneState = _useState10[0],
+      setVerifyPhoneState = _useState10[1];
+
+  var _useState11 = (0, _react.useState)({
+    loading: false,
+    result: {
+      error: false
+    }
+  }),
+      _useState12 = _slicedToArray(_useState11, 2),
+      checkPhoneCodeState = _useState12[0],
+      setCheckPhoneCodeState = _useState12[1];
 
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
@@ -423,6 +460,152 @@ var UserFormDetails = function UserFormDetails(props) {
       return _ref2.apply(this, arguments);
     };
   }();
+  /**
+   * function to send verify code with twilio
+   * @param {Object} values object with cellphone and country code values
+   */
+
+
+  var sendVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(values) {
+      var response, res;
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              setIsVerifiedPhone(false);
+              _context3.prev = 1;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: true
+              }));
+              _context3.next = 5;
+              return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  cellphone: values.cellphone,
+                  country_phone_code: "+".concat(values.country_phone_code)
+                })
+              });
+
+            case 5:
+              response = _context3.sent;
+              _context3.next = 8;
+              return response.json();
+
+            case 8:
+              res = _context3.sent;
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: false,
+                result: res
+              }));
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](1);
+              setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
+                loading: false,
+                result: {
+                  error: _context3.t0.message
+                }
+              }));
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[1, 12]]);
+    }));
+
+    return function sendVerifyPhoneCode(_x5) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  /**
+   * function to verify code with endpoint
+   * @param {Object} values object with cellphone and country code values
+   */
+
+
+  var checkVerifyPhoneCode = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(values) {
+      var body, _res$result, response, res;
+
+      return _regenerator.default.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              body = _objectSpread({}, values);
+              _context4.prev = 1;
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: true
+              }));
+              _context4.next = 5;
+              return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+              });
+
+            case 5:
+              response = _context4.sent;
+              _context4.next = 8;
+              return response.json();
+
+            case 8:
+              res = _context4.sent;
+
+              if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
+                setIsVerifiedPhone(true);
+                showToast(_ToastContext.ToastType.Info, t('PHONE_VERIFIED', 'Phone number has been verified!'), 1000);
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: res
+              }));
+              _context4.next = 16;
+              break;
+
+            case 13:
+              _context4.prev = 13;
+              _context4.t0 = _context4["catch"](1);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  error: _context4.t0.message
+                }
+              }));
+
+            case 16:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[1, 13]]);
+    }));
+
+    return function checkVerifyPhoneCode(_x6) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var handleSetCheckPhoneCodeState = function handleSetCheckPhoneCodeState(data) {
+    var values = data || {
+      loading: false,
+      result: {
+        error: false
+      }
+    };
+    setCheckPhoneCodeState(values);
+  };
 
   var handleChangePromotions = function handleChangePromotions(enabled) {
     setFormState(_objectSpread(_objectSpread({}, formState), {}, {
@@ -447,6 +630,7 @@ var UserFormDetails = function UserFormDetails(props) {
     formState: formState,
     userState: userState,
     validationFields: validationFields,
+    isVerifiedPhone: isVerifiedPhone,
     showField: showField,
     setFormState: setFormState,
     isRequiredField: isRequiredField,
@@ -457,6 +641,11 @@ var UserFormDetails = function UserFormDetails(props) {
       return setIsEdit(!isEdit);
     },
     handleToggleAvalaibleStatusDriver: handleToggleAvalaibleStatusDriver,
+    handleSendVerifyCode: sendVerifyPhoneCode,
+    handleCheckPhoneCode: checkVerifyPhoneCode,
+    verifyPhoneState: verifyPhoneState,
+    checkPhoneCodeState: checkPhoneCodeState,
+    setCheckPhoneCodeState: handleSetCheckPhoneCodeState,
     handleChangePromotions: handleChangePromotions
   })));
 };
