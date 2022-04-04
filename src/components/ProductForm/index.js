@@ -430,7 +430,7 @@ export const ProductForm = (props) => {
   }
 
   const handleChangeProductCartQuantity = (quantity) => {
-    if (maxProductQuantity <= 0 || quantity >= maxProductQuantity) {
+    if (maxProductQuantity <= 0 || quantity > maxProductQuantity) {
       return
     }
     productCart.quantity = quantity || 0
