@@ -665,7 +665,7 @@ var ProductForm = function ProductForm(props) {
   };
 
   var handleChangeProductCartQuantity = function handleChangeProductCartQuantity(quantity) {
-    if (maxProductQuantity <= 0 || quantity >= maxProductQuantity) {
+    if (maxProductQuantity <= 0 || quantity > maxProductQuantity) {
       return;
     }
 
