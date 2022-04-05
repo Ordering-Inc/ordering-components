@@ -52,7 +52,7 @@ export const BusinessList = (props) => {
   const [requestsState, setRequestsState] = useState({})
   const [, { refreshConfigs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
-  const [filters, setFilters] = useState({ business_types: [] })
+  const [filters, setFilters] = useState({ business_types: [], orderBy: 'default' })
   const [termValue, setTermValue] = useState('')
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
@@ -442,15 +442,22 @@ export const BusinessList = (props) => {
   }
 
   const handleChangeTermValue = (val) => {
-    console.log('val', val)
     setTermValue(val)
   }
 
   const handleChangeFilters = (filterName, filterValue) => {
-    setFilters({
-      ...filters,
-      [filterName]: filterValue
-    })
+    if (filterName === 'orderBy') {
+      const ascdesc = filterValue === filters?.orderBy ? filterValue.includes('-') ? filterValue : `-${filterValue}` : filterValue
+      setFilters({
+        ...filters,
+        orderBy: ascdesc
+      })
+    } else {
+      setFilters({
+        ...filters,
+        [filterName]: filterValue
+      })
+    }
   }
 
   const handleSearchbusinessAndProducts = async () => {
