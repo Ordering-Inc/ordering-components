@@ -4,13 +4,14 @@ import { useSession } from '../../contexts/SessionContext'
 
 export const WalletList = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    isWalletCashEnabled,
+    isWalletPointsEnabled
   } = props
 
   const [ordering] = useApi()
   const [{ token, user }] = useSession()
   const [walletSelected, setWalletSelected] = useState(null)
-  const requestsState = {}
 
   const [state, setState] = useState({ wallets: [], loading: true, error: null })
   const [transactions, setTransactions] = useState({ list: null, loading: true, error: null })
@@ -33,12 +34,12 @@ export const WalletList = (props) => {
 
       setTransactions({
         ...transactions,
-        loading: false,
         error: error ? result : null,
         list: {
           ...transactions.list,
           [`wallet:${walletId}`]: error ? null : result
-        }
+        },
+        loading: false
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
@@ -66,7 +67,16 @@ export const WalletList = (props) => {
       const { error, result } = await response.json()
 
       if (!error && result?.length > 0) {
-        getTransactions(result[0].id)
+        const cashWallet = isWalletCashEnabled ? result.find(wallet => wallet.type === 'cash') : null
+        const pointsWallet = isWalletPointsEnabled ? result.find(wallet => wallet.type === 'credit_point') : null
+
+        if (cashWallet) {
+          getTransactions(cashWallet.id)
+          return
+        }
+        if (pointsWallet) {
+          getTransactions(pointsWallet.id)
+        }
       }
 
       setState({
@@ -88,12 +98,6 @@ export const WalletList = (props) => {
 
   useEffect(() => {
     getWallets()
-
-    // return () => {
-    //   if (requestsState.wallets) {
-    //     requestsState.wallets.cancel()
-    //   }
-    // }
   }, [])
 
   useEffect(() => {
