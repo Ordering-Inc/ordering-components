@@ -82,6 +82,7 @@ export const OrderListGroups = (props) => {
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
+
   const getOrders = async ({
     page,
     pageSize = paginationSettings.pageSize,
@@ -211,6 +212,13 @@ export const OrderListGroups = (props) => {
           condition: '<=',
           value: filtered?.date?.to
         }
+      })
+    }
+
+    if (filtered?.timeStatus) {
+      options.query.where.push({
+        attribute: 'time_status',
+        value: filtered?.timeStatus
       })
     }
 
