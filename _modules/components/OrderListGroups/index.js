@@ -369,17 +369,24 @@ var OrderListGroups = function OrderListGroups(props) {
                 });
               }
 
+              if (filtered !== null && filtered !== void 0 && filtered.timeStatus) {
+                options.query.where.push({
+                  attribute: 'time_status',
+                  value: filtered === null || filtered === void 0 ? void 0 : filtered.timeStatus
+                });
+              }
+
               source = {};
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 26;
+              _context.next = 27;
               return functionFetch.get(options);
 
-            case 26:
+            case 27:
               return _context.abrupt("return", _context.sent);
 
-            case 27:
+            case 28:
             case "end":
               return _context.stop();
           }

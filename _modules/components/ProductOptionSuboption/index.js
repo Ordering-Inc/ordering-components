@@ -73,7 +73,7 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
   var toggleSelect = function toggleSelect() {
     var selectStatus = isOrigin ? !state.selected : state.selected;
 
-    if (selectStatus && option.limit_suboptions_by_max && balance === option.max) {
+    if (selectStatus && option.limit_suboptions_by_max && balance === option.max && !((option === null || option === void 0 ? void 0 : option.max) === 1 && (option === null || option === void 0 ? void 0 : option.min) === 1)) {
       return;
     }
 
