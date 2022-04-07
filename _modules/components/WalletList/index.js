@@ -183,42 +183,31 @@ var WalletList = function WalletList(props) {
               error = _yield$response$json2.error;
               result = _yield$response$json2.result;
 
-              if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
-                _context2.next = 16;
-                break;
+              if (!error && (result === null || result === void 0 ? void 0 : result.length) > 0) {
+                cashWallet = isWalletCashEnabled ? result.find(function (wallet) {
+                  return wallet.type === 'cash';
+                }) : null;
+                pointsWallet = isWalletPointsEnabled ? result.find(function (wallet) {
+                  return wallet.type === 'credit_point';
+                }) : null;
+
+                if (cashWallet) {
+                  getTransactions(cashWallet.id);
+                } else if (pointsWallet) {
+                  getTransactions(pointsWallet.id);
+                }
               }
 
-              cashWallet = isWalletCashEnabled ? result.find(function (wallet) {
-                return wallet.type === 'cash';
-              }) : null;
-              pointsWallet = isWalletPointsEnabled ? result.find(function (wallet) {
-                return wallet.type === 'credit_point';
-              }) : null;
-
-              if (!cashWallet) {
-                _context2.next = 15;
-                break;
-              }
-
-              getTransactions(cashWallet.id);
-              return _context2.abrupt("return");
-
-            case 15:
-              if (pointsWallet) {
-                getTransactions(pointsWallet.id);
-              }
-
-            case 16:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
                 error: error ? result : null,
                 wallets: error ? null : result
               }));
-              _context2.next = 22;
+              _context2.next = 16;
               break;
 
-            case 19:
-              _context2.prev = 19;
+            case 13:
+              _context2.prev = 13;
               _context2.t0 = _context2["catch"](0);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
@@ -228,12 +217,12 @@ var WalletList = function WalletList(props) {
                 }));
               }
 
-            case 22:
+            case 16:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 19]]);
+      }, _callee2, null, [[0, 13]]);
     }));
 
     return function getWallets() {
