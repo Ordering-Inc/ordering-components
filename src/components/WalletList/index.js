@@ -72,9 +72,7 @@ export const WalletList = (props) => {
 
         if (cashWallet) {
           getTransactions(cashWallet.id)
-          return
-        }
-        if (pointsWallet) {
+        } else if (pointsWallet) {
           getTransactions(pointsWallet.id)
         }
       }
