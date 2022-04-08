@@ -209,7 +209,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                         case 0:
                           e.preventDefault();
                           setIsLoadingPlace(true);
-                          setCreateOrder(true);
+                          setCreateOrder && setCreateOrder(true);
                           _context2.prev = 3;
                           _context2.next = 6;
                           return card.tokenize();
@@ -269,7 +269,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           });
 
                         case 22:
-                          setCreateOrder(false);
+                          setCreateOrder && setCreateOrder(false);
                           setIsLoadingPlace(false);
 
                         case 24:
@@ -339,7 +339,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                           }
 
                           setIsLoadingPlace(true);
-                          setCreateOrder(true);
+                          setCreateOrder && setCreateOrder(true);
                           params.paymethod_data = {
                             token: result.token
                           };
@@ -397,7 +397,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
 
                         case 27:
                           setIsLoadingPlace(false);
-                          setCreateOrder(false);
+                          setCreateOrder && setCreateOrder(false);
 
                         case 29:
                         case "end":
@@ -456,7 +456,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
                         case 0:
                           e.preventDefault();
                           setIsLoadingPlace(true);
-                          setCreateOrder(true);
+                          setCreateOrder && setCreateOrder(true);
                           _context6.prev = 3;
                           _context6.next = 6;
                           return giftCard.tokenize();
@@ -508,7 +508,7 @@ var PaymentOptionSquare = function PaymentOptionSquare(props) {
 
                         case 21:
                           setIsLoadingPlace(false);
-                          setCreateOrder(false);
+                          setCreateOrder && setCreateOrder(false);
 
                         case 23:
                         case "end":
