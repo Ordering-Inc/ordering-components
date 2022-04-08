@@ -133,7 +133,8 @@ var UtilsProviders = function UtilsProviders(_ref) {
       separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_configState$configs$2 = configState.configs.format_number_decimal_separator) === null || _configState$configs$2 === void 0 ? void 0 : _configState$configs$2.value) || ',',
       thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$3 = configState.configs.format_number_thousand_separator) === null || _configState$configs$3 === void 0 ? void 0 : _configState$configs$3.value) || '.',
       currency: (options === null || options === void 0 ? void 0 : options.currency) || ((_configState$configs$4 = configState.configs.format_number_currency) === null || _configState$configs$4 === void 0 ? void 0 : _configState$configs$4.value) || '$',
-      currencyPosition: (options === null || options === void 0 ? void 0 : options.currencyPosition) || ((_configState$configs$5 = configState.configs.currency_position) === null || _configState$configs$5 === void 0 ? void 0 : _configState$configs$5.value) || 'left'
+      currencyPosition: (options === null || options === void 0 ? void 0 : options.currencyPosition) || ((_configState$configs$5 = configState.configs.currency_position) === null || _configState$configs$5 === void 0 ? void 0 : _configState$configs$5.value) || 'left',
+      isTruncable: options === null || options === void 0 ? void 0 : options.isTruncable
     };
     var number = parseNumber(value, formatNumber);
 
@@ -156,7 +157,16 @@ var UtilsProviders = function UtilsProviders(_ref) {
       separator: (options === null || options === void 0 ? void 0 : options.separator) || ((_configState$configs$7 = configState.configs.format_number_decimal_separator) === null || _configState$configs$7 === void 0 ? void 0 : _configState$configs$7.value) || ',',
       thousand: (options === null || options === void 0 ? void 0 : options.thousand) || ((_configState$configs$8 = configState.configs.format_number_thousand_separator) === null || _configState$configs$8 === void 0 ? void 0 : _configState$configs$8.value) || '.'
     };
-    var number = value.toFixed(formatNumber.decimal);
+    var number = value;
+
+    if (options !== null && options !== void 0 && options.isTruncable) {
+      number = number * Math.pow(10, formatNumber.decimal);
+      number = Math.trunc(number);
+      number = number / Math.pow(10, formatNumber.decimal);
+    } else {
+      number = value.toFixed(formatNumber.decimal);
+    }
+
     number = number.toString();
 
     if (number.indexOf('.')) {
