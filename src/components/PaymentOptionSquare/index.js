@@ -86,7 +86,7 @@ export const PaymentOptionSquare = (props) => {
       e.preventDefault()
 
       setIsLoadingPlace(true)
-      setCreateOrder(true)
+      setCreateOrder && setCreateOrder(true)
       try {
         const result = await card.tokenize()
         if (result.status === 'OK') {
@@ -115,7 +115,7 @@ export const PaymentOptionSquare = (props) => {
           content: e.message
         })
       }
-      setCreateOrder(false)
+      setCreateOrder && setCreateOrder(false)
       setIsLoadingPlace(false)
     }
 
@@ -136,7 +136,7 @@ export const PaymentOptionSquare = (props) => {
         })
         if (result.status === 'OK') {
           setIsLoadingPlace(true)
-          setCreateOrder(true)
+          setCreateOrder && setCreateOrder(true)
           params.paymethod_data = { token: result.token }
           const response = await placeCart(body.cartUuid, params)
           if (!response?.error && response?.result) {
@@ -165,7 +165,7 @@ export const PaymentOptionSquare = (props) => {
         })
       }
       setIsLoadingPlace(false)
-      setCreateOrder(false)
+      setCreateOrder && setCreateOrder(false)
     }
     const achButton = document.getElementById('ach-button')
     achButton.addEventListener('click', eventHandler)
@@ -179,7 +179,7 @@ export const PaymentOptionSquare = (props) => {
     const eventHandler = async (e) => {
       e.preventDefault()
       setIsLoadingPlace(true)
-      setCreateOrder(true)
+      setCreateOrder && setCreateOrder(true)
       try {
         const result = await giftCard.tokenize()
         if (result.status === 'OK') {
@@ -203,7 +203,7 @@ export const PaymentOptionSquare = (props) => {
         })
       }
       setIsLoadingPlace(false)
-      setCreateOrder(false)
+      setCreateOrder && setCreateOrder(false)
     }
     const giftCardButton = document.getElementById('gift-card-button')
     giftCardButton.addEventListener('click', eventHandler)
