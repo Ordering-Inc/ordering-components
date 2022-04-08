@@ -121,7 +121,8 @@ export const UtilsProviders = ({ children }) => {
       separator: options?.separator || configState.configs.format_number_decimal_separator?.value || ',',
       thousand: options?.thousand || configState.configs.format_number_thousand_separator?.value || '.',
       currency: options?.currency || configState.configs.format_number_currency?.value || '$',
-      currencyPosition: options?.currencyPosition || configState.configs.currency_position?.value || 'left'
+      currencyPosition: options?.currencyPosition || configState.configs.currency_position?.value || 'left',
+      isTruncable: options?.isTruncable
     }
     let number = parseNumber(value, formatNumber)
     if (formatNumber.currencyPosition?.toLowerCase() === 'left') {
@@ -139,7 +140,14 @@ export const UtilsProviders = ({ children }) => {
       separator: options?.separator || configState.configs.format_number_decimal_separator?.value || ',',
       thousand: options?.thousand || configState.configs.format_number_thousand_separator?.value || '.'
     }
-    let number = value.toFixed(formatNumber.decimal)
+    let number = value
+    if (options?.isTruncable) {
+      number = number * Math.pow(10, formatNumber.decimal)
+      number = Math.trunc(number)
+      number = number / Math.pow(10, formatNumber.decimal)
+    } else {
+      number = value.toFixed(formatNumber.decimal)
+    }
     number = number.toString()
     if (number.indexOf('.')) {
       number = number.replace('.', formatNumber.separator)
