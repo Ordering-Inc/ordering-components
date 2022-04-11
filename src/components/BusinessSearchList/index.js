@@ -7,7 +7,8 @@ import { useSession } from '../../contexts/SessionContext'
 export const BusinessSearchList = (props) => {
   const {
     UIComponent,
-    paginationSettings
+    paginationSettings,
+    lazySearch
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -24,7 +25,7 @@ export const BusinessSearchList = (props) => {
   const [termValue, setTermValue] = useState('')
 
   useEffect(() => {
-    handleSearchbusinessAndProducts(true)
+    !lazySearch && handleSearchbusinessAndProducts(true)
   }, [filters])
 
   useEffect(() => {
@@ -126,6 +127,7 @@ export const BusinessSearchList = (props) => {
             termValue={termValue}
             handleSearchbusinessAndProducts={handleSearchbusinessAndProducts}
             handleChangeTermValue={handleChangeTermValue}
+            setFilters={setFilters}
           />
         )
       }
