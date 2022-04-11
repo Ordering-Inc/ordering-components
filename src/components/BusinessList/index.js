@@ -51,7 +51,6 @@ export const BusinessList = (props) => {
   const [requestsState, setRequestsState] = useState({})
   const [, { refreshConfigs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
-
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
 
