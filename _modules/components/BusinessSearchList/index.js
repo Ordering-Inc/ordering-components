@@ -61,7 +61,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
   var _paginationSettings$p;
 
   var UIComponent = props.UIComponent,
-      paginationSettings = props.paginationSettings;
+      paginationSettings = props.paginationSettings,
+      lazySearch = props.lazySearch;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -109,7 +110,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
       setTermValue = _useState8[1];
 
   (0, _react.useEffect)(function () {
-    handleSearchbusinessAndProducts(true);
+    !lazySearch && handleSearchbusinessAndProducts(true);
   }, [filters]);
   (0, _react.useEffect)(function () {
     if (businessesSearchList !== null && businessesSearchList !== void 0 && businessesSearchList.loading) return;
@@ -245,7 +246,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
     filters: filters,
     termValue: termValue,
     handleSearchbusinessAndProducts: handleSearchbusinessAndProducts,
-    handleChangeTermValue: handleChangeTermValue
+    handleChangeTermValue: handleChangeTermValue,
+    setFilters: setFilters
   })));
 };
 
