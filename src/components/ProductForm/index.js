@@ -67,19 +67,19 @@ export const ProductForm = (props) => {
   const cart = orderState.carts?.[`businessId:${props.businessId}`]
 
   /**
-   * Product in cart
+   * Total products in cart
    */
-  const productInCart = product.product && cart?.products?.find(prod => prod.id === product.product.id)
-
-  /**
-   * Total product in cart
-   */
-  const totalBalance = (productInCart?.quantity || 0) - removeToBalance
+  const cartProducts = Object.values(orderState.carts).reduce((products, _cart) => [...products, ..._cart?.products], [])
 
   /**
    * Total the current product in cart
    */
-  const productBalance = (cart?.products?.reduce((sum, _product) => sum + (product.product && _product.id === product.product.id ? _product.quantity : 0), 0) || 0) - removeToBalance
+  const productBalance = cartProducts.reduce((sum, _product) => sum + (product.product && _product.id === product.product.id ? _product.quantity : 0), 0)
+
+  /**
+   * Total product in cart
+   */
+  const totalBalance = (productBalance || 0) - removeToBalance
 
   /**
    * Config context manager
@@ -94,7 +94,7 @@ export const ProductForm = (props) => {
   /**
    * Max total product in cart by config
    */
-  let maxCartProductInventory = (product.product?.inventoried ? product.product?.quantity : undefined) - productBalance
+  let maxCartProductInventory = (product.product?.inventoried ? product.product?.quantity : undefined) - totalBalance
 
   /**
    * True if product is sold out
