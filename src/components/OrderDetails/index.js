@@ -345,9 +345,6 @@ export const OrderDetails = (props) => {
 
       // loadMessages()
     }
-    const handleOrder = (order) => {
-      events.emit('order_added', order)
-    }
     const handleTrackingDriver = ({ location }) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
@@ -357,13 +354,11 @@ export const OrderDetails = (props) => {
     socket.join(`drivers_${orderState.order?.driver_id}`)
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
-    socket.on('orders_register', handleOrder)
     return () => {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
       socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
-      socket.off('orders_register', handleOrder)
     }
   }, [orderState.order, socket, loading, userCustomerId])
 

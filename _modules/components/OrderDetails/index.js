@@ -800,10 +800,6 @@ var OrderDetails = function OrderDetails(props) {
       })); // loadMessages()
     };
 
-    var handleOrder = function handleOrder(order) {
-      events.emit('order_added', order);
-    };
-
     var handleTrackingDriver = function handleTrackingDriver(_ref10) {
       var location = _ref10.location;
       var newLocation = location !== null && location !== void 0 ? location : {
@@ -818,7 +814,6 @@ var OrderDetails = function OrderDetails(props) {
     socket.join("drivers_".concat((_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.driver_id));
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
-    socket.on('orders_register', handleOrder);
     return function () {
       var _orderState$order12;
 
@@ -826,7 +821,6 @@ var OrderDetails = function OrderDetails(props) {
       socket.leave("drivers_".concat((_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
-      socket.off('orders_register', handleOrder);
     };
   }, [orderState.order, socket, loading, userCustomerId]);
   (0, _react.useEffect)(function () {

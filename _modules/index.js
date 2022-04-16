@@ -27,6 +27,12 @@ Object.defineProperty(exports, "Analytics", {
     return _Analitycs.Analytics;
   }
 });
+Object.defineProperty(exports, "AnalyticsSegment", {
+  enumerable: true,
+  get: function get() {
+    return _AnalyticsSegment.AnalyticsSegment;
+  }
+});
 Object.defineProperty(exports, "ApiContext", {
   enumerable: true,
   get: function get() {
@@ -837,6 +843,8 @@ var _AddressDetails = require("./components/AddressDetails");
 var _AddressForm = require("./components/AddressForm");
 
 var _AddressList = require("./components/AddressList");
+
+var _AnalyticsSegment = require("./components/AnalyticsSegment");
 
 var _BaseComponent = require("./components/BaseComponent");
 
