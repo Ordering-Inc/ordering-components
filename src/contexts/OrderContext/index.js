@@ -668,7 +668,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             business: { name: result.business.name },
             total: result.total,
             tax_total: result.tax,
-            delivery_zone_price: result.delivery_price
+            delivery_zone_price: result.delivery_price,
+            business_id: result.business_id,
+            paymethod: result.paymethod.gateway
           }
           events.emit('order_placed', orderObject)
         }
