@@ -670,7 +670,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             tax_total: result.tax,
             delivery_zone_price: result.delivery_price,
             business_id: result.business_id,
-            paymethod: result.paymethod.gateway
+            paymethod: result.paymethod_data.gateway
           }
           events.emit('order_placed', orderObject)
         }
