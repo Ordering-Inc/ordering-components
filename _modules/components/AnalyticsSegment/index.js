@@ -71,6 +71,16 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
     });
   };
 
+  var handleProductRemoved = function handleProductRemoved(product) {
+    analytics.track('Product Removed', {
+      id: product.id,
+      name: product.name,
+      category: product.category_id,
+      price: product.price,
+      quantity: product.quantity
+    });
+  };
+
   var handleOrderPlaced = function handleOrderPlaced(order) {
     var _order$business, _order$business2;
 
@@ -123,6 +133,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       events.on('order_placed', handleOrderPlaced);
       events.on('order_updated', handleUpdateOrder);
       events.on('order_added', handleAddOrder);
+      events.on('cart_product_removed', handleProductRemoved);
     }
 
     return function () {
@@ -132,6 +143,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         events.off('order_placed', handleOrderPlaced);
         events.off('order_updated', handleUpdateOrder);
         events.off('order_added', handleAddOrder);
+        events.off('cart_product_removed', handleProductRemoved);
       }
     };
   }, [analytics]);

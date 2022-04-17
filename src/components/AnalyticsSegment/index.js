@@ -31,6 +31,16 @@ export const AnalyticsSegment = (props) => {
     })
   }
 
+  const handleProductRemoved = (product) => {
+    analytics.track('Product Removed', {
+      id: product.id,
+      name: product.name,
+      category: product.category_id,
+      price: product.price,
+      quantity: product.quantity
+    })
+  }
+
   const handleOrderPlaced = (order) => {
     analytics.track('Order Placed', {
       id: order.id,
@@ -77,6 +87,7 @@ export const AnalyticsSegment = (props) => {
       events.on('order_placed', handleOrderPlaced)
       events.on('order_updated', handleUpdateOrder)
       events.on('order_added', handleAddOrder)
+      events.on('cart_product_removed', handleProductRemoved)
     }
     return () => {
       if (analytics) {
@@ -85,6 +96,7 @@ export const AnalyticsSegment = (props) => {
         events.off('order_placed', handleOrderPlaced)
         events.off('order_updated', handleUpdateOrder)
         events.off('order_added', handleAddOrder)
+        events.off('cart_product_removed', handleProductRemoved)
       }
     }
   }, [analytics])
