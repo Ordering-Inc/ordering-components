@@ -83,7 +83,7 @@ export const AnalyticsSegment = (props) => {
   const handleLogin = (data) => {
     analytics.identify(data.id, {
       email: data.email,
-      name: `${data.name} ${data.lastname}`
+      name: data.name
     })
   }
 
