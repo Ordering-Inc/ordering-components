@@ -334,7 +334,6 @@ export const OrderDetails = (props) => {
     if (orderState.loading || loading) return
     const handleUpdateOrder = (order) => {
       if (order?.id !== orderState.order?.id) return
-      events.emit('order_updated', order)
       showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000)
       delete order.total
       delete order.subtotal
@@ -342,6 +341,7 @@ export const OrderDetails = (props) => {
         ...orderState,
         order: Object.assign(orderState.order, order)
       })
+      events.emit('order_updated', Object.assign(orderState.order, order))
 
       // loadMessages()
     }
