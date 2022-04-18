@@ -80,10 +80,18 @@ export const AnalyticsSegment = (props) => {
     })
   }
 
+  const handleLogin = (data) => {
+    analytics.identify(data.id, {
+      email: data.email,
+      name: data.name
+    })
+  }
+
   useEffect(() => {
     if (analytics) {
       events.on('product_clicked', handleClickProduct)
       events.on('product_added', handleProductAdded)
+      events.on('userLogin', handleLogin)
       events.on('order_placed', handleOrderPlaced)
       events.on('order_updated', handleUpdateOrder)
       events.on('order_added', handleAddOrder)
@@ -93,6 +101,7 @@ export const AnalyticsSegment = (props) => {
       if (analytics) {
         events.off('product_clicked', handleClickProduct)
         events.off('product_added', handleProductAdded)
+        events.off('userLogin', handleLogin)
         events.off('order_placed', handleOrderPlaced)
         events.off('order_updated', handleUpdateOrder)
         events.off('order_added', handleAddOrder)
