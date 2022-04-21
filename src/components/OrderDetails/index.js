@@ -341,6 +341,7 @@ export const OrderDetails = (props) => {
         ...orderState,
         order: Object.assign(orderState.order, order)
       })
+      events.emit('order_updated', Object.assign(orderState.order, order))
 
       // loadMessages()
     }
