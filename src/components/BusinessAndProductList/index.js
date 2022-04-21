@@ -32,7 +32,7 @@ export const BusinessAndProductList = (props) => {
   const [searchValue, setSearchValue] = useState(null)
   const [sortByValue, setSortByValue] = useState(null)
   const [filterByMenus, setFilterByMenus] = useState(null)
-  const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: true, error: null })
+  const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: !props.avoidBusinessLoading, error: null })
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
@@ -650,7 +650,13 @@ export const BusinessAndProductList = (props) => {
   }, [slug])
 
   useEffect(() => {
-    if (!orderState.loading && orderOptions && !languageState.loading) {
+    if (!orderState.loading && orderOptions && !languageState.loading && !props.avoidBusinessLoading) {
+      getBusiness()
+    }
+  }, [orderOptions, languageState.loading, slug, filterByMenus])
+
+  useEffect(() => {
+    if (!orderState.loading && orderOptions && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
       getBusiness()
     }
   }, [orderOptions, languageState.loading, slug, filterByMenus])
