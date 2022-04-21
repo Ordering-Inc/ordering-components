@@ -98,7 +98,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
   var _useState5 = (0, _react.useState)({
     business_types: [],
-    orderBy: 'default'
+    orderBy: 'distance'
   }),
       _useState6 = _slicedToArray(_useState5, 2),
       filters = _useState6[0],

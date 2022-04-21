@@ -796,7 +796,8 @@ var OrderDetails = function OrderDetails(props) {
       delete order.subtotal;
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         order: Object.assign(orderState.order, order)
-      })); // loadMessages()
+      }));
+      events.emit('order_updated', Object.assign(orderState.order, order)); // loadMessages()
     };
 
     var handleTrackingDriver = function handleTrackingDriver(_ref10) {

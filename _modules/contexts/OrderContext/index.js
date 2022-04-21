@@ -1596,7 +1596,9 @@ var OrderProvider = function OrderProvider(_ref) {
                   },
                   total: result.total,
                   tax_total: result.tax,
-                  delivery_zone_price: result.delivery_price
+                  delivery_zone_price: result.delivery_price,
+                  business_id: result.business_id,
+                  paymethod: result.paymethod_data.gateway
                 };
                 events.emit('order_placed', orderObject);
               }

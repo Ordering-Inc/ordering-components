@@ -118,7 +118,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   var _useState9 = (0, _react.useState)({
     business: {},
     menus: null,
-    loading: true,
+    loading: !props.avoidBusinessLoading,
     error: null
   }),
       _useState10 = _slicedToArray(_useState9, 2),
@@ -1041,7 +1041,12 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     loadProducts();
   }, [slug]);
   (0, _react.useEffect)(function () {
-    if (!orderState.loading && orderOptions && !languageState.loading) {
+    if (!orderState.loading && orderOptions && !languageState.loading && !props.avoidBusinessLoading) {
+      getBusiness();
+    }
+  }, [orderOptions, languageState.loading, slug, filterByMenus]);
+  (0, _react.useEffect)(function () {
+    if (!orderState.loading && orderOptions && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
       getBusiness();
     }
   }, [orderOptions, languageState.loading, slug, filterByMenus]);
