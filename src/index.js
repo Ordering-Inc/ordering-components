@@ -1,6 +1,7 @@
 import { AddressDetails } from './components/AddressDetails'
 import { AddressForm } from './components/AddressForm'
 import { AddressList } from './components/AddressList'
+import { AnalyticsSegment } from './components/AnalyticsSegment'
 import { BaseComponent } from './components/BaseComponent'
 import { BusinessAndProductList } from './components/BusinessAndProductList'
 import { BusinessBasicInformation } from './components/BusinessBasicInformation'
@@ -114,6 +115,7 @@ export {
   AddressForm,
   AddressList,
   AppleLogin,
+  AnalyticsSegment,
   BaseComponent,
   BusinessAndProductList,
   BusinessBasicInformation,

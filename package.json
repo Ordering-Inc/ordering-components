@@ -54,6 +54,7 @@
     "@sentry/react": "^5.27.1",
     "@sentry/tracing": "^5.27.1",
     "@react-native-async-storage/async-storage": "^1.13.1",
+    "@segment/analytics-next": "^1.35.1",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.9.0",
     "dayjs": "^1.9.3",
