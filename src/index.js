@@ -88,6 +88,7 @@ import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
 import { CustomerContext, CustomerProvider, useCustomer } from './contexts/CustomerContext'
 import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { ToastContext, ToastProvider, useToast, ToastType } from './contexts/ToastContext'
+import { PlaceSpot } from './components/PlaceSpot'
 import { PaymethodList } from './components/PaymethodList'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionPaypal } from './components/PaymentOptionPaypal'
@@ -166,6 +167,7 @@ export {
   PaymentOptions,
   PaymentOptionWallet,
   PaymethodList,
+  PlaceSpot,
   Popup,
   ProductComponent,
   ProductForm,
