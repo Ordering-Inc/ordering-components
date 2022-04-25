@@ -525,6 +525,12 @@ Object.defineProperty(exports, "PhoneAutocomplete", {
     return _PhoneAutocomplete.PhoneAutocomplete;
   }
 });
+Object.defineProperty(exports, "PlaceSpot", {
+  enumerable: true,
+  get: function get() {
+    return _PlaceSpot.PlaceSpot;
+  }
+});
 Object.defineProperty(exports, "Popup", {
   enumerable: true,
   get: function get() {
@@ -1017,6 +1023,8 @@ var _CustomerContext = require("./contexts/CustomerContext");
 var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
 
 var _ToastContext = require("./contexts/ToastContext");
+
+var _PlaceSpot = require("./components/PlaceSpot");
 
 var _PaymethodList = require("./components/PaymethodList");
 
