@@ -312,7 +312,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
 
     if (url != null && url.indexOf('res.cloudinary.com') !== -1) {
       var parts = url.split('upload');
-      url = "".concat(parts[0], "upload/").concat(parts[1]);
+      url = "".concat(parts[0], "upload").concat(parts[1]);
     }
 
     return url;
