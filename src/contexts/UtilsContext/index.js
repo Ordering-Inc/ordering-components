@@ -252,11 +252,6 @@ export const UtilsProviders = ({ children }) => {
 
   const optimizeImage = (url, params, fallback) => {
     if (!url && fallback) return fallback
-    params = params && params.length > 0 ? `,${params}` : ''
-    if (url != null && url.indexOf('res.cloudinary.com') !== -1) {
-      var parts = url.split('upload')
-      url = `${parts[0]}upload${parts[1]}`
-    }
     return url
   }
 
