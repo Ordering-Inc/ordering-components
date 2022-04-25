@@ -308,13 +308,6 @@ var UtilsProviders = function UtilsProviders(_ref) {
 
   var optimizeImage = function optimizeImage(url, params, fallback) {
     if (!url && fallback) return fallback;
-    params = params && params.length > 0 ? ",".concat(params) : '';
-
-    if (url != null && url.indexOf('res.cloudinary.com') !== -1) {
-      var parts = url.split('upload');
-      url = "".concat(parts[0], "upload/f_auto,q_auto").concat(params).concat(parts[1]);
-    }
-
     return url;
   };
 
