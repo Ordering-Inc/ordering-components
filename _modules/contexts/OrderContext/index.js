@@ -159,13 +159,7 @@ var OrderProvider = function OrderProvider(_ref) {
       moment: null
     } : {
       type: orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value],
-      moment: null,
-      address: {
-        location: {
-          lat: null,
-          lng: null
-        }
-      }
+      moment: null
     },
     carts: {},
     confirmAlert: confirmAlert,
