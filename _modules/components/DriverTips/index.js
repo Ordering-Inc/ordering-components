@@ -101,11 +101,11 @@ var DriverTips = function DriverTips(props) {
   };
 
   (0, _react.useEffect)(function () {
-    var _orderState$carts, _orderState$carts$, _orderState$carts2, _orderState$carts2$, _configs$driver_tip_t;
+    var _orderState$carts, _orderState$carts$, _orderState$carts2, _orderState$carts2$, _configs$driver_tip_t, _configs$driver_tip_u;
 
     var orderDriverTipRate = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts$ = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.driver_tip_rate) || 0;
     var orderDriverTip = ((_orderState$carts2 = orderState.carts) === null || _orderState$carts2 === void 0 ? void 0 : (_orderState$carts2$ = _orderState$carts2["businessId:".concat(businessId)]) === null || _orderState$carts2$ === void 0 ? void 0 : _orderState$carts2$.driver_tip) || 0;
-    var isFixedPrice = parseInt(configs === null || configs === void 0 ? void 0 : (_configs$driver_tip_t = configs.driver_tip_type) === null || _configs$driver_tip_t === void 0 ? void 0 : _configs$driver_tip_t.value, 10) === 1; // 1 - fixed, 2 - percentage
+    var isFixedPrice = parseInt(configs === null || configs === void 0 ? void 0 : (_configs$driver_tip_t = configs.driver_tip_type) === null || _configs$driver_tip_t === void 0 ? void 0 : _configs$driver_tip_t.value, 10) === 1 || !!parseInt(configs === null || configs === void 0 ? void 0 : (_configs$driver_tip_u = configs.driver_tip_use_custom) === null || _configs$driver_tip_u === void 0 ? void 0 : _configs$driver_tip_u.value, 10); // 1 - fixed, 2 - percentage
 
     setOptionSelected(isFixedPrice ? orderDriverTip : orderDriverTipRate);
     setDriverTipAmount(orderDriverTip);
