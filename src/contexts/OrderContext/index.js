@@ -52,7 +52,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       : {
         type: orderTypes[configState?.configs?.default_order_type?.value],
         moment: null,
-        address: { location : { lat: null , lng: null } }
+        address: { location : {} }
       },
     carts: {},
     confirmAlert,
