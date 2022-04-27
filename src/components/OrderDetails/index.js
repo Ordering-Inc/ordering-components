@@ -6,6 +6,8 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useOrder } from '../../contexts/OrderContext'
+
 
 export const OrderDetails = (props) => {
   const {
