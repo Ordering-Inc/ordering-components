@@ -25,6 +25,8 @@ var _LanguageContext = require("../../contexts/LanguageContext");
 
 var _EventContext = require("../../contexts/EventContext");
 
+var _OrderContext = require("../../contexts/OrderContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -100,6 +102,10 @@ var OrderDetails = function OrderDetails(props) {
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
 
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      reorder = _useOrder2[1].reorder;
+
   var _useState = (0, _react.useState)({
     order: (_props$order = props.order) !== null && _props$order !== void 0 ? _props$order : null,
     businessData: {},
@@ -162,6 +168,15 @@ var OrderDetails = function OrderDetails(props) {
       _useState16 = _slicedToArray(_useState15, 2),
       forceUpdate = _useState16[0],
       setForceUpdate = _useState16[1];
+
+  var _useState17 = (0, _react.useState)({
+    loading: false,
+    result: [],
+    error: null
+  }),
+      _useState18 = _slicedToArray(_useState17, 2),
+      reorderState = _useState18[0],
+      setReorderState = _useState18[1];
 
   var propsToFetch = ['header', 'slug'];
   var deliveryMessages = {
@@ -753,6 +768,72 @@ var OrderDetails = function OrderDetails(props) {
     };
   }();
 
+  var handleReorder = /*#__PURE__*/function () {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(orderId) {
+      var _yield$reorder, error, result;
+
+      return _regenerator.default.wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              if (orderId) {
+                _context9.next = 2;
+                break;
+              }
+
+              return _context9.abrupt("return");
+
+            case 2:
+              _context9.prev = 2;
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: true
+              }));
+              _context9.next = 6;
+              return reorder(orderId);
+
+            case 6:
+              _yield$reorder = _context9.sent;
+              error = _yield$reorder.error;
+              result = _yield$reorder.result;
+
+              if (!error) {
+                setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                  loading: false,
+                  result: result
+                }));
+              } else {
+                setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                  loading: false,
+                  error: true,
+                  result: result
+                }));
+              }
+
+              _context9.next = 15;
+              break;
+
+            case 12:
+              _context9.prev = 12;
+              _context9.t0 = _context9["catch"](2);
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: false,
+                error: true,
+                result: [_context9.t0 === null || _context9.t0 === void 0 ? void 0 : _context9.t0.message]
+              }));
+
+            case 15:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9, null, [[2, 12]]);
+    }));
+
+    return function handleReorder(_x5) {
+      return _ref10.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
   }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.status, orderState.loading]);
@@ -800,8 +881,8 @@ var OrderDetails = function OrderDetails(props) {
       events.emit('order_updated', Object.assign(orderState.order, order)); // loadMessages()
     };
 
-    var handleTrackingDriver = function handleTrackingDriver(_ref10) {
-      var location = _ref10.location;
+    var handleTrackingDriver = function handleTrackingDriver(_ref11) {
+      var location = _ref11.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
         lng: 144.7729561
@@ -881,7 +962,9 @@ var OrderDetails = function OrderDetails(props) {
     messagesReadList: messagesReadList,
     driverUpdateLocation: driverUpdateLocation,
     setDriverUpdateLocation: setDriverUpdateLocation,
-    forceUpdate: forceUpdate
+    forceUpdate: forceUpdate,
+    reorderState: reorderState,
+    handleReorder: handleReorder
   })));
 };
 

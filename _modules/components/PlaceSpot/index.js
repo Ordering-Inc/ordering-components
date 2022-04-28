@@ -85,6 +85,8 @@ var PlaceSpot = function PlaceSpot(props) {
       placesState = _useState2[0],
       setPlacesState = _useState2[1];
 
+  var orderTypesAllowed = [3, 4];
+
   var getPlaces = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var responsePlaceGroups, _yield$responsePlaceG, resultPlaceGroups, errorPlaceGroups, responsePlaces, _yield$responsePlaces, resultPlaces, errorPlaces;
@@ -243,7 +245,7 @@ var PlaceSpot = function PlaceSpot(props) {
   (0, _react.useEffect)(function () {
     var _orderState$options;
 
-    if ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) === 4) {
+    if (orderTypesAllowed.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type)) {
       getPlaces();
     }
   }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type]);

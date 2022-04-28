@@ -97,6 +97,8 @@ var CouponControl = function CouponControl(props) {
   var handleButtonApplyClick = function handleButtonApplyClick() {
     var _configs$advanced_off;
 
+    setCouponInput('');
+
     if (!(configs !== null && configs !== void 0 && (_configs$advanced_off = configs.advanced_offers_module) !== null && _configs$advanced_off !== void 0 && _configs$advanced_off.value)) {
       if (user !== null && user !== void 0 && user.id) {
         // Callcenter
