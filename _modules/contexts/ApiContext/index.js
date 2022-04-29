@@ -71,7 +71,7 @@ var ApiProvider = function ApiProvider(_ref) {
   (0, _react.useEffect)(function () {
     if (ordering.language === language) return;
 
-    var _ordering = new _orderingApiSdk.Ordering(_objectSpread(_objectSpread({}, settings), {}, {
+    var _ordering = new _orderingApiSdk.Ordering(_objectSpread(_objectSpread(_objectSpread({}, settings), ordering), {}, {
       language: language
     }));
 
