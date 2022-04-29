@@ -28,6 +28,7 @@ export const ApiProvider = ({ settings, children }) => {
     if (ordering.language === language) return
     const _ordering = new Ordering({
       ...settings,
+      ...ordering,
       language
     })
     setOrdering(_ordering)
