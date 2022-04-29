@@ -51,7 +51,7 @@ export const DriverTips = (props) => {
   useEffect(() => {
     const orderDriverTipRate = orderState.carts?.[`businessId:${businessId}`]?.driver_tip_rate || 0
     const orderDriverTip = orderState.carts?.[`businessId:${businessId}`]?.driver_tip || 0
-    const isFixedPrice = parseInt(configs?.driver_tip_type?.value, 10) === 1 // 1 - fixed, 2 - percentage
+    const isFixedPrice = parseInt(configs?.driver_tip_type?.value, 10) === 1 || !!parseInt(configs?.driver_tip_use_custom?.value, 10) // 1 - fixed, 2 - percentage
 
     setOptionSelected(isFixedPrice ? orderDriverTip : orderDriverTipRate)
     setDriverTipAmount(orderDriverTip)

@@ -6,6 +6,8 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useOrder } from '../../contexts/OrderContext'
+
 
 export const OrderDetails = (props) => {
   const {
@@ -25,6 +27,7 @@ export const OrderDetails = (props) => {
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [events] = useEvent()
+  const [, { reorder }] = useOrder()
 
   const [orderState, setOrderState] = useState({ order: props.order ?? null, businessData: {}, loading: !props.order, error: null })
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
@@ -35,6 +38,7 @@ export const OrderDetails = (props) => {
   const [messagesReadList, setMessagesReadList] = useState(false)
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
   const [forceUpdate, setForceUpdate] = useState(null)
+  const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
 
   const propsToFetch = ['header', 'slug']
 
@@ -139,10 +143,10 @@ export const OrderDetails = (props) => {
         setOrderState({ ...orderState, order: result, loading: false })
       }
       if (error) {
-        const selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery 
-                            : result.includes(deliveryMessages.pickup.text) 
-                              ? deliveryMessages.pickup 
-                              : null
+        const selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery
+          : result.includes(deliveryMessages.pickup.text)
+            ? deliveryMessages.pickup
+            : null
         if (selected) {
           setForceUpdate(null)
           setOrderState({ ...orderState, loading: false })
@@ -302,6 +306,39 @@ export const OrderDetails = (props) => {
     }
   }
 
+
+  const handleReorder = async (orderId) => {
+    if (!orderId) return
+    try {
+      setReorderState({
+        ...reorderState,
+        loading: true
+      })
+      const { error, result } = await reorder(orderId)
+      if (!error) {
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          result: result
+        })
+      } else {
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          error: true,
+          result: result
+        })
+      }
+    } catch (err) {
+      setReorderState({
+        ...reorderState,
+        loading: false,
+        error: true,
+        result: [err?.message]
+      })
+    }
+  }
+
   useEffect(() => {
     !orderState.loading && loadMessages()
   }, [orderId, orderState?.order?.status, orderState.loading])
@@ -423,6 +460,8 @@ export const OrderDetails = (props) => {
           setDriverUpdateLocation={setDriverUpdateLocation}
           forceUpdate={forceUpdate}
           getOrder={getOrder}
+          reorderState={reorderState}
+          handleReorder={handleReorder}
         />
       )}
     </>

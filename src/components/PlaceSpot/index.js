@@ -3,6 +3,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useSession } from '../../contexts/SessionContext'
+
 export const PlaceSpot = (props) => {
   const {
     UIComponent,
@@ -18,6 +19,8 @@ export const PlaceSpot = (props) => {
    * Places state (Curbside, eat in)
    */
   const [placesState, setPlacesState] = useState({ loading: false, places: [], placeGroups: [], error: null })
+
+  const orderTypesAllowed = [3, 4]
 
   const getPlaces = async () => {
     try {
@@ -90,7 +93,7 @@ export const PlaceSpot = (props) => {
   }
 
   useEffect(() => {
-    if (orderState?.options?.type === 4) {
+    if (orderTypesAllowed.includes(orderState?.options?.type)) {
       getPlaces()
     }
   }, [orderState?.options?.type])

@@ -33,6 +33,7 @@ export const CouponControl = (props) => {
    * method to manage coupon apply button
    */
   const handleButtonApplyClick = () => {
+    setCouponInput('')
     if (!configs?.advanced_offers_module?.value) {
       if (user?.id) { // Callcenter
         applyCoupon({
