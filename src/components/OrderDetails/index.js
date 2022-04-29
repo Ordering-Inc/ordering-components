@@ -422,6 +422,7 @@ export const OrderDetails = (props) => {
           driverUpdateLocation={driverUpdateLocation}
           setDriverUpdateLocation={setDriverUpdateLocation}
           forceUpdate={forceUpdate}
+          getOrder={getOrder}
         />
       )}
     </>
