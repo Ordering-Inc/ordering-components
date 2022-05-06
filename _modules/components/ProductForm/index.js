@@ -526,7 +526,7 @@ var ProductForm = function ProductForm(props) {
 
     product.product.extras.forEach(function (extra) {
       extra.options.map(function (option) {
-        var _productCart$options$4;
+        var _productCart$options$4, _option$suboptions2;
 
         var suboptions = (_productCart$options$4 = productCart.options["id:".concat(option.id)]) === null || _productCart$options$4 === void 0 ? void 0 : _productCart$options$4.suboptions;
         var quantity = suboptions ? option.limit_suboptions_by_max ? Object.values(suboptions).reduce(function (count, suboption) {
@@ -551,7 +551,7 @@ var ProductForm = function ProductForm(props) {
 
         var evaluate = option.respect_to ? evaluateRespectTo : true;
 
-        if (evaluate) {
+        if ((option === null || option === void 0 ? void 0 : (_option$suboptions2 = option.suboptions) === null || _option$suboptions2 === void 0 ? void 0 : _option$suboptions2.length) > 0 && evaluate) {
           if (option.min > quantity) {
             errors["id:".concat(option.id)] = true;
           } else if (option.max < quantity) {
@@ -680,6 +680,8 @@ var ProductForm = function ProductForm(props) {
 
 
   var showOption = function showOption(option) {
+    var _option$suboptions3;
+
     var showOption = true;
 
     if (option.respect_to) {
@@ -701,6 +703,7 @@ var ProductForm = function ProductForm(props) {
       }
     }
 
+    if ((option === null || option === void 0 ? void 0 : (_option$suboptions3 = option.suboptions) === null || _option$suboptions3 === void 0 ? void 0 : _option$suboptions3.length) === 0) showOption = false;
     return showOption;
   };
   /**
@@ -774,9 +777,9 @@ var ProductForm = function ProductForm(props) {
       var suboptionsArray = [];
       options.map(function (option) {
         var defaultSuboptions = option.suboptions.filter(function (suboption) {
-          var _option$suboptions2;
+          var _option$suboptions4;
 
-          return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 ? void 0 : (_option$suboptions2 = option.suboptions) === null || _option$suboptions2 === void 0 ? void 0 : _option$suboptions2.length) === 1);
+          return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 ? void 0 : (_option$suboptions4 = option.suboptions) === null || _option$suboptions4 === void 0 ? void 0 : _option$suboptions4.length) === 1);
         }).map(function (suboption) {
           return {
             option: option,
