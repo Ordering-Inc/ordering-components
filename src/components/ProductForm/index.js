@@ -365,7 +365,7 @@ export const ProductForm = (props) => {
           }
         }
         const evaluate = option.respect_to ? evaluateRespectTo : true
-        if (evaluate) {
+        if (option?.suboptions?.length > 0 && evaluate) {
           if (option.min > quantity) {
             errors[`id:${option.id}`] = true
           } else if (option.max < quantity) {
@@ -459,6 +459,9 @@ export const ProductForm = (props) => {
         }
       }
     }
+
+    if (option?.suboptions?.length === 0) showOption = false
+
     return showOption
   }
 
