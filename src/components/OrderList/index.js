@@ -117,7 +117,7 @@ export const OrderList = props => {
       })
       const nextPage = !isNextPage ? pagination.currentPage + 1 : 1
       const response = await getOrders(getFirstOrder ? 0 : nextPage, searchByOtherStatus, pageSize)
-      console.log('response', response)
+
       if (searchByOtherStatus) {
         setOrderList({
           loading: false,
