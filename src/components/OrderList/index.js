@@ -75,7 +75,7 @@ export const OrderList = props => {
       options.query.where.push({ attribute: 'business_id', value: parseInt(businessId, 10) })
     }
     if (franchiseId) {
-      options.query.where.push({ attribute : 'ref_business', conditions: [{ attribute: 'franchise_id', value: parseInt(franchiseId, 10) }]})
+      options.query.where.push({ attribute: 'ref_business', conditions: [{ attribute: 'franchise_id', value: parseInt(franchiseId, 10) }] })
     }
     const source = {}
     requestsState.orders = source
@@ -89,11 +89,13 @@ export const OrderList = props => {
   const loadOrders = async (
     isNextPage,
     searchByOtherStatus,
-    keepOrders = false
+    keepOrders = false,
+    getFirstOrder
   ) => {
     if (
       pagination?.currentPage === pagination?.totalPages &&
-      pagination?.total !== null
+      pagination?.total !== null &&
+      !getFirstOrder
     ) {
       return
     }
@@ -114,7 +116,8 @@ export const OrderList = props => {
         loading: true
       })
       const nextPage = !isNextPage ? pagination.currentPage + 1 : 1
-      const response = await getOrders(nextPage, searchByOtherStatus, pageSize)
+      const response = await getOrders(getFirstOrder ? 0 : nextPage, searchByOtherStatus, pageSize)
+
       if (searchByOtherStatus) {
         setOrderList({
           loading: false,
@@ -406,7 +409,7 @@ OrderList.propTypes = {
     if (props[propName] !== undefined && typeof props[propName] !== 'string') {
       return new Error(
         `Invalid prop \`${propName}\` of type \`${typeof props[
-          propName
+        propName
         ]}\` supplied to \`UserProfile\`, expected \`object\`.`
       )
     }
