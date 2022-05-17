@@ -236,6 +236,7 @@ var OrderList = function OrderList(props) {
   var loadOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(isNextPage, searchByOtherStatus) {
       var keepOrders,
+          getFirstOrder,
           pageSize,
           nextPage,
           response,
@@ -245,19 +246,20 @@ var OrderList = function OrderList(props) {
           switch (_context2.prev = _context2.next) {
             case 0:
               keepOrders = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : false;
+              getFirstOrder = _args2.length > 3 ? _args2[3] : undefined;
 
-              if (!((pagination === null || pagination === void 0 ? void 0 : pagination.currentPage) === (pagination === null || pagination === void 0 ? void 0 : pagination.totalPages) && (pagination === null || pagination === void 0 ? void 0 : pagination.total) !== null)) {
-                _context2.next = 3;
+              if (!((pagination === null || pagination === void 0 ? void 0 : pagination.currentPage) === (pagination === null || pagination === void 0 ? void 0 : pagination.totalPages) && (pagination === null || pagination === void 0 ? void 0 : pagination.total) !== null && !getFirstOrder)) {
+                _context2.next = 4;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 3:
+            case 4:
               pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize;
 
               if (session.token) {
-                _context2.next = 7;
+                _context2.next = 8;
                 break;
               }
 
@@ -266,16 +268,16 @@ var OrderList = function OrderList(props) {
               }));
               return _context2.abrupt("return");
 
-            case 7:
-              _context2.prev = 7;
+            case 8:
+              _context2.prev = 8;
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: true
               }));
               nextPage = !isNextPage ? pagination.currentPage + 1 : 1;
-              _context2.next = 12;
-              return getOrders(nextPage, searchByOtherStatus, pageSize);
+              _context2.next = 13;
+              return getOrders(getFirstOrder ? 0 : nextPage, searchByOtherStatus, pageSize);
 
-            case 12:
+            case 13:
               response = _context2.sent;
 
               if (searchByOtherStatus) {
@@ -303,12 +305,12 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 20;
+              _context2.next = 21;
               break;
 
-            case 17:
-              _context2.prev = 17;
-              _context2.t0 = _context2["catch"](7);
+            case 18:
+              _context2.prev = 18;
+              _context2.t0 = _context2["catch"](8);
 
               if (_context2.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -317,12 +319,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 20:
+            case 21:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[7, 17]]);
+      }, _callee2, null, [[8, 18]]);
     }));
 
     return function loadOrders(_x2, _x3) {
