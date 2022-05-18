@@ -3,6 +3,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export const PlaceSpot = (props) => {
   const {
@@ -14,11 +15,12 @@ export const PlaceSpot = (props) => {
   const [ordering] = useApi()
   const [{ token }] = useSession()
   const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
 
   /**
    * Places state (Curbside, eat in)
    */
-  const [placesState, setPlacesState] = useState({ loading: false, places: [], placeGroups: [], error: null })
+  const [placesState, setPlacesState] = useState({ loading: true, places: [], placeGroups: [], error: null })
 
   const orderTypesAllowed = [3, 4]
 
@@ -41,13 +43,28 @@ export const PlaceSpot = (props) => {
       })
       const { result: resultPlaces, error: errorPlaces } = await responsePlaces.json()
 
+      const placeGroupDefault = {
+        id: null,
+        business_id: cart?.business_id,
+        enabled: true,
+        name: t('DEFAULT_PLACE_GROUP', 'Default place group')
+      }
       if (!errorPlaces && !errorPlaceGroups) {
-        setPlacesState({
-          places: resultPlaces,
-          placeGroups: resultPlaceGroups,
-          loading: false,
-          error: null
-        })
+        if (resultPlaces.find(place => place.place_group_id === null)) {
+          setPlacesState({
+            places: resultPlaces,
+            placeGroups: [placeGroupDefault, ...resultPlaceGroups],
+            loading: false,
+            error: null
+          })
+        } else {
+          setPlacesState({
+            places: resultPlaces,
+            placeGroups: resultPlaceGroups,
+            loading: false,
+            error: null
+          })
+        }
         return
       }
 
