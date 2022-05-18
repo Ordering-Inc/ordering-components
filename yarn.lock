@@ -1117,9 +1117,9 @@
     rimraf "^3.0.2"
 
 "@react-native-async-storage/async-storage@^1.13.1":
-  version "1.17.4"
-  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.4.tgz#f03837565f085c487bc9e8a9f1862c3e4e3f8fb6"
-  integrity sha512-c6GglKBRaWkjNyYd0FM8f0/neQEcwQom4MjZNqYSsIz55LcddJb7W8GM/n2dkzZ0JnaMylMX3+Vo+fpmkFEGTQ==
+  version "1.17.5"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.5.tgz#8cc3edd305d09a3c252d88921f0d2846a0444f25"
+  integrity sha512-0XT5zZa3mh8XfAFYytq9hPyI6w0FJEBED4pjeLc17pkNF9tND86fsTX2pQFr15uV0nvfYeHisbd/mM7bpGrWKA==
   dependencies:
     merge-options "^3.0.4"
 
@@ -1131,14 +1131,14 @@
     any-observable "^0.3.0"
 
 "@segment/analytics-next@^1.35.1":
-  version "1.36.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.36.0.tgz#61de2e82f697686e460b482f285ee710a785d75e"
-  integrity sha512-4sBn8D/abcUZrocgTVdmy7kbxvRR9VhbCE95uLe55uD5NXysByPQO4T4RMyTiCSRYJKB2wZdikDh6SkItSKNsw==
+  version "1.37.0"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.37.0.tgz#28a774da26917418219f50985babfe0b765211d9"
+  integrity sha512-gFrHAVHgRGO7CA/byXOwiATck0C+dzvRrBot70PU8gTqHXOtJmmV10d2mrM84yp0jH3qq9Z+qUOh5CYDeAXqPQ==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     "@segment/analytics.js-video-plugins" "^0.2.1"
     "@segment/facade" "^3.4.9"
-    "@segment/tsub" "^0.1.10"
+    "@segment/tsub" "^0.1.12"
     dset "^3.0.0"
     js-cookie "^2.2.1"
     node-fetch "^2.6.7"
@@ -1175,7 +1175,7 @@
   resolved "https://registry.yarnpkg.com/@segment/isodate/-/isodate-1.0.3.tgz#f44e8202d5edd277ce822785239474b2c9411d4a"
   integrity sha512-BtanDuvJqnACFkeeYje7pWULVv8RgZaqKHWwGFnL/g/TH/CcZjkIVTfGDp/MAxmilYHUkrX70SqwnYSTNEaN7A==
 
-"@segment/tsub@^0.1.10":
+"@segment/tsub@^0.1.12":
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/@segment/tsub/-/tsub-0.1.12.tgz#1c301a8b81e5dbda54eb0435ae808fbe65553f23"
   integrity sha512-35JB0+HuMZrn7mus/s4yOHAcuid+MzaOYxV8YAogTR4Z7AsHwn/Zn/y9XdoHp2kKdn54s6jO4IaO826v0j7qmw==
@@ -5857,9 +5857,9 @@ levn@^0.3.0, levn@~0.3.0:
     type-check "~0.3.2"
 
 libphonenumber-js@^1.9.17:
-  version "1.9.53"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.9.53.tgz#f4f3321f8fb0ee62952c2a8df4711236d2626088"
-  integrity sha512-3cuMrA2CY3TbKVC0wKye5dXYgxmVVi4g13gzotprQSguFHMqf0pIrMM2Z6ZtMsSWqvtIqi5TuQhGjMhxz0O9Mw==
+  version "1.10.4"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.4.tgz#90397f0ed620262570a32244c9fbc389cc417ce4"
+  integrity sha512-9QWxEk4GW5RDnFzt8UtyRENfFpAN8u7Sbf9wf32tcXY9tdtnz1dKHIBwW2Wnfx8ypXJb9zUnTpK9aQJ/B8AlnA==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
@@ -7366,22 +7366,22 @@ react-popper@^1.3.8:
     warning "^4.0.2"
 
 react-router-dom@^5.2.0:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-5.3.2.tgz#93a82c95732963d137c02b3aee0505956baeb69e"
-  integrity sha512-j8sAq4YdWsrkM2DfDX26GnjtDKWUSd65LzHyBz8NcgFcK0ct7oTvYlwhOr532xpXsYP1HONq6QqUGA7GhbAY5w==
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-5.3.3.tgz#8779fc28e6691d07afcaf98406d3812fe6f11199"
+  integrity sha512-Ov0tGPMBgqmbu5CDmN++tv2HQ9HlWDuWIIqn4b88gjlAN5IHI+4ZUZRcpz9Hl0azFIwihbLDYw1OiHGRo7ZIng==
   dependencies:
     "@babel/runtime" "^7.12.13"
     history "^4.9.0"
     loose-envify "^1.3.1"
     prop-types "^15.6.2"
-    react-router "5.3.2"
+    react-router "5.3.3"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-router@5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-5.3.2.tgz#87614394781e75cc6aa3b61cdfd147a1361cd890"
-  integrity sha512-GlsSUckZ4JthgsW5lV9oSCs5CoQ7q0t0Ump/Y5YQ8qhiS+WjaAhaoJhc7otpZW9eVhO6N06vYPt40SpEzuuZeg==
+react-router@5.3.3:
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-5.3.3.tgz#8e3841f4089e728cf82a429d92cdcaa5e4a3a288"
+  integrity sha512-mzQGUvS3bM84TnbtMYR8ZjKnuPJ71IjSzR+DE6UkUqvN4czWIqEs17yLL8xkAycv4ev0AiN+IGrWu88vJs/p2w==
   dependencies:
     "@babel/runtime" "^7.12.13"
     history "^4.9.0"

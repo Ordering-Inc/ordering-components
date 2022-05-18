@@ -19,6 +19,8 @@ var _ToastContext = require("../../contexts/ToastContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
+var _LanguageContext = require("../../contexts/LanguageContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -26,6 +28,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
@@ -70,13 +80,17 @@ var PlaceSpot = function PlaceSpot(props) {
   var _useToast = (0, _ToastContext.useToast)(),
       _useToast2 = _slicedToArray(_useToast, 2),
       showToast = _useToast2[1].showToast;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
   /**
    * Places state (Curbside, eat in)
    */
 
 
   var _useState = (0, _react.useState)({
-    loading: false,
+    loading: true,
     places: [],
     placeGroups: [],
     error: null
@@ -89,7 +103,7 @@ var PlaceSpot = function PlaceSpot(props) {
 
   var getPlaces = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var responsePlaceGroups, _yield$responsePlaceG, resultPlaceGroups, errorPlaceGroups, responsePlaces, _yield$responsePlaces, resultPlaces, errorPlaces;
+      var responsePlaceGroups, _yield$responsePlaceG, resultPlaceGroups, errorPlaceGroups, responsePlaces, _yield$responsePlaces, resultPlaces, errorPlaces, placeGroupDefault;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -133,44 +147,62 @@ var PlaceSpot = function PlaceSpot(props) {
               _yield$responsePlaces = _context.sent;
               resultPlaces = _yield$responsePlaces.result;
               errorPlaces = _yield$responsePlaces.error;
+              placeGroupDefault = {
+                id: null,
+                business_id: cart === null || cart === void 0 ? void 0 : cart.business_id,
+                enabled: true,
+                name: t('DEFAULT_PLACE_GROUP', 'Default place group')
+              };
 
               if (!(!errorPlaces && !errorPlaceGroups)) {
-                _context.next = 21;
+                _context.next = 22;
                 break;
               }
 
-              setPlacesState({
-                places: resultPlaces,
-                placeGroups: resultPlaceGroups,
-                loading: false,
-                error: null
-              });
+              if (resultPlaces.find(function (place) {
+                return place.place_group_id === null;
+              })) {
+                setPlacesState({
+                  places: resultPlaces,
+                  placeGroups: [placeGroupDefault].concat(_toConsumableArray(resultPlaceGroups)),
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setPlacesState({
+                  places: resultPlaces,
+                  placeGroups: resultPlaceGroups,
+                  loading: false,
+                  error: null
+                });
+              }
+
               return _context.abrupt("return");
 
-            case 21:
+            case 22:
               setPlacesState({
                 places: [],
                 placeGroups: [],
                 loading: false,
                 error: errorPlaceGroups ? resultPlaceGroups : resultPlaces
               });
-              _context.next = 27;
+              _context.next = 28;
               break;
 
-            case 24:
-              _context.prev = 24;
+            case 25:
+              _context.prev = 25;
               _context.t0 = _context["catch"](0);
               setPlacesState(_objectSpread(_objectSpread({}, placesState), {}, {
                 loading: false,
                 error: _context.t0.message
               }));
 
-            case 27:
+            case 28:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 24]]);
+      }, _callee, null, [[0, 25]]);
     }));
 
     return function getPlaces() {
