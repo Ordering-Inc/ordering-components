@@ -257,6 +257,8 @@ export const OrderList = props => {
 
     socket.on('orders_register', handleAddNewOrder)
     socket.on('update_order', handleUpdateOrder)
+    const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
+    socket.join(ordersRoom)
     return () => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('orders_register', handleAddNewOrder)
