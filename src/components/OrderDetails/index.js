@@ -339,6 +339,20 @@ export const OrderDetails = (props) => {
     }
   }
 
+  const multiRemoveProducts = async (unavailableProducts, carts) => {
+    const _err = []
+    unavailableProducts.forEach(async product => {
+      const re = await removeProduct(product, carts)
+      if (re) {
+        showToast(ToastType.Error, t('NOT_AVAILABLE_PRODUCT', 'This product is not available.'), 1000)
+      } else {
+        _err.push("error")
+      }
+    })
+    if (_err.length > 0) return false
+    return true
+  }
+
   useEffect(() => {
     !orderState.loading && loadMessages()
   }, [orderId, orderState?.order?.status, orderState.loading])
@@ -462,6 +476,7 @@ export const OrderDetails = (props) => {
           getOrder={getOrder}
           reorderState={reorderState}
           handleReorder={handleReorder}
+          multiRemoveProducts={multiRemoveProducts}
         />
       )}
     </>
