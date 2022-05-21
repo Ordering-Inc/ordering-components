@@ -92,7 +92,7 @@ export const LoginForm = (props) => {
 
       const { content: { error, result } } = await ordering.users().auth(_credentials)
 
-      if (isReCaptchaEnable) {
+      if (isReCaptchaEnable && window?.grecaptcha) {
         window.grecaptcha.reset()
         setReCaptchaValue(null)
       }
