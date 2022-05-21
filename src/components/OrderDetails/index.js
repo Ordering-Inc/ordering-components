@@ -8,7 +8,6 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useOrder } from '../../contexts/OrderContext'
 
-
 export const OrderDetails = (props) => {
   const {
     orderId,
@@ -50,7 +49,7 @@ export const OrderDetails = (props) => {
     pickup: {
       text: 'outside pickup area, insert reasons to force update',
       value: 9
-    },
+    }
   }
 
   const requestsState = {}
@@ -306,7 +305,7 @@ export const OrderDetails = (props) => {
     }
   }
 
-
+  
   const handleReorder = async (orderId) => {
     if (!orderId) return
     try {
@@ -337,20 +336,6 @@ export const OrderDetails = (props) => {
         result: [err?.message]
       })
     }
-  }
-
-  const multiRemoveProducts = async (unavailableProducts, carts) => {
-    const _err = []
-    unavailableProducts.forEach(async product => {
-      const re = await removeProduct(product, carts)
-      if (re) {
-        showToast(ToastType.Error, t('NOT_AVAILABLE_PRODUCT', 'This product is not available.'), 1000)
-      } else {
-        _err.push("error")
-      }
-    })
-    if (_err.length > 0) return false
-    return true
   }
 
   useEffect(() => {
@@ -476,7 +461,6 @@ export const OrderDetails = (props) => {
           getOrder={getOrder}
           reorderState={reorderState}
           handleReorder={handleReorder}
-          multiRemoveProducts={multiRemoveProducts}
         />
       )}
     </>

@@ -5,6 +5,7 @@ import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
 
 dayjs.extend(utc)
 
@@ -24,7 +25,8 @@ export const BusinessAndProductList = (props) => {
     location
   } = props
 
-  const [orderState] = useOrder()
+  const [orderState, { removeProduct }] = useOrder()
+  const [, { showToast }] = useToast()
   const [{ configs }] = useConfig()
   const [languageState, t] = useLanguage()
 
@@ -627,6 +629,15 @@ export const BusinessAndProductList = (props) => {
     }
   }
 
+  const multiRemoveProducts = async (unavailableProducts, carts) => {
+    unavailableProducts.forEach(async product => {
+      const re = await removeProduct(product, carts)
+      if (re) {
+        showToast(ToastType.Error, t('NOT_AVAILABLE_PRODUCT', 'This product is not available.'), 1000)
+      }
+    })
+  }
+
   useEffect(() => {
     if (!businessState.loading) {
       loadProducts({ newFetch: true })
@@ -732,6 +743,7 @@ export const BusinessAndProductList = (props) => {
           handleChangeFilterByMenus={handleChangeFilterByMenus}
           getNextProducts={loadMoreProducts}
           updateProductModal={(val) => setProductModal({ ...productModal, product: val })}
+          multiRemoveProducts={multiRemoveProducts}
         />
       )}
     </>
