@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
-
+import { useOrder } from '../../contexts/OrderContext'
 export const PromotionsController = (props) => {
   const {
-    paramsToFetch,
-    paginationSettings,
     UIComponent,
+    paramsToFetch,
+    paginationSettings
   } = props
 
   const [session] = useSession()
-  const [ordering] = useApi();
+  const [ordering] = useApi()
+  const [{ options }] = useOrder()
 
+  const [searchValue, setSearchValue] = useState('')
+  const [offerSelected, setOfferSelected] = useState(null)
   const [offersState, setOffersState] = useState({
     loading: true,
     error: null,
@@ -26,22 +29,23 @@ export const PromotionsController = (props) => {
   })
 
   const getOffers = async ({ page, pageSize = paginationSettings.pageSize }) => {
-    const url = `${ordering.root}/offers?page=${page}&page_size=${pageSize}&params=${paramsToFetch.join()}`
+    const location = JSON.stringify(options?.address?.location)
+    const url = `${ordering.root}/offers/public?enabled=true&params=${paramsToFetch.join()}&location=${location}`
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.token}`
-      },
+      }
     })
     return await response.json()
   }
 
   const loadOffers = async () => {
     if (
-      offersState.pagination?.currentPage === offersState.pagination?.totalPages &&
-      offersState.pagination?.total !== null
+      (offersState.pagination?.currentPage === offersState.pagination?.totalPages &&
+        offersState.pagination?.total !== null) && !searchValue
     ) {
       return
     }
@@ -57,12 +61,12 @@ export const PromotionsController = (props) => {
         pagination: !error
           ? {
             ...offersState.pagination,
-            currentPage: pagination.current_page,
-            pageSize: pagination.page_size,
-            totalPages: pagination.total_pages,
-            total: pagination.total,
-            from: pagination.from,
-            to: pagination.to
+            currentPage: pagination?.current_page,
+            pageSize: pagination?.page_size,
+            totalPages: pagination?.total_pages,
+            total: pagination?.total,
+            from: pagination?.from,
+            to: pagination?.to
           }
           : offersState.pagination
       })
@@ -79,7 +83,7 @@ export const PromotionsController = (props) => {
     try {
       setOffersState({ ...offersState, loading: true })
       const { error, result, pagination } = await getOffers({
-        page: offersState.pagination.currentPage + 1,
+        page: offersState.pagination?.currentPage + 1
       })
       setOffersState({
         ...offersState,
@@ -107,6 +111,10 @@ export const PromotionsController = (props) => {
     }
   }
 
+  const handleSearchValue = (value) => {
+    setSearchValue(value)
+  }
+
   useEffect(() => {
     loadOffers()
   }, [])
@@ -117,7 +125,11 @@ export const PromotionsController = (props) => {
         <UIComponent
           {...props}
           offersState={offersState}
+          searchValue={searchValue}
+          offerSelected={offerSelected}
           loadMoreOffers={loadMoreOffers}
+          handleSearchValue={handleSearchValue}
+          setOfferSelected={setOfferSelected}
         />
       )}
     </>
@@ -161,5 +173,5 @@ PromotionsController.defaultProps = {
     initialPage: 1,
     pageSize: 10,
     controlType: 'infinity'
-  },
+  }
 }
