@@ -8,7 +8,6 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useOrder } from '../../contexts/OrderContext'
 
-
 export const OrderDetails = (props) => {
   const {
     orderId,
@@ -50,7 +49,7 @@ export const OrderDetails = (props) => {
     pickup: {
       text: 'outside pickup area, insert reasons to force update',
       value: 9
-    },
+    }
   }
 
   const requestsState = {}
@@ -306,7 +305,7 @@ export const OrderDetails = (props) => {
     }
   }
 
-
+  
   const handleReorder = async (orderId) => {
     if (!orderId) return
     try {
