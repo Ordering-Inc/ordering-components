@@ -1,70 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const PromotionsController = (props) => {
   const {
-    paramsToFetch,
-    paginationSettings,
     UIComponent,
+    paramsToFetch
   } = props
 
   const [session] = useSession()
-  const [ordering] = useApi();
+  const [ordering] = useApi()
+  const [{ options }] = useOrder()
 
+  const [searchValue, setSearchValue] = useState('')
+  const [offerSelected, setOfferSelected] = useState(null)
   const [offersState, setOffersState] = useState({
     loading: true,
     error: null,
-    offers: [],
-    pagination: {
-      currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
-        ? paginationSettings.initialPage - 1
-        : 0,
-      pageSize: paginationSettings.pageSize ?? 10,
-      total: null
-    }
+    offers: []
   })
 
-  const getOffers = async ({ page, pageSize = paginationSettings.pageSize }) => {
-    const url = `${ordering.root}/offers?page=${page}&page_size=${pageSize}&params=${paramsToFetch.join()}`
+  const getOffers = async () => {
+    const location = JSON.stringify(options?.address?.location)
+    const url = `${ordering.root}/offers/public?enabled=true&params=${paramsToFetch.join()}&location=${location}`
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.token}`
-      },
+      }
     })
     return await response.json()
   }
 
   const loadOffers = async () => {
-    if (
-      offersState.pagination?.currentPage === offersState.pagination?.totalPages &&
-      offersState.pagination?.total !== null
-    ) {
-      return
-    }
-
     try {
       setOffersState({ ...offersState, loading: true })
-      const { error, result, pagination } = await getOffers({ page: 1 })
+      const { error, result } = await getOffers()
       setOffersState({
         ...offersState,
         loading: false,
         error: error ? result : null,
-        offers: error ? [] : result,
-        pagination: !error
-          ? {
-            ...offersState.pagination,
-            currentPage: pagination.current_page,
-            pageSize: pagination.page_size,
-            totalPages: pagination.total_pages,
-            total: pagination.total,
-            from: pagination.from,
-            to: pagination.to
-          }
-          : offersState.pagination
+        offers: error ? [] : result
       })
     } catch (err) {
       setOffersState({
@@ -75,36 +54,8 @@ export const PromotionsController = (props) => {
     }
   }
 
-  const loadMoreOffers = async () => {
-    try {
-      setOffersState({ ...offersState, loading: true })
-      const { error, result, pagination } = await getOffers({
-        page: offersState.pagination.currentPage + 1,
-      })
-      setOffersState({
-        ...offersState,
-        loading: false,
-        error: error ? result : null,
-        offers: error ? offersState.offers : offersState.offers.concat(result),
-        pagination: !error
-          ? {
-            ...offersState.pagination,
-            currentPage: pagination.current_page,
-            pageSize: pagination.page_size,
-            totalPages: pagination.total_pages,
-            total: pagination.total,
-            from: pagination.from,
-            to: pagination.to
-          }
-          : offersState.pagination
-      })
-    } catch (err) {
-      setOffersState({
-        ...offersState,
-        loading: false,
-        error: [err?.message ?? 'ERROR']
-      })
-    }
+  const handleSearchValue = (value) => {
+    setSearchValue(value)
   }
 
   useEffect(() => {
@@ -117,7 +68,10 @@ export const PromotionsController = (props) => {
         <UIComponent
           {...props}
           offersState={offersState}
-          loadMoreOffers={loadMoreOffers}
+          searchValue={searchValue}
+          offerSelected={offerSelected}
+          handleSearchValue={handleSearchValue}
+          setOfferSelected={setOfferSelected}
         />
       )}
     </>
@@ -156,10 +110,5 @@ PromotionsController.defaultProps = {
     'valid_from_after_user_last_order_minutes',
     'valid_until_after_user_last_order_minutes',
     'include_products_with_offer'
-  ],
-  paginationSettings: {
-    initialPage: 1,
-    pageSize: 10,
-    controlType: 'infinity'
-  },
+  ]
 }
