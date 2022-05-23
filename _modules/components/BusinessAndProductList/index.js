@@ -21,6 +21,8 @@ var _LanguageContext = require("../../contexts/LanguageContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
+var _ToastContext = require("../../contexts/ToastContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -80,8 +82,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       location = props.location;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 1),
-      orderState = _useOrder2[0];
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      orderState = _useOrder2[0],
+      removeProduct = _useOrder2[1].removeProduct;
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
 
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 1),
@@ -1015,6 +1022,55 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     };
   }();
 
+  var multiRemoveProducts = /*#__PURE__*/function () {
+    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(unavailableProducts, carts) {
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              unavailableProducts.forEach( /*#__PURE__*/function () {
+                var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product) {
+                  var re;
+                  return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+                    while (1) {
+                      switch (_context7.prev = _context7.next) {
+                        case 0:
+                          _context7.next = 2;
+                          return removeProduct(product, carts);
+
+                        case 2:
+                          re = _context7.sent;
+
+                          if (re) {
+                            showToast(_ToastContext.ToastType.Error, t('NOT_AVAILABLE_PRODUCT', 'This product is not available.'), 1000);
+                          }
+
+                        case 4:
+                        case "end":
+                          return _context7.stop();
+                      }
+                    }
+                  }, _callee7);
+                }));
+
+                return function (_x4) {
+                  return _ref14.apply(this, arguments);
+                };
+              }());
+
+            case 1:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8);
+    }));
+
+    return function multiRemoveProducts(_x2, _x3) {
+      return _ref13.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     if (!businessState.loading) {
       loadProducts({
@@ -1125,7 +1181,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       return setProductModal(_objectSpread(_objectSpread({}, productModal), {}, {
         product: val
       }));
-    }
+    },
+    multiRemoveProducts: multiRemoveProducts
   })));
 };
 

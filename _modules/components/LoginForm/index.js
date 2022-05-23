@@ -163,7 +163,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var _credentials2, _credentials$cellphon, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
+      var _credentials2, _credentials$cellphon, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -228,7 +228,7 @@ var LoginForm = function LoginForm(props) {
               error = _yield$ordering$users2.error;
               result = _yield$ordering$users2.result;
 
-              if (isReCaptchaEnable) {
+              if (isReCaptchaEnable && (_window = window) !== null && _window !== void 0 && _window.grecaptcha) {
                 window.grecaptcha.reset();
                 setReCaptchaValue(null);
               }

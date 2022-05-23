@@ -13,6 +13,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
+var _OrderContext = require("../../contexts/OrderContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -44,11 +46,8 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var PromotionsController = function PromotionsController(props) {
-  var _paginationSettings$p;
-
-  var paramsToFetch = props.paramsToFetch,
-      paginationSettings = props.paginationSettings,
-      UIComponent = props.UIComponent;
+  var UIComponent = props.UIComponent,
+      paramsToFetch = props.paramsToFetch;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -58,30 +57,40 @@ var PromotionsController = function PromotionsController(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useState = (0, _react.useState)({
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 1),
+      options = _useOrder2[0].options;
+
+  var _useState = (0, _react.useState)(''),
+      _useState2 = _slicedToArray(_useState, 2),
+      searchValue = _useState2[0],
+      setSearchValue = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      offerSelected = _useState4[0],
+      setOfferSelected = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     loading: true,
     error: null,
-    offers: [],
-    pagination: {
-      currentPage: paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1 ? paginationSettings.initialPage - 1 : 0,
-      pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
-      total: null
-    }
+    offers: []
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      offersState = _useState2[0],
-      setOffersState = _useState2[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      offersState = _useState6[0],
+      setOffersState = _useState6[1];
 
   var getOffers = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
-      var page, _ref$pageSize, pageSize, url, response;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var _options$address;
 
+      var location, url, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              page = _ref.page, _ref$pageSize = _ref.pageSize, pageSize = _ref$pageSize === void 0 ? paginationSettings.pageSize : _ref$pageSize;
-              url = "".concat(ordering.root, "/offers?page=").concat(page, "&page_size=").concat(pageSize, "&params=").concat(paramsToFetch.join());
+              location = JSON.stringify(options === null || options === void 0 ? void 0 : (_options$address = options.address) === null || _options$address === void 0 ? void 0 : _options$address.location);
+              url = "".concat(ordering.root, "/offers/public?enabled=true&params=").concat(paramsToFetch.join(), "&location=").concat(location);
               _context.next = 4;
               return fetch(url, {
                 method: 'GET',
@@ -107,154 +116,76 @@ var PromotionsController = function PromotionsController(props) {
       }, _callee);
     }));
 
-    return function getOffers(_x) {
-      return _ref2.apply(this, arguments);
+    return function getOffers() {
+      return _ref.apply(this, arguments);
     };
   }();
 
   var loadOffers = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var _offersState$paginati, _offersState$paginati2, _offersState$paginati3;
-
-      var _yield$getOffers, error, result, pagination, _err$message;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var _yield$getOffers, error, result, _err$message;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (!(((_offersState$paginati = offersState.pagination) === null || _offersState$paginati === void 0 ? void 0 : _offersState$paginati.currentPage) === ((_offersState$paginati2 = offersState.pagination) === null || _offersState$paginati2 === void 0 ? void 0 : _offersState$paginati2.totalPages) && ((_offersState$paginati3 = offersState.pagination) === null || _offersState$paginati3 === void 0 ? void 0 : _offersState$paginati3.total) !== null)) {
-                _context2.next = 2;
-                break;
-              }
-
-              return _context2.abrupt("return");
-
-            case 2:
-              _context2.prev = 2;
+              _context2.prev = 0;
               setOffersState(_objectSpread(_objectSpread({}, offersState), {}, {
                 loading: true
               }));
-              _context2.next = 6;
-              return getOffers({
-                page: 1
-              });
+              _context2.next = 4;
+              return getOffers();
 
-            case 6:
+            case 4:
               _yield$getOffers = _context2.sent;
               error = _yield$getOffers.error;
               result = _yield$getOffers.result;
-              pagination = _yield$getOffers.pagination;
               setOffersState(_objectSpread(_objectSpread({}, offersState), {}, {
                 loading: false,
                 error: error ? result : null,
-                offers: error ? [] : result,
-                pagination: !error ? _objectSpread(_objectSpread({}, offersState.pagination), {}, {
-                  currentPage: pagination.current_page,
-                  pageSize: pagination.page_size,
-                  totalPages: pagination.total_pages,
-                  total: pagination.total,
-                  from: pagination.from,
-                  to: pagination.to
-                }) : offersState.pagination
+                offers: error ? [] : result
               }));
-              _context2.next = 16;
+              _context2.next = 13;
               break;
 
-            case 13:
-              _context2.prev = 13;
-              _context2.t0 = _context2["catch"](2);
+            case 10:
+              _context2.prev = 10;
+              _context2.t0 = _context2["catch"](0);
               setOffersState(_objectSpread(_objectSpread({}, offersState), {}, {
                 loading: false,
                 error: [(_err$message = _context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message) !== null && _err$message !== void 0 ? _err$message : 'ERROR']
               }));
 
-            case 16:
+            case 13:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[2, 13]]);
+      }, _callee2, null, [[0, 10]]);
     }));
 
     return function loadOffers() {
-      return _ref3.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
 
-  var loadMoreOffers = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var _yield$getOffers2, error, result, pagination, _err$message2;
-
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.prev = 0;
-              setOffersState(_objectSpread(_objectSpread({}, offersState), {}, {
-                loading: true
-              }));
-              _context3.next = 4;
-              return getOffers({
-                page: offersState.pagination.currentPage + 1
-              });
-
-            case 4:
-              _yield$getOffers2 = _context3.sent;
-              error = _yield$getOffers2.error;
-              result = _yield$getOffers2.result;
-              pagination = _yield$getOffers2.pagination;
-              setOffersState(_objectSpread(_objectSpread({}, offersState), {}, {
-                loading: false,
-                error: error ? result : null,
-                offers: error ? offersState.offers : offersState.offers.concat(result),
-                pagination: !error ? _objectSpread(_objectSpread({}, offersState.pagination), {}, {
-                  currentPage: pagination.current_page,
-                  pageSize: pagination.page_size,
-                  totalPages: pagination.total_pages,
-                  total: pagination.total,
-                  from: pagination.from,
-                  to: pagination.to
-                }) : offersState.pagination
-              }));
-              _context3.next = 14;
-              break;
-
-            case 11:
-              _context3.prev = 11;
-              _context3.t0 = _context3["catch"](0);
-              setOffersState(_objectSpread(_objectSpread({}, offersState), {}, {
-                loading: false,
-                error: [(_err$message2 = _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message) !== null && _err$message2 !== void 0 ? _err$message2 : 'ERROR']
-              }));
-
-            case 14:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, _callee3, null, [[0, 11]]);
-    }));
-
-    return function loadMoreOffers() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+  var handleSearchValue = function handleSearchValue(value) {
+    setSearchValue(value);
+  };
 
   (0, _react.useEffect)(function () {
     loadOffers();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     offersState: offersState,
-    loadMoreOffers: loadMoreOffers
+    searchValue: searchValue,
+    offerSelected: offerSelected,
+    handleSearchValue: handleSearchValue,
+    setOfferSelected: setOfferSelected
   })));
 };
 
 exports.PromotionsController = PromotionsController;
 PromotionsController.defaultProps = {
-  paramsToFetch: ['id', 'name', 'description', 'businesses', 'sites', 'image', 'end', 'start', 'paymethods', 'type', 'minimum', 'rate_type', 'rate', 'coupon', 'limit', 'enabled', 'label', 'rank', 'condition_type', 'target', 'max_discount', 'stackable', 'auto', 'public', 'limit_per_user', 'user_order_count', 'user_order_count_condition', 'valid_from_after_user_last_order_minutes', 'valid_until_after_user_last_order_minutes', 'include_products_with_offer'],
-  paginationSettings: {
-    initialPage: 1,
-    pageSize: 10,
-    controlType: 'infinity'
-  }
+  paramsToFetch: ['id', 'name', 'description', 'businesses', 'sites', 'image', 'end', 'start', 'paymethods', 'type', 'minimum', 'rate_type', 'rate', 'coupon', 'limit', 'enabled', 'label', 'rank', 'condition_type', 'target', 'max_discount', 'stackable', 'auto', 'public', 'limit_per_user', 'user_order_count', 'user_order_count_condition', 'valid_from_after_user_last_order_minutes', 'valid_until_after_user_last_order_minutes', 'include_products_with_offer']
 };
