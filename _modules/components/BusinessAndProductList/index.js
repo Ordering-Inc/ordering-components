@@ -21,8 +21,6 @@ var _LanguageContext = require("../../contexts/LanguageContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
-var _ToastContext = require("../../contexts/ToastContext");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -86,9 +84,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       orderState = _useOrder2[0],
       removeProduct = _useOrder2[1].removeProduct;
 
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
+  var _useState = (0, _react.useState)({
+    open: false,
+    content: []
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      alertState = _useState2[0],
+      setAlertState = _useState2[1];
 
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 1),
@@ -99,69 +101,69 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       languageState = _useLanguage2[0],
       t = _useLanguage2[1];
 
-  var _useState = (0, _react.useState)({
+  var _useState3 = (0, _react.useState)({
     id: null,
     name: t('ALL', 'All')
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      categorySelected = _useState2[0],
-      setCategorySelected = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      searchValue = _useState4[0],
-      setSearchValue = _useState4[1];
+      categorySelected = _useState4[0],
+      setCategorySelected = _useState4[1];
 
   var _useState5 = (0, _react.useState)(null),
       _useState6 = _slicedToArray(_useState5, 2),
-      sortByValue = _useState6[0],
-      setSortByValue = _useState6[1];
+      searchValue = _useState6[0],
+      setSearchValue = _useState6[1];
 
   var _useState7 = (0, _react.useState)(null),
       _useState8 = _slicedToArray(_useState7, 2),
-      filterByMenus = _useState8[0],
-      setFilterByMenus = _useState8[1];
+      sortByValue = _useState8[0],
+      setSortByValue = _useState8[1];
 
-  var _useState9 = (0, _react.useState)({
+  var _useState9 = (0, _react.useState)(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      filterByMenus = _useState10[0],
+      setFilterByMenus = _useState10[1];
+
+  var _useState11 = (0, _react.useState)({
     business: {},
     menus: null,
     loading: !props.avoidBusinessLoading,
     error: null
   }),
-      _useState10 = _slicedToArray(_useState9, 2),
-      businessState = _useState10[0],
-      setBusinessState = _useState10[1];
-
-  var _useState11 = (0, _react.useState)({}),
       _useState12 = _slicedToArray(_useState11, 2),
-      categoriesState = _useState12[0],
-      setCategoriesState = _useState12[1];
+      businessState = _useState12[0],
+      setBusinessState = _useState12[1];
 
   var _useState13 = (0, _react.useState)({}),
       _useState14 = _slicedToArray(_useState13, 2),
-      orderOptions = _useState14[0],
-      setOrderOptions = _useState14[1];
+      categoriesState = _useState14[0],
+      setCategoriesState = _useState14[1];
 
-  var _useState15 = (0, _react.useState)({
+  var _useState15 = (0, _react.useState)({}),
+      _useState16 = _slicedToArray(_useState15, 2),
+      orderOptions = _useState16[0],
+      setOrderOptions = _useState16[1];
+
+  var _useState17 = (0, _react.useState)({
     product: null,
     loading: false,
     error: null
   }),
-      _useState16 = _slicedToArray(_useState15, 2),
-      productModal = _useState16[0],
-      setProductModal = _useState16[1];
-
-  var _useState17 = (0, _react.useState)(false),
       _useState18 = _slicedToArray(_useState17, 2),
-      featuredProducts = _useState18[0],
-      setFeaturedProducts = _useState18[1];
+      productModal = _useState18[0],
+      setProductModal = _useState18[1];
 
-  var _useState19 = (0, _react.useState)({
+  var _useState19 = (0, _react.useState)(false),
+      _useState20 = _slicedToArray(_useState19, 2),
+      featuredProducts = _useState20[0],
+      setFeaturedProducts = _useState20[1];
+
+  var _useState21 = (0, _react.useState)({
     values: []
   }),
-      _useState20 = _slicedToArray(_useState19, 2),
-      openCategories = _useState20[0],
-      setOpenCategories = _useState20[1];
+      _useState22 = _slicedToArray(_useState21, 2),
+      openCategories = _useState22[0],
+      setOpenCategories = _useState22[1];
 
   var requestsState = {};
   var categoryStateDefault = {
@@ -176,20 +178,20 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     products: []
   };
 
-  var _useState21 = (0, _react.useState)(categoryStateDefault),
-      _useState22 = _slicedToArray(_useState21, 2),
-      categoryState = _useState22[0],
-      setCategoryState = _useState22[1];
-
-  var _useState23 = (0, _react.useState)(null),
+  var _useState23 = (0, _react.useState)(categoryStateDefault),
       _useState24 = _slicedToArray(_useState23, 2),
-      errors = _useState24[0],
-      setErrors = _useState24[1];
+      categoryState = _useState24[0],
+      setCategoryState = _useState24[1];
 
-  var _useState25 = (0, _react.useState)(false),
+  var _useState25 = (0, _react.useState)(null),
       _useState26 = _slicedToArray(_useState25, 2),
-      errorQuantityProducts = _useState26[0],
-      setErrorQuantityProducts = _useState26[1];
+      errors = _useState26[0],
+      setErrors = _useState26[1];
+
+  var _useState27 = (0, _react.useState)(false),
+      _useState28 = _slicedToArray(_useState27, 2),
+      errorQuantityProducts = _useState28[0],
+      setErrorQuantityProducts = _useState28[1];
 
   var categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
   var isUseParentCategory = (configs === null || configs === void 0 ? void 0 : (_configs$use_parent_c = configs.use_parent_category) === null || _configs$use_parent_c === void 0 ? void 0 : _configs$use_parent_c.value) === 'true' || (configs === null || configs === void 0 ? void 0 : (_configs$use_parent_c2 = configs.use_parent_category) === null || _configs$use_parent_c2 === void 0 ? void 0 : _configs$use_parent_c2.value) === '1';
@@ -1023,47 +1025,40 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   }();
 
   var multiRemoveProducts = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(unavailableProducts, carts) {
-      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(unavailableProducts, carts) {
+      var allPromise;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context8.prev = _context8.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              unavailableProducts.forEach( /*#__PURE__*/function () {
-                var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product) {
-                  var re;
-                  return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-                    while (1) {
-                      switch (_context7.prev = _context7.next) {
-                        case 0:
-                          _context7.next = 2;
-                          return removeProduct(product, carts);
-
-                        case 2:
-                          re = _context7.sent;
-
-                          if (re) {
-                            showToast(_ToastContext.ToastType.Error, t('NOT_AVAILABLE_PRODUCT', 'This product is not available.'), 1000);
-                          }
-
-                        case 4:
-                        case "end":
-                          return _context7.stop();
-                      }
-                    }
-                  }, _callee7);
+              allPromise = [];
+              unavailableProducts.forEach(function (product) {
+                allPromise.push(new Promise(function (resolve, reject) {
+                  resolve(removeProduct(product, carts));
                 }));
+              });
+              _context7.next = 4;
+              return Promise.all(allPromise);
 
-                return function (_x4) {
-                  return _ref14.apply(this, arguments);
-                };
-              }());
+            case 4:
+              _context7.t0 = _context7.sent;
 
-            case 1:
+              if (!_context7.t0) {
+                _context7.next = 7;
+                break;
+              }
+
+              setAlertState({
+                open: true,
+                content: [t('NOT_AVAILABLE_PRODUCT', 'This product is not available.')]
+              });
+
+            case 7:
             case "end":
-              return _context8.stop();
+              return _context7.stop();
           }
         }
-      }, _callee8);
+      }, _callee7);
     }));
 
     return function multiRemoveProducts(_x2, _x3) {
@@ -1182,7 +1177,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         product: val
       }));
     },
-    multiRemoveProducts: multiRemoveProducts
+    multiRemoveProducts: multiRemoveProducts,
+    setAlertState: setAlertState,
+    alertState: alertState
   })));
 };
 
