@@ -629,13 +629,13 @@ export const BusinessAndProductList = (props) => {
   }
 
   const multiRemoveProducts = async (unavailableProducts, carts) => {
-    const Allpromise = []
+    const allPromise = []
     unavailableProducts.forEach(product => {
-      Allpromise.push(new Promise(function (resolve, reject) {
+      allPromise.push(new Promise((resolve, reject) => {
         resolve(removeProduct(product, carts))
       }))
     })
-    await Promise.all(Allpromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCT', 'This product is not available.')] })
+    await Promise.all(allPromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCT', 'This product is not available.')] })
   }
 
   useEffect(() => {
