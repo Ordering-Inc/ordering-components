@@ -59,6 +59,7 @@ import { ProductsListing } from './components/ProductsListing'
 import { PromotionsController } from './components/PromotionsController'
 import { Messages } from './components/Messages'
 import { SearchOptions } from './components/SearchOptions'
+import { Sessions } from './components/Sessions'
 import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
 import { SingleOrderCard } from './components/SingleOrderCard'
@@ -180,6 +181,7 @@ export {
   ProductsListing,
   PromotionsController,
   SearchOptions,
+  Sessions,
   SignupForm,
   SingleBusinessCard,
   SingleOrderCard,
