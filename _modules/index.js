@@ -645,6 +645,12 @@ Object.defineProperty(exports, "SessionProvider", {
     return _SessionContext.SessionProvider;
   }
 });
+Object.defineProperty(exports, "Sessions", {
+  enumerable: true,
+  get: function get() {
+    return _Sessions.Sessions;
+  }
+});
 Object.defineProperty(exports, "SignupForm", {
   enumerable: true,
   get: function get() {
@@ -965,6 +971,8 @@ var _PromotionsController = require("./components/PromotionsController");
 var _Messages = require("./components/Messages");
 
 var _SearchOptions = require("./components/SearchOptions");
+
+var _Sessions = require("./components/Sessions");
 
 var _SignupForm = require("./components/SignupForm");
 

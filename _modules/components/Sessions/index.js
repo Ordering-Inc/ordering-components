@@ -5,17 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.LogoutAction = void 0;
+exports.Sessions = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _SessionContext = require("../../contexts/SessionContext");
-
 var _ApiContext = require("../../contexts/ApiContext");
 
-var _ConfigContext = require("../../contexts/ConfigContext");
+var _SessionContext = require("../../contexts/SessionContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49,228 +47,305 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Component to manage logout behavior without UI component
- */
-var LogoutAction = function LogoutAction(props) {
-  var _configs$facebook_id3, _configs$google_login2;
-
-  var UIComponent = props.UIComponent,
-      handleSuccessLogout = props.handleSuccessLogout,
-      token = props.token,
-      isNative = props.isNative,
-      useDefualtSessionManager = props.useDefualtSessionManager,
-      handleCustomLogoutClick = props.handleCustomLogoutClick;
+var Sessions = function Sessions(props) {
+  var UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token;
+
   var _useState = (0, _react.useState)({
-    loading: false,
-    result: {
-      error: false
-    }
+    sessions: [],
+    loading: true,
+    error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      formState = _useState2[0],
-      setFormState = _useState2[1];
+      sessionsList = _useState2[0],
+      setSessionsList = _useState2[1];
 
-  var _useSession = (0, _SessionContext.useSession)(),
-      _useSession2 = _slicedToArray(_useSession, 2),
-      data = _useSession2[0],
-      logout = _useSession2[1].logout;
-
-  var _useConfig = (0, _ConfigContext.useConfig)(),
-      _useConfig2 = _slicedToArray(_useConfig, 1),
-      configs = _useConfig2[0].configs;
-
-  (0, _react.useEffect)(function () {
-    var _configs$facebook_id;
-
-    if (configs !== null && configs !== void 0 && (_configs$facebook_id = configs.facebook_id) !== null && _configs$facebook_id !== void 0 && _configs$facebook_id.value && !isNative) {
-      window.fbAsyncInit = function () {
-        var _configs$facebook_id2;
-
-        window.FB.init({
-          appId: configs === null || configs === void 0 ? void 0 : (_configs$facebook_id2 = configs.facebook_id) === null || _configs$facebook_id2 === void 0 ? void 0 : _configs$facebook_id2.value,
-          cookie: true,
-          xfbml: false,
-          version: 'v7.0',
-          status: true
-        });
-      };
-
-      if (window.document.getElementById('facebook-jssdk')) {
-        return;
-      }
-
-      var js = window.document.createElement('script');
-      var fjs = window.document.getElementsByTagName('script')[0];
-      js.id = 'facebook-jssdk';
-      js.async = true;
-      js.defer = true;
-      js.src = 'https://connect.facebook.net/en_US/sdk.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }
-  }, [configs === null || configs === void 0 ? void 0 : (_configs$facebook_id3 = configs.facebook_id) === null || _configs$facebook_id3 === void 0 ? void 0 : _configs$facebook_id3.value]);
-  (0, _react.useEffect)(function () {
-    var _configs$google_login;
-
-    if (configs !== null && configs !== void 0 && (_configs$google_login = configs.google_login_client_id) !== null && _configs$google_login !== void 0 && _configs$google_login.value && !isNative) {
-      var js = window.document.createElement('script');
-      js.id = 'google-login';
-      js.src = 'https://apis.google.com/js/api.js';
-      js.async = true;
-      js.defer = true;
-
-      js.onload = function () {
-        window.gapi.load('auth2', function () {});
-      };
-
-      window.document.body.appendChild(js);
-      return function () {
-        var element = document.getElementById('google-login');
-
-        if (element) {
-          element.parentNode.removeChild(element);
-        }
-      };
-    }
-  }, [configs === null || configs === void 0 ? void 0 : (_configs$google_login2 = configs.google_login_client_id) === null || _configs$google_login2 === void 0 ? void 0 : _configs$google_login2.value]);
+  var _useState3 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      actionState = _useState4[0],
+      setActionState = _useState4[1];
   /**
-   * Default fuction for logout workflow
+   * Method to get the sessions from API
    */
 
-  var handleLogoutClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(bodyParams) {
-      var accessToken, body, funtionFetch, _yield$funtionFetch, _yield$funtionFetch$c, error, result;
+
+  var handleGetSessions = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var response, _yield$response$json, result, error;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (handleCustomLogoutClick) {
-                handleCustomLogoutClick && handleCustomLogoutClick();
-              }
-
-              _context.prev = 1;
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              _context.prev = 0;
+              setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
                 loading: true
               }));
-              accessToken = token || data.token;
-              body = bodyParams && bodyParams !== null && bodyParams !== void 0 && bodyParams.notification_token ? {
-                notification_app: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_app,
-                notification_token: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_token,
-                token_notification: bodyParams === null || bodyParams === void 0 ? void 0 : bodyParams.notification_token
-              } : null;
-              funtionFetch = body ? ordering.setAccessToken(accessToken).users().logout(body) : ordering.setAccessToken(accessToken).users().logout();
-              _context.next = 8;
-              return funtionFetch;
-
-            case 8:
-              _yield$funtionFetch = _context.sent;
-              _yield$funtionFetch$c = _yield$funtionFetch.content;
-              error = _yield$funtionFetch$c.error;
-              result = _yield$funtionFetch$c.result;
-
-              if (error) {
-                _context.next = 17;
-                break;
-              }
-
-              setFormState({
-                result: {
-                  error: error,
-                  result: result
-                },
-                loading: false
+              _context.next = 4;
+              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/sessions"), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
               });
 
-              if (useDefualtSessionManager) {
-                logout();
+            case 4:
+              response = _context.sent;
+              _context.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json = _context.sent;
+              result = _yield$response$json.result;
+              error = _yield$response$json.error;
+
+              if (!error) {
+                setSessionsList({
+                  loading: false,
+                  error: null,
+                  sessions: result
+                });
+              } else {
+                setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
+                  loading: false,
+                  error: result
+                }));
               }
 
-              if (handleSuccessLogout) {
-                handleSuccessLogout();
-              }
+              _context.next = 16;
+              break;
 
-              return _context.abrupt("return", true);
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](0);
+              setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
 
-            case 17:
-              setFormState({
-                result: {
-                  error: error,
-                  result: result
-                },
-                loading: false
-              });
-              return _context.abrupt("return", false);
-
-            case 21:
-              _context.prev = 21;
-              _context.t0 = _context["catch"](1);
-              setFormState({
-                result: {
-                  error: true,
-                  result: _context.t0.message
-                },
-                loading: false
-              });
-              return _context.abrupt("return", false);
-
-            case 25:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 21]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
-    return function handleLogoutClick(_x) {
+    return function handleGetSessions() {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * Method to delete the session from API
+   * @param {number} sessionId session id
+   */
 
+
+  var handleDeleteSession = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(sessionId) {
+      var response, _yield$response$json2, result, error, sessions;
+
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/sessions/").concat(sessionId), {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              });
+
+            case 4:
+              response = _context2.sent;
+              _context2.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json2 = _context2.sent;
+              result = _yield$response$json2.result;
+              error = _yield$response$json2.error;
+
+              if (!error) {
+                sessions = sessionsList.sessions.filter(function (session) {
+                  return session.id !== sessionId;
+                });
+                setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
+                  sessions: sessions
+                }));
+                setActionState({
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setActionState({
+                  loading: false,
+                  error: result
+                });
+              }
+
+              _context2.next = 16;
+              break;
+
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](0);
+              setActionState({
+                loading: false,
+                error: [_context2.t0.message]
+              });
+
+            case 16:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 13]]);
+    }));
+
+    return function handleDeleteSession(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to delete all sessions
+   */
+
+
+  var handleDeleteAllSessions = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var response, _yield$response$json3, result, error;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
+                loading: true
+              }));
+              _context3.next = 4;
+              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/sessions/all"), {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              });
+
+            case 4:
+              response = _context3.sent;
+              _context3.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json3 = _context3.sent;
+              result = _yield$response$json3.result;
+              error = _yield$response$json3.error;
+
+              if (!error) {
+                setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
+                  sessions: []
+                }));
+                setActionState({
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setActionState({
+                  loading: false,
+                  error: result
+                });
+              }
+
+              _context3.next = 16;
+              break;
+
+            case 13:
+              _context3.prev = 13;
+              _context3.t0 = _context3["catch"](0);
+              setActionState({
+                loading: false,
+                error: [_context3.t0.message]
+              });
+
+            case 16:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 13]]);
+    }));
+
+    return function handleDeleteAllSessions() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  (0, _react.useEffect)(function () {
+    handleGetSessions();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    formState: formState,
-    handleLogoutClick: handleLogoutClick
+    sessionsList: sessionsList,
+    actionState: actionState,
+    handleDeleteSession: handleDeleteSession,
+    handleDeleteAllSessions: handleDeleteAllSessions
   })));
 };
 
-exports.LogoutAction = LogoutAction;
-LogoutAction.propTypes = {
+exports.Sessions = Sessions;
+Sessions.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Function to get logout success event
+   * Components types before Sessions list
+   * Array of type components, the parent props will pass to these components
    */
-  handleSuccessLogout: _propTypes.default.func,
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Function to get logout error event
+   * Components types after Sessions list
+   * Array of type components, the parent props will pass to these components
    */
-  handleErrorLogout: _propTypes.default.func,
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Provide token if you use custom session manager
+   * Elements before Sessions list
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  token: _propTypes.default.string,
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Enable/Disable default session manager
-   * Remove user and token with default session manager
+   * Elements after Sessions list
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  useDefualtSessionManager: _propTypes.default.bool,
-
-  /**
-   * Custom function
-   */
-  handleCustomLogoutClick: _propTypes.default.func
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-LogoutAction.defaultProps = {
-  useDefualtSessionManager: true
+Sessions.defaultProps = {
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
 };
