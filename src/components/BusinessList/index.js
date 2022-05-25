@@ -207,25 +207,14 @@ export const BusinessList = (props) => {
       requestsState.businesses = source
       setRequestsState({ ...requestsState })
 
-      const fetchEndpoint = advancedSearchEnabled && searchValue?.length >= 3
+      const fetchEndpoint = (advancedSearchEnabled && searchValue?.length >= 3) || (!where && !asDashboard)
         ? ordering.businesses().select(propsToFetch).parameters(parameters)
         : where && asDashboard
           ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard()
           : where && !asDashboard
             ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
-            : !where && asDashboard
-              ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
-              : ordering.businesses().select(propsToFetch).parameters(parameters)
-      // const requestOptions = {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${token}`
-      //   }
-      // }
-      // let filtParams = searchValue?.length >= 3 ? `&term=${searchValue}` : ''
-      // filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
-      // const endpoint = await fetch(`${ordering.root}/search?order_type_id=${orderState?.options?.type}&location=${JSON.stringify(location)}${filtParams}&params=${propsToFetch.join(',')}`, requestOptions)
+            : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
+
       const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source, advancedSearch: advancedSearchEnabled && searchValue?.length >= 3 })
       if (isSortByReview) {
         const _result = sortBusinesses(result, 'review')
