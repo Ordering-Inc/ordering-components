@@ -154,6 +154,15 @@ var UserFormDetails = function UserFormDetails(props) {
       checkPhoneCodeState = _useState12[0],
       setCheckPhoneCodeState = _useState12[1];
 
+  var _useState13 = (0, _react.useState)({
+    loading: false,
+    error: null,
+    result: null
+  }),
+      _useState14 = _slicedToArray(_useState13, 2),
+      removeAccountState = _useState14[0],
+      setAccountState = _useState14[1];
+
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
@@ -624,11 +633,69 @@ var UserFormDetails = function UserFormDetails(props) {
     }));
   };
 
+  var handleRemoveAccount = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(userId) {
+      var idToDelete, response, res;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              idToDelete = userId !== null && userId !== void 0 ? userId : session.user.id;
+              _context5.prev = 1;
+              setAccountState(_objectSpread(_objectSpread({}, removeAccountState), {}, {
+                loading: true
+              }));
+              _context5.next = 5;
+              return fetch("".concat(ordering.root, "/users/").concat(idToDelete), {
+                method: 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(accessToken)
+                }
+              });
+
+            case 5:
+              response = _context5.sent;
+              _context5.next = 8;
+              return response.json();
+
+            case 8:
+              res = _context5.sent;
+              setAccountState(_objectSpread(_objectSpread({}, removeAccountState), {}, {
+                loading: false,
+                result: res === null || res === void 0 ? void 0 : res.result,
+                error: res === null || res === void 0 ? void 0 : res.error
+              }));
+              _context5.next = 15;
+              break;
+
+            case 12:
+              _context5.prev = 12;
+              _context5.t0 = _context5["catch"](1);
+              setAccountState(_objectSpread(_objectSpread({}, removeAccountState), {}, {
+                loading: false,
+                error: _context5.t0.message
+              }));
+
+            case 15:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 12]]);
+    }));
+
+    return function handleRemoveAccount(_x7) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     isEdit: isEdit,
     cleanFormState: cleanFormState,
     formState: formState,
     userState: userState,
+    removeAccountState: removeAccountState,
     validationFields: validationFields,
     isVerifiedPhone: isVerifiedPhone,
     showField: showField,
@@ -646,7 +713,8 @@ var UserFormDetails = function UserFormDetails(props) {
     verifyPhoneState: verifyPhoneState,
     checkPhoneCodeState: checkPhoneCodeState,
     setCheckPhoneCodeState: handleSetCheckPhoneCodeState,
-    handleChangePromotions: handleChangePromotions
+    handleChangePromotions: handleChangePromotions,
+    handleRemoveAccount: handleRemoveAccount
   })));
 };
 
