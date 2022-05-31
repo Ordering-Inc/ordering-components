@@ -36,6 +36,7 @@ export const UserFormDetails = (props) => {
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
+  const [removeAccountState, setAccountState] = useState({ loading: false, error: null, result: null })
 
   const requestsState = {}
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
@@ -367,6 +368,31 @@ export const UserFormDetails = (props) => {
     })
   }
 
+  const handleRemoveAccount = async (userId) => {
+    const idToDelete = userId ?? session.user.id
+    try {
+      setAccountState({ ...removeAccountState, loading: true })
+      const response = await fetch(`${ordering.root}/users/${idToDelete}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      const res = await response.json()
+      console.log(res)
+      setAccountState({
+        ...removeAccountState,
+        loading: false,
+        result: res?.result,
+        error: res?.error
+      })
+    } catch (error) {
+      setAccountState({
+        ...removeAccountState,
+        loading: false,
+        error: error.message
+      })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -392,6 +418,7 @@ export const UserFormDetails = (props) => {
           checkPhoneCodeState={checkPhoneCodeState}
           setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
           handleChangePromotions={handleChangePromotions}
+          handleRemoveAccount={handleRemoveAccount}
         />
       )}
     </>
