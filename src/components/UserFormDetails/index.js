@@ -380,7 +380,6 @@ export const UserFormDetails = (props) => {
         }
       })
       const res = await response.json()
-      console.log(res)
       setAccountState({
         ...removeAccountState,
         loading: false,
