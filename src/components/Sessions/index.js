@@ -9,7 +9,7 @@ export const Sessions = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [{ user, token }] = useSession()
+  const [{ user, token }, { logout }] = useSession()
 
   const [sessionsList, setSessionsList] = useState({ sessions: [], loading: true, error: null })
   const [actionState, setActionState] = useState({ loading: false, error: null })
@@ -57,10 +57,10 @@ export const Sessions = (props) => {
    * Method to delete the session from API
    * @param {number} sessionId session id
    */
-  const handleDeleteSession = async (sessionId) => {
+  const handleDeleteSession = async (session) => {
     try {
       setActionState({ ...actionState, loading: true })
-      const response = await fetch(`${ordering.root}/users/${user.id}/sessions/${sessionId}`, {
+      const response = await fetch(`${ordering.root}/users/${user.id}/sessions/${session.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export const Sessions = (props) => {
       })
       const { result, error } = await response.json()
       if (!error) {
-        const sessions = sessionsList.sessions.filter(session => session.id !== sessionId)
+        const sessions = sessionsList.sessions.filter(_session => _session.id !== session.id)
         setSessionsList({
           ...sessionsList,
           sessions
@@ -78,6 +78,9 @@ export const Sessions = (props) => {
           loading: false,
           error: null
         })
+        if (session.current) {
+          logout()
+        }
       } else {
         setActionState({
           loading: false,
@@ -103,7 +106,8 @@ export const Sessions = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
-        }
+        },
+        body: JSON.stringify({ delete_current: true })
       })
       const { result, error } = await response.json()
       if (!error) {
@@ -115,6 +119,7 @@ export const Sessions = (props) => {
           loading: false,
           error: null
         })
+        logout()
       } else {
         setActionState({
           loading: false,
@@ -130,8 +135,16 @@ export const Sessions = (props) => {
   }
 
   useEffect(() => {
-    handleGetSessions()
-  }, [])
+    if (user?.session_strategy === 'jwt_session') {
+      handleGetSessions()
+    } else {
+      setSessionsList({
+        ...sessionsList,
+        loading: false,
+        sessions: []
+      })
+    }
+  }, [user?.session_strategy])
 
   return (
     <>
