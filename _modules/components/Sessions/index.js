@@ -55,10 +55,11 @@ var Sessions = function Sessions(props) {
       ordering = _useApi2[0];
 
   var _useSession = (0, _SessionContext.useSession)(),
-      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2 = _slicedToArray(_useSession, 2),
       _useSession2$ = _useSession2[0],
       user = _useSession2$.user,
-      token = _useSession2$.token;
+      token = _useSession2$.token,
+      logout = _useSession2[1].logout;
 
   var _useState = (0, _react.useState)({
     sessions: [],
@@ -155,7 +156,7 @@ var Sessions = function Sessions(props) {
 
 
   var handleDeleteSession = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(sessionId) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(session) {
       var response, _yield$response$json2, result, error, sessions;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -167,7 +168,7 @@ var Sessions = function Sessions(props) {
                 loading: true
               }));
               _context2.next = 4;
-              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/sessions/").concat(sessionId), {
+              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/sessions/").concat(session.id), {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
@@ -186,8 +187,8 @@ var Sessions = function Sessions(props) {
               error = _yield$response$json2.error;
 
               if (!error) {
-                sessions = sessionsList.sessions.filter(function (session) {
-                  return session.id !== sessionId;
+                sessions = sessionsList.sessions.filter(function (_session) {
+                  return _session.id !== session.id;
                 });
                 setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
                   sessions: sessions
@@ -196,6 +197,10 @@ var Sessions = function Sessions(props) {
                   loading: false,
                   error: null
                 });
+
+                if (session.current) {
+                  logout();
+                }
               } else {
                 setActionState({
                   loading: false,
@@ -249,7 +254,10 @@ var Sessions = function Sessions(props) {
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: "Bearer ".concat(token)
-                }
+                },
+                body: JSON.stringify({
+                  delete_current: true
+                })
               });
 
             case 4:
@@ -270,6 +278,7 @@ var Sessions = function Sessions(props) {
                   loading: false,
                   error: null
                 });
+                logout();
               } else {
                 setActionState({
                   loading: false,
@@ -302,8 +311,15 @@ var Sessions = function Sessions(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    handleGetSessions();
-  }, []);
+    if ((user === null || user === void 0 ? void 0 : user.session_strategy) === 'jwt_session') {
+      handleGetSessions();
+    } else {
+      setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
+        loading: false,
+        sessions: []
+      }));
+    }
+  }, [user === null || user === void 0 ? void 0 : user.session_strategy]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     sessionsList: sessionsList,
     actionState: actionState,
