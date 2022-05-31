@@ -374,7 +374,10 @@ export const UserFormDetails = (props) => {
       setAccountState({ ...removeAccountState, loading: true })
       const response = await fetch(`${ordering.root}/users/${idToDelete}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        }
       })
       const res = await response.json()
       console.log(res)
