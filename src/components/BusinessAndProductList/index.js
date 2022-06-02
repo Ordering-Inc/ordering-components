@@ -280,7 +280,7 @@ export const BusinessAndProductList = (props) => {
       ? functionFetch.parameters(parameters).where(where)
       : functionFetch.parameters(parameters)
 
-    promises.push(await productEndpoint.get())
+    promises.push(await productEndpoint.get({ cancelToken: source }))
 
     if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
       parameters.params = 'features'
@@ -288,7 +288,7 @@ export const BusinessAndProductList = (props) => {
         ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where)
         : ordering.businesses(businessState.business.id).products().parameters(parameters)
 
-      promises.push(await productEndpoint.get())
+      promises.push(await productEndpoint.get({ cancelToken: source }))
     }
 
     return promises
@@ -464,12 +464,12 @@ export const BusinessAndProductList = (props) => {
             totalPages: pagination.total_pages
           },
           loading: false,
-          products: curCategoryState.products.concat(result)
+          products: [...curCategoryState.products, ...result]
         }
 
         categoriesState[categoryKey] = newcategoryState
-        categoryState = newcategoryState
-        setCategoryState({ ...newcategoryState })
+        categoryState = { ...categoryState, ...newcategoryState }
+        setCategoryState({ ...categoryState, ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
         const isFeatured = categoriesState.all.products.some(product => product.featured) ||
@@ -642,7 +642,7 @@ export const BusinessAndProductList = (props) => {
     if (!businessState.loading) {
       loadProducts({ newFetch: true })
     }
-  }, [businessState])
+  }, [businessState.loading])
 
   useEffect(() => {
     loadProducts({ newFetch: !!searchValue })
