@@ -76,25 +76,21 @@ var AppleLogin = function AppleLogin(props) {
 
   var initParams = initParamsCustom || {
     clientId: configs === null || configs === void 0 ? void 0 : (_configs$apple_login_ = configs.apple_login_client_id) === null || _configs$apple_login_ === void 0 ? void 0 : _configs$apple_login_.value,
-    redirectURI: !window.location.origin.includes('localhost') ? window.location.href : 'https://example-app.com/redirect',
+    redirectURI: !window.location.origin.includes('localhost') ? "".concat(window.location.href, "login/apple/callback") : 'https://example-app.com/redirect',
     response_mode: 'form_post',
     response_type: 'code',
     state: 'state',
     scope: 'name email',
     nonce: 'nonce',
-    usePopup: false // or true defaults to false
+    usePopup: true // or true defaults to false
 
   };
   (0, _react.useEffect)(function () {
-    var AppleIDSignInOnSuccess = document.addEventListener('AppleIDSignInOnSuccess', function (data) {
-      onSuccess(data);
-    });
     var AppleIDSignInOnFailure = document.addEventListener('AppleIDSignInOnFailure', function (error) {
       onFailure(error);
     });
     createScriptApple();
     return function () {
-      document.removeEventListener('AppleIDSignInOnSuccess', AppleIDSignInOnSuccess);
       document.removeEventListener('AppleIDSignInOnFailure', AppleIDSignInOnFailure);
     };
   }, []);
@@ -117,7 +113,8 @@ var AppleLogin = function AppleLogin(props) {
 
   var handleAppleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
-      var response;
+      var response, _yield$response$json, result, error;
+
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -148,26 +145,31 @@ var AppleLogin = function AppleLogin(props) {
 
             case 7:
               response = _context.sent;
+              _context.next = 10;
+              return response.json();
+
+            case 10:
+              _yield$response$json = _context.sent;
+              result = _yield$response$json.result;
+              error = _yield$response$json.error;
               setFormState({
-                result: response.content,
+                result: result,
                 loading: false
               });
 
-              if (!response.content.error) {
-                if (onSuccess) {
-                  onSuccess(response.content.result);
-                }
+              if (onSuccess && !error && result !== null && result !== void 0 && result.session) {
+                onSuccess(result);
               } else {
                 if (onFailure) {
-                  onFailure(response.content.result);
+                  onFailure(result);
                 }
               }
 
-              _context.next = 15;
+              _context.next = 20;
               break;
 
-            case 12:
-              _context.prev = 12;
+            case 17:
+              _context.prev = 17;
               _context.t0 = _context["catch"](3);
               setFormState({
                 result: {
@@ -177,12 +179,12 @@ var AppleLogin = function AppleLogin(props) {
                 loading: false
               });
 
-            case 15:
+            case 20:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 12]]);
+      }, _callee, null, [[3, 17]]);
     }));
 
     return function handleAppleLoginClick(_x) {
@@ -216,7 +218,7 @@ var AppleLogin = function AppleLogin(props) {
 
             case 3:
               data = _context2.sent;
-              console.log(data);
+              handleAppleLoginClick(data === null || data === void 0 ? void 0 : data.authorization);
               _context2.next = 10;
               break;
 
@@ -239,8 +241,7 @@ var AppleLogin = function AppleLogin(props) {
   }();
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    initLoginApple: initLoginApple,
-    handleAppleLoginClick: handleAppleLoginClick
+    initLoginApple: initLoginApple
   })));
 };
 

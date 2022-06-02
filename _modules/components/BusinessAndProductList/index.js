@@ -462,7 +462,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               productEndpoint = ((_where = where) === null || _where === void 0 ? void 0 : (_where$conditions = _where.conditions) === null || _where$conditions === void 0 ? void 0 : _where$conditions.length) > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
               _context2.t0 = promises;
               _context2.next = 18;
-              return productEndpoint.get();
+              return productEndpoint.get({
+                cancelToken: source
+              });
 
             case 18:
               _context2.t1 = _context2.sent;
@@ -478,7 +480,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               productEndpoint = ((_where2 = where) === null || _where2 === void 0 ? void 0 : (_where2$conditions = _where2.conditions) === null || _where2$conditions === void 0 ? void 0 : _where2$conditions.length) > 0 ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where) : ordering.businesses(businessState.business.id).products().parameters(parameters);
               _context2.t2 = promises;
               _context2.next = 26;
-              return productEndpoint.get();
+              return productEndpoint.get({
+                cancelToken: source
+              });
 
             case 26:
               _context2.t3 = _context2.sent;
@@ -790,11 +794,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     totalPages: pagination.total_pages
                   }),
                   loading: false,
-                  products: curCategoryState.products.concat(result)
+                  products: [].concat(_toConsumableArray(curCategoryState.products), _toConsumableArray(result))
                 };
                 categoriesState[categoryKey] = newcategoryState;
-                categoryState = newcategoryState;
-                setCategoryState(_objectSpread({}, newcategoryState));
+                categoryState = _objectSpread(_objectSpread({}, categoryState), newcategoryState);
+                setCategoryState(_objectSpread(_objectSpread({}, categoryState), newcategoryState));
                 setCategoriesState(_objectSpread({}, categoriesState));
                 isFeatured = categoriesState.all.products.some(function (product) {
                   return product.featured;
@@ -1072,7 +1076,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         newFetch: true
       });
     }
-  }, [businessState]);
+  }, [businessState.loading]);
   (0, _react.useEffect)(function () {
     loadProducts({
       newFetch: !!searchValue
