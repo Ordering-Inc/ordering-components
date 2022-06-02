@@ -12,7 +12,7 @@ export const AppleLogin = (props) => {
 
   const initParams = initParamsCustom || {
     clientId: configs?.apple_login_client_id?.value,
-    redirectURI: !window.location.origin.includes('localhost') ? 'https://9dd5-201-221-112-26.ngrok.io/login/apple/callback' : 'https://example-app.com/redirect',
+    redirectURI: !window.location.origin.includes('localhost') ? `${window.location.href}login/apple/callback` : 'https://example-app.com/redirect',
     response_mode: 'form_post',
     response_type: 'code',
     state: 'state',
