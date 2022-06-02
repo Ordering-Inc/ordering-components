@@ -12,26 +12,22 @@ export const AppleLogin = (props) => {
 
   const initParams = initParamsCustom || {
     clientId: configs?.apple_login_client_id?.value,
-    redirectURI: !window.location.origin.includes('localhost') ? window.location.href : 'https://example-app.com/redirect',
+    redirectURI: !window.location.origin.includes('localhost') ? 'https://9dd5-201-221-112-26.ngrok.io/login/apple/callback' : 'https://example-app.com/redirect',
     response_mode: 'form_post',
     response_type: 'code',
     state: 'state',
     scope: 'name email',
     nonce: 'nonce',
-    usePopup: false // or true defaults to false
+    usePopup: true // or true defaults to false
   }
 
   useEffect(() => {
-    const AppleIDSignInOnSuccess = document.addEventListener('AppleIDSignInOnSuccess', (data) => {
-      onSuccess(data)
-    })
     const AppleIDSignInOnFailure = document.addEventListener('AppleIDSignInOnFailure', (error) => {
       onFailure(error)
     })
     createScriptApple()
 
     return () => {
-      document.removeEventListener('AppleIDSignInOnSuccess', AppleIDSignInOnSuccess)
       document.removeEventListener('AppleIDSignInOnFailure', AppleIDSignInOnFailure)
     }
   }, [])
@@ -68,17 +64,16 @@ export const AppleLogin = (props) => {
           code: data.code
         })
       })
+      const { result, error } = await response.json()
       setFormState({
-        result: response.content,
+        result: result,
         loading: false
       })
-      if (!response.content.error) {
-        if (onSuccess) {
-          onSuccess(response.content.result)
-        }
+      if (onSuccess && !error && result?.session) {
+        onSuccess(result)
       } else {
         if (onFailure) {
-          onFailure(response.content.result)
+          onFailure(result)
         }
       }
     } catch (err) {
@@ -107,13 +102,13 @@ export const AppleLogin = (props) => {
   const handleLoginApple = async () => {
     try {
       const data = await window.AppleID.auth.signIn()
-      console.log(data)
+      handleAppleLoginClick(data?.authorization)
     } catch (err) {
       console.log('error', err)
     }
   }
 
-  return <>{UIComponent && <UIComponent {...props} initLoginApple={initLoginApple} handleAppleLoginClick={handleAppleLoginClick} />}</>
+  return <>{UIComponent && <UIComponent {...props} initLoginApple={initLoginApple} />}</>
 }
 
 AppleLogin.propTypes = {
