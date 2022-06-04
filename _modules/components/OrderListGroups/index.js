@@ -107,7 +107,7 @@ var OrderListGroups = function OrderListGroups(props) {
   var ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled'];
   var ordersGroupStatus = {
     pending: (_orderGroupStatusCust = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust !== void 0 ? _orderGroupStatusCust : [0, 13],
-    inProgress: (_orderGroupStatusCust2 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust2 !== void 0 ? _orderGroupStatusCust2 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
+    inProgress: (_orderGroupStatusCust2 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust2 !== void 0 ? _orderGroupStatusCust2 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23],
     completed: (_orderGroupStatusCust3 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust3 !== void 0 ? _orderGroupStatusCust3 : [1, 11, 15],
     cancelled: (_orderGroupStatusCust4 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.cancelled) !== null && _orderGroupStatusCust4 !== void 0 ? _orderGroupStatusCust4 : [2, 5, 6, 10, 12, 16, 17]
   };

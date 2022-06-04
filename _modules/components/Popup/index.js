@@ -39,7 +39,8 @@ var Popup = function Popup(props) {
       open = props.open,
       backdropClassName = props.backdropClassName,
       closeOnBackdrop = props.closeOnBackdrop,
-      onClose = props.onClose;
+      onClose = props.onClose,
+      isSideBar = props.isSideBar;
   var modalRef = (0, _react.useRef)(null);
 
   var _useState = (0, _react.useState)(),
@@ -103,7 +104,13 @@ var Popup = function Popup(props) {
       var modalRoot = window.document.getElementById('app-modals');
 
       if (modalRoot) {
-        modalRoot.remove();
+        if (isSideBar) {
+          setTimeout(function () {
+            modalRoot.remove();
+          }, 250);
+        } else {
+          modalRoot.remove();
+        }
       }
 
       window.document.body.style.overflow = defaultOverflow;
