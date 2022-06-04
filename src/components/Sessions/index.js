@@ -9,7 +9,7 @@ export const Sessions = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [{ user, token }, { logout }] = useSession()
+  const [{ user, token }, { login, logout }] = useSession()
 
   const [sessionsList, setSessionsList] = useState({ sessions: [], loading: true, error: null })
   const [actionState, setActionState] = useState({ loading: false, error: null })
@@ -98,7 +98,7 @@ export const Sessions = (props) => {
   /**
    * Method to delete all sessions
    */
-  const handleDeleteAllSessions = async () => {
+  const handleDeleteAllSessions = async (deleteCurrent = false) => {
     try {
       setActionState({ ...actionState, loading: true })
       const response = await fetch(`${ordering.root}/users/${user.id}/sessions/all`, {
@@ -107,19 +107,32 @@ export const Sessions = (props) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ delete_current: true })
+        body: JSON.stringify({ delete_current: deleteCurrent })
       })
       const { result, error } = await response.json()
       if (!error) {
-        setSessionsList({
-          ...sessionsList,
-          sessions: []
-        })
         setActionState({
           loading: false,
           error: null
         })
-        logout()
+        if (deleteCurrent) {
+          setSessionsList({
+            ...sessionsList,
+            sessions: []
+          })
+          logout()
+        } else {
+          setSessionsList({
+            ...sessionsList,
+            sessions: sessionsList.sessions.filter(session => session.current)
+          })
+          if (user?.session_strategy === 'jwt') {
+            login({
+              token: token,
+              user: { ...user, session_strategy: 'jwt_session' }
+            })
+          }
+        }
       } else {
         setActionState({
           loading: false,
