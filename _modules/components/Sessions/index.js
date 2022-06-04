@@ -59,7 +59,9 @@ var Sessions = function Sessions(props) {
       _useSession2$ = _useSession2[0],
       user = _useSession2$.user,
       token = _useSession2$.token,
-      logout = _useSession2[1].logout;
+      _useSession2$2 = _useSession2[1],
+      login = _useSession2$2.login,
+      logout = _useSession2$2.logout;
 
   var _useState = (0, _react.useState)({
     sessions: [],
@@ -238,17 +240,23 @@ var Sessions = function Sessions(props) {
 
   var handleDeleteAllSessions = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var response, _yield$response$json3, result, error;
+      var deleteCurrent,
+          response,
+          _yield$response$json3,
+          result,
+          error,
+          _args3 = arguments;
 
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _context3.prev = 0;
+              deleteCurrent = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : false;
+              _context3.prev = 1;
               setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
                 loading: true
               }));
-              _context3.next = 4;
+              _context3.next = 5;
               return fetch("".concat(ordering.root, "/users/").concat(user.id, "/sessions/all"), {
                 method: 'DELETE',
                 headers: {
@@ -256,29 +264,47 @@ var Sessions = function Sessions(props) {
                   Authorization: "Bearer ".concat(token)
                 },
                 body: JSON.stringify({
-                  delete_current: true
+                  delete_current: deleteCurrent
                 })
               });
 
-            case 4:
+            case 5:
               response = _context3.sent;
-              _context3.next = 7;
+              _context3.next = 8;
               return response.json();
 
-            case 7:
+            case 8:
               _yield$response$json3 = _context3.sent;
               result = _yield$response$json3.result;
               error = _yield$response$json3.error;
 
               if (!error) {
-                setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
-                  sessions: []
-                }));
                 setActionState({
                   loading: false,
                   error: null
                 });
-                logout();
+
+                if (deleteCurrent) {
+                  setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
+                    sessions: []
+                  }));
+                  logout();
+                } else {
+                  setSessionsList(_objectSpread(_objectSpread({}, sessionsList), {}, {
+                    sessions: sessionsList.sessions.filter(function (session) {
+                      return session.current;
+                    })
+                  }));
+
+                  if ((user === null || user === void 0 ? void 0 : user.session_strategy) === 'jwt') {
+                    login({
+                      token: token,
+                      user: _objectSpread(_objectSpread({}, user), {}, {
+                        session_strategy: 'jwt_session'
+                      })
+                    });
+                  }
+                }
               } else {
                 setActionState({
                   loading: false,
@@ -286,23 +312,23 @@ var Sessions = function Sessions(props) {
                 });
               }
 
-              _context3.next = 16;
+              _context3.next = 17;
               break;
 
-            case 13:
-              _context3.prev = 13;
-              _context3.t0 = _context3["catch"](0);
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](1);
               setActionState({
                 loading: false,
                 error: [_context3.t0.message]
               });
 
-            case 16:
+            case 17:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 13]]);
+      }, _callee3, null, [[1, 14]]);
     }));
 
     return function handleDeleteAllSessions() {
