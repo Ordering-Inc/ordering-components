@@ -175,7 +175,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var customerFromLocalStorage, userCustomerId, options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, carts, _options, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc3, _yield$ordering$setAc4, _error, _result, _err$message, message;
+      var _res$content, _res$content2, customerFromLocalStorage, userCustomerId, options, res, error, result, carts, _options, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -213,10 +213,9 @@ var OrderProvider = function OrderProvider(_ref) {
               return ordering.setAccessToken(session.token).orderOptions().get(options);
 
             case 11:
-              _yield$ordering$setAc = _context.sent;
-              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
-              error = _yield$ordering$setAc2.error;
-              result = _yield$ordering$setAc2.result;
+              res = _context.sent;
+              error = res === null || res === void 0 ? void 0 : (_res$content = res.content) === null || _res$content === void 0 ? void 0 : _res$content.error;
+              result = res === null || res === void 0 ? void 0 : (_res$content2 = res.content) === null || _res$content2 === void 0 ? void 0 : _res$content2.result;
 
               if (!error) {
                 carts = result.carts, _options = _objectWithoutProperties(result, _excluded);
@@ -233,26 +232,26 @@ var OrderProvider = function OrderProvider(_ref) {
                   content: result
                 });
 
-                if ((result === null || result === void 0 ? void 0 : result[0]) === 'You do not have permission.') {
+                if ((res === null || res === void 0 ? void 0 : res.status) === 401) {
                   session.auth && logout();
                 }
               }
 
-              _context.next = 19;
+              _context.next = 18;
               return strategy.getItem('options', true);
 
-            case 19:
+            case 18:
               localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 51;
+                _context.next = 50;
                 break;
               }
 
               _options2 = {};
 
               if (!(Object.keys(localOptions.address).length > 0)) {
-                _context.next = 43;
+                _context.next = 42;
                 break;
               }
 
@@ -261,10 +260,10 @@ var OrderProvider = function OrderProvider(_ref) {
                 value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
               userId = userCustomerId || session.user.id;
-              _context.next = 27;
+              _context.next = 26;
               return ordering.setAccessToken(session.token).users(userId).addresses().where(conditions).get();
 
-            case 27:
+            case 26:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
                 var _localOptions$address2, _localOptions$address3, _localOptions$address4, _address$location, _localOptions$address5, _address$location2, _localOptions$address6, _localOptions$address7, _localOptions$address8, _localOptions$address9, _localOptions$address10;
@@ -276,7 +275,7 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
               if (address) {
-                _context.next = 40;
+                _context.next = 39;
                 break;
               }
 
@@ -285,32 +284,32 @@ var OrderProvider = function OrderProvider(_ref) {
 
                 return (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address11 = localOptions.address) === null || _localOptions$address11 === void 0 ? void 0 : _localOptions$address11[key]) === null && (localOptions === null || localOptions === void 0 ? true : (_localOptions$address12 = localOptions.address) === null || _localOptions$address12 === void 0 ? true : delete _localOptions$address12[key]);
               });
-              _context.next = 33;
+              _context.next = 32;
               return ordering.setAccessToken(session.token).users(userId).addresses().save(localOptions.address);
 
-            case 33:
-              _yield$ordering$setAc3 = _context.sent;
-              _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
-              _error = _yield$ordering$setAc4.error;
-              _result = _yield$ordering$setAc4.result;
+            case 32:
+              _yield$ordering$setAc = _context.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              _error = _yield$ordering$setAc2.error;
+              _result = _yield$ordering$setAc2.result;
 
               if (!_error) {
                 address = _result;
               }
 
-              _context.next = 42;
+              _context.next = 41;
               break;
 
-            case 40:
-              _context.next = 42;
+            case 39:
+              _context.next = 41;
               return ordering.setAccessToken(session.token).users(userId).addresses(address.id).save({
                 default: true
               });
 
-            case 42:
+            case 41:
               address && (_options2.address_id = address.id);
 
-            case 43:
+            case 42:
               if (localOptions.type) {
                 _options2.type = localOptions.type;
               }
@@ -331,24 +330,24 @@ var OrderProvider = function OrderProvider(_ref) {
                 }));
               }
 
-              _context.next = 49;
+              _context.next = 48;
               return strategy.removeItem('options');
 
-            case 49:
-              _context.next = 52;
+            case 48:
+              _context.next = 51;
               break;
 
-            case 51:
+            case 50:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 52:
-              _context.next = 59;
+            case 51:
+              _context.next = 58;
               break;
 
-            case 54:
-              _context.prev = 54;
+            case 53:
+              _context.prev = 53;
               _context.t0 = _context["catch"](0);
               message = _context.t0 !== null && _context.t0 !== void 0 && (_err$message = _context.t0.message) !== null && _err$message !== void 0 && _err$message.includes('Internal error') ? 'INTERNAL_ERROR' : _context.t0.message;
               setAlert({
@@ -359,12 +358,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: false
               }));
 
-            case 59:
+            case 58:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 54]]);
+      }, _callee, null, [[0, 53]]);
     }));
 
     return function refreshOrderOptions() {
@@ -601,7 +600,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(changes) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, carts, options, _err$message2, message;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
@@ -634,10 +633,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 11:
-              _yield$ordering$setAc5 = _context5.sent;
-              _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
-              error = _yield$ordering$setAc6.error;
-              result = _yield$ordering$setAc6.result;
+              _yield$ordering$setAc3 = _context5.sent;
+              _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
+              error = _yield$ordering$setAc4.error;
+              result = _yield$ordering$setAc4.result;
 
               if (!error) {
                 carts = result.carts, options = _objectWithoutProperties(result, _excluded2);
@@ -695,7 +694,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var addProduct = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(product, cart, isQuickAddProduct) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
 
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
@@ -724,10 +723,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 9:
-              _yield$ordering$setAc7 = _context6.sent;
-              _yield$ordering$setAc8 = _yield$ordering$setAc7.content;
-              error = _yield$ordering$setAc8.error;
-              result = _yield$ordering$setAc8.result;
+              _yield$ordering$setAc5 = _context6.sent;
+              _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
+              error = _yield$ordering$setAc6.error;
+              result = _yield$ordering$setAc6.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -774,7 +773,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var removeProduct = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
 
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) {
@@ -807,10 +806,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 9:
-              _yield$ordering$setAc9 = _context7.sent;
-              _yield$ordering$setAc10 = _yield$ordering$setAc9.content;
-              error = _yield$ordering$setAc10.error;
-              result = _yield$ordering$setAc10.result;
+              _yield$ordering$setAc7 = _context7.sent;
+              _yield$ordering$setAc8 = _yield$ordering$setAc7.content;
+              error = _yield$ordering$setAc8.error;
+              result = _yield$ordering$setAc8.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -937,7 +936,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateProduct = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart, isQuickAddProduct) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, _yield$ordering$setAc12, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
 
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) {
@@ -966,10 +965,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 9:
-              _yield$ordering$setAc11 = _context9.sent;
-              _yield$ordering$setAc12 = _yield$ordering$setAc11.content;
-              error = _yield$ordering$setAc12.error;
-              result = _yield$ordering$setAc12.result;
+              _yield$ordering$setAc9 = _context9.sent;
+              _yield$ordering$setAc10 = _yield$ordering$setAc9.content;
+              error = _yield$ordering$setAc10.error;
+              result = _yield$ordering$setAc10.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -1017,7 +1016,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(couponData, customParams) {
       var _state$carts$;
 
-      var response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc13, content, result;
+      var response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, content, result;
 
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) {
@@ -1114,8 +1113,8 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 26:
-              _yield$ordering$setAc13 = _context10.sent;
-              content = _yield$ordering$setAc13.content;
+              _yield$ordering$setAc11 = _context10.sent;
+              content = _yield$ordering$setAc11.content;
               result = content;
 
               if (!result.error) {
@@ -1339,8 +1338,8 @@ var OrderProvider = function OrderProvider(_ref) {
           customerFromLocalStorage,
           userCustomerId,
           body,
-          _yield$ordering$setAc14,
-          _yield$ordering$setAc15,
+          _yield$ordering$setAc12,
+          _yield$ordering$setAc13,
           error,
           result,
           _args13 = arguments;
@@ -1397,10 +1396,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 17:
-              _yield$ordering$setAc14 = _context13.sent;
-              _yield$ordering$setAc15 = _yield$ordering$setAc14.content;
-              error = _yield$ordering$setAc15.error;
-              result = _yield$ordering$setAc15.result;
+              _yield$ordering$setAc12 = _context13.sent;
+              _yield$ordering$setAc13 = _yield$ordering$setAc12.content;
+              error = _yield$ordering$setAc13.error;
+              result = _yield$ordering$setAc13.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -1446,7 +1445,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId, paymethodId, paymethodData) {
       var _state$carts$3;
 
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
 
       return _regeneratorRuntime().wrap(function _callee14$(_context14) {
         while (1) {
@@ -1508,10 +1507,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 17:
-              _yield$ordering$setAc16 = _context14.sent;
-              _yield$ordering$setAc17 = _yield$ordering$setAc16.content;
-              error = _yield$ordering$setAc17.error;
-              result = _yield$ordering$setAc17.result;
+              _yield$ordering$setAc14 = _context14.sent;
+              _yield$ordering$setAc15 = _yield$ordering$setAc14.content;
+              error = _yield$ordering$setAc15.error;
+              result = _yield$ordering$setAc15.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
@@ -1547,7 +1546,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var placeCart = /*#__PURE__*/function () {
     var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(cardId, data) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result, orderObject;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
 
       return _regeneratorRuntime().wrap(function _callee15$(_context15) {
         while (1) {
@@ -1574,10 +1573,10 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
             case 9:
-              _yield$ordering$setAc18 = _context15.sent;
-              _yield$ordering$setAc19 = _yield$ordering$setAc18.content;
-              error = _yield$ordering$setAc19.error;
-              result = _yield$ordering$setAc19.result;
+              _yield$ordering$setAc16 = _context15.sent;
+              _yield$ordering$setAc17 = _yield$ordering$setAc16.content;
+              error = _yield$ordering$setAc17.error;
+              result = _yield$ordering$setAc17.result;
 
               if (error) {
                 _context15.next = 17;
@@ -1756,7 +1755,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var reorder = /*#__PURE__*/function () {
     var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(orderId) {
-      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc20, _yield$ordering$setAc21, error, result;
+      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
 
       return _regeneratorRuntime().wrap(function _callee17$(_context17) {
         while (1) {
@@ -1789,10 +1788,10 @@ var OrderProvider = function OrderProvider(_ref) {
               return ordering.setAccessToken(session.token).orders(orderId).reorder(options);
 
             case 11:
-              _yield$ordering$setAc20 = _context17.sent;
-              _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
-              error = _yield$ordering$setAc21.error;
-              result = _yield$ordering$setAc21.result;
+              _yield$ordering$setAc18 = _context17.sent;
+              _yield$ordering$setAc19 = _yield$ordering$setAc18.content;
+              error = _yield$ordering$setAc19.error;
+              result = _yield$ordering$setAc19.result;
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
