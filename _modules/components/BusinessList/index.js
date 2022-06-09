@@ -489,7 +489,7 @@ var BusinessList = function BusinessList(props) {
   (0, _react.useEffect)(function () {
     var _orderState$options12, _orderState$options13;
 
-    if (orderState.loading || !((_orderState$options12 = orderState.options) !== null && _orderState$options12 !== void 0 && (_orderState$options13 = _orderState$options12.address) !== null && _orderState$options13 !== void 0 && _orderState$options13.location) && !customLocation) return;
+    if (orderState.loading || !((_orderState$options12 = orderState.options) !== null && _orderState$options12 !== void 0 && (_orderState$options13 = _orderState$options12.address) !== null && _orderState$options13 !== void 0 && _orderState$options13.location) && !customLocation && !asDashboard) return;
 
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);

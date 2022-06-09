@@ -81,6 +81,17 @@ var WalletList = function WalletList(props) {
       transactions = _useState6[0],
       setTransactions = _useState6[1];
 
+  var _useState7 = (0, _react.useState)({
+    loading: true,
+    error: null,
+    loyaltyLevel: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      userLoyaltyLevel = _useState8[0],
+      setUserLoyaltyLevel = _useState8[1];
+
+  var userProps = ['loyalty_level'];
+
   var getTransactions = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(walletId) {
       var _transactions$list;
@@ -228,7 +239,54 @@ var WalletList = function WalletList(props) {
     };
   }();
 
+  var getUserLoyaltyLevel = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var _yield$ordering$users, _yield$ordering$users2, result, error;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              _context3.next = 3;
+              return ordering.users(user.id).select(userProps).get();
+
+            case 3:
+              _yield$ordering$users = _context3.sent;
+              _yield$ordering$users2 = _yield$ordering$users.content;
+              result = _yield$ordering$users2.result;
+              error = _yield$ordering$users2.error;
+              setUserLoyaltyLevel(_objectSpread(_objectSpread({}, userLoyaltyLevel), {}, {
+                loading: false,
+                loyaltyLevel: error ? null : result === null || result === void 0 ? void 0 : result.loyalty_level,
+                error: error ? result : null
+              }));
+              _context3.next = 13;
+              break;
+
+            case 10:
+              _context3.prev = 10;
+              _context3.t0 = _context3["catch"](0);
+              setUserLoyaltyLevel(_objectSpread(_objectSpread({}, userLoyaltyLevel), {}, {
+                loading: false,
+                error: _context3.t0
+              }));
+
+            case 13:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 10]]);
+    }));
+
+    return function getUserLoyaltyLevel() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
+    getUserLoyaltyLevel();
     getWallets();
   }, []);
   (0, _react.useEffect)(function () {
@@ -238,6 +296,7 @@ var WalletList = function WalletList(props) {
   }, [walletSelected]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     walletList: state,
+    userLoyaltyLevel: userLoyaltyLevel,
     transactionsList: transactions,
     setWalletSelected: setWalletSelected
   })));
