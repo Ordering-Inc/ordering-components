@@ -290,7 +290,7 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation && !asDashboard))) return
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
