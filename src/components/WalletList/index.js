@@ -112,6 +112,7 @@ export const WalletList = (props) => {
           walletList={state}
           transactionsList={transactions}
           setWalletSelected={setWalletSelected}
+          getWallets={getWallets}
         />
       )}
     </>
