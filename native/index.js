@@ -66,6 +66,7 @@ import { ReviewCustomer } from '../src/components/ReviewCustomer'
 import { ReviewDriver } from '../src/components/ReviewDriver'
 import { ReviewProduct } from '../src/components/ReviewProduct'
 import { SearchOptions } from '../src/components/SearchOptions'
+import { Sessions } from '../src/components/Sessions'
 import { SignupForm } from '../src/components/SignupForm'
 import { SingleBusinessCard } from '../src/components/SingleBusinessCard'
 import { SingleOrderCard } from '../src/components/SingleOrderCard'
@@ -163,6 +164,7 @@ export {
   ReviewDriver,
   ReviewProduct,
   SearchOptions,
+  Sessions,
   SignupForm,
   SingleBusinessCard,
   SingleOrderCard,
