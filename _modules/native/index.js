@@ -531,6 +531,12 @@ Object.defineProperty(exports, "SessionProvider", {
     return _SessionContext.SessionProvider;
   }
 });
+Object.defineProperty(exports, "Sessions", {
+  enumerable: true,
+  get: function get() {
+    return _Sessions.Sessions;
+  }
+});
 Object.defineProperty(exports, "SignupForm", {
   enumerable: true,
   get: function get() {
@@ -853,6 +859,8 @@ var _ReviewDriver = require("../src/components/ReviewDriver");
 var _ReviewProduct = require("../src/components/ReviewProduct");
 
 var _SearchOptions = require("../src/components/SearchOptions");
+
+var _Sessions = require("../src/components/Sessions");
 
 var _SignupForm = require("../src/components/SignupForm");
 
