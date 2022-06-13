@@ -290,15 +290,19 @@ export const UserFormDetails = (props) => {
    */
   const sendVerifyPhoneCode = async (values) => {
     setIsVerifiedPhone(false)
+    const body = {
+      cellphone: values.cellphone,
+      country_phone_code: parseInt(values.country_phone_code),
+      channel: 2,
+      type: 2,
+      size: 4
+    }
     try {
       setVerifyPhoneState({ ...verifyPhoneState, loading: true })
-      const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
+      const response = await fetch(`${ordering.root}/codes/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cellphone: values.cellphone,
-          country_phone_code: `+${values.country_phone_code}`
-        })
+        body: JSON.stringify(body)
       })
       const res = await response.json()
       setVerifyPhoneState({
@@ -323,13 +327,17 @@ export const UserFormDetails = (props) => {
    */
   const checkVerifyPhoneCode = async (values) => {
     const body = {
-      ...values
+      ...values,
+      channel: 2
     }
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
-      const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
+      const response = await fetch(`${ordering.root}/users/${userId}/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`
+        },
         body: JSON.stringify(body)
       })
       const res = await response.json()
