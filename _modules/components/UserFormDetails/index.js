@@ -561,7 +561,7 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: true
               }));
               _context4.next = 5;
-              return fetch("".concat(ordering.root, "/users/").concat(userId, "/verify"), {
+              return fetch("".concat(ordering.root, "/users/").concat(useSessionUser && refreshSessionUser ? session.user.id : userId, "/verify"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

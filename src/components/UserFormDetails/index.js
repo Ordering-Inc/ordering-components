@@ -332,7 +332,7 @@ export const UserFormDetails = (props) => {
     }
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
-      const response = await fetch(`${ordering.root}/users/${userId}/verify`, {
+      const response = await fetch(`${ordering.root}/users/${(useSessionUser && refreshSessionUser) ? session.user.id : userId}/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
