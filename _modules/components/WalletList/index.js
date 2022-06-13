@@ -298,7 +298,8 @@ var WalletList = function WalletList(props) {
     walletList: state,
     userLoyaltyLevel: userLoyaltyLevel,
     transactionsList: transactions,
-    setWalletSelected: setWalletSelected
+    setWalletSelected: setWalletSelected,
+    getWallets: getWallets
   })));
 };
 

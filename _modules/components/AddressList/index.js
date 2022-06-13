@@ -335,7 +335,8 @@ var AddressList = function AddressList(props) {
     setAddressList: setAddressList,
     actionStatus: actionStatus,
     handleSetDefault: handleSetDefault,
-    handleDelete: handleDelete
+    handleDelete: handleDelete,
+    loadAddresses: loadAddresses
   })));
 };
 
