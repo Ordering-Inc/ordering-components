@@ -556,11 +556,12 @@ var UserFormDetails = function UserFormDetails(props) {
               body = _objectSpread(_objectSpread({}, values), {}, {
                 channel: 2
               });
-              _context4.prev = 1;
+              console.log(useSessionUser && refreshSessionUser ? session.user.id : userId, '(useSessionUser && refreshSessionUser) ? session.user.id : userId');
+              _context4.prev = 2;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: true
               }));
-              _context4.next = 5;
+              _context4.next = 6;
               return fetch("".concat(ordering.root, "/users/").concat(useSessionUser && refreshSessionUser ? session.user.id : userId, "/verify"), {
                 method: 'POST',
                 headers: {
@@ -570,12 +571,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 body: JSON.stringify(body)
               });
 
-            case 5:
+            case 6:
               response = _context4.sent;
-              _context4.next = 8;
+              _context4.next = 9;
               return response.json();
 
-            case 8:
+            case 9:
               res = _context4.sent;
 
               if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
@@ -587,12 +588,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false,
                 result: res
               }));
-              _context4.next = 16;
+              _context4.next = 17;
               break;
 
-            case 13:
-              _context4.prev = 13;
-              _context4.t0 = _context4["catch"](1);
+            case 14:
+              _context4.prev = 14;
+              _context4.t0 = _context4["catch"](2);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
@@ -600,12 +601,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 }
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 13]]);
+      }, _callee4, null, [[2, 14]]);
     }));
 
     return function checkVerifyPhoneCode(_x6) {

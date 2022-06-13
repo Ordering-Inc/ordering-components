@@ -330,6 +330,7 @@ export const UserFormDetails = (props) => {
       ...values,
       channel: 2
     }
+    console.log((useSessionUser && refreshSessionUser) ? session.user.id : userId, '(useSessionUser && refreshSessionUser) ? session.user.id : userId')
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
       const response = await fetch(`${ordering.root}/users/${(useSessionUser && refreshSessionUser) ? session.user.id : userId}/verify`, {
