@@ -135,6 +135,7 @@ export const WalletList = (props) => {
           userLoyaltyLevel={userLoyaltyLevel}
           transactionsList={transactions}
           setWalletSelected={setWalletSelected}
+          getWallets={getWallets}
         />
       )}
     </>
