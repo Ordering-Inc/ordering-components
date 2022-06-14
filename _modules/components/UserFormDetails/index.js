@@ -547,7 +547,9 @@ var UserFormDetails = function UserFormDetails(props) {
 
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(values) {
-      var body, _res$result, response, res;
+      var _props$userData4;
+
+      var body, _props$userData5, _res$result, response, res;
 
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
@@ -556,13 +558,13 @@ var UserFormDetails = function UserFormDetails(props) {
               body = _objectSpread(_objectSpread({}, values), {}, {
                 channel: 2
               });
-              console.log(useSessionUser && refreshSessionUser ? session.user.id : userId, '(useSessionUser && refreshSessionUser) ? session.user.id : userId');
+              console.log((props === null || props === void 0 ? void 0 : (_props$userData4 = props.userData) === null || _props$userData4 === void 0 ? void 0 : _props$userData4.id) || userState.result.result.id, 'props?.userData?.id || userState.result.result.id');
               _context4.prev = 2;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: true
               }));
               _context4.next = 6;
-              return fetch("".concat(ordering.root, "/users/").concat(useSessionUser && refreshSessionUser ? session.user.id : userId, "/verify"), {
+              return fetch("".concat(ordering.root, "/users/").concat((props === null || props === void 0 ? void 0 : (_props$userData5 = props.userData) === null || _props$userData5 === void 0 ? void 0 : _props$userData5.id) || userState.result.result.id, "/verify"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

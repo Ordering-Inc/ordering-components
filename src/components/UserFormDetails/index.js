@@ -330,10 +330,10 @@ export const UserFormDetails = (props) => {
       ...values,
       channel: 2
     }
-    console.log((useSessionUser && refreshSessionUser) ? session.user.id : userId, '(useSessionUser && refreshSessionUser) ? session.user.id : userId')
+    console.log(props?.userData?.id || userState.result.result.id, 'props?.userData?.id || userState.result.result.id')
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
-      const response = await fetch(`${ordering.root}/users/${(useSessionUser && refreshSessionUser) ? session.user.id : userId}/verify`, {
+      const response = await fetch(`${ordering.root}/users/${props?.userData?.id || userState.result.result.id}/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
