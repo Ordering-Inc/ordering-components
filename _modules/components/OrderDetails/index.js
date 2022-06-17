@@ -385,7 +385,7 @@ var OrderDetails = function OrderDetails(props) {
 
               if (!error) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  order: result,
+                  order: Object.assign(orderState.order, result),
                   loading: false
                 }));
               }
