@@ -15,6 +15,9 @@ export const WalletList = (props) => {
 
   const [state, setState] = useState({ wallets: [], loading: true, error: null })
   const [transactions, setTransactions] = useState({ list: null, loading: true, error: null })
+  const [userLoyaltyLevel, setUserLoyaltyLevel] = useState({ loading: true, error: null, loyaltyLevel: null })
+
+  const userProps = ['loyalty_level']
 
   const getTransactions = async (walletId) => {
     if (transactions.list?.[`wallet:${walletId}`]) return
@@ -81,7 +84,7 @@ export const WalletList = (props) => {
         ...state,
         loading: false,
         error: error ? result : null,
-        wallets: error ? null : result,
+        wallets: error ? null : result
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
@@ -94,12 +97,31 @@ export const WalletList = (props) => {
     }
   }
 
+  const getUserLoyaltyLevel = async () => {
+    try {
+      const { content: { result, error } } = await ordering.users(user.id).select(userProps).get()
+      setUserLoyaltyLevel({
+        ...userLoyaltyLevel,
+        loading: false,
+        loyaltyLevel: error ? null : result?.loyalty_level,
+        error: error ? result : null
+      })
+    } catch (error) {
+      setUserLoyaltyLevel({
+        ...userLoyaltyLevel,
+        loading: false,
+        error
+      })
+    }
+  }
+
   useEffect(() => {
+    getUserLoyaltyLevel()
     getWallets()
   }, [])
 
   useEffect(() => {
-    if (walletSelected ) {
+    if (walletSelected) {
       getTransactions(walletSelected)
     }
   }, [walletSelected])
@@ -110,8 +132,10 @@ export const WalletList = (props) => {
         <UIComponent
           {...props}
           walletList={state}
+          userLoyaltyLevel={userLoyaltyLevel}
           transactionsList={transactions}
           setWalletSelected={setWalletSelected}
+          getWallets={getWallets}
         />
       )}
     </>

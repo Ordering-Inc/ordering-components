@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useEvent } from '../../contexts/EventContext'
@@ -15,17 +15,35 @@ export const NewOrderNotification = (props) => {
 
   useEffect(() => {
     if (!token) return
+    const handleActionEvent = (event, value) => {
+      const evts = {
+        messages: 'message_added_notification',
+        order_added: 'order_added_notification',
+        order_updated: 'order_updated_notification'
+      }
+      events.emit(evts[event], value)
+    }
 
-    const messagesOrdersRoom =
-      user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
-    const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`
+    socket.on('message', (e) => handleActionEvent('messages', e))
+    socket.on('orders_register', (e) => handleActionEvent('order_added', e))
+    socket.on('update_order', (e) => handleActionEvent('order_updated', e))
 
-    socket.on('disconnect', (reason) => {
-      socket.join(
-        user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
-      )
+    return () => {
+      socket.off('message', (e) => handleActionEvent('messages', e))
+      socket.off('orders_register', (e) => handleActionEvent('order_added', e))
+      socket.off('update_order', (e) => handleActionEvent('order_updated', e))
+    }
+  }, [socket, user])
+
+  useEffect(() => {
+    if (!token) return
+    socket.on('disconnect', () => {
+      socket.join(user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`)
       socket.join(user?.level === 0 ? 'orders' : `orders_${user?.id}`)
     })
+
+    const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
+    const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`
 
     socket.join(messagesOrdersRoom)
     socket.join(ordersRoom)
@@ -33,30 +51,6 @@ export const NewOrderNotification = (props) => {
     return () => {
       socket.leave(messagesOrdersRoom)
       socket.leave(ordersRoom)
-    }
-  }, [socket, user])
-
-  const handleMessage = useCallback(async (message) => {
-    events.emit('message_added_noification', message)
-  }, [])
-
-  const handleOrder = useCallback(async (order) => {
-    events.emit('order_added_noification', order)
-  }, [])
-
-  const handleUpdateOrder = useCallback(async (order) => {
-    events.emit('order_updated_noification', order)
-  }, [])
-
-  useEffect(() => {
-    socket.on('message', handleMessage)
-    socket.on('orders_register', handleOrder)
-    socket.on('update_order', handleUpdateOrder)
-
-    return () => {
-      socket.off('message', handleMessage)
-      socket.off('update_order', handleUpdateOrder)
-      socket.on('orders_register', handleOrder)
     }
   }, [socket, user])
 

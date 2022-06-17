@@ -8,7 +8,6 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useOrder } from '../../contexts/OrderContext'
 
-
 export const OrderDetails = (props) => {
   const {
     orderId,
@@ -50,7 +49,7 @@ export const OrderDetails = (props) => {
     pickup: {
       text: 'outside pickup area, insert reasons to force update',
       value: 9
-    },
+    }
   }
 
   const requestsState = {}
@@ -140,7 +139,11 @@ export const OrderDetails = (props) => {
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderState.order?.id ?? orderId).save(bodyToSend)
 
       if (!error) {
-        setOrderState({ ...orderState, order: result, loading: false })
+        setOrderState({
+          ...orderState,
+          order: Object.assign(orderState.order, result),
+          loading: false
+        })
       }
       if (error) {
         const selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery
@@ -306,7 +309,7 @@ export const OrderDetails = (props) => {
     }
   }
 
-
+  
   const handleReorder = async (orderId) => {
     if (!orderId) return
     try {

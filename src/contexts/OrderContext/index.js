@@ -80,7 +80,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           franchise_id: franchiseId
         }
       }
-      const { content: { error, result } } = await ordering.setAccessToken(session.token).orderOptions().get(options)
+      const res = await ordering.setAccessToken(session.token).orderOptions().get(options)
+      const error = res?.content?.error
+      const result = res?.content?.result
+
       if (!error) {
         const { carts, ...options } = result
         state.carts = {}
@@ -94,7 +97,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       if (error) {
         setAlert({ show: true, content: result })
-        if (result?.[0] === 'You do not have permission.') {
+        if (res?.status === 401) {
           session.auth && logout()
         }
       }
@@ -769,12 +772,12 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       ...state,
       loading: false,
       options: isDisabledDefaultOpts
-      ? { type: null, moment: null }
-      : {
-        type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
-        moment: optionsLocalStorage?.moment || null,
-        address: optionsLocalStorage?.address || state?.options?.address || {}
-      }
+        ? { type: null, moment: null }
+        : {
+          type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
+          moment: optionsLocalStorage?.moment || null,
+          address: optionsLocalStorage?.address || state?.options?.address || {}
+        }
     })
   }
 

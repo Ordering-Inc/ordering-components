@@ -33,7 +33,7 @@ export const OrderListGroups = (props) => {
 
   const ordersGroupStatus = {
     pending: orderGroupStatusCustom?.pending ?? [0, 13],
-    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21],
+    inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23],
     completed: orderGroupStatusCustom?.completed ?? [1, 11, 15],
     cancelled: orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
   }
@@ -729,6 +729,8 @@ export const OrderListGroups = (props) => {
 
     socket.on('orders_register', handleAddNewOrder)
     socket.on('update_order', handleUpdateOrder)
+    const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
+    socket.join(ordersRoom)
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)

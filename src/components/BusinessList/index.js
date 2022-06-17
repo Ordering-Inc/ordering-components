@@ -49,11 +49,11 @@ export const BusinessList = (props) => {
   const [ordering] = useApi()
   const [{ token }] = useSession()
   const [requestsState, setRequestsState] = useState({})
-  const [, { refreshConfigs }] = useConfig()
+  const [{ configs }, { refreshConfigs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
-
+  const advancedSearchEnabled = configs?.advanced_business_search_enabled?.value === '1'
   const sortBusinesses = (array, option) => {
     if (option === 'review') {
       return array.sort((a, b) => b.reviews.total - a.reviews.total)
@@ -78,6 +78,14 @@ export const BusinessList = (props) => {
         parameters = {
           ...parameters,
           orderBy: orderByValue
+        }
+      }
+      if (searchValue?.length >= 3 && advancedSearchEnabled) {
+        parameters = {
+          ...parameters,
+          term: searchValue,
+          order_type_id: orderState?.options?.type,
+          location: JSON.stringify({ lat: orderState.options?.address?.location?.lat, lng: orderState.options?.address?.location?.lng })
         }
       }
       if (!isSortByReview && !isOfferBusinesses) {
@@ -198,14 +206,16 @@ export const BusinessList = (props) => {
       const source = {}
       requestsState.businesses = source
       setRequestsState({ ...requestsState })
-      const fetchEndpoint = where && asDashboard
-        ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard()
-        : where && !asDashboard
-          ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
-          : !where && asDashboard
-            ? ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
-            : ordering.businesses().select(propsToFetch).parameters(parameters)
-      const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
+
+      const fetchEndpoint = (advancedSearchEnabled && searchValue?.length >= 3) || (!where && !asDashboard)
+        ? ordering.businesses().select(propsToFetch).parameters(parameters)
+        : where && asDashboard
+          ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard()
+          : where && !asDashboard
+            ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
+            : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
+
+      const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source, advancedSearch: advancedSearchEnabled && searchValue?.length >= 3 })
       if (isSortByReview) {
         const _result = sortBusinesses(result, 'review')
         businessesList.businesses = _result
@@ -280,7 +290,7 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation && !asDashboard))) return
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
@@ -476,6 +486,6 @@ BusinessList.propTypes = {
 }
 
 BusinessList.defaultProps = {
-  propsToFetch: ['id', 'name', 'header', 'logo', 'location', 'schedule', 'open', 'delivery_price', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers', 'food', 'laundry', 'alcohol', 'groceries', 'slug'],
+  propsToFetch: ['id', 'name', 'header', 'logo', 'location', 'schedule', 'open', 'ribbon', 'delivery_price', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers', 'food', 'laundry', 'alcohol', 'groceries', 'slug'],
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' }
 }

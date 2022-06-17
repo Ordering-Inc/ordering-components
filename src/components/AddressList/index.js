@@ -136,6 +136,7 @@ export const AddressList = (props) => {
           actionStatus={actionStatus}
           handleSetDefault={handleSetDefault}
           handleDelete={handleDelete}
+          loadAddresses={loadAddresses}
         />
       )}
     </>

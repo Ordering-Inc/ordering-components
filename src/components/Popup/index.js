@@ -11,7 +11,8 @@ export const Popup = (props) => {
     open,
     backdropClassName,
     closeOnBackdrop,
-    onClose
+    onClose,
+    isSideBar
   } = props
 
   const modalRef = useRef(null)
@@ -56,7 +57,13 @@ export const Popup = (props) => {
     if (isFirst) {
       const modalRoot = window.document.getElementById('app-modals')
       if (modalRoot) {
-        modalRoot.remove()
+        if (isSideBar) {
+          setTimeout(() => {
+            modalRoot.remove()
+          }, 250)
+        } else {
+          modalRoot.remove()
+        }
       }
       window.document.body.style.overflow = defaultOverflow
       window.document.body.style.paddingRight = defaultPaddingRight

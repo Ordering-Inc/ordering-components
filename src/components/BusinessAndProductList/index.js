@@ -24,7 +24,8 @@ export const BusinessAndProductList = (props) => {
     location
   } = props
 
-  const [orderState] = useOrder()
+  const [orderState, { removeProduct }] = useOrder()
+  const [alertState, setAlertState] = useState({ open: false, content: [] })
   const [{ configs }] = useConfig()
   const [languageState, t] = useLanguage()
 
@@ -279,7 +280,7 @@ export const BusinessAndProductList = (props) => {
       ? functionFetch.parameters(parameters).where(where)
       : functionFetch.parameters(parameters)
 
-    promises.push(await productEndpoint.get())
+    promises.push(await productEndpoint.get({ cancelToken: source }))
 
     if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
       parameters.params = 'features'
@@ -287,7 +288,7 @@ export const BusinessAndProductList = (props) => {
         ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where)
         : ordering.businesses(businessState.business.id).products().parameters(parameters)
 
-      promises.push(await productEndpoint.get())
+      promises.push(await productEndpoint.get({ cancelToken: source }))
     }
 
     return promises
@@ -463,12 +464,12 @@ export const BusinessAndProductList = (props) => {
             totalPages: pagination.total_pages
           },
           loading: false,
-          products: curCategoryState.products.concat(result)
+          products: [...curCategoryState.products, ...result]
         }
 
         categoriesState[categoryKey] = newcategoryState
-        categoryState = newcategoryState
-        setCategoryState({ ...newcategoryState })
+        categoryState = { ...categoryState, ...newcategoryState }
+        setCategoryState({ ...categoryState, ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
         const isFeatured = categoriesState.all.products.some(product => product.featured) ||
@@ -627,11 +628,21 @@ export const BusinessAndProductList = (props) => {
     }
   }
 
+  const multiRemoveProducts = async (unavailableProducts, carts) => {
+    const allPromise = []
+    unavailableProducts.forEach(product => {
+      allPromise.push(new Promise((resolve, reject) => {
+        resolve(removeProduct(product, carts))
+      }))
+    })
+    await Promise.all(allPromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCT', 'This product is not available.')] })
+  }
+
   useEffect(() => {
     if (!businessState.loading) {
       loadProducts({ newFetch: true })
     }
-  }, [businessState])
+  }, [businessState.loading])
 
   useEffect(() => {
     loadProducts({ newFetch: !!searchValue })
@@ -732,6 +743,9 @@ export const BusinessAndProductList = (props) => {
           handleChangeFilterByMenus={handleChangeFilterByMenus}
           getNextProducts={loadMoreProducts}
           updateProductModal={(val) => setProductModal({ ...productModal, product: val })}
+          multiRemoveProducts={multiRemoveProducts}
+          setAlertState={setAlertState}
+          alertState={alertState}
         />
       )}
     </>
