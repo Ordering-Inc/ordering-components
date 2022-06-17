@@ -139,7 +139,11 @@ export const OrderDetails = (props) => {
       const { content: { result, error } } = await ordering.setAccessToken(token).orders(orderState.order?.id ?? orderId).save(bodyToSend)
 
       if (!error) {
-        setOrderState({ ...orderState, order: result, loading: false })
+        setOrderState({
+          ...orderState,
+          order: Object.assign(orderState.order, result),
+          loading: false
+        })
       }
       if (error) {
         const selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery
