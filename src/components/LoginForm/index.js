@@ -67,7 +67,7 @@ export const LoginForm = (props) => {
       if (loginTab === 'otp') {
         _credentials = {
           [otpType]: values && values[otpType] || credentials[otpType],
-          one_time_password: otpState
+          one_time_password: values && values?.code || otpState
         }
       } else {
         _credentials = {
@@ -105,7 +105,6 @@ export const LoginForm = (props) => {
       }
 
       const { content: { error, result } } = await ordering.users().auth(_credentials)
-
       if (isReCaptchaEnable) {
         window.grecaptcha.reset()
         setReCaptchaValue(null)
@@ -285,30 +284,43 @@ export const LoginForm = (props) => {
     }
   }
 
-  const generateOtpCode = async (cellphone, countryPhoneCode) => {
+  const generateOtpCode = async (values) => {
     const body = {
       type: 4,
       channel: otpType === 'email' ? 1 : 2,
       size: 6
     }
-    if (otpType === 'cellphone') {
-      body.country_phone_code = countryPhoneCode
-      body.cellphone = cellphone
-    } else {
-      body.email = credentials.email
+    const email = values?.email || credentials?.email
+    const cellphone = values?.cellphone || credentials.country_phone_cod
+    const countryPhoneCode = values?.countryPhoneCode || values?.country_phone_code || credentials?.cellphone
+    try {
+      if (otpType === 'cellphone') {
+        body.country_phone_code = countryPhoneCode
+        body.cellphone = cellphone
+        setCredentials({
+          cellphone,
+          country_phone_code: countryPhoneCode
+        })
+      } else {
+        body.email = email
+        setCredentials({
+          email
+        })
+      }
+      const response = await fetch(`${ordering.root}/codes/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: result, error: null } })
+        return
+      }
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result } })
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message } })
     }
-    const response = await fetch(`${ordering.root}/codes/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-    const { result, error } = await response.json()
-
-    if (!error) {
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: result, error: null } })
-      return
-    }
-    setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result } })
   }
 
   return (
@@ -335,6 +347,8 @@ export const LoginForm = (props) => {
           generateOtpCode={generateOtpCode}
           setOtpState={setOtpState}
           otpState={otpState}
+          useLoginOtpEmail={useLoginOtpEmail}
+          useLoginOtpCellphone={useLoginOtpCellphone}
         />
       )}
     </>
