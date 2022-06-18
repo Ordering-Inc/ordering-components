@@ -12,9 +12,9 @@ export const PaymentOptionWallet = (props) => {
   const [ordering] = useApi()
   const [orderState, { setStateValues }] = useOrder()
   const [{ token, user }] = useSession()
-  const requestsState = {}
 
   const [walletsState, setWalletsState] = useState({ result: [], loyaltyPlans: [], loading: true, error: null })
+  const [errorState, setErrorState] = useState(null)
 
   const getRedemptionRate = (wallet, loyaltyPlans) => {
     if (wallet.type === 'cash') return 100
@@ -104,21 +104,20 @@ export const PaymentOptionWallet = (props) => {
             Authorization: `Bearer ${token}`
           },
           body: JSON.stringify({
-            wallet_id: wallet.id,
-            // amount: wallet.balance
+            wallet_id: wallet.id
           })
         }
       )
       const { error, result } = await response.json()
-      if (!error) {
-        let carts = orderState.carts
-        carts[`businessId:${result.business_id}`] = result
-        setStateValues({ carts })
+      if (error) {
+        setErrorState(result)
+        return
       }
+      const carts = orderState.carts
+      carts[`businessId:${result.business_id}`] = result
+      setStateValues({ carts })
     } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        console.log(err);
-      }
+      setErrorState([err?.message])
     }
   }
 
@@ -131,19 +130,19 @@ export const PaymentOptionWallet = (props) => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`
-          },
+          }
         }
       )
       const { error, result } = await response.json()
-      if (!error) {
-        let carts = orderState.carts
-        carts[`businessId:${result.business_id}`] = result
-        setStateValues({ carts })
+      if (error) {
+        setErrorState(result)
+        return
       }
+      const carts = orderState.carts
+      carts[`businessId:${result.business_id}`] = result
+      setStateValues({ carts })
     } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        console.log(err);
-      }
+      setErrorState([err?.message])
     }
   }
 
@@ -156,6 +155,8 @@ export const PaymentOptionWallet = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          errorState={errorState}
+          setErrorState={setErrorState}
           walletsState={walletsState}
           selectWallet={selectWallet}
           deletetWalletSelected={deletetWalletSelected}
