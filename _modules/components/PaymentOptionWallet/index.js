@@ -64,8 +64,6 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
       token = _useSession2$.token,
       user = _useSession2$.user;
 
-  var requestsState = {};
-
   var _useState = (0, _react.useState)({
     result: [],
     loyaltyPlans: [],
@@ -75,6 +73,11 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
       _useState2 = _slicedToArray(_useState, 2),
       walletsState = _useState2[0],
       setWalletsState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      errorState = _useState4[0],
+      setErrorState = _useState4[1];
 
   var getRedemptionRate = function getRedemptionRate(wallet, loyaltyPlans) {
     var _businessLoyaltyPlan$;
@@ -206,8 +209,7 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                   Authorization: "Bearer ".concat(token)
                 },
                 body: JSON.stringify({
-                  wallet_id: wallet.id // amount: wallet.balance
-
+                  wallet_id: wallet.id
                 })
               });
 
@@ -222,30 +224,33 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
               result = _yield$response$json2.result;
 
               if (!error) {
-                carts = orderState.carts;
-                carts["businessId:".concat(result.business_id)] = result;
-                setStateValues({
-                  carts: carts
-                });
+                _context2.next = 12;
+                break;
               }
 
-              _context2.next = 15;
-              break;
+              setErrorState(result);
+              return _context2.abrupt("return");
 
             case 12:
-              _context2.prev = 12;
+              carts = orderState.carts;
+              carts["businessId:".concat(result.business_id)] = result;
+              setStateValues({
+                carts: carts
+              });
+              _context2.next = 20;
+              break;
+
+            case 17:
+              _context2.prev = 17;
               _context2.t0 = _context2["catch"](0);
+              setErrorState([_context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message]);
 
-              if (_context2.t0.constructor.name !== 'Cancel') {
-                console.log(_context2.t0);
-              }
-
-            case 15:
+            case 20:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 12]]);
+      }, _callee2, null, [[0, 17]]);
     }));
 
     return function selectWallet(_x) {
@@ -282,30 +287,33 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
               result = _yield$response$json3.result;
 
               if (!error) {
-                carts = orderState.carts;
-                carts["businessId:".concat(result.business_id)] = result;
-                setStateValues({
-                  carts: carts
-                });
+                _context3.next = 12;
+                break;
               }
 
-              _context3.next = 15;
-              break;
+              setErrorState(result);
+              return _context3.abrupt("return");
 
             case 12:
-              _context3.prev = 12;
+              carts = orderState.carts;
+              carts["businessId:".concat(result.business_id)] = result;
+              setStateValues({
+                carts: carts
+              });
+              _context3.next = 20;
+              break;
+
+            case 17:
+              _context3.prev = 17;
               _context3.t0 = _context3["catch"](0);
+              setErrorState([_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message]);
 
-              if (_context3.t0.constructor.name !== 'Cancel') {
-                console.log(_context3.t0);
-              }
-
-            case 15:
+            case 20:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 12]]);
+      }, _callee3, null, [[0, 17]]);
     }));
 
     return function deletetWalletSelected(_x2) {
@@ -317,6 +325,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
     getWallets();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    errorState: errorState,
+    setErrorState: setErrorState,
     walletsState: walletsState,
     selectWallet: selectWallet,
     deletetWalletSelected: deletetWalletSelected
