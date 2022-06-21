@@ -209,38 +209,25 @@ var PlaceSpot = function PlaceSpot(props) {
   }();
 
   var handleChangePlace = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(place) {
-      var uuid, response, _yield$response$json, result, error;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(place, isOrder) {
+      var _bodyToSend, id, bodyToSend, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              uuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
-              _context2.next = 4;
-              return fetch("".concat(ordering.root, "/carts/").concat(uuid), {
-                'Content-Type': 'application/json',
-                method: 'PUT',
-                body: JSON.stringify({
-                  place: place,
-                  place_id: place === null || place === void 0 ? void 0 : place.id
-                }),
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
-                }
-              });
+              id = isOrder ? cart === null || cart === void 0 ? void 0 : cart.id : cart === null || cart === void 0 ? void 0 : cart.uuid;
+              bodyToSend = (_bodyToSend = {}, _defineProperty(_bodyToSend, isOrder ? 'status' : 'place', isOrder ? cart === null || cart === void 0 ? void 0 : cart.status : place), _defineProperty(_bodyToSend, "place_id", place === null || place === void 0 ? void 0 : place.id), _bodyToSend);
+              endpointToFetch = isOrder ? ordering.setAccessToken(token).orders(id).save(bodyToSend) : ordering.setAccessToken(token).carts(id).set(bodyToSend);
+              _context2.next = 6;
+              return endpointToFetch;
 
-            case 4:
-              response = _context2.sent;
-              _context2.next = 7;
-              return response.json();
-
-            case 7:
-              _yield$response$json = _context2.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
+            case 6:
+              _yield$endpointToFetc = _context2.sent;
+              _yield$endpointToFetc2 = _yield$endpointToFetc.content;
+              error = _yield$endpointToFetc2.error;
+              result = _yield$endpointToFetc2.result;
 
               if (!error) {
                 _context2.next = 13;
@@ -267,7 +254,7 @@ var PlaceSpot = function PlaceSpot(props) {
       }, _callee2, null, [[0, 15]]);
     }));
 
-    return function handleChangePlace(_x) {
+    return function handleChangePlace(_x, _x2) {
       return _ref2.apply(this, arguments);
     };
   }();
