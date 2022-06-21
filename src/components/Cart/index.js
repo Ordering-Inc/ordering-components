@@ -64,7 +64,7 @@ export const Cart = (props) => {
    * Calc balance by product id
    */
   const getProductMax = (product) => {
-    const productMax = (product.inventoried ? product.stock : maxCartProductConfig)
+    const productMax = (product.inventoried ? product.stock > 999 ? 999 : product.stock : maxCartProductConfig)
     const max = product.quantity + productMax - product.balance
     return max < product.quantity ? product.quantity : max
   }
