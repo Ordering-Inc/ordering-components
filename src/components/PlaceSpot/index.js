@@ -83,23 +83,17 @@ export const PlaceSpot = (props) => {
     }
   }
 
-  const handleChangePlace = async (place) => {
+  const handleChangePlace = async (place, isOrder) => {
     try {
-      const uuid = cart?.uuid
-      const response = await fetch(`${ordering.root}/carts/${uuid}`, {
-        'Content-Type': 'application/json',
-        method: 'PUT',
-        body: JSON.stringify({
-          place: place,
-          place_id: place?.id
-
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const { result, error } = await response.json()
+      const id = isOrder ? cart?.id : cart?.uuid
+      const bodyToSend = {
+        [isOrder ? 'status' : 'place']: isOrder ? cart?.status : place,
+        place_id: place?.id
+      }
+      const endpointToFetch = isOrder
+        ? ordering.setAccessToken(token).orders(id).save(bodyToSend)
+        : ordering.setAccessToken(token).carts(id).set(bodyToSend)
+      const { content: { error, result } } = await endpointToFetch
       if (error) {
         showToast(ToastType.Error, result)
         return
