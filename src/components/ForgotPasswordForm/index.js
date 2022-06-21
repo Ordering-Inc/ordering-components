@@ -99,6 +99,7 @@ export const ForgotPasswordForm = (props) => {
           hanldeChangeInput={hanldeChangeInput}
           enableReCaptcha={isReCaptchaEnable}
           handleReCaptcha={setReCaptchaValue}
+          reCaptchaValue={reCaptchaValue}
           handleButtonForgotPasswordClick={handleButtonForgotPasswordClick || handleForgotPasswordClick}
         />
       )}
