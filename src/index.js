@@ -5,7 +5,6 @@ import { AnalyticsSegment } from './components/AnalyticsSegment'
 import { BaseComponent } from './components/BaseComponent'
 import { BusinessAndProductList } from './components/BusinessAndProductList'
 import { BusinessBasicInformation } from './components/BusinessBasicInformation'
-import { BusinessBrandFilter } from './components/BusinessBrandFilter'
 import { BusinessController } from './components/BusinessController'
 import { BusinessList } from './components/BusinessList'
 import { BusinessInformation } from './components/BusinessInformation'
@@ -122,7 +121,6 @@ export {
   BaseComponent,
   BusinessAndProductList,
   BusinessBasicInformation,
-  BusinessBrandFilter,
   BusinessController,
   BusinessList,
   BusinessInformation,

@@ -69,12 +69,6 @@ Object.defineProperty(exports, "BusinessBasicInformation", {
     return _BusinessBasicInformation.BusinessBasicInformation;
   }
 });
-Object.defineProperty(exports, "BusinessBrandFilter", {
-  enumerable: true,
-  get: function get() {
-    return _BusinessBrandFilter.BusinessBrandFilter;
-  }
-});
 Object.defineProperty(exports, "BusinessContext", {
   enumerable: true,
   get: function get() {
@@ -869,8 +863,6 @@ var _BaseComponent = require("./components/BaseComponent");
 var _BusinessAndProductList = require("./components/BusinessAndProductList");
 
 var _BusinessBasicInformation = require("./components/BusinessBasicInformation");
-
-var _BusinessBrandFilter = require("./components/BusinessBrandFilter");
 
 var _BusinessController = require("./components/BusinessController");
 
