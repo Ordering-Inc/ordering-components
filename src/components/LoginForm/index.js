@@ -61,13 +61,18 @@ export const LoginForm = (props) => {
       handleCustomLogin(values || credentials, loginTab)
       return
     }
-
     try {
       let _credentials
       if (loginTab === 'otp') {
         _credentials = {
           [otpType]: values && values[otpType] || credentials[otpType],
           one_time_password: values && values?.code || otpState
+        }
+        if (otpType === 'cellphone') {
+          _credentials = {
+            ..._credentials,
+            country_phone_code: values && values?.country_phone_code || credentials?.country_phone_code,
+          }
         }
       } else {
         _credentials = {
@@ -292,8 +297,9 @@ export const LoginForm = (props) => {
       size: 6
     }
     const email = values?.email || credentials?.email
-    const cellphone = values?.cellphone || credentials.country_phone_cod
-    const countryPhoneCode = values?.countryPhoneCode || values?.country_phone_code || credentials?.cellphone
+    const cellphone = values?.cellphone || credentials?.cellphone
+    const countryPhoneCode = values?.countryPhoneCode || values?.country_phone_code || credentials.country_phone_code
+
     try {
       if (otpType === 'cellphone') {
         body.country_phone_code = countryPhoneCode
