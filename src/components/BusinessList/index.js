@@ -68,7 +68,7 @@ export const BusinessList = (props) => {
     try {
       setBusinessesList({ ...businessesList, loading: true })
       refreshConfigs()
-      let parameters = {
+      let parameters = asDashboard ? {} : {
         location: !customLocation
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : `${customLocation.lat},${customLocation.lng}`,
@@ -290,14 +290,14 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation && !asDashboard))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
 
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true)
     }
