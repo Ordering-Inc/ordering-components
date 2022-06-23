@@ -21,7 +21,11 @@ export const BusinessSearchList = (props) => {
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [{ token }] = useSession()
-  const [filters, setFilters] = useState({ business_types: [], orderBy: 'distance' })
+  const [filters, setFilters] = useState({
+    business_types: [],
+    orderBy: 'distance',
+    franchise_ids: []
+  })
   const [termValue, setTermValue] = useState('')
 
   useEffect(() => {
