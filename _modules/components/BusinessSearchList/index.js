@@ -73,16 +73,29 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useState2 = _slicedToArray(_useState, 2),
       businessesSearchList = _useState2[0],
       setBusinessesSearchList = _useState2[1];
+  /**
+   * brandList, this must be contain a brands, loading and error to send UIComponent
+   */
+
 
   var _useState3 = (0, _react.useState)({
+    loading: true,
+    brands: [],
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      brandList = _useState4[0],
+      setBrandList = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     currentPage: 1,
     pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
     totalItems: null,
     totalPages: null
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      paginationProps = _useState4[0],
-      setPaginationProps = _useState4[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      paginationProps = _useState6[0],
+      setPaginationProps = _useState6[1];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -96,19 +109,19 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
-  var _useState5 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
     business_types: [],
     orderBy: 'distance',
     franchise_ids: []
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      filters = _useState6[0],
-      setFilters = _useState6[1];
-
-  var _useState7 = (0, _react.useState)(''),
       _useState8 = _slicedToArray(_useState7, 2),
-      termValue = _useState8[0],
-      setTermValue = _useState8[1];
+      filters = _useState8[0],
+      setFilters = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(''),
+      _useState10 = _slicedToArray(_useState9, 2),
+      termValue = _useState10[0],
+      setTermValue = _useState10[1];
 
   (0, _react.useEffect)(function () {
     !lazySearch && handleSearchbusinessAndProducts(true);
@@ -240,19 +253,6 @@ var BusinessSearchList = function BusinessSearchList(props) {
     };
   }();
   /**
-  * brandList, this must be contain a brands, loading and error to send UIComponent
-  */
-
-
-  var _useState9 = (0, _react.useState)({
-    loading: true,
-    brands: [],
-    error: null
-  }),
-      _useState10 = _slicedToArray(_useState9, 2),
-      brandList = _useState10[0],
-      setBrandList = _useState10[1];
-  /**
   * Function to get brand list from API
   */
 
@@ -289,9 +289,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
               if (!content.error) {
                 setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
                   loading: false,
-                  brands: content === null || content === void 0 ? void 0 : content.result.filter(function (brand) {
-                    return brand === null || brand === void 0 ? void 0 : brand.enabled;
-                  }),
+                  brands: content === null || content === void 0 ? void 0 : content.result,
                   error: null
                 }));
               } else {

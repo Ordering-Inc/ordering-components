@@ -12,6 +12,10 @@ export const BusinessSearchList = (props) => {
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
+  /**
+   * brandList, this must be contain a brands, loading and error to send UIComponent
+   */
+  const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
   const [paginationProps, setPaginationProps] = useState({
     currentPage: 1,
     pageSize: paginationSettings.pageSize ?? 10,
@@ -119,11 +123,6 @@ export const BusinessSearchList = (props) => {
   }
 
   /**
- * brandList, this must be contain a brands, loading and error to send UIComponent
- */
-  const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
-
-  /**
   * Function to get brand list from API
   */
   const getBrandList = async () => {
@@ -145,7 +144,7 @@ export const BusinessSearchList = (props) => {
         setBrandList({
           ...brandList,
           loading: false,
-          brands: content?.result.filter(brand => brand?.enabled),
+          brands: content?.result,
           error: null
         })
       } else {
