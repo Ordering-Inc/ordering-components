@@ -196,7 +196,7 @@ var BusinessList = function BusinessList(props) {
                 loading: true
               }));
               refreshConfigs();
-              parameters = {
+              parameters = asDashboard ? {} : {
                 location: !customLocation ? "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng) : "".concat(customLocation.lat, ",").concat(customLocation.lng),
                 type: !initialOrderType ? ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1 : initialOrderType
               };
@@ -489,7 +489,7 @@ var BusinessList = function BusinessList(props) {
   (0, _react.useEffect)(function () {
     var _orderState$options12, _orderState$options13;
 
-    if (orderState.loading || !((_orderState$options12 = orderState.options) !== null && _orderState$options12 !== void 0 && (_orderState$options13 = _orderState$options12.address) !== null && _orderState$options13 !== void 0 && _orderState$options13.location) && !customLocation && !asDashboard) return;
+    if (orderState.loading || !((_orderState$options12 = orderState.options) !== null && _orderState$options12 !== void 0 && (_orderState$options13 = _orderState$options12.address) !== null && _orderState$options13 !== void 0 && _orderState$options13.location) && !asDashboard && !customLocation) return;
 
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
@@ -498,7 +498,7 @@ var BusinessList = function BusinessList(props) {
   (0, _react.useEffect)(function () {
     var _orderState$options14, _orderState$options15;
 
-    if (orderState.loading || !((_orderState$options14 = orderState.options) !== null && _orderState$options14 !== void 0 && (_orderState$options15 = _orderState$options14.address) !== null && _orderState$options15 !== void 0 && _orderState$options15.location) && !customLocation) return;
+    if (orderState.loading || !((_orderState$options14 = orderState.options) !== null && _orderState$options14 !== void 0 && (_orderState$options15 = _orderState$options14.address) !== null && _orderState$options15 !== void 0 && _orderState$options15.location) && !asDashboard && !customLocation) return;
 
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true);
