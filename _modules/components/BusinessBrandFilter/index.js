@@ -65,7 +65,7 @@ var BusinessBrandFilter = function BusinessBrandFilter(props) {
 
 
   var _useState = (0, _react.useState)({
-    loading: false,
+    loading: true,
     brands: [],
     error: null
   }),

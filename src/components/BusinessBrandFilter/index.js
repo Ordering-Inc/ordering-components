@@ -16,7 +16,7 @@ export const BusinessBrandFilter = (props) => {
   /**
    * This state save brand list from API
    */
-  const [brandList, setBrandList] = useState({ loading: false, brands: [], error: null })
+  const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
 
   /**
    * Function to get brand list
