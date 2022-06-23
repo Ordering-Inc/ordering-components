@@ -14,16 +14,17 @@ export const BusinessBrandFilter = (props) => {
   const [{ token }] = useSession()
 
   /**
-   * This state save brand list from API
+   * brandList, this must be contain a brands, loading and error to send UIComponent
    */
   const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
 
   /**
-   * Function to get brand list
+   * Function to get brand list from API
    */
   const getBrandList = async () => {
     try {
       setBrandList({ ...brandList, loading: true })
+
       const requestOptions = {
         method: 'GET',
         headers: {
