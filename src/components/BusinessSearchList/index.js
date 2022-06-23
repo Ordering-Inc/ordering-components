@@ -118,6 +118,56 @@ export const BusinessSearchList = (props) => {
     }
   }
 
+  /**
+ * brandList, this must be contain a brands, loading and error to send UIComponent
+ */
+  const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
+
+  /**
+  * Function to get brand list from API
+  */
+  const getBrandList = async () => {
+    try {
+      setBrandList({ ...brandList, loading: true })
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+
+      const response = await fetch(`${ordering.root}/franchises`, requestOptions)
+      const content = await response.json()
+
+      if (!content.error) {
+        setBrandList({
+          ...brandList,
+          loading: false,
+          brands: content?.result.filter(brand => brand?.enabled),
+          error: null
+        })
+      } else {
+        setBrandList({
+          ...brandList,
+          loading: false,
+          error: content?.result
+        })
+      }
+    } catch (error) {
+      setBrandList({
+        ...brandList,
+        loading: false,
+        error: error.message
+      })
+    }
+  }
+
+  useEffect(() => {
+    getBrandList()
+  }, [])
+
   return (
     <>
       {
@@ -132,6 +182,7 @@ export const BusinessSearchList = (props) => {
             handleSearchbusinessAndProducts={handleSearchbusinessAndProducts}
             handleChangeTermValue={handleChangeTermValue}
             setFilters={setFilters}
+            brandList={brandList}
           />
         )
       }

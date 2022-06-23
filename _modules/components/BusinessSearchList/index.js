@@ -239,7 +239,95 @@ var BusinessSearchList = function BusinessSearchList(props) {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+  * brandList, this must be contain a brands, loading and error to send UIComponent
+  */
 
+
+  var _useState9 = (0, _react.useState)({
+    loading: true,
+    brands: [],
+    error: null
+  }),
+      _useState10 = _slicedToArray(_useState9, 2),
+      brandList = _useState10[0],
+      setBrandList = _useState10[1];
+  /**
+  * Function to get brand list from API
+  */
+
+
+  var getBrandList = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var requestOptions, response, content;
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              _context2.next = 5;
+              return fetch("".concat(ordering.root, "/franchises"), requestOptions);
+
+            case 5:
+              response = _context2.sent;
+              _context2.next = 8;
+              return response.json();
+
+            case 8:
+              content = _context2.sent;
+
+              if (!content.error) {
+                setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                  loading: false,
+                  brands: content === null || content === void 0 ? void 0 : content.result.filter(function (brand) {
+                    return brand === null || brand === void 0 ? void 0 : brand.enabled;
+                  }),
+                  error: null
+                }));
+              } else {
+                setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                  loading: false,
+                  error: content === null || content === void 0 ? void 0 : content.result
+                }));
+              }
+
+              _context2.next = 15;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](0);
+              setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                loading: false,
+                error: _context2.t0.message
+              }));
+
+            case 15:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 12]]);
+    }));
+
+    return function getBrandList() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  (0, _react.useEffect)(function () {
+    getBrandList();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     paginationProps: paginationProps,
     businessesSearchList: businessesSearchList,
@@ -248,7 +336,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
     termValue: termValue,
     handleSearchbusinessAndProducts: handleSearchbusinessAndProducts,
     handleChangeTermValue: handleChangeTermValue,
-    setFilters: setFilters
+    setFilters: setFilters,
+    brandList: brandList
   })));
 };
 
