@@ -3,7 +3,6 @@ import { AddressForm } from '../src/components/AddressForm'
 import { AddressList } from '../src/components/AddressList'
 import { BusinessAndProductList } from '../src/components/BusinessAndProductList'
 import { BusinessBasicInformation } from '../src/components/BusinessBasicInformation'
-import { BusinessBrandFilter } from '../src/components/BusinessBrandFilter'
 import { BusinessController } from '../src/components/BusinessController'
 import { BusinessList } from '../src/components/BusinessList'
 import { BusinessInformation } from '../src/components/BusinessInformation'
@@ -101,7 +100,6 @@ export {
   AddressList,
   BusinessAndProductList,
   BusinessBasicInformation,
-  BusinessBrandFilter,
   BusinessController,
   BusinessList,
   BusinessInformation,
