@@ -142,7 +142,8 @@ var Cart = function Cart(props) {
    */
 
   var getProductMax = function getProductMax(product) {
-    var productMax = product.inventoried ? product.stock : maxCartProductConfig;
+    var fixedMaxAmount = 999;
+    var productMax = product.inventoried ? product.stock > fixedMaxAmount ? fixedMaxAmount : product.stock : maxCartProductConfig;
     var max = product.quantity + productMax - product.balance;
     return max < product.quantity ? product.quantity : max;
   };

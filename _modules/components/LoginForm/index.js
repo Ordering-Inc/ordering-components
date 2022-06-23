@@ -198,6 +198,12 @@ var LoginForm = function LoginForm(props) {
 
               if (loginTab === 'otp') {
                 _credentials = (_credentials2 = {}, _defineProperty(_credentials2, otpType, values && values[otpType] || credentials[otpType]), _defineProperty(_credentials2, "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState), _credentials2);
+
+                if (otpType === 'cellphone') {
+                  _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
+                    country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code)
+                  });
+                }
               } else {
                 _credentials = (_credentials3 = {}, _defineProperty(_credentials3, loginTab, values && values[loginTab] || credentials[loginTab]), _defineProperty(_credentials3, "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password), _credentials3);
               }
@@ -568,8 +574,8 @@ var LoginForm = function LoginForm(props) {
                 size: 6
               };
               email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
-              cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || credentials.country_phone_cod;
-              countryPhoneCode = (values === null || values === void 0 ? void 0 : values.countryPhoneCode) || (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
+              cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
+              countryPhoneCode = (values === null || values === void 0 ? void 0 : values.countryPhoneCode) || (values === null || values === void 0 ? void 0 : values.country_phone_code) || credentials.country_phone_code;
               _context4.prev = 4;
 
               if (otpType === 'cellphone') {
