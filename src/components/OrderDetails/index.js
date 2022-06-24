@@ -195,7 +195,7 @@ export const OrderDetails = (props) => {
       setOrderState({
         ...orderState,
         loading: false,
-        order: result,
+        order: Object.assign(orderState.order, result),
         error: error ? result : null
       })
     } catch (e) {
