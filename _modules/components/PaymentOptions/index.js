@@ -57,7 +57,7 @@ var paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
  */
 
 var PaymentOptions = function PaymentOptions(props) {
-  var _orderState$carts, _orderState$carts$;
+  var _orderState$carts, _orderState$carts2;
 
   var isLoading = props.isLoading,
       paymethods = props.paymethods,
@@ -80,7 +80,7 @@ var PaymentOptions = function PaymentOptions(props) {
       orderState = _useOrder2[0],
       changePaymethod = _useOrder2[1].changePaymethod;
 
-  var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts$ = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts$ === void 0 ? void 0 : _orderState$carts$.total) || 0;
+  var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts2 = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts2 === void 0 ? void 0 : _orderState$carts2.total) || 0;
 
   var _useState = (0, _react.useState)({
     paymethods: [],

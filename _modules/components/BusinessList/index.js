@@ -144,7 +144,9 @@ var BusinessList = function BusinessList(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      auth = _useSession2$.auth,
+      token = _useSession2$.token;
 
   var _useState15 = (0, _react.useState)({}),
       _useState16 = _slicedToArray(_useState15, 2),
@@ -185,7 +187,7 @@ var BusinessList = function BusinessList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, specificPagination, prev) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options7, _orderState$options8, parameters, _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, paginationParams, _orderState$options9, moment, where, conditions, _orderState$options10, _orderState$options11, searchConditions, isSpecialCharacter, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options7, _orderState$options8, parameters, _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, paginationParams, _orderState$options9, moment, where, conditions, _orderState$options10, _orderState$options11, searchConditions, isSpecialCharacter, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -355,42 +357,48 @@ var BusinessList = function BusinessList(props) {
             case 25:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
+              error = _yield$fetchEndpoint$2.error;
               result = _yield$fetchEndpoint$2.result;
               pagination = _yield$fetchEndpoint$2.pagination;
 
-              if (isSortByReview) {
-                _result = sortBusinesses(result, 'review');
-                businessesList.businesses = _result;
-              } else if (isOfferBusinesses) {
-                offerBuesinesses = result.filter(function (_business) {
-                  return (_business === null || _business === void 0 ? void 0 : _business.offers.length) > 0;
-                });
-                businessesList.businesses = offerBuesinesses;
-              } else {
-                businessesList.businesses = newFetch ? result : prev ? [].concat(_toConsumableArray(result), _toConsumableArray(businessesList.businesses)) : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
+              if (!error) {
+                if (isSortByReview) {
+                  _result = sortBusinesses(result, 'review');
+                  businessesList.businesses = _result;
+                } else if (isOfferBusinesses) {
+                  offerBuesinesses = result.filter(function (_business) {
+                    return (_business === null || _business === void 0 ? void 0 : _business.offers.length) > 0;
+                  });
+                  businessesList.businesses = offerBuesinesses;
+                } else {
+                  businessesList.businesses = newFetch ? result : prev ? [].concat(_toConsumableArray(result), _toConsumableArray(businessesList.businesses)) : [].concat(_toConsumableArray(businessesList.businesses), _toConsumableArray(result));
+                }
+
+                nextPageItems = 0;
+
+                if ((pagination === null || pagination === void 0 ? void 0 : pagination.current_page) !== (pagination === null || pagination === void 0 ? void 0 : pagination.total_pages)) {
+                  remainingItems = pagination.total - businessesList.businesses.length;
+                  nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size;
+                }
+
+                setPaginationProps(_objectSpread(_objectSpread({}, paginationProps), {}, {
+                  currentPage: pagination === null || pagination === void 0 ? void 0 : pagination.current_page,
+                  totalPages: pagination === null || pagination === void 0 ? void 0 : pagination.total_pages,
+                  totalItems: pagination === null || pagination === void 0 ? void 0 : pagination.total,
+                  nextPageItems: nextPageItems
+                }));
               }
 
-              nextPageItems = 0;
-
-              if (pagination.current_page !== pagination.total_pages) {
-                remainingItems = pagination.total - businessesList.businesses.length;
-                nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size;
-              }
-
-              setPaginationProps(_objectSpread(_objectSpread({}, paginationProps), {}, {
-                currentPage: pagination.current_page,
-                totalPages: pagination.total_pages,
-                totalItems: pagination.total,
-                nextPageItems: nextPageItems
-              }));
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-                loading: false
+                loading: false,
+                error: error,
+                result: result
               }));
-              _context.next = 39;
+              _context.next = 37;
               break;
 
-            case 36:
-              _context.prev = 36;
+            case 34:
+              _context.prev = 34;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -400,12 +408,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 39:
+            case 37:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 36]]);
+      }, _callee, null, [[0, 34]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
@@ -487,18 +495,18 @@ var BusinessList = function BusinessList(props) {
    */
 
   (0, _react.useEffect)(function () {
-    var _orderState$options12, _orderState$options13;
+    var _orderState$options12, _orderState$options13, _orderState$options14;
 
-    if (orderState.loading || !((_orderState$options12 = orderState.options) !== null && _orderState$options12 !== void 0 && (_orderState$options13 = _orderState$options12.address) !== null && _orderState$options13 !== void 0 && _orderState$options13.location) && !asDashboard && !customLocation) return;
+    if (orderState.loading || !((_orderState$options12 = orderState.options) !== null && _orderState$options12 !== void 0 && (_orderState$options13 = _orderState$options12.address) !== null && _orderState$options13 !== void 0 && _orderState$options13.location) && !asDashboard && !customLocation || auth && !(orderState !== null && orderState !== void 0 && (_orderState$options14 = orderState.options) !== null && _orderState$options14 !== void 0 && _orderState$options14.user_id)) return;
 
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
     }
   }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
   (0, _react.useEffect)(function () {
-    var _orderState$options14, _orderState$options15;
+    var _orderState$options15, _orderState$options16;
 
-    if (orderState.loading || !((_orderState$options14 = orderState.options) !== null && _orderState$options14 !== void 0 && (_orderState$options15 = _orderState$options14.address) !== null && _orderState$options15 !== void 0 && _orderState$options15.location) && !asDashboard && !customLocation) return;
+    if (orderState.loading || !((_orderState$options15 = orderState.options) !== null && _orderState$options15 !== void 0 && (_orderState$options16 = _orderState$options15.address) !== null && _orderState$options16 !== void 0 && _orderState$options16.location) && !asDashboard && !customLocation) return;
 
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true);

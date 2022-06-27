@@ -1014,7 +1014,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var applyCoupon = /*#__PURE__*/function () {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(couponData, customParams) {
-      var _state$carts$;
+      var _state$carts;
 
       var response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, content, result;
 
@@ -1038,7 +1038,7 @@ var OrderProvider = function OrderProvider(_ref) {
               throw new Error('`coupon` is required.');
 
             case 4:
-              if (!(((_state$carts$ = state.carts["businessId:".concat(couponData.business_id)]) === null || _state$carts$ === void 0 ? void 0 : _state$carts$.coupon) === couponData.coupon)) {
+              if (!(((_state$carts = state.carts["businessId:".concat(couponData.business_id)]) === null || _state$carts === void 0 ? void 0 : _state$carts.coupon) === couponData.coupon)) {
                 _context10.next = 6;
                 break;
               }
@@ -1330,7 +1330,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeDriverTip = /*#__PURE__*/function () {
     var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(businessId) {
-      var _state$carts$2;
+      var _state$carts2;
 
       var driverTipRate,
           isFixedPrice,
@@ -1367,7 +1367,7 @@ var OrderProvider = function OrderProvider(_ref) {
               throw new Error('`driverTipRate` is required.');
 
             case 6:
-              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts$2 = state.carts["businessId:".concat(businessId)]) === null || _state$carts$2 === void 0 ? void 0 : _state$carts$2.driver_tip_rate) === driverTipRate)) {
+              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts2 = state.carts["businessId:".concat(businessId)]) === null || _state$carts2 === void 0 ? void 0 : _state$carts2.driver_tip_rate) === driverTipRate)) {
                 _context13.next = 8;
                 break;
               }
@@ -1443,7 +1443,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changePaymethod = /*#__PURE__*/function () {
     var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId, paymethodId, paymethodData) {
-      var _state$carts$3;
+      var _state$carts3;
 
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
 
@@ -1475,7 +1475,7 @@ var OrderProvider = function OrderProvider(_ref) {
               throw new Error('`paymethodData` is required.');
 
             case 6:
-              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts$3 = state.carts["businessId:".concat(businessId)]) === null || _state$carts$3 === void 0 ? void 0 : _state$carts$3.paymethodId) === paymethodId)) {
+              if (!(!state.carts["businessId:".concat(businessId)] || ((_state$carts3 = state.carts["businessId:".concat(businessId)]) === null || _state$carts3 === void 0 ? void 0 : _state$carts3.paymethodId) === paymethodId)) {
                 _context14.next = 8;
                 break;
               }
