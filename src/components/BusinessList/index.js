@@ -47,7 +47,7 @@ export const BusinessList = (props) => {
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
-  const [{ token }] = useSession()
+  const [{ auth, token }] = useSession()
   const [requestsState, setRequestsState] = useState({})
   const [{ configs }, { refreshConfigs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
@@ -215,31 +215,37 @@ export const BusinessList = (props) => {
             ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
             : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
 
-      const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source, advancedSearch: advancedSearchEnabled && searchValue?.length >= 3 })
-      if (isSortByReview) {
-        const _result = sortBusinesses(result, 'review')
-        businessesList.businesses = _result
-      } else if (isOfferBusinesses) {
-        const offerBuesinesses = result.filter(_business => _business?.offers.length > 0)
-        businessesList.businesses = offerBuesinesses
-      } else {
-        businessesList.businesses = newFetch ? result : (prev ? [...result, ...businessesList.businesses] : [...businessesList.businesses, ...result])
+      const { content: { error, result, pagination } } = await fetchEndpoint.get({ cancelToken: source, advancedSearch: advancedSearchEnabled && searchValue?.length >= 3 })
+
+      if (!error) {
+        if (isSortByReview) {
+          const _result = sortBusinesses(result, 'review')
+          businessesList.businesses = _result
+        } else if (isOfferBusinesses) {
+          const offerBuesinesses = result.filter(_business => _business?.offers.length > 0)
+          businessesList.businesses = offerBuesinesses
+        } else {
+          businessesList.businesses = newFetch ? result : (prev ? [...result, ...businessesList.businesses] : [...businessesList.businesses, ...result])
+        }
+        let nextPageItems = 0
+        if (pagination?.current_page !== pagination?.total_pages) {
+          const remainingItems = pagination.total - businessesList.businesses.length
+          nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size
+        }
+        setPaginationProps({
+          ...paginationProps,
+          currentPage: pagination?.current_page,
+          totalPages: pagination?.total_pages,
+          totalItems: pagination?.total,
+          nextPageItems
+        })
       }
-      let nextPageItems = 0
-      if (pagination.current_page !== pagination.total_pages) {
-        const remainingItems = pagination.total - businessesList.businesses.length
-        nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size
-      }
-      setPaginationProps({
-        ...paginationProps,
-        currentPage: pagination.current_page,
-        totalPages: pagination.total_pages,
-        totalItems: pagination.total,
-        nextPageItems
-      })
+
       setBusinessesList({
         ...businessesList,
-        loading: false
+        loading: false,
+        error,
+        result
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
@@ -290,7 +296,7 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation)) || (auth && !orderState?.options?.user_id)) return
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
