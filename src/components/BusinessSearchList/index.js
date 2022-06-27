@@ -28,7 +28,8 @@ export const BusinessSearchList = (props) => {
   const [filters, setFilters] = useState({
     business_types: [],
     orderBy: 'distance',
-    franchise_ids: []
+    franchise_ids: [],
+    price_level: null
   })
   const [termValue, setTermValue] = useState('')
 
