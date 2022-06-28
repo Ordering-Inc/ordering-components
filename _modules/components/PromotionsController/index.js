@@ -180,6 +180,7 @@ var PromotionsController = function PromotionsController(props) {
     offersState: offersState,
     searchValue: searchValue,
     offerSelected: offerSelected,
+    loadOffers: loadOffers,
     handleSearchValue: handleSearchValue,
     setOfferSelected: setOfferSelected
   })));
