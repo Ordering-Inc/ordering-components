@@ -142,9 +142,11 @@ export const UtilsProviders = ({ children }) => {
     }
     let number = value
     if (options?.isTruncable) {
-      number = number * Math.pow(10, formatNumber.decimal)
-      number = Math.trunc(number)
-      number = number / Math.pow(10, formatNumber.decimal)
+      number = number.toString()
+      const numberParts = number.split(formatNumber.separator)
+      let decimalPart = numberParts[1] ?? ''
+      decimalPart = decimalPart.padEnd(formatNumber.decimal, '0').substring(0, formatNumber.decimal)
+      number = numberParts[0] + '.' + decimalPart
     } else {
       number = value.toFixed(formatNumber.decimal)
     }
