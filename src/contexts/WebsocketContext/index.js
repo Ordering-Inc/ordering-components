@@ -15,33 +15,50 @@ export const WebsocketContext = createContext()
  * This provider has a reducer for manage session state
  * @param {props} props
  */
-export const WebsocketProvider = ({ settings, children }) => {
+export const WebsocketProvider = ({ settings, children, strategy }) => {
   const [session] = useSession()
   const [socket, setSocket] = useState()
+  const [configs, setConfigs] = useState(settings)
 
   useEffect(() => {
     if (session.loading) return
-    if (session.auth && settings.url && settings.project) {
-      const _socket = new Socket({ ...settings, accessToken: session.token })
+    if (session.auth && configs.url && configs.project) {
+      const _socket = new Socket({ ...configs, accessToken: session.token })
       setSocket(_socket)
     }
     if (!session.auth) {
       socket && socket.close()
     }
-  }, [session])
+  }, [session, configs])
 
   useEffect(() => {
     if (socket) {
       socket.connect()
-      // Get client socket ID
-      // socket.socket.on('connect', () => {
-      //   // console.log('SOCKET CONECCTED', socket.socket.id)
-      // })
     }
     return () => {
       socket && socket.close()
     }
   }, [socket])
+
+  useEffect(() => {
+    if (session.auth) return
+    const projectInputInterval = setInterval(async () => {
+      let project = null
+      if (configs.use_root_point) {
+        project = await strategy.getItem('project_name', true)
+      } else {
+        await strategy.removeItem('project_name')
+        clearInterval(projectInputInterval)
+      }
+      if (project) {
+        setConfigs({ ...configs, project })
+        configs.project = project
+        clearInterval(projectInputInterval)
+      }
+    }, 1000)
+    return () => clearInterval(projectInputInterval);
+  }, [session])
+
   return (
     <WebsocketContext.Provider value={socket}>
       {children}
