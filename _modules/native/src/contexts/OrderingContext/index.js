@@ -71,8 +71,10 @@ var OrderingProvider = function OrderingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
+    strategy: nativeStrategy,
     settings: Object.assign(settings.socket, {
-      project: settings.project
+      project: settings.project,
+      use_root_point: settings.use_root_point
     })
   }, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
     strategy: nativeStrategy
