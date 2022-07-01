@@ -6,6 +6,8 @@ import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useOrder } from '../../contexts/OrderContext'
+
 import dayjs from 'dayjs'
 
 export const OrderList = props => {
@@ -28,6 +30,7 @@ export const OrderList = props => {
   } = props
 
   const [ordering] = useApi()
+  const [, { reorder }] = useOrder()
   const [session] = useSession()
   const [, { showToast }] = useToast()
   const socket = useWebsocket()
@@ -45,10 +48,47 @@ export const OrderList = props => {
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [updateOtherStatus, setUpdateOtherStatus] = useState([])
   const [sortBy, setSortBy] = useState({ param: orderBy, direction: orderDirection })
-
+  const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
   const profileMessage = props.profileMessages
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
+
+  const handleReorder = async (orderId) => {
+    if (!orderId) return
+    try {
+      setReorderState({
+        ...reorderState,
+        loading: true
+      })
+      const { error, result } = await reorder(orderId)
+      if (!error) {
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          result: { ...result, orderId: orderId }
+        })
+      } else {
+        const choosedOrder = orderList.orders.find(_order => _order?.id === orderId)
+        const _businessId = choosedOrder?.business_id ?? choosedOrder?.original?.business_id
+        const _businessData = await ordering.businesses(_businessId).select(['slug']).get()
+        const _businessSlug = await _businessData?.content?.result?.slug
+
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          error: true,
+          result: { ...result, orderId: orderId, business_id: _businessId, business: { slug: _businessSlug } }
+        })
+      }
+    } catch (err) {
+      setReorderState({
+        ...reorderState,
+        loading: false,
+        error: true,
+        result: [err?.message]
+      })
+    }
+  }
 
   const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
     const options = {
@@ -382,6 +422,8 @@ export const OrderList = props => {
           messages={messages}
           setMessages={setMessages}
           setUpdateOtherStatus={setUpdateOtherStatus}
+          handleReorder={handleReorder}
+          reorderState={reorderState}
         />
       )}
     </>
