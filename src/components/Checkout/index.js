@@ -124,7 +124,7 @@ export const Checkout = (props) => {
   /**
    * Method to handle click on Place order
    */
-  const handlerClickPlaceOrder = async (paymentOptions) => {
+  const handlerClickPlaceOrder = async (paymentOptions, payloadProps) => {
     let paymethodData = paymethodSelected?.data
     if (paymethodSelected?.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = {
@@ -158,6 +158,7 @@ export const Checkout = (props) => {
 
     payload = {
       ...payload,
+      ...payloadProps,
       paymethod_data: {
         ...paymethodData,
         ...paymentOptions
