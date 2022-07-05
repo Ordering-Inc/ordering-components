@@ -157,10 +157,6 @@ FavoriteOrders.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   * Businessid, this must be contains an business id for get data from API
-   */
-  businessId: PropTypes.number,
-  /**
    * Components types before products listing
    * Array of type components, the parent props will pass to these components
    */
