@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useUtils } from '../../contexts/UtilsContext'
+import { useSession } from '../../contexts/SessionContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
@@ -20,10 +23,16 @@ export const BusinessController = (props) => {
     handleCustomClick,
     isDisabledInterval,
     minutesToCloseSoon,
-    UIComponent
+    UIComponent,
+    handleUpdateBusinessList,
+    favoriteIds,
+    setFavoriteIds
   } = props
 
   const [ordering] = useApi()
+  const [{ user, token }] = useSession()
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
 
   /**
    * This must be containt business object data
@@ -45,6 +54,7 @@ export const BusinessController = (props) => {
    * timer in minutes when the business is going to close
    */
   const [businessWillCloseSoonMinutes, setBusinessWillCloseSoonMinutes] = useState(null)
+  const [actionState, setActionState] = useState({ loading: false, error: null })
 
   /**
    * Method to get business from SDK
@@ -96,6 +106,110 @@ export const BusinessController = (props) => {
    */
   const formatNumber = (num) => {
     return Math.round(num * 1e2) / 1e2
+  }
+
+  /**
+   * Method to add favorite info for user from API
+   */
+  const addFavoriteBusiness = async () => {
+    if (!businessState?.business || !user) return
+    showToast(ToastType.Info, t('LOADING', 'loading'))
+
+    try {
+      setActionState({ ...actionState, loading: true, error: null })
+      const changes = { object_id: businessState?.business?.id }
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(changes)
+      }
+
+      const response = await fetch(`${ordering.root}/users/${user?.id}/favorite_businesses`, requestOptions)
+      const content = await response.json()
+
+      if (!content.error) {
+        setActionState({ ...actionState, loading: false })
+        handleUpdateBusinessList && handleUpdateBusinessList(businessState?.business?.id, { favorite: true })
+        setBusinessState({
+          ...businessState,
+          business: {
+            ...businessState?.business,
+            favorite: true
+          }
+        })
+        if (favoriteIds) {
+          const updateIds = [...favoriteIds, businessState?.business?.id]
+          setFavoriteIds(updateIds)
+        }
+        showToast(ToastType.Success, t('FAVORITE_ADDED', 'Favorite added'))
+      } else {
+        setActionState({
+          ...actionState,
+          loading: false,
+          error: content.result
+        })
+        showToast(ToastType.Error, content.result)
+      }
+    } catch (error) {
+      setActionState({
+        ...actionState,
+        loading: false,
+        error: [error.message]
+      })
+      showToast(ToastType.Error, [error.message])
+    }
+  }
+
+  /**
+   * Method to delete favorite info for user from API
+   */
+  const deleteFavoriteBusiness = async () => {
+    if (!businessState?.business || !user) return
+    showToast(ToastType.Info, t('LOADING', 'loading'))
+
+    try {
+      setActionState({ ...actionState, loading: true })
+      const response = await fetch(`${ordering.root}/users/${user.id}/favorite_businesses/${businessState?.business?.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const content = await response.json()
+      if (!content.error) {
+        setActionState({ ...actionState, loading: false })
+        handleUpdateBusinessList && handleUpdateBusinessList(businessState?.business?.id, { favorite: false })
+        setBusinessState({
+          ...businessState,
+          business: {
+            ...businessState?.business,
+            favorite: false
+          }
+        })
+        if (favoriteIds) {
+          const updateIds = favoriteIds.filter(item => item !== businessState?.business?.id)
+          setFavoriteIds(updateIds)
+        }
+        showToast(ToastType.Success, t('FAVORITE_REMOVED', 'Favorite removed'))
+      } else {
+        setActionState({
+          ...actionState,
+          loading: false,
+          error: content.result
+        })
+        showToast(ToastType.Error, content.result)
+      }
+    } catch (error) {
+      setActionState({
+        loading: false,
+        error: [error.message]
+      })
+      showToast(ToastType.Error, [error.message])
+    }
   }
 
   useEffect(() => {
@@ -163,7 +277,7 @@ export const BusinessController = (props) => {
     } else if (!business) {
       getBusiness()
     }
-  }, [])
+  }, [business])
 
   const updateBusiness = async (businessId, updateParams = {}) => {
     setBusinessState({ ...businessState, loading: true })
@@ -179,6 +293,22 @@ export const BusinessController = (props) => {
       setBusinessState({ ...businessState, loading: false, error: err.message })
     }
   }
+
+  useEffect(() => {
+    if (!favoriteIds) return
+
+    if (favoriteIds?.includes(businessState?.business?.id)) {
+      setBusinessState({
+        ...businessState,
+        business: { ...businessState?.business, favorite: true }
+      })
+    } else {
+      setBusinessState({
+        ...businessState,
+        business: { ...businessState?.business, favorite: false }
+      })
+    }
+  }, [favoriteIds])
 
   return (
     <>
@@ -196,6 +326,8 @@ export const BusinessController = (props) => {
           getBusinessMaxOffer={getBusinessMaxOffer}
           handleClick={handleCustomClick || onBusinessClick}
           businessWillCloseSoonMinutes={businessWillCloseSoonMinutes}
+          addFavoriteBusiness={addFavoriteBusiness}
+          deleteFavoriteBusiness={deleteFavoriteBusiness}
         />
       )}
     </>
