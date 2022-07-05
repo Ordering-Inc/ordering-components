@@ -66,10 +66,9 @@ export const FavoriteProducts = (props) => {
         const productIds = content?.result?.reduce((ids, product) => [...ids, product?.object_id], [])
         const { error, result } = await getProductList(productIds)
         if (!error) {
-          const updatedResult = result.map(item => { return { ...item, favorite: true } })
           setFavoriteProductList({
             loading: false,
-            products: [...favoriteProductList?.products, ...updatedResult],
+            products: [...favoriteProductList?.products, ...result],
             error: null
           })
         } else {

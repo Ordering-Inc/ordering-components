@@ -121,7 +121,6 @@ var FavoriteProducts = function FavoriteProducts(props) {
           _yield$getProductList,
           error,
           result,
-          updatedResult,
           _args = arguments;
 
       return _regenerator.default.wrap(function _callee$(_context) {
@@ -187,14 +186,9 @@ var FavoriteProducts = function FavoriteProducts(props) {
               result = _yield$getProductList.result;
 
               if (!error) {
-                updatedResult = result.map(function (item) {
-                  return _objectSpread(_objectSpread({}, item), {}, {
-                    favorite: true
-                  });
-                });
                 setFavoriteProductList({
                   loading: false,
-                  products: [].concat(_toConsumableArray(favoriteProductList === null || favoriteProductList === void 0 ? void 0 : favoriteProductList.products), _toConsumableArray(updatedResult)),
+                  products: [].concat(_toConsumableArray(favoriteProductList === null || favoriteProductList === void 0 ? void 0 : favoriteProductList.products), _toConsumableArray(result)),
                   error: null
                 });
               } else {
