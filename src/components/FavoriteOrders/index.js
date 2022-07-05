@@ -96,6 +96,9 @@ export const FavoriteOrders = (props) => {
     }
   }
 
+  /**
+   * Function to get order list from API
+   */
   const getOrderList = async (ids) => {
     let where = null
     const conditions = []

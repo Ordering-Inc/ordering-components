@@ -97,6 +97,9 @@ export const FavoriteBusinesses = (props) => {
     }
   }
 
+  /**
+   * Function to get business list from API
+   */
   const getBusinessList = async (ids) => {
     const parameters = {
       location: !customLocation

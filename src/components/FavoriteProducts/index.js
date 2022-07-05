@@ -94,6 +94,9 @@ export const FavoriteProducts = (props) => {
     }
   }
 
+  /**
+   * Function to get product list from API
+   */
   const getProductList = async (ids) => {
     let where = null
     const conditions = []
