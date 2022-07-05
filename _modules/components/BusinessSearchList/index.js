@@ -88,14 +88,23 @@ var BusinessSearchList = function BusinessSearchList(props) {
       setBrandList = _useState4[1];
 
   var _useState5 = (0, _react.useState)({
+    loading: true,
+    result: [],
+    error: null
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      tags = _useState6[0],
+      setTags = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
     currentPage: 1,
     pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
     totalItems: null,
     totalPages: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      paginationProps = _useState6[0],
-      setPaginationProps = _useState6[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      paginationProps = _useState8[0],
+      setPaginationProps = _useState8[1];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -109,20 +118,20 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
-  var _useState7 = (0, _react.useState)({
+  var _useState9 = (0, _react.useState)({
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
     price_level: null
   }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      filters = _useState8[0],
-      setFilters = _useState8[1];
-
-  var _useState9 = (0, _react.useState)(''),
       _useState10 = _slicedToArray(_useState9, 2),
-      termValue = _useState10[0],
-      setTermValue = _useState10[1];
+      filters = _useState10[0],
+      setFilters = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(''),
+      _useState12 = _slicedToArray(_useState11, 2),
+      termValue = _useState12[0],
+      setTermValue = _useState12[1];
 
   (0, _react.useEffect)(function () {
     !lazySearch && handleSearchbusinessAndProducts(true);
@@ -323,9 +332,79 @@ var BusinessSearchList = function BusinessSearchList(props) {
       return _ref2.apply(this, arguments);
     };
   }();
+  /**
+  * Function to get tag list from API
+  */
+
+
+  var getTagList = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var requestOptions, response, content;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              };
+              _context3.next = 5;
+              return fetch("".concat(ordering.root, "/tags"), requestOptions);
+
+            case 5:
+              response = _context3.sent;
+              _context3.next = 8;
+              return response.json();
+
+            case 8:
+              content = _context3.sent;
+
+              if (!content.error) {
+                setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                  loading: false,
+                  result: content === null || content === void 0 ? void 0 : content.result,
+                  error: null
+                }));
+              } else {
+                setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                  loading: false,
+                  error: content === null || content === void 0 ? void 0 : content.result
+                }));
+              }
+
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](0);
+              setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                loading: false,
+                error: _context3.t0.message
+              }));
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 12]]);
+    }));
+
+    return function getTagList() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
     getBrandList();
+    getTagList();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     paginationProps: paginationProps,
@@ -336,7 +415,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
     handleSearchbusinessAndProducts: handleSearchbusinessAndProducts,
     handleChangeTermValue: handleChangeTermValue,
     setFilters: setFilters,
-    brandList: brandList
+    brandList: brandList,
+    tags: tags
   })));
 };
 
