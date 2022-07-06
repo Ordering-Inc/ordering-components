@@ -133,13 +133,6 @@ export const BusinessController = (props) => {
       if (!content.error) {
         setActionState({ ...actionState, loading: false })
         handleUpdateBusinessList && handleUpdateBusinessList(businessState?.business?.id, { favorite: true })
-        setBusinessState({
-          ...businessState,
-          business: {
-            ...businessState?.business,
-            favorite: true
-          }
-        })
         if (favoriteIds) {
           const updateIds = [...favoriteIds, businessState?.business?.id]
           setFavoriteIds(updateIds)
@@ -183,13 +176,6 @@ export const BusinessController = (props) => {
       if (!content.error) {
         setActionState({ ...actionState, loading: false })
         handleUpdateBusinessList && handleUpdateBusinessList(businessState?.business?.id, { favorite: false })
-        setBusinessState({
-          ...businessState,
-          business: {
-            ...businessState?.business,
-            favorite: false
-          }
-        })
         if (favoriteIds) {
           const updateIds = favoriteIds.filter(item => item !== businessState?.business?.id)
           setFavoriteIds(updateIds)
