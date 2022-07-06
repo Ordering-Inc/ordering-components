@@ -267,22 +267,10 @@ Object.defineProperty(exports, "FacebookPixel", {
     return _FacebookPixel.FacebookPixel;
   }
 });
-Object.defineProperty(exports, "FavoriteBusinesses", {
+Object.defineProperty(exports, "FavoriteList", {
   enumerable: true,
   get: function get() {
-    return _FavoriteBusinesses.FavoriteBusinesses;
-  }
-});
-Object.defineProperty(exports, "FavoriteOrders", {
-  enumerable: true,
-  get: function get() {
-    return _FavoriteOrders.FavoriteOrders;
-  }
-});
-Object.defineProperty(exports, "FavoriteProducts", {
-  enumerable: true,
-  get: function get() {
-    return _FavoriteProducts.FavoriteProducts;
+    return _FavoriteList.FavoriteList;
   }
 });
 Object.defineProperty(exports, "FloatingButton", {
@@ -924,11 +912,7 @@ var _FacebookLoginButton = require("./components/FacebookLoginButton");
 
 var _FacebookPixel = require("./components/FacebookPixel");
 
-var _FavoriteBusinesses = require("./components/FavoriteBusinesses");
-
-var _FavoriteProducts = require("./components/FavoriteProducts");
-
-var _FavoriteOrders = require("./components/FavoriteOrders");
+var _FavoriteList = require("./components/FavoriteList");
 
 var _ForgotPasswordForm = require("./components/ForgotPasswordForm");
 

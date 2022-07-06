@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FavoriteProducts = void 0;
+exports.FavoriteList = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -55,11 +55,15 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var FavoriteProducts = function FavoriteProducts(props) {
+var FavoriteList = function FavoriteList(props) {
   var _paginationSettings$p;
 
   var UIComponent = props.UIComponent,
-      paginationSettings = props.paginationSettings;
+      paginationSettings = props.paginationSettings,
+      favoriteURL = props.favoriteURL,
+      originalURL = props.originalURL,
+      location = props.location,
+      propsToFetch = props.propsToFetch;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -73,12 +77,12 @@ var FavoriteProducts = function FavoriteProducts(props) {
 
   var _useState = (0, _react.useState)({
     loading: false,
-    products: [],
+    favorites: [],
     error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      favoriteProductList = _useState2[0],
-      setFavoriteProductList = _useState2[1];
+      favoriteList = _useState2[0],
+      setFavoriteList = _useState2[1];
 
   var _useState3 = (0, _react.useState)({
     currentPage: paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1 ? paginationSettings.initialPage - 1 : 0,
@@ -89,27 +93,27 @@ var FavoriteProducts = function FavoriteProducts(props) {
       pagination = _useState4[0],
       setPagination = _useState4[1];
   /**
-   * Method to update product list
-   * @param {number} productId product id
-   * @param {object} changes product info
+   * Method to update favorite list
+   * @param {number} id business, order, product id
+   * @param {object} changes favorite info
    */
 
 
-  var handleUpdateProducts = function handleUpdateProducts(productId, changes) {
+  var handleUpdateFavoriteList = function handleUpdateFavoriteList(id, changes) {
     if (changes !== null && changes !== void 0 && changes.favorite) return;
-    var updatedProducts = favoriteProductList === null || favoriteProductList === void 0 ? void 0 : favoriteProductList.products.filter(function (product) {
-      return (product === null || product === void 0 ? void 0 : product.id) !== productId;
+    var updatedFavorites = favoriteList === null || favoriteList === void 0 ? void 0 : favoriteList.favorites.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.id) !== id;
     });
-    setFavoriteProductList(_objectSpread(_objectSpread({}, favoriteProductList), {}, {
-      products: updatedProducts
+    setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
+      favorites: updatedFavorites
     }));
   };
   /**
-   * Function to get favorite product list from API
+   * Function to get favorite list from API
    */
 
 
-  var getFavoriteProductList = /*#__PURE__*/function () {
+  var getFavoriteList = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(page) {
       var pageSize,
           requestOptions,
@@ -117,8 +121,8 @@ var FavoriteProducts = function FavoriteProducts(props) {
           response,
           content,
           _content$result,
-          productIds,
-          _yield$getProductList,
+          idList,
+          _yield$getOriginalLis,
           error,
           result,
           _args = arguments;
@@ -129,7 +133,7 @@ var FavoriteProducts = function FavoriteProducts(props) {
             case 0:
               pageSize = _args.length > 1 && _args[1] !== undefined ? _args[1] : paginationSettings.pageSize;
 
-              if (user) {
+              if (!(!user || !favoriteURL || !originalURL)) {
                 _context.next = 3;
                 break;
               }
@@ -138,7 +142,7 @@ var FavoriteProducts = function FavoriteProducts(props) {
 
             case 3:
               _context.prev = 3;
-              setFavoriteProductList(_objectSpread(_objectSpread({}, favoriteProductList), {}, {
+              setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                 loading: true,
                 error: null
               }));
@@ -149,7 +153,7 @@ var FavoriteProducts = function FavoriteProducts(props) {
                   Authorization: "Bearer ".concat(token)
                 }
               };
-              fetchEndpoint = "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_products?page=").concat(page, "&page_size=").concat(pageSize);
+              fetchEndpoint = "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/").concat(favoriteURL, "?page=").concat(page, "&page_size=").concat(pageSize);
               _context.next = 9;
               return fetch(fetchEndpoint, requestOptions);
 
@@ -174,25 +178,25 @@ var FavoriteProducts = function FavoriteProducts(props) {
                 from: content.pagination.from,
                 to: content.pagination.to
               });
-              productIds = content === null || content === void 0 ? void 0 : (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.reduce(function (ids, product) {
+              idList = content === null || content === void 0 ? void 0 : (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.reduce(function (ids, product) {
                 return [].concat(_toConsumableArray(ids), [product === null || product === void 0 ? void 0 : product.object_id]);
               }, []);
               _context.next = 18;
-              return getProductList(productIds);
+              return getOriginalList(idList);
 
             case 18:
-              _yield$getProductList = _context.sent;
-              error = _yield$getProductList.error;
-              result = _yield$getProductList.result;
+              _yield$getOriginalLis = _context.sent;
+              error = _yield$getOriginalLis.error;
+              result = _yield$getOriginalLis.result;
 
               if (!error) {
-                setFavoriteProductList({
+                setFavoriteList({
                   loading: false,
-                  products: [].concat(_toConsumableArray(favoriteProductList === null || favoriteProductList === void 0 ? void 0 : favoriteProductList.products), _toConsumableArray(result)),
+                  favorites: [].concat(_toConsumableArray(favoriteList === null || favoriteList === void 0 ? void 0 : favoriteList.favorites), _toConsumableArray(result)),
                   error: null
                 });
               } else {
-                setFavoriteProductList(_objectSpread(_objectSpread({}, favoriteProductList), {}, {
+                setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                   loading: false,
                   error: result
                 }));
@@ -202,7 +206,7 @@ var FavoriteProducts = function FavoriteProducts(props) {
               break;
 
             case 24:
-              setFavoriteProductList(_objectSpread(_objectSpread({}, favoriteProductList), {}, {
+              setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                 loading: false,
                 error: content.result
               }));
@@ -214,7 +218,7 @@ var FavoriteProducts = function FavoriteProducts(props) {
             case 27:
               _context.prev = 27;
               _context.t0 = _context["catch"](3);
-              setFavoriteProductList(_objectSpread(_objectSpread({}, favoriteProductList), {}, {
+              setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
@@ -227,18 +231,18 @@ var FavoriteProducts = function FavoriteProducts(props) {
       }, _callee, null, [[3, 27]]);
     }));
 
-    return function getFavoriteProductList(_x) {
+    return function getFavoriteList(_x) {
       return _ref.apply(this, arguments);
     };
   }();
   /**
-   * Function to get product list from API
+   * Function to get business, product, order list from API
    */
 
 
-  var getProductList = /*#__PURE__*/function () {
+  var getOriginalList = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(ids) {
-      var where, conditions, requestOptions, response;
+      var where, conditions, requestOptions, fetchEndpoint, response;
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -264,18 +268,21 @@ var FavoriteProducts = function FavoriteProducts(props) {
                   Authorization: "Bearer ".concat(token)
                 }
               };
-              _context2.next = 7;
-              return fetch("".concat(ordering.root, "/products?where=").concat(JSON.stringify(where)), requestOptions);
-
-            case 7:
-              response = _context2.sent;
+              fetchEndpoint = "".concat(ordering.root, "/").concat(originalURL, "?where=").concat(JSON.stringify(where));
+              if (location) fetchEndpoint = "".concat(fetchEndpoint, "&location=").concat(location);
+              if (propsToFetch) fetchEndpoint = "".concat(fetchEndpoint, "&params=").concat(propsToFetch);
               _context2.next = 10;
-              return response.json();
+              return fetch(fetchEndpoint, requestOptions);
 
             case 10:
+              response = _context2.sent;
+              _context2.next = 13;
+              return response.json();
+
+            case 13:
               return _context2.abrupt("return", _context2.sent);
 
-            case 11:
+            case 14:
             case "end":
               return _context2.stop();
           }
@@ -283,54 +290,69 @@ var FavoriteProducts = function FavoriteProducts(props) {
       }, _callee2);
     }));
 
-    return function getProductList(_x2) {
+    return function getOriginalList(_x2) {
       return _ref2.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    getFavoriteProductList(1);
+    getFavoriteList(1);
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    favoriteProductList: favoriteProductList,
-    handleUpdateProducts: handleUpdateProducts,
+    favoriteList: favoriteList,
+    handleUpdateFavoriteList: handleUpdateFavoriteList,
     pagination: pagination,
-    getFavoriteProductList: getFavoriteProductList
+    getFavoriteList: getFavoriteList
   })));
 };
 
-exports.FavoriteProducts = FavoriteProducts;
-FavoriteProducts.propTypes = {
+exports.FavoriteList = FavoriteList;
+FavoriteList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Components types before products listing
+   * Default URL to get favorite list
+   */
+  favoriteURL: _propTypes.default.string.isRequired,
+
+  /**
+   * Default URL to get business, product, order list
+   */
+  originalURL: _propTypes.default.string.isRequired,
+
+  /**
+   * Info of location
+   */
+  location: _propTypes.default.string,
+
+  /**
+   * Components types before favorite listing
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after products listing
+   * Components types after favorite listing
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before products listing
+   * Elements before favorite listing
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after products listing
+   * Elements after favorite listing
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-FavoriteProducts.defaultProps = {
+FavoriteList.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
