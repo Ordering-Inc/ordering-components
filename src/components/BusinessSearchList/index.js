@@ -17,7 +17,6 @@ export const BusinessSearchList = (props) => {
    * brandList, this must be contain a brands, loading and error to send UIComponent
    */
   const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
-  const [tags, setTags] = useState({ loading: true, result: [], error: null })
   const [paginationProps, setPaginationProps] = useState({
     currentPage: 1,
     pageSize: paginationSettings.pageSize ?? 10,
@@ -207,7 +206,6 @@ export const BusinessSearchList = (props) => {
   }
   useEffect(() => {
     getBrandList()
-    getTagList()
   }, [])
 
   return (
@@ -225,7 +223,6 @@ export const BusinessSearchList = (props) => {
             handleChangeTermValue={handleChangeTermValue}
             setFilters={setFilters}
             brandList={brandList}
-            tags={tags}
           />
         )
       }
