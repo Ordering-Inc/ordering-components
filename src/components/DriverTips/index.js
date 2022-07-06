@@ -39,7 +39,7 @@ export const DriverTips = (props) => {
    * @param {number} val
    */
   const handlerChangeOption = (driverTip, isFixedPrice = props.isFixedPrice) => {
-    driverTip = typeof driverTip === 'string' ? parseInt(driverTip) : driverTip
+    driverTip = typeof driverTip === 'string' ? parseFloat(driverTip) : driverTip
     if (useOrderContext) {
       changeDriverTip(businessId, driverTip, isFixedPrice)
     } else {
