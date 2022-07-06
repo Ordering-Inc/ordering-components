@@ -62,7 +62,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
   var UIComponent = props.UIComponent,
       paginationSettings = props.paginationSettings,
-      lazySearch = props.lazySearch;
+      lazySearch = props.lazySearch,
+      defaultTerm = props.defaultTerm;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -88,23 +89,14 @@ var BusinessSearchList = function BusinessSearchList(props) {
       setBrandList = _useState4[1];
 
   var _useState5 = (0, _react.useState)({
-    loading: true,
-    result: [],
-    error: null
-  }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      tags = _useState6[0],
-      setTags = _useState6[1];
-
-  var _useState7 = (0, _react.useState)({
     currentPage: 1,
     pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
     totalItems: null,
     totalPages: null
   }),
-      _useState8 = _slicedToArray(_useState7, 2),
-      paginationProps = _useState8[0],
-      setPaginationProps = _useState8[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      paginationProps = _useState6[0],
+      setPaginationProps = _useState6[1];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -118,20 +110,20 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
-  var _useState9 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
     price_level: null
   }),
-      _useState10 = _slicedToArray(_useState9, 2),
-      filters = _useState10[0],
-      setFilters = _useState10[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      filters = _useState8[0],
+      setFilters = _useState8[1];
 
-  var _useState11 = (0, _react.useState)(''),
-      _useState12 = _slicedToArray(_useState11, 2),
-      termValue = _useState12[0],
-      setTermValue = _useState12[1];
+  var _useState9 = (0, _react.useState)(defaultTerm || ''),
+      _useState10 = _slicedToArray(_useState9, 2),
+      termValue = _useState10[0],
+      setTermValue = _useState10[1];
 
   (0, _react.useEffect)(function () {
     !lazySearch && handleSearchbusinessAndProducts(true);
@@ -404,7 +396,6 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
   (0, _react.useEffect)(function () {
     getBrandList();
-    getTagList();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     paginationProps: paginationProps,
@@ -415,8 +406,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
     handleSearchbusinessAndProducts: handleSearchbusinessAndProducts,
     handleChangeTermValue: handleChangeTermValue,
     setFilters: setFilters,
-    brandList: brandList,
-    tags: tags
+    brandList: brandList
   })));
 };
 
