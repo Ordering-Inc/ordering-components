@@ -8,7 +8,8 @@ export const BusinessSearchList = (props) => {
   const {
     UIComponent,
     paginationSettings,
-    lazySearch
+    lazySearch,
+    defaultTerm
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -32,7 +33,7 @@ export const BusinessSearchList = (props) => {
     franchise_ids: [],
     price_level: null
   })
-  const [termValue, setTermValue] = useState('')
+  const [termValue, setTermValue] = useState(defaultTerm || '')
 
   useEffect(() => {
     !lazySearch && handleSearchbusinessAndProducts(true)
@@ -168,7 +169,7 @@ export const BusinessSearchList = (props) => {
   /**
   * Function to get tag list from API
   */
-   const getTagList = async () => {
+  const getTagList = async () => {
     try {
       setTags({ ...tags, loading: true })
 
