@@ -442,6 +442,19 @@ var OrderList = function OrderList(props) {
     };
   }();
 
+  var handleUpdateOrderList = function handleUpdateOrderList(orderId, changes) {
+    var updatedOrders = orderList === null || orderList === void 0 ? void 0 : orderList.orders.map(function (order) {
+      if ((order === null || order === void 0 ? void 0 : order.id) === orderId) {
+        return _objectSpread(_objectSpread({}, order), changes);
+      }
+
+      return order;
+    });
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: updatedOrders
+    }));
+  };
+
   var loadMessages = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(orderId) {
       var url, response, _yield$response$json, error, result;
@@ -785,7 +798,8 @@ var OrderList = function OrderList(props) {
     setMessages: setMessages,
     setUpdateOtherStatus: setUpdateOtherStatus,
     handleReorder: handleReorder,
-    reorderState: reorderState
+    reorderState: reorderState,
+    handleUpdateOrderList: handleUpdateOrderList
   })));
 };
 

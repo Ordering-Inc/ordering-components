@@ -654,6 +654,25 @@ var BusinessList = function BusinessList(props) {
 
     setMaxDeliveryFee(deliveryFee);
   };
+  /**
+   * Method to update business list
+   * @param {number} businessId business id
+   * @param {object} changes business info
+   */
+
+
+  var handleUpdateBusinessList = function handleUpdateBusinessList(businessId, changes) {
+    var updatedBusinesses = businessesList === null || businessesList === void 0 ? void 0 : businessesList.businesses.map(function (business) {
+      if ((business === null || business === void 0 ? void 0 : business.id) === businessId) {
+        return _objectSpread(_objectSpread({}, business), changes);
+      }
+
+      return business;
+    });
+    setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+      businesses: updatedBusinesses
+    }));
+  };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     businessesList: businessesList,
@@ -670,7 +689,8 @@ var BusinessList = function BusinessList(props) {
     handleBusinessClick: handleBusinessClick,
     handleChangeBusinessType: handleChangeBusinessType,
     handleChangeMaxDeliveryFee: handleChangeMaxDeliveryFee,
-    franchiseEnabled: franchiseEnabled
+    franchiseEnabled: franchiseEnabled,
+    handleUpdateBusinessList: handleUpdateBusinessList
   })));
 };
 
