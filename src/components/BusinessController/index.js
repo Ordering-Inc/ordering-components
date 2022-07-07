@@ -109,9 +109,9 @@ export const BusinessController = (props) => {
   }
 
   /**
-   * Method to add favorite info for user from API
+   * Method to add, remove favorite info for user from API
    */
-  const addFavoriteBusiness = async () => {
+  const handleFavoriteBusiness = async (isAdd = false) => {
     if (!businessState?.business || !user) return
     showToast(ToastType.Info, t('LOADING', 'loading'))
 
@@ -119,25 +119,29 @@ export const BusinessController = (props) => {
       setActionState({ ...actionState, loading: true, error: null })
       const changes = { object_id: businessState?.business?.id }
       const requestOptions = {
-        method: 'POST',
+        method: isAdd ? 'POST' : 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(changes)
+        ...(isAdd && { body: JSON.stringify(changes) })
       }
-
-      const response = await fetch(`${ordering.root}/users/${user?.id}/favorite_businesses`, requestOptions)
+      const fetchEndpoint = isAdd
+        ? `${ordering.root}/users/${user?.id}/favorite_businesses`
+        : `${ordering.root}/users/${user.id}/favorite_businesses/${businessState?.business?.id}`
+      const response = await fetch(fetchEndpoint, requestOptions)
       const content = await response.json()
 
       if (!content.error) {
         setActionState({ ...actionState, loading: false })
-        handleUpdateBusinessList && handleUpdateBusinessList(businessState?.business?.id, { favorite: true })
+        handleUpdateBusinessList && handleUpdateBusinessList(businessState?.business?.id, { favorite: isAdd })
         if (favoriteIds) {
-          const updateIds = [...favoriteIds, businessState?.business?.id]
+          const updateIds = isAdd
+            ? [...favoriteIds, businessState?.business?.id]
+            : favoriteIds.filter(item => item !== businessState?.business?.id)
           setFavoriteIds(updateIds)
         }
-        showToast(ToastType.Success, t('FAVORITE_ADDED', 'Favorite added'))
+        showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
       } else {
         setActionState({
           ...actionState,
@@ -149,48 +153,6 @@ export const BusinessController = (props) => {
     } catch (error) {
       setActionState({
         ...actionState,
-        loading: false,
-        error: [error.message]
-      })
-      showToast(ToastType.Error, [error.message])
-    }
-  }
-
-  /**
-   * Method to delete favorite info for user from API
-   */
-  const deleteFavoriteBusiness = async () => {
-    if (!businessState?.business || !user) return
-    showToast(ToastType.Info, t('LOADING', 'loading'))
-
-    try {
-      setActionState({ ...actionState, loading: true })
-      const response = await fetch(`${ordering.root}/users/${user.id}/favorite_businesses/${businessState?.business?.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const content = await response.json()
-      if (!content.error) {
-        setActionState({ ...actionState, loading: false })
-        handleUpdateBusinessList && handleUpdateBusinessList(businessState?.business?.id, { favorite: false })
-        if (favoriteIds) {
-          const updateIds = favoriteIds.filter(item => item !== businessState?.business?.id)
-          setFavoriteIds(updateIds)
-        }
-        showToast(ToastType.Success, t('FAVORITE_REMOVED', 'Favorite removed'))
-      } else {
-        setActionState({
-          ...actionState,
-          loading: false,
-          error: content.result
-        })
-        showToast(ToastType.Error, content.result)
-      }
-    } catch (error) {
-      setActionState({
         loading: false,
         error: [error.message]
       })
@@ -312,8 +274,7 @@ export const BusinessController = (props) => {
           getBusinessMaxOffer={getBusinessMaxOffer}
           handleClick={handleCustomClick || onBusinessClick}
           businessWillCloseSoonMinutes={businessWillCloseSoonMinutes}
-          addFavoriteBusiness={addFavoriteBusiness}
-          deleteFavoriteBusiness={deleteFavoriteBusiness}
+          handleFavoriteBusiness={handleFavoriteBusiness}
         />
       )}
     </>

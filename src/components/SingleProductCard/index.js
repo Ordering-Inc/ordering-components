@@ -20,30 +20,33 @@ export const SingleProductCard = (props) => {
   const [actionState, setActionState] = useState({ loading: false, error: null })
 
   /**
-   * Method to add favorite info for user from API
+   * Method to add, remove favorite info for user from API
    */
-  const addFavoriteProduct = async () => {
+  const handleFavoriteProduct = async (isAdd = false) => {
     if (!product || !user) return
     showToast(ToastType.Info, t('LOADING', 'loading'))
     try {
       setActionState({ ...actionState, loading: true, error: null })
       const changes = { object_id: product?.id }
       const requestOptions = {
-        method: 'POST',
+        method: isAdd ? 'POST' : 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(changes)
+        ...(isAdd && { body: JSON.stringify(changes) })
       }
 
-      const response = await fetch(`${ordering.root}/users/${user?.id}/favorite_products`, requestOptions)
+      const fetchEndpoint = isAdd
+        ? `${ordering.root}/users/${user?.id}/favorite_products`
+        : `${ordering.root}/users/${user.id}/favorite_products/${product?.id}`
+      const response = await fetch(fetchEndpoint, requestOptions)
       const content = await response.json()
 
       if (!content.error) {
         setActionState({ ...actionState, loading: false })
-        handleUpdateProducts && handleUpdateProducts(product?.id, { favorite: true })
-        showToast(ToastType.Success, t('FAVORITE_ADDED', 'Favorite added'))
+        handleUpdateProducts && handleUpdateProducts(product?.id, { favorite: isAdd })
+        showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
       } else {
         setActionState({
           ...actionState,
@@ -62,49 +65,12 @@ export const SingleProductCard = (props) => {
     }
   }
 
-  /**
-   * Method to delete favorite info for user from API
-   */
-  const deleteFavoriteProduct = async () => {
-    if (!product || !user) return
-    showToast(ToastType.Info, t('LOADING', 'loading'))
-
-    try {
-      setActionState({ ...actionState, loading: true })
-      const response = await fetch(`${ordering.root}/users/${user.id}/favorite_products/${product?.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const content = await response.json()
-      if (!content.error) {
-        setActionState({ ...actionState, loading: false })
-        handleUpdateProducts && handleUpdateProducts(product?.id, { favorite: false })
-        showToast(ToastType.Success, t('FAVORITE_REMOVED', 'Favorite removed'))
-      } else {
-        setActionState({
-          ...actionState,
-          loading: false,
-          error: content.result
-        })
-      }
-    } catch (error) {
-      setActionState({
-        loading: false,
-        error: [error.message]
-      })
-    }
-  }
-
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          addFavoriteProduct={addFavoriteProduct}
-          deleteFavoriteProduct={deleteFavoriteProduct}
+          handleFavoriteProduct={handleFavoriteProduct}
           actionState={actionState}
         />
       )}
