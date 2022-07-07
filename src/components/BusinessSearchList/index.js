@@ -8,7 +8,8 @@ export const BusinessSearchList = (props) => {
   const {
     UIComponent,
     paginationSettings,
-    lazySearch
+    lazySearch,
+    defaultTerm
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -16,7 +17,6 @@ export const BusinessSearchList = (props) => {
    * brandList, this must be contain a brands, loading and error to send UIComponent
    */
   const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
-  const [tags, setTags] = useState({ loading: true, result: [], error: null })
   const [paginationProps, setPaginationProps] = useState({
     currentPage: 1,
     pageSize: paginationSettings.pageSize ?? 10,
@@ -32,7 +32,7 @@ export const BusinessSearchList = (props) => {
     franchise_ids: [],
     price_level: null
   })
-  const [termValue, setTermValue] = useState('')
+  const [termValue, setTermValue] = useState(defaultTerm || '')
 
   useEffect(() => {
     !lazySearch && handleSearchbusinessAndProducts(true)
@@ -168,7 +168,7 @@ export const BusinessSearchList = (props) => {
   /**
   * Function to get tag list from API
   */
-   const getTagList = async () => {
+  const getTagList = async () => {
     try {
       setTags({ ...tags, loading: true })
 
@@ -206,7 +206,6 @@ export const BusinessSearchList = (props) => {
   }
   useEffect(() => {
     getBrandList()
-    getTagList()
   }, [])
 
   return (
@@ -224,7 +223,6 @@ export const BusinessSearchList = (props) => {
             handleChangeTermValue={handleChangeTermValue}
             setFilters={setFilters}
             brandList={brandList}
-            tags={tags}
           />
         )
       }
