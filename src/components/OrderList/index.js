@@ -7,7 +7,6 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useOrder } from '../../contexts/OrderContext'
-
 import dayjs from 'dayjs'
 
 export const OrderList = props => {
@@ -194,6 +193,22 @@ export const OrderList = props => {
         setOrderList({ ...orderList, loading: false, error: [err.message] })
       }
     }
+  }
+
+  const handleUpdateOrderList = (orderId, changes) => {
+    const updatedOrders = orderList?.orders.map(order => {
+      if (order?.id === orderId) {
+        return {
+          ...order,
+          ...changes
+        }
+      }
+      return order
+    })
+    setOrderList({
+      ...orderList,
+      orders: updatedOrders
+    })
   }
 
   const loadMessages = async (orderId) => {
@@ -424,6 +439,7 @@ export const OrderList = props => {
           setUpdateOtherStatus={setUpdateOtherStatus}
           handleReorder={handleReorder}
           reorderState={reorderState}
+          handleUpdateOrderList={handleUpdateOrderList}
         />
       )}
     </>

@@ -26,6 +26,7 @@ import { DriverTips } from './components/DriverTips'
 import { ExamineClick } from './components/ExamineClick'
 import { FacebookLoginButton } from './components/FacebookLoginButton'
 import { FacebookPixel } from './components/FacebookPixel'
+import { FavoriteList } from './components/FavoriteList'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
 import { GoogleLoginButton } from './components/GoogleLoginButton'
 import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
@@ -143,6 +144,7 @@ export {
   ExamineClick,
   FacebookLoginButton,
   FacebookPixel,
+  FavoriteList,
   GoogleLoginButton,
   ForgotPasswordForm,
   GoogleAutocompleteInput,
