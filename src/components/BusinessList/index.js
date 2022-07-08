@@ -300,14 +300,14 @@ export const BusinessList = (props) => {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true)
     }
-  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
+  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useLayoutEffect(() => {
     if (isDoordash) {
