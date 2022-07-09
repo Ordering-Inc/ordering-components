@@ -12,7 +12,9 @@ export const AddressDetails = (props) => {
   const {
     apiKey,
     UIComponent,
-    mapConfigs
+    mapConfigs,
+    isMultiCheckout,
+    openCarts
   } = props
   const [orderState] = useOrder()
   const [{ optimizeImage }] = useUtils()
@@ -34,9 +36,18 @@ export const AddressDetails = (props) => {
    */
   const formatUrl = (location) => {
     const orderLocation = props.orderLocation || orderState?.options?.address?.location
+    let businessesMarkers = ''
+    if (isMultiCheckout) {
+      openCarts.forEach(cart => {
+        businessesMarkers += `&markers=icon:${optimizeImage(cart.business?.logo, 'w_60,h_60,r_max')}%7Ccolor:white%7C${cart.business?.location?.lat},${cart.business?.location?.lng}`
+      })
+    }
+    const staticmapUrl = isMultiCheckout
+      ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}${businessesMarkers}&key=${GM_API_KEY}`
+      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:${optimizeImage(logo, 'w_60,h_60,r_max')}%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${GM_API_KEY}`
     return orderState.options.type === 1
       ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=${mapConfigs?.mapZoom || 15}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&key=${GM_API_KEY}`
-      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:${optimizeImage(logo, 'w_60,h_60,r_max')}%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${GM_API_KEY}`
+      : `${staticmapUrl}`
   }
   /**
    * Method to get business location from API
@@ -53,6 +64,7 @@ export const AddressDetails = (props) => {
   }
 
   useEffect(() => {
+    if (isMultiCheckout) return
     if (props.location && props.businessLogo && !props.uuid) {
       setLocation(props.location)
       setLogo(props.businessLogo)
@@ -64,7 +76,7 @@ export const AddressDetails = (props) => {
         requestsState.business.cancel()
       }
     }
-  }, [businessId])
+  }, [businessId, isMultiCheckout])
 
   return (
     <>
