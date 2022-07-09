@@ -32,6 +32,7 @@ import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
 import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
 import { GpsButton, GoogleGpsButton } from './components/GpsButton'
 import { GoogleIdentityButton } from './components/GoogleIdentity'
+import { GroupCartsPaymethodsAndWallets } from './components/GroupCartsPaymethodsAndWallets'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
 import { LogoutAction } from './components/LogoutAction'
@@ -152,6 +153,7 @@ export {
   GpsButton,
   GoogleGpsButton,
   GoogleIdentityButton,
+  GroupCartsPaymethodsAndWallets,
   LanguageSelector,
   LoginForm,
   LogoutAction,
