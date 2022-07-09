@@ -5,15 +5,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MultiBusinessesCheckout = void 0;
+exports.GroupCartsPaymethodsAndWallets = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _OrderContext = require("../../contexts/OrderContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
@@ -60,10 +58,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage Multi businesses checkout page behavior without UI component
  */
-var MultiBusinessesCheckout = function MultiBusinessesCheckout(props) {
-  var _Object$values;
-
-  var UIComponent = props.UIComponent;
+var GroupCartsPaymethodsAndWallets = function GroupCartsPaymethodsAndWallets(props) {
+  var UIComponent = props.UIComponent,
+      openCarts = props.openCarts;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -71,26 +68,16 @@ var MultiBusinessesCheckout = function MultiBusinessesCheckout(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+      _useSession2$ = _useSession2[0],
+      token = _useSession2$.token,
+      user = _useSession2$.user;
 
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 1),
-      carts = _useOrder2[0].carts;
-
-  var openCarts = ((_Object$values = Object.values(carts)) === null || _Object$values === void 0 ? void 0 : _Object$values.filter(function (cart) {
-    var _cart$products;
-
-    return (cart === null || cart === void 0 ? void 0 : cart.products) && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.length) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2 && (cart === null || cart === void 0 ? void 0 : cart.valid_schedule) && (cart === null || cart === void 0 ? void 0 : cart.valid_products) && (cart === null || cart === void 0 ? void 0 : cart.valid_address) && (cart === null || cart === void 0 ? void 0 : cart.valid_maximum) && (cart === null || cart === void 0 ? void 0 : cart.valid_minimum);
-  })) || null || [];
-  var totalCartsPrice = openCarts && openCarts.reduce(function (total, cart) {
-    return total + (cart === null || cart === void 0 ? void 0 : cart.total);
-  }, 0);
   var cartsUuids = openCarts.reduce(function (uuids, cart) {
     return [].concat(_toConsumableArray(uuids), [cart.uuid]);
   }, []);
 
   var _useState = (0, _react.useState)({
-    loading: false,
+    loading: true,
     paymethods: [],
     wallets: [],
     error: null
@@ -98,12 +85,21 @@ var MultiBusinessesCheckout = function MultiBusinessesCheckout(props) {
       _useState2 = _slicedToArray(_useState, 2),
       paymethodsAndWallets = _useState2[0],
       setPaymethodsAndWallets = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
+    result: [],
+    loading: true,
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      walletsState = _useState4[0],
+      setWalletsState = _useState4[1];
   /**
    * Get available wallets and paymethods from API
    */
 
 
-  var getAvailablePaymethodsAndWallets = /*#__PURE__*/function () {
+  var getPaymethodsAndWallets = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var requestOptions, response, content, _content$result, _content$result2;
 
@@ -169,23 +165,86 @@ var MultiBusinessesCheckout = function MultiBusinessesCheckout(props) {
       }, _callee, null, [[0, 12]]);
     }));
 
-    return function getAvailablePaymethodsAndWallets() {
+    return function getPaymethodsAndWallets() {
       return _ref.apply(this, arguments);
+    };
+  }();
+  /**
+   * Get user wallets from API
+   */
+
+
+  var getUserWallets = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var response, _yield$response$json, error, result;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets"), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              });
+
+            case 3:
+              response = _context2.sent;
+              _context2.next = 6;
+              return response.json();
+
+            case 6:
+              _yield$response$json = _context2.sent;
+              error = _yield$response$json.error;
+              result = _yield$response$json.result;
+              setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
+                loading: false,
+                error: error ? result : null,
+                result: error ? null : result
+              }));
+              _context2.next = 15;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](0);
+
+              if (_context2.t0.constructor.name !== 'Cancel') {
+                setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
+                  loading: false,
+                  error: [_context2.t0.message]
+                }));
+              }
+
+            case 15:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 12]]);
+    }));
+
+    return function getUserWallets() {
+      return _ref2.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    getAvailablePaymethodsAndWallets();
+    getPaymethodsAndWallets();
+    getUserWallets();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    openCarts: openCarts,
-    totalCartsPrice: totalCartsPrice,
-    paymethodsAndWallets: paymethodsAndWallets
+    paymethodsAndWallets: paymethodsAndWallets,
+    walletsState: walletsState
   })));
 };
 
-exports.MultiBusinessesCheckout = MultiBusinessesCheckout;
-MultiBusinessesCheckout.propTypes = {
+exports.GroupCartsPaymethodsAndWallets = GroupCartsPaymethodsAndWallets;
+GroupCartsPaymethodsAndWallets.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
