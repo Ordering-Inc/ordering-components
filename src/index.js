@@ -33,6 +33,7 @@ import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
 import { GpsButton, GoogleGpsButton } from './components/GpsButton'
 import { GoogleIdentityButton } from './components/GoogleIdentity'
 import { GroupCartsPaymethodsAndWallets } from './components/GroupCartsPaymethodsAndWallets'
+import { GroupCheckout } from './components/GroupCheckout'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
 import { LogoutAction } from './components/LogoutAction'
@@ -41,7 +42,6 @@ import { MenuControl } from './components/MenuControl'
 import { MomentOption } from './components/MomentOption'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
-import { MultiBusinessesCheckout } from './components/MultiBusinessesCheckout'
 import { NewOrderNotification } from './components/NewOrderNotification'
 import { OrderList } from './components/OrderList'
 import { OrderTypeControl } from './components/OrderTypeControl'
@@ -154,6 +154,7 @@ export {
   GoogleGpsButton,
   GoogleIdentityButton,
   GroupCartsPaymethodsAndWallets,
+  GroupCheckout,
   LanguageSelector,
   LoginForm,
   LogoutAction,
@@ -162,7 +163,6 @@ export {
   MomentOption,
   MyOrders,
   MyOrdersList,
-  MultiBusinessesCheckout,
   NewOrderNotification,
   OrderList,
   OrderTypeControl,
