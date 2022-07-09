@@ -6,7 +6,7 @@ import { useSession } from '../../contexts/SessionContext'
 /**
  * Component to manage Multi businesses checkout page behavior without UI component
  */
-export const GroupCheckout = (props) => {
+export const MultiCheckout = (props) => {
   const {
     UIComponent
   } = props
@@ -96,7 +96,7 @@ export const GroupCheckout = (props) => {
   )
 }
 
-GroupCheckout.propTypes = {
+MultiCheckout.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

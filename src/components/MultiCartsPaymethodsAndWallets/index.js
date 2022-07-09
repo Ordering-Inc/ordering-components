@@ -4,9 +4,9 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 
 /**
- * Component to manage Multi businesses checkout page behavior without UI component
+ * Component to manage Multi carts paymethods and wallets behavior without UI component
  */
-export const GroupCartsPaymethodsAndWallets = (props) => {
+export const MultiCartsPaymethodsAndWallets = (props) => {
   const {
     UIComponent,
     openCarts
@@ -112,7 +112,7 @@ export const GroupCartsPaymethodsAndWallets = (props) => {
   )
 }
 
-GroupCartsPaymethodsAndWallets.propTypes = {
+MultiCartsPaymethodsAndWallets.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

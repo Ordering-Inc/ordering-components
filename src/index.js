@@ -32,14 +32,14 @@ import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
 import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
 import { GpsButton, GoogleGpsButton } from './components/GpsButton'
 import { GoogleIdentityButton } from './components/GoogleIdentity'
-import { GroupCartsPaymethodsAndWallets } from './components/GroupCartsPaymethodsAndWallets'
-import { GroupCheckout } from './components/GroupCheckout'
+import { MultiCartsPaymethodsAndWallets } from './components/MultiCartsPaymethodsAndWallets'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
 import { LogoutAction } from './components/LogoutAction'
 import { MainSearch } from './components/MainSearch'
 import { MenuControl } from './components/MenuControl'
 import { MomentOption } from './components/MomentOption'
+import { MultiCheckout } from './components/MultiCheckout'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
 import { NewOrderNotification } from './components/NewOrderNotification'
@@ -153,14 +153,14 @@ export {
   GpsButton,
   GoogleGpsButton,
   GoogleIdentityButton,
-  GroupCartsPaymethodsAndWallets,
-  GroupCheckout,
   LanguageSelector,
   LoginForm,
   LogoutAction,
   MainSearch,
   MenuControl,
   MomentOption,
+  MultiCartsPaymethodsAndWallets,
+  MultiCheckout,
   MyOrders,
   MyOrdersList,
   NewOrderNotification,
