@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const FavoriteList = (props) => {
   const {
@@ -15,8 +16,10 @@ export const FavoriteList = (props) => {
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
+  const [, { reorder }] = useOrder()
 
   const [favoriteList, setFavoriteList] = useState({ loading: false, favorites: [], error: null })
+  const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10,
@@ -130,6 +133,43 @@ export const FavoriteList = (props) => {
     return await response.json()
   }
 
+  const handleReorder = async (orderId) => {
+    if (!orderId) return
+    try {
+      setReorderState({
+        ...reorderState,
+        loading: true
+      })
+      const { error, result } = await reorder(orderId)
+      if (!error) {
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          result: { ...result, orderId: orderId }
+        })
+      } else {
+        const choosedOrder = favoriteList.favorites.find(_order => _order?.id === orderId)
+        const _businessId = choosedOrder?.business_id ?? choosedOrder?.original?.business_id
+        const _businessData = await ordering.businesses(_businessId).select(['slug']).get()
+        const _businessSlug = await _businessData?.content?.result?.slug
+
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          error: true,
+          result: { ...result, orderId: orderId, business_id: _businessId, business: { slug: _businessSlug } }
+        })
+      }
+    } catch (err) {
+      setReorderState({
+        ...reorderState,
+        loading: false,
+        error: true,
+        result: [err?.message]
+      })
+    }
+  }
+
   useEffect(() => {
     getFavoriteList(1)
   }, [])
@@ -143,6 +183,8 @@ export const FavoriteList = (props) => {
           handleUpdateFavoriteList={handleUpdateFavoriteList}
           pagination={pagination}
           getFavoriteList={getFavoriteList}
+          handleReorder={handleReorder}
+          reorderState={reorderState}
         />
       )}
     </>
