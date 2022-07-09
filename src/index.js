@@ -40,6 +40,7 @@ import { MenuControl } from './components/MenuControl'
 import { MomentOption } from './components/MomentOption'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
+import { MultiBusinessesCheckout } from './components/MultiBusinessesCheckout'
 import { NewOrderNotification } from './components/NewOrderNotification'
 import { OrderList } from './components/OrderList'
 import { OrderTypeControl } from './components/OrderTypeControl'
@@ -159,6 +160,7 @@ export {
   MomentOption,
   MyOrders,
   MyOrdersList,
+  MultiBusinessesCheckout,
   NewOrderNotification,
   OrderList,
   OrderTypeControl,
