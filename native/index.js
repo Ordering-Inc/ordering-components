@@ -24,6 +24,7 @@ import { DragAndDrop } from '../src/components/DragAndDrop'
 import { DriverList } from '../src/components/DriverList'
 import { DriverTips } from '../src/components/DriverTips'
 import { ExamineClick } from '../src/components/ExamineClick'
+import { FavoriteList } from '../src/components/FavoriteList'
 import { FloatingButton } from '../src/components/FloatingButton'
 import { ForgotPasswordForm } from '../src/components/ForgotPasswordForm'
 import { LanguageSelector } from '../src/components/LanguageSelector'
@@ -123,6 +124,7 @@ export {
   DriverList,
   DriverTips,
   ExamineClick,
+  FavoriteList,
   FloatingButton,
   ForgotPasswordForm,
   LanguageSelector,
