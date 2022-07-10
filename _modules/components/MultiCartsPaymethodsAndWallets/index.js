@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GroupCartsPaymethodsAndWallets = void 0;
+exports.MultiCartsPaymethodsAndWallets = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -56,9 +56,9 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage Multi businesses checkout page behavior without UI component
+ * Component to manage Multi carts paymethods and wallets behavior without UI component
  */
-var GroupCartsPaymethodsAndWallets = function GroupCartsPaymethodsAndWallets(props) {
+var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
   var UIComponent = props.UIComponent,
       openCarts = props.openCarts;
 
@@ -243,8 +243,8 @@ var GroupCartsPaymethodsAndWallets = function GroupCartsPaymethodsAndWallets(pro
   })));
 };
 
-exports.GroupCartsPaymethodsAndWallets = GroupCartsPaymethodsAndWallets;
-GroupCartsPaymethodsAndWallets.propTypes = {
+exports.MultiCartsPaymethodsAndWallets = MultiCartsPaymethodsAndWallets;
+MultiCartsPaymethodsAndWallets.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

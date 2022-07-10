@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GroupCheckout = void 0;
+exports.MultiCheckout = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -60,7 +60,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage Multi businesses checkout page behavior without UI component
  */
-var GroupCheckout = function GroupCheckout(props) {
+var MultiCheckout = function MultiCheckout(props) {
   var _Object$values;
 
   var UIComponent = props.UIComponent;
@@ -210,8 +210,8 @@ var GroupCheckout = function GroupCheckout(props) {
   })));
 };
 
-exports.GroupCheckout = GroupCheckout;
-GroupCheckout.propTypes = {
+exports.MultiCheckout = MultiCheckout;
+MultiCheckout.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */

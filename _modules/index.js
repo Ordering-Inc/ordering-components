@@ -321,18 +321,6 @@ Object.defineProperty(exports, "GpsButton", {
     return _GpsButton.GpsButton;
   }
 });
-Object.defineProperty(exports, "GroupCartsPaymethodsAndWallets", {
-  enumerable: true,
-  get: function get() {
-    return _GroupCartsPaymethodsAndWallets.GroupCartsPaymethodsAndWallets;
-  }
-});
-Object.defineProperty(exports, "GroupCheckout", {
-  enumerable: true,
-  get: function get() {
-    return _GroupCheckout.GroupCheckout;
-  }
-});
 Object.defineProperty(exports, "LanguageContext", {
   enumerable: true,
   get: function get() {
@@ -391,6 +379,18 @@ Object.defineProperty(exports, "MomentOption", {
   enumerable: true,
   get: function get() {
     return _MomentOption.MomentOption;
+  }
+});
+Object.defineProperty(exports, "MultiCartsPaymethodsAndWallets", {
+  enumerable: true,
+  get: function get() {
+    return _MultiCartsPaymethodsAndWallets.MultiCartsPaymethodsAndWallets;
+  }
+});
+Object.defineProperty(exports, "MultiCheckout", {
+  enumerable: true,
+  get: function get() {
+    return _MultiCheckout.MultiCheckout;
   }
 });
 Object.defineProperty(exports, "MyOrders", {
@@ -930,10 +930,6 @@ var _GpsButton = require("./components/GpsButton");
 
 var _GoogleIdentity = require("./components/GoogleIdentity");
 
-var _GroupCartsPaymethodsAndWallets = require("./components/GroupCartsPaymethodsAndWallets");
-
-var _GroupCheckout = require("./components/GroupCheckout");
-
 var _LanguageSelector = require("./components/LanguageSelector");
 
 var _LoginForm = require("./components/LoginForm");
@@ -945,6 +941,10 @@ var _MainSearch = require("./components/MainSearch");
 var _MenuControl = require("./components/MenuControl");
 
 var _MomentOption = require("./components/MomentOption");
+
+var _MultiCheckout = require("./components/MultiCheckout");
+
+var _MultiCartsPaymethodsAndWallets = require("./components/MultiCartsPaymethodsAndWallets");
 
 var _MyOrders = require("./components/MyOrders");
 
