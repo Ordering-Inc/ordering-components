@@ -1,58 +1,37 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useSession } from '../../contexts/SessionContext'
 /**
  * Component to manage Multi businesses checkout page behavior without UI component
  */
 export const MultiCheckout = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    onPlaceOrderClick
   } = props
 
-  const [ordering] = useApi()
-  const [{ token }] = useSession()
-  const [{ carts }] = useOrder()
+  const [{ carts }, { placeMulitCarts }] = useOrder()
 
   const openCarts = (Object.values(carts)?.filter(cart => cart?.products && cart?.products?.length && cart?.status !== 2 && cart?.valid_schedule && cart?.valid_products && cart?.valid_address && cart?.valid_maximum && cart?.valid_minimum) || null) || []
   const totalCartsPrice = openCarts && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
   const cartsUuids = openCarts.reduce((uuids, cart) => [...uuids, cart.uuid], [])
 
-  const [placingState, setPlacingState] = useState({ loading: false, error: null })
+  const [placing, setPlacing] = useState(false)
   const [paymethodSelectedState, setPaymethodSelectedState] = useState({})
 
   /**
    * Confirm cart payment from  API
    */
   const handleGroupPlaceOrder = async () => {
-    try {
-      setPlacingState({ ...placingState, loading: true })
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `bearer ${token}`
-        },
-        body: JSON.stringify({
-          carts: cartsUuids,
-          amount: totalCartsPrice,
-          ...paymethodSelectedState
-        })
-      }
-
-      const response = await fetch(`${ordering.root}/carts/place_group`, requestOptions)
-      const { error, result } = await response.json()
-      if (!error) {
-        setPlacingState({ loading: false, error: null })
-      } else {
-        setPlacingState({ loading: false, error: result })
-      }
-    } catch (err) {
-      setPlacingState({
-        loading: false,
-        error: [err.message]
-      })
+    setPlacing(true)
+    const result = await placeMulitCarts({
+      carts: cartsUuids,
+      amount: totalCartsPrice,
+      ...paymethodSelectedState
+    })
+    setPlacing(false)
+    if (!result.error) {
+      onPlaceOrderClick && onPlaceOrderClick(cartsUuids)
     }
   }
 
@@ -83,7 +62,7 @@ export const MultiCheckout = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          placingState={placingState}
+          placing={placing}
           openCarts={openCarts}
           totalCartsPrice={totalCartsPrice}
           paymethodSelectedState={paymethodSelectedState}
