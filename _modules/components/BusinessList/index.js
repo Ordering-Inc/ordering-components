@@ -502,7 +502,7 @@ var BusinessList = function BusinessList(props) {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
     }
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useEffect)(function () {
     var _orderState$options15, _orderState$options16;
 
@@ -511,7 +511,7 @@ var BusinessList = function BusinessList(props) {
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true);
     }
-  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee]);
+  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useLayoutEffect)(function () {
     if (isDoordash) {
       getBusinesses(true);
