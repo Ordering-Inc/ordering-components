@@ -668,7 +668,7 @@ export const BusinessAndProductList = (props) => {
         resolve(removeProduct(product, carts))
       }))
     })
-    await Promise.all(allPromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCT', 'This product is not available.')] })
+    await Promise.all(allPromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCTS', 'These products are not available.')] })
   }
 
   useEffect(() => {
