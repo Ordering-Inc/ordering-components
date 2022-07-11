@@ -15,6 +15,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
+var _OrderContext = require("../../contexts/OrderContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -75,6 +77,10 @@ var FavoriteList = function FavoriteList(props) {
       user = _useSession2$.user,
       token = _useSession2$.token;
 
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      reorder = _useOrder2[1].reorder;
+
   var _useState = (0, _react.useState)({
     loading: false,
     favorites: [],
@@ -85,13 +91,22 @@ var FavoriteList = function FavoriteList(props) {
       setFavoriteList = _useState2[1];
 
   var _useState3 = (0, _react.useState)({
+    loading: false,
+    result: [],
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      reorderState = _useState4[0],
+      setReorderState = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     currentPage: paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1 ? paginationSettings.initialPage - 1 : 0,
     pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
     total: null
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      pagination = _useState4[0],
-      setPagination = _useState4[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      pagination = _useState6[0],
+      setPagination = _useState6[1];
   /**
    * Method to update favorite list
    * @param {number} id business, order, product id
@@ -295,6 +310,101 @@ var FavoriteList = function FavoriteList(props) {
     };
   }();
 
+  var handleReorder = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(orderId) {
+      var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, choosedOrder, _businessId, _businessData, _businessSlug;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (orderId) {
+                _context3.next = 2;
+                break;
+              }
+
+              return _context3.abrupt("return");
+
+            case 2:
+              _context3.prev = 2;
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: true
+              }));
+              _context3.next = 6;
+              return reorder(orderId);
+
+            case 6:
+              _yield$reorder = _context3.sent;
+              error = _yield$reorder.error;
+              result = _yield$reorder.result;
+
+              if (error) {
+                _context3.next = 13;
+                break;
+              }
+
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: false,
+                result: _objectSpread(_objectSpread({}, result), {}, {
+                  orderId: orderId
+                })
+              }));
+              _context3.next = 22;
+              break;
+
+            case 13:
+              choosedOrder = favoriteList.favorites.find(function (_order) {
+                return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId;
+              });
+              _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 ? void 0 : (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
+              _context3.next = 17;
+              return ordering.businesses(_businessId).select(['slug']).get();
+
+            case 17:
+              _businessData = _context3.sent;
+              _context3.next = 20;
+              return _businessData === null || _businessData === void 0 ? void 0 : (_businessData$content = _businessData.content) === null || _businessData$content === void 0 ? void 0 : (_businessData$content2 = _businessData$content.result) === null || _businessData$content2 === void 0 ? void 0 : _businessData$content2.slug;
+
+            case 20:
+              _businessSlug = _context3.sent;
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: false,
+                error: true,
+                result: _objectSpread(_objectSpread({}, result), {}, {
+                  orderId: orderId,
+                  business_id: _businessId,
+                  business: {
+                    slug: _businessSlug
+                  }
+                })
+              }));
+
+            case 22:
+              _context3.next = 27;
+              break;
+
+            case 24:
+              _context3.prev = 24;
+              _context3.t0 = _context3["catch"](2);
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: false,
+                error: true,
+                result: [_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message]
+              }));
+
+            case 27:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[2, 24]]);
+    }));
+
+    return function handleReorder(_x3) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     getFavoriteList(1);
   }, []);
@@ -302,7 +412,9 @@ var FavoriteList = function FavoriteList(props) {
     favoriteList: favoriteList,
     handleUpdateFavoriteList: handleUpdateFavoriteList,
     pagination: pagination,
-    getFavoriteList: getFavoriteList
+    getFavoriteList: getFavoriteList,
+    handleReorder: handleReorder,
+    reorderState: reorderState
   })));
 };
 
