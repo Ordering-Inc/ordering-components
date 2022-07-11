@@ -1086,7 +1086,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
               setAlertState({
                 open: true,
-                content: [t('NOT_AVAILABLE_PRODUCT', 'This product is not available.')]
+                content: [t('NOT_AVAILABLE_PRODUCTS', 'These products are not available.')]
               });
 
             case 7:
