@@ -15,10 +15,6 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _OrderContext = require("../../contexts/OrderContext");
 
-var _ApiContext = require("../../contexts/ApiContext");
-
-var _SessionContext = require("../../contexts/SessionContext");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -63,19 +59,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCheckout = function MultiCheckout(props) {
   var _Object$values;
 
-  var UIComponent = props.UIComponent;
-
-  var _useApi = (0, _ApiContext.useApi)(),
-      _useApi2 = _slicedToArray(_useApi, 1),
-      ordering = _useApi2[0];
-
-  var _useSession = (0, _SessionContext.useSession)(),
-      _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
+  var UIComponent = props.UIComponent,
+      onPlaceOrderClick = props.onPlaceOrderClick;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 1),
-      carts = _useOrder2[0].carts;
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      carts = _useOrder2[0].carts,
+      placeMulitCarts = _useOrder2[1].placeMulitCarts;
 
   var openCarts = ((_Object$values = Object.values(carts)) === null || _Object$values === void 0 ? void 0 : _Object$values.filter(function (cart) {
     var _cart$products;
@@ -89,13 +79,10 @@ var MultiCheckout = function MultiCheckout(props) {
     return [].concat(_toConsumableArray(uuids), [cart.uuid]);
   }, []);
 
-  var _useState = (0, _react.useState)({
-    loading: false,
-    error: null
-  }),
+  var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
-      placingState = _useState2[0],
-      setPlacingState = _useState2[1];
+      placing = _useState2[0],
+      setPlacing = _useState2[1];
 
   var _useState3 = (0, _react.useState)({}),
       _useState4 = _slicedToArray(_useState3, 2),
@@ -108,69 +95,32 @@ var MultiCheckout = function MultiCheckout(props) {
 
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var requestOptions, response, _yield$response$json, error, result;
-
+      var result;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
-              setPlacingState(_objectSpread(_objectSpread({}, placingState), {}, {
-                loading: true
-              }));
-              requestOptions = {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(token)
-                },
-                body: JSON.stringify(_objectSpread({
-                  carts: cartsUuids,
-                  amount: totalCartsPrice
-                }, paymethodSelectedState))
-              };
-              _context.next = 5;
-              return fetch("".concat(ordering.root, "/carts/place_group"), requestOptions);
+              setPlacing(true);
+              _context.next = 3;
+              return placeMulitCarts(_objectSpread({
+                carts: cartsUuids,
+                amount: totalCartsPrice
+              }, paymethodSelectedState));
 
-            case 5:
-              response = _context.sent;
-              _context.next = 8;
-              return response.json();
+            case 3:
+              result = _context.sent;
+              setPlacing(false);
 
-            case 8:
-              _yield$response$json = _context.sent;
-              error = _yield$response$json.error;
-              result = _yield$response$json.result;
-
-              if (!error) {
-                setPlacingState({
-                  loading: false,
-                  error: null
-                });
-              } else {
-                setPlacingState({
-                  loading: false,
-                  error: result
-                });
+              if (!result.error) {
+                onPlaceOrderClick && onPlaceOrderClick(cartsUuids);
               }
 
-              _context.next = 17;
-              break;
-
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
-              setPlacingState({
-                loading: false,
-                error: [_context.t0.message]
-              });
-
-            case 17:
+            case 6:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 14]]);
+      }, _callee);
     }));
 
     return function handleGroupPlaceOrder() {
@@ -200,7 +150,7 @@ var MultiCheckout = function MultiCheckout(props) {
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    placingState: placingState,
+    placing: placing,
     openCarts: openCarts,
     totalCartsPrice: totalCartsPrice,
     paymethodSelectedState: paymethodSelectedState,
