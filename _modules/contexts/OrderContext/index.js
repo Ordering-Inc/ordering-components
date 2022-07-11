@@ -1648,13 +1648,13 @@ var OrderProvider = function OrderProvider(_ref) {
     };
   }();
   /**
-   * Confirm cart
+   * Place multi carts
    */
 
 
-  var confirmCart = /*#__PURE__*/function () {
-    var _ref17 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee16(cardId, data) {
-      var customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
+  var placeMulitCarts = /*#__PURE__*/function () {
+    var _ref17 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee16(data) {
+      var requestOptions, response, _yield$response$json2, error, result;
 
       return _regenerator.default.wrap(function _callee16$(_context16) {
         while (1) {
@@ -1664,59 +1664,60 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              _context16.next = 4;
-              return strategy.getItem('user-customer', true);
+              requestOptions = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "bearer ".concat(session.token)
+                },
+                body: JSON.stringify(data)
+              };
+              _context16.next = 5;
+              return fetch("".concat(ordering.root, "/carts/place_group"), requestOptions);
 
-            case 4:
-              customerFromLocalStorage = _context16.sent;
-              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              body = _objectSpread(_objectSpread({}, data), {}, {
-                user_id: userCustomerId || session.user.id
-              });
+            case 5:
+              response = _context16.sent;
+              _context16.next = 8;
+              return response.json();
 
-              if (!(body.user_id === userCustomerId)) {
-                _context16.next = 13;
+            case 8:
+              _yield$response$json2 = _context16.sent;
+              error = _yield$response$json2.error;
+              result = _yield$response$json2.result;
+
+              if (error) {
+                _context16.next = 15;
                 break;
               }
 
-              _context16.next = 10;
-              return ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, {
-                headers: {
-                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-                }
+              result.carts.forEach(function (cart) {
+                delete state.carts["businessId:".concat(cart.business_id)];
+                var orderObject = {
+                  id: cart.uuid,
+                  business: {
+                    name: cart.business.name
+                  },
+                  total: cart.total,
+                  tax_total: cart.tax,
+                  delivery_zone_price: cart.delivery_price,
+                  business_id: cart.business_id
+                };
+                events.emit('order_placed', orderObject);
               });
-
-            case 10:
-              fetchurl = _context16.sent;
-              _context16.next = 16;
+              _context16.next = 18;
               break;
 
-            case 13:
-              _context16.next = 15;
-              return ordering.setAccessToken(session.token).carts(cardId).confirm(body, {
-                headers: {
-                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-                }
-              });
-
             case 15:
-              fetchurl = _context16.sent;
+              setAlert({
+                show: true,
+                content: result
+              });
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context16.abrupt("return");
 
-            case 16:
-              _fetchurl = fetchurl, _fetchurl$content = _fetchurl.content, error = _fetchurl$content.error, result = _fetchurl$content.result, cart = _fetchurl$content.cart;
-
-              if (!error) {
-                if (result.status !== 1) {
-                  state.carts["businessId:".concat(result.business_id)] = result;
-                  events.emit('cart_updated', result);
-                } else {
-                  delete state.carts["businessId:".concat(result.business_id)];
-                }
-              } else if (cart) {
-                state.carts["businessId:".concat(cart.business_id)] = cart;
-                events.emit('cart_updated', cart);
-              }
-
+            case 18:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
@@ -1744,18 +1745,18 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16, null, [[0, 22]]);
     }));
 
-    return function confirmCart(_x25, _x26) {
+    return function placeMulitCarts(_x25) {
       return _ref17.apply(this, arguments);
     };
   }();
   /**
-   * Reorder an order and get cart
+   * Confirm cart
    */
 
 
-  var reorder = /*#__PURE__*/function () {
-    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee17(orderId) {
-      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
+  var confirmCart = /*#__PURE__*/function () {
+    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee17(cardId, data) {
+      var customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
 
       return _regenerator.default.wrap(function _callee17$(_context17) {
         while (1) {
@@ -1771,6 +1772,107 @@ var OrderProvider = function OrderProvider(_ref) {
             case 4:
               customerFromLocalStorage = _context17.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              body = _objectSpread(_objectSpread({}, data), {}, {
+                user_id: userCustomerId || session.user.id
+              });
+
+              if (!(body.user_id === userCustomerId)) {
+                _context17.next = 13;
+                break;
+              }
+
+              _context17.next = 10;
+              return ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, {
+                headers: {
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+                }
+              });
+
+            case 10:
+              fetchurl = _context17.sent;
+              _context17.next = 16;
+              break;
+
+            case 13:
+              _context17.next = 15;
+              return ordering.setAccessToken(session.token).carts(cardId).confirm(body, {
+                headers: {
+                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+                }
+              });
+
+            case 15:
+              fetchurl = _context17.sent;
+
+            case 16:
+              _fetchurl = fetchurl, _fetchurl$content = _fetchurl.content, error = _fetchurl$content.error, result = _fetchurl$content.result, cart = _fetchurl$content.cart;
+
+              if (!error) {
+                if (result.status !== 1) {
+                  state.carts["businessId:".concat(result.business_id)] = result;
+                  events.emit('cart_updated', result);
+                } else {
+                  delete state.carts["businessId:".concat(result.business_id)];
+                }
+              } else if (cart) {
+                state.carts["businessId:".concat(cart.business_id)] = cart;
+                events.emit('cart_updated', cart);
+              }
+
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context17.abrupt("return", {
+                error: error,
+                result: result
+              });
+
+            case 22:
+              _context17.prev = 22;
+              _context17.t0 = _context17["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context17.abrupt("return", {
+                error: true,
+                result: [_context17.t0.message]
+              });
+
+            case 26:
+            case "end":
+              return _context17.stop();
+          }
+        }
+      }, _callee17, null, [[0, 22]]);
+    }));
+
+    return function confirmCart(_x26, _x27) {
+      return _ref18.apply(this, arguments);
+    };
+  }();
+  /**
+   * Reorder an order and get cart
+   */
+
+
+  var reorder = /*#__PURE__*/function () {
+    var _ref19 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee18(orderId) {
+      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
+
+      return _regenerator.default.wrap(function _callee18$(_context18) {
+        while (1) {
+          switch (_context18.prev = _context18.next) {
+            case 0:
+              _context18.prev = 0;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+              _context18.next = 4;
+              return strategy.getItem('user-customer', true);
+
+            case 4:
+              customerFromLocalStorage = _context18.sent;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               query = userCustomerId ? {
                 user_id: userCustomerId
               } : null;
@@ -1784,11 +1886,11 @@ var OrderProvider = function OrderProvider(_ref) {
                 options.query = query;
               }
 
-              _context17.next = 11;
+              _context18.next = 11;
               return ordering.setAccessToken(session.token).orders(orderId).reorder(options);
 
             case 11:
-              _yield$ordering$setAc18 = _context17.sent;
+              _yield$ordering$setAc18 = _context18.sent;
               _yield$ordering$setAc19 = _yield$ordering$setAc18.content;
               error = _yield$ordering$setAc19.error;
               result = _yield$ordering$setAc19.result;
@@ -1806,49 +1908,49 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              return _context17.abrupt("return", {
+              return _context18.abrupt("return", {
                 error: error,
                 result: result
               });
 
             case 20:
-              _context17.prev = 20;
-              _context17.t0 = _context17["catch"](0);
+              _context18.prev = 20;
+              _context18.t0 = _context18["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-              return _context17.abrupt("return", {
+              return _context18.abrupt("return", {
                 error: true,
-                result: [_context17.t0.message]
+                result: [_context18.t0.message]
               });
 
             case 24:
             case "end":
-              return _context17.stop();
+              return _context18.stop();
           }
         }
-      }, _callee17, null, [[0, 20]]);
+      }, _callee18, null, [[0, 20]]);
     }));
 
-    return function reorder(_x27) {
-      return _ref18.apply(this, arguments);
+    return function reorder(_x28) {
+      return _ref19.apply(this, arguments);
     };
   }();
 
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
-    var _ref19 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee18() {
+    var _ref20 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee19() {
       var _configState$configs4, _configState$configs5, _state$options7;
 
       var optionsLocalStorage;
-      return _regenerator.default.wrap(function _callee18$(_context18) {
+      return _regenerator.default.wrap(function _callee19$(_context19) {
         while (1) {
-          switch (_context18.prev = _context18.next) {
+          switch (_context19.prev = _context19.next) {
             case 0:
-              _context18.next = 2;
+              _context19.next = 2;
               return strategy.getItem('options', true);
 
             case 2:
-              optionsLocalStorage = _context18.sent;
+              optionsLocalStorage = _context19.sent;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
                 options: isDisabledDefaultOpts ? {
@@ -1863,14 +1965,14 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
             case "end":
-              return _context18.stop();
+              return _context19.stop();
           }
         }
-      }, _callee18);
+      }, _callee19);
     }));
 
     return function setOptionFromLocalStorage() {
-      return _ref19.apply(this, arguments);
+      return _ref20.apply(this, arguments);
     };
   }();
 
@@ -1879,23 +1981,23 @@ var OrderProvider = function OrderProvider(_ref) {
   };
 
   var setUserCustomerOptions = /*#__PURE__*/function () {
-    var _ref20 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee19(params) {
+    var _ref21 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee20(params) {
       var _params$options, _params$customer;
 
       var options;
-      return _regenerator.default.wrap(function _callee19$(_context19) {
+      return _regenerator.default.wrap(function _callee20$(_context20) {
         while (1) {
-          switch (_context19.prev = _context19.next) {
+          switch (_context20.prev = _context20.next) {
             case 0:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
               options = (_params$options = params.options) !== null && _params$options !== void 0 ? _params$options : {};
-              _context19.next = 4;
+              _context20.next = 4;
               return setUserCustomer((_params$customer = params.customer) !== null && _params$customer !== void 0 ? _params$customer : {}, true);
 
             case 4:
-              _context19.next = 6;
+              _context20.next = 6;
               return updateOrderOptions(options);
 
             case 6:
@@ -1905,14 +2007,14 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 7:
             case "end":
-              return _context19.stop();
+              return _context20.stop();
           }
         }
-      }, _callee19);
+      }, _callee20);
     }));
 
-    return function setUserCustomerOptions(_x28) {
-      return _ref20.apply(this, arguments);
+    return function setUserCustomerOptions(_x29) {
+      return _ref21.apply(this, arguments);
     };
   }();
 
@@ -1981,9 +2083,9 @@ var OrderProvider = function OrderProvider(_ref) {
       }));
     };
 
-    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref21) {
-      var carts = _ref21.carts,
-          options = _objectWithoutProperties(_ref21, _excluded3);
+    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref22) {
+      var carts = _ref22.carts,
+          options = _objectWithoutProperties(_ref22, _excluded3);
 
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
@@ -2048,7 +2150,8 @@ var OrderProvider = function OrderProvider(_ref) {
     setConfirm: setConfirm,
     changePaymethod: changePaymethod,
     setUserCustomerOptions: setUserCustomerOptions,
-    setStateValues: setStateValues
+    setStateValues: setStateValues,
+    placeMulitCarts: placeMulitCarts
   };
   var copyState = JSON.parse(JSON.stringify(state));
   return /*#__PURE__*/_react.default.createElement(OrderContext.Provider, {
