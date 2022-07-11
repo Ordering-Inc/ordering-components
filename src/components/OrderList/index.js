@@ -25,7 +25,11 @@ export const OrderList = props => {
     activeOrders,
     isDynamicSort,
     businessId,
-    franchiseId
+    franchiseId,
+    businessesSearchList,
+    setIsEmptyBusinesses,
+    businessOrderIds,
+    setBusinessOrderIds
   } = props
 
   const [ordering] = useApi()
@@ -48,6 +52,7 @@ export const OrderList = props => {
   const [updateOtherStatus, setUpdateOtherStatus] = useState([])
   const [sortBy, setSortBy] = useState({ param: orderBy, direction: orderDirection })
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
+  const [products, setProducts] = useState([])
   const profileMessage = props.profileMessages
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
@@ -172,6 +177,19 @@ export const OrderList = props => {
           error: response.content.error ? response.content.result : null
         })
       }
+      setBusinessOrderIds && setBusinessOrderIds(
+        [...response.content.result, ...orderList.orders]
+          .map(order => order.business_id)
+          .filter((id, i, hash) => (!businessesSearchList || businessesSearchList?.businesses?.some(business => business?.id === id)) && hash.indexOf(id) === i)
+      )
+      setProducts && setProducts(
+        [...response.content.result, ...orderList.orders]
+          .filter(order => !businessesSearchList || businessesSearchList?.businesses?.some(business => order?.business_id === business?.id))
+          .map(order => order.products)
+          .flat()
+          .filter((product, i, hash) => hash.map(_product => _product?.product_id).indexOf(product?.product_id) === i)
+      )
+
       if (!response.content.error) {
         setPagination({
           currentPage: keepOrders
@@ -243,7 +261,7 @@ export const OrderList = props => {
         orders: orders?.lenght > 0 ? orders : customArray || [],
         loading: false
       })
-    } else {
+    } else if (!businessesSearchList) {
       loadOrders()
     }
 
@@ -421,6 +439,16 @@ export const OrderList = props => {
     }
   }, [sortBy])
 
+  useEffect(() => {
+    if (businessesSearchList && !businessesSearchList?.loading) {
+      loadOrders(false, false, false, true)
+    }
+  }, [businessesSearchList, businessId])
+
+  useEffect(() => {
+    setIsEmptyBusinesses && setIsEmptyBusinesses(businessOrderIds?.length === 0)
+  }, [businessOrderIds])
+
   return (
     <>
       {UIComponent && (
@@ -439,6 +467,8 @@ export const OrderList = props => {
           setUpdateOtherStatus={setUpdateOtherStatus}
           handleReorder={handleReorder}
           reorderState={reorderState}
+          businessOrderIds={businessOrderIds}
+          products={products}
           handleUpdateOrderList={handleUpdateOrderList}
         />
       )}
