@@ -8,7 +8,8 @@ export const BusinessSearchList = (props) => {
   const {
     UIComponent,
     paginationSettings,
-    lazySearch
+    lazySearch,
+    defaultTerm
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -31,7 +32,7 @@ export const BusinessSearchList = (props) => {
     franchise_ids: [],
     price_level: null
   })
-  const [termValue, setTermValue] = useState('')
+  const [termValue, setTermValue] = useState(defaultTerm || '')
 
   useEffect(() => {
     !lazySearch && handleSearchbusinessAndProducts(true)
@@ -164,6 +165,45 @@ export const BusinessSearchList = (props) => {
     }
   }
 
+  /**
+  * Function to get tag list from API
+  */
+  const getTagList = async () => {
+    try {
+      setTags({ ...tags, loading: true })
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+      const response = await fetch(`${ordering.root}/tags`, requestOptions)
+      const content = await response.json()
+
+      if (!content.error) {
+        setTags({
+          ...tags,
+          loading: false,
+          result: content?.result,
+          error: null
+        })
+      } else {
+        setTags({
+          ...tags,
+          loading: false,
+          error: content?.result
+        })
+      }
+    } catch (error) {
+      setTags({
+        ...tags,
+        loading: false,
+        error: error.message
+      })
+    }
+  }
   useEffect(() => {
     getBrandList()
   }, [])

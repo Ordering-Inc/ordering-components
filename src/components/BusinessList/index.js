@@ -448,6 +448,27 @@ export const BusinessList = (props) => {
     setMaxDeliveryFee(deliveryFee)
   }
 
+  /**
+   * Method to update business list
+   * @param {number} businessId business id
+   * @param {object} changes business info
+   */
+  const handleUpdateBusinessList = (businessId, changes) => {
+    const updatedBusinesses = businessesList?.businesses.map(business => {
+      if (business?.id === businessId) {
+        return {
+          ...business,
+          ...changes
+        }
+      }
+      return business
+    })
+    setBusinessesList({
+      ...businessesList,
+      businesses: updatedBusinesses
+    })
+  }
+
   return (
     <>
       {
@@ -469,6 +490,7 @@ export const BusinessList = (props) => {
             handleChangeBusinessType={handleChangeBusinessType}
             handleChangeMaxDeliveryFee={handleChangeMaxDeliveryFee}
             franchiseEnabled={franchiseEnabled}
+            handleUpdateBusinessList={handleUpdateBusinessList}
           />
         )
       }

@@ -5,7 +5,6 @@ import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useConfig } from '../../contexts/ConfigContext'
-
 dayjs.extend(utc)
 
 export const BusinessAndProductList = (props) => {
@@ -152,6 +151,40 @@ export const BusinessAndProductList = (props) => {
         iterateCategories(category.subcategories)
       })
     )
+  }
+
+  const handleUpdateProducts = (productId, changes) => {
+    const updatedProducts = categoryState?.products.map(product => {
+      if (product?.id === productId) {
+        return {
+          ...product,
+          ...changes
+        }
+      }
+      return product
+    })
+    setCategoryState({
+      ...categoryState,
+      products: updatedProducts
+    })
+    if (categoriesState?.featured?.products) {
+      const updatedFeaturedProducts = categoriesState?.featured?.products.map(product => {
+        if (product?.id === productId) {
+          return {
+            ...product,
+            ...changes
+          }
+        }
+        return product
+      })
+      setCategoriesState({
+        ...categoriesState,
+        featured: {
+          ...categoriesState.featured,
+          products: updatedFeaturedProducts
+        }
+      })
+    }
   }
 
   const getProducts = async () => {
@@ -635,7 +668,7 @@ export const BusinessAndProductList = (props) => {
         resolve(removeProduct(product, carts))
       }))
     })
-    await Promise.all(allPromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCT', 'This product is not available.')] })
+    await Promise.all(allPromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCTS', 'These products are not available.')] })
   }
 
   useEffect(() => {
@@ -746,6 +779,7 @@ export const BusinessAndProductList = (props) => {
           multiRemoveProducts={multiRemoveProducts}
           setAlertState={setAlertState}
           alertState={alertState}
+          handleUpdateProducts={handleUpdateProducts}
         />
       )}
     </>
