@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MultiCheckout = void 0;
+exports.MultiOrdersDetails = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,7 +13,9 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _OrderContext = require("../../contexts/OrderContext");
+var _ApiContext = require("../../contexts/ApiContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -33,14 +35,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -54,116 +48,126 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage Multi businesses checkout page behavior without UI component
+ * Component to manage Multi orders page behavior without UI component
  */
-var MultiCheckout = function MultiCheckout(props) {
-  var _Object$values;
+var MultiOrdersDetails = function MultiOrdersDetails(props) {
+  var _ordersList$orders$, _ordersList$orders$2;
 
-  var UIComponent = props.UIComponent,
-      onPlaceOrderClick = props.onPlaceOrderClick;
+  var orderUuids = props.orderUuids,
+      onRedirectPage = props.onRedirectPage,
+      UIComponent = props.UIComponent;
 
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 2),
-      carts = _useOrder2[0].carts,
-      placeMulitCarts = _useOrder2[1].placeMulitCarts;
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
 
-  var openCarts = ((_Object$values = Object.values(carts)) === null || _Object$values === void 0 ? void 0 : _Object$values.filter(function (cart) {
-    var _cart$products;
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
 
-    return (cart === null || cart === void 0 ? void 0 : cart.products) && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.length) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2 && (cart === null || cart === void 0 ? void 0 : cart.valid_schedule) && (cart === null || cart === void 0 ? void 0 : cart.valid_products) && (cart === null || cart === void 0 ? void 0 : cart.valid_address) && (cart === null || cart === void 0 ? void 0 : cart.valid_maximum) && (cart === null || cart === void 0 ? void 0 : cart.valid_minimum);
-  })) || null || [];
-  var totalCartsPrice = openCarts && openCarts.reduce(function (total, cart) {
-    return total + (cart === null || cart === void 0 ? void 0 : cart.total);
-  }, 0);
-  var cartsUuids = openCarts.reduce(function (uuids, cart) {
-    return [].concat(_toConsumableArray(uuids), [cart.uuid]);
-  }, []);
-
-  var _useState = (0, _react.useState)(false),
+  var _useState = (0, _react.useState)({
+    loading: true,
+    error: null,
+    orders: []
+  }),
       _useState2 = _slicedToArray(_useState, 2),
-      placing = _useState2[0],
-      setPlacing = _useState2[1];
+      ordersList = _useState2[0],
+      setOrdersList = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({}),
+  var _useState3 = (0, _react.useState)(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      paymethodSelectedState = _useState4[0],
-      setPaymethodSelectedState = _useState4[1];
+      totalPrice = _useState4[0],
+      setTotalPrice = _useState4[1];
+  /**
+   * Get orders from API
+   */
 
-  var handleGroupPlaceOrder = /*#__PURE__*/function () {
+
+  var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$placeMulitCart, error, result, orderUuids;
+      var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _totalPrice;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setPlacing(true);
-              _context.next = 3;
-              return placeMulitCarts(_objectSpread({
-                carts: cartsUuids,
-                amount: totalCartsPrice
-              }, paymethodSelectedState));
+              _context.prev = 0;
+              setOrdersList(_objectSpread(_objectSpread({}, ordersList), {}, {
+                loading: true
+              }));
+              options = {
+                query: {
+                  orderBy: '-',
+                  where: [{
+                    attribute: 'uuid',
+                    value: orderUuids
+                  }]
+                }
+              };
+              _context.next = 5;
+              return ordering.setAccessToken(token).orders().get(options);
 
-            case 3:
-              _yield$placeMulitCart = _context.sent;
-              error = _yield$placeMulitCart.error;
-              result = _yield$placeMulitCart.result;
-              setPlacing(false);
+            case 5:
+              _yield$ordering$setAc = _context.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              error = _yield$ordering$setAc2.error;
+              result = _yield$ordering$setAc2.result;
+              setOrdersList({
+                loading: false,
+                orders: error ? [] : result,
+                error: error ? result : null
+              });
 
               if (!error) {
-                orderUuids = result.carts.reduce(function (uuids, cart) {
-                  return [].concat(_toConsumableArray(uuids), [cart.order.uuid]);
-                }, []);
-                onPlaceOrderClick && onPlaceOrderClick(orderUuids);
+                _totalPrice = result.reduce(function (total, order) {
+                  var _order$summary;
+
+                  return total + (order === null || order === void 0 ? void 0 : (_order$summary = order.summary) === null || _order$summary === void 0 ? void 0 : _order$summary.total);
+                }, 0);
+                setTotalPrice(_totalPrice);
               }
 
-            case 8:
+              _context.next = 16;
+              break;
+
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](0);
+              setOrdersList(_objectSpread(_objectSpread({}, ordersList), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
+
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 13]]);
     }));
 
-    return function handleGroupPlaceOrder() {
+    return function getOrders() {
       return _ref.apply(this, arguments);
     };
   }();
 
-  var handleSelectPaymethod = function handleSelectPaymethod(paymethodId) {
-    setPaymethodSelectedState(_objectSpread(_objectSpread({}, paymethodSelectedState), {}, {
-      paymethod_id: paymethodId
-    }));
-  };
-
-  var handleSelectWallet = function handleSelectWallet(checked, wallet) {
-    if (checked) {
-      setPaymethodSelectedState(_objectSpread(_objectSpread({}, paymethodSelectedState), {}, {
-        wallet_id: wallet.id,
-        wallet_data: wallet.balance > totalCartsPrice ? totalCartsPrice : wallet.balance
-      }));
+  (0, _react.useEffect)(function () {
+    if (orderUuids.length) {
+      getOrders();
     } else {
-      var _paymethodSelectedState = _objectSpread({}, paymethodSelectedState);
-
-      delete _paymethodSelectedState.wallet_id;
-      delete _paymethodSelectedState.wallet_data;
-      setPaymethodSelectedState(_paymethodSelectedState);
+      onRedirectPage && onRedirectPage();
     }
-  };
-
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    placing: placing,
-    openCarts: openCarts,
-    totalCartsPrice: totalCartsPrice,
-    paymethodSelectedState: paymethodSelectedState,
-    handleSelectPaymethod: handleSelectPaymethod,
-    handleGroupPlaceOrder: handleGroupPlaceOrder,
-    handleSelectWallet: handleSelectWallet
+    ordersList: ordersList,
+    customer: (_ordersList$orders$ = ordersList.orders[0]) === null || _ordersList$orders$ === void 0 ? void 0 : _ordersList$orders$.customer,
+    paymentEvents: ((_ordersList$orders$2 = ordersList.orders[0]) === null || _ordersList$orders$2 === void 0 ? void 0 : _ordersList$orders$2.payment_events) || [],
+    totalPrice: totalPrice
   })));
 };
 
-exports.MultiCheckout = MultiCheckout;
-MultiCheckout.propTypes = {
+exports.MultiOrdersDetails = MultiOrdersDetails;
+MultiOrdersDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
