@@ -725,8 +725,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         })
       } else {
         setAlert({ show: true, content: result })
-        setState({ ...state, loading: false })
-        return
       }
       setState({ ...state, loading: false })
       return { error, result }
