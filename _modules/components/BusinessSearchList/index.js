@@ -62,7 +62,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
   var UIComponent = props.UIComponent,
       paginationSettings = props.paginationSettings,
-      lazySearch = props.lazySearch;
+      lazySearch = props.lazySearch,
+      defaultTerm = props.defaultTerm;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -119,7 +120,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
       filters = _useState8[0],
       setFilters = _useState8[1];
 
-  var _useState9 = (0, _react.useState)(''),
+  var _useState9 = (0, _react.useState)(defaultTerm || ''),
       _useState10 = _slicedToArray(_useState9, 2),
       termValue = _useState10[0],
       setTermValue = _useState10[1];
@@ -321,6 +322,75 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
     return function getBrandList() {
       return _ref2.apply(this, arguments);
+    };
+  }();
+  /**
+  * Function to get tag list from API
+  */
+
+
+  var getTagList = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var requestOptions, response, content;
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              };
+              _context3.next = 5;
+              return fetch("".concat(ordering.root, "/tags"), requestOptions);
+
+            case 5:
+              response = _context3.sent;
+              _context3.next = 8;
+              return response.json();
+
+            case 8:
+              content = _context3.sent;
+
+              if (!content.error) {
+                setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                  loading: false,
+                  result: content === null || content === void 0 ? void 0 : content.result,
+                  error: null
+                }));
+              } else {
+                setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                  loading: false,
+                  error: content === null || content === void 0 ? void 0 : content.result
+                }));
+              }
+
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](0);
+              setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                loading: false,
+                error: _context3.t0.message
+              }));
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 12]]);
+    }));
+
+    return function getTagList() {
+      return _ref3.apply(this, arguments);
     };
   }();
 

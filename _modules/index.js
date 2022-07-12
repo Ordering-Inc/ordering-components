@@ -267,6 +267,12 @@ Object.defineProperty(exports, "FacebookPixel", {
     return _FacebookPixel.FacebookPixel;
   }
 });
+Object.defineProperty(exports, "FavoriteList", {
+  enumerable: true,
+  get: function get() {
+    return _FavoriteList.FavoriteList;
+  }
+});
 Object.defineProperty(exports, "FloatingButton", {
   enumerable: true,
   get: function get() {
@@ -923,6 +929,8 @@ var _ExamineClick = require("./components/ExamineClick");
 var _FacebookLoginButton = require("./components/FacebookLoginButton");
 
 var _FacebookPixel = require("./components/FacebookPixel");
+
+var _FavoriteList = require("./components/FavoriteList");
 
 var _ForgotPasswordForm = require("./components/ForgotPasswordForm");
 

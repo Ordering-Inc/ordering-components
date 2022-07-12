@@ -89,7 +89,7 @@ var DriverTips = function DriverTips(props) {
 
   var handlerChangeOption = function handlerChangeOption(driverTip) {
     var isFixedPrice = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : props.isFixedPrice;
-    driverTip = typeof driverTip === 'string' ? parseInt(driverTip) : driverTip;
+    driverTip = typeof driverTip === 'string' ? parseFloat(driverTip) : driverTip;
 
     if (useOrderContext) {
       changeDriverTip(businessId, driverTip, isFixedPrice);

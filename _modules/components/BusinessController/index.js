@@ -19,6 +19,12 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _UtilsContext = require("../../contexts/UtilsContext");
 
+var _SessionContext = require("../../contexts/SessionContext");
+
+var _ToastContext = require("../../contexts/ToastContext");
+
+var _LanguageContext = require("../../contexts/LanguageContext");
+
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _timezone = _interopRequireDefault(require("dayjs/plugin/timezone"));
@@ -32,6 +38,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
@@ -67,11 +81,28 @@ var BusinessController = function BusinessController(props) {
       handleCustomClick = props.handleCustomClick,
       isDisabledInterval = props.isDisabledInterval,
       minutesToCloseSoon = props.minutesToCloseSoon,
-      UIComponent = props.UIComponent;
+      UIComponent = props.UIComponent,
+      handleUpdateBusinessList = props.handleUpdateBusinessList,
+      favoriteIds = props.favoriteIds,
+      setFavoriteIds = props.setFavoriteIds;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token;
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
   /**
    * This must be containt business object data
    */
@@ -119,6 +150,14 @@ var BusinessController = function BusinessController(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       businessWillCloseSoonMinutes = _useState6[0],
       setBusinessWillCloseSoonMinutes = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      actionState = _useState8[0],
+      setActionState = _useState8[1];
   /**
    * Method to get business from SDK
    */
@@ -227,20 +266,134 @@ var BusinessController = function BusinessController(props) {
   var formatNumber = function formatNumber(num) {
     return Math.round(num * 1e2) / 1e2;
   };
+  /**
+   * Method to add, remove favorite info for user from API
+   */
+
+
+  var handleFavoriteBusiness = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var isAdd,
+          _businessState$busine,
+          _businessState$busine2,
+          changes,
+          requestOptions,
+          fetchEndpoint,
+          response,
+          content,
+          _businessState$busine3,
+          _businessState$busine4,
+          updateIds,
+          _args2 = arguments;
+
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              isAdd = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : false;
+
+              if (!(!(businessState !== null && businessState !== void 0 && businessState.business) || !user)) {
+                _context2.next = 3;
+                break;
+              }
+
+              return _context2.abrupt("return");
+
+            case 3:
+              showToast(_ToastContext.ToastType.Info, t('LOADING', 'loading'));
+              _context2.prev = 4;
+              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
+                loading: true,
+                error: null
+              }));
+              changes = {
+                object_id: businessState === null || businessState === void 0 ? void 0 : (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.id
+              };
+              requestOptions = _objectSpread({
+                method: isAdd ? 'POST' : 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              }, isAdd && {
+                body: JSON.stringify(changes)
+              });
+              fetchEndpoint = isAdd ? "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_businesses") : "".concat(ordering.root, "/users/").concat(user.id, "/favorite_businesses/").concat(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : _businessState$busine2.id);
+              _context2.next = 11;
+              return fetch(fetchEndpoint, requestOptions);
+
+            case 11:
+              response = _context2.sent;
+              _context2.next = 14;
+              return response.json();
+
+            case 14:
+              content = _context2.sent;
+
+              if (!content.error) {
+                setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
+                  loading: false
+                }));
+                handleUpdateBusinessList && handleUpdateBusinessList(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine3 = businessState.business) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.id, {
+                  favorite: isAdd
+                });
+
+                if (favoriteIds) {
+                  updateIds = isAdd ? [].concat(_toConsumableArray(favoriteIds), [businessState === null || businessState === void 0 ? void 0 : (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.id]) : favoriteIds.filter(function (item) {
+                    var _businessState$busine5;
+
+                    return item !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id);
+                  });
+                  setFavoriteIds(updateIds);
+                }
+
+                showToast(_ToastContext.ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
+              } else {
+                setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
+                  loading: false,
+                  error: content.result
+                }));
+                showToast(_ToastContext.ToastType.Error, content.result);
+              }
+
+              _context2.next = 22;
+              break;
+
+            case 18:
+              _context2.prev = 18;
+              _context2.t0 = _context2["catch"](4);
+              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
+                loading: false,
+                error: [_context2.t0.message]
+              }));
+              showToast(_ToastContext.ToastType.Error, [_context2.t0.message]);
+
+            case 22:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[4, 18]]);
+    }));
+
+    return function handleFavoriteBusiness() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
     if (!isDisabledInterval) {
-      var _businessState$busine, _businessState$busine2, _businessState$busine3;
+      var _businessState$busine6, _businessState$busine7, _businessState$busine8;
 
       var timeout = null;
       var timeoutCloseSoon = null;
-      var currentDate = (0, _dayjs.default)().tz((_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.timezone);
+      var currentDate = (0, _dayjs.default)().tz((_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.timezone);
       var lapse = null;
 
-      if ((_businessState$busine2 = businessState.business) !== null && _businessState$busine2 !== void 0 && (_businessState$busine3 = _businessState$busine2.today) !== null && _businessState$busine3 !== void 0 && _businessState$busine3.enabled) {
-        var _businessState$busine4, _businessState$busine5, _businessState$busine6;
+      if ((_businessState$busine7 = businessState.business) !== null && _businessState$busine7 !== void 0 && (_businessState$busine8 = _businessState$busine7.today) !== null && _businessState$busine8 !== void 0 && _businessState$busine8.enabled) {
+        var _businessState$busine9, _businessState$busine10, _businessState$busine11;
 
-        lapse = (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : (_businessState$busine5 = _businessState$busine4.today) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.lapses) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.find(function (lapse) {
+        lapse = (_businessState$busine9 = businessState.business) === null || _businessState$busine9 === void 0 ? void 0 : (_businessState$busine10 = _businessState$busine9.today) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.lapses) === null || _businessState$busine11 === void 0 ? void 0 : _businessState$busine11.find(function (lapse) {
           var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
           var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
           return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix();
@@ -289,40 +442,40 @@ var BusinessController = function BusinessController(props) {
     };
   }, [businessWillCloseSoonMinutes]);
   (0, _react.useEffect)(function () {
-    var _businessState$busine7;
+    var _businessState$busine12;
 
-    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.id)) {
+    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: business
       }));
     } else if (!business) {
       getBusiness();
     }
-  }, []);
+  }, [business]);
 
   var updateBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(businessId) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(businessId) {
       var updateParams,
           _yield$ordering$busin3,
           _yield$ordering$busin4,
           result,
           error,
-          _args2 = arguments;
+          _args3 = arguments;
 
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+      return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              updateParams = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : {};
+              updateParams = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : {};
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
                 loading: true
               }));
-              _context2.prev = 2;
-              _context2.next = 5;
+              _context3.prev = 2;
+              _context3.next = 5;
               return ordering.businesses(businessId).save(updateParams);
 
             case 5:
-              _yield$ordering$busin3 = _context2.sent;
+              _yield$ordering$busin3 = _context3.sent;
               _yield$ordering$busin4 = _yield$ordering$busin3.content;
               result = _yield$ordering$busin4.result;
               error = _yield$ordering$busin4.error;
@@ -340,30 +493,49 @@ var BusinessController = function BusinessController(props) {
                 }));
               }
 
-              _context2.next = 15;
+              _context3.next = 15;
               break;
 
             case 12:
-              _context2.prev = 12;
-              _context2.t0 = _context2["catch"](2);
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](2);
               setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
                 loading: false,
-                error: _context2.t0.message
+                error: _context3.t0.message
               }));
 
             case 15:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, null, [[2, 12]]);
+      }, _callee3, null, [[2, 12]]);
     }));
 
     return function updateBusiness(_x) {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
+  (0, _react.useEffect)(function () {
+    var _businessState$busine13;
+
+    if (!favoriteIds) return;
+
+    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id)) {
+      setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+        business: _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
+          favorite: true
+        })
+      }));
+    } else {
+      setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+        business: _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
+          favorite: false
+        })
+      }));
+    }
+  }, [favoriteIds]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     updateBusiness: updateBusiness,
     orderState: orderState,
@@ -375,7 +547,8 @@ var BusinessController = function BusinessController(props) {
     getBusinessOffer: getBusinessOffer,
     getBusinessMaxOffer: getBusinessMaxOffer,
     handleClick: handleCustomClick || onBusinessClick,
-    businessWillCloseSoonMinutes: businessWillCloseSoonMinutes
+    businessWillCloseSoonMinutes: businessWillCloseSoonMinutes,
+    handleFavoriteBusiness: handleFavoriteBusiness
   })));
 };
 

@@ -74,10 +74,10 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
       ordersList = _useState2[0],
       setOrdersList = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(null),
+  var _useState3 = (0, _react.useState)({}),
       _useState4 = _slicedToArray(_useState3, 2),
-      totalPrice = _useState4[0],
-      setTotalPrice = _useState4[1];
+      ordersSummary = _useState4[0],
+      setOrdersSummary = _useState4[1];
   /**
    * Get orders from API
    */
@@ -85,7 +85,7 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
 
   var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _totalPrice;
+      var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _total, _subtotal, _tax;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -119,12 +119,26 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
               });
 
               if (!error) {
-                _totalPrice = result.reduce(function (total, order) {
+                _total = result.reduce(function (total, order) {
                   var _order$summary;
 
                   return total + (order === null || order === void 0 ? void 0 : (_order$summary = order.summary) === null || _order$summary === void 0 ? void 0 : _order$summary.total);
                 }, 0);
-                setTotalPrice(_totalPrice);
+                _subtotal = result.reduce(function (subtotal, order) {
+                  var _order$summary2;
+
+                  return subtotal + (order === null || order === void 0 ? void 0 : (_order$summary2 = order.summary) === null || _order$summary2 === void 0 ? void 0 : _order$summary2.subtotal);
+                }, 0);
+                _tax = result.reduce(function (tax, order) {
+                  var _order$summary3;
+
+                  return tax + (order === null || order === void 0 ? void 0 : (_order$summary3 = order.summary) === null || _order$summary3 === void 0 ? void 0 : _order$summary3.tax);
+                }, 0);
+                setOrdersSummary({
+                  total: _total,
+                  subtotal: _subtotal,
+                  tax: _tax
+                });
               }
 
               _context.next = 16;
@@ -162,7 +176,7 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
     ordersList: ordersList,
     customer: (_ordersList$orders$ = ordersList.orders[0]) === null || _ordersList$orders$ === void 0 ? void 0 : _ordersList$orders$.customer,
     paymentEvents: ((_ordersList$orders$2 = ordersList.orders[0]) === null || _ordersList$orders$2 === void 0 ? void 0 : _ordersList$orders$2.payment_events) || [],
-    totalPrice: totalPrice
+    ordersSummary: ordersSummary
   })));
 };
 

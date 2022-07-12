@@ -82,7 +82,11 @@ var OrderList = function OrderList(props) {
       activeOrders = props.activeOrders,
       isDynamicSort = props.isDynamicSort,
       businessId = props.businessId,
-      franchiseId = props.franchiseId;
+      franchiseId = props.franchiseId,
+      businessesSearchList = props.businessesSearchList,
+      setIsEmptyBusinesses = props.setIsEmptyBusinesses,
+      businessOrderIds = props.businessOrderIds,
+      setBusinessOrderIds = props.setBusinessOrderIds;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -154,6 +158,11 @@ var OrderList = function OrderList(props) {
       _useState12 = _slicedToArray(_useState11, 2),
       reorderState = _useState12[0],
       setReorderState = _useState12[1];
+
+  var _useState13 = (0, _react.useState)([]),
+      _useState14 = _slicedToArray(_useState13, 2),
+      products = _useState14[0],
+      setProducts = _useState14[1];
 
   var profileMessage = props.profileMessages;
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
@@ -404,6 +413,29 @@ var OrderList = function OrderList(props) {
                 });
               }
 
+              setBusinessOrderIds && setBusinessOrderIds([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).map(function (order) {
+                return order.business_id;
+              }).filter(function (id, i, hash) {
+                var _businessesSearchList;
+
+                return (!businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 ? void 0 : (_businessesSearchList = businessesSearchList.businesses) === null || _businessesSearchList === void 0 ? void 0 : _businessesSearchList.some(function (business) {
+                  return (business === null || business === void 0 ? void 0 : business.id) === id;
+                }))) && hash.indexOf(id) === i;
+              }));
+              setProducts && setProducts([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).filter(function (order) {
+                var _businessesSearchList2;
+
+                return !businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 ? void 0 : (_businessesSearchList2 = businessesSearchList.businesses) === null || _businessesSearchList2 === void 0 ? void 0 : _businessesSearchList2.some(function (business) {
+                  return (order === null || order === void 0 ? void 0 : order.business_id) === (business === null || business === void 0 ? void 0 : business.id);
+                }));
+              }).map(function (order) {
+                return order.products;
+              }).flat().filter(function (product, i, hash) {
+                return hash.map(function (_product) {
+                  return _product === null || _product === void 0 ? void 0 : _product.product_id;
+                }).indexOf(product === null || product === void 0 ? void 0 : product.product_id) === i;
+              }));
+
               if (!response.content.error) {
                 setPagination({
                   currentPage: keepOrders ? pagination.currentPage : response.content.pagination.current_page,
@@ -415,11 +447,11 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context3.next = 21;
+              _context3.next = 23;
               break;
 
-            case 18:
-              _context3.prev = 18;
+            case 20:
+              _context3.prev = 20;
               _context3.t0 = _context3["catch"](8);
 
               if (_context3.t0.constructor.name !== 'Cancel') {
@@ -429,18 +461,31 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 21:
+            case 23:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[8, 18]]);
+      }, _callee3, null, [[8, 20]]);
     }));
 
     return function loadOrders(_x3, _x4) {
       return _ref3.apply(this, arguments);
     };
   }();
+
+  var handleUpdateOrderList = function handleUpdateOrderList(orderId, changes) {
+    var updatedOrders = orderList === null || orderList === void 0 ? void 0 : orderList.orders.map(function (order) {
+      if ((order === null || order === void 0 ? void 0 : order.id) === orderId) {
+        return _objectSpread(_objectSpread({}, order), changes);
+      }
+
+      return order;
+    });
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: updatedOrders
+    }));
+  };
 
   var loadMessages = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(orderId) {
@@ -517,7 +562,7 @@ var OrderList = function OrderList(props) {
         orders: (orders === null || orders === void 0 ? void 0 : orders.lenght) > 0 ? orders : customArray || [],
         loading: false
       }));
-    } else {
+    } else if (!businessesSearchList) {
       loadOrders();
     }
 
@@ -772,6 +817,14 @@ var OrderList = function OrderList(props) {
       loadOrders(true, []);
     }
   }, [sortBy]);
+  (0, _react.useEffect)(function () {
+    if (businessesSearchList && !(businessesSearchList !== null && businessesSearchList !== void 0 && businessesSearchList.loading)) {
+      loadOrders(false, false, false, true);
+    }
+  }, [businessesSearchList, businessId]);
+  (0, _react.useEffect)(function () {
+    setIsEmptyBusinesses && setIsEmptyBusinesses((businessOrderIds === null || businessOrderIds === void 0 ? void 0 : businessOrderIds.length) === 0);
+  }, [businessOrderIds]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     sortOrders: sortOrders,
     setSortBy: setSortBy,
@@ -785,7 +838,10 @@ var OrderList = function OrderList(props) {
     setMessages: setMessages,
     setUpdateOtherStatus: setUpdateOtherStatus,
     handleReorder: handleReorder,
-    reorderState: reorderState
+    reorderState: reorderState,
+    businessOrderIds: businessOrderIds,
+    products: products,
+    handleUpdateOrderList: handleUpdateOrderList
   })));
 };
 

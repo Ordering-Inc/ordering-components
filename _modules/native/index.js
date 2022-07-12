@@ -225,6 +225,12 @@ Object.defineProperty(exports, "ExamineClick", {
     return _ExamineClick.ExamineClick;
   }
 });
+Object.defineProperty(exports, "FavoriteList", {
+  enumerable: true,
+  get: function get() {
+    return _FavoriteList.FavoriteList;
+  }
+});
 Object.defineProperty(exports, "FloatingButton", {
   enumerable: true,
   get: function get() {
@@ -775,6 +781,8 @@ var _DriverList = require("../src/components/DriverList");
 var _DriverTips = require("../src/components/DriverTips");
 
 var _ExamineClick = require("../src/components/ExamineClick");
+
+var _FavoriteList = require("../src/components/FavoriteList");
 
 var _FloatingButton = require("../src/components/FloatingButton");
 
