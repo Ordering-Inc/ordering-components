@@ -22,7 +22,8 @@ export const CardForm = (props) => {
     handleSource,
     onNewCard,
     handleCustomSubmit,
-    isSplitForm
+    isSplitForm,
+    businessIds
   } = props
 
   const [{ user }] = useSession()
@@ -41,7 +42,7 @@ export const CardForm = (props) => {
    * @param {*object} user object with user info from session provider
    * @param {*string} businessId string to know your business
    */
-  const stripeTokenHandler = async (tokenId, user, businessId) => {
+  const stripeTokenHandler = async (tokenId, user, businessId, isNewCard = true) => {
     const result = await fetch(`${ordering.root}/payments/stripe/cards`, {
       method: 'POST',
       headers: {
@@ -56,7 +57,7 @@ export const CardForm = (props) => {
       })
     })
     const response = await result.json()
-    onNewCard && onNewCard(response.result)
+    isNewCard && onNewCard && onNewCard(response.result)
   }
 
   /**
@@ -83,7 +84,7 @@ export const CardForm = (props) => {
     setLoading(true)
     event.preventDefault()
     let card = elements?.getElement(CardElement)
-    
+
     if (isSplitForm) {
       card = elements?.getElement(CardNumberElement)
     }
@@ -142,7 +143,14 @@ export const CardForm = (props) => {
       } else {
         setLoading(false)
         setError(null)
-        toSave && stripeTokenHandler(result.setupIntent.payment_method, user, props.businessId)
+        if (businessIds) {
+          businessIds.forEach((_businessId, index) => {
+            const _isNewCard = index === 0
+            toSave && stripeTokenHandler(result.setupIntent.payment_method, user, _businessId, _isNewCard)
+          })
+        } else {
+          toSave && stripeTokenHandler(result.setupIntent.payment_method, user, props.businessId)
+        }
       }
     }
   }
