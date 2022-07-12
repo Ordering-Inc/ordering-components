@@ -1685,39 +1685,28 @@ var OrderProvider = function OrderProvider(_ref) {
               error = _yield$response$json2.error;
               result = _yield$response$json2.result;
 
-              if (error) {
-                _context16.next = 15;
-                break;
+              if (!error) {
+                result.carts.forEach(function (cart) {
+                  delete state.carts["businessId:".concat(cart.business_id)];
+                  var orderObject = {
+                    id: cart.uuid,
+                    business: {
+                      name: cart.business.name
+                    },
+                    total: cart.total,
+                    tax_total: cart.tax,
+                    delivery_zone_price: cart.delivery_price,
+                    business_id: cart.business_id
+                  };
+                  events.emit('order_placed', orderObject);
+                });
+              } else {
+                setAlert({
+                  show: true,
+                  content: result
+                });
               }
 
-              result.carts.forEach(function (cart) {
-                delete state.carts["businessId:".concat(cart.business_id)];
-                var orderObject = {
-                  id: cart.uuid,
-                  business: {
-                    name: cart.business.name
-                  },
-                  total: cart.total,
-                  tax_total: cart.tax,
-                  delivery_zone_price: cart.delivery_price,
-                  business_id: cart.business_id
-                };
-                events.emit('order_placed', orderObject);
-              });
-              _context16.next = 18;
-              break;
-
-            case 15:
-              setAlert({
-                show: true,
-                content: result
-              });
-              setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
-              }));
-              return _context16.abrupt("return");
-
-            case 18:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
@@ -1726,8 +1715,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: result
               });
 
-            case 22:
-              _context16.prev = 22;
+            case 16:
+              _context16.prev = 16;
               _context16.t0 = _context16["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1737,12 +1726,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context16.t0.message]
               });
 
-            case 26:
+            case 20:
             case "end":
               return _context16.stop();
           }
         }
-      }, _callee16, null, [[0, 22]]);
+      }, _callee16, null, [[0, 16]]);
     }));
 
     return function placeMulitCarts(_x25) {
