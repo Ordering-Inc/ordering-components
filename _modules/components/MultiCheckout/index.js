@@ -86,25 +86,56 @@ var MultiCheckout = function MultiCheckout(props) {
 
   var _useState3 = (0, _react.useState)({}),
       _useState4 = _slicedToArray(_useState3, 2),
-      paymethodSelectedState = _useState4[0],
-      setPaymethodSelectedState = _useState4[1];
+      paymethodSelected = _useState4[0],
+      setPaymethodSelected = _useState4[1];
 
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _yield$placeMulitCart, error, result, orderUuids;
+      var _paymethodSelected$pa;
+
+      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMulitCart, error, result, orderUuids;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setPlacing(true);
-              _context.next = 3;
-              return placeMulitCarts(_objectSpread({
+              paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.paymethod_data;
+
+              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa = paymethodSelected.paymethod) === null || _paymethodSelected$pa === void 0 ? void 0 : _paymethodSelected$pa.gateway)) {
+                paymethodData = JSON.stringify({
+                  source_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa2 = paymethodSelected.paymethod_data) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.id
+                });
+              }
+
+              payload = {
                 carts: cartsUuids,
                 amount: totalCartsPrice
-              }, paymethodSelectedState));
+              };
 
-            case 3:
+              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
+                payload = _objectSpread(_objectSpread({}, payload), {}, {
+                  paymethod_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id
+                });
+              }
+
+              if (paymethodData) {
+                payload = _objectSpread(_objectSpread({}, payload), {}, {
+                  paymethod_data: paymethodData
+                });
+              }
+
+              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.wallet_id) {
+                payload = _objectSpread(_objectSpread({}, payload), {}, {
+                  wallet_id: paymethodSelected.wallet_id,
+                  wallet_data: paymethodSelected.wallet_data
+                });
+              }
+
+              setPlacing(true);
+              _context.next = 9;
+              return placeMulitCarts(payload);
+
+            case 9:
               _yield$placeMulitCart = _context.sent;
               error = _yield$placeMulitCart.error;
               result = _yield$placeMulitCart.result;
@@ -117,7 +148,7 @@ var MultiCheckout = function MultiCheckout(props) {
                 onPlaceOrderClick && onPlaceOrderClick(orderUuids);
               }
 
-            case 8:
+            case 14:
             case "end":
               return _context.stop();
           }
@@ -130,35 +161,42 @@ var MultiCheckout = function MultiCheckout(props) {
     };
   }();
 
-  var handleSelectPaymethod = function handleSelectPaymethod(paymethodId) {
-    setPaymethodSelectedState(_objectSpread(_objectSpread({}, paymethodSelectedState), {}, {
-      paymethod_id: paymethodId
+  var handleSelectPaymethod = function handleSelectPaymethod(paymethod) {
+    setPaymethodSelected(_objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
+      paymethod_data: null
     }));
   };
 
   var handleSelectWallet = function handleSelectWallet(checked, wallet) {
     if (checked) {
-      setPaymethodSelectedState(_objectSpread(_objectSpread({}, paymethodSelectedState), {}, {
+      setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
         wallet_id: wallet.id,
         wallet_data: wallet.balance > totalCartsPrice ? totalCartsPrice : wallet.balance
       }));
     } else {
-      var _paymethodSelectedState = _objectSpread({}, paymethodSelectedState);
+      var _paymethodSelected = _objectSpread({}, paymethodSelected);
 
-      delete _paymethodSelectedState.wallet_id;
-      delete _paymethodSelectedState.wallet_data;
-      setPaymethodSelectedState(_paymethodSelectedState);
+      delete _paymethodSelected.wallet_id;
+      delete _paymethodSelected.wallet_data;
+      setPaymethodSelected(_paymethodSelected);
     }
+  };
+
+  var handlePaymethodDataChange = function handlePaymethodDataChange(data) {
+    setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
+      paymethod_data: data
+    }));
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     placing: placing,
     openCarts: openCarts,
     totalCartsPrice: totalCartsPrice,
-    paymethodSelectedState: paymethodSelectedState,
+    paymethodSelected: paymethodSelected,
     handleSelectPaymethod: handleSelectPaymethod,
     handleGroupPlaceOrder: handleGroupPlaceOrder,
-    handleSelectWallet: handleSelectWallet
+    handleSelectWallet: handleSelectWallet,
+    handlePaymethodDataChange: handlePaymethodDataChange
   })));
 };
 
