@@ -19,19 +19,17 @@ export const MultiCheckout = (props) => {
   const [placing, setPlacing] = useState(false)
   const [paymethodSelectedState, setPaymethodSelectedState] = useState({})
 
-  /**
-   * Confirm cart payment from  API
-   */
   const handleGroupPlaceOrder = async () => {
     setPlacing(true)
-    const result = await placeMulitCarts({
+    const { error, result } = await placeMulitCarts({
       carts: cartsUuids,
       amount: totalCartsPrice,
       ...paymethodSelectedState
     })
     setPlacing(false)
-    if (!result.error) {
-      onPlaceOrderClick && onPlaceOrderClick(cartsUuids)
+    if (!error) {
+      const orderUuids = result.carts.reduce((uuids, cart) => [...uuids, cart.order.uuid], [])
+      onPlaceOrderClick && onPlaceOrderClick(orderUuids)
     }
   }
 
