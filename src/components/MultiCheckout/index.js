@@ -17,15 +17,40 @@ export const MultiCheckout = (props) => {
   const cartsUuids = openCarts.reduce((uuids, cart) => [...uuids, cart.uuid], [])
 
   const [placing, setPlacing] = useState(false)
-  const [paymethodSelectedState, setPaymethodSelectedState] = useState({})
+  const [paymethodSelected, setPaymethodSelected] = useState({})
 
   const handleGroupPlaceOrder = async () => {
-    setPlacing(true)
-    const { error, result } = await placeMulitCarts({
+    let paymethodData = paymethodSelected?.paymethod_data
+    if (paymethodSelected?.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
+      paymethodData = JSON.stringify({
+        source_id: paymethodSelected?.paymethod_data?.id
+      })
+    }
+    let payload = {
       carts: cartsUuids,
-      amount: totalCartsPrice,
-      ...paymethodSelectedState
-    })
+      amount: totalCartsPrice
+    }
+    if (paymethodSelected?.paymethod) {
+      payload = {
+        ...payload,
+        paymethod_id: paymethodSelected?.paymethod?.id
+      }
+    }
+    if (paymethodData) {
+      payload = {
+        ...payload,
+        paymethod_data: paymethodData
+      }
+    }
+    if (paymethodSelected?.wallet_id) {
+      payload = {
+        ...payload,
+        wallet_id: paymethodSelected.wallet_id,
+        wallet_data: paymethodSelected.wallet_data
+      }
+    }
+    setPlacing(true)
+    const { error, result } = await placeMulitCarts(payload)
     setPlacing(false)
     if (!error) {
       const orderUuids = result.carts.reduce((uuids, cart) => [...uuids, cart.order.uuid], [])
@@ -33,26 +58,34 @@ export const MultiCheckout = (props) => {
     }
   }
 
-  const handleSelectPaymethod = (paymethodId) => {
-    setPaymethodSelectedState({
-      ...paymethodSelectedState,
-      paymethod_id: paymethodId
+  const handleSelectPaymethod = (paymethod) => {
+    setPaymethodSelected({
+      ...paymethodSelected,
+      ...paymethod,
+      paymethod_data: null
     })
   }
 
   const handleSelectWallet = (checked, wallet) => {
     if (checked) {
-      setPaymethodSelectedState({
-        ...paymethodSelectedState,
+      setPaymethodSelected({
+        ...paymethodSelected,
         wallet_id: wallet.id,
         wallet_data: wallet.balance > totalCartsPrice ? totalCartsPrice : wallet.balance
       })
     } else {
-      const _paymethodSelectedState = { ...paymethodSelectedState }
-      delete _paymethodSelectedState.wallet_id
-      delete _paymethodSelectedState.wallet_data
-      setPaymethodSelectedState(_paymethodSelectedState)
+      const _paymethodSelected = { ...paymethodSelected }
+      delete _paymethodSelected.wallet_id
+      delete _paymethodSelected.wallet_data
+      setPaymethodSelected(_paymethodSelected)
     }
+  }
+
+  const handlePaymethodDataChange = (data) => {
+    setPaymethodSelected({
+      ...paymethodSelected,
+      paymethod_data: data
+    })
   }
 
   return (
@@ -63,10 +96,11 @@ export const MultiCheckout = (props) => {
           placing={placing}
           openCarts={openCarts}
           totalCartsPrice={totalCartsPrice}
-          paymethodSelectedState={paymethodSelectedState}
+          paymethodSelected={paymethodSelected}
           handleSelectPaymethod={handleSelectPaymethod}
           handleGroupPlaceOrder={handleGroupPlaceOrder}
           handleSelectWallet={handleSelectWallet}
+          handlePaymethodDataChange={handlePaymethodDataChange}
         />
       )}
     </>
