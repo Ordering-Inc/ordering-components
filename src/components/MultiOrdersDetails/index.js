@@ -16,7 +16,7 @@ export const MultiOrdersDetails = (props) => {
   const [ordering] = useApi()
   const [{ token }] = useSession()
   const [ordersList, setOrdersList] = useState({ loading: true, error: null, orders: [] })
-  const [totalPrice, setTotalPrice] = useState(null)
+  const [ordersSummary, setOrdersSummary] = useState({})
 
   /**
    * Get orders from API
@@ -40,8 +40,14 @@ export const MultiOrdersDetails = (props) => {
         error: error ? result : null
       })
       if (!error) {
-        const _totalPrice = result.reduce((total, order) => { return total + order?.summary?.total }, 0)
-        setTotalPrice(_totalPrice)
+        const _total = result.reduce((total, order) => { return total + order?.summary?.total }, 0)
+        const _subtotal = result.reduce((subtotal, order) => { return subtotal + order?.summary?.subtotal }, 0)
+        const _tax = result.reduce((tax, order) => { return tax + order?.summary?.tax }, 0)
+        setOrdersSummary({
+          total: _total,
+          subtotal: _subtotal,
+          tax: _tax
+        })
       }
     } catch (err) {
       setOrdersList({
@@ -68,7 +74,7 @@ export const MultiOrdersDetails = (props) => {
           ordersList={ordersList}
           customer={ordersList.orders[0]?.customer}
           paymentEvents={ordersList.orders[0]?.payment_events || []}
-          totalPrice={totalPrice}
+          ordersSummary={ordersSummary}
         />
       )}
     </>
