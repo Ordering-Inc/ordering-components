@@ -68,6 +68,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
+    strategy: webStrategy,
     settings: Object.assign(settings.socket, {
       project: settings.project,
       appId: settings.app_id
