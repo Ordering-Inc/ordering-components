@@ -56,7 +56,7 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
         clearInterval(projectInputInterval)
       }
     }, 1000)
-    return () => clearInterval(projectInputInterval);
+    return () => clearInterval(projectInputInterval)
   }, [session])
 
   return (
