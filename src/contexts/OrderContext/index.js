@@ -694,6 +694,50 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   /**
+   * Place multi carts
+   */
+  const placeMulitCarts = async (data) => {
+    try {
+      setState({ ...state, loading: true })
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${session.token}`
+        },
+        body: JSON.stringify(data)
+      }
+
+      const response = await fetch(`${ordering.root}/carts/place_group`, requestOptions)
+      const { error, result } = await response.json()
+      if (!error) {
+        result.carts.forEach(cart => {
+          delete state.carts[`businessId:${cart.business_id}`]
+          const orderObject = {
+            id: cart.uuid,
+            business: { name: cart.business.name },
+            total: cart.total,
+            tax_total: cart.tax,
+            delivery_zone_price: cart.delivery_price,
+            business_id: cart.business_id
+          }
+          events.emit('order_placed', orderObject)
+        })
+      } else {
+        setAlert({ show: true, content: result })
+      }
+      setState({ ...state, loading: false })
+      return { error, result }
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return {
+        error: true,
+        result: [err.message]
+      }
+    }
+  }
+
+  /**
    * Confirm cart
    */
   const confirmCart = async (cardId, data) => {
@@ -908,7 +952,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setConfirm,
     changePaymethod,
     setUserCustomerOptions,
-    setStateValues
+    setStateValues,
+    placeMulitCarts
   }
 
   const copyState = JSON.parse(JSON.stringify(state))

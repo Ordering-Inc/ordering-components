@@ -39,6 +39,9 @@ import { LogoutAction } from './components/LogoutAction'
 import { MainSearch } from './components/MainSearch'
 import { MenuControl } from './components/MenuControl'
 import { MomentOption } from './components/MomentOption'
+import { MultiCheckout } from './components/MultiCheckout'
+import { MultiCartsPaymethodsAndWallets } from './components/MultiCartsPaymethodsAndWallets'
+import { MultiOrdersDetails } from './components/MultiOrdersDetails'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
 import { NewOrderNotification } from './components/NewOrderNotification'
@@ -159,6 +162,9 @@ export {
   MainSearch,
   MenuControl,
   MomentOption,
+  MultiCartsPaymethodsAndWallets,
+  MultiCheckout,
+  MultiOrdersDetails,
   MyOrders,
   MyOrdersList,
   NewOrderNotification,
