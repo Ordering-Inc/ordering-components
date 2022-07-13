@@ -309,7 +309,6 @@ export const OrderDetails = (props) => {
     }
   }
 
-  
   const handleReorder = async (orderId) => {
     if (!orderId) return
     try {
