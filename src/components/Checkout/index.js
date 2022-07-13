@@ -133,14 +133,14 @@ export const Checkout = (props) => {
     }
     let payload = {
       offer_id: cart.offer_id,
-      amount: cart?.balance ?? cart?.total,
+      amount: cart?.balance ?? cart?.total
     }
 
     if (paymethodSelected?.paymethod) {
       payload = {
         ...payload,
         paymethod_id: paymethodSelected?.paymethodId,
-        paymethod_data: paymethodSelected?.data,
+        paymethod_data: paymethodSelected?.data
       }
     }
 
@@ -268,7 +268,9 @@ export const Checkout = (props) => {
   }
 
   useEffect(() => {
-    getBusiness()
+    if (businessId && typeof businessId === 'number') {
+      getBusiness()
+    }
   }, [businessId])
 
   /**
@@ -281,7 +283,7 @@ export const Checkout = (props) => {
         paymethod_data: paymethodSelected?.data,
         delivery_zone_id: cart.delivery_zone_id,
         offer_id: cart.offer_id,
-        amount: cart?.balance ?? cart?.total,
+        amount: cart?.balance ?? cart?.total
       }
       onPlaceOrderClick && onPlaceOrderClick(data, paymethodSelected, cart)
     }
