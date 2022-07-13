@@ -592,7 +592,9 @@ var Checkout = function Checkout(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    getBusiness();
+    if (businessId && typeof businessId === 'number') {
+      getBusiness();
+    }
   }, [businessId]);
   /**
    * Update carts from sockets
