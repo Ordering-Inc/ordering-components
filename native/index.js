@@ -34,6 +34,9 @@ import { MainSearch } from '../src/components/MainSearch'
 import { MenuControl } from '../src/components/MenuControl'
 import { Messages } from '../src/components/Messages'
 import { MomentOption } from '../src/components/MomentOption'
+import { MultiCheckout } from '../src/components/MultiCheckout'
+import { MultiCartsPaymethodsAndWallets } from '../src/components/MultiCartsPaymethodsAndWallets'
+import { MultiOrdersDetails } from '../src/components/MultiOrdersDetails'
 import { MyOrders } from '../src/components/MyOrders'
 import { MyOrdersList } from '../src/components/MyOrdersList'
 import { NewOrderNotification } from '../src/components/NewOrderNotification'
@@ -135,6 +138,9 @@ export {
   MenuControl,
   Messages,
   MomentOption,
+  MultiCheckout,
+  MultiCartsPaymethodsAndWallets,
+  MultiOrdersDetails,
   MyOrders,
   MyOrdersList,
   NewOrderNotification,
