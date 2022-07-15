@@ -422,14 +422,19 @@ var OrderList = function OrderList(props) {
                   return (business === null || business === void 0 ? void 0 : business.id) === id;
                 }))) && hash.indexOf(id) === i;
               }));
-              setProducts && setProducts([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).filter(function (order) {
+              setProducts([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).filter(function (order) {
                 var _businessesSearchList2;
 
                 return !businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 ? void 0 : (_businessesSearchList2 = businessesSearchList.businesses) === null || _businessesSearchList2 === void 0 ? void 0 : _businessesSearchList2.some(function (business) {
                   return (order === null || order === void 0 ? void 0 : order.business_id) === (business === null || business === void 0 ? void 0 : business.id);
                 }));
               }).map(function (order) {
-                return order.products;
+                return order.products.map(function (product) {
+                  return _objectSpread(_objectSpread({}, product), {}, {
+                    business: order === null || order === void 0 ? void 0 : order.business,
+                    businessId: order === null || order === void 0 ? void 0 : order.business_id
+                  });
+                });
               }).flat().filter(function (product, i, hash) {
                 return hash.map(function (_product) {
                   return _product === null || _product === void 0 ? void 0 : _product.product_id;
