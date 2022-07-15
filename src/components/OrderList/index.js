@@ -182,10 +182,10 @@ export const OrderList = props => {
           .map(order => order.business_id)
           .filter((id, i, hash) => (!businessesSearchList || businessesSearchList?.businesses?.some(business => business?.id === id)) && hash.indexOf(id) === i)
       )
-      setProducts && setProducts(
+      setProducts(
         [...response.content.result, ...orderList.orders]
           .filter(order => !businessesSearchList || businessesSearchList?.businesses?.some(business => order?.business_id === business?.id))
-          .map(order => order.products)
+          .map(order => order.products.map(product => ({ ...product, business: order?.business, businessId: order?.business_id })))
           .flat()
           .filter((product, i, hash) => hash.map(_product => _product?.product_id).indexOf(product?.product_id) === i)
       )
