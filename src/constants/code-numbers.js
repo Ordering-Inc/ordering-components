@@ -121,6 +121,7 @@ export const CODES = [
   { countryCode: 'MH', phoneCode: '692', countryName: 'Marshall Islands' },
   { countryCode: 'MQ', phoneCode: '596', countryName: 'Martinique' },
   { countryCode: 'MR', phoneCode: '222', countryName: 'Mauritania' },
+  { countryCode: 'MU', phoneCode: '230', countryName: 'Mauritius' },
   { countryCode: 'YT', phoneCode: '269', countryName: 'Mayotte' },
   { countryCode: 'MX', phoneCode: '52', countryName: 'Mexico' },
   { countryCode: 'FM', phoneCode: '691', countryName: 'Micronesia' },
