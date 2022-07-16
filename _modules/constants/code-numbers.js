@@ -493,6 +493,10 @@ var CODES = [{
   phoneCode: '222',
   countryName: 'Mauritania'
 }, {
+  countryCode: 'MU',
+  phoneCode: '230',
+  countryName: 'Mauritius'
+}, {
   countryCode: 'YT',
   phoneCode: '269',
   countryName: 'Mayotte'
