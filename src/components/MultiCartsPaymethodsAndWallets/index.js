@@ -18,9 +18,8 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const [{ token, user }] = useSession()
   const [orderState] = useOrder()
 
-  const cartsUuids = openCarts.reduce((uuids, cart) => [...uuids, cart.uuid], [])
-  const businessIds = openCarts.reduce((uuids, cart) => [...uuids, cart.business_id], [])
-
+  const [cartsUuids, setCartsUuids] = useState([])
+  const [businessIds, setBusinessIds] = useState([])
   const [paymethodsAndWallets, setPaymethodsAndWallets] = useState({ loading: true, paymethods: [], wallets: [], error: null })
   const [walletsState, setWalletsState] = useState({ result: [], loading: true, error: null })
   const [businessPaymethods, setBusinessPaymethods] = useState({ loading: true, result: [], error: null })
@@ -125,11 +124,21 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   }
 
   useEffect(() => {
+    const _cartsUuids = openCarts.reduce((uuids, cart) => [...uuids, cart.uuid], [])
+    setCartsUuids(_cartsUuids)
+    const _businessIds = openCarts.reduce((uuids, cart) => [...uuids, cart.business_id], [])
+    setBusinessIds(_businessIds)
+  }, [openCarts])
+
+  useEffect(() => {
+    getUserWallets()
+  }, [])
+
+  useEffect(() => {
     if (!cartsUuids.length) return
     getPaymethodsAndWallets()
-    getUserWallets()
     getBusiness()
-  }, [])
+  }, [JSON.stringify(cartsUuids), JSON.stringify(businessIds)])
 
   return (
     <>
