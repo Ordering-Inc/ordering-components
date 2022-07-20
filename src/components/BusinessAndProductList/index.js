@@ -185,6 +185,28 @@ export const BusinessAndProductList = (props) => {
         }
       })
     }
+    const updatedCategories = businessState?.business?.categories?.map(_category => {
+      const updatedProducts = _category?.products.map(_product => {
+        if (_product?.id === productId) {
+          return {
+            ..._product,
+            ...changes
+          }
+        }
+        return _product
+      })
+      return {
+        ..._category,
+        products: updatedProducts
+      }
+    })
+    setBusinessState({
+      ...businessState,
+      business: {
+        ...businessState?.business,
+        categories: updatedCategories
+      }
+    })
   }
 
   const getProducts = async () => {

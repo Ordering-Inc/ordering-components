@@ -54,7 +54,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var SingleProductCard = function SingleProductCard(props) {
   var UIComponent = props.UIComponent,
       product = props.product,
-      handleUpdateProducts = props.handleUpdateProducts;
+      handleUpdateProducts = props.handleUpdateProducts,
+      isProductId = props.isProductId;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -89,6 +90,7 @@ var SingleProductCard = function SingleProductCard(props) {
   var handleFavoriteProduct = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
       var isAdd,
+          productId,
           changes,
           requestOptions,
           fetchEndpoint,
@@ -115,8 +117,9 @@ var SingleProductCard = function SingleProductCard(props) {
                 loading: true,
                 error: null
               }));
+              productId = isProductId ? product === null || product === void 0 ? void 0 : product.product_id : product === null || product === void 0 ? void 0 : product.id;
               changes = {
-                object_id: product === null || product === void 0 ? void 0 : product.id
+                object_id: productId
               };
               requestOptions = _objectSpread({
                 method: isAdd ? 'POST' : 'DELETE',
@@ -127,23 +130,23 @@ var SingleProductCard = function SingleProductCard(props) {
               }, isAdd && {
                 body: JSON.stringify(changes)
               });
-              fetchEndpoint = isAdd ? "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_products") : "".concat(ordering.root, "/users/").concat(user.id, "/favorite_products/").concat(product === null || product === void 0 ? void 0 : product.id);
-              _context.next = 11;
+              fetchEndpoint = isAdd ? "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_products") : "".concat(ordering.root, "/users/").concat(user.id, "/favorite_products/").concat(productId);
+              _context.next = 12;
               return fetch(fetchEndpoint, requestOptions);
 
-            case 11:
+            case 12:
               response = _context.sent;
-              _context.next = 14;
+              _context.next = 15;
               return response.json();
 
-            case 14:
+            case 15:
               content = _context.sent;
 
               if (!content.error) {
                 setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
                   loading: false
                 }));
-                handleUpdateProducts && handleUpdateProducts(product === null || product === void 0 ? void 0 : product.id, {
+                handleUpdateProducts && handleUpdateProducts(productId, {
                   favorite: isAdd
                 });
                 showToast(_ToastContext.ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
@@ -155,11 +158,11 @@ var SingleProductCard = function SingleProductCard(props) {
                 showToast(_ToastContext.ToastType.Error, content.result);
               }
 
-              _context.next = 22;
+              _context.next = 23;
               break;
 
-            case 18:
-              _context.prev = 18;
+            case 19:
+              _context.prev = 19;
               _context.t0 = _context["catch"](4);
               setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
                 loading: false,
@@ -167,12 +170,12 @@ var SingleProductCard = function SingleProductCard(props) {
               }));
               showToast(_ToastContext.ToastType.Error, [_context.t0.message]);
 
-            case 22:
+            case 23:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[4, 18]]);
+      }, _callee, null, [[4, 19]]);
     }));
 
     return function handleFavoriteProduct() {
