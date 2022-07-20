@@ -27,6 +27,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -36,14 +44,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -79,40 +79,43 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
       _useOrder2 = _slicedToArray(_useOrder, 1),
       orderState = _useOrder2[0];
 
-  var cartsUuids = openCarts.reduce(function (uuids, cart) {
-    return [].concat(_toConsumableArray(uuids), [cart.uuid]);
-  }, []);
-  var businessIds = openCarts.reduce(function (uuids, cart) {
-    return [].concat(_toConsumableArray(uuids), [cart.business_id]);
-  }, []);
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      cartsUuids = _useState2[0],
+      setCartsUuids = _useState2[1];
 
-  var _useState = (0, _react.useState)({
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      businessIds = _useState4[0],
+      setBusinessIds = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     loading: true,
     paymethods: [],
     wallets: [],
     error: null
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      paymethodsAndWallets = _useState2[0],
-      setPaymethodsAndWallets = _useState2[1];
-
-  var _useState3 = (0, _react.useState)({
-    result: [],
-    loading: true,
-    error: null
-  }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      walletsState = _useState4[0],
-      setWalletsState = _useState4[1];
-
-  var _useState5 = (0, _react.useState)({
-    loading: true,
-    result: [],
-    error: null
-  }),
       _useState6 = _slicedToArray(_useState5, 2),
-      businessPaymethods = _useState6[0],
-      setBusinessPaymethods = _useState6[1];
+      paymethodsAndWallets = _useState6[0],
+      setPaymethodsAndWallets = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
+    result: [],
+    loading: true,
+    error: null
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      walletsState = _useState8[0],
+      setWalletsState = _useState8[1];
+
+  var _useState9 = (0, _react.useState)({
+    loading: true,
+    result: [],
+    error: null
+  }),
+      _useState10 = _slicedToArray(_useState9, 2),
+      businessPaymethods = _useState10[0],
+      setBusinessPaymethods = _useState10[1];
   /**
    * Method to get available wallets and paymethods from API
    */
@@ -306,11 +309,26 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
   }();
 
   (0, _react.useEffect)(function () {
+    var _cartsUuids = openCarts.reduce(function (uuids, cart) {
+      return [].concat(_toConsumableArray(uuids), [cart.uuid]);
+    }, []);
+
+    setCartsUuids(_cartsUuids);
+
+    var _businessIds = openCarts.reduce(function (uuids, cart) {
+      return [].concat(_toConsumableArray(uuids), [cart.business_id]);
+    }, []);
+
+    setBusinessIds(_businessIds);
+  }, [openCarts]);
+  (0, _react.useEffect)(function () {
+    getUserWallets();
+  }, []);
+  (0, _react.useEffect)(function () {
     if (!cartsUuids.length) return;
     getPaymethodsAndWallets();
-    getUserWallets();
     getBusiness();
-  }, []);
+  }, [JSON.stringify(cartsUuids), JSON.stringify(businessIds)]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     businessIds: businessIds,
     paymethodsAndWallets: paymethodsAndWallets,
