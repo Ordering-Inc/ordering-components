@@ -9,7 +9,8 @@ export const SingleProductCard = (props) => {
   const {
     UIComponent,
     product,
-    handleUpdateProducts
+    handleUpdateProducts,
+    isProductId
   } = props
 
   const [ordering] = useApi()
@@ -27,7 +28,8 @@ export const SingleProductCard = (props) => {
     showToast(ToastType.Info, t('LOADING', 'loading'))
     try {
       setActionState({ ...actionState, loading: true, error: null })
-      const changes = { object_id: product?.id }
+      const productId = isProductId ? product?.product_id : product?.id
+      const changes = { object_id: productId }
       const requestOptions = {
         method: isAdd ? 'POST' : 'DELETE',
         headers: {
@@ -39,13 +41,13 @@ export const SingleProductCard = (props) => {
 
       const fetchEndpoint = isAdd
         ? `${ordering.root}/users/${user?.id}/favorite_products`
-        : `${ordering.root}/users/${user.id}/favorite_products/${product?.id}`
+        : `${ordering.root}/users/${user.id}/favorite_products/${productId}`
       const response = await fetch(fetchEndpoint, requestOptions)
       const content = await response.json()
 
       if (!content.error) {
         setActionState({ ...actionState, loading: false })
-        handleUpdateProducts && handleUpdateProducts(product?.id, { favorite: isAdd })
+        handleUpdateProducts && handleUpdateProducts(productId, { favorite: isAdd })
         showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
       } else {
         setActionState({

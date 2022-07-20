@@ -64,6 +64,68 @@ export const BusinessSearchList = (props) => {
     }
   }
 
+  /**
+   * Method to update business list
+   * @param {number} businessId business id
+   * @param {object} changes business info
+   */
+  const handleUpdateBusinessList = (businessId, changes) => {
+    const updatedBusinesses = businessesSearchList?.businesses.map(business => {
+      if (business?.id === businessId) {
+        return {
+          ...business,
+          ...changes
+        }
+      }
+      return business
+    })
+    setBusinessesSearchList({
+      ...businessesSearchList,
+      businesses: updatedBusinesses
+    })
+  }
+
+  /**
+   * Method to update business list
+   * @param {number} productId product id
+   * @param {number} categoryId category id
+   * @param {number} businessId business id
+   * @param {object} changes product info
+   */
+  const handleUpdateProducts = (productId, categoryId, businessId, changes) => {
+    const updatedBusinesses = businessesSearchList?.businesses.map(business => {
+      if (business?.id === businessId) {
+        const updatedCategories = business?.categories.map(category => {
+          if (category?.id === categoryId) {
+            const updateProducts = category?.products.map(product => {
+              if (product?.id === productId) {
+                return {
+                  ...product,
+                  ...changes
+                }
+              }
+              return product
+            })
+            return {
+              ...category,
+              products: updateProducts
+            }
+          }
+          return category
+        })
+        return {
+          ...business,
+          categories: updatedCategories
+        }
+      }
+      return business
+    })
+    setBusinessesSearchList({
+      ...businessesSearchList,
+      businesses: updatedBusinesses
+    })
+  }
+
   const handleSearchbusinessAndProducts = async (newFetch) => {
     try {
       let filtParams = termValue?.length >= 3 ? `&term=${termValue}` : ''
@@ -223,6 +285,8 @@ export const BusinessSearchList = (props) => {
             handleChangeTermValue={handleChangeTermValue}
             setFilters={setFilters}
             brandList={brandList}
+            handleUpdateBusinessList={handleUpdateBusinessList}
+            handleUpdateProducts={handleUpdateProducts}
           />
         )
       }
