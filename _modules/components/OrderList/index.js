@@ -797,6 +797,17 @@ var OrderList = function OrderList(props) {
     return ordersSorted;
   };
 
+  var handleUpdateProducts = function handleUpdateProducts(productId, changes) {
+    var updatedProducts = products === null || products === void 0 ? void 0 : products.map(function (product) {
+      if ((product === null || product === void 0 ? void 0 : product.product_id) === productId) {
+        return _objectSpread(_objectSpread({}, product), changes);
+      }
+
+      return product;
+    });
+    setProducts(updatedProducts);
+  };
+
   (0, _react.useEffect)(function () {
     if (profileMessage) return;
 
@@ -846,7 +857,8 @@ var OrderList = function OrderList(props) {
     reorderState: reorderState,
     businessOrderIds: businessOrderIds,
     products: products,
-    handleUpdateOrderList: handleUpdateOrderList
+    handleUpdateOrderList: handleUpdateOrderList,
+    handleUpdateProducts: handleUpdateProducts
   })));
 };
 
