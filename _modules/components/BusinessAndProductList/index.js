@@ -343,6 +343,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var _categoryState$produc;
+
       var i, _ref2, _businessState$busine3, _businessState$busine4, _businessState$busine5, _category$products, category, isFeatured, categoryState, _businessState$busine6, _ref3, _businessState$busine7, _businessState$busine8, _categories$find, _subCategoriesList$fi, _businessState$busine9, _businessState$busine10, _businessState$busine11, categoriesList, categories, parentCategory, categoryFinded, productsFiltered, _businessState$busine12, _businessState$busine13, _productsFiltered, _businessState$busine14, _businessState$busine15, _productsFiltered2;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -419,9 +421,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }
 
               categoryState.products = sortProductsArray(sortByValue, categoryState.products);
+              setErrorQuantityProducts(!((_categoryState$produc = categoryState.products) !== null && _categoryState$produc !== void 0 && _categoryState$produc.length));
               setCategoryState(_objectSpread({}, categoryState));
 
-            case 14:
+            case 15:
             case "end":
               return _context.stop();
           }
@@ -586,8 +589,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
           _featuredRes$content11,
           _oldFeatured$products,
           _featuredRes$content12,
+          _featureState$product,
           oldFeatured,
           featureState,
+          _newcategoryState$pro,
           _categoriesState$feat3,
           _categoriesState$feat4,
           newcategoryState,
@@ -694,6 +699,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                   loading: false,
                   products: newFetch ? _toConsumableArray(featuredRes === null || featuredRes === void 0 ? void 0 : (_featuredRes$content11 = featuredRes.content) === null || _featuredRes$content11 === void 0 ? void 0 : _featuredRes$content11.result) : oldFeatured === null || oldFeatured === void 0 ? void 0 : (_oldFeatured$products = oldFeatured.products) === null || _oldFeatured$products === void 0 ? void 0 : _oldFeatured$products.concat(featuredRes === null || featuredRes === void 0 ? void 0 : (_featuredRes$content12 = featuredRes.content) === null || _featuredRes$content12 === void 0 ? void 0 : _featuredRes$content12.result)
                 };
+                setErrorQuantityProducts(!((_featureState$product = featureState.products) !== null && _featureState$product !== void 0 && _featureState$product.length));
                 categoriesState.featured = featureState;
               }
 
@@ -707,6 +713,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                   loading: false,
                   products: result
                 };
+                setErrorQuantityProducts(!((_newcategoryState$pro = newcategoryState.products) !== null && _newcategoryState$pro !== void 0 && _newcategoryState$pro.length));
                 categoriesState[categoryKey] = newcategoryState;
                 categoryState = newcategoryState;
                 setCategoryState(_objectSpread({}, newcategoryState));
@@ -1027,13 +1034,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             case 9:
               _yield$ordering$busin2 = _context6.sent;
               result = _yield$ordering$busin2.content.result;
-
-              if (!(result !== null && result !== void 0 && result.categories) || (result === null || result === void 0 ? void 0 : (_result$categories = result.categories) === null || _result$categories === void 0 ? void 0 : _result$categories.length) === 0) {
-                setErrorQuantityProducts(true);
-              } else {
-                setErrorQuantityProducts(false);
-              }
-
+              setErrorQuantityProducts(!(result !== null && result !== void 0 && result.categories) || (result === null || result === void 0 ? void 0 : (_result$categories = result.categories) === null || _result$categories === void 0 ? void 0 : _result$categories.length) === 0);
               data = _objectSpread(_objectSpread({}, businessState), {}, {
                 business: result,
                 loading: false
