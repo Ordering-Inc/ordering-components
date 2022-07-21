@@ -1,6 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+
 import { useOrder } from '../../contexts/OrderContext'
+import { useApi } from '../../contexts/ApiContext'
+import { useSession } from '../../contexts/SessionContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
+
 /**
  * Component to manage Multi businesses checkout page behavior without UI component
  */
@@ -10,7 +16,25 @@ export const MultiCheckout = (props) => {
     onPlaceOrderClick
   } = props
 
+  const [ordering] = useApi()
+  /**
+   * Session content
+   */
+  const [{ token }] = useSession()
   const [{ carts }, { placeMulitCarts }] = useOrder()
+  /**
+* Toast state
+*/
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
+  /**
+  * Delivery Instructions options
+  */
+  const [instructionsOptions, setInstructionsOptions] = useState({ loading: false, result: [{ id: null, enabled: true, name: t('EITHER_WAY', 'Either way') }], error: null })
+  /**
+  * Delivery instructions selected
+  */
+  const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
 
   const openCarts = (Object.values(carts)?.filter(cart => cart?.products && cart?.products?.length && cart?.status !== 2 && cart?.valid_schedule && cart?.valid_products && cart?.valid_address && cart?.valid_maximum && cart?.valid_minimum) || null) || []
   const totalCartsPrice = openCarts && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
@@ -88,6 +112,71 @@ export const MultiCheckout = (props) => {
     })
   }
 
+  const getDeliveryOptions = async () => {
+    try {
+      const response = await fetch(`${ordering.root}/delivery_options`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${token}`
+        }
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        setInstructionsOptions({ loading: false, result: [...instructionsOptions.result, ...result] })
+        return
+      }
+      setInstructionsOptions({ loading: false, error: true, result })
+      showToast(ToastType.Error, result)
+    } catch (err) {
+      setInstructionsOptions({ loading: false, error: true, result: err.message })
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
+  const multiHandleChangeDeliveryOption = async (value, cartUuidArr) => {
+    try {
+      const allPromise = cartUuidArr.map(cartId => {
+        return new Promise(async (resolve, reject) => {
+          const response = await fetch(`${ordering.root}/carts/${cartId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `bearer ${token}`
+            },
+            body: JSON.stringify({
+              delivery_option_id: value
+            })
+          })
+          const { result, error } = await response.json()
+          if (!error && result?.delivery_option_id === value) {
+            resolve(result)
+          } else {
+            reject(false)
+          }
+        })
+      })
+      await Promise.all(allPromise) && setDeliveryOptionSelected(value)
+    } catch (err) {
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
+  const handleChangeDeliveryOption = async (value) => {
+    const cartUuidArr = openCarts.map(cart => cart?.uuid)
+    multiHandleChangeDeliveryOption(value, cartUuidArr)
+  }
+
+  useEffect(() => {
+    if (deliveryOptionSelected === undefined) {
+      setDeliveryOptionSelected(null)
+    }
+  }, [instructionsOptions])
+
+  useEffect(() => {
+    getDeliveryOptions()
+  }, [])
+
   return (
     <>
       {UIComponent && (
@@ -101,6 +190,9 @@ export const MultiCheckout = (props) => {
           handleGroupPlaceOrder={handleGroupPlaceOrder}
           handleSelectWallet={handleSelectWallet}
           handlePaymethodDataChange={handlePaymethodDataChange}
+          handleChangeDeliveryOption={handleChangeDeliveryOption}
+          deliveryOptionSelected={deliveryOptionSelected}
+          instructionsOptions={instructionsOptions}
         />
       )}
     </>
