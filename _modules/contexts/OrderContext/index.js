@@ -689,11 +689,12 @@ var OrderProvider = function OrderProvider(_ref) {
    * @param {object} product product for add
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
+   * @param {boolean} isService option to add product when product type is service
    */
 
 
   var addProduct = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(product, cart, isQuickAddProduct) {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(product, cart, isQuickAddProduct, isService) {
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
 
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
@@ -710,11 +711,15 @@ var OrderProvider = function OrderProvider(_ref) {
             case 4:
               customerFromLocalStorage = _context6.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              body = {
+              body = _objectSpread(_objectSpread({
                 product: product,
                 business_id: cart.business_id,
                 user_id: userCustomerId || session.user.id
-              };
+              }, isService && {
+                professional_id: cart === null || cart === void 0 ? void 0 : cart.professional_id
+              }), isService && {
+                service_start: cart === null || cart === void 0 ? void 0 : cart.service_start
+              });
               _context6.next = 9;
               return ordering.setAccessToken(session.token).carts().addProduct(body, {
                 headers: {
@@ -762,7 +767,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee6, null, [[0, 18]]);
     }));
 
-    return function addProduct(_x6, _x7, _x8) {
+    return function addProduct(_x6, _x7, _x8, _x9) {
       return _ref7.apply(this, arguments);
     };
   }();
@@ -843,7 +848,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee7, null, [[0, 18]]);
     }));
 
-    return function removeProduct(_x9, _x10) {
+    return function removeProduct(_x10, _x11) {
       return _ref8.apply(this, arguments);
     };
   }();
@@ -925,7 +930,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee8, null, [[0, 20]]);
     }));
 
-    return function clearCart(_x11) {
+    return function clearCart(_x12) {
       return _ref9.apply(this, arguments);
     };
   }();
@@ -935,7 +940,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var updateProduct = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart, isQuickAddProduct) {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart, isQuickAddProduct, isService) {
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
 
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
@@ -952,11 +957,15 @@ var OrderProvider = function OrderProvider(_ref) {
             case 4:
               customerFromLocalStorage = _context9.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              body = {
+              body = _objectSpread(_objectSpread({
                 product: product,
                 business_id: cart.business_id,
                 user_id: userCustomerId || session.user.id
-              };
+              }, isService && {
+                professional_id: cart === null || cart === void 0 ? void 0 : cart.professional_id
+              }), isService && {
+                service_start: cart === null || cart === void 0 ? void 0 : cart.service_start
+              });
               _context9.next = 9;
               return ordering.setAccessToken(session.token).carts().updateProduct(body, {
                 headers: {
@@ -1003,7 +1012,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee9, null, [[0, 18]]);
     }));
 
-    return function updateProduct(_x12, _x13, _x14) {
+    return function updateProduct(_x13, _x14, _x15, _x16) {
       return _ref10.apply(this, arguments);
     };
   }();
@@ -1148,7 +1157,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee10, null, [[6, 34]]);
     }));
 
-    return function applyCoupon(_x15, _x16) {
+    return function applyCoupon(_x17, _x18) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -1235,7 +1244,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[4, 17]]);
     }));
 
-    return function applyOffer(_x17) {
+    return function applyOffer(_x19) {
       return _ref12.apply(this, arguments);
     };
   }();
@@ -1319,7 +1328,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee12, null, [[4, 17]]);
     }));
 
-    return function removeOffer(_x18) {
+    return function removeOffer(_x20) {
       return _ref13.apply(this, arguments);
     };
   }();
@@ -1432,7 +1441,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee13, null, [[8, 26]]);
     }));
 
-    return function changeDriverTip(_x19) {
+    return function changeDriverTip(_x21) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1535,7 +1544,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[8, 26]]);
     }));
 
-    return function changePaymethod(_x20, _x21, _x22) {
+    return function changePaymethod(_x22, _x23, _x24) {
       return _ref15.apply(this, arguments);
     };
   }();
@@ -1643,7 +1652,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee15, null, [[0, 24]]);
     }));
 
-    return function placeCart(_x23, _x24) {
+    return function placeCart(_x25, _x26) {
       return _ref16.apply(this, arguments);
     };
   }();
@@ -1734,7 +1743,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16, null, [[0, 16]]);
     }));
 
-    return function placeMulitCarts(_x25) {
+    return function placeMulitCarts(_x27) {
       return _ref17.apply(this, arguments);
     };
   }();
@@ -1835,7 +1844,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee17, null, [[0, 22]]);
     }));
 
-    return function confirmCart(_x26, _x27) {
+    return function confirmCart(_x28, _x29) {
       return _ref18.apply(this, arguments);
     };
   }();
@@ -1921,7 +1930,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee18, null, [[0, 20]]);
     }));
 
-    return function reorder(_x28) {
+    return function reorder(_x30) {
       return _ref19.apply(this, arguments);
     };
   }();
@@ -2002,7 +2011,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee20);
     }));
 
-    return function setUserCustomerOptions(_x29) {
+    return function setUserCustomerOptions(_x31) {
       return _ref21.apply(this, arguments);
     };
   }();

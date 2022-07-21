@@ -13,6 +13,14 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _OrderContext = require("../../contexts/OrderContext");
 
+var _ApiContext = require("../../contexts/ApiContext");
+
+var _SessionContext = require("../../contexts/SessionContext");
+
+var _ToastContext = require("../../contexts/ToastContext");
+
+var _LanguageContext = require("../../contexts/LanguageContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -62,10 +70,60 @@ var MultiCheckout = function MultiCheckout(props) {
   var UIComponent = props.UIComponent,
       onPlaceOrderClick = props.onPlaceOrderClick;
 
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+  /**
+   * Session content
+   */
+
+
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
+
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       carts = _useOrder2[0].carts,
       placeMulitCarts = _useOrder2[1].placeMulitCarts;
+  /**
+  * Toast state
+  */
+
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
+  /**
+  * Delivery Instructions options
+  */
+
+
+  var _useState = (0, _react.useState)({
+    loading: false,
+    result: [{
+      id: null,
+      enabled: true,
+      name: t('EITHER_WAY', 'Either way')
+    }],
+    error: null
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      instructionsOptions = _useState2[0],
+      setInstructionsOptions = _useState2[1];
+  /**
+  * Delivery instructions selected
+  */
+
+
+  var _useState3 = (0, _react.useState)(undefined),
+      _useState4 = _slicedToArray(_useState3, 2),
+      deliveryOptionSelected = _useState4[0],
+      setDeliveryOptionSelected = _useState4[1];
 
   var openCarts = ((_Object$values = Object.values(carts)) === null || _Object$values === void 0 ? void 0 : _Object$values.filter(function (cart) {
     var _cart$products;
@@ -79,15 +137,15 @@ var MultiCheckout = function MultiCheckout(props) {
     return [].concat(_toConsumableArray(uuids), [cart.uuid]);
   }, []);
 
-  var _useState = (0, _react.useState)(false),
-      _useState2 = _slicedToArray(_useState, 2),
-      placing = _useState2[0],
-      setPlacing = _useState2[1];
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      placing = _useState6[0],
+      setPlacing = _useState6[1];
 
-  var _useState3 = (0, _react.useState)({}),
-      _useState4 = _slicedToArray(_useState3, 2),
-      paymethodSelected = _useState4[0],
-      setPaymethodSelected = _useState4[1];
+  var _useState7 = (0, _react.useState)({}),
+      _useState8 = _slicedToArray(_useState7, 2),
+      paymethodSelected = _useState8[0],
+      setPaymethodSelected = _useState8[1];
 
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -188,6 +246,204 @@ var MultiCheckout = function MultiCheckout(props) {
     }));
   };
 
+  var getDeliveryOptions = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var response, _yield$response$json, result, error;
+
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return fetch("".concat(ordering.root, "/delivery_options"), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "bearer ".concat(token)
+                }
+              });
+
+            case 3:
+              response = _context2.sent;
+              _context2.next = 6;
+              return response.json();
+
+            case 6:
+              _yield$response$json = _context2.sent;
+              result = _yield$response$json.result;
+              error = _yield$response$json.error;
+
+              if (error) {
+                _context2.next = 12;
+                break;
+              }
+
+              setInstructionsOptions({
+                loading: false,
+                result: [].concat(_toConsumableArray(instructionsOptions.result), _toConsumableArray(result))
+              });
+              return _context2.abrupt("return");
+
+            case 12:
+              setInstructionsOptions({
+                loading: false,
+                error: true,
+                result: result
+              });
+              showToast(_ToastContext.ToastType.Error, result);
+              _context2.next = 20;
+              break;
+
+            case 16:
+              _context2.prev = 16;
+              _context2.t0 = _context2["catch"](0);
+              setInstructionsOptions({
+                loading: false,
+                error: true,
+                result: _context2.t0.message
+              });
+              showToast(_ToastContext.ToastType.Error, _context2.t0.message);
+
+            case 20:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 16]]);
+    }));
+
+    return function getDeliveryOptions() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var multiHandleChangeDeliveryOption = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(value, cartUuidArr) {
+      var allPromise;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              allPromise = cartUuidArr.map(function (cartId) {
+                return new Promise( /*#__PURE__*/function () {
+                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve, reject) {
+                    var response, _yield$response$json2, result, error;
+
+                    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                      while (1) {
+                        switch (_context3.prev = _context3.next) {
+                          case 0:
+                            _context3.next = 2;
+                            return fetch("".concat(ordering.root, "/carts/").concat(cartId), {
+                              method: 'PUT',
+                              headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: "bearer ".concat(token)
+                              },
+                              body: JSON.stringify({
+                                delivery_option_id: value
+                              })
+                            });
+
+                          case 2:
+                            response = _context3.sent;
+                            _context3.next = 5;
+                            return response.json();
+
+                          case 5:
+                            _yield$response$json2 = _context3.sent;
+                            result = _yield$response$json2.result;
+                            error = _yield$response$json2.error;
+
+                            if (!error && (result === null || result === void 0 ? void 0 : result.delivery_option_id) === value) {
+                              resolve(result);
+                            } else {
+                              reject(false);
+                            }
+
+                          case 9:
+                          case "end":
+                            return _context3.stop();
+                        }
+                      }
+                    }, _callee3);
+                  }));
+
+                  return function (_x3, _x4) {
+                    return _ref4.apply(this, arguments);
+                  };
+                }());
+              });
+              _context4.next = 4;
+              return Promise.all(allPromise);
+
+            case 4:
+              _context4.t0 = _context4.sent;
+
+              if (!_context4.t0) {
+                _context4.next = 7;
+                break;
+              }
+
+              setDeliveryOptionSelected(value);
+
+            case 7:
+              _context4.next = 12;
+              break;
+
+            case 9:
+              _context4.prev = 9;
+              _context4.t1 = _context4["catch"](0);
+              showToast(_ToastContext.ToastType.Error, _context4.t1.message);
+
+            case 12:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[0, 9]]);
+    }));
+
+    return function multiHandleChangeDeliveryOption(_x, _x2) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  var handleChangeDeliveryOption = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value) {
+      var cartUuidArr;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              cartUuidArr = openCarts.map(function (cart) {
+                return cart === null || cart === void 0 ? void 0 : cart.uuid;
+              });
+              multiHandleChangeDeliveryOption(value, cartUuidArr);
+
+            case 2:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5);
+    }));
+
+    return function handleChangeDeliveryOption(_x5) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  (0, _react.useEffect)(function () {
+    if (deliveryOptionSelected === undefined) {
+      setDeliveryOptionSelected(null);
+    }
+  }, [instructionsOptions]);
+  (0, _react.useEffect)(function () {
+    getDeliveryOptions();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     placing: placing,
     openCarts: openCarts,
@@ -196,7 +452,10 @@ var MultiCheckout = function MultiCheckout(props) {
     handleSelectPaymethod: handleSelectPaymethod,
     handleGroupPlaceOrder: handleGroupPlaceOrder,
     handleSelectWallet: handleSelectWallet,
-    handlePaymethodDataChange: handlePaymethodDataChange
+    handlePaymethodDataChange: handlePaymethodDataChange,
+    handleChangeDeliveryOption: handleChangeDeliveryOption,
+    deliveryOptionSelected: deliveryOptionSelected,
+    instructionsOptions: instructionsOptions
   })));
 };
 
