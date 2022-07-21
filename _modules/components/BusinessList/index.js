@@ -74,6 +74,7 @@ var BusinessList = function BusinessList(props) {
       initialOrderByValue = props.initialOrderByValue,
       initialFilterKey = props.initialFilterKey,
       initialFilterValue = props.initialFilterValue,
+      initialPricelevel = props.initialPricelevel,
       isOfferBusinesses = props.isOfferBusinesses,
       isSortByReview = props.isSortByReview,
       isSearchByName = props.isSearchByName,
@@ -114,25 +115,30 @@ var BusinessList = function BusinessList(props) {
       businessTypeSelected = _useState6[0],
       setBusinessTypeSelected = _useState6[1];
 
-  var _useState7 = (0, _react.useState)(''),
+  var _useState7 = (0, _react.useState)(null),
       _useState8 = _slicedToArray(_useState7, 2),
-      searchValue = _useState8[0],
-      setSearchValue = _useState8[1];
+      priceLevelSelected = _useState8[0],
+      setPriceLevelSelected = _useState8[1];
 
-  var _useState9 = (0, _react.useState)(null),
+  var _useState9 = (0, _react.useState)(''),
       _useState10 = _slicedToArray(_useState9, 2),
-      timeLimitValue = _useState10[0],
-      setTimeLimitValue = _useState10[1];
+      searchValue = _useState10[0],
+      setSearchValue = _useState10[1];
 
-  var _useState11 = (0, _react.useState)(initialOrderByValue !== null && initialOrderByValue !== void 0 ? initialOrderByValue : null),
+  var _useState11 = (0, _react.useState)(null),
       _useState12 = _slicedToArray(_useState11, 2),
-      orderByValue = _useState12[0],
-      setOrderByValue = _useState12[1];
+      timeLimitValue = _useState12[0],
+      setTimeLimitValue = _useState12[1];
 
-  var _useState13 = (0, _react.useState)(null),
+  var _useState13 = (0, _react.useState)(initialOrderByValue !== null && initialOrderByValue !== void 0 ? initialOrderByValue : null),
       _useState14 = _slicedToArray(_useState13, 2),
-      maxDeliveryFee = _useState14[0],
-      setMaxDeliveryFee = _useState14[1];
+      orderByValue = _useState14[0],
+      setOrderByValue = _useState14[1];
+
+  var _useState15 = (0, _react.useState)(null),
+      _useState16 = _slicedToArray(_useState15, 2),
+      maxDeliveryFee = _useState16[0],
+      setMaxDeliveryFee = _useState16[1];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -148,20 +154,20 @@ var BusinessList = function BusinessList(props) {
       auth = _useSession2$.auth,
       token = _useSession2$.token;
 
-  var _useState15 = (0, _react.useState)({}),
-      _useState16 = _slicedToArray(_useState15, 2),
-      requestsState = _useState16[0],
-      setRequestsState = _useState16[1];
+  var _useState17 = (0, _react.useState)({}),
+      _useState18 = _slicedToArray(_useState17, 2),
+      requestsState = _useState18[0],
+      setRequestsState = _useState18[1];
 
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 2),
       configs = _useConfig2[0].configs,
       refreshConfigs = _useConfig2[1].refreshConfigs;
 
-  var _useState17 = (0, _react.useState)(false),
-      _useState18 = _slicedToArray(_useState17, 2),
-      franchiseEnabled = _useState18[0],
-      setFranchiseEnabled = _useState18[1];
+  var _useState19 = (0, _react.useState)(false),
+      _useState20 = _slicedToArray(_useState19, 2),
+      franchiseEnabled = _useState20[0],
+      setFranchiseEnabled = _useState20[1];
 
   var isValidMoment = function isValidMoment(date, format) {
     return _dayjs.default.utc(date, format).format(format) === date;
@@ -260,6 +266,13 @@ var BusinessList = function BusinessList(props) {
                 });
               }
 
+              if (priceLevelSelected || initialPricelevel) {
+                conditions.push({
+                  attribute: 'price_level',
+                  value: initialPricelevel !== null && initialPricelevel !== void 0 ? initialPricelevel : priceLevelSelected
+                });
+              }
+
               if (businessId) {
                 conditions.push({
                   attribute: typeof businessId === 'string' ? 'slug' : 'id',
@@ -348,13 +361,13 @@ var BusinessList = function BusinessList(props) {
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3 || !where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters) : where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard();
-              _context.next = 25;
+              _context.next = 26;
               return fetchEndpoint.get({
                 cancelToken: source,
                 advancedSearch: advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3
               });
 
-            case 25:
+            case 26:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               error = _yield$fetchEndpoint$2.error;
@@ -394,11 +407,11 @@ var BusinessList = function BusinessList(props) {
                 error: error,
                 result: result
               }));
-              _context.next = 37;
+              _context.next = 38;
               break;
 
-            case 34:
-              _context.prev = 34;
+            case 35:
+              _context.prev = 35;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -408,12 +421,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 37:
+            case 38:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 34]]);
+      }, _callee, null, [[0, 35]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
@@ -502,7 +515,7 @@ var BusinessList = function BusinessList(props) {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
     }
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
+  }, [JSON.stringify(orderState.options), businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useEffect)(function () {
     var _orderState$options15, _orderState$options16;
 
@@ -511,7 +524,7 @@ var BusinessList = function BusinessList(props) {
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true);
     }
-  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
+  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, priceLevelSelected, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useLayoutEffect)(function () {
     if (isDoordash) {
       getBusinesses(true);
@@ -573,6 +586,20 @@ var BusinessList = function BusinessList(props) {
       }));
       setBusinessTypeSelected(businessType);
     }
+  };
+  /**
+   * Change price level
+   * @param {string} priceLevel price level
+   */
+
+
+  var handleChangePriceLevel = function handleChangePriceLevel(priceLevel) {
+    if (priceLevel === priceLevelSelected) {
+      setPriceLevelSelected(null);
+      return;
+    }
+
+    setPriceLevelSelected(priceLevel);
   };
   /**
    * Change text to search
@@ -682,6 +709,8 @@ var BusinessList = function BusinessList(props) {
     businessTypeSelected: businessTypeSelected,
     orderByValue: orderByValue,
     maxDeliveryFee: maxDeliveryFee,
+    priceLevelSelected: priceLevelSelected,
+    handleChangePriceLevel: handleChangePriceLevel,
     getBusinesses: getBusinesses,
     handleChangeSearch: handleChangeSearch,
     handleChangeTimeLimit: handleChangeTimeLimit,

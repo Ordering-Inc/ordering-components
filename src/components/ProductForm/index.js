@@ -11,7 +11,9 @@ export const ProductForm = (props) => {
     useOrderContext,
     onSave,
     handleCustomSave,
-    isStarbucks
+    isStarbucks,
+    isService,
+    professionalSelected
   } = props
 
   const requestsState = {}
@@ -390,10 +392,18 @@ export const ProductForm = (props) => {
       let successful = true
       if (useOrderContext) {
         successful = false
+        const currentChanges = cart || { business_id: props.businessId }
+        const changes = !isService
+          ? { ...currentChanges }
+          : {
+            ...currentChanges,
+            professional_id: professionalSelected?.id,
+            service_start: orderState.options?.moment
+          }
         if (!props.productCart?.code) {
-          successful = await addProduct(productCart, (cart || { business_id: props.businessId }))
+          successful = await addProduct(productCart, changes, false, !!isService)
         } else {
-          successful = await updateProduct(productCart, (cart || { business_id: props.businessId }))
+          successful = await updateProduct(productCart, changes, false, !!isService)
           if (successful) {
             events.emit('product_edited', productCart)
           }

@@ -66,7 +66,9 @@ var ProductForm = function ProductForm(props) {
       useOrderContext = props.useOrderContext,
       onSave = props.onSave,
       handleCustomSave = props.handleCustomSave,
-      isStarbucks = props.isStarbucks;
+      isStarbucks = props.isStarbucks,
+      isService = props.isService,
+      professionalSelected = props.professionalSelected;
   var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -570,7 +572,7 @@ var ProductForm = function ProductForm(props) {
 
   var handleSave = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var errors, successful, _props$productCart6, _props$productCart7;
+      var errors, successful, _orderState$options, _props$productCart6, currentChanges, changes, _props$productCart7;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -583,53 +585,56 @@ var ProductForm = function ProductForm(props) {
               errors = checkErrors();
 
               if (!(Object.keys(errors).length === 0)) {
-                _context2.next = 17;
+                _context2.next = 19;
                 break;
               }
 
               successful = true;
 
               if (!useOrderContext) {
-                _context2.next = 16;
+                _context2.next = 18;
                 break;
               }
 
               successful = false;
+              currentChanges = cart || {
+                business_id: props.businessId
+              };
+              changes = !isService ? _objectSpread({}, currentChanges) : _objectSpread(_objectSpread({}, currentChanges), {}, {
+                professional_id: professionalSelected === null || professionalSelected === void 0 ? void 0 : professionalSelected.id,
+                service_start: (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
+              });
 
               if ((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code) {
-                _context2.next = 12;
+                _context2.next = 14;
                 break;
               }
 
-              _context2.next = 9;
-              return addProduct(productCart, cart || {
-                business_id: props.businessId
-              });
+              _context2.next = 11;
+              return addProduct(productCart, changes, false, !!isService);
 
-            case 9:
+            case 11:
               successful = _context2.sent;
-              _context2.next = 16;
+              _context2.next = 18;
               break;
 
-            case 12:
-              _context2.next = 14;
-              return updateProduct(productCart, cart || {
-                business_id: props.businessId
-              });
-
             case 14:
+              _context2.next = 16;
+              return updateProduct(productCart, changes, false, !!isService);
+
+            case 16:
               successful = _context2.sent;
 
               if (successful) {
                 events.emit('product_edited', productCart);
               }
 
-            case 16:
+            case 18:
               if (successful) {
                 onSave(productCart, !((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code));
               }
 
-            case 17:
+            case 19:
             case "end":
               return _context2.stop();
           }

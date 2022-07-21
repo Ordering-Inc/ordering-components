@@ -442,9 +442,7 @@ var BusinessController = function BusinessController(props) {
     };
   }, [businessWillCloseSoonMinutes]);
   (0, _react.useEffect)(function () {
-    var _businessState$busine12;
-
-    if (business && (business === null || business === void 0 ? void 0 : business.id) !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id)) {
+    if (business) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: business
       }));
@@ -518,11 +516,11 @@ var BusinessController = function BusinessController(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    var _businessState$busine13;
+    var _businessState$busine12;
 
     if (!favoriteIds) return;
 
-    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id)) {
+    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
           favorite: true

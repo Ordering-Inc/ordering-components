@@ -150,6 +150,64 @@ var BusinessSearchList = function BusinessSearchList(props) {
       setFilters(_objectSpread(_objectSpread({}, filters), {}, _defineProperty({}, filterName, filterValue)));
     }
   };
+  /**
+   * Method to update business list
+   * @param {number} businessId business id
+   * @param {object} changes business info
+   */
+
+
+  var handleUpdateBusinessList = function handleUpdateBusinessList(businessId, changes) {
+    var updatedBusinesses = businessesSearchList === null || businessesSearchList === void 0 ? void 0 : businessesSearchList.businesses.map(function (business) {
+      if ((business === null || business === void 0 ? void 0 : business.id) === businessId) {
+        return _objectSpread(_objectSpread({}, business), changes);
+      }
+
+      return business;
+    });
+    setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
+      businesses: updatedBusinesses
+    }));
+  };
+  /**
+   * Method to update business list
+   * @param {number} productId product id
+   * @param {number} categoryId category id
+   * @param {number} businessId business id
+   * @param {object} changes product info
+   */
+
+
+  var handleUpdateProducts = function handleUpdateProducts(productId, categoryId, businessId, changes) {
+    var updatedBusinesses = businessesSearchList === null || businessesSearchList === void 0 ? void 0 : businessesSearchList.businesses.map(function (business) {
+      if ((business === null || business === void 0 ? void 0 : business.id) === businessId) {
+        var updatedCategories = business === null || business === void 0 ? void 0 : business.categories.map(function (category) {
+          if ((category === null || category === void 0 ? void 0 : category.id) === categoryId) {
+            var updateProducts = category === null || category === void 0 ? void 0 : category.products.map(function (product) {
+              if ((product === null || product === void 0 ? void 0 : product.id) === productId) {
+                return _objectSpread(_objectSpread({}, product), changes);
+              }
+
+              return product;
+            });
+            return _objectSpread(_objectSpread({}, category), {}, {
+              products: updateProducts
+            });
+          }
+
+          return category;
+        });
+        return _objectSpread(_objectSpread({}, business), {}, {
+          categories: updatedCategories
+        });
+      }
+
+      return business;
+    });
+    setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
+      businesses: updatedBusinesses
+    }));
+  };
 
   var handleSearchbusinessAndProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newFetch) {
@@ -406,7 +464,9 @@ var BusinessSearchList = function BusinessSearchList(props) {
     handleSearchbusinessAndProducts: handleSearchbusinessAndProducts,
     handleChangeTermValue: handleChangeTermValue,
     setFilters: setFilters,
-    brandList: brandList
+    brandList: brandList,
+    handleUpdateBusinessList: handleUpdateBusinessList,
+    handleUpdateProducts: handleUpdateProducts
   })));
 };
 
