@@ -70,6 +70,7 @@ export const MomentOption = (props) => {
     setDateSelected(date)
     setTimeSelected(null)
     setIsAsap(false)
+    onChangeMoment && onChangeMoment(null)
   }
 
   const handleChangeTime = (time) => {

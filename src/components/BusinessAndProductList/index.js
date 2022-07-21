@@ -32,6 +32,7 @@ export const BusinessAndProductList = (props) => {
   const [searchValue, setSearchValue] = useState(null)
   const [sortByValue, setSortByValue] = useState(null)
   const [filterByMenus, setFilterByMenus] = useState(null)
+  const [professionalSelected, setProfessionalSelected] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: !props.avoidBusinessLoading, error: null })
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState({})
@@ -151,6 +152,14 @@ export const BusinessAndProductList = (props) => {
         iterateCategories(category.subcategories)
       })
     )
+  }
+
+  /**
+   * Method to change professional
+   * @param {object} professional a professional info
+   */
+  const handleChangeProfessionalSelected = (professional) => {
+    setProfessionalSelected(professional)
   }
 
   const handleUpdateProducts = (productId, changes) => {
@@ -647,6 +656,10 @@ export const BusinessAndProductList = (props) => {
         parameters.menu_id = filterByMenus
       }
 
+      if (professionalSelected) {
+        parameters.professional_id = professionalSelected?.id
+      }
+
       const { content: { result } } = await ordering
         .businesses(slug)
         .select(businessProps)
@@ -717,7 +730,7 @@ export const BusinessAndProductList = (props) => {
     if (!orderState.loading && orderOptions && !languageState.loading && !props.avoidBusinessLoading) {
       getBusiness()
     }
-  }, [orderOptions, languageState.loading, slug, filterByMenus])
+  }, [orderOptions, languageState.loading, slug, filterByMenus, professionalSelected])
 
   useEffect(() => {
     if (!orderState.loading && orderOptions && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
@@ -800,6 +813,8 @@ export const BusinessAndProductList = (props) => {
           setAlertState={setAlertState}
           alertState={alertState}
           handleUpdateProducts={handleUpdateProducts}
+          professionalSelected={professionalSelected}
+          handleChangeProfessionalSelected={handleChangeProfessionalSelected}
         />
       )}
     </>

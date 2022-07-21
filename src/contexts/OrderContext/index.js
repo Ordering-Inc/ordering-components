@@ -317,8 +317,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * @param {object} product product for add
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
+   * @param {boolean} isService option to add product when product type is service
    */
-  const addProduct = async (product, cart, isQuickAddProduct) => {
+  const addProduct = async (product, cart, isQuickAddProduct, isService) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -326,7 +327,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const body = {
         product,
         business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id
+        user_id: userCustomerId || session.user.id,
+        ...(isService && { professional_id: cart?.professional_id }),
+        ...(isService && { service_start: cart?.service_start })
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -409,7 +412,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Update product to cart
    */
-  const updateProduct = async (product, cart, isQuickAddProduct) => {
+  const updateProduct = async (product, cart, isQuickAddProduct, isService) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -417,7 +420,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const body = {
         product,
         business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id
+        user_id: userCustomerId || session.user.id,
+        ...(isService && { professional_id: cart?.professional_id }),
+        ...(isService && { service_start: cart?.service_start })
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {

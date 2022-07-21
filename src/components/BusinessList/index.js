@@ -16,6 +16,7 @@ export const BusinessList = (props) => {
     initialOrderByValue,
     initialFilterKey,
     initialFilterValue,
+    initialPricelevel,
     isOfferBusinesses,
     isSortByReview,
     isSearchByName,
@@ -41,6 +42,7 @@ export const BusinessList = (props) => {
     totalPages: null
   })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
+  const [priceLevelSelected, setPriceLevelSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [timeLimitValue, setTimeLimitValue] = useState(null)
   const [orderByValue, setOrderByValue] = useState(initialOrderByValue ?? null)
@@ -117,6 +119,10 @@ export const BusinessList = (props) => {
 
       if (franchiseId) {
         conditions.push({ attribute: 'franchise_id', value: franchiseId })
+      }
+
+      if (priceLevelSelected || initialPricelevel) {
+        conditions.push({ attribute: 'price_level', value: initialPricelevel ?? priceLevelSelected })
       }
 
       if (businessId) {
@@ -300,14 +306,14 @@ export const BusinessList = (props) => {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true)
     }
-  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
+  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, priceLevelSelected, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useLayoutEffect(() => {
     if (isDoordash) {
@@ -366,6 +372,18 @@ export const BusinessList = (props) => {
       })
       setBusinessTypeSelected(businessType)
     }
+  }
+
+  /**
+   * Change price level
+   * @param {string} priceLevel price level
+   */
+  const handleChangePriceLevel = (priceLevel) => {
+    if (priceLevel === priceLevelSelected) {
+      setPriceLevelSelected(null)
+      return
+    }
+    setPriceLevelSelected(priceLevel)
   }
 
   /**
@@ -482,6 +500,8 @@ export const BusinessList = (props) => {
             businessTypeSelected={businessTypeSelected}
             orderByValue={orderByValue}
             maxDeliveryFee={maxDeliveryFee}
+            priceLevelSelected={priceLevelSelected}
+            handleChangePriceLevel={handleChangePriceLevel}
             getBusinesses={getBusinesses}
             handleChangeSearch={handleChangeSearch}
             handleChangeTimeLimit={handleChangeTimeLimit}
