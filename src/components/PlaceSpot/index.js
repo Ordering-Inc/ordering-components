@@ -8,7 +8,10 @@ import { useLanguage } from '../../contexts/LanguageContext'
 export const PlaceSpot = (props) => {
   const {
     UIComponent,
-    cart
+    cart,
+    spotNumberDefault,
+    vehicleDefault,
+    onRemoveSpotNumber
   } = props
 
   const [orderState] = useOrder()
@@ -21,8 +24,16 @@ export const PlaceSpot = (props) => {
    * Places state (Curbside, eat in)
    */
   const [placesState, setPlacesState] = useState({ loading: true, places: [], placeGroups: [], error: null })
+  const [spotState, setSpotState] = useState({ loading: false, error: null })
+  const [spotNumber, setSpotNumber] = useState(spotNumberDefault)
+  const [vehicle, setVehicle] = useState({
+    type: vehicleDefault?.type ?? '',
+    model: vehicleDefault?.model ?? '',
+    car_registration: vehicleDefault?.car_registration ?? '',
+    color: vehicleDefault?.color ?? ''
+  })
 
-  const orderTypesAllowed = [3, 4]
+  const orderTypesAllowed = [3, 4, 5]
 
   const getPlaces = async () => {
     try {
@@ -83,48 +94,77 @@ export const PlaceSpot = (props) => {
     }
   }
 
-  const handleChangePlace = async (place) => {
+  const handleChangeSpot = async ({ isCheckout = true, bodyToSend }) => {
     try {
-      const uuid = cart?.uuid
-      const response = await fetch(`${ordering.root}/carts/${uuid}`, {
-        'Content-Type': 'application/json',
-        method: 'PUT',
-        body: JSON.stringify({
-          place: place,
-          place_id: place?.id
+      setSpotState({ ...spotState, loading: true })
+      const id = isCheckout ? cart?.uuid : cart?.id
+      const endpointToFetch = isCheckout
+        ? ordering.setAccessToken(token).carts(id).set(bodyToSend)
+        : ordering.setAccessToken(token).orders(id).save(bodyToSend)
 
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const { result, error } = await response.json()
-      if (error) {
-        showToast(ToastType.Error, result)
-        return
+      const { content: { error, result } } = await endpointToFetch
+
+      if (!error) {
+        onRemoveSpotNumber && onRemoveSpotNumber(cart?.business?.slug)
       }
+
+      if (props.showToastMsg) {
+        showToast(
+          error ? ToastType.Error : ToastType.Success,
+          error
+            ? t('ERROR', result[0])
+            : t('SPOT_CHANGE_SUCCESS_CONTENT', 'Changes applied correctly')
+        )
+      }
+
+      setSpotState({
+        ...spotState,
+        loading: false,
+        error: error ? result : null
+      })
     } catch (err) {
-      showToast(ToastType.Error, err.message)
+      setSpotState({
+        ...spotState,
+        loading: false,
+        error: [err.message]
+      })
     }
   }
 
   useEffect(() => {
-    if (orderTypesAllowed.includes(orderState?.options?.type)) {
+    if (orderTypesAllowed.includes(orderState?.options?.type) && !props.isInputMode) {
       getPlaces()
     }
   }, [orderState?.options?.type])
+
+  useEffect(() => {
+    if (spotNumberDefault && spotNumberDefault !== cart?.spot_number) {
+      handleChangeSpot({
+        bodyToSend: { spot_number: spotNumberDefault }
+      })
+    }
+  }, [spotNumberDefault])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
+          vehicle={vehicle}
+          spotState={spotState}
+          spotNumber={spotNumber}
           placesState={placesState}
-          handleChangePlace={handleChangePlace}
+          setVehicle={setVehicle}
+          setSpotState={setSpotState}
+          setSpotNumber={setSpotNumber}
+          handleChangeSpot={handleChangeSpot}
           getPlacesList={getPlaces}
         />
       )}
     </>
   )
+}
+
+PlaceSpot.defaultProps = {
+  showToastMsg: true
 }

@@ -26,6 +26,7 @@ import { DriverTips } from './components/DriverTips'
 import { ExamineClick } from './components/ExamineClick'
 import { FacebookLoginButton } from './components/FacebookLoginButton'
 import { FacebookPixel } from './components/FacebookPixel'
+import { FavoriteList } from './components/FavoriteList'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
 import { GoogleLoginButton } from './components/GoogleLoginButton'
 import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
@@ -38,6 +39,9 @@ import { LogoutAction } from './components/LogoutAction'
 import { MainSearch } from './components/MainSearch'
 import { MenuControl } from './components/MenuControl'
 import { MomentOption } from './components/MomentOption'
+import { MultiCheckout } from './components/MultiCheckout'
+import { MultiCartsPaymethodsAndWallets } from './components/MultiCartsPaymethodsAndWallets'
+import { MultiOrdersDetails } from './components/MultiOrdersDetails'
 import { MyOrders } from './components/MyOrders'
 import { MyOrdersList } from './components/MyOrdersList'
 import { NewOrderNotification } from './components/NewOrderNotification'
@@ -143,6 +147,7 @@ export {
   ExamineClick,
   FacebookLoginButton,
   FacebookPixel,
+  FavoriteList,
   GoogleLoginButton,
   ForgotPasswordForm,
   GoogleAutocompleteInput,
@@ -157,6 +162,9 @@ export {
   MainSearch,
   MenuControl,
   MomentOption,
+  MultiCartsPaymethodsAndWallets,
+  MultiCheckout,
+  MultiOrdersDetails,
   MyOrders,
   MyOrdersList,
   NewOrderNotification,

@@ -6,6 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useOrder } from '../../contexts/OrderContext'
 import dayjs from 'dayjs'
 
 export const OrderList = props => {
@@ -24,10 +25,15 @@ export const OrderList = props => {
     activeOrders,
     isDynamicSort,
     businessId,
-    franchiseId
+    franchiseId,
+    businessesSearchList,
+    setIsEmptyBusinesses,
+    businessOrderIds,
+    setBusinessOrderIds
   } = props
 
   const [ordering] = useApi()
+  const [, { reorder }] = useOrder()
   const [session] = useSession()
   const [, { showToast }] = useToast()
   const socket = useWebsocket()
@@ -45,10 +51,48 @@ export const OrderList = props => {
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [updateOtherStatus, setUpdateOtherStatus] = useState([])
   const [sortBy, setSortBy] = useState({ param: orderBy, direction: orderDirection })
-
+  const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
+  const [products, setProducts] = useState([])
   const profileMessage = props.profileMessages
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
+
+  const handleReorder = async (orderId) => {
+    if (!orderId) return
+    try {
+      setReorderState({
+        ...reorderState,
+        loading: true
+      })
+      const { error, result } = await reorder(orderId)
+      if (!error) {
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          result: { ...result, orderId: orderId }
+        })
+      } else {
+        const choosedOrder = orderList.orders.find(_order => _order?.id === orderId)
+        const _businessId = choosedOrder?.business_id ?? choosedOrder?.original?.business_id
+        const _businessData = await ordering.businesses(_businessId).select(['slug']).get()
+        const _businessSlug = await _businessData?.content?.result?.slug
+
+        setReorderState({
+          ...reorderState,
+          loading: false,
+          error: true,
+          result: { ...result, orderId: orderId, business_id: _businessId, business: { slug: _businessSlug } }
+        })
+      }
+    } catch (err) {
+      setReorderState({
+        ...reorderState,
+        loading: false,
+        error: true,
+        result: [err?.message]
+      })
+    }
+  }
 
   const getOrders = async (page, otherStatus = [], pageSize = paginationSettings.pageSize) => {
     const options = {
@@ -133,6 +177,19 @@ export const OrderList = props => {
           error: response.content.error ? response.content.result : null
         })
       }
+      setBusinessOrderIds && setBusinessOrderIds(
+        [...response.content.result, ...orderList.orders]
+          .map(order => order.business_id)
+          .filter((id, i, hash) => (!businessesSearchList || businessesSearchList?.businesses?.some(business => business?.id === id)) && hash.indexOf(id) === i)
+      )
+      setProducts(
+        [...response.content.result, ...orderList.orders]
+          .filter(order => !businessesSearchList || businessesSearchList?.businesses?.some(business => order?.business_id === business?.id))
+          .map(order => order.products.map(product => ({ ...product, business: order?.business, businessId: order?.business_id })))
+          .flat()
+          .filter((product, i, hash) => hash.map(_product => _product?.product_id).indexOf(product?.product_id) === i)
+      )
+
       if (!response.content.error) {
         setPagination({
           currentPage: keepOrders
@@ -154,6 +211,22 @@ export const OrderList = props => {
         setOrderList({ ...orderList, loading: false, error: [err.message] })
       }
     }
+  }
+
+  const handleUpdateOrderList = (orderId, changes) => {
+    const updatedOrders = orderList?.orders.map(order => {
+      if (order?.id === orderId) {
+        return {
+          ...order,
+          ...changes
+        }
+      }
+      return order
+    })
+    setOrderList({
+      ...orderList,
+      orders: updatedOrders
+    })
   }
 
   const loadMessages = async (orderId) => {
@@ -188,7 +261,7 @@ export const OrderList = props => {
         orders: orders?.lenght > 0 ? orders : customArray || [],
         loading: false
       })
-    } else {
+    } else if (!businessesSearchList) {
       loadOrders()
     }
 
@@ -341,6 +414,19 @@ export const OrderList = props => {
     return ordersSorted
   }
 
+  const handleUpdateProducts = (productId, changes) => {
+    const updatedProducts = products?.map(product => {
+      if (product?.product_id === productId) {
+        return {
+          ...product,
+          ...changes
+        }
+      }
+      return product
+    })
+    setProducts(updatedProducts)
+  }
+
   useEffect(() => {
     if (profileMessage) return
     if (!orderList.loading && orderBy !== 'last_direct_message_at') {
@@ -366,6 +452,16 @@ export const OrderList = props => {
     }
   }, [sortBy])
 
+  useEffect(() => {
+    if (businessesSearchList && !businessesSearchList?.loading) {
+      loadOrders(false, false, false, true)
+    }
+  }, [businessesSearchList, businessId])
+
+  useEffect(() => {
+    setIsEmptyBusinesses && setIsEmptyBusinesses(businessOrderIds?.length === 0)
+  }, [businessOrderIds])
+
   return (
     <>
       {UIComponent && (
@@ -382,6 +478,12 @@ export const OrderList = props => {
           messages={messages}
           setMessages={setMessages}
           setUpdateOtherStatus={setUpdateOtherStatus}
+          handleReorder={handleReorder}
+          reorderState={reorderState}
+          businessOrderIds={businessOrderIds}
+          products={products}
+          handleUpdateOrderList={handleUpdateOrderList}
+          handleUpdateProducts={handleUpdateProducts}
         />
       )}
     </>

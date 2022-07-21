@@ -24,6 +24,7 @@ import { DragAndDrop } from '../src/components/DragAndDrop'
 import { DriverList } from '../src/components/DriverList'
 import { DriverTips } from '../src/components/DriverTips'
 import { ExamineClick } from '../src/components/ExamineClick'
+import { FavoriteList } from '../src/components/FavoriteList'
 import { FloatingButton } from '../src/components/FloatingButton'
 import { ForgotPasswordForm } from '../src/components/ForgotPasswordForm'
 import { LanguageSelector } from '../src/components/LanguageSelector'
@@ -33,6 +34,9 @@ import { MainSearch } from '../src/components/MainSearch'
 import { MenuControl } from '../src/components/MenuControl'
 import { Messages } from '../src/components/Messages'
 import { MomentOption } from '../src/components/MomentOption'
+import { MultiCheckout } from '../src/components/MultiCheckout'
+import { MultiCartsPaymethodsAndWallets } from '../src/components/MultiCartsPaymethodsAndWallets'
+import { MultiOrdersDetails } from '../src/components/MultiOrdersDetails'
 import { MyOrders } from '../src/components/MyOrders'
 import { MyOrdersList } from '../src/components/MyOrdersList'
 import { NewOrderNotification } from '../src/components/NewOrderNotification'
@@ -123,6 +127,7 @@ export {
   DriverList,
   DriverTips,
   ExamineClick,
+  FavoriteList,
   FloatingButton,
   ForgotPasswordForm,
   LanguageSelector,
@@ -133,6 +138,9 @@ export {
   MenuControl,
   Messages,
   MomentOption,
+  MultiCheckout,
+  MultiCartsPaymethodsAndWallets,
+  MultiOrdersDetails,
   MyOrders,
   MyOrdersList,
   NewOrderNotification,

@@ -16,6 +16,7 @@ export const BusinessList = (props) => {
     initialOrderByValue,
     initialFilterKey,
     initialFilterValue,
+    initialPricelevel,
     isOfferBusinesses,
     isSortByReview,
     isSearchByName,
@@ -41,13 +42,14 @@ export const BusinessList = (props) => {
     totalPages: null
   })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
+  const [priceLevelSelected, setPriceLevelSelected] = useState(null)
   const [searchValue, setSearchValue] = useState('')
   const [timeLimitValue, setTimeLimitValue] = useState(null)
   const [orderByValue, setOrderByValue] = useState(initialOrderByValue ?? null)
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
   const [ordering] = useApi()
-  const [{ token }] = useSession()
+  const [{ auth, token }] = useSession()
   const [requestsState, setRequestsState] = useState({})
   const [{ configs }, { refreshConfigs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
@@ -68,7 +70,7 @@ export const BusinessList = (props) => {
     try {
       setBusinessesList({ ...businessesList, loading: true })
       refreshConfigs()
-      let parameters = {
+      let parameters = asDashboard ? {} : {
         location: !customLocation
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : `${customLocation.lat},${customLocation.lng}`,
@@ -117,6 +119,10 @@ export const BusinessList = (props) => {
 
       if (franchiseId) {
         conditions.push({ attribute: 'franchise_id', value: franchiseId })
+      }
+
+      if (priceLevelSelected || initialPricelevel) {
+        conditions.push({ attribute: 'price_level', value: initialPricelevel ?? priceLevelSelected })
       }
 
       if (businessId) {
@@ -215,31 +221,37 @@ export const BusinessList = (props) => {
             ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
             : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard()
 
-      const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source, advancedSearch: advancedSearchEnabled && searchValue?.length >= 3 })
-      if (isSortByReview) {
-        const _result = sortBusinesses(result, 'review')
-        businessesList.businesses = _result
-      } else if (isOfferBusinesses) {
-        const offerBuesinesses = result.filter(_business => _business?.offers.length > 0)
-        businessesList.businesses = offerBuesinesses
-      } else {
-        businessesList.businesses = newFetch ? result : (prev ? [...result, ...businessesList.businesses] : [...businessesList.businesses, ...result])
+      const { content: { error, result, pagination } } = await fetchEndpoint.get({ cancelToken: source, advancedSearch: advancedSearchEnabled && searchValue?.length >= 3 })
+
+      if (!error) {
+        if (isSortByReview) {
+          const _result = sortBusinesses(result, 'review')
+          businessesList.businesses = _result
+        } else if (isOfferBusinesses) {
+          const offerBuesinesses = result.filter(_business => _business?.offers.length > 0)
+          businessesList.businesses = offerBuesinesses
+        } else {
+          businessesList.businesses = newFetch ? result : (prev ? [...result, ...businessesList.businesses] : [...businessesList.businesses, ...result])
+        }
+        let nextPageItems = 0
+        if (pagination?.current_page !== pagination?.total_pages) {
+          const remainingItems = pagination.total - businessesList.businesses.length
+          nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size
+        }
+        setPaginationProps({
+          ...paginationProps,
+          currentPage: pagination?.current_page,
+          totalPages: pagination?.total_pages,
+          totalItems: pagination?.total,
+          nextPageItems
+        })
       }
-      let nextPageItems = 0
-      if (pagination.current_page !== pagination.total_pages) {
-        const remainingItems = pagination.total - businessesList.businesses.length
-        nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size
-      }
-      setPaginationProps({
-        ...paginationProps,
-        currentPage: pagination.current_page,
-        totalPages: pagination.total_pages,
-        totalItems: pagination.total,
-        nextPageItems
-      })
+
       setBusinessesList({
         ...businessesList,
-        loading: false
+        loading: false,
+        error,
+        result
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
@@ -290,18 +302,18 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation && !asDashboard))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation)) || (auth && !orderState?.options?.user_id)) return
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
-  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
+  }, [JSON.stringify(orderState.options), businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !customLocation))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true)
     }
-  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, timeLimitValue, orderByValue, maxDeliveryFee])
+  }, [JSON.stringify(orderState.options), franchiseEnabled, businessTypeSelected, searchValue, priceLevelSelected, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useLayoutEffect(() => {
     if (isDoordash) {
@@ -360,6 +372,18 @@ export const BusinessList = (props) => {
       })
       setBusinessTypeSelected(businessType)
     }
+  }
+
+  /**
+   * Change price level
+   * @param {string} priceLevel price level
+   */
+  const handleChangePriceLevel = (priceLevel) => {
+    if (priceLevel === priceLevelSelected) {
+      setPriceLevelSelected(null)
+      return
+    }
+    setPriceLevelSelected(priceLevel)
   }
 
   /**
@@ -442,6 +466,27 @@ export const BusinessList = (props) => {
     setMaxDeliveryFee(deliveryFee)
   }
 
+  /**
+   * Method to update business list
+   * @param {number} businessId business id
+   * @param {object} changes business info
+   */
+  const handleUpdateBusinessList = (businessId, changes) => {
+    const updatedBusinesses = businessesList?.businesses.map(business => {
+      if (business?.id === businessId) {
+        return {
+          ...business,
+          ...changes
+        }
+      }
+      return business
+    })
+    setBusinessesList({
+      ...businessesList,
+      businesses: updatedBusinesses
+    })
+  }
+
   return (
     <>
       {
@@ -455,6 +500,8 @@ export const BusinessList = (props) => {
             businessTypeSelected={businessTypeSelected}
             orderByValue={orderByValue}
             maxDeliveryFee={maxDeliveryFee}
+            priceLevelSelected={priceLevelSelected}
+            handleChangePriceLevel={handleChangePriceLevel}
             getBusinesses={getBusinesses}
             handleChangeSearch={handleChangeSearch}
             handleChangeTimeLimit={handleChangeTimeLimit}
@@ -463,6 +510,7 @@ export const BusinessList = (props) => {
             handleChangeBusinessType={handleChangeBusinessType}
             handleChangeMaxDeliveryFee={handleChangeMaxDeliveryFee}
             franchiseEnabled={franchiseEnabled}
+            handleUpdateBusinessList={handleUpdateBusinessList}
           />
         )
       }

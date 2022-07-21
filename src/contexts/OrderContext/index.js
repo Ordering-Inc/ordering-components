@@ -317,8 +317,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * @param {object} product product for add
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
+   * @param {boolean} isService option to add product when product type is service
    */
-  const addProduct = async (product, cart, isQuickAddProduct) => {
+  const addProduct = async (product, cart, isQuickAddProduct, isService) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -326,7 +327,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const body = {
         product,
         business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id
+        user_id: userCustomerId || session.user.id,
+        ...(isService && { professional_id: cart?.professional_id }),
+        ...(isService && { service_start: cart?.service_start })
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -409,7 +412,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Update product to cart
    */
-  const updateProduct = async (product, cart, isQuickAddProduct) => {
+  const updateProduct = async (product, cart, isQuickAddProduct, isService) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -417,7 +420,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const body = {
         product,
         business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id
+        user_id: userCustomerId || session.user.id,
+        ...(isService && { professional_id: cart?.professional_id }),
+        ...(isService && { service_start: cart?.service_start })
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -694,6 +699,50 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   /**
+   * Place multi carts
+   */
+  const placeMulitCarts = async (data) => {
+    try {
+      setState({ ...state, loading: true })
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${session.token}`
+        },
+        body: JSON.stringify(data)
+      }
+
+      const response = await fetch(`${ordering.root}/carts/place_group`, requestOptions)
+      const { error, result } = await response.json()
+      if (!error) {
+        result.carts.forEach(cart => {
+          delete state.carts[`businessId:${cart.business_id}`]
+          const orderObject = {
+            id: cart.uuid,
+            business: { name: cart.business.name },
+            total: cart.total,
+            tax_total: cart.tax,
+            delivery_zone_price: cart.delivery_price,
+            business_id: cart.business_id
+          }
+          events.emit('order_placed', orderObject)
+        })
+      } else {
+        setAlert({ show: true, content: result })
+      }
+      setState({ ...state, loading: false })
+      return { error, result }
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return {
+        error: true,
+        result: [err.message]
+      }
+    }
+  }
+
+  /**
    * Confirm cart
    */
   const confirmCart = async (cardId, data) => {
@@ -908,7 +957,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setConfirm,
     changePaymethod,
     setUserCustomerOptions,
-    setStateValues
+    setStateValues,
+    placeMulitCarts
   }
 
   const copyState = JSON.parse(JSON.stringify(state))

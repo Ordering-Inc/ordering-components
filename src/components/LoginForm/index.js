@@ -34,7 +34,8 @@ export const LoginForm = (props) => {
   const [{ configs }] = useConfig()
   const [reCaptchaValue, setReCaptchaValue] = useState(null)
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
-
+  const [otpType, setOtpType] = useState('email')
+  const [otpState, setOtpState] = useState('')
   if (!useLoginByEmail && !useLoginByCellphone) {
     defaultLoginTab = 'none'
   } else if (defaultLoginTab === 'email' && !useLoginByEmail && useLoginByCellphone) {
@@ -42,6 +43,10 @@ export const LoginForm = (props) => {
   } else if (defaultLoginTab === 'cellphone' && !useLoginByCellphone && useLoginByEmail) {
     defaultLoginTab = 'email'
   }
+
+  const useLoginOtpEmail = configs?.opt_email_enabled?.value === '1'
+  const useLoginOtpCellphone = configs?.otp_cellphone_enabled?.value === '1'
+  const useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone
 
   const [loginTab, setLoginTab] = useState(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email'))
   const [, { login, logout }] = useSession()
@@ -56,12 +61,26 @@ export const LoginForm = (props) => {
       handleCustomLogin(values || credentials, loginTab)
       return
     }
-
     try {
-      const _credentials = {
-        [loginTab]: values && values[loginTab] || credentials[loginTab],
-        password: values && values?.password || credentials.password
+      let _credentials
+      if (loginTab === 'otp') {
+        _credentials = {
+          [otpType]: values && values[otpType] || credentials[otpType],
+          one_time_password: values && values?.code || otpState
+        }
+        if (otpType === 'cellphone') {
+          _credentials = {
+            ..._credentials,
+            country_phone_code: values && values?.country_phone_code || credentials?.country_phone_code,
+          }
+        }
+      } else {
+        _credentials = {
+          [loginTab]: values && values[loginTab] || credentials[loginTab],
+          password: values && values?.password || credentials.password
+        }
       }
+
       if (isReCaptchaEnable) {
         if (reCaptchaValue === null) {
           setFormState({
@@ -163,6 +182,10 @@ export const LoginForm = (props) => {
     setIsReCaptchaEnable(props.isRecaptchaEnable && configs &&
       Object.keys(configs).length > 0 &&
       configs?.security_recaptcha_auth?.value === '1')
+
+    if (useLoginOtpCellphone && !useLoginOtpEmail) {
+      setOtpType('cellphone')
+    }
   }, [configs])
 
   /**
@@ -206,7 +229,6 @@ export const LoginForm = (props) => {
         loading: false,
         result: res
       })
-
     } catch (error) {
       setVerifyPhoneState({
         ...verifyPhoneState,
@@ -268,6 +290,46 @@ export const LoginForm = (props) => {
     }
   }
 
+  const generateOtpCode = async (values) => {
+    const body = {
+      type: 4,
+      channel: otpType === 'email' ? 1 : 2,
+      size: 6
+    }
+    const email = values?.email || credentials?.email
+    const cellphone = values?.cellphone || credentials?.cellphone
+    const countryPhoneCode = values?.countryPhoneCode || values?.country_phone_code || credentials.country_phone_code
+
+    try {
+      if (otpType === 'cellphone') {
+        body.country_phone_code = countryPhoneCode
+        body.cellphone = cellphone
+        setCredentials({
+          cellphone,
+          country_phone_code: countryPhoneCode
+        })
+      } else {
+        body.email = email
+        setCredentials({
+          email
+        })
+      }
+      const response = await fetch(`${ordering.root}/codes/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: result, error: null } })
+        return
+      }
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result } })
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message } })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -286,6 +348,14 @@ export const LoginForm = (props) => {
           handleCheckPhoneCode={checkVerifyPhoneCode}
           enableReCaptcha={isReCaptchaEnable}
           handleReCaptcha={setReCaptchaValue}
+          useLoginOtp={useLoginOtp}
+          setOtpType={setOtpType}
+          otpType={otpType}
+          generateOtpCode={generateOtpCode}
+          setOtpState={setOtpState}
+          otpState={otpState}
+          useLoginOtpEmail={useLoginOtpEmail}
+          useLoginOtpCellphone={useLoginOtpCellphone}
         />
       )}
     </>

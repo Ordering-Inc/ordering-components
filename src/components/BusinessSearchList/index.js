@@ -8,10 +8,15 @@ export const BusinessSearchList = (props) => {
   const {
     UIComponent,
     paginationSettings,
-    lazySearch
+    lazySearch,
+    defaultTerm
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
+  /**
+   * brandList, this must be contain a brands, loading and error to send UIComponent
+   */
+  const [brandList, setBrandList] = useState({ loading: true, brands: [], error: null })
   const [paginationProps, setPaginationProps] = useState({
     currentPage: 1,
     pageSize: paginationSettings.pageSize ?? 10,
@@ -21,8 +26,13 @@ export const BusinessSearchList = (props) => {
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [{ token }] = useSession()
-  const [filters, setFilters] = useState({ business_types: [], orderBy: 'distance' })
-  const [termValue, setTermValue] = useState('')
+  const [filters, setFilters] = useState({
+    business_types: [],
+    orderBy: 'distance',
+    franchise_ids: [],
+    price_level: null
+  })
+  const [termValue, setTermValue] = useState(defaultTerm || '')
 
   useEffect(() => {
     !lazySearch && handleSearchbusinessAndProducts(true)
@@ -52,6 +62,68 @@ export const BusinessSearchList = (props) => {
         [filterName]: filterValue
       })
     }
+  }
+
+  /**
+   * Method to update business list
+   * @param {number} businessId business id
+   * @param {object} changes business info
+   */
+  const handleUpdateBusinessList = (businessId, changes) => {
+    const updatedBusinesses = businessesSearchList?.businesses.map(business => {
+      if (business?.id === businessId) {
+        return {
+          ...business,
+          ...changes
+        }
+      }
+      return business
+    })
+    setBusinessesSearchList({
+      ...businessesSearchList,
+      businesses: updatedBusinesses
+    })
+  }
+
+  /**
+   * Method to update business list
+   * @param {number} productId product id
+   * @param {number} categoryId category id
+   * @param {number} businessId business id
+   * @param {object} changes product info
+   */
+  const handleUpdateProducts = (productId, categoryId, businessId, changes) => {
+    const updatedBusinesses = businessesSearchList?.businesses.map(business => {
+      if (business?.id === businessId) {
+        const updatedCategories = business?.categories.map(category => {
+          if (category?.id === categoryId) {
+            const updateProducts = category?.products.map(product => {
+              if (product?.id === productId) {
+                return {
+                  ...product,
+                  ...changes
+                }
+              }
+              return product
+            })
+            return {
+              ...category,
+              products: updateProducts
+            }
+          }
+          return category
+        })
+        return {
+          ...business,
+          categories: updatedCategories
+        }
+      }
+      return business
+    })
+    setBusinessesSearchList({
+      ...businessesSearchList,
+      businesses: updatedBusinesses
+    })
   }
 
   const handleSearchbusinessAndProducts = async (newFetch) => {
@@ -114,6 +186,90 @@ export const BusinessSearchList = (props) => {
     }
   }
 
+  /**
+  * Function to get brand list from API
+  */
+  const getBrandList = async () => {
+    try {
+      setBrandList({ ...brandList, loading: true })
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+
+      const response = await fetch(`${ordering.root}/franchises`, requestOptions)
+      const content = await response.json()
+
+      if (!content.error) {
+        setBrandList({
+          ...brandList,
+          loading: false,
+          brands: content?.result,
+          error: null
+        })
+      } else {
+        setBrandList({
+          ...brandList,
+          loading: false,
+          error: content?.result
+        })
+      }
+    } catch (error) {
+      setBrandList({
+        ...brandList,
+        loading: false,
+        error: error.message
+      })
+    }
+  }
+
+  /**
+  * Function to get tag list from API
+  */
+  const getTagList = async () => {
+    try {
+      setTags({ ...tags, loading: true })
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+
+      const response = await fetch(`${ordering.root}/tags`, requestOptions)
+      const content = await response.json()
+
+      if (!content.error) {
+        setTags({
+          ...tags,
+          loading: false,
+          result: content?.result,
+          error: null
+        })
+      } else {
+        setTags({
+          ...tags,
+          loading: false,
+          error: content?.result
+        })
+      }
+    } catch (error) {
+      setTags({
+        ...tags,
+        loading: false,
+        error: error.message
+      })
+    }
+  }
+  useEffect(() => {
+    getBrandList()
+  }, [])
+
   return (
     <>
       {
@@ -128,6 +284,9 @@ export const BusinessSearchList = (props) => {
             handleSearchbusinessAndProducts={handleSearchbusinessAndProducts}
             handleChangeTermValue={handleChangeTermValue}
             setFilters={setFilters}
+            brandList={brandList}
+            handleUpdateBusinessList={handleUpdateBusinessList}
+            handleUpdateProducts={handleUpdateProducts}
           />
         )
       }
