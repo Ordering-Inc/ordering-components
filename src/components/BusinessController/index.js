@@ -220,7 +220,7 @@ export const BusinessController = (props) => {
   }, [businessWillCloseSoonMinutes])
 
   useEffect(() => {
-    if (business && business?.id !== businessState?.business?.id) {
+    if (business) {
       setBusinessState({ ...businessState, business })
     } else if (!business) {
       getBusiness()

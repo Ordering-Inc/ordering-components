@@ -185,6 +185,28 @@ export const BusinessAndProductList = (props) => {
         }
       })
     }
+    const updatedCategories = businessState?.business?.categories?.map(_category => {
+      const updatedProducts = _category?.products.map(_product => {
+        if (_product?.id === productId) {
+          return {
+            ..._product,
+            ...changes
+          }
+        }
+        return _product
+      })
+      return {
+        ..._category,
+        products: updatedProducts
+      }
+    })
+    setBusinessState({
+      ...businessState,
+      business: {
+        ...businessState?.business,
+        categories: updatedCategories
+      }
+    })
   }
 
   const getProducts = async () => {
@@ -231,6 +253,7 @@ export const BusinessAndProductList = (props) => {
       categoryState.products = productsFiltered || []
     }
     categoryState.products = sortProductsArray(sortByValue, categoryState.products)
+    setErrorQuantityProducts(!categoryState.products?.length)
     setCategoryState({ ...categoryState })
   }
 
@@ -382,6 +405,7 @@ export const BusinessAndProductList = (props) => {
             ? [...featuredRes?.content?.result]
             : oldFeatured?.products?.concat(featuredRes?.content?.result)
         }
+        setErrorQuantityProducts(!featureState.products?.length)
         categoriesState.featured = featureState
       }
 
@@ -396,7 +420,7 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: result
         }
-
+        setErrorQuantityProducts(!newcategoryState.products?.length)
         categoriesState[categoryKey] = newcategoryState
         categoryState = newcategoryState
         setCategoryState({ ...newcategoryState })
@@ -629,11 +653,7 @@ export const BusinessAndProductList = (props) => {
         .parameters(parameters)
         .get({ cancelToken: source })
 
-      if (!result?.categories || result?.categories?.length === 0) {
-        setErrorQuantityProducts(true)
-      } else {
-        setErrorQuantityProducts(false)
-      }
+      setErrorQuantityProducts(!result?.categories || result?.categories?.length === 0)
 
       const data = {
         ...businessState,
