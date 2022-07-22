@@ -124,7 +124,7 @@ export const Checkout = (props) => {
   /**
    * Method to handle click on Place order
    */
-  const handlerClickPlaceOrder = async (paymentOptions, payloadProps) => {
+  const handlerClickPlaceOrder = async (paymentOptions, payloadProps, confirmPayment) => {
     let paymethodData = paymethodSelected?.data
     if (paymethodSelected?.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = {
@@ -177,6 +177,12 @@ export const Checkout = (props) => {
 
     if (cartResult?.paymethod_data?.status === 2 && actionsBeforePlace) {
       await actionsBeforePlace(paymethodSelected, result.result)
+    }
+    if (confirmPayment && result?.result?.paymethod_data?.gateway === 'apple_pay') {
+      const { error: confirmApplePayError } = await confirmPayment(result?.result?.paymethod_data?.result?.client_secret)
+      if (confirmApplePayError) {
+        setErrors(confirmApplePayError)
+      }
     }
     setPlacing(false)
     onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
