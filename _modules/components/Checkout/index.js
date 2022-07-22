@@ -286,10 +286,10 @@ var Checkout = function Checkout(props) {
 
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps) {
-      var _paymethodSelected$pa5, _cart$balance, _cartResult$paymethod;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment) {
+      var _paymethodSelected$pa5, _cart$balance, _cartResult$paymethod, _result$result, _result$result$paymet;
 
-      var paymethodData, _paymethodSelected$da, payload, result, cartResult;
+      var paymethodData, _paymethodSelected$da, payload, result, cartResult, _result$result2, _result$result2$payme, _result$result2$payme2, _yield$confirmPayment, confirmApplePayError;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -360,10 +360,27 @@ var Checkout = function Checkout(props) {
               return actionsBeforePlace(paymethodSelected, result.result);
 
             case 20:
+              if (!(confirmPayment && (result === null || result === void 0 ? void 0 : (_result$result = result.result) === null || _result$result === void 0 ? void 0 : (_result$result$paymet = _result$result.paymethod_data) === null || _result$result$paymet === void 0 ? void 0 : _result$result$paymet.gateway) === 'apple_pay')) {
+                _context2.next = 26;
+                break;
+              }
+
+              _context2.next = 23;
+              return confirmPayment(result === null || result === void 0 ? void 0 : (_result$result2 = result.result) === null || _result$result2 === void 0 ? void 0 : (_result$result2$payme = _result$result2.paymethod_data) === null || _result$result2$payme === void 0 ? void 0 : (_result$result2$payme2 = _result$result2$payme.result) === null || _result$result2$payme2 === void 0 ? void 0 : _result$result2$payme2.client_secret);
+
+            case 23:
+              _yield$confirmPayment = _context2.sent;
+              confirmApplePayError = _yield$confirmPayment.error;
+
+              if (confirmApplePayError) {
+                setErrors(confirmApplePayError);
+              }
+
+            case 26:
               setPlacing(false);
               onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
 
-            case 22:
+            case 28:
             case "end":
               return _context2.stop();
           }
@@ -371,7 +388,7 @@ var Checkout = function Checkout(props) {
       }, _callee2);
     }));
 
-    return function handlerClickPlaceOrder(_x, _x2) {
+    return function handlerClickPlaceOrder(_x, _x2, _x3) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -586,7 +603,7 @@ var Checkout = function Checkout(props) {
       }, _callee5, null, [[0, 13]]);
     }));
 
-    return function handleChangeDeliveryOption(_x3) {
+    return function handleChangeDeliveryOption(_x4) {
       return _ref5.apply(this, arguments);
     };
   }();
