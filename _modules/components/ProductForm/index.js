@@ -571,8 +571,8 @@ var ProductForm = function ProductForm(props) {
 
 
   var handleSave = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var errors, successful, _orderState$options, _props$productCart6, currentChanges, changes, _props$productCart7;
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+      var errors, successful, _values$serviceTime, _orderState$options, _props$productCart6, currentChanges, changes, _props$productCart7;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -602,7 +602,7 @@ var ProductForm = function ProductForm(props) {
               };
               changes = !isService ? _objectSpread({}, currentChanges) : _objectSpread(_objectSpread({}, currentChanges), {}, {
                 professional_id: professionalSelected === null || professionalSelected === void 0 ? void 0 : professionalSelected.id,
-                service_start: (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
+                service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
               });
 
               if ((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code) {
@@ -642,7 +642,7 @@ var ProductForm = function ProductForm(props) {
       }, _callee2);
     }));
 
-    return function handleSave() {
+    return function handleSave(_x) {
       return _ref3.apply(this, arguments);
     };
   }();
