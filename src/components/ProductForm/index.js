@@ -383,7 +383,7 @@ export const ProductForm = (props) => {
   /**
    * Handle when click on save product
    */
-  const handleSave = async (serviceTime = null) => {
+  const handleSave = async (values) => {
     if (handleCustomSave) {
       handleCustomSave && handleCustomSave()
     }
@@ -398,7 +398,7 @@ export const ProductForm = (props) => {
           : {
             ...currentChanges,
             professional_id: professionalSelected?.id,
-            service_start: serviceTime ?? orderState.options?.moment
+            service_start: values?.serviceTime ?? orderState.options?.moment
           }
         if (!props.productCart?.code) {
           successful = await addProduct(productCart, changes, false, !!isService)
