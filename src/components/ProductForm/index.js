@@ -383,7 +383,7 @@ export const ProductForm = (props) => {
   /**
    * Handle when click on save product
    */
-  const handleSave = async (serviceTime=null) => {
+  const handleSave = async (serviceTime = null) => {
     if (handleCustomSave) {
       handleCustomSave && handleCustomSave()
     }
