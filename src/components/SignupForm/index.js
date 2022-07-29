@@ -50,7 +50,7 @@ export const SignupForm = (props) => {
         setFormState({
           result: {
             error: true,
-            result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The captcha validation is required')
+            result: [t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.')]
           },
           loading: false
         })
