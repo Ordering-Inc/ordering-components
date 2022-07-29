@@ -15,6 +15,10 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _ConfigContext = require("../../contexts/ConfigContext");
+
+var _LanguageContext = require("../../contexts/LanguageContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -59,6 +63,10 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
+
   var _useState = (0, _react.useState)({
     loading: false,
     result: {
@@ -75,6 +83,20 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       formData = _useState4[0],
       setFormData = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      reCaptchaValue = _useState6[0],
+      setReCaptchaValue = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      isReCaptchaEnable = _useState8[0],
+      setIsReCaptchaEnable = _useState8[1];
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
   /**
    * Default fuction for forgot password workflow
    */
@@ -82,35 +104,60 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
 
   var handleForgotPasswordClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(data) {
-      var values, _values, response;
+      var values, _window, _values, response;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              if (!isReCaptchaEnable) {
+                _context.next = 4;
+                break;
+              }
+
+              if (!(reCaptchaValue === null)) {
+                _context.next = 4;
+                break;
+              }
+
+              setFormState({
+                result: {
+                  error: true,
+                  result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The captcha validation is required')
+                },
+                loading: false
+              });
+              return _context.abrupt("return");
+
+            case 4:
               if (!handleCustomForgotPasswordClick) {
-                _context.next = 3;
+                _context.next = 7;
                 break;
               }
 
               values = data || formData;
               return _context.abrupt("return", handleCustomForgotPasswordClick(values));
 
-            case 3:
-              _context.prev = 3;
+            case 7:
+              _context.prev = 7;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               _values = data || formData;
-              _context.next = 8;
+              _context.next = 12;
               return ordering.users().forgotPassword(_values);
 
-            case 8:
+            case 12:
               response = _context.sent;
               setFormState({
                 result: response.content,
                 loading: false
               });
+
+              if (isReCaptchaEnable && (_window = window) !== null && _window !== void 0 && _window.grecaptcha) {
+                window.grecaptcha.reset();
+                setReCaptchaValue(null);
+              }
 
               if (!response.content.error) {
                 if (handleSuccessForgotPassword) {
@@ -118,12 +165,12 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
                 }
               }
 
-              _context.next = 16;
+              _context.next = 21;
               break;
 
-            case 13:
-              _context.prev = 13;
-              _context.t0 = _context["catch"](3);
+            case 18:
+              _context.prev = 18;
+              _context.t0 = _context["catch"](7);
               setFormState({
                 result: {
                   error: true,
@@ -132,12 +179,12 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
                 loading: false
               });
 
-            case 16:
+            case 21:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 13]]);
+      }, _callee, null, [[7, 18]]);
     }));
 
     return function handleForgotPasswordClick(_x) {
@@ -154,10 +201,18 @@ var ForgotPasswordForm = function ForgotPasswordForm(props) {
     setFormData(_objectSpread(_objectSpread({}, formData), {}, _defineProperty({}, e.target.name, e.target.value)));
   };
 
+  (0, _react.useEffect)(function () {
+    var _configs$security_rec;
+
+    setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_auth) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === '1');
+  }, [configs]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     formData: formData,
     hanldeChangeInput: hanldeChangeInput,
+    enableReCaptcha: isReCaptchaEnable,
+    handleReCaptcha: setReCaptchaValue,
+    reCaptchaValue: reCaptchaValue,
     handleButtonForgotPasswordClick: handleButtonForgotPasswordClick || handleForgotPasswordClick
   })));
 };

@@ -60,10 +60,13 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var PlaceSpot = function PlaceSpot(props) {
-  var _orderState$options2;
+  var _vehicleDefault$type, _vehicleDefault$model, _vehicleDefault$car_r, _vehicleDefault$color, _orderState$options2;
 
   var UIComponent = props.UIComponent,
-      cart = props.cart;
+      cart = props.cart,
+      spotNumberDefault = props.spotNumberDefault,
+      vehicleDefault = props.vehicleDefault,
+      onRemoveSpotNumber = props.onRemoveSpotNumber;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -99,7 +102,30 @@ var PlaceSpot = function PlaceSpot(props) {
       placesState = _useState2[0],
       setPlacesState = _useState2[1];
 
-  var orderTypesAllowed = [3, 4];
+  var _useState3 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      spotState = _useState4[0],
+      setSpotState = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(spotNumberDefault),
+      _useState6 = _slicedToArray(_useState5, 2),
+      spotNumber = _useState6[0],
+      setSpotNumber = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
+    type: (_vehicleDefault$type = vehicleDefault === null || vehicleDefault === void 0 ? void 0 : vehicleDefault.type) !== null && _vehicleDefault$type !== void 0 ? _vehicleDefault$type : '',
+    model: (_vehicleDefault$model = vehicleDefault === null || vehicleDefault === void 0 ? void 0 : vehicleDefault.model) !== null && _vehicleDefault$model !== void 0 ? _vehicleDefault$model : '',
+    car_registration: (_vehicleDefault$car_r = vehicleDefault === null || vehicleDefault === void 0 ? void 0 : vehicleDefault.car_registration) !== null && _vehicleDefault$car_r !== void 0 ? _vehicleDefault$car_r : '',
+    color: (_vehicleDefault$color = vehicleDefault === null || vehicleDefault === void 0 ? void 0 : vehicleDefault.color) !== null && _vehicleDefault$color !== void 0 ? _vehicleDefault$color : ''
+  }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      vehicle = _useState8[0],
+      setVehicle = _useState8[1];
+
+  var orderTypesAllowed = [3, 4, 5];
 
   var getPlaces = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -210,82 +236,96 @@ var PlaceSpot = function PlaceSpot(props) {
     };
   }();
 
-  var handleChangePlace = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(place) {
-      var uuid, response, _yield$response$json, result, error;
+  var handleChangeSpot = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(_ref2) {
+      var _ref2$isCheckout, isCheckout, bodyToSend, id, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result, _cart$business;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _context2.prev = 0;
-              uuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
-              _context2.next = 4;
-              return fetch("".concat(ordering.root, "/carts/").concat(uuid), {
-                'Content-Type': 'application/json',
-                method: 'PUT',
-                body: JSON.stringify({
-                  place: place,
-                  place_id: place === null || place === void 0 ? void 0 : place.id
-                }),
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
-                }
-              });
-
-            case 4:
-              response = _context2.sent;
+              _ref2$isCheckout = _ref2.isCheckout, isCheckout = _ref2$isCheckout === void 0 ? true : _ref2$isCheckout, bodyToSend = _ref2.bodyToSend;
+              _context2.prev = 1;
+              setSpotState(_objectSpread(_objectSpread({}, spotState), {}, {
+                loading: true
+              }));
+              id = isCheckout ? cart === null || cart === void 0 ? void 0 : cart.uuid : cart === null || cart === void 0 ? void 0 : cart.id;
+              endpointToFetch = isCheckout ? ordering.setAccessToken(token).carts(id).set(bodyToSend) : ordering.setAccessToken(token).orders(id).save(bodyToSend);
               _context2.next = 7;
-              return response.json();
+              return endpointToFetch;
 
             case 7:
-              _yield$response$json = _context2.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
+              _yield$endpointToFetc = _context2.sent;
+              _yield$endpointToFetc2 = _yield$endpointToFetc.content;
+              error = _yield$endpointToFetc2.error;
+              result = _yield$endpointToFetc2.result;
 
               if (!error) {
-                _context2.next = 13;
-                break;
+                onRemoveSpotNumber && onRemoveSpotNumber(cart === null || cart === void 0 ? void 0 : (_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.slug);
               }
 
-              showToast(_ToastContext.ToastType.Error, result);
-              return _context2.abrupt("return");
+              if (props.showToastMsg) {
+                showToast(error ? _ToastContext.ToastType.Error : _ToastContext.ToastType.Success, error ? t('ERROR', result[0]) : t('SPOT_CHANGE_SUCCESS_CONTENT', 'Changes applied correctly'));
+              }
 
-            case 13:
-              _context2.next = 18;
+              setSpotState(_objectSpread(_objectSpread({}, spotState), {}, {
+                loading: false,
+                error: error ? result : null
+              }));
+              _context2.next = 19;
               break;
 
-            case 15:
-              _context2.prev = 15;
-              _context2.t0 = _context2["catch"](0);
-              showToast(_ToastContext.ToastType.Error, _context2.t0.message);
+            case 16:
+              _context2.prev = 16;
+              _context2.t0 = _context2["catch"](1);
+              setSpotState(_objectSpread(_objectSpread({}, spotState), {}, {
+                loading: false,
+                error: [_context2.t0.message]
+              }));
 
-            case 18:
+            case 19:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 15]]);
+      }, _callee2, null, [[1, 16]]);
     }));
 
-    return function handleChangePlace(_x) {
-      return _ref2.apply(this, arguments);
+    return function handleChangeSpot(_x) {
+      return _ref3.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
     var _orderState$options;
 
-    if (orderTypesAllowed.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type)) {
+    if (orderTypesAllowed.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) && !props.isInputMode) {
       getPlaces();
     }
   }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type]);
+  (0, _react.useEffect)(function () {
+    if (spotNumberDefault && spotNumberDefault !== (cart === null || cart === void 0 ? void 0 : cart.spot_number)) {
+      handleChangeSpot({
+        bodyToSend: {
+          spot_number: spotNumberDefault
+        }
+      });
+    }
+  }, [spotNumberDefault]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
+    vehicle: vehicle,
+    spotState: spotState,
+    spotNumber: spotNumber,
     placesState: placesState,
-    handleChangePlace: handleChangePlace,
+    setVehicle: setVehicle,
+    setSpotState: setSpotState,
+    setSpotNumber: setSpotNumber,
+    handleChangeSpot: handleChangeSpot,
     getPlacesList: getPlaces
   })));
 };
 
 exports.PlaceSpot = PlaceSpot;
+PlaceSpot.defaultProps = {
+  showToastMsg: true
+};

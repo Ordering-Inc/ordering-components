@@ -292,14 +292,14 @@ export const UserFormDetails = (props) => {
     setIsVerifiedPhone(false)
     const body = {
       cellphone: values.cellphone,
-      country_phone_code: parseInt(values.country_phone_code),
-      channel: 2,
-      type: 2,
-      size: 4
+      country_phone_code: parseInt(values.country_phone_code)
+      // channel: 2,
+      // type: 2,
+      // size: 4
     }
     try {
       setVerifyPhoneState({ ...verifyPhoneState, loading: true })
-      const response = await fetch(`${ordering.root}/codes/generate`, {
+      const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -330,7 +330,6 @@ export const UserFormDetails = (props) => {
       ...values,
       channel: 2
     }
-    console.log(props?.userData?.id || userState.result.result.id, 'props?.userData?.id || userState.result.result.id')
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
       const response = await fetch(`${ordering.root}/users/${props?.userData?.id || userState.result.result.id}/verify`, {

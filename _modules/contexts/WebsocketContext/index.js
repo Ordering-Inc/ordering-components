@@ -7,6 +7,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.useWebsocket = exports.WebsocketProvider = exports.WebsocketContext = void 0;
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
 var _react = _interopRequireWildcard(require("react"));
 
 var _SessionContext = require("../SessionContext");
@@ -16,6 +18,12 @@ var _socket2 = require("./socket");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
@@ -51,7 +59,8 @@ exports.WebsocketContext = WebsocketContext;
 
 var WebsocketProvider = function WebsocketProvider(_ref) {
   var settings = _ref.settings,
-      children = _ref.children;
+      children = _ref.children,
+      strategy = _ref.strategy;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -62,11 +71,16 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
       socket = _useState2[0],
       setSocket = _useState2[1];
 
+  var _useState3 = (0, _react.useState)(settings),
+      _useState4 = _slicedToArray(_useState3, 2),
+      configs = _useState4[0],
+      setConfigs = _useState4[1];
+
   (0, _react.useEffect)(function () {
     if (session.loading) return;
 
-    if (session.auth && settings.url && settings.project) {
-      var _socket = new _socket2.Socket(_objectSpread(_objectSpread({}, settings), {}, {
+    if (session.auth && configs.url && configs.project) {
+      var _socket = new _socket2.Socket(_objectSpread(_objectSpread({}, configs), {}, {
         accessToken: session.token
       }));
 
@@ -76,19 +90,66 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
     if (!session.auth) {
       socket && socket.close();
     }
-  }, [session]);
+  }, [session, configs]);
   (0, _react.useEffect)(function () {
     if (socket) {
-      socket.connect(); // Get client socket ID
-      // socket.socket.on('connect', () => {
-      //   // console.log('SOCKET CONECCTED', socket.socket.id)
-      // })
+      socket.connect();
     }
 
     return function () {
       socket && socket.close();
     };
   }, [socket]);
+  (0, _react.useEffect)(function () {
+    if (session.auth) return;
+    var projectInputInterval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+      var project;
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              project = null;
+
+              if (!configs.use_root_point) {
+                _context.next = 7;
+                break;
+              }
+
+              _context.next = 4;
+              return strategy.getItem('project_name', true);
+
+            case 4:
+              project = _context.sent;
+              _context.next = 10;
+              break;
+
+            case 7:
+              _context.next = 9;
+              return strategy.removeItem('project_name');
+
+            case 9:
+              clearInterval(projectInputInterval);
+
+            case 10:
+              if (project) {
+                setConfigs(_objectSpread(_objectSpread({}, configs), {}, {
+                  project: project
+                }));
+                configs.project = project;
+                clearInterval(projectInputInterval);
+              }
+
+            case 11:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })), 1000);
+    return function () {
+      return clearInterval(projectInputInterval);
+    };
+  }, [session]);
   return /*#__PURE__*/_react.default.createElement(WebsocketContext.Provider, {
     value: socket
   }, children);

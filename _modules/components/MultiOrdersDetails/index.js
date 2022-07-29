@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SingleOrderCard = void 0;
+exports.MultiOrdersDetails = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -16,10 +16,6 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _ApiContext = require("../../contexts/ApiContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
-
-var _ToastContext = require("../../contexts/ToastContext");
-
-var _LanguageContext = require("../../contexts/LanguageContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -51,10 +47,15 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var SingleOrderCard = function SingleOrderCard(props) {
-  var UIComponent = props.UIComponent,
-      order = props.order,
-      handleUpdateOrderList = props.handleUpdateOrderList;
+/**
+ * Component to manage Multi orders page behavior without UI component
+ */
+var MultiOrdersDetails = function MultiOrdersDetails(props) {
+  var _ordersList$orders$, _ordersList$orders$2;
+
+  var orderUuids = props.orderUuids,
+      onRedirectPage = props.onRedirectPage,
+      UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -62,169 +63,127 @@ var SingleOrderCard = function SingleOrderCard(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      _useSession2$ = _useSession2[0],
-      user = _useSession2$.user,
-      token = _useSession2$.token;
-
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
+      token = _useSession2[0].token;
 
   var _useState = (0, _react.useState)({
-    loading: false,
-    error: null
+    loading: true,
+    error: null,
+    orders: []
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      actionState = _useState2[0],
-      setActionState = _useState2[1];
+      ordersList = _useState2[0],
+      setOrdersList = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({}),
+      _useState4 = _slicedToArray(_useState3, 2),
+      ordersSummary = _useState4[0],
+      setOrdersSummary = _useState4[1];
   /**
-   * Method to add, remove favorite info for user from API
+   * Get orders from API
    */
 
 
-  var handleFavoriteOrder = /*#__PURE__*/function () {
+  var getOrders = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var isAdd,
-          changes,
-          requestOptions,
-          fetchEndPoint,
-          response,
-          content,
-          _args = arguments;
+      var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _total, _subtotal, _tax;
+
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              isAdd = _args.length > 0 && _args[0] !== undefined ? _args[0] : false;
-
-              if (!(!order || !user)) {
-                _context.next = 3;
-                break;
-              }
-
-              return _context.abrupt("return");
-
-            case 3:
-              _context.prev = 3;
-              showToast(_ToastContext.ToastType.Info, t('LOADING', 'loading'));
-              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
-                loading: true,
-                error: null
+              _context.prev = 0;
+              setOrdersList(_objectSpread(_objectSpread({}, ordersList), {}, {
+                loading: true
               }));
-              changes = {
-                object_id: order === null || order === void 0 ? void 0 : order.id
-              };
-              requestOptions = _objectSpread({
-                method: isAdd ? 'POST' : 'DELETE',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+              options = {
+                query: {
+                  orderBy: '-',
+                  where: [{
+                    attribute: 'uuid',
+                    value: orderUuids
+                  }]
                 }
-              }, isAdd && {
-                body: JSON.stringify(changes)
+              };
+              _context.next = 5;
+              return ordering.setAccessToken(token).orders().get(options);
+
+            case 5:
+              _yield$ordering$setAc = _context.sent;
+              _yield$ordering$setAc2 = _yield$ordering$setAc.content;
+              error = _yield$ordering$setAc2.error;
+              result = _yield$ordering$setAc2.result;
+              setOrdersList({
+                loading: false,
+                orders: error ? [] : result,
+                error: error ? result : null
               });
-              fetchEndPoint = isAdd ? "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_orders") : "".concat(ordering.root, "/users/").concat(user.id, "/favorite_orders/").concat(order === null || order === void 0 ? void 0 : order.id);
-              _context.next = 11;
-              return fetch(fetchEndPoint, requestOptions);
 
-            case 11:
-              response = _context.sent;
-              _context.next = 14;
-              return response.json();
+              if (!error) {
+                _total = result.reduce(function (total, order) {
+                  var _order$summary;
 
-            case 14:
-              content = _context.sent;
+                  return total + (order === null || order === void 0 ? void 0 : (_order$summary = order.summary) === null || _order$summary === void 0 ? void 0 : _order$summary.total);
+                }, 0);
+                _subtotal = result.reduce(function (subtotal, order) {
+                  var _order$summary2;
 
-              if (!content.error) {
-                setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
-                  loading: false
-                }));
-                handleUpdateOrderList && handleUpdateOrderList(order === null || order === void 0 ? void 0 : order.id, {
-                  favorite: isAdd
+                  return subtotal + (order === null || order === void 0 ? void 0 : (_order$summary2 = order.summary) === null || _order$summary2 === void 0 ? void 0 : _order$summary2.subtotal);
+                }, 0);
+                _tax = result.reduce(function (tax, order) {
+                  var _order$summary3;
+
+                  return tax + (order === null || order === void 0 ? void 0 : (_order$summary3 = order.summary) === null || _order$summary3 === void 0 ? void 0 : _order$summary3.tax);
+                }, 0);
+                setOrdersSummary({
+                  total: _total,
+                  subtotal: _subtotal,
+                  tax: _tax
                 });
-                showToast(_ToastContext.ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
-              } else {
-                setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
-                  loading: false,
-                  error: content.result
-                }));
-                showToast(_ToastContext.ToastType.Error, content.result);
               }
 
-              _context.next = 22;
+              _context.next = 16;
               break;
 
-            case 18:
-              _context.prev = 18;
-              _context.t0 = _context["catch"](3);
-              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](0);
+              setOrdersList(_objectSpread(_objectSpread({}, ordersList), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
-              showToast(_ToastContext.ToastType.Error, [_context.t0.message]);
 
-            case 22:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 18]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
-    return function handleFavoriteOrder() {
+    return function getOrders() {
       return _ref.apply(this, arguments);
     };
   }();
 
+  (0, _react.useEffect)(function () {
+    if (orderUuids.length) {
+      getOrders();
+    } else {
+      onRedirectPage && onRedirectPage();
+    }
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    handleFavoriteOrder: handleFavoriteOrder,
-    actionState: actionState
+    ordersList: ordersList,
+    customer: (_ordersList$orders$ = ordersList.orders[0]) === null || _ordersList$orders$ === void 0 ? void 0 : _ordersList$orders$.customer,
+    paymentEvents: ((_ordersList$orders$2 = ordersList.orders[0]) === null || _ordersList$orders$2 === void 0 ? void 0 : _ordersList$orders$2.payment_events) || [],
+    ordersSummary: ordersSummary
   })));
 };
 
-exports.SingleOrderCard = SingleOrderCard;
-SingleOrderCard.propTypes = {
+exports.MultiOrdersDetails = MultiOrdersDetails;
+MultiOrdersDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
-  UIComponent: _propTypes.default.elementType,
-
-  /**
-   * Order details to render
-   */
-  order: _propTypes.default.object.isRequired,
-
-  /**
-   * Components types before Single order card
-   * Array of type components, the parent props will pass to these components
-   */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Components types after Single order card
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-
-  /**
-   * Elements before Single order card
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-
-  /**
-   * Elements after Single order card
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
-};
-SingleOrderCard.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
+  UIComponent: _propTypes.default.elementType
 };

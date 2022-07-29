@@ -160,9 +160,15 @@ var UtilsProviders = function UtilsProviders(_ref) {
     var number = value;
 
     if (options !== null && options !== void 0 && options.isTruncable) {
-      number = number * Math.pow(10, formatNumber.decimal);
-      number = Math.trunc(number);
-      number = number / Math.pow(10, formatNumber.decimal);
+      var _numberParts$;
+
+      number = number.toString();
+
+      var _numberParts = number.split(formatNumber.separator);
+
+      var decimalPart = (_numberParts$ = _numberParts[1]) !== null && _numberParts$ !== void 0 ? _numberParts$ : '';
+      decimalPart = decimalPart.padEnd(formatNumber.decimal, '0').substring(0, formatNumber.decimal);
+      number = _numberParts[0] + '.' + decimalPart;
     } else {
       number = value.toFixed(formatNumber.decimal);
     }

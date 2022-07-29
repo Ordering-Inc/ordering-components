@@ -59,6 +59,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var LoginForm = function LoginForm(props) {
+  var _configs$opt_email_en, _configs$otp_cellphon;
+
   var UIComponent = props.UIComponent,
       handleButtonLoginClick = props.handleButtonLoginClick,
       handleSuccessLogin = props.handleSuccessLogin,
@@ -133,6 +135,16 @@ var LoginForm = function LoginForm(props) {
       isReCaptchaEnable = _useState12[0],
       setIsReCaptchaEnable = _useState12[1];
 
+  var _useState13 = (0, _react.useState)('email'),
+      _useState14 = _slicedToArray(_useState13, 2),
+      otpType = _useState14[0],
+      setOtpType = _useState14[1];
+
+  var _useState15 = (0, _react.useState)(''),
+      _useState16 = _slicedToArray(_useState15, 2),
+      otpState = _useState16[0],
+      setOtpState = _useState16[1];
+
   if (!useLoginByEmail && !useLoginByCellphone) {
     defaultLoginTab = 'none';
   } else if (defaultLoginTab === 'email' && !useLoginByEmail && useLoginByCellphone) {
@@ -141,10 +153,14 @@ var LoginForm = function LoginForm(props) {
     defaultLoginTab = 'email';
   }
 
-  var _useState13 = (0, _react.useState)(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email')),
-      _useState14 = _slicedToArray(_useState13, 2),
-      loginTab = _useState14[0],
-      setLoginTab = _useState14[1];
+  var useLoginOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$opt_email_en = configs.opt_email_enabled) === null || _configs$opt_email_en === void 0 ? void 0 : _configs$opt_email_en.value) === '1';
+  var useLoginOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$otp_cellphon = configs.otp_cellphone_enabled) === null || _configs$otp_cellphon === void 0 ? void 0 : _configs$otp_cellphon.value) === '1';
+  var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
+
+  var _useState17 = (0, _react.useState)(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email')),
+      _useState18 = _slicedToArray(_useState17, 2),
+      loginTab = _useState18[0],
+      setLoginTab = _useState18[1];
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
@@ -163,7 +179,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
-      var _credentials2, _credentials$cellphon, _window, _credentials, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
+      var _credentials4, _credentials4$cellpho, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -179,7 +195,18 @@ var LoginForm = function LoginForm(props) {
 
             case 3:
               _context.prev = 3;
-              _credentials = (_credentials2 = {}, _defineProperty(_credentials2, loginTab, values && values[loginTab] || credentials[loginTab]), _defineProperty(_credentials2, "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password), _credentials2);
+
+              if (loginTab === 'otp') {
+                _credentials = (_credentials2 = {}, _defineProperty(_credentials2, otpType, values && values[otpType] || credentials[otpType]), _defineProperty(_credentials2, "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState), _credentials2);
+
+                if (otpType === 'cellphone') {
+                  _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
+                    country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code)
+                  });
+                }
+              } else {
+                _credentials = (_credentials3 = {}, _defineProperty(_credentials3, loginTab, values && values[loginTab] || credentials[loginTab]), _defineProperty(_credentials3, "password", values && (values === null || values === void 0 ? void 0 : values.password) || credentials.password), _credentials3);
+              }
 
               if (!isReCaptchaEnable) {
                 _context.next = 12;
@@ -208,7 +235,7 @@ var LoginForm = function LoginForm(props) {
                 loading: true
               }));
 
-              if (_credentials !== null && _credentials !== void 0 && (_credentials$cellphon = _credentials.cellphone) !== null && _credentials$cellphon !== void 0 && _credentials$cellphon.includes('+')) {
+              if ((_credentials4 = _credentials) !== null && _credentials4 !== void 0 && (_credentials4$cellpho = _credentials4.cellphone) !== null && _credentials4$cellpho !== void 0 && _credentials4$cellpho.includes('+')) {
                 parsedNumber = (0, _libphonenumberJs.default)(_credentials.cellphone);
                 cellphone = parsedNumber === null || parsedNumber === void 0 ? void 0 : parsedNumber.nationalNumber;
                 _credentials.cellphone = cellphone;
@@ -348,6 +375,10 @@ var LoginForm = function LoginForm(props) {
     var _configs$security_rec;
 
     setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_auth) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === '1');
+
+    if (useLoginOtpCellphone && !useLoginOtpEmail) {
+      setOtpType('cellphone');
+    }
   }, [configs]);
   /**
    * Update credential data
@@ -529,6 +560,101 @@ var LoginForm = function LoginForm(props) {
     };
   }();
 
+  var generateOtpCode = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(values) {
+      var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
+
+      return _regenerator.default.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              body = {
+                type: 4,
+                channel: otpType === 'email' ? 1 : 2,
+                size: 6
+              };
+              email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
+              cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
+              countryPhoneCode = (values === null || values === void 0 ? void 0 : values.countryPhoneCode) || (values === null || values === void 0 ? void 0 : values.country_phone_code) || credentials.country_phone_code;
+              _context4.prev = 4;
+
+              if (otpType === 'cellphone') {
+                body.country_phone_code = countryPhoneCode;
+                body.cellphone = cellphone;
+                setCredentials({
+                  cellphone: cellphone,
+                  country_phone_code: countryPhoneCode
+                });
+              } else {
+                body.email = email;
+                setCredentials({
+                  email: email
+                });
+              }
+
+              _context4.next = 8;
+              return fetch("".concat(ordering.root, "/codes/generate"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+              });
+
+            case 8:
+              response = _context4.sent;
+              _context4.next = 11;
+              return response.json();
+
+            case 11:
+              _yield$response$json = _context4.sent;
+              result = _yield$response$json.result;
+              error = _yield$response$json.error;
+
+              if (error) {
+                _context4.next = 17;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  result: result,
+                  error: null
+                }
+              }));
+              return _context4.abrupt("return");
+
+            case 17:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: result
+                }
+              }));
+              _context4.next = 23;
+              break;
+
+            case 20:
+              _context4.prev = 20;
+              _context4.t0 = _context4["catch"](4);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: _context4.t0.message
+                }
+              }));
+
+            case 23:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[4, 20]]);
+    }));
+
+    return function generateOtpCode(_x4) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     loginTab: loginTab,
@@ -542,7 +668,15 @@ var LoginForm = function LoginForm(props) {
     handleSendVerifyCode: sendVerifyPhoneCode,
     handleCheckPhoneCode: checkVerifyPhoneCode,
     enableReCaptcha: isReCaptchaEnable,
-    handleReCaptcha: setReCaptchaValue
+    handleReCaptcha: setReCaptchaValue,
+    useLoginOtp: useLoginOtp,
+    setOtpType: setOtpType,
+    otpType: otpType,
+    generateOtpCode: generateOtpCode,
+    setOtpState: setOtpState,
+    otpState: otpState,
+    useLoginOtpEmail: useLoginOtpEmail,
+    useLoginOtpCellphone: useLoginOtpCellphone
   })));
 };
 

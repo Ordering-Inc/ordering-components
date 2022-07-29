@@ -485,17 +485,17 @@ var UserFormDetails = function UserFormDetails(props) {
               setIsVerifiedPhone(false);
               body = {
                 cellphone: values.cellphone,
-                country_phone_code: parseInt(values.country_phone_code),
-                channel: 2,
-                type: 2,
-                size: 4
+                country_phone_code: parseInt(values.country_phone_code) // channel: 2,
+                // type: 2,
+                // size: 4
+
               };
               _context3.prev = 2;
               setVerifyPhoneState(_objectSpread(_objectSpread({}, verifyPhoneState), {}, {
                 loading: true
               }));
               _context3.next = 6;
-              return fetch("".concat(ordering.root, "/codes/generate"), {
+              return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -547,9 +547,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(values) {
-      var _props$userData4;
-
-      var body, _props$userData5, _res$result, response, res;
+      var body, _props$userData4, _res$result, response, res;
 
       return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
@@ -558,13 +556,12 @@ var UserFormDetails = function UserFormDetails(props) {
               body = _objectSpread(_objectSpread({}, values), {}, {
                 channel: 2
               });
-              console.log((props === null || props === void 0 ? void 0 : (_props$userData4 = props.userData) === null || _props$userData4 === void 0 ? void 0 : _props$userData4.id) || userState.result.result.id, 'props?.userData?.id || userState.result.result.id');
-              _context4.prev = 2;
+              _context4.prev = 1;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: true
               }));
-              _context4.next = 6;
-              return fetch("".concat(ordering.root, "/users/").concat((props === null || props === void 0 ? void 0 : (_props$userData5 = props.userData) === null || _props$userData5 === void 0 ? void 0 : _props$userData5.id) || userState.result.result.id, "/verify"), {
+              _context4.next = 5;
+              return fetch("".concat(ordering.root, "/users/").concat((props === null || props === void 0 ? void 0 : (_props$userData4 = props.userData) === null || _props$userData4 === void 0 ? void 0 : _props$userData4.id) || userState.result.result.id, "/verify"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -573,12 +570,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 body: JSON.stringify(body)
               });
 
-            case 6:
+            case 5:
               response = _context4.sent;
-              _context4.next = 9;
+              _context4.next = 8;
               return response.json();
 
-            case 9:
+            case 8:
               res = _context4.sent;
 
               if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
@@ -590,12 +587,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false,
                 result: res
               }));
-              _context4.next = 17;
+              _context4.next = 16;
               break;
 
-            case 14:
-              _context4.prev = 14;
-              _context4.t0 = _context4["catch"](2);
+            case 13:
+              _context4.prev = 13;
+              _context4.t0 = _context4["catch"](1);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
@@ -603,12 +600,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 }
               }));
 
-            case 17:
+            case 16:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[2, 14]]);
+      }, _callee4, null, [[1, 13]]);
     }));
 
     return function checkVerifyPhoneCode(_x6) {

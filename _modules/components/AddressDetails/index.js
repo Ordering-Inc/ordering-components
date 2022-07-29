@@ -53,7 +53,9 @@ var AddressDetails = function AddressDetails(props) {
 
   var apiKey = props.apiKey,
       UIComponent = props.UIComponent,
-      mapConfigs = props.mapConfigs;
+      mapConfigs = props.mapConfigs,
+      isMultiCheckout = props.isMultiCheckout,
+      openCarts = props.openCarts;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -95,10 +97,21 @@ var AddressDetails = function AddressDetails(props) {
    */
 
   var formatUrl = function formatUrl(location) {
-    var _orderState$options, _orderState$options$a, _mapConfigs$mapSize, _mapConfigs$mapSize2, _mapConfigs$mapSize3, _mapConfigs$mapSize4;
+    var _orderState$options, _orderState$options$a, _mapConfigs$mapSize, _mapConfigs$mapSize2, _mapConfigs$mapSize3, _mapConfigs$mapSize4, _mapConfigs$mapSize5, _mapConfigs$mapSize6;
 
     var orderLocation = props.orderLocation || (orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : _orderState$options$a.location);
-    return orderState.options.type === 1 ? "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize = mapConfigs.mapSize) === null || _mapConfigs$mapSize === void 0 ? void 0 : _mapConfigs$mapSize.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize2 = mapConfigs.mapSize) === null || _mapConfigs$mapSize2 === void 0 ? void 0 : _mapConfigs$mapSize2.height) || 190, "&center=").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&zoom=").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : mapConfigs.mapZoom) || 15, "&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&key=").concat(GM_API_KEY) : "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize3 = mapConfigs.mapSize) === null || _mapConfigs$mapSize3 === void 0 ? void 0 : _mapConfigs$mapSize3.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize4 = mapConfigs.mapSize) === null || _mapConfigs$mapSize4 === void 0 ? void 0 : _mapConfigs$mapSize4.height) || 190, "&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&markers=icon:").concat(optimizeImage(logo, 'w_60,h_60,r_max'), "%7Ccolor:white%7C").concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng, "&key=").concat(GM_API_KEY);
+    var businessesMarkers = '';
+
+    if (isMultiCheckout) {
+      openCarts.forEach(function (cart) {
+        var _cart$business, _cart$business2, _cart$business2$locat, _cart$business3, _cart$business3$locat;
+
+        businessesMarkers += "&markers=icon:".concat(optimizeImage((_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.logo, 'w_60,h_60,r_max'), "%7Ccolor:white%7C").concat((_cart$business2 = cart.business) === null || _cart$business2 === void 0 ? void 0 : (_cart$business2$locat = _cart$business2.location) === null || _cart$business2$locat === void 0 ? void 0 : _cart$business2$locat.lat, ",").concat((_cart$business3 = cart.business) === null || _cart$business3 === void 0 ? void 0 : (_cart$business3$locat = _cart$business3.location) === null || _cart$business3$locat === void 0 ? void 0 : _cart$business3$locat.lng);
+      });
+    }
+
+    var staticmapUrl = isMultiCheckout ? "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize = mapConfigs.mapSize) === null || _mapConfigs$mapSize === void 0 ? void 0 : _mapConfigs$mapSize.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize2 = mapConfigs.mapSize) === null || _mapConfigs$mapSize2 === void 0 ? void 0 : _mapConfigs$mapSize2.height) || 190, "&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng).concat(businessesMarkers, "&key=").concat(GM_API_KEY) : "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize3 = mapConfigs.mapSize) === null || _mapConfigs$mapSize3 === void 0 ? void 0 : _mapConfigs$mapSize3.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize4 = mapConfigs.mapSize) === null || _mapConfigs$mapSize4 === void 0 ? void 0 : _mapConfigs$mapSize4.height) || 190, "&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&markers=icon:").concat(optimizeImage(logo, 'w_60,h_60,r_max'), "%7Ccolor:white%7C").concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng, "&key=").concat(GM_API_KEY);
+    return orderState.options.type === 1 ? "https://maps.googleapis.com/maps/api/staticmap?size=".concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize5 = mapConfigs.mapSize) === null || _mapConfigs$mapSize5 === void 0 ? void 0 : _mapConfigs$mapSize5.width) || 500, "x").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : (_mapConfigs$mapSize6 = mapConfigs.mapSize) === null || _mapConfigs$mapSize6 === void 0 ? void 0 : _mapConfigs$mapSize6.height) || 190, "&center=").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&zoom=").concat((mapConfigs === null || mapConfigs === void 0 ? void 0 : mapConfigs.mapZoom) || 15, "&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lat, ",").concat(orderLocation === null || orderLocation === void 0 ? void 0 : orderLocation.lng, "&key=").concat(GM_API_KEY) : "".concat(staticmapUrl);
   };
   /**
    * Method to get business location from API
@@ -147,6 +160,8 @@ var AddressDetails = function AddressDetails(props) {
   }();
 
   (0, _react.useEffect)(function () {
+    if (isMultiCheckout) return;
+
     if (props.location && props.businessLogo && !props.uuid) {
       setLocation(props.location);
       setLogo(props.businessLogo);
@@ -159,7 +174,7 @@ var AddressDetails = function AddressDetails(props) {
         requestsState.business.cancel();
       }
     };
-  }, [businessId]);
+  }, [businessId, isMultiCheckout]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     googleMapsUrl: formatUrl(location)
   })));

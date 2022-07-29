@@ -62,7 +62,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
   var UIComponent = props.UIComponent,
       paginationSettings = props.paginationSettings,
-      lazySearch = props.lazySearch;
+      lazySearch = props.lazySearch,
+      defaultTerm = props.defaultTerm;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -73,16 +74,29 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useState2 = _slicedToArray(_useState, 2),
       businessesSearchList = _useState2[0],
       setBusinessesSearchList = _useState2[1];
+  /**
+   * brandList, this must be contain a brands, loading and error to send UIComponent
+   */
+
 
   var _useState3 = (0, _react.useState)({
+    loading: true,
+    brands: [],
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      brandList = _useState4[0],
+      setBrandList = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
     currentPage: 1,
     pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
     totalItems: null,
     totalPages: null
   }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      paginationProps = _useState4[0],
-      setPaginationProps = _useState4[1];
+      _useState6 = _slicedToArray(_useState5, 2),
+      paginationProps = _useState6[0],
+      setPaginationProps = _useState6[1];
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
@@ -96,18 +110,20 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
-  var _useState5 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
     business_types: [],
-    orderBy: 'distance'
+    orderBy: 'distance',
+    franchise_ids: [],
+    price_level: null
   }),
-      _useState6 = _slicedToArray(_useState5, 2),
-      filters = _useState6[0],
-      setFilters = _useState6[1];
-
-  var _useState7 = (0, _react.useState)(''),
       _useState8 = _slicedToArray(_useState7, 2),
-      termValue = _useState8[0],
-      setTermValue = _useState8[1];
+      filters = _useState8[0],
+      setFilters = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(defaultTerm || ''),
+      _useState10 = _slicedToArray(_useState9, 2),
+      termValue = _useState10[0],
+      setTermValue = _useState10[1];
 
   (0, _react.useEffect)(function () {
     !lazySearch && handleSearchbusinessAndProducts(true);
@@ -133,6 +149,64 @@ var BusinessSearchList = function BusinessSearchList(props) {
     } else {
       setFilters(_objectSpread(_objectSpread({}, filters), {}, _defineProperty({}, filterName, filterValue)));
     }
+  };
+  /**
+   * Method to update business list
+   * @param {number} businessId business id
+   * @param {object} changes business info
+   */
+
+
+  var handleUpdateBusinessList = function handleUpdateBusinessList(businessId, changes) {
+    var updatedBusinesses = businessesSearchList === null || businessesSearchList === void 0 ? void 0 : businessesSearchList.businesses.map(function (business) {
+      if ((business === null || business === void 0 ? void 0 : business.id) === businessId) {
+        return _objectSpread(_objectSpread({}, business), changes);
+      }
+
+      return business;
+    });
+    setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
+      businesses: updatedBusinesses
+    }));
+  };
+  /**
+   * Method to update business list
+   * @param {number} productId product id
+   * @param {number} categoryId category id
+   * @param {number} businessId business id
+   * @param {object} changes product info
+   */
+
+
+  var handleUpdateProducts = function handleUpdateProducts(productId, categoryId, businessId, changes) {
+    var updatedBusinesses = businessesSearchList === null || businessesSearchList === void 0 ? void 0 : businessesSearchList.businesses.map(function (business) {
+      if ((business === null || business === void 0 ? void 0 : business.id) === businessId) {
+        var updatedCategories = business === null || business === void 0 ? void 0 : business.categories.map(function (category) {
+          if ((category === null || category === void 0 ? void 0 : category.id) === categoryId) {
+            var updateProducts = category === null || category === void 0 ? void 0 : category.products.map(function (product) {
+              if ((product === null || product === void 0 ? void 0 : product.id) === productId) {
+                return _objectSpread(_objectSpread({}, product), changes);
+              }
+
+              return product;
+            });
+            return _objectSpread(_objectSpread({}, category), {}, {
+              products: updateProducts
+            });
+          }
+
+          return category;
+        });
+        return _objectSpread(_objectSpread({}, business), {}, {
+          categories: updatedCategories
+        });
+      }
+
+      return business;
+    });
+    setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
+      businesses: updatedBusinesses
+    }));
   };
 
   var handleSearchbusinessAndProducts = /*#__PURE__*/function () {
@@ -238,7 +312,149 @@ var BusinessSearchList = function BusinessSearchList(props) {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+  * Function to get brand list from API
+  */
 
+
+  var getBrandList = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var requestOptions, response, content;
+      return _regenerator.default.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              _context2.next = 5;
+              return fetch("".concat(ordering.root, "/franchises"), requestOptions);
+
+            case 5:
+              response = _context2.sent;
+              _context2.next = 8;
+              return response.json();
+
+            case 8:
+              content = _context2.sent;
+
+              if (!content.error) {
+                setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                  loading: false,
+                  brands: content === null || content === void 0 ? void 0 : content.result,
+                  error: null
+                }));
+              } else {
+                setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                  loading: false,
+                  error: content === null || content === void 0 ? void 0 : content.result
+                }));
+              }
+
+              _context2.next = 15;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](0);
+              setBrandList(_objectSpread(_objectSpread({}, brandList), {}, {
+                loading: false,
+                error: _context2.t0.message
+              }));
+
+            case 15:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 12]]);
+    }));
+
+    return function getBrandList() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  /**
+  * Function to get tag list from API
+  */
+
+
+  var getTagList = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var requestOptions, response, content;
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              };
+              _context3.next = 5;
+              return fetch("".concat(ordering.root, "/tags"), requestOptions);
+
+            case 5:
+              response = _context3.sent;
+              _context3.next = 8;
+              return response.json();
+
+            case 8:
+              content = _context3.sent;
+
+              if (!content.error) {
+                setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                  loading: false,
+                  result: content === null || content === void 0 ? void 0 : content.result,
+                  error: null
+                }));
+              } else {
+                setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                  loading: false,
+                  error: content === null || content === void 0 ? void 0 : content.result
+                }));
+              }
+
+              _context3.next = 15;
+              break;
+
+            case 12:
+              _context3.prev = 12;
+              _context3.t0 = _context3["catch"](0);
+              setTags(_objectSpread(_objectSpread({}, tags), {}, {
+                loading: false,
+                error: _context3.t0.message
+              }));
+
+            case 15:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 12]]);
+    }));
+
+    return function getTagList() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+
+  (0, _react.useEffect)(function () {
+    getBrandList();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     paginationProps: paginationProps,
     businessesSearchList: businessesSearchList,
@@ -247,7 +463,10 @@ var BusinessSearchList = function BusinessSearchList(props) {
     termValue: termValue,
     handleSearchbusinessAndProducts: handleSearchbusinessAndProducts,
     handleChangeTermValue: handleChangeTermValue,
-    setFilters: setFilters
+    setFilters: setFilters,
+    brandList: brandList,
+    handleUpdateBusinessList: handleUpdateBusinessList,
+    handleUpdateProducts: handleUpdateProducts
   })));
 };
 

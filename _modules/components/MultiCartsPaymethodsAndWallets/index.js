@@ -5,11 +5,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PaymentOptionWallet = void 0;
+exports.MultiCartsPaymethodsAndWallets = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
@@ -24,6 +26,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
@@ -47,18 +57,17 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var PaymentOptionWallet = function PaymentOptionWallet(props) {
-  var cart = props.cart,
-      UIComponent = props.UIComponent;
+/**
+ * Component to manage Multi carts paymethods and wallets behavior without UI component
+ */
+var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
+  var UIComponent = props.UIComponent,
+      openCarts = props.openCarts,
+      propsToFetch = props.propsToFetch;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
-
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 2),
-      orderState = _useOrder2[0],
-      setStateValues = _useOrder2[1].setStateValues;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -66,203 +75,183 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
       token = _useSession2$.token,
       user = _useSession2$.user;
 
-  var _useState = (0, _react.useState)({
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 1),
+      orderState = _useOrder2[0];
+
+  var _useState = (0, _react.useState)([]),
+      _useState2 = _slicedToArray(_useState, 2),
+      cartsUuids = _useState2[0],
+      setCartsUuids = _useState2[1];
+
+  var _useState3 = (0, _react.useState)([]),
+      _useState4 = _slicedToArray(_useState3, 2),
+      businessIds = _useState4[0],
+      setBusinessIds = _useState4[1];
+
+  var _useState5 = (0, _react.useState)({
+    loading: true,
+    paymethods: [],
+    wallets: [],
+    error: null
+  }),
+      _useState6 = _slicedToArray(_useState5, 2),
+      paymethodsAndWallets = _useState6[0],
+      setPaymethodsAndWallets = _useState6[1];
+
+  var _useState7 = (0, _react.useState)({
     result: [],
-    loyaltyPlans: [],
     loading: true,
     error: null
   }),
-      _useState2 = _slicedToArray(_useState, 2),
-      walletsState = _useState2[0],
-      setWalletsState = _useState2[1];
+      _useState8 = _slicedToArray(_useState7, 2),
+      walletsState = _useState8[0],
+      setWalletsState = _useState8[1];
 
-  var _useState3 = (0, _react.useState)(null),
-      _useState4 = _slicedToArray(_useState3, 2),
-      errorState = _useState4[0],
-      setErrorState = _useState4[1];
+  var _useState9 = (0, _react.useState)({
+    loading: true,
+    result: [],
+    error: null
+  }),
+      _useState10 = _slicedToArray(_useState9, 2),
+      businessPaymethods = _useState10[0],
+      setBusinessPaymethods = _useState10[1];
+  /**
+   * Method to get available wallets and paymethods from API
+   */
 
-  var getRedemptionRate = function getRedemptionRate(wallet, loyaltyPlans) {
-    var _businessLoyaltyPlan$;
 
-    if (wallet.type === 'cash') return 100;
-    if (!(loyaltyPlans !== null && loyaltyPlans !== void 0 && loyaltyPlans.length)) return false;
-    var loyaltyPlan = loyaltyPlans.find(function (plan) {
-      return plan.type === wallet.type;
-    });
-    if (!loyaltyPlan) return false;
-    var businessLoyaltyPlan = loyaltyPlan.businesses.find(function (business) {
-      return business.business_id === cart.business_id;
-    });
-    if (!businessLoyaltyPlan && loyaltyPlan.businesses.length) return false;
-    if (businessLoyaltyPlan && !businessLoyaltyPlan.redeems) return false;
-    var redemptionRate = (_businessLoyaltyPlan$ = businessLoyaltyPlan === null || businessLoyaltyPlan === void 0 ? void 0 : businessLoyaltyPlan.redemption_rate) !== null && _businessLoyaltyPlan$ !== void 0 ? _businessLoyaltyPlan$ : loyaltyPlan === null || loyaltyPlan === void 0 ? void 0 : loyaltyPlan.redemption_rate;
-    return redemptionRate;
-  };
-
-  var getWallets = /*#__PURE__*/function () {
+  var getPaymethodsAndWallets = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var response, _yield$response$json, error, result, reqLoyalty, resLoyalty, wallets, loyaltyPlans;
+      var requestOptions, response, content, _content$result, _content$result2;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              _context.next = 3;
-              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets"), {
-                method: 'GET',
+              setPaymethodsAndWallets(_objectSpread(_objectSpread({}, paymethodsAndWallets), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
-                }
-              });
+                  Authorization: "bearer ".concat(token)
+                },
+                body: JSON.stringify({
+                  carts: cartsUuids
+                })
+              };
+              _context.next = 5;
+              return fetch("".concat(ordering.root, "/carts/prepare_checkout"), requestOptions);
 
-            case 3:
+            case 5:
               response = _context.sent;
-              _context.next = 6;
+              _context.next = 8;
               return response.json();
 
-            case 6:
-              _yield$response$json = _context.sent;
-              error = _yield$response$json.error;
-              result = _yield$response$json.result;
-              _context.next = 11;
-              return fetch("".concat(ordering.root, "/loyalty_plans"), {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
-                }
-              });
+            case 8:
+              content = _context.sent;
 
-            case 11:
-              reqLoyalty = _context.sent;
-              _context.next = 14;
-              return reqLoyalty.json();
-
-            case 14:
-              resLoyalty = _context.sent;
-              wallets = [];
-
-              if (!error) {
-                loyaltyPlans = resLoyalty.result;
-                wallets = result.map(function (wallet) {
-                  var redemptionRate = getRedemptionRate(wallet, loyaltyPlans);
-
-                  if (redemptionRate === false) {
-                    wallet.valid = false;
-                    wallet.redemption_rate = null;
-                  } else {
-                    wallet.valid = true;
-                    wallet.redemption_rate = redemptionRate;
-                  }
-
-                  return wallet;
-                });
-              }
-
-              setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
-                loading: false,
-                error: error ? result : null,
-                result: error ? null : wallets,
-                loyaltyPlans: resLoyalty !== null && resLoyalty !== void 0 && resLoyalty.error ? [] : resLoyalty === null || resLoyalty === void 0 ? void 0 : resLoyalty.result
-              }));
-              _context.next = 23;
-              break;
-
-            case 20:
-              _context.prev = 20;
-              _context.t0 = _context["catch"](0);
-
-              if (_context.t0.constructor.name !== 'Cancel') {
-                setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
+              if (!content.error) {
+                setPaymethodsAndWallets({
                   loading: false,
-                  error: [_context.t0.message]
+                  paymethods: ((_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.paymethods) || [],
+                  wallets: ((_content$result2 = content.result) === null || _content$result2 === void 0 ? void 0 : _content$result2.wallets) || [],
+                  error: null
+                });
+              } else {
+                setPaymethodsAndWallets(_objectSpread(_objectSpread({}, paymethodsAndWallets), {}, {
+                  loading: false,
+                  error: content.result
                 }));
               }
 
-            case 23:
+              _context.next = 15;
+              break;
+
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](0);
+              setPaymethodsAndWallets(_objectSpread(_objectSpread({}, paymethodsAndWallets), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
+
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 20]]);
+      }, _callee, null, [[0, 12]]);
     }));
 
-    return function getWallets() {
+    return function getPaymethodsAndWallets() {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+  * Method to get business from API
+  */
 
-  var selectWallet = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(wallet) {
-      var response, _yield$response$json2, error, result, carts;
+
+  var getBusiness = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var _orderState$options, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              _context2.next = 3;
-              return fetch("".concat(ordering.root, "/carts/").concat(cart.uuid, "/wallets"), {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
-                },
-                body: JSON.stringify({
-                  wallet_id: wallet.id
-                })
+              parameters = {
+                type: (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type
+              };
+              _context2.next = 4;
+              return ordering.businesses(businessIds[0]).select(propsToFetch).parameters(parameters).get();
+
+            case 4:
+              _yield$ordering$busin = _context2.sent;
+              _yield$ordering$busin2 = _yield$ordering$busin.content;
+              result = _yield$ordering$busin2.result;
+              error = _yield$ordering$busin2.error;
+              setBusinessPaymethods({
+                loading: false,
+                result: error ? [] : result === null || result === void 0 ? void 0 : result.paymethods,
+                error: error ? result : null
               });
-
-            case 3:
-              response = _context2.sent;
-              _context2.next = 6;
-              return response.json();
-
-            case 6:
-              _yield$response$json2 = _context2.sent;
-              error = _yield$response$json2.error;
-              result = _yield$response$json2.result;
-
-              if (!error) {
-                _context2.next = 12;
-                break;
-              }
-
-              setErrorState(result);
-              return _context2.abrupt("return");
-
-            case 12:
-              carts = orderState.carts;
-              carts["businessId:".concat(result.business_id)] = result;
-              setStateValues({
-                carts: carts
-              });
-              _context2.next = 20;
+              _context2.next = 14;
               break;
 
-            case 17:
-              _context2.prev = 17;
+            case 11:
+              _context2.prev = 11;
               _context2.t0 = _context2["catch"](0);
-              setErrorState([_context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message]);
+              setBusinessPaymethods(_objectSpread(_objectSpread({}, businessPaymethods), {}, {
+                loading: false,
+                error: [_context2.t0.message]
+              }));
 
-            case 20:
+            case 14:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 17]]);
+      }, _callee2, null, [[0, 11]]);
     }));
 
-    return function selectWallet(_x) {
+    return function getBusiness() {
       return _ref2.apply(this, arguments);
     };
   }();
+  /**
+   * Method to get user wallets from API
+   */
 
-  var deletetWalletSelected = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(wallet) {
-      var response, _yield$response$json3, error, result, carts;
+
+  var getUserWallets = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
@@ -270,8 +259,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
             case 0:
               _context3.prev = 0;
               _context3.next = 3;
-              return fetch("".concat(ordering.root, "/carts/").concat(cart.uuid, "/wallets/").concat(wallet.id), {
-                method: 'DELETE',
+              return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets"), {
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: "Bearer ".concat(token)
@@ -284,56 +273,77 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
               return response.json();
 
             case 6:
-              _yield$response$json3 = _context3.sent;
-              error = _yield$response$json3.error;
-              result = _yield$response$json3.result;
-
-              if (!error) {
-                _context3.next = 12;
-                break;
-              }
-
-              setErrorState(result);
-              return _context3.abrupt("return");
-
-            case 12:
-              carts = orderState.carts;
-              carts["businessId:".concat(result.business_id)] = result;
-              setStateValues({
-                carts: carts
-              });
-              _context3.next = 20;
+              _yield$response$json = _context3.sent;
+              error = _yield$response$json.error;
+              result = _yield$response$json.result;
+              setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
+                loading: false,
+                error: error ? result : null,
+                result: error ? null : result
+              }));
+              _context3.next = 15;
               break;
 
-            case 17:
-              _context3.prev = 17;
+            case 12:
+              _context3.prev = 12;
               _context3.t0 = _context3["catch"](0);
-              setErrorState([_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message]);
 
-            case 20:
+              if (_context3.t0.constructor.name !== 'Cancel') {
+                setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
+                  loading: false,
+                  error: [_context3.t0.message]
+                }));
+              }
+
+            case 15:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 17]]);
+      }, _callee3, null, [[0, 12]]);
     }));
 
-    return function deletetWalletSelected(_x2) {
+    return function getUserWallets() {
       return _ref3.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    getWallets();
+    var _cartsUuids = openCarts.reduce(function (uuids, cart) {
+      return [].concat(_toConsumableArray(uuids), [cart.uuid]);
+    }, []);
+
+    setCartsUuids(_cartsUuids);
+
+    var _businessIds = openCarts.reduce(function (uuids, cart) {
+      return [].concat(_toConsumableArray(uuids), [cart.business_id]);
+    }, []);
+
+    setBusinessIds(_businessIds);
+  }, [openCarts]);
+  (0, _react.useEffect)(function () {
+    getUserWallets();
   }, []);
+  (0, _react.useEffect)(function () {
+    if (!cartsUuids.length) return;
+    getPaymethodsAndWallets();
+    getBusiness();
+  }, [JSON.stringify(cartsUuids), JSON.stringify(businessIds)]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    errorState: errorState,
-    setErrorState: setErrorState,
+    businessIds: businessIds,
+    paymethodsAndWallets: paymethodsAndWallets,
     walletsState: walletsState,
-    selectWallet: selectWallet,
-    deletetWalletSelected: deletetWalletSelected
+    businessPaymethods: businessPaymethods
   })));
 };
 
-exports.PaymentOptionWallet = PaymentOptionWallet;
-PaymentOptionWallet.defaultProps = {};
+exports.MultiCartsPaymethodsAndWallets = MultiCartsPaymethodsAndWallets;
+MultiCartsPaymethodsAndWallets.propTypes = {
+  /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: _propTypes.default.elementType
+};
+MultiCartsPaymethodsAndWallets.defaultProps = {
+  propsToFetch: ['id', 'name', 'email', 'cellphone', 'address', 'paymethods', 'logo', 'location', 'configs']
+};

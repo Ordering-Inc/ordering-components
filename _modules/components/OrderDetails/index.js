@@ -385,7 +385,7 @@ var OrderDetails = function OrderDetails(props) {
 
               if (!error) {
                 setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  order: result,
+                  order: Object.assign(orderState.order, result),
                   loading: false
                 }));
               }
@@ -525,7 +525,7 @@ var OrderDetails = function OrderDetails(props) {
               result = _yield$ordering$setAc6.result;
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
                 loading: false,
-                order: result,
+                order: Object.assign(orderState.order, result),
                 error: error ? result : null
               }));
               _context5.next = 15;

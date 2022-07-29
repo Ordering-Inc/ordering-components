@@ -286,7 +286,7 @@ var Checkout = function Checkout(props) {
 
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(paymentOptions) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(paymentOptions, payloadProps) {
       var _paymethodSelected$pa5, _cart$balance, _cartResult$paymethod;
 
       var paymethodData, _paymethodSelected$da, payload, result, cartResult;
@@ -330,7 +330,7 @@ var Checkout = function Checkout(props) {
               return _context2.abrupt("return");
 
             case 8:
-              payload = _objectSpread(_objectSpread({}, payload), {}, {
+              payload = _objectSpread(_objectSpread(_objectSpread({}, payload), payloadProps), {}, {
                 paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
               });
               setPlacing(true);
@@ -371,7 +371,7 @@ var Checkout = function Checkout(props) {
       }, _callee2);
     }));
 
-    return function handlerClickPlaceOrder(_x) {
+    return function handlerClickPlaceOrder(_x, _x2) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -586,13 +586,15 @@ var Checkout = function Checkout(props) {
       }, _callee5, null, [[0, 13]]);
     }));
 
-    return function handleChangeDeliveryOption(_x2) {
+    return function handleChangeDeliveryOption(_x3) {
       return _ref5.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    getBusiness();
+    if (businessId && typeof businessId === 'number') {
+      getBusiness();
+    }
   }, [businessId]);
   /**
    * Update carts from sockets

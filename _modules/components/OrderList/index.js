@@ -21,6 +21,8 @@ var _ToastContext = require("../../contexts/ToastContext");
 
 var _LanguageContext = require("../../contexts/LanguageContext");
 
+var _OrderContext = require("../../contexts/OrderContext");
+
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -80,11 +82,19 @@ var OrderList = function OrderList(props) {
       activeOrders = props.activeOrders,
       isDynamicSort = props.isDynamicSort,
       businessId = props.businessId,
-      franchiseId = props.franchiseId;
+      franchiseId = props.franchiseId,
+      businessesSearchList = props.businessesSearchList,
+      setIsEmptyBusinesses = props.setIsEmptyBusinesses,
+      businessOrderIds = props.businessOrderIds,
+      setBusinessOrderIds = props.setBusinessOrderIds;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      reorder = _useOrder2[1].reorder;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -140,25 +150,134 @@ var OrderList = function OrderList(props) {
       sortBy = _useState10[0],
       setSortBy = _useState10[1];
 
+  var _useState11 = (0, _react.useState)({
+    loading: false,
+    result: [],
+    error: null
+  }),
+      _useState12 = _slicedToArray(_useState11, 2),
+      reorderState = _useState12[0],
+      setReorderState = _useState12[1];
+
+  var _useState13 = (0, _react.useState)([]),
+      _useState14 = _slicedToArray(_useState13, 2),
+      products = _useState14[0],
+      setProducts = _useState14[1];
+
   var profileMessage = props.profileMessages;
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
 
+  var handleReorder = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(orderId) {
+      var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, choosedOrder, _businessId, _businessData, _businessSlug;
+
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              if (orderId) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 2:
+              _context.prev = 2;
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: true
+              }));
+              _context.next = 6;
+              return reorder(orderId);
+
+            case 6:
+              _yield$reorder = _context.sent;
+              error = _yield$reorder.error;
+              result = _yield$reorder.result;
+
+              if (error) {
+                _context.next = 13;
+                break;
+              }
+
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: false,
+                result: _objectSpread(_objectSpread({}, result), {}, {
+                  orderId: orderId
+                })
+              }));
+              _context.next = 22;
+              break;
+
+            case 13:
+              choosedOrder = orderList.orders.find(function (_order) {
+                return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId;
+              });
+              _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 ? void 0 : (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
+              _context.next = 17;
+              return ordering.businesses(_businessId).select(['slug']).get();
+
+            case 17:
+              _businessData = _context.sent;
+              _context.next = 20;
+              return _businessData === null || _businessData === void 0 ? void 0 : (_businessData$content = _businessData.content) === null || _businessData$content === void 0 ? void 0 : (_businessData$content2 = _businessData$content.result) === null || _businessData$content2 === void 0 ? void 0 : _businessData$content2.slug;
+
+            case 20:
+              _businessSlug = _context.sent;
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: false,
+                error: true,
+                result: _objectSpread(_objectSpread({}, result), {}, {
+                  orderId: orderId,
+                  business_id: _businessId,
+                  business: {
+                    slug: _businessSlug
+                  }
+                })
+              }));
+
+            case 22:
+              _context.next = 27;
+              break;
+
+            case 24:
+              _context.prev = 24;
+              _context.t0 = _context["catch"](2);
+              setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
+                loading: false,
+                error: true,
+                result: [_context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message]
+              }));
+
+            case 27:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[2, 24]]);
+    }));
+
+    return function handleReorder(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
   var getOrders = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(page) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(page) {
       var otherStatus,
           pageSize,
           options,
           searchByStatus,
           source,
           functionFetch,
-          _args = arguments;
-      return _regenerator.default.wrap(function _callee$(_context) {
+          _args2 = arguments;
+      return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
-              otherStatus = _args.length > 1 && _args[1] !== undefined ? _args[1] : [];
-              pageSize = _args.length > 2 && _args[2] !== undefined ? _args[2] : paginationSettings.pageSize;
+              otherStatus = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : [];
+              pageSize = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : paginationSettings.pageSize;
               options = {
                 query: {
                   orderBy: "".concat(sortBy.direction === 'desc' ? '-' : '').concat(sortBy.param),
@@ -214,71 +333,71 @@ var OrderList = function OrderList(props) {
               requestsState.orders = source;
               options.cancelToken = source;
               functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-              _context.next = 13;
+              _context2.next = 13;
               return functionFetch.get(options);
 
             case 13:
-              return _context.abrupt("return", _context.sent);
+              return _context2.abrupt("return", _context2.sent);
 
             case 14:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee);
+      }, _callee2);
     }));
 
-    return function getOrders(_x) {
-      return _ref.apply(this, arguments);
+    return function getOrders(_x2) {
+      return _ref2.apply(this, arguments);
     };
   }();
 
   var loadOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(isNextPage, searchByOtherStatus) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(isNextPage, searchByOtherStatus) {
       var keepOrders,
           getFirstOrder,
           pageSize,
           nextPage,
           response,
-          _args2 = arguments;
-      return _regenerator.default.wrap(function _callee2$(_context2) {
+          _args3 = arguments;
+      return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              keepOrders = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : false;
-              getFirstOrder = _args2.length > 3 ? _args2[3] : undefined;
+              keepOrders = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : false;
+              getFirstOrder = _args3.length > 3 ? _args3[3] : undefined;
 
               if (!((pagination === null || pagination === void 0 ? void 0 : pagination.currentPage) === (pagination === null || pagination === void 0 ? void 0 : pagination.totalPages) && (pagination === null || pagination === void 0 ? void 0 : pagination.total) !== null && !getFirstOrder)) {
-                _context2.next = 4;
+                _context3.next = 4;
                 break;
               }
 
-              return _context2.abrupt("return");
+              return _context3.abrupt("return");
 
             case 4:
               pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize;
 
               if (session.token) {
-                _context2.next = 8;
+                _context3.next = 8;
                 break;
               }
 
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: false
               }));
-              return _context2.abrupt("return");
+              return _context3.abrupt("return");
 
             case 8:
-              _context2.prev = 8;
+              _context3.prev = 8;
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: true
               }));
               nextPage = !isNextPage ? pagination.currentPage + 1 : 1;
-              _context2.next = 13;
+              _context3.next = 13;
               return getOrders(getFirstOrder ? 0 : nextPage, searchByOtherStatus, pageSize);
 
             case 13:
-              response = _context2.sent;
+              response = _context3.sent;
 
               if (searchByOtherStatus) {
                 setOrderList({
@@ -294,6 +413,34 @@ var OrderList = function OrderList(props) {
                 });
               }
 
+              setBusinessOrderIds && setBusinessOrderIds([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).map(function (order) {
+                return order.business_id;
+              }).filter(function (id, i, hash) {
+                var _businessesSearchList;
+
+                return (!businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 ? void 0 : (_businessesSearchList = businessesSearchList.businesses) === null || _businessesSearchList === void 0 ? void 0 : _businessesSearchList.some(function (business) {
+                  return (business === null || business === void 0 ? void 0 : business.id) === id;
+                }))) && hash.indexOf(id) === i;
+              }));
+              setProducts([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).filter(function (order) {
+                var _businessesSearchList2;
+
+                return !businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 ? void 0 : (_businessesSearchList2 = businessesSearchList.businesses) === null || _businessesSearchList2 === void 0 ? void 0 : _businessesSearchList2.some(function (business) {
+                  return (order === null || order === void 0 ? void 0 : order.business_id) === (business === null || business === void 0 ? void 0 : business.id);
+                }));
+              }).map(function (order) {
+                return order.products.map(function (product) {
+                  return _objectSpread(_objectSpread({}, product), {}, {
+                    business: order === null || order === void 0 ? void 0 : order.business,
+                    businessId: order === null || order === void 0 ? void 0 : order.business_id
+                  });
+                });
+              }).flat().filter(function (product, i, hash) {
+                return hash.map(function (_product) {
+                  return _product === null || _product === void 0 ? void 0 : _product.product_id;
+                }).indexOf(product === null || product === void 0 ? void 0 : product.product_id) === i;
+              }));
+
               if (!response.content.error) {
                 setPagination({
                   currentPage: keepOrders ? pagination.currentPage : response.content.pagination.current_page,
@@ -305,47 +452,60 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context2.next = 21;
+              _context3.next = 23;
               break;
 
-            case 18:
-              _context2.prev = 18;
-              _context2.t0 = _context2["catch"](8);
+            case 20:
+              _context3.prev = 20;
+              _context3.t0 = _context3["catch"](8);
 
-              if (_context2.t0.constructor.name !== 'Cancel') {
+              if (_context3.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                   loading: false,
-                  error: [_context2.t0.message]
+                  error: [_context3.t0.message]
                 }));
               }
 
-            case 21:
+            case 23:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2, null, [[8, 18]]);
+      }, _callee3, null, [[8, 20]]);
     }));
 
-    return function loadOrders(_x2, _x3) {
-      return _ref2.apply(this, arguments);
+    return function loadOrders(_x3, _x4) {
+      return _ref3.apply(this, arguments);
     };
   }();
 
+  var handleUpdateOrderList = function handleUpdateOrderList(orderId, changes) {
+    var updatedOrders = orderList === null || orderList === void 0 ? void 0 : orderList.orders.map(function (order) {
+      if ((order === null || order === void 0 ? void 0 : order.id) === orderId) {
+        return _objectSpread(_objectSpread({}, order), changes);
+      }
+
+      return order;
+    });
+    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+      orders: updatedOrders
+    }));
+  };
+
   var loadMessages = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(orderId) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(orderId) {
       var url, response, _yield$response$json, error, result;
 
-      return _regenerator.default.wrap(function _callee3$(_context3) {
+      return _regenerator.default.wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context3.prev = 0;
+              _context4.prev = 0;
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: true
               }));
               url = "".concat(ordering.root, "/orders/").concat(orderId, "/messages?mode=dashboard");
-              _context3.next = 5;
+              _context4.next = 5;
               return fetch(url, {
                 method: 'GET',
                 headers: {
@@ -355,12 +515,12 @@ var OrderList = function OrderList(props) {
               });
 
             case 5:
-              response = _context3.sent;
-              _context3.next = 8;
+              response = _context4.sent;
+              _context4.next = 8;
               return response.json();
 
             case 8:
-              _yield$response$json = _context3.sent;
+              _yield$response$json = _context4.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
 
@@ -377,27 +537,27 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-              _context3.next = 17;
+              _context4.next = 17;
               break;
 
             case 14:
-              _context3.prev = 14;
-              _context3.t0 = _context3["catch"](0);
+              _context4.prev = 14;
+              _context4.t0 = _context4["catch"](0);
               setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                 loading: false,
-                error: [_context3.t0.Messages]
+                error: [_context4.t0.Messages]
               }));
 
             case 17:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3, null, [[0, 14]]);
+      }, _callee4, null, [[0, 14]]);
     }));
 
-    return function loadMessages(_x4) {
-      return _ref3.apply(this, arguments);
+    return function loadMessages(_x5) {
+      return _ref4.apply(this, arguments);
     };
   }();
 
@@ -407,7 +567,7 @@ var OrderList = function OrderList(props) {
         orders: (orders === null || orders === void 0 ? void 0 : orders.lenght) > 0 ? orders : customArray || [],
         loading: false
       }));
-    } else {
+    } else if (!businessesSearchList) {
       loadOrders();
     }
 
@@ -506,67 +666,7 @@ var OrderList = function OrderList(props) {
   }, [socket, session, userCustomerId]);
 
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee4(searchByOtherStatus) {
-      var response;
-      return _regenerator.default.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: true
-              }));
-              _context4.prev = 1;
-              _context4.next = 4;
-              return getOrders(pagination.currentPage + 1, searchByOtherStatus);
-
-            case 4:
-              response = _context4.sent;
-              setOrderList({
-                loading: false,
-                orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
-                error: response.content.error ? response.content.result : null
-              });
-
-              if (!response.content.error) {
-                setPagination({
-                  currentPage: response.content.pagination.current_page,
-                  pageSize: response.content.pagination.page_size,
-                  totalPages: response.content.pagination.total_pages,
-                  total: response.content.pagination.total,
-                  from: response.content.pagination.from,
-                  to: response.content.pagination.to
-                });
-              }
-
-              _context4.next = 12;
-              break;
-
-            case 9:
-              _context4.prev = 9;
-              _context4.t0 = _context4["catch"](1);
-
-              if (_context4.t0.constructor.name !== 'Cancel') {
-                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                  loading: false,
-                  error: [_context4.t0.message]
-                }));
-              }
-
-            case 12:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4, null, [[1, 9]]);
-    }));
-
-    return function loadMoreOrders(_x5) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-
-  var goToPage = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(page) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(searchByOtherStatus) {
       var response;
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -577,13 +677,13 @@ var OrderList = function OrderList(props) {
               }));
               _context5.prev = 1;
               _context5.next = 4;
-              return getOrders(page);
+              return getOrders(pagination.currentPage + 1, searchByOtherStatus);
 
             case 4:
               response = _context5.sent;
               setOrderList({
                 loading: false,
-                orders: response.content.error ? [] : response.content.result,
+                orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
                 error: response.content.error ? response.content.result : null
               });
 
@@ -620,8 +720,68 @@ var OrderList = function OrderList(props) {
       }, _callee5, null, [[1, 9]]);
     }));
 
-    return function goToPage(_x6) {
+    return function loadMoreOrders(_x6) {
       return _ref5.apply(this, arguments);
+    };
+  }();
+
+  var goToPage = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(page) {
+      var response;
+      return _regenerator.default.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: true
+              }));
+              _context6.prev = 1;
+              _context6.next = 4;
+              return getOrders(page);
+
+            case 4:
+              response = _context6.sent;
+              setOrderList({
+                loading: false,
+                orders: response.content.error ? [] : response.content.result,
+                error: response.content.error ? response.content.result : null
+              });
+
+              if (!response.content.error) {
+                setPagination({
+                  currentPage: response.content.pagination.current_page,
+                  pageSize: response.content.pagination.page_size,
+                  totalPages: response.content.pagination.total_pages,
+                  total: response.content.pagination.total,
+                  from: response.content.pagination.from,
+                  to: response.content.pagination.to
+                });
+              }
+
+              _context6.next = 12;
+              break;
+
+            case 9:
+              _context6.prev = 9;
+              _context6.t0 = _context6["catch"](1);
+
+              if (_context6.t0.constructor.name !== 'Cancel') {
+                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                  loading: false,
+                  error: [_context6.t0.message]
+                }));
+              }
+
+            case 12:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[1, 9]]);
+    }));
+
+    return function goToPage(_x7) {
+      return _ref6.apply(this, arguments);
     };
   }();
 
@@ -635,6 +795,17 @@ var OrderList = function OrderList(props) {
       return a.id - b.id;
     });
     return ordersSorted;
+  };
+
+  var handleUpdateProducts = function handleUpdateProducts(productId, changes) {
+    var updatedProducts = products === null || products === void 0 ? void 0 : products.map(function (product) {
+      if ((product === null || product === void 0 ? void 0 : product.product_id) === productId) {
+        return _objectSpread(_objectSpread({}, product), changes);
+      }
+
+      return product;
+    });
+    setProducts(updatedProducts);
   };
 
   (0, _react.useEffect)(function () {
@@ -662,6 +833,14 @@ var OrderList = function OrderList(props) {
       loadOrders(true, []);
     }
   }, [sortBy]);
+  (0, _react.useEffect)(function () {
+    if (businessesSearchList && !(businessesSearchList !== null && businessesSearchList !== void 0 && businessesSearchList.loading)) {
+      loadOrders(false, false, false, true);
+    }
+  }, [businessesSearchList, businessId]);
+  (0, _react.useEffect)(function () {
+    setIsEmptyBusinesses && setIsEmptyBusinesses((businessOrderIds === null || businessOrderIds === void 0 ? void 0 : businessOrderIds.length) === 0);
+  }, [businessOrderIds]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     sortOrders: sortOrders,
     setSortBy: setSortBy,
@@ -673,7 +852,13 @@ var OrderList = function OrderList(props) {
     loadMessages: loadMessages,
     messages: messages,
     setMessages: setMessages,
-    setUpdateOtherStatus: setUpdateOtherStatus
+    setUpdateOtherStatus: setUpdateOtherStatus,
+    handleReorder: handleReorder,
+    reorderState: reorderState,
+    businessOrderIds: businessOrderIds,
+    products: products,
+    handleUpdateOrderList: handleUpdateOrderList,
+    handleUpdateProducts: handleUpdateProducts
   })));
 };
 

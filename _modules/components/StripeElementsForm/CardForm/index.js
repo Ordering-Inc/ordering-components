@@ -55,7 +55,8 @@ var CardForm = function CardForm(props) {
       handleSource = props.handleSource,
       onNewCard = props.onNewCard,
       handleCustomSubmit = props.handleCustomSubmit,
-      isSplitForm = props.isSplitForm;
+      isSplitForm = props.isSplitForm,
+      businessIds = props.businessIds;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -93,12 +94,16 @@ var CardForm = function CardForm(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(tokenId, user, businessId) {
       var _user$session;
 
-      var result, response;
+      var isNewCard,
+          result,
+          response,
+          _args = arguments;
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
+              isNewCard = _args.length > 3 && _args[3] !== undefined ? _args[3] : true;
+              _context.next = 3;
               return fetch("".concat(ordering.root, "/payments/stripe/cards"), {
                 method: 'POST',
                 headers: {
@@ -113,16 +118,16 @@ var CardForm = function CardForm(props) {
                 })
               });
 
-            case 2:
+            case 3:
               result = _context.sent;
-              _context.next = 5;
+              _context.next = 6;
               return result.json();
 
-            case 5:
+            case 6:
               response = _context.sent;
-              onNewCard && onNewCard(response.result);
+              isNewCard && onNewCard && onNewCard(response.result);
 
-            case 7:
+            case 8:
             case "end":
               return _context.stop();
           }
@@ -256,7 +261,16 @@ var CardForm = function CardForm(props) {
               } else {
                 setLoading(false);
                 setError(null);
-                toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
+
+                if (businessIds) {
+                  businessIds.forEach(function (_businessId, index) {
+                    var _isNewCard = index === 0;
+
+                    toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, _businessId, _isNewCard);
+                  });
+                } else {
+                  toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
+                }
               }
 
             case 24:
