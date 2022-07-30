@@ -15,8 +15,8 @@ export const LoginForm = (props) => {
     UIComponent,
     handleButtonLoginClick,
     handleSuccessLogin,
-    useLoginByEmail,
-    useLoginByCellphone,
+    // useLoginByEmail,
+    // useLoginByCellphone,
     useDefualtSessionManager,
     urlToRedirect,
     allowedLevels,
@@ -34,21 +34,20 @@ export const LoginForm = (props) => {
   const [{ configs }] = useConfig()
   const [reCaptchaValue, setReCaptchaValue] = useState(null)
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
-  const [otpType, setOtpType] = useState('email')
-  const [otpState, setOtpState] = useState('')
-  if (!useLoginByEmail && !useLoginByCellphone) {
-    defaultLoginTab = 'none'
-  } else if (defaultLoginTab === 'email' && !useLoginByEmail && useLoginByCellphone) {
-    defaultLoginTab = 'cellphone'
-  } else if (defaultLoginTab === 'cellphone' && !useLoginByCellphone && useLoginByEmail) {
-    defaultLoginTab = 'email'
-  }
 
+  const useLoginByCellphone = configs?.phone_password_login_enabled?.value === '1'
   const useLoginOtpEmail = configs?.opt_email_enabled?.value === '1'
   const useLoginOtpCellphone = configs?.otp_cellphone_enabled?.value === '1'
+  const useLoginByEmail = (useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone)
+    ? configs?.email_password_login_enabled?.value === '1' : true
+
   const useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone
 
-  const [loginTab, setLoginTab] = useState(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email'))
+  defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp'
+  const [loginTab, setLoginTab] = useState(defaultLoginTab)
+  const [otpType, setOtpType] = useState((!useLoginOtpEmail && useLoginOtpCellphone) ? 'cellphone' : 'email')
+  const [otpState, setOtpState] = useState('')
+
   const [, { login, logout }] = useSession()
   const [, t] = useLanguage()
 
@@ -354,6 +353,8 @@ export const LoginForm = (props) => {
           generateOtpCode={generateOtpCode}
           setOtpState={setOtpState}
           otpState={otpState}
+          useLoginByEmail={useLoginByEmail}
+          useLoginByCellphone={useLoginByCellphone}
           useLoginOtpEmail={useLoginOtpEmail}
           useLoginOtpCellphone={useLoginOtpCellphone}
         />
