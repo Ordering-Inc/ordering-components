@@ -434,7 +434,7 @@ var SignupForm = function SignupForm(props) {
               setSignupData(_objectSpread(_objectSpread({}, signupData), {}, {
                 email: email,
                 cellphone: cellphone,
-                countryPhoneCode: countryPhoneCode
+                country_phone_code: countryPhoneCode
               }));
               _context3.prev = 5;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
@@ -609,6 +609,8 @@ var SignupForm = function SignupForm(props) {
 
   var checkVerifyByOtpCode = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _signupData$country_p;
+
       var _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -619,7 +621,7 @@ var SignupForm = function SignupForm(props) {
                 email: signupData === null || signupData === void 0 ? void 0 : signupData.email,
                 one_time_password: otpState
               } : {
-                country_phone_code: signupData === null || signupData === void 0 ? void 0 : signupData.country_phone_code.replace('+', ''),
+                country_phone_code: signupData === null || signupData === void 0 ? void 0 : (_signupData$country_p = signupData.country_phone_code) === null || _signupData$country_p === void 0 ? void 0 : _signupData$country_p.replace('+', ''),
                 cellphone: signupData === null || signupData === void 0 ? void 0 : signupData.cellphone,
                 one_time_password: otpState
               };
