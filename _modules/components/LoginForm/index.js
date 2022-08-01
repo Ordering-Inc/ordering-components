@@ -59,13 +59,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var LoginForm = function LoginForm(props) {
-  var _configs$opt_email_en, _configs$otp_cellphon;
+  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo;
 
   var UIComponent = props.UIComponent,
       handleButtonLoginClick = props.handleButtonLoginClick,
       handleSuccessLogin = props.handleSuccessLogin,
-      useLoginByEmail = props.useLoginByEmail,
-      useLoginByCellphone = props.useLoginByCellphone,
       useDefualtSessionManager = props.useDefualtSessionManager,
       urlToRedirect = props.urlToRedirect,
       allowedLevels = props.allowedLevels,
@@ -135,32 +133,27 @@ var LoginForm = function LoginForm(props) {
       isReCaptchaEnable = _useState12[0],
       setIsReCaptchaEnable = _useState12[1];
 
-  var _useState13 = (0, _react.useState)('email'),
-      _useState14 = _slicedToArray(_useState13, 2),
-      otpType = _useState14[0],
-      setOtpType = _useState14[1];
-
-  var _useState15 = (0, _react.useState)(''),
-      _useState16 = _slicedToArray(_useState15, 2),
-      otpState = _useState16[0],
-      setOtpState = _useState16[1];
-
-  if (!useLoginByEmail && !useLoginByCellphone) {
-    defaultLoginTab = 'none';
-  } else if (defaultLoginTab === 'email' && !useLoginByEmail && useLoginByCellphone) {
-    defaultLoginTab = 'cellphone';
-  } else if (defaultLoginTab === 'cellphone' && !useLoginByCellphone && useLoginByEmail) {
-    defaultLoginTab = 'email';
-  }
-
+  var useLoginByCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$phone_passwo = configs.phone_password_login_enabled) === null || _configs$phone_passwo === void 0 ? void 0 : _configs$phone_passwo.value) === '1';
   var useLoginOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$opt_email_en = configs.opt_email_enabled) === null || _configs$opt_email_en === void 0 ? void 0 : _configs$opt_email_en.value) === '1';
   var useLoginOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$otp_cellphon = configs.otp_cellphone_enabled) === null || _configs$otp_cellphon === void 0 ? void 0 : _configs$otp_cellphon.value) === '1';
+  var useLoginByEmail = useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$email_passwo = configs.email_password_login_enabled) === null || _configs$email_passwo === void 0 ? void 0 : _configs$email_passwo.value) === '1' : true;
   var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
+  defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp';
 
-  var _useState17 = (0, _react.useState)(defaultLoginTab || (useLoginByCellphone && !useLoginByEmail ? 'cellphone' : 'email')),
+  var _useState13 = (0, _react.useState)(defaultLoginTab),
+      _useState14 = _slicedToArray(_useState13, 2),
+      loginTab = _useState14[0],
+      setLoginTab = _useState14[1];
+
+  var _useState15 = (0, _react.useState)(!useLoginOtpEmail && useLoginOtpCellphone ? 'cellphone' : 'email'),
+      _useState16 = _slicedToArray(_useState15, 2),
+      otpType = _useState16[0],
+      setOtpType = _useState16[1];
+
+  var _useState17 = (0, _react.useState)(''),
       _useState18 = _slicedToArray(_useState17, 2),
-      loginTab = _useState18[0],
-      setLoginTab = _useState18[1];
+      otpState = _useState18[0],
+      setOtpState = _useState18[1];
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
@@ -675,6 +668,8 @@ var LoginForm = function LoginForm(props) {
     generateOtpCode: generateOtpCode,
     setOtpState: setOtpState,
     otpState: otpState,
+    useLoginByEmail: useLoginByEmail,
+    useLoginByCellphone: useLoginByCellphone,
     useLoginOtpEmail: useLoginOtpEmail,
     useLoginOtpCellphone: useLoginOtpCellphone
   })));

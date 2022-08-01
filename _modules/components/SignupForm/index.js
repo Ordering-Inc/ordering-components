@@ -59,6 +59,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage signup behavior without UI component
  */
 var SignupForm = function SignupForm(props) {
+  var _configs$email_otp_si, _configs$phone_otp_si, _configs$full_details;
+
   var UIComponent = props.UIComponent,
       useChekoutFileds = props.useChekoutFileds,
       handleButtonSignupClick = props.handleButtonSignupClick,
@@ -66,7 +68,8 @@ var SignupForm = function SignupForm(props) {
       externalPhoneNumber = props.externalPhoneNumber,
       handleCustomSignup = props.handleCustomSignup,
       notificationState = props.notificationState,
-      isCustomerMode = props.isCustomerMode;
+      isCustomerMode = props.isCustomerMode,
+      numOtpInputs = props.numOtpInputs;
   var requestsState = {};
 
   var _useEvent = (0, _EventContext.useEvent)(),
@@ -128,24 +131,43 @@ var SignupForm = function SignupForm(props) {
       checkPhoneCodeState = _useState8[0],
       setCheckPhoneCodeState = _useState8[1];
 
+  var _useState9 = (0, _react.useState)(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      willVerifyOtpState = _useState10[0],
+      setWillVerifyOtpState = _useState10[1];
+
+  var _useState11 = (0, _react.useState)(''),
+      _useState12 = _slicedToArray(_useState11, 2),
+      otpState = _useState12[0],
+      setOtpState = _useState12[1];
+
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configs = _useConfig2[0].configs;
 
-  var _useState9 = (0, _react.useState)(null),
-      _useState10 = _slicedToArray(_useState9, 2),
-      reCaptchaValue = _useState10[0],
-      setReCaptchaValue = _useState10[1];
-
-  var _useState11 = (0, _react.useState)(false),
-      _useState12 = _slicedToArray(_useState11, 2),
-      isReCaptchaEnable = _useState12[0],
-      setIsReCaptchaEnable = _useState12[1];
-
-  var _useState13 = (0, _react.useState)(false),
+  var _useState13 = (0, _react.useState)(null),
       _useState14 = _slicedToArray(_useState13, 2),
-      promotionsEnabled = _useState14[0],
-      setPromotionsEnabled = _useState14[1];
+      reCaptchaValue = _useState14[0],
+      setReCaptchaValue = _useState14[1];
+
+  var _useState15 = (0, _react.useState)(false),
+      _useState16 = _slicedToArray(_useState15, 2),
+      isReCaptchaEnable = _useState16[0],
+      setIsReCaptchaEnable = _useState16[1];
+
+  var _useState17 = (0, _react.useState)(false),
+      _useState18 = _slicedToArray(_useState17, 2),
+      promotionsEnabled = _useState18[0],
+      setPromotionsEnabled = _useState18[1];
+
+  var useSignUpOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$email_otp_si = configs.email_otp_signup_enabled) === null || _configs$email_otp_si === void 0 ? void 0 : _configs$email_otp_si.value) === '1';
+  var useSignUpOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$phone_otp_si = configs.phone_otp_signup_enabled) === null || _configs$phone_otp_si === void 0 ? void 0 : _configs$phone_otp_si.value) === '1';
+  var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : false;
+
+  var _useState19 = (0, _react.useState)('default'),
+      _useState20 = _slicedToArray(_useState19, 2),
+      signUpTab = _useState20[0],
+      setSignUpTab = _useState20[1];
   /**
    * Default fuction for signup workflow
    */
@@ -305,16 +327,11 @@ var SignupForm = function SignupForm(props) {
   var setReCaptcha = function setReCaptcha(value) {
     setReCaptchaValue(value);
   };
-
-  (0, _react.useEffect)(function () {
-    var _configs$security_rec;
-
-    setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_signup) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === '1');
-  }, [configs]);
   /**
    * Check if field should be show
    * @param {string} fieldName Field name
    */
+
 
   var showField = function showField(fieldName) {
     var _validationFields$fie, _validationFields$fie2, _validationFields$fie3, _validationFields$fie4, _validationFields$fie5, _validationFields$fie6, _validationFields$fie7;
@@ -398,6 +415,106 @@ var SignupForm = function SignupForm(props) {
     };
   }();
 
+  var generateOtpCode = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+      var body, email, cellphone, countryPhoneCode, response, _yield$response$json, result, error;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              body = {
+                type: 4,
+                channel: signUpTab === 'otpEmail' ? 1 : 2,
+                size: 6
+              };
+              email = (values === null || values === void 0 ? void 0 : values.email) || (signupData === null || signupData === void 0 ? void 0 : signupData.email);
+              cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (signupData === null || signupData === void 0 ? void 0 : signupData.cellphone);
+              countryPhoneCode = (values === null || values === void 0 ? void 0 : values.country_phone_code) || signupData.country_phone_code;
+              setSignupData(_objectSpread(_objectSpread({}, signupData), {}, {
+                email: email,
+                cellphone: cellphone,
+                countryPhoneCode: countryPhoneCode
+              }));
+              _context3.prev = 5;
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: true
+              }));
+              setWillVerifyOtpState(true);
+
+              if (signUpTab === 'otpCellphone') {
+                body.country_phone_code = countryPhoneCode;
+                body.cellphone = cellphone;
+              } else {
+                body.email = email;
+              }
+
+              _context3.next = 11;
+              return fetch("".concat(ordering.root, "/codes/generate"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+              });
+
+            case 11:
+              response = _context3.sent;
+              _context3.next = 14;
+              return response.json();
+
+            case 14:
+              _yield$response$json = _context3.sent;
+              result = _yield$response$json.result;
+              error = _yield$response$json.error;
+
+              if (error) {
+                _context3.next = 20;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  result: result,
+                  error: null
+                }
+              }));
+              return _context3.abrupt("return");
+
+            case 20:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  error: result
+                }
+              }));
+              _context3.next = 26;
+              break;
+
+            case 23:
+              _context3.prev = 23;
+              _context3.t0 = _context3["catch"](5);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  error: _context3.t0.message
+                }
+              }));
+
+            case 26:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[5, 23]]);
+    }));
+
+    return function generateOtpCode(_x3) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
   var handleSetCheckPhoneCodeState = function handleSetCheckPhoneCodeState(data) {
     var values = data || {
       loading: false,
@@ -414,15 +531,15 @@ var SignupForm = function SignupForm(props) {
 
 
   var checkVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
       var body, _res$result, response, res, _res$result2, _res$result2$session;
 
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
               body = _objectSpread({}, values);
-              _context3.prev = 1;
+              _context4.prev = 1;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: true
               }));
@@ -432,7 +549,7 @@ var SignupForm = function SignupForm(props) {
                 body.notification_app = notificationState.notification_app;
               }
 
-              _context3.next = 6;
+              _context4.next = 6;
               return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
                 method: 'POST',
                 headers: {
@@ -442,12 +559,12 @@ var SignupForm = function SignupForm(props) {
               });
 
             case 6:
-              response = _context3.sent;
-              _context3.next = 9;
+              response = _context4.sent;
+              _context4.next = 9;
               return response.json();
 
             case 9:
-              res = _context3.sent;
+              res = _context4.sent;
 
               if (!(res !== null && res !== void 0 && res.error) && res !== null && res !== void 0 && (_res$result = res.result) !== null && _res$result !== void 0 && _res$result.id) {
                 login({
@@ -464,29 +581,114 @@ var SignupForm = function SignupForm(props) {
                 loading: false,
                 result: res
               }));
-              _context3.next = 17;
+              _context4.next = 17;
               break;
 
             case 14:
-              _context3.prev = 14;
-              _context3.t0 = _context3["catch"](1);
+              _context4.prev = 14;
+              _context4.t0 = _context4["catch"](1);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
-                  error: _context3.t0.message
+                  error: _context4.t0.message
                 }
               }));
 
             case 17:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3, null, [[1, 14]]);
+      }, _callee4, null, [[1, 14]]);
     }));
 
-    return function checkVerifyPhoneCode(_x3) {
-      return _ref5.apply(this, arguments);
+    return function checkVerifyPhoneCode(_x4) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  var checkVerifyByOtpCode = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _credentials, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session;
+
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _credentials = signUpTab === 'otpEmail' ? {
+                email: signupData === null || signupData === void 0 ? void 0 : signupData.email,
+                one_time_password: otpState
+              } : {
+                country_phone_code: signupData === null || signupData === void 0 ? void 0 : signupData.country_phone_code.replace('+', ''),
+                cellphone: signupData === null || signupData === void 0 ? void 0 : signupData.cellphone,
+                one_time_password: otpState
+              };
+              _context5.prev = 1;
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: true,
+                result: {
+                  error: false
+                }
+              }));
+              _context5.next = 5;
+              return ordering.users().auth(_credentials);
+
+            case 5:
+              _yield$ordering$users = _context5.sent;
+              _yield$ordering$users2 = _yield$ordering$users.content;
+              error = _yield$ordering$users2.error;
+              result = _yield$ordering$users2.result;
+
+              if (!error && result !== null && result !== void 0 && result.id) {
+                login({
+                  user: result,
+                  token: result === null || result === void 0 ? void 0 : (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
+                });
+
+                if (handleSuccessSignup) {
+                  handleSuccessSignup(result);
+                }
+
+                setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                  loading: false,
+                  result: {
+                    result: result,
+                    error: false
+                  }
+                }));
+              } else {
+                setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                  loading: false,
+                  result: {
+                    result: result,
+                    error: true
+                  }
+                }));
+              }
+
+              _context5.next = 15;
+              break;
+
+            case 12:
+              _context5.prev = 12;
+              _context5.t0 = _context5["catch"](1);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  error: _context5.t0.message
+                }
+              }));
+
+            case 15:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 12]]);
+    }));
+
+    return function checkVerifyByOtpCode() {
+      return _ref7.apply(this, arguments);
     };
   }();
   /**
@@ -498,6 +700,16 @@ var SignupForm = function SignupForm(props) {
     setPromotionsEnabled(!promotionsEnabled);
   };
 
+  (0, _react.useEffect)(function () {
+    var _configs$security_rec;
+
+    setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_signup) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === '1');
+  }, [configs]);
+  (0, _react.useEffect)(function () {
+    if ((otpState === null || otpState === void 0 ? void 0 : otpState.length) === numOtpInputs) {
+      checkVerifyByOtpCode();
+    }
+  }, [otpState]);
   (0, _react.useEffect)(function () {
     return function () {
       if (requestsState.signup) {
@@ -516,11 +728,21 @@ var SignupForm = function SignupForm(props) {
     setCheckPhoneCodeState: handleSetCheckPhoneCodeState,
     handleChangeInput: handleChangeInput,
     handleButtonSignupClick: handleButtonSignupClick || handleSignupClick,
+    generateOtpCode: generateOtpCode,
     handleSendVerifyCode: sendVerifyPhoneCode,
     handleCheckPhoneCode: checkVerifyPhoneCode,
     enableReCaptcha: isReCaptchaEnable,
     handleReCaptcha: setReCaptcha,
-    handleChangePromotions: handleChangePromotions
+    handleChangePromotions: handleChangePromotions,
+    setOtpState: setOtpState,
+    otpState: otpState,
+    setSignUpTab: setSignUpTab,
+    signUpTab: signUpTab,
+    setWillVerifyOtpState: setWillVerifyOtpState,
+    willVerifyOtpState: willVerifyOtpState,
+    useSignUpFullDetails: useSignUpFullDetails,
+    useSignUpOtpEmail: useSignUpOtpEmail,
+    useSignUpOtpCellphone: useSignUpOtpCellphone
   })));
 };
 
