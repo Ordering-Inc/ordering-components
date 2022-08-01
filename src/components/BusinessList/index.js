@@ -68,7 +68,11 @@ export const BusinessList = (props) => {
    */
   const getBusinesses = async (newFetch, specificPagination, prev) => {
     try {
-      setBusinessesList({ ...businessesList, loading: true })
+      setBusinessesList({
+        ...businessesList,
+        loading: true,
+        businesses: newFetch ? [] : businessesList.businesses
+      })
       refreshConfigs()
       let parameters = asDashboard ? {} : {
         location: !customLocation
