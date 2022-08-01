@@ -214,7 +214,7 @@ export const SignupForm = (props) => {
       ...signupData,
       email: email,
       cellphone: cellphone,
-      countryPhoneCode: countryPhoneCode
+      country_phone_code: countryPhoneCode
     })
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
@@ -295,11 +295,10 @@ export const SignupForm = (props) => {
       email: signupData?.email,
       one_time_password: otpState
     } : {
-      country_phone_code: signupData?.country_phone_code.replace('+', ''),
+      country_phone_code: signupData?.country_phone_code?.replace('+', ''),
       cellphone: signupData?.cellphone,
       one_time_password: otpState
     }
-
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true, result: { error: false } })
       const { content: { error, result } } = await ordering.users().auth(_credentials)
