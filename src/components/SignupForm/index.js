@@ -200,16 +200,22 @@ export const SignupForm = (props) => {
     }
   }
 
-  const generateOtpCode = async () => {
+  const generateOtpCode = async (values) => {
     const body = {
       type: 4,
       channel: signUpTab === 'otpEmail' ? 1 : 2,
       size: 6
     }
-    const email = signupData?.email
-    const cellphone = signupData?.cellphone
-    const countryPhoneCode = signupData.country_phone_code
+    const email = values?.email || signupData?.email
+    const cellphone = values?.cellphone || signupData?.cellphone
+    const countryPhoneCode = values?.country_phone_code || signupData.country_phone_code
 
+    setSignupData({
+      ...signupData,
+      email: email,
+      cellphone: cellphone,
+      countryPhoneCode: countryPhoneCode
+    })
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
       setWillVerifyOtpState(true)
@@ -285,7 +291,6 @@ export const SignupForm = (props) => {
   }
 
   const checkVerifyByOtpCode = async () => {
-    console.log(signupData)
     const _credentials = signUpTab === 'otpEmail' ? {
       email: signupData?.email,
       one_time_password: otpState
