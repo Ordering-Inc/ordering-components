@@ -15,8 +15,6 @@ export const LoginForm = (props) => {
     UIComponent,
     handleButtonLoginClick,
     handleSuccessLogin,
-    // useLoginByEmail,
-    // useLoginByCellphone,
     useDefualtSessionManager,
     urlToRedirect,
     allowedLevels,
