@@ -18,7 +18,8 @@ export const SignupForm = (props) => {
     externalPhoneNumber,
     handleCustomSignup,
     notificationState,
-    isCustomerMode
+    isCustomerMode,
+    numOtpInputs
   } = props
   const requestsState = {}
 
@@ -32,10 +33,18 @@ export const SignupForm = (props) => {
   const [signupData, setSignupData] = useState({ email: '', cellphone: externalPhoneNumber || '', password: '' })
   const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
+  const [willVerifyOtpState, setWillVerifyOtpState] = useState(false)
+  const [otpState, setOtpState] = useState('')
   const [{ configs }] = useConfig()
   const [reCaptchaValue, setReCaptchaValue] = useState(null)
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
   const [promotionsEnabled, setPromotionsEnabled] = useState(false)
+
+  const useSignUpOtpEmail = configs?.email_otp_signup_enabled?.value === '1'
+  const useSignUpOtpCellphone = configs?.phone_otp_signup_enabled?.value === '1'
+  const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone) ? configs?.full_details_signup_enabled?.value === '1' : false
+
+  const [signUpTab, setSignUpTab] = useState('default')
   /**
    * Default fuction for signup workflow
    */
@@ -135,12 +144,6 @@ export const SignupForm = (props) => {
     setReCaptchaValue(value)
   }
 
-  useEffect(() => {
-    setIsReCaptchaEnable(props.isRecaptchaEnable && configs &&
-      Object.keys(configs).length > 0 &&
-      configs?.security_recaptcha_signup?.value === '1')
-  }, [configs])
-
   /**
    * Check if field should be show
    * @param {string} fieldName Field name
@@ -197,6 +200,46 @@ export const SignupForm = (props) => {
     }
   }
 
+  const generateOtpCode = async (values) => {
+    const body = {
+      type: 4,
+      channel: signUpTab === 'otpEmail' ? 1 : 2,
+      size: 6
+    }
+    const email = values?.email || signupData?.email
+    const cellphone = values?.cellphone || signupData?.cellphone
+    const countryPhoneCode = values?.country_phone_code || signupData.country_phone_code
+
+    setSignupData({
+      ...signupData,
+      email: email,
+      cellphone: cellphone,
+      countryPhoneCode: countryPhoneCode
+    })
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      setWillVerifyOtpState(true)
+      if (signUpTab === 'otpCellphone') {
+        body.country_phone_code = countryPhoneCode
+        body.cellphone = cellphone
+      } else {
+        body.email = email
+      }
+      const response = await fetch(`${ordering.root}/codes/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { result: result, error: null } })
+        return
+      }
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: result } })
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: err.message } })
+    }
+  }
   const handleSetCheckPhoneCodeState = (data) => {
     const values = data || { loading: false, result: { error: false } }
     setCheckPhoneCodeState(values)
@@ -247,12 +290,74 @@ export const SignupForm = (props) => {
     }
   }
 
+  const checkVerifyByOtpCode = async () => {
+    const _credentials = signUpTab === 'otpEmail' ? {
+      email: signupData?.email,
+      one_time_password: otpState
+    } : {
+      country_phone_code: signupData?.country_phone_code.replace('+', ''),
+      cellphone: signupData?.cellphone,
+      one_time_password: otpState
+    }
+
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true, result: { error: false } })
+      const { content: { error, result } } = await ordering.users().auth(_credentials)
+      if (!error && result?.id) {
+        login({
+          user: result,
+          token: result?.session?.access_token
+        })
+        if (handleSuccessSignup) {
+          handleSuccessSignup(result)
+        }
+
+        setCheckPhoneCodeState({
+          ...checkPhoneCodeState,
+          loading: false,
+          result: {
+            result: result,
+            error: false
+          }
+        })
+      } else {
+        setCheckPhoneCodeState({
+          ...checkPhoneCodeState,
+          loading: false,
+          result: {
+            result: result,
+            error: true
+          }
+        })
+      }
+    } catch (error) {
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: {
+          error: error.message
+        }
+      })
+    }
+  }
   /**
    * function to change promotions enabled
    */
   const handleChangePromotions = () => {
     setPromotionsEnabled(!promotionsEnabled)
   }
+
+  useEffect(() => {
+    setIsReCaptchaEnable(props.isRecaptchaEnable && configs &&
+      Object.keys(configs).length > 0 &&
+      configs?.security_recaptcha_signup?.value === '1')
+  }, [configs])
+
+  useEffect(() => {
+    if (otpState?.length === numOtpInputs) {
+      checkVerifyByOtpCode()
+    }
+  }, [otpState])
 
   useEffect(() => {
     return () => {
@@ -277,11 +382,21 @@ export const SignupForm = (props) => {
           setCheckPhoneCodeState={handleSetCheckPhoneCodeState}
           handleChangeInput={handleChangeInput}
           handleButtonSignupClick={handleButtonSignupClick || handleSignupClick}
+          generateOtpCode={generateOtpCode}
           handleSendVerifyCode={sendVerifyPhoneCode}
           handleCheckPhoneCode={checkVerifyPhoneCode}
           enableReCaptcha={isReCaptchaEnable}
           handleReCaptcha={setReCaptcha}
           handleChangePromotions={handleChangePromotions}
+          setOtpState={setOtpState}
+          otpState={otpState}
+          setSignUpTab={setSignUpTab}
+          signUpTab={signUpTab}
+          setWillVerifyOtpState={setWillVerifyOtpState}
+          willVerifyOtpState={willVerifyOtpState}
+          useSignUpFullDetails={useSignUpFullDetails}
+          useSignUpOtpEmail={useSignUpOtpEmail}
+          useSignUpOtpCellphone={useSignUpOtpCellphone}
         />
       )}
     </>
