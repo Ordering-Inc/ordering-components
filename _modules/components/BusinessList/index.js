@@ -201,7 +201,8 @@ var BusinessList = function BusinessList(props) {
             case 0:
               _context.prev = 0;
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
-                loading: true
+                loading: true,
+                businesses: newFetch ? [] : businessesList.businesses
               }));
               refreshConfigs();
               parameters = asDashboard ? {} : {
