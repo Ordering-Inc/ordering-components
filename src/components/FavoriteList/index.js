@@ -11,7 +11,8 @@ export const FavoriteList = (props) => {
     favoriteURL,
     originalURL,
     location,
-    propsToFetch
+    propsToFetch,
+    isProduct
   } = props
 
   const [ordering] = useApi()
@@ -70,20 +71,31 @@ export const FavoriteList = (props) => {
           from: content.pagination.from,
           to: content.pagination.to
         })
-        const idList = content?.result?.reduce((ids, product) => [...ids, product?.object_id], [])
-        const { error, result } = await getOriginalList(idList)
-        if (!error) {
+        if (isProduct) {
+          const updatedProducts = content?.result.map(item => {
+            return item?.product
+          })
           setFavoriteList({
             loading: false,
-            favorites: [...favoriteList?.favorites, ...result],
+            favorites: [...favoriteList?.favorites, ...updatedProducts],
             error: null
           })
         } else {
-          setFavoriteList({
-            ...favoriteList,
-            loading: false,
-            error: result
-          })
+          const idList = content?.result?.reduce((ids, product) => [...ids, product?.object_id], [])
+          const { error, result } = await getOriginalList(idList)
+          if (!error) {
+            setFavoriteList({
+              loading: false,
+              favorites: [...favoriteList?.favorites, ...result],
+              error: null
+            })
+          } else {
+            setFavoriteList({
+              ...favoriteList,
+              loading: false,
+              error: result
+            })
+          }
         }
       } else {
         setFavoriteList({
