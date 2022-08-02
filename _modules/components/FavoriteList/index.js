@@ -65,7 +65,8 @@ var FavoriteList = function FavoriteList(props) {
       favoriteURL = props.favoriteURL,
       originalURL = props.originalURL,
       location = props.location,
-      propsToFetch = props.propsToFetch;
+      propsToFetch = props.propsToFetch,
+      isProduct = props.isProduct;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -135,6 +136,7 @@ var FavoriteList = function FavoriteList(props) {
           fetchEndpoint,
           response,
           content,
+          updatedProducts,
           _content$result,
           idList,
           _yield$getOriginalLis,
@@ -181,7 +183,7 @@ var FavoriteList = function FavoriteList(props) {
               content = _context.sent;
 
               if (content.error) {
-                _context.next = 24;
+                _context.next = 29;
                 break;
               }
 
@@ -193,13 +195,31 @@ var FavoriteList = function FavoriteList(props) {
                 from: content.pagination.from,
                 to: content.pagination.to
               });
+
+              if (!isProduct) {
+                _context.next = 20;
+                break;
+              }
+
+              updatedProducts = content === null || content === void 0 ? void 0 : content.result.map(function (item) {
+                return item === null || item === void 0 ? void 0 : item.product;
+              });
+              setFavoriteList({
+                loading: false,
+                favorites: [].concat(_toConsumableArray(favoriteList === null || favoriteList === void 0 ? void 0 : favoriteList.favorites), _toConsumableArray(updatedProducts)),
+                error: null
+              });
+              _context.next = 27;
+              break;
+
+            case 20:
               idList = content === null || content === void 0 ? void 0 : (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.reduce(function (ids, product) {
                 return [].concat(_toConsumableArray(ids), [product === null || product === void 0 ? void 0 : product.object_id]);
               }, []);
-              _context.next = 18;
+              _context.next = 23;
               return getOriginalList(idList);
 
-            case 18:
+            case 23:
               _yield$getOriginalLis = _context.sent;
               error = _yield$getOriginalLis.error;
               result = _yield$getOriginalLis.result;
@@ -217,33 +237,34 @@ var FavoriteList = function FavoriteList(props) {
                 }));
               }
 
-              _context.next = 25;
+            case 27:
+              _context.next = 30;
               break;
 
-            case 24:
+            case 29:
               setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                 loading: false,
                 error: content.result
               }));
 
-            case 25:
-              _context.next = 30;
+            case 30:
+              _context.next = 35;
               break;
 
-            case 27:
-              _context.prev = 27;
+            case 32:
+              _context.prev = 32;
               _context.t0 = _context["catch"](3);
               setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
 
-            case 30:
+            case 35:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 27]]);
+      }, _callee, null, [[3, 32]]);
     }));
 
     return function getFavoriteList(_x) {
