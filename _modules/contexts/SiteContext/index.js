@@ -91,11 +91,12 @@ var SiteProvider = function SiteProvider(_ref) {
               requestOptions = {
                 method: 'GET',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-APP-X': appId
                 }
               };
               _context.next = 5;
-              return fetch("".concat(ordering.root, "/sites/").concat(appId), requestOptions);
+              return fetch("".concat(ordering.root, "/sites/current"), requestOptions);
 
             case 5:
               response = _context.sent;
