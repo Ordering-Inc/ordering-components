@@ -35,7 +35,7 @@ export const SiteProvider = ({ appId, children }) => {
       setState({
         ...state,
         loading: false,
-        configs: error ? {} : result
+        site: error ? {} : result
       })
     } catch (err) {
       setState({ ...state, loading: false })
