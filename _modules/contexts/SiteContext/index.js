@@ -109,7 +109,7 @@ var SiteProvider = function SiteProvider(_ref) {
               result = _yield$response$json.result;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
-                configs: error ? {} : result
+                site: error ? {} : result
               }));
               _context.next = 17;
               break;
