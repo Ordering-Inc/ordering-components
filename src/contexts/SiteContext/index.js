@@ -24,11 +24,12 @@ export const SiteProvider = ({ appId, children }) => {
       const requestOptions = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-APP-X': appId
         }
       }
 
-      const response = await fetch(`${ordering.root}/sites/${appId}`, requestOptions)
+      const response = await fetch(`${ordering.root}/sites/current`, requestOptions)
       const { error, result } = await response.json()
 
       setState({
