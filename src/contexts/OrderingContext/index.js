@@ -32,8 +32,8 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <LanguageProvider strategy={webStrategy}>
-            <ConfigProvider appId={settings.app_id}>
-              <SiteProvider>
+            <ConfigProvider>
+              <SiteProvider appId={settings.app_id}>
                 <UtilsProviders>
                   <ToastProvider>
                     <ValidationFieldsProvider>
