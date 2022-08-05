@@ -830,6 +830,33 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     })
   }
 
+  /**
+  * get Latest past Order that has no review
+  */
+  const getLastOrderHasNoReview = async () => {
+    if (session?.token) {
+      const pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17]
+      const options = {
+        query: {
+          orderBy: '-delivery_datetime',
+          page: 1,
+          page_size: 10,
+          where: [{ attribute: 'status', value: pastOrderTypes }]
+        }
+      }
+      const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders().get(options)
+
+      if (!error && result?.length > 0) {
+        const _noRviewOrders = result?.find(order => !order?.review)
+        return _noRviewOrders
+      } else {
+        return null
+      }
+    } else {
+      return null
+    }
+  }
+
   const setStateValues = (values) => {
     setState({ ...state, ...values })
   }
@@ -958,7 +985,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     changePaymethod,
     setUserCustomerOptions,
     setStateValues,
-    placeMulitCarts
+    placeMulitCarts,
+    getLastOrderHasNoReview
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
@@ -1009,7 +1037,8 @@ export const useOrder = () => {
     changeDriverTip: warningMessage,
     reorder: warningMessage,
     changePaymethod: warningMessage,
-    setStateValues: warningMessage
+    setStateValues: warningMessage,
+    getLastOrderHasNoReview: warningMessage
   }
   return orderManager || [{}, functionsPlaceholders]
 }
