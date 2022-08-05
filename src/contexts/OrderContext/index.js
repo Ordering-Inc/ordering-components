@@ -847,8 +847,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders().get(options)
 
       if (!error && result?.length > 0) {
-        const _noRviewOrders = result?.find(order => !order?.review)
-        return _noRviewOrders
+        const _noRviewOrder = result?.find(order => !order?.review)
+        return _noRviewOrder
       } else {
         return null
       }
