@@ -68,7 +68,7 @@ export const OrderingThemeProvider = ({ children, settings }) => {
 }
 
 /**
- * Hook to get and update language state
+ * Hook to get ordering theme
  */
 export const useOrderingTheme = () => {
   const orderingThemeManager = useContext(OrderingThemeContext)
