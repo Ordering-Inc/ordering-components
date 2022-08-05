@@ -31,7 +31,7 @@ export const OrderingThemeProvider = ({ children, settings }) => {
     }
     const response = await fetch(`${ordering.root}/theme`, requestOptions)
     const { result, error } = await response.json()
-    if (error) { // invert it later
+    if (!error) {
       setState({
         ...state,
         theme: result.values,
