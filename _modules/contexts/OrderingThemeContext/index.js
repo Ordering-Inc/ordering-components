@@ -98,12 +98,11 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
               result = _yield$response$json.result;
               error = _yield$response$json.error;
 
-              if (!error) {
+              if (error) {
                 _context.next = 12;
                 break;
               }
 
-              // invert it later
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 theme: result.values,
                 loading: false,
