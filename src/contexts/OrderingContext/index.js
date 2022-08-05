@@ -1,5 +1,6 @@
 import React, { createContext } from 'react'
 import { ConfigProvider } from '../ConfigContext'
+import { SiteProvider } from '../SiteContext'
 import { SessionProvider } from '../SessionContext'
 import { WebsocketProvider } from '../WebsocketContext'
 import { OrderProvider } from '../OrderContext'
@@ -32,26 +33,28 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <LanguageProvider strategy={webStrategy}>
             <ConfigProvider>
-              <UtilsProviders>
-                <ToastProvider>
-                  <ValidationFieldsProvider>
-                    <SessionProvider strategy={webStrategy}>
-                      <WebsocketProvider
-                        strategy={webStrategy}
-                        settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}
-                      >
-                        <CustomerProvider strategy={webStrategy}>
-                          <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
-                            <BusinessProvider>
-                              {children}
-                            </BusinessProvider>
-                          </OrderProvider>
-                        </CustomerProvider>
-                      </WebsocketProvider>
-                    </SessionProvider>
-                  </ValidationFieldsProvider>
-                </ToastProvider>
-              </UtilsProviders>
+              <SiteProvider appId={settings.app_id}>
+                <UtilsProviders>
+                  <ToastProvider>
+                    <ValidationFieldsProvider>
+                      <SessionProvider strategy={webStrategy}>
+                        <WebsocketProvider
+                          strategy={webStrategy}
+                          settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}
+                        >
+                          <CustomerProvider strategy={webStrategy}>
+                            <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
+                              <BusinessProvider>
+                                {children}
+                              </BusinessProvider>
+                            </OrderProvider>
+                          </CustomerProvider>
+                        </WebsocketProvider>
+                      </SessionProvider>
+                    </ValidationFieldsProvider>
+                  </ToastProvider>
+                </UtilsProviders>
+              </SiteProvider>
             </ConfigProvider>
           </LanguageProvider>
         </ApiProvider>
