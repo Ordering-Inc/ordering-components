@@ -423,6 +423,20 @@ var SignupForm = function SignupForm(props) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
+              if (!(isReCaptchaEnable && reCaptchaValue === null)) {
+                _context3.next = 3;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: true,
+                  result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.')
+                }
+              }));
+              return _context3.abrupt("return");
+
+            case 3:
               body = {
                 type: 4,
                 channel: signUpTab === 'otpEmail' ? 1 : 2,
@@ -436,9 +450,13 @@ var SignupForm = function SignupForm(props) {
                 cellphone: cellphone,
                 country_phone_code: countryPhoneCode
               }));
-              _context3.prev = 5;
+              _context3.prev = 8;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
-                loading: true
+                loading: true,
+                result: {
+                  error: false,
+                  result: null
+                }
               }));
               setWillVerifyOtpState(true);
 
@@ -449,7 +467,7 @@ var SignupForm = function SignupForm(props) {
                 body.email = email;
               }
 
-              _context3.next = 11;
+              _context3.next = 14;
               return fetch("".concat(ordering.root, "/codes/generate"), {
                 method: 'POST',
                 headers: {
@@ -458,18 +476,18 @@ var SignupForm = function SignupForm(props) {
                 body: JSON.stringify(body)
               });
 
-            case 11:
+            case 14:
               response = _context3.sent;
-              _context3.next = 14;
+              _context3.next = 17;
               return response.json();
 
-            case 14:
+            case 17:
               _yield$response$json = _context3.sent;
               result = _yield$response$json.result;
               error = _yield$response$json.error;
 
               if (error) {
-                _context3.next = 20;
+                _context3.next = 23;
                 break;
               }
 
@@ -482,32 +500,34 @@ var SignupForm = function SignupForm(props) {
               }));
               return _context3.abrupt("return");
 
-            case 20:
+            case 23:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
-                  error: result
+                  error: true,
+                  result: result
                 }
               }));
-              _context3.next = 26;
+              _context3.next = 29;
               break;
 
-            case 23:
-              _context3.prev = 23;
-              _context3.t0 = _context3["catch"](5);
+            case 26:
+              _context3.prev = 26;
+              _context3.t0 = _context3["catch"](8);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
-                  error: _context3.t0.message
+                  error: true,
+                  result: _context3.t0.message
                 }
               }));
 
-            case 26:
+            case 29:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[5, 23]]);
+      }, _callee3, null, [[8, 26]]);
     }));
 
     return function generateOtpCode(_x3) {
@@ -625,17 +645,40 @@ var SignupForm = function SignupForm(props) {
                 cellphone: signupData === null || signupData === void 0 ? void 0 : signupData.cellphone,
                 one_time_password: otpState
               };
-              _context5.prev = 1;
+
+              if (!isReCaptchaEnable) {
+                _context5.next = 8;
+                break;
+              }
+
+              if (!(reCaptchaValue === null)) {
+                _context5.next = 7;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: true,
+                  result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.')
+                }
+              }));
+              return _context5.abrupt("return");
+
+            case 7:
+              _credentials.verification_code = reCaptchaValue;
+
+            case 8:
+              _context5.prev = 8;
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: true,
                 result: {
                   error: false
                 }
               }));
-              _context5.next = 5;
+              _context5.next = 12;
               return ordering.users().auth(_credentials);
 
-            case 5:
+            case 12:
               _yield$ordering$users = _context5.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               error = _yield$ordering$users2.error;
@@ -668,12 +711,12 @@ var SignupForm = function SignupForm(props) {
                 }));
               }
 
-              _context5.next = 15;
+              _context5.next = 22;
               break;
 
-            case 12:
-              _context5.prev = 12;
-              _context5.t0 = _context5["catch"](1);
+            case 19:
+              _context5.prev = 19;
+              _context5.t0 = _context5["catch"](8);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 loading: false,
                 result: {
@@ -681,12 +724,12 @@ var SignupForm = function SignupForm(props) {
                 }
               }));
 
-            case 15:
+            case 22:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[1, 12]]);
+      }, _callee5, null, [[8, 19]]);
     }));
 
     return function checkVerifyByOtpCode() {
