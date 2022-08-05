@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _ConfigContext = require("../ConfigContext");
 
+var _SiteContext = require("../SiteContext");
+
 var _SessionContext = require("../SessionContext");
 
 var _WebsocketContext = require("../WebsocketContext");
@@ -65,7 +67,9 @@ var OrderingProvider = function OrderingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: webStrategy
-  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
+  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_SiteContext.SiteProvider, {
+    appId: settings.app_id
+  }, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     strategy: webStrategy,
@@ -79,7 +83,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
     strategy: webStrategy,
     Alert: Alert,
     isAlsea: isAlsea
-  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children)))))))))))));
+  }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children))))))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

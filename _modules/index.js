@@ -699,6 +699,18 @@ Object.defineProperty(exports, "SingleProductCard", {
     return _SingleProductCard.SingleProductCard;
   }
 });
+Object.defineProperty(exports, "SiteContext", {
+  enumerable: true,
+  get: function get() {
+    return _SiteContext.SiteContext;
+  }
+});
+Object.defineProperty(exports, "SiteProvider", {
+  enumerable: true,
+  get: function get() {
+    return _SiteContext.SiteProvider;
+  }
+});
 Object.defineProperty(exports, "SmartAppBanner", {
   enumerable: true,
   get: function get() {
@@ -847,6 +859,12 @@ Object.defineProperty(exports, "useSession", {
   enumerable: true,
   get: function get() {
     return _SessionContext.useSession;
+  }
+});
+Object.defineProperty(exports, "useSite", {
+  enumerable: true,
+  get: function get() {
+    return _SiteContext.useSite;
   }
 });
 Object.defineProperty(exports, "useToast", {
@@ -1039,6 +1057,8 @@ var _BusinessesMap = require("./components/BusinessesMap");
 var _MapView = require("./components/MapView");
 
 var _ConfigContext = require("./contexts/ConfigContext");
+
+var _SiteContext = require("./contexts/SiteContext");
 
 var _LanguageContext = require("./contexts/LanguageContext");
 
