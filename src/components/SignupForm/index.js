@@ -201,6 +201,10 @@ export const SignupForm = (props) => {
   }
 
   const generateOtpCode = async (values) => {
+    if (isReCaptchaEnable && reCaptchaValue === null) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: true, result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.') } })
+      return
+    }
     const body = {
       type: 4,
       channel: signUpTab === 'otpEmail' ? 1 : 2,
@@ -214,10 +218,10 @@ export const SignupForm = (props) => {
       ...signupData,
       email: email,
       cellphone: cellphone,
-      countryPhoneCode: countryPhoneCode
+      country_phone_code: countryPhoneCode
     })
     try {
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true, result: { error: false, result: null } })
       setWillVerifyOtpState(true)
       if (signUpTab === 'otpCellphone') {
         body.country_phone_code = countryPhoneCode
@@ -235,9 +239,9 @@ export const SignupForm = (props) => {
         setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { result: result, error: null } })
         return
       }
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: result } })
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: true, result: result } })
     } catch (err) {
-      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: err.message } })
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false, result: { error: true, result: err.message } })
     }
   }
   const handleSetCheckPhoneCodeState = (data) => {
@@ -295,9 +299,18 @@ export const SignupForm = (props) => {
       email: signupData?.email,
       one_time_password: otpState
     } : {
-      country_phone_code: signupData?.country_phone_code.replace('+', ''),
+      country_phone_code: signupData?.country_phone_code?.replace('+', ''),
       cellphone: signupData?.cellphone,
       one_time_password: otpState
+    }
+
+    if (isReCaptchaEnable) {
+      if (reCaptchaValue === null) {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: true, result: t('RECAPTCHA_VALIDATION_IS_REQUIRED', 'The ReCaptcha validation is required.') } })
+        return
+      } else {
+        _credentials.verification_code = reCaptchaValue
+      }
     }
 
     try {
