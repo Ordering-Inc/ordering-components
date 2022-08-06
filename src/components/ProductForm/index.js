@@ -44,6 +44,11 @@ export const ProductForm = (props) => {
   const [defaultSubOptions, setDefaultSubOptions] = useState([])
 
   /**
+   * Suboption by default when there is only one
+   */
+  const [currentProfessional, setCurrentProfessional] = useState(null)
+
+  /**
    * Custom Suboption by default
    */
   const [customDefaultSubOptions, setCustomDefaultSubOptions] = useState([])
@@ -622,6 +627,11 @@ export const ProductForm = (props) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!professionalSelected) return
+    setCurrentProfessional(professionalSelected)
+  }, [professionalSelected])
+
   return (
     <>
       {
@@ -642,6 +652,7 @@ export const ProductForm = (props) => {
             handleChangeIngredientState={handleChangeIngredientState}
             handleChangeSuboptionState={handleChangeSuboptionState}
             handleChangeCommentState={handleChangeCommentState}
+            currentProfessional={currentProfessional}
           />
         )
       }
