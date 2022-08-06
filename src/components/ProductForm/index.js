@@ -455,6 +455,10 @@ export const ProductForm = (props) => {
     })
   }
 
+  const handleChangeProfessional = (professional) => {
+    setCurrentProfessional(professional)
+  }
+
   /**
    * Check if option must show
    * @param {object} option Option to check
@@ -653,6 +657,7 @@ export const ProductForm = (props) => {
             handleChangeSuboptionState={handleChangeSuboptionState}
             handleChangeCommentState={handleChangeCommentState}
             currentProfessional={currentProfessional}
+            handleChangeProfessional={handleChangeProfessional}
           />
         )
       }
