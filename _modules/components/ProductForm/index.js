@@ -67,8 +67,7 @@ var ProductForm = function ProductForm(props) {
       onSave = props.onSave,
       handleCustomSave = props.handleCustomSave,
       isStarbucks = props.isStarbucks,
-      isService = props.isService,
-      professionalSelected = props.professionalSelected;
+      isService = props.isService;
   var requestsState = {};
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -572,7 +571,7 @@ var ProductForm = function ProductForm(props) {
 
   var handleSave = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
-      var errors, successful, _values$serviceTime, _orderState$options, _props$productCart6, currentChanges, changes, _props$productCart7;
+      var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, currentChanges, changes, _props$productCart7;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -601,7 +600,7 @@ var ProductForm = function ProductForm(props) {
                 business_id: props.businessId
               };
               changes = !isService ? _objectSpread({}, currentChanges) : _objectSpread(_objectSpread({}, currentChanges), {}, {
-                professional_id: professionalSelected === null || professionalSelected === void 0 ? void 0 : professionalSelected.id,
+                professional_id: values === null || values === void 0 ? void 0 : (_values$professional = values.professional) === null || _values$professional === void 0 ? void 0 : _values$professional.id,
                 service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
               });
 
