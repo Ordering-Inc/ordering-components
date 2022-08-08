@@ -13,7 +13,7 @@ import { ValidationFieldsProvider } from '../ValidationsFieldsContext'
 import { CustomerProvider } from '../CustomerContext'
 import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
-
+import { OrderingThemeProvider } from '../OrderingThemeContext'
 /**
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
@@ -33,28 +33,30 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <LanguageProvider strategy={webStrategy}>
             <ConfigProvider>
-              <SiteProvider appId={settings.app_id}>
-                <UtilsProviders>
-                  <ToastProvider>
-                    <ValidationFieldsProvider>
-                      <SessionProvider strategy={webStrategy}>
-                        <WebsocketProvider
-                          strategy={webStrategy}
-                          settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}
-                        >
-                          <CustomerProvider strategy={webStrategy}>
-                            <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
-                              <BusinessProvider>
-                                {children}
-                              </BusinessProvider>
-                            </OrderProvider>
-                          </CustomerProvider>
-                        </WebsocketProvider>
-                      </SessionProvider>
-                    </ValidationFieldsProvider>
-                  </ToastProvider>
-                </UtilsProviders>
-              </SiteProvider>
+              <OrderingThemeProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
+                <SiteProvider appId={settings.app_id}>
+                  <UtilsProviders>
+                    <ToastProvider>
+                      <ValidationFieldsProvider>
+                        <SessionProvider strategy={webStrategy}>
+                          <WebsocketProvider
+                            strategy={webStrategy}
+                            settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}
+                          >
+                            <CustomerProvider strategy={webStrategy}>
+                              <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
+                                <BusinessProvider>
+                                  {children}
+                                </BusinessProvider>
+                              </OrderProvider>
+                            </CustomerProvider>
+                          </WebsocketProvider>
+                        </SessionProvider>
+                      </ValidationFieldsProvider>
+                    </ToastProvider>
+                  </UtilsProviders>
+                </SiteProvider>
+              </OrderingThemeProvider>
             </ConfigProvider>
           </LanguageProvider>
         </ApiProvider>

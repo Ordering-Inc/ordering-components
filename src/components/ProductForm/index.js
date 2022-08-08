@@ -12,8 +12,7 @@ export const ProductForm = (props) => {
     onSave,
     handleCustomSave,
     isStarbucks,
-    isService,
-    professionalSelected
+    isService
   } = props
 
   const requestsState = {}
@@ -397,7 +396,7 @@ export const ProductForm = (props) => {
           ? { ...currentChanges }
           : {
             ...currentChanges,
-            professional_id: professionalSelected?.id,
+            professional_id: values?.professional?.id,
             service_start: values?.serviceTime ?? orderState.options?.moment
           }
         if (!props.productCart?.code) {
