@@ -12,8 +12,7 @@ export const ProductForm = (props) => {
     onSave,
     handleCustomSave,
     isStarbucks,
-    isService,
-    professionalSelected
+    isService
   } = props
 
   const requestsState = {}
@@ -42,11 +41,6 @@ export const ProductForm = (props) => {
    * Suboption by default when there is only one
    */
   const [defaultSubOptions, setDefaultSubOptions] = useState([])
-
-  /**
-   * Suboption by default when there is only one
-   */
-  const [currentProfessional, setCurrentProfessional] = useState(null)
 
   /**
    * Custom Suboption by default
@@ -402,7 +396,7 @@ export const ProductForm = (props) => {
           ? { ...currentChanges }
           : {
             ...currentChanges,
-            professional_id: professionalSelected?.id,
+            professional_id: values?.professional?.id,
             service_start: values?.serviceTime ?? orderState.options?.moment
           }
         if (!props.productCart?.code) {
@@ -453,10 +447,6 @@ export const ProductForm = (props) => {
     setProductCart({
       ...productCart
     })
-  }
-
-  const handleChangeProfessional = (professional) => {
-    setCurrentProfessional(professional)
   }
 
   /**
@@ -631,11 +621,6 @@ export const ProductForm = (props) => {
     }
   }, [])
 
-  useEffect(() => {
-    if (!professionalSelected) return
-    setCurrentProfessional(professionalSelected)
-  }, [professionalSelected])
-
   return (
     <>
       {
@@ -656,8 +641,6 @@ export const ProductForm = (props) => {
             handleChangeIngredientState={handleChangeIngredientState}
             handleChangeSuboptionState={handleChangeSuboptionState}
             handleChangeCommentState={handleChangeCommentState}
-            currentProfessional={currentProfessional}
-            handleChangeProfessional={handleChangeProfessional}
           />
         )
       }
