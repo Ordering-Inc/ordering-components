@@ -48,13 +48,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const [state, setState] = useState({
     loading: true,
     options: isDisabledDefaultOpts
-      ? { type: null, moment: null }
+      ? { type: null, moment: null, city_id: null }
       : {
         type: orderTypes[configState?.configs?.default_order_type?.value],
-        moment: null
+        moment: null,
+        city_id: null
       },
     carts: {},
-    city_id: null,
     confirmAlert,
     alert
   })
@@ -817,7 +817,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   const changeCityFilter = (id) => {
-    setState({ ...state, city_id: id })
+    setState({ ...state, options: { ...state?.options, city_id: id } })
   }
 
   const setOptionFromLocalStorage = async () => {
