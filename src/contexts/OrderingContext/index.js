@@ -44,7 +44,12 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                             settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}
                           >
                             <CustomerProvider strategy={webStrategy}>
-                              <OrderProvider strategy={webStrategy} Alert={Alert} isAlsea={isAlsea}>
+                              <OrderProvider
+                                strategy={webStrategy}
+                                Alert={Alert}
+                                isAlsea={isAlsea}
+                                franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                              >
                                 <BusinessProvider>
                                   {children}
                                 </BusinessProvider>
