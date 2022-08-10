@@ -57,6 +57,8 @@ var OrderingContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderingContext = OrderingContext;
 
 var OrderingProvider = function OrderingProvider(_ref) {
+  var _settings$franchiseSl;
+
   var Alert = _ref.Alert,
       settings = _ref.settings,
       isAlsea = _ref.isAlsea,
@@ -89,7 +91,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,
     Alert: Alert,
-    isAlsea: isAlsea
+    isAlsea: isAlsea,
+    franchiseId: (_settings$franchiseSl = settings === null || settings === void 0 ? void 0 : settings.franchiseSlug) !== null && _settings$franchiseSl !== void 0 ? _settings$franchiseSl : settings === null || settings === void 0 ? void 0 : settings.franchiseId
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children)))))))))))))));
 };
 
