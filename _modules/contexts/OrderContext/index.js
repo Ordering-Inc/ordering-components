@@ -156,13 +156,14 @@ var OrderProvider = function OrderProvider(_ref) {
     loading: true,
     options: isDisabledDefaultOpts ? {
       type: null,
-      moment: null
+      moment: null,
+      city_id: null
     } : {
       type: orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.default_order_type) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value],
-      moment: null
+      moment: null,
+      city_id: null
     },
     carts: {},
-    city_id: null,
     confirmAlert: confirmAlert,
     alert: alert
   }),
@@ -1938,7 +1939,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeCityFilter = function changeCityFilter(id) {
     setState(_objectSpread(_objectSpread({}, state), {}, {
-      city_id: id
+      options: _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : state.options), {}, {
+        city_id: id
+      })
     }));
   };
 
