@@ -54,6 +54,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         moment: null
       },
     carts: {},
+    city_id: null,
     confirmAlert,
     alert
   })
@@ -815,6 +816,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
   }
 
+  const changeCityFilter = (id) => {
+    setState({ ...state, city_id: id })
+  }
+
   const setOptionFromLocalStorage = async () => {
     const optionsLocalStorage = await strategy.getItem('options', true)
     setState({
@@ -986,7 +991,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setUserCustomerOptions,
     setStateValues,
     placeMulitCarts,
-    getLastOrderHasNoReview
+    getLastOrderHasNoReview,
+    changeCityFilter
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
