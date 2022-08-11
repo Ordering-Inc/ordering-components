@@ -1938,11 +1938,9 @@ var OrderProvider = function OrderProvider(_ref) {
   }();
 
   var changeCityFilter = function changeCityFilter(id) {
-    setState(_objectSpread(_objectSpread({}, state), {}, {
-      options: _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : state.options), {}, {
-        city_id: id
-      })
-    }));
+    updateOrderOptions({
+      city_id: id
+    });
   };
 
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
