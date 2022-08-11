@@ -830,7 +830,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         : {
           type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
           moment: optionsLocalStorage?.moment || null,
-          address: optionsLocalStorage?.address || state?.options?.address || {}
+          address: optionsLocalStorage?.address || state?.options?.address || {},
+          city_id: optionsLocalStorage?.city_id || null
         }
     })
   }
