@@ -48,10 +48,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const [state, setState] = useState({
     loading: true,
     options: isDisabledDefaultOpts
-      ? { type: null, moment: null }
+      ? { type: null, moment: null, city_id: null }
       : {
         type: orderTypes[configState?.configs?.default_order_type?.value],
-        moment: null
+        moment: null,
+        city_id: null
       },
     carts: {},
     confirmAlert,
@@ -815,6 +816,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
   }
 
+  const changeCityFilter = (id) => {
+    updateOrderOptions({ city_id: id })
+  }
+
   const setOptionFromLocalStorage = async () => {
     const optionsLocalStorage = await strategy.getItem('options', true)
     setState({
@@ -825,7 +830,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         : {
           type: optionsLocalStorage?.type || orderTypes[configState?.configs?.default_order_type?.value],
           moment: optionsLocalStorage?.moment || null,
-          address: optionsLocalStorage?.address || state?.options?.address || {}
+          address: optionsLocalStorage?.address || state?.options?.address || {},
+          city_id: optionsLocalStorage?.city_id || null
         }
     })
   }
@@ -986,7 +992,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setUserCustomerOptions,
     setStateValues,
     placeMulitCarts,
-    getLastOrderHasNoReview
+    getLastOrderHasNoReview,
+    changeCityFilter
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
