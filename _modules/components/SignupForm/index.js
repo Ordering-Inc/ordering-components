@@ -162,9 +162,10 @@ var SignupForm = function SignupForm(props) {
 
   var useSignUpOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$email_otp_si = configs.email_otp_signup_enabled) === null || _configs$email_otp_si === void 0 ? void 0 : _configs$email_otp_si.value) === '1';
   var useSignUpOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$phone_otp_si = configs.phone_otp_signup_enabled) === null || _configs$phone_otp_si === void 0 ? void 0 : _configs$phone_otp_si.value) === '1';
-  var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : false;
+  var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : true;
+  var defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone';
 
-  var _useState19 = (0, _react.useState)('default'),
+  var _useState19 = (0, _react.useState)(defaultSignUpTab),
       _useState20 = _slicedToArray(_useState19, 2),
       signUpTab = _useState20[0],
       setSignUpTab = _useState20[1];

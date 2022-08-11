@@ -83,21 +83,22 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
                   'X-App-X': settings.appId
                 }
               };
-              _context.next = 3;
+              _context.prev = 1;
+              _context.next = 4;
               return fetch("".concat(ordering.root, "/theme"), requestOptions);
 
-            case 3:
+            case 4:
               response = _context.sent;
-              _context.next = 6;
+              _context.next = 7;
               return response.json();
 
-            case 6:
+            case 7:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
               error = _yield$response$json.error;
 
               if (error) {
-                _context.next = 12;
+                _context.next = 13;
                 break;
               }
 
@@ -108,19 +109,30 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
               }));
               return _context.abrupt("return");
 
-            case 12:
+            case 13:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 theme: {},
                 loading: false,
                 error: true
               }));
+              _context.next = 19;
+              break;
 
-            case 13:
+            case 16:
+              _context.prev = 16;
+              _context.t0 = _context["catch"](1);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                theme: {},
+                loading: false,
+                error: _context.t0
+              }));
+
+            case 19:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[1, 16]]);
     }));
 
     return function getThemes() {
