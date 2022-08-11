@@ -817,7 +817,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   const changeCityFilter = (id) => {
-    setState({ ...state, options: { ...state?.options, city_id: id } })
+    // setState({ ...state, options: { ...state?.options, city_id: id } })
+    updateOrderOptions({ city_id: id })
   }
 
   const setOptionFromLocalStorage = async () => {
