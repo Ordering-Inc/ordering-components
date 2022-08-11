@@ -29,23 +29,32 @@ export const OrderingThemeProvider = ({ children, settings }) => {
         'X-App-X': settings.appId
       }
     }
-    const response = await fetch(`${ordering.root}/theme`, requestOptions)
-    const { result, error } = await response.json()
-    if (!error) {
+    try {
+      const response = await fetch(`${ordering.root}/theme`, requestOptions)
+      const { result, error } = await response.json()
+      if (!error) {
+        setState({
+          ...state,
+          theme: result.values,
+          loading: false,
+          error: false
+        })
+        return
+      }
       setState({
         ...state,
-        theme: result.values,
+        theme: {},
         loading: false,
-        error: false
+        error: true
       })
-      return
+    } catch (err) {
+      setState({
+        ...state,
+        theme: {},
+        loading: false,
+        error: err
+      })
     }
-    setState({
-      ...state,
-      theme: {},
-      loading: false,
-      error: true
-    })
   }
 
   const refreshTheme = () => {

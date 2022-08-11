@@ -6,6 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useOrderingTheme } from '../../contexts/OrderingThemeContext'
 dayjs.extend(utc)
 
 export const BusinessList = (props) => {
@@ -31,7 +32,8 @@ export const BusinessList = (props) => {
     windowPathname,
     currentPageParam,
     franchiseId,
-    businessId
+    businessId,
+    cityId
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -50,12 +52,16 @@ export const BusinessList = (props) => {
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [{ auth, token }] = useSession()
+  const [orderingTheme] = useOrderingTheme()
   const [requestsState, setRequestsState] = useState({})
+  const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
   const [{ configs }, { refreshConfigs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   const advancedSearchEnabled = configs?.advanced_business_search_enabled?.value === '1'
+  const showCities = !orderingTheme?.theme?.business_listing_view?.components?.cities?.hidden
+
   const sortBusinesses = (array, option) => {
     if (option === 'review') {
       return array.sort((a, b) => b.reviews.total - a.reviews.total)
@@ -198,6 +204,13 @@ export const BusinessList = (props) => {
         })
       }
 
+      if (orderState?.options?.city_id || cityId) {
+        conditions.push({
+          attribute: 'city_id',
+          value: cityId || orderState?.options?.city_id
+        })
+      }
+
       if (conditions.length) {
         where = {
           conditions,
@@ -292,6 +305,28 @@ export const BusinessList = (props) => {
     }
   }
 
+  const getCities = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+    setCitiesState({ ...citiesState, loading: true })
+    const response = await fetch(`${ordering.root}/countries`, requestOptions)
+    const { result, error, pagination } = await response.json()
+
+    if (!error) {
+      setCitiesState({
+        ...citiesState,
+        loading: false,
+        cities: result?.map(country => country?.cities).flat(),
+        pagination
+      })
+    }
+  }
+
   /**
    * Cancel businesses request
    */
@@ -354,6 +389,12 @@ export const BusinessList = (props) => {
         break
     }
   }, [initialFilterKey, initialFilterValue])
+
+  useEffect(() => {
+    if (showCities) {
+      getCities()
+    }
+  }, [showCities])
 
   /**
    * Default behavior business click
@@ -515,6 +556,8 @@ export const BusinessList = (props) => {
             handleChangeMaxDeliveryFee={handleChangeMaxDeliveryFee}
             franchiseEnabled={franchiseEnabled}
             handleUpdateBusinessList={handleUpdateBusinessList}
+            getCities={getCities}
+            citiesState={citiesState}
           />
         )
       }
@@ -538,6 +581,6 @@ BusinessList.propTypes = {
 }
 
 BusinessList.defaultProps = {
-  propsToFetch: ['id', 'name', 'header', 'logo', 'location', 'schedule', 'open', 'ribbon', 'delivery_price', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers', 'food', 'laundry', 'alcohol', 'groceries', 'slug'],
+  propsToFetch: ['id', 'name', 'header', 'logo', 'location', 'schedule', 'open', 'ribbon', 'delivery_price', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers', 'food', 'laundry', 'alcohol', 'groceries', 'slug', 'city', 'city_id'],
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' }
 }
