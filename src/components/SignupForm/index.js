@@ -42,9 +42,10 @@ export const SignupForm = (props) => {
 
   const useSignUpOtpEmail = configs?.email_otp_signup_enabled?.value === '1'
   const useSignUpOtpCellphone = configs?.phone_otp_signup_enabled?.value === '1'
-  const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone) ? configs?.full_details_signup_enabled?.value === '1' : false
+  const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone) ? configs?.full_details_signup_enabled?.value === '1' : true
 
-  const [signUpTab, setSignUpTab] = useState('default')
+  const defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone'
+  const [signUpTab, setSignUpTab] = useState(defaultSignUpTab)
   /**
    * Default fuction for signup workflow
    */
