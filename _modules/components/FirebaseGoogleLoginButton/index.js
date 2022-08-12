@@ -191,7 +191,7 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
 };
 
 exports.FirebaseGoogleLoginButton = FirebaseGoogleLoginButton;
-FirebaseGoogleLoginButton.PropTypes = {
+FirebaseGoogleLoginButton.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
