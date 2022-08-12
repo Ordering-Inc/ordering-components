@@ -75,7 +75,7 @@ export const FirebaseGoogleLoginButton = (props) => {
   )
 }
 
-FirebaseGoogleLoginButton.PropTypes = {
+FirebaseGoogleLoginButton.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
