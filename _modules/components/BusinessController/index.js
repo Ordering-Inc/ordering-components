@@ -383,17 +383,18 @@ var BusinessController = function BusinessController(props) {
 
   (0, _react.useEffect)(function () {
     if (!isDisabledInterval) {
-      var _businessState$busine6, _businessState$busine7, _businessState$busine8;
+      var _businessState$busine6, _businessState$busine7, _businessState$busine8, _businessState$busine9;
 
       var timeout = null;
       var timeoutCloseSoon = null;
-      var currentDate = (0, _dayjs.default)().tz((_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.timezone);
+      if (!((_businessState$busine6 = businessState.business) !== null && _businessState$busine6 !== void 0 && _businessState$busine6.timezone)) return;
+      var currentDate = (0, _dayjs.default)().tz((_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.timezone);
       var lapse = null;
 
-      if ((_businessState$busine7 = businessState.business) !== null && _businessState$busine7 !== void 0 && (_businessState$busine8 = _businessState$busine7.today) !== null && _businessState$busine8 !== void 0 && _businessState$busine8.enabled) {
-        var _businessState$busine9, _businessState$busine10, _businessState$busine11;
+      if ((_businessState$busine8 = businessState.business) !== null && _businessState$busine8 !== void 0 && (_businessState$busine9 = _businessState$busine8.today) !== null && _businessState$busine9 !== void 0 && _businessState$busine9.enabled) {
+        var _businessState$busine10, _businessState$busine11, _businessState$busine12;
 
-        lapse = (_businessState$busine9 = businessState.business) === null || _businessState$busine9 === void 0 ? void 0 : (_businessState$busine10 = _businessState$busine9.today) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.lapses) === null || _businessState$busine11 === void 0 ? void 0 : _businessState$busine11.find(function (lapse) {
+        lapse = (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.today) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.lapses) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.find(function (lapse) {
           var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
           var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
           return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix();
@@ -516,11 +517,11 @@ var BusinessController = function BusinessController(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    var _businessState$busine12;
+    var _businessState$busine13;
 
     if (!favoriteIds) return;
 
-    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine12 = businessState.business) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.id)) {
+    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
           favorite: true

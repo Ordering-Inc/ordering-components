@@ -273,6 +273,12 @@ Object.defineProperty(exports, "FavoriteList", {
     return _FavoriteList.FavoriteList;
   }
 });
+Object.defineProperty(exports, "FirebaseGoogleLoginButton", {
+  enumerable: true,
+  get: function get() {
+    return _FirebaseGoogleLoginButton.FirebaseGoogleLoginButton;
+  }
+});
 Object.defineProperty(exports, "FloatingButton", {
   enumerable: true,
   get: function get() {
@@ -967,6 +973,8 @@ var _FacebookLoginButton = require("./components/FacebookLoginButton");
 var _FacebookPixel = require("./components/FacebookPixel");
 
 var _FavoriteList = require("./components/FavoriteList");
+
+var _FirebaseGoogleLoginButton = require("./components/FirebaseGoogleLoginButton");
 
 var _ForgotPasswordForm = require("./components/ForgotPasswordForm");
 
