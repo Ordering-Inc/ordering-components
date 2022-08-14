@@ -164,6 +164,7 @@ export const BusinessController = (props) => {
     if (!isDisabledInterval) {
       let timeout = null
       let timeoutCloseSoon = null
+      if (!businessState.business?.timezone) return
       const currentDate = dayjs().tz(businessState.business?.timezone);
       let lapse = null
 
