@@ -33,6 +33,8 @@ var _ToastContext = require("../../../../src/contexts/ToastContext");
 
 var _CustomerContext = require("../../../../src/contexts/CustomerContext");
 
+var _OrderingThemeContext = require("../../../../src/contexts/OrderingThemeContext");
+
 var _NativeStrategy = require("../../NativeStrategy");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -68,7 +70,12 @@ var OrderingProvider = function OrderingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: nativeStrategy
-  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
+  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_OrderingThemeContext.OrderingThemeProvider, {
+    settings: Object.assign(settings.api, {
+      project: settings.project,
+      appId: settings.app_id
+    })
+  }, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     strategy: nativeStrategy,
@@ -86,7 +93,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
     franchiseId: (_settings$franchiseSl = settings === null || settings === void 0 ? void 0 : settings.franchiseSlug) !== null && _settings$franchiseSl !== void 0 ? _settings$franchiseSl : settings === null || settings === void 0 ? void 0 : settings.franchiseId
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, {
     businessId: (_settings$businessSlu = settings === null || settings === void 0 ? void 0 : settings.businessSlug) !== null && _settings$businessSlu !== void 0 ? _settings$businessSlu : settings === null || settings === void 0 ? void 0 : settings.businessId
-  }, children)))))))))))));
+  }, children))))))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;
