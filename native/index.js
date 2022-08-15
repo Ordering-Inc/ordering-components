@@ -95,6 +95,7 @@ import { ValidationFieldsContext, useValidationFields, ValidationFieldsProvider 
 import { WebsocketContext, WebsocketProvider, useWebsocket } from '../src/contexts/WebsocketContext'
 import { OrderingContext, OrderingProvider } from './src/contexts/OrderingContext'
 import { ToastType, ToastContext, ToastProvider, useToast } from '../src/contexts/ToastContext'
+import { OrderingThemeContext, OrderingThemeProvider, useOrderingTheme } from '../src/contexts/OrderingThemeContext'
 
 import { CODES } from '../src/constants/code-numbers'
 
@@ -223,6 +224,9 @@ export {
   ToastContext,
   ToastProvider,
   useToast,
+  OrderingThemeContext,
+  OrderingThemeProvider,
+  useOrderingTheme,
   // Constants
   CODES
 }
