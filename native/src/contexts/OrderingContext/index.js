@@ -11,6 +11,7 @@ import { UtilsProviders } from '../../../../src/contexts/UtilsContext'
 import { ValidationFieldsProvider } from '../../../../src/contexts/ValidationsFieldsContext'
 import { ToastProvider } from '../../../../src/contexts/ToastContext'
 import { CustomerProvider } from '../../../../src/contexts/CustomerContext'
+import { OrderingThemeProvider } from '../../../../src/contexts/OrderingThemeContext'
 import { NativeStrategy } from '../../NativeStrategy'
 
 /**
@@ -32,31 +33,33 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast, is
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <LanguageProvider strategy={nativeStrategy}>
             <ConfigProvider>
-              <UtilsProviders>
-                <ToastProvider>
-                  <ValidationFieldsProvider>
-                    <SessionProvider strategy={nativeStrategy}>
-                      <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, { project: settings.project, use_root_point: settings.use_root_point })}>
-                        <CustomerProvider strategy={nativeStrategy}>
-                          <OrderProvider
-                            isDisabledDefaultOpts={isDisabledDefaultOpts}
-                            strategy={nativeStrategy}
-                            Alert={Alert}
-                            isDisableToast={isDisableToast}
-                            franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
-                          >
-                            <BusinessProvider
-                              businessId={settings?.businessSlug ?? settings?.businessId}
+              <OrderingThemeProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
+                <UtilsProviders>
+                  <ToastProvider>
+                    <ValidationFieldsProvider>
+                      <SessionProvider strategy={nativeStrategy}>
+                        <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, { project: settings.project, use_root_point: settings.use_root_point })}>
+                          <CustomerProvider strategy={nativeStrategy}>
+                            <OrderProvider
+                              isDisabledDefaultOpts={isDisabledDefaultOpts}
+                              strategy={nativeStrategy}
+                              Alert={Alert}
+                              isDisableToast={isDisableToast}
+                              franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
                             >
-                              {children}
-                            </BusinessProvider>
-                          </OrderProvider>
-                        </CustomerProvider>
-                      </WebsocketProvider>
-                    </SessionProvider>
-                  </ValidationFieldsProvider>
-                </ToastProvider>
-              </UtilsProviders>
+                              <BusinessProvider
+                                businessId={settings?.businessSlug ?? settings?.businessId}
+                              >
+                                {children}
+                              </BusinessProvider>
+                            </OrderProvider>
+                          </CustomerProvider>
+                        </WebsocketProvider>
+                      </SessionProvider>
+                    </ValidationFieldsProvider>
+                  </ToastProvider>
+                </UtilsProviders>
+              </OrderingThemeProvider>
             </ConfigProvider>
           </LanguageProvider>
         </ApiProvider>
