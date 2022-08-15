@@ -68,7 +68,7 @@ export const BusinessAndProductList = (props) => {
    */
   const handleChangeCategory = (category) => {
     if (category?.subcategories?.length) {
-      if (!category?.parent_category_id) {
+      if (!category?.parent_category_id && !openCategories.values.includes(category.id)) {
         openCategories.values = []
       }
       if (openCategories.values.includes(category.id)) {
