@@ -37,7 +37,7 @@ export const UserFormDetails = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if (((userId || (useSessionUser && refreshSessionUser)) && !session.loading && !props.userData) || isSuccess) {
+    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading && !props.userData) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source

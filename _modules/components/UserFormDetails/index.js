@@ -140,7 +140,7 @@ var UserFormDetails = function UserFormDetails(props) {
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
-    if ((userId || useSessionUser && refreshSessionUser) && !session.loading && !props.userData || isSuccess) {
+    if ((userId || useSessionUser && refreshSessionUser) && !session.loading && !props.userData) {
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
         loading: true
       }));
