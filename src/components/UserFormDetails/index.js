@@ -36,7 +36,7 @@ export const UserFormDetails = (props) => {
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   useEffect(() => {
-    if ((userId || (useSessionUser && refreshSessionUser)) && !session.loading && !props.userData) {
+    if (((userId || (useSessionUser && refreshSessionUser)) && !session.loading && !props.userData) || isSuccess) {
       setUserState({ ...userState, loading: true })
       const source = {}
       requestsState.user = source
@@ -81,7 +81,7 @@ export const UserFormDetails = (props) => {
         requestsState.user.cancel()
       }
     }
-  }, [session.loading])
+  }, [session.loading, isSuccess])
 
   /**
    * Clean formState
