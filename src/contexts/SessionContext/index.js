@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
+import { useApi } from '../ApiContext'
+import { useToast, ToastType } from '../ToastContext'
+import { useLanguage } from '../LanguageContext'
 /**
  * Create SessionContext
  * This context will manage the session internally and provide an easy interface
@@ -18,7 +20,9 @@ export const SessionProvider = ({ children, strategy }) => {
     user: null,
     loading: true
   })
-
+  const [ordering] = useApi()
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
   const setValuesFromLocalStorage = async () => {
     const { auth, token, user } = await getValuesFromLocalStorage()
     setState({
@@ -84,6 +88,30 @@ export const SessionProvider = ({ children, strategy }) => {
     }
   }
 
+  const refreshUserInfo = async () => {
+    try {
+      const requestOptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${state.token}`
+        }
+      }
+      const response = await fetch(`${ordering.root}/users/${state.user.id}`, requestOptions)
+      const { result, error } = await response.json()
+      if (!error) {
+        setState({
+          ...state,
+          user: result
+        })
+        await strategy.setItem('user', result, true)
+      } else {
+        showToast(ToastType.Error, t('FAILED_TO_REFRESH_USER', 'Failed to refresh user'))
+      }
+    } catch (err) {
+      showToast(ToastType.Error, t('FAILED_TO_REFRESH_USER', 'Failed to refresh user'))
+    }
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       checkLocalStorage()
@@ -98,7 +126,8 @@ export const SessionProvider = ({ children, strategy }) => {
   const functions = {
     login,
     logout,
-    changeUser
+    changeUser,
+    refreshUserInfo
   }
 
   return (
@@ -113,5 +142,5 @@ export const SessionProvider = ({ children, strategy }) => {
  */
 export const useSession = () => {
   const sessionManager = useContext(SessionContext)
-  return sessionManager || [{}, () => {}]
+  return sessionManager || [{}, () => { }]
 }
