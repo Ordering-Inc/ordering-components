@@ -19,7 +19,8 @@ export const UserFormDetails = (props) => {
     useValidationFields,
     handleButtonUpdateClick,
     handleSuccessUpdate,
-    isCustomerMode
+    isCustomerMode,
+    isSuccess
   } = props
 
   const [ordering] = useApi()
@@ -81,7 +82,7 @@ export const UserFormDetails = (props) => {
         requestsState.user.cancel()
       }
     }
-  }, [session.loading])
+  }, [session.loading, isSuccess])
 
   /**
    * Clean formState
