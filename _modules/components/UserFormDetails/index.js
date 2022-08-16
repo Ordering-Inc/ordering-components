@@ -70,7 +70,8 @@ var UserFormDetails = function UserFormDetails(props) {
       useValidationFields = props.useValidationFields,
       handleButtonUpdateClick = props.handleButtonUpdateClick,
       handleSuccessUpdate = props.handleSuccessUpdate,
-      isCustomerMode = props.isCustomerMode;
+      isCustomerMode = props.isCustomerMode,
+      isSuccess = props.isSuccess;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -186,7 +187,7 @@ var UserFormDetails = function UserFormDetails(props) {
         requestsState.user.cancel();
       }
     };
-  }, [session.loading]);
+  }, [session.loading, isSuccess]);
   /**
    * Clean formState
    */
