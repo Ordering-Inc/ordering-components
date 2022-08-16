@@ -19,7 +19,8 @@ export const UserFormDetails = (props) => {
     useValidationFields,
     handleButtonUpdateClick,
     handleSuccessUpdate,
-    isCustomerMode
+    isCustomerMode,
+    isSuccess
   } = props
 
   const [ordering] = useApi()
