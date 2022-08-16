@@ -9,6 +9,12 @@ exports.useSession = exports.SessionProvider = exports.SessionContext = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _ApiContext = require("../ApiContext");
+
+var _ToastContext = require("../ToastContext");
+
+var _LanguageContext = require("../LanguageContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -63,6 +69,18 @@ var SessionProvider = function SessionProvider(_ref) {
       _useState2 = _slicedToArray(_useState, 2),
       state = _useState2[0],
       setState = _useState2[1];
+
+  var _useApi = (0, _ApiContext.useApi)(),
+      _useApi2 = _slicedToArray(_useApi, 1),
+      ordering = _useApi2[0];
+
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
 
   var setValuesFromLocalStorage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -277,6 +295,74 @@ var SessionProvider = function SessionProvider(_ref) {
     };
   }();
 
+  var refreshUserInfo = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      var requestOptions, response, _yield$response$json, result, error;
+
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.prev = 0;
+              requestOptions = {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "bearer ".concat(state.token)
+                }
+              };
+              _context7.next = 4;
+              return fetch("".concat(ordering.root, "/users/").concat(state.user.id), requestOptions);
+
+            case 4:
+              response = _context7.sent;
+              _context7.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json = _context7.sent;
+              result = _yield$response$json.result;
+              error = _yield$response$json.error;
+
+              if (error) {
+                _context7.next = 16;
+                break;
+              }
+
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                user: result
+              }));
+              _context7.next = 14;
+              return strategy.setItem('user', result, true);
+
+            case 14:
+              _context7.next = 17;
+              break;
+
+            case 16:
+              showToast(_ToastContext.ToastType.Error, t('FAILED_TO_REFRESH_USER', 'Failed to refresh user'));
+
+            case 17:
+              _context7.next = 22;
+              break;
+
+            case 19:
+              _context7.prev = 19;
+              _context7.t0 = _context7["catch"](0);
+              showToast(_ToastContext.ToastType.Error, t('FAILED_TO_REFRESH_USER', 'Failed to refresh user'));
+
+            case 22:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[0, 19]]);
+    }));
+
+    return function refreshUserInfo() {
+      return _ref8.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       checkLocalStorage();
@@ -291,7 +377,8 @@ var SessionProvider = function SessionProvider(_ref) {
   var functions = {
     login: login,
     logout: logout,
-    changeUser: changeUser
+    changeUser: changeUser,
+    refreshUserInfo: refreshUserInfo
   };
   return /*#__PURE__*/_react.default.createElement(SessionContext.Provider, {
     value: [state, functions]
