@@ -627,7 +627,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 31;
+                _context5.next = 34;
                 break;
               }
 
@@ -651,18 +651,24 @@ var OrderProvider = function OrderProvider(_ref) {
               };
               countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : state === null || state === void 0 ? void 0 : (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : (_state$options10$addr = _state$options10.address) === null || _state$options10$addr === void 0 ? void 0 : _state$options10$addr.country_code;
 
-              if (countryCode) {
-                headers = _objectSpread(_objectSpread({}, headers), {}, {
-                  'X-Country-Code-X': countryCode
-                });
+              if (!countryCode) {
+                _context5.next = 15;
+                break;
               }
 
-              _context5.next = 14;
+              headers = _objectSpread(_objectSpread({}, headers), {}, {
+                'X-Country-Code-X': countryCode
+              });
+              _context5.next = 15;
+              return strategy.setItem('country-code', countryCode);
+
+            case 15:
+              _context5.next = 17;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
                 headers: headers
               });
 
-            case 14:
+            case 17:
               _yield$ordering$setAc3 = _context5.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               error = _yield$ordering$setAc4.error;
@@ -688,8 +694,8 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", !error);
 
-            case 24:
-              _context5.prev = 24;
+            case 27:
+              _context5.prev = 27;
               _context5.t0 = _context5["catch"](6);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
@@ -702,12 +708,12 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", false);
 
-            case 31:
+            case 34:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 24]]);
+      }, _callee5, null, [[6, 27]]);
     }));
 
     return function updateOrderOptions(_x5) {

@@ -306,6 +306,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             ...headers,
             'X-Country-Code-X': countryCode
           }
+          await strategy.setItem('country-code', countryCode)
         }
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
