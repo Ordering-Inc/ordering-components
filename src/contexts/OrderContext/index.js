@@ -92,6 +92,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           'X-Country-Code-X': countryCode
         }
       }
+      console.log('refreshOrderOptions: ', options)
       const res = await ordering.setAccessToken(session.token).orderOptions().get(options)
       const error = res?.content?.error
       const result = res?.content?.result
@@ -308,6 +309,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           }
           await strategy.setItem('country-code', countryCode)
         }
+        console.log('updateOrderOptions countryCode: ', countryCode)
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()

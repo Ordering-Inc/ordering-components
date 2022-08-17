@@ -224,10 +224,11 @@ var OrderProvider = function OrderProvider(_ref) {
                 };
               }
 
-              _context.next = 16;
+              console.log('refreshOrderOptions: ', options);
+              _context.next = 17;
               return ordering.setAccessToken(session.token).orderOptions().get(options);
 
-            case 16:
+            case 17:
               res = _context.sent;
               error = res === null || res === void 0 ? void 0 : (_res$content = res.content) === null || _res$content === void 0 ? void 0 : _res$content.error;
               result = res === null || res === void 0 ? void 0 : (_res$content2 = res.content) === null || _res$content2 === void 0 ? void 0 : _res$content2.result;
@@ -252,21 +253,21 @@ var OrderProvider = function OrderProvider(_ref) {
                 }
               }
 
-              _context.next = 23;
+              _context.next = 24;
               return strategy.getItem('options', true);
 
-            case 23:
+            case 24:
               localOptions = _context.sent;
 
               if (!localOptions) {
-                _context.next = 55;
+                _context.next = 56;
                 break;
               }
 
               _options2 = {};
 
               if (!(Object.keys(localOptions.address).length > 0)) {
-                _context.next = 47;
+                _context.next = 48;
                 break;
               }
 
@@ -275,10 +276,10 @@ var OrderProvider = function OrderProvider(_ref) {
                 value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
               userId = userCustomerId || session.user.id;
-              _context.next = 31;
+              _context.next = 32;
               return ordering.setAccessToken(session.token).users(userId).addresses().where(conditions).get();
 
-            case 31:
+            case 32:
               addressesResponse = _context.sent;
               address = addressesResponse.content.result.find(function (address) {
                 var _localOptions$address2, _localOptions$address3, _localOptions$address4, _address$location, _localOptions$address5, _address$location2, _localOptions$address6, _localOptions$address7, _localOptions$address8, _localOptions$address9, _localOptions$address10;
@@ -290,7 +291,7 @@ var OrderProvider = function OrderProvider(_ref) {
               });
 
               if (address) {
-                _context.next = 44;
+                _context.next = 45;
                 break;
               }
 
@@ -299,10 +300,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
                 return (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address11 = localOptions.address) === null || _localOptions$address11 === void 0 ? void 0 : _localOptions$address11[key]) === null && (localOptions === null || localOptions === void 0 ? true : (_localOptions$address12 = localOptions.address) === null || _localOptions$address12 === void 0 ? true : delete _localOptions$address12[key]);
               });
-              _context.next = 37;
+              _context.next = 38;
               return ordering.setAccessToken(session.token).users(userId).addresses().save(localOptions.address);
 
-            case 37:
+            case 38:
               _yield$ordering$setAc = _context.sent;
               _yield$ordering$setAc2 = _yield$ordering$setAc.content;
               _error = _yield$ordering$setAc2.error;
@@ -312,19 +313,19 @@ var OrderProvider = function OrderProvider(_ref) {
                 address = _result;
               }
 
-              _context.next = 46;
+              _context.next = 47;
               break;
 
-            case 44:
-              _context.next = 46;
+            case 45:
+              _context.next = 47;
               return ordering.setAccessToken(session.token).users(userId).addresses(address.id).save({
                 default: true
               });
 
-            case 46:
+            case 47:
               address && (_options2.address_id = address.id);
 
-            case 47:
+            case 48:
               if (localOptions.type) {
                 _options2.type = localOptions.type;
               }
@@ -345,24 +346,24 @@ var OrderProvider = function OrderProvider(_ref) {
                 }));
               }
 
-              _context.next = 53;
+              _context.next = 54;
               return strategy.removeItem('options');
 
-            case 53:
-              _context.next = 56;
+            case 54:
+              _context.next = 57;
               break;
 
-            case 55:
+            case 56:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 56:
-              _context.next = 63;
+            case 57:
+              _context.next = 64;
               break;
 
-            case 58:
-              _context.prev = 58;
+            case 59:
+              _context.prev = 59;
               _context.t0 = _context["catch"](0);
               message = _context.t0 !== null && _context.t0 !== void 0 && (_err$message = _context.t0.message) !== null && _err$message !== void 0 && _err$message.includes('Internal error') ? 'INTERNAL_ERROR' : _context.t0.message;
               setAlert({
@@ -373,12 +374,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: false
               }));
 
-            case 63:
+            case 64:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 58]]);
+      }, _callee, null, [[0, 59]]);
     }));
 
     return function refreshOrderOptions() {
@@ -627,7 +628,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 34;
+                _context5.next = 35;
                 break;
               }
 
@@ -663,12 +664,13 @@ var OrderProvider = function OrderProvider(_ref) {
               return strategy.setItem('country-code', countryCode);
 
             case 15:
-              _context5.next = 17;
+              console.log('updateOrderOptions countryCode: ', countryCode);
+              _context5.next = 18;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
                 headers: headers
               });
 
-            case 17:
+            case 18:
               _yield$ordering$setAc3 = _context5.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               error = _yield$ordering$setAc4.error;
@@ -694,8 +696,8 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", !error);
 
-            case 27:
-              _context5.prev = 27;
+            case 28:
+              _context5.prev = 28;
               _context5.t0 = _context5["catch"](6);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
@@ -708,12 +710,12 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", false);
 
-            case 34:
+            case 35:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 27]]);
+      }, _callee5, null, [[6, 28]]);
     }));
 
     return function updateOrderOptions(_x5) {
