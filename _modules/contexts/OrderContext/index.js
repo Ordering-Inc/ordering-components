@@ -607,14 +607,14 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(changes) {
-      var customerFromLocalStorage, userCustomerId, body, _state$options7, _state$options7$addre, headers, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
+      var customerFromLocalStorage, userCustomerId, body, _state$options7, _state$options7$addre, _state$options8, _state$options8$addre, headers, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 30;
+                _context5.next = 31;
                 break;
               }
 
@@ -636,19 +636,20 @@ var OrderProvider = function OrderProvider(_ref) {
               headers = {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               };
+              countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : (_state$options7$addre = _state$options7.address) === null || _state$options7$addre === void 0 ? void 0 : _state$options7$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : state === null || state === void 0 ? void 0 : (_state$options8 = state.options) === null || _state$options8 === void 0 ? void 0 : (_state$options8$addre = _state$options8.address) === null || _state$options8$addre === void 0 ? void 0 : _state$options8$addre.country_code;
 
-              if (changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : (_state$options7$addre = _state$options7.address) === null || _state$options7$addre === void 0 ? void 0 : _state$options7$addre.country_code)) {
+              if (countryCode) {
                 headers = _objectSpread(_objectSpread({}, headers), {}, {
-                  'X-Country-Code-X': changes === null || changes === void 0 ? void 0 : changes.country_code
+                  'X-Country-Code-X': countryCode
                 });
               }
 
-              _context5.next = 13;
+              _context5.next = 14;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
                 headers: headers
               });
 
-            case 13:
+            case 14:
               _yield$ordering$setAc3 = _context5.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               error = _yield$ordering$setAc4.error;
@@ -674,8 +675,8 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", !error);
 
-            case 23:
-              _context5.prev = 23;
+            case 24:
+              _context5.prev = 24;
               _context5.t0 = _context5["catch"](6);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
@@ -688,12 +689,12 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", false);
 
-            case 30:
+            case 31:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 23]]);
+      }, _callee5, null, [[6, 24]]);
     }));
 
     return function updateOrderOptions(_x5) {
@@ -1959,7 +1960,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
     var _ref20 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19() {
-      var _configState$configs4, _configState$configs5, _state$options8;
+      var _configState$configs4, _configState$configs5, _state$options9;
 
       var optionsLocalStorage;
       return _regeneratorRuntime().wrap(function _callee19$(_context19) {
@@ -1979,7 +1980,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 } : {
                   type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
                   moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
-                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options8 = state.options) === null || _state$options8 === void 0 ? void 0 : _state$options8.address) || {},
+                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : _state$options9.address) || {},
                   city_id: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.city_id) || null
                 }
               }));

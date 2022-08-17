@@ -286,13 +286,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         let headers = {
           'X-Socket-Id-X': socket?.getId()
         }
-        if (
-          changes?.country_code &&
-          changes?.country_code !== state?.options?.address?.country_code
-        ) {
+        const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
+          ? changes?.country_code
+          : state?.options?.address?.country_code
+
+        if (countryCode) {
           headers = {
             ...headers,
-            'X-Country-Code-X': changes?.country_code
+            'X-Country-Code-X': countryCode
           }
         }
         const { content: { error, result } } = await ordering
