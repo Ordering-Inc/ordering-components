@@ -173,7 +173,7 @@ var AddressList = function AddressList(props) {
 
   var handleSetDefault = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(address, userCustomerSetup, sameAddress, dontSetUserCustomer) {
-      var _yield$ordering$setAc2, content;
+      var _yield$ordering$setAc2, content, _content$result;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -201,7 +201,9 @@ var AddressList = function AddressList(props) {
                 break;
               }
 
-              changeAddress(address === null || address === void 0 ? void 0 : address.id);
+              changeAddress(address === null || address === void 0 ? void 0 : address.id, {
+                country_code: address === null || address === void 0 ? void 0 : address.country_code
+              });
               return _context2.abrupt("return");
 
             case 6:
@@ -229,7 +231,9 @@ var AddressList = function AddressList(props) {
                 });
 
                 if (changeOrderAddressWithDefault) {
-                  changeAddress(content.result.id);
+                  changeAddress(content.result.id, {
+                    country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code
+                  });
                 }
 
                 setAddressList(_objectSpread({}, addressList));

@@ -607,7 +607,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(changes) {
-      var customerFromLocalStorage, userCustomerId, body, headers, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
+      var customerFromLocalStorage, userCustomerId, body, _state$options7, _state$options7$addre, headers, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
@@ -637,7 +637,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               };
 
-              if (changes !== null && changes !== void 0 && changes.country_code) {
+              if (changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : (_state$options7$addre = _state$options7.address) === null || _state$options7$addre === void 0 ? void 0 : _state$options7$addre.country_code)) {
                 headers = _objectSpread(_objectSpread({}, headers), {}, {
                   'X-Country-Code-X': changes === null || changes === void 0 ? void 0 : changes.country_code
                 });
@@ -1959,7 +1959,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
     var _ref20 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19() {
-      var _configState$configs4, _configState$configs5, _state$options7;
+      var _configState$configs4, _configState$configs5, _state$options8;
 
       var optionsLocalStorage;
       return _regeneratorRuntime().wrap(function _callee19$(_context19) {
@@ -1979,7 +1979,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 } : {
                   type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
                   moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
-                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options7 = state.options) === null || _state$options7 === void 0 ? void 0 : _state$options7.address) || {},
+                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options8 = state.options) === null || _state$options8 === void 0 ? void 0 : _state$options8.address) || {},
                   city_id: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.city_id) || null
                 }
               }));
