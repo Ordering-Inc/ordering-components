@@ -107,6 +107,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           ...state.options,
           ...options
         }
+
+        if (!countryCodeFromLocalStorage && options?.address?.country_code) {
+          updateOrderOptions({ country_code: options?.address?.country_code })
+        }
       }
       if (error) {
         setAlert({ show: true, content: result })
@@ -288,9 +292,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     if (session.auth) {
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-      const body = {
-        address_id: changes?.address_id,
-        user_id: userCustomerId || session.user.id
+      const body = { user_id: userCustomerId || session.user.id }
+      if (changes?.address_id) {
+        body.address_id = changes?.address_id
       }
       try {
         setState({ ...state, loading: true })

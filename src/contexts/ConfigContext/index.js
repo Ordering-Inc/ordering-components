@@ -17,7 +17,7 @@ export const ConfigContext = createContext()
  * This provider has a reducer for manage configs state
  * @param {props} props
  */
-export const ConfigProvider = ({ children }) => {
+export const ConfigProvider = ({ children, strategy }) => {
   const [state, setState] = useState({ loading: true, configs: {} })
   const [languageState] = useLanguage()
   const [ordering] = useApi()
@@ -108,7 +108,16 @@ export const ConfigProvider = ({ children }) => {
   const refreshConfigs = async () => {
     try {
       !state.loading && setState({ ...state, loading: true })
-      const { content: { error, result } } = await ordering.configs().asDictionary().get()
+      const countryCodeFromLocalStorage = await strategy.getItem('country-code')
+      const countryCode = countryCodeFromLocalStorage
+      const options = {}
+
+      if (countryCode) {
+        options.headers = {
+          'X-Country-Code-X': countryCode
+        }
+      }
+      const { content: { error, result } } = await ordering.configs().asDictionary().get(options)
       let data = null
       try {
         const response = await fetch('https://ipapi.co/json/')
@@ -126,7 +135,7 @@ export const ConfigProvider = ({ children }) => {
           key: 'dates_general_format',
           value: result?.dates_general_format?.value ||
           (result?.format_time?.value === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
-        },
+        }
       }
       const configsResult = {
         ...customConfigs,

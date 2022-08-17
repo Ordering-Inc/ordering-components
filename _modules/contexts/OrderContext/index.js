@@ -177,7 +177,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _state$options, _state$options$addres, _state$options2, _state$options2$addre, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, carts, _options, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
+      var _state$options, _state$options$addres, _state$options2, _state$options2$addre, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options$address, carts, _options, _options$address2, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -240,6 +240,12 @@ var OrderProvider = function OrderProvider(_ref) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
                 });
                 state.options = _objectSpread(_objectSpread({}, state.options), _options);
+
+                if (!countryCodeFromLocalStorage && _options !== null && _options !== void 0 && (_options$address = _options.address) !== null && _options$address !== void 0 && _options$address.country_code) {
+                  updateOrderOptions({
+                    country_code: _options === null || _options === void 0 ? void 0 : (_options$address2 = _options.address) === null || _options$address2 === void 0 ? void 0 : _options$address2.country_code
+                  });
+                }
               }
 
               if (error) {
@@ -628,7 +634,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 35;
+                _context5.next = 36;
                 break;
               }
 
@@ -639,10 +645,14 @@ var OrderProvider = function OrderProvider(_ref) {
               customerFromLocalStorage = _context5.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
-                address_id: changes === null || changes === void 0 ? void 0 : changes.address_id,
                 user_id: userCustomerId || session.user.id
               };
-              _context5.prev = 6;
+
+              if (changes !== null && changes !== void 0 && changes.address_id) {
+                body.address_id = changes === null || changes === void 0 ? void 0 : changes.address_id;
+              }
+
+              _context5.prev = 7;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
@@ -653,24 +663,24 @@ var OrderProvider = function OrderProvider(_ref) {
               countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : state === null || state === void 0 ? void 0 : (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : (_state$options10$addr = _state$options10.address) === null || _state$options10$addr === void 0 ? void 0 : _state$options10$addr.country_code;
 
               if (!countryCode) {
-                _context5.next = 15;
+                _context5.next = 16;
                 break;
               }
 
               headers = _objectSpread(_objectSpread({}, headers), {}, {
                 'X-Country-Code-X': countryCode
               });
-              _context5.next = 15;
+              _context5.next = 16;
               return strategy.setItem('country-code', countryCode);
 
-            case 15:
+            case 16:
               console.log('updateOrderOptions countryCode: ', countryCode);
-              _context5.next = 18;
+              _context5.next = 19;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
                 headers: headers
               });
 
-            case 18:
+            case 19:
               _yield$ordering$setAc3 = _context5.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               error = _yield$ordering$setAc4.error;
@@ -696,9 +706,9 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", !error);
 
-            case 28:
-              _context5.prev = 28;
-              _context5.t0 = _context5["catch"](6);
+            case 29:
+              _context5.prev = 29;
+              _context5.t0 = _context5["catch"](7);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
                 show: true,
@@ -710,12 +720,12 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", false);
 
-            case 35:
+            case 36:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 28]]);
+      }, _callee5, null, [[7, 29]]);
     }));
 
     return function updateOrderOptions(_x5) {
