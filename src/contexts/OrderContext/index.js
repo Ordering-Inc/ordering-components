@@ -67,7 +67,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!state.loading) {
         setState({ ...state, loading: true })
       }
-      const countryCodeFromLocalStorage = await strategy.getItem('country-code', true)
+      const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const options = {}

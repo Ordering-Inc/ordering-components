@@ -192,7 +192,7 @@ var OrderProvider = function OrderProvider(_ref) {
               }
 
               _context.next = 4;
-              return strategy.getItem('country-code', true);
+              return strategy.getItem('country-code');
 
             case 4:
               countryCodeFromLocalStorage = _context.sent;
