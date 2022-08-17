@@ -438,41 +438,46 @@ var OrderProvider = function OrderProvider(_ref) {
               return _context2.abrupt("return");
 
             case 10:
+              console.log('changeAddress', addressId, params);
+
               if (!(params && params !== null && params !== void 0 && params.address && !checkAddress(params === null || params === void 0 ? void 0 : params.address))) {
-                _context2.next = 13;
+                _context2.next = 14;
                 break;
               }
 
               updateOrderOptions({
-                address_id: params === null || params === void 0 ? void 0 : (_params$address = params.address) === null || _params$address === void 0 ? void 0 : _params$address.id
+                address_id: params === null || params === void 0 ? void 0 : (_params$address = params.address) === null || _params$address === void 0 ? void 0 : _params$address.id,
+                country_code: params === null || params === void 0 ? void 0 : params.country_code
               });
               return _context2.abrupt("return");
 
-            case 13:
+            case 14:
               if (!(params && params !== null && params !== void 0 && params.isEdit)) {
-                _context2.next = 18;
+                _context2.next = 19;
                 break;
               }
 
               if (!(addressId !== state.options.address_id)) {
-                _context2.next = 16;
+                _context2.next = 17;
                 break;
               }
 
               return _context2.abrupt("return");
 
-            case 16:
+            case 17:
               updateOrderOptions({
-                address_id: addressId
+                address_id: addressId,
+                country_code: params === null || params === void 0 ? void 0 : params.country_code
               });
               return _context2.abrupt("return");
 
-            case 18:
+            case 19:
               updateOrderOptions({
-                address_id: addressId
+                address_id: addressId,
+                country_code: params === null || params === void 0 ? void 0 : params.country_code
               });
 
-            case 19:
+            case 20:
             case "end":
               return _context2.stop();
           }
@@ -602,14 +607,14 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(changes) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
+      var customerFromLocalStorage, userCustomerId, body, headers, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 28;
+                _context5.next = 30;
                 break;
               }
 
@@ -619,22 +624,31 @@ var OrderProvider = function OrderProvider(_ref) {
             case 3:
               customerFromLocalStorage = _context5.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              body = _objectSpread(_objectSpread({}, changes), {}, {
+              body = {
+                address_id: changes === null || changes === void 0 ? void 0 : changes.address_id,
                 user_id: userCustomerId || session.user.id
-              });
+              };
               _context5.prev = 6;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
               state.loading = true;
-              _context5.next = 11;
+              headers = {
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              };
+
+              if (changes !== null && changes !== void 0 && changes.country_code) {
+                headers = _objectSpread(_objectSpread({}, headers), {}, {
+                  'X-Country-Code-X': changes === null || changes === void 0 ? void 0 : changes.country_code
+                });
+              }
+
+              _context5.next = 13;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
-                headers: {
-                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-                }
+                headers: headers
               });
 
-            case 11:
+            case 13:
               _yield$ordering$setAc3 = _context5.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               error = _yield$ordering$setAc4.error;
@@ -660,8 +674,8 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", !error);
 
-            case 21:
-              _context5.prev = 21;
+            case 23:
+              _context5.prev = 23;
               _context5.t0 = _context5["catch"](6);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
@@ -674,12 +688,12 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", false);
 
-            case 28:
+            case 30:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[6, 21]]);
+      }, _callee5, null, [[6, 23]]);
     }));
 
     return function updateOrderOptions(_x5) {

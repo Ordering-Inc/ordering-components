@@ -203,8 +203,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       return
     }
 
+    console.log('changeAddress', addressId, params)
+
     if (params && params?.address && !checkAddress(params?.address)) {
-      updateOrderOptions({ address_id: params?.address?.id })
+      updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
       return
     }
 
@@ -212,10 +214,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (addressId !== state.options.address_id) {
         return
       }
-      updateOrderOptions({ address_id: addressId })
+      updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
       return
     }
-    updateOrderOptions({ address_id: addressId })
+    updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
   }
 
   /**
@@ -275,16 +277,25 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
-        ...changes,
+        address_id: changes?.address_id,
         user_id: userCustomerId || session.user.id
       }
       try {
         setState({ ...state, loading: true })
         state.loading = true
+        let headers = {
+          'X-Socket-Id-X': socket?.getId()
+        }
+        if (changes?.country_code) {
+          headers = {
+            ...headers,
+            'X-Country-Code-X': changes?.country_code
+          }
+        }
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()
-          .save(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+          .save(body, { headers })
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}
