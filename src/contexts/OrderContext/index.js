@@ -67,6 +67,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!state.loading) {
         setState({ ...state, loading: true })
       }
+      const countryCodeFromLocalStorage = await strategy.getItem('country-code', true)
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const options = {}
@@ -79,6 +80,16 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         options.query = {
           ...options.query,
           franchise_id: franchiseId
+        }
+      }
+
+      const countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== state?.options?.address?.country_code
+        ? countryCodeFromLocalStorage
+        : state?.options?.address?.country_code
+
+      if (countryCode) {
+        options.headers = {
+          'X-Country-Code-X': countryCode
         }
       }
       const res = await ordering.setAccessToken(session.token).orderOptions().get(options)
