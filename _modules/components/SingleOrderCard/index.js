@@ -19,6 +19,8 @@ var _ToastContext = require("../../contexts/ToastContext");
 
 var _LanguageContext = require("../../contexts/LanguageContext");
 
+var _OrderContext = require("../../contexts/OrderContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -54,6 +56,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var SingleOrderCard = function SingleOrderCard(props) {
   var UIComponent = props.UIComponent,
       order = props.order,
+      handleReorder = props.handleReorder,
       handleUpdateOrderList = props.handleUpdateOrderList;
 
   var _useApi = (0, _ApiContext.useApi)(),
@@ -74,6 +77,11 @@ var SingleOrderCard = function SingleOrderCard(props) {
       _useToast2 = _slicedToArray(_useToast, 2),
       showToast = _useToast2[1].showToast;
 
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      carts = _useOrder2[0].carts,
+      clearCart = _useOrder2[1].clearCart;
+
   var _useState = (0, _react.useState)({
     loading: false,
     error: null
@@ -81,6 +89,14 @@ var SingleOrderCard = function SingleOrderCard(props) {
       _useState2 = _slicedToArray(_useState, 2),
       actionState = _useState2[0],
       setActionState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState4 = _slicedToArray(_useState3, 2),
+      cartState = _useState4[0],
+      setCartState = _useState4[1];
   /**
    * Method to add, remove favorite info for user from API
    */
@@ -179,10 +195,82 @@ var SingleOrderCard = function SingleOrderCard(props) {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * Method to remove products from cart
+   */
+
+
+  var handleRemoveCart = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var _carts;
+
+      var uuid, content;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              uuid = (_carts = carts["businessId:".concat(order.business_id)]) === null || _carts === void 0 ? void 0 : _carts.uuid;
+
+              if (uuid) {
+                _context2.next = 3;
+                break;
+              }
+
+              return _context2.abrupt("return");
+
+            case 3:
+              _context2.prev = 3;
+              setCartState(_objectSpread(_objectSpread({}, cartState), {}, {
+                loading: true
+              }));
+              _context2.next = 7;
+              return clearCart(uuid);
+
+            case 7:
+              content = _context2.sent;
+
+              if (!(content !== null && content !== void 0 && content.error)) {
+                handleReorder(order === null || order === void 0 ? void 0 : order.id);
+                setCartState({
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setCartState({
+                  loading: false,
+                  error: content === null || content === void 0 ? void 0 : content.result
+                });
+              }
+
+              _context2.next = 14;
+              break;
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](3);
+              setCartState({
+                loading: false,
+                error: [_context2.t0.message]
+              });
+
+            case 14:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[3, 11]]);
+    }));
+
+    return function handleRemoveCart() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     handleFavoriteOrder: handleFavoriteOrder,
-    actionState: actionState
+    actionState: actionState,
+    cartState: cartState,
+    handleRemoveCart: handleRemoveCart
   })));
 };
 
