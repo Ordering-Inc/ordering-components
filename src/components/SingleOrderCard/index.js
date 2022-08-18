@@ -4,11 +4,13 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 export const SingleOrderCard = (props) => {
   const {
     UIComponent,
     order,
+    handleReorder,
     handleUpdateOrderList
   } = props
 
@@ -16,8 +18,10 @@ export const SingleOrderCard = (props) => {
   const [{ user, token }] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
+  const [{ carts }, { clearCart }] = useOrder()
 
   const [actionState, setActionState] = useState({ loading: false, error: null })
+  const [cartState, setCartState] = useState({ loading: false, error: null })
 
   /**
    * Method to add, remove favorite info for user from API
@@ -66,6 +70,34 @@ export const SingleOrderCard = (props) => {
     }
   }
 
+  /**
+   * Method to remove products from cart
+   */
+  const handleRemoveCart = async () => {
+    const uuid = carts[`businessId:${order.business_id}`]?.uuid
+    if (!uuid) return
+    try {
+      setCartState({
+        loading: true,
+        error: null
+      })
+      const content = await clearCart(uuid)
+      if (!content?.error) {
+        handleReorder(order?.id)
+      } else {
+        setCartState({
+          loading: false,
+          error: content?.result
+        })
+      }
+    } catch (error) {
+      setCartState({
+        loading: false,
+        error: [error.message]
+      })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -73,6 +105,8 @@ export const SingleOrderCard = (props) => {
           {...props}
           handleFavoriteOrder={handleFavoriteOrder}
           actionState={actionState}
+          cartState={cartState}
+          handleRemoveCart={handleRemoveCart}
         />
       )}
     </>
