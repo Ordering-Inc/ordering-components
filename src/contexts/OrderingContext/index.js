@@ -32,7 +32,7 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <LanguageProvider strategy={webStrategy}>
-            <ConfigProvider>
+            <ConfigProvider strategy={webStrategy}>
               <OrderingThemeProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
                 <SiteProvider appId={settings.app_id}>
                   <UtilsProviders>
