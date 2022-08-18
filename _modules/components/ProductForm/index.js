@@ -292,7 +292,7 @@ var ProductForm = function ProductForm(props) {
 
   var loadProductWithOptions = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var source, _yield$ordering$busin, result;
+      var source, _yield$ordering$busin, _yield$ordering$busin2, result, error;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -311,28 +311,43 @@ var ProductForm = function ProductForm(props) {
 
             case 6:
               _yield$ordering$busin = _context.sent;
-              result = _yield$ordering$busin.content.result;
+              _yield$ordering$busin2 = _yield$ordering$busin.content;
+              result = _yield$ordering$busin2.result;
+              error = _yield$ordering$busin2.error;
+
+              if (error) {
+                _context.next = 13;
+                break;
+              }
+
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: false,
                 product: result
               }));
-              _context.next = 14;
+              return _context.abrupt("return");
+
+            case 13:
+              setProduct(_objectSpread(_objectSpread({}, product), {}, {
+                loading: false,
+                error: [result]
+              }));
+              _context.next = 19;
               break;
 
-            case 11:
-              _context.prev = 11;
+            case 16:
+              _context.prev = 16;
               _context.t0 = _context["catch"](0);
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
 
-            case 14:
+            case 19:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 16]]);
     }));
 
     return function loadProductWithOptions() {

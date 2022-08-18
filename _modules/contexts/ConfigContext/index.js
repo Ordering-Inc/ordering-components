@@ -171,7 +171,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
 
   var refreshConfigs = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _result$dates_moment_, _result$format_time, _result$dates_general, _result$format_time2, _data, _data2, countryCodeFromLocalStorage, countryCode, options, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, conditionalConfigs, configsResult;
+      var _result$dates_moment_, _result$format_time, _result$dates_general, _result$format_time2, _data, _data2, countryCode, options, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, conditionalConfigs, configsResult;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -185,8 +185,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
               return strategy.getItem('country-code');
 
             case 4:
-              countryCodeFromLocalStorage = _context.sent;
-              countryCode = countryCodeFromLocalStorage;
+              countryCode = _context.sent;
               options = {};
 
               if (countryCode) {
@@ -195,35 +194,35 @@ var ConfigProvider = function ConfigProvider(_ref) {
                 };
               }
 
-              _context.next = 10;
+              _context.next = 9;
               return ordering.configs().asDictionary().get(options);
 
-            case 10:
+            case 9:
               _yield$ordering$confi = _context.sent;
               _yield$ordering$confi2 = _yield$ordering$confi.content;
               error = _yield$ordering$confi2.error;
               result = _yield$ordering$confi2.result;
               data = null;
-              _context.prev = 15;
-              _context.next = 18;
+              _context.prev = 14;
+              _context.next = 17;
               return fetch('https://ipapi.co/json/');
 
-            case 18:
+            case 17:
               response = _context.sent;
-              _context.next = 21;
+              _context.next = 20;
               return response.json();
 
-            case 21:
+            case 20:
               data = _context.sent;
-              _context.next = 27;
+              _context.next = 26;
               break;
 
-            case 24:
-              _context.prev = 24;
-              _context.t0 = _context["catch"](15);
+            case 23:
+              _context.prev = 23;
+              _context.t0 = _context["catch"](14);
               data = null;
 
-            case 27:
+            case 26:
               conditionalConfigs = {
                 dates_moment_format: {
                   key: 'dates_moment_format',
@@ -244,22 +243,22 @@ var ConfigProvider = function ConfigProvider(_ref) {
                 loading: false,
                 configs: error ? {} : configsResult
               }));
-              _context.next = 35;
+              _context.next = 34;
               break;
 
-            case 32:
-              _context.prev = 32;
+            case 31:
+              _context.prev = 31;
               _context.t1 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 35:
+            case 34:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 32], [15, 24]]);
+      }, _callee, null, [[0, 31], [14, 23]]);
     }));
 
     return function refreshConfigs() {

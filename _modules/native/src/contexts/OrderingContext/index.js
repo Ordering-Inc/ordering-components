@@ -70,7 +70,9 @@ var OrderingProvider = function OrderingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: nativeStrategy
-  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, null, /*#__PURE__*/_react.default.createElement(_OrderingThemeContext.OrderingThemeProvider, {
+  }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, {
+    strategy: nativeStrategy
+  }, /*#__PURE__*/_react.default.createElement(_OrderingThemeContext.OrderingThemeProvider, {
     settings: Object.assign(settings.api, {
       project: settings.project,
       appId: settings.app_id
