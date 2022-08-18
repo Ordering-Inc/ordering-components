@@ -290,6 +290,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    */
   const updateOrderOptions = async (changes) => {
     if (session.auth) {
+      const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = { user_id: userCustomerId || session.user.id }
@@ -304,7 +305,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }
         const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
           ? changes?.country_code
-          : state?.options?.address?.country_code
+          : countryCodeFromLocalStorage
 
         if (countryCode) {
           headers = {
