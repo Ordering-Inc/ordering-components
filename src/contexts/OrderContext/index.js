@@ -92,7 +92,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           'X-Country-Code-X': countryCode
         }
       }
-      console.log('refreshOrderOptions: ', options)
+
       const res = await ordering.setAccessToken(session.token).orderOptions().get(options)
       const error = res?.content?.error
       const result = res?.content?.result
@@ -219,8 +219,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       return
     }
 
-    console.log('changeAddress', addressId, params)
-
     if (params && params?.address && !checkAddress(params?.address)) {
       updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
       return
@@ -314,7 +312,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           }
           await strategy.setItem('country-code', countryCode)
         }
-        console.log('updateOrderOptions countryCode: ', countryCode)
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()

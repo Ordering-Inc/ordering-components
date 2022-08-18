@@ -108,8 +108,7 @@ export const ConfigProvider = ({ children, strategy }) => {
   const refreshConfigs = async () => {
     try {
       !state.loading && setState({ ...state, loading: true })
-      const countryCodeFromLocalStorage = await strategy.getItem('country-code')
-      const countryCode = countryCodeFromLocalStorage
+      const countryCode = await strategy.getItem('country-code')
       const options = {}
 
       if (countryCode) {
