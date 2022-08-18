@@ -78,12 +78,16 @@ export const SingleOrderCard = (props) => {
     if (!uuid) return
     try {
       setCartState({
-        loading: true,
-        error: null
+        ...cartState,
+        loading: true
       })
       const content = await clearCart(uuid)
       if (!content?.error) {
         handleReorder(order?.id)
+        setCartState({
+          loading: false,
+          error: null
+        })
       } else {
         setCartState({
           loading: false,
