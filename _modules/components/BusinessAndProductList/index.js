@@ -1173,7 +1173,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (!orderState.loading && orderOptions && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
       getBusiness();
     }
-  }, [orderOptions, languageState.loading, slug, filterByMenus]);
+  }, [orderOptions, languageState.loading, slug, filterByMenus, professionalSelected]);
   /**
    * getBusiness if orderState is loading the first time when is rendered
    */
