@@ -112,7 +112,10 @@ export const AddressForm = (props) => {
       return
     }
     if (!auth) {
-      changeAddress({ ...values, ...formState.changes })
+      changeAddress(
+        { ...values, ...formState.changes },
+        { country_code: values?.country_code ?? formState.changes?.country_code }
+      )
       onSaveAddress && onSaveAddress(formState.changes)
       return
     }
@@ -140,6 +143,7 @@ export const AddressForm = (props) => {
         if (isSelectedAfterAdd) {
           changeAddress(content.result.id, {
             address: isEdit ? null : content.result,
+            country_code: content.result?.country_code,
             isEdit
           })
         }
