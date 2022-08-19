@@ -339,7 +339,7 @@ export const BusinessAndProductList = (props) => {
       ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products()
       : !isUseParentCategory
         ? ordering.businesses(businessState.business.id).products()
-        : ordering.businesses(businessState.business.id).categories()
+        : !(where?.conditions?.length > 0) ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products()
 
     let productEndpoint = where?.conditions?.length > 0
       ? functionFetch.parameters(parameters).where(where)
@@ -441,7 +441,7 @@ export const BusinessAndProductList = (props) => {
       }
 
       if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
-        const productsList = [].concat(...result.map(category => category?.products)).filter(item => item)
+        const productsList = searchValue ? [...result] : [].concat(...result.map(category => category?.products)).filter(item => item)
         const productsListFeatured = featuredRes?.content?.result ?? []
         const paginationData = categorySelected.id === 'featured'
           ? categoriesState?.featured?.pagination ?? {}
@@ -462,7 +462,7 @@ export const BusinessAndProductList = (props) => {
           loading: false,
           products: categorySelected.id === 'featured'
             ? productsListFeatured
-            : [...productsListFeatured, ...curCategoryState.products.concat(productsList)]
+            : searchValue ? [...productsListFeatured, ...productsList] : [...productsListFeatured, ...curCategoryState.products.concat(productsList)]
         }
 
         categoriesState[categoryKey] = newcategoryState
