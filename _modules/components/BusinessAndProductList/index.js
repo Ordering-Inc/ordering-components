@@ -209,7 +209,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _category$subcategori;
 
     if (category !== null && category !== void 0 && (_category$subcategori = category.subcategories) !== null && _category$subcategori !== void 0 && _category$subcategori.length) {
-      if (!(category !== null && category !== void 0 && category.parent_category_id)) {
+      if (!(category !== null && category !== void 0 && category.parent_category_id) && !openCategories.values.includes(category.id)) {
         openCategories.values = [];
       }
 
@@ -453,9 +453,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
 
   var getLazyProducts = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref4) {
-      var _orderState$options$t, _orderState$options, _orderState$options2, _orderState$options3, _where, _where$conditions;
+      var _orderState$options$t, _orderState$options, _orderState$options2, _orderState$options3, _where, _where$conditions, _where2, _where2$conditions;
 
-      var page, _ref4$pageSize, pageSize, parameters, _orderState$options4, moment, where, searchConditions, source, promises, functionFetch, productEndpoint, _where2, _where2$conditions;
+      var page, _ref4$pageSize, pageSize, parameters, _orderState$options4, moment, where, searchConditions, source, promises, functionFetch, productEndpoint, _where3, _where3$conditions;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -525,8 +525,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               source = {};
               requestsState.products = source;
               promises = [];
-              functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : !isUseParentCategory ? ordering.businesses(businessState.business.id).products() : ordering.businesses(businessState.business.id).categories();
-              productEndpoint = ((_where = where) === null || _where === void 0 ? void 0 : (_where$conditions = _where.conditions) === null || _where$conditions === void 0 ? void 0 : _where$conditions.length) > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
+              functionFetch = categorySelected.id && categorySelected.id !== 'featured' ? ordering.businesses(businessState.business.id).categories(categorySelected.id).products() : !isUseParentCategory ? ordering.businesses(businessState.business.id).products() : !(((_where = where) === null || _where === void 0 ? void 0 : (_where$conditions = _where.conditions) === null || _where$conditions === void 0 ? void 0 : _where$conditions.length) > 0) ? ordering.businesses(businessState.business.id).categories() : ordering.businesses(businessState.business.id).products();
+              productEndpoint = ((_where2 = where) === null || _where2 === void 0 ? void 0 : (_where2$conditions = _where2.conditions) === null || _where2$conditions === void 0 ? void 0 : _where2$conditions.length) > 0 ? functionFetch.parameters(parameters).where(where) : functionFetch.parameters(parameters);
               _context2.t0 = promises;
               _context2.next = 18;
               return productEndpoint.get({
@@ -544,7 +544,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }
 
               parameters.params = 'features';
-              productEndpoint = ((_where2 = where) === null || _where2 === void 0 ? void 0 : (_where2$conditions = _where2.conditions) === null || _where2$conditions === void 0 ? void 0 : _where2$conditions.length) > 0 ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where) : ordering.businesses(businessState.business.id).products().parameters(parameters);
+              productEndpoint = ((_where3 = where) === null || _where3 === void 0 ? void 0 : (_where3$conditions = _where3.conditions) === null || _where3$conditions === void 0 ? void 0 : _where3$conditions.length) > 0 ? ordering.businesses(businessState.business.id).products().parameters(parameters).where(where) : ordering.businesses(businessState.business.id).products().parameters(parameters);
               _context2.t2 = promises;
               _context2.next = 26;
               return productEndpoint.get({
@@ -741,7 +741,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }
 
               if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
-                productsList = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(result.map(function (category) {
+                productsList = searchValue ? _toConsumableArray(result) : (_ref8 = []).concat.apply(_ref8, _toConsumableArray(result.map(function (category) {
                   return category === null || category === void 0 ? void 0 : category.products;
                 }))).filter(function (item) {
                   return item;
@@ -755,7 +755,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
                     totalPages: categorySelected.id === 'featured' ? featuredRes === null || featuredRes === void 0 ? void 0 : (_featuredRes$content18 = featuredRes.content) === null || _featuredRes$content18 === void 0 ? void 0 : (_featuredRes$content19 = _featuredRes$content18.pagination) === null || _featuredRes$content19 === void 0 ? void 0 : _featuredRes$content19.total_pages : pagination.total_pages
                   }),
                   loading: false,
-                  products: categorySelected.id === 'featured' ? productsListFeatured : [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(curCategoryState.products.concat(productsList)))
+                  products: categorySelected.id === 'featured' ? productsListFeatured : searchValue ? [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(productsList)) : [].concat(_toConsumableArray(productsListFeatured), _toConsumableArray(curCategoryState.products.concat(productsList)))
                 };
                 categoriesState[categoryKey] = _newcategoryState;
                 setCategoryState(_objectSpread({}, _newcategoryState));
