@@ -390,7 +390,9 @@ export const OrderDetails = (props) => {
     }
     const ordersRoom = user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
     if (!isDisabledOrdersRoom) socket.join(ordersRoom)
-    socket.join(`drivers_${orderState.order?.driver_id}`)
+    if (orderState.order?.driver_id) {
+      socket.join(`drivers_${orderState.order?.driver_id}`)
+    }
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
@@ -399,7 +401,7 @@ export const OrderDetails = (props) => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket, loading, userCustomerId])
+  }, [orderState.order, socket, loading, userCustomerId, orderState.order?.driver_id])
 
   useEffect(() => {
     if (messages.loading) return
