@@ -291,9 +291,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-      const body = { user_id: userCustomerId || session.user.id }
-      if (changes?.address_id) {
-        body.address_id = changes?.address_id
+      const body = {
+        ...changes,
+        user_id: userCustomerId || session.user.id
       }
       try {
         setState({ ...state, loading: true })
@@ -311,6 +311,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             'X-Country-Code-X': countryCode
           }
           await strategy.setItem('country-code', countryCode)
+        }
+        if (body?.country_code) {
+          delete body?.country_code
         }
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
