@@ -66,7 +66,7 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order9, _orderState$order13;
+  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order9, _orderState$order14, _orderState$order15;
 
   var orderId = props.orderId,
       hashKey = props.hashKey,
@@ -892,18 +892,24 @@ var OrderDetails = function OrderDetails(props) {
 
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     if (!isDisabledOrdersRoom) socket.join(ordersRoom);
-    socket.join("drivers_".concat((_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.driver_id));
+
+    if ((_orderState$order11 = orderState.order) !== null && _orderState$order11 !== void 0 && _orderState$order11.driver_id) {
+      var _orderState$order12;
+
+      socket.join("drivers_".concat((_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.driver_id));
+    }
+
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      var _orderState$order12;
+      var _orderState$order13;
 
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
-      socket.leave("drivers_".concat((_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.driver_id));
+      socket.leave("drivers_".concat((_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState.order, socket, loading, userCustomerId]);
+  }, [orderState.order, socket, loading, userCustomerId, (_orderState$order14 = orderState.order) === null || _orderState$order14 === void 0 ? void 0 : _orderState$order14.driver_id]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
 
@@ -923,7 +929,7 @@ var OrderDetails = function OrderDetails(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket, (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.status, userCustomerId]);
+  }, [messages, socket, (_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.status, userCustomerId]);
   (0, _react.useEffect)(function () {
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     socket.join(messagesOrdersRoom);
