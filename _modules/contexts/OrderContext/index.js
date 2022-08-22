@@ -646,15 +646,10 @@ var OrderProvider = function OrderProvider(_ref) {
             case 6:
               customerFromLocalStorage = _context5.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              body = {
+              body = _objectSpread(_objectSpread({}, changes), {}, {
                 user_id: userCustomerId || session.user.id
-              };
-
-              if (changes !== null && changes !== void 0 && changes.address_id) {
-                body.address_id = changes === null || changes === void 0 ? void 0 : changes.address_id;
-              }
-
-              _context5.prev = 10;
+              });
+              _context5.prev = 9;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
@@ -665,17 +660,21 @@ var OrderProvider = function OrderProvider(_ref) {
               countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : countryCodeFromLocalStorage;
 
               if (!countryCode) {
-                _context5.next = 19;
+                _context5.next = 18;
                 break;
               }
 
               headers = _objectSpread(_objectSpread({}, headers), {}, {
                 'X-Country-Code-X': countryCode
               });
-              _context5.next = 19;
+              _context5.next = 18;
               return strategy.setItem('country-code', countryCode);
 
-            case 19:
+            case 18:
+              if (body !== null && body !== void 0 && body.country_code) {
+                body === null || body === void 0 ? true : delete body.country_code;
+              }
+
               _context5.next = 21;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
                 headers: headers
@@ -709,7 +708,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 31:
               _context5.prev = 31;
-              _context5.t0 = _context5["catch"](10);
+              _context5.t0 = _context5["catch"](9);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
                 show: true,
@@ -726,7 +725,7 @@ var OrderProvider = function OrderProvider(_ref) {
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[10, 31]]);
+      }, _callee5, null, [[9, 31]]);
     }));
 
     return function updateOrderOptions(_x5) {
