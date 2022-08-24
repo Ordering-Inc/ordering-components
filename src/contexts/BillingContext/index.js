@@ -6,6 +6,7 @@ import { ApiProvider } from '../ApiContext'
 import { EventProvider } from '../EventContext'
 import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
+import { OrderProvider } from '../OrderContext'
 /**
  * Create BillingContext
  * Wrapper to use all context to ordering apps
@@ -17,7 +18,7 @@ export const BillingContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const BillingProvider = ({ settings, children }) => {
+export const BillingProvider = ({ Alert, settings, children }) => {
   const webStrategy = new WebStrategy()
   return (
     <BillingContext.Provider>
@@ -27,7 +28,12 @@ export const BillingProvider = ({ settings, children }) => {
             <ConfigProvider strategy={webStrategy}>
               <ToastProvider>
                 <SessionProvider strategy={webStrategy}>
-                  {children}
+                  <OrderProvider
+                    strategy={webStrategy}
+                    Alert={Alert}
+                  >
+                    {children}
+                  </OrderProvider>
                 </SessionProvider>
               </ToastProvider>
             </ConfigProvider>
