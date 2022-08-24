@@ -45,10 +45,7 @@ var BillingProvider = function BillingProvider(_ref) {
       children = _ref.children;
   var webStrategy = new _webStrategy.WebStrategy();
   return /*#__PURE__*/_react.default.createElement(BillingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
-    settings: Object.assign(settings.api, {
-      project: settings.project,
-      appId: settings.app_id
-    })
+    settings: settings
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, {
