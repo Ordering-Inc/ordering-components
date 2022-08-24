@@ -22,7 +22,7 @@ export const BillingProvider = ({ settings, children }) => {
   return (
     <BillingContext.Provider>
       <EventProvider>
-        <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
+        <ApiProvider settings={settings}>
           <LanguageProvider strategy={webStrategy}>
             <ConfigProvider strategy={webStrategy}>
               <ToastProvider>
