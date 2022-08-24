@@ -57,6 +57,18 @@ Object.defineProperty(exports, "BaseComponent", {
     return _BaseComponent.BaseComponent;
   }
 });
+Object.defineProperty(exports, "BillingContext", {
+  enumerable: true,
+  get: function get() {
+    return _BillingContext.BillingContext;
+  }
+});
+Object.defineProperty(exports, "BillingProvider", {
+  enumerable: true,
+  get: function get() {
+    return _BillingContext.BillingProvider;
+  }
+});
 Object.defineProperty(exports, "BusinessAndProductList", {
   enumerable: true,
   get: function get() {
@@ -1103,6 +1115,8 @@ var _EventContext = require("./contexts/EventContext");
 var _UtilsContext = require("./contexts/UtilsContext");
 
 var _OrderingContext = require("./contexts/OrderingContext");
+
+var _BillingContext = require("./contexts/BillingContext");
 
 var _CustomerContext = require("./contexts/CustomerContext");
 
