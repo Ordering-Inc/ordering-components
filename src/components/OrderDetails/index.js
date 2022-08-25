@@ -500,6 +500,7 @@ export const OrderDetails = (props) => {
           reorderState={reorderState}
           handleReorder={handleReorder}
           handleRemoveCart={handleRemoveCart}
+          cartState={cartState}
         />
       )}
     </>
