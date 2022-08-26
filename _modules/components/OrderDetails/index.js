@@ -66,7 +66,7 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order9, _orderState$order14, _orderState$order15;
+  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order10, _orderState$order15, _orderState$order16;
 
   var orderId = props.orderId,
       hashKey = props.hashKey,
@@ -104,7 +104,10 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
-      reorder = _useOrder2[1].reorder;
+      carts = _useOrder2[0].carts,
+      _useOrder2$ = _useOrder2[1],
+      reorder = _useOrder2$.reorder,
+      clearCart = _useOrder2$.clearCart;
 
   var _useState = (0, _react.useState)({
     order: (_props$order = props.order) !== null && _props$order !== void 0 ? _props$order : null,
@@ -177,6 +180,14 @@ var OrderDetails = function OrderDetails(props) {
       _useState18 = _slicedToArray(_useState17, 2),
       reorderState = _useState18[0],
       setReorderState = _useState18[1];
+
+  var _useState19 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
+      _useState20 = _slicedToArray(_useState19, 2),
+      cartState = _useState20[0],
+      setCartState = _useState20[1];
 
   var propsToFetch = ['header', 'slug'];
   var deliveryMessages = {
@@ -833,10 +844,81 @@ var OrderDetails = function OrderDetails(props) {
       return _ref10.apply(this, arguments);
     };
   }();
+  /**
+  * Method to remove products from cart
+  */
+
+
+  var handleRemoveCart = /*#__PURE__*/function () {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+      var _carts;
+
+      var uuid, content, _orderState$order9;
+
+      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              uuid = (_carts = carts["businessId:".concat(orderState === null || orderState === void 0 ? void 0 : orderState.order.business_id)]) === null || _carts === void 0 ? void 0 : _carts.uuid;
+
+              if (uuid) {
+                _context10.next = 3;
+                break;
+              }
+
+              return _context10.abrupt("return");
+
+            case 3:
+              _context10.prev = 3;
+              setCartState(_objectSpread(_objectSpread({}, cartState), {}, {
+                loading: true
+              }));
+              _context10.next = 7;
+              return clearCart(uuid);
+
+            case 7:
+              content = _context10.sent;
+
+              if (!(content !== null && content !== void 0 && content.error)) {
+                handleReorder(orderState === null || orderState === void 0 ? void 0 : (_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.id);
+                setCartState({
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setCartState({
+                  loading: false,
+                  error: content === null || content === void 0 ? void 0 : content.result
+                });
+              }
+
+              _context10.next = 14;
+              break;
+
+            case 11:
+              _context10.prev = 11;
+              _context10.t0 = _context10["catch"](3);
+              setCartState({
+                loading: false,
+                error: [_context10.t0.message]
+              });
+
+            case 14:
+            case "end":
+              return _context10.stop();
+          }
+        }
+      }, _callee10, null, [[3, 11]]);
+    }));
+
+    return function handleRemoveCart() {
+      return _ref11.apply(this, arguments);
+    };
+  }();
 
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
-  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.status, orderState.loading]);
+  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.status, orderState.loading]);
   (0, _react.useEffect)(function () {
     if (props.order) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -864,14 +946,14 @@ var OrderDetails = function OrderDetails(props) {
     };
   }, [props.order]);
   (0, _react.useEffect)(function () {
-    var _orderState$order11;
+    var _orderState$order12;
 
     if (orderState.loading || loading) return;
 
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _orderState$order10;
+      var _orderState$order11;
 
-      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.id)) return;
+      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.id)) return;
       showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000);
       delete order.total;
       delete order.subtotal;
@@ -881,8 +963,8 @@ var OrderDetails = function OrderDetails(props) {
       events.emit('order_updated', Object.assign(orderState.order, order)); // loadMessages()
     };
 
-    var handleTrackingDriver = function handleTrackingDriver(_ref11) {
-      var location = _ref11.location;
+    var handleTrackingDriver = function handleTrackingDriver(_ref12) {
+      var location = _ref12.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
         lng: 144.7729561
@@ -893,23 +975,23 @@ var OrderDetails = function OrderDetails(props) {
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     if (!isDisabledOrdersRoom) socket.join(ordersRoom);
 
-    if ((_orderState$order11 = orderState.order) !== null && _orderState$order11 !== void 0 && _orderState$order11.driver_id) {
-      var _orderState$order12;
+    if ((_orderState$order12 = orderState.order) !== null && _orderState$order12 !== void 0 && _orderState$order12.driver_id) {
+      var _orderState$order13;
 
-      socket.join("drivers_".concat((_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.driver_id));
+      socket.join("drivers_".concat((_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.driver_id));
     }
 
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      var _orderState$order13;
+      var _orderState$order14;
 
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
-      socket.leave("drivers_".concat((_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.driver_id));
+      socket.leave("drivers_".concat((_orderState$order14 = orderState.order) === null || _orderState$order14 === void 0 ? void 0 : _orderState$order14.driver_id));
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState.order, socket, loading, userCustomerId, (_orderState$order14 = orderState.order) === null || _orderState$order14 === void 0 ? void 0 : _orderState$order14.driver_id]);
+  }, [orderState.order, socket, loading, userCustomerId, (_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.driver_id]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
 
@@ -929,7 +1011,7 @@ var OrderDetails = function OrderDetails(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket, (_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.status, userCustomerId]);
+  }, [messages, socket, (_orderState$order16 = orderState.order) === null || _orderState$order16 === void 0 ? void 0 : _orderState$order16.status, userCustomerId]);
   (0, _react.useEffect)(function () {
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     socket.join(messagesOrdersRoom);
@@ -971,7 +1053,9 @@ var OrderDetails = function OrderDetails(props) {
     forceUpdate: forceUpdate,
     getOrder: getOrder,
     reorderState: reorderState,
-    handleReorder: handleReorder
+    handleReorder: handleReorder,
+    handleRemoveCart: handleRemoveCart,
+    cartState: cartState
   })));
 };
 
