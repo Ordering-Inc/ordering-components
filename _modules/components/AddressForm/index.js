@@ -224,7 +224,7 @@ var AddressForm = function AddressForm(props) {
 
   var saveAddress = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values, userCustomerSetup) {
-      var _addressState$address, _yield$ordering$users2, content;
+      var _values$country_code, _formState$changes, _addressState$address, _yield$ordering$users2, content, _content$result;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -244,7 +244,9 @@ var AddressForm = function AddressForm(props) {
                 break;
               }
 
-              changeAddress(_objectSpread(_objectSpread({}, values), formState.changes));
+              changeAddress(_objectSpread(_objectSpread({}, values), formState.changes), {
+                country_code: (_values$country_code = values === null || values === void 0 ? void 0 : values.country_code) !== null && _values$country_code !== void 0 ? _values$country_code : (_formState$changes = formState.changes) === null || _formState$changes === void 0 ? void 0 : _formState$changes.country_code
+              });
               onSaveAddress && onSaveAddress(formState.changes);
               return _context2.abrupt("return");
 
@@ -280,6 +282,7 @@ var AddressForm = function AddressForm(props) {
                 if (isSelectedAfterAdd) {
                   changeAddress(content.result.id, {
                     address: isEdit ? null : content.result,
+                    country_code: (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.country_code,
                     isEdit: isEdit
                   });
                 }
