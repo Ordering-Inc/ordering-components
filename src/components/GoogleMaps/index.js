@@ -4,7 +4,7 @@ import { WrapperGoogleMaps } from '../WrapperGoogleMaps'
 
 import { useEvent } from '../../contexts/EventContext'
 import { useUtils } from '../../contexts/UtilsContext'
-
+import { useOrder } from '../../contexts/OrderContext'
 export const GoogleMaps = (props) => {
   const {
     googleReady,
@@ -18,11 +18,15 @@ export const GoogleMaps = (props) => {
     businessMap,
     onBusinessClick,
     setNearBusinessList,
-    noDistanceValidation
+    noDistanceValidation,
+    pfchangs,
+    setCurrentLocation,
+    businessClikedId
   } = props
 
   const [{ optimizeImage }] = useUtils()
   const [events] = useEvent()
+  const [orderState] = useOrder()
   const divRef = useRef()
   const [googleMap, setGoogleMap] = useState(null)
   const [markers, setMarkers] = useState([])
@@ -30,9 +34,29 @@ export const GoogleMaps = (props) => {
   const [boundMap, setBoundMap] = useState(null)
   const [userActivity, setUserActivity] = useState(false)
   const markerRef = useRef()
-
+  let infowindow
   const location = fixedLocation || props.location
   const center = { lat: location?.lat, lng: location?.lng }
+
+  const triggerPopup = (id) => {
+    const marker = markers.find(marker => marker.id === id)
+    window.google.maps.event.trigger(marker, 'click')
+    googleMap && googleMap.panTo(new window.google.maps.LatLng(marker.getPosition()))
+    googleMap && googleMap.setZoom(16)
+  }
+
+  const addClickListenerToInfo = (infowindow, location) => {
+    window.google.maps.event.addListener(infowindow, 'domready', () => {
+      const addressButton = document.getElementById('address-map')
+      if (addressButton && location?.address) {
+        addressButton.addEventListener('click', () => {
+          window.open(
+            `https://www.google.com/maps/search/?api=1&query=${location.address}`, '_blank'
+          )
+        })
+      }
+    })
+  }
 
   /**
    * Function to generate multiple markers
@@ -51,25 +75,36 @@ export const GoogleMaps = (props) => {
         position: new window.google.maps.LatLng(locations[i]?.lat, locations[i]?.lng),
         map,
         title: locations[i]?.slug,
+        id: locations[i]?.id,
         icon: locations[i]?.icon ? {
           url: formatUrl || locations[i].icon,
-          scaledSize: new window.google.maps.Size(45, 45)
+          scaledSize: new window.google.maps.Size(35, 35)
         } : null
       })
-      if (businessMap && !noDistanceValidation) {
-        const isNear = validateResult(googleMap, marker, marker.getPosition())
-        if (isNear) {
+      if (businessMap && (!noDistanceValidation || pfchangs)) {
+        let isNear
+        if (!pfchangs) {
+          isNear = validateResult(googleMap, marker, marker.getPosition())
+        }
+        if (isNear || pfchangs) {
           if (i === 0 && locations[0]?.markerPopup) {
-            const infowindow = new window.google.maps.InfoWindow()
+            infowindow = new window.google.maps.InfoWindow()
             infowindow.setContent(locations[0]?.markerPopup)
             infowindow.open(map, marker)
+            addClickListenerToInfo(infowindow, locations[0])
             markerRef.current = infowindow
           }
           marker.addListener('click', () => {
             if (locations[i]?.markerPopup) {
-              const infowindow = new window.google.maps.InfoWindow()
+              if (infowindow) {
+                infowindow.close()
+              }
+              infowindow = new window.google.maps.InfoWindow()
               infowindow.setContent(locations[i]?.markerPopup)
               infowindow.open(map, marker)
+              addClickListenerToInfo(infowindow, locations[i])
+              googleMap && googleMap.panTo(new window.google.maps.LatLng(marker.getPosition()))
+              googleMap && googleMap.setZoom(16)
             } else {
               onBusinessClick(locations[i]?.slug)
             }
@@ -196,7 +231,7 @@ export const GoogleMaps = (props) => {
       setGoogleMap(map)
 
       if (locations) {
-        if (businessMap) {
+        if (businessMap && !pfchangs) {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center.lat, center.lng),
             map
@@ -206,11 +241,13 @@ export const GoogleMaps = (props) => {
         if (locations.length > 0) {
           generateMarkers(map)
         }
-        marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center?.lat, center?.lng),
-          map
-        })
-        setGoogleMapMarker(marker)
+        if (!pfchangs) {
+          marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(center?.lat, center?.lng),
+            map
+          })
+          setGoogleMapMarker(marker)
+        }
       } else {
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center?.lat, center?.lng),
@@ -223,30 +260,41 @@ export const GoogleMaps = (props) => {
   }, [googleReady])
 
   useEffect(() => {
-    if (!businessMap) {
-      if (googleReady && googleMap && googleMapMarker) {
-        window.google.maps.event.addListener(googleMapMarker, 'dragend', () => {
-          validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
-        })
+    if (!businessMap || pfchangs) {
+      if (googleReady && googleMap && (googleMapMarker || pfchangs)) {
+        if (googleMapMarker) {
+          window.google.maps.event.addListener(googleMapMarker, 'dragend', () => {
+            validateResult(googleMap, googleMapMarker, googleMapMarker.getPosition())
+          })
 
-        window.google.maps.event.addListener(googleMapMarker, 'drag', () => {
-          events.emit('map_is_dragging', true)
-        })
+          window.google.maps.event.addListener(googleMapMarker, 'drag', () => {
+            events.emit('map_is_dragging', true)
+          })
+        }
 
         if (mapControls?.isMarkerDraggable) {
           window.google.maps.event.addListener(googleMap, 'drag', () => {
-            googleMapMarker.setPosition(googleMap.getCenter())
+            if (!pfchangs) {
+              googleMapMarker.setPosition(googleMap.getCenter())
+            }
             events.emit('map_is_dragging', true)
           })
 
           window.google.maps.event.addListener(googleMap, 'dragend', () => {
-            googleMapMarker.setPosition(googleMap.getCenter())
-            validateResult(googleMap, googleMapMarker, googleMap.getCenter())
+            if (!pfchangs) {
+              googleMapMarker.setPosition(googleMap.getCenter())
+              validateResult(googleMap, googleMapMarker, googleMap.getCenter())
+            }
+            if (orderState?.options?.address?.location) {
+              setCurrentLocation && setCurrentLocation(googleMap.getCenter())
+            }
           })
         }
 
         return () => {
-          window.google.maps.event.clearListeners(googleMapMarker, 'dragend')
+          if (googleMapMarker) {
+            window.google.maps.event.clearListeners(googleMapMarker, 'dragend')
+          }
           window.google.maps.event.clearListeners(googleMap, 'drag')
           window.google.maps.event.clearListeners(googleMap, 'dragend')
         }
@@ -267,10 +315,12 @@ export const GoogleMaps = (props) => {
       }
       center.lat = location?.lat
       center.lng = location?.lng
-      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center?.lat, center?.lng))
+      if (!pfchangs) {
+        googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center?.lat, center?.lng))
+      }
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
     }
-  }, [location, locations])
+  }, [location, locations?.length])
 
   useEffect(() => {
     if (!businessMap) {
@@ -289,6 +339,12 @@ export const GoogleMaps = (props) => {
       return () => clearInterval(interval)
     }
   }, [locations, userActivity])
+
+  useEffect(() => {
+    if (businessClikedId) {
+      triggerPopup(businessClikedId)
+    }
+  }, [businessClikedId])
 
   return (
     googleReady && (
