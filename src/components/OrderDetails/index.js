@@ -26,7 +26,7 @@ export const OrderDetails = (props) => {
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [events] = useEvent()
-  const [, { reorder }] = useOrder()
+  const [{ carts }, { reorder, clearCart }] = useOrder()
 
   const [orderState, setOrderState] = useState({ order: props.order ?? null, businessData: {}, loading: !props.order, error: null })
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
@@ -38,6 +38,7 @@ export const OrderDetails = (props) => {
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
   const [forceUpdate, setForceUpdate] = useState(null)
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
+  const [cartState, setCartState] = useState({ loading: false, error: null })
 
   const propsToFetch = ['header', 'slug']
 
@@ -341,6 +342,38 @@ export const OrderDetails = (props) => {
     }
   }
 
+  /**
+ * Method to remove products from cart
+ */
+  const handleRemoveCart = async () => {
+    const uuid = carts[`businessId:${orderState?.order.business_id}`]?.uuid
+    if (!uuid) return
+    try {
+      setCartState({
+        ...cartState,
+        loading: true
+      })
+      const content = await clearCart(uuid)
+      if (!content?.error) {
+        handleReorder(orderState?.order?.id)
+        setCartState({
+          loading: false,
+          error: null
+        })
+      } else {
+        setCartState({
+          loading: false,
+          error: content?.result
+        })
+      }
+    } catch (error) {
+      setCartState({
+        loading: false,
+        error: [error.message]
+      })
+    }
+  }
+
   useEffect(() => {
     !orderState.loading && loadMessages()
   }, [orderId, orderState?.order?.status, orderState.loading])
@@ -390,7 +423,9 @@ export const OrderDetails = (props) => {
     }
     const ordersRoom = user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
     if (!isDisabledOrdersRoom) socket.join(ordersRoom)
-    socket.join(`drivers_${orderState.order?.driver_id}`)
+    if (orderState.order?.driver_id) {
+      socket.join(`drivers_${orderState.order?.driver_id}`)
+    }
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
@@ -399,7 +434,7 @@ export const OrderDetails = (props) => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket, loading, userCustomerId])
+  }, [orderState.order, socket, loading, userCustomerId, orderState.order?.driver_id])
 
   useEffect(() => {
     if (messages.loading) return
@@ -464,6 +499,8 @@ export const OrderDetails = (props) => {
           getOrder={getOrder}
           reorderState={reorderState}
           handleReorder={handleReorder}
+          handleRemoveCart={handleRemoveCart}
+          cartState={cartState}
         />
       )}
     </>

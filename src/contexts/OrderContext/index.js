@@ -67,6 +67,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!state.loading) {
         setState({ ...state, loading: true })
       }
+      const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const options = {}
@@ -81,6 +82,17 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           franchise_id: franchiseId
         }
       }
+
+      const countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== state?.options?.address?.country_code
+        ? countryCodeFromLocalStorage
+        : state?.options?.address?.country_code
+
+      if (countryCode) {
+        options.headers = {
+          'X-Country-Code-X': countryCode
+        }
+      }
+
       const res = await ordering.setAccessToken(session.token).orderOptions().get(options)
       const error = res?.content?.error
       const result = res?.content?.result
@@ -94,6 +106,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         state.options = {
           ...state.options,
           ...options
+        }
+
+        if (!countryCodeFromLocalStorage && options?.address?.country_code) {
+          updateOrderOptions({ country_code: options?.address?.country_code })
         }
       }
       if (error) {
@@ -204,7 +220,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
 
     if (params && params?.address && !checkAddress(params?.address)) {
-      updateOrderOptions({ address_id: params?.address?.id })
+      updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
       return
     }
 
@@ -212,10 +228,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (addressId !== state.options.address_id) {
         return
       }
-      updateOrderOptions({ address_id: addressId })
+      updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
       return
     }
-    updateOrderOptions({ address_id: addressId })
+    updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
   }
 
   /**
@@ -272,6 +288,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    */
   const updateOrderOptions = async (changes) => {
     if (session.auth) {
+      const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
       const body = {
@@ -281,10 +298,27 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       try {
         setState({ ...state, loading: true })
         state.loading = true
+        let headers = {
+          'X-Socket-Id-X': socket?.getId()
+        }
+        const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
+          ? changes?.country_code
+          : countryCodeFromLocalStorage
+
+        if (countryCode) {
+          headers = {
+            ...headers,
+            'X-Country-Code-X': countryCode
+          }
+          await strategy.setItem('country-code', countryCode)
+        }
+        if (body?.country_code) {
+          delete body?.country_code
+        }
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()
-          .save(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
+          .save(body, { headers })
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}

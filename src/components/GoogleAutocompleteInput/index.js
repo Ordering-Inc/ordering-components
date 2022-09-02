@@ -42,13 +42,37 @@ const AutocompleteInput = (props) => {
       const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, options)
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace()
-        let postalCode = null
+        const addressObj = {}
         if (place?.address_components) {
           for (const component of place.address_components) {
             const addressType = component.types[0]
             if (addressType === 'postal_code') {
-              postalCode = component.short_name
-              break
+              addressObj.zipcode = component.short_name
+            }
+            if (addressType === 'street_number') {
+              addressObj.street_number = component.long_name
+            }
+            if (addressType === 'neighborhood') {
+              addressObj.neighborhood = component.long_name
+            }
+            if (addressType === 'route') {
+              addressObj.route = component.short_name
+            }
+            if (addressType === 'locality') {
+              addressObj.locality = component.long_name
+            }
+            if (component.types?.includes('sublocality') === 'sublocality') {
+              addressObj.sublocality = component.long_name
+            }
+            if (addressType === 'country') {
+              addressObj.country = component.long_name
+              addressObj.country_code = component.short_name
+            }
+            if (addressType === 'administrative_area_level_1') {
+              addressObj.state = component.long_name
+            }
+            if (addressType === 'administrative_area_level_2') {
+              addressObj.city = component.long_name
             }
           }
           const address = {
@@ -61,10 +85,8 @@ const AutocompleteInput = (props) => {
             map_data: {
               library: 'google',
               place_id: place.place_id
-            }
-          }
-          if (postalCode) {
-            address.zipcode = postalCode
+            },
+            ...addressObj
           }
           onChangeAddress(address)
         }
@@ -125,7 +147,7 @@ AutocompleteInput.propTypes = {
 
 AutocompleteInput.defaultProps = {
   types: [],
-  fields: ['place_id', 'formatted_address', 'geometry', 'utc_offset_minutes', 'address_components'],
+  fields: ['ALL'],
   countryCode: '*'
 }
 

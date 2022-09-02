@@ -92,6 +92,7 @@ import { ApiContext, ApiProvider, useApi } from './contexts/ApiContext'
 import { EventContext, EventProvider, useEvent } from './contexts/EventContext'
 import { UtilsContext, UtilsProviders, useUtils } from './contexts/UtilsContext'
 import { OrderingContext, OrderingProvider } from './contexts/OrderingContext'
+import { BillingContext, BillingProvider } from './contexts/BillingContext'
 import { CustomerContext, CustomerProvider, useCustomer } from './contexts/CustomerContext'
 import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { ToastContext, ToastProvider, useToast, ToastType } from './contexts/ToastContext'
@@ -253,6 +254,8 @@ export {
   useApi,
   OrderingContext,
   OrderingProvider,
+  BillingContext,
+  BillingProvider,
   EventContext,
   EventProvider,
   useEvent,
