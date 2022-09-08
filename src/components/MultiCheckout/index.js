@@ -36,7 +36,7 @@ export const MultiCheckout = (props) => {
   */
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
 
-  const openCarts = (Object.values(carts)?.filter(cart => cart?.products && cart?.products?.length && cart?.status !== 2 && cart?.valid_schedule && cart?.valid_products && cart?.valid_address && cart?.valid_maximum && cart?.valid_minimum) || null) || []
+  const openCarts = (Object.values(carts)?.filter(cart => cart?.products && cart?.products?.length && cart?.status !== 2 && cart?.valid_schedule && cart?.valid_products && cart?.valid_address && cart?.valid_maximum && cart?.valid_minimum && !cart?.wallets) || null) || []
   const totalCartsPrice = openCarts && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
   const cartsUuids = openCarts.reduce((uuids, cart) => [...uuids, cart.uuid], [])
 
