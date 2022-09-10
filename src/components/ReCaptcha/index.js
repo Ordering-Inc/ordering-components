@@ -1,5 +1,6 @@
 import React from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { useConfig } from '../../contexts/ConfigContext'
 import PropTypes from 'prop-types'
 
