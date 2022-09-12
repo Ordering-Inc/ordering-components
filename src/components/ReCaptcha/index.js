@@ -11,31 +11,12 @@ export const ReCaptcha = (props) => {
 
   const [{ configs }] = useConfig()
   const [reCaptchaVersion, setRecaptchaVersion] = useState({ version: 'v2', siteKey: '' })
-  const [score, setScore] = useState(0)
 
   /**
    * Change reCaptcha
    */
   const onChange = (value) => {
     handleReCaptcha(value)
-    // score === 0 && getScore(value)
-  }
-  /**
-   * get score
-   */
-  const getScore = async (value) => {
-    setScore(1)
-    const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        secret: '6LcnFa4hAAAAADboq_iU3VBt5rg0wRqfeYapPILS',
-        response: value
-      })
-    })
-    const res = await response.json()
   }
 
   useEffect(() => {
