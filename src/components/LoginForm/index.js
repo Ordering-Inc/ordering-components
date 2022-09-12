@@ -90,6 +90,11 @@ export const LoginForm = (props) => {
           return
         } else {
           _credentials.verification_code = reCaptchaValue
+          const reCaptchaVersion = (configs && Object.keys(configs).length > 0 &&
+            configs?.security_recaptcha_type?.value === 'v3' &&
+            configs?.security_recaptcha_score_v3?.value > 0 &&
+            configs?.security_recaptcha_site_key_v3?.value) ? 'v3' : 'v2'
+          _credentials.recaptcha_type = reCaptchaVersion
         }
       }
       setFormState({ ...formState, loading: true })
@@ -109,7 +114,7 @@ export const LoginForm = (props) => {
       const { content: { error, result } } = await ordering.users().auth(_credentials)
 
       if (isReCaptchaEnable && window?.grecaptcha) {
-        window.grecaptcha.reset()
+        _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset()
         setReCaptchaValue(null)
       }
 
@@ -117,10 +122,10 @@ export const LoginForm = (props) => {
         if (useDefualtSessionManager) {
           if (allowedLevels && allowedLevels?.length > 0) {
             const { level, session } = result
-            const access_token = session?.access_token
+            const accessToken = session?.access_token
             if (!allowedLevels.includes(level)) {
               try {
-                const { content: logoutResp } = await ordering.setAccessToken(access_token).users().logout()
+                const { content: logoutResp } = await ordering.setAccessToken(accessToken).users().logout()
                 if (!logoutResp.error) {
                   logout()
                 }
