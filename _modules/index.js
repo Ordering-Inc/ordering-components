@@ -525,6 +525,12 @@ Object.defineProperty(exports, "PaymentOptionCash", {
     return _PaymentOptionCash.PaymentOptionCash;
   }
 });
+Object.defineProperty(exports, "PaymentOptionOpenPay", {
+  enumerable: true,
+  get: function get() {
+    return _PaymentOptionOpenPay.PaymentOptionOpenPay;
+  }
+});
 Object.defineProperty(exports, "PaymentOptionPaypal", {
   enumerable: true,
   get: function get() {
@@ -1129,6 +1135,8 @@ var _OrderingThemeContext = require("./contexts/OrderingThemeContext");
 var _PlaceSpot = require("./components/PlaceSpot");
 
 var _PaymethodList = require("./components/PaymethodList");
+
+var _PaymentOptionOpenPay = require("./components/PaymentOptionOpenPay");
 
 var _PaymentOptionCash = require("./components/PaymentOptionCash");
 
