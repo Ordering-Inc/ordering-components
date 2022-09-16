@@ -99,6 +99,7 @@ import { ToastContext, ToastProvider, useToast, ToastType } from './contexts/Toa
 import { OrderingThemeContext, OrderingThemeProvider, useOrderingTheme } from './contexts/OrderingThemeContext'
 import { PlaceSpot } from './components/PlaceSpot'
 import { PaymethodList } from './components/PaymethodList'
+import { PaymentOptionOpenPay } from './components/PaymentOptionOpenPay'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
 import { PaymentOptionPaypal } from './components/PaymentOptionPaypal'
 import { PaymentOptionStripe } from './components/PaymentOptionStripe'
@@ -206,6 +207,7 @@ export {
   OrderDetails,
   OrderReview,
   PaymentOptionCash,
+  PaymentOptionOpenPay,
   PaymentOptionPaypal,
   PaymentOptionStripe,
   PaymentOptionStripeDirect,
