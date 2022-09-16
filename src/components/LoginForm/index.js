@@ -30,7 +30,7 @@ export const LoginForm = (props) => {
   const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
   const [events] = useEvent()
   const [{ configs }] = useConfig()
-  const [reCaptchaValue, setReCaptchaValue] = useState(null)
+  const [reCaptchaValue, setReCaptchaValue] = useState({ code: '', version: '' })
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
 
   const useLoginByCellphone = configs?.phone_password_login_enabled?.value === '1'
@@ -79,7 +79,7 @@ export const LoginForm = (props) => {
       }
 
       if (isReCaptchaEnable) {
-        if (reCaptchaValue === null) {
+        if (reCaptchaValue?.code === '') {
           setFormState({
             result: {
               error: true,
@@ -89,12 +89,8 @@ export const LoginForm = (props) => {
           })
           return
         } else {
-          _credentials.verification_code = reCaptchaValue
-          const reCaptchaVersion = (configs && Object.keys(configs).length > 0 &&
-            configs?.security_recaptcha_type?.value === 'v3' &&
-            configs?.security_recaptcha_score_v3?.value > 0 &&
-            configs?.security_recaptcha_site_key_v3?.value) ? 'v3' : 'v2'
-          _credentials.recaptcha_type = reCaptchaVersion
+          _credentials.verification_code = reCaptchaValue?.code
+          _credentials.recaptcha_type = reCaptchaValue?.version
         }
       }
       setFormState({ ...formState, loading: true })
@@ -115,7 +111,7 @@ export const LoginForm = (props) => {
 
       if (isReCaptchaEnable && window?.grecaptcha) {
         _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset()
-        setReCaptchaValue(null)
+        setReCaptchaValue({ code: '', version: '' })
       }
 
       if (!error) {
