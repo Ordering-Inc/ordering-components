@@ -17,6 +17,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _EventContext = require("../../contexts/EventContext");
 
+var _SessionContext = require("../../contexts/SessionContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -80,7 +82,14 @@ var PaymentOptions = function PaymentOptions(props) {
       orderState = _useOrder2[0],
       changePaymethod = _useOrder2[1].changePaymethod;
 
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token;
+
   var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts2 = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts2 === void 0 ? void 0 : _orderState$carts2.total) || 0;
+  var isAlsea = ordering.project === 'alsea';
 
   var _useState = (0, _react.useState)({
     paymethods: [],
@@ -107,6 +116,15 @@ var PaymentOptions = function PaymentOptions(props) {
       _useState8 = _slicedToArray(_useState7, 2),
       isOpenMethod = _useState8[0],
       setIsOpenMethod = _useState8[1];
+
+  var _useState9 = (0, _react.useState)({
+    loading: false,
+    points: null,
+    error: null
+  }),
+      _useState10 = _slicedToArray(_useState9, 2),
+      wowPoints = _useState10[0],
+      setWowPoints = _useState10[1];
 
   var parsePaymethods = function parsePaymethods(paymethods) {
     var _paymethods = paymethods && paymethods.filter(function (credentials) {
@@ -248,6 +266,82 @@ var PaymentOptions = function PaymentOptions(props) {
     }
   };
 
+  var getWowPoints = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var _result$user, response, result, _result$user2;
+
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setWowPoints(_objectSpread(_objectSpread({}, wowPoints), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/wow_check_profile.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  id: user === null || user === void 0 ? void 0 : user.id,
+                  mail: user === null || user === void 0 ? void 0 : user.email,
+                  name: user === null || user === void 0 ? void 0 : user.name,
+                  lastname: user === null || user === void 0 ? void 0 : user.lastname,
+                  cellphone: user === null || user === void 0 ? void 0 : user.cellphone
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId,
+                  'Content-Type': 'application/json'
+                }
+              });
+
+            case 4:
+              response = _context2.sent;
+              _context2.next = 7;
+              return response.json();
+
+            case 7:
+              result = _context2.sent;
+
+              if (result !== null && result !== void 0 && (_result$user = result.user) !== null && _result$user !== void 0 && _result$user.points) {
+                setWowPoints({
+                  error: false,
+                  loading: false,
+                  points: result === null || result === void 0 ? void 0 : (_result$user2 = result.user) === null || _result$user2 === void 0 ? void 0 : _result$user2.points
+                });
+              } else {
+                setWowPoints({
+                  error: true,
+                  loading: false,
+                  points: '???'
+                });
+              }
+
+              _context2.next = 14;
+              break;
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](0);
+              setWowPoints({
+                error: true,
+                loading: false,
+                points: '???'
+              });
+
+            case 14:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 11]]);
+    }));
+
+    return function getWowPoints() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     if (paymethodSelected) {
       changePaymethod(businessId, paymethodSelected.id, JSON.stringify(paymethodData));
@@ -273,6 +367,14 @@ var PaymentOptions = function PaymentOptions(props) {
         loading: isLoading,
         paymethods: parsePaymethods(paymethods)
       }));
+
+      if (paymethods.find(function (paymethod) {
+        var _paymethod$paymethod;
+
+        return (paymethod === null || paymethod === void 0 ? void 0 : (_paymethod$paymethod = paymethod.paymethod) === null || _paymethod$paymethod === void 0 ? void 0 : _paymethod$paymethod.gateway) === 'wow_rewards';
+      })) {
+        getWowPoints();
+      }
     } else {
       if (businessId) {
         getPaymentOptions();
@@ -285,6 +387,7 @@ var PaymentOptions = function PaymentOptions(props) {
     paymethodsList: paymethodsList,
     paymethodSelected: paymethodSelected,
     paymethodData: paymethodData,
+    wowPoints: wowPoints,
     setPaymethodData: setPaymethodData,
     handlePaymethodClick: handlePaymethodClick,
     handlePaymethodDataChange: handlePaymethodDataChange
