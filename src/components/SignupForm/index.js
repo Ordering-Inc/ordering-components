@@ -36,7 +36,7 @@ export const SignupForm = (props) => {
   const [willVerifyOtpState, setWillVerifyOtpState] = useState(false)
   const [otpState, setOtpState] = useState('')
   const [{ configs }] = useConfig()
-  const [reCaptchaValue, setReCaptchaValue] = useState(null)
+  const [reCaptchaValue, setReCaptchaValue] = useState({ code: '', version: '' })
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
   const [promotionsEnabled, setPromotionsEnabled] = useState(false)
 
@@ -56,7 +56,7 @@ export const SignupForm = (props) => {
     }
     const data = values || signupData
     if (isReCaptchaEnable) {
-      if (reCaptchaValue === null) {
+      if (reCaptchaValue?.code === '') {
         setFormState({
           result: {
             error: true,
@@ -66,7 +66,8 @@ export const SignupForm = (props) => {
         })
         return
       } else {
-        data.verification_code = reCaptchaValue
+        data.verification_code = reCaptchaValue?.code
+        data.recaptcha_type = reCaptchaValue?.version
       }
     }
 
