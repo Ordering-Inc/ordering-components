@@ -24,28 +24,31 @@ export const PaymentOptionOpenPay = (props) => {
 
   useEffect(() => {
     if (!merchantId || !publicKey) return
-    if (window?.OpenPay) {
+    if (window?.OpenPay?.deviceData?.setup) {
       setIsSdkReady(true)
       return
     }
-    const script = document.createElement('script')
-    script.type = 'text/javascript'
-    script.src = 'https://resources.openpay.mx/lib/openpay-js/1.2.38/openpay.v1.min.js'
-    script.async = true
-    script.onload = () => {
-      setIsSdkReady(true)
-      window.OpenPay.setId(merchantId)
-      window.OpenPay.setApiKey(publicKey)
-      window.OpenPay.setSandboxMode(isSandbox)
-    }
-    script.onerror = () => {
-      throw new Error('Open pay SDK could not be loaded.')
-    }
-
-    document.body.appendChild(script)
-    return () => {
-      script.onload = null
-    }
+    const scripts = [
+      'https://js.openpay.mx/openpay.v1.min.js',
+      'https://js.openpay.mx/openpay-data.v1.min.js'
+    ]
+    scripts.forEach(s => {
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = s
+      script.defer = true
+      script.async = true
+      script.onload = () => {
+        window.OpenPay.setId(merchantId)
+        window.OpenPay.setApiKey(publicKey)
+        window.OpenPay.setSandboxMode(isSandbox)
+        setIsSdkReady(true)
+      }
+      script.onerror = () => {
+        throw new Error('Open pay SDK could not be loaded.')
+      }
+      document.body.appendChild(script)
+    })
   }, [merchantId, publicKey])
 
   const getCards = async () => {
