@@ -1,53 +1,42 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
-import { useConfig } from '../../contexts/ConfigContext'
 import PropTypes from 'prop-types'
 
 export const ReCaptcha = (props) => {
   const {
-    handleReCaptcha
+    handleReCaptcha,
+    reCaptchaVersion
   } = props
 
-  const [{ configs }] = useConfig()
-  const [reCaptchaVersion, setRecaptchaVersion] = useState({ version: 'v2', siteKey: '' })
-
+  const [currVersion, setCurrVersion] = useState(reCaptchaVersion?.version)
   /**
    * Change reCaptcha
    */
-  const onChange = (value) => {
-    handleReCaptcha(value)
-  }
+  const onChange = useCallback((value) => {
+    handleReCaptcha({ code: value, version: reCaptchaVersion?.version })
+  }, [reCaptchaVersion])
 
   useEffect(() => {
-    if (configs && Object.keys(configs).length > 0 &&
-      configs?.security_recaptcha_type?.value === 'v3' &&
-      configs?.security_recaptcha_score_v3?.value > 0 &&
-      configs?.security_recaptcha_site_key_v3?.value
-    ) {
-      setRecaptchaVersion({ version: 'v3', siteKey: configs?.security_recaptcha_site_key_v3?.value })
-      return
+    if (reCaptchaVersion?.siteKey === '') return
+    if (currVersion?.version !== reCaptchaVersion && window.grecaptcha) {
+      window.grecaptcha = undefined
     }
-    if (configs && Object.keys(configs).length > 0 && configs?.security_recaptcha_site_key?.value) {
-      setRecaptchaVersion({ version: 'v2', siteKey: configs?.security_recaptcha_site_key?.value })
-      return
-    }
-    if (configs && Object.keys(configs).length > 0) {
-      throw new Error('ReCaptcha component: the config doesn\'t have recaptcha site key')
-    }
-  }, [configs])
+    setCurrVersion(reCaptchaVersion?.version)
+  }, [reCaptchaVersion])
 
   return (
     <>
-      {reCaptchaVersion?.version === 'v2' ? (
+      {(reCaptchaVersion?.version === 'v3' && currVersion === 'v3') && (
+        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaVersion?.siteKey}>
+          <GoogleReCaptcha onVerify={onChange} />
+        </GoogleReCaptchaProvider>
+      )}
+      {(reCaptchaVersion?.version === 'v2' && currVersion === 'v2') && (
         <ReCAPTCHA
           sitekey={reCaptchaVersion?.siteKey}
           onChange={onChange}
         />
-      ) : (
-        <GoogleReCaptchaProvider reCaptchaKey={reCaptchaVersion?.siteKey}>
-          <GoogleReCaptcha onVerify={onChange} />
-        </GoogleReCaptchaProvider>
       )}
     </>
   )
