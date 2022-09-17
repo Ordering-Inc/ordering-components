@@ -13,8 +13,6 @@ var _reactGoogleRecaptcha = _interopRequireDefault(require("react-google-recaptc
 
 var _reactGoogleRecaptchaV = require("react-google-recaptcha-v3");
 
-var _ConfigContext = require("../../contexts/ConfigContext");
-
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -36,63 +34,41 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var ReCaptcha = function ReCaptcha(props) {
-  var handleReCaptcha = props.handleReCaptcha;
+  var handleReCaptcha = props.handleReCaptcha,
+      reCaptchaVersion = props.reCaptchaVersion;
 
-  var _useConfig = (0, _ConfigContext.useConfig)(),
-      _useConfig2 = _slicedToArray(_useConfig, 1),
-      configs = _useConfig2[0].configs;
-
-  var _useState = (0, _react.useState)({
-    version: 'v2',
-    siteKey: ''
-  }),
+  var _useState = (0, _react.useState)(reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version),
       _useState2 = _slicedToArray(_useState, 2),
-      reCaptchaVersion = _useState2[0],
-      setRecaptchaVersion = _useState2[1];
+      currVersion = _useState2[0],
+      setCurrVersion = _useState2[1];
   /**
    * Change reCaptcha
    */
 
 
-  var onChange = function onChange(value) {
-    handleReCaptcha(value);
-  };
-
+  var onChange = (0, _react.useCallback)(function (value) {
+    handleReCaptcha({
+      code: value,
+      version: reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version
+    });
+  }, [reCaptchaVersion]);
   (0, _react.useEffect)(function () {
-    var _configs$security_rec, _configs$security_rec2, _configs$security_rec3, _configs$security_rec5;
+    if ((reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.siteKey) === '') return;
 
-    if (configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_type) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === 'v3' && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec2 = configs.security_recaptcha_score_v3) === null || _configs$security_rec2 === void 0 ? void 0 : _configs$security_rec2.value) > 0 && configs !== null && configs !== void 0 && (_configs$security_rec3 = configs.security_recaptcha_site_key_v3) !== null && _configs$security_rec3 !== void 0 && _configs$security_rec3.value) {
-      var _configs$security_rec4;
-
-      setRecaptchaVersion({
-        version: 'v3',
-        siteKey: configs === null || configs === void 0 ? void 0 : (_configs$security_rec4 = configs.security_recaptcha_site_key_v3) === null || _configs$security_rec4 === void 0 ? void 0 : _configs$security_rec4.value
-      });
-      return;
+    if ((currVersion === null || currVersion === void 0 ? void 0 : currVersion.version) !== reCaptchaVersion && window.grecaptcha) {
+      window.grecaptcha = undefined;
     }
 
-    if (configs && Object.keys(configs).length > 0 && configs !== null && configs !== void 0 && (_configs$security_rec5 = configs.security_recaptcha_site_key) !== null && _configs$security_rec5 !== void 0 && _configs$security_rec5.value) {
-      var _configs$security_rec6;
-
-      setRecaptchaVersion({
-        version: 'v2',
-        siteKey: configs === null || configs === void 0 ? void 0 : (_configs$security_rec6 = configs.security_recaptcha_site_key) === null || _configs$security_rec6 === void 0 ? void 0 : _configs$security_rec6.value
-      });
-      return;
-    }
-
-    if (configs && Object.keys(configs).length > 0) {
-      throw new Error('ReCaptcha component: the config doesn\'t have recaptcha site key');
-    }
-  }, [configs]);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, (reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version) === 'v2' ? /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptcha.default, {
-    sitekey: reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.siteKey,
-    onChange: onChange
-  }) : /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptchaV.GoogleReCaptchaProvider, {
+    setCurrVersion(reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version);
+  }, [reCaptchaVersion]);
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, (reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version) === 'v3' && currVersion === 'v3' && /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptchaV.GoogleReCaptchaProvider, {
     reCaptchaKey: reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.siteKey
   }, /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptchaV.GoogleReCaptcha, {
     onVerify: onChange
-  })));
+  })), (reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version) === 'v2' && currVersion === 'v2' && /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptcha.default, {
+    sitekey: reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.siteKey,
+    onChange: onChange
+  }));
 };
 
 exports.ReCaptcha = ReCaptcha;

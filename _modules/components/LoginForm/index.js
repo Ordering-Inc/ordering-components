@@ -123,7 +123,10 @@ var LoginForm = function LoginForm(props) {
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configs = _useConfig2[0].configs;
 
-  var _useState9 = (0, _react.useState)(null),
+  var _useState9 = (0, _react.useState)({
+    code: '',
+    version: ''
+  }),
       _useState10 = _slicedToArray(_useState9, 2),
       reCaptchaValue = _useState10[0],
       setReCaptchaValue = _useState10[1];
@@ -172,7 +175,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var _credentials4, _credentials4$cellpho, _window, _credentials, _credentials2, _credentials3, _configs$security_rec, _configs$security_rec2, _configs$security_rec3, reCaptchaVersion, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, accessToken, _yield$ordering$setAc, logoutResp;
+      var _credentials4, _credentials4$cellpho, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, accessToken, _yield$ordering$setAc, logoutResp;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -202,11 +205,11 @@ var LoginForm = function LoginForm(props) {
               }
 
               if (!isReCaptchaEnable) {
-                _context.next = 14;
+                _context.next = 13;
                 break;
               }
 
-              if (!(reCaptchaValue === null)) {
+              if (!((reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code) === '')) {
                 _context.next = 11;
                 break;
               }
@@ -221,11 +224,10 @@ var LoginForm = function LoginForm(props) {
               return _context.abrupt("return");
 
             case 11:
-              _credentials.verification_code = reCaptchaValue;
-              reCaptchaVersion = configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_type) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === 'v3' && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec2 = configs.security_recaptcha_score_v3) === null || _configs$security_rec2 === void 0 ? void 0 : _configs$security_rec2.value) > 0 && configs !== null && configs !== void 0 && (_configs$security_rec3 = configs.security_recaptcha_site_key_v3) !== null && _configs$security_rec3 !== void 0 && _configs$security_rec3.value ? 'v3' : 'v2';
-              _credentials.recaptcha_type = reCaptchaVersion;
+              _credentials.verification_code = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code;
+              _credentials.recaptcha_type = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.version;
 
-            case 14:
+            case 13:
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
@@ -241,10 +243,10 @@ var LoginForm = function LoginForm(props) {
                 _credentials.notification_token = notificationState.notification_token;
               }
 
-              _context.next = 19;
+              _context.next = 18;
               return ordering.users().auth(_credentials);
 
-            case 19:
+            case 18:
               _yield$ordering$users = _context.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               error = _yield$ordering$users2.error;
@@ -252,21 +254,24 @@ var LoginForm = function LoginForm(props) {
 
               if (isReCaptchaEnable && (_window = window) !== null && _window !== void 0 && _window.grecaptcha) {
                 _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset();
-                setReCaptchaValue(null);
+                setReCaptchaValue({
+                  code: '',
+                  version: ''
+                });
               }
 
               if (error) {
-                _context.next = 47;
+                _context.next = 46;
                 break;
               }
 
               if (!useDefualtSessionManager) {
-                _context.next = 44;
+                _context.next = 43;
                 break;
               }
 
               if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-                _context.next = 43;
+                _context.next = 42;
                 break;
               }
 
@@ -274,15 +279,15 @@ var LoginForm = function LoginForm(props) {
               accessToken = session === null || session === void 0 ? void 0 : session.access_token;
 
               if (allowedLevels.includes(level)) {
-                _context.next = 43;
+                _context.next = 42;
                 break;
               }
 
-              _context.prev = 30;
-              _context.next = 33;
+              _context.prev = 29;
+              _context.next = 32;
               return ordering.setAccessToken(accessToken).users().logout();
 
-            case 33:
+            case 32:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
@@ -297,12 +302,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 42;
+              _context.next = 41;
               break;
 
-            case 39:
-              _context.prev = 39;
-              _context.t0 = _context["catch"](30);
+            case 38:
+              _context.prev = 38;
+              _context.t0 = _context["catch"](29);
               setFormState({
                 result: {
                   error: true,
@@ -311,16 +316,16 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 42:
+            case 41:
               return _context.abrupt("return");
 
-            case 43:
+            case 42:
               login({
                 user: result,
                 token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
 
-            case 44:
+            case 43:
               events.emit('userLogin', result);
 
               if (handleSuccessLogin) {
@@ -331,7 +336,7 @@ var LoginForm = function LoginForm(props) {
                 window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
               }
 
-            case 47:
+            case 46:
               setFormState({
                 result: {
                   error: error,
@@ -339,11 +344,11 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 53;
+              _context.next = 52;
               break;
 
-            case 50:
-              _context.prev = 50;
+            case 49:
+              _context.prev = 49;
               _context.t1 = _context["catch"](3);
               setFormState({
                 result: {
@@ -353,12 +358,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 53:
+            case 52:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 50], [30, 39]]);
+      }, _callee, null, [[3, 49], [29, 38]]);
     }));
 
     return function handleLoginClick(_x) {
@@ -367,9 +372,9 @@ var LoginForm = function LoginForm(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    var _configs$security_rec4;
+    var _configs$security_rec;
 
-    setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec4 = configs.security_recaptcha_auth) === null || _configs$security_rec4 === void 0 ? void 0 : _configs$security_rec4.value) === '1');
+    setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_auth) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === '1');
 
     if (useLoginOtpCellphone && !useLoginOtpEmail) {
       setOtpType('cellphone');
