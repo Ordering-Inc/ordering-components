@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
-
+import { useOrder } from '../../contexts/OrderContext'
+import { useConfig } from '../../contexts/ConfigContext'
 /**
  * Component to manage payment option paypal behavior without UI component
  */
@@ -11,7 +12,8 @@ export const PaymentOptionOpenPay = (props) => {
     UIComponent,
     publicKey,
     merchantId,
-    isSandbox
+    isSandbox,
+    businessId
   } = props
 
   const [{ token, user }] = useSession()
@@ -19,6 +21,8 @@ export const PaymentOptionOpenPay = (props) => {
   const [isSdkReady, setIsSdkReady] = useState(false)
   const [ordering] = useApi()
   const [cardSelected, setCardSelected] = useState(null)
+  const [ , { applyCoupon, applyOffer, removeOffer }] = useOrder()
+  const [{ configs }] = useConfig()
 
   const isAlsea = ordering.project === 'alsea'
 
@@ -107,6 +111,23 @@ export const PaymentOptionOpenPay = (props) => {
         device_session_id: window.OpenPay.deviceData.setup()
       }
     })
+    if (card.brandCardName === 'mastercard') {
+      applyMasterCardCoupon()
+    } else {
+      if (props?.cart?.offers.length > 0) {
+        if (!configs?.advanced_offers_module?.value) {
+          applyCoupon({
+            business_id: businessId,
+            coupon: null
+          })
+        } else {
+          removeOffer({
+            business_id: businessId,
+            offer_id: props?.cart?.offers[0].id
+          })
+        }
+      }
+    }
   }
 
   const handleNewCard = async (data) => {
@@ -235,6 +256,21 @@ export const PaymentOptionOpenPay = (props) => {
         ...cardsList,
         loading: false,
         error: [err.message]
+      })
+    }
+  }
+
+  const applyMasterCardCoupon = () => {
+    if (!configs?.advanced_offers_module?.value) {
+      applyCoupon({
+        business_id: businessId,
+        coupon: 'DLVMASTER30'
+      })
+    } else {
+      applyOffer({
+        business_id: businessId,
+        coupon: 'DLVMASTER30',
+        force: true
       })
     }
   }
