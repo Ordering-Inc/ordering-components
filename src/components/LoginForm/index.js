@@ -30,7 +30,7 @@ export const LoginForm = (props) => {
   const [checkPhoneCodeState, setCheckPhoneCodeState] = useState({ loading: false, result: { error: false } })
   const [events] = useEvent()
   const [{ configs }] = useConfig()
-  const [reCaptchaValue, setReCaptchaValue] = useState(null)
+  const [reCaptchaValue, setReCaptchaValue] = useState({ code: '', version: '' })
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
 
   const useLoginByCellphone = configs?.phone_password_login_enabled?.value === '1'
@@ -79,7 +79,7 @@ export const LoginForm = (props) => {
       }
 
       if (isReCaptchaEnable) {
-        if (reCaptchaValue === null) {
+        if (reCaptchaValue?.code === '') {
           setFormState({
             result: {
               error: true,
@@ -89,7 +89,8 @@ export const LoginForm = (props) => {
           })
           return
         } else {
-          _credentials.verification_code = reCaptchaValue
+          _credentials.verification_code = reCaptchaValue?.code
+          _credentials.recaptcha_type = reCaptchaValue?.version
         }
       }
       setFormState({ ...formState, loading: true })
@@ -109,18 +110,18 @@ export const LoginForm = (props) => {
       const { content: { error, result } } = await ordering.users().auth(_credentials)
 
       if (isReCaptchaEnable && window?.grecaptcha) {
-        window.grecaptcha.reset()
-        setReCaptchaValue(null)
+        _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset()
+        setReCaptchaValue({ code: '', version: '' })
       }
 
       if (!error) {
         if (useDefualtSessionManager) {
           if (allowedLevels && allowedLevels?.length > 0) {
             const { level, session } = result
-            const access_token = session?.access_token
+            const accessToken = session?.access_token
             if (!allowedLevels.includes(level)) {
               try {
-                const { content: logoutResp } = await ordering.setAccessToken(access_token).users().logout()
+                const { content: logoutResp } = await ordering.setAccessToken(accessToken).users().logout()
                 if (!logoutResp.error) {
                   logout()
                 }
