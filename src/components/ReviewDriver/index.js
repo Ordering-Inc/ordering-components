@@ -41,9 +41,13 @@ export const ReviewDriver = (props) => {
             error: false
           }
         })
-        if (isToast) showToast(ToastType.Success, isProfessional
-          ? t('PROFESSIONAL_REVIEW_SUCCESS_CONTENT', 'Thank you, Professional review successfully submitted!')
-          : t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'))
+        if (isToast) {
+          showToast(
+            ToastType.Success,
+            isProfessional
+              ? t('PROFESSIONAL_REVIEW_SUCCESS_CONTENT', 'Thank you, Professional review successfully submitted!')
+              : t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'))
+        }
       } else {
         setFormState({
           ...formState,
