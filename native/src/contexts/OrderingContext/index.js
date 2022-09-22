@@ -27,18 +27,24 @@ export const OrderingContext = createContext()
  */
 export const OrderingProvider = ({ Alert, settings, children, isDisableToast, isDisabledDefaultOpts }) => {
   const nativeStrategy = new NativeStrategy()
+  const restOfSettings = {
+    project: settings.project,
+    appId: settings.app_id,
+    use_root_point: settings.use_root_point,
+    countryCode: settings.countryCode
+  }
   return (
     <OrderingContext.Provider>
       <EventProvider>
-        <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
+        <ApiProvider settings={Object.assign(settings.api, restOfSettings)}>
           <LanguageProvider strategy={nativeStrategy}>
             <ConfigProvider strategy={nativeStrategy}>
-              <OrderingThemeProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
+              <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
                 <UtilsProviders>
                   <ToastProvider>
                     <ValidationFieldsProvider>
                       <SessionProvider strategy={nativeStrategy}>
-                        <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, { project: settings.project, use_root_point: settings.use_root_point })}>
+                        <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, restOfSettings)}>
                           <CustomerProvider strategy={nativeStrategy}>
                             <OrderProvider
                               isDisabledDefaultOpts={isDisabledDefaultOpts}
