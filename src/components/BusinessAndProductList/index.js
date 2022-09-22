@@ -413,7 +413,6 @@ export const BusinessAndProductList = (props) => {
       return
     }
 
-    console.log('sdf')
     const pageSize = categoryStateDefault.pagination.pageSize
 
     try {

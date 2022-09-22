@@ -42,7 +42,7 @@ export const ProfessionalInfo = (props) => {
   }
 
   /**
-   * Method to get the driver reviews from API
+   * Method to get the user reviews from API
    */
   const getUserReviews = async () => {
     try {
