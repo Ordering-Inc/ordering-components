@@ -344,6 +344,7 @@ var OrderProvider = function OrderProvider(_ref) {
               }
 
               if (_options2 && Object.keys(_options2).length > 0) {
+                console.log('______________________________ get update __________________________', _options2);
                 updateOrderOptions(_options2);
               } else {
                 setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -631,25 +632,26 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 38;
+                _context5.next = 39;
                 break;
               }
 
-              _context5.next = 3;
+              console.log('_________________ update options changes _______________', changes);
+              _context5.next = 4;
               return strategy.getItem('country-code');
 
-            case 3:
+            case 4:
               countryCodeFromLocalStorage = _context5.sent;
-              _context5.next = 6;
+              _context5.next = 7;
               return strategy.getItem('user-customer', true);
 
-            case 6:
+            case 7:
               customerFromLocalStorage = _context5.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({}, changes), {}, {
                 user_id: userCustomerId || session.user.id
               });
-              _context5.prev = 9;
+              _context5.prev = 10;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
@@ -660,27 +662,27 @@ var OrderProvider = function OrderProvider(_ref) {
               countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : countryCodeFromLocalStorage;
 
               if (!countryCode) {
-                _context5.next = 18;
+                _context5.next = 19;
                 break;
               }
 
               headers = _objectSpread(_objectSpread({}, headers), {}, {
                 'X-Country-Code-X': countryCode
               });
-              _context5.next = 18;
+              _context5.next = 19;
               return strategy.setItem('country-code', countryCode);
 
-            case 18:
+            case 19:
               if (body !== null && body !== void 0 && body.country_code) {
                 body === null || body === void 0 ? true : delete body.country_code;
               }
 
-              _context5.next = 21;
+              _context5.next = 22;
               return ordering.setAccessToken(session.token).orderOptions().save(body, {
                 headers: headers
               });
 
-            case 21:
+            case 22:
               _yield$ordering$setAc3 = _context5.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               error = _yield$ordering$setAc4.error;
@@ -706,9 +708,9 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", !error);
 
-            case 31:
-              _context5.prev = 31;
-              _context5.t0 = _context5["catch"](9);
+            case 32:
+              _context5.prev = 32;
+              _context5.t0 = _context5["catch"](10);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
                 show: true,
@@ -720,12 +722,12 @@ var OrderProvider = function OrderProvider(_ref) {
               state.loading = false;
               return _context5.abrupt("return", false);
 
-            case 38:
+            case 39:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[9, 31]]);
+      }, _callee5, null, [[10, 32]]);
     }));
 
     return function updateOrderOptions(_x5) {
@@ -2121,15 +2123,16 @@ var OrderProvider = function OrderProvider(_ref) {
               return setUserCustomer((_params$customer = params.customer) !== null && _params$customer !== void 0 ? _params$customer : {}, true);
 
             case 4:
-              _context21.next = 6;
+              console.log('________________________ setusercustomer options _______________________', options);
+              _context21.next = 7;
               return updateOrderOptions(options);
 
-            case 6:
+            case 7:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 7:
+            case 8:
             case "end":
               return _context21.stop();
           }

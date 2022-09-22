@@ -159,6 +159,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           options.address_id = localOptions?.address_id
         }
         if (options && Object.keys(options).length > 0) {
+          console.log('______________________________ get update __________________________', options)
           updateOrderOptions(options)
         } else {
           setState({ ...state, loading: false })
@@ -288,6 +289,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    */
   const updateOrderOptions = async (changes) => {
     if (session.auth) {
+      console.log('_________________ update options changes _______________', changes)
       const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
@@ -905,6 +907,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setState({ ...state, loading: true })
     const options = params.options ?? {}
     await setUserCustomer(params.customer ?? {}, true)
+    console.log('________________________ setusercustomer options _______________________', options)
     await updateOrderOptions(options)
     setState({ ...state, loading: false })
   }
