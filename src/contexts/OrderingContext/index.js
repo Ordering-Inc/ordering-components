@@ -27,13 +27,18 @@ export const OrderingContext = createContext()
  */
 export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
   const webStrategy = new WebStrategy()
+  const restOfSettings = {
+    project: settings.project,
+    appId: settings.app_id,
+    countryCode: settings.countryCode
+  }
   return (
     <OrderingContext.Provider>
       <EventProvider>
-        <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
+        <ApiProvider settings={Object.assign(settings.api, restOfSettings)}>
           <LanguageProvider strategy={webStrategy}>
             <ConfigProvider strategy={webStrategy}>
-              <OrderingThemeProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
+              <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
                 <SiteProvider appId={settings.app_id}>
                   <UtilsProviders>
                     <ToastProvider>
@@ -41,7 +46,7 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                         <SessionProvider strategy={webStrategy}>
                           <WebsocketProvider
                             strategy={webStrategy}
-                            settings={Object.assign(settings.socket, { project: settings.project, appId: settings.app_id })}
+                            settings={Object.assign(settings.socket, restOfSettings)}
                           >
                             <CustomerProvider strategy={webStrategy}>
                               <OrderProvider

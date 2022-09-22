@@ -61,6 +61,7 @@ import { ProductOption } from './components/ProductOption'
 import { ProductOptionSuboption } from './components/ProductOptionSuboption'
 import { ProductsList } from './components/ProductsList'
 import { ProductsListing } from './components/ProductsListing'
+import { ProfessionalInfo } from './components/ProfessionalInfo'
 import { PromotionsController } from './components/PromotionsController'
 import { Messages } from './components/Messages'
 import { SearchOptions } from './components/SearchOptions'
@@ -192,6 +193,7 @@ export {
   ProductOptionSuboption,
   ProductsList,
   ProductsListing,
+  ProfessionalInfo,
   PromotionsController,
   SearchOptions,
   Sessions,
