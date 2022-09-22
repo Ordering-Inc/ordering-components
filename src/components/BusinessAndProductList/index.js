@@ -39,6 +39,7 @@ export const BusinessAndProductList = (props) => {
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
   const [featuredProducts, setFeaturedProducts] = useState(false)
   const [openCategories, setOpenCategories] = useState({ values: [] })
+  const [priceFilterValues, setPriceFilterValues] = useState({ min: null, max: null })
   const requestsState = {}
 
   const categoryStateDefault = {
@@ -99,16 +100,26 @@ export const BusinessAndProductList = (props) => {
     setFilterByMenus(val)
   }
 
-  const isMatchSearch = (name, description) => {
-    if (!searchValue) return true
+  const handleChangePriceFilterValues = (name, value) => {
+    setPriceFilterValues({
+      ...priceFilterValues,
+      [name]: value
+    })
+  }
+
+  const isMatchSearch = (name, description, price) => {
+    if (!searchValue && !priceFilterValues?.min && !priceFilterValues?.max) return true
     return (
-      name && (name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-        .includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByName)
+      ((searchValue
+        ? (name && (name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByName)) : true) &&
+        (priceFilterValues?.min ? parseFloat(price) >= parseFloat(priceFilterValues?.min) : true) &&
+        (priceFilterValues?.max ? parseFloat(price) <= parseFloat(priceFilterValues?.max) : true))
     ) ||
       (
-        description && (description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-          .includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByDescription)
-      )
+        ((searchValue
+          ? (description && (description.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(searchValue.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')) && isSearchByDescription)) : true) &&
+          (priceFilterValues?.min ? parseFloat(price) >= parseFloat(priceFilterValues?.min) : true) &&
+          (priceFilterValues?.max ? parseFloat(price) <= parseFloat(priceFilterValues?.max) : true)))
   }
 
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
@@ -242,8 +253,8 @@ export const BusinessAndProductList = (props) => {
         ?.find(category => category.id === (isUseParentCategory ? parentCategory?.parent_category_id : categorySelected.id))
         ?.products
         .filter(product => isUseParentCategory
-          ? (categoryFinded?.children?.some(cat => cat.category_id === product?.category_id) && isMatchSearch(product.name, product.description))
-          : isMatchSearch(product.name, product.description))
+          ? (categoryFinded?.children?.some(cat => cat.category_id === product?.category_id) && isMatchSearch(product.name, product.description, product?.price))
+          : isMatchSearch(product.name, product.description, product?.price))
 
       categoryState.products = productsFiltered || []
     } else if (categorySelected.id === 'featured') {
@@ -257,7 +268,7 @@ export const BusinessAndProductList = (props) => {
       const productsFiltered = businessState?.business?.categories?.reduce(
         (products, category) => [...products, ...category.products], []
       ).filter(
-        product => isMatchSearch(product.name, product.description)
+        product => isMatchSearch(product.name, product.description, product?.price)
       )
       categoryState.products = productsFiltered || []
     }
@@ -307,6 +318,30 @@ export const BusinessAndProductList = (props) => {
           }
         )
       }
+    }
+
+    if (priceFilterValues?.min) {
+      searchConditions.push(
+        {
+          attribute: 'price',
+          value: {
+            condition: '>=',
+            value: encodeURI(priceFilterValues?.min)
+          }
+        }
+      )
+    }
+
+    if (priceFilterValues?.max) {
+      searchConditions.push(
+        {
+          attribute: 'price',
+          value: {
+            condition: '<=',
+            value: encodeURI(priceFilterValues?.max)
+          }
+        }
+      )
     }
 
     where = {
@@ -727,6 +762,10 @@ export const BusinessAndProductList = (props) => {
   }, [slug])
 
   useEffect(() => {
+    loadProducts({ newFetch: true })
+  }, [priceFilterValues])
+
+  useEffect(() => {
     if (!orderState.loading && orderOptions && !languageState.loading && !props.avoidBusinessLoading) {
       getBusiness()
     }
@@ -815,6 +854,8 @@ export const BusinessAndProductList = (props) => {
           handleUpdateProducts={handleUpdateProducts}
           professionalSelected={professionalSelected}
           handleChangeProfessionalSelected={handleChangeProfessionalSelected}
+          priceFilterValues={priceFilterValues}
+          handleChangePriceFilterValues={handleChangePriceFilterValues}
         />
       )}
     </>
