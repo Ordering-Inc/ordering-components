@@ -109,7 +109,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }
 
         if (!countryCodeFromLocalStorage && options?.address?.country_code) {
-          updateOrderOptions({ country_code: options?.address?.country_code })
+          await updateOrderOptions({ country_code: options?.address?.country_code })
         }
       }
       if (error) {
