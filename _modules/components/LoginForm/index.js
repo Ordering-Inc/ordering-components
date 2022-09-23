@@ -698,12 +698,12 @@ var LoginForm = function LoginForm(props) {
               result = _context5.sent;
 
               if (!(result === 'new_user')) {
-                _context5.next = 29;
+                _context5.next = 30;
                 break;
               }
 
               if (!(otpType === 'cellphone')) {
-                _context5.next = 25;
+                _context5.next = 26;
                 break;
               }
 
@@ -739,10 +739,9 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               }));
               setCreateOtpUser(true);
-              _context5.next = 27;
-              break;
+              return _context5.abrupt("return", true);
 
-            case 25:
+            case 26:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist')
@@ -751,29 +750,29 @@ var LoginForm = function LoginForm(props) {
               }));
               setOtpType('cellphone');
 
-            case 27:
-              _context5.next = 45;
+            case 28:
+              _context5.next = 46;
               break;
 
-            case 29:
+            case 30:
               if (!(result === 'existing_user')) {
-                _context5.next = 43;
+                _context5.next = 44;
                 break;
               }
 
-              _context5.next = 32;
+              _context5.next = 33;
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
 
-            case 32:
+            case 33:
               _responseOtp = _context5.sent;
-              _context5.next = 35;
+              _context5.next = 36;
               return _responseOtp.json();
 
-            case 35:
+            case 36:
               _resultOtp = _context5.sent;
 
               if (!_resultOtp.error) {
-                _context5.next = 39;
+                _context5.next = 40;
                 break;
               }
 
@@ -785,7 +784,7 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 39:
+            case 40:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   result: _resultOtp.result
@@ -794,7 +793,7 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", true);
 
-            case 43:
+            case 44:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   error: result.result
@@ -803,12 +802,12 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 45:
-              _context5.next = 50;
+            case 46:
+              _context5.next = 51;
               break;
 
-            case 47:
-              _context5.prev = 47;
+            case 48:
+              _context5.prev = 48;
               _context5.t0 = _context5["catch"](0);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
@@ -817,12 +816,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               }));
 
-            case 50:
+            case 51:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[0, 47]]);
+      }, _callee5, null, [[0, 48]]);
     }));
 
     return function alseaOtpInitialize(_x5, _x6) {
