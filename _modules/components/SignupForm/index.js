@@ -69,7 +69,8 @@ var SignupForm = function SignupForm(props) {
       handleCustomSignup = props.handleCustomSignup,
       notificationState = props.notificationState,
       isCustomerMode = props.isCustomerMode,
-      numOtpInputs = props.numOtpInputs;
+      numOtpInputs = props.numOtpInputs,
+      otpDataUser = props.otpDataUser;
   var requestsState = {};
 
   var _useEvent = (0, _EventContext.useEvent)(),
@@ -160,15 +161,21 @@ var SignupForm = function SignupForm(props) {
       promotionsEnabled = _useState18[0],
       setPromotionsEnabled = _useState18[1];
 
+  var _useState19 = (0, _react.useState)(true),
+      _useState20 = _slicedToArray(_useState19, 2),
+      confirmDeleteUser = _useState20[0],
+      setConfirmDeleteUser = _useState20[1];
+
   var useSignUpOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$email_otp_si = configs.email_otp_signup_enabled) === null || _configs$email_otp_si === void 0 ? void 0 : _configs$email_otp_si.value) === '1';
   var useSignUpOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$phone_otp_si = configs.phone_otp_signup_enabled) === null || _configs$phone_otp_si === void 0 ? void 0 : _configs$phone_otp_si.value) === '1';
   var useSignUpFullDetails = useSignUpOtpEmail || useSignUpOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$full_details = configs.full_details_signup_enabled) === null || _configs$full_details === void 0 ? void 0 : _configs$full_details.value) === '1' : true;
   var defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone';
+  var isAlsea = ordering.project === 'alsea';
 
-  var _useState19 = (0, _react.useState)(defaultSignUpTab),
-      _useState20 = _slicedToArray(_useState19, 2),
-      signUpTab = _useState20[0],
-      setSignUpTab = _useState20[1];
+  var _useState21 = (0, _react.useState)(defaultSignUpTab),
+      _useState22 = _slicedToArray(_useState21, 2),
+      signUpTab = _useState22[0],
+      setSignUpTab = _useState22[1];
   /**
    * Default fuction for signup workflow
    */
@@ -238,6 +245,15 @@ var SignupForm = function SignupForm(props) {
                 delete data.country_phone_code;
               }
 
+              if (otpDataUser.email) {
+                delete data.email;
+              }
+
+              if (otpDataUser.cellphone) {
+                delete data.cellphone;
+                delete data.country_phone_code;
+              }
+
               newData = Object.fromEntries(Object.entries(data).filter(function (_ref2) {
                 var _ref3 = _slicedToArray(_ref2, 2),
                     _ = _ref3[0],
@@ -245,19 +261,48 @@ var SignupForm = function SignupForm(props) {
 
                 return v !== '';
               }));
-              _context.prev = 15;
+              _context.prev = 17;
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
               source = {};
               requestsState.signup = source;
-              _context.next = 21;
+
+              if (!(otpDataUser !== null && otpDataUser !== void 0 && otpDataUser.id)) {
+                _context.next = 30;
+                break;
+              }
+
+              _context.next = 24;
+              return ordering.setAccessToken(otpDataUser === null || otpDataUser === void 0 ? void 0 : otpDataUser.token).users(otpDataUser === null || otpDataUser === void 0 ? void 0 : otpDataUser.id).save(newData, {
+                cancelToken: source
+              });
+
+            case 24:
+              response = _context.sent;
+
+              if (response.content.error) {
+                _context.next = 28;
+                break;
+              }
+
+              _context.next = 28;
+              return setConfirmDeleteUser(false);
+
+            case 28:
+              _context.next = 33;
+              break;
+
+            case 30:
+              _context.next = 32;
               return ordering.users().save(newData, {
                 cancelToken: source
               });
 
-            case 21:
+            case 32:
               response = _context.sent;
+
+            case 33:
               setFormState({
                 result: response.content,
                 loading: false
@@ -271,12 +316,12 @@ var SignupForm = function SignupForm(props) {
                 }
               }
 
-              _context.next = 29;
+              _context.next = 40;
               break;
 
-            case 26:
-              _context.prev = 26;
-              _context.t0 = _context["catch"](15);
+            case 37:
+              _context.prev = 37;
+              _context.t0 = _context["catch"](17);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setFormState({
@@ -288,12 +333,12 @@ var SignupForm = function SignupForm(props) {
                 });
               }
 
-            case 29:
+            case 40:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[15, 26]]);
+      }, _callee, null, [[17, 37]]);
     }));
 
     return function handleSignupClick(_x) {
@@ -746,6 +791,149 @@ var SignupForm = function SignupForm(props) {
     setPromotionsEnabled(!promotionsEnabled);
   };
 
+  var deleteOtpUser = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.prev = 0;
+              _context6.next = 3;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/delete_new_user.php"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  id: otpDataUser.id,
+                  token: otpDataUser.token
+                })
+              });
+
+            case 3:
+              _context6.next = 8;
+              break;
+
+            case 5:
+              _context6.prev = 5;
+              _context6.t0 = _context6["catch"](0);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false,
+                result: {
+                  error: _context6.t0.message
+                }
+              }));
+
+            case 8:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[0, 5]]);
+    }));
+
+    return function deleteOtpUser() {
+      return _ref8.apply(this, arguments);
+    };
+  }();
+
+  var alseaOtpConsult = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(params) {
+      var response, text;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.prev = 0;
+              _context7.next = 3;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform//wow_search_recover.php?").concat(params), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+
+            case 3:
+              response = _context7.sent;
+              _context7.next = 6;
+              return response.text();
+
+            case 6:
+              text = _context7.sent;
+              return _context7.abrupt("return", text);
+
+            case 10:
+              _context7.prev = 10;
+              _context7.t0 = _context7["catch"](0);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: _context7.t0.message
+                }
+              }));
+
+            case 13:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[0, 10]]);
+    }));
+
+    return function alseaOtpConsult(_x5) {
+      return _ref9.apply(this, arguments);
+    };
+  }();
+
+  var signUpOtpUser = /*#__PURE__*/function () {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      var params, result;
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: true
+              }));
+              params = "pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt&mail=".concat(signupData.email);
+              _context8.next = 4;
+              return alseaOtpConsult(params);
+
+            case 4:
+              result = _context8.sent;
+
+              if (result === 'new_user') {
+                handleSignupClick();
+              } else if (result === 'existing_user') {
+                setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                  result: {
+                    error: t('EMAIL_ALREADY_TAKEN', 'Email already taken')
+                  }
+                }));
+              } else {
+                setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                  result: {
+                    error: result
+                  }
+                }));
+              }
+
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: false
+              }));
+
+            case 7:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8);
+    }));
+
+    return function signUpOtpUser() {
+      return _ref10.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     var _configs$security_rec;
 
@@ -788,7 +976,10 @@ var SignupForm = function SignupForm(props) {
     willVerifyOtpState: willVerifyOtpState,
     useSignUpFullDetails: useSignUpFullDetails,
     useSignUpOtpEmail: useSignUpOtpEmail,
-    useSignUpOtpCellphone: useSignUpOtpCellphone
+    useSignUpOtpCellphone: useSignUpOtpCellphone,
+    deleteOtpUser: deleteOtpUser,
+    confirmDeleteUser: confirmDeleteUser,
+    signUpOtpUser: signUpOtpUser
   })));
 };
 

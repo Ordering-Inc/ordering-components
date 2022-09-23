@@ -82,6 +82,7 @@ var Checkout = function Checkout(props) {
 
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 2),
+      configs = _useConfig2[0],
       refreshConfigs = _useConfig2[1].refreshConfigs;
 
   var _useState = (0, _react.useState)(false),
@@ -93,10 +94,11 @@ var Checkout = function Checkout(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       errors = _useState4[0],
       setErrors = _useState4[1];
+
+  var isAlsea = ordering.project === 'alsea';
   /**
    * Language context
    */
-
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
@@ -191,9 +193,34 @@ var Checkout = function Checkout(props) {
   var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
     return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
   })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
+
+  var _useState15 = (0, _react.useState)(null),
+      _useState16 = _slicedToArray(_useState15, 2),
+      defaultOptionsVaXMiCuenta = _useState16[0],
+      setDefaultOptionsVaXMiCuenta = _useState16[1];
+  /**
+   * This must be contains an object with info about va x mi cuenta
+   */
+
+
+  var _useState17 = (0, _react.useState)({
+    loading: true
+  }),
+      _useState18 = _slicedToArray(_useState17, 2),
+      vaXMiCuenta = _useState18[0],
+      setVaXMiCuenta = _useState18[1];
+
+  var _useState19 = (0, _react.useState)({
+    isUberDirect: false,
+    amountToHide: null
+  }),
+      _useState20 = _slicedToArray(_useState19, 2),
+      uberDirect = _useState20[0],
+      setUberDirect = _useState20[1];
   /**
    * Current cart
    */
+
 
   var cart = (_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts["businessId:".concat(businessId)];
   /**
@@ -207,27 +234,124 @@ var Checkout = function Checkout(props) {
 
   var previousComment;
   /**
-   * Method to get business from API
+   * Method to get va por mi cuenta from Plugin
    */
 
-  var getBusiness = /*#__PURE__*/function () {
+  var getVaXMiCuenta = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _orderState$options, _cartState$cart, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error, _result$paymethods, _paymethodSelected$pa, _paymethodSelected, _paymethodSelected$pa2, _paymethodSelected$pa3, _paymethodSelected$pa4;
-
+      var response, result, option;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              if (defaultOptionsVaXMiCuenta !== null && defaultOptionsVaXMiCuenta !== void 0 && defaultOptionsVaXMiCuenta.enable) {
+                _context.next = 3;
+                break;
+              }
+
+              setVaXMiCuenta({
+                selectedOption: {
+                  amount: 0,
+                  option: 0
+                },
+                loading: false,
+                error: null
+              });
+              return _context.abrupt("return");
+
+            case 3:
+              _context.prev = 3;
+              setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                loading: true,
+                error: null
+              }));
+              _context.next = 7;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/va_por_mi_cuenta.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  uuid: cart.uuid
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId
+                }
+              });
+
+            case 7:
+              response = _context.sent;
+              _context.next = 10;
+              return response.json();
+
+            case 10:
+              result = _context.sent;
+
+              if (result.result) {
+                option = result.result;
+              } else {
+                option = result;
+              }
+
+              if (!result.error) {
+                setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                  selectedOption: _objectSpread(_objectSpread({}, option), {}, {
+                    default: true
+                  }),
+                  loading: false,
+                  error: null
+                }));
+              } else {
+                setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                  loading: false,
+                  error: [result === null || result === void 0 ? void 0 : result.result]
+                }));
+              }
+
+              _context.next = 18;
+              break;
+
+            case 15:
+              _context.prev = 15;
+              _context.t0 = _context["catch"](3);
+              setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
+
+            case 18:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[3, 15]]);
+    }));
+
+    return function getVaXMiCuenta() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to get business from API
+   */
+
+
+  var getBusiness = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var _orderState$options, _cartState$cart, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error, _result$paymethods, _paymethodSelected$pa, _paymethodSelected, _paymethodSelected$pa2, _paymethodSelected$pa3, _paymethodSelected$pa4;
+
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
               refreshConfigs();
-              _context.prev = 1;
+              _context2.prev = 1;
               parameters = {
                 type: (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type
               };
-              _context.next = 5;
+              _context2.next = 5;
               return ordering.businesses(businessId).select(propsToFetch).parameters(parameters).get();
 
             case 5:
-              _yield$ordering$busin = _context.sent;
+              _yield$ordering$busin = _context2.sent;
               _yield$ordering$busin2 = _yield$ordering$busin.content;
               result = _yield$ordering$busin2.result;
               error = _yield$ordering$busin2.error;
@@ -257,27 +381,27 @@ var Checkout = function Checkout(props) {
                 business: result,
                 error: error
               }));
-              _context.next = 16;
+              _context2.next = 16;
               break;
 
             case 13:
-              _context.prev = 13;
-              _context.t0 = _context["catch"](1);
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](1);
               setBusinessDetails(_objectSpread(_objectSpread({}, businessDetails), {}, {
                 loading: false,
-                error: _context.t0
+                error: _context2.t0
               }));
 
             case 16:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee, null, [[1, 13]]);
+      }, _callee2, null, [[1, 13]]);
     }));
 
     return function getBusiness() {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
   /**
@@ -286,14 +410,14 @@ var Checkout = function Checkout(props) {
 
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(paymentOptions, payloadProps, confirmPayment) {
       var _paymethodSelected$pa5, _cart$balance, _cartResult$paymethod, _result$result, _result$result$paymet;
 
       var paymethodData, _paymethodSelected$da, payload, result, cartResult, _result$result2, _result$result2$payme, _result$result2$payme2, _yield$confirmPayment, confirmApplePayError;
 
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data;
 
@@ -322,54 +446,54 @@ var Checkout = function Checkout(props) {
               }
 
               if (!handleCustomClick) {
-                _context2.next = 8;
+                _context3.next = 8;
                 break;
               }
 
               handleCustomClick(payload, paymethodSelected, cart);
-              return _context2.abrupt("return");
+              return _context3.abrupt("return");
 
             case 8:
               payload = _objectSpread(_objectSpread(_objectSpread({}, payload), payloadProps), {}, {
                 paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
               });
               setPlacing(true);
-              _context2.next = 12;
+              _context3.next = 12;
               return placeCart(cart.uuid, payload);
 
             case 12:
-              result = _context2.sent;
+              result = _context3.sent;
 
               if (!(result !== null && result !== void 0 && result.error)) {
-                _context2.next = 16;
+                _context3.next = 16;
                 break;
               }
 
               setErrors(result === null || result === void 0 ? void 0 : result.result);
-              return _context2.abrupt("return");
+              return _context3.abrupt("return");
 
             case 16:
               cartResult = result === null || result === void 0 ? void 0 : result.result;
 
               if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-                _context2.next = 20;
+                _context3.next = 20;
                 break;
               }
 
-              _context2.next = 20;
+              _context3.next = 20;
               return actionsBeforePlace(paymethodSelected, result.result);
 
             case 20:
               if (!(confirmPayment && (result === null || result === void 0 ? void 0 : (_result$result = result.result) === null || _result$result === void 0 ? void 0 : (_result$result$paymet = _result$result.paymethod_data) === null || _result$result$paymet === void 0 ? void 0 : _result$result$paymet.gateway) === 'apple_pay')) {
-                _context2.next = 26;
+                _context3.next = 26;
                 break;
               }
 
-              _context2.next = 23;
+              _context3.next = 23;
               return confirmPayment(result === null || result === void 0 ? void 0 : (_result$result2 = result.result) === null || _result$result2 === void 0 ? void 0 : (_result$result2$payme = _result$result2.paymethod_data) === null || _result$result2$payme === void 0 ? void 0 : (_result$result2$payme2 = _result$result2$payme.result) === null || _result$result2$payme2 === void 0 ? void 0 : _result$result2$payme2.client_secret);
 
             case 23:
-              _yield$confirmPayment = _context2.sent;
+              _yield$confirmPayment = _context3.sent;
               confirmApplePayError = _yield$confirmPayment.error;
 
               if (confirmApplePayError) {
@@ -382,14 +506,14 @@ var Checkout = function Checkout(props) {
 
             case 28:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2);
+      }, _callee3);
     }));
 
     return function handlerClickPlaceOrder(_x, _x2, _x3) {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
@@ -405,18 +529,18 @@ var Checkout = function Checkout(props) {
     try {
       if (previousComment !== value) {
         clearTimeout(timeout);
-        timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
           var uuid, response, _yield$response$json, result, error;
 
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context4.prev = _context4.next) {
                 case 0:
                   setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
                     loading: true
                   }));
                   uuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
-                  _context3.next = 4;
+                  _context4.next = 4;
                   return fetch("".concat(ordering.root, "/carts/").concat(uuid), {
                     'Content-Type': 'application/json',
                     method: 'PUT',
@@ -430,17 +554,17 @@ var Checkout = function Checkout(props) {
                   });
 
                 case 4:
-                  response = _context3.sent;
-                  _context3.next = 7;
+                  response = _context4.sent;
+                  _context4.next = 7;
                   return response.json();
 
                 case 7:
-                  _yield$response$json = _context3.sent;
+                  _yield$response$json = _context4.sent;
                   result = _yield$response$json.result;
                   error = _yield$response$json.error;
 
                   if (!error) {
-                    _context3.next = 14;
+                    _context4.next = 14;
                     break;
                   }
 
@@ -450,7 +574,7 @@ var Checkout = function Checkout(props) {
                     result: result
                   }));
                   showToast(_ToastContext.ToastType.Error, result);
-                  return _context3.abrupt("return");
+                  return _context4.abrupt("return");
 
                 case 14:
                   setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
@@ -461,10 +585,10 @@ var Checkout = function Checkout(props) {
 
                 case 15:
                 case "end":
-                  return _context3.stop();
+                  return _context4.stop();
               }
             }
-          }, _callee3);
+          }, _callee4);
         })), 750);
       }
 
@@ -480,15 +604,15 @@ var Checkout = function Checkout(props) {
   };
 
   var getDeliveryOptions = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var response, _yield$response$json2, result, error;
 
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
-              _context4.prev = 0;
-              _context4.next = 3;
+              _context5.prev = 0;
+              _context5.next = 3;
               return fetch("".concat(ordering.root, "/delivery_options"), {
                 method: 'GET',
                 headers: {
@@ -498,17 +622,17 @@ var Checkout = function Checkout(props) {
               });
 
             case 3:
-              response = _context4.sent;
-              _context4.next = 6;
+              response = _context5.sent;
+              _context5.next = 6;
               return response.json();
 
             case 6:
-              _yield$response$json2 = _context4.sent;
+              _yield$response$json2 = _context5.sent;
               result = _yield$response$json2.result;
               error = _yield$response$json2.error;
 
               if (error) {
-                _context4.next = 12;
+                _context5.next = 12;
                 break;
               }
 
@@ -516,7 +640,7 @@ var Checkout = function Checkout(props) {
                 loading: false,
                 result: [].concat(_toConsumableArray(instructionsOptions.result), _toConsumableArray(result))
               });
-              return _context4.abrupt("return");
+              return _context5.abrupt("return");
 
             case 12:
               setInstructionsOptions({
@@ -525,42 +649,42 @@ var Checkout = function Checkout(props) {
                 result: result
               });
               showToast(_ToastContext.ToastType.Error, result);
-              _context4.next = 20;
+              _context5.next = 20;
               break;
 
             case 16:
-              _context4.prev = 16;
-              _context4.t0 = _context4["catch"](0);
+              _context5.prev = 16;
+              _context5.t0 = _context5["catch"](0);
               setInstructionsOptions({
                 loading: false,
                 error: true,
-                result: _context4.t0.message
+                result: _context5.t0.message
               });
-              showToast(_ToastContext.ToastType.Error, _context4.t0.message);
+              showToast(_ToastContext.ToastType.Error, _context5.t0.message);
 
             case 20:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
         }
-      }, _callee4, null, [[0, 16]]);
+      }, _callee5, null, [[0, 16]]);
     }));
 
     return function getDeliveryOptions() {
-      return _ref4.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
   var handleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(value) {
       var response, _yield$response$json3, result, error;
 
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
-              _context5.prev = 0;
-              _context5.next = 3;
+              _context6.prev = 0;
+              _context6.next = 3;
               return fetch("".concat(ordering.root, "/carts/").concat(cart === null || cart === void 0 ? void 0 : cart.uuid), {
                 method: 'PUT',
                 headers: {
@@ -573,12 +697,12 @@ var Checkout = function Checkout(props) {
               });
 
             case 3:
-              response = _context5.sent;
-              _context5.next = 6;
+              response = _context6.sent;
+              _context6.next = 6;
               return response.json();
 
             case 6:
-              _yield$response$json3 = _context5.sent;
+              _yield$response$json3 = _context6.sent;
               result = _yield$response$json3.result;
               error = _yield$response$json3.error;
               setDeliveryOptionSelected(result === null || result === void 0 ? void 0 : result.delivery_option_id);
@@ -587,24 +711,144 @@ var Checkout = function Checkout(props) {
                 showToast(_ToastContext.ToastType.Error, result);
               }
 
-              _context5.next = 16;
+              _context6.next = 16;
               break;
 
             case 13:
-              _context5.prev = 13;
-              _context5.t0 = _context5["catch"](0);
-              showToast(_ToastContext.ToastType.Error, _context5.t0.message);
+              _context6.prev = 13;
+              _context6.t0 = _context6["catch"](0);
+              showToast(_ToastContext.ToastType.Error, _context6.t0.message);
 
             case 16:
             case "end":
-              return _context5.stop();
+              return _context6.stop();
           }
         }
-      }, _callee5, null, [[0, 13]]);
+      }, _callee6, null, [[0, 13]]);
     }));
 
     return function handleChangeDeliveryOption(_x4) {
-      return _ref5.apply(this, arguments);
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  var handleChangeVaXMiCuenta = function handleChangeVaXMiCuenta(option, index) {
+    setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+      selectedOption: {
+        amount: option,
+        option: index,
+        default: false
+      }
+    }));
+  };
+
+  var checkUberDirect = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      var response, result;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.prev = 0;
+              _context7.next = 3;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/is_cash_external_driver_group.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  uuid: cart.uuid
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId
+                }
+              });
+
+            case 3:
+              response = _context7.sent;
+              _context7.next = 6;
+              return response.json();
+
+            case 6:
+              result = _context7.sent;
+
+              if (!result.error) {
+                setUberDirect(_objectSpread(_objectSpread({}, uberDirect), {}, {
+                  isUberDirect: !result
+                }));
+              }
+
+              _context7.next = 13;
+              break;
+
+            case 10:
+              _context7.prev = 10;
+              _context7.t0 = _context7["catch"](0);
+              console.log(_context7.t0);
+
+            case 13:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[0, 10]]);
+    }));
+
+    return function checkUberDirect() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+
+  var checkAmountToHideCash = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      var response, result;
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              _context8.prev = 0;
+              _context8.next = 3;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/max_cash_delivery.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  uuid: cart.uuid
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId
+                }
+              });
+
+            case 3:
+              response = _context8.sent;
+              _context8.next = 6;
+              return response.json();
+
+            case 6:
+              result = _context8.sent;
+
+              if (!result.error) {
+                setUberDirect(_objectSpread(_objectSpread({}, uberDirect), {}, {
+                  amountToHide: result
+                }));
+              }
+
+              _context8.next = 13;
+              break;
+
+            case 10:
+              _context8.prev = 10;
+              _context8.t0 = _context8["catch"](0);
+              console.log(_context8.t0);
+
+            case 13:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8, null, [[0, 10]]);
+    }));
+
+    return function checkAmountToHideCash() {
+      return _ref8.apply(this, arguments);
     };
   }();
 
@@ -613,6 +857,87 @@ var Checkout = function Checkout(props) {
       getBusiness();
     }
   }, [businessId]);
+  (0, _react.useEffect)(function () {
+    if (defaultOptionsVaXMiCuenta === null) return;
+    getVaXMiCuenta();
+  }, [defaultOptionsVaXMiCuenta]);
+  (0, _react.useEffect)(function () {
+    var _configs$configs, _configs$configs$va_p;
+
+    if (configs.loading || businessDetails.loading) return;
+    setDefaultOptionsVaXMiCuenta(JSON.parse((_configs$configs = configs.configs) === null || _configs$configs === void 0 ? void 0 : (_configs$configs$va_p = _configs$configs.va_por_mi_cuenta) === null || _configs$configs$va_p === void 0 ? void 0 : _configs$configs$va_p.value).find(function (value) {
+      var _businessDetails$busi;
+
+      return value.brand_id == parseInt(businessDetails === null || businessDetails === void 0 ? void 0 : (_businessDetails$busi = businessDetails.business) === null || _businessDetails$busi === void 0 ? void 0 : _businessDetails$busi.brand_id);
+    }));
+  }, [configs.loading, businessDetails.loading]);
+  (0, _react.useEffect)(function () {
+    if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return;
+
+    var applyDonation = /*#__PURE__*/function () {
+      var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+        var response, result;
+        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _context9.prev = 0;
+                _context9.next = 3;
+                return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php"), {
+                  method: 'POST',
+                  body: JSON.stringify({
+                    uuid: cart.uuid,
+                    option: vaXMiCuenta.selectedOption.option
+                  }),
+                  headers: {
+                    Authorization: "Bearer ".concat(token),
+                    'X-APP-X': ordering.appId
+                  }
+                });
+
+              case 3:
+                response = _context9.sent;
+                _context9.next = 6;
+                return response.json();
+
+              case 6:
+                result = _context9.sent;
+
+                if (!result.error) {
+                  console.log(result);
+                }
+
+                _context9.next = 13;
+                break;
+
+              case 10:
+                _context9.prev = 10;
+                _context9.t0 = _context9["catch"](0);
+                setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
+                  loading: false,
+                  error: [_context9.t0.message]
+                }));
+
+              case 13:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, null, [[0, 10]]);
+      }));
+
+      return function applyDonation() {
+        return _ref9.apply(this, arguments);
+      };
+    }();
+
+    applyDonation();
+  }, [vaXMiCuenta.selectedOption]);
+  (0, _react.useEffect)(function () {
+    if (uberDirect.isUberDirect) {
+      checkAmountToHideCash();
+    }
+  }, [uberDirect.isUberDirect]);
   /**
    * Update carts from sockets
    */
@@ -638,6 +963,7 @@ var Checkout = function Checkout(props) {
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
   (0, _react.useEffect)(function () {
     getDeliveryOptions();
+    checkUberDirect();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
@@ -649,10 +975,14 @@ var Checkout = function Checkout(props) {
     commentState: commentState,
     instructionsOptions: instructionsOptions,
     deliveryOptionSelected: deliveryOptionSelected,
+    defaultOptionsVaXMiCuenta: defaultOptionsVaXMiCuenta,
+    vaXMiCuenta: vaXMiCuenta,
+    uberDirect: uberDirect,
     handlePaymethodChange: handlePaymethodChange,
     handlerClickPlaceOrder: handlerClickPlaceOrder,
     handleChangeComment: handleChangeComment,
-    handleChangeDeliveryOption: handleChangeDeliveryOption
+    handleChangeDeliveryOption: handleChangeDeliveryOption,
+    handleChangeVaXMiCuenta: handleChangeVaXMiCuenta
   })));
 };
 

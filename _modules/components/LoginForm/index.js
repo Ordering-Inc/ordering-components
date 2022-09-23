@@ -68,7 +68,9 @@ var LoginForm = function LoginForm(props) {
       urlToRedirect = props.urlToRedirect,
       allowedLevels = props.allowedLevels,
       handleCustomLogin = props.handleCustomLogin,
-      notificationState = props.notificationState;
+      notificationState = props.notificationState,
+      setOtpDataUser = props.setOtpDataUser,
+      handleOpenSignup = props.handleOpenSignup;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -133,12 +135,13 @@ var LoginForm = function LoginForm(props) {
       isReCaptchaEnable = _useState12[0],
       setIsReCaptchaEnable = _useState12[1];
 
+  var isAlsea = ordering.project === 'alsea';
   var useLoginByCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$phone_passwo = configs.phone_password_login_enabled) === null || _configs$phone_passwo === void 0 ? void 0 : _configs$phone_passwo.value) === '1';
   var useLoginOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$opt_email_en = configs.opt_email_enabled) === null || _configs$opt_email_en === void 0 ? void 0 : _configs$opt_email_en.value) === '1';
   var useLoginOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$otp_cellphon = configs.otp_cellphone_enabled) === null || _configs$otp_cellphon === void 0 ? void 0 : _configs$otp_cellphon.value) === '1';
   var useLoginByEmail = useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$email_passwo = configs.email_password_login_enabled) === null || _configs$email_passwo === void 0 ? void 0 : _configs$email_passwo.value) === '1' : true;
   var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
-  defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp';
+  defaultLoginTab = defaultLoginTab || (useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp');
 
   var _useState13 = (0, _react.useState)(defaultLoginTab),
       _useState14 = _slicedToArray(_useState13, 2),
@@ -154,6 +157,11 @@ var LoginForm = function LoginForm(props) {
       _useState18 = _slicedToArray(_useState17, 2),
       otpState = _useState18[0],
       setOtpState = _useState18[1];
+
+  var _useState19 = (0, _react.useState)(false),
+      _useState20 = _slicedToArray(_useState19, 2),
+      createOtpUser = _useState20[0],
+      setCreateOtpUser = _useState20[1];
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
@@ -194,7 +202,8 @@ var LoginForm = function LoginForm(props) {
 
                 if (otpType === 'cellphone') {
                   _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
-                    country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code)
+                    country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code),
+                    country_code: values && (values === null || values === void 0 ? void 0 : values.country_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_code)
                   });
                 }
               } else {
@@ -648,6 +657,318 @@ var LoginForm = function LoginForm(props) {
     };
   }();
 
+  var alseaOtpInitialize = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(values, type) {
+      var body, requestParams, params, result, responseOtp, resultOtp, _responseOtp, _resultOtp;
+
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              _context5.prev = 0;
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: true
+              }));
+              setCreateOtpUser(false);
+              body = {
+                type: type
+              };
+
+              if (otpType === 'cellphone') {
+                body.user = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
+                body.cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
+                body.country_code = values === null || values === void 0 ? void 0 : values.countryPhoneCode;
+              } else {
+                body.email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
+                body.user = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
+              }
+
+              requestParams = {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+              };
+              params = "pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt".concat(body.cellphone ? "&cellphone=".concat(body.cellphone) : '').concat(body.country_code ? "&country_phone_code=".concat(body.country_code) : '').concat(body.email ? "&mail=".concat(body.email) : '');
+              _context5.next = 9;
+              return alseaOtpConsult(params);
+
+            case 9:
+              result = _context5.sent;
+
+              if (!(result === 'new_user')) {
+                _context5.next = 29;
+                break;
+              }
+
+              if (!(otpType === 'cellphone')) {
+                _context5.next = 25;
+                break;
+              }
+
+              _context5.next = 14;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/cellphone_new_user_code.php"), requestParams);
+
+            case 14:
+              responseOtp = _context5.sent;
+              _context5.next = 17;
+              return responseOtp.json();
+
+            case 17:
+              resultOtp = _context5.sent;
+
+              if (!resultOtp.error) {
+                _context5.next = 21;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: resultOtp.result
+                },
+                loading: false
+              }));
+              return _context5.abrupt("return", false);
+
+            case 21:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  result: resultOtp.result
+                },
+                loading: false
+              }));
+              setCreateOtpUser(true);
+              _context5.next = 27;
+              break;
+
+            case 25:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist')
+                },
+                loading: false
+              }));
+              setOtpType('cellphone');
+
+            case 27:
+              _context5.next = 45;
+              break;
+
+            case 29:
+              if (!(result === 'existing_user')) {
+                _context5.next = 43;
+                break;
+              }
+
+              _context5.next = 32;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
+
+            case 32:
+              _responseOtp = _context5.sent;
+              _context5.next = 35;
+              return _responseOtp.json();
+
+            case 35:
+              _resultOtp = _context5.sent;
+
+              if (!_resultOtp.error) {
+                _context5.next = 39;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: _resultOtp.result
+                },
+                loading: false
+              }));
+              return _context5.abrupt("return", false);
+
+            case 39:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  result: _resultOtp.result
+                },
+                loading: false
+              }));
+              return _context5.abrupt("return", true);
+
+            case 43:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: result.result
+                },
+                loading: false
+              }));
+              return _context5.abrupt("return", false);
+
+            case 45:
+              _context5.next = 50;
+              break;
+
+            case 47:
+              _context5.prev = 47;
+              _context5.t0 = _context5["catch"](0);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: _context5.t0.message
+                },
+                loading: false
+              }));
+
+            case 50:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[0, 47]]);
+    }));
+
+    return function alseaOtpInitialize(_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  var alseaOtpConsult = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(params) {
+      var response, text;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.prev = 0;
+              _context6.next = 3;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform//wow_search_recover.php?").concat(params), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+
+            case 3:
+              response = _context6.sent;
+              _context6.next = 6;
+              return response.text();
+
+            case 6:
+              text = _context6.sent;
+              return _context6.abrupt("return", text);
+
+            case 10:
+              _context6.prev = 10;
+              _context6.t0 = _context6["catch"](0);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: _context6.t0.message
+                }
+              }));
+
+            case 13:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[0, 10]]);
+    }));
+
+    return function alseaOtpConsult(_x7) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  var alseaOtpCreateUser = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(values) {
+      var _result$result, _result$result2, _result$result2$sessi, body, response, result;
+
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.prev = 0;
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: true
+              }));
+              body = {
+                code: values.code
+              };
+
+              if (otpType === 'cellphone') {
+                body.cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
+                body.country_code = values === null || values === void 0 ? void 0 : values.country_code;
+              } else {
+                body.email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
+              }
+
+              _context7.next = 6;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/cellphone_new_user_signup.php"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+              });
+
+            case 6:
+              response = _context7.sent;
+              _context7.next = 9;
+              return response.json();
+
+            case 9:
+              result = _context7.sent;
+
+              if (!result.error) {
+                _context7.next = 13;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: result.result
+                }
+              }));
+              return _context7.abrupt("return");
+
+            case 13:
+              setOtpDataUser({
+                email: body.email,
+                cellphone: body.cellphone,
+                country_code: body.country_code,
+                id: result === null || result === void 0 ? void 0 : (_result$result = result.result) === null || _result$result === void 0 ? void 0 : _result$result.id,
+                token: result === null || result === void 0 ? void 0 : (_result$result2 = result.result) === null || _result$result2 === void 0 ? void 0 : (_result$result2$sessi = _result$result2.session) === null || _result$result2$sessi === void 0 ? void 0 : _result$result2$sessi.access_token
+              });
+              handleOpenSignup();
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: false
+              }));
+              _context7.next = 22;
+              break;
+
+            case 18:
+              _context7.prev = 18;
+              _context7.t0 = _context7["catch"](0);
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: _context7.t0.message
+                }
+              }));
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: false
+              }));
+
+            case 22:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7, null, [[0, 18]]);
+    }));
+
+    return function alseaOtpCreateUser(_x8) {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     loginTab: loginTab,
@@ -671,7 +992,10 @@ var LoginForm = function LoginForm(props) {
     useLoginByEmail: useLoginByEmail,
     useLoginByCellphone: useLoginByCellphone,
     useLoginOtpEmail: useLoginOtpEmail,
-    useLoginOtpCellphone: useLoginOtpCellphone
+    useLoginOtpCellphone: useLoginOtpCellphone,
+    alseaOtpInitialize: alseaOtpInitialize,
+    createOtpUser: createOtpUser,
+    alseaOtpCreateUser: alseaOtpCreateUser
   })));
 };
 

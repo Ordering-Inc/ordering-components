@@ -13,6 +13,10 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _OrderContext = require("../../contexts/OrderContext");
+
+var _ConfigContext = require("../../contexts/ConfigContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -62,7 +66,8 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
   var UIComponent = props.UIComponent,
       publicKey = props.publicKey,
       merchantId = props.merchantId,
-      isSandbox = props.isSandbox;
+      isSandbox = props.isSandbox,
+      businessId = props.businessId;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -92,6 +97,17 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
       _useState6 = _slicedToArray(_useState5, 2),
       cardSelected = _useState6[0],
       setCardSelected = _useState6[1];
+
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 2),
+      _useOrder2$ = _useOrder2[1],
+      applyCoupon = _useOrder2$.applyCoupon,
+      applyOffer = _useOrder2$.applyOffer,
+      removeOffer = _useOrder2$.removeOffer;
+
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
 
   var isAlsea = ordering.project === 'alsea';
   (0, _react.useEffect)(function () {
@@ -214,6 +230,30 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
         device_session_id: window.OpenPay.deviceData.setup()
       }
     });
+
+    if (card.brandCardName === 'mastercard') {
+      applyMasterCardCoupon();
+    } else {
+      var _props$cart;
+
+      if ((props === null || props === void 0 ? void 0 : (_props$cart = props.cart) === null || _props$cart === void 0 ? void 0 : _props$cart.offers.length) > 0) {
+        var _configs$advanced_off;
+
+        if (!(configs !== null && configs !== void 0 && (_configs$advanced_off = configs.advanced_offers_module) !== null && _configs$advanced_off !== void 0 && _configs$advanced_off.value)) {
+          applyCoupon({
+            business_id: businessId,
+            coupon: null
+          });
+        } else {
+          var _props$cart2;
+
+          removeOffer({
+            business_id: businessId,
+            offer_id: props === null || props === void 0 ? void 0 : (_props$cart2 = props.cart) === null || _props$cart2 === void 0 ? void 0 : _props$cart2.offers[0].id
+          });
+        }
+      }
+    }
   };
 
   var handleNewCard = /*#__PURE__*/function () {
@@ -419,6 +459,23 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
       return _ref3.apply(this, arguments);
     };
   }();
+
+  var applyMasterCardCoupon = function applyMasterCardCoupon() {
+    var _configs$advanced_off2;
+
+    if (!(configs !== null && configs !== void 0 && (_configs$advanced_off2 = configs.advanced_offers_module) !== null && _configs$advanced_off2 !== void 0 && _configs$advanced_off2.value)) {
+      applyCoupon({
+        business_id: businessId,
+        coupon: 'DLVMASTER30'
+      });
+    } else {
+      applyOffer({
+        business_id: businessId,
+        coupon: 'DLVMASTER30',
+        force: true
+      });
+    }
+  };
 
   (0, _react.useEffect)(function () {
     if (isSdkReady) {
