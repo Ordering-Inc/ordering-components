@@ -76,6 +76,9 @@ export const Checkout = (props) => {
    */
   const [vaXMiCuenta, setVaXMiCuenta] = useState({ loading: true })
 
+
+  const [uberDirect, setUberDirect] = useState({ isUberDirect: false, amountToHide: null })
+
   /**
    * Current cart
    */
@@ -349,6 +352,54 @@ export const Checkout = (props) => {
     })
   }
 
+  const checkUberDirect = async () => {
+    try {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/is_cash_external_driver_group.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          uuid: cart.uuid,
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-APP-X': ordering.appId
+        }
+      })
+      const result = await response.json()
+      if (!result.error) {
+        setUberDirect({
+          ...uberDirect,
+         isUberDirect : !result
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const checkAmountToHideCash = async () => {
+      try {
+        const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/max_cash_delivery.php`, {
+          method: 'POST',
+          body: JSON.stringify({
+            uuid: cart.uuid,
+          }),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-APP-X': ordering.appId
+          }
+        })
+        const result = await response.json()
+        if (!result.error) {
+          setUberDirect({
+            ...uberDirect,
+            amountToHide: result
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+  }
+
   useEffect(() => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
@@ -397,6 +448,13 @@ export const Checkout = (props) => {
     applyDonation()
   }, [vaXMiCuenta.selectedOption])
 
+  useEffect(() => {
+    if(uberDirect.isUberDirect) {
+      checkAmountToHideCash()
+    }
+  }, [uberDirect.isUberDirect])
+
+
   /**
    * Update carts from sockets
    */
@@ -421,6 +479,7 @@ export const Checkout = (props) => {
 
   useEffect(() => {
     getDeliveryOptions()
+    checkUberDirect()
   }, [])
 
   return (
@@ -439,6 +498,7 @@ export const Checkout = (props) => {
           deliveryOptionSelected={deliveryOptionSelected}
           defaultOptionsVaXMiCuenta={defaultOptionsVaXMiCuenta}
           vaXMiCuenta={vaXMiCuenta}
+          uberDirect={uberDirect}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
           handleChangeComment={handleChangeComment}
