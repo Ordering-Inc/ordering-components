@@ -19,7 +19,9 @@ export const LoginForm = (props) => {
     urlToRedirect,
     allowedLevels,
     handleCustomLogin,
-    notificationState
+    notificationState,
+    setOtpDataUser,
+    handleOpenSignup
   } = props
 
   const [ordering] = useApi()
@@ -32,6 +34,7 @@ export const LoginForm = (props) => {
   const [{ configs }] = useConfig()
   const [reCaptchaValue, setReCaptchaValue] = useState(null)
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
+  const isAlsea = ordering.project === 'alsea'
 
   const useLoginByCellphone = configs?.phone_password_login_enabled?.value === '1'
   const useLoginOtpEmail = configs?.opt_email_enabled?.value === '1'
@@ -41,11 +44,11 @@ export const LoginForm = (props) => {
 
   const useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone
 
-  defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp'
+  defaultLoginTab = defaultLoginTab || (useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp')
   const [loginTab, setLoginTab] = useState(defaultLoginTab)
   const [otpType, setOtpType] = useState((!useLoginOtpEmail && useLoginOtpCellphone) ? 'cellphone' : 'email')
   const [otpState, setOtpState] = useState('')
-
+  const [createOtpUser, setCreateOtpUser] = useState(false)
   const [, { login, logout }] = useSession()
   const [, t] = useLanguage()
 
@@ -69,6 +72,7 @@ export const LoginForm = (props) => {
           _credentials = {
             ..._credentials,
             country_phone_code: values && values?.country_phone_code || credentials?.country_phone_code,
+            country_code: values && values?.country_code || credentials?.country_code
           }
         }
       } else {
@@ -327,6 +331,119 @@ export const LoginForm = (props) => {
     }
   }
 
+  const alseaOtpInitialize = async (values, type) => {
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      setCreateOtpUser(false)
+      const body = {
+        type
+      }
+      if (otpType === 'cellphone') {
+        body.user = values?.cellphone || credentials?.cellphone
+        body.cellphone = values?.cellphone || credentials?.cellphone
+        body.country_code = values?.countryPhoneCode
+      } else {
+        body.email = values?.email || credentials?.email
+        body.user = values?.email || credentials?.email
+      }
+      const requestParams = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }
+      const params = `pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt${body.cellphone ? `&cellphone=${body.cellphone}` : ''}${body.country_code ? `&country_phone_code=${body.country_code}` : ''}${body.email ? `&mail=${body.email}` : ''}`
+      const result = await alseaOtpConsult(params)
+      if (result === 'new_user') {
+        if (otpType === 'cellphone') {
+          const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
+          const resultOtp = await responseOtp.json()
+          if (resultOtp.error) {
+            setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
+            return false
+          }
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
+          setCreateOtpUser(true)
+        } else {
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist') }, loading: false })
+          setOtpType('cellphone')
+        }
+      } else if (result === 'existing_user') {
+        const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/otp_create.php`, requestParams)
+        const resultOtp = await responseOtp.json()
+        if (resultOtp.error) {
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
+          return false
+        }
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
+        return true
+      } else {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result.result }, loading: false })
+        return false
+      }
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message }, loading: false })
+    }
+  }
+
+  const alseaOtpConsult = async (params) => {
+    try {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      const text = await response.text()
+      return text
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message } })
+    }
+  }
+
+  const alseaOtpCreateUser = async (values) => {
+    try {
+      setFormState({
+        ...formState,
+        loading: true
+      })
+      const body = {
+        code: values.code
+      }
+      if (otpType === 'cellphone') {
+        body.cellphone = values?.cellphone || credentials?.cellphone
+        body.country_code = values?.country_code
+      } else {
+        body.email = values?.email || credentials?.email
+      }
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/cellphone_new_user_signup.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+      const result = await response.json()
+      if (result.error) {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result.result } })
+        return
+      }
+      setOtpDataUser({
+        email: body.email,
+        cellphone: body.cellphone,
+        country_code: body.country_code,
+        id: result?.result?.id,
+        token: result?.result?.session?.access_token
+      })
+      handleOpenSignup()
+      setFormState({
+        ...formState,
+        loading: false
+      })
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message } })
+      setFormState({
+        ...formState,
+        loading: false
+      })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -355,6 +472,9 @@ export const LoginForm = (props) => {
           useLoginByCellphone={useLoginByCellphone}
           useLoginOtpEmail={useLoginOtpEmail}
           useLoginOtpCellphone={useLoginOtpCellphone}
+          alseaOtpInitialize={alseaOtpInitialize}
+          createOtpUser={createOtpUser}
+          alseaOtpCreateUser={alseaOtpCreateUser}
         />
       )}
     </>

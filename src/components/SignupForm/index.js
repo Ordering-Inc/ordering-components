@@ -9,7 +9,7 @@ import { useEvent } from '../../contexts/EventContext'
 /**
  * Component to manage signup behavior without UI component
  */
-export const SignupForm = (props) => {
+ export const SignupForm = (props) => {
   const {
     UIComponent,
     useChekoutFileds,
@@ -19,7 +19,8 @@ export const SignupForm = (props) => {
     handleCustomSignup,
     notificationState,
     isCustomerMode,
-    numOtpInputs
+    numOtpInputs,
+    otpDataUser
   } = props
   const requestsState = {}
 
@@ -39,12 +40,14 @@ export const SignupForm = (props) => {
   const [reCaptchaValue, setReCaptchaValue] = useState(null)
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
   const [promotionsEnabled, setPromotionsEnabled] = useState(false)
+  const [confirmDeleteUser, setConfirmDeleteUser] = useState(true)
 
   const useSignUpOtpEmail = configs?.email_otp_signup_enabled?.value === '1'
   const useSignUpOtpCellphone = configs?.phone_otp_signup_enabled?.value === '1'
   const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone) ? configs?.full_details_signup_enabled?.value === '1' : true
 
   const defaultSignUpTab = useSignUpFullDetails ? 'default' : useSignUpOtpEmail ? 'otpEmail' : 'otpCellphone'
+  const isAlsea = ordering.project === 'alsea'
   const [signUpTab, setSignUpTab] = useState(defaultSignUpTab)
   /**
    * Default fuction for signup workflow
@@ -83,12 +86,28 @@ export const SignupForm = (props) => {
       data.phone = data.cellphone
       delete data.country_phone_code
     }
+    if (otpDataUser.email) {
+      delete data.email
+    }
+    if (otpDataUser.cellphone) {
+      delete data.cellphone
+      delete data.country_phone_code
+    }
+
     const newData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ''))
     try {
       setFormState({ ...formState, loading: true })
       const source = {}
       requestsState.signup = source
-      const response = await ordering.users().save(newData, { cancelToken: source })
+      let response
+      if (otpDataUser?.id) {
+        response = await ordering.setAccessToken(otpDataUser?.token).users(otpDataUser?.id).save(newData, { cancelToken: source })
+        if (!response.content.error) {
+          await setConfirmDeleteUser(false)
+        }
+      } else {
+        response = await ordering.users().save(newData, { cancelToken: source })
+      }
       setFormState({
         result: response.content,
         loading: false
@@ -361,6 +380,54 @@ export const SignupForm = (props) => {
     setPromotionsEnabled(!promotionsEnabled)
   }
 
+  const deleteOtpUser = async () => {
+    try {
+      await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/delete_new_user.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: otpDataUser.id,
+          token: otpDataUser.token
+        })
+      })
+    } catch (err) {
+      setCheckPhoneCodeState({
+        ...checkPhoneCodeState,
+        loading: false,
+        result: {
+          error: err.message
+        }
+      })
+    }
+  }
+
+  const alseaOtpConsult = async (params) => {
+    try {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      const text = await response.text()
+      return text
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message } })
+    }
+  }
+
+  const signUpOtpUser = async () => {
+    setFormState({ ...formState, loading: true })
+    const params = `pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt&mail=${signupData.email}`
+    const result = await alseaOtpConsult(params)
+    if (result === 'new_user') {
+      handleSignupClick()
+    } else if (result === 'existing_user') {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('EMAIL_ALREADY_TAKEN', 'Email already taken') } })
+    } else {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result } })
+    }
+    setFormState({ ...formState, loading: false })
+  }
+
   useEffect(() => {
     setIsReCaptchaEnable(props.isRecaptchaEnable && configs &&
       Object.keys(configs).length > 0 &&
@@ -411,6 +478,9 @@ export const SignupForm = (props) => {
           useSignUpFullDetails={useSignUpFullDetails}
           useSignUpOtpEmail={useSignUpOtpEmail}
           useSignUpOtpCellphone={useSignUpOtpCellphone}
+          deleteOtpUser={deleteOtpUser}
+          confirmDeleteUser={confirmDeleteUser}
+          signUpOtpUser={signUpOtpUser}
         />
       )}
     </>
