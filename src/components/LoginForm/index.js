@@ -363,6 +363,7 @@ export const LoginForm = (props) => {
           }
           setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
           setCreateOtpUser(true)
+          return true
         } else {
           setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist') }, loading: false })
           setOtpType('cellphone')
