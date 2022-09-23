@@ -20,10 +20,12 @@ export const Checkout = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [, { refreshConfigs }] = useConfig()
+  const [configs, { refreshConfigs }] = useConfig()
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
+
+  const isAlsea = ordering.project === 'alsea'
 
   /**
    * Language context
@@ -65,6 +67,15 @@ export const Checkout = (props) => {
   const businessId = props.uuid
     ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
     : props.businessId
+
+
+  const [defaultOptionsVaXMiCuenta, setDefaultOptionsVaXMiCuenta] = useState(null)
+
+  /**
+   * This must be contains an object with info about va x mi cuenta
+   */
+  const [vaXMiCuenta, setVaXMiCuenta] = useState({ loading: true })
+
   /**
    * Current cart
    */
@@ -77,6 +88,64 @@ export const Checkout = (props) => {
    * Cart comment stagged
    */
   let previousComment
+
+  /**
+   * Method to get va por mi cuenta from Plugin
+   */
+  const getVaXMiCuenta = async () => {
+    if (!defaultOptionsVaXMiCuenta?.enable) {
+      setVaXMiCuenta({
+        selectedOption: { amount: 0, option: 0 },
+        loading: false,
+        error: null
+      })
+      return
+    }
+    try {
+      setVaXMiCuenta({
+        ...vaXMiCuenta,
+        loading: true,
+        error: null
+      })
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/va_por_mi_cuenta.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          uuid: cart.uuid
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-APP-X': ordering.appId
+        }
+      })
+      const result = await response.json()
+      let option;
+      if (result.result) {
+        option = result.result
+      } else {
+        option = result
+      }
+      if (!result.error) {
+        setVaXMiCuenta({
+          ...vaXMiCuenta,
+          selectedOption: {...option, default: true},
+          loading: false,
+          error: null
+        })
+      } else {
+        setVaXMiCuenta({
+          ...vaXMiCuenta,
+          loading: false,
+          error: [result?.result]
+        })
+      }
+    } catch (err) {
+      setVaXMiCuenta({
+        ...vaXMiCuenta,
+        loading: false,
+        error: [err.message]
+      })
+    }
+  }
 
   /**
    * Method to get business from API
@@ -273,11 +342,60 @@ export const Checkout = (props) => {
     }
   }
 
+  const handleChangeVaXMiCuenta = (option, index) => {
+    setVaXMiCuenta({
+      ...vaXMiCuenta,
+      selectedOption: { amount:option, option: index, default: false}
+    })
+  }
+
   useEffect(() => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
     }
   }, [businessId])
+
+  useEffect(() => {
+    if (defaultOptionsVaXMiCuenta === null) return
+    getVaXMiCuenta()
+  }, [defaultOptionsVaXMiCuenta])
+
+  useEffect(() => {
+    if (configs.loading || businessDetails.loading) return
+
+    setDefaultOptionsVaXMiCuenta(JSON.parse(configs.configs?.va_por_mi_cuenta?.value).find((value) => value.brand_id == parseInt(businessDetails?.business?.brand_id)))
+
+  }, [configs.loading, businessDetails.loading])
+
+  useEffect(() => {
+    if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return
+    const applyDonation = async () => {
+      try {
+        const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php`, {
+          method: 'POST',
+          body: JSON.stringify({
+            uuid: cart.uuid,
+            option: vaXMiCuenta.selectedOption.option
+          }),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-APP-X': ordering.appId
+          }
+        })
+        const result = await response.json()
+        if (!result.error) {
+          console.log(result)
+        }
+      } catch (err) {
+        setVaXMiCuenta({
+          ...vaXMiCuenta,
+          loading: false,
+          error: [err.message]
+        })
+      }
+    }
+    applyDonation()
+  }, [vaXMiCuenta.selectedOption])
 
   /**
    * Update carts from sockets
@@ -319,10 +437,13 @@ export const Checkout = (props) => {
           commentState={commentState}
           instructionsOptions={instructionsOptions}
           deliveryOptionSelected={deliveryOptionSelected}
+          defaultOptionsVaXMiCuenta={defaultOptionsVaXMiCuenta}
+          vaXMiCuenta={vaXMiCuenta}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
           handleChangeComment={handleChangeComment}
           handleChangeDeliveryOption={handleChangeDeliveryOption}
+          handleChangeVaXMiCuenta={handleChangeVaXMiCuenta}
         />
       )}
     </>
