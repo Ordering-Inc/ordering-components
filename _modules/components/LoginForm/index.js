@@ -751,12 +751,12 @@ var LoginForm = function LoginForm(props) {
               setOtpType('cellphone');
 
             case 28:
-              _context5.next = 46;
+              _context5.next = 47;
               break;
 
             case 30:
               if (!(result === 'existing_user')) {
-                _context5.next = 44;
+                _context5.next = 45;
                 break;
               }
 
@@ -791,9 +791,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               }));
+              setCredentials(_objectSpread(_objectSpread({}, credentials), {}, {
+                country_phone_code: body.country_code
+              }));
               return _context5.abrupt("return", true);
 
-            case 44:
+            case 45:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   error: result.result
@@ -802,12 +805,12 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 46:
-              _context5.next = 51;
+            case 47:
+              _context5.next = 52;
               break;
 
-            case 48:
-              _context5.prev = 48;
+            case 49:
+              _context5.prev = 49;
               _context5.t0 = _context5["catch"](0);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
@@ -816,12 +819,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               }));
 
-            case 51:
+            case 52:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[0, 48]]);
+      }, _callee5, null, [[0, 49]]);
     }));
 
     return function alseaOtpInitialize(_x5, _x6) {
