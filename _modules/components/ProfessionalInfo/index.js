@@ -5,21 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ReviewDriver = void 0;
+exports.ProfessionalInfo = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
-
-var _ToastContext = require("../../contexts/ToastContext");
-
-var _LanguageContext = require("../../contexts/LanguageContext");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -51,11 +45,10 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var ReviewDriver = function ReviewDriver(props) {
-  var UIComponent = props.UIComponent,
-      order = props.order,
-      isToast = props.isToast,
-      isProfessional = props.isProfessional;
+var ProfessionalInfo = function ProfessionalInfo(props) {
+  var userId = props.userId,
+      propsToFetch = props.propsToFetch,
+      UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -63,176 +56,210 @@ var ReviewDriver = function ReviewDriver(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      session = _useSession2[0];
-
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
+      token = _useSession2[0].token;
 
   var _useState = (0, _react.useState)({
-    qualification: 0,
-    comment: ''
+    reviews: [],
+    loading: false,
+    error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      reviews = _useState2[0],
-      setReviews = _useState2[1];
+      userReviewState = _useState2[0],
+      setUserReviewState = _useState2[1];
 
   var _useState3 = (0, _react.useState)({
+    user: null,
     loading: false,
-    result: {
-      error: false
-    }
+    error: null
   }),
       _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
+      userState = _useState4[0],
+      setUserState = _useState4[1];
   /**
-   * Function that load and send the driver review to ordering
+   * Method to get user from API
    */
 
 
-  var handleSendDriverReview = /*#__PURE__*/function () {
+  var getUser = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _order$products$, _order$products$$cale, _order$products$$cale2, _order$driver, userId, response, _yield$response$json, result, error;
+      var fetchEndpoint, _yield$fetchEndpoint$, result, user;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              _context.prev = 0;
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: true
               }));
-              _context.prev = 1;
-              userId = isProfessional ? order === null || order === void 0 ? void 0 : (_order$products$ = order.products[0]) === null || _order$products$ === void 0 ? void 0 : (_order$products$$cale = _order$products$.calendar_event) === null || _order$products$$cale === void 0 ? void 0 : (_order$products$$cale2 = _order$products$$cale.professional) === null || _order$products$$cale2 === void 0 ? void 0 : _order$products$$cale2.id : order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id;
+              fetchEndpoint = ordering.setAccessToken(token).users(userId).select(propsToFetch);
               _context.next = 5;
-              return fetch("".concat(ordering.root, "/users/").concat(userId, "/user_reviews"), {
-                method: 'POST',
-                headers: {
-                  Authorization: "Bearer ".concat(session.token),
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(_objectSpread(_objectSpread({}, reviews), {}, {
-                  order_id: order === null || order === void 0 ? void 0 : order.id,
-                  user_id: userId
-                }))
-              });
+              return fetchEndpoint.get();
 
             case 5:
-              response = _context.sent;
-              _context.next = 8;
-              return response.json();
-
-            case 8:
-              _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
-
-              if (!error) {
-                setFormState({
-                  loading: false,
-                  result: {
-                    result: result,
-                    error: false
-                  }
-                });
-
-                if (isToast) {
-                  showToast(_ToastContext.ToastType.Success, isProfessional ? t('PROFESSIONAL_REVIEW_SUCCESS_CONTENT', 'Thank you, Professional review successfully submitted!') : t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'));
-                }
-              } else {
-                setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-                  loading: false,
-                  result: {
-                    result: result,
-                    error: true
-                  }
-                }));
-              }
-
-              _context.next = 17;
+              _yield$fetchEndpoint$ = _context.sent;
+              result = _yield$fetchEndpoint$.content.result;
+              user = Array.isArray(result) ? null : result;
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: false,
+                user: user
+              }));
+              _context.next = 14;
               break;
 
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](1);
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-                result: {
-                  error: true,
-                  result: _context.t0.message
-                },
-                loading: false
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: false,
+                error: [_context.t0.message]
               }));
 
-            case 17:
+            case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 14]]);
+      }, _callee, null, [[0, 11]]);
     }));
 
-    return function handleSendDriverReview() {
+    return function getUser() {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * Method to get the user reviews from API
+   */
 
+
+  var getUserReviews = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var requestOptions, response, content;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              setUserReviewState(_objectSpread(_objectSpread({}, userReviewState), {}, {
+                loading: true
+              }));
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              _context2.next = 5;
+              return fetch("".concat(ordering.root, "/users/").concat(userId, "/user_reviews"), requestOptions);
+
+            case 5:
+              response = _context2.sent;
+              _context2.next = 8;
+              return response.json();
+
+            case 8:
+              content = _context2.sent;
+
+              if (!content.error) {
+                setUserReviewState({
+                  reviews: content.result,
+                  loading: false,
+                  error: null
+                });
+              }
+
+              _context2.next = 15;
+              break;
+
+            case 12:
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](0);
+              setUserReviewState(_objectSpread(_objectSpread({}, userReviewState), {}, {
+                loading: false,
+                error: [_context2.t0.message]
+              }));
+
+            case 15:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 12]]);
+    }));
+
+    return function getUserReviews() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  (0, _react.useEffect)(function () {
+    if (props.user) {
+      setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+        user: props.user
+      }));
+    } else {
+      getUser();
+    }
+
+    if (userId) getUserReviews();
+  }, [userId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    formState: formState,
-    handleSendDriverReview: handleSendDriverReview,
-    dirverReviews: reviews,
-    setDriverReviews: setReviews
+    userState: userState,
+    userReviewState: userReviewState
   })));
 };
 
-exports.ReviewDriver = ReviewDriver;
-ReviewDriver.propTypes = {
+exports.ProfessionalInfo = ProfessionalInfo;
+ProfessionalInfo.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Getting the order that can be review
-  */
-  order: _propTypes.default.object,
-
-  /**
-   * Enable to show/hide toast
+   * Array of drivers props to fetch
    */
-  isToast: _propTypes.default.bool,
+  propsToFetch: _propTypes.default.arrayOf(_propTypes.string),
 
   /**
-   * Components types before payment option cash
+  * This must be contains userId to fetch
+  */
+  userId: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+  * User, this must be contains an object with all user info
+  */
+  user: _propTypes.default.object,
+
+  /**
+   * Components types before order details
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Components types after payment option cash
-   * Array of type components, the parent props will pass to these components
-   */
+    * Components types after order details
+    * Array of type components, the parent props will pass to these components
+    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Elements before payment option cash
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
+    * Elements before order details
+    * Array of HTML/Components elements, these components will not get the parent props
+    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * Elements after payment option cash
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
+    * Elements after order details
+    * Array of HTML/Components elements, these components will not get the parent props
+    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-ReviewDriver.defaultProps = {
-  order: {},
+ProfessionalInfo.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'address_notes', 'driver_zone_restriction', 'dropdown_option_id', 'dropdown_option', 'location', 'loyalty_level', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'phone_verified', 'email_verified', 'schedule', 'timezone', 'max_days_in_future', 'occupation_id', 'occupation', 'session']
 };
