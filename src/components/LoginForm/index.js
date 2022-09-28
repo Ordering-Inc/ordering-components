@@ -376,6 +376,7 @@ export const LoginForm = (props) => {
           return false
         }
         setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
+        setCredentials({ ...credentials, country_phone_code: body.country_code })
         return true
       } else {
         setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result.result }, loading: false })
