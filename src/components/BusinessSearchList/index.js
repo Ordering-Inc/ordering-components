@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useOrderingTheme } from '../../contexts/OrderingThemeContext'
 
 export const BusinessSearchList = (props) => {
   const {
     UIComponent,
     paginationSettings,
     lazySearch,
-    defaultTerm
+    defaultTerm,
+    defaultLocation
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -26,6 +28,8 @@ export const BusinessSearchList = (props) => {
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [{ token }] = useSession()
+  const [orderingTheme] = useOrderingTheme()
+
   const [filters, setFilters] = useState({
     business_types: [],
     orderBy: 'distance',
@@ -33,20 +37,18 @@ export const BusinessSearchList = (props) => {
     price_level: null
   })
   const [termValue, setTermValue] = useState(defaultTerm || '')
+  const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
+  const showCities = !orderingTheme?.theme?.business_listing_view?.components?.cities?.hidden
 
   useEffect(() => {
-    !lazySearch && handleSearchbusinessAndProducts(true)
-  }, [filters])
-
-  useEffect(() => {
-    if (businessesSearchList?.loading) return
-    if (termValue?.length === 0 || termValue?.length >= 3) {
-      handleSearchbusinessAndProducts(true)
-    }
-  }, [termValue])
+    !lazySearch && (Object.keys(orderState?.options?.address?.location || {})?.length > 0 || defaultLocation) && handleSearchbusinessAndProducts(true)
+  }, [filters, JSON.stringify(orderState?.options)])
 
   const handleChangeTermValue = (val) => {
     setTermValue(val)
+    if ((termValue?.length === 0 || termValue?.length >= 3)) {
+      handleSearchbusinessAndProducts(true, {}, val)
+    }
   }
 
   const handleChangeFilters = (filterName, filterValue) => {
@@ -126,13 +128,14 @@ export const BusinessSearchList = (props) => {
     })
   }
 
-  const handleSearchbusinessAndProducts = async (newFetch) => {
+  const handleSearchbusinessAndProducts = async (newFetch, options, val) => {
     try {
-      let filtParams = termValue?.length >= 3 ? `&term=${termValue}` : ''
+      let filtParams = val?.length >= 3 ? `&term=${val}` : ''
       Object.keys(filters).map(key => {
         if ((!filters[key] && filters[key] !== 0) || filters[key] === 'default' || filters[key]?.length === 0) return
         Array.isArray(filters[key]) ? filtParams = filtParams + `&${key}=[${filters[key]}]` : filtParams = filtParams + `&${key}=${filters[key]}`
       })
+      filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation ? '&max_distance=20000' : '')
       filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
       setBusinessesSearchList({
         ...businessesSearchList,
@@ -146,8 +149,8 @@ export const BusinessSearchList = (props) => {
           Authorization: `Bearer ${token}`
         }
       }
-      const location = { lat: orderState.options?.address?.location?.lat, lng: orderState.options?.address?.location?.lng }
-      const response = await fetch(`${ordering.root}/search?order_type_id=${orderState?.options?.type}&location=${JSON.stringify(location)}${filtParams}`, requestOptions)
+      const location = { lat: orderState.options?.address?.location?.lat || defaultLocation?.lat, lng: orderState.options?.address?.location?.lng || defaultLocation?.lng }
+      const response = await fetch(`${ordering.root}/search?order_type_id=${orderState?.options?.type}&location=${JSON.stringify(options?.location || location)}${filtParams}`, requestOptions)
       const { result, error, pagination } = await response.json()
       if (error) {
         setBusinessesSearchList({
@@ -227,6 +230,28 @@ export const BusinessSearchList = (props) => {
     }
   }
 
+  const getCities = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+    setCitiesState({ ...citiesState, loading: true })
+    const response = await fetch(`${ordering.root}/countries`, requestOptions)
+    const { result, error, pagination } = await response.json()
+
+    if (!error) {
+      setCitiesState({
+        ...citiesState,
+        loading: false,
+        cities: result?.map(country => country?.cities).flat(),
+        pagination
+      })
+    }
+  }
+
   /**
   * Function to get tag list from API
   */
@@ -270,6 +295,12 @@ export const BusinessSearchList = (props) => {
     getBrandList()
   }, [])
 
+  useEffect(() => {
+    if (showCities) {
+      getCities()
+    }
+  }, [showCities])
+
   return (
     <>
       {
@@ -287,6 +318,7 @@ export const BusinessSearchList = (props) => {
             brandList={brandList}
             handleUpdateBusinessList={handleUpdateBusinessList}
             handleUpdateProducts={handleUpdateProducts}
+            citiesState={citiesState}
           />
         )
       }
