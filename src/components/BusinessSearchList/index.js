@@ -11,7 +11,8 @@ export const BusinessSearchList = (props) => {
     paginationSettings,
     lazySearch,
     defaultTerm,
-    defaultLocation
+    defaultLocation,
+    brandId
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -34,7 +35,8 @@ export const BusinessSearchList = (props) => {
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
-    price_level: null
+    price_level: null,
+    brand_ids: brandId ? [brandId] : []
   })
   const [termValue, setTermValue] = useState(defaultTerm || '')
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
@@ -128,7 +130,7 @@ export const BusinessSearchList = (props) => {
     })
   }
 
-  const handleSearchbusinessAndProducts = async (newFetch, options) => {
+  const handleSearchbusinessAndProducts = async (newFetch, options, val) => {
     try {
       let filtParams = val?.length >= 3 ? `&term=${val}` : ''
       Object.keys(filters).map(key => {
