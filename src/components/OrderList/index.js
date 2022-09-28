@@ -29,11 +29,13 @@ export const OrderList = props => {
     businessesSearchList,
     setIsEmptyBusinesses,
     businessOrderIds,
-    setBusinessOrderIds
+    setBusinessOrderIds,
+    propsToFetchBusiness,
+    isBusiness
   } = props
 
   const [ordering] = useApi()
-  const [, { reorder }] = useOrder()
+  const [orderState, { reorder }] = useOrder()
   const [session] = useSession()
   const [, { showToast }] = useToast()
   const socket = useWebsocket()
@@ -53,9 +55,12 @@ export const OrderList = props => {
   const [sortBy, setSortBy] = useState({ param: orderBy, direction: orderDirection })
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
   const [products, setProducts] = useState([])
+  const [businesses, setBusinesses] = useState({ loading: false, result: [], error: null })
+
   const profileMessage = props.profileMessages
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
 
   const handleReorder = async (orderId) => {
     if (!orderId) return
@@ -159,6 +164,12 @@ export const OrderList = props => {
         ...orderList,
         loading: true
       })
+      if (isBusiness) {
+        setBusinesses({
+          ...businesses,
+          loading: true
+        })
+      }
       const nextPage = !isNextPage ? pagination.currentPage + 1 : 1
       const response = await getOrders(getFirstOrder ? 0 : nextPage, searchByOtherStatus, pageSize)
 
@@ -177,11 +188,9 @@ export const OrderList = props => {
           error: response.content.error ? response.content.result : null
         })
       }
-      setBusinessOrderIds && setBusinessOrderIds(
-        [...response.content.result, ...orderList.orders]
-          .map(order => order.business_id)
-          .filter((id, i, hash) => (!businessesSearchList || businessesSearchList?.businesses?.some(business => business?.id === id)) && hash.indexOf(id) === i)
-      )
+      const businessIds = [...response.content.result, ...orderList.orders].map(order => order.business_id)
+      console.log(businessIds)
+      setBusinessOrderIds && setBusinessOrderIds(businessIds)
       setProducts(
         [...response.content.result, ...orderList.orders]
           .filter(order => !businessesSearchList || businessesSearchList?.businesses?.some(business => order?.business_id === business?.id))
@@ -189,6 +198,9 @@ export const OrderList = props => {
           .flat()
           .filter((product, i, hash) => hash.map(_product => _product?.product_id).indexOf(product?.product_id) === i)
       )
+      if (isBusiness) {
+        getBusinesses(businessIds)
+      }
 
       if (!response.content.error) {
         setPagination({
@@ -209,6 +221,10 @@ export const OrderList = props => {
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
         setOrderList({ ...orderList, loading: false, error: [err.message] })
+        setBusinesses({
+          ...businesses,
+          loading: false
+        })
       }
     }
   }
@@ -249,8 +265,60 @@ export const OrderList = props => {
           error: result
         })
       }
-    } catch (error) {
-      setMessages({ ...messages, loading: false, error: [error.Messages] })
+    } catch (err) {
+      setMessages({ ...messages, loading: false, error: [err.message] })
+    }
+  }
+
+  const getBusinesses = async (businessIds) => {
+    try {
+      const parameters = {
+        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
+      }
+
+      if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+        const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+        parameters.timestamp = moment
+      }
+
+      let where = null
+      const conditions = []
+
+      if (businessIds) {
+        conditions.push({
+          attribute: typeof businessIds === 'string' ? 'slug' : 'id',
+          value: businessIds
+        })
+      }
+
+      if (conditions.length) {
+        where = {
+          conditions,
+          conector: 'AND'
+        }
+      }
+
+      const source = {}
+      requestsState.businesses = source
+
+      const fetchEndpoint = ordering.businesses().select(propsToFetchBusiness).parameters(parameters).where(where)
+
+      const { content: { error, result } } = await fetchEndpoint.get({ cancelToken: source })
+      if (!error) {
+        setBusinesses({
+          result,
+          error: null,
+          loading: false
+        })
+      }
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setBusinesses({
+          ...businesses,
+          err: err.message,
+          loading: false
+        })
+      }
     }
   }
 
@@ -484,6 +552,7 @@ export const OrderList = props => {
           products={products}
           handleUpdateOrderList={handleUpdateOrderList}
           handleUpdateProducts={handleUpdateProducts}
+          businesses={businesses}
         />
       )}
     </>
@@ -589,5 +658,6 @@ OrderList.defaultProps = {
   afterComponents: [],
   beforeElements: [],
   afterElements: [],
-  isAsCustomer: false
+  isAsCustomer: false,
+  propsToFetchBusiness: ['id', 'name', 'header', 'logo', 'location', 'schedule', 'open', 'ribbon', 'delivery_price', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers', 'food', 'laundry', 'alcohol', 'groceries', 'slug', 'city', 'city_id']
 }

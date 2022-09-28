@@ -10,7 +10,9 @@ export const CartStoresListing = (props) => {
     UIComponent,
     cartuuid,
     cartStoresList,
-    pageChangeStore
+    pageChangeStore,
+    isStore,
+    handleCustomStoreRedirect
   } = props
 
   const [ordering] = useApi()
@@ -68,8 +70,12 @@ export const CartStoresListing = (props) => {
         carts[`businessId:${result?.business_id}`] = result
         setStateValues({ carts })
         const route = window.location.pathname
-        if (route.includes('/store/') && pageChangeStore) {
-          events.emit('go_to_page', { page: pageChangeStore, params: { store: result?.business?.slug } })
+        if (isStore) {
+          if (handleCustomStoreRedirect) {
+            handleCustomStoreRedirect(result?.business?.slug)
+          } else if (route.includes('/store/') && pageChangeStore) {
+            events.emit('go_to_page', { page: pageChangeStore, params: { store: result?.business?.slug } })
+          }
         }
       }
       setChangeStore({

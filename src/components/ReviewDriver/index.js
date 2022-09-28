@@ -6,7 +6,7 @@ import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export const ReviewDriver = (props) => {
-  const { UIComponent, order, isToast } = props
+  const { UIComponent, order, isToast, isProfessional } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
@@ -21,13 +21,16 @@ export const ReviewDriver = (props) => {
   const handleSendDriverReview = async () => {
     setFormState({ ...formState, loading: true })
     try {
-      const response = await fetch(`${ordering.root}/users/${order?.driver?.id}/user_reviews`, {
+      const userId = isProfessional
+        ? order?.products[0]?.calendar_event?.professional?.id
+        : order?.driver?.id
+      const response = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${session.token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ ...reviews, order_id: order?.id, user_id: order?.driver?.id })
+        body: JSON.stringify({ ...reviews, order_id: order?.id, user_id: userId })
       })
       const { result, error } = await response.json()
       if (!error) {
@@ -38,7 +41,13 @@ export const ReviewDriver = (props) => {
             error: false
           }
         })
-        if (isToast) showToast(ToastType.Success, t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'))
+        if (isToast) {
+          showToast(
+            ToastType.Success,
+            isProfessional
+              ? t('PROFESSIONAL_REVIEW_SUCCESS_CONTENT', 'Thank you, Professional review successfully submitted!')
+              : t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'))
+        }
       } else {
         setFormState({
           ...formState,

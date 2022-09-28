@@ -37,7 +37,7 @@ import { useEvent } from '../../contexts/EventContext'
   const [willVerifyOtpState, setWillVerifyOtpState] = useState(false)
   const [otpState, setOtpState] = useState('')
   const [{ configs }] = useConfig()
-  const [reCaptchaValue, setReCaptchaValue] = useState(null)
+  const [reCaptchaValue, setReCaptchaValue] = useState({ code: '', version: '' })
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
   const [promotionsEnabled, setPromotionsEnabled] = useState(false)
   const [confirmDeleteUser, setConfirmDeleteUser] = useState(true)
@@ -59,7 +59,7 @@ import { useEvent } from '../../contexts/EventContext'
     }
     const data = values || signupData
     if (isReCaptchaEnable) {
-      if (reCaptchaValue === null) {
+      if (reCaptchaValue?.code === '') {
         setFormState({
           result: {
             error: true,
@@ -69,7 +69,8 @@ import { useEvent } from '../../contexts/EventContext'
         })
         return
       } else {
-        data.verification_code = reCaptchaValue
+        data.verification_code = reCaptchaValue?.code
+        data.recaptcha_type = reCaptchaValue?.version
       }
     }
 

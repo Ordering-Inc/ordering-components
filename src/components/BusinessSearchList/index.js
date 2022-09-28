@@ -44,15 +44,11 @@ export const BusinessSearchList = (props) => {
     !lazySearch && (Object.keys(orderState?.options?.address?.location || {})?.length > 0 || defaultLocation) && handleSearchbusinessAndProducts(true)
   }, [filters, JSON.stringify(orderState?.options)])
 
-  useEffect(() => {
-    if (businessesSearchList?.loading) return
-    if ((termValue?.length === 0 || termValue?.length >= 3) && Object.keys(orderState?.options?.address?.location || {})?.length > 0) {
-      handleSearchbusinessAndProducts(true)
-    }
-  }, [termValue])
-
   const handleChangeTermValue = (val) => {
     setTermValue(val)
+    if ((termValue?.length === 0 || termValue?.length >= 3)) {
+      handleSearchbusinessAndProducts(true, {}, val)
+    }
   }
 
   const handleChangeFilters = (filterName, filterValue) => {
@@ -134,12 +130,12 @@ export const BusinessSearchList = (props) => {
 
   const handleSearchbusinessAndProducts = async (newFetch, options) => {
     try {
-      let filtParams = termValue?.length >= 3 ? `&term=${termValue}` : ''
+      let filtParams = val?.length >= 3 ? `&term=${val}` : ''
       Object.keys(filters).map(key => {
         if ((!filters[key] && filters[key] !== 0) || filters[key] === 'default' || filters[key]?.length === 0) return
         Array.isArray(filters[key]) ? filtParams = filtParams + `&${key}=[${filters[key]}]` : filtParams = filtParams + `&${key}=${filters[key]}`
       })
-      filtParams = orderState?.options?.type === 1 && defaultLocation ? '&max_distance=20000' : ''
+      filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation ? '&max_distance=20000' : '')
       filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
       setBusinessesSearchList({
         ...businessesSearchList,
