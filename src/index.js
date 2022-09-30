@@ -70,6 +70,7 @@ import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
 import { SingleOrderCard } from './components/SingleOrderCard'
 import { SingleProductCard } from './components/SingleProductCard'
+import { SingleProfessionalCard } from './components/SingleProfessionalCard'
 import { SmartAppBanner } from './components/SmartAppBanner'
 import { UserFormDetails } from './components/UserFormDetails'
 import { UpsellingPage } from './components/UpsellingPage'
@@ -201,6 +202,7 @@ export {
   SingleBusinessCard,
   SingleOrderCard,
   SingleProductCard,
+  SingleProfessionalCard,
   SmartAppBanner,
   UserFormDetails,
   UpsellingPage,

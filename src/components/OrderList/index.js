@@ -55,6 +55,7 @@ export const OrderList = props => {
   const [sortBy, setSortBy] = useState({ param: orderBy, direction: orderDirection })
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
   const [products, setProducts] = useState([])
+  const [professionals, setProfessionals] = useState([])
   const [businesses, setBusinesses] = useState({ loading: false, result: [], error: null })
 
   const profileMessage = props.profileMessages
@@ -188,6 +189,10 @@ export const OrderList = props => {
           error: response.content.error ? response.content.result : null
         })
       }
+      setProfessionals([...response.content.result, ...orderList.orders]
+        .reduce((previousValue, currentValue) => previousValue.concat(currentValue?.products[0]?.calendar_event?.professional), [])
+        .filter((professional, i, hash) => professional && hash.map(_professional => _professional?.id).indexOf(professional?.id) === i)
+      )
       const businessIds = [...response.content.result, ...orderList.orders].map(order => order.business_id)
       console.log(businessIds)
       setBusinessOrderIds && setBusinessOrderIds(businessIds)
@@ -320,6 +325,20 @@ export const OrderList = props => {
         })
       }
     }
+  }
+
+  // Function to update professional list
+  const handleUpdateProfessionals = (id, changes) => {
+    const updateProfessionals = professionals.map(professional => {
+      if (professional?.id === id) {
+        return {
+          ...professional,
+          ...changes
+        }
+      }
+      return professional
+    })
+    setProfessionals(updateProfessionals)
   }
 
   useEffect(() => {
@@ -553,6 +572,8 @@ export const OrderList = props => {
           handleUpdateOrderList={handleUpdateOrderList}
           handleUpdateProducts={handleUpdateProducts}
           businesses={businesses}
+          professionals={professionals}
+          handleUpdateProfessionals={handleUpdateProfessionals}
         />
       )}
     </>
