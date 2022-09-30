@@ -167,14 +167,19 @@ var OrderList = function OrderList(props) {
       products = _useState14[0],
       setProducts = _useState14[1];
 
-  var _useState15 = (0, _react.useState)({
+  var _useState15 = (0, _react.useState)([]),
+      _useState16 = _slicedToArray(_useState15, 2),
+      professionals = _useState16[0],
+      setProfessionals = _useState16[1];
+
+  var _useState17 = (0, _react.useState)({
     loading: false,
     result: [],
     error: null
   }),
-      _useState16 = _slicedToArray(_useState15, 2),
-      businesses = _useState16[0],
-      setBusinesses = _useState16[1];
+      _useState18 = _slicedToArray(_useState17, 2),
+      businesses = _useState18[0],
+      setBusinesses = _useState18[1];
 
   var profileMessage = props.profileMessages;
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
@@ -437,6 +442,15 @@ var OrderList = function OrderList(props) {
                 });
               }
 
+              setProfessionals([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).reduce(function (previousValue, currentValue) {
+                var _currentValue$product, _currentValue$product2;
+
+                return previousValue.concat(currentValue === null || currentValue === void 0 ? void 0 : (_currentValue$product = currentValue.products[0]) === null || _currentValue$product === void 0 ? void 0 : (_currentValue$product2 = _currentValue$product.calendar_event) === null || _currentValue$product2 === void 0 ? void 0 : _currentValue$product2.professional);
+              }, []).filter(function (professional, i, hash) {
+                return professional && hash.map(function (_professional) {
+                  return _professional === null || _professional === void 0 ? void 0 : _professional.id;
+                }).indexOf(professional === null || professional === void 0 ? void 0 : professional.id) === i;
+              }));
               businessIds = [].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).map(function (order) {
                 return order.business_id;
               });
@@ -476,11 +490,11 @@ var OrderList = function OrderList(props) {
                 });
               }
 
-              _context3.next = 27;
+              _context3.next = 28;
               break;
 
-            case 24:
-              _context3.prev = 24;
+            case 25:
+              _context3.prev = 25;
               _context3.t0 = _context3["catch"](8);
 
               if (_context3.t0.constructor.name !== 'Cancel') {
@@ -493,12 +507,12 @@ var OrderList = function OrderList(props) {
                 }));
               }
 
-            case 27:
+            case 28:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[8, 24]]);
+      }, _callee3, null, [[8, 25]]);
     }));
 
     return function loadOrders(_x3, _x4) {
@@ -670,7 +684,19 @@ var OrderList = function OrderList(props) {
     return function getBusinesses(_x6) {
       return _ref5.apply(this, arguments);
     };
-  }();
+  }(); // Function to update professional list
+
+
+  var handleUpdateProfessionals = function handleUpdateProfessionals(id, changes) {
+    var updateProfessionals = professionals.map(function (professional) {
+      if ((professional === null || professional === void 0 ? void 0 : professional.id) === id) {
+        return _objectSpread(_objectSpread({}, professional), changes);
+      }
+
+      return professional;
+    });
+    setProfessionals(updateProfessionals);
+  };
 
   (0, _react.useEffect)(function () {
     if (orders || customArray) {
@@ -970,7 +996,9 @@ var OrderList = function OrderList(props) {
     products: products,
     handleUpdateOrderList: handleUpdateOrderList,
     handleUpdateProducts: handleUpdateProducts,
-    businesses: businesses
+    businesses: businesses,
+    professionals: professionals,
+    handleUpdateProfessionals: handleUpdateProfessionals
   })));
 };
 

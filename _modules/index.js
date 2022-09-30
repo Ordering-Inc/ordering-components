@@ -735,6 +735,12 @@ Object.defineProperty(exports, "SingleProductCard", {
     return _SingleProductCard.SingleProductCard;
   }
 });
+Object.defineProperty(exports, "SingleProfessionalCard", {
+  enumerable: true,
+  get: function get() {
+    return _SingleProfessionalCard.SingleProfessionalCard;
+  }
+});
 Object.defineProperty(exports, "SiteContext", {
   enumerable: true,
   get: function get() {
@@ -1077,6 +1083,8 @@ var _SingleBusinessCard = require("./components/SingleBusinessCard");
 var _SingleOrderCard = require("./components/SingleOrderCard");
 
 var _SingleProductCard = require("./components/SingleProductCard");
+
+var _SingleProfessionalCard = require("./components/SingleProfessionalCard");
 
 var _SmartAppBanner = require("./components/SmartAppBanner");
 
