@@ -44,6 +44,12 @@ export const LanguageSelector = (props) => {
         .where([{ attribute: 'enabled', value: true }])
         .get({ cancelToken: source })
 
+      const language = !error && currentLanguage && result?.find(l => l.code === currentLanguage)
+      if (language) {
+        setLanguage(language)
+        setLanguageSelected(language)
+      }
+
       setLanguageState({
         ...languagesState,
         loading: false,
@@ -77,7 +83,7 @@ export const LanguageSelector = (props) => {
    * Selecting default if exist and there is not one in local storage
    */
   useEffect(() => {
-    if (currentLanguage) {
+    if (currentLanguage && languages?.length > 0) {
       const language = languages.find(language => language.code === currentLanguage)
       setLanguage(language)
       setLanguageSelected(language)
