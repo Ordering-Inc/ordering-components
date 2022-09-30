@@ -103,7 +103,7 @@ var LanguageSelector = function LanguageSelector(props) {
 
   var loadLanguages = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var source, _yield$ordering$langu, _yield$ordering$langu2, error, result;
+      var source, _yield$ordering$langu, _yield$ordering$langu2, error, result, language;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -128,15 +128,24 @@ var LanguageSelector = function LanguageSelector(props) {
               _yield$ordering$langu2 = _yield$ordering$langu.content;
               error = _yield$ordering$langu2.error;
               result = _yield$ordering$langu2.result;
+              language = !error && currentLanguage && (result === null || result === void 0 ? void 0 : result.find(function (l) {
+                return l.code === currentLanguage;
+              }));
+
+              if (language) {
+                setLanguage(language);
+                setLanguageSelected(language);
+              }
+
               setLanguageState(_objectSpread(_objectSpread({}, languagesState), {}, {
                 loading: false,
                 languages: error ? [] : result
               }));
-              _context.next = 16;
+              _context.next = 18;
               break;
 
-            case 13:
-              _context.prev = 13;
+            case 15:
+              _context.prev = 15;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -146,12 +155,12 @@ var LanguageSelector = function LanguageSelector(props) {
                 }));
               }
 
-            case 16:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 13]]);
+      }, _callee, null, [[0, 15]]);
     }));
 
     return function loadLanguages() {
@@ -182,7 +191,7 @@ var LanguageSelector = function LanguageSelector(props) {
   (0, _react.useEffect)(function () {
     var _languageState$langua;
 
-    if (currentLanguage) {
+    if (currentLanguage && (languages === null || languages === void 0 ? void 0 : languages.length) > 0) {
       var language = languages.find(function (language) {
         return language.code === currentLanguage;
       });
