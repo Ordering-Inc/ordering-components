@@ -12,7 +12,8 @@ export const FavoriteList = (props) => {
     originalURL,
     location,
     propsToFetch,
-    isProduct
+    isProduct,
+    isProfessional
   } = props
 
   const [ordering] = useApi()
@@ -78,6 +79,15 @@ export const FavoriteList = (props) => {
           setFavoriteList({
             loading: false,
             favorites: [...favoriteList?.favorites, ...updatedProducts],
+            error: null
+          })
+        } else if (isProfessional) {
+          const updatedUsers = content?.result.map(item => {
+            return item?.user
+          })
+          setFavoriteList({
+            loading: false,
+            favorites: [...favoriteList?.favorites, ...updatedUsers],
             error: null
           })
         } else {
