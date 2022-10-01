@@ -66,13 +66,13 @@ export const LoginForm = (props) => {
       if (loginTab === 'otp') {
         _credentials = {
           [otpType]: values && values[otpType] || credentials[otpType],
-          one_time_password: values && values?.code || otpState
+          one_time_password: values && values?.code || otpState,
+          country_code: values && values?.country_phone_code || credentials?.country_phone_code
         }
         if (otpType === 'cellphone') {
           _credentials = {
             ..._credentials,
             country_phone_code: values && values?.country_phone_code || credentials?.country_phone_code,
-            country_code: values && values?.country_code || credentials?.country_code
           }
         }
       } else {
@@ -332,18 +332,19 @@ export const LoginForm = (props) => {
     }
   }
 
-  const alseaOtpInitialize = async (values, type) => {
+  const alseaOtpInitialize = async (values, type, social) => {
     try {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
       setCreateOtpUser(false)
       const body = {
         type
       }
-      if (otpType === 'cellphone') {
+      if (social?.cellphone || otpType === 'cellphone') {
         body.user = values?.cellphone || credentials?.cellphone
         body.cellphone = values?.cellphone || credentials?.cellphone
         body.country_code = values?.countryPhoneCode
-      } else {
+      }
+      if ((social?.email && !social?.cellphone) || otpType === 'email') {
         body.email = values?.email || credentials?.email
         body.user = values?.email || credentials?.email
       }
@@ -353,7 +354,11 @@ export const LoginForm = (props) => {
         body: JSON.stringify(body)
       }
       const params = `pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt${body.cellphone ? `&cellphone=${body.cellphone}` : ''}${body.country_code ? `&country_phone_code=${body.country_code}` : ''}${body.email ? `&mail=${body.email}` : ''}`
-      const result = await alseaOtpConsult(params)
+      const result = await alseaOtpConsult(params, social)
+      if (social) {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false })
+        return
+      }
       if (result === 'new_user') {
         if (otpType === 'cellphone') {
           const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
@@ -447,6 +452,52 @@ export const LoginForm = (props) => {
     }
   }
 
+  const handleLoginFacebookAlsea = async (fbdata) => {
+    try {
+      const fbBody = JSON.stringify({
+        access_token: fbdata?.authResponse?.accessToken,
+        social_id: fbdata?.social_id
+      })
+      const responsefb = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api/facebook.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: fbBody
+      })
+      const { result, error, redirect } = await responsefb.json()
+      if (error) {
+        setFormState({
+          ...formState,
+          loading: false,
+          result: {
+            error: true,
+            result: result
+          }
+        })
+        return
+      }
+      if (redirect) {
+        setOtpDataUser({
+          ...result,
+          social: true
+        })
+        handleOpenSignup()
+      } else {
+        login({
+          user: result,
+          token: result?.session?.access_token
+        })
+      }
+    } catch (err) {
+      setFormState({
+        result: {
+          error: true,
+          result: err.message
+        },
+        loading: false
+      })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -478,6 +529,8 @@ export const LoginForm = (props) => {
           alseaOtpInitialize={alseaOtpInitialize}
           createOtpUser={createOtpUser}
           alseaOtpCreateUser={alseaOtpCreateUser}
+          // handleCheckFacebookInfo={handleCheckFacebookInfo}
+          handleLoginFacebookAlsea={handleLoginFacebookAlsea}
         />
       )}
     </>

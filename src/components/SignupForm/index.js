@@ -9,7 +9,7 @@ import { useEvent } from '../../contexts/EventContext'
 /**
  * Component to manage signup behavior without UI component
  */
- export const SignupForm = (props) => {
+export const SignupForm = (props) => {
   const {
     UIComponent,
     useChekoutFileds,
@@ -41,7 +41,7 @@ import { useEvent } from '../../contexts/EventContext'
   const [isReCaptchaEnable, setIsReCaptchaEnable] = useState(false)
   const [promotionsEnabled, setPromotionsEnabled] = useState(false)
   const [confirmDeleteUser, setConfirmDeleteUser] = useState(true)
-
+  const [openOtpOptions, setOpenOtpOptions] = useState(false)
   const useSignUpOtpEmail = configs?.email_otp_signup_enabled?.value === '1'
   const useSignUpOtpCellphone = configs?.phone_otp_signup_enabled?.value === '1'
   const useSignUpFullDetails = (useSignUpOtpEmail || useSignUpOtpCellphone) ? configs?.full_details_signup_enabled?.value === '1' : true
@@ -52,7 +52,7 @@ import { useEvent } from '../../contexts/EventContext'
   /**
    * Default fuction for signup workflow
    */
-  const handleSignupClick = async (values) => {
+  const handleSignupClick = async (values, aditionalValues) => {
     if (handleCustomSignup) {
       handleCustomSignup(values || signupData)
       return
@@ -101,10 +101,10 @@ import { useEvent } from '../../contexts/EventContext'
       const source = {}
       requestsState.signup = source
       let response
-      if (otpDataUser?.id) {
-        response = await ordering.setAccessToken(otpDataUser?.token).users(otpDataUser?.id).save(newData, { cancelToken: source })
+      if (otpDataUser?.id || aditionalValues?.id) {
+        response = await ordering.setAccessToken(otpDataUser?.token || aditionalValues?.session?.access_token).users(otpDataUser?.id || aditionalValues?.id).save(Object.keys(newData).length > 0 ? newData : otpDataUser, { cancelToken: source })
         if (!response.content.error) {
-          await setConfirmDeleteUser(false)
+          setConfirmDeleteUser(false)
         }
       } else {
         response = await ordering.users().save(newData, { cancelToken: source })
@@ -322,7 +322,8 @@ import { useEvent } from '../../contexts/EventContext'
     } : {
       country_phone_code: signupData?.country_phone_code?.replace('+', ''),
       cellphone: signupData?.cellphone,
-      one_time_password: otpState
+      one_time_password: otpState,
+      country_code: signupData?.country_phone_code?.replace('+', '')
     }
 
     if (isReCaptchaEnable) {
@@ -338,10 +339,21 @@ import { useEvent } from '../../contexts/EventContext'
       setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true, result: { error: false } })
       const { content: { error, result } } = await ordering.users().auth(_credentials)
       if (!error && result?.id) {
-        login({
-          user: result,
-          token: result?.session?.access_token
-        })
+        if (otpDataUser.social) {
+          await login({
+            user: {
+              ...result,
+              ...otpDataUser
+            },
+            token: result?.session?.access_token
+          })
+          await handleSignupClick({}, result)
+        } else {
+          login({
+            user: result,
+            token: result?.session?.access_token
+          })
+        }
         if (handleSuccessSignup) {
           handleSuccessSignup(result)
         }
@@ -402,13 +414,23 @@ import { useEvent } from '../../contexts/EventContext'
     }
   }
 
-  const alseaOtpConsult = async (params) => {
+  const alseaOtpConsult = async (params, type) => {
     try {
       const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
       const text = await response.text()
+      if (otpDataUser.social) {
+        if (text === 'new_user') {
+          return text
+        } else if (text === 'existing_user') {
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: type === 'email' ? t('EMAIL_ALREADY_TAKEN', 'Email already taken') : t('CELLPHONE_ALREADY_EXISTS', 'The cellphone already exists') }, loading: false })
+          setOpenOtpOptions(false)
+        } else {
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('ERROR', 'Error') }, loading: false })
+        }
+      }
       return text
     } catch (err) {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message } })
@@ -417,16 +439,58 @@ import { useEvent } from '../../contexts/EventContext'
 
   const signUpOtpUser = async () => {
     setFormState({ ...formState, loading: true })
-    const params = `pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt&mail=${signupData.email}`
+    let params
+    const alseaPass = 'q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt'
+    params = `pass=${alseaPass}&mail=${signupData.email}`
+    if (otpDataUser.social) {
+      if (!otpDataUser?.email) {
+        await alseaOtpConsult(params, 'email')
+      }
+      if (!otpDataUser?.cellphone) {
+        params = `pass=${alseaPass}${signupData.cellphone ? `&cellphone=${signupData.cellphone}` : ''}${signupData.country_phone_code ? `&country_phone_code=${signupData.country_phone_code}` : ''}`
+        const text = await alseaOtpConsult(params, 'cellphone')
+        if (text === 'new_user') setOpenOtpOptions(true)
+      }
+      setFormState({ ...formState, loading: false })
+      return
+    }
     const result = await alseaOtpConsult(params)
     if (result === 'new_user') {
-      handleSignupClick()
+      handleSignupClick(signupData)
     } else if (result === 'existing_user') {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('EMAIL_ALREADY_TAKEN', 'Email already taken') } })
     } else {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result } })
     }
     setFormState({ ...formState, loading: false })
+  }
+
+  const socialOtpUser = async (values, type) => {
+    try {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: true })
+      const body = {
+        type,
+        user: values?.cellphone || signupData?.cellphone,
+        cellphone: values?.cellphone || signupData?.cellphone,
+        country_code: signupData?.country_phone_code
+      }
+
+      const requestParams = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }
+      const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
+      const resultOtp = await responseOtp.json()
+      if (resultOtp.error) {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
+        return false
+      }
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
+      return true
+    } catch (err) {
+      setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message }, loading: false })
+    }
   }
 
   useEffect(() => {
@@ -482,6 +546,9 @@ import { useEvent } from '../../contexts/EventContext'
           deleteOtpUser={deleteOtpUser}
           confirmDeleteUser={confirmDeleteUser}
           signUpOtpUser={signUpOtpUser}
+          openOtpOptions={openOtpOptions}
+          socialOtpUser={socialOtpUser}
+          setOpenOtpOptions={setOpenOtpOptions}
         />
       )}
     </>
