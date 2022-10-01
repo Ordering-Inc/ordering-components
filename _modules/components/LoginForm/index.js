@@ -125,7 +125,10 @@ var LoginForm = function LoginForm(props) {
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configs = _useConfig2[0].configs;
 
-  var _useState9 = (0, _react.useState)(null),
+  var _useState9 = (0, _react.useState)({
+    code: '',
+    version: ''
+  }),
       _useState10 = _slicedToArray(_useState9, 2),
       reCaptchaValue = _useState10[0],
       setReCaptchaValue = _useState10[1];
@@ -180,7 +183,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var _credentials4, _credentials4$cellpho, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, access_token, _yield$ordering$setAc, logoutResp;
+      var _credentials4, _credentials4$cellpho, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, accessToken, _yield$ordering$setAc, logoutResp;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -198,12 +201,11 @@ var LoginForm = function LoginForm(props) {
               _context.prev = 3;
 
               if (loginTab === 'otp') {
-                _credentials = (_credentials2 = {}, _defineProperty(_credentials2, otpType, values && values[otpType] || credentials[otpType]), _defineProperty(_credentials2, "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState), _credentials2);
+                _credentials = (_credentials2 = {}, _defineProperty(_credentials2, otpType, values && values[otpType] || credentials[otpType]), _defineProperty(_credentials2, "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState), _defineProperty(_credentials2, "country_code", values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code)), _credentials2);
 
                 if (otpType === 'cellphone') {
                   _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
-                    country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code),
-                    country_code: values && (values === null || values === void 0 ? void 0 : values.country_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_code)
+                    country_phone_code: values && (values === null || values === void 0 ? void 0 : values.country_phone_code) || (credentials === null || credentials === void 0 ? void 0 : credentials.country_phone_code)
                   });
                 }
               } else {
@@ -211,11 +213,11 @@ var LoginForm = function LoginForm(props) {
               }
 
               if (!isReCaptchaEnable) {
-                _context.next = 12;
+                _context.next = 13;
                 break;
               }
 
-              if (!(reCaptchaValue === null)) {
+              if (!((reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code) === '')) {
                 _context.next = 11;
                 break;
               }
@@ -230,9 +232,10 @@ var LoginForm = function LoginForm(props) {
               return _context.abrupt("return");
 
             case 11:
-              _credentials.verification_code = reCaptchaValue;
+              _credentials.verification_code = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code;
+              _credentials.recaptcha_type = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.version;
 
-            case 12:
+            case 13:
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: true
               }));
@@ -248,48 +251,51 @@ var LoginForm = function LoginForm(props) {
                 _credentials.notification_token = notificationState.notification_token;
               }
 
-              _context.next = 17;
+              _context.next = 18;
               return ordering.users().auth(_credentials);
 
-            case 17:
+            case 18:
               _yield$ordering$users = _context.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
               error = _yield$ordering$users2.error;
               result = _yield$ordering$users2.result;
 
               if (isReCaptchaEnable && (_window = window) !== null && _window !== void 0 && _window.grecaptcha) {
-                window.grecaptcha.reset();
-                setReCaptchaValue(null);
+                _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset();
+                setReCaptchaValue({
+                  code: '',
+                  version: ''
+                });
               }
 
               if (error) {
-                _context.next = 45;
+                _context.next = 46;
                 break;
               }
 
               if (!useDefualtSessionManager) {
-                _context.next = 42;
+                _context.next = 43;
                 break;
               }
 
               if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-                _context.next = 41;
+                _context.next = 42;
                 break;
               }
 
               level = result.level, session = result.session;
-              access_token = session === null || session === void 0 ? void 0 : session.access_token;
+              accessToken = session === null || session === void 0 ? void 0 : session.access_token;
 
               if (allowedLevels.includes(level)) {
-                _context.next = 41;
+                _context.next = 42;
                 break;
               }
 
-              _context.prev = 28;
-              _context.next = 31;
-              return ordering.setAccessToken(access_token).users().logout();
+              _context.prev = 29;
+              _context.next = 32;
+              return ordering.setAccessToken(accessToken).users().logout();
 
-            case 31:
+            case 32:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
@@ -304,12 +310,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 40;
+              _context.next = 41;
               break;
 
-            case 37:
-              _context.prev = 37;
-              _context.t0 = _context["catch"](28);
+            case 38:
+              _context.prev = 38;
+              _context.t0 = _context["catch"](29);
               setFormState({
                 result: {
                   error: true,
@@ -318,16 +324,16 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 40:
+            case 41:
               return _context.abrupt("return");
 
-            case 41:
+            case 42:
               login({
                 user: result,
                 token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
 
-            case 42:
+            case 43:
               events.emit('userLogin', result);
 
               if (handleSuccessLogin) {
@@ -338,7 +344,7 @@ var LoginForm = function LoginForm(props) {
                 window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
               }
 
-            case 45:
+            case 46:
               setFormState({
                 result: {
                   error: error,
@@ -346,11 +352,11 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 51;
+              _context.next = 52;
               break;
 
-            case 48:
-              _context.prev = 48;
+            case 49:
+              _context.prev = 49;
               _context.t1 = _context["catch"](3);
               setFormState({
                 result: {
@@ -360,12 +366,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 51:
+            case 52:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 48], [28, 37]]);
+      }, _callee, null, [[3, 49], [29, 38]]);
     }));
 
     return function handleLoginClick(_x) {
@@ -658,7 +664,7 @@ var LoginForm = function LoginForm(props) {
   }();
 
   var alseaOtpInitialize = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(values, type) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(values, type, social) {
       var body, requestParams, params, result, responseOtp, resultOtp, _responseOtp, _resultOtp;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -674,11 +680,13 @@ var LoginForm = function LoginForm(props) {
                 type: type
               };
 
-              if (otpType === 'cellphone') {
+              if (social !== null && social !== void 0 && social.cellphone || otpType === 'cellphone') {
                 body.user = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
                 body.cellphone = (values === null || values === void 0 ? void 0 : values.cellphone) || (credentials === null || credentials === void 0 ? void 0 : credentials.cellphone);
                 body.country_code = values === null || values === void 0 ? void 0 : values.countryPhoneCode;
-              } else {
+              }
+
+              if (social !== null && social !== void 0 && social.email && !(social !== null && social !== void 0 && social.cellphone) || otpType === 'email') {
                 body.email = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
                 body.user = (values === null || values === void 0 ? void 0 : values.email) || (credentials === null || credentials === void 0 ? void 0 : credentials.email);
               }
@@ -691,35 +699,46 @@ var LoginForm = function LoginForm(props) {
                 body: JSON.stringify(body)
               };
               params = "pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt".concat(body.cellphone ? "&cellphone=".concat(body.cellphone) : '').concat(body.country_code ? "&country_phone_code=".concat(body.country_code) : '').concat(body.email ? "&mail=".concat(body.email) : '');
-              _context5.next = 9;
-              return alseaOtpConsult(params);
+              _context5.next = 10;
+              return alseaOtpConsult(params, social);
 
-            case 9:
+            case 10:
               result = _context5.sent;
 
+              if (!social) {
+                _context5.next = 14;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                loading: false
+              }));
+              return _context5.abrupt("return");
+
+            case 14:
               if (!(result === 'new_user')) {
-                _context5.next = 30;
+                _context5.next = 34;
                 break;
               }
 
               if (!(otpType === 'cellphone')) {
-                _context5.next = 26;
+                _context5.next = 30;
                 break;
               }
 
-              _context5.next = 14;
+              _context5.next = 18;
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/cellphone_new_user_code.php"), requestParams);
 
-            case 14:
+            case 18:
               responseOtp = _context5.sent;
-              _context5.next = 17;
+              _context5.next = 21;
               return responseOtp.json();
 
-            case 17:
+            case 21:
               resultOtp = _context5.sent;
 
               if (!resultOtp.error) {
-                _context5.next = 21;
+                _context5.next = 25;
                 break;
               }
 
@@ -731,7 +750,7 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 21:
+            case 25:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   result: resultOtp.result
@@ -741,7 +760,7 @@ var LoginForm = function LoginForm(props) {
               setCreateOtpUser(true);
               return _context5.abrupt("return", true);
 
-            case 26:
+            case 30:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist')
@@ -750,29 +769,29 @@ var LoginForm = function LoginForm(props) {
               }));
               setOtpType('cellphone');
 
-            case 28:
-              _context5.next = 47;
+            case 32:
+              _context5.next = 51;
               break;
 
-            case 30:
+            case 34:
               if (!(result === 'existing_user')) {
-                _context5.next = 45;
+                _context5.next = 49;
                 break;
               }
 
-              _context5.next = 33;
+              _context5.next = 37;
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
 
-            case 33:
+            case 37:
               _responseOtp = _context5.sent;
-              _context5.next = 36;
+              _context5.next = 40;
               return _responseOtp.json();
 
-            case 36:
+            case 40:
               _resultOtp = _context5.sent;
 
               if (!_resultOtp.error) {
-                _context5.next = 40;
+                _context5.next = 44;
                 break;
               }
 
@@ -784,7 +803,7 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 40:
+            case 44:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   result: _resultOtp.result
@@ -796,7 +815,7 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", true);
 
-            case 45:
+            case 49:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   error: result.result
@@ -805,12 +824,12 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 47:
-              _context5.next = 52;
+            case 51:
+              _context5.next = 56;
               break;
 
-            case 49:
-              _context5.prev = 49;
+            case 53:
+              _context5.prev = 53;
               _context5.t0 = _context5["catch"](0);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
@@ -819,15 +838,15 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               }));
 
-            case 52:
+            case 56:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[0, 49]]);
+      }, _callee5, null, [[0, 53]]);
     }));
 
-    return function alseaOtpInitialize(_x5, _x6) {
+    return function alseaOtpInitialize(_x5, _x6, _x7) {
       return _ref5.apply(this, arguments);
     };
   }();
@@ -874,7 +893,7 @@ var LoginForm = function LoginForm(props) {
       }, _callee6, null, [[0, 10]]);
     }));
 
-    return function alseaOtpConsult(_x7) {
+    return function alseaOtpConsult(_x8) {
       return _ref6.apply(this, arguments);
     };
   }();
@@ -966,8 +985,95 @@ var LoginForm = function LoginForm(props) {
       }, _callee7, null, [[0, 18]]);
     }));
 
-    return function alseaOtpCreateUser(_x8) {
+    return function alseaOtpCreateUser(_x9) {
       return _ref7.apply(this, arguments);
+    };
+  }();
+
+  var handleLoginFacebookAlsea = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(fbdata) {
+      var _fbdata$authResponse, fbBody, responsefb, _yield$responsefb$jso, result, error, redirect, _result$session2;
+
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              _context8.prev = 0;
+              fbBody = JSON.stringify({
+                access_token: fbdata === null || fbdata === void 0 ? void 0 : (_fbdata$authResponse = fbdata.authResponse) === null || _fbdata$authResponse === void 0 ? void 0 : _fbdata$authResponse.accessToken,
+                social_id: fbdata === null || fbdata === void 0 ? void 0 : fbdata.social_id
+              });
+              _context8.next = 4;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api/facebook.php"), {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: fbBody
+              });
+
+            case 4:
+              responsefb = _context8.sent;
+              _context8.next = 7;
+              return responsefb.json();
+
+            case 7:
+              _yield$responsefb$jso = _context8.sent;
+              result = _yield$responsefb$jso.result;
+              error = _yield$responsefb$jso.error;
+              redirect = _yield$responsefb$jso.redirect;
+
+              if (!error) {
+                _context8.next = 14;
+                break;
+              }
+
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: false,
+                result: {
+                  error: true,
+                  result: result
+                }
+              }));
+              return _context8.abrupt("return");
+
+            case 14:
+              if (redirect) {
+                setOtpDataUser(_objectSpread(_objectSpread({}, result), {}, {
+                  social: true
+                }));
+                handleOpenSignup();
+              } else {
+                login({
+                  user: result,
+                  token: result === null || result === void 0 ? void 0 : (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
+                });
+              }
+
+              _context8.next = 20;
+              break;
+
+            case 17:
+              _context8.prev = 17;
+              _context8.t0 = _context8["catch"](0);
+              setFormState({
+                result: {
+                  error: true,
+                  result: _context8.t0.message
+                },
+                loading: false
+              });
+
+            case 20:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8, null, [[0, 17]]);
+    }));
+
+    return function handleLoginFacebookAlsea(_x10) {
+      return _ref8.apply(this, arguments);
     };
   }();
 
@@ -997,7 +1103,9 @@ var LoginForm = function LoginForm(props) {
     useLoginOtpCellphone: useLoginOtpCellphone,
     alseaOtpInitialize: alseaOtpInitialize,
     createOtpUser: createOtpUser,
-    alseaOtpCreateUser: alseaOtpCreateUser
+    alseaOtpCreateUser: alseaOtpCreateUser // handleCheckFacebookInfo={handleCheckFacebookInfo}
+    ,
+    handleLoginFacebookAlsea: handleLoginFacebookAlsea
   })));
 };
 

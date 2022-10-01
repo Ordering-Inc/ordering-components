@@ -63,28 +63,25 @@ var OrderingProvider = function OrderingProvider(_ref) {
       isDisableToast = _ref.isDisableToast,
       isDisabledDefaultOpts = _ref.isDisabledDefaultOpts;
   var nativeStrategy = new _NativeStrategy.NativeStrategy();
+  var restOfSettings = {
+    project: settings.project,
+    appId: settings.app_id,
+    use_root_point: settings.use_root_point,
+    countryCode: settings.countryCode
+  };
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
-    settings: Object.assign(settings.api, {
-      project: settings.project,
-      appId: settings.app_id
-    })
+    settings: Object.assign(settings.api, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_OrderingThemeContext.OrderingThemeProvider, {
-    settings: Object.assign(settings.api, {
-      project: settings.project,
-      appId: settings.app_id
-    })
+    settings: Object.assign(settings.api, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
     strategy: nativeStrategy,
-    settings: Object.assign(settings.socket, {
-      project: settings.project,
-      use_root_point: settings.use_root_point
-    })
+    settings: Object.assign(settings.socket, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_CustomerContext.CustomerProvider, {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {

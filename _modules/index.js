@@ -651,6 +651,12 @@ Object.defineProperty(exports, "ProductsListing", {
     return _ProductsListing.ProductsListing;
   }
 });
+Object.defineProperty(exports, "ProfessionalInfo", {
+  enumerable: true,
+  get: function get() {
+    return _ProfessionalInfo.ProfessionalInfo;
+  }
+});
 Object.defineProperty(exports, "PromotionsController", {
   enumerable: true,
   get: function get() {
@@ -1059,6 +1065,8 @@ var _ProductOptionSuboption = require("./components/ProductOptionSuboption");
 var _ProductsList = require("./components/ProductsList");
 
 var _ProductsListing = require("./components/ProductsListing");
+
+var _ProfessionalInfo = require("./components/ProfessionalInfo");
 
 var _PromotionsController = require("./components/PromotionsController");
 

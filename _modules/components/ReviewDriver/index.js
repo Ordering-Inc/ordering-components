@@ -54,7 +54,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ReviewDriver = function ReviewDriver(props) {
   var UIComponent = props.UIComponent,
       order = props.order,
-      isToast = props.isToast;
+      isToast = props.isToast,
+      isProfessional = props.isProfessional;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -96,7 +97,7 @@ var ReviewDriver = function ReviewDriver(props) {
 
   var handleSendDriverReview = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _order$driver, _order$driver2, response, _yield$response$json, result, error;
+      var _order$products$, _order$products$$cale, _order$products$$cale2, _order$driver, userId, response, _yield$response$json, result, error;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -106,8 +107,9 @@ var ReviewDriver = function ReviewDriver(props) {
                 loading: true
               }));
               _context.prev = 1;
-              _context.next = 4;
-              return fetch("".concat(ordering.root, "/users/").concat(order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id, "/user_reviews"), {
+              userId = isProfessional ? order === null || order === void 0 ? void 0 : (_order$products$ = order.products[0]) === null || _order$products$ === void 0 ? void 0 : (_order$products$$cale = _order$products$.calendar_event) === null || _order$products$$cale === void 0 ? void 0 : (_order$products$$cale2 = _order$products$$cale.professional) === null || _order$products$$cale2 === void 0 ? void 0 : _order$products$$cale2.id : order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id;
+              _context.next = 5;
+              return fetch("".concat(ordering.root, "/users/").concat(userId, "/user_reviews"), {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(session.token),
@@ -115,16 +117,16 @@ var ReviewDriver = function ReviewDriver(props) {
                 },
                 body: JSON.stringify(_objectSpread(_objectSpread({}, reviews), {}, {
                   order_id: order === null || order === void 0 ? void 0 : order.id,
-                  user_id: order === null || order === void 0 ? void 0 : (_order$driver2 = order.driver) === null || _order$driver2 === void 0 ? void 0 : _order$driver2.id
+                  user_id: userId
                 }))
               });
 
-            case 4:
+            case 5:
               response = _context.sent;
-              _context.next = 7;
+              _context.next = 8;
               return response.json();
 
-            case 7:
+            case 8:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
               error = _yield$response$json.error;
@@ -137,7 +139,10 @@ var ReviewDriver = function ReviewDriver(props) {
                     error: false
                   }
                 });
-                if (isToast) showToast(_ToastContext.ToastType.Success, t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'));
+
+                if (isToast) {
+                  showToast(_ToastContext.ToastType.Success, isProfessional ? t('PROFESSIONAL_REVIEW_SUCCESS_CONTENT', 'Thank you, Professional review successfully submitted!') : t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'));
+                }
               } else {
                 setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                   loading: false,
@@ -148,11 +153,11 @@ var ReviewDriver = function ReviewDriver(props) {
                 }));
               }
 
-              _context.next = 16;
+              _context.next = 17;
               break;
 
-            case 13:
-              _context.prev = 13;
+            case 14:
+              _context.prev = 14;
               _context.t0 = _context["catch"](1);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -162,12 +167,12 @@ var ReviewDriver = function ReviewDriver(props) {
                 loading: false
               }));
 
-            case 16:
+            case 17:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 13]]);
+      }, _callee, null, [[1, 14]]);
     }));
 
     return function handleSendDriverReview() {

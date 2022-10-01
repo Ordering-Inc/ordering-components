@@ -55,7 +55,9 @@ var CartStoresListing = function CartStoresListing(props) {
   var UIComponent = props.UIComponent,
       cartuuid = props.cartuuid,
       cartStoresList = props.cartStoresList,
-      pageChangeStore = props.pageChangeStore;
+      pageChangeStore = props.pageChangeStore,
+      isStore = props.isStore,
+      handleCustomStoreRedirect = props.handleCustomStoreRedirect;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -161,7 +163,7 @@ var CartStoresListing = function CartStoresListing(props) {
 
   var handleCartStoreChange = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(businessId) {
-      var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, _orderState$carts, carts, cartFinded, route, _result$business;
+      var _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, _orderState$carts, carts, cartFinded, route, _result$business, _result$business2;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -199,13 +201,17 @@ var CartStoresListing = function CartStoresListing(props) {
                 });
                 route = window.location.pathname;
 
-                if (route.includes('/store/') && pageChangeStore) {
-                  events.emit('go_to_page', {
-                    page: pageChangeStore,
-                    params: {
-                      store: result === null || result === void 0 ? void 0 : (_result$business = result.business) === null || _result$business === void 0 ? void 0 : _result$business.slug
-                    }
-                  });
+                if (isStore) {
+                  if (handleCustomStoreRedirect) {
+                    handleCustomStoreRedirect(result === null || result === void 0 ? void 0 : (_result$business = result.business) === null || _result$business === void 0 ? void 0 : _result$business.slug);
+                  } else if (route.includes('/store/') && pageChangeStore) {
+                    events.emit('go_to_page', {
+                      page: pageChangeStore,
+                      params: {
+                        store: result === null || result === void 0 ? void 0 : (_result$business2 = result.business) === null || _result$business2 === void 0 ? void 0 : _result$business2.slug
+                      }
+                    });
+                  }
                 }
               }
 

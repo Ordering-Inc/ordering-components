@@ -5,23 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MultiCheckout = void 0;
+exports.ProfessionalInfo = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _OrderContext = require("../../contexts/OrderContext");
-
-var _ApiContext = require("../../contexts/ApiContext");
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
 var _SessionContext = require("../../contexts/SessionContext");
 
-var _ToastContext = require("../../contexts/ToastContext");
-
-var _LanguageContext = require("../../contexts/LanguageContext");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _ApiContext = require("../../contexts/ApiContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -41,14 +33,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -61,408 +45,221 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Component to manage Multi businesses checkout page behavior without UI component
- */
-var MultiCheckout = function MultiCheckout(props) {
-  var _Object$values;
-
-  var UIComponent = props.UIComponent,
-      onPlaceOrderClick = props.onPlaceOrderClick;
+var ProfessionalInfo = function ProfessionalInfo(props) {
+  var userId = props.userId,
+      propsToFetch = props.propsToFetch,
+      UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
-  /**
-   * Session content
-   */
-
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 2),
-      carts = _useOrder2[0].carts,
-      placeMulitCarts = _useOrder2[1].placeMulitCarts;
-  /**
-  * Toast state
-  */
-
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
-
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
-  /**
-  * Delivery Instructions options
-  */
-
-
   var _useState = (0, _react.useState)({
+    reviews: [],
     loading: false,
-    result: [{
-      id: null,
-      enabled: true,
-      name: t('EITHER_WAY', 'Either way')
-    }],
     error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      instructionsOptions = _useState2[0],
-      setInstructionsOptions = _useState2[1];
-  /**
-  * Delivery instructions selected
-  */
+      userReviewState = _useState2[0],
+      setUserReviewState = _useState2[1];
 
-
-  var _useState3 = (0, _react.useState)(undefined),
+  var _useState3 = (0, _react.useState)({
+    user: null,
+    loading: false,
+    error: null
+  }),
       _useState4 = _slicedToArray(_useState3, 2),
-      deliveryOptionSelected = _useState4[0],
-      setDeliveryOptionSelected = _useState4[1];
+      userState = _useState4[0],
+      setUserState = _useState4[1];
+  /**
+   * Method to get user from API
+   */
 
-  var openCarts = ((_Object$values = Object.values(carts)) === null || _Object$values === void 0 ? void 0 : _Object$values.filter(function (cart) {
-    var _cart$products;
 
-    return (cart === null || cart === void 0 ? void 0 : cart.products) && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.length) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2 && (cart === null || cart === void 0 ? void 0 : cart.valid_schedule) && (cart === null || cart === void 0 ? void 0 : cart.valid_products) && (cart === null || cart === void 0 ? void 0 : cart.valid_address) && (cart === null || cart === void 0 ? void 0 : cart.valid_maximum) && (cart === null || cart === void 0 ? void 0 : cart.valid_minimum) && !(cart !== null && cart !== void 0 && cart.wallets);
-  })) || null || [];
-  var totalCartsPrice = openCarts && openCarts.reduce(function (total, cart) {
-    return total + (cart === null || cart === void 0 ? void 0 : cart.total);
-  }, 0);
-  var cartsUuids = openCarts.reduce(function (uuids, cart) {
-    return [].concat(_toConsumableArray(uuids), [cart.uuid]);
-  }, []);
-
-  var _useState5 = (0, _react.useState)(false),
-      _useState6 = _slicedToArray(_useState5, 2),
-      placing = _useState6[0],
-      setPlacing = _useState6[1];
-
-  var _useState7 = (0, _react.useState)({}),
-      _useState8 = _slicedToArray(_useState7, 2),
-      paymethodSelected = _useState8[0],
-      setPaymethodSelected = _useState8[1];
-
-  var handleGroupPlaceOrder = /*#__PURE__*/function () {
+  var getUser = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _paymethodSelected$pa;
-
-      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMulitCart, error, result, orderUuids;
+      var fetchEndpoint, _yield$fetchEndpoint$, result, user;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.paymethod_data;
+              _context.prev = 0;
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: true
+              }));
+              fetchEndpoint = ordering.setAccessToken(token).users(userId).select(propsToFetch);
+              _context.next = 5;
+              return fetchEndpoint.get();
 
-              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa = paymethodSelected.paymethod) === null || _paymethodSelected$pa === void 0 ? void 0 : _paymethodSelected$pa.gateway)) {
-                paymethodData = JSON.stringify({
-                  source_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa2 = paymethodSelected.paymethod_data) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.id
-                });
-              }
+            case 5:
+              _yield$fetchEndpoint$ = _context.sent;
+              result = _yield$fetchEndpoint$.content.result;
+              user = Array.isArray(result) ? null : result;
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: false,
+                user: user
+              }));
+              _context.next = 14;
+              break;
 
-              payload = {
-                carts: cartsUuids,
-                amount: totalCartsPrice
-              };
-
-              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
-                payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  paymethod_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id
-                });
-              }
-
-              if (paymethodData) {
-                payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  paymethod_data: paymethodData
-                });
-              }
-
-              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.wallet_id) {
-                payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  wallet_id: paymethodSelected.wallet_id,
-                  wallet_data: paymethodSelected.wallet_data
-                });
-              }
-
-              setPlacing(true);
-              _context.next = 9;
-              return placeMulitCarts(payload);
-
-            case 9:
-              _yield$placeMulitCart = _context.sent;
-              error = _yield$placeMulitCart.error;
-              result = _yield$placeMulitCart.result;
-              setPlacing(false);
-
-              if (!error) {
-                orderUuids = result.carts.reduce(function (uuids, cart) {
-                  return [].concat(_toConsumableArray(uuids), [cart.order.uuid]);
-                }, []);
-                onPlaceOrderClick && onPlaceOrderClick(orderUuids);
-              }
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](0);
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
 
             case 14:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 11]]);
     }));
 
-    return function handleGroupPlaceOrder() {
+    return function getUser() {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * Method to get the user reviews from API
+   */
 
-  var handleSelectPaymethod = function handleSelectPaymethod(paymethod) {
-    setPaymethodSelected(_objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
-      paymethod_data: null
-    }));
-  };
 
-  var handleSelectWallet = function handleSelectWallet(checked, wallet) {
-    if (checked) {
-      setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
-        wallet_id: wallet.id,
-        wallet_data: wallet.balance > totalCartsPrice ? totalCartsPrice : wallet.balance
-      }));
-    } else {
-      var _paymethodSelected = _objectSpread({}, paymethodSelected);
-
-      delete _paymethodSelected.wallet_id;
-      delete _paymethodSelected.wallet_data;
-      setPaymethodSelected(_paymethodSelected);
-    }
-  };
-
-  var handlePaymethodDataChange = function handlePaymethodDataChange(data) {
-    setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
-      paymethod_data: data
-    }));
-  };
-
-  var getDeliveryOptions = /*#__PURE__*/function () {
+  var getUserReviews = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var response, _yield$response$json, result, error;
-
+      var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              _context2.next = 3;
-              return fetch("".concat(ordering.root, "/delivery_options"), {
+              setUserReviewState(_objectSpread(_objectSpread({}, userReviewState), {}, {
+                loading: true
+              }));
+              requestOptions = {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token)
                 }
-              });
+              };
+              _context2.next = 5;
+              return fetch("".concat(ordering.root, "/users/").concat(userId, "/user_reviews"), requestOptions);
 
-            case 3:
+            case 5:
               response = _context2.sent;
-              _context2.next = 6;
+              _context2.next = 8;
               return response.json();
 
-            case 6:
-              _yield$response$json = _context2.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
+            case 8:
+              content = _context2.sent;
 
-              if (error) {
-                _context2.next = 12;
-                break;
+              if (!content.error) {
+                setUserReviewState({
+                  reviews: content.result,
+                  loading: false,
+                  error: null
+                });
               }
 
-              setInstructionsOptions({
-                loading: false,
-                result: [].concat(_toConsumableArray(instructionsOptions.result), _toConsumableArray(result))
-              });
-              return _context2.abrupt("return");
-
-            case 12:
-              setInstructionsOptions({
-                loading: false,
-                error: true,
-                result: result
-              });
-              showToast(_ToastContext.ToastType.Error, result);
-              _context2.next = 20;
+              _context2.next = 15;
               break;
 
-            case 16:
-              _context2.prev = 16;
+            case 12:
+              _context2.prev = 12;
               _context2.t0 = _context2["catch"](0);
-              setInstructionsOptions({
+              setUserReviewState(_objectSpread(_objectSpread({}, userReviewState), {}, {
                 loading: false,
-                error: true,
-                result: _context2.t0.message
-              });
-              showToast(_ToastContext.ToastType.Error, _context2.t0.message);
+                error: [_context2.t0.message]
+              }));
 
-            case 20:
+            case 15:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 16]]);
+      }, _callee2, null, [[0, 12]]);
     }));
 
-    return function getDeliveryOptions() {
+    return function getUserReviews() {
       return _ref2.apply(this, arguments);
     };
   }();
 
-  var multiHandleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(value, cartUuidArr) {
-      var allPromise;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              _context4.prev = 0;
-              allPromise = cartUuidArr.map(function (cartId) {
-                return new Promise( /*#__PURE__*/function () {
-                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve, reject) {
-                    var response, _yield$response$json2, result, error;
-
-                    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                      while (1) {
-                        switch (_context3.prev = _context3.next) {
-                          case 0:
-                            _context3.next = 2;
-                            return fetch("".concat(ordering.root, "/carts/").concat(cartId), {
-                              method: 'PUT',
-                              headers: {
-                                'Content-Type': 'application/json',
-                                Authorization: "bearer ".concat(token)
-                              },
-                              body: JSON.stringify({
-                                delivery_option_id: value
-                              })
-                            });
-
-                          case 2:
-                            response = _context3.sent;
-                            _context3.next = 5;
-                            return response.json();
-
-                          case 5:
-                            _yield$response$json2 = _context3.sent;
-                            result = _yield$response$json2.result;
-                            error = _yield$response$json2.error;
-
-                            if (!error && (result === null || result === void 0 ? void 0 : result.delivery_option_id) === value) {
-                              resolve(result);
-                            } else {
-                              reject(false);
-                            }
-
-                          case 9:
-                          case "end":
-                            return _context3.stop();
-                        }
-                      }
-                    }, _callee3);
-                  }));
-
-                  return function (_x3, _x4) {
-                    return _ref4.apply(this, arguments);
-                  };
-                }());
-              });
-              _context4.next = 4;
-              return Promise.all(allPromise);
-
-            case 4:
-              _context4.t0 = _context4.sent;
-
-              if (!_context4.t0) {
-                _context4.next = 7;
-                break;
-              }
-
-              setDeliveryOptionSelected(value);
-
-            case 7:
-              _context4.next = 12;
-              break;
-
-            case 9:
-              _context4.prev = 9;
-              _context4.t1 = _context4["catch"](0);
-              showToast(_ToastContext.ToastType.Error, _context4.t1.message);
-
-            case 12:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4, null, [[0, 9]]);
-    }));
-
-    return function multiHandleChangeDeliveryOption(_x, _x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  var handleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value) {
-      var cartUuidArr;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              cartUuidArr = openCarts.map(function (cart) {
-                return cart === null || cart === void 0 ? void 0 : cart.uuid;
-              });
-              multiHandleChangeDeliveryOption(value, cartUuidArr);
-
-            case 2:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }));
-
-    return function handleChangeDeliveryOption(_x5) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-
   (0, _react.useEffect)(function () {
-    if (deliveryOptionSelected === undefined) {
-      setDeliveryOptionSelected(null);
+    if (props.user) {
+      setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+        user: props.user
+      }));
+    } else {
+      getUser();
     }
-  }, [instructionsOptions]);
-  (0, _react.useEffect)(function () {
-    getDeliveryOptions();
-  }, []);
+
+    if (userId) getUserReviews();
+  }, [userId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    placing: placing,
-    openCarts: openCarts,
-    totalCartsPrice: totalCartsPrice,
-    paymethodSelected: paymethodSelected,
-    handleSelectPaymethod: handleSelectPaymethod,
-    handleGroupPlaceOrder: handleGroupPlaceOrder,
-    handleSelectWallet: handleSelectWallet,
-    handlePaymethodDataChange: handlePaymethodDataChange,
-    handleChangeDeliveryOption: handleChangeDeliveryOption,
-    deliveryOptionSelected: deliveryOptionSelected,
-    instructionsOptions: instructionsOptions
+    userState: userState,
+    userReviewState: userReviewState
   })));
 };
 
-exports.MultiCheckout = MultiCheckout;
-MultiCheckout.propTypes = {
+exports.ProfessionalInfo = ProfessionalInfo;
+ProfessionalInfo.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
-  UIComponent: _propTypes.default.elementType
+  UIComponent: _propTypes.default.elementType,
+
+  /**
+   * Array of drivers props to fetch
+   */
+  propsToFetch: _propTypes.default.arrayOf(_propTypes.string),
+
+  /**
+  * This must be contains userId to fetch
+  */
+  userId: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+  * User, this must be contains an object with all user info
+  */
+  user: _propTypes.default.object,
+
+  /**
+   * Components types before order details
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+
+  /**
+    * Components types after order details
+    * Array of type components, the parent props will pass to these components
+    */
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+
+  /**
+    * Elements before order details
+    * Array of HTML/Components elements, these components will not get the parent props
+    */
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
+
+  /**
+    * Elements after order details
+    * Array of HTML/Components elements, these components will not get the parent props
+    */
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
+};
+ProfessionalInfo.defaultProps = {
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: [],
+  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'address_notes', 'driver_zone_restriction', 'dropdown_option_id', 'dropdown_option', 'location', 'loyalty_level', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'phone_verified', 'email_verified', 'schedule', 'timezone', 'max_days_in_future', 'occupation_id', 'occupation', 'session']
 };
