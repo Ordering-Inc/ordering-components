@@ -17,6 +17,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
+var _OrderingThemeContext = require("../../contexts/OrderingThemeContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -58,12 +60,13 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var BusinessSearchList = function BusinessSearchList(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _orderingTheme$theme, _orderingTheme$theme$, _orderingTheme$theme$2, _orderingTheme$theme$3;
 
   var UIComponent = props.UIComponent,
       paginationSettings = props.paginationSettings,
       lazySearch = props.lazySearch,
-      defaultTerm = props.defaultTerm;
+      defaultTerm = props.defaultTerm,
+      defaultLocation = props.defaultLocation;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -110,6 +113,10 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useSession2 = _slicedToArray(_useSession, 1),
       token = _useSession2[0].token;
 
+  var _useOrderingTheme = (0, _OrderingThemeContext.useOrderingTheme)(),
+      _useOrderingTheme2 = _slicedToArray(_useOrderingTheme, 1),
+      orderingTheme = _useOrderingTheme2[0];
+
   var _useState7 = (0, _react.useState)({
     business_types: [],
     orderBy: 'distance',
@@ -125,19 +132,28 @@ var BusinessSearchList = function BusinessSearchList(props) {
       termValue = _useState10[0],
       setTermValue = _useState10[1];
 
-  (0, _react.useEffect)(function () {
-    !lazySearch && handleSearchbusinessAndProducts(true);
-  }, [filters]);
-  (0, _react.useEffect)(function () {
-    if (businessesSearchList !== null && businessesSearchList !== void 0 && businessesSearchList.loading) return;
+  var _useState11 = (0, _react.useState)({
+    loading: false,
+    cities: [],
+    error: null
+  }),
+      _useState12 = _slicedToArray(_useState11, 2),
+      citiesState = _useState12[0],
+      setCitiesState = _useState12[1];
 
-    if ((termValue === null || termValue === void 0 ? void 0 : termValue.length) === 0 || (termValue === null || termValue === void 0 ? void 0 : termValue.length) >= 3) {
-      handleSearchbusinessAndProducts(true);
-    }
-  }, [termValue]);
+  var showCities = !(orderingTheme !== null && orderingTheme !== void 0 && (_orderingTheme$theme = orderingTheme.theme) !== null && _orderingTheme$theme !== void 0 && (_orderingTheme$theme$ = _orderingTheme$theme.business_listing_view) !== null && _orderingTheme$theme$ !== void 0 && (_orderingTheme$theme$2 = _orderingTheme$theme$.components) !== null && _orderingTheme$theme$2 !== void 0 && (_orderingTheme$theme$3 = _orderingTheme$theme$2.cities) !== null && _orderingTheme$theme$3 !== void 0 && _orderingTheme$theme$3.hidden);
+  (0, _react.useEffect)(function () {
+    var _Object$keys, _orderState$options, _orderState$options$a;
+
+    !lazySearch && (((_Object$keys = Object.keys((orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : _orderState$options$a.location) || {})) === null || _Object$keys === void 0 ? void 0 : _Object$keys.length) > 0 || defaultLocation) && handleSearchbusinessAndProducts(true);
+  }, [filters, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : orderState.options)]);
 
   var handleChangeTermValue = function handleChangeTermValue(val) {
     setTermValue(val);
+
+    if ((termValue === null || termValue === void 0 ? void 0 : termValue.length) === 0 || (termValue === null || termValue === void 0 ? void 0 : termValue.length) >= 3) {
+      handleSearchbusinessAndProducts(true, {}, val);
+    }
   };
 
   var handleChangeFilters = function handleChangeFilters(filterName, filterValue) {
@@ -210,21 +226,22 @@ var BusinessSearchList = function BusinessSearchList(props) {
   };
 
   var handleSearchbusinessAndProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, filtParams, requestOptions, location, response, _yield$response$json, result, error, pagination, nextPageItems, remainingItems;
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, options, val) {
+      var _orderState$options2, _orderState$options3, _orderState$options3$, _orderState$options3$2, _orderState$options4, _orderState$options4$, _orderState$options4$2, _orderState$options5, filtParams, requestOptions, location, response, _yield$response$json, result, error, pagination, nextPageItems, remainingItems;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              filtParams = (termValue === null || termValue === void 0 ? void 0 : termValue.length) >= 3 ? "&term=".concat(termValue) : '';
+              filtParams = (val === null || val === void 0 ? void 0 : val.length) >= 3 ? "&term=".concat(val) : '';
               Object.keys(filters).map(function (key) {
                 var _filters$key;
 
                 if (!filters[key] && filters[key] !== 0 || filters[key] === 'default' || ((_filters$key = filters[key]) === null || _filters$key === void 0 ? void 0 : _filters$key.length) === 0) return;
                 Array.isArray(filters[key]) ? filtParams = filtParams + "&".concat(key, "=[").concat(filters[key], "]") : filtParams = filtParams + "&".concat(key, "=").concat(filters[key]);
               });
+              filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 1 && defaultLocation ? '&max_distance=20000' : '');
               filtParams = filtParams + "&page=".concat(newFetch ? 1 : paginationProps.currentPage + 1, "&page_size=").concat(paginationProps.pageSize);
               setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
                 loading: true,
@@ -238,25 +255,25 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 }
               };
               location = {
-                lat: (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat,
-                lng: (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng
+                lat: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : (_orderState$options3$2 = _orderState$options3$.location) === null || _orderState$options3$2 === void 0 ? void 0 : _orderState$options3$2.lat) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lat),
+                lng: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : (_orderState$options4$2 = _orderState$options4$.location) === null || _orderState$options4$2 === void 0 ? void 0 : _orderState$options4$2.lng) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lng)
               };
-              _context.next = 9;
-              return fetch("".concat(ordering.root, "/search?order_type_id=").concat(orderState === null || orderState === void 0 ? void 0 : (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type, "&location=").concat(JSON.stringify(location)).concat(filtParams), requestOptions);
+              _context.next = 10;
+              return fetch("".concat(ordering.root, "/search?order_type_id=").concat(orderState === null || orderState === void 0 ? void 0 : (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.type, "&location=").concat(JSON.stringify((options === null || options === void 0 ? void 0 : options.location) || location)).concat(filtParams), requestOptions);
 
-            case 9:
+            case 10:
               response = _context.sent;
-              _context.next = 12;
+              _context.next = 13;
               return response.json();
 
-            case 12:
+            case 13:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
               error = _yield$response$json.error;
               pagination = _yield$response$json.pagination;
 
               if (!error) {
-                _context.next = 19;
+                _context.next = 20;
                 break;
               }
 
@@ -268,7 +285,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
               });
               return _context.abrupt("return");
 
-            case 19:
+            case 20:
               nextPageItems = 0;
 
               if (pagination.current_page !== pagination.total_pages) {
@@ -287,11 +304,11 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 loading: false,
                 lengthError: false
               }));
-              _context.next = 28;
+              _context.next = 29;
               break;
 
-            case 25:
-              _context.prev = 25;
+            case 26:
+              _context.prev = 26;
               _context.t0 = _context["catch"](0);
               setBusinessesSearchList({
                 businesses: [],
@@ -300,15 +317,15 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 lengthError: false
               });
 
-            case 28:
+            case 29:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 25]]);
+      }, _callee, null, [[0, 26]]);
     }));
 
-    return function handleSearchbusinessAndProducts(_x) {
+    return function handleSearchbusinessAndProducts(_x, _x2, _x3) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -382,19 +399,74 @@ var BusinessSearchList = function BusinessSearchList(props) {
       return _ref2.apply(this, arguments);
     };
   }();
+
+  var getCities = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var requestOptions, response, _yield$response$json2, result, error, pagination;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              requestOptions = {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              setCitiesState(_objectSpread(_objectSpread({}, citiesState), {}, {
+                loading: true
+              }));
+              _context3.next = 4;
+              return fetch("".concat(ordering.root, "/countries"), requestOptions);
+
+            case 4:
+              response = _context3.sent;
+              _context3.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json2 = _context3.sent;
+              result = _yield$response$json2.result;
+              error = _yield$response$json2.error;
+              pagination = _yield$response$json2.pagination;
+
+              if (!error) {
+                setCitiesState(_objectSpread(_objectSpread({}, citiesState), {}, {
+                  loading: false,
+                  cities: result === null || result === void 0 ? void 0 : result.map(function (country) {
+                    return country === null || country === void 0 ? void 0 : country.cities;
+                  }).flat(),
+                  pagination: pagination
+                }));
+              }
+
+            case 12:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function getCities() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
   /**
   * Function to get tag list from API
   */
 
 
   var getTagList = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var requestOptions, response, content;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context3.prev = 0;
+              _context4.prev = 0;
               setTags(_objectSpread(_objectSpread({}, tags), {}, {
                 loading: true
               }));
@@ -404,16 +476,16 @@ var BusinessSearchList = function BusinessSearchList(props) {
                   'Content-Type': 'application/json'
                 }
               };
-              _context3.next = 5;
+              _context4.next = 5;
               return fetch("".concat(ordering.root, "/tags"), requestOptions);
 
             case 5:
-              response = _context3.sent;
-              _context3.next = 8;
+              response = _context4.sent;
+              _context4.next = 8;
               return response.json();
 
             case 8:
-              content = _context3.sent;
+              content = _context4.sent;
 
               if (!content.error) {
                 setTags(_objectSpread(_objectSpread({}, tags), {}, {
@@ -428,33 +500,38 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 }));
               }
 
-              _context3.next = 15;
+              _context4.next = 15;
               break;
 
             case 12:
-              _context3.prev = 12;
-              _context3.t0 = _context3["catch"](0);
+              _context4.prev = 12;
+              _context4.t0 = _context4["catch"](0);
               setTags(_objectSpread(_objectSpread({}, tags), {}, {
                 loading: false,
-                error: _context3.t0.message
+                error: _context4.t0.message
               }));
 
             case 15:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3, null, [[0, 12]]);
+      }, _callee4, null, [[0, 12]]);
     }));
 
     return function getTagList() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
     getBrandList();
   }, []);
+  (0, _react.useEffect)(function () {
+    if (showCities) {
+      getCities();
+    }
+  }, [showCities]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     paginationProps: paginationProps,
     businessesSearchList: businessesSearchList,
@@ -466,7 +543,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
     setFilters: setFilters,
     brandList: brandList,
     handleUpdateBusinessList: handleUpdateBusinessList,
-    handleUpdateProducts: handleUpdateProducts
+    handleUpdateProducts: handleUpdateProducts,
+    citiesState: citiesState
   })));
 };
 
