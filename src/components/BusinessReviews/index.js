@@ -38,6 +38,18 @@ export const BusinessReviews = (props) => {
     })
   }
 
+  const onChangeReview = (text) => {
+    console.log(text)
+    const reviews = text !== ''
+      ? reviewsList.filter(review => review.comment.toLowerCase().includes(text?.toLowerCase()))
+      : reviewsList
+    setBusinessReviewsList({
+      ...businessReviewsList,
+      loading: false,
+      reviews
+    })
+  }
+
   /**
    * Method to get business from SDK
    */
@@ -124,6 +136,7 @@ export const BusinessReviews = (props) => {
           searchValue={searchValue}
           reviewsList={businessReviewsList}
           handleClickOption={onChangeOption}
+          onChangeReview={onChangeReview}
           handleChangeSearch={handleChangeSearch}
         />
       )}
