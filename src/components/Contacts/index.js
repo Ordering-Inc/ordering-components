@@ -409,6 +409,7 @@ export const Contacts = (props) => {
           getCustomers={getCustomers}
           getDrivers={getDrivers}
           loadMore={loadMore}
+          getOrders={getOrders}
         />
       )}
     </>
