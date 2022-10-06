@@ -92,7 +92,8 @@ var BusinessList = function BusinessList(props) {
       currentPageParam = props.currentPageParam,
       franchiseId = props.franchiseId,
       businessId = props.businessId,
-      cityId = props.cityId;
+      cityId = props.cityId,
+      actualSlug = props.actualSlug;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -210,7 +211,7 @@ var BusinessList = function BusinessList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, specificPagination, prev) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options7, _orderState$options8, _orderState$options12, parameters, _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, paginationParams, _orderState$options9, moment, where, conditions, _orderState$options10, _orderState$options11, searchConditions, isSpecialCharacter, _orderState$options13, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options7, _orderState$options8, _orderState$options12, parameters, _orderState$options4, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options6$, _orderState$options6$2, paginationParams, _orderState$options9, moment, where, conditions, _orderState$options10, _orderState$options11, searchConditions, isSpecialCharacter, _orderState$options13, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems, businesses, fromIndex, toIndex, element;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -427,31 +428,47 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
+              businesses = businessesList.businesses;
+
+              if (actualSlug) {
+                fromIndex = businesses.findIndex(function (business) {
+                  return business.slug === actualSlug;
+                });
+                toIndex = 0;
+
+                if (fromIndex !== toIndex) {
+                  element = businesses.splice(fromIndex, 1)[0];
+                  businesses.splice(toIndex, 0, element);
+                }
+              }
+
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false,
                 error: error,
+                businesses: businesses,
                 result: result
               }));
-              _context.next = 39;
+              _context.next = 41;
               break;
 
-            case 36:
-              _context.prev = 36;
+            case 38:
+              _context.prev = 38;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
                 setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                   loading: false,
-                  error: [_context.t0.message]
+                  error: true,
+                  result: [_context.t0.message]
                 }));
               }
 
-            case 39:
+            case 41:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 36]]);
+      }, _callee, null, [[0, 38]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
