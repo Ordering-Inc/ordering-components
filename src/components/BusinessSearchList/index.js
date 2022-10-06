@@ -51,6 +51,8 @@ export const BusinessSearchList = (props) => {
     }
   }
 
+  const cityId = orderState?.options?.city_id
+  
   const handleChangeFilters = (filterName, filterValue) => {
     if (filterName === 'orderBy') {
       const ascdesc = filterValue === filters?.orderBy ? filterValue.includes('-') ? filterValue : `-${filterValue}` : filterValue
@@ -83,7 +85,7 @@ export const BusinessSearchList = (props) => {
     })
     setBusinessesSearchList({
       ...businessesSearchList,
-      businesses: updatedBusinesses
+      businesses: updatedBusinesses.filter(_business => _business?.city_id === cityId)
     })
   }
 
@@ -124,7 +126,7 @@ export const BusinessSearchList = (props) => {
     })
     setBusinessesSearchList({
       ...businessesSearchList,
-      businesses: updatedBusinesses
+      businesses: updatedBusinesses.filter(_business => _business?.city_id === cityId)
     })
   }
 
@@ -175,7 +177,7 @@ export const BusinessSearchList = (props) => {
       })
       setBusinessesSearchList({
         ...businessesSearchList,
-        businesses: newFetch ? result : [...businessesSearchList?.businesses, ...result],
+        businesses: (newFetch ? result : [...businessesSearchList?.businesses, ...result]).filter(_business => _business?.city_id === cityId),
         loading: false,
         lengthError: false
       })
