@@ -439,7 +439,7 @@ export const OrderDetails = (props) => {
   useEffect(() => {
     if (messages.loading) return
     const handleNewMessage = (message) => {
-      const actualChat = messages.find(_message => _message?.order_id === message?.order?.id)
+      const actualChat = messages?.messages?.find(_message => _message?.order_id === message?.order?.id)
       const found = messages.messages.find(_message => _message.id === message.id)
       if (!found && actualChat) {
         setMessages({
