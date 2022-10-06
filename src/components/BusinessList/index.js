@@ -33,7 +33,8 @@ export const BusinessList = (props) => {
     currentPageParam,
     franchiseId,
     businessId,
-    cityId
+    cityId,
+    actualSlug
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -264,10 +265,22 @@ export const BusinessList = (props) => {
         })
       }
 
+      const businesses = businessesList.businesses
+
+      if (actualSlug) {
+        const fromIndex = businesses.findIndex(business => business.slug === actualSlug)
+        const toIndex = 0
+        if (fromIndex !== toIndex) {
+          const element = businesses.splice(fromIndex, 1)[0]
+          businesses.splice(toIndex, 0, element)
+        }
+      }
+
       setBusinessesList({
         ...businessesList,
         loading: false,
         error,
+        businesses,
         result
       })
     } catch (err) {
@@ -275,7 +288,8 @@ export const BusinessList = (props) => {
         setBusinessesList({
           ...businessesList,
           loading: false,
-          error: [err.message]
+          error: true,
+          result: [err.message]
         })
       }
     }
