@@ -400,7 +400,7 @@ export const OrderDetails = (props) => {
         requestsState.business.cancel()
       }
     }
-  }, [props.order])
+  }, [props.order, orderState.order?.id])
 
   useEffect(() => {
     if (orderState.loading || loading) return
@@ -415,8 +415,8 @@ export const OrderDetails = (props) => {
       })
       events.emit('order_updated', Object.assign(orderState.order, order))
 
-      // loadMessages()
     }
+    loadMessages()
     const handleTrackingDriver = ({ location }) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
@@ -434,13 +434,14 @@ export const OrderDetails = (props) => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket, loading, userCustomerId, orderState.order?.driver_id])
+  }, [orderState.order, socket, loading, userCustomerId, orderState.order?.id])
 
   useEffect(() => {
     if (messages.loading) return
     const handleNewMessage = (message) => {
+      const actualChat = messages.find(_message => _message?.order_id === message?.order?.id)
       const found = messages.messages.find(_message => _message.id === message.id)
-      if (!found) {
+      if (!found && actualChat) {
         setMessages({
           ...messages,
           messages: [...messages.messages, message]
