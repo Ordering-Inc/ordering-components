@@ -85,7 +85,7 @@ export const BusinessSearchList = (props) => {
     })
     setBusinessesSearchList({
       ...businessesSearchList,
-      businesses: updatedBusinesses.filter(_business => _business?.city_id === cityId)
+      businesses: cityId ? updatedBusinesses?.filter(_business => _business?.city_id === cityId) : updatedBusinesses
     })
   }
 
@@ -126,7 +126,7 @@ export const BusinessSearchList = (props) => {
     })
     setBusinessesSearchList({
       ...businessesSearchList,
-      businesses: updatedBusinesses.filter(_business => _business?.city_id === cityId)
+      businesses: cityId ? updatedBusinesses?.filter(_business => _business?.city_id === cityId) : updatedBusinesses
     })
   }
 
@@ -177,7 +177,7 @@ export const BusinessSearchList = (props) => {
       })
       setBusinessesSearchList({
         ...businessesSearchList,
-        businesses: (newFetch ? result : [...businessesSearchList?.businesses, ...result]).filter(_business => _business?.city_id === cityId),
+        businesses: cityId ? (newFetch ? result : [...businessesSearchList?.businesses, ...result])?.filter(_business => _business?.city_id === cityId) : newFetch ? result : [...businessesSearchList?.businesses, ...result],
         loading: false,
         lengthError: false
       })
