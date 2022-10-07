@@ -141,7 +141,7 @@ export const BusinessSearchList = (props) => {
       filtParams = filtParams + isPfChangs ? '&forceOrderBy=enabled' : '&forceOrderBy=disabled'
       filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation ? '&max_distance=20000' : '')
       filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
-      brandId && (filtParams = filtParams +  `'&franchise_ids=[${brandId}]'`)
+      brandId && (filtParams = filtParams +  `&franchise_ids=[${brandId}]`)
       setBusinessesSearchList({
         ...businessesSearchList,
         loading: true,
