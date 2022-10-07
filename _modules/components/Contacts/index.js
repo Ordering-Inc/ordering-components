@@ -640,8 +640,7 @@ var Contacts = function Contacts(props) {
     getBusinesses: getBusinesses,
     getCustomers: getCustomers,
     getDrivers: getDrivers,
-    loadMore: loadMore,
-    getOrders: getOrders
+    loadMore: loadMore
   })));
 };
 
