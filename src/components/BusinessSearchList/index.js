@@ -85,7 +85,7 @@ export const BusinessSearchList = (props) => {
     })
     setBusinessesSearchList({
       ...businessesSearchList,
-      businesses: cityId ? updatedBusinesses?.filter(_business => _business?.city_id === cityId) : updatedBusinesses
+      businesses: updatedBusinesses?.filter(_business => cityId ? _business?.city_id === cityId : _business)
     })
   }
 
@@ -126,7 +126,7 @@ export const BusinessSearchList = (props) => {
     })
     setBusinessesSearchList({
       ...businessesSearchList,
-      businesses: cityId ? updatedBusinesses?.filter(_business => _business?.city_id === cityId) : updatedBusinesses
+      businesses: updatedBusinesses?.filter(_business => cityId ? _business?.city_id === cityId : _business)
     })
   }
 
