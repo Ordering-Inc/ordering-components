@@ -37,7 +37,6 @@ export const BusinessSearchList = (props) => {
     orderBy: 'distance',
     franchise_ids: [],
     price_level: null,
-    brand_ids: brandId ? [brandId] : []
   })
   const [termValue, setTermValue] = useState(defaultTerm || '')
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
@@ -155,7 +154,7 @@ export const BusinessSearchList = (props) => {
         }
       }
       const location = { lat: orderState.options?.address?.location?.lat || defaultLocation?.lat, lng: orderState.options?.address?.location?.lng || defaultLocation?.lng }
-      const response = await fetch(`${ordering.root}/search?order_type_id=${orderState?.options?.type}&franchise_ids=[${brandId}]&location=${JSON.stringify(options?.location || location)}${filtParams}`, requestOptions)
+      const response = await fetch(`${ordering.root}/search?order_type_id=${orderState?.options?.type}&location=${JSON.stringify(options?.location || location)}${filtParams}`, requestOptions)
       const { result, error, pagination } = await response.json()
       if (error) {
         setBusinessesSearchList({
