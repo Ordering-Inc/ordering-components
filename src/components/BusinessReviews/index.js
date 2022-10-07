@@ -39,7 +39,6 @@ export const BusinessReviews = (props) => {
   }
 
   const onChangeReview = (text) => {
-    console.log(text)
     const reviews = text !== ''
       ? reviewsList.filter(review => review.comment.toLowerCase().includes(text?.toLowerCase()))
       : reviewsList
