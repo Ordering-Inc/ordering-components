@@ -734,7 +734,7 @@ var ProductForm = function ProductForm(props) {
     if (product.product) {
       initProductCart(product.product);
     }
-  }, [product.product, props.productCart]);
+  }, [product.product]);
   /**
    * Check error when product state changed
    */

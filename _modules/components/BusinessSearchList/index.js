@@ -60,7 +60,7 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var BusinessSearchList = function BusinessSearchList(props) {
-  var _paginationSettings$p, _orderingTheme$theme, _orderingTheme$theme$, _orderingTheme$theme$2, _orderingTheme$theme$3;
+  var _paginationSettings$p, _orderingTheme$theme, _orderingTheme$theme$, _orderingTheme$theme$2, _orderingTheme$theme$3, _orderState$options2;
 
   var UIComponent = props.UIComponent,
       paginationSettings = props.paginationSettings,
@@ -156,6 +156,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
     }
   };
 
+  var cityId = orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.city_id;
+
   var handleChangeFilters = function handleChangeFilters(filterName, filterValue) {
     if (filterName === 'orderBy') {
       var ascdesc = filterValue === (filters === null || filters === void 0 ? void 0 : filters.orderBy) ? filterValue.includes('-') ? filterValue : "-".concat(filterValue) : filterValue;
@@ -182,7 +184,9 @@ var BusinessSearchList = function BusinessSearchList(props) {
       return business;
     });
     setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
-      businesses: updatedBusinesses
+      businesses: updatedBusinesses === null || updatedBusinesses === void 0 ? void 0 : updatedBusinesses.filter(function (_business) {
+        return cityId ? (_business === null || _business === void 0 ? void 0 : _business.city_id) === cityId : _business;
+      })
     }));
   };
   /**
@@ -221,13 +225,15 @@ var BusinessSearchList = function BusinessSearchList(props) {
       return business;
     });
     setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
-      businesses: updatedBusinesses
+      businesses: updatedBusinesses === null || updatedBusinesses === void 0 ? void 0 : updatedBusinesses.filter(function (_business) {
+        return cityId ? (_business === null || _business === void 0 ? void 0 : _business.city_id) === cityId : _business;
+      })
     }));
   };
 
   var handleSearchbusinessAndProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, options, val) {
-      var _orderState$options2, _orderState$options3, _orderState$options3$, _orderState$options3$2, _orderState$options4, _orderState$options4$, _orderState$options4$2, _orderState$options5, filtParams, requestOptions, location, response, _yield$response$json, result, error, pagination, nextPageItems, remainingItems;
+      var _orderState$options3, _orderState$options4, _orderState$options4$, _orderState$options4$2, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _ref2, filtParams, requestOptions, location, response, _yield$response$json, result, error, pagination, nextPageItems, remainingItems;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -241,7 +247,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 if (!filters[key] && filters[key] !== 0 || filters[key] === 'default' || ((_filters$key = filters[key]) === null || _filters$key === void 0 ? void 0 : _filters$key.length) === 0) return;
                 Array.isArray(filters[key]) ? filtParams = filtParams + "&".concat(key, "=[").concat(filters[key], "]") : filtParams = filtParams + "&".concat(key, "=").concat(filters[key]);
               });
-              filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 1 && defaultLocation ? '&max_distance=20000' : '');
+              filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) === 1 && defaultLocation ? '&max_distance=20000' : '');
               filtParams = filtParams + "&page=".concat(newFetch ? 1 : paginationProps.currentPage + 1, "&page_size=").concat(paginationProps.pageSize);
               setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
                 loading: true,
@@ -255,11 +261,11 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 }
               };
               location = {
-                lat: ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : (_orderState$options3$2 = _orderState$options3$.location) === null || _orderState$options3$2 === void 0 ? void 0 : _orderState$options3$2.lat) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lat),
-                lng: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : (_orderState$options4$2 = _orderState$options4$.location) === null || _orderState$options4$2 === void 0 ? void 0 : _orderState$options4$2.lng) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lng)
+                lat: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : (_orderState$options4$2 = _orderState$options4$.location) === null || _orderState$options4$2 === void 0 ? void 0 : _orderState$options4$2.lat) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lat),
+                lng: ((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : (_orderState$options5$2 = _orderState$options5$.location) === null || _orderState$options5$2 === void 0 ? void 0 : _orderState$options5$2.lng) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lng)
               };
               _context.next = 10;
-              return fetch("".concat(ordering.root, "/search?order_type_id=").concat(orderState === null || orderState === void 0 ? void 0 : (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.type, "&location=").concat(JSON.stringify((options === null || options === void 0 ? void 0 : options.location) || location)).concat(filtParams), requestOptions);
+              return fetch("".concat(ordering.root, "/search?order_type_id=").concat(orderState === null || orderState === void 0 ? void 0 : (_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type, "&location=").concat(JSON.stringify((options === null || options === void 0 ? void 0 : options.location) || location)).concat(filtParams), requestOptions);
 
             case 10:
               response = _context.sent;
@@ -300,7 +306,9 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 nextPageItems: nextPageItems
               }));
               setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
-                businesses: newFetch ? result : [].concat(_toConsumableArray(businessesSearchList === null || businessesSearchList === void 0 ? void 0 : businessesSearchList.businesses), _toConsumableArray(result)),
+                businesses: cityId ? (_ref2 = newFetch ? result : [].concat(_toConsumableArray(businessesSearchList === null || businessesSearchList === void 0 ? void 0 : businessesSearchList.businesses), _toConsumableArray(result))) === null || _ref2 === void 0 ? void 0 : _ref2.filter(function (_business) {
+                  return (_business === null || _business === void 0 ? void 0 : _business.city_id) === cityId;
+                }) : newFetch ? result : [].concat(_toConsumableArray(businessesSearchList === null || businessesSearchList === void 0 ? void 0 : businessesSearchList.businesses), _toConsumableArray(result)),
                 loading: false,
                 lengthError: false
               }));
@@ -335,7 +343,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
 
   var getBrandList = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -396,12 +404,12 @@ var BusinessSearchList = function BusinessSearchList(props) {
     }));
 
     return function getBrandList() {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
   var getCities = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var requestOptions, response, _yield$response$json2, result, error, pagination;
 
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
@@ -451,7 +459,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
     }));
 
     return function getCities() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
   /**
@@ -460,7 +468,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
 
 
   var getTagList = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
@@ -520,7 +528,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
     }));
 
     return function getTagList() {
-      return _ref4.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
