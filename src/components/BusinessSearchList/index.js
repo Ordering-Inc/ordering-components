@@ -141,6 +141,7 @@ export const BusinessSearchList = (props) => {
       filtParams = filtParams + isPfChangs ? '&forceOrderBy=enabled' : '&forceOrderBy=disabled'
       filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation ? '&max_distance=20000' : '')
       filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
+      brandId && (filtParams = filtParams +  `'&franchise_ids=[${brandId}]'`)
       setBusinessesSearchList({
         ...businessesSearchList,
         loading: true,
@@ -154,7 +155,7 @@ export const BusinessSearchList = (props) => {
         }
       }
       const location = { lat: orderState.options?.address?.location?.lat || defaultLocation?.lat, lng: orderState.options?.address?.location?.lng || defaultLocation?.lng }
-      const response = await fetch(`${ordering.root}/search?order_type_id=${orderState?.options?.type}&location=${JSON.stringify(options?.location || location)}${filtParams}`, requestOptions)
+      const response = await fetch(`${ordering.root}/search?order_type_id=${orderState?.options?.type}&franchise_ids=[${brandId}]&location=${JSON.stringify(options?.location || location)}${filtParams}`, requestOptions)
       const { result, error, pagination } = await response.json()
       if (error) {
         setBusinessesSearchList({
