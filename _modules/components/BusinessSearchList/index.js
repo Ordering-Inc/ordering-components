@@ -123,8 +123,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
-    price_level: null,
-    brand_ids: brandId ? [brandId] : []
+    price_level: null
   }),
       _useState8 = _slicedToArray(_useState7, 2),
       filters = _useState8[0],
@@ -264,7 +263,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 lng: ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : (_orderState$options4$2 = _orderState$options4$.location) === null || _orderState$options4$2 === void 0 ? void 0 : _orderState$options4$2.lng) || (defaultLocation === null || defaultLocation === void 0 ? void 0 : defaultLocation.lng)
               };
               _context.next = 12;
-              return fetch("".concat(ordering.root, "/search?order_type_id=").concat(orderState === null || orderState === void 0 ? void 0 : (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.type, "&franchise_ids=[").concat(brandId, "]&location=").concat(JSON.stringify((options === null || options === void 0 ? void 0 : options.location) || location)).concat(filtParams), requestOptions);
+              return fetch("".concat(ordering.root, "/search?order_type_id=").concat(orderState === null || orderState === void 0 ? void 0 : (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.type, "&location=").concat(JSON.stringify((options === null || options === void 0 ? void 0 : options.location) || location)).concat(filtParams), requestOptions);
 
             case 12:
               response = _context.sent;
