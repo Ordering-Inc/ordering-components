@@ -498,6 +498,35 @@ export const LoginForm = (props) => {
     }
   }
 
+  const handleLoginGoogleAlsea = async (user) => {
+    let params = 'pass=q7i1rcljnv3roqv72sleodqt9mi0udrrotqau4rhi81274q2ejt'
+    if (user.email) {
+      params = params + `${user.email ? `&mail=${user.email}` : ''}`
+    }
+    if (user.cellphone && user.country_code) {
+      params = params + `${user.cellphone ? `&cellphone=${user.cellphone}` : ''}${user.country_code ? `&country_phone_code=${user.country_code}` : ''}`
+    }
+    const response = await alseaOtpConsult(params)
+    if (response === 'new_user') {
+      setOtpDataUser({
+        name: user.name,
+        lastname: user.lastname,
+        email: user.email,
+        cellphone: user.cellphone,
+        country_code: user.country_code,
+        id: user?.id,
+        token: user?.session?.access_token,
+        social: true
+      })
+      handleOpenSignup()
+    } else if (response === 'existing_user') {
+      login({
+        user,
+        token: user?.session?.access_token
+      })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -531,6 +560,8 @@ export const LoginForm = (props) => {
           alseaOtpCreateUser={alseaOtpCreateUser}
           // handleCheckFacebookInfo={handleCheckFacebookInfo}
           handleLoginFacebookAlsea={handleLoginFacebookAlsea}
+          alseaOtpConsult={alseaOtpConsult}
+          handleLoginGoogleAlsea={handleLoginGoogleAlsea}
         />
       )}
     </>
