@@ -359,7 +359,7 @@ export const BusinessList = (props) => {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
-  }, [JSON.stringify(orderState.options), businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
+  }, [JSON.stringify(orderState.options), orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
