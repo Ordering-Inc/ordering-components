@@ -939,249 +939,126 @@ Object.defineProperty(exports, "useWebsocket", {
     return _WebsocketContext.useWebsocket;
   }
 });
-
 var _AddressDetails = require("./components/AddressDetails");
-
 var _AddressForm = require("./components/AddressForm");
-
 var _AddressList = require("./components/AddressList");
-
 var _AnalyticsSegment = require("./components/AnalyticsSegment");
-
 var _BaseComponent = require("./components/BaseComponent");
-
 var _BusinessAndProductList = require("./components/BusinessAndProductList");
-
 var _BusinessBasicInformation = require("./components/BusinessBasicInformation");
-
 var _BusinessController = require("./components/BusinessController");
-
 var _BusinessList = require("./components/BusinessList");
-
 var _BusinessInformation = require("./components/BusinessInformation");
-
 var _BusinessMenuListing = require("./components/BusinessMenuListing");
-
 var _BusinessProductsCategories = require("./components/BusinessProductsCategories");
-
 var _BusinessProductsSearch = require("./components/BusinessProductsSearch");
-
 var _BusinessReviews = require("./components/BusinessReviews");
-
 var _BusinessSortControl = require("./components/BusinessSortControl");
-
 var _BusinessTypeFilter = require("./components/BusinessTypeFilter");
-
 var _BusinessSearchList = require("./components/BusinessSearchList");
-
 var _Cart = require("./components/Cart");
-
 var _CartStoresListing = require("./components/CartStoresListing");
-
 var _Checkout = require("./components/Checkout");
-
 var _CouponControl = require("./components/CouponControl");
-
 var _Contacts = require("./components/Contacts");
-
 var _DragAndDrop = require("./components/DragAndDrop");
-
 var _DriverList = require("./components/DriverList");
-
 var _DriverTips = require("./components/DriverTips");
-
 var _ExamineClick = require("./components/ExamineClick");
-
 var _FacebookLoginButton = require("./components/FacebookLoginButton");
-
 var _FacebookPixel = require("./components/FacebookPixel");
-
 var _FavoriteList = require("./components/FavoriteList");
-
 var _FirebaseGoogleLoginButton = require("./components/FirebaseGoogleLoginButton");
-
 var _ForgotPasswordForm = require("./components/ForgotPasswordForm");
-
 var _GoogleLoginButton = require("./components/GoogleLoginButton");
-
 var _GoogleAutocompleteInput = require("./components/GoogleAutocompleteInput");
-
 var _GoogleMaps = require("./components/GoogleMaps");
-
 var _GpsButton = require("./components/GpsButton");
-
 var _GoogleIdentity = require("./components/GoogleIdentity");
-
 var _LanguageSelector = require("./components/LanguageSelector");
-
 var _LoginForm = require("./components/LoginForm");
-
 var _LogoutAction = require("./components/LogoutAction");
-
 var _MainSearch = require("./components/MainSearch");
-
 var _MenuControl = require("./components/MenuControl");
-
 var _MomentOption = require("./components/MomentOption");
-
 var _MultiCheckout = require("./components/MultiCheckout");
-
 var _MultiCartsPaymethodsAndWallets = require("./components/MultiCartsPaymethodsAndWallets");
-
 var _MultiOrdersDetails = require("./components/MultiOrdersDetails");
-
 var _MyOrders = require("./components/MyOrders");
-
 var _MyOrdersList = require("./components/MyOrdersList");
-
 var _NewOrderNotification = require("./components/NewOrderNotification");
-
 var _OrderList = require("./components/OrderList");
-
 var _OrderTypeControl = require("./components/OrderTypeControl");
-
 var _OrdersControlFilters = require("./components/OrdersControlFilters");
-
 var _PaymentOptions = require("./components/PaymentOptions");
-
 var _PaymentOptionWallet = require("./components/PaymentOptionWallet");
-
 var _Popup = require("./components/Popup");
-
 var _ProductComponent = require("./components/ProductComponent");
-
 var _ProductForm = require("./components/ProductForm");
-
 var _ProductShare = require("./components/ProductShare");
-
 var _ProductImages = require("./components/ProductImages");
-
 var _ProductIngredient = require("./components/ProductIngredient");
-
 var _ProductOption = require("./components/ProductOption");
-
 var _ProductOptionSuboption = require("./components/ProductOptionSuboption");
-
 var _ProductsList = require("./components/ProductsList");
-
 var _ProductsListing = require("./components/ProductsListing");
-
 var _ProfessionalInfo = require("./components/ProfessionalInfo");
-
 var _PromotionsController = require("./components/PromotionsController");
-
 var _Messages = require("./components/Messages");
-
 var _SearchOptions = require("./components/SearchOptions");
-
 var _Sessions = require("./components/Sessions");
-
 var _SignupForm = require("./components/SignupForm");
-
 var _SingleBusinessCard = require("./components/SingleBusinessCard");
-
 var _SingleOrderCard = require("./components/SingleOrderCard");
-
 var _SingleProductCard = require("./components/SingleProductCard");
-
 var _SingleProfessionalCard = require("./components/SingleProfessionalCard");
-
 var _SmartAppBanner = require("./components/SmartAppBanner");
-
 var _UserFormDetails = require("./components/UserFormDetails");
-
 var _UpsellingPage = require("./components/UpsellingPage");
-
 var _WrapperGoogleMaps = require("./components/WrapperGoogleMaps");
-
 var _OrderDetails = require("./components/OrderDetails");
-
 var _OrderVerticalList = require("./components/OrderVerticalList");
-
 var _OrderReview = require("./components/OrderReview");
-
 var _OrderListGroups = require("./components/OrderListGroups");
-
 var _CmsContent = require("./components/CmsContent");
-
 var _PhoneAutocomplete = require("./components/PhoneAutocomplete");
-
 var _BusinessesMap = require("./components/BusinessesMap");
-
 var _MapView = require("./components/MapView");
-
 var _ConfigContext = require("./contexts/ConfigContext");
-
 var _SiteContext = require("./contexts/SiteContext");
-
 var _LanguageContext = require("./contexts/LanguageContext");
-
 var _OrderContext = require("./contexts/OrderContext");
-
 var _BusinessContext = require("./contexts/BusinessContext");
-
 var _SessionContext = require("./contexts/SessionContext");
-
 var _WebsocketContext = require("./contexts/WebsocketContext");
-
 var _ApiContext = require("./contexts/ApiContext");
-
 var _EventContext = require("./contexts/EventContext");
-
 var _UtilsContext = require("./contexts/UtilsContext");
-
 var _OrderingContext = require("./contexts/OrderingContext");
-
 var _BillingContext = require("./contexts/BillingContext");
-
 var _CustomerContext = require("./contexts/CustomerContext");
-
 var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
-
 var _ToastContext = require("./contexts/ToastContext");
-
 var _OrderingThemeContext = require("./contexts/OrderingThemeContext");
-
 var _PlaceSpot = require("./components/PlaceSpot");
-
 var _PaymethodList = require("./components/PaymethodList");
-
 var _PaymentOptionCash = require("./components/PaymentOptionCash");
-
 var _PaymentOptionPaypal = require("./components/PaymentOptionPaypal");
-
 var _PaymentOptionStripe = require("./components/PaymentOptionStripe");
-
 var _PaymentOptionStripeDirect = require("./components/PaymentOptionStripeDirect");
-
 var _PaymentOptionStripeRedirect = require("./components/PaymentOptionStripeRedirect");
-
 var _PaymentOptionSquare = require("./components/PaymentOptionSquare");
-
 var _StripeElementsForm = require("./components/StripeElementsForm");
-
 var _CardForm = require("./components/StripeElementsForm/CardForm");
-
 var _StripeRedirectForm = require("./components/PaymentOptionStripeRedirect/StripeRedirectForm");
-
 var _FloatingButton = require("./components/FloatingButton");
-
 var _ResetPassword = require("./components/ResetPassword");
-
 var _Analitycs = require("./components/Analitycs");
-
 var _AppleLogin = require("./components/AppleLogin");
-
 var _ReCaptcha = require("./components/ReCaptcha");
-
 var _ReviewCustomer = require("./components/ReviewCustomer");
-
 var _ReviewProduct = require("./components/ReviewProduct");
-
 var _ReviewDriver = require("./components/ReviewDriver");
-
 var _UserVerification = require("./components/UserVerification");
-
 var _WalletList = require("./components/WalletList");
-
 var _codeNumbers = require("./constants/code-numbers");

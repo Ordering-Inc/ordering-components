@@ -1,67 +1,46 @@
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.OrderingProvider = exports.OrderingContext = void 0;
-
 var _react = _interopRequireWildcard(require("react"));
-
 var _ConfigContext = require("../../../../src/contexts/ConfigContext");
-
 var _SessionContext = require("../../../../src/contexts/SessionContext");
-
 var _WebsocketContext = require("../../../../src/contexts/WebsocketContext");
-
 var _OrderContext = require("../../../../src/contexts/OrderContext");
-
 var _BusinessContext = require("../../../../src/contexts/BusinessContext");
-
 var _LanguageContext = require("../../../../src/contexts/LanguageContext");
-
 var _ApiContext = require("../../../../src/contexts/ApiContext");
-
 var _EventContext = require("../../../../src/contexts/EventContext");
-
 var _UtilsContext = require("../../../../src/contexts/UtilsContext");
-
 var _ValidationsFieldsContext = require("../../../../src/contexts/ValidationsFieldsContext");
-
 var _ToastContext = require("../../../../src/contexts/ToastContext");
-
 var _CustomerContext = require("../../../../src/contexts/CustomerContext");
-
 var _OrderingThemeContext = require("../../../../src/contexts/OrderingThemeContext");
-
 var _NativeStrategy = require("../../NativeStrategy");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
  */
 var OrderingContext = /*#__PURE__*/(0, _react.createContext)();
+
 /**
  * Custom provider to languages manager
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-
 exports.OrderingContext = OrderingContext;
-
 var OrderingProvider = function OrderingProvider(_ref) {
   var _settings$franchiseSl, _settings$businessSlu;
-
   var Alert = _ref.Alert,
-      settings = _ref.settings,
-      children = _ref.children,
-      isDisableToast = _ref.isDisableToast,
-      isDisabledDefaultOpts = _ref.isDisabledDefaultOpts;
+    settings = _ref.settings,
+    children = _ref.children,
+    isDisableToast = _ref.isDisableToast,
+    isDisabledDefaultOpts = _ref.isDisabledDefaultOpts;
   var nativeStrategy = new _NativeStrategy.NativeStrategy();
   var restOfSettings = {
     project: settings.project,
@@ -94,5 +73,4 @@ var OrderingProvider = function OrderingProvider(_ref) {
     businessId: (_settings$businessSlu = settings === null || settings === void 0 ? void 0 : settings.businessSlug) !== null && _settings$businessSlu !== void 0 ? _settings$businessSlu : settings === null || settings === void 0 ? void 0 : settings.businessId
   }, children))))))))))))));
 };
-
 exports.OrderingProvider = OrderingProvider;
