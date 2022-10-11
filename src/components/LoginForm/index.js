@@ -21,7 +21,8 @@ export const LoginForm = (props) => {
     handleCustomLogin,
     notificationState,
     setOtpDataUser,
-    handleOpenSignup
+    handleOpenSignup,
+    isPFChangsLayout
   } = props
 
   const [ordering] = useApi()
@@ -46,7 +47,7 @@ export const LoginForm = (props) => {
 
   defaultLoginTab = defaultLoginTab || (useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp')
   const [loginTab, setLoginTab] = useState(defaultLoginTab)
-  const [otpType, setOtpType] = useState((!useLoginOtpEmail && useLoginOtpCellphone) ? 'cellphone' : 'email')
+  const [otpType, setOtpType] = useState(((!useLoginOtpEmail && useLoginOtpCellphone) || isPFChangsLayout) ? 'cellphone' : 'email')
   const [otpState, setOtpState] = useState('')
   const [createOtpUser, setCreateOtpUser] = useState(false)
   const [, { login, logout }] = useSession()
