@@ -907,12 +907,14 @@ var OrderListGroups = function OrderListGroups(props) {
     };
   }();
   (0, _react.useEffect)(function () {
+    var _ordersGroup$currentT15;
+    setCurrentFilters((_ordersGroup$currentT15 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT15 === void 0 ? void 0 : _ordersGroup$currentT15.currentFilter);
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!(logisticOrders !== null && logisticOrders !== void 0 && logisticOrders.orders));
     } else {
-      var _ordersGroup$currentT15, _ordersGroup$currentT16;
+      var _ordersGroup$currentT16, _ordersGroup$currentT17;
       loadOrders({
-        newFetchCurrent: ((_ordersGroup$currentT15 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT15 === void 0 ? void 0 : (_ordersGroup$currentT16 = _ordersGroup$currentT15.pagination) === null || _ordersGroup$currentT16 === void 0 ? void 0 : _ordersGroup$currentT16.total) === null
+        newFetchCurrent: ((_ordersGroup$currentT16 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT16 === void 0 ? void 0 : (_ordersGroup$currentT17 = _ordersGroup$currentT16.pagination) === null || _ordersGroup$currentT17 === void 0 ? void 0 : _ordersGroup$currentT17.total) === null
       });
     }
   }, [currentTabSelected]);
@@ -930,8 +932,8 @@ var OrderListGroups = function OrderListGroups(props) {
     });
   }, [filtered]);
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT17, _session$user5, _session$user6;
-    if ((_ordersGroup$currentT17 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT17 !== void 0 && _ordersGroup$currentT17.loading) return;
+    var _ordersGroup$currentT18, _session$user5, _session$user6;
+    if ((_ordersGroup$currentT18 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT18 !== void 0 && _ordersGroup$currentT18.loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _orderFound, _orderFound$driver, _order$driver, _session$user4;
       events.emit('order_updated', order);

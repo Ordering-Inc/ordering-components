@@ -367,7 +367,6 @@ var OrderList = function OrderList(props) {
               businessIds = [].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).map(function (order) {
                 return order.business_id;
               });
-              console.log(businessIds);
               setBusinessOrderIds && setBusinessOrderIds(businessIds);
               setProducts([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).filter(function (order) {
                 var _businessesSearchList;
@@ -399,10 +398,10 @@ var OrderList = function OrderList(props) {
                   to: keepOrders ? pagination.to : response.content.pagination.to
                 });
               }
-              _context3.next = 28;
+              _context3.next = 27;
               break;
-            case 25:
-              _context3.prev = 25;
+            case 24:
+              _context3.prev = 24;
               _context3.t0 = _context3["catch"](8);
               if (_context3.t0.constructor.name !== 'Cancel') {
                 setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
@@ -413,12 +412,12 @@ var OrderList = function OrderList(props) {
                   loading: false
                 }));
               }
-            case 28:
+            case 27:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[8, 25]]);
+      }, _callee3, null, [[8, 24]]);
     }));
     return function loadOrders(_x3, _x4) {
       return _ref3.apply(this, arguments);
