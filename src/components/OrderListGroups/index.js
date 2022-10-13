@@ -609,6 +609,7 @@ export const OrderListGroups = (props) => {
   }
 
   useEffect(() => {
+    setCurrentFilters(ordersGroup[currentTabSelected]?.currentFilter)
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!logisticOrders?.orders)
     } else {

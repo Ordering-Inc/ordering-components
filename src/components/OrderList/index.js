@@ -194,7 +194,6 @@ export const OrderList = props => {
         .filter((professional, i, hash) => professional && hash.map(_professional => _professional?.id).indexOf(professional?.id) === i)
       )
       const businessIds = [...response.content.result, ...orderList.orders].map(order => order.business_id)
-      console.log(businessIds)
       setBusinessOrderIds && setBusinessOrderIds(businessIds)
       setProducts(
         [...response.content.result, ...orderList.orders]
