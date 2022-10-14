@@ -60,7 +60,8 @@ var GoogleMaps = function GoogleMaps(props) {
       noDistanceValidation = props.noDistanceValidation,
       pfchangs = props.pfchangs,
       setCurrentLocation = props.setCurrentLocation,
-      businessClikedId = props.businessClikedId;
+      businessClikedId = props.businessClikedId,
+      locationPin = props.locationPin;
 
   var _useUtils = (0, _UtilsContext.useUtils)(),
       _useUtils2 = _slicedToArray(_useUtils, 1),
@@ -148,7 +149,7 @@ var GoogleMaps = function GoogleMaps(props) {
       if (i === 1 || businessMap) {
         var _locations$i;
 
-        formatUrl = optimizeImage((_locations$i = locations[i]) === null || _locations$i === void 0 ? void 0 : _locations$i.icon, 'r_max');
+        formatUrl = optimizeImage(locationPin ? locationPin : (_locations$i = locations[i]) === null || _locations$i === void 0 ? void 0 : _locations$i.icon, 'r_max');
       }
 
       var marker = new window.google.maps.Marker({
