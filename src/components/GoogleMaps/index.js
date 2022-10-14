@@ -21,7 +21,8 @@ export const GoogleMaps = (props) => {
     noDistanceValidation,
     pfchangs,
     setCurrentLocation,
-    businessClikedId
+    businessClikedId,
+    locationPin
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -69,7 +70,7 @@ export const GoogleMaps = (props) => {
     for (let i = 0; i < locations.length; i++) {
       let formatUrl = null
       if (i === 1 || businessMap) {
-        formatUrl = optimizeImage(locations[i]?.icon, 'r_max')
+        formatUrl = optimizeImage(locationPin ? locationPin : locations[i]?.icon, 'r_max')
       }
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i]?.lat, locations[i]?.lng),
