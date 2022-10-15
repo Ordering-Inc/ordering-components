@@ -12,7 +12,8 @@ export const ProductForm = (props) => {
     onSave,
     handleCustomSave,
     isStarbucks,
-    isService
+    isService,
+    productAddedToCartLength
   } = props
 
   const requestsState = {}
@@ -124,6 +125,7 @@ export const ProductForm = (props) => {
         selected: true
       }
     }
+    const quantity = (productAddedToCartLength && product?.maximum_per_order) ? (product?.maximum_per_order - productAddedToCartLength) : props.productCart?.quantity
     const newProductCart = {
       ...props.productCart,
       id: product.id,
@@ -136,7 +138,7 @@ export const ProductForm = (props) => {
       ingredients: props.productCart?.ingredients || ingredients,
       options: props.productCart?.options || {},
       comment: props.productCart?.comment || null,
-      quantity: props.productCart?.quantity || 1
+      quantity: quantity || 1
     }
     newProductCart.unitTotal = getUnitTotal(newProductCart)
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
