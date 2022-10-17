@@ -33,8 +33,6 @@ export const Checkout = (props) => {
    * Order context
    */
   const [orderState, { placeCart } ] = useOrder()
-  const [{options}] = useOrder()
-
   /**
    * Session content
    */
@@ -279,7 +277,7 @@ export const Checkout = (props) => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
     }
-  }, [businessId, options?.type])
+  }, [businessId, orderState.options?.type])
 
   /**
    * Update carts from sockets
