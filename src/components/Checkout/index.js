@@ -277,7 +277,7 @@ export const Checkout = (props) => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
     }
-  }, [businessId])
+  }, [businessId, orderState.options?.type])
 
   /**
    * Update carts from sockets
