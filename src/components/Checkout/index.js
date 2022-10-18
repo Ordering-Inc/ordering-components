@@ -32,7 +32,7 @@ export const Checkout = (props) => {
   /**
    * Order context
    */
-  const [orderState, { placeCart } ] = useOrder()
+  const [orderState, { placeCart }] = useOrder()
   /**
    * Session content
    */
