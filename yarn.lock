@@ -1618,9 +1618,9 @@
     tslib "^2.4.0"
 
 "@segment/analytics-next@^1.35.1":
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.44.0.tgz#09d004dfe1f83c563c1b2a5d401ef72addbfd093"
-  integrity sha512-88h+zFtcrj3HiiUZ8Y+mkWCO+AmvUSTSmnii3ayWe1vBGrZ2OxMG9UDuj5PEmsErGM0c+KRyyGlO+anF4M01iw==
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.45.0.tgz#458efc0b07421051a2f75ccc9f50e00ac62f17c4"
+  integrity sha512-dgMo5epHmQnQjtEWSSmFmWWq4lsaxoKlhJcfcVJ91CNuCDnGCZyjubL9I6F7A+3AydIpptzJKo+b7zztC/2Lew==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     "@segment/analytics-core" "1.1.0"
@@ -3532,9 +3532,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001400:
-  version "1.0.30001421"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001421.tgz#979993aaacff5ab72a8d0d58c28ddbcb7b4deba6"
-  integrity sha512-Sw4eLbgUJAEhjLs1Fa+mk45sidp1wRn5y6GtDpHGBaNJ9OCDJaVh2tIaWWUnGfuXfKf1JCBaIarak3FkVAvEeA==
+  version "1.0.30001422"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001422.tgz#f2d7c6202c49a8359e6e35add894d88ef93edba1"
+  integrity sha512-hSesn02u1QacQHhaxl/kNMZwqVG35Sz/8DgvmgedxSH8z9UUpcDYSPYgsj3x5dQNRcNp6BwpSfQfVzYUTm+fog==
 
 caseless@~0.12.0:
   version "0.12.0"
