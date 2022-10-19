@@ -29,7 +29,8 @@ export const PromotionsController = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.token}`
+        Authorization: `Bearer ${session.token}`,
+        'X-App-X': ordering.appId
       }
     })
     return await response.json()
