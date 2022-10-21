@@ -13,7 +13,8 @@ export const PaymentOptionOpenPay = (props) => {
     publicKey,
     merchantId,
     isSandbox,
-    businessId
+    businessId,
+    isApplyMasterCoupon
   } = props
 
   const [{ token, user }] = useSession()
@@ -111,10 +112,10 @@ export const PaymentOptionOpenPay = (props) => {
         device_session_id: window.OpenPay.deviceData.setup()
       }
     })
-    if (card.brandCardName === 'mastercard') {
+    if (card.brandCardName === 'mastercard' && isApplyMasterCoupon) {
       applyMasterCardCoupon()
     } else {
-      if (props?.cart?.offers.length > 0) {
+      if (props?.cart?.offers.length > 0 || props?.cart?.coupon && props?.cart?.coupon === 'DLVMASTER30') {
         if (!configs?.advanced_offers_module?.value) {
           applyCoupon({
             business_id: businessId,
