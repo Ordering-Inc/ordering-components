@@ -109,6 +109,33 @@ var MapView = function MapView(props) {
       return _ref.apply(this, arguments);
     };
   }();
+  var setDriverLocation = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(location) {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return ordering.setAccessToken(session.token).users(session.user.id).driverLocations().save(location);
+            case 3:
+              _context2.next = 8;
+              break;
+            case 5:
+              _context2.prev = 5;
+              _context2.t0 = _context2["catch"](0);
+              console.log(_context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message);
+            case 8:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 5]]);
+    }));
+    return function setDriverLocation(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     var handleUpdateOrder = function handleUpdateOrder(order) {
       getBusinessLocations();
@@ -144,6 +171,7 @@ var MapView = function MapView(props) {
     isLoadingBusinessMarkers: isLoadingBusinessMarkers,
     markerGroups: markerGroups,
     getBusinessLocations: getBusinessLocations,
+    setDriverLocation: setDriverLocation,
     alertState: alertState,
     setAlertState: setAlertState,
     setMarkerGroups: setMarkerGroups,
