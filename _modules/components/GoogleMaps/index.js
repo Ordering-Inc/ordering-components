@@ -91,7 +91,7 @@ var GoogleMaps = function GoogleMaps(props) {
         title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
         icon: (_locations$i5 = locations[i]) !== null && _locations$i5 !== void 0 && _locations$i5.icon ? {
           url: formatUrl || locations[i].icon,
-          scaledSize: new window.google.maps.Size(45, 45)
+          scaledSize: new window.google.maps.Size(35, 35)
         } : null
       });
       if (businessMap && !noDistanceValidation) {
@@ -154,7 +154,6 @@ var GoogleMaps = function GoogleMaps(props) {
     map.fitBounds(bounds);
     setBoundMap(bounds);
   };
-
   /**
    * function to get all address information with a location
    * @param {google location} pos
@@ -273,7 +272,11 @@ var GoogleMaps = function GoogleMaps(props) {
         }
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
-          map: map
+          map: map,
+          icon: {
+            url: locations[0].icon,
+            scaledSize: new window.google.maps.Size(35, 35)
+          }
         });
         setGoogleMapMarker(marker);
       } else {
@@ -327,7 +330,9 @@ var GoogleMaps = function GoogleMaps(props) {
       }
       center.lat = location === null || location === void 0 ? void 0 : location.lat;
       center.lng = location === null || location === void 0 ? void 0 : location.lng;
-      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
+      var newPos = new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng);
+      googleMapMarker && googleMapMarker.setPosition(newPos);
+      (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newPos);
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
   }, [location, locations]);
