@@ -37,7 +37,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Checkout page behavior without UI component
  */
 var Checkout = function Checkout(props) {
-  var _Object$values$find$b, _Object$values$find, _orderState$carts;
+  var _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$options2;
   var cartState = props.cartState,
     propsToFetch = props.propsToFetch,
     actionsBeforePlace = props.actionsBeforePlace,
@@ -494,7 +494,7 @@ var Checkout = function Checkout(props) {
     if (businessId && typeof businessId === 'number') {
       getBusiness();
     }
-  }, [businessId]);
+  }, [businessId, (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type]);
 
   /**
    * Update carts from sockets
