@@ -388,7 +388,7 @@ export const OrderDetails = (props) => {
       if (isFetchDrivers) {
         getDrivers(props.order?.id ?? orderId)
       }
-    } else {
+    } else if (!orderState.order) {
       getOrder()
     }
 
@@ -414,12 +414,20 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
       events.emit('order_updated', Object.assign(orderState.order, order))
-
     }
-    loadMessages()
     const handleTrackingDriver = ({ location }) => {
       const newLocation = location ?? { lat: -37.9722342, lng: 144.7729561 }
       setDriverLocation(newLocation)
+      setOrderState({
+        ...orderState,
+        order: {
+          ...orderState.order,
+          driver: {
+            ...orderState.order?.driver,
+            location: newLocation
+          }
+        }
+      })
     }
     const ordersRoom = user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
     if (!isDisabledOrdersRoom) socket.join(ordersRoom)
@@ -430,9 +438,9 @@ export const OrderDetails = (props) => {
     socket.on('update_order', handleUpdateOrder)
     return () => {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
-      socket.leave(`drivers_${orderState.order?.driver_id}`)
+      // socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
-      socket.off('tracking_driver', handleTrackingDriver)
+      // socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [orderState.order, socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id])
 

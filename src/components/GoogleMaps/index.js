@@ -53,7 +53,7 @@ export const GoogleMaps = (props) => {
         title: locations[i]?.slug,
         icon: locations[i]?.icon ? {
           url: formatUrl || locations[i].icon,
-          scaledSize: new window.google.maps.Size(45, 45)
+          scaledSize: new window.google.maps.Size(35, 35)
         } : null
       })
       if (businessMap && !noDistanceValidation) {
@@ -99,7 +99,6 @@ export const GoogleMaps = (props) => {
     map.fitBounds(bounds)
     setBoundMap(bounds)
   }
-
   /**
    * function to get all address information with a location
    * @param {google location} pos
@@ -135,9 +134,7 @@ export const GoogleMaps = (props) => {
       })
     } else {
       const location = { lat: pos?.lat(), lng: pos?.lng() }
-      handleChangeAddressMap && handleChangeAddressMap({
-        location
-      })
+      handleChangeAddressMap && handleChangeAddressMap({ location })
       center.lat = location?.lat
       center.lng = location?.lng
       googleMap && googleMap.panTo(new window.google.maps.LatLng(location?.lat, location?.lng))
@@ -208,7 +205,11 @@ export const GoogleMaps = (props) => {
         }
         marker = new window.google.maps.Marker({
           position: new window.google.maps.LatLng(center?.lat, center?.lng),
-          map
+          map,
+          icon: {
+            url: locations[0].icon,
+            scaledSize: new window.google.maps.Size(35, 35)
+          }
         })
         setGoogleMapMarker(marker)
       } else {
@@ -267,7 +268,9 @@ export const GoogleMaps = (props) => {
       }
       center.lat = location?.lat
       center.lng = location?.lng
-      googleMapMarker && googleMapMarker.setPosition(new window.google.maps.LatLng(center?.lat, center?.lng))
+      const newPos = new window.google.maps.LatLng(center?.lat, center?.lng)
+      googleMapMarker && googleMapMarker.setPosition(newPos)
+      markers?.[0] && markers[0].setPosition(newPos)
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
     }
   }, [location, locations])
