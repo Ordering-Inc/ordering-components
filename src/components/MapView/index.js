@@ -45,6 +45,18 @@ export const MapView = (props) => {
     }
   }
 
+  const setDriverLocation = async (location) => {
+    try {
+      await ordering
+        .setAccessToken(session.token)
+        .users(session.user.id)
+        .driverLocations()
+        .save(location)
+    } catch (error) {
+      console.log(error?.message)
+    }
+  }
+
   useEffect(() => {
     const handleUpdateOrder = (order) => {
       getBusinessLocations()
@@ -85,6 +97,7 @@ export const MapView = (props) => {
             isLoadingBusinessMarkers={isLoadingBusinessMarkers}
             markerGroups={markerGroups}
             getBusinessLocations={getBusinessLocations}
+            setDriverLocation={setDriverLocation}
             alertState={alertState}
             setAlertState={setAlertState}
             setMarkerGroups={setMarkerGroups}
