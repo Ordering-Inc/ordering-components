@@ -71,6 +71,15 @@ var BusinessReviews = function BusinessReviews(props) {
       reviews: reviews
     }));
   };
+  var onChangeReview = function onChangeReview(text) {
+    var reviews = text !== '' ? reviewsList.filter(function (review) {
+      return review.comment.toLowerCase().includes(text === null || text === void 0 ? void 0 : text.toLowerCase());
+    }) : reviewsList;
+    setBusinessReviewsList(_objectSpread(_objectSpread({}, businessReviewsList), {}, {
+      loading: false,
+      reviews: reviews
+    }));
+  };
 
   /**
    * Method to get business from SDK
@@ -171,6 +180,7 @@ var BusinessReviews = function BusinessReviews(props) {
     searchValue: searchValue,
     reviewsList: businessReviewsList,
     handleClickOption: onChangeOption,
+    onChangeReview: onChangeReview,
     handleChangeSearch: handleChangeSearch
   })));
 };
