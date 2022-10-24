@@ -38,7 +38,8 @@ var ProductForm = function ProductForm(props) {
     onSave = props.onSave,
     handleCustomSave = props.handleCustomSave,
     isStarbucks = props.isStarbucks,
-    isService = props.isService;
+    isService = props.isService,
+    productAddedToCartLength = props.productAddedToCartLength;
   var requestsState = {};
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -185,6 +186,7 @@ var ProductForm = function ProductForm(props) {
         selected: true
       };
     }
+    var quantity = productAddedToCartLength && product !== null && product !== void 0 && product.maximum_per_order ? (product === null || product === void 0 ? void 0 : product.maximum_per_order) - productAddedToCartLength : (_props$productCart2 = props.productCart) === null || _props$productCart2 === void 0 ? void 0 : _props$productCart2.quantity;
     var newProductCart = _objectSpread(_objectSpread({}, props.productCart), {}, {
       id: product.id,
       price: product.price,
@@ -193,10 +195,10 @@ var ProductForm = function ProductForm(props) {
       categoryId: product.category_id,
       inventoried: product.inventoried,
       stock: product.quantity,
-      ingredients: ((_props$productCart2 = props.productCart) === null || _props$productCart2 === void 0 ? void 0 : _props$productCart2.ingredients) || ingredients,
-      options: ((_props$productCart3 = props.productCart) === null || _props$productCart3 === void 0 ? void 0 : _props$productCart3.options) || {},
-      comment: ((_props$productCart4 = props.productCart) === null || _props$productCart4 === void 0 ? void 0 : _props$productCart4.comment) || null,
-      quantity: ((_props$productCart5 = props.productCart) === null || _props$productCart5 === void 0 ? void 0 : _props$productCart5.quantity) || 1
+      ingredients: ((_props$productCart3 = props.productCart) === null || _props$productCart3 === void 0 ? void 0 : _props$productCart3.ingredients) || ingredients,
+      options: ((_props$productCart4 = props.productCart) === null || _props$productCart4 === void 0 ? void 0 : _props$productCart4.options) || {},
+      comment: ((_props$productCart5 = props.productCart) === null || _props$productCart5 === void 0 ? void 0 : _props$productCart5.comment) || null,
+      quantity: quantity || 1
     });
     newProductCart.unitTotal = getUnitTotal(newProductCart);
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity;

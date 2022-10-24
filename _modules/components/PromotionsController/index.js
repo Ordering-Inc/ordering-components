@@ -67,7 +67,8 @@ var PromotionsController = function PromotionsController(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(session.token)
+                  Authorization: "Bearer ".concat(session.token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 4:
