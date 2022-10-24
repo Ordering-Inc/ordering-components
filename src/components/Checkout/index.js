@@ -34,7 +34,7 @@ export const Checkout = (props) => {
   /**
    * Order context
    */
-  const [orderState, { placeCart }] = useOrder()
+  const [orderState, { placeCart, refreshOrderOptions }] = useOrder()
   /**
    * Session content
    */
@@ -436,6 +436,7 @@ export const Checkout = (props) => {
         const result = await response.json()
         if (!result.error) {
           console.log(result)
+          refreshOrderOptions()
         }
       } catch (err) {
         setVaXMiCuenta({
