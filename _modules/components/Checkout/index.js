@@ -111,7 +111,9 @@ var Checkout = function Checkout(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
       orderState = _useOrder2[0],
-      placeCart = _useOrder2[1].placeCart;
+      _useOrder2$ = _useOrder2[1],
+      placeCart = _useOrder2$.placeCart,
+      refreshOrderOptions = _useOrder2$.refreshOrderOptions;
   /**
    * Session content
    */
@@ -905,6 +907,7 @@ var Checkout = function Checkout(props) {
 
                 if (!result.error) {
                   console.log(result);
+                  refreshOrderOptions();
                 }
 
                 _context9.next = 13;
