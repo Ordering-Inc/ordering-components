@@ -745,13 +745,12 @@ var OrderProvider = function OrderProvider(_ref) {
    * @param {object} product product for add
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
-   * @param {boolean} isService option to add product when product type is service
    */
 
 
   var addProduct = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(product, cart, isQuickAddProduct, isService) {
-      var customerFromLocalStorage, userCustomerId, currentProduct, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee6(product, cart, isQuickAddProduct) {
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
 
       return _regenerator.default.wrap(function _callee6$(_context6) {
         while (1) {
@@ -767,24 +766,19 @@ var OrderProvider = function OrderProvider(_ref) {
             case 4:
               customerFromLocalStorage = _context6.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              currentProduct = _objectSpread(_objectSpread(_objectSpread({}, product), isService && {
-                professional_id: cart === null || cart === void 0 ? void 0 : cart.professional_id
-              }), isService && {
-                service_start: cart === null || cart === void 0 ? void 0 : cart.service_start
-              });
               body = {
-                product: currentProduct,
+                product: product,
                 business_id: cart.business_id,
                 user_id: userCustomerId || session.user.id
               };
-              _context6.next = 10;
+              _context6.next = 9;
               return ordering.setAccessToken(session.token).carts().addProduct(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
-            case 10:
+            case 9:
               _yield$ordering$setAc5 = _context6.sent;
               _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
               error = _yield$ordering$setAc6.error;
@@ -792,10 +786,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
-                events.emit('cart_product_added', currentProduct, result);
+                events.emit('cart_product_added', product, result);
                 events.emit('cart_updated', result);
-                events.emit('product_added', currentProduct);
-                isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', currentProduct.name));
+                events.emit('product_added', product);
+                isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name));
               } else {
                 setAlert({
                   show: true,
@@ -808,23 +802,23 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context6.abrupt("return", !error);
 
-            case 19:
-              _context6.prev = 19;
+            case 18:
+              _context6.prev = 18;
               _context6.t0 = _context6["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context6.abrupt("return", false);
 
-            case 23:
+            case 22:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[0, 19]]);
+      }, _callee6, null, [[0, 18]]);
     }));
 
-    return function addProduct(_x6, _x7, _x8, _x9) {
+    return function addProduct(_x6, _x7, _x8) {
       return _ref7.apply(this, arguments);
     };
   }();
@@ -905,7 +899,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee7, null, [[0, 18]]);
     }));
 
-    return function removeProduct(_x10, _x11) {
+    return function removeProduct(_x9, _x10) {
       return _ref8.apply(this, arguments);
     };
   }();
@@ -987,7 +981,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee8, null, [[0, 20]]);
     }));
 
-    return function clearCart(_x12) {
+    return function clearCart(_x11) {
       return _ref9.apply(this, arguments);
     };
   }();
@@ -997,8 +991,8 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var updateProduct = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(product, cart, isQuickAddProduct, isService) {
-      var customerFromLocalStorage, userCustomerId, currentProduct, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee9(product, cart, isQuickAddProduct) {
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
 
       return _regenerator.default.wrap(function _callee9$(_context9) {
         while (1) {
@@ -1014,24 +1008,19 @@ var OrderProvider = function OrderProvider(_ref) {
             case 4:
               customerFromLocalStorage = _context9.sent;
               userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              currentProduct = _objectSpread(_objectSpread(_objectSpread({}, product), isService && {
-                professional_id: cart === null || cart === void 0 ? void 0 : cart.professional_id
-              }), isService && {
-                service_start: cart === null || cart === void 0 ? void 0 : cart.service_start
-              });
               body = {
-                product: currentProduct,
+                product: product,
                 business_id: cart.business_id,
                 user_id: userCustomerId || session.user.id
               };
-              _context9.next = 10;
+              _context9.next = 9;
               return ordering.setAccessToken(session.token).carts().updateProduct(body, {
                 headers: {
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                 }
               });
 
-            case 10:
+            case 9:
               _yield$ordering$setAc9 = _context9.sent;
               _yield$ordering$setAc10 = _yield$ordering$setAc9.content;
               error = _yield$ordering$setAc10.error;
@@ -1039,9 +1028,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
-                events.emit('cart_product_updated', currentProduct, result);
+                events.emit('cart_product_updated', product, result);
                 events.emit('cart_updated', result);
-                isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', currentProduct.name));
+                isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name));
               } else {
                 setAlert({
                   show: true,
@@ -1054,23 +1043,23 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context9.abrupt("return", !error);
 
-            case 19:
-              _context9.prev = 19;
+            case 18:
+              _context9.prev = 18;
               _context9.t0 = _context9["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context9.abrupt("return", false);
 
-            case 23:
+            case 22:
             case "end":
               return _context9.stop();
           }
         }
-      }, _callee9, null, [[0, 19]]);
+      }, _callee9, null, [[0, 18]]);
     }));
 
-    return function updateProduct(_x13, _x14, _x15, _x16) {
+    return function updateProduct(_x12, _x13, _x14) {
       return _ref10.apply(this, arguments);
     };
   }();
@@ -1215,7 +1204,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee10, null, [[6, 34]]);
     }));
 
-    return function applyCoupon(_x17, _x18) {
+    return function applyCoupon(_x15, _x16) {
       return _ref11.apply(this, arguments);
     };
   }();
@@ -1302,7 +1291,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[4, 17]]);
     }));
 
-    return function applyOffer(_x19) {
+    return function applyOffer(_x17) {
       return _ref12.apply(this, arguments);
     };
   }();
@@ -1386,7 +1375,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee12, null, [[4, 17]]);
     }));
 
-    return function removeOffer(_x20) {
+    return function removeOffer(_x18) {
       return _ref13.apply(this, arguments);
     };
   }();
@@ -1499,7 +1488,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee13, null, [[8, 26]]);
     }));
 
-    return function changeDriverTip(_x21) {
+    return function changeDriverTip(_x19) {
       return _ref14.apply(this, arguments);
     };
   }();
@@ -1602,7 +1591,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[8, 26]]);
     }));
 
-    return function changePaymethod(_x22, _x23, _x24) {
+    return function changePaymethod(_x20, _x21, _x22) {
       return _ref15.apply(this, arguments);
     };
   }();
@@ -1710,7 +1699,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee15, null, [[0, 24]]);
     }));
 
-    return function placeCart(_x25, _x26) {
+    return function placeCart(_x23, _x24) {
       return _ref16.apply(this, arguments);
     };
   }();
@@ -1801,7 +1790,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16, null, [[0, 16]]);
     }));
 
-    return function placeMulitCarts(_x27) {
+    return function placeMulitCarts(_x25) {
       return _ref17.apply(this, arguments);
     };
   }();
@@ -1902,7 +1891,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee17, null, [[0, 22]]);
     }));
 
-    return function confirmCart(_x28, _x29) {
+    return function confirmCart(_x26, _x27) {
       return _ref18.apply(this, arguments);
     };
   }();
@@ -1988,7 +1977,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee18, null, [[0, 20]]);
     }));
 
-    return function reorder(_x30) {
+    return function reorder(_x28) {
       return _ref19.apply(this, arguments);
     };
   }();
@@ -2147,7 +2136,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee21);
     }));
 
-    return function setUserCustomerOptions(_x31) {
+    return function setUserCustomerOptions(_x29) {
       return _ref22.apply(this, arguments);
     };
   }();

@@ -589,7 +589,7 @@ var ProductForm = function ProductForm(props) {
 
   var handleSave = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(values) {
-      var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, currentChanges, changes, _props$productCart7;
+      var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, changes, currentProduct, _props$productCart7;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -614,10 +614,10 @@ var ProductForm = function ProductForm(props) {
               }
 
               successful = false;
-              currentChanges = cart || {
+              changes = cart || {
                 business_id: props.businessId
               };
-              changes = !isService ? _objectSpread({}, currentChanges) : _objectSpread(_objectSpread({}, currentChanges), {}, {
+              currentProduct = !isService ? _objectSpread({}, productCart) : _objectSpread(_objectSpread({}, productCart), {}, {
                 professional_id: values === null || values === void 0 ? void 0 : (_values$professional = values.professional) === null || _values$professional === void 0 ? void 0 : _values$professional.id,
                 service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
               });
@@ -628,7 +628,7 @@ var ProductForm = function ProductForm(props) {
               }
 
               _context2.next = 11;
-              return addProduct(productCart, changes, false, !!isService);
+              return addProduct(currentProduct, changes, false);
 
             case 11:
               successful = _context2.sent;
@@ -637,13 +637,13 @@ var ProductForm = function ProductForm(props) {
 
             case 14:
               _context2.next = 16;
-              return updateProduct(productCart, changes, false, !!isService);
+              return updateProduct(currentProduct, changes, false);
 
             case 16:
               successful = _context2.sent;
 
               if (successful) {
-                events.emit('product_edited', productCart);
+                events.emit('product_edited', currentProduct);
               }
 
             case 18:
