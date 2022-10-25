@@ -359,20 +359,23 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-      const body = {
-        product,
-        business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id,
+      const currentProduct = {
+        ...product,
         ...(isService && { professional_id: cart?.professional_id }),
         ...(isService && { service_start: cart?.service_start })
+      }
+      const body = {
+        product: currentProduct,
+        business_id: cart.business_id,
+        user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
-        events.emit('cart_product_added', product, result)
+        events.emit('cart_product_added', currentProduct, result)
         events.emit('cart_updated', result)
-        events.emit('product_added', product)
-        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
+        events.emit('product_added', currentProduct)
+        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', currentProduct.name))
       } else {
         setAlert({ show: true, content: result })
       }
@@ -452,19 +455,22 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-      const body = {
-        product,
-        business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id,
+      const currentProduct = {
+        ...product,
         ...(isService && { professional_id: cart?.professional_id }),
         ...(isService && { service_start: cart?.service_start })
+      }
+      const body = {
+        product: currentProduct,
+        business_id: cart.business_id,
+        user_id: userCustomerId || session.user.id
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
-        events.emit('cart_product_updated', product, result)
+        events.emit('cart_product_updated', currentProduct, result)
         events.emit('cart_updated', result)
-        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name))
+        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', currentProduct.name))
       } else {
         setAlert({ show: true, content: result })
       }
