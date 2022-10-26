@@ -401,20 +401,20 @@ export const ProductForm = (props) => {
       let successful = true
       if (useOrderContext) {
         successful = false
-        const currentChanges = cart || { business_id: props.businessId }
-        const changes = !isService
-          ? { ...currentChanges }
+        const changes = cart || { business_id: props.businessId }
+        const currentProduct = !isService
+          ? { ...productCart }
           : {
-            ...currentChanges,
+            ...productCart,
             professional_id: values?.professional?.id,
             service_start: values?.serviceTime ?? orderState.options?.moment
           }
         if (!props.productCart?.code) {
-          successful = await addProduct(productCart, changes, false, !!isService)
+          successful = await addProduct(currentProduct, changes, false)
         } else {
-          successful = await updateProduct(productCart, changes, false, !!isService)
+          successful = await updateProduct(currentProduct, changes, false)
           if (successful) {
-            events.emit('product_edited', productCart)
+            events.emit('product_edited', currentProduct)
           }
         }
       }
