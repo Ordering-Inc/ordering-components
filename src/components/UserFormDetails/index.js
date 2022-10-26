@@ -316,16 +316,15 @@ export const UserFormDetails = (props) => {
 
   const updatePromotions = async (change, setState, state) => {
     try {
-      let response
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save(change, {
-          accessToken: accessToken
-        })
-        setState({
-          ...state,
-          changes: response.content.error ? change : {},
-          result: response.content,
-          loading: false
-        })
+      const response = await ordering.users(props?.userData?.id || userState.result.result.id).save(change, {
+        accessToken: accessToken
+      })
+      setState({
+        ...state,
+        changes: response.content.error ? change : {},
+        result: response.content,
+        loading: false
+      })
 
       if (!response.content.error) {
         setUserState({
@@ -363,38 +362,48 @@ export const UserFormDetails = (props) => {
     }
   }
 
-  const handleChangePromotions = (enabled, type) => {
-    if(type==='group'){
-      setNotificationsGroup({
-        ...notificationsGroup,
-        changes: {
-          ...notificationsGroup?.changes,
-          settings: { email: { newsletter: enabled, promotions: enabled }, notification: { newsletter: enabled, promotions: enabled }, sms: { newsletter: enabled, promotions: enabled } }
+  const handleChangePromotions = (enabled, isSingle = false) => {
+    const _changes = {
+      settings: {
+        email: {
+          newsletter: !isSingle ? enabled : enabled?.email,
+          promotions: !isSingle ? enabled : enabled?.email
         },
-        loading: true
-      })
-    }else {
-      setSingleNotifications({
-          ...singleNotifications,
-          changes: {
-            ...singleNotifications?.changes,
-            settings: { email: { newsletter: enabled?.email, promotions: enabled?.email }, notification: { newsletter: enabled?.notification, promotions: enabled?.notification }, sms: { newsletter: enabled?.sms, promotions: enabled?.sms } }
-          },
-          loading: true
-        })
-    }
-  }
-  
-  const handleChangeNotifications = (value) => {
-      setFormState({
-        ...formState,
-        changes: {
-          ...formState?.changes,
-          settings: { email: { newsletter: value?.email, promotions: value?.email }, notification: { newsletter: value?.notification, promotions: value?.notification }, sms: { newsletter: value?.sms, promotions: value?.sms } }
+        notification: {
+          newsletter: !isSingle ? enabled : enabled?.notification,
+          promotions: !isSingle ? enabled : enabled?.notification
+        },
+        sms: {
+          newsletter: !isSingle ? enabled : enabled?.sms,
+          promotions: !isSingle ? enabled : enabled?.sms
         }
-      })
+      }
+    }
+
+    const state = {
+      changes: {
+        ...[isSingle ? singleNotifications : notificationsGroup]?.changes,
+        ..._changes
+      },
+      loading: true
+    }
+    if (isSingle) {
+      setSingleNotifications({ ...singleNotifications, ...state })
+      return
+    }
+    setNotificationsGroup({ ...notificationsGroup, ...state })
   }
-  
+
+  const handleChangeNotifications = (value) => {
+    setFormState({
+      ...formState,
+      changes: {
+        ...formState?.changes,
+        settings: { email: { newsletter: value?.email, promotions: value?.email }, notification: { newsletter: value?.notification, promotions: value?.notification }, sms: { newsletter: value?.sms, promotions: value?.sms } }
+      }
+    })
+  }
+
   const handleRemoveAccount = async (userId) => {
     const idToDelete = userId ?? session.user.id
     try {
@@ -421,14 +430,14 @@ export const UserFormDetails = (props) => {
       })
     }
   }
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     updatePromotions(
       singleNotifications?.loading ? singleNotifications?.changes : notificationsGroup?.changes,
-      singleNotifications?.loading ? setSingleNotifications : setNotificationsGroup, 
+      singleNotifications?.loading ? setSingleNotifications : setNotificationsGroup,
       singleNotifications?.loading ? singleNotifications : notificationsGroup
     )
-  },[notificationsGroup?.loading, singleNotifications?.loading])
+  }, [notificationsGroup?.loading, singleNotifications?.loading])
 
   return (
     <>
