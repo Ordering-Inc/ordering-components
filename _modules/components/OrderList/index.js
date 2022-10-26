@@ -787,6 +787,18 @@ var OrderList = function OrderList(props) {
     });
     setProducts(updatedProducts);
   };
+  var handleUpdateBusinesses = function handleUpdateBusinesses(businessId, changes) {
+    var _businesses$result;
+    var updatedBusiness = businesses === null || businesses === void 0 ? void 0 : (_businesses$result = businesses.result) === null || _businesses$result === void 0 ? void 0 : _businesses$result.map(function (business) {
+      if ((business === null || business === void 0 ? void 0 : business.id) === businessId) {
+        return _objectSpread(_objectSpread({}, business), changes);
+      }
+      return business;
+    });
+    setBusinesses(_objectSpread(_objectSpread({}, businesses), {}, {
+      result: updatedBusiness
+    }));
+  };
   (0, _react.useEffect)(function () {
     if (profileMessage) return;
     if (!orderList.loading && orderBy !== 'last_direct_message_at') {
@@ -836,6 +848,7 @@ var OrderList = function OrderList(props) {
     products: products,
     handleUpdateOrderList: handleUpdateOrderList,
     handleUpdateProducts: handleUpdateProducts,
+    handleUpdateBusinesses: handleUpdateBusinesses,
     businesses: businesses,
     professionals: professionals,
     handleUpdateProfessionals: handleUpdateProfessionals

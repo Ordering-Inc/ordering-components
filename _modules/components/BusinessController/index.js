@@ -217,6 +217,7 @@ var BusinessController = function BusinessController(props) {
         response,
         content,
         _businessState$busine3,
+        _businessState$busine6,
         _businessState$busine4,
         updateIds,
         _args2 = arguments;
@@ -272,6 +273,9 @@ var BusinessController = function BusinessController(props) {
                   });
                   setFavoriteIds(updateIds);
                 }
+                props.handleCustomUpdate && props.handleCustomUpdate(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.id, {
+                  favorite: isAdd
+                });
                 showToast(_ToastContext.ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
               } else {
                 setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
@@ -303,15 +307,15 @@ var BusinessController = function BusinessController(props) {
   }();
   (0, _react.useEffect)(function () {
     if (!isDisabledInterval) {
-      var _businessState$busine6, _businessState$busine7, _businessState$busine8, _businessState$busine9;
+      var _businessState$busine7, _businessState$busine8, _businessState$busine9, _businessState$busine10;
       var timeout = null;
       var timeoutCloseSoon = null;
-      if (!((_businessState$busine6 = businessState.business) !== null && _businessState$busine6 !== void 0 && _businessState$busine6.timezone)) return;
-      var currentDate = (0, _dayjs.default)().tz((_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : _businessState$busine7.timezone);
+      if (!((_businessState$busine7 = businessState.business) !== null && _businessState$busine7 !== void 0 && _businessState$busine7.timezone)) return;
+      var currentDate = (0, _dayjs.default)().tz((_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 ? void 0 : _businessState$busine8.timezone);
       var lapse = null;
-      if ((_businessState$busine8 = businessState.business) !== null && _businessState$busine8 !== void 0 && (_businessState$busine9 = _businessState$busine8.today) !== null && _businessState$busine9 !== void 0 && _businessState$busine9.enabled) {
-        var _businessState$busine10, _businessState$busine11, _businessState$busine12;
-        lapse = (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : (_businessState$busine11 = _businessState$busine10.today) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.lapses) === null || _businessState$busine12 === void 0 ? void 0 : _businessState$busine12.find(function (lapse) {
+      if ((_businessState$busine9 = businessState.business) !== null && _businessState$busine9 !== void 0 && (_businessState$busine10 = _businessState$busine9.today) !== null && _businessState$busine10 !== void 0 && _businessState$busine10.enabled) {
+        var _businessState$busine11, _businessState$busine12, _businessState$busine13;
+        lapse = (_businessState$busine11 = businessState.business) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.today) === null || _businessState$busine12 === void 0 ? void 0 : (_businessState$busine13 = _businessState$busine12.lapses) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.find(function (lapse) {
           var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
           var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
           return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix();
@@ -419,9 +423,9 @@ var BusinessController = function BusinessController(props) {
     };
   }();
   (0, _react.useEffect)(function () {
-    var _businessState$busine13;
+    var _businessState$busine14;
     if (!favoriteIds) return;
-    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.id)) {
+    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine14 = businessState.business) === null || _businessState$busine14 === void 0 ? void 0 : _businessState$busine14.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
           favorite: true
