@@ -344,7 +344,7 @@ export const UserFormDetails = (props) => {
           setUserCustomer({
             ...customer.user,
             ...response.content.result
-          }, changes?.setCustomerInLocal ?? true)
+          }, change?.setCustomerInLocal ?? true)
         }
 
         if (handleSuccessUpdate) {
@@ -363,15 +363,26 @@ export const UserFormDetails = (props) => {
     }
   }
 
-  const handleChangePromotions = (enabled) => {
-    setNotificationsGroup({
-      ...notificationsGroup,
-      changes: {
-        ...notificationsGroup?.changes,
-        settings: { email: { newsletter: enabled, promotions: enabled }, notification: { newsletter: enabled, promotions: enabled }, sms: { newsletter: enabled, promotions: enabled } }
-      },
-      loading: true
-    })
+  const handleChangePromotions = (enabled, type) => {
+    if(type==='group'){
+      setNotificationsGroup({
+        ...notificationsGroup,
+        changes: {
+          ...notificationsGroup?.changes,
+          settings: { email: { newsletter: enabled, promotions: enabled }, notification: { newsletter: enabled, promotions: enabled }, sms: { newsletter: enabled, promotions: enabled } }
+        },
+        loading: true
+      })
+    }else {
+      setSingleNotifications({
+          ...singleNotifications,
+          changes: {
+            ...singleNotifications?.changes,
+            settings: { email: { newsletter: enabled?.email, promotions: enabled?.email }, notification: { newsletter: enabled?.notification, promotions: enabled?.notification }, sms: { newsletter: enabled?.sms, promotions: enabled?.sms } }
+          },
+          loading: true
+        })
+    }
   }
   
   const handleChangeNotifications = (value) => {
@@ -381,17 +392,6 @@ export const UserFormDetails = (props) => {
           ...formState?.changes,
           settings: { email: { newsletter: value?.email, promotions: value?.email }, notification: { newsletter: value?.notification, promotions: value?.notification }, sms: { newsletter: value?.sms, promotions: value?.sms } }
         }
-      })
-  }
-
-  const handleSingleNotifications = (value) => {
-    setSingleNotifications({
-        ...singleNotifications,
-        changes: {
-          ...singleNotifications?.changes,
-          settings: { email: { newsletter: value?.email, promotions: value?.email }, notification: { newsletter: value?.notification, promotions: value?.notification }, sms: { newsletter: value?.sms, promotions: value?.sms } }
-        },
-        loading: true
       })
   }
   
@@ -423,7 +423,11 @@ export const UserFormDetails = (props) => {
   }
   
   useEffect(()=> {
-    singleNotifications?.loading ? updatePromotions(singleNotifications?.changes, setSingleNotifications, singleNotifications) : updatePromotions(notificationsGroup?.changes, setNotificationsGroup, notificationsGroup)
+    updatePromotions(
+      singleNotifications?.loading ? singleNotifications?.changes : notificationsGroup?.changes,
+      singleNotifications?.loading ? setSingleNotifications : setNotificationsGroup, 
+      singleNotifications?.loading ? singleNotifications : notificationsGroup
+    )
   },[notificationsGroup?.loading, singleNotifications?.loading])
 
   return (
@@ -452,7 +456,6 @@ export const UserFormDetails = (props) => {
           handleChangePromotions={handleChangePromotions}
           handleRemoveAccount={handleRemoveAccount}
           handleChangeNotifications={handleChangeNotifications}
-          handleSingleNotifications={handleSingleNotifications}
         />
       )}
     </>
