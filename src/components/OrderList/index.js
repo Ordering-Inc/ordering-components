@@ -513,6 +513,22 @@ export const OrderList = props => {
     setProducts(updatedProducts)
   }
 
+  const handleUpdateBusinesses = (businessId, changes) => {
+    const updatedBusiness = businesses?.result?.map(business => {
+      if (business?.id === businessId) {
+        return {
+          ...business,
+          ...changes
+        }
+      }
+      return business
+    })
+    setBusinesses({
+      ...businesses,
+      result: updatedBusiness
+    })
+  }
+
   useEffect(() => {
     if (profileMessage) return
     if (!orderList.loading && orderBy !== 'last_direct_message_at') {
@@ -570,6 +586,7 @@ export const OrderList = props => {
           products={products}
           handleUpdateOrderList={handleUpdateOrderList}
           handleUpdateProducts={handleUpdateProducts}
+          handleUpdateBusinesses={handleUpdateBusinesses}
           businesses={businesses}
           professionals={professionals}
           handleUpdateProfessionals={handleUpdateProfessionals}
