@@ -30,6 +30,8 @@ export const UserFormDetails = (props) => {
   const [isEdit, setIsEdit] = useState(!!props?.isEdit)
   const [userState, setUserState] = useState({ loading: false, loadingDriver: false, result: { error: false } })
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
+  const [notificationsGroup, setNotificationsGroup] = useState({ loading: false, changes: {}, result: { error: false } })
+  const [singleNotifications, setSingleNotifications] = useState({ loading: false, changes: {}, result: { error: false } })
   const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [removeAccountState, setAccountState] = useState({ loading: false, error: null, result: null })
 
@@ -312,12 +314,92 @@ export const UserFormDetails = (props) => {
     }
   }
 
-  const handleChangePromotions = (enabled) => {
+  const updatePromotions = async (change, setState, state) => {
+    try {
+      const response = await ordering.users(props?.userData?.id || userState.result.result.id).save(change, {
+        accessToken: accessToken
+      })
+      setState({
+        ...state,
+        changes: response.content.error ? change : {},
+        result: response.content,
+        loading: false
+      })
+
+      if (!response.content.error) {
+        setUserState({
+          ...userState,
+          result: {
+            ...userState.result,
+            ...response.content
+          }
+        })
+        if (!isCustomerMode) {
+          changeUser({
+            ...session.user,
+            ...response.content.result
+          })
+        } else {
+          setUserCustomer({
+            ...customer.user,
+            ...response.content.result
+          }, change?.setCustomerInLocal ?? true)
+        }
+
+        if (handleSuccessUpdate) {
+          handleSuccessUpdate(response.content.result)
+        }
+      }
+    } catch (err) {
+      setState({
+        ...state,
+        result: {
+          error: true,
+          result: err.message
+        },
+        loading: false
+      })
+    }
+  }
+
+  const handleChangePromotions = (enabled, isSingle = false) => {
+    const _changes = {
+      settings: {
+        email: {
+          newsletter: !isSingle ? enabled : enabled?.email,
+          promotions: !isSingle ? enabled : enabled?.email
+        },
+        notification: {
+          newsletter: !isSingle ? enabled : enabled?.notification,
+          promotions: !isSingle ? enabled : enabled?.notification
+        },
+        sms: {
+          newsletter: !isSingle ? enabled : enabled?.sms,
+          promotions: !isSingle ? enabled : enabled?.sms
+        }
+      }
+    }
+
+    const state = {
+      changes: {
+        ...[isSingle ? singleNotifications : notificationsGroup]?.changes,
+        ..._changes
+      },
+      loading: true
+    }
+    if (isSingle) {
+      setSingleNotifications({ ...singleNotifications, ...state })
+      return
+    }
+    setNotificationsGroup({ ...notificationsGroup, ...state })
+  }
+
+  const handleChangeNotifications = (value) => {
     setFormState({
       ...formState,
       changes: {
-        ...formState.changes,
-        settings: { notification: { newsletter: enabled, promotions: enabled }, sms: { newsletter: enabled, promotions: enabled } }
+        ...formState?.changes,
+        settings: { email: { newsletter: value?.email, promotions: value?.email }, notification: { newsletter: value?.notification, promotions: value?.notification }, sms: { newsletter: value?.sms, promotions: value?.sms } }
       }
     })
   }
@@ -349,6 +431,14 @@ export const UserFormDetails = (props) => {
     }
   }
 
+  useEffect(() => {
+    updatePromotions(
+      singleNotifications?.loading ? singleNotifications?.changes : notificationsGroup?.changes,
+      singleNotifications?.loading ? setSingleNotifications : setNotificationsGroup,
+      singleNotifications?.loading ? singleNotifications : notificationsGroup
+    )
+  }, [notificationsGroup?.loading, singleNotifications?.loading])
+
   return (
     <>
       {UIComponent && (
@@ -361,6 +451,8 @@ export const UserFormDetails = (props) => {
           removeAccountState={removeAccountState}
           validationFields={validationFields}
           showField={showField}
+          singleNotifications={singleNotifications}
+          notificationsGroup={notificationsGroup}
           setFormState={setFormState}
           isRequiredField={isRequiredField}
           handleChangeInput={handleChangeInput}
@@ -372,6 +464,7 @@ export const UserFormDetails = (props) => {
           verifyPhoneState={verifyPhoneState}
           handleChangePromotions={handleChangePromotions}
           handleRemoveAccount={handleRemoveAccount}
+          handleChangeNotifications={handleChangeNotifications}
         />
       )}
     </>
