@@ -68,7 +68,6 @@ export const Checkout = (props) => {
     ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
     : props.businessId
 
-
   const [defaultOptionsVaXMiCuenta, setDefaultOptionsVaXMiCuenta] = useState(null)
 
   /**
@@ -76,9 +75,9 @@ export const Checkout = (props) => {
    */
   const [vaXMiCuenta, setVaXMiCuenta] = useState({ loading: true })
 
-
   const [uberDirect, setUberDirect] = useState({ isUberDirect: false, amountToHide: null })
 
+  const [hasCateringProducts, setHasCateringProducts] = useState(false)
   /**
    * Current cart
    */
@@ -121,7 +120,7 @@ export const Checkout = (props) => {
         }
       })
       const result = await response.json()
-      let option;
+      let option
       if (result.result) {
         option = result.result
       } else {
@@ -130,7 +129,7 @@ export const Checkout = (props) => {
       if (!result.error) {
         setVaXMiCuenta({
           ...vaXMiCuenta,
-          selectedOption: {...option, default: true},
+          selectedOption: { ...option, default: true },
           loading: false,
           error: null
         })
@@ -348,7 +347,7 @@ export const Checkout = (props) => {
   const handleChangeVaXMiCuenta = (option, index) => {
     setVaXMiCuenta({
       ...vaXMiCuenta,
-      selectedOption: { amount:option, option: index, default: false}
+      selectedOption: { amount: option, option: index, default: false }
     })
   }
 
@@ -357,7 +356,7 @@ export const Checkout = (props) => {
       const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/is_cash_external_driver_group.php`, {
         method: 'POST',
         body: JSON.stringify({
-          uuid: cart.uuid,
+          uuid: cart.uuid
         }),
         headers: {
           Authorization: `Bearer ${token}`,
@@ -368,7 +367,7 @@ export const Checkout = (props) => {
       if (!result.error) {
         setUberDirect({
           ...uberDirect,
-         isUberDirect : !result
+          isUberDirect: !result
         })
       }
     } catch (err) {
@@ -377,27 +376,49 @@ export const Checkout = (props) => {
   }
 
   const checkAmountToHideCash = async () => {
-      try {
-        const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/max_cash_delivery.php`, {
-          method: 'POST',
-          body: JSON.stringify({
-            uuid: cart.uuid,
-          }),
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'X-APP-X': ordering.appId
-          }
-        })
-        const result = await response.json()
-        if (!result.error) {
-          setUberDirect({
-            ...uberDirect,
-            amountToHide: result
-          })
+    try {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/max_cash_delivery.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          uuid: cart.uuid
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-APP-X': ordering.appId
         }
-      } catch (err) {
-        console.log(err)
+      })
+      const result = await response.json()
+      if (!result.error) {
+        setUberDirect({
+          ...uberDirect,
+          amountToHide: result
+        })
       }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const cartCateringEvaluate = async () => {
+    try {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/is_catering.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          uuid: cart.uuid,
+          brand_id: businessDetails?.business?.brand_id
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-APP-X': ordering.appId
+        }
+      })
+      const result = await response.json()
+      if (!result.error) {
+        setHasCateringProducts(result)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   useEffect(() => {
@@ -413,9 +434,7 @@ export const Checkout = (props) => {
 
   useEffect(() => {
     if (configs.loading || businessDetails.loading) return
-
-    setDefaultOptionsVaXMiCuenta(JSON.parse(configs.configs?.va_por_mi_cuenta?.value).find((value) => value.brand_id == parseInt(businessDetails?.business?.brand_id)))
-
+    setDefaultOptionsVaXMiCuenta(JSON.parse(configs.configs?.va_por_mi_cuenta?.value).find((value) => value.brand_id === parseInt(businessDetails?.business?.brand_id)))
   }, [configs.loading, businessDetails.loading])
 
   useEffect(() => {
@@ -435,7 +454,6 @@ export const Checkout = (props) => {
         })
         const result = await response.json()
         if (!result.error) {
-          console.log(result)
           refreshOrderOptions()
         }
       } catch (err) {
@@ -450,11 +468,10 @@ export const Checkout = (props) => {
   }, [vaXMiCuenta.selectedOption])
 
   useEffect(() => {
-    if(uberDirect.isUberDirect) {
+    if (uberDirect.isUberDirect) {
       checkAmountToHideCash()
     }
   }, [uberDirect.isUberDirect])
-
 
   /**
    * Update carts from sockets
@@ -483,6 +500,12 @@ export const Checkout = (props) => {
     checkUberDirect()
   }, [])
 
+  useEffect(() => {
+    if (businessDetails?.business?.brand_id) {
+      cartCateringEvaluate()
+    }
+  }, [businessDetails])
+
   return (
     <>
       {UIComponent && (
@@ -500,6 +523,7 @@ export const Checkout = (props) => {
           defaultOptionsVaXMiCuenta={defaultOptionsVaXMiCuenta}
           vaXMiCuenta={vaXMiCuenta}
           uberDirect={uberDirect}
+          hasCateringProducts={hasCateringProducts}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
           handleChangeComment={handleChangeComment}
