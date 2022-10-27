@@ -219,6 +219,11 @@ var Checkout = function Checkout(props) {
       _useState20 = _slicedToArray(_useState19, 2),
       uberDirect = _useState20[0],
       setUberDirect = _useState20[1];
+
+  var _useState21 = (0, _react.useState)(false),
+      _useState22 = _slicedToArray(_useState21, 2),
+      hasCateringProducts = _useState22[0],
+      setHasCateringProducts = _useState22[1];
   /**
    * Current cart
    */
@@ -854,6 +859,61 @@ var Checkout = function Checkout(props) {
     };
   }();
 
+  var cartCateringEvaluate = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+      var _businessDetails$busi, response, result;
+
+      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              _context9.prev = 0;
+              _context9.next = 3;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/is_catering.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  uuid: cart.uuid,
+                  brand_id: businessDetails === null || businessDetails === void 0 ? void 0 : (_businessDetails$busi = businessDetails.business) === null || _businessDetails$busi === void 0 ? void 0 : _businessDetails$busi.brand_id
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId
+                }
+              });
+
+            case 3:
+              response = _context9.sent;
+              _context9.next = 6;
+              return response.json();
+
+            case 6:
+              result = _context9.sent;
+
+              if (!result.error) {
+                setHasCateringProducts(result);
+              }
+
+              _context9.next = 13;
+              break;
+
+            case 10:
+              _context9.prev = 10;
+              _context9.t0 = _context9["catch"](0);
+              console.log(_context9.t0);
+
+            case 13:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9, null, [[0, 10]]);
+    }));
+
+    return function cartCateringEvaluate() {
+      return _ref9.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     if (businessId && typeof businessId === 'number') {
       getBusiness();
@@ -868,23 +928,23 @@ var Checkout = function Checkout(props) {
 
     if (configs.loading || businessDetails.loading) return;
     setDefaultOptionsVaXMiCuenta(JSON.parse((_configs$configs = configs.configs) === null || _configs$configs === void 0 ? void 0 : (_configs$configs$va_p = _configs$configs.va_por_mi_cuenta) === null || _configs$configs$va_p === void 0 ? void 0 : _configs$configs$va_p.value).find(function (value) {
-      var _businessDetails$busi;
+      var _businessDetails$busi2;
 
-      return value.brand_id == parseInt(businessDetails === null || businessDetails === void 0 ? void 0 : (_businessDetails$busi = businessDetails.business) === null || _businessDetails$busi === void 0 ? void 0 : _businessDetails$busi.brand_id);
+      return value.brand_id === parseInt(businessDetails === null || businessDetails === void 0 ? void 0 : (_businessDetails$busi2 = businessDetails.business) === null || _businessDetails$busi2 === void 0 ? void 0 : _businessDetails$busi2.brand_id);
     }));
   }, [configs.loading, businessDetails.loading]);
   (0, _react.useEffect)(function () {
     if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return;
 
     var applyDonation = /*#__PURE__*/function () {
-      var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+      var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
         var response, result;
-        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        return _regeneratorRuntime().wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context9.prev = _context9.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
-                _context9.prev = 0;
-                _context9.next = 3;
+                _context10.prev = 0;
+                _context10.next = 3;
                 return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php"), {
                   method: 'POST',
                   body: JSON.stringify({
@@ -898,39 +958,38 @@ var Checkout = function Checkout(props) {
                 });
 
               case 3:
-                response = _context9.sent;
-                _context9.next = 6;
+                response = _context10.sent;
+                _context10.next = 6;
                 return response.json();
 
               case 6:
-                result = _context9.sent;
+                result = _context10.sent;
 
                 if (!result.error) {
-                  console.log(result);
                   refreshOrderOptions();
                 }
 
-                _context9.next = 13;
+                _context10.next = 13;
                 break;
 
               case 10:
-                _context9.prev = 10;
-                _context9.t0 = _context9["catch"](0);
+                _context10.prev = 10;
+                _context10.t0 = _context10["catch"](0);
                 setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
                   loading: false,
-                  error: [_context9.t0.message]
+                  error: [_context10.t0.message]
                 }));
 
               case 13:
               case "end":
-                return _context9.stop();
+                return _context10.stop();
             }
           }
-        }, _callee9, null, [[0, 10]]);
+        }, _callee10, null, [[0, 10]]);
       }));
 
       return function applyDonation() {
-        return _ref9.apply(this, arguments);
+        return _ref10.apply(this, arguments);
       };
     }();
 
@@ -968,6 +1027,13 @@ var Checkout = function Checkout(props) {
     getDeliveryOptions();
     checkUberDirect();
   }, []);
+  (0, _react.useEffect)(function () {
+    var _businessDetails$busi3;
+
+    if (businessDetails !== null && businessDetails !== void 0 && (_businessDetails$busi3 = businessDetails.business) !== null && _businessDetails$busi3 !== void 0 && _businessDetails$busi3.brand_id) {
+      cartCateringEvaluate();
+    }
+  }, [businessDetails]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,
@@ -981,6 +1047,7 @@ var Checkout = function Checkout(props) {
     defaultOptionsVaXMiCuenta: defaultOptionsVaXMiCuenta,
     vaXMiCuenta: vaXMiCuenta,
     uberDirect: uberDirect,
+    hasCateringProducts: hasCateringProducts,
     handlePaymethodChange: handlePaymethodChange,
     handlerClickPlaceOrder: handlerClickPlaceOrder,
     handleChangeComment: handleChangeComment,
