@@ -220,7 +220,11 @@ var Checkout = function Checkout(props) {
       uberDirect = _useState20[0],
       setUberDirect = _useState20[1];
 
-  var _useState21 = (0, _react.useState)(false),
+  var _useState21 = (0, _react.useState)({
+    result: false,
+    loading: true,
+    error: false
+  }),
       _useState22 = _slicedToArray(_useState21, 2),
       hasCateringProducts = _useState22[0],
       setHasCateringProducts = _useState22[1];
@@ -868,7 +872,10 @@ var Checkout = function Checkout(props) {
           switch (_context9.prev = _context9.next) {
             case 0:
               _context9.prev = 0;
-              _context9.next = 3;
+              setHasCateringProducts(_objectSpread(_objectSpread({}, hasCateringProducts), {}, {
+                loading: true
+              }));
+              _context9.next = 4;
               return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/is_catering.php"), {
                 method: 'POST',
                 body: JSON.stringify({
@@ -881,32 +888,47 @@ var Checkout = function Checkout(props) {
                 }
               });
 
-            case 3:
+            case 4:
               response = _context9.sent;
-              _context9.next = 6;
+              _context9.next = 7;
               return response.json();
 
-            case 6:
+            case 7:
               result = _context9.sent;
 
-              if (!result.error) {
-                setHasCateringProducts(result);
+              if (result.error) {
+                _context9.next = 11;
+                break;
               }
 
-              _context9.next = 13;
+              setHasCateringProducts(_objectSpread(_objectSpread({}, hasCateringProducts), {}, {
+                loading: false,
+                result: result
+              }));
+              return _context9.abrupt("return");
+
+            case 11:
+              setHasCateringProducts(_objectSpread(_objectSpread({}, hasCateringProducts), {}, {
+                loading: false,
+                error: true
+              }));
+              _context9.next = 17;
               break;
 
-            case 10:
-              _context9.prev = 10;
+            case 14:
+              _context9.prev = 14;
               _context9.t0 = _context9["catch"](0);
-              console.log(_context9.t0);
+              setHasCateringProducts(_objectSpread(_objectSpread({}, hasCateringProducts), {}, {
+                loading: false,
+                error: true
+              }));
 
-            case 13:
+            case 17:
             case "end":
               return _context9.stop();
           }
         }
-      }, _callee9, null, [[0, 10]]);
+      }, _callee9, null, [[0, 14]]);
     }));
 
     return function cartCateringEvaluate() {
