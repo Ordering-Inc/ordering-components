@@ -77,7 +77,7 @@ export const Checkout = (props) => {
 
   const [uberDirect, setUberDirect] = useState({ isUberDirect: false, amountToHide: null })
 
-  const [hasCateringProducts, setHasCateringProducts] = useState(false)
+  const [hasCateringProducts, setHasCateringProducts] = useState({ result: false, loading: true, error: false })
   /**
    * Current cart
    */
@@ -401,6 +401,10 @@ export const Checkout = (props) => {
 
   const cartCateringEvaluate = async () => {
     try {
+      setHasCateringProducts({
+        ...hasCateringProducts,
+        loading: true
+      })
       const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/is_catering.php`, {
         method: 'POST',
         body: JSON.stringify({
@@ -414,10 +418,24 @@ export const Checkout = (props) => {
       })
       const result = await response.json()
       if (!result.error) {
-        setHasCateringProducts(result)
+        setHasCateringProducts({
+          ...hasCateringProducts,
+          loading: false,
+          result
+        })
+        return
       }
+      setHasCateringProducts({
+        ...hasCateringProducts,
+        loading: false,
+        error: true
+      })
     } catch (err) {
-      console.log(err)
+      setHasCateringProducts({
+        ...hasCateringProducts,
+        loading: false,
+        error: true
+      })
     }
   }
 
