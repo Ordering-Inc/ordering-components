@@ -14,6 +14,7 @@ export const Checkout = (props) => {
     cartState,
     propsToFetch,
     actionsBeforePlace,
+    isPfchangs,
     handleCustomClick,
     onPlaceOrderClick,
     UIComponent
@@ -519,10 +520,10 @@ export const Checkout = (props) => {
   }, [])
 
   useEffect(() => {
-    if (businessDetails?.business?.brand_id) {
+    if (businessDetails?.business?.brand_id && isPfchangs) {
       cartCateringEvaluate()
     }
-  }, [businessDetails])
+  }, [businessDetails, isPfchangs])
 
   return (
     <>
