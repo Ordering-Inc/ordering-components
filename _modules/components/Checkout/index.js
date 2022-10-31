@@ -72,6 +72,7 @@ var Checkout = function Checkout(props) {
   var cartState = props.cartState,
       propsToFetch = props.propsToFetch,
       actionsBeforePlace = props.actionsBeforePlace,
+      isPfchangs = props.isPfchangs,
       handleCustomClick = props.handleCustomClick,
       onPlaceOrderClick = props.onPlaceOrderClick,
       UIComponent = props.UIComponent;
@@ -1052,10 +1053,10 @@ var Checkout = function Checkout(props) {
   (0, _react.useEffect)(function () {
     var _businessDetails$busi3;
 
-    if (businessDetails !== null && businessDetails !== void 0 && (_businessDetails$busi3 = businessDetails.business) !== null && _businessDetails$busi3 !== void 0 && _businessDetails$busi3.brand_id) {
+    if (businessDetails !== null && businessDetails !== void 0 && (_businessDetails$busi3 = businessDetails.business) !== null && _businessDetails$busi3 !== void 0 && _businessDetails$busi3.brand_id && isPfchangs) {
       cartCateringEvaluate();
     }
-  }, [businessDetails]);
+  }, [businessDetails, isPfchangs]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,
