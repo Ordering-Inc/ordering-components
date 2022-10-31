@@ -501,7 +501,7 @@ var OrderProvider = function OrderProvider(_ref) {
    */
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(changes) {
-      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options9, _state$options9$addre, headers, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
+      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options9, _state$options9$addre, _ref7, _state$options10, _state$options10$addr, headers, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
@@ -530,7 +530,7 @@ var OrderProvider = function OrderProvider(_ref) {
               headers = {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               };
-              countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : countryCodeFromLocalStorage;
+              countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : (_ref7 = countryCodeFromLocalStorage !== null && countryCodeFromLocalStorage !== void 0 ? countryCodeFromLocalStorage : changes === null || changes === void 0 ? void 0 : changes.country_code) !== null && _ref7 !== void 0 ? _ref7 : state === null || state === void 0 ? void 0 : (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : (_state$options10$addr = _state$options10.address) === null || _state$options10$addr === void 0 ? void 0 : _state$options10$addr.country_code;
               if (!countryCode) {
                 _context5.next = 18;
                 break;
@@ -603,7 +603,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
   var addProduct = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(product, cart, isQuickAddProduct) {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(product, cart, isQuickAddProduct) {
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
@@ -665,7 +665,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee6, null, [[0, 18]]);
     }));
     return function addProduct(_x6, _x7, _x8) {
-      return _ref7.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
 
@@ -673,7 +673,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Remove product to cart
    */
   var removeProduct = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart) {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart) {
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) {
@@ -737,7 +737,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee7, null, [[0, 18]]);
     }));
     return function removeProduct(_x9, _x10) {
-      return _ref8.apply(this, arguments);
+      return _ref9.apply(this, arguments);
     };
   }();
 
@@ -745,7 +745,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Clear products of cart
    */
   var clearCart = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(uuid) {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(uuid) {
       var customerFromLocalStorage, userCustomerId, body, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) {
@@ -809,7 +809,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee8, null, [[0, 20]]);
     }));
     return function clearCart(_x11) {
-      return _ref9.apply(this, arguments);
+      return _ref10.apply(this, arguments);
     };
   }();
 
@@ -817,7 +817,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Update product to cart
    */
   var updateProduct = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart, isQuickAddProduct) {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart, isQuickAddProduct) {
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) {
@@ -878,7 +878,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee9, null, [[0, 18]]);
     }));
     return function updateProduct(_x12, _x13, _x14) {
-      return _ref10.apply(this, arguments);
+      return _ref11.apply(this, arguments);
     };
   }();
 
@@ -886,7 +886,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Apply coupon to cart
    */
   var applyCoupon = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(couponData, customParams) {
+    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(couponData, customParams) {
       var _state$carts;
       var response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, content, result;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
@@ -1000,11 +1000,11 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee10, null, [[6, 34]]);
     }));
     return function applyCoupon(_x15, _x16) {
-      return _ref11.apply(this, arguments);
+      return _ref12.apply(this, arguments);
     };
   }();
   var applyOffer = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(offerData) {
+    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(offerData) {
       var _offerData$force, response, result;
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {
         while (1) {
@@ -1074,11 +1074,11 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee11, null, [[4, 17]]);
     }));
     return function applyOffer(_x17) {
-      return _ref12.apply(this, arguments);
+      return _ref13.apply(this, arguments);
     };
   }();
   var removeOffer = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(offerData) {
+    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(offerData) {
       var response, result;
       return _regeneratorRuntime().wrap(function _callee12$(_context12) {
         while (1) {
@@ -1146,7 +1146,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee12, null, [[4, 17]]);
     }));
     return function removeOffer(_x18) {
-      return _ref13.apply(this, arguments);
+      return _ref14.apply(this, arguments);
     };
   }();
 
@@ -1154,7 +1154,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Apply coupon to cart
    */
   var changeDriverTip = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(businessId) {
+    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(businessId) {
       var _state$carts2;
       var driverTipRate,
         isFixedPrice,
@@ -1242,7 +1242,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee13, null, [[8, 26]]);
     }));
     return function changeDriverTip(_x19) {
-      return _ref14.apply(this, arguments);
+      return _ref15.apply(this, arguments);
     };
   }();
 
@@ -1250,7 +1250,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Change payment method
    */
   var changePaymethod = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId, paymethodId, paymethodData) {
+    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId, paymethodId, paymethodData) {
       var _state$carts3;
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
       return _regeneratorRuntime().wrap(function _callee14$(_context14) {
@@ -1327,7 +1327,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee14, null, [[8, 26]]);
     }));
     return function changePaymethod(_x20, _x21, _x22) {
-      return _ref15.apply(this, arguments);
+      return _ref16.apply(this, arguments);
     };
   }();
 
@@ -1335,7 +1335,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Place cart
    */
   var placeCart = /*#__PURE__*/function () {
-    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(cardId, data) {
+    var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(cardId, data) {
       var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
       return _regeneratorRuntime().wrap(function _callee15$(_context15) {
         while (1) {
@@ -1423,7 +1423,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee15, null, [[0, 24]]);
     }));
     return function placeCart(_x23, _x24) {
-      return _ref16.apply(this, arguments);
+      return _ref17.apply(this, arguments);
     };
   }();
 
@@ -1431,7 +1431,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Place multi carts
    */
   var placeMulitCarts = /*#__PURE__*/function () {
-    var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(data) {
+    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(data) {
       var requestOptions, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee16$(_context16) {
         while (1) {
@@ -1505,7 +1505,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16, null, [[0, 16]]);
     }));
     return function placeMulitCarts(_x25) {
-      return _ref17.apply(this, arguments);
+      return _ref18.apply(this, arguments);
     };
   }();
 
@@ -1513,7 +1513,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Confirm cart
    */
   var confirmCart = /*#__PURE__*/function () {
-    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(cardId, data) {
+    var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(cardId, data) {
       var customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
       return _regeneratorRuntime().wrap(function _callee17$(_context17) {
         while (1) {
@@ -1592,7 +1592,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee17, null, [[0, 22]]);
     }));
     return function confirmCart(_x26, _x27) {
-      return _ref18.apply(this, arguments);
+      return _ref19.apply(this, arguments);
     };
   }();
 
@@ -1600,7 +1600,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Reorder an order and get cart
    */
   var reorder = /*#__PURE__*/function () {
-    var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(orderId) {
+    var _ref20 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(orderId) {
       var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
       return _regeneratorRuntime().wrap(function _callee18$(_context18) {
         while (1) {
@@ -1667,7 +1667,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee18, null, [[0, 20]]);
     }));
     return function reorder(_x28) {
-      return _ref19.apply(this, arguments);
+      return _ref20.apply(this, arguments);
     };
   }();
   var changeCityFilter = function changeCityFilter(id) {
@@ -1676,8 +1676,8 @@ var OrderProvider = function OrderProvider(_ref) {
     });
   };
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
-    var _ref20 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19() {
-      var _configState$configs4, _configState$configs5, _state$options10;
+    var _ref21 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19() {
+      var _configState$configs4, _configState$configs5, _state$options11;
       var optionsLocalStorage;
       return _regeneratorRuntime().wrap(function _callee19$(_context19) {
         while (1) {
@@ -1695,7 +1695,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 } : {
                   type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
                   moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
-                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : _state$options10.address) || {},
+                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options11 = state.options) === null || _state$options11 === void 0 ? void 0 : _state$options11.address) || {},
                   city_id: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.city_id) || null
                 }
               }));
@@ -1707,7 +1707,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee19);
     }));
     return function setOptionFromLocalStorage() {
-      return _ref20.apply(this, arguments);
+      return _ref21.apply(this, arguments);
     };
   }();
 
@@ -1715,7 +1715,7 @@ var OrderProvider = function OrderProvider(_ref) {
   * get Latest past Order that has no review
   */
   var getLastOrderHasNoReview = /*#__PURE__*/function () {
-    var _ref21 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
+    var _ref22 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
       var pastOrderTypes, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder;
       return _regeneratorRuntime().wrap(function _callee20$(_context20) {
         while (1) {
@@ -1767,14 +1767,14 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee20);
     }));
     return function getLastOrderHasNoReview() {
-      return _ref21.apply(this, arguments);
+      return _ref22.apply(this, arguments);
     };
   }();
   var setStateValues = function setStateValues(values) {
     setState(_objectSpread(_objectSpread({}, state), values));
   };
   var setUserCustomerOptions = /*#__PURE__*/function () {
-    var _ref22 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21(params) {
+    var _ref23 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21(params) {
       var _params$options, _params$customer;
       var options;
       return _regeneratorRuntime().wrap(function _callee21$(_context21) {
@@ -1802,7 +1802,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee21);
     }));
     return function setUserCustomerOptions(_x29) {
-      return _ref22.apply(this, arguments);
+      return _ref23.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
@@ -1863,9 +1863,9 @@ var OrderProvider = function OrderProvider(_ref) {
         loading: false
       }));
     };
-    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref23) {
-      var carts = _ref23.carts,
-        options = _objectWithoutProperties(_ref23, _excluded3);
+    var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref24) {
+      var carts = _ref24.carts,
+        options = _objectWithoutProperties(_ref24, _excluded3);
       if (!isDisableToast) {
         showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER_OPTIONS', 'Updating order options...'));
       }
