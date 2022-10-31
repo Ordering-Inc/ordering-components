@@ -303,7 +303,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }
         const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
           ? changes?.country_code
-          : countryCodeFromLocalStorage
+          : countryCodeFromLocalStorage ?? changes?.country_code ?? state?.options?.address?.country_code
 
         if (countryCode) {
           headers = {
