@@ -520,10 +520,10 @@ export const Checkout = (props) => {
   }, [])
 
   useEffect(() => {
-    if (businessDetails?.business?.brand_id && isPfchangs) {
+    if (businessDetails?.business?.brand_id) {
       cartCateringEvaluate()
     }
-  }, [businessDetails, isPfchangs])
+  }, [businessDetails])
 
   return (
     <>
