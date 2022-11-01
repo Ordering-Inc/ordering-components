@@ -1053,10 +1053,10 @@ var Checkout = function Checkout(props) {
   (0, _react.useEffect)(function () {
     var _businessDetails$busi3;
 
-    if (businessDetails !== null && businessDetails !== void 0 && (_businessDetails$busi3 = businessDetails.business) !== null && _businessDetails$busi3 !== void 0 && _businessDetails$busi3.brand_id && isPfchangs) {
+    if (businessDetails !== null && businessDetails !== void 0 && (_businessDetails$busi3 = businessDetails.business) !== null && _businessDetails$busi3 !== void 0 && _businessDetails$busi3.brand_id) {
       cartCateringEvaluate();
     }
-  }, [businessDetails, isPfchangs]);
+  }, [businessDetails]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,
