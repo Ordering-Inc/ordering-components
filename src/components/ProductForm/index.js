@@ -13,7 +13,9 @@ export const ProductForm = (props) => {
     handleCustomSave,
     isStarbucks,
     isService,
-    productAddedToCartLength
+    isCartProduct,
+    productAddedToCartLength,
+    professionalList
   } = props
 
   const requestsState = {}
@@ -47,6 +49,8 @@ export const ProductForm = (props) => {
    * Custom Suboption by default
    */
   const [customDefaultSubOptions, setCustomDefaultSubOptions] = useState([])
+
+  const [professionalListState, setProfessionalListState] = useState({ loading: false, professionals: [], error: null })
 
   /**
    * Edit mode
@@ -485,6 +489,39 @@ export const ProductForm = (props) => {
   }
 
   /**
+   * Load professionals from API
+   */
+  const getProfessionalList = async () => {
+    try {
+      setProfessionalListState({ ...professionalListState, loading: true })
+      const { content: { result, error } } = await ordering
+        .businesses(props.businessId)
+        .select(['id', 'professionals'])
+        .get()
+
+      if (!error) {
+        setProfessionalListState({
+          ...professionalListState,
+          loading: false,
+          professionals: result?.professionals ?? []
+        })
+        return
+      }
+      setProfessionalListState({
+        ...professionalListState,
+        loading: false,
+        error: [result]
+      })
+    } catch (err) {
+      setProfessionalListState({
+        ...professionalListState,
+        loading: false,
+        error: [err.message]
+      })
+    }
+  }
+
+  /**
    * Init product cart when product changed
    */
   useEffect(() => {
@@ -631,6 +668,19 @@ export const ProductForm = (props) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!isService) return
+
+    if (isCartProduct) {
+      getProfessionalList()
+    } else {
+      setProfessionalListState({
+        ...professionalListState,
+        professionals: professionalList
+      })
+    }
+  }, [isService, isCartProduct, professionalList])
+
   return (
     <>
       {
@@ -651,6 +701,7 @@ export const ProductForm = (props) => {
             handleChangeIngredientState={handleChangeIngredientState}
             handleChangeSuboptionState={handleChangeSuboptionState}
             handleChangeCommentState={handleChangeCommentState}
+            professionalListState={professionalListState}
           />
         )
       }
