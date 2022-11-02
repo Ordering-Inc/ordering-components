@@ -39,7 +39,9 @@ var ProductForm = function ProductForm(props) {
     handleCustomSave = props.handleCustomSave,
     isStarbucks = props.isStarbucks,
     isService = props.isService,
-    productAddedToCartLength = props.productAddedToCartLength;
+    isCartProduct = props.isCartProduct,
+    productAddedToCartLength = props.productAddedToCartLength,
+    professionalList = props.professionalList;
   var requestsState = {};
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -96,6 +98,14 @@ var ProductForm = function ProductForm(props) {
     _useState10 = _slicedToArray(_useState9, 2),
     customDefaultSubOptions = _useState10[0],
     setCustomDefaultSubOptions = _useState10[1];
+  var _useState11 = (0, _react.useState)({
+      loading: false,
+      professionals: [],
+      error: null
+    }),
+    _useState12 = _slicedToArray(_useState11, 2),
+    professionalListState = _useState12[0],
+    setProfessionalListState = _useState12[1];
 
   /**
    * Edit mode
@@ -597,6 +607,62 @@ var ProductForm = function ProductForm(props) {
   };
 
   /**
+   * Load professionals from API
+   */
+  var getProfessionalList = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var _yield$ordering$busin3, _yield$ordering$busin4, result, error, _result$professionals;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
+              setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
+                loading: true
+              }));
+              _context3.next = 4;
+              return ordering.businesses(props.businessId).select(['id', 'professionals']).get();
+            case 4:
+              _yield$ordering$busin3 = _context3.sent;
+              _yield$ordering$busin4 = _yield$ordering$busin3.content;
+              result = _yield$ordering$busin4.result;
+              error = _yield$ordering$busin4.error;
+              if (error) {
+                _context3.next = 11;
+                break;
+              }
+              setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
+                loading: false,
+                professionals: (_result$professionals = result === null || result === void 0 ? void 0 : result.professionals) !== null && _result$professionals !== void 0 ? _result$professionals : []
+              }));
+              return _context3.abrupt("return");
+            case 11:
+              setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
+                loading: false,
+                error: [result]
+              }));
+              _context3.next = 17;
+              break;
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](0);
+              setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
+                loading: false,
+                error: [_context3.t0.message]
+              }));
+            case 17:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 14]]);
+    }));
+    return function getProfessionalList() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  /**
    * Init product cart when product changed
    */
   (0, _react.useEffect)(function () {
@@ -626,8 +692,8 @@ var ProductForm = function ProductForm(props) {
    */
   (0, _react.useEffect)(function () {
     if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-      var _ref4, _ref5;
-      var options = (_ref4 = []).concat.apply(_ref4, _toConsumableArray(product.product.extras.map(function (extra) {
+      var _ref5, _ref6;
+      var options = (_ref5 = []).concat.apply(_ref5, _toConsumableArray(product.product.extras.map(function (extra) {
         return extra.options.filter(function (option) {
           return option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
             return suboption.enabled;
@@ -639,7 +705,7 @@ var ProductForm = function ProductForm(props) {
       if (!(options !== null && options !== void 0 && options.length)) {
         return;
       }
-      var suboptions = (_ref5 = []).concat.apply(_ref5, _toConsumableArray(options.map(function (option) {
+      var suboptions = (_ref6 = []).concat.apply(_ref6, _toConsumableArray(options.map(function (option) {
         return option.suboptions;
       }))).filter(function (suboption) {
         return suboption.enabled;
@@ -680,8 +746,8 @@ var ProductForm = function ProductForm(props) {
   if (isStarbucks) {
     (0, _react.useEffect)(function () {
       if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-        var _ref6, _ref7;
-        var options = (_ref6 = []).concat.apply(_ref6, _toConsumableArray(product.product.extras.map(function (extra) {
+        var _ref7, _ref8;
+        var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
           return extra.options.filter(function (option) {
             return option.name === 'Tamaño' && option.suboptions.filter(function (suboption) {
               return suboption.name === 'Grande (16oz - 437ml)';
@@ -691,7 +757,7 @@ var ProductForm = function ProductForm(props) {
         if (!(options !== null && options !== void 0 && options.length)) {
           return;
         }
-        var suboptions = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(options.map(function (option) {
+        var suboptions = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(options.map(function (option) {
           return option.suboptions;
         }))).filter(function (suboption) {
           return suboption.name === 'Grande (16oz - 437ml)';
@@ -746,6 +812,16 @@ var ProductForm = function ProductForm(props) {
       }
     };
   }, []);
+  (0, _react.useEffect)(function () {
+    if (!isService) return;
+    if (isCartProduct) {
+      getProfessionalList();
+    } else {
+      setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
+        professionals: professionalList
+      }));
+    }
+  }, [isService, isCartProduct, professionalList]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     productObject: product,
     productCart: productCart,
@@ -760,7 +836,8 @@ var ProductForm = function ProductForm(props) {
     showOption: showOption,
     handleChangeIngredientState: handleChangeIngredientState,
     handleChangeSuboptionState: handleChangeSuboptionState,
-    handleChangeCommentState: handleChangeCommentState
+    handleChangeCommentState: handleChangeCommentState,
+    professionalListState: professionalListState
   })));
 };
 exports.ProductForm = ProductForm;
