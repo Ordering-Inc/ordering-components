@@ -85,21 +85,41 @@ var UserFormDetails = function UserFormDetails(props) {
     setFormState = _useState6[1];
   var _useState7 = (0, _react.useState)({
       loading: false,
+      changes: {},
       result: {
         error: false
       }
     }),
     _useState8 = _slicedToArray(_useState7, 2),
-    verifyPhoneState = _useState8[0],
-    setVerifyPhoneState = _useState8[1];
+    notificationsGroup = _useState8[0],
+    setNotificationsGroup = _useState8[1];
   var _useState9 = (0, _react.useState)({
+      loading: false,
+      changes: {},
+      result: {
+        error: false
+      }
+    }),
+    _useState10 = _slicedToArray(_useState9, 2),
+    singleNotifications = _useState10[0],
+    setSingleNotifications = _useState10[1];
+  var _useState11 = (0, _react.useState)({
+      loading: false,
+      result: {
+        error: false
+      }
+    }),
+    _useState12 = _slicedToArray(_useState11, 2),
+    verifyPhoneState = _useState12[0],
+    setVerifyPhoneState = _useState12[1];
+  var _useState13 = (0, _react.useState)({
       loading: false,
       error: null,
       result: null
     }),
-    _useState10 = _slicedToArray(_useState9, 2),
-    removeAccountState = _useState10[0],
-    setAccountState = _useState10[1];
+    _useState14 = _slicedToArray(_useState13, 2),
+    removeAccountState = _useState14[0],
+    setAccountState = _useState14[1];
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
@@ -162,7 +182,7 @@ var UserFormDetails = function UserFormDetails(props) {
    */
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
-      var response, _props$userData, _formState$changes, photo, _changes, _props$userData2, _changes$setCustomerI;
+      var response, _props$userData, _formState$changes, photo, _changes2, _props$userData2, _changes$setCustomerI;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -192,9 +212,9 @@ var UserFormDetails = function UserFormDetails(props) {
               });
             case 8:
               response = _context.sent;
-              _formState$changes = formState.changes, photo = _formState$changes.photo, _changes = _objectWithoutProperties(_formState$changes, _excluded);
+              _formState$changes = formState.changes, photo = _formState$changes.photo, _changes2 = _objectWithoutProperties(_formState$changes, _excluded);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-                changes: response.content.error ? formState.changes : _changes,
+                changes: response.content.error ? formState.changes : _changes2,
                 result: response.content,
                 loading: false
               }));
@@ -426,35 +446,123 @@ var UserFormDetails = function UserFormDetails(props) {
       return _ref3.apply(this, arguments);
     };
   }();
+  var updatePromotions = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(change, setState, state) {
+      var _props$userData4, response, _change$setCustomerIn;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              _context4.next = 3;
+              return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData4 = props.userData) === null || _props$userData4 === void 0 ? void 0 : _props$userData4.id) || userState.result.result.id).save(change, {
+                accessToken: accessToken
+              });
+            case 3:
+              response = _context4.sent;
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                changes: response.content.error ? change : {},
+                result: response.content,
+                loading: false
+              }));
+              if (!response.content.error) {
+                setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                  result: _objectSpread(_objectSpread({}, userState.result), response.content)
+                }));
+                if (!isCustomerMode) {
+                  changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
+                } else {
+                  setUserCustomer(_objectSpread(_objectSpread({}, customer.user), response.content.result), (_change$setCustomerIn = change === null || change === void 0 ? void 0 : change.setCustomerInLocal) !== null && _change$setCustomerIn !== void 0 ? _change$setCustomerIn : true);
+                }
+                if (handleSuccessUpdate) {
+                  handleSuccessUpdate(response.content.result);
+                }
+              }
+              _context4.next = 11;
+              break;
+            case 8:
+              _context4.prev = 8;
+              _context4.t0 = _context4["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                result: {
+                  error: true,
+                  result: _context4.t0.message
+                },
+                loading: false
+              }));
+            case 11:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[0, 8]]);
+    }));
+    return function updatePromotions(_x6, _x7, _x8) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
   var handleChangePromotions = function handleChangePromotions(enabled) {
+    var _ref5;
+    var isSingle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    var _changes = {
+      settings: {
+        email: {
+          newsletter: !isSingle ? enabled : enabled === null || enabled === void 0 ? void 0 : enabled.email,
+          promotions: !isSingle ? enabled : enabled === null || enabled === void 0 ? void 0 : enabled.email
+        },
+        notification: {
+          newsletter: !isSingle ? enabled : enabled === null || enabled === void 0 ? void 0 : enabled.notification,
+          promotions: !isSingle ? enabled : enabled === null || enabled === void 0 ? void 0 : enabled.notification
+        },
+        sms: {
+          newsletter: !isSingle ? enabled : enabled === null || enabled === void 0 ? void 0 : enabled.sms,
+          promotions: !isSingle ? enabled : enabled === null || enabled === void 0 ? void 0 : enabled.sms
+        }
+      }
+    };
+    var state = {
+      changes: _objectSpread(_objectSpread({}, (_ref5 = [isSingle ? singleNotifications : notificationsGroup]) === null || _ref5 === void 0 ? void 0 : _ref5.changes), _changes),
+      loading: true
+    };
+    if (isSingle) {
+      setSingleNotifications(_objectSpread(_objectSpread({}, singleNotifications), state));
+      return;
+    }
+    setNotificationsGroup(_objectSpread(_objectSpread({}, notificationsGroup), state));
+  };
+  var handleChangeNotifications = function handleChangeNotifications(value) {
     setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-      changes: _objectSpread(_objectSpread({}, formState.changes), {}, {
+      changes: _objectSpread(_objectSpread({}, formState === null || formState === void 0 ? void 0 : formState.changes), {}, {
         settings: {
+          email: {
+            newsletter: value === null || value === void 0 ? void 0 : value.email,
+            promotions: value === null || value === void 0 ? void 0 : value.email
+          },
           notification: {
-            newsletter: enabled,
-            promotions: enabled
+            newsletter: value === null || value === void 0 ? void 0 : value.notification,
+            promotions: value === null || value === void 0 ? void 0 : value.notification
           },
           sms: {
-            newsletter: enabled,
-            promotions: enabled
+            newsletter: value === null || value === void 0 ? void 0 : value.sms,
+            promotions: value === null || value === void 0 ? void 0 : value.sms
           }
         }
       })
     }));
   };
   var handleRemoveAccount = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(userId) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(userId) {
       var idToDelete, response, res;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               idToDelete = userId !== null && userId !== void 0 ? userId : session.user.id;
-              _context4.prev = 1;
+              _context5.prev = 1;
               setAccountState(_objectSpread(_objectSpread({}, removeAccountState), {}, {
                 loading: true
               }));
-              _context4.next = 5;
+              _context5.next = 5;
               return fetch("".concat(ordering.root, "/users/").concat(idToDelete), {
                 method: 'DELETE',
                 headers: {
@@ -463,36 +571,39 @@ var UserFormDetails = function UserFormDetails(props) {
                 }
               });
             case 5:
-              response = _context4.sent;
-              _context4.next = 8;
+              response = _context5.sent;
+              _context5.next = 8;
               return response.json();
             case 8:
-              res = _context4.sent;
+              res = _context5.sent;
               setAccountState(_objectSpread(_objectSpread({}, removeAccountState), {}, {
                 loading: false,
                 result: res === null || res === void 0 ? void 0 : res.result,
                 error: res === null || res === void 0 ? void 0 : res.error
               }));
-              _context4.next = 15;
+              _context5.next = 15;
               break;
             case 12:
-              _context4.prev = 12;
-              _context4.t0 = _context4["catch"](1);
+              _context5.prev = 12;
+              _context5.t0 = _context5["catch"](1);
               setAccountState(_objectSpread(_objectSpread({}, removeAccountState), {}, {
                 loading: false,
-                error: _context4.t0.message
+                error: _context5.t0.message
               }));
             case 15:
             case "end":
-              return _context4.stop();
+              return _context5.stop();
           }
         }
-      }, _callee4, null, [[1, 12]]);
+      }, _callee5, null, [[1, 12]]);
     }));
-    return function handleRemoveAccount(_x6) {
-      return _ref4.apply(this, arguments);
+    return function handleRemoveAccount(_x9) {
+      return _ref6.apply(this, arguments);
     };
   }();
+  (0, _react.useEffect)(function () {
+    updatePromotions(singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.changes : notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.changes, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? setSingleNotifications : setNotificationsGroup, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications : notificationsGroup);
+  }, [notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.loading, singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.loading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     isEdit: isEdit,
     cleanFormState: cleanFormState,
@@ -501,6 +612,8 @@ var UserFormDetails = function UserFormDetails(props) {
     removeAccountState: removeAccountState,
     validationFields: validationFields,
     showField: showField,
+    singleNotifications: singleNotifications,
+    notificationsGroup: notificationsGroup,
     setFormState: setFormState,
     isRequiredField: isRequiredField,
     handleChangeInput: handleChangeInput,
@@ -513,7 +626,8 @@ var UserFormDetails = function UserFormDetails(props) {
     handleSendVerifyCode: sendVerifyPhoneCode,
     verifyPhoneState: verifyPhoneState,
     handleChangePromotions: handleChangePromotions,
-    handleRemoveAccount: handleRemoveAccount
+    handleRemoveAccount: handleRemoveAccount,
+    handleChangeNotifications: handleChangeNotifications
   })));
 };
 exports.UserFormDetails = UserFormDetails;
