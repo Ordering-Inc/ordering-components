@@ -4,35 +4,30 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
-import { useOrder } from '../../contexts/OrderContext'
 
-export const SingleOrderCard = (props) => {
+export const SingleProfessionalCard = (props) => {
   const {
     UIComponent,
-    order,
-    handleReorder,
-    handleUpdateOrderList
+    professional,
+    handleUpdateProfessionals
   } = props
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
-  const [, t] = useLanguage()
   const [, { showToast }] = useToast()
-  const [{ carts }, { clearCart }] = useOrder()
+  const [, t] = useLanguage()
 
   const [actionState, setActionState] = useState({ loading: false, error: null })
-  const [cartState, setCartState] = useState({ loading: false, error: null })
 
   /**
    * Method to add, remove favorite info for user from API
    */
-  const handleFavoriteOrder = async (isAdd = false) => {
-    if (!order || !user) return
-
+  const handleFavoriteProfessional = async (isAdd = false) => {
+    if (!professional || !user) return
+    showToast(ToastType.Info, t('LOADING', 'loading'))
     try {
-      showToast(ToastType.Info, t('LOADING', 'loading'))
       setActionState({ ...actionState, loading: true, error: null })
-      const changes = { object_id: order?.id }
+      const changes = { object_id: professional?.id }
       const requestOptions = {
         method: isAdd ? 'POST' : 'DELETE',
         headers: {
@@ -43,15 +38,15 @@ export const SingleOrderCard = (props) => {
         ...(isAdd && { body: JSON.stringify(changes) })
       }
 
-      const fetchEndPoint = isAdd
-        ? `${ordering.root}/users/${user?.id}/favorite_orders`
-        : `${ordering.root}/users/${user.id}/favorite_orders/${order?.id}`
-      const response = await fetch(fetchEndPoint, requestOptions)
+      const fetchEndpoint = isAdd
+        ? `${ordering.root}/users/${user?.id}/favorite_users`
+        : `${ordering.root}/users/${user.id}/favorite_users/${professional?.id}`
+      const response = await fetch(fetchEndpoint, requestOptions)
       const content = await response.json()
 
       if (!content.error) {
         setActionState({ ...actionState, loading: false })
-        handleUpdateOrderList && handleUpdateOrderList(order?.id, { favorite: isAdd })
+        handleUpdateProfessionals && handleUpdateProfessionals(professional?.id, { favorite: isAdd })
         showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
       } else {
         setActionState({
@@ -71,85 +66,51 @@ export const SingleOrderCard = (props) => {
     }
   }
 
-  /**
-   * Method to remove products from cart
-   */
-  const handleRemoveCart = async () => {
-    const uuid = carts[`businessId:${order.business_id}`]?.uuid
-    if (!uuid) return
-    try {
-      setCartState({
-        ...cartState,
-        loading: true
-      })
-      const content = await clearCart(uuid)
-      if (!content?.error) {
-        handleReorder(order?.id)
-        setCartState({
-          loading: false,
-          error: null
-        })
-      } else {
-        setCartState({
-          loading: false,
-          error: content?.result
-        })
-      }
-    } catch (error) {
-      setCartState({
-        loading: false,
-        error: [error.message]
-      })
-    }
-  }
-
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          handleFavoriteOrder={handleFavoriteOrder}
+          handleFavoriteProfessional={handleFavoriteProfessional}
           actionState={actionState}
-          cartState={cartState}
-          handleRemoveCart={handleRemoveCart}
         />
       )}
     </>
   )
 }
 
-SingleOrderCard.propTypes = {
+SingleProfessionalCard.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: PropTypes.elementType,
   /**
-   * Order details to render
+   * Businessid, this must be contains an business id for get data from API
    */
-  order: PropTypes.object.isRequired,
+  businessId: PropTypes.number,
   /**
-   * Components types before Single order card
+   * Components types before products listing
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Components types after Single order card
+   * Components types after products listing
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: PropTypes.arrayOf(PropTypes.elementType),
   /**
-   * Elements before Single order card
+   * Elements before products listing
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: PropTypes.arrayOf(PropTypes.element),
   /**
-   * Elements after Single order card
+   * Elements after products listing
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-SingleOrderCard.defaultProps = {
+SingleProfessionalCard.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

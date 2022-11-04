@@ -51,7 +51,15 @@ export const Messages = (props) => {
         body.type = 3
         body.file = image
       }
-      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }, body: JSON.stringify(body) })
+      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId
+        },
+        body: JSON.stringify(body)
+      })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({

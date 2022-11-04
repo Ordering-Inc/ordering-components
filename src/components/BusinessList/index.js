@@ -291,8 +291,9 @@ export const BusinessList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
+        },
       }
       const functionFetch = `${ordering.root}/franchises/${franchiseId}`
 
@@ -310,7 +311,8 @@ export const BusinessList = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId
       }
     }
     setCitiesState({ ...citiesState, loading: true })

@@ -250,7 +250,12 @@ export const OrderList = props => {
       setMessages({ ...messages, loading: true })
       const url = `${ordering.root}/orders/${orderId}/messages?mode=dashboard`
 
-      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+        }
+      })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({

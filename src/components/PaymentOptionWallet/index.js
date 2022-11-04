@@ -41,7 +41,8 @@ export const PaymentOptionWallet = (props) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId
           }
         }
       )
@@ -53,7 +54,8 @@ export const PaymentOptionWallet = (props) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId
           }
         }
       )
@@ -101,7 +103,8 @@ export const PaymentOptionWallet = (props) => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId
           },
           body: JSON.stringify({
             wallet_id: wallet.id
@@ -129,7 +132,8 @@ export const PaymentOptionWallet = (props) => {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId
           }
         }
       )
