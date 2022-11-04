@@ -244,7 +244,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 Array.isArray(filters[key]) ? filtParams = filtParams + "&".concat(key, "=[").concat(filters[key], "]") : filtParams = filtParams + "&".concat(key, "=").concat(filters[key]);
               });
               filtParams = filtParams + isPfChangs ? '&forceOrderBy=enabled' : '&forceOrderBy=disabled';
-              filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 1 && defaultLocation ? '&max_distance=20000' : '');
+              filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 1 && defaultLocation && filters.max_distance ? "&max_distance=".concat(filters.max_distance) : '');
               filtParams = filtParams + "&page=".concat(newFetch ? 1 : paginationProps.currentPage + 1, "&page_size=").concat(paginationProps.pageSize);
               brandId && (filtParams = filtParams + "&franchise_ids=[".concat(brandId, "]"));
               setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
