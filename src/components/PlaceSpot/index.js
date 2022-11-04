@@ -44,13 +44,15 @@ export const PlaceSpot = (props) => {
 
       const responsePlaceGroups = await fetch(`${ordering.root}/business/${cart?.business_id}/place_groups`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        'X-App-X': ordering.appId
       })
       const { result: resultPlaceGroups, error: errorPlaceGroups } = await responsePlaceGroups.json()
 
       const responsePlaces = await fetch(`${ordering.root}/business/${cart?.business_id}/places`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        'X-App-X': ordering.appId
       })
       const { result: resultPlaces, error: errorPlaces } = await responsePlaces.json()
 

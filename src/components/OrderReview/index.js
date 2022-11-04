@@ -37,7 +37,8 @@ export const OrderReview = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${session.token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify(body)
       })

@@ -150,7 +150,8 @@ export const BusinessSearchList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       }
       const location = { lat: orderState.options?.address?.location?.lat || defaultLocation?.lat, lng: orderState.options?.address?.location?.lng || defaultLocation?.lng }
@@ -204,7 +205,8 @@ export const BusinessSearchList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       }
 
@@ -239,7 +241,8 @@ export const BusinessSearchList = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId
       }
     }
     setCitiesState({ ...citiesState, loading: true })
@@ -266,7 +269,8 @@ export const BusinessSearchList = (props) => {
       const requestOptions = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         }
       }
 

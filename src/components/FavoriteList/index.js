@@ -54,7 +54,8 @@ export const FavoriteList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       }
 
@@ -133,7 +134,8 @@ export const FavoriteList = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId
       }
     }
 
