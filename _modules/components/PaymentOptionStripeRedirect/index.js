@@ -92,7 +92,8 @@ var PaymentOptionStripeRedirect = function PaymentOptionStripeRedirect(props) {
               _context.next = 2;
               return fetch("".concat(ordering.root, "/payments/stripe/credentials"), {
                 headers: {
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
 

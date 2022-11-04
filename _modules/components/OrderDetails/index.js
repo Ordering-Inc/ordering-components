@@ -232,7 +232,8 @@ var OrderDetails = function OrderDetails(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(accessToken)
+                  Authorization: "Bearer ".concat(accessToken),
+                  'X-App-X': ordering.appId
                 }
               });
 
@@ -313,7 +314,8 @@ var OrderDetails = function OrderDetails(props) {
                 method: 'post',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   can_see: '0,2,3',
@@ -696,7 +698,8 @@ var OrderDetails = function OrderDetails(props) {
                 method: 'GET',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 }
               });
 

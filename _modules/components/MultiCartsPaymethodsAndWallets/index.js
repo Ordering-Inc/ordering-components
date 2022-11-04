@@ -137,7 +137,8 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(token)
+                  Authorization: "bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   carts: cartsUuids
@@ -263,7 +264,8 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
 

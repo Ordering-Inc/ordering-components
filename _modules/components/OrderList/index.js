@@ -537,7 +537,8 @@ var OrderList = function OrderList(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(accessToken)
+                  Authorization: "Bearer ".concat(accessToken),
+                  'X-App-X': ordering.appId
                 }
               });
 

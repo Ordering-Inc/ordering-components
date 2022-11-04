@@ -101,7 +101,8 @@ var Sessions = function Sessions(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
 
@@ -174,7 +175,8 @@ var Sessions = function Sessions(props) {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
 
@@ -261,7 +263,8 @@ var Sessions = function Sessions(props) {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   delete_current: deleteCurrent

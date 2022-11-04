@@ -106,7 +106,8 @@ var UserVerification = function UserVerification(props) {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   type: (_values$type = values === null || values === void 0 ? void 0 : values.type) !== null && _values$type !== void 0 ? _values$type : 3,
@@ -176,7 +177,8 @@ var UserVerification = function UserVerification(props) {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   channel: (_values$channel2 = values === null || values === void 0 ? void 0 : values.channel) !== null && _values$channel2 !== void 0 ? _values$channel2 : 1,
@@ -269,7 +271,8 @@ var UserVerification = function UserVerification(props) {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   type: (_values$type2 = values === null || values === void 0 ? void 0 : values.type) !== null && _values$type2 !== void 0 ? _values$type2 : 2,
@@ -340,7 +343,8 @@ var UserVerification = function UserVerification(props) {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   channel: (_values$channel4 = values === null || values === void 0 ? void 0 : values.channel) !== null && _values$channel4 !== void 0 ? _values$channel4 : 2,

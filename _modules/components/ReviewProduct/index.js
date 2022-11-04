@@ -124,7 +124,8 @@ var ReviewProduct = function ReviewProduct(props) {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(session.token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   reviews: JSON.stringify(formState === null || formState === void 0 ? void 0 : formState.changes)

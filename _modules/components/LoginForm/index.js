@@ -432,7 +432,8 @@ var LoginForm = function LoginForm(props) {
               return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   cellphone: values.cellphone,
@@ -515,7 +516,8 @@ var LoginForm = function LoginForm(props) {
               return fetch("".concat(ordering.root, "/auth/sms/twilio"), {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify(body)
               });
@@ -605,7 +607,8 @@ var LoginForm = function LoginForm(props) {
               return fetch("".concat(ordering.root, "/codes/generate"), {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify(body)
               });

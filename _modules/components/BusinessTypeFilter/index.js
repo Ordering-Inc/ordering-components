@@ -104,7 +104,8 @@ var BusinessTypeFilter = function BusinessTypeFilter(props) {
               return fetch("".concat(ordering.root, "/business_types?where=[{\"attribute\":\"enabled\",\"value\":true}]"), {
                 method: 'GET',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 }
               });
 

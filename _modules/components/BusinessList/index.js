@@ -477,7 +477,8 @@ var BusinessList = function BusinessList(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               };
               functionFetch = "".concat(ordering.root, "/franchises/").concat(franchiseId);
@@ -530,7 +531,8 @@ var BusinessList = function BusinessList(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               };
               setCitiesState(_objectSpread(_objectSpread({}, citiesState), {}, {

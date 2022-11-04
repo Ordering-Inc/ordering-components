@@ -260,7 +260,8 @@ var MultiCheckout = function MultiCheckout(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(token)
+                  Authorization: "bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
 
@@ -340,7 +341,8 @@ var MultiCheckout = function MultiCheckout(props) {
                               method: 'PUT',
                               headers: {
                                 'Content-Type': 'application/json',
-                                Authorization: "bearer ".concat(token)
+                                Authorization: "bearer ".concat(token),
+                                'X-App-X': ordering.appId
                               },
                               body: JSON.stringify({
                                 delivery_option_id: value

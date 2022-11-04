@@ -307,7 +307,8 @@ var SessionProvider = function SessionProvider(_ref) {
               requestOptions = {
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(state.token)
+                  Authorization: "bearer ".concat(state.token),
+                  'X-App-X': ordering.appId
                 }
               };
               _context7.next = 4;

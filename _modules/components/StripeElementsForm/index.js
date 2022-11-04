@@ -76,7 +76,8 @@ var StripeElementsForm = function StripeElementsForm(props) {
               _context.next = 2;
               return fetch("".concat(ordering.root, "/payments/stripe/requirements?type=add_card"), {
                 headers: {
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
 
