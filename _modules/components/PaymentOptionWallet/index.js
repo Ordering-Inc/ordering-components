@@ -81,7 +81,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 3:
@@ -97,7 +98,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 11:
@@ -162,7 +164,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   wallet_id: wallet.id
@@ -218,7 +221,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 3:

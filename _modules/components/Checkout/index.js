@@ -334,7 +334,8 @@ var Checkout = function Checkout(props) {
                     }),
                     headers: {
                       'Content-Type': 'application/json',
-                      Authorization: "Bearer ".concat(token)
+                      Authorization: "Bearer ".concat(token),
+                      'X-App-X': ordering.appId
                     }
                   });
                 case 4:
@@ -393,7 +394,8 @@ var Checkout = function Checkout(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(token)
+                  Authorization: "bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 3:
@@ -455,7 +457,8 @@ var Checkout = function Checkout(props) {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(token)
+                  Authorization: "bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   delivery_option_id: value

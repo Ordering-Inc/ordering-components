@@ -410,7 +410,8 @@ var UserFormDetails = function UserFormDetails(props) {
               return fetch("".concat(ordering.root, "/auth/sms/twilio/verify"), {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify(body)
               });
@@ -567,7 +568,8 @@ var UserFormDetails = function UserFormDetails(props) {
                 method: 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(accessToken)
+                  Authorization: "Bearer ".concat(accessToken),
+                  'X-App-X': ordering.appId
                 }
               });
             case 5:

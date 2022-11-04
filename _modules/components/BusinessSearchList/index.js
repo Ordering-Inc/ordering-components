@@ -202,7 +202,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               };
               location = {
@@ -291,7 +292,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               };
               _context2.next = 5;
@@ -345,7 +347,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               };
               setCitiesState(_objectSpread(_objectSpread({}, citiesState), {}, {
@@ -400,7 +403,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
               requestOptions = {
                 method: 'GET',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 }
               };
               _context4.next = 5;

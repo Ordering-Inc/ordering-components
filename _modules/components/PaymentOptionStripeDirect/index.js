@@ -61,7 +61,8 @@ var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
               _context.next = 2;
               return fetch("".concat(ordering.root, "/payments/stripe/credentials"), {
                 headers: {
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 2:
@@ -97,7 +98,8 @@ var PaymentOptionStripeDirect = function PaymentOptionStripeDirect(props) {
               _context2.next = 2;
               return fetch("".concat(ordering.root, "/payments/stripe/requirements?type=add_card"), {
                 headers: {
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 2:

@@ -179,7 +179,8 @@ var OrderDetails = function OrderDetails(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(accessToken)
+                  Authorization: "Bearer ".concat(accessToken),
+                  'X-App-X': ordering.appId
                 }
               });
             case 5:
@@ -249,7 +250,8 @@ var OrderDetails = function OrderDetails(props) {
                 method: 'post',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   can_see: '0,2,3',
@@ -584,7 +586,8 @@ var OrderDetails = function OrderDetails(props) {
                 method: 'GET',
                 headers: {
                   Authorization: "Bearer ".concat(token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 }
               });
             case 6:
@@ -837,7 +840,7 @@ var OrderDetails = function OrderDetails(props) {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
       // socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder);
-      // socket.off('tracking_driver', handleTrackingDriver)
+      socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [orderState.order, socket, loading, userCustomerId, (_orderState$order16 = orderState.order) === null || _orderState$order16 === void 0 ? void 0 : _orderState$order16.driver_id, (_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.id]);
   (0, _react.useEffect)(function () {

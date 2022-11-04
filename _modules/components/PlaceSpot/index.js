@@ -102,7 +102,8 @@ var PlaceSpot = function PlaceSpot(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json'
-                }
+                },
+                'X-App-X': ordering.appId
               });
             case 4:
               responsePlaceGroups = _context.sent;
@@ -117,7 +118,8 @@ var PlaceSpot = function PlaceSpot(props) {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json'
-                }
+                },
+                'X-App-X': ordering.appId
               });
             case 12:
               responsePlaces = _context.sent;

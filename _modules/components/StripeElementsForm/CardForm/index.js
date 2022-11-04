@@ -79,7 +79,8 @@ var CardForm = function CardForm(props) {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(user === null || user === void 0 ? void 0 : (_user$session = user.session) === null || _user$session === void 0 ? void 0 : _user$session.access_token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   business_id: businessId,

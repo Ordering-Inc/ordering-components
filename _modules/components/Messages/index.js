@@ -114,7 +114,8 @@ var Messages = function Messages(props) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(accessToken)
+                  Authorization: "Bearer ".concat(accessToken),
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify(body)
               });

@@ -97,7 +97,8 @@ var OrderReview = function OrderReview(props) {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(session.token),
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify(body)
               });

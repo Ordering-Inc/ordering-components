@@ -770,7 +770,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 headers: {
                   'Content-Type': 'application/json',
                   'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
-                  Authorization: "Bearer ".concat(session.token)
+                  Authorization: "Bearer ".concat(session.token),
+                  'X-App-X': ordering.appId
                 },
                 body: body
               });
@@ -930,7 +931,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/x-www-form-urlencoded',
-                  'Access-Control-Allow-Origin': '*'
+                  'Access-Control-Allow-Origin': '*',
+                  'X-App-X': ordering.appId
                 }
               });
             case 11:
@@ -1037,7 +1039,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 }),
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(session.token)
+                  Authorization: "Bearer ".concat(session.token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 8:
@@ -1109,7 +1112,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 }),
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(session.token)
+                  Authorization: "Bearer ".concat(session.token),
+                  'X-App-X': ordering.appId
                 }
               });
             case 8:
@@ -1445,7 +1449,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(session.token)
+                  Authorization: "bearer ".concat(session.token),
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify(data)
               };

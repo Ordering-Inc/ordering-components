@@ -194,7 +194,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   business_id: businessId,

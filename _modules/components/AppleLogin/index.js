@@ -104,7 +104,8 @@ var AppleLogin = function AppleLogin(props) {
               return fetch("".concat(ordering.root, "/auth/apple"), {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
                   code: data.code

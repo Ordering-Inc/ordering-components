@@ -89,7 +89,8 @@ var SingleProfessionalCard = function SingleProfessionalCard(props) {
                 method: isAdd ? 'POST' : 'DELETE',
                 headers: {
                   'Content-Type': 'application/json',
-                  Authorization: "Bearer ".concat(token)
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
                 }
               }, isAdd && {
                 body: JSON.stringify(changes)
