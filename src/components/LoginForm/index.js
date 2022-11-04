@@ -215,7 +215,10 @@ export const LoginForm = (props) => {
       setVerifyPhoneState({ ...verifyPhoneState, loading: true })
       const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
+        },
         body: JSON.stringify({
           cellphone: values.cellphone,
           country_phone_code: `+${values.country_phone_code}`
@@ -259,7 +262,10 @@ export const LoginForm = (props) => {
       }
       const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
+        },
         body: JSON.stringify(body)
       })
       const res = await response.json()
@@ -314,7 +320,10 @@ export const LoginForm = (props) => {
       }
       const response = await fetch(`${ordering.root}/codes/generate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
+        },
         body: JSON.stringify(body)
       })
       const { result, error } = await response.json()

@@ -28,7 +28,8 @@ export const ReviewDriver = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${session.token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({ ...reviews, order_id: order?.id, user_id: userId })
       })

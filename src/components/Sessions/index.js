@@ -27,7 +27,8 @@ export const Sessions = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       })
       const { result, error } = await response.json()
@@ -64,7 +65,8 @@ export const Sessions = (props) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       })
       const { result, error } = await response.json()
@@ -105,7 +107,8 @@ export const Sessions = (props) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({ delete_current: deleteCurrent })
       })
