@@ -140,7 +140,7 @@ export const BusinessSearchList = (props) => {
       filtParams = filtParams + isPfChangs ? '&forceOrderBy=enabled' : '&forceOrderBy=disabled'
       filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation ? '&max_distance=20000' : '')
       filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
-      brandId && (filtParams = filtParams +  `&franchise_ids=[${brandId}]`)
+      brandId && (filtParams = filtParams + `&franchise_ids=[${brandId}]`)
       setBusinessesSearchList({
         ...businessesSearchList,
         loading: true,
@@ -150,7 +150,8 @@ export const BusinessSearchList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       }
       const location = { lat: orderState.options?.address?.location?.lat || defaultLocation?.lat, lng: orderState.options?.address?.location?.lng || defaultLocation?.lng }
@@ -204,7 +205,8 @@ export const BusinessSearchList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       }
 
@@ -239,7 +241,8 @@ export const BusinessSearchList = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId
       }
     }
     setCitiesState({ ...citiesState, loading: true })
@@ -266,7 +269,8 @@ export const BusinessSearchList = (props) => {
       const requestOptions = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         }
       }
 
