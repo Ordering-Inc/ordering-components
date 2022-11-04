@@ -400,7 +400,12 @@ export const OrderListGroups = (props) => {
       setMessages({ ...messages, loading: true })
       const url = `${ordering.root}/orders/${orderId}/messages?mode=dashboard`
 
-      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+        }
+      })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({
@@ -468,7 +473,12 @@ export const OrderListGroups = (props) => {
     try {
       setlogisticOrders({ ...logisticOrders, loading: true })
       const url = `${ordering.root}/drivers/${session.user?.id}/assign_requests`
-      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+        }
+      })
       const { result, error } = await response.json()
       if (!error) {
         setlogisticOrders({ ...logisticOrders, loading: false, orders: result.filter(order => !(order?.order_group && order?.order_group?.orders?.length === 0)) })

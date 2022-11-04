@@ -93,7 +93,8 @@ export const PaymentOptionStripe = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           business_id: businessId,

@@ -426,7 +426,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         uuid,
         user_id: userCustomerId || session.user.id
       })
-      const response = await fetch(`${ordering.root}/carts/clear`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}` }, body })
+      const response = await fetch(`${ordering.root}/carts/clear`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 'X-Socket-Id-X': socket?.getId(), Authorization: `Bearer ${session.token}`, 'X-App-X': ordering.appId
+        },
+        body
+      })
       const { error, result } = await response.json()
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
@@ -498,7 +504,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'X-App-X': ordering.appId
           }
         })
         const result = await response.json()
@@ -554,7 +561,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
+          Authorization: `Bearer ${session.token}`,
+          'X-App-X': ordering.appId
         }
       })
       const result = await response.json()
@@ -589,7 +597,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         }),
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
+          Authorization: `Bearer ${session.token}`,
+          'X-App-X': ordering.appId
         }
       })
       const result = await response.json()
@@ -738,7 +747,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `bearer ${session.token}`
+          Authorization: `bearer ${session.token}`,
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify(data)
       }

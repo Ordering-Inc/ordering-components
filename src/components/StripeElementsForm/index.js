@@ -25,7 +25,8 @@ export const StripeElementsForm = (props) => {
       `${ordering.root}/payments/stripe/requirements?type=add_card`,
       {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       }
     )

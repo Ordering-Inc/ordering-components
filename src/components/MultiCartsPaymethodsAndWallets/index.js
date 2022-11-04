@@ -34,7 +34,8 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `bearer ${token}`
+          Authorization: `bearer ${token}`,
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           carts: cartsUuids
@@ -100,7 +101,8 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId
           }
         }
       )

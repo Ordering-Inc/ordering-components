@@ -32,7 +32,8 @@ export const SingleProfessionalCard = (props) => {
         method: isAdd ? 'POST' : 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         },
         ...(isAdd && { body: JSON.stringify(changes) })
       }
