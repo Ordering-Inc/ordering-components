@@ -440,7 +440,7 @@ export const OrderDetails = (props) => {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
       // socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
-      // socket.off('tracking_driver', handleTrackingDriver)
+      socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [orderState.order, socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id])
 
