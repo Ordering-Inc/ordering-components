@@ -47,7 +47,8 @@ export const CardForm = (props) => {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user?.session?.access_token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-App-X': ordering.appId
       },
       body: JSON.stringify({
         business_id: businessId,

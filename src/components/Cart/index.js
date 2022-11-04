@@ -112,7 +112,8 @@ export const Cart = (props) => {
             }),
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
+              'X-App-X': ordering.appId
             }
           })
           const { result, error } = await response.json()

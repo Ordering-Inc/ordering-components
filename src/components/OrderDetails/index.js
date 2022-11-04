@@ -70,7 +70,12 @@ export const OrderDetails = (props) => {
       const url = (userCustomerId || driverAndBusinessId)
         ? `${ordering.root}/orders/${orderState.order?.id}/messages?mode=dashboard`
         : `${ordering.root}/orders/${orderState.order?.id}/messages`
-      const response = await fetch(url, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+        }
+      })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({
@@ -107,7 +112,8 @@ export const OrderDetails = (props) => {
         method: 'post',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           can_see: '0,2,3',
@@ -276,7 +282,8 @@ export const OrderDetails = (props) => {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         }
       })
       const { result } = await response.json()
@@ -440,7 +447,7 @@ export const OrderDetails = (props) => {
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
       // socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder)
-      // socket.off('tracking_driver', handleTrackingDriver)
+      socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [orderState.order, socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id])
 

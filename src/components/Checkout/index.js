@@ -210,7 +210,8 @@ export const Checkout = (props) => {
             }),
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
+              'X-App-X': ordering.appId
             }
           })
           const { result, error } = await response.json()
@@ -235,7 +236,8 @@ export const Checkout = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `bearer ${token}`
+          Authorization: `bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       })
       const { result, error } = await response.json()
@@ -257,7 +259,8 @@ export const Checkout = (props) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `bearer ${token}`
+          Authorization: `bearer ${token}`,
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           delivery_option_id: value

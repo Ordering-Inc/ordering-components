@@ -42,7 +42,8 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           type: values?.type ?? 3,
@@ -81,7 +82,8 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           channel: values?.channel ?? 1,
@@ -146,7 +148,8 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           type: values?.type ?? 2,
@@ -185,7 +188,8 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           channel: values?.channel ?? 2,

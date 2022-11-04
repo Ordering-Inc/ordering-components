@@ -294,7 +294,7 @@ export const UserFormDetails = (props) => {
       setVerifyPhoneState({ ...verifyPhoneState, loading: true })
       const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'X-App-X': ordering.appId },
         body: JSON.stringify(body)
       })
       const res = await response.json()
@@ -412,7 +412,8 @@ export const UserFormDetails = (props) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId
         }
       })
       const res = await response.json()

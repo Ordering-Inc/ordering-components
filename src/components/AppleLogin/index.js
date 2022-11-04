@@ -59,7 +59,10 @@ export const AppleLogin = (props) => {
       setFormState({ ...formState, loading: true })
       const response = await fetch(`${ordering.root}/auth/apple`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId
+        },
         body: JSON.stringify({
           code: data.code
         })

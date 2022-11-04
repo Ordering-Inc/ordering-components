@@ -43,7 +43,8 @@ export const PaymentOptionStripeRedirect = (props) => {
       `${ordering.root}/payments/stripe/credentials`,
       {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
         }
       }
     )
