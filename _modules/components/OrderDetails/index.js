@@ -783,7 +783,7 @@ var OrderDetails = function OrderDetails(props) {
         var _props$order$id, _props$order3;
         getDrivers((_props$order$id = (_props$order3 = props.order) === null || _props$order3 === void 0 ? void 0 : _props$order3.id) !== null && _props$order$id !== void 0 ? _props$order$id : orderId);
       }
-    } else {
+    } else if (!orderState.order) {
       getOrder();
     }
     return function () {
@@ -796,7 +796,7 @@ var OrderDetails = function OrderDetails(props) {
     };
   }, [props.order, (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.id]);
   (0, _react.useEffect)(function () {
-    var _orderState$order13;
+    var _orderState$order14;
     if (orderState.loading || loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _orderState$order12;
@@ -809,27 +809,33 @@ var OrderDetails = function OrderDetails(props) {
       }));
       events.emit('order_updated', Object.assign(orderState.order, order));
     };
-    loadMessages();
     var handleTrackingDriver = function handleTrackingDriver(_ref12) {
+      var _orderState$order13;
       var location = _ref12.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
         lng: 144.7729561
       };
       setDriverLocation(newLocation);
+      setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+        order: _objectSpread(_objectSpread({}, orderState.order), {}, {
+          driver: _objectSpread(_objectSpread({}, (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.driver), {}, {
+            location: newLocation
+          })
+        })
+      }));
     };
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     if (!isDisabledOrdersRoom) socket.join(ordersRoom);
-    if ((_orderState$order13 = orderState.order) !== null && _orderState$order13 !== void 0 && _orderState$order13.driver_id) {
-      var _orderState$order14;
-      socket.join("drivers_".concat((_orderState$order14 = orderState.order) === null || _orderState$order14 === void 0 ? void 0 : _orderState$order14.driver_id));
+    if ((_orderState$order14 = orderState.order) !== null && _orderState$order14 !== void 0 && _orderState$order14.driver_id) {
+      var _orderState$order15;
+      socket.join("drivers_".concat((_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.driver_id));
     }
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
     return function () {
-      var _orderState$order15;
       if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
-      socket.leave("drivers_".concat((_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.driver_id));
+      // socket.leave(`drivers_${orderState.order?.driver_id}`)
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
