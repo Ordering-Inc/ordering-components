@@ -142,6 +142,13 @@ export const BusinessController = (props) => {
             : favoriteIds.filter(item => item !== businessState?.business?.id)
           setFavoriteIds(updateIds)
         }
+        setBusinessState({
+          ...businessState,
+          business: {
+            ...businessState.business,
+            favorite: isAdd
+          }
+        })
         props.handleCustomUpdate && props.handleCustomUpdate(businessState?.business?.id, { favorite: isAdd })
         showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
       } else {
