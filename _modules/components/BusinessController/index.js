@@ -273,6 +273,11 @@ var BusinessController = function BusinessController(props) {
                   });
                   setFavoriteIds(updateIds);
                 }
+                setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                  business: _objectSpread(_objectSpread({}, businessState.business), {}, {
+                    favorite: isAdd
+                  })
+                }));
                 props.handleCustomUpdate && props.handleCustomUpdate(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.id, {
                   favorite: isAdd
                 });
