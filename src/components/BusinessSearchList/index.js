@@ -17,6 +17,8 @@ export const BusinessSearchList = (props) => {
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
+  const [businessesInsideZone, setBusinessesInsideZone] = useState({ businesses: [], loading: true, error: null })
+
   /**
    * brandList, this must be contain a brands, loading and error to send UIComponent
    */
@@ -36,14 +38,21 @@ export const BusinessSearchList = (props) => {
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
-    price_level: null,
+    price_level: null
   })
   const [termValue, setTermValue] = useState(defaultTerm || '')
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
   const showCities = !orderingTheme?.theme?.business_listing_view?.components?.cities?.hidden
 
   useEffect(() => {
-    !lazySearch && (Object.keys(orderState?.options?.address?.location || {})?.length > 0 || defaultLocation) && handleSearchbusinessAndProducts(true)
+    if (!lazySearch && (Object.keys(orderState?.options?.address?.location || {})?.length > 0 || defaultLocation)) {
+      if (isPfChangs) {
+        handleSearchbusinessAndProducts(true, {
+          force_max_distance: true
+        })
+      }
+      handleSearchbusinessAndProducts(true)
+    }
   }, [filters, JSON.stringify(orderState?.options)])
 
   const handleChangeTermValue = (val) => {
@@ -137,7 +146,7 @@ export const BusinessSearchList = (props) => {
         if ((!filters[key] && filters[key] !== 0) || filters[key] === 'default' || filters[key]?.length === 0) return
         Array.isArray(filters[key]) ? filtParams = filtParams + `&${key}=[${filters[key]}]` : filtParams = filtParams + `&${key}=${filters[key]}`
       })
-      filtParams = filtParams + isPfChangs ? '&forceOrderBy=enabled' : '&forceOrderBy=disabled'
+      filtParams = filtParams + isPfChangs ? `&forceOrderBy=enabled&closed_businesses=enabled&force_max_distance=${options?.force_max_distance ? 'enabled' : 'disabled'}` : '&forceOrderBy=disabled'
       filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation && filters.max_distance ? `&max_distance=${filters.max_distance}` : '')
       filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
       brandId && (filtParams = filtParams + `&franchise_ids=[${brandId}]`)
@@ -146,6 +155,12 @@ export const BusinessSearchList = (props) => {
         loading: true,
         lengthError: false
       })
+      if (!(options?.force_max_distance || !isPfChangs)) {
+        setBusinessesInsideZone({
+          ...businessesInsideZone,
+          loading: true
+        })
+      }
       const requestOptions = {
         method: 'GET',
         headers: {
@@ -178,12 +193,20 @@ export const BusinessSearchList = (props) => {
         totalItems: pagination.total,
         nextPageItems
       })
-      setBusinessesSearchList({
-        ...businessesSearchList,
-        businesses: newFetch ? result : [...businessesSearchList?.businesses, ...result],
-        loading: false,
-        lengthError: false
-      })
+      if (options?.force_max_distance || !isPfChangs) {
+        setBusinessesSearchList({
+          ...businessesSearchList,
+          businesses: newFetch ? result : [...businessesSearchList?.businesses, ...result],
+          loading: false,
+          lengthError: false
+        })
+      } else {
+        setBusinessesInsideZone({
+          ...businessesInsideZone,
+          businesses: newFetch ? result : [...businessesInsideZone?.businesses, ...result],
+          loading: false
+        })
+      }
     } catch (err) {
       setBusinessesSearchList({
         businesses: [],
@@ -317,6 +340,7 @@ export const BusinessSearchList = (props) => {
             {...props}
             paginationProps={paginationProps}
             businessesSearchList={businessesSearchList}
+            businessesInsideZone={businessesInsideZone}
             handleChangeFilters={handleChangeFilters}
             filters={filters}
             termValue={termValue}
