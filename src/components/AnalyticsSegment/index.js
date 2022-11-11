@@ -96,7 +96,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   useEffect(() => {
-    if (analytics) {
+    if (analytics && !customData) {
       events.on('product_clicked', handleClickProduct)
       events.on('product_added', handleProductAdded)
       events.on('userLogin', handleLogin)
@@ -105,28 +105,6 @@ export const AnalyticsSegment = (props) => {
       events.on('order_added', handleAddOrder)
       events.on('cart_product_removed', handleProductRemoved)
     }
-    return () => {
-      if (analytics) {
-        events.off('product_clicked', handleClickProduct)
-        events.off('product_added', handleProductAdded)
-        events.off('userLogin', handleLogin)
-        events.off('order_placed', handleOrderPlaced)
-        events.off('order_updated', handleUpdateOrder)
-        events.off('order_added', handleAddOrder)
-        events.off('cart_product_removed', handleProductRemoved)
-      }
-    }
-  }, [analytics])
-
-  useEffect(() => {
-    const loadAnalytics = async () => {
-      const [response] = await AnalyticsBrowser.load({ writeKey })
-      setAnalytics(response)
-    }
-    loadAnalytics()
-  }, [writeKey])
-
-  useEffect(() => {
     if (!customData || !analytics) return
     const { type, data } = customData
     switch (type) {
@@ -162,7 +140,26 @@ export const AnalyticsSegment = (props) => {
 			default:
 				break;
 		}
-  }, [customData, analytics])
+    return () => {
+      if (analytics) {
+        events.off('product_clicked', handleClickProduct)
+        events.off('product_added', handleProductAdded)
+        events.off('userLogin', handleLogin)
+        events.off('order_placed', handleOrderPlaced)
+        events.off('order_updated', handleUpdateOrder)
+        events.off('order_added', handleAddOrder)
+        events.off('cart_product_removed', handleProductRemoved)
+      }
+    }
+  }, [analytics, customData])
+
+  useEffect(() => {
+    const loadAnalytics = async () => {
+      const [response] = await AnalyticsBrowser.load({ writeKey })
+      setAnalytics(response)
+    }
+    loadAnalytics()
+  }, [writeKey])
 
   return (
     <>
