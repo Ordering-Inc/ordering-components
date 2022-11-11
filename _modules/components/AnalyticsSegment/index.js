@@ -142,7 +142,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   (0, _react.useEffect)(function () {
-    if (analytics) {
+    if (analytics && !customData) {
       events.on('product_clicked', handleClickProduct);
       events.on('product_added', handleProductAdded);
       events.on('userLogin', handleLogin);
@@ -152,54 +152,6 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       events.on('cart_product_removed', handleProductRemoved);
     }
 
-    return function () {
-      if (analytics) {
-        events.off('product_clicked', handleClickProduct);
-        events.off('product_added', handleProductAdded);
-        events.off('userLogin', handleLogin);
-        events.off('order_placed', handleOrderPlaced);
-        events.off('order_updated', handleUpdateOrder);
-        events.off('order_added', handleAddOrder);
-        events.off('cart_product_removed', handleProductRemoved);
-      }
-    };
-  }, [analytics]);
-  (0, _react.useEffect)(function () {
-    var loadAnalytics = /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var _yield$AnalyticsBrows, _yield$AnalyticsBrows2, response;
-
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return _analyticsNext.AnalyticsBrowser.load({
-                  writeKey: writeKey
-                });
-
-              case 2:
-                _yield$AnalyticsBrows = _context.sent;
-                _yield$AnalyticsBrows2 = _slicedToArray(_yield$AnalyticsBrows, 1);
-                response = _yield$AnalyticsBrows2[0];
-                setAnalytics(response);
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      return function loadAnalytics() {
-        return _ref.apply(this, arguments);
-      };
-    }();
-
-    loadAnalytics();
-  }, [writeKey]);
-  (0, _react.useEffect)(function () {
     if (!customData || !analytics) return;
     var type = customData.type,
         data = customData.data;
@@ -241,7 +193,54 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       default:
         break;
     }
-  }, [customData, analytics]);
+
+    return function () {
+      if (analytics) {
+        events.off('product_clicked', handleClickProduct);
+        events.off('product_added', handleProductAdded);
+        events.off('userLogin', handleLogin);
+        events.off('order_placed', handleOrderPlaced);
+        events.off('order_updated', handleUpdateOrder);
+        events.off('order_added', handleAddOrder);
+        events.off('cart_product_removed', handleProductRemoved);
+      }
+    };
+  }, [analytics, customData]);
+  (0, _react.useEffect)(function () {
+    var loadAnalytics = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var _yield$AnalyticsBrows, _yield$AnalyticsBrows2, response;
+
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return _analyticsNext.AnalyticsBrowser.load({
+                  writeKey: writeKey
+                });
+
+              case 2:
+                _yield$AnalyticsBrows = _context.sent;
+                _yield$AnalyticsBrows2 = _slicedToArray(_yield$AnalyticsBrows, 1);
+                response = _yield$AnalyticsBrows2[0];
+                setAnalytics(response);
+
+              case 6:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function loadAnalytics() {
+        return _ref.apply(this, arguments);
+      };
+    }();
+
+    loadAnalytics();
+  }, [writeKey]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, children);
 };
 
