@@ -6,7 +6,8 @@ import PropTypes from 'prop-types'
 export const AnalyticsSegment = (props) => {
   const {
     writeKey,
-    children
+    children,
+    customData
   } = props
 
   const [events] = useEvent()
@@ -117,6 +118,40 @@ export const AnalyticsSegment = (props) => {
     }
     loadAnalytics()
   }, [writeKey])
+
+  useEffect(() => {
+    if (!customData || !analytics) return
+    const { type, data } = customData
+    switch (type) {
+			case 'Aplicar Cupon':
+				analytics.track('Aplicar Cupon', {
+					id: data.id,
+					name: data.name
+				})
+				break;
+			case 'Calificar Orden':
+				analytics.track('Calificar Orden', {
+					business_id: data.business_id,
+					order_id: data.order_id,
+					user_id: data.user_id,
+				})
+				break;
+			case 'Abrir banner':
+				analytics.track('Abrir banner', {
+					type: data.type,
+					brand: data.brand
+				})
+				break;
+			case 'Abrir negocio':
+				analytics.track('Abrir negocio', {
+					id: data.id,
+					name: data.name,
+				})
+				break;
+			default:
+				break;
+		}
+  }, [customData, analytics])
 
   return (
     <>
