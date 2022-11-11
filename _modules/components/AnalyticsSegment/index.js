@@ -41,7 +41,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var AnalyticsSegment = function AnalyticsSegment(props) {
   var writeKey = props.writeKey,
-      children = props.children;
+      children = props.children,
+      customData = props.customData;
 
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
@@ -191,6 +192,45 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
 
     loadAnalytics();
   }, [writeKey]);
+  (0, _react.useEffect)(function () {
+    if (!customData || !analytics) return;
+    var type = customData.type,
+        data = customData.data;
+
+    switch (type) {
+      case 'Aplicar Cupon':
+        analytics.track('Aplicar Cupon', {
+          id: data.id,
+          name: data.name
+        });
+        break;
+
+      case 'Calificar Orden':
+        analytics.track('Calificar Orden', {
+          business_id: data.business_id,
+          order_id: data.order_id,
+          user_id: data.user_id
+        });
+        break;
+
+      case 'Abrir banner':
+        analytics.track('Abrir banner', {
+          type: data.type,
+          brand: data.brand
+        });
+        break;
+
+      case 'Abrir negocio':
+        analytics.track('Abrir negocio', {
+          id: data.id,
+          name: data.name
+        });
+        break;
+
+      default:
+        break;
+    }
+  }, [customData, analytics]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, children);
 };
 
