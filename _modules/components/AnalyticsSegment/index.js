@@ -54,6 +54,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       setAnalytics = _useState2[1];
 
   var handleClickProduct = function handleClickProduct(product) {
+    console.log('Segment Product Clicked', product);
     analytics.track('Product Clicked', {
       id: product.id,
       name: product.name,
@@ -63,6 +64,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleProductAdded = function handleProductAdded(product) {
+    console.log('Segment Product Added', product);
     analytics.track('Product Added', {
       id: product.id,
       name: product.name,
@@ -73,6 +75,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleProductRemoved = function handleProductRemoved(product) {
+    console.log('Segment Product Removed', product);
     analytics.track('Product Removed', {
       id: product.id,
       name: product.name,
@@ -85,6 +88,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleOrderPlaced = function handleOrderPlaced(order) {
     var _order$business, _order$business2;
 
+    console.log('Segment Order Placed', order);
     analytics.track('Order Placed', {
       id: order.id,
       affiliation: (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.name,
@@ -106,6 +110,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleUpdateOrder = function handleUpdateOrder(order) {
     var _order$business3;
 
+    console.log('Segment Order Updated', order);
     analytics.track('Order Updated', {
       id: order.id,
       affiliation: (_order$business3 = order.business) === null || _order$business3 === void 0 ? void 0 : _order$business3.name,
@@ -118,6 +123,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleAddOrder = function handleAddOrder(order) {
     var _order$business4;
 
+    console.log('Segment Order Added', order);
     analytics.track('Order Added', {
       id: order.id,
       affiliation: (_order$business4 = order.business) === null || _order$business4 === void 0 ? void 0 : _order$business4.name,
