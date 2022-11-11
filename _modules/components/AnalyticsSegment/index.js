@@ -128,6 +128,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleLogin = function handleLogin(data) {
+    console.log('Segment Login', data);
     analytics.identify(data.id, {
       email: data.email,
       name: data.name
@@ -199,6 +200,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
 
     switch (type) {
       case 'Aplicar Cupon':
+        console.log('Segment Aplicar Cupon', data);
         analytics.track('Aplicar Cupon', {
           id: data.id,
           name: data.name
@@ -206,6 +208,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         break;
 
       case 'Calificar Orden':
+        console.log('Segment Calificar Orden', data);
         analytics.track('Calificar Orden', {
           business_id: data.business_id,
           order_id: data.order_id,
@@ -214,6 +217,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         break;
 
       case 'Abrir banner':
+        console.log('Segment Abrir banner', data);
         analytics.track('Abrir banner', {
           type: data.type,
           brand: data.brand
@@ -221,6 +225,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         break;
 
       case 'Abrir negocio':
+        console.log('Segment Abrir negocio', data);
         analytics.track('Abrir negocio', {
           id: data.id,
           name: data.name
