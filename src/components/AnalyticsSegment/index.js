@@ -14,6 +14,7 @@ export const AnalyticsSegment = (props) => {
   const [analytics, setAnalytics] = useState(undefined)
 
   const handleClickProduct = (product) => {
+    console.log('Segment Product Clicked', product)
     analytics.track('Product Clicked', {
       id: product.id,
       name: product.name,
@@ -23,6 +24,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleProductAdded = (product) => {
+    console.log('Segment Product Added', product)
     analytics.track('Product Added', {
       id: product.id,
       name: product.name,
@@ -33,6 +35,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleProductRemoved = (product) => {
+    console.log('Segment Product Removed', product)
     analytics.track('Product Removed', {
       id: product.id,
       name: product.name,
@@ -43,6 +46,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleOrderPlaced = (order) => {
+    console.log('Segment Order Placed', order)
     analytics.track('Order Placed', {
       id: order.id,
       affiliation: order.business?.name,
@@ -62,6 +66,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleUpdateOrder = (order) => {
+    console.log('Segment Order Updated', order)
     analytics.track('Order Updated', {
       id: order.id,
       affiliation: order.business?.name,
@@ -72,6 +77,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleAddOrder = (order) => {
+    console.log('Segment Order Added', order)
     analytics.track('Order Added', {
       id: order.id,
       affiliation: order.business?.name,
