@@ -14,6 +14,7 @@ import { CustomerProvider } from '../CustomerContext'
 import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
 import { OrderingThemeProvider } from '../OrderingThemeContext'
+import { DefaultThemeProvider } from '../DefaultThemeContext'
 /**
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
@@ -43,25 +44,27 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                   <UtilsProviders>
                     <ToastProvider>
                       <ValidationFieldsProvider>
-                        <SessionProvider strategy={webStrategy}>
-                          <WebsocketProvider
-                            strategy={webStrategy}
-                            settings={Object.assign(settings.socket, restOfSettings)}
-                          >
-                            <CustomerProvider strategy={webStrategy}>
-                              <OrderProvider
-                                strategy={webStrategy}
-                                Alert={Alert}
-                                isAlsea={isAlsea}
-                                franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
-                              >
-                                <BusinessProvider>
-                                  {children}
-                                </BusinessProvider>
-                              </OrderProvider>
-                            </CustomerProvider>
-                          </WebsocketProvider>
-                        </SessionProvider>
+                        <DefaultThemeProvider>
+                          <SessionProvider strategy={webStrategy}>
+                            <WebsocketProvider
+                              strategy={webStrategy}
+                              settings={Object.assign(settings.socket, restOfSettings)}
+                            >
+                              <CustomerProvider strategy={webStrategy}>
+                                <OrderProvider
+                                  strategy={webStrategy}
+                                  Alert={Alert}
+                                  isAlsea={isAlsea}
+                                  franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                                >
+                                  <BusinessProvider>
+                                    {children}
+                                  </BusinessProvider>
+                                </OrderProvider>
+                              </CustomerProvider>
+                            </WebsocketProvider>
+                          </SessionProvider>
+                        </DefaultThemeProvider>
                       </ValidationFieldsProvider>
                     </ToastProvider>
                   </UtilsProviders>

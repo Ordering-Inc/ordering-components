@@ -5,13 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.useOrderingTheme = exports.OrderingThemeProvider = exports.OrderingThemeContext = void 0;
+exports.useDefaultTheme = exports.DefaultThemeProvider = exports.DefaultThemeContext = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _ApiContext = require("../ApiContext");
+
+var _SessionContext = require("../SessionContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -42,21 +44,20 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Create OrderingThemeContext
+ * Create DefaultThemeContext
  * This context will manage the current themes and layouts
  */
-var OrderingThemeContext = /*#__PURE__*/(0, _react.createContext)();
+var DefaultThemeContext = /*#__PURE__*/(0, _react.createContext)();
 /**
  * Custom provider to ordering themes and layouts manager
  * This provider has a reducer for manage themes and layouts state
  * @param {props} props
  */
 
-exports.OrderingThemeContext = OrderingThemeContext;
+exports.DefaultThemeContext = DefaultThemeContext;
 
-var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
-  var children = _ref.children,
-      settings = _ref.settings;
+var DefaultThemeProvider = function DefaultThemeProvider(_ref) {
+  var children = _ref.children;
 
   var _useState = (0, _react.useState)({
     loading: true,
@@ -71,9 +72,13 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
+
   var getThemes = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var requestOptions, response, _yield$response$json, result, error;
+      var requestOptions, response, _yield$response$json, result, error, _result$, _result$$values_defau, _result$$values_defau2;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -82,12 +87,13 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
               requestOptions = {
                 method: 'GET',
                 headers: {
-                  'X-App-X': settings.appId
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token)
                 }
               };
               _context.prev = 1;
               _context.next = 4;
-              return fetch("".concat(ordering.root, "/theme"), requestOptions);
+              return fetch("".concat(ordering.root, "/themes"), requestOptions);
 
             case 4:
               response = _context.sent;
@@ -105,7 +111,7 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
               }
 
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                theme: result.values,
+                theme: (_result$ = result[0]) === null || _result$ === void 0 ? void 0 : (_result$$values_defau = _result$.values_default) === null || _result$$values_defau === void 0 ? void 0 : (_result$$values_defau2 = _result$$values_defau.my_products) === null || _result$$values_defau2 === void 0 ? void 0 : _result$$values_defau2.components,
                 loading: false,
                 error: false
               }));
@@ -147,12 +153,13 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
   };
 
   (0, _react.useEffect)(function () {
+    if (!token) return;
     getThemes();
-  }, []);
+  }, [token]);
   var functions = {
     refreshTheme: refreshTheme
   };
-  return /*#__PURE__*/_react.default.createElement(OrderingThemeContext.Provider, {
+  return /*#__PURE__*/_react.default.createElement(DefaultThemeContext.Provider, {
     value: [state, functions]
   }, children);
 };
@@ -161,10 +168,10 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
  */
 
 
-exports.OrderingThemeProvider = OrderingThemeProvider;
+exports.DefaultThemeProvider = DefaultThemeProvider;
 
-var useOrderingTheme = function useOrderingTheme() {
-  var orderingThemeManager = (0, _react.useContext)(OrderingThemeContext);
+var useDefaultTheme = function useDefaultTheme() {
+  var defaultThemeManager = (0, _react.useContext)(DefaultThemeContext);
 
   var warningMessage = function warningMessage() {
     console.warn('Must use OrderingThemeProvider to wrappe the app.');
@@ -177,7 +184,7 @@ var useOrderingTheme = function useOrderingTheme() {
   var functionsPlaceholders = {
     refreshTheme: warningMessage
   };
-  return orderingThemeManager || [{}, functionsPlaceholders];
+  return defaultThemeManager || [{}, functionsPlaceholders];
 };
 
-exports.useOrderingTheme = useOrderingTheme;
+exports.useDefaultTheme = useDefaultTheme;
