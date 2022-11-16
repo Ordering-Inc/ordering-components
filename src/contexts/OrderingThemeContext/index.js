@@ -17,6 +17,7 @@ export const OrderingThemeProvider = ({ children, settings }) => {
   const [state, setState] = useState({
     loading: true,
     theme: {},
+    themeValues: {},
     error: false
   })
 
@@ -57,12 +58,48 @@ export const OrderingThemeProvider = ({ children, settings }) => {
     }
   }
 
+  const getOrderingThemes = async () => {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    try {
+      const response = await fetch(`${ordering.root}/themes`, requestOptions)
+      const { result, error } = await response.json()
+      if (!error) {
+        setState({
+          ...state,
+          themeValues: result[0]?.values_default?.my_products?.components,
+          loading: false,
+          error: false
+        })
+        return
+      }
+      setState({
+        ...state,
+        themeValues: {},
+        loading: false,
+        error: true
+      })
+    } catch (err) {
+      setState({
+        ...state,
+        themeValues: {},
+        loading: false,
+        error: err
+      })
+    }
+  }
+
   const refreshTheme = () => {
     getThemes()
   }
 
   useEffect(() => {
     getThemes()
+    getOrderingThemes()
   }, [])
 
   const functions = {
