@@ -44,8 +44,8 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                   <UtilsProviders>
                     <ToastProvider>
                       <ValidationFieldsProvider>
-                        <DefaultThemeProvider>
-                          <SessionProvider strategy={webStrategy}>
+                        <SessionProvider strategy={webStrategy}>
+                          <DefaultThemeProvider>
                             <WebsocketProvider
                               strategy={webStrategy}
                               settings={Object.assign(settings.socket, restOfSettings)}
@@ -63,8 +63,8 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                                 </OrderProvider>
                               </CustomerProvider>
                             </WebsocketProvider>
-                          </SessionProvider>
-                        </DefaultThemeProvider>
+                          </DefaultThemeProvider>
+                        </SessionProvider>
                       </ValidationFieldsProvider>
                     </ToastProvider>
                   </UtilsProviders>
