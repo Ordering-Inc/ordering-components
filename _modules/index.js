@@ -231,6 +231,18 @@ Object.defineProperty(exports, "CustomerProvider", {
     return _CustomerContext.CustomerProvider;
   }
 });
+Object.defineProperty(exports, "DefaultThemeContext", {
+  enumerable: true,
+  get: function get() {
+    return _DefaultThemeContext.DefaultThemeContext;
+  }
+});
+Object.defineProperty(exports, "DefaultThemeProvider", {
+  enumerable: true,
+  get: function get() {
+    return _DefaultThemeContext.DefaultThemeProvider;
+  }
+});
 Object.defineProperty(exports, "DragAndDrop", {
   enumerable: true,
   get: function get() {
@@ -879,6 +891,12 @@ Object.defineProperty(exports, "useCustomer", {
     return _CustomerContext.useCustomer;
   }
 });
+Object.defineProperty(exports, "useDefaultTheme", {
+  enumerable: true,
+  get: function get() {
+    return _DefaultThemeContext.useDefaultTheme;
+  }
+});
 Object.defineProperty(exports, "useEvent", {
   enumerable: true,
   get: function get() {
@@ -1040,6 +1058,7 @@ var _CustomerContext = require("./contexts/CustomerContext");
 var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
 var _ToastContext = require("./contexts/ToastContext");
 var _OrderingThemeContext = require("./contexts/OrderingThemeContext");
+var _DefaultThemeContext = require("./contexts/DefaultThemeContext");
 var _PlaceSpot = require("./components/PlaceSpot");
 var _PaymethodList = require("./components/PaymethodList");
 var _PaymentOptionCash = require("./components/PaymentOptionCash");
