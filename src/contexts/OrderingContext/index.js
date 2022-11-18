@@ -14,7 +14,7 @@ import { CustomerProvider } from '../CustomerContext'
 import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
 import { OrderingThemeProvider } from '../OrderingThemeContext'
-import { DefaultThemeProvider } from '../DefaultThemeContext'
+
 /**
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
@@ -45,25 +45,23 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                     <ToastProvider>
                       <ValidationFieldsProvider>
                         <SessionProvider strategy={webStrategy}>
-                          <DefaultThemeProvider>
-                            <WebsocketProvider
-                              strategy={webStrategy}
-                              settings={Object.assign(settings.socket, restOfSettings)}
-                            >
-                              <CustomerProvider strategy={webStrategy}>
-                                <OrderProvider
-                                  strategy={webStrategy}
-                                  Alert={Alert}
-                                  isAlsea={isAlsea}
-                                  franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
-                                >
-                                  <BusinessProvider>
-                                    {children}
-                                  </BusinessProvider>
-                                </OrderProvider>
-                              </CustomerProvider>
-                            </WebsocketProvider>
-                          </DefaultThemeProvider>
+                          <WebsocketProvider
+                            strategy={webStrategy}
+                            settings={Object.assign(settings.socket, restOfSettings)}
+                          >
+                            <CustomerProvider strategy={webStrategy}>
+                              <OrderProvider
+                                strategy={webStrategy}
+                                Alert={Alert}
+                                isAlsea={isAlsea}
+                                franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                              >
+                                <BusinessProvider>
+                                  {children}
+                                </BusinessProvider>
+                              </OrderProvider>
+                            </CustomerProvider>
+                          </WebsocketProvider>
                         </SessionProvider>
                       </ValidationFieldsProvider>
                     </ToastProvider>
