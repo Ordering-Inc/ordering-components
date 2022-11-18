@@ -364,7 +364,10 @@ export const BusinessList = (props) => {
   }, [JSON.stringify(orderState.options), orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) return
+    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) {
+      setBusinessesList({ ...businessesList, loading: false })
+      return
+    }
     if (isDoordash || franchiseEnabled) {
       getBusinesses(true)
     }
