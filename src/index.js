@@ -99,7 +99,6 @@ import { CustomerContext, CustomerProvider, useCustomer } from './contexts/Custo
 import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { ToastContext, ToastProvider, useToast, ToastType } from './contexts/ToastContext'
 import { OrderingThemeContext, OrderingThemeProvider, useOrderingTheme } from './contexts/OrderingThemeContext'
-import { DefaultThemeContext, DefaultThemeProvider, useDefaultTheme } from './contexts/DefaultThemeContext'
 import { PlaceSpot } from './components/PlaceSpot'
 import { PaymethodList } from './components/PaymethodList'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
@@ -280,9 +279,6 @@ export {
   OrderingThemeContext,
   OrderingThemeProvider,
   useOrderingTheme,
-  DefaultThemeContext,
-  DefaultThemeProvider,
-  useDefaultTheme,
   // Constants
   CODES
 }
