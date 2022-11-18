@@ -14,6 +14,7 @@ import { CustomerProvider } from '../CustomerContext'
 import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
 import { OrderingThemeProvider } from '../OrderingThemeContext'
+
 /**
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
