@@ -286,7 +286,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * Update order option data
    * @param {object} changes Changes to update order options
    */
-  const updateOrderOptions = async (changes) => {
+   const updateOrderOptions = async (changes) => {
     if (session.auth) {
       const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
@@ -297,20 +297,27 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       try {
         setState({ ...state, loading: true })
+        const options = {}
         state.loading = true
-        let headers = {
+        options.headers = {
           'X-Socket-Id-X': socket?.getId()
         }
         const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
           ? changes?.country_code
-          : countryCodeFromLocalStorage ?? changes?.country_code ?? state?.options?.address?.country_code
+          : countryCodeFromLocalStorage
 
         if (countryCode) {
-          headers = {
-            ...headers,
+          options.headers = {
+            ...options.headers,
             'X-Country-Code-X': countryCode
           }
           await strategy.setItem('country-code', countryCode)
+        }
+        if (franchiseId) {
+          options.query = {
+            ...options.query,
+            franchise_id: franchiseId
+          }
         }
         if (body?.country_code) {
           delete body?.country_code
@@ -318,7 +325,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()
-          .save(body, { headers })
+          .save(body, options)
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}
