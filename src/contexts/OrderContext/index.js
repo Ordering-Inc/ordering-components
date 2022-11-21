@@ -286,7 +286,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * Update order option data
    * @param {object} changes Changes to update order options
    */
-   const updateOrderOptions = async (changes) => {
+  const updateOrderOptions = async (changes) => {
     if (session.auth) {
       const countryCodeFromLocalStorage = await strategy.getItem('country-code')
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
