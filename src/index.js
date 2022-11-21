@@ -49,6 +49,7 @@ import { NewOrderNotification } from './components/NewOrderNotification'
 import { OrderList } from './components/OrderList'
 import { OrderTypeControl } from './components/OrderTypeControl'
 import { OrdersControlFilters } from './components/OrdersControlFilters'
+import { PageBanner } from './components/PageBanner'
 import { PaymentOptions } from './components/PaymentOptions'
 import { PaymentOptionWallet } from './components/PaymentOptionWallet'
 import { Popup } from './components/Popup'
@@ -180,6 +181,7 @@ export {
   OrdersControlFilters,
   OrderVerticalList,
   Messages,
+  PageBanner,
   PaymentOptions,
   PaymentOptionWallet,
   PaymethodList,
