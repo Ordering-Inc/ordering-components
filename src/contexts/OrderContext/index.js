@@ -296,9 +296,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         user_id: userCustomerId || session.user.id
       }
       try {
+        const options = {}
         setState({ ...state, loading: true })
         state.loading = true
-        let headers = {
+        options.headers = {
           'X-Socket-Id-X': socket?.getId()
         }
         const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
@@ -306,11 +307,17 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           : countryCodeFromLocalStorage
 
         if (countryCode) {
-          headers = {
-            ...headers,
+          options.headers = {
+            ...options.headers,
             'X-Country-Code-X': countryCode
           }
           await strategy.setItem('country-code', countryCode)
+        }
+        if (franchiseId) {
+          options.query = {
+            ...options.query,
+            franchise_id: franchiseId
+          }
         }
         if (body?.country_code) {
           delete body?.country_code
@@ -318,7 +325,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()
-          .save(body, { headers })
+          .save(body, options)
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}
