@@ -146,7 +146,8 @@ var LanguageProvider = function LanguageProvider(_ref) {
                 break;
               }
               setState(_objectSpread(_objectSpread({}, state), {}, {
-                loading: false
+                loading: false,
+                error: typeof result === 'string' ? result : result === null || result === void 0 ? void 0 : result[0]
               }));
               return _context3.abrupt("return");
             case 10:
