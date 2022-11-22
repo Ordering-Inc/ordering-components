@@ -381,7 +381,7 @@ export const BusinessList = (props) => {
   }, [JSON.stringify(orderState.options), orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
 
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) {
+    if ((orderState.loading || (!orderState.options?.address?.location && !isAllowUnaddressOrderType && !asDashboard && !customLocation))) {
       setBusinessesList({ ...businessesList, loading: false })
       return
     }
