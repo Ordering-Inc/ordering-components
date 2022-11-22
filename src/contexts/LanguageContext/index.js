@@ -50,15 +50,23 @@ export const LanguageProvider = ({ children, strategy }) => {
   const loadDefaultLanguage = async () => {
     try {
       const { content: { error, result } } = await ordering.languages().where([{ attribute: 'default', value: true }]).get()
-      if (!error) {
-        const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
-        await strategy.setItem('language', language, true)
+      if (error) {
         setState({
           ...state,
-          language
+          loading: false,
+          error: typeof result === 'string' ? result : result?.[0]
         })
+        return
       }
-    } catch (err) {}
+      const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
+      await strategy.setItem('language', language, true)
+      setState({
+        ...state,
+        language
+      })
+    } catch (err) {
+      setState({ ...state, loading: false })
+    }
   }
 
   const setLanguage = async (language) => {
