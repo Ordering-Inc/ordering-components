@@ -141,33 +141,40 @@ var LanguageProvider = function LanguageProvider(_ref) {
               _yield$ordering$langu2 = _yield$ordering$langu.content;
               error = _yield$ordering$langu2.error;
               result = _yield$ordering$langu2.result;
-              if (error) {
-                _context3.next = 12;
+              if (!error) {
+                _context3.next = 10;
                 break;
               }
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+              return _context3.abrupt("return");
+            case 10:
               language = {
                 id: result[0].id,
                 code: result[0].code,
                 rtl: result[0].rtl
               };
-              _context3.next = 11;
+              _context3.next = 13;
               return strategy.setItem('language', language, true);
-            case 11:
+            case 13:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 language: language
               }));
-            case 12:
-              _context3.next = 16;
+              _context3.next = 19;
               break;
-            case 14:
-              _context3.prev = 14;
-              _context3.t0 = _context3["catch"](0);
             case 16:
+              _context3.prev = 16;
+              _context3.t0 = _context3["catch"](0);
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: false
+              }));
+            case 19:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 14]]);
+      }, _callee3, null, [[0, 16]]);
     }));
     return function loadDefaultLanguage() {
       return _ref4.apply(this, arguments);
