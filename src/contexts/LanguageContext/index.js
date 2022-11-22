@@ -51,7 +51,11 @@ export const LanguageProvider = ({ children, strategy }) => {
     try {
       const { content: { error, result } } = await ordering.languages().where([{ attribute: 'default', value: true }]).get()
       if (error) {
-        setState({ ...state, loading: false })
+        setState({
+          ...state,
+          loading: false,
+          error: typeof result === 'string' ? result : result?.[0]
+        })
         return
       }
       const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
