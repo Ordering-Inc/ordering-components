@@ -26,7 +26,8 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PromotionsController = function PromotionsController(props) {
   var UIComponent = props.UIComponent,
-    paramsToFetch = props.paramsToFetch;
+    paramsToFetch = props.paramsToFetch,
+    franchiseId = props.franchiseId;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     session = _useSession2[0];
@@ -55,14 +56,18 @@ var PromotionsController = function PromotionsController(props) {
   var getOffers = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _options$address;
-      var location, url, response;
+      var location, params, url, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               location = JSON.stringify(options === null || options === void 0 ? void 0 : (_options$address = options.address) === null || _options$address === void 0 ? void 0 : _options$address.location);
-              url = "".concat(ordering.root, "/offers/public?enabled=true&params=").concat(paramsToFetch.join(), "&location=").concat(location);
-              _context.next = 4;
+              params = "?enabled=true&params=".concat(paramsToFetch.join(), "&location=").concat(location);
+              if (franchiseId) {
+                params = params + "&franchise_id=".concat(franchiseId);
+              }
+              url = "".concat(ordering.root, "/offers/public").concat(params);
+              _context.next = 6;
               return fetch(url, {
                 method: 'GET',
                 headers: {
@@ -71,13 +76,13 @@ var PromotionsController = function PromotionsController(props) {
                   'X-App-X': ordering.appId
                 }
               });
-            case 4:
+            case 6:
               response = _context.sent;
-              _context.next = 7;
+              _context.next = 9;
               return response.json();
-            case 7:
+            case 9:
               return _context.abrupt("return", _context.sent);
-            case 8:
+            case 10:
             case "end":
               return _context.stop();
           }
