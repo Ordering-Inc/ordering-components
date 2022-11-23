@@ -501,13 +501,13 @@ var OrderProvider = function OrderProvider(_ref) {
    */
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(changes) {
-      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options9, _state$options9$addre, _ref7, _state$options10, _state$options10$addr, headers, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, options, _err$message2, message;
+      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options9, _state$options9$addre, _ref7, _state$options10, _state$options10$addr, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options3, _err$message2, message;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
             case 0:
               if (!session.auth) {
-                _context5.next = 38;
+                _context5.next = 40;
                 break;
               }
               _context5.next = 3;
@@ -526,40 +526,44 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
+              options = {};
               state.loading = true;
-              headers = {
+              options.headers = {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               };
               countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : (_ref7 = countryCodeFromLocalStorage !== null && countryCodeFromLocalStorage !== void 0 ? countryCodeFromLocalStorage : changes === null || changes === void 0 ? void 0 : changes.country_code) !== null && _ref7 !== void 0 ? _ref7 : state === null || state === void 0 ? void 0 : (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : (_state$options10$addr = _state$options10.address) === null || _state$options10$addr === void 0 ? void 0 : _state$options10$addr.country_code;
               if (!countryCode) {
-                _context5.next = 18;
+                _context5.next = 19;
                 break;
               }
-              headers = _objectSpread(_objectSpread({}, headers), {}, {
+              options.headers = _objectSpread(_objectSpread({}, options.headers), {}, {
                 'X-Country-Code-X': countryCode
               });
-              _context5.next = 18;
+              _context5.next = 19;
               return strategy.setItem('country-code', countryCode);
-            case 18:
+            case 19:
+              if (franchiseId) {
+                options.query = _objectSpread(_objectSpread({}, options.query), {}, {
+                  franchise_id: franchiseId
+                });
+              }
               if (body !== null && body !== void 0 && body.country_code) {
                 body === null || body === void 0 ? true : delete body.country_code;
               }
-              _context5.next = 21;
-              return ordering.setAccessToken(session.token).orderOptions().save(body, {
-                headers: headers
-              });
-            case 21:
+              _context5.next = 23;
+              return ordering.setAccessToken(session.token).orderOptions().save(body, options);
+            case 23:
               _yield$ordering$setAc3 = _context5.sent;
               _yield$ordering$setAc4 = _yield$ordering$setAc3.content;
               error = _yield$ordering$setAc4.error;
               result = _yield$ordering$setAc4.result;
               if (!error) {
-                carts = result.carts, options = _objectWithoutProperties(result, _excluded2);
+                carts = result.carts, _options3 = _objectWithoutProperties(result, _excluded2);
                 state.carts = {};
                 carts.forEach(function (cart) {
                   state.carts["businessId:".concat(cart.business_id)] = cart;
                 });
-                state.options = _objectSpread(_objectSpread({}, state.options), options);
+                state.options = _objectSpread(_objectSpread({}, state.options), _options3);
               } else {
                 setAlert({
                   show: true,
@@ -571,8 +575,8 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               state.loading = false;
               return _context5.abrupt("return", !error);
-            case 31:
-              _context5.prev = 31;
+            case 33:
+              _context5.prev = 33;
               _context5.t0 = _context5["catch"](9);
               message = _context5.t0 !== null && _context5.t0 !== void 0 && (_err$message2 = _context5.t0.message) !== null && _err$message2 !== void 0 && _err$message2.includes('Internal error') ? 'INTERNAL_ERROR' : _context5.t0.message;
               setAlert({
@@ -584,12 +588,12 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               state.loading = false;
               return _context5.abrupt("return", false);
-            case 38:
+            case 40:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[9, 31]]);
+      }, _callee5, null, [[9, 33]]);
     }));
     return function updateOrderOptions(_x5) {
       return _ref6.apply(this, arguments);
