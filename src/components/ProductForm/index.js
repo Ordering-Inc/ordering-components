@@ -4,6 +4,9 @@ import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../contexts/SessionContext'
+import { useToast } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export const ProductForm = (props) => {
   const {
@@ -15,10 +18,15 @@ export const ProductForm = (props) => {
     isService,
     isCartProduct,
     productAddedToCartLength,
-    professionalList
+    professionalList,
+    handleUpdateProducts,
   } = props
 
   const requestsState = {}
+
+  const [{ user, token }] = useSession()
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
 
   const [ordering] = useApi()
   /**
@@ -171,6 +179,51 @@ export const ProductForm = (props) => {
       }
     }
     return product.product?.price + subtotal
+  }
+  /**
+   * Method to add, remove favorite info for user from API
+   */
+  const handleFavoriteProduct = async (productFav, isAdd = false) => {
+    if (!product || !user) return
+    showToast(ToastType.Info, t('LOADING', 'loading'))
+    try {
+      setProduct({ ...product, loading: true, error: null })
+      const productId = productFav?.id
+      const changes = { object_id: productId }
+      const requestOptions = {
+        method: isAdd ? 'POST' : 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
+        },
+        ...(isAdd && { body: JSON.stringify(changes) })
+      }
+      const fetchEndpoint = isAdd
+        ? `${ordering.root}/users/${user?.id}/favorite_products`
+        : `${ordering.root}/users/${user.id}/favorite_products/${productId}`
+      const response = await fetch(fetchEndpoint, requestOptions)
+      const content = await response.json()
+      if (!content.error) {
+        loadProductWithOptions()
+        handleUpdateProducts && handleUpdateProducts(productId, { favorite: isAdd })
+        showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
+      } else {
+        setProduct({
+          ...product,
+          loading: false,
+          error: content.result
+        })
+        showToast(ToastType.Error, content.result)
+      }
+    } catch (error) {
+      setProduct({
+        ...product,
+        loading: false,
+        error: [error.message]
+      })
+      showToast(ToastType.Error, [error.message])
+    }
   }
 
   /**
@@ -614,8 +667,6 @@ export const ProductForm = (props) => {
         const suboptions = []
           .concat(...options.map(option => option.suboptions))
           .filter(suboption => suboption.name === 'Grande (16oz - 437ml)')
-        // console.log(suboptions)
-
         const states = suboptions.map((suboption, i) => {
           const price = options[i].with_half_option && suboption.half_price && suboption?.position !== 'whole'
             ? suboption.half_price
@@ -698,6 +749,7 @@ export const ProductForm = (props) => {
             handleChangeProductCartQuantity={handleChangeProductCartQuantity}
             handleSave={handleSave}
             showOption={showOption}
+            handleFavoriteProduct={handleFavoriteProduct}
             handleChangeIngredientState={handleChangeIngredientState}
             handleChangeSuboptionState={handleChangeSuboptionState}
             handleChangeCommentState={handleChangeCommentState}
