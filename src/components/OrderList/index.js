@@ -621,7 +621,6 @@ export const OrderList = props => {
           businesses={businesses}
           professionals={professionals}
           handleUpdateProfessionals={handleUpdateProfessionals}
-          getOrders={getOrders}
           getPage={getPage}
         />
       )}
