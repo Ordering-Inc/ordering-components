@@ -534,6 +534,32 @@ export const OrderList = props => {
     })
   }
 
+  const getPage = async (page, pageSize) => {
+    setOrderList({ ...orderList, loading: true })
+    try {
+      const response = await getOrders(page, pageSize)
+      setOrderList({
+        loading: false,
+        orders: response.content.error ? orderList.orders : response.content.result,
+        error: response.content.error ? response.content.result : null
+      })
+      if (!response.content.error) {
+        setPagination({
+          currentPage: response.content.pagination.current_page,
+          pageSize: response.content.pagination.page_size,
+          totalPages: response.content.pagination.total_pages,
+          total: response.content.pagination.total,
+          from: response.content.pagination.from,
+          to: response.content.pagination.to
+        })
+      }
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setOrderList({ ...orderList, loading: false, error: [err.message] })
+      }
+    }
+  }
+
   useEffect(() => {
     if (profileMessage) return
     if (!orderList.loading && orderBy !== 'last_direct_message_at') {
@@ -595,6 +621,8 @@ export const OrderList = props => {
           businesses={businesses}
           professionals={professionals}
           handleUpdateProfessionals={handleUpdateProfessionals}
+          getOrders={getOrders}
+          getPage={getPage}
         />
       )}
     </>
