@@ -105,7 +105,7 @@ export const CardForm = (props) => {
     let billing_data = {
       name: `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
       email: user.email,
-      address: user?.address ? user?.address : ''
+      address: user?.address ?? ''
     }
 
     if (isSplitForm) {
