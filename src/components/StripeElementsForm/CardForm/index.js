@@ -33,6 +33,8 @@ export const CardForm = (props) => {
   const elements = useElements()
 
   const [error, setError] = useState(null)
+  const [errorExpiry, setErrorExpiry] = useState(null)
+  const [errorCvc, setErrorCvc] = useState(null)
   const [loading, setLoading] = useState(false)
   const [, t] = useLanguage()
 
@@ -66,9 +68,23 @@ export const CardForm = (props) => {
    */
   const handleChange = (event) => {
     if (event.error) {
-      setError(event.error.message)
+      (event.elementType === 'cardNumber' || 'card') && setError(event.error.message)
     } else {
       setError(null)
+    }
+  }
+  const handleChangeExpiry = (event) => {
+    if (event.error) {
+      setErrorExpiry(event.error.message)
+    } else {
+      setErrorExpiry(null)
+    }
+  }
+  const handleChangeCvc = (event) => {
+    if (event.error) {
+      setErrorCvc(event.error.message)
+    } else {
+      setErrorCvc(null)
     }
   }
 
@@ -85,8 +101,17 @@ export const CardForm = (props) => {
     event.preventDefault()
     let card = elements?.getElement(CardElement)
 
+    let billing_data = {
+      name: (!user?.name || !user?.lastname) ? `${user?.name && user?.name} ${user?.lastname && user?.lastname}`.replace(/ /g, '') : `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
+      email: user.email,
+    }
+
     if (isSplitForm) {
       card = elements?.getElement(CardNumberElement)
+      billing_data = {
+        name: (!user?.name || !user?.lastname) ? `${user?.name && user?.name} ${user?.lastname && user?.lastname}`.replace(/ /g, '') : `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
+        email: user.email,
+      }
     }
 
     if (!requirements) {
@@ -97,11 +122,7 @@ export const CardForm = (props) => {
       const result = await stripe.createPaymentMethod({
         type: 'card',
         card: card,
-        billing_details: {
-          name: `${user.name} ${user.lastname}`,
-          email: user.email,
-          address: user.address
-        }
+        billing_details: !user?.address ? billing_data : { ...billing_data, address: user?.address },
       })
       if (result.error) {
         setLoading(false)
@@ -109,6 +130,8 @@ export const CardForm = (props) => {
       } else {
         setLoading(false)
         setError(null)
+        setErrorExpiry(null)
+        setErrorCvc(null)
         handleSource && handleSource({
           id: result?.paymentMethod.id,
           type: 'card',
@@ -128,12 +151,8 @@ export const CardForm = (props) => {
         requirements,
         {
           payment_method: {
-            card,
-            billing_details: {
-              name: `${user.name} ${user.lastname}`,
-              email: user.email,
-              address: user.address
-            }
+            card: card,
+            billing_details: billing_data
           }
         }
       )
@@ -143,6 +162,8 @@ export const CardForm = (props) => {
       } else {
         setLoading(false)
         setError(null)
+        setErrorExpiry(null)
+        setErrorCvc(null)
         if (businessIds) {
           businessIds.forEach((_businessId, index) => {
             const _isNewCard = index === 0
@@ -160,7 +181,11 @@ export const CardForm = (props) => {
       {...props}
       handleSubmit={handleSubmit}
       error={error}
+      errorExpiry={errorExpiry}
+      errorCvc={errorCvc}
       loading={loading}
+      handleChangeExpiry={handleChangeExpiry}
+      handleChangeCvc={handleChangeCvc}
       handleChange={handleChange}
     />
   )

@@ -6,7 +6,7 @@ import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export const OrderReview = (props) => {
-  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast, defaultStar } = props
+  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast, defaultStar, handleUpdateOrderList } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
@@ -45,6 +45,7 @@ export const OrderReview = (props) => {
       onSaveReview && onSaveReview(response)
       setFormState({ loading: false, result: result, error: error })
       if (!error && isToast) showToast(ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'))
+      if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id, { review: result })
     } catch (err) {
       setFormState({
         result: {
