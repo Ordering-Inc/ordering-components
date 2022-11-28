@@ -103,15 +103,14 @@ export const CardForm = (props) => {
     let card = elements?.getElement(CardElement)
 
     let billing_data = {
-      name: `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
+      name: (!user?.name || !user?.lastname) ? `${user?.name && user?.name} ${user?.lastname && user?.lastname}`.replace(/ /g, '') : `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
       email: user.email,
-      address: user?.address ?? ''
     }
 
     if (isSplitForm) {
       card = elements?.getElement(CardNumberElement)
       billing_data = {
-        name: `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
+        name: (!user?.name || !user?.lastname) ? `${user?.name && user?.name} ${user?.lastname && user?.lastname}`.replace(/ /g, '') : `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
         email: user.email,
       }
     }
@@ -124,7 +123,7 @@ export const CardForm = (props) => {
       const result = await stripe.createPaymentMethod({
         type: 'card',
         card: card,
-        billing_details: billing_data,
+        billing_details: !user?.address ? billing_data : { ...billing_data, address: user?.address },
       })
       if (result.error) {
         setLoading(false)
