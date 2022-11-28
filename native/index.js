@@ -48,6 +48,7 @@ import { OrdersControlFilters } from '../src/components/OrdersControlFilters'
 import { OrderDetails } from '../src/components/OrderDetails'
 import { OrderVerticalList } from '../src/components/OrderVerticalList'
 import { OrderReview } from '../src/components/OrderReview'
+import { PageBanner } from '../src/components/PageBanner'
 import { PaymethodList } from '../src/components/PaymethodList'
 import { PaymentOptions } from '../src/components/PaymentOptions'
 import { PaymentOptionCash } from '../src/components/PaymentOptionCash'
@@ -151,6 +152,7 @@ export {
   OrderChange,
   OrderDetails,
   OrderReview,
+  PageBanner,
   PaymethodList,
   PaymentOptions,
   PaymentOptionCash,
