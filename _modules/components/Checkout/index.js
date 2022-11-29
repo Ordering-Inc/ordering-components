@@ -222,13 +222,22 @@ var Checkout = function Checkout(props) {
       setUberDirect = _useState20[1];
 
   var _useState21 = (0, _react.useState)({
-    result: false,
+    result: null,
     loading: true,
     error: false
   }),
       _useState22 = _slicedToArray(_useState21, 2),
-      hasCateringProducts = _useState22[0],
-      setHasCateringProducts = _useState22[1];
+      wowAcumulationPoints = _useState22[0],
+      setWowAcumulationPoints = _useState22[1];
+
+  var _useState23 = (0, _react.useState)({
+    result: false,
+    loading: true,
+    error: false
+  }),
+      _useState24 = _slicedToArray(_useState23, 2),
+      hasCateringProducts = _useState24[0],
+      setHasCateringProducts = _useState24[1];
   /**
    * Current cart
    */
@@ -940,6 +949,78 @@ var Checkout = function Checkout(props) {
     };
   }();
 
+  var getWowPointsAcumulation = /*#__PURE__*/function () {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(total) {
+      var response, result;
+      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              _context10.prev = 0;
+              setWowAcumulationPoints(_objectSpread(_objectSpread({}, wowAcumulationPoints), {}, {
+                loading: true
+              }));
+              _context10.next = 4;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/points_convert.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  type: 3,
+                  amount: total !== null && total !== void 0 ? total : cart === null || cart === void 0 ? void 0 : cart.total
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId
+                }
+              });
+
+            case 4:
+              response = _context10.sent;
+              _context10.next = 7;
+              return response.json();
+
+            case 7:
+              result = _context10.sent;
+
+              if (result.error) {
+                _context10.next = 11;
+                break;
+              }
+
+              setWowAcumulationPoints(_objectSpread(_objectSpread({}, wowAcumulationPoints), {}, {
+                loading: false,
+                result: result
+              }));
+              return _context10.abrupt("return");
+
+            case 11:
+              setWowAcumulationPoints(_objectSpread(_objectSpread({}, wowAcumulationPoints), {}, {
+                loading: false,
+                error: true
+              }));
+              _context10.next = 17;
+              break;
+
+            case 14:
+              _context10.prev = 14;
+              _context10.t0 = _context10["catch"](0);
+              setWowAcumulationPoints(_objectSpread(_objectSpread({}, wowAcumulationPoints), {}, {
+                loading: false,
+                error: true
+              }));
+
+            case 17:
+            case "end":
+              return _context10.stop();
+          }
+        }
+      }, _callee10, null, [[0, 14]]);
+    }));
+
+    return function getWowPointsAcumulation(_x5) {
+      return _ref10.apply(this, arguments);
+    };
+  }();
+
   (0, _react.useEffect)(function () {
     if (businessId && typeof businessId === 'number') {
       getBusiness();
@@ -963,14 +1044,14 @@ var Checkout = function Checkout(props) {
     if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return;
 
     var applyDonation = /*#__PURE__*/function () {
-      var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+      var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
         var response, result;
-        return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        return _regeneratorRuntime().wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                _context10.prev = 0;
-                _context10.next = 3;
+                _context11.prev = 0;
+                _context11.next = 3;
                 return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php"), {
                   method: 'POST',
                   body: JSON.stringify({
@@ -984,38 +1065,38 @@ var Checkout = function Checkout(props) {
                 });
 
               case 3:
-                response = _context10.sent;
-                _context10.next = 6;
+                response = _context11.sent;
+                _context11.next = 6;
                 return response.json();
 
               case 6:
-                result = _context10.sent;
+                result = _context11.sent;
 
                 if (!result.error) {
                   refreshOrderOptions();
                 }
 
-                _context10.next = 13;
+                _context11.next = 13;
                 break;
 
               case 10:
-                _context10.prev = 10;
-                _context10.t0 = _context10["catch"](0);
+                _context11.prev = 10;
+                _context11.t0 = _context11["catch"](0);
                 setVaXMiCuenta(_objectSpread(_objectSpread({}, vaXMiCuenta), {}, {
                   loading: false,
-                  error: [_context10.t0.message]
+                  error: [_context11.t0.message]
                 }));
 
               case 13:
               case "end":
-                return _context10.stop();
+                return _context11.stop();
             }
           }
-        }, _callee10, null, [[0, 10]]);
+        }, _callee11, null, [[0, 10]]);
       }));
 
       return function applyDonation() {
-        return _ref10.apply(this, arguments);
+        return _ref11.apply(this, arguments);
       };
     }();
 
@@ -1050,6 +1131,13 @@ var Checkout = function Checkout(props) {
     }
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
   (0, _react.useEffect)(function () {
+    if (vaXMiCuenta.amount && vaXMiCuenta.amount > 0) {
+      getWowPointsAcumulation(cart.total - vaXMiCuenta.amount);
+    } else {
+      getWowPointsAcumulation();
+    }
+  }, [cart === null || cart === void 0 ? void 0 : cart.total]);
+  (0, _react.useEffect)(function () {
     getDeliveryOptions();
     checkUberDirect();
   }, []);
@@ -1078,7 +1166,8 @@ var Checkout = function Checkout(props) {
     handlerClickPlaceOrder: handlerClickPlaceOrder,
     handleChangeComment: handleChangeComment,
     handleChangeDeliveryOption: handleChangeDeliveryOption,
-    handleChangeVaXMiCuenta: handleChangeVaXMiCuenta
+    handleChangeVaXMiCuenta: handleChangeVaXMiCuenta,
+    wowAcumulationPoints: wowAcumulationPoints
   })));
 };
 
