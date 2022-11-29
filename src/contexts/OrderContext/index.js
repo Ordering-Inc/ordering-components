@@ -888,12 +888,27 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const getLastOrderHasNoReview = async () => {
     if (session?.token) {
       const pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17]
+      const where = [{ attribute: 'status', value: pastOrderTypes }]
+      if (franchiseId) {
+        where.push({
+          attribute: 'ref_business',
+          conditions: [
+            {
+              attribute: 'franchise_id',
+              value: {
+                condition: '=',
+                value: franchiseId
+              }
+            }
+          ]
+        })
+      }
       const options = {
         query: {
           orderBy: '-delivery_datetime',
           page: 1,
           page_size: 10,
-          where: [{ attribute: 'status', value: pastOrderTypes }]
+          where
         }
       }
       const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders().get(options)
