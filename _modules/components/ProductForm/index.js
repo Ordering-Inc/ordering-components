@@ -283,7 +283,7 @@ var ProductForm = function ProductForm(props) {
               }
               return _context.abrupt("return");
             case 3:
-              showToast(ToastType.Info, t('LOADING', 'loading'));
+              showToast(_ToastContext.ToastType.Info, t('LOADING', 'loading'));
               _context.prev = 4;
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: true,
@@ -317,13 +317,13 @@ var ProductForm = function ProductForm(props) {
                 handleUpdateProducts && handleUpdateProducts(productId, {
                   favorite: isAdd
                 });
-                showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
+                showToast(_ToastContext.ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
               } else {
                 setProduct(_objectSpread(_objectSpread({}, product), {}, {
                   loading: false,
                   error: content.result
                 }));
-                showToast(ToastType.Error, content.result);
+                showToast(_ToastContext.ToastType.Error, content.result);
               }
               _context.next = 23;
               break;
@@ -334,7 +334,7 @@ var ProductForm = function ProductForm(props) {
                 loading: false,
                 error: [_context.t0.message]
               }));
-              showToast(ToastType.Error, [_context.t0.message]);
+              showToast(_ToastContext.ToastType.Error, [_context.t0.message]);
             case 23:
             case "end":
               return _context.stop();
