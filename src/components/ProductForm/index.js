@@ -5,7 +5,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useSession } from '../../contexts/SessionContext'
-import { useToast } from '../../contexts/ToastContext'
+import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export const ProductForm = (props) => {
