@@ -43,18 +43,18 @@ export const UtilsProviders = ({ children }) => {
       t('MONTH12', 'December')
     ]
     const monthsShort = [
-      t('MONTHSHORT1', 'Jan' ),
-      t('MONTHSHORT2', 'Feb' ),
-      t('MONTHSHORT3', 'Mar' ),
-      t('MONTHSHORT4', 'Apr' ),
-      t('MONTHSHORT5', 'May' ),
-      t('MONTHSHORT6', 'Jun' ),
-      t('MONTHSHORT7', 'Jul' ),
-      t('MONTHSHORT8', 'Aug' ),
-      t('MONTHSHORT9', 'Sep' ),
-      t('MONTHSHORT10', 'Oct' ),
-      t('MONTHSHORT11', 'Nov' ),
-      t('MONTHSHORT12', 'Dec' )
+      t('MONTHSHORT1', 'Jan'),
+      t('MONTHSHORT2', 'Feb'),
+      t('MONTHSHORT3', 'Mar'),
+      t('MONTHSHORT4', 'Apr'),
+      t('MONTHSHORT5', 'May'),
+      t('MONTHSHORT6', 'Jun'),
+      t('MONTHSHORT7', 'Jul'),
+      t('MONTHSHORT8', 'Aug'),
+      t('MONTHSHORT9', 'Sep'),
+      t('MONTHSHORT10', 'Oct'),
+      t('MONTHSHORT11', 'Nov'),
+      t('MONTHSHORT12', 'Dec')
     ]
     const weekdays = [
       t('DAY7', 'Sunday'),
@@ -66,22 +66,22 @@ export const UtilsProviders = ({ children }) => {
       t('DAY6', 'Saturday')
     ]
     const weekdaysShort = [
-      t('DAYSHORT7', 'Sun' ),
-      t('DAYSHORT1', 'Mon' ),
-      t('DAYSHORT2', 'Tue' ),
-      t('DAYSHORT3', 'Wed' ),
-      t('DAYSHORT4', 'Thu' ),
-      t('DAYSHORT5', 'Fri' ),
-      t('DAYSHORT6', 'Sat' )
+      t('DAYSHORT7', 'Sun'),
+      t('DAYSHORT1', 'Mon'),
+      t('DAYSHORT2', 'Tue'),
+      t('DAYSHORT3', 'Wed'),
+      t('DAYSHORT4', 'Thu'),
+      t('DAYSHORT5', 'Fri'),
+      t('DAYSHORT6', 'Sat')
     ]
     const weekdaysMin = [
-      t('DAYMIN7', 'Su' ),
-      t('DAYMIN1', 'Mo' ),
-      t('DAYMIN2', 'Tu' ),
-      t('DAYMIN3', 'We' ),
-      t('DAYMIN4', 'Th' ),
-      t('DAYMIN5', 'Fr' ),
-      t('DAYMIN6', 'Sa' )
+      t('DAYMIN7', 'Su'),
+      t('DAYMIN1', 'Mo'),
+      t('DAYMIN2', 'Tu'),
+      t('DAYMIN3', 'We'),
+      t('DAYMIN4', 'Th'),
+      t('DAYMIN5', 'Fr'),
+      t('DAYMIN6', 'Sa')
     ]
     const localeObject = {
       name: 'auto', // name String
@@ -257,6 +257,61 @@ export const UtilsProviders = ({ children }) => {
     return url
   }
 
+  const getOrderState = (num) => {
+    switch (num) {
+      case 0:
+        return t('PENDING', 'Pending')
+      case 1:
+        return t('COMPLETED_BY_ADMIN', 'Completed by admin')
+      case 2:
+        return t('REJECTED_BY_ADMIN', 'Rejected by admin')
+      case 3:
+        return t('ORDER_STATUS_IN_BUSINESS', 'Driver arrived to business')
+      case 4:
+        return t('PREPARATION_COMPLETED', 'Preparation Completed')
+      case 5:
+        return t('REJECTED_BY_BUSINESS', 'Rejected by business')
+      case 6:
+        return t('REJECTED_BY_DRIVER', 'Rejected by driver')
+      case 7:
+        return t('ACCEPTED_BY_BUSINESS', 'Accepted by business')
+      case 8:
+        return t('ACCEPTED_BY_DRIVER', 'Accepted by driver')
+      case 9:
+        return t('PICK_UP_COMPLETED_BY_DRIVER', 'Pick up completed by driver')
+      case 10:
+        return t('PICK_UP_FAILED_BY_DRIVER', 'Pick up Failed by driver')
+      case 11:
+        return t('DELIVERY_COMPLETED_BY_DRIVER', 'Delivery completed by driver')
+      case 12:
+        return t('DELIVERY_FAILED_BY_DRIVER', 'Delivery Failed by driver')
+      case 13:
+        return t('PREORDER', 'Preorder')
+      case 14:
+        return t('ORDER_NOT_READY', 'Order not ready')
+      case 15:
+        return t('ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER', 'Pickup completed by customer')
+      case 16:
+        return t('ORDER_STATUS_CANCELLED_BY_CUSTOMER', 'Cancelled by customer')
+      case 17:
+        return t('ORDER_NOT_PICKEDUP_BY_CUSTOMER', 'Not picked by customer')
+      case 18:
+        return t('ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS', 'Driver almost arrived to business')
+      case 19:
+        return t('ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER', 'Driver almost arrived to customer')
+      case 20:
+        return t('ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS', 'Customer almost arrived to business')
+      case 21:
+        return t('ORDER_CUSTOMER_ARRIVED_BUSINESS', 'Customer arrived to business')
+      case 22:
+        return t('ORDER_LOOKING_FOR_DRIVER', 'Looking for driver')
+      case 23:
+        return t('ORDER_DRIVER_ON_WAY', 'Driver on way')
+      default:
+        return 'N/A'
+    }
+  }
+
   const functions = {
     parsePrice,
     parseNumber,
@@ -266,7 +321,8 @@ export const UtilsProviders = ({ children }) => {
     parseShortenDistance,
     getTimeAgo,
     getTimeTo,
-    optimizeImage
+    optimizeImage,
+    getOrderState
   }
 
   useEffect(() => {
@@ -286,5 +342,5 @@ export const UtilsProviders = ({ children }) => {
  */
 export const useUtils = () => {
   const utilsManager = useContext(UtilsContext)
-  return utilsManager || [{}, () => {}]
+  return utilsManager || [{}, () => { }]
 }
