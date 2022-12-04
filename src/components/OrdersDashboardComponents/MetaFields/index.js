@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
-import { useSession } from '../../../../contexts/SessionContext'
-import { useApi } from '../../../../contexts/ApiContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
 
 export const MetaFields = (props) => {
   const {

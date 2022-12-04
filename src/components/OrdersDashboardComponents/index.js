@@ -2,7 +2,7 @@ import { BusinessProductsListing } from './BusinessProductsListing'
 import { CheckPassword } from './CheckPassword'
 import { CityList } from './CityList'
 import { CountryList } from './CountryList'
-import { DashBoardBusinessList } from './DashboardBusinessList'
+import { DashboardBusinessList } from './DashboardBusinessList'
 import { DashboardOrdersList } from './DashboardOrdersList'
 import { DriverList } from '../DriverList'
 import { ExportCSV } from './ExportCSV'
@@ -25,7 +25,7 @@ export {
   CheckPassword,
   CityList,
   CountryList,
-  DashBoardBusinessList,
+  DashboardBusinessList,
   DashboardOrdersList,
   DriverList,
   ExportCSV,

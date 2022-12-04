@@ -27,10 +27,10 @@ Object.defineProperty(exports, "CountryList", {
     return _CountryList.CountryList;
   }
 });
-Object.defineProperty(exports, "DashBoardBusinessList", {
+Object.defineProperty(exports, "DashboardBusinessList", {
   enumerable: true,
   get: function get() {
-    return _DashboardBusinessList.DashBoardBusinessList;
+    return _DashboardBusinessList.DashboardBusinessList;
   }
 });
 Object.defineProperty(exports, "DashboardOrdersList", {

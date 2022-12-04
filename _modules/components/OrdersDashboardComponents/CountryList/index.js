@@ -11,7 +11,7 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _ApiContext = require("../../../../contexts/ApiContext");
+var _ApiContext = require("../../../contexts/ApiContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

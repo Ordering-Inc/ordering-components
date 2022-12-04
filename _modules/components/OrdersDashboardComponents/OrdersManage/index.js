@@ -11,11 +11,11 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _SessionContext = require("../../../../contexts/SessionContext");
+var _SessionContext = require("../../../contexts/SessionContext");
 
-var _ApiContext = require("../../../../contexts/ApiContext");
+var _ApiContext = require("../../../contexts/ApiContext");
 
-var _WebsocketContext = require("../../../../contexts/WebsocketContext");
+var _WebsocketContext = require("../../../contexts/WebsocketContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

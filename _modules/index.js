@@ -255,10 +255,10 @@ Object.defineProperty(exports, "CustomerProvider", {
     return _CustomerContext.CustomerProvider;
   }
 });
-Object.defineProperty(exports, "DashBoardBusinessList", {
+Object.defineProperty(exports, "DashboardBusinessList", {
   enumerable: true,
   get: function get() {
-    return _OrdersDashboardComponents.DashBoardBusinessList;
+    return _OrdersDashboardComponents.DashboardBusinessList;
   }
 });
 Object.defineProperty(exports, "DashboardOrdersList", {
