@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useWebsocket } from '../../contexts/WebsocketContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const Messages = (props) => {
   const {

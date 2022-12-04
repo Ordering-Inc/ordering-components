@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useApi } from '../../contexts/ApiContext'
-import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useSession } from '../../../contexts/SessionContext'
 
 export const PointsWalletLevels = (props) => {
   const {

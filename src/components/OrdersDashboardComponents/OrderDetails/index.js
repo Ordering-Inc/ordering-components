@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useWebsocket } from '../../contexts/WebsocketContext'
-import { useEvent } from '../../contexts/EventContext'
-import { useLanguage } from '../../contexts/LanguageContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
+import { useEvent } from '../../../contexts/EventContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
+import { useToast, ToastType } from '../../../contexts/ToastContext'
 
 export const OrderDetails = (props) => {
   const {

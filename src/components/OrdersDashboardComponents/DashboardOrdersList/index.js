@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string, object, number } from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useWebsocket } from '../../contexts/WebsocketContext'
-import { useEvent } from '../../contexts/EventContext'
-import { useConfig } from '../../contexts/ConfigContext'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
+import { useEvent } from '../../../contexts/EventContext'
+import { useConfig } from '../../../contexts/ConfigContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
 
 export const DashboardOrdersList = (props) => {
   const {

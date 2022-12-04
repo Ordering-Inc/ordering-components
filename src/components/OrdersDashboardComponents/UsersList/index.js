@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
-import { useApi } from '../../contexts/ApiContext'
-import { useSession } from '../../contexts/SessionContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useToast, ToastType } from '../../../contexts/ToastContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
 
 export const UsersList = (props) => {
   const {

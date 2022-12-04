@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
-import { useLanguage } from '../../contexts/LanguageContext'
-import { useConfig } from '../../contexts/ConfigContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useToast, ToastType } from '../../../contexts/ToastContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
+import { useConfig } from '../../../contexts/ConfigContext'
 
 export const GoogleMapsApiKeySetting = (props) => {
   const {

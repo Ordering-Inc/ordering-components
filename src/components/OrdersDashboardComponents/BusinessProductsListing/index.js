@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useEvent } from '../../../contexts/EventContext'
 
 export const BusinessProductsListing = (props) => {
   const {

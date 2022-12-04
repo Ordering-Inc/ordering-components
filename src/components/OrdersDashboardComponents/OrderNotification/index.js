@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useWebsocket } from '../../contexts/WebsocketContext'
-import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
+import { useEvent } from '../../../contexts/EventContext'
 
 export const OrderNotification = (props) => {
   const {

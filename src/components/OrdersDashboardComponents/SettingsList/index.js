@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes, { object, string } from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
-import { useLanguage } from '../../contexts/LanguageContext'
-import { useConfig } from '../../contexts/ConfigContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useToast, ToastType } from '../../../contexts/ToastContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
+import { useConfig } from '../../../contexts/ConfigContext'
 
 /**
  * Component to manage Settings List page behavior without UI component
