@@ -39,10 +39,10 @@ Object.defineProperty(exports, "DashboardOrdersList", {
     return _DashboardOrdersList.DashboardOrdersList;
   }
 });
-Object.defineProperty(exports, "DriverList", {
+Object.defineProperty(exports, "DriversList", {
   enumerable: true,
   get: function get() {
-    return _DriverList.DriverList;
+    return _DriversList.DriversList;
   }
 });
 Object.defineProperty(exports, "ExportCSV", {
@@ -142,7 +142,7 @@ var _DashboardBusinessList = require("./DashboardBusinessList");
 
 var _DashboardOrdersList = require("./DashboardOrdersList");
 
-var _DriverList = require("../DriverList");
+var _DriversList = require("./DriversList");
 
 var _ExportCSV = require("./ExportCSV");
 
@@ -152,11 +152,11 @@ var _LogisticInformation = require("./LogisticInformation");
 
 var _Logistics = require("./Logistics");
 
-var _Messages = require("../Messages");
+var _Messages = require("./Messages");
 
 var _MetaFields = require("./MetaFields");
 
-var _OrderDetails = require("../OrderDetails");
+var _OrderDetails = require("./OrderDetails");
 
 var _OrderNotification = require("./OrderNotification");
 

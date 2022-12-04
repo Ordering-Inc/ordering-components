@@ -282,7 +282,7 @@ Object.defineProperty(exports, "DriverList", {
 Object.defineProperty(exports, "DriverListDashboard", {
   enumerable: true,
   get: function get() {
-    return _OrdersDashboardComponents.DriverList;
+    return _OrdersDashboardComponents.DriversList;
   }
 });
 Object.defineProperty(exports, "DriverTips", {
