@@ -4,14 +4,14 @@ import { CityList } from './CityList'
 import { CountryList } from './CountryList'
 import { DashboardBusinessList } from './DashboardBusinessList'
 import { DashboardOrdersList } from './DashboardOrdersList'
-import { DriverList } from '../DriverList'
+import { DriversList } from './DriversList'
 import { ExportCSV } from './ExportCSV'
 import { GoogleMapsApiKeySetting } from './GoogleMapsApiKeySetting'
 import { LogisticInformation } from './LogisticInformation'
 import { Logistics } from './Logistics'
-import { Messages } from '../Messages'
+import { Messages } from './Messages'
 import { MetaFields } from './MetaFields'
-import { OrderDetails } from '../OrderDetails'
+import { OrderDetails } from './OrderDetails'
 import { OrderNotification } from './OrderNotification'
 import { OrdersFilter } from './OrdersFilter'
 import { OrdersManage } from './OrdersManage'
@@ -27,7 +27,7 @@ export {
   CountryList,
   DashboardBusinessList,
   DashboardOrdersList,
-  DriverList,
+  DriversList,
   ExportCSV,
   GoogleMapsApiKeySetting,
   LogisticInformation,

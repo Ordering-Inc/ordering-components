@@ -128,7 +128,7 @@ import {
   CountryList,
   DashboardBusinessList,
   DashboardOrdersList,
-  DriverList as DriverListDashboard,
+  DriversList as DriverListDashboard,
   ExportCSV,
   GoogleMapsApiKeySetting,
   LogisticInformation,
