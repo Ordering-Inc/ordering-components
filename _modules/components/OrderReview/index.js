@@ -35,7 +35,8 @@ var OrderReview = function OrderReview(props) {
     onSaveReview = props.onSaveReview,
     handleCustomSendReview = props.handleCustomSendReview,
     isToast = props.isToast,
-    defaultStar = props.defaultStar;
+    defaultStar = props.defaultStar,
+    handleUpdateOrderList = props.handleUpdateOrderList;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -118,10 +119,13 @@ var OrderReview = function OrderReview(props) {
                 error: error
               });
               if (!error && isToast) showToast(_ToastContext.ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'));
-              _context.next = 20;
+              if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id, {
+                review: result
+              });
+              _context.next = 21;
               break;
-            case 17:
-              _context.prev = 17;
+            case 18:
+              _context.prev = 18;
               _context.t0 = _context["catch"](2);
               setFormState({
                 result: {
@@ -130,12 +134,12 @@ var OrderReview = function OrderReview(props) {
                 },
                 loading: false
               });
-            case 20:
+            case 21:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 17]]);
+      }, _callee, null, [[2, 18]]);
     }));
     return function handleSendReview() {
       return _ref.apply(this, arguments);

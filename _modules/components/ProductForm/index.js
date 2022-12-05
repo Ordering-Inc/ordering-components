@@ -11,6 +11,9 @@ var _OrderContext = require("../../contexts/OrderContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 var _ApiContext = require("../../contexts/ApiContext");
 var _EventContext = require("../../contexts/EventContext");
+var _SessionContext = require("../../contexts/SessionContext");
+var _ToastContext = require("../../contexts/ToastContext");
+var _LanguageContext = require("../../contexts/LanguageContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -43,8 +46,20 @@ var ProductForm = function ProductForm(props) {
     isService = props.isService,
     isCartProduct = props.isCartProduct,
     productAddedToCartLength = props.productAddedToCartLength,
-    professionalList = props.professionalList;
+    professionalList = props.professionalList,
+    handleUpdateProducts = props.handleUpdateProducts;
   var requestsState = {};
+  var _useSession = (0, _SessionContext.useSession)(),
+    _useSession2 = _slicedToArray(_useSession, 1),
+    _useSession2$ = _useSession2[0],
+    user = _useSession2$.user,
+    token = _useSession2$.token;
+  var _useToast = (0, _ToastContext.useToast)(),
+    _useToast2 = _slicedToArray(_useToast, 2),
+    showToast = _useToast2[1].showToast;
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+    _useLanguage2 = _slicedToArray(_useLanguage, 2),
+    t = _useLanguage2[1];
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -244,64 +259,151 @@ var ProductForm = function ProductForm(props) {
     }
     return ((_product$product7 = product.product) === null || _product$product7 === void 0 ? void 0 : _product$product7.price) + subtotal;
   };
+  /**
+   * Method to add, remove favorite info for user from API
+   */
+  var handleFavoriteProduct = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(productFav) {
+      var isAdd,
+        productId,
+        changes,
+        requestOptions,
+        fetchEndpoint,
+        response,
+        content,
+        _args = arguments;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              isAdd = _args.length > 1 && _args[1] !== undefined ? _args[1] : false;
+              if (!(!product || !user)) {
+                _context.next = 3;
+                break;
+              }
+              return _context.abrupt("return");
+            case 3:
+              showToast(_ToastContext.ToastType.Info, t('LOADING', 'loading'));
+              _context.prev = 4;
+              setProduct(_objectSpread(_objectSpread({}, product), {}, {
+                loading: true,
+                error: null
+              }));
+              productId = productFav === null || productFav === void 0 ? void 0 : productFav.id;
+              changes = {
+                object_id: productId
+              };
+              requestOptions = _objectSpread({
+                method: isAdd ? 'POST' : 'DELETE',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(token),
+                  'X-App-X': ordering.appId
+                }
+              }, isAdd && {
+                body: JSON.stringify(changes)
+              });
+              fetchEndpoint = isAdd ? "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_products") : "".concat(ordering.root, "/users/").concat(user.id, "/favorite_products/").concat(productId);
+              _context.next = 12;
+              return fetch(fetchEndpoint, requestOptions);
+            case 12:
+              response = _context.sent;
+              _context.next = 15;
+              return response.json();
+            case 15:
+              content = _context.sent;
+              if (!content.error) {
+                loadProductWithOptions();
+                handleUpdateProducts && handleUpdateProducts(productId, {
+                  favorite: isAdd
+                });
+                showToast(_ToastContext.ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
+              } else {
+                setProduct(_objectSpread(_objectSpread({}, product), {}, {
+                  loading: false,
+                  error: content.result
+                }));
+                showToast(_ToastContext.ToastType.Error, content.result);
+              }
+              _context.next = 23;
+              break;
+            case 19:
+              _context.prev = 19;
+              _context.t0 = _context["catch"](4);
+              setProduct(_objectSpread(_objectSpread({}, product), {}, {
+                loading: false,
+                error: [_context.t0.message]
+              }));
+              showToast(_ToastContext.ToastType.Error, [_context.t0.message]);
+            case 23:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[4, 19]]);
+    }));
+    return function handleFavoriteProduct(_x2) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 
   /**
    * Load product from API
    */
   var loadProductWithOptions = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var source, _yield$ordering$busin, _yield$ordering$busin2, result, error;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
-          switch (_context.prev = _context.next) {
+          switch (_context2.prev = _context2.next) {
             case 0:
-              _context.prev = 0;
+              _context2.prev = 0;
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: true
               }));
               source = {};
               requestsState.product = source;
-              _context.next = 6;
+              _context2.next = 6;
               return ordering.businesses(props.businessId).categories(props.categoryId).products(props.productId).get({
                 cancelToken: source
               });
             case 6:
-              _yield$ordering$busin = _context.sent;
+              _yield$ordering$busin = _context2.sent;
               _yield$ordering$busin2 = _yield$ordering$busin.content;
               result = _yield$ordering$busin2.result;
               error = _yield$ordering$busin2.error;
               if (error) {
-                _context.next = 13;
+                _context2.next = 13;
                 break;
               }
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: false,
                 product: result
               }));
-              return _context.abrupt("return");
+              return _context2.abrupt("return");
             case 13:
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: false,
                 error: [result]
               }));
-              _context.next = 19;
+              _context2.next = 19;
               break;
             case 16:
-              _context.prev = 16;
-              _context.t0 = _context["catch"](0);
+              _context2.prev = 16;
+              _context2.t0 = _context2["catch"](0);
               setProduct(_objectSpread(_objectSpread({}, product), {}, {
                 loading: false,
-                error: [_context.t0.message]
+                error: [_context2.t0.message]
               }));
             case 19:
             case "end":
-              return _context.stop();
+              return _context2.stop();
           }
         }
-      }, _callee, null, [[0, 16]]);
+      }, _callee2, null, [[0, 16]]);
     }));
     return function loadProductWithOptions() {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
 
@@ -395,10 +497,10 @@ var ProductForm = function ProductForm(props) {
     if (!newProductCart.options) {
       newProductCart.options = {};
     }
-    defaultOptions.map(function (_ref2) {
-      var option = _ref2.option,
-        state = _ref2.state,
-        suboption = _ref2.suboption;
+    defaultOptions.map(function (_ref3) {
+      var option = _ref3.option,
+        state = _ref3.state,
+        suboption = _ref3.suboption;
       if (!newProductCart.options["id:".concat(option.id)]) {
         newProductCart.options["id:".concat(option.id)] = {
           id: option.id,
@@ -496,23 +598,23 @@ var ProductForm = function ProductForm(props) {
    * Handle when click on save product
    */
   var handleSave = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, changes, currentProduct, _props$productCart7;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
               if (handleCustomSave) {
                 handleCustomSave && handleCustomSave();
               }
               errors = checkErrors();
               if (!(Object.keys(errors).length === 0)) {
-                _context2.next = 19;
+                _context3.next = 19;
                 break;
               }
               successful = true;
               if (!useOrderContext) {
-                _context2.next = 18;
+                _context3.next = 18;
                 break;
               }
               successful = false;
@@ -524,20 +626,20 @@ var ProductForm = function ProductForm(props) {
                 service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
               });
               if ((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code) {
-                _context2.next = 14;
+                _context3.next = 14;
                 break;
               }
-              _context2.next = 11;
+              _context3.next = 11;
               return addProduct(currentProduct, changes, false);
             case 11:
-              successful = _context2.sent;
-              _context2.next = 18;
+              successful = _context3.sent;
+              _context3.next = 18;
               break;
             case 14:
-              _context2.next = 16;
+              _context3.next = 16;
               return updateProduct(currentProduct, changes, false);
             case 16:
-              successful = _context2.sent;
+              successful = _context3.sent;
               if (successful) {
                 events.emit('product_edited', currentProduct);
               }
@@ -547,13 +649,13 @@ var ProductForm = function ProductForm(props) {
               }
             case 19:
             case "end":
-              return _context2.stop();
+              return _context3.stop();
           }
         }
-      }, _callee2);
+      }, _callee3);
     }));
-    return function handleSave(_x2) {
-      return _ref3.apply(this, arguments);
+    return function handleSave(_x3) {
+      return _ref4.apply(this, arguments);
     };
   }();
   var increment = function increment() {
@@ -612,55 +714,55 @@ var ProductForm = function ProductForm(props) {
    * Load professionals from API
    */
   var getProfessionalList = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _yield$ordering$busin3, _yield$ordering$busin4, result, error, _result$professionals;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
             case 0:
-              _context3.prev = 0;
+              _context4.prev = 0;
               setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
                 loading: true
               }));
-              _context3.next = 4;
+              _context4.next = 4;
               return ordering.businesses(props.businessId).select(['id', 'professionals']).get();
             case 4:
-              _yield$ordering$busin3 = _context3.sent;
+              _yield$ordering$busin3 = _context4.sent;
               _yield$ordering$busin4 = _yield$ordering$busin3.content;
               result = _yield$ordering$busin4.result;
               error = _yield$ordering$busin4.error;
               if (error) {
-                _context3.next = 11;
+                _context4.next = 11;
                 break;
               }
               setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
                 loading: false,
                 professionals: (_result$professionals = result === null || result === void 0 ? void 0 : result.professionals) !== null && _result$professionals !== void 0 ? _result$professionals : []
               }));
-              return _context3.abrupt("return");
+              return _context4.abrupt("return");
             case 11:
               setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
                 loading: false,
                 error: [result]
               }));
-              _context3.next = 17;
+              _context4.next = 17;
               break;
             case 14:
-              _context3.prev = 14;
-              _context3.t0 = _context3["catch"](0);
+              _context4.prev = 14;
+              _context4.t0 = _context4["catch"](0);
               setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
                 loading: false,
-                error: [_context3.t0.message]
+                error: [_context4.t0.message]
               }));
             case 17:
             case "end":
-              return _context3.stop();
+              return _context4.stop();
           }
         }
-      }, _callee3, null, [[0, 14]]);
+      }, _callee4, null, [[0, 14]]);
     }));
     return function getProfessionalList() {
-      return _ref4.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -694,8 +796,8 @@ var ProductForm = function ProductForm(props) {
    */
   (0, _react.useEffect)(function () {
     if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-      var _ref5, _ref6;
-      var options = (_ref5 = []).concat.apply(_ref5, _toConsumableArray(product.product.extras.map(function (extra) {
+      var _ref6, _ref7;
+      var options = (_ref6 = []).concat.apply(_ref6, _toConsumableArray(product.product.extras.map(function (extra) {
         return extra.options.filter(function (option) {
           return option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
             return suboption.enabled;
@@ -707,7 +809,7 @@ var ProductForm = function ProductForm(props) {
       if (!(options !== null && options !== void 0 && options.length)) {
         return;
       }
-      var suboptions = (_ref6 = []).concat.apply(_ref6, _toConsumableArray(options.map(function (option) {
+      var suboptions = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(options.map(function (option) {
         return option.suboptions;
       }))).filter(function (suboption) {
         return suboption.enabled;
@@ -748,8 +850,8 @@ var ProductForm = function ProductForm(props) {
   if (isStarbucks) {
     (0, _react.useEffect)(function () {
       if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-        var _ref7, _ref8;
-        var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
+        var _ref8, _ref9;
+        var options = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(product.product.extras.map(function (extra) {
           return extra.options.filter(function (option) {
             return option.name === 'Tamaño' && option.suboptions.filter(function (suboption) {
               return suboption.name === 'Grande (16oz - 437ml)';
@@ -759,13 +861,11 @@ var ProductForm = function ProductForm(props) {
         if (!(options !== null && options !== void 0 && options.length)) {
           return;
         }
-        var suboptions = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(options.map(function (option) {
+        var suboptions = (_ref9 = []).concat.apply(_ref9, _toConsumableArray(options.map(function (option) {
           return option.suboptions;
         }))).filter(function (suboption) {
           return suboption.name === 'Grande (16oz - 437ml)';
         });
-        // console.log(suboptions)
-
         var states = suboptions.map(function (suboption, i) {
           var price = options[i].with_half_option && suboption.half_price && (suboption === null || suboption === void 0 ? void 0 : suboption.position) !== 'whole' ? suboption.half_price : suboption.price;
           return {
@@ -836,6 +936,7 @@ var ProductForm = function ProductForm(props) {
     handleChangeProductCartQuantity: handleChangeProductCartQuantity,
     handleSave: handleSave,
     showOption: showOption,
+    handleFavoriteProduct: handleFavoriteProduct,
     handleChangeIngredientState: handleChangeIngredientState,
     handleChangeSuboptionState: handleChangeSuboptionState,
     handleChangeCommentState: handleChangeCommentState,

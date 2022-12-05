@@ -801,6 +801,58 @@ var OrderList = function OrderList(props) {
       result: updatedBusiness
     }));
   };
+  var getPage = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(page, pageSize) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) {
+          switch (_context8.prev = _context8.next) {
+            case 0:
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: true
+              }));
+              _context8.prev = 1;
+              _context8.next = 4;
+              return getOrders(page, pageSize);
+            case 4:
+              response = _context8.sent;
+              setOrderList({
+                loading: false,
+                orders: response.content.error ? orderList.orders : response.content.result,
+                error: response.content.error ? response.content.result : null
+              });
+              if (!response.content.error) {
+                setPagination({
+                  currentPage: response.content.pagination.current_page,
+                  pageSize: response.content.pagination.page_size,
+                  totalPages: response.content.pagination.total_pages,
+                  total: response.content.pagination.total,
+                  from: response.content.pagination.from,
+                  to: response.content.pagination.to
+                });
+              }
+              _context8.next = 12;
+              break;
+            case 9:
+              _context8.prev = 9;
+              _context8.t0 = _context8["catch"](1);
+              if (_context8.t0.constructor.name !== 'Cancel') {
+                setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                  loading: false,
+                  error: [_context8.t0.message]
+                }));
+              }
+            case 12:
+            case "end":
+              return _context8.stop();
+          }
+        }
+      }, _callee8, null, [[1, 9]]);
+    }));
+    return function getPage(_x10, _x11) {
+      return _ref8.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (profileMessage) return;
     if (!orderList.loading && orderBy !== 'last_direct_message_at') {
@@ -853,7 +905,8 @@ var OrderList = function OrderList(props) {
     handleUpdateBusinesses: handleUpdateBusinesses,
     businesses: businesses,
     professionals: professionals,
-    handleUpdateProfessionals: handleUpdateProfessionals
+    handleUpdateProfessionals: handleUpdateProfessionals,
+    getPage: getPage
   })));
 };
 exports.OrderList = OrderList;
