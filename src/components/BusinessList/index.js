@@ -34,7 +34,8 @@ export const BusinessList = (props) => {
     franchiseId,
     businessId,
     cityId,
-    actualSlug
+    actualSlug,
+    searchValueCustom
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -427,6 +428,10 @@ export const BusinessList = (props) => {
       getCities()
     }
   }, [showCities])
+
+  useEffect(() => {
+    handleChangeSearch(searchValueCustom)
+  }, [searchValueCustom])
 
   /**
    * Default behavior business click
