@@ -62,7 +62,8 @@ var BusinessList = function BusinessList(props) {
     franchiseId = props.franchiseId,
     businessId = props.businessId,
     cityId = props.cityId,
-    actualSlug = props.actualSlug;
+    actualSlug = props.actualSlug,
+    searchValueCustom = props.searchValueCustom;
   var _useState = (0, _react.useState)({
       businesses: [],
       loading: true,
@@ -561,6 +562,9 @@ var BusinessList = function BusinessList(props) {
       getCities();
     }
   }, [showCities]);
+  (0, _react.useEffect)(function () {
+    handleChangeSearch(searchValueCustom);
+  }, [searchValueCustom]);
 
   /**
    * Default behavior business click
