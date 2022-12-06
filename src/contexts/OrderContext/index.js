@@ -760,7 +760,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         body: JSON.stringify(data)
       }
 
-      const response = await fetch(`${ordering.root}/carts/place_group`, requestOptions)
+      const response = await fetch(`${ordering.root}/cart_groups/${data?.cartUuid}/place`, requestOptions)
       const { error, result } = await response.json()
       if (!error) {
         result.carts.forEach(cart => {

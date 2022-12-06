@@ -121,6 +121,7 @@ import { ReviewProduct } from './components/ReviewProduct'
 import { ReviewDriver } from './components/ReviewDriver'
 import { UserVerification } from './components/UserVerification'
 import { WalletList } from './components/WalletList'
+import { MultiCartCreate } from './components/MultiCartCreate'
 import { CODES } from './constants/code-numbers'
 
 export {
@@ -233,6 +234,7 @@ export {
   MapView,
   UserVerification,
   WalletList,
+  MultiCartCreate,
   // Contexts
   ConfigContext,
   ConfigProvider,

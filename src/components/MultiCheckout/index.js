@@ -13,7 +13,8 @@ import { useLanguage } from '../../contexts/LanguageContext'
 export const MultiCheckout = (props) => {
   const {
     UIComponent,
-    onPlaceOrderClick
+    onPlaceOrderClick,
+    cartUuid
   } = props
 
   const [ordering] = useApi()
@@ -52,7 +53,8 @@ export const MultiCheckout = (props) => {
     }
     let payload = {
       carts: cartsUuids,
-      amount: totalCartsPrice
+      amount: totalCartsPrice,
+      cartUuid
     }
     if (paymethodSelected?.paymethod) {
       payload = {
