@@ -334,7 +334,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   }();
   (0, _react.useEffect)(function () {
     var _customersPhones$user;
-    if (phone && phone.length === 7 && (customersPhones === null || customersPhones === void 0 ? void 0 : (_customersPhones$user = customersPhones.users) === null || _customersPhones$user === void 0 ? void 0 : _customersPhones$user.length) === 0) {
+    if (phone && phone.length >= 7 && (customersPhones === null || customersPhones === void 0 ? void 0 : (_customersPhones$user = customersPhones.users) === null || _customersPhones$user === void 0 ? void 0 : _customersPhones$user.length) === 0) {
       getUsers();
     }
     if (phone && phone.length < 7) {
