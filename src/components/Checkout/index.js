@@ -16,10 +16,12 @@ export const Checkout = (props) => {
     actionsBeforePlace,
     handleCustomClick,
     onPlaceOrderClick,
-    UIComponent
+    UIComponent,
+    isApp
   } = props
 
   const [ordering] = useApi()
+  const [{ options }] = useOrder()
   const [, { refreshConfigs }] = useConfig()
 
   const [placing, setPlacing] = useState(false)
@@ -50,8 +52,12 @@ export const Checkout = (props) => {
    */
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
   /**
-   * Comment state
+   * Place spot state from chackout
    */
+  const [placeSpotNumber, setPlaceSpotNumber] = useState(cartState?.cart?.spot_number ?? cart?.spot_number)
+  /**
+ * Comment state
+ */
   const [commentState, setCommentState] = useState({ loading: false, result: null, error: null })
   /**
    * Object to save an object with business information
@@ -166,6 +172,7 @@ export const Checkout = (props) => {
     }
 
     setPlacing(true)
+    await onChangeSpot()
     const result = await placeCart(cart.uuid, payload)
 
     if (result?.error) {
@@ -190,6 +197,53 @@ export const Checkout = (props) => {
 
   const handlePaymethodChange = (paymethod) => {
     setPaymethodSelected(paymethod)
+  }
+
+  const onRemoveSpotNumber = (businessSlug) => {
+    const spotNumberFromStorage = window.localStorage.getItem('table_number')
+    if (!spotNumberFromStorage) return
+    const slug = JSON.parse(spotNumberFromStorage)?.slug
+    if (businessSlug === slug) {
+      window.localStorage.removeItem('table_number')
+    }
+  }
+
+  /**
+   * change place spot from checkout
+   */
+  const handleChangeSpot = async ({ isCheckout = true, bodyToSend }) => {
+    try {
+      const id = isCheckout ? cart?.uuid : cart?.id
+      const endpointToFetch = isCheckout
+        ? ordering.setAccessToken(token).carts(id).set(bodyToSend)
+        : ordering.setAccessToken(token).orders(id).save(bodyToSend)
+
+      const { content: { error, result } } = await endpointToFetch
+
+      if (!error && !isApp) {
+        onRemoveSpotNumber && onRemoveSpotNumber(cart?.business?.slug)
+      }
+
+      showToast(
+        error ? ToastType.Error : ToastType.Success,
+        error
+          ? t('ERROR', result[0])
+          : t('SPOT_CHANGE_SUCCESS_CONTENT', 'Changes applied correctly')
+      )
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const onChangeSpot = async () => {
+    if (options.type === 3 && (!cartState?.cart?.spot_number && !cart?.spot_number)) {
+      const bodyToSend = {}
+      placeSpotNumber && (bodyToSend.spot_number = placeSpotNumber)
+
+      if (Object.keys(bodyToSend).length) {
+        handleChangeSpot({ bodyToSend })
+      }
+    }
   }
 
   /**
@@ -317,11 +371,15 @@ export const Checkout = (props) => {
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
           commentState={commentState}
+          placeSpotNumber={placeSpotNumber}
+          setPlaceSpotNumber={setPlaceSpotNumber}
           instructionsOptions={instructionsOptions}
           deliveryOptionSelected={deliveryOptionSelected}
           handlePaymethodChange={handlePaymethodChange}
           handlerClickPlaceOrder={handlerClickPlaceOrder}
           handleChangeComment={handleChangeComment}
+          handleChangeSpot={handleChangeSpot}
+          onChangeSpot={onChangeSpot}
           handleChangeDeliveryOption={handleChangeDeliveryOption}
         />
       )}
