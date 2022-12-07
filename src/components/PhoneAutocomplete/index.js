@@ -141,7 +141,7 @@ export const PhoneAutocomplete = (props) => {
   useEffect(() => {
     if (
       phone &&
-      phone.length === 7 &&
+      phone.length >= 7 &&
       customersPhones?.users?.length === 0
     ) {
       getUsers()
