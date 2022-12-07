@@ -519,6 +519,12 @@ Object.defineProperty(exports, "OrdersControlFilters", {
     return _OrdersControlFilters.OrdersControlFilters;
   }
 });
+Object.defineProperty(exports, "PageBanner", {
+  enumerable: true,
+  get: function get() {
+    return _PageBanner.PageBanner;
+  }
+});
 Object.defineProperty(exports, "PaymentOptionCash", {
   enumerable: true,
   get: function get() {
@@ -990,6 +996,7 @@ var _NewOrderNotification = require("./components/NewOrderNotification");
 var _OrderList = require("./components/OrderList");
 var _OrderTypeControl = require("./components/OrderTypeControl");
 var _OrdersControlFilters = require("./components/OrdersControlFilters");
+var _PageBanner = require("./components/PageBanner");
 var _PaymentOptions = require("./components/PaymentOptions");
 var _PaymentOptionWallet = require("./components/PaymentOptionWallet");
 var _Popup = require("./components/Popup");
