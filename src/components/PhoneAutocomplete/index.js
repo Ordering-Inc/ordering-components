@@ -146,7 +146,7 @@ export const PhoneAutocomplete = (props) => {
     ) {
       getUsers()
     }
-    if (phone && phone.length < 7) {
+    if ((phone && phone.length < 7) || !phone) {
       setCustomersPhones({ ...customersPhones, users: [] })
     }
   }, [phone])
