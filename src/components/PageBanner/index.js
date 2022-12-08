@@ -28,7 +28,7 @@ export const PageBanner = (props) => {
       const { error, result } = await response.json()
       setPageBannerState({
         loading: false,
-        banner: error ? null : result,
+        banner: error ? null : Array.isArray(result) ? result[0] : result,
         error: error ? result : null
       })
     } catch (error) {
