@@ -93,7 +93,8 @@ var BusinessList = function BusinessList(props) {
       franchiseId = props.franchiseId,
       businessId = props.businessId,
       cityId = props.cityId,
-      actualSlug = props.actualSlug;
+      actualSlug = props.actualSlug,
+      searchValueCustom = props.searchValueCustom;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -222,7 +223,6 @@ var BusinessList = function BusinessList(props) {
                 loading: true,
                 businesses: newFetch ? [] : businessesList.businesses
               }));
-              refreshConfigs();
               parameters = asDashboard ? {} : {
                 location: !customLocation ? "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng) : "".concat(customLocation.lat, ",").concat(customLocation.lng),
                 type: !initialOrderType ? ((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type) || 1 : initialOrderType
@@ -387,13 +387,13 @@ var BusinessList = function BusinessList(props) {
               requestsState.businesses = source;
               setRequestsState(_objectSpread({}, requestsState));
               fetchEndpoint = advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3 || !where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters) : where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard();
-              _context.next = 27;
+              _context.next = 26;
               return fetchEndpoint.get({
                 cancelToken: source,
                 advancedSearch: advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3
               });
 
-            case 27:
+            case 26:
               _yield$fetchEndpoint$ = _context.sent;
               _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
               error = _yield$fetchEndpoint$2.error;
@@ -448,11 +448,11 @@ var BusinessList = function BusinessList(props) {
                 businesses: businesses,
                 result: result
               }));
-              _context.next = 41;
+              _context.next = 40;
               break;
 
-            case 38:
-              _context.prev = 38;
+            case 37:
+              _context.prev = 37;
               _context.t0 = _context["catch"](0);
 
               if (_context.t0.constructor.name !== 'Cancel') {
@@ -463,12 +463,12 @@ var BusinessList = function BusinessList(props) {
                 }));
               }
 
-            case 41:
+            case 40:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 38]]);
+      }, _callee, null, [[0, 37]]);
     }));
 
     return function getBusinesses(_x, _x2, _x3) {
@@ -669,10 +669,15 @@ var BusinessList = function BusinessList(props) {
     }
   }, [initialFilterKey, initialFilterValue]);
   (0, _react.useEffect)(function () {
+    if (citiesState.loading) return;
+
     if (showCities) {
       getCities();
     }
   }, [showCities]);
+  (0, _react.useEffect)(function () {
+    handleChangeSearch(searchValueCustom);
+  }, [searchValueCustom]);
   /**
    * Default behavior business click
    * @param {object} business Business clicked

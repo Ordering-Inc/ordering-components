@@ -67,18 +67,23 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Checkout page behavior without UI component
  */
 var Checkout = function Checkout(props) {
-  var _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$options2;
+  var _cartState$cart$spot_, _cartState$cart, _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$options2;
 
   var cartState = props.cartState,
       propsToFetch = props.propsToFetch,
       actionsBeforePlace = props.actionsBeforePlace,
       handleCustomClick = props.handleCustomClick,
       onPlaceOrderClick = props.onPlaceOrderClick,
-      UIComponent = props.UIComponent;
+      UIComponent = props.UIComponent,
+      isApp = props.isApp;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useOrder = (0, _OrderContext.useOrder)(),
+      _useOrder2 = _slicedToArray(_useOrder, 1),
+      options = _useOrder2[0].options;
 
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 2),
@@ -106,10 +111,10 @@ var Checkout = function Checkout(props) {
    */
 
 
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 2),
-      orderState = _useOrder2[0],
-      placeCart = _useOrder2[1].placeCart;
+  var _useOrder3 = (0, _OrderContext.useOrder)(),
+      _useOrder4 = _slicedToArray(_useOrder3, 2),
+      orderState = _useOrder4[0],
+      placeCart = _useOrder4[1].placeCart;
   /**
    * Session content
    */
@@ -153,40 +158,49 @@ var Checkout = function Checkout(props) {
       deliveryOptionSelected = _useState8[0],
       setDeliveryOptionSelected = _useState8[1];
   /**
-   * Comment state
+   * Place spot state from chackout
    */
 
 
-  var _useState9 = (0, _react.useState)({
+  var _useState9 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
+      _useState10 = _slicedToArray(_useState9, 2),
+      placeSpotNumber = _useState10[0],
+      setPlaceSpotNumber = _useState10[1];
+  /**
+  * Comment state
+  */
+
+
+  var _useState11 = (0, _react.useState)({
     loading: false,
     result: null,
     error: null
   }),
-      _useState10 = _slicedToArray(_useState9, 2),
-      commentState = _useState10[0],
-      setCommentState = _useState10[1];
+      _useState12 = _slicedToArray(_useState11, 2),
+      commentState = _useState12[0],
+      setCommentState = _useState12[1];
   /**
    * Object to save an object with business information
    */
 
 
-  var _useState11 = (0, _react.useState)({
+  var _useState13 = (0, _react.useState)({
     business: null,
     loading: true,
     error: null
   }),
-      _useState12 = _slicedToArray(_useState11, 2),
-      businessDetails = _useState12[0],
-      setBusinessDetails = _useState12[1];
+      _useState14 = _slicedToArray(_useState13, 2),
+      businessDetails = _useState14[0],
+      setBusinessDetails = _useState14[1];
   /**
    * This must be contains an object with info about paymente selected
    */
 
 
-  var _useState13 = (0, _react.useState)(null),
-      _useState14 = _slicedToArray(_useState13, 2),
-      paymethodSelected = _useState14[0],
-      setPaymethodSelected = _useState14[1];
+  var _useState15 = (0, _react.useState)(null),
+      _useState16 = _slicedToArray(_useState15, 2),
+      paymethodSelected = _useState16[0],
+      setPaymethodSelected = _useState16[1];
 
   var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
     return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
@@ -212,7 +226,7 @@ var Checkout = function Checkout(props) {
 
   var getBusiness = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _orderState$options, _cartState$cart, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error, _result$paymethods, _paymethodSelected$pa, _paymethodSelected, _paymethodSelected$pa2, _paymethodSelected$pa3, _paymethodSelected$pa4;
+      var _orderState$options, _cartState$cart2, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error, _result$paymethods, _paymethodSelected$pa, _paymethodSelected, _paymethodSelected$pa2, _paymethodSelected$pa3, _paymethodSelected$pa4;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -232,11 +246,11 @@ var Checkout = function Checkout(props) {
               result = _yield$ordering$busin2.result;
               error = _yield$ordering$busin2.error;
 
-              if (!error && (_cartState$cart = cartState.cart) !== null && _cartState$cart !== void 0 && _cartState$cart.paymethod_id) {
+              if (!error && (_cartState$cart2 = cartState.cart) !== null && _cartState$cart2 !== void 0 && _cartState$cart2.paymethod_id) {
                 _paymethodSelected = result === null || result === void 0 ? void 0 : (_result$paymethods = result.paymethods) === null || _result$paymethods === void 0 ? void 0 : _result$paymethods.find(function (paymethod) {
-                  var _cartState$cart2;
+                  var _cartState$cart3;
 
-                  return (paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_id) === ((_cartState$cart2 = cartState.cart) === null || _cartState$cart2 === void 0 ? void 0 : _cartState$cart2.paymethod_id);
+                  return (paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_id) === ((_cartState$cart3 = cartState.cart) === null || _cartState$cart3 === void 0 ? void 0 : _cartState$cart3.paymethod_id);
                 });
 
                 if (_paymethodSelected !== null && _paymethodSelected !== void 0 && (_paymethodSelected$pa = _paymethodSelected.paymethod) !== null && _paymethodSelected$pa !== void 0 && _paymethodSelected$pa.id) {
@@ -335,40 +349,44 @@ var Checkout = function Checkout(props) {
               });
               setPlacing(true);
               _context2.next = 12;
-              return placeCart(cart.uuid, payload);
+              return onChangeSpot();
 
             case 12:
+              _context2.next = 14;
+              return placeCart(cart.uuid, payload);
+
+            case 14:
               result = _context2.sent;
 
               if (!(result !== null && result !== void 0 && result.error)) {
-                _context2.next = 16;
+                _context2.next = 18;
                 break;
               }
 
               setErrors(result === null || result === void 0 ? void 0 : result.result);
               return _context2.abrupt("return");
 
-            case 16:
+            case 18:
               cartResult = result === null || result === void 0 ? void 0 : result.result;
 
               if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-                _context2.next = 20;
+                _context2.next = 22;
                 break;
               }
 
-              _context2.next = 20;
+              _context2.next = 22;
               return actionsBeforePlace(paymethodSelected, result.result);
 
-            case 20:
+            case 22:
               if (!(confirmPayment && (result === null || result === void 0 ? void 0 : (_result$result = result.result) === null || _result$result === void 0 ? void 0 : (_result$result$paymet = _result$result.paymethod_data) === null || _result$result$paymet === void 0 ? void 0 : _result$result$paymet.gateway) === 'apple_pay')) {
-                _context2.next = 26;
+                _context2.next = 28;
                 break;
               }
 
-              _context2.next = 23;
+              _context2.next = 25;
               return confirmPayment(result === null || result === void 0 ? void 0 : (_result$result2 = result.result) === null || _result$result2 === void 0 ? void 0 : (_result$result2$payme = _result$result2.paymethod_data) === null || _result$result2$payme === void 0 ? void 0 : (_result$result2$payme2 = _result$result2$payme.result) === null || _result$result2$payme2 === void 0 ? void 0 : _result$result2$payme2.client_secret);
 
-            case 23:
+            case 25:
               _yield$confirmPayment = _context2.sent;
               confirmApplePayError = _yield$confirmPayment.error;
 
@@ -376,11 +394,11 @@ var Checkout = function Checkout(props) {
                 setErrors(confirmApplePayError);
               }
 
-            case 26:
+            case 28:
               setPlacing(false);
               onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
 
-            case 28:
+            case 30:
             case "end":
               return _context2.stop();
           }
@@ -396,6 +414,102 @@ var Checkout = function Checkout(props) {
   var handlePaymethodChange = function handlePaymethodChange(paymethod) {
     setPaymethodSelected(paymethod);
   };
+
+  var onRemoveSpotNumber = function onRemoveSpotNumber(businessSlug) {
+    var _JSON$parse;
+
+    var spotNumberFromStorage = window.localStorage.getItem('table_number');
+    if (!spotNumberFromStorage) return;
+    var slug = (_JSON$parse = JSON.parse(spotNumberFromStorage)) === null || _JSON$parse === void 0 ? void 0 : _JSON$parse.slug;
+
+    if (businessSlug === slug) {
+      window.localStorage.removeItem('table_number');
+    }
+  };
+  /**
+   * change place spot from checkout
+   */
+
+
+  var handleChangeSpot = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
+      var _ref3$isCheckout, isCheckout, bodyToSend, id, endpointToFetch, _yield$endpointToFetc, _yield$endpointToFetc2, error, result, _cart$business;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _ref3$isCheckout = _ref3.isCheckout, isCheckout = _ref3$isCheckout === void 0 ? true : _ref3$isCheckout, bodyToSend = _ref3.bodyToSend;
+              _context3.prev = 1;
+              id = isCheckout ? cart === null || cart === void 0 ? void 0 : cart.uuid : cart === null || cart === void 0 ? void 0 : cart.id;
+              endpointToFetch = isCheckout ? ordering.setAccessToken(token).carts(id).set(bodyToSend) : ordering.setAccessToken(token).orders(id).save(bodyToSend);
+              _context3.next = 6;
+              return endpointToFetch;
+
+            case 6:
+              _yield$endpointToFetc = _context3.sent;
+              _yield$endpointToFetc2 = _yield$endpointToFetc.content;
+              error = _yield$endpointToFetc2.error;
+              result = _yield$endpointToFetc2.result;
+
+              if (!error && !isApp) {
+                onRemoveSpotNumber && onRemoveSpotNumber(cart === null || cart === void 0 ? void 0 : (_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.slug);
+              }
+
+              showToast(error ? _ToastContext.ToastType.Error : _ToastContext.ToastType.Success, error ? t('ERROR', result[0]) : t('SPOT_CHANGE_SUCCESS_CONTENT', 'Changes applied correctly'));
+              _context3.next = 17;
+              break;
+
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](1);
+              console.log(_context3.t0);
+
+            case 17:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[1, 14]]);
+    }));
+
+    return function handleChangeSpot(_x4) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  var onChangeSpot = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+      var _cartState$cart4;
+
+      var bodyToSend;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              if (options.type === 3 && !(cartState !== null && cartState !== void 0 && (_cartState$cart4 = cartState.cart) !== null && _cartState$cart4 !== void 0 && _cartState$cart4.spot_number) && !(cart !== null && cart !== void 0 && cart.spot_number)) {
+                bodyToSend = {};
+                placeSpotNumber && (bodyToSend.spot_number = placeSpotNumber);
+
+                if (Object.keys(bodyToSend).length) {
+                  handleChangeSpot({
+                    bodyToSend: bodyToSend
+                  });
+                }
+              }
+
+            case 1:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function onChangeSpot() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
   /**
    * change comment for cart
    */
@@ -405,18 +519,18 @@ var Checkout = function Checkout(props) {
     try {
       if (previousComment !== value) {
         clearTimeout(timeout);
-        timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
           var uuid, response, _yield$response$json, result, error;
 
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          return _regeneratorRuntime().wrap(function _callee5$(_context5) {
             while (1) {
-              switch (_context3.prev = _context3.next) {
+              switch (_context5.prev = _context5.next) {
                 case 0:
                   setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
                     loading: true
                   }));
                   uuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
-                  _context3.next = 4;
+                  _context5.next = 4;
                   return fetch("".concat(ordering.root, "/carts/").concat(uuid), {
                     'Content-Type': 'application/json',
                     method: 'PUT',
@@ -431,17 +545,17 @@ var Checkout = function Checkout(props) {
                   });
 
                 case 4:
-                  response = _context3.sent;
-                  _context3.next = 7;
+                  response = _context5.sent;
+                  _context5.next = 7;
                   return response.json();
 
                 case 7:
-                  _yield$response$json = _context3.sent;
+                  _yield$response$json = _context5.sent;
                   result = _yield$response$json.result;
                   error = _yield$response$json.error;
 
                   if (!error) {
-                    _context3.next = 14;
+                    _context5.next = 14;
                     break;
                   }
 
@@ -451,7 +565,7 @@ var Checkout = function Checkout(props) {
                     result: result
                   }));
                   showToast(_ToastContext.ToastType.Error, result);
-                  return _context3.abrupt("return");
+                  return _context5.abrupt("return");
 
                 case 14:
                   setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
@@ -462,10 +576,10 @@ var Checkout = function Checkout(props) {
 
                 case 15:
                 case "end":
-                  return _context3.stop();
+                  return _context5.stop();
               }
             }
-          }, _callee3);
+          }, _callee5);
         })), 750);
       }
 
@@ -481,15 +595,15 @@ var Checkout = function Checkout(props) {
   };
 
   var getDeliveryOptions = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var response, _yield$response$json2, result, error;
 
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
-          switch (_context4.prev = _context4.next) {
+          switch (_context6.prev = _context6.next) {
             case 0:
-              _context4.prev = 0;
-              _context4.next = 3;
+              _context6.prev = 0;
+              _context6.next = 3;
               return fetch("".concat(ordering.root, "/delivery_options"), {
                 method: 'GET',
                 headers: {
@@ -500,17 +614,17 @@ var Checkout = function Checkout(props) {
               });
 
             case 3:
-              response = _context4.sent;
-              _context4.next = 6;
+              response = _context6.sent;
+              _context6.next = 6;
               return response.json();
 
             case 6:
-              _yield$response$json2 = _context4.sent;
+              _yield$response$json2 = _context6.sent;
               result = _yield$response$json2.result;
               error = _yield$response$json2.error;
 
               if (error) {
-                _context4.next = 12;
+                _context6.next = 12;
                 break;
               }
 
@@ -518,7 +632,7 @@ var Checkout = function Checkout(props) {
                 loading: false,
                 result: [].concat(_toConsumableArray(instructionsOptions.result), _toConsumableArray(result))
               });
-              return _context4.abrupt("return");
+              return _context6.abrupt("return");
 
             case 12:
               setInstructionsOptions({
@@ -527,42 +641,42 @@ var Checkout = function Checkout(props) {
                 result: result
               });
               showToast(_ToastContext.ToastType.Error, result);
-              _context4.next = 20;
+              _context6.next = 20;
               break;
 
             case 16:
-              _context4.prev = 16;
-              _context4.t0 = _context4["catch"](0);
+              _context6.prev = 16;
+              _context6.t0 = _context6["catch"](0);
               setInstructionsOptions({
                 loading: false,
                 error: true,
-                result: _context4.t0.message
+                result: _context6.t0.message
               });
-              showToast(_ToastContext.ToastType.Error, _context4.t0.message);
+              showToast(_ToastContext.ToastType.Error, _context6.t0.message);
 
             case 20:
             case "end":
-              return _context4.stop();
+              return _context6.stop();
           }
         }
-      }, _callee4, null, [[0, 16]]);
+      }, _callee6, null, [[0, 16]]);
     }));
 
     return function getDeliveryOptions() {
-      return _ref4.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
 
   var handleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value) {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(value) {
       var response, _yield$response$json3, result, error;
 
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) {
-          switch (_context5.prev = _context5.next) {
+          switch (_context7.prev = _context7.next) {
             case 0:
-              _context5.prev = 0;
-              _context5.next = 3;
+              _context7.prev = 0;
+              _context7.next = 3;
               return fetch("".concat(ordering.root, "/carts/").concat(cart === null || cart === void 0 ? void 0 : cart.uuid), {
                 method: 'PUT',
                 headers: {
@@ -576,12 +690,12 @@ var Checkout = function Checkout(props) {
               });
 
             case 3:
-              response = _context5.sent;
-              _context5.next = 6;
+              response = _context7.sent;
+              _context7.next = 6;
               return response.json();
 
             case 6:
-              _yield$response$json3 = _context5.sent;
+              _yield$response$json3 = _context7.sent;
               result = _yield$response$json3.result;
               error = _yield$response$json3.error;
               setDeliveryOptionSelected(result === null || result === void 0 ? void 0 : result.delivery_option_id);
@@ -590,24 +704,24 @@ var Checkout = function Checkout(props) {
                 showToast(_ToastContext.ToastType.Error, result);
               }
 
-              _context5.next = 16;
+              _context7.next = 16;
               break;
 
             case 13:
-              _context5.prev = 13;
-              _context5.t0 = _context5["catch"](0);
-              showToast(_ToastContext.ToastType.Error, _context5.t0.message);
+              _context7.prev = 13;
+              _context7.t0 = _context7["catch"](0);
+              showToast(_ToastContext.ToastType.Error, _context7.t0.message);
 
             case 16:
             case "end":
-              return _context5.stop();
+              return _context7.stop();
           }
         }
-      }, _callee5, null, [[0, 13]]);
+      }, _callee7, null, [[0, 13]]);
     }));
 
-    return function handleChangeDeliveryOption(_x4) {
-      return _ref5.apply(this, arguments);
+    return function handleChangeDeliveryOption(_x5) {
+      return _ref8.apply(this, arguments);
     };
   }();
 
@@ -650,11 +764,15 @@ var Checkout = function Checkout(props) {
     paymethodSelected: paymethodSelected,
     businessDetails: businessDetails,
     commentState: commentState,
+    placeSpotNumber: placeSpotNumber,
+    setPlaceSpotNumber: setPlaceSpotNumber,
     instructionsOptions: instructionsOptions,
     deliveryOptionSelected: deliveryOptionSelected,
     handlePaymethodChange: handlePaymethodChange,
     handlerClickPlaceOrder: handlerClickPlaceOrder,
     handleChangeComment: handleChangeComment,
+    handleChangeSpot: handleChangeSpot,
+    onChangeSpot: onChangeSpot,
     handleChangeDeliveryOption: handleChangeDeliveryOption
   })));
 };

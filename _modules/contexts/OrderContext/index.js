@@ -2044,40 +2044,55 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var getLastOrderHasNoReview = /*#__PURE__*/function () {
     var _ref22 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20() {
-      var pastOrderTypes, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder;
+      var pastOrderTypes, where, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder;
 
       return _regeneratorRuntime().wrap(function _callee20$(_context20) {
         while (1) {
           switch (_context20.prev = _context20.next) {
             case 0:
               if (!(session !== null && session !== void 0 && session.token)) {
-                _context20.next = 17;
+                _context20.next = 19;
                 break;
               }
 
               pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17];
+              where = [{
+                attribute: 'status',
+                value: pastOrderTypes
+              }];
+
+              if (franchiseId) {
+                where.push({
+                  attribute: 'ref_business',
+                  conditions: [{
+                    attribute: 'franchise_id',
+                    value: {
+                      condition: '=',
+                      value: franchiseId
+                    }
+                  }]
+                });
+              }
+
               options = {
                 query: {
                   orderBy: '-delivery_datetime',
                   page: 1,
                   page_size: 10,
-                  where: [{
-                    attribute: 'status',
-                    value: pastOrderTypes
-                  }]
+                  where: where
                 }
               };
-              _context20.next = 5;
+              _context20.next = 7;
               return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(options);
 
-            case 5:
+            case 7:
               _yield$ordering$setAc20 = _context20.sent;
               _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
               result = _yield$ordering$setAc21.result;
               error = _yield$ordering$setAc21.error;
 
               if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
-                _context20.next = 14;
+                _context20.next = 16;
                 break;
               }
 
@@ -2086,17 +2101,17 @@ var OrderProvider = function OrderProvider(_ref) {
               });
               return _context20.abrupt("return", _noRviewOrder);
 
-            case 14:
+            case 16:
               return _context20.abrupt("return", null);
-
-            case 15:
-              _context20.next = 18;
-              break;
 
             case 17:
+              _context20.next = 20;
+              break;
+
+            case 19:
               return _context20.abrupt("return", null);
 
-            case 18:
+            case 20:
             case "end":
               return _context20.stop();
           }

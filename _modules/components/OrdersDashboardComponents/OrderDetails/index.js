@@ -5,23 +5,23 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MultiCheckout = void 0;
+exports.OrderDetails = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
-var _OrderContext = require("../../contexts/OrderContext");
+var _SessionContext = require("../../../contexts/SessionContext");
 
-var _ApiContext = require("../../contexts/ApiContext");
+var _ApiContext = require("../../../contexts/ApiContext");
 
-var _SessionContext = require("../../contexts/SessionContext");
+var _WebsocketContext = require("../../../contexts/WebsocketContext");
 
-var _ToastContext = require("../../contexts/ToastContext");
+var _EventContext = require("../../../contexts/EventContext");
 
-var _LanguageContext = require("../../contexts/LanguageContext");
+var _LanguageContext = require("../../../contexts/LanguageContext");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _ToastContext = require("../../../contexts/ToastContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -41,14 +41,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -61,421 +53,449 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-/**
- * Component to manage Multi businesses checkout page behavior without UI component
- */
-var MultiCheckout = function MultiCheckout(props) {
-  var _Object$values;
+var OrderDetails = function OrderDetails(props) {
+  var orderId = props.orderId,
+      propsToFetch = props.propsToFetch,
+      asDashboard = props.asDashboard,
+      hashKey = props.hashKey,
+      userCustomerId = props.userCustomerId,
+      isDisableLoadMessages = props.isDisableLoadMessages,
+      drivers = props.drivers,
+      UIComponent = props.UIComponent;
 
-  var UIComponent = props.UIComponent,
-      onPlaceOrderClick = props.onPlaceOrderClick,
-      cartUuid = props.cartUuid;
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2$ = _useSession2[0],
+      user = _useSession2$.user,
+      token = _useSession2$.token,
+      loading = _useSession2$.loading;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
-  /**
-   * Session content
-   */
 
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
-  var _useSession = (0, _SessionContext.useSession)(),
-      _useSession2 = _slicedToArray(_useSession, 1),
-      token = _useSession2[0].token;
-
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 2),
-      carts = _useOrder2[0].carts,
-      placeMulitCarts = _useOrder2[1].placeMulitCarts;
-  /**
-  * Toast state
-  */
-
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
 
   var _useToast = (0, _ToastContext.useToast)(),
       _useToast2 = _slicedToArray(_useToast, 2),
       showToast = _useToast2[1].showToast;
 
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
-  /**
-  * Delivery Instructions options
-  */
-
-
   var _useState = (0, _react.useState)({
-    loading: false,
-    result: [{
-      id: null,
-      enabled: true,
-      name: t('EITHER_WAY', 'Either way')
-    }],
+    order: null,
+    loading: !props.order,
     error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      instructionsOptions = _useState2[0],
-      setInstructionsOptions = _useState2[1];
-  /**
-  * Delivery instructions selected
-  */
+      orderState = _useState2[0],
+      setOrderState = _useState2[1];
 
-
-  var _useState3 = (0, _react.useState)(undefined),
+  var _useState3 = (0, _react.useState)({
+    status: null,
+    loading: false,
+    error: null
+  }),
       _useState4 = _slicedToArray(_useState3, 2),
-      deliveryOptionSelected = _useState4[0],
-      setDeliveryOptionSelected = _useState4[1];
+      messageErrors = _useState4[0],
+      setMessageErrors = _useState4[1];
 
-  var openCarts = ((_Object$values = Object.values(carts)) === null || _Object$values === void 0 ? void 0 : _Object$values.filter(function (cart) {
-    var _cart$products;
-
-    return (cart === null || cart === void 0 ? void 0 : cart.products) && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.length) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2 && (cart === null || cart === void 0 ? void 0 : cart.valid_schedule) && (cart === null || cart === void 0 ? void 0 : cart.valid_products) && (cart === null || cart === void 0 ? void 0 : cart.valid_address) && (cart === null || cart === void 0 ? void 0 : cart.valid_maximum) && (cart === null || cart === void 0 ? void 0 : cart.valid_minimum) && !(cart !== null && cart !== void 0 && cart.wallets);
-  })) || null || [];
-  var totalCartsPrice = openCarts && openCarts.reduce(function (total, cart) {
-    return total + (cart === null || cart === void 0 ? void 0 : cart.total);
-  }, 0);
-  var cartsUuids = openCarts.reduce(function (uuids, cart) {
-    return [].concat(_toConsumableArray(uuids), [cart.uuid]);
-  }, []);
-
-  var _useState5 = (0, _react.useState)(false),
+  var _useState5 = (0, _react.useState)({
+    loading: false,
+    error: null
+  }),
       _useState6 = _slicedToArray(_useState5, 2),
-      placing = _useState6[0],
-      setPlacing = _useState6[1];
+      actionStatus = _useState6[0],
+      setActionStatus = _useState6[1];
 
-  var _useState7 = (0, _react.useState)({}),
-      _useState8 = _slicedToArray(_useState7, 2),
-      paymethodSelected = _useState8[0],
-      setPaymethodSelected = _useState8[1];
-
-  var _useState9 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
     loading: true,
     error: null,
-    result: null
+    messages: []
   }),
+      _useState8 = _slicedToArray(_useState7, 2),
+      messages = _useState8[0],
+      setMessages = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      cartGroup = _useState10[0],
-      setCartGroup = _useState10[1];
+      messagesReadList = _useState10[0],
+      setMessagesReadList = _useState10[1];
 
-  var handleGroupPlaceOrder = /*#__PURE__*/function () {
+  var socket = (0, _WebsocketContext.useWebsocket)();
+  var accessToken = props.accessToken || token;
+  /**
+   * Method to format a price number
+   * @param {Number} price
+   */
+
+  var formatPrice = function formatPrice(price) {
+    return price && "$ ".concat(price.toFixed(2));
+  };
+  /**
+   * Method to Load message for first time
+   */
+
+
+  var loadMessages = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _paymethodSelected$pa;
-
-      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMulitCart, error, result, orderUuids;
+      var url, response, _yield$response$json, error, result;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.paymethod_data;
+              _context.prev = 0;
+              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+                loading: true
+              }));
+              url = "".concat(ordering.root, "/orders/").concat(orderId, "/messages?mode=dashboard");
+              _context.next = 5;
+              return fetch(url, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "Bearer ".concat(accessToken)
+                }
+              });
 
-              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa = paymethodSelected.paymethod) === null || _paymethodSelected$pa === void 0 ? void 0 : _paymethodSelected$pa.gateway)) {
-                paymethodData = JSON.stringify({
-                  source_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa2 = paymethodSelected.paymethod_data) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.id
-                });
-              }
+            case 5:
+              response = _context.sent;
+              _context.next = 8;
+              return response.json();
 
-              payload = {
-                carts: cartsUuids,
-                amount: totalCartsPrice,
-                cartUuid: cartUuid
-              };
-
-              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
-                payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  paymethod_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id
-                });
-              }
-
-              if (paymethodData) {
-                payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  paymethod_data: paymethodData
-                });
-              }
-
-              if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.wallet_id) {
-                payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  wallet_id: paymethodSelected.wallet_id,
-                  wallet_data: paymethodSelected.wallet_data
-                });
-              }
-
-              setPlacing(true);
-              _context.next = 9;
-              return placeMulitCarts(payload);
-
-            case 9:
-              _yield$placeMulitCart = _context.sent;
-              error = _yield$placeMulitCart.error;
-              result = _yield$placeMulitCart.result;
-              setPlacing(false);
+            case 8:
+              _yield$response$json = _context.sent;
+              error = _yield$response$json.error;
+              result = _yield$response$json.result;
 
               if (!error) {
-                orderUuids = result.carts.reduce(function (uuids, cart) {
-                  return [].concat(_toConsumableArray(uuids), [cart.order.uuid]);
-                }, []);
-                onPlaceOrderClick && onPlaceOrderClick(orderUuids);
+                setMessages({
+                  messages: result,
+                  loading: false,
+                  error: null
+                });
+              } else {
+                setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+                  loading: false,
+                  error: result
+                }));
               }
 
+              _context.next = 17;
+              break;
+
             case 14:
+              _context.prev = 14;
+              _context.t0 = _context["catch"](0);
+              setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+                loading: false,
+                error: [_context.t0.Messages]
+              }));
+
+            case 17:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 14]]);
     }));
 
-    return function handleGroupPlaceOrder() {
+    return function loadMessages() {
       return _ref.apply(this, arguments);
     };
   }();
+  /**
+   * Method to send a message
+   * @param {string} spot
+   */
 
-  var handleSelectPaymethod = function handleSelectPaymethod(paymethod) {
-    setPaymethodSelected(_objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
-      paymethod_data: null
-    }));
-  };
 
-  var handleSelectWallet = function handleSelectWallet(checked, wallet) {
-    if (checked) {
-      setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
-        wallet_id: wallet.id,
-        wallet_data: wallet.balance > totalCartsPrice ? totalCartsPrice : wallet.balance
-      }));
-    } else {
-      var _paymethodSelected = _objectSpread({}, paymethodSelected);
-
-      delete _paymethodSelected.wallet_id;
-      delete _paymethodSelected.wallet_data;
-      setPaymethodSelected(_paymethodSelected);
-    }
-  };
-
-  var handlePaymethodDataChange = function handlePaymethodDataChange(data) {
-    setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
-      paymethod_data: data
-    }));
-  };
-
-  var getDeliveryOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var response, _yield$response$json, result, error;
+  var sendMessage = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(spot) {
+      var _yield$fetch, status;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              _context2.next = 3;
-              return fetch("".concat(ordering.root, "/delivery_options"), {
-                method: 'GET',
+              setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
+                loading: true
+              }));
+              _context2.next = 4;
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages"), {
+                method: 'post',
                 headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: "bearer ".concat(token),
-                  'X-App-X': ordering.appId
-                }
+                  Authorization: "Bearer ".concat(token),
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  can_see: '0,2,3',
+                  comment: "I am on the parking number: ".concat(spot),
+                  order_id: orderId,
+                  type: 2
+                })
               });
 
-            case 3:
-              response = _context2.sent;
-              _context2.next = 6;
-              return response.json();
-
-            case 6:
-              _yield$response$json = _context2.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
-
-              if (error) {
-                _context2.next = 12;
-                break;
-              }
-
-              setInstructionsOptions({
+            case 4:
+              _yield$fetch = _context2.sent;
+              status = _yield$fetch.status;
+              setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
                 loading: false,
-                result: [].concat(_toConsumableArray(instructionsOptions.result), _toConsumableArray(result))
-              });
-              return _context2.abrupt("return");
-
-            case 12:
-              setInstructionsOptions({
-                loading: false,
-                error: true,
-                result: result
-              });
-              showToast(_ToastContext.ToastType.Error, result);
-              _context2.next = 20;
+                status: status
+              }));
+              _context2.next = 12;
               break;
 
-            case 16:
-              _context2.prev = 16;
+            case 9:
+              _context2.prev = 9;
               _context2.t0 = _context2["catch"](0);
-              setInstructionsOptions({
+              setMessageErrors(_objectSpread(_objectSpread({}, messageErrors), {}, {
                 loading: false,
-                error: true,
-                result: _context2.t0.message
-              });
-              showToast(_ToastContext.ToastType.Error, _context2.t0.message);
+                error: [_context2.t0.message]
+              }));
 
-            case 20:
+            case 12:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 16]]);
+      }, _callee2, null, [[0, 9]]);
     }));
 
-    return function getDeliveryOptions() {
+    return function sendMessage(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
+  /**
+   * handler send message with spot info
+   * @param {number} param0
+   */
 
-  var multiHandleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(value, cartUuidArr) {
-      var allPromise;
+
+  var handlerSubmitSpotNumber = function handlerSubmitSpotNumber(_ref3) {
+    var spot = _ref3.spot;
+    sendMessage(spot);
+  };
+  /**
+   * Method to get order from API
+   */
+
+
+  var getOrder = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var options, functionFetch, _yield$functionFetch$, result, order;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              options = {};
+
+              if (hashKey) {
+                options.headers = {
+                  'X-uuid-access-X': hashKey
+                };
+              }
+
+              if (userCustomerId) {
+                options.query = {
+                  mode: 'dashboard'
+                };
+              }
+
+              _context3.prev = 3;
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: true
+              }));
+
+              if (propsToFetch) {
+                functionFetch = asDashboard ? ordering.setAccessToken(token).orders(orderId).asDashboard().select(propsToFetch) : ordering.setAccessToken(token).orders(orderId).select(propsToFetch);
+              } else {
+                functionFetch = asDashboard ? ordering.setAccessToken(token).orders(orderId).asDashboard() : ordering.setAccessToken(token).orders(orderId);
+              }
+
+              _context3.next = 8;
+              return functionFetch.get();
+
+            case 8:
+              _yield$functionFetch$ = _context3.sent;
+              result = _yield$functionFetch$.content.result;
+              order = Array.isArray(result) ? null : result;
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                order: order
+              }));
+              _context3.next = 17;
+              break;
+
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](3);
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                loading: false,
+                error: [_context3.t0.message]
+              }));
+
+            case 17:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[3, 14]]);
+    }));
+
+    return function getOrder() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  /**
+   * Method to change order status from API
+   * @param {object} order orders id and new status
+   */
+
+
+  var handleUpdateOrderStatus = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(order) {
+      var response, content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
               _context4.prev = 0;
-              allPromise = cartUuidArr.map(function (cartId) {
-                return new Promise( /*#__PURE__*/function () {
-                  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve, reject) {
-                    var response, _yield$response$json2, result, error;
-
-                    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                      while (1) {
-                        switch (_context3.prev = _context3.next) {
-                          case 0:
-                            _context3.next = 2;
-                            return fetch("".concat(ordering.root, "/carts/").concat(cartId), {
-                              method: 'PUT',
-                              headers: {
-                                'Content-Type': 'application/json',
-                                Authorization: "bearer ".concat(token),
-                                'X-App-X': ordering.appId
-                              },
-                              body: JSON.stringify({
-                                delivery_option_id: value
-                              })
-                            });
-
-                          case 2:
-                            response = _context3.sent;
-                            _context3.next = 5;
-                            return response.json();
-
-                          case 5:
-                            _yield$response$json2 = _context3.sent;
-                            result = _yield$response$json2.result;
-                            error = _yield$response$json2.error;
-
-                            if (!error && (result === null || result === void 0 ? void 0 : result.delivery_option_id) === value) {
-                              resolve(result);
-                            } else {
-                              reject(false);
-                            }
-
-                          case 9:
-                          case "end":
-                            return _context3.stop();
-                        }
-                      }
-                    }, _callee3);
-                  }));
-
-                  return function (_x3, _x4) {
-                    return _ref4.apply(this, arguments);
-                  };
-                }());
-              });
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: true
+              }));
               _context4.next = 4;
-              return Promise.all(allPromise);
+              return fetch("".concat(ordering.root, "/orders/").concat(order === null || order === void 0 ? void 0 : order.id), {
+                method: 'PUT',
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  status: order.newStatus
+                })
+              });
 
             case 4:
-              _context4.t0 = _context4.sent;
-
-              if (!_context4.t0) {
-                _context4.next = 7;
-                break;
-              }
-
-              setDeliveryOptionSelected(value);
+              response = _context4.sent;
+              _context4.next = 7;
+              return response.json();
 
             case 7:
-              _context4.next = 12;
+              content = _context4.sent;
+              setActionStatus({
+                loading: false,
+                error: content.error ? content.result : null
+              });
+              _context4.next = 14;
               break;
 
-            case 9:
-              _context4.prev = 9;
-              _context4.t1 = _context4["catch"](0);
-              showToast(_ToastContext.ToastType.Error, _context4.t1.message);
+            case 11:
+              _context4.prev = 11;
+              _context4.t0 = _context4["catch"](0);
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: false,
+                error: [_context4.t0.message]
+              }));
 
-            case 12:
+            case 14:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[0, 9]]);
+      }, _callee4, null, [[0, 11]]);
     }));
 
-    return function multiHandleChangeDeliveryOption(_x, _x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-
-  var handleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value) {
-      var cartUuidArr;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              cartUuidArr = openCarts.map(function (cart) {
-                return cart === null || cart === void 0 ? void 0 : cart.uuid;
-              });
-              multiHandleChangeDeliveryOption(value, cartUuidArr);
-
-            case 2:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5);
-    }));
-
-    return function handleChangeDeliveryOption(_x5) {
+    return function handleUpdateOrderStatus(_x2) {
       return _ref5.apply(this, arguments);
     };
   }();
 
-  var getMultiCart = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var response, _yield$response$json3, result, error;
+  var readMessages = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _messages$messages, _messages$messages2;
+
+      var messageId, response, _yield$response$json2, result;
+
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              messageId = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages[(messages === null || messages === void 0 ? void 0 : (_messages$messages2 = messages.messages) === null || _messages$messages2 === void 0 ? void 0 : _messages$messages2.length) - 1]) === null || _messages$messages === void 0 ? void 0 : _messages$messages.id;
+              _context5.prev = 1;
+              _context5.next = 4;
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/messages/").concat(messageId, "/read"), {
+                method: 'GET',
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'Content-Type': 'application/json'
+                }
+              });
+
+            case 4:
+              response = _context5.sent;
+              _context5.next = 7;
+              return response.json();
+
+            case 7:
+              _yield$response$json2 = _context5.sent;
+              result = _yield$response$json2.result;
+              setMessagesReadList(result);
+              _context5.next = 15;
+              break;
+
+            case 12:
+              _context5.prev = 12;
+              _context5.t0 = _context5["catch"](1);
+              console.log(_context5.t0.message);
+
+            case 15:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, null, [[1, 12]]);
+    }));
+
+    return function readMessages() {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  var handleRefundOrder = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var _orderState$order, _orderState$order2, _orderState$order3, _orderState$order3$pa, requestOption, response, content;
 
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
             case 0:
               _context6.prev = 0;
-              setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
+              showToast(_ToastContext.ToastType.Info, t('LOADING', 'Loading'));
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: true
               }));
-
-              if (cartUuid) {
-                _context6.next = 4;
-                break;
-              }
-
-              return _context6.abrupt("return");
-
-            case 4:
+              requestOption = {
+                method: 'POST',
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  order_id: (_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : _orderState$order.id,
+                  business_id: (_orderState$order2 = orderState.order) === null || _orderState$order2 === void 0 ? void 0 : _orderState$order2.business_id,
+                  gateway: (_orderState$order3 = orderState.order) === null || _orderState$order3 === void 0 ? void 0 : (_orderState$order3$pa = _orderState$order3.paymethod) === null || _orderState$order3$pa === void 0 ? void 0 : _orderState$order3$pa.gateway
+                })
+              };
               _context6.next = 6;
-              return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid), {
-                'Content-Type': 'application/json',
-                Authorization: "bearer ".concat(token),
-                'X-App-X': ordering.appId
-              });
+              return fetch("".concat(ordering.root, "/payments/stripe/refund"), requestOption);
 
             case 6:
               response = _context6.sent;
@@ -483,66 +503,175 @@ var MultiCheckout = function MultiCheckout(props) {
               return response.json();
 
             case 9:
-              _yield$response$json3 = _context6.sent;
-              result = _yield$response$json3.result;
-              error = _yield$response$json3.error;
-              setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
+              content = _context6.sent;
+              setActionStatus({
                 loading: false,
-                result: result,
-                error: error
-              }));
-              _context6.next = 18;
+                error: content.error ? content.result : null
+              });
+
+              if (!content.error) {
+                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                  order: _objectSpread(_objectSpread({}, orderState.order), {}, {
+                    refund_data: content.result
+                  })
+                }));
+                showToast(_ToastContext.ToastType.Success, t('ORDER_REFUNDED', 'Order refunded'));
+              }
+
+              _context6.next = 17;
               break;
 
-            case 15:
-              _context6.prev = 15;
+            case 14:
+              _context6.prev = 14;
               _context6.t0 = _context6["catch"](0);
-              setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: false,
-                error: _context6.t0.message
+                error: [_context6.t0.message]
               }));
 
-            case 18:
+            case 17:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[0, 15]]);
+      }, _callee6, null, [[0, 14]]);
     }));
 
-    return function getMultiCart() {
-      return _ref6.apply(this, arguments);
+    return function handleRefundOrder() {
+      return _ref7.apply(this, arguments);
     };
   }();
 
   (0, _react.useEffect)(function () {
-    if (deliveryOptionSelected === undefined) {
-      setDeliveryOptionSelected(null);
+    if (props.order) {
+      setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+        order: props.order
+      }));
+    } else {
+      getOrder();
     }
-  }, [instructionsOptions]);
+  }, [orderId]);
   (0, _react.useEffect)(function () {
-    getDeliveryOptions();
-    getMultiCart();
-  }, []);
+    if (orderState.loading || loading) return;
+
+    var handleUpdateOrder = function handleUpdateOrder(order) {
+      var _orderState$order4;
+
+      if ((order === null || order === void 0 ? void 0 : order.id) !== (orderState === null || orderState === void 0 ? void 0 : (_orderState$order4 = orderState.order) === null || _orderState$order4 === void 0 ? void 0 : _orderState$order4.id)) return;
+      delete order.total;
+      delete order.subtotal;
+
+      if (!(order !== null && order !== void 0 && order.driver) && order !== null && order !== void 0 && order.driver_id) {
+        var updatedDriver = drivers.find(function (driver) {
+          return driver.id === order.driver_id;
+        });
+
+        if (updatedDriver) {
+          order.driver = _objectSpread({}, updatedDriver);
+        }
+      }
+
+      setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+        order: Object.assign(orderState.order, order)
+      }));
+    };
+
+    if (!asDashboard) {
+      socket.join("orders_".concat(user.id));
+    }
+
+    socket.on('update_order', handleUpdateOrder);
+    return function () {
+      if (!asDashboard) {
+        socket.leave("orders_".concat(user.id));
+      }
+
+      socket.off('update_order', handleUpdateOrder);
+    };
+  }, [orderState.order, socket, loading, drivers]);
+  (0, _react.useEffect)(function () {
+    var handleCustomerReviewed = function handleCustomerReviewed(review) {
+      setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+        order: _objectSpread(_objectSpread({}, orderState.order), {}, {
+          user_review: review
+        })
+      }));
+    };
+
+    events.on('customer_reviewed', handleCustomerReviewed);
+    return function () {
+      events.off('customer_reviewed', handleCustomerReviewed);
+    };
+  }, [orderState]);
+  (0, _react.useEffect)(function () {
+    if (!isDisableLoadMessages) {
+      loadMessages();
+    }
+  }, [orderId]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    placing: placing,
-    openCarts: openCarts,
-    totalCartsPrice: totalCartsPrice,
-    paymethodSelected: paymethodSelected,
-    handleSelectPaymethod: handleSelectPaymethod,
-    handleGroupPlaceOrder: handleGroupPlaceOrder,
-    handleSelectWallet: handleSelectWallet,
-    handlePaymethodDataChange: handlePaymethodDataChange,
-    handleChangeDeliveryOption: handleChangeDeliveryOption,
-    deliveryOptionSelected: deliveryOptionSelected,
-    instructionsOptions: instructionsOptions
+    order: orderState,
+    messageErrors: messageErrors,
+    actionStatus: actionStatus,
+    formatPrice: formatPrice,
+    handlerSubmit: handlerSubmitSpotNumber,
+    handleUpdateOrderStatus: handleUpdateOrderStatus,
+    messages: messages,
+    setMessages: setMessages,
+    messagesReadList: messagesReadList,
+    readMessages: readMessages,
+    handleRefundOrder: handleRefundOrder
   })));
 };
 
-exports.MultiCheckout = MultiCheckout;
-MultiCheckout.propTypes = {
+exports.OrderDetails = OrderDetails;
+OrderDetails.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
-  UIComponent: _propTypes.default.elementType
+  UIComponent: _propTypes.default.elementType,
+
+  /**
+   * Array of drivers props to fetch
+   */
+  propsToFetch: _propTypes.default.arrayOf(_propTypes.string),
+
+  /**
+   * This must be contains orderId to fetch
+   */
+  orderId: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+   * Order, this must be contains an object with all order info
+   */
+  order: _propTypes.default.object,
+
+  /**
+   * Components types before order details
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+
+  /**
+   * Components types after order details
+   * Array of type components, the parent props will pass to these components
+   */
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+
+  /**
+   * Elements before order details
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
+
+  /**
+   * Elements after order details
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
+};
+OrderDetails.defaultProps = {
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
 };

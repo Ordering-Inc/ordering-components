@@ -5,19 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OrderReview = void 0;
+exports.ExportCSV = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _SessionContext = require("../../contexts/SessionContext");
+var _ApiContext = require("../../../contexts/ApiContext");
 
-var _ApiContext = require("../../contexts/ApiContext");
-
-var _ToastContext = require("../../contexts/ToastContext");
-
-var _LanguageContext = require("../../contexts/LanguageContext");
+var _SessionContext = require("../../../contexts/SessionContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51,14 +47,9 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var OrderReview = function OrderReview(props) {
+var ExportCSV = function ExportCSV(props) {
   var UIComponent = props.UIComponent,
-      order = props.order,
-      onSaveReview = props.onSaveReview,
-      handleCustomSendReview = props.handleCustomSendReview,
-      isToast = props.isToast,
-      defaultStar = props.defaultStar,
-      handleUpdateOrderList = props.handleUpdateOrderList;
+      filterValues = props.filterValues;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -66,195 +57,218 @@ var OrderReview = function OrderReview(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      session = _useSession2[0];
-
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
+      _useSession2$ = _useSession2[0],
+      token = _useSession2$.token,
+      loading = _useSession2$.loading;
 
   var _useState = (0, _react.useState)({
-    quality: defaultStar,
-    punctiality: defaultStar,
-    service: defaultStar,
-    packaging: defaultStar,
-    comments: ''
+    loading: false,
+    error: null,
+    result: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      stars = _useState2[0],
-      setStars = _useState2[1];
-
-  var _useState3 = (0, _react.useState)({
-    loading: false,
-    result: {
-      error: false
-    }
-  }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
+      actionStatus = _useState2[0],
+      setActionStatus = _useState2[1];
   /**
-   * Function that load and send the review order to ordering
+   * Method to get csv from API
    */
 
 
-  var handleSendReview = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _session$user, body, response, _yield$response$json, result, error;
+  var getCSV = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(filterApply) {
+      var requestOptions, filterConditons, functionFetch, response, _yield$response$json, error, result;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (handleCustomSendReview) {
-                handleCustomSendReview && handleCustomSendReview(stars);
+              if (!loading) {
+                _context.next = 2;
+                break;
               }
 
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              return _context.abrupt("return");
+
+            case 2:
+              _context.prev = 2;
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
                 loading: true
               }));
-              _context.prev = 2;
-              body = {
-                order_id: order.id,
-                quality: stars.quality,
-                delivery: stars.punctiality,
-                service: stars.service,
-                package: stars.packaging,
-                comment: stars.comments,
-                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
-                business_id: order.business_id
-              };
-              _context.next = 6;
-              return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
-                method: 'POST',
+              requestOptions = {
+                method: 'GET',
                 headers: {
-                  Authorization: "Bearer ".concat(session.token),
                   'Content-Type': 'application/json',
-                  'X-App-X': ordering.appId
-                },
-                body: JSON.stringify(body)
-              });
+                  Authorization: "Bearer ".concat(token)
+                }
+              };
+              filterConditons = [];
 
-            case 6:
+              if (filterApply) {
+                if (Object.keys(filterValues).length) {
+                  if (filterValues.statuses !== undefined) {
+                    if (filterValues.statuses.length > 0) {
+                      filterConditons.push({
+                        attribute: 'status',
+                        value: filterValues.statuses
+                      });
+                    } else {
+                      filterConditons.push({
+                        attribute: 'status',
+                        value: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                      });
+                    }
+                  }
+
+                  if (filterValues.deliveryFromDatetime !== undefined) {
+                    if (filterValues.deliveryFromDatetime !== null) {
+                      filterConditons.push({
+                        attribute: 'delivery_datetime',
+                        value: {
+                          condition: '>=',
+                          value: encodeURI(filterValues.deliveryFromDatetime)
+                        }
+                      });
+                    }
+                  }
+
+                  if (filterValues.deliveryEndDatetime !== undefined) {
+                    if (filterValues.deliveryEndDatetime !== null) {
+                      filterConditons.push({
+                        attribute: 'delivery_datetime',
+                        value: {
+                          condition: '<=',
+                          value: filterValues.deliveryEndDatetime
+                        }
+                      });
+                    }
+                  }
+
+                  if (filterValues.businessIds !== undefined) {
+                    if (filterValues.businessIds.length !== 0) {
+                      filterConditons.push({
+                        attribute: 'business_id',
+                        value: filterValues.businessIds
+                      });
+                    }
+                  }
+
+                  if (filterValues.driverIds !== undefined) {
+                    if (filterValues.driverIds.length !== 0) {
+                      filterConditons.push({
+                        attribute: 'driver_id',
+                        value: filterValues.driverIds
+                      });
+                    }
+                  }
+
+                  if (filterValues.deliveryTypes !== undefined) {
+                    if (filterValues.deliveryTypes.length !== 0) {
+                      filterConditons.push({
+                        attribute: 'delivery_type',
+                        value: filterValues.deliveryTypes
+                      });
+                    }
+                  }
+
+                  if (filterValues.paymethodIds !== undefined) {
+                    if (filterValues.paymethodIds.length !== 0) {
+                      filterConditons.push({
+                        attribute: 'paymethod_id',
+                        value: filterValues.paymethodIds
+                      });
+                    }
+                  }
+                }
+              }
+
+              functionFetch = filterApply ? "".concat(ordering.root, "/orders.csv?mode=dashboard&orderBy=id&where=").concat(JSON.stringify(filterConditons)) : "".concat(ordering.root, "/orders.csv?mode=dashboard&orderBy=id");
+              _context.next = 10;
+              return fetch(functionFetch, requestOptions);
+
+            case 10:
               response = _context.sent;
-              _context.next = 9;
+              _context.next = 13;
               return response.json();
 
-            case 9:
+            case 13:
               _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
               error = _yield$response$json.error;
-              onSaveReview && onSaveReview(response);
-              setFormState({
-                loading: false,
-                result: result,
-                error: error
-              });
-              if (!error && isToast) showToast(_ToastContext.ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'));
-              if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id, {
-                review: result
-              });
-              _context.next = 21;
+              result = _yield$response$json.result;
+
+              if (!error) {
+                setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                  loading: false,
+                  result: result
+                }));
+              } else {
+                setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                  loading: true,
+                  error: result
+                }));
+              }
+
+              _context.next = 22;
               break;
 
-            case 18:
-              _context.prev = 18;
+            case 19:
+              _context.prev = 19;
               _context.t0 = _context["catch"](2);
-              setFormState({
-                result: {
-                  error: true,
-                  result: _context.t0.message
-                },
-                loading: false
-              });
+              setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+                loading: false,
+                error: _context.t0
+              }));
 
-            case 21:
+            case 22:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 18]]);
+      }, _callee, null, [[2, 19]]);
     }));
 
-    return function handleSendReview() {
+    return function getCSV(_x) {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Rating the product
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var handleChangeRating = function handleChangeRating(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, _defineProperty({}, e.target.name, parseInt(e.target.value))));
-  };
-  /**
-   * Rating the product with comments
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var handleChangeInput = function handleChangeInput(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, {
-      comments: e.target.value
-    }));
-  };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    stars: stars,
-    order: order,
-    formState: formState,
-    handleSendReview: handleSendReview,
-    handleChangeInput: handleChangeInput,
-    handleChangeRating: handleChangeRating,
-    setStars: setStars
+    actionStatus: actionStatus,
+    getCSV: getCSV
   })));
 };
 
-exports.OrderReview = OrderReview;
-OrderReview.propTypes = {
+exports.ExportCSV = ExportCSV;
+ExportCSV.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Getting the order that can be review
-  */
-  order: _propTypes.default.object,
+   * Components types before my orders
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Enable to show/hide toast
+   * Components types after my orders
+   * Array of type components, the parent props will pass to these components
    */
-  isToast: _propTypes.default.bool,
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Setting as default value for stars
+   * Elements before my orders
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  defaultStar: _propTypes.default.number,
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-    * Response of ordering that contains de review
+   * Elements after my orders
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  onSaveReview: _propTypes.default.func,
-
-  /**
-   * function that saves the order that will be reviewed
-   */
-  handleSendReview: _propTypes.default.func,
-
-  /**
-   * handleCustomClick, function to get click event and return scores without default behavior
-   */
-  handleCustomSendReview: _propTypes.default.func
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-OrderReview.defaultProps = {
-  defaultStar: 1,
-  order: {},
+ExportCSV.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

@@ -5,19 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OrderReview = void 0;
+exports.CheckPassword = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _SessionContext = require("../../contexts/SessionContext");
+var _ApiContext = require("../../../contexts/ApiContext");
 
-var _ApiContext = require("../../contexts/ApiContext");
-
-var _ToastContext = require("../../contexts/ToastContext");
-
-var _LanguageContext = require("../../contexts/LanguageContext");
+var _SessionContext = require("../../../contexts/SessionContext");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51,14 +47,8 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var OrderReview = function OrderReview(props) {
-  var UIComponent = props.UIComponent,
-      order = props.order,
-      onSaveReview = props.onSaveReview,
-      handleCustomSendReview = props.handleCustomSendReview,
-      isToast = props.isToast,
-      defaultStar = props.defaultStar,
-      handleUpdateOrderList = props.handleUpdateOrderList;
+var CheckPassword = function CheckPassword(props) {
+  var UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -66,195 +56,143 @@ var OrderReview = function OrderReview(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
-      session = _useSession2[0];
+      token = _useSession2[0].token;
 
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
-
-  var _useState = (0, _react.useState)({
-    quality: defaultStar,
-    punctiality: defaultStar,
-    service: defaultStar,
-    packaging: defaultStar,
-    comments: ''
-  }),
+  var _useState = (0, _react.useState)(null),
       _useState2 = _slicedToArray(_useState, 2),
-      stars = _useState2[0],
-      setStars = _useState2[1];
+      passwordValue = _useState2[0],
+      setPasswordValue = _useState2[1];
 
   var _useState3 = (0, _react.useState)({
+    result: null,
     loading: false,
-    result: {
-      error: false
-    }
+    error: null
   }),
       _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
+      checkPasswordStatus = _useState4[0],
+      setCheckPasswordStatus = _useState4[1];
   /**
-   * Function that load and send the review order to ordering
+   * Change text to password
+   * @param {string} password Search value
    */
 
 
-  var handleSendReview = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _session$user, body, response, _yield$response$json, result, error;
+  var handleChangePassword = function handleChangePassword(password) {
+    setPasswordValue(password);
+  };
+  /**
+   * Method to confirm password from API
+   */
 
+
+  var getCheckPassword = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (handleCustomSendReview) {
-                handleCustomSendReview && handleCustomSendReview(stars);
-              }
-
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              _context.prev = 0;
+              setCheckPasswordStatus(_objectSpread(_objectSpread({}, checkPasswordStatus), {}, {
                 loading: true
               }));
-              _context.prev = 2;
-              body = {
-                order_id: order.id,
-                quality: stars.quality,
-                delivery: stars.punctiality,
-                service: stars.service,
-                package: stars.packaging,
-                comment: stars.comments,
-                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
-                business_id: order.business_id
-              };
-              _context.next = 6;
-              return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
+              requestOptions = {
                 method: 'POST',
                 headers: {
-                  Authorization: "Bearer ".concat(session.token),
                   'Content-Type': 'application/json',
-                  'X-App-X': ordering.appId
+                  Authorization: "Bearer ".concat(token)
                 },
-                body: JSON.stringify(body)
-              });
+                body: JSON.stringify({
+                  password: passwordValue
+                })
+              };
+              _context.next = 5;
+              return fetch("".concat(ordering.root, "/users/check_password"), requestOptions);
 
-            case 6:
+            case 5:
               response = _context.sent;
-              _context.next = 9;
+              _context.next = 8;
               return response.json();
 
-            case 9:
-              _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
-              onSaveReview && onSaveReview(response);
-              setFormState({
-                loading: false,
-                result: result,
-                error: error
-              });
-              if (!error && isToast) showToast(_ToastContext.ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'));
-              if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id, {
-                review: result
-              });
-              _context.next = 21;
+            case 8:
+              content = _context.sent;
+
+              if (!content.error) {
+                setCheckPasswordStatus(_objectSpread(_objectSpread({}, checkPasswordStatus), {}, {
+                  loading: false,
+                  result: content.result,
+                  error: null
+                }));
+              } else {
+                setCheckPasswordStatus(_objectSpread(_objectSpread({}, checkPasswordStatus), {}, {
+                  loading: false,
+                  error: content.result
+                }));
+              }
+
+              _context.next = 15;
               break;
 
-            case 18:
-              _context.prev = 18;
-              _context.t0 = _context["catch"](2);
-              setFormState({
-                result: {
-                  error: true,
-                  result: _context.t0.message
-                },
-                loading: false
-              });
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](0);
+              setCheckPasswordStatus(_objectSpread(_objectSpread({}, checkPasswordStatus), {}, {
+                loading: false,
+                error: _context.t0
+              }));
 
-            case 21:
+            case 15:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 18]]);
+      }, _callee, null, [[0, 12]]);
     }));
 
-    return function handleSendReview() {
+    return function getCheckPassword() {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Rating the product
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var handleChangeRating = function handleChangeRating(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, _defineProperty({}, e.target.name, parseInt(e.target.value))));
-  };
-  /**
-   * Rating the product with comments
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var handleChangeInput = function handleChangeInput(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, {
-      comments: e.target.value
-    }));
-  };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    stars: stars,
-    order: order,
-    formState: formState,
-    handleSendReview: handleSendReview,
-    handleChangeInput: handleChangeInput,
-    handleChangeRating: handleChangeRating,
-    setStars: setStars
+    checkPasswordStatus: checkPasswordStatus,
+    handleChangePassword: handleChangePassword,
+    getCheckPassword: getCheckPassword
   })));
 };
 
-exports.OrderReview = OrderReview;
-OrderReview.propTypes = {
+exports.CheckPassword = CheckPassword;
+CheckPassword.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Getting the order that can be review
-  */
-  order: _propTypes.default.object,
+   * Components types before Facebook login button
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Enable to show/hide toast
+   * Components types after Facebook login button
+   * Array of type components, the parent props will pass to these components
    */
-  isToast: _propTypes.default.bool,
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Setting as default value for stars
+   * Elements before Facebook login button
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  defaultStar: _propTypes.default.number,
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-    * Response of ordering that contains de review
+   * Elements after Facebook login button
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  onSaveReview: _propTypes.default.func,
-
-  /**
-   * function that saves the order that will be reviewed
-   */
-  handleSendReview: _propTypes.default.func,
-
-  /**
-   * handleCustomClick, function to get click event and return scores without default behavior
-   */
-  handleCustomSendReview: _propTypes.default.func
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-OrderReview.defaultProps = {
-  defaultStar: 1,
-  order: {},
+CheckPassword.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

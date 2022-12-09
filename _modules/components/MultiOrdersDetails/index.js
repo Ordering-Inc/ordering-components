@@ -53,7 +53,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiOrdersDetails = function MultiOrdersDetails(props) {
   var _ordersList$orders$, _ordersList$orders$2;
 
-  var orderUuids = props.orderUuids,
+  var orderId = props.orderId,
       onRedirectPage = props.onRedirectPage,
       UIComponent = props.UIComponent;
 
@@ -99,8 +99,11 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
                 query: {
                   orderBy: '-',
                   where: [{
-                    attribute: 'uuid',
-                    value: orderUuids
+                    attribute: 'cart_group',
+                    value: {
+                      attribute: 'uuid',
+                      orderId: orderId
+                    }
                   }]
                 }
               };
@@ -166,7 +169,7 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
   }();
 
   (0, _react.useEffect)(function () {
-    if (orderUuids.length) {
+    if (orderId) {
       getOrders();
     } else {
       onRedirectPage && onRedirectPage();

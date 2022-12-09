@@ -5,21 +5,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OrderReview = void 0;
+exports.LogisticInformation = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _propTypes = _interopRequireWildcard(require("prop-types"));
 
-var _SessionContext = require("../../contexts/SessionContext");
+var _SessionContext = require("../../../contexts/SessionContext");
 
-var _ApiContext = require("../../contexts/ApiContext");
-
-var _ToastContext = require("../../contexts/ToastContext");
-
-var _LanguageContext = require("../../contexts/LanguageContext");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _ApiContext = require("../../../contexts/ApiContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -51,14 +45,9 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var OrderReview = function OrderReview(props) {
-  var UIComponent = props.UIComponent,
-      order = props.order,
-      onSaveReview = props.onSaveReview,
-      handleCustomSendReview = props.handleCustomSendReview,
-      isToast = props.isToast,
-      defaultStar = props.defaultStar,
-      handleUpdateOrderList = props.handleUpdateOrderList;
+var LogisticInformation = function LogisticInformation(props) {
+  var orderId = props.orderId,
+      UIComponent = props.UIComponent;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -67,194 +56,138 @@ var OrderReview = function OrderReview(props) {
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
       session = _useSession2[0];
-
-  var _useLanguage = (0, _LanguageContext.useLanguage)(),
-      _useLanguage2 = _slicedToArray(_useLanguage, 2),
-      t = _useLanguage2[1];
-
-  var _useToast = (0, _ToastContext.useToast)(),
-      _useToast2 = _slicedToArray(_useToast, 2),
-      showToast = _useToast2[1].showToast;
-
-  var _useState = (0, _react.useState)({
-    quality: defaultStar,
-    punctiality: defaultStar,
-    service: defaultStar,
-    packaging: defaultStar,
-    comments: ''
-  }),
-      _useState2 = _slicedToArray(_useState, 2),
-      stars = _useState2[0],
-      setStars = _useState2[1];
-
-  var _useState3 = (0, _react.useState)({
-    loading: false,
-    result: {
-      error: false
-    }
-  }),
-      _useState4 = _slicedToArray(_useState3, 2),
-      formState = _useState4[0],
-      setFormState = _useState4[1];
   /**
-   * Function that load and send the review order to ordering
+   * Array to save logistics
    */
 
 
-  var handleSendReview = /*#__PURE__*/function () {
+  var _useState = (0, _react.useState)({
+    data: [],
+    loading: true,
+    error: null
+  }),
+      _useState2 = _slicedToArray(_useState, 2),
+      logisticInformation = _useState2[0],
+      setLogisticInformation = _useState2[1];
+  /**
+   * Method to get logistics from API
+   */
+
+
+  var getLogistics = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _session$user, body, response, _yield$response$json, result, error;
+      var requestOptions, response, _yield$response$json, result;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (handleCustomSendReview) {
-                handleCustomSendReview && handleCustomSendReview(stars);
-              }
-
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              _context.prev = 0;
+              setLogisticInformation(_objectSpread(_objectSpread({}, logisticInformation), {}, {
                 loading: true
               }));
-              _context.prev = 2;
-              body = {
-                order_id: order.id,
-                quality: stars.quality,
-                delivery: stars.punctiality,
-                service: stars.service,
-                package: stars.packaging,
-                comment: stars.comments,
-                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
-                business_id: order.business_id
-              };
-              _context.next = 6;
-              return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
-                method: 'POST',
+              requestOptions = {
+                method: 'GET',
                 headers: {
-                  Authorization: "Bearer ".concat(session.token),
                   'Content-Type': 'application/json',
-                  'X-App-X': ordering.appId
-                },
-                body: JSON.stringify(body)
-              });
+                  Authorization: "Bearer ".concat(session.token)
+                }
+              };
+              _context.next = 5;
+              return fetch("".concat(ordering.root, "/logistic/orders/").concat(orderId, "/information"), requestOptions);
 
-            case 6:
+            case 5:
               response = _context.sent;
-              _context.next = 9;
+              _context.next = 8;
               return response.json();
 
-            case 9:
+            case 8:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
-              error = _yield$response$json.error;
-              onSaveReview && onSaveReview(response);
-              setFormState({
-                loading: false,
-                result: result,
-                error: error
-              });
-              if (!error && isToast) showToast(_ToastContext.ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'));
-              if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id, {
-                review: result
-              });
-              _context.next = 21;
+
+              if (response.ok) {
+                setLogisticInformation({
+                  error: null,
+                  loading: false,
+                  data: result
+                });
+              } else {
+                setLogisticInformation(_objectSpread(_objectSpread({}, logisticInformation), {}, {
+                  loading: false,
+                  error: result
+                }));
+              }
+
+              _context.next = 16;
               break;
 
-            case 18:
-              _context.prev = 18;
-              _context.t0 = _context["catch"](2);
-              setFormState({
-                result: {
-                  error: true,
-                  result: _context.t0.message
-                },
-                loading: false
-              });
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](0);
+              setLogisticInformation(_objectSpread(_objectSpread({}, logisticInformation), {}, {
+                loading: false,
+                error: _context.t0.message
+              }));
 
-            case 21:
+            case 16:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 18]]);
+      }, _callee, null, [[0, 13]]);
     }));
 
-    return function handleSendReview() {
+    return function getLogistics() {
       return _ref.apply(this, arguments);
     };
   }();
-  /**
-   * Rating the product
-   * @param {EventTarget} e Related HTML event
-   */
 
-
-  var handleChangeRating = function handleChangeRating(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, _defineProperty({}, e.target.name, parseInt(e.target.value))));
-  };
-  /**
-   * Rating the product with comments
-   * @param {EventTarget} e Related HTML event
-   */
-
-
-  var handleChangeInput = function handleChangeInput(e) {
-    setStars(_objectSpread(_objectSpread({}, stars), {}, {
-      comments: e.target.value
-    }));
-  };
-
+  (0, _react.useEffect)(function () {
+    getLogistics();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    stars: stars,
-    order: order,
-    formState: formState,
-    handleSendReview: handleSendReview,
-    handleChangeInput: handleChangeInput,
-    handleChangeRating: handleChangeRating,
-    setStars: setStars
+    logisticInformation: logisticInformation,
+    getLogistics: getLogistics
   })));
 };
 
-exports.OrderReview = OrderReview;
-OrderReview.propTypes = {
+exports.LogisticInformation = LogisticInformation;
+LogisticInformation.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
 
   /**
-   * Getting the order that can be review
-  */
-  order: _propTypes.default.object,
+   * Array of drivers props to fetch
+   */
+  propsToFetch: _propTypes.default.arrayOf(_propTypes.string),
 
   /**
-   * Enable to show/hide toast
+   * Components types before my orders
+   * Array of type components, the parent props will pass to these components
    */
-  isToast: _propTypes.default.bool,
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-   * Setting as default value for stars
+   * Components types after my orders
+   * Array of type components, the parent props will pass to these components
    */
-  defaultStar: _propTypes.default.number,
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
 
   /**
-    * Response of ordering that contains de review
+   * Elements before my orders
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  onSaveReview: _propTypes.default.func,
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
 
   /**
-   * function that saves the order that will be reviewed
+   * Elements after my orders
+   * Array of HTML/Components elements, these components will not get the parent props
    */
-  handleSendReview: _propTypes.default.func,
-
-  /**
-   * handleCustomClick, function to get click event and return scores without default behavior
-   */
-  handleCustomSendReview: _propTypes.default.func
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-OrderReview.defaultProps = {
-  defaultStar: 1,
-  order: {},
+LogisticInformation.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
