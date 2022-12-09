@@ -389,10 +389,18 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
-      return !error
+      if (isPlatformProduct) {
+        return result
+      } else {
+        return !error
+      }
     } catch (err) {
       setState({ ...state, loading: false })
-      return false
+      if (isPlatformProduct) {
+        return err
+      } else {
+        return false
+      }
     }
   }
 
