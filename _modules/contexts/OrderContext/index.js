@@ -822,22 +822,50 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
+
+              if (!isPlatformProduct) {
+                _context6.next = 20;
+                break;
+              }
+
+              return _context6.abrupt("return", {
+                error: error,
+                result: result
+              });
+
+            case 20:
               return _context6.abrupt("return", !error);
 
-            case 19:
-              _context6.prev = 19;
+            case 21:
+              _context6.next = 31;
+              break;
+
+            case 23:
+              _context6.prev = 23;
               _context6.t0 = _context6["catch"](1);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
+
+              if (!isPlatformProduct) {
+                _context6.next = 30;
+                break;
+              }
+
+              return _context6.abrupt("return", {
+                error: true,
+                result: _context6.t0.message
+              });
+
+            case 30:
               return _context6.abrupt("return", false);
 
-            case 23:
+            case 31:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[1, 19]]);
+      }, _callee6, null, [[1, 23]]);
     }));
 
     return function addProduct(_x6, _x7, _x8) {
