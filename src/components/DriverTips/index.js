@@ -10,10 +10,11 @@ export const DriverTips = (props) => {
   const {
     UIComponent,
     businessId,
+    businessIds,
     useOrderContext
   } = props
 
-  if (useOrderContext && !businessId) {
+  if (useOrderContext && !businessId && !businessIds) {
     throw new Error('`businessId` is required when `useOrderContext` is true.')
   }
 
@@ -41,7 +42,11 @@ export const DriverTips = (props) => {
   const handlerChangeOption = (driverTip, isFixedPrice = props.isFixedPrice) => {
     driverTip = typeof driverTip === 'string' ? parseFloat(driverTip) : driverTip
     if (useOrderContext) {
-      changeDriverTip(businessId, driverTip, isFixedPrice)
+      if (businessIds) {
+        Promise.all(businessIds.map(id => changeDriverTip(id, driverTip, isFixedPrice)))
+      } else {
+        changeDriverTip(businessId, driverTip, isFixedPrice)
+      }
     } else {
       setOptionSelected(driverTip)
     }
@@ -49,8 +54,8 @@ export const DriverTips = (props) => {
   }
 
   useEffect(() => {
-    const orderDriverTipRate = orderState.carts?.[`businessId:${businessId}`]?.driver_tip_rate || 0
-    const orderDriverTip = orderState.carts?.[`businessId:${businessId}`]?.driver_tip || 0
+    const orderDriverTipRate = orderState.carts?.[`businessId:${businessId ?? businessIds?.[0]}`]?.driver_tip_rate || 0
+    const orderDriverTip = orderState.carts?.[`businessId:${businessId ?? businessIds?.[0]}`]?.driver_tip || 0
     const isFixedPrice = parseInt(configs?.driver_tip_type?.value, 10) === 1 || !!parseInt(configs?.driver_tip_use_custom?.value, 10) // 1 - fixed, 2 - percentage
 
     setOptionSelected(isFixedPrice ? orderDriverTip : orderDriverTipRate)
