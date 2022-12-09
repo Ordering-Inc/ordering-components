@@ -64,6 +64,7 @@ import { ProductsList } from './components/ProductsList'
 import { ProductsListing } from './components/ProductsListing'
 import { ProfessionalInfo } from './components/ProfessionalInfo'
 import { PromotionsController } from './components/PromotionsController'
+import { PurchaseGiftCard } from './components/PurchaseGiftCard'
 import { Messages } from './components/Messages'
 import { SearchOptions } from './components/SearchOptions'
 import { Sessions } from './components/Sessions'
@@ -222,6 +223,7 @@ export {
   ProductsListing,
   ProfessionalInfo,
   PromotionsController,
+  PurchaseGiftCard,
   SearchOptions,
   Sessions,
   SignupForm,
