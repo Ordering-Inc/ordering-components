@@ -74,7 +74,7 @@ var PageBanner = function PageBanner(props) {
               result = _yield$response$json.result;
               setPageBannerState({
                 loading: false,
-                banner: error ? null : result,
+                banner: error ? null : Array.isArray(result) ? result[0] : result,
                 error: error ? result : null
               });
               _context.next = 17;
