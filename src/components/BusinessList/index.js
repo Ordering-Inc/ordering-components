@@ -34,7 +34,8 @@ export const BusinessList = (props) => {
     franchiseId,
     businessId,
     cityId,
-    actualSlug
+    actualSlug,
+    searchValueCustom
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -80,7 +81,6 @@ export const BusinessList = (props) => {
         loading: true,
         businesses: newFetch ? [] : businessesList.businesses
       })
-      refreshConfigs()
       let parameters = asDashboard ? {} : {
         location: !customLocation
           ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
@@ -357,11 +357,26 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation)) || (auth && !orderState?.options?.user_id)) return
+    if (
+      (orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation)) ||
+      (auth && !orderState?.options?.user_id)
+    ) return
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
-  }, [JSON.stringify(orderState.options), orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
+  }, [
+    JSON.stringify(orderState.options),
+    orderState.loading,
+    businessTypeSelected,
+    priceLevelSelected,
+    searchValue,
+    initialPricelevel,
+    initialBuisnessType,
+    timeLimitValue,
+    orderByValue,
+    maxDeliveryFee,
+    businessId
+  ])
 
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) {
@@ -410,10 +425,15 @@ export const BusinessList = (props) => {
   }, [initialFilterKey, initialFilterValue])
 
   useEffect(() => {
+    if (citiesState.loading) return
     if (showCities) {
       getCities()
     }
   }, [showCities])
+
+  useEffect(() => {
+    handleChangeSearch(searchValueCustom)
+  }, [searchValueCustom])
 
   /**
    * Default behavior business click
