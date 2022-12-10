@@ -66,6 +66,7 @@ import { ProfessionalInfo } from './components/ProfessionalInfo'
 import { PromotionsController } from './components/PromotionsController'
 import { PurchaseGiftCard } from './components/PurchaseGiftCard'
 import { Messages } from './components/Messages'
+import { RedeemGiftCard } from './components/RedeemGiftCard'
 import { SearchOptions } from './components/SearchOptions'
 import { Sessions } from './components/Sessions'
 import { SignupForm } from './components/SignupForm'
@@ -224,6 +225,7 @@ export {
   ProfessionalInfo,
   PromotionsController,
   PurchaseGiftCard,
+  RedeemGiftCard,
   SearchOptions,
   Sessions,
   SignupForm,

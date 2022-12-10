@@ -65,7 +65,7 @@ export const PurchaseGiftCard = (props) => {
     }
   }
 
-  const hanldeAccept = async () => {
+  const handleAccept = async () => {
     const giftCard = {
       id: selectedProduct?.id,
       quantity: 1
@@ -88,7 +88,7 @@ export const PurchaseGiftCard = (props) => {
           productsListState={productsListState}
           selectedProduct={selectedProduct}
           setSelectedProduct={setSelectedProduct}
-          hanldeAccept={hanldeAccept}
+          handleAccept={handleAccept}
         />
       )}
     </>
