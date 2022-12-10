@@ -74,7 +74,7 @@ export const Checkout = (props) => {
   /**
    * Current cart
    */
-  const cart = orderState.carts?.[`businessId:${businessId}`]
+  const cart = businessId && typeof businessId === 'number' ? orderState.carts?.[`businessId:${businessId}`] : orderState.carts?.['businessId:null']
   /**
    * Timeout for update cart comment
    */
