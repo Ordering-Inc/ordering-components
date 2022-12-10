@@ -783,6 +783,12 @@ Object.defineProperty(exports, "ReCaptcha", {
     return _ReCaptcha.ReCaptcha;
   }
 });
+Object.defineProperty(exports, "RedeemGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _RedeemGiftCard.RedeemGiftCard;
+  }
+});
 Object.defineProperty(exports, "ResetPassword", {
   enumerable: true,
   get: function get() {
@@ -1213,6 +1219,8 @@ var _PromotionsController = require("./components/PromotionsController");
 var _PurchaseGiftCard = require("./components/PurchaseGiftCard");
 
 var _Messages = require("./components/Messages");
+
+var _RedeemGiftCard = require("./components/RedeemGiftCard");
 
 var _SearchOptions = require("./components/SearchOptions");
 

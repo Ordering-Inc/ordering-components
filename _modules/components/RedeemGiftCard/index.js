@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PurchaseGiftCard = void 0;
+exports.RedeemGiftCard = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -16,10 +16,6 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
-
-var _OrderContext = require("../../contexts/OrderContext");
-
-var _EventContext = require("../../contexts/EventContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -52,9 +48,9 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 /**
- * Component to manage purchase gift card behavior without UI component
+ * Component to manage redeem gift card behavior without UI component
  */
-var PurchaseGiftCard = function PurchaseGiftCard(props) {
+var RedeemGiftCard = function RedeemGiftCard(props) {
   var UIComponent = props.UIComponent;
 
   var _useSession = (0, _SessionContext.useSession)(),
@@ -65,164 +61,86 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
-  var _useOrder = (0, _OrderContext.useOrder)(),
-      _useOrder2 = _slicedToArray(_useOrder, 2),
-      addProduct = _useOrder2[1].addProduct;
-
-  var _useEvent = (0, _EventContext.useEvent)(),
-      _useEvent2 = _slicedToArray(_useEvent, 1),
-      events = _useEvent2[0];
-
   var _useState = (0, _react.useState)({
-    loading: true,
-    products: [],
+    loading: false,
     error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      productsListState = _useState2[0],
-      setProductsListState = _useState2[1];
+      actionState = _useState2[0],
+      setActionState = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(null),
-      _useState4 = _slicedToArray(_useState3, 2),
-      selectedProduct = _useState4[0],
-      setSelectedProduct = _useState4[1];
-  /**
-   * Method to get the gift products from API
-   */
-
-
-  var getPlatformProductsList = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var where, conditions, requestOptions, response, _yield$response$json, error, result;
+  var handleApply = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
+      var requestOptions, response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              where = null;
-              conditions = [];
-              conditions.push({
-                attribute: 'type',
-                value: 'gift_card'
-              });
-
-              if (conditions.length) {
-                where = {
-                  conditions: conditions,
-                  conector: 'AND'
-                };
-              }
-
-              setProductsListState(_objectSpread(_objectSpread({}, productsListState), {}, {
+              console.log(values);
+              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
                 loading: true
               }));
               requestOptions = {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: "Bearer ".concat(token)
-                }
+                },
+                body: JSON.stringify(values)
               };
-              _context.next = 9;
-              return fetch("".concat(ordering.root, "/platform_products?where=").concat(JSON.stringify(where)), requestOptions);
+              _context.next = 6;
+              return fetch("".concat(ordering.root, "/gift_cards/redeem"), requestOptions);
 
-            case 9:
+            case 6:
               response = _context.sent;
-              _context.next = 12;
+              _context.next = 9;
               return response.json();
 
-            case 12:
+            case 9:
               _yield$response$json = _context.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
-              setProductsListState({
+              setActionState({
                 loading: false,
-                products: error ? [] : result,
                 error: error ? result : null
               });
-              _context.next = 21;
+              _context.next = 18;
               break;
 
-            case 18:
-              _context.prev = 18;
+            case 15:
+              _context.prev = 15;
               _context.t0 = _context["catch"](0);
-              setProductsListState(_objectSpread(_objectSpread({}, productsListState), {}, {
+              setActionState({
                 loading: false,
                 error: [_context.t0.message]
-              }));
+              });
 
-            case 21:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 18]]);
+      }, _callee, null, [[0, 15]]);
     }));
 
-    return function getPlatformProductsList() {
+    return function handleApply(_x) {
       return _ref.apply(this, arguments);
     };
   }();
 
-  var handleAccept = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
-      var giftCard, _yield$addProduct, error, result;
-
-      return _regenerator.default.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              giftCard = {
-                id: selectedProduct === null || selectedProduct === void 0 ? void 0 : selectedProduct.id,
-                quantity: 1
-              };
-              _context2.next = 3;
-              return addProduct(giftCard, null, null, true);
-
-            case 3:
-              _yield$addProduct = _context2.sent;
-              error = _yield$addProduct.error;
-              result = _yield$addProduct.result;
-
-              if (!error) {
-                events.emit('go_to_page', {
-                  page: 'checkout',
-                  params: {
-                    cartUuid: result.uuid
-                  }
-                });
-              }
-
-            case 7:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function handleAccept() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  (0, _react.useEffect)(function () {
-    getPlatformProductsList();
-  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    productsListState: productsListState,
-    selectedProduct: selectedProduct,
-    setSelectedProduct: setSelectedProduct,
-    handleAccept: handleAccept
+    actionState: actionState,
+    handleApply: handleApply
   })));
 };
 
-exports.PurchaseGiftCard = PurchaseGiftCard;
-PurchaseGiftCard.propTypes = {
+exports.RedeemGiftCard = RedeemGiftCard;
+RedeemGiftCard.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType
 };
-PurchaseGiftCard.defaultProps = {};
+RedeemGiftCard.defaultProps = {};
