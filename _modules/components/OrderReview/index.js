@@ -181,7 +181,7 @@ var OrderReview = function OrderReview(props) {
               }
 
               // eslint-disable-next-line no-unused-expressions
-              order === null || order === void 0 ? void 0 : (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.foreach( /*#__PURE__*/function () {
+              order === null || order === void 0 ? void 0 : (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.forEach( /*#__PURE__*/function () {
                 var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_business, i) {
                   var _order$business3;
 
