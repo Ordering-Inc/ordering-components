@@ -8,7 +8,7 @@ import { useSession } from '../../contexts/SessionContext'
  */
 export const MultiOrdersDetails = (props) => {
   const {
-    orderUuids,
+    orderId,
     onRedirectPage,
     UIComponent
   } = props
@@ -30,7 +30,7 @@ export const MultiOrdersDetails = (props) => {
       const options = {
         query: {
           orderBy: '-',
-          where: [{ attribute: 'uuid', value: orderUuids }]
+          where: [{ attribute: 'cart_group_id', value: orderId }]
         }
       }
       const { content: { error, result } } = await ordering.setAccessToken(token).orders().get(options)
@@ -59,7 +59,7 @@ export const MultiOrdersDetails = (props) => {
   }
 
   useEffect(() => {
-    if (orderUuids.length) {
+    if (orderId) {
       getOrders()
     } else {
       onRedirectPage && onRedirectPage()

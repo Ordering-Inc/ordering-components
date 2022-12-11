@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
@@ -7,25 +7,27 @@ import { useEvent } from '../../contexts/EventContext'
 
 export const MultiCartCreate = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    cartGroup: cartGroupFound,
+    cartUuid
   } = props
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-  const [orderState] = useOrder()
+  const [orderState, { refreshOrderOptions }] = useOrder()
   const [events] = useEvent()
-  const [formState, setFormState] = useState({ loading: true, error: null })
+
   const filtValidation = (cart) =>
     cart?.status !== 2 &&
-    cart?.valid
-
-  const cartsUuidForGroup = Object.values(orderState?.carts).filter(cart => filtValidation(cart)).map(cart => cart?.uuid)
+    cart?.valid &&
+    (cartGroupFound === 'create' ? !cart?.group?.uuid : cart?.group?.uuid === cartGroupFound)
 
   const createMultiCart = async () => {
-    setFormState({
-      ...formState,
-      loading: true
-    })
+    const cartsUuidForGroup = Object.values(orderState?.carts).filter(cart => filtValidation(cart)).map(cart => cart?.uuid)
+    cartsUuidForGroup.push(cartUuid)
+    if (cartsUuidForGroup?.length === 1) {
+      events.emit('go_to_page', { page: 'checkout', params: { cartUuid: cartsUuidForGroup[0] } })
+    }
     const response = await fetch(`${ordering.root}/cart_groups`, {
       method: 'POST',
       headers: {
@@ -38,23 +40,15 @@ export const MultiCartCreate = (props) => {
       })
     })
     const { result, error } = await response.json()
-    setFormState({
-      ...formState,
-      loading: false,
-      result
-    })
+    await refreshOrderOptions()
     if (!error) {
-      events.emit('go_to_page', { page: 'multi_checkout', params: { cartUuid: result?.group?.uuid } })
+      events.emit('go_to_page', { page: 'multi_checkout', params: { cartUuid: result?.uuid } })
     }
   }
 
   useEffect(() => {
-    if (cartsUuidForGroup?.length > 1) {
-      createMultiCart()
-    } else if (cartsUuidForGroup?.length === 1) {
-      events.emit('go_to_page', { page: 'checkout', params: { cartUuid: cartsUuidForGroup[0] } })
-    }
-  }, [cartsUuidForGroup])
+    createMultiCart()
+  }, [])
 
   return (
     <>

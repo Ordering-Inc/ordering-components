@@ -14,7 +14,8 @@ export const MultiCheckout = (props) => {
   const {
     UIComponent,
     onPlaceOrderClick,
-    cartUuid
+    cartUuid,
+    actionsBeforePlace
   } = props
 
   const [ordering] = useApi()
@@ -37,12 +38,13 @@ export const MultiCheckout = (props) => {
   */
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
 
-  const openCarts = (Object.values(carts)?.filter(cart => cart?.products && cart?.products?.length && cart?.status !== 2 && cart?.valid_schedule && cart?.valid_products && cart?.valid_address && cart?.valid_maximum && cart?.valid_minimum && !cart?.wallets) || null) || []
+  const openCarts = (Object.values(carts)?.filter(cart => cart?.valid && cart?.group?.uuid === cartUuid) || null) || []
   const totalCartsPrice = openCarts && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
   const cartsUuids = openCarts.reduce((uuids, cart) => [...uuids, cart.uuid], [])
 
   const [placing, setPlacing] = useState(false)
   const [paymethodSelected, setPaymethodSelected] = useState({})
+  const [cartGroup, setCartGroup] = useState({ loading: true, error: null, result: null })
 
   const handleGroupPlaceOrder = async () => {
     let paymethodData = paymethodSelected?.paymethod_data
@@ -53,7 +55,7 @@ export const MultiCheckout = (props) => {
     }
     let payload = {
       carts: cartsUuids,
-      amount: totalCartsPrice,
+      amount: cartGroup?.result?.balance,
       cartUuid
     }
     if (paymethodSelected?.paymethod) {
@@ -77,10 +79,14 @@ export const MultiCheckout = (props) => {
     }
     setPlacing(true)
     const { error, result } = await placeMulitCarts(payload)
+
+    if (result?.paymethod_data?.status === 2 && actionsBeforePlace) {
+      await actionsBeforePlace(paymethodSelected, result)
+    }
     setPlacing(false)
     if (!error) {
-      const orderUuids = result.carts.reduce((uuids, cart) => [...uuids, cart.order.uuid], [])
-      onPlaceOrderClick && onPlaceOrderClick(orderUuids)
+      // const orderUuids = result.carts.reduce((uuids, cart) => [...uuids, cart.order.uuid], [])
+      onPlaceOrderClick && onPlaceOrderClick(result)
     }
   }
 
@@ -171,6 +177,37 @@ export const MultiCheckout = (props) => {
     multiHandleChangeDeliveryOption(value, cartUuidArr)
   }
 
+  const getMultiCart = async () => {
+    try {
+      if (!cartUuid) return
+      setCartGroup({
+        ...cartGroup,
+        loading: true
+      })
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${token}`,
+          'X-App-X': ordering.appId
+        }
+      })
+      const { result, error } = await response.json()
+      setCartGroup({
+        ...cartGroup,
+        loading: false,
+        result,
+        error
+      })
+    } catch (err) {
+      setCartGroup({
+        ...cartGroup,
+        loading: false,
+        error: err.message
+      })
+    }
+  }
+
   useEffect(() => {
     if (deliveryOptionSelected === undefined) {
       setDeliveryOptionSelected(null)
@@ -180,6 +217,10 @@ export const MultiCheckout = (props) => {
   useEffect(() => {
     getDeliveryOptions()
   }, [])
+
+  useEffect(() => {
+    getMultiCart()
+  }, [JSON.stringify(carts)])
 
   return (
     <>
@@ -197,6 +238,7 @@ export const MultiCheckout = (props) => {
           handleChangeDeliveryOption={handleChangeDeliveryOption}
           deliveryOptionSelected={deliveryOptionSelected}
           instructionsOptions={instructionsOptions}
+          cartGroup={cartGroup}
         />
       )}
     </>

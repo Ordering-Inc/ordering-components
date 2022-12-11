@@ -831,6 +831,43 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   /**
+ * Confirm multi carts
+ */
+  const confirmMultiCarts = async (cartUuid) => {
+    try {
+      setState({ ...state, loading: true })
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${session.token}`,
+          'X-App-X': ordering.appId
+        }
+      }
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/confirm`, requestOptions)
+      const { result, error } = await response.json()
+      if (!error) {
+        result.carts.forEach(cart => {
+          if (result.status !== 'completed') {
+            state.carts[`businessId:${cart.business_id}`] = result
+            events.emit('cart_updated', result)
+          } else {
+            delete state.carts[`businessId:${cart.business_id}`]
+          }
+        })
+      }
+      setState({ ...state, loading: false })
+      return { error, result }
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return {
+        error: true,
+        result: [err.message]
+      }
+    }
+  }
+
+  /**
    * Reorder an order and get cart
    */
   const reorder = async (orderId) => {
@@ -1054,7 +1091,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setStateValues,
     placeMulitCarts,
     getLastOrderHasNoReview,
-    changeCityFilter
+    changeCityFilter,
+    confirmMultiCarts
   }
 
   const copyState = JSON.parse(JSON.stringify(state))
