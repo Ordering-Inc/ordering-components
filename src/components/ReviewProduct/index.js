@@ -46,7 +46,7 @@ export const ReviewProduct = (props) => {
       let error, result
       if (order?.business?.length > 1) {
         // eslint-disable-next-line no-unused-expressions
-        order?.business?.foreach(async (business, i) => {
+        order?.business?.forEach(async (business, i) => {
           const productsOfOrder = Object.values(formState.changes)
             .filter(product =>
               order?.products

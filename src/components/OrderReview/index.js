@@ -47,7 +47,7 @@ export const OrderReview = (props) => {
     try {
       if (order?.business?.length > 1) {
         // eslint-disable-next-line no-unused-expressions
-        order?.business?.foreach(async (_business, i) => {
+        order?.business?.forEach(async (_business, i) => {
           const body = {
             ...staticBody,
             order_id: order.id[i],
