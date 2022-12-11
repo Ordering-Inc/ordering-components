@@ -99,11 +99,8 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
                 query: {
                   orderBy: '-',
                   where: [{
-                    attribute: 'cart_group',
-                    value: {
-                      attribute: 'uuid',
-                      orderId: orderId
-                    }
+                    attribute: 'cart_group_id',
+                    value: orderId
                   }]
                 }
               };

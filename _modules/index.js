@@ -1162,6 +1162,8 @@ var _MenuControl = require("./components/MenuControl");
 
 var _MomentOption = require("./components/MomentOption");
 
+var _MultiCartCreate = require("./components/MultiCartCreate");
+
 var _MultiCheckout = require("./components/MultiCheckout");
 
 var _MultiCartsPaymethodsAndWallets = require("./components/MultiCartsPaymethodsAndWallets");
@@ -1323,8 +1325,6 @@ var _ReviewDriver = require("./components/ReviewDriver");
 var _UserVerification = require("./components/UserVerification");
 
 var _WalletList = require("./components/WalletList");
-
-var _MultiCartCreate = require("./components/MultiCartCreate");
 
 var _OrdersDashboardComponents = require("./components/OrdersDashboardComponents");
 

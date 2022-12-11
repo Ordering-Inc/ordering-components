@@ -102,25 +102,24 @@ var ReviewProduct = function ReviewProduct(props) {
       changes: _changes
     }));
   };
-  /**
-   * Function that load and send the product review to ordering
-   */
 
-
-  var handleSendProductReview = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var response, _yield$response$json, result, error;
-
+  var reviewProducts = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId, changes) {
+      var response, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-                loading: true
-              }));
-              _context.prev = 1;
+              if (changes) {
+                _context.next = 2;
+                break;
+              }
+
+              return _context.abrupt("return");
+
+            case 2:
               _context.next = 4;
-              return fetch("".concat(ordering.root, "/orders/").concat(order === null || order === void 0 ? void 0 : order.id, "/product_reviews"), {
+              return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/product_reviews"), {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(session.token),
@@ -128,7 +127,7 @@ var ReviewProduct = function ReviewProduct(props) {
                   'X-App-X': ordering.appId
                 },
                 body: JSON.stringify({
-                  reviews: JSON.stringify(formState === null || formState === void 0 ? void 0 : formState.changes)
+                  reviews: JSON.stringify(changes)
                 })
               });
 
@@ -138,10 +137,94 @@ var ReviewProduct = function ReviewProduct(props) {
               return response.json();
 
             case 7:
-              _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
+              result = _context.sent;
+              return _context.abrupt("return", result);
 
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function reviewProducts(_x, _x2) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  /**
+   * Function that load and send the product review to ordering
+   */
+
+
+  var handleSendProductReview = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var _order$business, error, result, _order$business2, _result;
+
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: true
+              }));
+              _context3.prev = 1;
+
+              if (!((order === null || order === void 0 ? void 0 : (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.length) > 1)) {
+                _context3.next = 6;
+                break;
+              }
+
+              // eslint-disable-next-line no-unused-expressions
+              order === null || order === void 0 ? void 0 : (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.foreach( /*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business, i) {
+                  var productsOfOrder, _result;
+
+                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          productsOfOrder = Object.values(formState.changes).filter(function (product) {
+                            var _order$products;
+
+                            return order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.some(function (_product) {
+                              return (product === null || product === void 0 ? void 0 : product.product_id) === (_product === null || _product === void 0 ? void 0 : _product.product_id) && (_product === null || _product === void 0 ? void 0 : _product.order_id) === (order === null || order === void 0 ? void 0 : order.id[i]);
+                            });
+                          });
+                          reviewProducts(order.id[i]);
+                          _context2.next = 4;
+                          return reviewProducts(order === null || order === void 0 ? void 0 : order.id[i], productsOfOrder);
+
+                        case 4:
+                          _result = _context2.sent;
+                          error = result.error;
+                          result = _result.result;
+
+                        case 7:
+                        case "end":
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2);
+                }));
+
+                return function (_x3, _x4) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+              _context3.next = 11;
+              break;
+
+            case 6:
+              _context3.next = 8;
+              return reviewProducts(order === null || order === void 0 ? void 0 : order.id, formState.changes);
+
+            case 8:
+              _result = _context3.sent;
+              error = result.error;
+              result = _result.result;
+
+            case 11:
               if (!error) {
                 setFormState({
                   loading: false,
@@ -162,30 +245,30 @@ var ReviewProduct = function ReviewProduct(props) {
                 }));
               }
 
-              _context.next = 16;
+              _context3.next = 17;
               break;
 
-            case 13:
-              _context.prev = 13;
-              _context.t0 = _context["catch"](1);
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](1);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
                   error: true,
-                  result: _context.t0.message
+                  result: _context3.t0.message
                 },
                 loading: false
               }));
 
-            case 16:
+            case 17:
             case "end":
-              return _context.stop();
+              return _context3.stop();
           }
         }
-      }, _callee, null, [[1, 13]]);
+      }, _callee3, null, [[1, 14]]);
     }));
 
     return function handleSendProductReview() {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
 
