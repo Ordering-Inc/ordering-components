@@ -177,9 +177,7 @@ var MultiCheckout = function MultiCheckout(props) {
               }
 
               payload = {
-                carts: cartsUuids,
-                amount: cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : _cartGroup$result.balance,
-                cartUuid: cartUuid
+                amount: cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : _cartGroup$result.balance
               };
 
               if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
@@ -203,7 +201,7 @@ var MultiCheckout = function MultiCheckout(props) {
 
               setPlacing(true);
               _context.next = 9;
-              return placeMulitCarts(payload);
+              return placeMulitCarts(payload, cartUuid);
 
             case 9:
               _yield$placeMulitCart = _context.sent;
@@ -241,7 +239,7 @@ var MultiCheckout = function MultiCheckout(props) {
 
   var handleSelectPaymethod = function handleSelectPaymethod(paymethod) {
     setPaymethodSelected(_objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
-      paymethod_data: null
+      paymethod_data: paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_data
     }));
   };
 

@@ -1718,7 +1718,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
 
   var placeMulitCarts = /*#__PURE__*/function () {
-    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(data) {
+    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(data, cartUuid) {
       var requestOptions, response, _yield$response$json2, error, result;
 
       return _regeneratorRuntime().wrap(function _callee16$(_context16) {
@@ -1739,7 +1739,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 body: JSON.stringify(data)
               };
               _context16.next = 5;
-              return fetch("".concat(ordering.root, "/cart_groups/").concat(data === null || data === void 0 ? void 0 : data.cartUuid, "/place"), requestOptions);
+              return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/place"), requestOptions);
 
             case 5:
               response = _context16.sent;
@@ -1800,7 +1800,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee16, null, [[0, 16]]);
     }));
 
-    return function placeMulitCarts(_x25) {
+    return function placeMulitCarts(_x25, _x26) {
       return _ref18.apply(this, arguments);
     };
   }();
@@ -1901,7 +1901,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee17, null, [[0, 22]]);
     }));
 
-    return function confirmCart(_x26, _x27) {
+    return function confirmCart(_x27, _x28) {
       return _ref19.apply(this, arguments);
     };
   }();
@@ -1981,7 +1981,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee18, null, [[0, 16]]);
     }));
 
-    return function confirmMultiCarts(_x28) {
+    return function confirmMultiCarts(_x29) {
       return _ref20.apply(this, arguments);
     };
   }();
@@ -2067,7 +2067,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee19, null, [[0, 20]]);
     }));
 
-    return function reorder(_x29) {
+    return function reorder(_x30) {
       return _ref21.apply(this, arguments);
     };
   }();
@@ -2241,7 +2241,7 @@ var OrderProvider = function OrderProvider(_ref) {
       }, _callee22);
     }));
 
-    return function setUserCustomerOptions(_x30) {
+    return function setUserCustomerOptions(_x31) {
       return _ref24.apply(this, arguments);
     };
   }();
