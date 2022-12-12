@@ -54,9 +54,7 @@ export const MultiCheckout = (props) => {
       })
     }
     let payload = {
-      carts: cartsUuids,
-      amount: cartGroup?.result?.balance,
-      cartUuid
+      amount: cartGroup?.result?.balance
     }
     if (paymethodSelected?.paymethod) {
       payload = {
@@ -78,7 +76,7 @@ export const MultiCheckout = (props) => {
       }
     }
     setPlacing(true)
-    const { error, result } = await placeMulitCarts(payload)
+    const { error, result } = await placeMulitCarts(payload, cartUuid)
 
     if (result?.paymethod_data?.status === 2 && actionsBeforePlace) {
       await actionsBeforePlace(paymethodSelected, result)
@@ -94,7 +92,7 @@ export const MultiCheckout = (props) => {
     setPaymethodSelected({
       ...paymethodSelected,
       ...paymethod,
-      paymethod_data: null
+      paymethod_data: paymethod?.paymethod_data
     })
   }
 
