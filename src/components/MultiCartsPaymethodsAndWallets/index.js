@@ -11,7 +11,8 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const {
     UIComponent,
     openCarts,
-    propsToFetch
+    propsToFetch,
+    cartUuid
   } = props
 
   const [ordering] = useApi()
@@ -31,17 +32,14 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
     try {
       setPaymethodsAndWallets({ ...paymethodsAndWallets, loading: true })
       const requestOptions = {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `bearer ${token}`,
           'X-App-X': ordering.appId
-        },
-        body: JSON.stringify({
-          carts: cartsUuids
-        })
+        }
       }
-      const response = await fetch(`${ordering.root}/carts/prepare_checkout`, requestOptions)
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/prepare`, requestOptions)
       const content = await response.json()
       if (!content.error) {
         setPaymethodsAndWallets({
