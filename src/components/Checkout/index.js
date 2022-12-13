@@ -78,6 +78,8 @@ export const Checkout = (props) => {
 
   const [uberDirect, setUberDirect] = useState({ isUberDirect: false, amountToHide: null })
 
+  const [wowAcumulationPoints, setWowAcumulationPoints] = useState({result: null, loading: true, error: false})
+
   const [hasCateringProducts, setHasCateringProducts] = useState({ result: false, loading: true, error: false })
   /**
    * Current cart
@@ -443,6 +445,45 @@ export const Checkout = (props) => {
     }
   }
 
+  const getWowPointsAcumulation = async (total) => {
+    try {
+      setWowAcumulationPoints({
+        ...wowAcumulationPoints,
+        loading: true
+      })
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/points_convert.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          type: 3,
+          amount: total ?? cart?.total
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-APP-X': ordering.appId
+        }
+      })
+      const result = await response.json()
+      if (!result.error) {
+        setWowAcumulationPoints({
+          ...wowAcumulationPoints,
+          loading: false,
+          result
+        })
+        return
+      }
+      setWowAcumulationPoints({
+        ...wowAcumulationPoints,
+        loading: false,
+        error: true
+      })
+    } catch (err) {
+      setWowAcumulationPoints({
+        ...wowAcumulationPoints,
+        loading: false,
+        error: true
+      })
+    }
+  }
   useEffect(() => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
@@ -518,6 +559,14 @@ export const Checkout = (props) => {
   }, [cart?.delivery_option_id])
 
   useEffect(() => {
+    if (vaXMiCuenta.amount && vaXMiCuenta.amount > 0) {
+      getWowPointsAcumulation(cart.total - vaXMiCuenta.amount)
+    } else {
+      getWowPointsAcumulation()
+    }
+  }, [cart?.total])
+
+  useEffect(() => {
     getDeliveryOptions()
     checkUberDirect()
   }, [])
@@ -551,6 +600,7 @@ export const Checkout = (props) => {
           handleChangeComment={handleChangeComment}
           handleChangeDeliveryOption={handleChangeDeliveryOption}
           handleChangeVaXMiCuenta={handleChangeVaXMiCuenta}
+          wowAcumulationPoints={wowAcumulationPoints}
         />
       )}
     </>
