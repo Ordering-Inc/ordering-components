@@ -68,7 +68,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
       defaultTerm = props.defaultTerm,
       defaultLocation = props.defaultLocation,
       brandId = props.brandId,
-      isPfChangs = props.isPfChangs;
+      isPfChangs = props.isPfChangs,
+      filterByCity = props.filterByCity;
 
   var _useState = (0, _react.useState)({
     businesses: [],
@@ -112,6 +113,11 @@ var BusinessSearchList = function BusinessSearchList(props) {
       paginationProps = _useState8[0],
       setPaginationProps = _useState8[1];
 
+  var _useState9 = (0, _react.useState)(false),
+      _useState10 = _slicedToArray(_useState9, 2),
+      allFetched = _useState10[0],
+      setAllFetched = _useState10[1];
+
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
       orderState = _useOrder2[0];
@@ -128,29 +134,29 @@ var BusinessSearchList = function BusinessSearchList(props) {
       _useOrderingTheme2 = _slicedToArray(_useOrderingTheme, 1),
       orderingTheme = _useOrderingTheme2[0];
 
-  var _useState9 = (0, _react.useState)({
+  var _useState11 = (0, _react.useState)({
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
     price_level: null
   }),
-      _useState10 = _slicedToArray(_useState9, 2),
-      filters = _useState10[0],
-      setFilters = _useState10[1];
-
-  var _useState11 = (0, _react.useState)(defaultTerm || ''),
       _useState12 = _slicedToArray(_useState11, 2),
-      termValue = _useState12[0],
-      setTermValue = _useState12[1];
+      filters = _useState12[0],
+      setFilters = _useState12[1];
 
-  var _useState13 = (0, _react.useState)({
+  var _useState13 = (0, _react.useState)(defaultTerm || ''),
+      _useState14 = _slicedToArray(_useState13, 2),
+      termValue = _useState14[0],
+      setTermValue = _useState14[1];
+
+  var _useState15 = (0, _react.useState)({
     loading: false,
     cities: [],
     error: null
   }),
-      _useState14 = _slicedToArray(_useState13, 2),
-      citiesState = _useState14[0],
-      setCitiesState = _useState14[1];
+      _useState16 = _slicedToArray(_useState15, 2),
+      citiesState = _useState16[0],
+      setCitiesState = _useState16[1];
 
   var showCities = !(orderingTheme !== null && orderingTheme !== void 0 && (_orderingTheme$theme = orderingTheme.theme) !== null && _orderingTheme$theme !== void 0 && (_orderingTheme$theme$ = _orderingTheme$theme.business_listing_view) !== null && _orderingTheme$theme$ !== void 0 && (_orderingTheme$theme$2 = _orderingTheme$theme$.components) !== null && _orderingTheme$theme$2 !== void 0 && (_orderingTheme$theme$3 = _orderingTheme$theme$2.cities) !== null && _orderingTheme$theme$3 !== void 0 && _orderingTheme$theme$3.hidden);
   (0, _react.useEffect)(function () {
@@ -260,9 +266,9 @@ var BusinessSearchList = function BusinessSearchList(props) {
                 if (!filters[key] && filters[key] !== 0 || filters[key] === 'default' || ((_filters$key = filters[key]) === null || _filters$key === void 0 ? void 0 : _filters$key.length) === 0) return;
                 Array.isArray(filters[key]) ? filtParams = filtParams + "&".concat(key, "=[").concat(filters[key], "]") : filtParams = filtParams + "&".concat(key, "=").concat(filters[key]);
               });
-              filtParams = filtParams + isPfChangs ? "&forceOrderBy=enabled&closed_businesses=enabled&force_max_distance=".concat(options !== null && options !== void 0 && options.force_max_distance ? 'enabled' : 'disabled') : '&forceOrderBy=disabled';
+              filtParams = "".concat(filtParams).concat(isPfChangs ? "&forceOrderBy=enabled&closed_businesses=enabled&force_max_distance=".concat(options !== null && options !== void 0 && options.force_max_distance ? 'enabled' : 'disabled') : '&forceOrderBy=disabled');
               filtParams = filtParams + ((orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 1 && defaultLocation && filters.max_distance ? "&max_distance=".concat(filters.max_distance) : '');
-              filtParams = filtParams + "&page=".concat(newFetch ? 1 : paginationProps.currentPage + 1, "&page_size=").concat(paginationProps.pageSize);
+              filtParams = !filterByCity ? filtParams + "&page=".concat(newFetch ? 1 : paginationProps.currentPage + 1, "&page_size=").concat(paginationProps.pageSize) : filtParams;
               brandId && (filtParams = filtParams + "&franchise_ids=[".concat(brandId, "]"));
               setBusinessesSearchList(_objectSpread(_objectSpread({}, businessesSearchList), {}, {
                 loading: true,
@@ -573,6 +579,17 @@ var BusinessSearchList = function BusinessSearchList(props) {
       getCities();
     }
   }, [showCities]);
+  (0, _react.useEffect)(function () {
+    if (filterByCity && isPfChangs) {
+      if (!allFetched) {
+        handleSearchbusinessAndProducts(true, {
+          force_max_distance: true
+        });
+        handleSearchbusinessAndProducts(true);
+        setAllFetched(true);
+      }
+    }
+  }, [filterByCity]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     paginationProps: paginationProps,
     businessesSearchList: businessesSearchList,
