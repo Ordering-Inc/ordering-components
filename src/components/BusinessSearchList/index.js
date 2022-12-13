@@ -13,7 +13,8 @@ export const BusinessSearchList = (props) => {
     defaultTerm,
     defaultLocation,
     brandId,
-    isPfChangs
+    isPfChangs,
+    filterByCity
   } = props
 
   const [businessesSearchList, setBusinessesSearchList] = useState({ businesses: [], loading: true, error: null, lengthError: true })
@@ -29,6 +30,7 @@ export const BusinessSearchList = (props) => {
     totalItems: null,
     totalPages: null
   })
+  const [allFetched, setAllFetched] = useState(false)
   const [orderState] = useOrder()
   const [ordering] = useApi()
   const [{ token }] = useSession()
@@ -146,9 +148,9 @@ export const BusinessSearchList = (props) => {
         if ((!filters[key] && filters[key] !== 0) || filters[key] === 'default' || filters[key]?.length === 0) return
         Array.isArray(filters[key]) ? filtParams = filtParams + `&${key}=[${filters[key]}]` : filtParams = filtParams + `&${key}=${filters[key]}`
       })
-      filtParams = filtParams + isPfChangs ? `&forceOrderBy=enabled&closed_businesses=enabled&force_max_distance=${options?.force_max_distance ? 'enabled' : 'disabled'}` : '&forceOrderBy=disabled'
+      filtParams = `${filtParams}${isPfChangs ? `&forceOrderBy=enabled&closed_businesses=enabled&force_max_distance=${options?.force_max_distance ? 'enabled' : 'disabled'}` : '&forceOrderBy=disabled'}`
       filtParams = filtParams + (orderState?.options?.type === 1 && defaultLocation && filters.max_distance ? `&max_distance=${filters.max_distance}` : '')
-      filtParams = filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`
+      filtParams = !filterByCity ? (filtParams + `&page=${newFetch ? 1 : paginationProps.currentPage + 1}&page_size=${paginationProps.pageSize}`) : filtParams
       brandId && (filtParams = filtParams + `&franchise_ids=[${brandId}]`)
       setBusinessesSearchList({
         ...businessesSearchList,
@@ -331,6 +333,18 @@ export const BusinessSearchList = (props) => {
       getCities()
     }
   }, [showCities])
+
+  useEffect(() => {
+    if (filterByCity && isPfChangs) {
+      if (!allFetched) {
+        handleSearchbusinessAndProducts(true, {
+          force_max_distance: true
+        })
+        handleSearchbusinessAndProducts(true)
+        setAllFetched(true)
+      }
+    }
+  }, [filterByCity])
 
   return (
     <>
