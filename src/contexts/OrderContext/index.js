@@ -254,7 +254,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       })
     }
 
-    updateOrderOptions({ type })
+    const cityId = state.options?.city_id
+    const params = { type }
+
+    if (cityId && type !== 2) {
+      params.city_id = null
+    }
+
+    updateOrderOptions(params)
   }
 
   /**
