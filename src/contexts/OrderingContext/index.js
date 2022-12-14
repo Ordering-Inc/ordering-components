@@ -55,6 +55,7 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                                 Alert={Alert}
                                 isAlsea={isAlsea}
                                 franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                                businessSlug={settings?.businessSlug}
                               >
                                 <BusinessProvider>
                                   {children}

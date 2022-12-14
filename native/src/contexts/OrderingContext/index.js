@@ -52,6 +52,7 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast, is
                               Alert={Alert}
                               isDisableToast={isDisableToast}
                               franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                              businessSlug={settings?.businessSlug}
                             >
                               <BusinessProvider
                                 businessId={settings?.businessSlug ?? settings?.businessId}
