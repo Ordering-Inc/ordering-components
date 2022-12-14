@@ -1056,7 +1056,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     if (session?.token) {
       const pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17]
       const where = [{ attribute: 'status', value: pastOrderTypes }]
-      if (franchiseId) {
+      if (franchiseId || typeof businessSlug === 'number') {
         where.push({
           attribute: 'ref_business',
           conditions: [
@@ -1064,7 +1064,21 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
               attribute: 'franchise_id',
               value: {
                 condition: '=',
-                value: franchiseId
+                value: franchiseId || businessSlug
+              }
+            }
+          ]
+        })
+      }
+      if (typeof businessSlug === 'string' && businessSlug) {
+        where.push({
+          attribute: 'ref_business',
+          conditions: [
+            {
+              attribute: 'slug',
+              value: {
+                condition: '=',
+                value: businessSlug
               }
             }
           ]
