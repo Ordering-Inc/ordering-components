@@ -29,7 +29,7 @@ export const MultiCartCreate = (props) => {
     cartsUuidForGroup.push(cartUuid)
     if (cartsUuidForGroup?.length === 1) {
       if (handleOnRedirectCheckout) {
-        handleOnRedirectCheckout()
+        handleOnRedirectCheckout(cartsUuidForGroup[0])
         return
       }
       events.emit('go_to_page', { page: 'checkout', params: { cartUuid: cartsUuidForGroup[0] } })
