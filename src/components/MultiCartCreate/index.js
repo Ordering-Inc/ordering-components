@@ -33,6 +33,7 @@ export const MultiCartCreate = (props) => {
         return
       }
       events.emit('go_to_page', { page: 'checkout', params: { cartUuid: cartsUuidForGroup[0] } })
+      return
     }
     const response = await fetch(`${ordering.root}/cart_groups`, {
       method: 'POST',
