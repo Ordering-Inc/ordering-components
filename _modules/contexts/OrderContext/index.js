@@ -60,7 +60,8 @@ var OrderProvider = function OrderProvider(_ref) {
     isAlsea = _ref.isAlsea,
     isDisableToast = _ref.isDisableToast,
     franchiseId = _ref.franchiseId,
-    isDisabledDefaultOpts = _ref.isDisabledDefaultOpts;
+    isDisabledDefaultOpts = _ref.isDisabledDefaultOpts,
+    businessSlug = _ref.businessSlug;
   var _useState = (0, _react.useState)({
       show: false
     }),
@@ -1739,7 +1740,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context20.prev = _context20.next) {
             case 0:
               if (!(session !== null && session !== void 0 && session.token)) {
-                _context20.next = 19;
+                _context20.next = 20;
                 break;
               }
               pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17];
@@ -1747,14 +1748,26 @@ var OrderProvider = function OrderProvider(_ref) {
                 attribute: 'status',
                 value: pastOrderTypes
               }];
-              if (franchiseId) {
+              if (franchiseId || typeof businessSlug === 'number') {
                 where.push({
                   attribute: 'ref_business',
                   conditions: [{
                     attribute: 'franchise_id',
                     value: {
                       condition: '=',
-                      value: franchiseId
+                      value: franchiseId || businessSlug
+                    }
+                  }]
+                });
+              }
+              if (typeof businessSlug === 'string' && businessSlug) {
+                where.push({
+                  attribute: 'ref_business',
+                  conditions: [{
+                    attribute: 'slug',
+                    value: {
+                      condition: '=',
+                      value: businessSlug
                     }
                   }]
                 });
@@ -1767,29 +1780,29 @@ var OrderProvider = function OrderProvider(_ref) {
                   where: where
                 }
               };
-              _context20.next = 7;
+              _context20.next = 8;
               return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(options);
-            case 7:
+            case 8:
               _yield$ordering$setAc20 = _context20.sent;
               _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
               result = _yield$ordering$setAc21.result;
               error = _yield$ordering$setAc21.error;
               if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
-                _context20.next = 16;
+                _context20.next = 17;
                 break;
               }
               _noRviewOrder = result === null || result === void 0 ? void 0 : result.find(function (order) {
                 return !(order !== null && order !== void 0 && order.review);
               });
               return _context20.abrupt("return", _noRviewOrder);
-            case 16:
-              return _context20.abrupt("return", null);
             case 17:
-              _context20.next = 20;
-              break;
-            case 19:
               return _context20.abrupt("return", null);
+            case 18:
+              _context20.next = 21;
+              break;
             case 20:
+              return _context20.abrupt("return", null);
+            case 21:
             case "end":
               return _context20.stop();
           }

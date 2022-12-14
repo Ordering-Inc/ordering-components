@@ -68,7 +68,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
     strategy: webStrategy,
     Alert: Alert,
     isAlsea: isAlsea,
-    franchiseId: (_settings$franchiseSl = settings === null || settings === void 0 ? void 0 : settings.franchiseSlug) !== null && _settings$franchiseSl !== void 0 ? _settings$franchiseSl : settings === null || settings === void 0 ? void 0 : settings.franchiseId
+    franchiseId: (_settings$franchiseSl = settings === null || settings === void 0 ? void 0 : settings.franchiseSlug) !== null && _settings$franchiseSl !== void 0 ? _settings$franchiseSl : settings === null || settings === void 0 ? void 0 : settings.franchiseId,
+    businessSlug: settings === null || settings === void 0 ? void 0 : settings.businessSlug
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, null, children)))))))))))))));
 };
 exports.OrderingProvider = OrderingProvider;
