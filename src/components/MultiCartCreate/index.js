@@ -9,7 +9,9 @@ export const MultiCartCreate = (props) => {
   const {
     UIComponent,
     cartGroup: cartGroupFound,
-    cartUuid
+    cartUuid,
+    handleOnRedirectMultiCheckout,
+    handleOnRedirectCheckout
   } = props
 
   const [{ token }] = useSession()
@@ -26,6 +28,10 @@ export const MultiCartCreate = (props) => {
     const cartsUuidForGroup = Object.values(orderState?.carts).filter(cart => filtValidation(cart)).map(cart => cart?.uuid)
     cartsUuidForGroup.push(cartUuid)
     if (cartsUuidForGroup?.length === 1) {
+      if (handleOnRedirectCheckout) {
+        handleOnRedirectCheckout()
+        return
+      }
       events.emit('go_to_page', { page: 'checkout', params: { cartUuid: cartsUuidForGroup[0] } })
     }
     const response = await fetch(`${ordering.root}/cart_groups`, {
@@ -42,6 +48,10 @@ export const MultiCartCreate = (props) => {
     const { result, error } = await response.json()
     await refreshOrderOptions()
     if (!error) {
+      if (handleOnRedirectMultiCheckout) {
+        handleOnRedirectMultiCheckout(result?.uuid)
+        return
+      }
       events.emit('go_to_page', { page: 'multi_checkout', params: { cartUuid: result?.uuid } })
     }
   }
