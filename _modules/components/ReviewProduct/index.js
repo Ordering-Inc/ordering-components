@@ -197,7 +197,7 @@ var ReviewProduct = function ReviewProduct(props) {
 
                         case 4:
                           _result = _context2.sent;
-                          error = result.error;
+                          error = _result.error;
                           result = _result.result;
 
                         case 7:
@@ -221,7 +221,7 @@ var ReviewProduct = function ReviewProduct(props) {
 
             case 8:
               _result = _context3.sent;
-              error = result.error;
+              error = _result.error;
               result = _result.result;
 
             case 11:

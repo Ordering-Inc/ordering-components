@@ -2124,14 +2124,14 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var getLastOrderHasNoReview = /*#__PURE__*/function () {
     var _ref23 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
-      var pastOrderTypes, where, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder;
+      var pastOrderTypes, where, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder, _options4, _yield$ordering$setAc22, _yield$ordering$setAc23, _result3, _error2, noReviewOrders;
 
       return _regeneratorRuntime().wrap(function _callee21$(_context21) {
         while (1) {
           switch (_context21.prev = _context21.next) {
             case 0:
               if (!(session !== null && session !== void 0 && session.token)) {
-                _context21.next = 19;
+                _context21.next = 36;
                 break;
               }
 
@@ -2172,26 +2172,74 @@ var OrderProvider = function OrderProvider(_ref) {
               error = _yield$ordering$setAc21.error;
 
               if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
-                _context21.next = 16;
+                _context21.next = 33;
                 break;
               }
 
               _noRviewOrder = result === null || result === void 0 ? void 0 : result.find(function (order) {
                 return !(order !== null && order !== void 0 && order.review);
               });
-              return _context21.abrupt("return", _noRviewOrder);
 
-            case 16:
+              if (!(_noRviewOrder !== null && _noRviewOrder !== void 0 && _noRviewOrder.cart_group_id)) {
+                _context21.next = 30;
+                break;
+              }
+
+              where.push({
+                attribute: 'cart_group_id',
+                value: _noRviewOrder === null || _noRviewOrder === void 0 ? void 0 : _noRviewOrder.cart_group_id
+              });
+              _options4 = {
+                query: {
+                  where: where,
+                  page: 1,
+                  page_size: 10
+                }
+              };
+              _context21.next = 18;
+              return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(_options4);
+
+            case 18:
+              _yield$ordering$setAc22 = _context21.sent;
+              _yield$ordering$setAc23 = _yield$ordering$setAc22.content;
+              _result3 = _yield$ordering$setAc23.result;
+              _error2 = _yield$ordering$setAc23.error;
+
+              if (_error2) {
+                _context21.next = 27;
+                break;
+              }
+
+              noReviewOrders = _result3.filter(function (order) {
+                return !(order !== null && order !== void 0 && order.review);
+              });
+              return _context21.abrupt("return", noReviewOrders);
+
+            case 27:
               return _context21.abrupt("return", null);
 
-            case 17:
-              _context21.next = 20;
+            case 28:
+              _context21.next = 31;
               break;
 
-            case 19:
+            case 30:
+              return _context21.abrupt("return", _noRviewOrder);
+
+            case 31:
+              _context21.next = 34;
+              break;
+
+            case 33:
               return _context21.abrupt("return", null);
 
-            case 20:
+            case 34:
+              _context21.next = 37;
+              break;
+
+            case 36:
+              return _context21.abrupt("return", null);
+
+            case 37:
             case "end":
               return _context21.stop();
           }
