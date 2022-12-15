@@ -603,12 +603,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
     try {
       setState({ ...state, loading: true })
+      const offerRemoveData = {
+        business_id: offerData.business_id,
+        offer_id: offerData.offer_id
+      }
+      if (offerData.user_id) offerRemoveData.user_id = offerData.user_id
       const response = await fetch(`${ordering.root}/carts/remove_offer`, {
         method: 'POST',
-        body: JSON.stringify({
-          business_id: offerData.business_id,
-          offer_id: offerData.offer_id
-        }),
+        body: JSON.stringify(offerRemoveData),
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.token}`,
