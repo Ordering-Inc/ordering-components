@@ -53,12 +53,12 @@ export const ReviewProduct = (props) => {
                 ?.some(_product => product?.product_id === _product?.product_id && _product?.order_id === order?.id[i]))
           reviewProducts(order.id[i])
           const _result = await reviewProducts(order?.id[i], productsOfOrder)
-          error = result.error
+          error = _result.error
           result = _result.result
         })
       } else {
         const _result = await reviewProducts(order?.id, formState.changes)
-        error = result.error
+        error = _result.error
         result = _result.result
       }
       if (!error) {

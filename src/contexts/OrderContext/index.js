@@ -952,7 +952,25 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
 
       if (!error && result?.length > 0) {
         const _noRviewOrder = result?.find(order => !order?.review)
-        return _noRviewOrder
+        if (_noRviewOrder?.cart_group_id) {
+          where.push({ attribute: 'cart_group_id', value: _noRviewOrder?.cart_group_id })
+          const options = {
+            query: {
+              where,
+              page: 1,
+              page_size: 10
+            }
+          }
+          const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders().get(options)
+          if (!error) {
+            const noReviewOrders = result.filter(order => !order?.review)
+            return noReviewOrders
+          } else {
+            return null
+          }
+        } else {
+          return _noRviewOrder
+        }
       } else {
         return null
       }
