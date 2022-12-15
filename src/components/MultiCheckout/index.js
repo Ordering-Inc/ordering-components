@@ -59,7 +59,7 @@ export const MultiCheckout = (props) => {
     if (paymethodSelected?.paymethod) {
       payload = {
         ...payload,
-        paymethod_id: paymethodSelected?.paymethod?.id
+        paymethod_id: paymethodSelected?.paymethod?.id || paymethodSelected?.id
       }
     }
     if (paymethodData) {
