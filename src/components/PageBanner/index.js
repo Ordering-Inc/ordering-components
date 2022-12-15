@@ -26,9 +26,10 @@ export const PageBanner = (props) => {
       }
       const response = await fetch(`${ordering.root}/banner?position=${position}`, requestOptions)
       const { error, result } = await response.json()
+      const totalItems = result.reduce((items, banner) => [...items, ...banner?.items], [])
       setPageBannerState({
         loading: false,
-        banner: error ? null : Array.isArray(result) ? result[0] : result,
+        banner: error ? null : { items: totalItems },
         error: error ? result : null
       })
     } catch (error) {
