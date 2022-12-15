@@ -17,13 +17,11 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
 
   const [ordering] = useApi()
   const [{ token, user }] = useSession()
-  const [orderState] = useOrder()
 
   const [cartsUuids, setCartsUuids] = useState([])
   const [businessIds, setBusinessIds] = useState([])
   const [paymethodsAndWallets, setPaymethodsAndWallets] = useState({ loading: true, paymethods: [], wallets: [], error: null })
   const [walletsState, setWalletsState] = useState({ result: [], loading: true, error: null })
-  const [businessPaymethods, setBusinessPaymethods] = useState({ loading: true, result: [], error: null })
 
   /**
    * Method to get available wallets and paymethods from API
@@ -60,30 +58,6 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
         ...paymethodsAndWallets,
         loading: false,
         error: [err.message]
-      })
-    }
-  }
-
-  /**
- * Method to get business from API
- */
-  const getBusiness = async () => {
-    try {
-      const parameters = {
-        type: orderState.options?.type
-      }
-
-      const { content: { result, error } } = await ordering.businesses(businessIds[0]).select(propsToFetch).parameters(parameters).get()
-      setBusinessPaymethods({
-        loading: false,
-        result: error ? [] : result?.paymethods,
-        error: error ? result : null
-      })
-    } catch (error) {
-      setBusinessPaymethods({
-        ...businessPaymethods,
-        loading: false,
-        error: [error.message]
       })
     }
   }
@@ -137,7 +111,6 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   useEffect(() => {
     if (!cartsUuids.length) return
     getPaymethodsAndWallets()
-    getBusiness()
   }, [JSON.stringify(cartsUuids), JSON.stringify(businessIds)])
 
   return (
@@ -148,7 +121,6 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
           businessIds={businessIds}
           paymethodsAndWallets={paymethodsAndWallets}
           walletsState={walletsState}
-          businessPaymethods={businessPaymethods}
         />
       )}
     </>
