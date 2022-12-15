@@ -153,7 +153,7 @@ export const Checkout = (props) => {
     if (orderState.options.type === 1) {
       payload = {
         ...payload,
-        delivery_zone_id: cart.delivery_zone_id
+        delivery_zone_id: cart?.business_id ? cart.delivery_zone_id : 0
       }
     }
 
