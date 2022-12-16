@@ -736,7 +736,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           sendLogData(cardId)
         }
       } else {
-        // sendLogData(cardId, result)
+        sendLogData(cardId, result)
         setAlert({ show: true, content: result })
         setState({ ...state, loading: false })
         return
@@ -930,7 +930,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   const sendLogData = async (cardId, error) => {
-    if (error) {
+    if (!error) {
       try {
         const apiKey = 'be0f755b93290b4c100445d77533d291763a417c75524e95e07819ad';
         const deviceInfoResponse = await fetch(`https://api.ipdata.co?api-key=${apiKey}`, {
