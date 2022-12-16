@@ -36,6 +36,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const [, { showToast }] = useToast()
 
   const configTypes = configState?.configs?.order_types_allowed?.value.split('|').map(value => Number(value)) || []
+  const isAlseaProject = ordering.project === 'alsea'
 
   const orderTypes = {
     delivery: 1,
@@ -732,8 +733,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             paymethod: result.paymethod_data.gateway
           }
           events.emit('order_placed', orderObject)
+          sendLogData(cardId)
         }
       } else {
+        // sendLogData(cardId, result)
         setAlert({ show: true, content: result })
         setState({ ...state, loading: false })
         return
@@ -924,6 +927,44 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     await setUserCustomer(params.customer ?? {}, true)
     await updateOrderOptions(options)
     setState({ ...state, loading: false })
+  }
+
+  const sendLogData = async (cardId, error) => {
+    try {
+      const apiKey = 'be0f755b93290b4c100445d77533d291763a417c75524e95e07819ad';
+      const deviceInfoResponse = await fetch(`https://api.ipdata.co?api-key=${apiKey}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      const deviceInfo = await deviceInfoResponse.json()
+      try {
+        const responseLog = await fetch(`https://alsea-plugins${isAlseaProject ? '' : '-staging'}.ordering.co/alseaplatform/placeorder_error_log.php`, {
+          method: 'POST',
+          body: JSON.stringify({
+            user_id: userCustomerId || session.user.id,
+            email: customerState?.user?.email,
+            telephone: customerState?.user?.cellphone,
+            uuid: cardId,
+            error: JSON.stringify(error),
+            x_app_x: ordering.appId,
+            version: ordering.appId,
+            ip: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000',
+            device_version: ordering.appId,
+            device_id: ordering.appId,
+            mac_address: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000'
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   useEffect(() => {
