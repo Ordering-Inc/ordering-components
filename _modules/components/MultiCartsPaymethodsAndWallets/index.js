@@ -38,7 +38,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
   var UIComponent = props.UIComponent,
     openCarts = props.openCarts,
-    propsToFetch = props.propsToFetch;
+    propsToFetch = props.propsToFetch,
+    cartUuid = props.cartUuid;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -47,9 +48,6 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
     _useSession2$ = _useSession2[0],
     token = _useSession2$.token,
     user = _useSession2$.user;
-  var _useOrder = (0, _OrderContext.useOrder)(),
-    _useOrder2 = _slicedToArray(_useOrder, 1),
-    orderState = _useOrder2[0];
   var _useState = (0, _react.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     cartsUuids = _useState2[0],
@@ -75,14 +73,6 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
     _useState8 = _slicedToArray(_useState7, 2),
     walletsState = _useState8[0],
     setWalletsState = _useState8[1];
-  var _useState9 = (0, _react.useState)({
-      loading: true,
-      result: [],
-      error: null
-    }),
-    _useState10 = _slicedToArray(_useState9, 2),
-    businessPaymethods = _useState10[0],
-    setBusinessPaymethods = _useState10[1];
 
   /**
    * Method to get available wallets and paymethods from API
@@ -99,18 +89,15 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 loading: true
               }));
               requestOptions = {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: "bearer ".concat(token),
                   'X-App-X': ordering.appId
-                },
-                body: JSON.stringify({
-                  carts: cartsUuids
-                })
+                }
               };
               _context.next = 5;
-              return fetch("".concat(ordering.root, "/carts/prepare_checkout"), requestOptions);
+              return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/prepare"), requestOptions);
             case 5:
               response = _context.sent;
               _context.next = 8;
@@ -152,64 +139,17 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
   }();
 
   /**
-  * Method to get business from API
-  */
-  var getBusiness = /*#__PURE__*/function () {
+   * Method to get user wallets from API
+   */
+  var getUserWallets = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var _orderState$options, parameters, _yield$ordering$busin, _yield$ordering$busin2, result, error;
+      var response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              parameters = {
-                type: (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type
-              };
-              _context2.next = 4;
-              return ordering.businesses(businessIds[0]).select(propsToFetch).parameters(parameters).get();
-            case 4:
-              _yield$ordering$busin = _context2.sent;
-              _yield$ordering$busin2 = _yield$ordering$busin.content;
-              result = _yield$ordering$busin2.result;
-              error = _yield$ordering$busin2.error;
-              setBusinessPaymethods({
-                loading: false,
-                result: error ? [] : result === null || result === void 0 ? void 0 : result.paymethods,
-                error: error ? result : null
-              });
-              _context2.next = 14;
-              break;
-            case 11:
-              _context2.prev = 11;
-              _context2.t0 = _context2["catch"](0);
-              setBusinessPaymethods(_objectSpread(_objectSpread({}, businessPaymethods), {}, {
-                loading: false,
-                error: [_context2.t0.message]
-              }));
-            case 14:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, null, [[0, 11]]);
-    }));
-    return function getBusiness() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  /**
-   * Method to get user wallets from API
-   */
-  var getUserWallets = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var response, _yield$response$json, error, result;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.prev = 0;
-              _context3.next = 3;
+              _context2.next = 3;
               return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets"), {
                 method: 'GET',
                 headers: {
@@ -219,11 +159,11 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 }
               });
             case 3:
-              response = _context3.sent;
-              _context3.next = 6;
+              response = _context2.sent;
+              _context2.next = 6;
               return response.json();
             case 6:
-              _yield$response$json = _context3.sent;
+              _yield$response$json = _context2.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
               setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
@@ -231,26 +171,26 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 error: error ? result : null,
                 result: error ? null : result
               }));
-              _context3.next = 15;
+              _context2.next = 15;
               break;
             case 12:
-              _context3.prev = 12;
-              _context3.t0 = _context3["catch"](0);
-              if (_context3.t0.constructor.name !== 'Cancel') {
+              _context2.prev = 12;
+              _context2.t0 = _context2["catch"](0);
+              if (_context2.t0.constructor.name !== 'Cancel') {
                 setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
                   loading: false,
-                  error: [_context3.t0.message]
+                  error: [_context2.t0.message]
                 }));
               }
             case 15:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
         }
-      }, _callee3, null, [[0, 12]]);
+      }, _callee2, null, [[0, 12]]);
     }));
     return function getUserWallets() {
-      return _ref3.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
@@ -269,13 +209,11 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
   (0, _react.useEffect)(function () {
     if (!cartsUuids.length) return;
     getPaymethodsAndWallets();
-    getBusiness();
   }, [JSON.stringify(cartsUuids), JSON.stringify(businessIds)]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     businessIds: businessIds,
     paymethodsAndWallets: paymethodsAndWallets,
-    walletsState: walletsState,
-    businessPaymethods: businessPaymethods
+    walletsState: walletsState
   })));
 };
 exports.MultiCartsPaymethodsAndWallets = MultiCartsPaymethodsAndWallets;

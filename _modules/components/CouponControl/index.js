@@ -86,11 +86,13 @@ var CouponControl = function CouponControl(props) {
         });
       }
     } else {
-      applyOffer({
+      var dataOffer = {
         business_id: businessId,
         coupon: couponInput,
         force: true
-      });
+      };
+      if (user.id) dataOffer.userId = user === null || user === void 0 ? void 0 : user.id; // Callcenter
+      applyOffer(dataOffer);
     }
   };
 

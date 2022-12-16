@@ -40,7 +40,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCheckout = function MultiCheckout(props) {
   var _Object$values;
   var UIComponent = props.UIComponent,
-    onPlaceOrderClick = props.onPlaceOrderClick;
+    onPlaceOrderClick = props.onPlaceOrderClick,
+    cartUuid = props.cartUuid,
+    actionsBeforePlace = props.actionsBeforePlace;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -86,8 +88,8 @@ var MultiCheckout = function MultiCheckout(props) {
     deliveryOptionSelected = _useState4[0],
     setDeliveryOptionSelected = _useState4[1];
   var openCarts = ((_Object$values = Object.values(carts)) === null || _Object$values === void 0 ? void 0 : _Object$values.filter(function (cart) {
-    var _cart$products;
-    return (cart === null || cart === void 0 ? void 0 : cart.products) && (cart === null || cart === void 0 ? void 0 : (_cart$products = cart.products) === null || _cart$products === void 0 ? void 0 : _cart$products.length) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2 && (cart === null || cart === void 0 ? void 0 : cart.valid_schedule) && (cart === null || cart === void 0 ? void 0 : cart.valid_products) && (cart === null || cart === void 0 ? void 0 : cart.valid_address) && (cart === null || cart === void 0 ? void 0 : cart.valid_maximum) && (cart === null || cart === void 0 ? void 0 : cart.valid_minimum) && !(cart !== null && cart !== void 0 && cart.wallets);
+    var _cart$group;
+    return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : (_cart$group = cart.group) === null || _cart$group === void 0 ? void 0 : _cart$group.uuid) === cartUuid;
   })) || null || [];
   var totalCartsPrice = openCarts && openCarts.reduce(function (total, cart) {
     return total + (cart === null || cart === void 0 ? void 0 : cart.total);
@@ -103,10 +105,18 @@ var MultiCheckout = function MultiCheckout(props) {
     _useState8 = _slicedToArray(_useState7, 2),
     paymethodSelected = _useState8[0],
     setPaymethodSelected = _useState8[1];
+  var _useState9 = (0, _react.useState)({
+      loading: true,
+      error: null,
+      result: null
+    }),
+    _useState10 = _slicedToArray(_useState9, 2),
+    cartGroup = _useState10[0],
+    setCartGroup = _useState10[1];
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _paymethodSelected$pa;
-      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMulitCart, error, result, orderUuids;
+      var _paymethodSelected$pa, _cartGroup$result, _result$paymethod_dat;
+      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMulitCart, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -118,12 +128,11 @@ var MultiCheckout = function MultiCheckout(props) {
                 });
               }
               payload = {
-                carts: cartsUuids,
-                amount: totalCartsPrice
+                amount: cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : _cartGroup$result.balance
               };
               if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
                 payload = _objectSpread(_objectSpread({}, payload), {}, {
-                  paymethod_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id
+                  paymethod_id: (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id) || (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.id)
                 });
               }
               if (paymethodData) {
@@ -139,19 +148,24 @@ var MultiCheckout = function MultiCheckout(props) {
               }
               setPlacing(true);
               _context.next = 9;
-              return placeMulitCarts(payload);
+              return placeMulitCarts(payload, cartUuid);
             case 9:
               _yield$placeMulitCart = _context.sent;
               error = _yield$placeMulitCart.error;
               result = _yield$placeMulitCart.result;
+              if (!((result === null || result === void 0 ? void 0 : (_result$paymethod_dat = result.paymethod_data) === null || _result$paymethod_dat === void 0 ? void 0 : _result$paymethod_dat.status) === 2 && actionsBeforePlace)) {
+                _context.next = 15;
+                break;
+              }
+              _context.next = 15;
+              return actionsBeforePlace(paymethodSelected, result);
+            case 15:
               setPlacing(false);
               if (!error) {
-                orderUuids = result.carts.reduce(function (uuids, cart) {
-                  return [].concat(_toConsumableArray(uuids), [cart.order.uuid]);
-                }, []);
-                onPlaceOrderClick && onPlaceOrderClick(orderUuids);
+                // const orderUuids = result.carts.reduce((uuids, cart) => [...uuids, cart.order.uuid], [])
+                onPlaceOrderClick && onPlaceOrderClick(result);
               }
-            case 14:
+            case 17:
             case "end":
               return _context.stop();
           }
@@ -164,7 +178,7 @@ var MultiCheckout = function MultiCheckout(props) {
   }();
   var handleSelectPaymethod = function handleSelectPaymethod(paymethod) {
     setPaymethodSelected(_objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
-      paymethod_data: null
+      paymethod_data: paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_data
     }));
   };
   var handleSelectWallet = function handleSelectWallet(checked, wallet) {
@@ -350,6 +364,65 @@ var MultiCheckout = function MultiCheckout(props) {
       return _ref5.apply(this, arguments);
     };
   }();
+  var getMultiCart = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var response, _yield$response$json3, result, error;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.prev = 0;
+              if (cartUuid) {
+                _context6.next = 3;
+                break;
+              }
+              return _context6.abrupt("return");
+            case 3:
+              setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
+                loading: true
+              }));
+              _context6.next = 6;
+              return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid), {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: "bearer ".concat(token),
+                  'X-App-X': ordering.appId
+                }
+              });
+            case 6:
+              response = _context6.sent;
+              _context6.next = 9;
+              return response.json();
+            case 9:
+              _yield$response$json3 = _context6.sent;
+              result = _yield$response$json3.result;
+              error = _yield$response$json3.error;
+              setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
+                loading: false,
+                result: result,
+                error: error
+              }));
+              _context6.next = 18;
+              break;
+            case 15:
+              _context6.prev = 15;
+              _context6.t0 = _context6["catch"](0);
+              setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
+                loading: false,
+                error: _context6.t0.message
+              }));
+            case 18:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, null, [[0, 15]]);
+    }));
+    return function getMultiCart() {
+      return _ref6.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (deliveryOptionSelected === undefined) {
       setDeliveryOptionSelected(null);
@@ -358,6 +431,9 @@ var MultiCheckout = function MultiCheckout(props) {
   (0, _react.useEffect)(function () {
     getDeliveryOptions();
   }, []);
+  (0, _react.useEffect)(function () {
+    getMultiCart();
+  }, [JSON.stringify(carts)]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     placing: placing,
     openCarts: openCarts,
@@ -369,7 +445,8 @@ var MultiCheckout = function MultiCheckout(props) {
     handlePaymethodDataChange: handlePaymethodDataChange,
     handleChangeDeliveryOption: handleChangeDeliveryOption,
     deliveryOptionSelected: deliveryOptionSelected,
-    instructionsOptions: instructionsOptions
+    instructionsOptions: instructionsOptions,
+    cartGroup: cartGroup
   })));
 };
 exports.MultiCheckout = MultiCheckout;
