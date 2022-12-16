@@ -84,7 +84,7 @@ var OrderContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OrderContext = OrderContext;
 
 var OrderProvider = function OrderProvider(_ref) {
-  var _configState$configs, _configState$configs$, _configState$configs2, _configState$configs3, _customerState$user7;
+  var _configState$configs, _configState$configs$, _configState$configs2, _configState$configs3, _customerState$user11;
 
   var Alert = _ref.Alert,
       children = _ref.children,
@@ -178,7 +178,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _state$options, _state$options$addres, _state$options2, _state$options2$addre, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, _userCustomerId, options, countryCode, res, error, result, _options$address, carts, _options, _options$address2, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
+      var _state$options, _state$options$addres, _state$options2, _state$options2$addre, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options$address, carts, _options, _options$address2, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -202,12 +202,12 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 7:
               customerFromLocalStorage = _context.sent;
-              _userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               options = {};
 
-              if (_userCustomerId) {
+              if (userCustomerId) {
                 options.query = {
-                  user_id: _userCustomerId
+                  user_id: userCustomerId
                 };
               }
 
@@ -289,7 +289,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 attribute: 'address',
                 value: localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.address
               }];
-              userId = _userCustomerId || session.user.id;
+              userId = userCustomerId || session.user.id;
               _context.next = 38;
               return ordering.setAccessToken(session.token).users(userId).addresses().where(conditions).get();
 
@@ -633,7 +633,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(changes) {
-      var countryCodeFromLocalStorage, customerFromLocalStorage, _userCustomerId2, body, _state$options9, _state$options9$addre, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options3, _err$message2, message;
+      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options9, _state$options9$addre, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options3, _err$message2, message;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
@@ -654,9 +654,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 6:
               customerFromLocalStorage = _context5.sent;
-              _userCustomerId2 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({}, changes), {}, {
-                user_id: _userCustomerId2 || session.user.id
+                user_id: userCustomerId || session.user.id
               });
               _context5.prev = 9;
               options = {};
@@ -757,7 +757,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var addProduct = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(product, cart, isQuickAddProduct, isService) {
-      var customerFromLocalStorage, _userCustomerId3, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
 
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
@@ -772,11 +772,11 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
               customerFromLocalStorage = _context6.sent;
-              _userCustomerId3 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({
                 product: product,
                 business_id: cart.business_id,
-                user_id: _userCustomerId3 || session.user.id
+                user_id: userCustomerId || session.user.id
               }, isService && {
                 professional_id: cart === null || cart === void 0 ? void 0 : cart.professional_id
               }), isService && {
@@ -840,7 +840,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var removeProduct = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart) {
-      var customerFromLocalStorage, _userCustomerId4, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
 
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) {
@@ -855,7 +855,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
               customerFromLocalStorage = _context7.sent;
-              _userCustomerId4 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 product: {
                   id: product.id,
@@ -863,7 +863,7 @@ var OrderProvider = function OrderProvider(_ref) {
                   business_id: product.business_id
                 },
                 business_id: cart.business_id,
-                user_id: _userCustomerId4 || session.user.id
+                user_id: userCustomerId || session.user.id
               };
               _context7.next = 9;
               return ordering.setAccessToken(session.token).carts().removeProduct(body, {
@@ -921,7 +921,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var clearCart = /*#__PURE__*/function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(uuid) {
-      var customerFromLocalStorage, _userCustomerId5, body, response, _yield$response$json, error, result;
+      var customerFromLocalStorage, userCustomerId, body, response, _yield$response$json, error, result;
 
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) {
@@ -936,10 +936,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
               customerFromLocalStorage = _context8.sent;
-              _userCustomerId5 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = JSON.stringify({
                 uuid: uuid,
-                user_id: _userCustomerId5 || session.user.id
+                user_id: userCustomerId || session.user.id
               });
               _context8.next = 9;
               return fetch("".concat(ordering.root, "/carts/clear"), {
@@ -1004,7 +1004,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateProduct = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(product, cart, isQuickAddProduct, isService) {
-      var customerFromLocalStorage, _userCustomerId6, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
 
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) {
@@ -1019,11 +1019,11 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
               customerFromLocalStorage = _context9.sent;
-              _userCustomerId6 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({
                 product: product,
                 business_id: cart.business_id,
-                user_id: _userCustomerId6 || session.user.id
+                user_id: userCustomerId || session.user.id
               }, isService && {
                 professional_id: cart === null || cart === void 0 ? void 0 : cart.professional_id
               }), isService && {
@@ -1088,7 +1088,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(couponData, customParams) {
       var _state$carts;
 
-      var response, _result2, customerFromLocalStorage, _userCustomerId7, body, _yield$ordering$setAc11, content, result;
+      var response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, content, result;
 
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) {
@@ -1172,11 +1172,11 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 21:
               customerFromLocalStorage = _context10.sent;
-              _userCustomerId7 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 business_id: couponData.business_id,
                 coupon: couponData.coupon,
-                user_id: _userCustomerId7 || session.user.id
+                user_id: userCustomerId || session.user.id
               };
               _context10.next = 26;
               return ordering.setAccessToken(session.token).carts().applyCoupon(body, {
@@ -1411,7 +1411,7 @@ var OrderProvider = function OrderProvider(_ref) {
           isFixedPrice,
           _body,
           customerFromLocalStorage,
-          _userCustomerId8,
+          userCustomerId,
           body,
           _yield$ordering$setAc12,
           _yield$ordering$setAc13,
@@ -1459,10 +1459,10 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 12:
               customerFromLocalStorage = _context13.sent;
-              _userCustomerId8 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = (_body = {
                 business_id: businessId
-              }, _defineProperty(_body, isFixedPrice ? 'driver_tip' : 'driver_tip_rate', driverTipRate), _defineProperty(_body, "user_id", _userCustomerId8 || session.user.id), _body);
+              }, _defineProperty(_body, isFixedPrice ? 'driver_tip' : 'driver_tip_rate', driverTipRate), _defineProperty(_body, "user_id", userCustomerId || session.user.id), _body);
               _context13.next = 17;
               return ordering.setAccessToken(session.token).carts().changeDriverTip(body, {
                 headers: {
@@ -1520,7 +1520,7 @@ var OrderProvider = function OrderProvider(_ref) {
     var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId, paymethodId, paymethodData) {
       var _state$carts3;
 
-      var customerFromLocalStorage, _userCustomerId9, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
 
       return _regeneratorRuntime().wrap(function _callee14$(_context14) {
         while (1) {
@@ -1567,12 +1567,12 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 12:
               customerFromLocalStorage = _context14.sent;
-              _userCustomerId9 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = {
                 business_id: businessId,
                 paymethod_id: paymethodId,
                 paymethod_data: paymethodData,
-                user_id: _userCustomerId9 !== null && _userCustomerId9 !== void 0 ? _userCustomerId9 : session.user.id
+                user_id: userCustomerId !== null && userCustomerId !== void 0 ? userCustomerId : session.user.id
               };
               _context14.next = 17;
               return ordering.setAccessToken(session.token).carts().changePaymethod(body, {
@@ -1621,7 +1621,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var placeCart = /*#__PURE__*/function () {
     var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(cardId, data) {
-      var customerFromLocalStorage, _userCustomerId10, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
+      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
 
       return _regeneratorRuntime().wrap(function _callee15$(_context15) {
         while (1) {
@@ -1636,9 +1636,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
               customerFromLocalStorage = _context15.sent;
-              _userCustomerId10 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({}, data), {}, {
-                user_id: _userCustomerId10 || session.user.id
+                user_id: userCustomerId || session.user.id
               });
               _context15.next = 9;
               return ordering.setAccessToken(session.token).carts(cardId).place(body, {
@@ -1823,7 +1823,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var confirmCart = /*#__PURE__*/function () {
     var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(cardId, data) {
-      var customerFromLocalStorage, _userCustomerId11, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
+      var customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
 
       return _regeneratorRuntime().wrap(function _callee17$(_context17) {
         while (1) {
@@ -1838,12 +1838,12 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
               customerFromLocalStorage = _context17.sent;
-              _userCustomerId11 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
               body = _objectSpread(_objectSpread({}, data), {}, {
-                user_id: _userCustomerId11 || session.user.id
+                user_id: userCustomerId || session.user.id
               });
 
-              if (!(body.user_id === _userCustomerId11)) {
+              if (!(body.user_id === userCustomerId)) {
                 _context17.next = 13;
                 break;
               }
@@ -1924,7 +1924,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var reorder = /*#__PURE__*/function () {
     var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(orderId) {
-      var customerFromLocalStorage, _userCustomerId12, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
+      var customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
 
       return _regeneratorRuntime().wrap(function _callee18$(_context18) {
         while (1) {
@@ -1939,9 +1939,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
             case 4:
               customerFromLocalStorage = _context18.sent;
-              _userCustomerId12 = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-              query = _userCustomerId12 ? {
-                user_id: _userCustomerId12
+              userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
+              query = userCustomerId ? {
+                user_id: userCustomerId
               } : null;
               options = {
                 headers: {
@@ -2165,15 +2165,20 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var sendLogData = /*#__PURE__*/function () {
     var _ref23 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22(cardId, error) {
-      var apiKey, deviceInfoResponse, deviceInfo, _customerState$user, _customerState$user2, responseLog;
+      var apiKey, deviceInfoResponse, deviceInfo, _customerState$user, _customerState$user2, _customerState$user3, responseLog, _customerState$user4, _customerState$user5, _customerState$user6, _responseLog;
 
       return _regeneratorRuntime().wrap(function _callee22$(_context22) {
         while (1) {
           switch (_context22.prev = _context22.next) {
             case 0:
-              _context22.prev = 0;
+              if (!error) {
+                _context22.next = 25;
+                break;
+              }
+
+              _context22.prev = 1;
               apiKey = 'be0f755b93290b4c100445d77533d291763a417c75524e95e07819ad';
-              _context22.next = 4;
+              _context22.next = 5;
               return fetch("https://api.ipdata.co?api-key=".concat(apiKey), {
                 method: 'GET',
                 headers: {
@@ -2181,21 +2186,21 @@ var OrderProvider = function OrderProvider(_ref) {
                 }
               });
 
-            case 4:
+            case 5:
               deviceInfoResponse = _context22.sent;
-              _context22.next = 7;
+              _context22.next = 8;
               return deviceInfoResponse.json();
 
-            case 7:
+            case 8:
               deviceInfo = _context22.sent;
-              _context22.prev = 8;
-              _context22.next = 11;
+              _context22.prev = 9;
+              _context22.next = 12;
               return fetch("https://alsea-plugins".concat(isAlseaProject ? '' : '-staging', ".ordering.co/alseaplatform/placeorder_error_log.php"), {
                 method: 'POST',
                 body: JSON.stringify({
-                  user_id: userCustomerId || session.user.id,
-                  email: customerState === null || customerState === void 0 ? void 0 : (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.email,
-                  telephone: customerState === null || customerState === void 0 ? void 0 : (_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.cellphone,
+                  user_id: (customerState === null || customerState === void 0 ? void 0 : (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id) || session.user.id,
+                  email: customerState === null || customerState === void 0 ? void 0 : (_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.email,
+                  telephone: customerState === null || customerState === void 0 ? void 0 : (_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.cellphone,
                   uuid: cardId,
                   error: error ? error : 'false',
                   x_app_x: ordering.appId,
@@ -2210,31 +2215,68 @@ var OrderProvider = function OrderProvider(_ref) {
                 }
               });
 
-            case 11:
+            case 12:
               responseLog = _context22.sent;
-              _context22.next = 17;
+              _context22.next = 18;
               break;
 
-            case 14:
-              _context22.prev = 14;
-              _context22.t0 = _context22["catch"](8);
+            case 15:
+              _context22.prev = 15;
+              _context22.t0 = _context22["catch"](9);
               console.log(_context22.t0);
 
-            case 17:
-              _context22.next = 22;
+            case 18:
+              _context22.next = 23;
               break;
 
-            case 19:
-              _context22.prev = 19;
-              _context22.t1 = _context22["catch"](0);
+            case 20:
+              _context22.prev = 20;
+              _context22.t1 = _context22["catch"](1);
               console.log(_context22.t1);
 
-            case 22:
+            case 23:
+              _context22.next = 34;
+              break;
+
+            case 25:
+              _context22.prev = 25;
+              _context22.next = 28;
+              return fetch("https://alsea-plugins".concat(isAlseaProject ? '' : '-staging', ".ordering.co/alseaplatform/placeorder_error_log.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  user_id: (customerState === null || customerState === void 0 ? void 0 : (_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || session.user.id,
+                  email: customerState === null || customerState === void 0 ? void 0 : (_customerState$user5 = customerState.user) === null || _customerState$user5 === void 0 ? void 0 : _customerState$user5.email,
+                  telephone: customerState === null || customerState === void 0 ? void 0 : (_customerState$user6 = customerState.user) === null || _customerState$user6 === void 0 ? void 0 : _customerState$user6.cellphone,
+                  uuid: cardId,
+                  error: 'false',
+                  x_app_x: ordering.appId,
+                  version: ordering.appId,
+                  ip: '0000',
+                  device_version: ordering.appId,
+                  device_id: ordering.appId,
+                  mac_address: '0000'
+                }),
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              });
+
+            case 28:
+              _responseLog = _context22.sent;
+              _context22.next = 34;
+              break;
+
+            case 31:
+              _context22.prev = 31;
+              _context22.t2 = _context22["catch"](25);
+              console.log(_context22.t2);
+
+            case 34:
             case "end":
               return _context22.stop();
           }
         }
-      }, _callee22, null, [[0, 19], [8, 14]]);
+      }, _callee22, null, [[1, 20], [9, 15], [25, 31]]);
     }));
 
     return function sendLogData(_x32, _x33) {
@@ -2342,18 +2384,18 @@ var OrderProvider = function OrderProvider(_ref) {
    */
 
   (0, _react.useEffect)(function () {
-    var _customerState$user3, _session$user, _customerState$user4, _session$user2;
+    var _customerState$user7, _session$user, _customerState$user8, _session$user2;
 
     if (!session.auth || session.loading) return;
-    socket.join("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.id) || (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id)));
-    socket.join("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id)));
+    socket.join("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user7 = customerState.user) === null || _customerState$user7 === void 0 ? void 0 : _customerState$user7.id) || (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id)));
+    socket.join("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user8 = customerState.user) === null || _customerState$user8 === void 0 ? void 0 : _customerState$user8.id) || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id)));
     return function () {
-      var _customerState$user5, _session$user3, _customerState$user6, _session$user4;
+      var _customerState$user9, _session$user3, _customerState$user10, _session$user4;
 
-      socket.leave("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user5 = customerState.user) === null || _customerState$user5 === void 0 ? void 0 : _customerState$user5.id) || (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id)));
-      socket.leave("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user6 = customerState.user) === null || _customerState$user6 === void 0 ? void 0 : _customerState$user6.id) || (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id)));
+      socket.leave("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user9 = customerState.user) === null || _customerState$user9 === void 0 ? void 0 : _customerState$user9.id) || (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id)));
+      socket.leave("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user10 = customerState.user) === null || _customerState$user10 === void 0 ? void 0 : _customerState$user10.id) || (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id)));
     };
-  }, [socket, session, customerState === null || customerState === void 0 ? void 0 : (_customerState$user7 = customerState.user) === null || _customerState$user7 === void 0 ? void 0 : _customerState$user7.id]);
+  }, [socket, session, customerState === null || customerState === void 0 ? void 0 : (_customerState$user11 = customerState.user) === null || _customerState$user11 === void 0 ? void 0 : _customerState$user11.id]);
   var functions = {
     refreshOrderOptions: refreshOrderOptions,
     changeAddress: changeAddress,
