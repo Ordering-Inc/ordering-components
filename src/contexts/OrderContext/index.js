@@ -930,30 +930,58 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   const sendLogData = async (cardId, error) => {
-    try {
-      const apiKey = 'be0f755b93290b4c100445d77533d291763a417c75524e95e07819ad';
-      const deviceInfoResponse = await fetch(`https://api.ipdata.co?api-key=${apiKey}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+    if (error) {
+      try {
+        const apiKey = 'be0f755b93290b4c100445d77533d291763a417c75524e95e07819ad';
+        const deviceInfoResponse = await fetch(`https://api.ipdata.co?api-key=${apiKey}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        const deviceInfo = await deviceInfoResponse.json()
+        try {
+          const responseLog = await fetch(`https://alsea-plugins${isAlseaProject ? '' : '-staging'}.ordering.co/alseaplatform/placeorder_error_log.php`, {
+            method: 'POST',
+            body: JSON.stringify({
+              user_id: customerState?.user?.id || session.user.id,
+              email: customerState?.user?.email,
+              telephone: customerState?.user?.cellphone,
+              uuid: cardId,
+              error: error ? error : 'false',
+              x_app_x: ordering.appId,
+              version: ordering.appId,
+              ip: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000',
+              device_version: ordering.appId,
+              device_id: ordering.appId,
+              mac_address: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000'
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          })
+        } catch (err) {
+          console.log(err)
         }
-      })
-      const deviceInfo = await deviceInfoResponse.json()
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
       try {
         const responseLog = await fetch(`https://alsea-plugins${isAlseaProject ? '' : '-staging'}.ordering.co/alseaplatform/placeorder_error_log.php`, {
           method: 'POST',
           body: JSON.stringify({
-            user_id: userCustomerId || session.user.id,
+            user_id: customerState?.user?.id || session.user.id,
             email: customerState?.user?.email,
             telephone: customerState?.user?.cellphone,
             uuid: cardId,
-            error: error ? error : 'false',
+            error: 'false',
             x_app_x: ordering.appId,
             version: ordering.appId,
-            ip: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000',
+            ip: '0000',
             device_version: ordering.appId,
             device_id: ordering.appId,
-            mac_address: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000'
+            mac_address: '0000'
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -962,8 +990,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       } catch (err) {
         console.log(err)
       }
-    } catch (err) {
-      console.log(err)
     }
   }
 
