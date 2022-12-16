@@ -68,6 +68,7 @@ import { PurchaseGiftCard } from './components/PurchaseGiftCard'
 import { Messages } from './components/Messages'
 import { RedeemGiftCard } from './components/RedeemGiftCard'
 import { SearchOptions } from './components/SearchOptions'
+import { SendGiftCard } from './components/SendGiftCard'
 import { Sessions } from './components/Sessions'
 import { SignupForm } from './components/SignupForm'
 import { SingleBusinessCard } from './components/SingleBusinessCard'
@@ -227,6 +228,7 @@ export {
   PurchaseGiftCard,
   RedeemGiftCard,
   SearchOptions,
+  SendGiftCard,
   Sessions,
   SignupForm,
   SingleBusinessCard,
