@@ -83,6 +83,8 @@ import { UpsellingPage } from '../src/components/UpsellingPage'
 import { MapView } from '../src/components/MapView'
 import { UserVerification } from '../src/components/UserVerification'
 import { WalletList } from '../src/components/WalletList'
+import { MultiCartCreate } from '../src/components/MultiCartCreate'
+
 import { ApiContext, ApiProvider, useApi } from '../src/contexts/ApiContext'
 import { BusinessContext, BusinessProvider, useBusiness } from '../src/contexts/BusinessContext'
 import { ConfigContext, ConfigProvider, useConfig } from '../src/contexts/ConfigContext'
@@ -186,6 +188,7 @@ export {
   UpsellingPage,
   UserVerification,
   WalletList,
+  MultiCartCreate,
   // Contexts
   ApiContext,
   ApiProvider,
