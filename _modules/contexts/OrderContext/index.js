@@ -1087,7 +1087,7 @@ var OrderProvider = function OrderProvider(_ref) {
   }();
   var removeOffer = /*#__PURE__*/function () {
     var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(offerData) {
-      var response, result;
+      var offerRemoveData, response, result;
       return _regeneratorRuntime().wrap(function _callee12$(_context12) {
         while (1) {
           switch (_context12.prev = _context12.next) {
@@ -1108,23 +1108,25 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              _context12.next = 8;
+              offerRemoveData = {
+                business_id: offerData.business_id,
+                offer_id: offerData.offer_id
+              };
+              if (offerData.user_id) offerRemoveData.user_id = offerData.user_id;
+              _context12.next = 10;
               return fetch("".concat(ordering.root, "/carts/remove_offer"), {
                 method: 'POST',
-                body: JSON.stringify({
-                  business_id: offerData.business_id,
-                  offer_id: offerData.offer_id
-                }),
+                body: JSON.stringify(offerRemoveData),
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: "Bearer ".concat(session.token)
                 }
               });
-            case 8:
+            case 10:
               response = _context12.sent;
-              _context12.next = 11;
+              _context12.next = 13;
               return response.json();
-            case 11:
+            case 13:
               result = _context12.sent;
               if (!result.error) {
                 state.carts["businessId:".concat(result.result.business_id)] = result.result;
@@ -1139,19 +1141,19 @@ var OrderProvider = function OrderProvider(_ref) {
                 loading: false
               }));
               return _context12.abrupt("return", !result.error);
-            case 17:
-              _context12.prev = 17;
+            case 19:
+              _context12.prev = 19;
               _context12.t0 = _context12["catch"](4);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context12.abrupt("return", false);
-            case 21:
+            case 23:
             case "end":
               return _context12.stop();
           }
         }
-      }, _callee12, null, [[4, 17]]);
+      }, _callee12, null, [[4, 19]]);
     }));
     return function removeOffer(_x19) {
       return _ref14.apply(this, arguments);

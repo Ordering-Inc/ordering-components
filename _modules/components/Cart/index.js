@@ -215,11 +215,13 @@ var Cart = function Cart(props) {
   /**
    * method to manage remove offer assigned
    */
-  var handleRemoveOfferClick = function handleRemoveOfferClick(id) {
-    removeOffer({
+  var handleRemoveOfferClick = function handleRemoveOfferClick(id, userId) {
+    var dataOffer = {
       business_id: cart === null || cart === void 0 ? void 0 : cart.business_id,
       offer_id: id
-    });
+    };
+    if (userId) dataOffer.user_id = userId;
+    removeOffer(dataOffer);
   };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     carts: orderState.carts,
