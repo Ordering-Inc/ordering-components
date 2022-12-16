@@ -947,7 +947,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             email: customerState?.user?.email,
             telephone: customerState?.user?.cellphone,
             uuid: cardId,
-            error: JSON.stringify(error),
+            error: error ? error : 'false',
             x_app_x: ordering.appId,
             version: ordering.appId,
             ip: Object.keys(deviceInfo).length > 0 ? deviceInfo?.ip : '0000',
