@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PageBanner = void 0;
+exports.SendGiftCard = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,7 +13,13 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
+var _SessionContext = require("../../contexts/SessionContext");
+
 var _ApiContext = require("../../contexts/ApiContext");
+
+var _ToastContext = require("../../contexts/ToastContext");
+
+var _LanguageContext = require("../../contexts/LanguageContext");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -22,14 +28,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
@@ -53,48 +51,59 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var PageBanner = function PageBanner(props) {
+/**
+ * Component to manage to send gift card behavior without UI component
+ */
+var SendGiftCard = function SendGiftCard(props) {
   var UIComponent = props.UIComponent,
-      position = props.position;
+      giftCardId = props.giftCardId;
+
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      token = _useSession2[0].token;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useToast = (0, _ToastContext.useToast)(),
+      _useToast2 = _slicedToArray(_useToast, 2),
+      showToast = _useToast2[1].showToast;
+
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+      _useLanguage2 = _slicedToArray(_useLanguage, 2),
+      t = _useLanguage2[1];
+
   var _useState = (0, _react.useState)({
-    loading: true,
-    banner: null,
+    loading: false,
     error: null
   }),
       _useState2 = _slicedToArray(_useState, 2),
-      pageBannerState = _useState2[0],
-      setPageBannerState = _useState2[1];
-  /**
-   * Method to get the page banner from API
-   */
+      actionState = _useState2[0],
+      setActionState = _useState2[1];
 
-
-  var handleGetPageBanner = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var requestOptions, response, _yield$response$json, error, result, totalItems;
+  var handleSendGiftCard = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
+      var requestOptions, response, _yield$response$json, error, result;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              setPageBannerState(_objectSpread(_objectSpread({}, pageBannerState), {}, {
+              setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
                 loading: true
               }));
               requestOptions = {
-                method: 'GET',
+                method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'X-App-X': ordering.appId
-                }
+                  Authorization: "Bearer ".concat(token)
+                },
+                body: JSON.stringify(values)
               };
               _context.next = 5;
-              return fetch("".concat(ordering.root, "/banner?position=").concat(position), requestOptions);
+              return fetch("".concat(ordering.root, "/gift_cards/").concat(giftCardId, "/send"), requestOptions);
 
             case 5:
               response = _context.sent;
@@ -105,26 +114,25 @@ var PageBanner = function PageBanner(props) {
               _yield$response$json = _context.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
-              totalItems = result.reduce(function (items, banner) {
-                return [].concat(_toConsumableArray(items), _toConsumableArray(banner === null || banner === void 0 ? void 0 : banner.items));
-              }, []);
-              setPageBannerState({
+              setActionState({
                 loading: false,
-                banner: error ? null : {
-                  items: totalItems
-                },
                 error: error ? result : null
               });
+
+              if (props.showToastMsg) {
+                showToast(error ? _ToastContext.ToastType.Error : _ToastContext.ToastType.Success, error ? t('ERROR', result[0]) : t('GIFT_CARD_SENT', 'The gift card sent'));
+              }
+
               _context.next = 18;
               break;
 
             case 15:
               _context.prev = 15;
               _context.t0 = _context["catch"](0);
-              setPageBannerState(_objectSpread(_objectSpread({}, pageBannerState), {}, {
+              setActionState({
                 loading: false,
                 error: [_context.t0.message]
-              }));
+              });
 
             case 18:
             case "end":
@@ -134,25 +142,22 @@ var PageBanner = function PageBanner(props) {
       }, _callee, null, [[0, 15]]);
     }));
 
-    return function handleGetPageBanner() {
+    return function handleSendGiftCard(_x) {
       return _ref.apply(this, arguments);
     };
   }();
 
-  (0, _react.useEffect)(function () {
-    if (!position) return;
-    handleGetPageBanner();
-  }, [position]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    pageBannerState: pageBannerState
+    actionState: actionState,
+    handleSendGiftCard: handleSendGiftCard
   })));
 };
 
-exports.PageBanner = PageBanner;
-PageBanner.propTypes = {
+exports.SendGiftCard = SendGiftCard;
+SendGiftCard.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType
 };
-PageBanner.defaultProps = {};
+SendGiftCard.defaultProps = {};

@@ -92,7 +92,8 @@ var OrderProvider = function OrderProvider(_ref) {
       isAlsea = _ref.isAlsea,
       isDisableToast = _ref.isDisableToast,
       franchiseId = _ref.franchiseId,
-      isDisabledDefaultOpts = _ref.isDisabledDefaultOpts;
+      isDisabledDefaultOpts = _ref.isDisabledDefaultOpts,
+      businessSlug = _ref.businessSlug;
 
   var _useState = (0, _react.useState)({
     show: false
@@ -521,7 +522,9 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var changeType = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3(type) {
-      var options;
+      var _state$options9;
+
+      var options, cityId, params;
       return _regenerator.default.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -552,11 +555,18 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
 
             case 7:
-              updateOrderOptions({
+              cityId = (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : _state$options9.city_id;
+              params = {
                 type: type
-              });
+              };
 
-            case 8:
+              if (cityId && type !== 2) {
+                params.city_id = null;
+              }
+
+              updateOrderOptions(params);
+
+            case 11:
             case "end":
               return _context3.stop();
           }
@@ -632,7 +642,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee5(changes) {
-      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options9, _state$options9$addre, _ref7, _state$options10, _state$options10$addr, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options3, _err$message2, message;
+      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options10, _state$options10$addr, _ref7, _state$options11, _state$options11$addr, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options3, _err$message2, message;
 
       return _regenerator.default.wrap(function _callee5$(_context5) {
         while (1) {
@@ -666,7 +676,7 @@ var OrderProvider = function OrderProvider(_ref) {
               options.headers = {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               };
-              countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options9 = state.options) === null || _state$options9 === void 0 ? void 0 : (_state$options9$addre = _state$options9.address) === null || _state$options9$addre === void 0 ? void 0 : _state$options9$addre.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : (_ref7 = countryCodeFromLocalStorage !== null && countryCodeFromLocalStorage !== void 0 ? countryCodeFromLocalStorage : changes === null || changes === void 0 ? void 0 : changes.country_code) !== null && _ref7 !== void 0 ? _ref7 : state === null || state === void 0 ? void 0 : (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : (_state$options10$addr = _state$options10.address) === null || _state$options10$addr === void 0 ? void 0 : _state$options10$addr.country_code;
+              countryCode = changes !== null && changes !== void 0 && changes.country_code && (changes === null || changes === void 0 ? void 0 : changes.country_code) !== (state === null || state === void 0 ? void 0 : (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : (_state$options10$addr = _state$options10.address) === null || _state$options10$addr === void 0 ? void 0 : _state$options10$addr.country_code) ? changes === null || changes === void 0 ? void 0 : changes.country_code : (_ref7 = countryCodeFromLocalStorage !== null && countryCodeFromLocalStorage !== void 0 ? countryCodeFromLocalStorage : changes === null || changes === void 0 ? void 0 : changes.country_code) !== null && _ref7 !== void 0 ? _ref7 : state === null || state === void 0 ? void 0 : (_state$options11 = state.options) === null || _state$options11 === void 0 ? void 0 : (_state$options11$addr = _state$options11.address) === null || _state$options11$addr === void 0 ? void 0 : _state$options11$addr.country_code;
 
               if (!countryCode) {
                 _context5.next = 19;
@@ -2045,7 +2055,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var setOptionFromLocalStorage = /*#__PURE__*/function () {
     var _ref21 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee19() {
-      var _configState$configs4, _configState$configs5, _state$options11;
+      var _configState$configs4, _configState$configs5, _state$options12;
 
       var optionsLocalStorage;
       return _regenerator.default.wrap(function _callee19$(_context19) {
@@ -2065,7 +2075,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 } : {
                   type: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.type) || orderTypes[configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.default_order_type) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value],
                   moment: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.moment) || null,
-                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options11 = state.options) === null || _state$options11 === void 0 ? void 0 : _state$options11.address) || {},
+                  address: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.address) || (state === null || state === void 0 ? void 0 : (_state$options12 = state.options) === null || _state$options12 === void 0 ? void 0 : _state$options12.address) || {},
                   city_id: (optionsLocalStorage === null || optionsLocalStorage === void 0 ? void 0 : optionsLocalStorage.city_id) || null
                 }
               }));
@@ -2096,7 +2106,7 @@ var OrderProvider = function OrderProvider(_ref) {
           switch (_context20.prev = _context20.next) {
             case 0:
               if (!(session !== null && session !== void 0 && session.token)) {
-                _context20.next = 19;
+                _context20.next = 20;
                 break;
               }
 
@@ -2106,14 +2116,27 @@ var OrderProvider = function OrderProvider(_ref) {
                 value: pastOrderTypes
               }];
 
-              if (franchiseId) {
+              if (franchiseId || typeof businessSlug === 'number') {
                 where.push({
                   attribute: 'ref_business',
                   conditions: [{
                     attribute: 'franchise_id',
                     value: {
                       condition: '=',
-                      value: franchiseId
+                      value: franchiseId || businessSlug
+                    }
+                  }]
+                });
+              }
+
+              if (typeof businessSlug === 'string' && businessSlug) {
+                where.push({
+                  attribute: 'ref_business',
+                  conditions: [{
+                    attribute: 'slug',
+                    value: {
+                      condition: '=',
+                      value: businessSlug
                     }
                   }]
                 });
@@ -2127,17 +2150,17 @@ var OrderProvider = function OrderProvider(_ref) {
                   where: where
                 }
               };
-              _context20.next = 7;
+              _context20.next = 8;
               return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(options);
 
-            case 7:
+            case 8:
               _yield$ordering$setAc20 = _context20.sent;
               _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
               result = _yield$ordering$setAc21.result;
               error = _yield$ordering$setAc21.error;
 
               if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
-                _context20.next = 16;
+                _context20.next = 17;
                 break;
               }
 
@@ -2146,17 +2169,17 @@ var OrderProvider = function OrderProvider(_ref) {
               });
               return _context20.abrupt("return", _noRviewOrder);
 
-            case 16:
+            case 17:
               return _context20.abrupt("return", null);
 
-            case 17:
-              _context20.next = 20;
+            case 18:
+              _context20.next = 21;
               break;
 
-            case 19:
+            case 20:
               return _context20.abrupt("return", null);
 
-            case 20:
+            case 21:
             case "end":
               return _context20.stop();
           }

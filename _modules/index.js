@@ -825,6 +825,12 @@ Object.defineProperty(exports, "SearchOptions", {
     return _SearchOptions.SearchOptions;
   }
 });
+Object.defineProperty(exports, "SendGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _SendGiftCard.SendGiftCard;
+  }
+});
 Object.defineProperty(exports, "SessionContext", {
   enumerable: true,
   get: function get() {
@@ -1223,6 +1229,8 @@ var _Messages = require("./components/Messages");
 var _RedeemGiftCard = require("./components/RedeemGiftCard");
 
 var _SearchOptions = require("./components/SearchOptions");
+
+var _SendGiftCard = require("./components/SendGiftCard");
 
 var _Sessions = require("./components/Sessions");
 
