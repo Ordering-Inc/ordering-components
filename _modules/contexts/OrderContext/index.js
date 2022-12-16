@@ -1678,11 +1678,11 @@ var OrderProvider = function OrderProvider(_ref) {
                 sendLogData(cardId);
               }
 
-              _context15.next = 20;
+              _context15.next = 21;
               break;
 
             case 17:
-              // sendLogData(cardId, result)
+              sendLogData(cardId, result);
               setAlert({
                 show: true,
                 content: result
@@ -1692,7 +1692,7 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
               return _context15.abrupt("return");
 
-            case 20:
+            case 21:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
@@ -1701,8 +1701,8 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: result
               });
 
-            case 24:
-              _context15.prev = 24;
+            case 25:
+              _context15.prev = 25;
               _context15.t0 = _context15["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -1712,12 +1712,12 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: [_context15.t0.message]
               });
 
-            case 28:
+            case 29:
             case "end":
               return _context15.stop();
           }
         }
-      }, _callee15, null, [[0, 24]]);
+      }, _callee15, null, [[0, 25]]);
     }));
 
     return function placeCart(_x25, _x26) {
@@ -2171,7 +2171,7 @@ var OrderProvider = function OrderProvider(_ref) {
         while (1) {
           switch (_context22.prev = _context22.next) {
             case 0:
-              if (!error) {
+              if (error) {
                 _context22.next = 25;
                 break;
               }
