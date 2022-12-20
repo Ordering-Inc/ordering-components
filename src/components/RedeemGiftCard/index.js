@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useEvent } from '../../contexts/EventContext'
 
 /**
  * Component to manage redeem gift card behavior without UI component
@@ -13,7 +14,10 @@ export const RedeemGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
+  const [events] = useEvent()
+
   const [actionState, setActionState] = useState({ loading: false, error: null })
+  const [redeemedGiftCard, setRedeemedGiftCard] = useState({})
 
   const handleApply = async (values) => {
     try {
@@ -33,6 +37,8 @@ export const RedeemGiftCard = (props) => {
         loading: false,
         error: error ? result : null
       })
+      setRedeemedGiftCard(result)
+      events.emit('gift_card_redeemed')
     } catch (err) {
       setActionState({
         loading: false,
@@ -47,6 +53,7 @@ export const RedeemGiftCard = (props) => {
         <UIComponent
           {...props}
           actionState={actionState}
+          redeemedGiftCard={redeemedGiftCard}
           handleApply={handleApply}
         />
       )}
