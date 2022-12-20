@@ -135,11 +135,13 @@ export const Cart = (props) => {
   /**
    * method to manage remove offer assigned
    */
-  const handleRemoveOfferClick = (id) => {
-    removeOffer({
+  const handleRemoveOfferClick = (id, userId) => {
+    const dataOffer = {
       business_id: cart?.business_id,
       offer_id: id
-    })
+    }
+    if (userId) dataOffer.user_id = userId
+    removeOffer(dataOffer)
   }
 
   return (

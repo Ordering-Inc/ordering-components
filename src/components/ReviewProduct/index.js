@@ -22,22 +22,45 @@ export const ReviewProduct = (props) => {
     setFormState({ ...formState, changes: _changes })
   }
 
+  const reviewProducts = async (orderId, changes) => {
+    if (!changes) return
+    const response = await fetch(`${ordering.root}/orders/${orderId}/product_reviews`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        'Content-Type': 'application/json',
+        'X-App-X': ordering.appId
+      },
+      body: JSON.stringify({ reviews: JSON.stringify(changes) })
+    })
+    const result = await response.json()
+    return result
+  }
+
   /**
    * Function that load and send the product review to ordering
    */
   const handleSendProductReview = async () => {
     setFormState({ ...formState, loading: true })
     try {
-      const response = await fetch(`${ordering.root}/orders/${order?.id}/product_reviews`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-          'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
-        },
-        body: JSON.stringify({ reviews: JSON.stringify(formState?.changes) })
-      })
-      const { result, error } = await response.json()
+      let error, result
+      if (order?.business?.length > 1) {
+        // eslint-disable-next-line no-unused-expressions
+        order?.business?.forEach(async (business, i) => {
+          const productsOfOrder = Object.values(formState.changes)
+            .filter(product =>
+              order?.products
+                ?.some(_product => product?.product_id === _product?.product_id && _product?.order_id === order?.id[i]))
+          reviewProducts(order.id[i])
+          const _result = await reviewProducts(order?.id[i], productsOfOrder)
+          error = _result.error
+          result = _result.result
+        })
+      } else {
+        const _result = await reviewProducts(order?.id, formState.changes)
+        error = _result.error
+        result = _result.result
+      }
       if (!error) {
         setFormState({
           loading: false,

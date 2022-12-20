@@ -40,6 +40,7 @@ import { LogoutAction } from './components/LogoutAction'
 import { MainSearch } from './components/MainSearch'
 import { MenuControl } from './components/MenuControl'
 import { MomentOption } from './components/MomentOption'
+import { MultiCartCreate } from './components/MultiCartCreate'
 import { MultiCheckout } from './components/MultiCheckout'
 import { MultiCartsPaymethodsAndWallets } from './components/MultiCartsPaymethodsAndWallets'
 import { MultiOrdersDetails } from './components/MultiOrdersDetails'
@@ -124,6 +125,7 @@ import { ReviewProduct } from './components/ReviewProduct'
 import { ReviewDriver } from './components/ReviewDriver'
 import { UserVerification } from './components/UserVerification'
 import { WalletList } from './components/WalletList'
+
 import {
   BusinessProductsListing,
   CheckPassword,
@@ -263,6 +265,7 @@ export {
   MapView,
   UserVerification,
   WalletList,
+  MultiCartCreate,
   // CallcenterDashboard
   BusinessProductsListing,
   CheckPassword,
