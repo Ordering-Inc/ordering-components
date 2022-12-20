@@ -78,6 +78,7 @@ var OrderListGroups = function OrderListGroups(props) {
     loading: false,
     error: null,
     orders: [],
+    ordersGrouped: [],
     pagination: {
       currentPage: paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1 ? paginationSettings.initialPage - 1 : 0,
       pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10,
@@ -376,13 +377,12 @@ var OrderListGroups = function OrderListGroups(props) {
         _ordersGroup$currentT4,
         pageSize,
         _ordersGroup$currentT5,
-        _ordersGroup$currentT6,
-        _ordersGroup$currentT7,
         _yield$getOrders,
         _yield$getOrders$cont,
         error,
         result,
         pagination,
+        _ordersCleaned,
         _err$message,
         _args3 = arguments;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
@@ -427,9 +427,18 @@ var OrderListGroups = function OrderListGroups(props) {
               error = _yield$getOrders$cont.error;
               result = _yield$getOrders$cont.result;
               pagination = _yield$getOrders$cont.pagination;
+              _ordersCleaned = function _ordersCleaned(prop) {
+                var _ordersGroup$currentT6, _ordersGroup$currentT7;
+                return error ? newFetch || newFetchCurrent ? [] : sortOrders((_ordersGroup$currentT6 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT6 === void 0 ? void 0 : _ordersGroup$currentT6[prop]) : newFetch || newFetchCurrent ? sortOrders(result) : sortOrders((_ordersGroup$currentT7 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT7 === void 0 ? void 0 : _ordersGroup$currentT7[prop].concat(result));
+              };
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: false,
-                orders: error ? newFetch || newFetchCurrent ? [] : sortOrders((_ordersGroup$currentT6 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT6 === void 0 ? void 0 : _ordersGroup$currentT6.orders) : newFetch || newFetchCurrent ? sortOrders(result) : sortOrders((_ordersGroup$currentT7 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT7 === void 0 ? void 0 : _ordersGroup$currentT7.orders.concat(result)),
+                orders: _ordersCleaned('orders').filter(function (o) {
+                  return !(o !== null && o !== void 0 && o.cart_group_id);
+                }),
+                ordersGrouped: _ordersCleaned('ordersGrouped').filter(function (o) {
+                  return o === null || o === void 0 ? void 0 : o.cart_group_id;
+                }),
                 error: error ? result : null,
                 pagination: _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
                   currentPage: pagination.current_page,
@@ -440,10 +449,10 @@ var OrderListGroups = function OrderListGroups(props) {
                   to: pagination.to
                 })
               }))));
-              _context3.next = 20;
+              _context3.next = 21;
               break;
-            case 17:
-              _context3.prev = 17;
+            case 18:
+              _context3.prev = 18;
               _context3.t0 = _context3["catch"](5);
               if (_context3.t0.constructor.name !== 'Cancel') {
                 setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
@@ -451,12 +460,12 @@ var OrderListGroups = function OrderListGroups(props) {
                   error: [(_err$message = _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message) !== null && _err$message !== void 0 ? _err$message : 'ERROR']
                 }))));
               }
-            case 20:
+            case 21:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[5, 17]]);
+      }, _callee3, null, [[5, 18]]);
     }));
     return function loadOrders() {
       return _ref4.apply(this, arguments);
@@ -464,7 +473,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var _ordersGroup$currentT8, _ordersGroup$currentT9, _ordersGroup$currentT10, _ordersGroup$currentT11, _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _err$message2;
+      var _ordersGroup$currentT8, _yield$getOrders2, _yield$getOrders2$con, _error, _result, pagination, _ordersCleaned, _err$message2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
@@ -482,14 +491,23 @@ var OrderListGroups = function OrderListGroups(props) {
             case 4:
               _yield$getOrders2 = _context4.sent;
               _yield$getOrders2$con = _yield$getOrders2.content;
-              error = _yield$getOrders2$con.error;
-              result = _yield$getOrders2$con.result;
+              _error = _yield$getOrders2$con.error;
+              _result = _yield$getOrders2$con.result;
               pagination = _yield$getOrders2$con.pagination;
+              _ordersCleaned = function _ordersCleaned(prop) {
+                var _ordersGroup$currentT9, _ordersGroup$currentT10, _ordersGroup$currentT11;
+                return _error ? sortOrders((_ordersGroup$currentT9 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT9 === void 0 ? void 0 : _ordersGroup$currentT9[prop]) : sortOrders((_ordersGroup$currentT10 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT10 === void 0 ? void 0 : (_ordersGroup$currentT11 = _ordersGroup$currentT10[prop]) === null || _ordersGroup$currentT11 === void 0 ? void 0 : _ordersGroup$currentT11.concat(_result));
+              };
               setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
                 loading: false,
-                orders: error ? sortOrders((_ordersGroup$currentT9 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT9 === void 0 ? void 0 : _ordersGroup$currentT9.orders) : sortOrders((_ordersGroup$currentT10 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT10 === void 0 ? void 0 : (_ordersGroup$currentT11 = _ordersGroup$currentT10.orders) === null || _ordersGroup$currentT11 === void 0 ? void 0 : _ordersGroup$currentT11.concat(result)),
-                error: error ? result : null,
-                pagination: !error ? _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
+                orders: _ordersCleaned('orders').filter(function (o) {
+                  return !(o !== null && o !== void 0 && o.cart_group_id);
+                }),
+                ordersGrouped: _ordersCleaned('ordersGrouped').filter(function (o) {
+                  return o === null || o === void 0 ? void 0 : o.cart_group_id;
+                }),
+                error: _error ? _result : null,
+                pagination: !_error ? _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected].pagination), {}, {
                   currentPage: pagination.current_page,
                   pageSize: pagination.page_size,
                   totalPages: pagination.total_pages,
@@ -498,10 +516,10 @@ var OrderListGroups = function OrderListGroups(props) {
                   to: pagination.to
                 }) : ordersGroup[currentTabSelected].pagination
               }))));
-              _context4.next = 15;
+              _context4.next = 16;
               break;
-            case 12:
-              _context4.prev = 12;
+            case 13:
+              _context4.prev = 13;
               _context4.t0 = _context4["catch"](1);
               if (_context4.t0.constructor.name !== 'Cancel') {
                 setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
@@ -509,12 +527,12 @@ var OrderListGroups = function OrderListGroups(props) {
                   error: [(_err$message2 = _context4.t0 === null || _context4.t0 === void 0 ? void 0 : _context4.t0.message) !== null && _err$message2 !== void 0 ? _err$message2 : 'ERROR']
                 }))));
               }
-            case 15:
+            case 16:
             case "end":
               return _context4.stop();
           }
         }
-      }, _callee4, null, [[1, 12]]);
+      }, _callee4, null, [[1, 13]]);
     }));
     return function loadMoreOrders() {
       return _ref6.apply(this, arguments);
@@ -522,7 +540,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   var loadMessages = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(orderId) {
-      var url, response, _yield$response$json, error, result;
+      var url, response, _yield$response$json, _error2, _result2;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
           switch (_context5.prev = _context5.next) {
@@ -547,18 +565,18 @@ var OrderListGroups = function OrderListGroups(props) {
               return response.json();
             case 8:
               _yield$response$json = _context5.sent;
-              error = _yield$response$json.error;
-              result = _yield$response$json.result;
-              if (!error) {
+              _error2 = _yield$response$json.error;
+              _result2 = _yield$response$json.result;
+              if (!_error2) {
                 setMessages({
-                  messages: result,
+                  messages: _result2,
                   loading: false,
                   error: null
                 });
               } else {
                 setMessages(_objectSpread(_objectSpread({}, messages), {}, {
                   loading: false,
-                  error: result
+                  error: _result2
                 }));
               }
               _context5.next = 17;
@@ -583,7 +601,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   var deleteOrders = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderIds) {
-      var _ordersGroup$currentT12, _ordersGroup$currentT13, _ordersGroup$currentT14, errorState, _yield$ordering$setAc3, error, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
+      var _ordersGroup$currentT12, _ordersGroup$currentT13, _ordersGroup$currentT14, errorState, _yield$ordering$setAc3, _error3, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) {
           switch (_context6.prev = _context6.next) {
@@ -601,9 +619,9 @@ var OrderListGroups = function OrderListGroups(props) {
               return ordering.setAccessToken(accessToken).orders(orderIds[0]).delete();
             case 6:
               _yield$ordering$setAc3 = _context6.sent;
-              error = _yield$ordering$setAc3.content.error;
+              _error3 = _yield$ordering$setAc3.content.error;
               errorState.push({
-                error: error,
+                error: _error3,
                 id: orderIds[0]
               });
               _context6.next = 32;
@@ -688,7 +706,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   var loadLogisticOrders = /*#__PURE__*/function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(isAlreadyFetched) {
-      var _session$user, url, response, _yield$response$json2, result, error;
+      var _session$user, url, response, _yield$response$json2, _result3, _error4;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) {
           switch (_context7.prev = _context7.next) {
@@ -719,15 +737,15 @@ var OrderListGroups = function OrderListGroups(props) {
               return response.json();
             case 10:
               _yield$response$json2 = _context7.sent;
-              result = _yield$response$json2.result;
-              error = _yield$response$json2.error;
-              if (error) {
+              _result3 = _yield$response$json2.result;
+              _error4 = _yield$response$json2.error;
+              if (_error4) {
                 _context7.next = 16;
                 break;
               }
               setlogisticOrders(_objectSpread(_objectSpread({}, logisticOrders), {}, {
                 loading: false,
-                orders: result.filter(function (order) {
+                orders: _result3.filter(function (order) {
                   var _order$order_group, _order$order_group$or;
                   return !(order !== null && order !== void 0 && order.order_group && (order === null || order === void 0 ? void 0 : (_order$order_group = order.order_group) === null || _order$order_group === void 0 ? void 0 : (_order$order_group$or = _order$order_group.orders) === null || _order$order_group$or === void 0 ? void 0 : _order$order_group$or.length) === 0);
                 })
@@ -737,7 +755,7 @@ var OrderListGroups = function OrderListGroups(props) {
               setlogisticOrders({
                 loading: false,
                 orders: [],
-                error: result
+                error: _result3
               });
               _context7.next = 22;
               break;
@@ -770,6 +788,18 @@ var OrderListGroups = function OrderListGroups(props) {
     });
     return ordersSorted;
   };
+  var formatOrdersGrouped = function formatOrdersGrouped(orders) {
+    if (!(orders !== null && orders !== void 0 && orders.length)) return orders;
+    var _obj = {};
+    orders.map(function (o) {
+      if (_obj !== null && _obj !== void 0 && _obj["".concat(o.cart_group_id)]) {
+        _obj["".concat(o.cart_group_id)].push(o);
+      } else {
+        _obj["".concat(o.cart_group_id)] = [o];
+      }
+    });
+    return _obj;
+  };
   var getStatusById = function getStatusById(id) {
     var _orderGroupStatusCust5, _orderGroupStatusCust6, _orderGroupStatusCust7;
     if (!id && id !== 0) return;
@@ -783,7 +813,7 @@ var OrderListGroups = function OrderListGroups(props) {
   };
   var actionOrderToTab = function actionOrderToTab(orderAux, status, type) {
     var _ordersGroup$status;
-    var orderList = (_ordersGroup$status = ordersGroup[status]) === null || _ordersGroup$status === void 0 ? void 0 : _ordersGroup$status.orders;
+    var orderList = (_ordersGroup$status = ordersGroup[status]) === null || _ordersGroup$status === void 0 ? void 0 : _ordersGroup$status[orderAux !== null && orderAux !== void 0 && orderAux.cart_group_id ? 'ordersGrouped' : 'orders'];
     var orders;
     var order = _objectSpread(_objectSpread({}, orderAux), {}, {
       showNotification: true
@@ -799,7 +829,7 @@ var OrderListGroups = function OrderListGroups(props) {
         return _order.id !== order.id;
       });
     }
-    ordersGroup[status].orders = sortOrders(orders);
+    ordersGroup[status][orderAux !== null && orderAux !== void 0 && orderAux.cart_group_id ? 'ordersGrouped' : 'orders'] = sortOrders(orders);
     if (type !== 'update') {
       ordersGroup[status].pagination = _objectSpread(_objectSpread({}, ordersGroup[status].pagination), {}, {
         total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
@@ -815,34 +845,30 @@ var OrderListGroups = function OrderListGroups(props) {
     if (!ordersGroups) {
       var _ordersGroup$status2;
       var status = getStatusById(order === null || order === void 0 ? void 0 : order.status);
-      var orderList = (_ordersGroup$status2 = ordersGroup[status]) === null || _ordersGroup$status2 === void 0 ? void 0 : _ordersGroup$status2.orders;
+      var orderList = (_ordersGroup$status2 = ordersGroup[status]) === null || _ordersGroup$status2 === void 0 ? void 0 : _ordersGroup$status2[order !== null && order !== void 0 && order.cart_group_id ? 'ordersGrouped' : 'orders'];
       var indexToUpdate = orderList === null || orderList === void 0 ? void 0 : orderList.findIndex(function (o) {
         return (o === null || o === void 0 ? void 0 : o.id) === (order === null || order === void 0 ? void 0 : order.id);
       });
       orderList[indexToUpdate] = order;
-      setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, status, _objectSpread(_objectSpread({}, ordersGroup[status]), {}, {
-        orders: sortOrders(orderList)
-      }))));
+      setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, status, _objectSpread(_objectSpread({}, ordersGroup[status]), {}, _defineProperty({}, order !== null && order !== void 0 && order.cart_group_id ? 'ordersGrouped' : 'orders', sortOrders(orderList))))));
     } else {
       var _order$order_group3, _order$order_group3$o, _order$order_group3$o2;
       var _status = getStatusById(order === null || order === void 0 ? void 0 : (_order$order_group3 = order.order_group) === null || _order$order_group3 === void 0 ? void 0 : (_order$order_group3$o = _order$order_group3.orders) === null || _order$order_group3$o === void 0 ? void 0 : (_order$order_group3$o2 = _order$order_group3$o[0]) === null || _order$order_group3$o2 === void 0 ? void 0 : _order$order_group3$o2.status);
       var _orderList;
       ordersGroups.map(function (order) {
         var _ordersGroup$_status, _orderList2;
-        _orderList = (_ordersGroup$_status = ordersGroup[_status]) === null || _ordersGroup$_status === void 0 ? void 0 : _ordersGroup$_status.orders;
+        _orderList = (_ordersGroup$_status = ordersGroup[_status]) === null || _ordersGroup$_status === void 0 ? void 0 : _ordersGroup$_status[order !== null && order !== void 0 && order.cart_group_id ? 'ordersGrouped' : 'orders'];
         var indexToUpdate = (_orderList2 = _orderList) === null || _orderList2 === void 0 ? void 0 : _orderList2.findIndex(function (o) {
           return (o === null || o === void 0 ? void 0 : o.id) === (order === null || order === void 0 ? void 0 : order.id);
         });
         _orderList[indexToUpdate] = order;
       });
-      setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, _status, _objectSpread(_objectSpread({}, ordersGroup[_status]), {}, {
-        orders: sortOrders(_orderList)
-      }))));
+      setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, _status, _objectSpread(_objectSpread({}, ordersGroup[_status]), {}, _defineProperty({}, order !== null && order !== void 0 && order.cart_group_id ? 'ordersGrouped' : 'orders', sortOrders(_orderList))))));
     }
   };
   var handleClickLogisticOrder = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(status, orderId) {
-      var _session$user2, _session$user3, response, _yield$response$json3, result, error, _logisticOrders$order, _logisticOrders$order2, order, newOrders, _order$order, _order$order$id, _order$order2, _order$order$id2, _order$order3;
+      var _session$user2, _session$user3, response, _yield$response$json3, _result4, _error5, _logisticOrders$order, _logisticOrders$order2, order, newOrders, _order$order, _order$order$id, _order$order2, _order$order$id2, _order$order3;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
@@ -866,9 +892,9 @@ var OrderListGroups = function OrderListGroups(props) {
               return response.json();
             case 6:
               _yield$response$json3 = _context8.sent;
-              result = _yield$response$json3.result;
-              error = _yield$response$json3.error;
-              if (error) {
+              _result4 = _yield$response$json3.result;
+              _error5 = _yield$response$json3.error;
+              if (_error5) {
                 _context8.next = 15;
                 break;
               }
@@ -889,7 +915,7 @@ var OrderListGroups = function OrderListGroups(props) {
               }
               return _context8.abrupt("return");
             case 15:
-              showToast(_ToastContext.ToastType.Error, result);
+              showToast(_ToastContext.ToastType.Error, _result4);
               _context8.next = 22;
               break;
             case 18:
@@ -908,6 +934,177 @@ var OrderListGroups = function OrderListGroups(props) {
     }));
     return function handleClickLogisticOrder(_x6, _x7) {
       return _ref10.apply(this, arguments);
+    };
+  }();
+  var handleChangeOrderStatus = /*#__PURE__*/function () {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(status, orderIds) {
+      var body,
+        bodyToSend,
+        setOrderStatus,
+        _result5,
+        _err$message4,
+        _args10 = arguments;
+      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        while (1) {
+          switch (_context10.prev = _context10.next) {
+            case 0:
+              body = _args10.length > 2 && _args10[2] !== undefined ? _args10[2] : {};
+              _context10.prev = 1;
+              delete body.id;
+              bodyToSend = Object.keys(body || {}).length > 0 ? body : {
+                status: status
+              };
+              setOrderStatus = /*#__PURE__*/function () {
+                var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(id) {
+                  var _yield$ordering$setAc5, _yield$ordering$setAc6, _result6, _error6;
+                  return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+                    while (1) {
+                      switch (_context9.prev = _context9.next) {
+                        case 0:
+                          _context9.prev = 0;
+                          _context9.next = 3;
+                          return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders(id).save(_objectSpread(_objectSpread({}, bodyToSend), {}, {
+                            id: id
+                          }));
+                        case 3:
+                          _yield$ordering$setAc5 = _context9.sent;
+                          _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
+                          _result6 = _yield$ordering$setAc6.result;
+                          _error6 = _yield$ordering$setAc6.error;
+                          return _context9.abrupt("return", _error6 ? null : _result6);
+                        case 10:
+                          _context9.prev = 10;
+                          _context9.t0 = _context9["catch"](0);
+                          return _context9.abrupt("return", null);
+                        case 13:
+                        case "end":
+                          return _context9.stop();
+                      }
+                    }
+                  }, _callee9, null, [[0, 10]]);
+                }));
+                return function setOrderStatus(_x10) {
+                  return _ref12.apply(this, arguments);
+                };
+              }();
+              _context10.next = 7;
+              return Promise.all(orderIds.map(function (id) {
+                return setOrderStatus(id);
+              }));
+            case 7:
+              _result5 = _context10.sent;
+              return _context10.abrupt("return", _result5);
+            case 11:
+              _context10.prev = 11;
+              _context10.t0 = _context10["catch"](1);
+              return _context10.abrupt("return", (_err$message4 = _context10.t0 === null || _context10.t0 === void 0 ? void 0 : _context10.t0.message) !== null && _err$message4 !== void 0 ? _err$message4 : _context10.t0);
+            case 14:
+            case "end":
+              return _context10.stop();
+          }
+        }
+      }, _callee10, null, [[1, 11]]);
+    }));
+    return function handleChangeOrderStatus(_x8, _x9) {
+      return _ref11.apply(this, arguments);
+    };
+  }();
+  var handleSendCustomerReview = /*#__PURE__*/function () {
+    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(_ref13) {
+      var customerId, orderIds, body, onClose, setCustomerReview, _result7, ordersGrupped, _err$message5;
+      return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+        while (1) {
+          switch (_context12.prev = _context12.next) {
+            case 0:
+              customerId = _ref13.customerId, orderIds = _ref13.orderIds, body = _ref13.body, onClose = _ref13.onClose;
+              _context12.prev = 1;
+              setCustomerReview = /*#__PURE__*/function () {
+                var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(body) {
+                  var response, _yield$response$json4, _result8, _error7;
+                  return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+                    while (1) {
+                      switch (_context11.prev = _context11.next) {
+                        case 0:
+                          _context11.prev = 0;
+                          _context11.next = 3;
+                          return fetch("".concat(ordering.root, "/users/").concat(customerId, "/user_reviews"), {
+                            method: 'POST',
+                            headers: {
+                              Authorization: "Bearer ".concat(session.token),
+                              'Content-Type': 'application/json',
+                              'X-App-X': ordering.appId
+                            },
+                            body: JSON.stringify(body)
+                          });
+                        case 3:
+                          response = _context11.sent;
+                          _context11.next = 6;
+                          return response.json();
+                        case 6:
+                          _yield$response$json4 = _context11.sent;
+                          _result8 = _yield$response$json4.result;
+                          _error7 = _yield$response$json4.error;
+                          return _context11.abrupt("return", _error7 ? null : _result8);
+                        case 12:
+                          _context11.prev = 12;
+                          _context11.t0 = _context11["catch"](0);
+                          return _context11.abrupt("return", null);
+                        case 15:
+                        case "end":
+                          return _context11.stop();
+                      }
+                    }
+                  }, _callee11, null, [[0, 12]]);
+                }));
+                return function setCustomerReview(_x12) {
+                  return _ref15.apply(this, arguments);
+                };
+              }();
+              _context12.next = 5;
+              return Promise.all(orderIds.map(function (id) {
+                return setCustomerReview(_objectSpread(_objectSpread({}, body), {}, {
+                  order_id: id,
+                  user_id: customerId
+                }));
+              }));
+            case 5:
+              _result7 = _context12.sent;
+              if (_result7 !== null && _result7 !== void 0 && _result7.length) {
+                ordersGrupped = ordersGroup[currentTabSelected].ordersGrouped;
+                _result7.map(function (order) {
+                  var orderFound = ordersGrupped.find(function (o) {
+                    return o.id === order.order_id;
+                  });
+                  var idxOrderFound = ordersGrupped.findIndex(function (o) {
+                    return o.id === order.order_id;
+                  });
+                  if (orderFound) {
+                    orderFound = _objectSpread(_objectSpread({}, orderFound), {}, {
+                      user_review: order
+                    });
+                    ordersGrupped[idxOrderFound] = orderFound;
+                    setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, {
+                      ordersGrouped: ordersGrupped
+                    }));
+                  }
+                });
+                showToast(_ToastContext.ToastType.Success, t('ORDERS_SUCCESSFULLY_REVIEWED', 'Orders successfully reviewed'));
+              }
+              onClose && onClose();
+              return _context12.abrupt("return", _result7);
+            case 11:
+              _context12.prev = 11;
+              _context12.t0 = _context12["catch"](1);
+              return _context12.abrupt("return", (_err$message5 = _context12.t0 === null || _context12.t0 === void 0 ? void 0 : _context12.t0.message) !== null && _err$message5 !== void 0 ? _err$message5 : _context12.t0);
+            case 14:
+            case "end":
+              return _context12.stop();
+          }
+        }
+      }, _callee12, null, [[1, 11]]);
+    }));
+    return function handleSendCustomerReview(_x11) {
+      return _ref14.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
@@ -945,8 +1142,8 @@ var OrderListGroups = function OrderListGroups(props) {
       for (var i = 0; i < ordersStatusArray.length; i++) {
         var status = ordersStatusArray[i];
         if (order !== null && order !== void 0 && order.products) {
-          var _ordersGroup$status3, _ordersGroup$status3$;
-          orderFound = (_ordersGroup$status3 = ordersGroup[status]) === null || _ordersGroup$status3 === void 0 ? void 0 : (_ordersGroup$status3$ = _ordersGroup$status3.orders) === null || _ordersGroup$status3$ === void 0 ? void 0 : _ordersGroup$status3$.find(function (_order) {
+          var _ordersGroup$status3, _ordersGroup$status4;
+          orderFound = (_ordersGroup$status3 = ordersGroup[status]) === null || _ordersGroup$status3 === void 0 ? void 0 : (_ordersGroup$status4 = _ordersGroup$status3[order !== null && order !== void 0 && order.cart_group_id ? 'ordersGrouped' : 'orders']) === null || _ordersGroup$status4 === void 0 ? void 0 : _ordersGroup$status4.find(function (_order) {
             return _order.id === order.id;
           });
         }
@@ -992,11 +1189,11 @@ var OrderListGroups = function OrderListGroups(props) {
       }
     };
     var handleAddNewOrder = function handleAddNewOrder(order) {
-      var _getStatusById4, _ordersGroup$status4;
+      var _getStatusById4, _ordersGroup$status5;
       events.emit('order_added', order);
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id), 1000);
       var status = (_getStatusById4 = getStatusById(order === null || order === void 0 ? void 0 : order.status)) !== null && _getStatusById4 !== void 0 ? _getStatusById4 : '';
-      var currentFilter = (_ordersGroup$status4 = ordersGroup[status]) === null || _ordersGroup$status4 === void 0 ? void 0 : _ordersGroup$status4.currentFilter;
+      var currentFilter = (_ordersGroup$status5 = ordersGroup[status]) === null || _ordersGroup$status5 === void 0 ? void 0 : _ordersGroup$status5.currentFilter;
       if (currentFilter.includes(order.status)) {
         actionOrderToTab(order, status, 'add');
       }
@@ -1097,9 +1294,11 @@ var OrderListGroups = function OrderListGroups(props) {
     var handleCustomerReviewed = function handleCustomerReviewed(review) {
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
-        var _ordersGroup$status5, _ordersGroup$status5$;
+        var _ordersGroup$status$o, _ordersGroup$status6, _ordersGroup$status6$, _ordersGroup$status7, _ordersGroup$status7$;
         var status = ordersStatusArray[i];
-        orderFound = (_ordersGroup$status5 = ordersGroup[status]) === null || _ordersGroup$status5 === void 0 ? void 0 : (_ordersGroup$status5$ = _ordersGroup$status5.orders) === null || _ordersGroup$status5$ === void 0 ? void 0 : _ordersGroup$status5$.find(function (_order) {
+        orderFound = (_ordersGroup$status$o = (_ordersGroup$status6 = ordersGroup[status]) === null || _ordersGroup$status6 === void 0 ? void 0 : (_ordersGroup$status6$ = _ordersGroup$status6.orders) === null || _ordersGroup$status6$ === void 0 ? void 0 : _ordersGroup$status6$.find(function (_order) {
+          return _order.id === review.order_id;
+        })) !== null && _ordersGroup$status$o !== void 0 ? _ordersGroup$status$o : (_ordersGroup$status7 = ordersGroup[status]) === null || _ordersGroup$status7 === void 0 ? void 0 : (_ordersGroup$status7$ = _ordersGroup$status7.ordersGrouped) === null || _ordersGroup$status7$ === void 0 ? void 0 : _ordersGroup$status7$.find(function (_order) {
           return _order.id === review.order_id;
         });
         if (orderFound) break;
@@ -1137,6 +1336,9 @@ var OrderListGroups = function OrderListGroups(props) {
     handleClickLogisticOrder: handleClickLogisticOrder,
     filtered: filtered,
     onFiltered: setFiltered,
+    handleChangeOrderStatus: handleChangeOrderStatus,
+    handleSendCustomerReview: handleSendCustomerReview,
+    ordersGroupedFormatted: formatOrdersGrouped(ordersGroup[currentTabSelected].ordersGrouped),
     isLogisticActivated: isLogisticActivated
   })));
 };
