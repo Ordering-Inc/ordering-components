@@ -17,6 +17,8 @@ var _SessionContext = require("../../contexts/SessionContext");
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -61,6 +63,10 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
+
   var _useState = (0, _react.useState)({
     loading: false,
     error: null
@@ -68,6 +74,11 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
       _useState2 = _slicedToArray(_useState, 2),
       actionState = _useState2[0],
       setActionState = _useState2[1];
+
+  var _useState3 = (0, _react.useState)({}),
+      _useState4 = _slicedToArray(_useState3, 2),
+      redeemedGiftCard = _useState4[0],
+      setRedeemedGiftCard = _useState4[1];
 
   var handleApply = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(values) {
@@ -106,23 +117,25 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
                 loading: false,
                 error: error ? result : null
               });
-              _context.next = 18;
+              setRedeemedGiftCard(result);
+              events.emit('gift_card_redeemed');
+              _context.next = 20;
               break;
 
-            case 15:
-              _context.prev = 15;
+            case 17:
+              _context.prev = 17;
               _context.t0 = _context["catch"](0);
               setActionState({
                 loading: false,
                 error: [_context.t0.message]
               });
 
-            case 18:
+            case 20:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 15]]);
+      }, _callee, null, [[0, 17]]);
     }));
 
     return function handleApply(_x) {
@@ -132,6 +145,7 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     actionState: actionState,
+    redeemedGiftCard: redeemedGiftCard,
     handleApply: handleApply
   })));
 };

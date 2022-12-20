@@ -56,7 +56,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  */
 var SendGiftCard = function SendGiftCard(props) {
   var UIComponent = props.UIComponent,
-      giftCardId = props.giftCardId;
+      giftCardId = props.giftCardId,
+      setIsGiftCardSent = props.setIsGiftCardSent;
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 1),
@@ -118,28 +119,29 @@ var SendGiftCard = function SendGiftCard(props) {
                 loading: false,
                 error: error ? result : null
               });
+              setIsGiftCardSent(true);
 
               if (props.showToastMsg) {
                 showToast(error ? _ToastContext.ToastType.Error : _ToastContext.ToastType.Success, error ? t('ERROR', result[0]) : t('GIFT_CARD_SENT', 'The gift card sent'));
               }
 
-              _context.next = 18;
+              _context.next = 19;
               break;
 
-            case 15:
-              _context.prev = 15;
+            case 16:
+              _context.prev = 16;
               _context.t0 = _context["catch"](0);
               setActionState({
                 loading: false,
                 error: [_context.t0.message]
               });
 
-            case 18:
+            case 19:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 15]]);
+      }, _callee, null, [[0, 16]]);
     }));
 
     return function handleSendGiftCard(_x) {
