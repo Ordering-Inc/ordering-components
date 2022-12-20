@@ -11,7 +11,8 @@ import { useLanguage } from '../../contexts/LanguageContext'
 export const SendGiftCard = (props) => {
   const {
     UIComponent,
-    giftCardId
+    giftCardId,
+    setIsGiftCardSent
   } = props
 
   const [{ token }] = useSession()
@@ -37,6 +38,7 @@ export const SendGiftCard = (props) => {
         loading: false,
         error: error ? result : null
       })
+      setIsGiftCardSent(true)
       if (props.showToastMsg) {
         showToast(
           error ? ToastType.Error : ToastType.Success,
