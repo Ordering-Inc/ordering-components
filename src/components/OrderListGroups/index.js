@@ -960,7 +960,7 @@ export const OrderListGroups = (props) => {
           onFiltered={setFiltered}
           handleChangeOrderStatus={handleChangeOrderStatus}
           handleSendCustomerReview={handleSendCustomerReview}
-          ordersGroupedFormatted={formatOrdersGrouped(ordersGroup[currentTabSelected].ordersGrouped)}
+          ordersGroupedFormatted={formatOrdersGrouped(ordersGroup[currentTabSelected]?.ordersGrouped)}
           isLogisticActivated={isLogisticActivated}
         />
       )}
