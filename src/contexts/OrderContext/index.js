@@ -198,6 +198,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * Change order address
    */
   const changeAddress = async (addressId, params) => {
+    let isCountryCodeChanged = false
+    if (state.options?.address?.country_code !== params?.country_code) {
+      isCountryCodeChanged = true
+    }
     if (typeof addressId === 'object') {
       const optionsStorage = await strategy.getItem('options', true)
       const options = {
@@ -220,7 +224,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
 
     if (params && params?.address && !checkAddress(params?.address)) {
-      updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
+      await updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
+      if (isCountryCodeChanged) {
+        events.emit('country_code_changed', params?.country_code)
+      }
       return
     }
 
@@ -228,10 +235,16 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (addressId !== state.options.address_id) {
         return
       }
-      updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+      await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+      if (isCountryCodeChanged) {
+        events.emit('country_code_changed', params?.country_code)
+      }
       return
     }
-    updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+    await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+    if (isCountryCodeChanged) {
+      events.emit('country_code_changed', params?.country_code)
+    }
   }
 
   /**
