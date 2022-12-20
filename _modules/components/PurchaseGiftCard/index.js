@@ -67,11 +67,16 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
+      orderState = _useOrder2[0],
       addProduct = _useOrder2[1].addProduct;
 
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
+
+  var giftCart = Object.values(orderState.carts).find(function (_cart) {
+    return !(_cart !== null && _cart !== void 0 && _cart.business_id);
+  });
 
   var _useState = (0, _react.useState)({
     loading: true,
@@ -82,7 +87,7 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
       productsListState = _useState2[0],
       setProductsListState = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(null),
+  var _useState3 = (0, _react.useState)(giftCart ? giftCart === null || giftCart === void 0 ? void 0 : giftCart.products[0] : null),
       _useState4 = _slicedToArray(_useState3, 2),
       selectedProduct = _useState4[0],
       setSelectedProduct = _useState4[1];
@@ -167,6 +172,8 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
 
   var handleAccept = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {
+      var _giftCart$products$;
+
       var giftCard, _yield$addProduct, error, result;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
@@ -177,10 +184,26 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
                 id: selectedProduct === null || selectedProduct === void 0 ? void 0 : selectedProduct.id,
                 quantity: 1
               };
-              _context2.next = 3;
+
+              if (!(giftCart && (selectedProduct === null || selectedProduct === void 0 ? void 0 : selectedProduct.id) === ((_giftCart$products$ = giftCart.products[0]) === null || _giftCart$products$ === void 0 ? void 0 : _giftCart$products$.id))) {
+                _context2.next = 5;
+                break;
+              }
+
+              events.emit('go_to_page', {
+                page: 'checkout',
+                params: {
+                  cartUuid: giftCart.uuid
+                }
+              });
+              _context2.next = 11;
+              break;
+
+            case 5:
+              _context2.next = 7;
               return addProduct(giftCard, null, null, true);
 
-            case 3:
+            case 7:
               _yield$addProduct = _context2.sent;
               error = _yield$addProduct.error;
               result = _yield$addProduct.result;
@@ -194,7 +217,7 @@ var PurchaseGiftCard = function PurchaseGiftCard(props) {
                 });
               }
 
-            case 7:
+            case 11:
             case "end":
               return _context2.stop();
           }

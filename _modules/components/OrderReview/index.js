@@ -96,39 +96,17 @@ var OrderReview = function OrderReview(props) {
       _useState4 = _slicedToArray(_useState3, 2),
       formState = _useState4[0],
       setFormState = _useState4[1];
-  /**
-   * Function that load and send the review order to ordering
-   */
 
-
-  var handleSendReview = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _session$user, body, response, _yield$response$json, result, error;
+  var reviewOrder = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(body) {
+      var response, _yield$response$json, result, error;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              if (handleCustomSendReview) {
-                handleCustomSendReview && handleCustomSendReview(stars);
-              }
-
-              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
-                loading: true
-              }));
-              _context.prev = 2;
-              body = {
-                order_id: order.id,
-                quality: stars.quality,
-                delivery: stars.punctiality,
-                service: stars.service,
-                package: stars.packaging,
-                comment: stars.comments,
-                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id,
-                business_id: order.business_id
-              };
-              _context.next = 6;
-              return fetch("".concat(ordering.root, "/business/").concat(order.business_id, "/reviews"), {
+              _context.next = 2;
+              return fetch("".concat(ordering.root, "/business/").concat(body.business_id, "/reviews"), {
                 method: 'POST',
                 headers: {
                   Authorization: "Bearer ".concat(session.token),
@@ -138,15 +116,133 @@ var OrderReview = function OrderReview(props) {
                 body: JSON.stringify(body)
               });
 
-            case 6:
+            case 2:
               response = _context.sent;
-              _context.next = 9;
+              _context.next = 5;
               return response.json();
 
-            case 9:
+            case 5:
               _yield$response$json = _context.sent;
               result = _yield$response$json.result;
               error = _yield$response$json.error;
+              return _context.abrupt("return", {
+                response: response,
+                result: result,
+                error: error
+              });
+
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function reviewOrder(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  /**
+   * Function that load and send the review order to ordering
+   */
+
+
+  var handleSendReview = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee3() {
+      var _session$user;
+
+      var staticBody, _order$business, _order$business2, body, _yield$reviewOrder2, response, result, error;
+
+      return _regenerator.default.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              if (handleCustomSendReview) {
+                handleCustomSendReview && handleCustomSendReview(stars);
+              }
+
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: true
+              }));
+              staticBody = {
+                quality: stars.quality,
+                delivery: stars.punctiality,
+                service: stars.service,
+                package: stars.packaging,
+                comment: stars.comments,
+                user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id
+              };
+              _context3.prev = 3;
+
+              if (!((order === null || order === void 0 ? void 0 : (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.length) > 1)) {
+                _context3.next = 8;
+                break;
+              }
+
+              // eslint-disable-next-line no-unused-expressions
+              order === null || order === void 0 ? void 0 : (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.forEach( /*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(_business, i) {
+                  var _order$business3;
+
+                  var body, _yield$reviewOrder, result, error;
+
+                  return _regenerator.default.wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          body = _objectSpread(_objectSpread({}, staticBody), {}, {
+                            order_id: order.id[i],
+                            business_id: order === null || order === void 0 ? void 0 : order.business_id[i]
+                          });
+                          _context2.next = 3;
+                          return reviewOrder(body);
+
+                        case 3:
+                          _yield$reviewOrder = _context2.sent;
+                          result = _yield$reviewOrder.result;
+                          error = _yield$reviewOrder.error;
+                          if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id[i], {
+                            review: result
+                          });
+
+                          if ((order === null || order === void 0 ? void 0 : (_order$business3 = order.business) === null || _order$business3 === void 0 ? void 0 : _order$business3.length) - 1 === i) {
+                            setFormState({
+                              loading: false,
+                              result: result,
+                              error: error
+                            });
+                            if (!error && isToast) showToast(_ToastContext.ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'));
+                          }
+
+                        case 8:
+                        case "end":
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2);
+                }));
+
+                return function (_x2, _x3) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+              _context3.next = 19;
+              break;
+
+            case 8:
+              body = _objectSpread(_objectSpread({}, staticBody), {}, {
+                order_id: order.id,
+                business_id: order.business_id
+              });
+              _context3.next = 11;
+              return reviewOrder(body);
+
+            case 11:
+              _yield$reviewOrder2 = _context3.sent;
+              response = _yield$reviewOrder2.response;
+              result = _yield$reviewOrder2.result;
+              error = _yield$reviewOrder2.error;
               onSaveReview && onSaveReview(response);
               setFormState({
                 loading: false,
@@ -157,30 +253,32 @@ var OrderReview = function OrderReview(props) {
               if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id, {
                 review: result
               });
-              _context.next = 21;
+
+            case 19:
+              _context3.next = 24;
               break;
 
-            case 18:
-              _context.prev = 18;
-              _context.t0 = _context["catch"](2);
+            case 21:
+              _context3.prev = 21;
+              _context3.t0 = _context3["catch"](3);
               setFormState({
                 result: {
                   error: true,
-                  result: _context.t0.message
+                  result: _context3.t0.message
                 },
                 loading: false
               });
 
-            case 21:
+            case 24:
             case "end":
-              return _context.stop();
+              return _context3.stop();
           }
         }
-      }, _callee, null, [[2, 18]]);
+      }, _callee3, null, [[3, 21]]);
     }));
 
     return function handleSendReview() {
-      return _ref.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
   /**
