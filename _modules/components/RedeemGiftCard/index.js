@@ -75,7 +75,7 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
       actionState = _useState2[0],
       setActionState = _useState2[1];
 
-  var _useState3 = (0, _react.useState)({}),
+  var _useState3 = (0, _react.useState)(null),
       _useState4 = _slicedToArray(_useState3, 2),
       redeemedGiftCard = _useState4[0],
       setRedeemedGiftCard = _useState4[1];
