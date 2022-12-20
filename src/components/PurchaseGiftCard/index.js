@@ -15,11 +15,13 @@ export const PurchaseGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-  const [, { addProduct }] = useOrder()
+  const [orderState, { addProduct }] = useOrder()
   const [events] = useEvent()
 
+  const giftCart = Object.values(orderState.carts).find(_cart => !_cart?.business_id)
+
   const [productsListState, setProductsListState] = useState({ loading: true, products: [], error: null })
-  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [selectedProduct, setSelectedProduct] = useState(giftCart ? giftCart?.products[0] : null)
 
   /**
    * Method to get the gift products from API
@@ -70,9 +72,13 @@ export const PurchaseGiftCard = (props) => {
       id: selectedProduct?.id,
       quantity: 1
     }
-    const { error, result } = await addProduct(giftCard, null, null, true)
-    if (!error) {
-      events.emit('go_to_page', { page: 'checkout', params: { cartUuid: result.uuid } })
+    if (giftCart && selectedProduct?.id === giftCart.products[0]?.id) {
+      events.emit('go_to_page', { page: 'checkout', params: { cartUuid: giftCart.uuid } })
+    } else {
+      const { error, result } = await addProduct(giftCard, null, null, true)
+      if (!error) {
+        events.emit('go_to_page', { page: 'checkout', params: { cartUuid: result.uuid } })
+      }
     }
   }
 
