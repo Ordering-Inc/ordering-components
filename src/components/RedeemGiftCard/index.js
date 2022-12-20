@@ -17,7 +17,7 @@ export const RedeemGiftCard = (props) => {
   const [events] = useEvent()
 
   const [actionState, setActionState] = useState({ loading: false, error: null })
-  const [redeemedGiftCard, setRedeemedGiftCard] = useState({})
+  const [redeemedGiftCard, setRedeemedGiftCard] = useState(null)
 
   const handleApply = async (values) => {
     try {
