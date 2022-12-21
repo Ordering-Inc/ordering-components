@@ -8,6 +8,7 @@ exports.useConfig = exports.ConfigProvider = exports.ConfigContext = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _ApiContext = require("../ApiContext");
 var _LanguageContext = require("../LanguageContext");
+var _EventContext = require("../EventContext");
 var _dayjs = _interopRequireDefault(require("dayjs"));
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -57,6 +58,9 @@ var ConfigProvider = function ConfigProvider(_ref) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
   var customConfigs = {
     max_days_preorder: {
       key: 'max_days_preorder',
@@ -143,7 +147,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
     }
   };
   var refreshConfigs = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newCountryCode) {
       var _result$dates_moment_, _result$format_time, _result$dates_general, _result$format_time2, _data, _data2, countryCode, options, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, conditionalConfigs, configsResult;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -153,40 +157,50 @@ var ConfigProvider = function ConfigProvider(_ref) {
               !state.loading && setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              _context.next = 4;
+              if (!(newCountryCode !== null && newCountryCode !== void 0)) {
+                _context.next = 6;
+                break;
+              }
+              _context.t0 = newCountryCode;
+              _context.next = 9;
+              break;
+            case 6:
+              _context.next = 8;
               return strategy.getItem('country-code');
-            case 4:
-              countryCode = _context.sent;
+            case 8:
+              _context.t0 = _context.sent;
+            case 9:
+              countryCode = _context.t0;
               options = {};
               if (countryCode) {
                 options.headers = {
                   'X-Country-Code-X': countryCode
                 };
               }
-              _context.next = 9;
+              _context.next = 14;
               return ordering.configs().asDictionary().get(options);
-            case 9:
+            case 14:
               _yield$ordering$confi = _context.sent;
               _yield$ordering$confi2 = _yield$ordering$confi.content;
               error = _yield$ordering$confi2.error;
               result = _yield$ordering$confi2.result;
               data = null;
-              _context.prev = 14;
-              _context.next = 17;
+              _context.prev = 19;
+              _context.next = 22;
               return fetch('https://ipapi.co/json/');
-            case 17:
+            case 22:
               response = _context.sent;
-              _context.next = 20;
+              _context.next = 25;
               return response.json();
-            case 20:
+            case 25:
               data = _context.sent;
-              _context.next = 26;
+              _context.next = 31;
               break;
-            case 23:
-              _context.prev = 23;
-              _context.t0 = _context["catch"](14);
+            case 28:
+              _context.prev = 28;
+              _context.t1 = _context["catch"](19);
               data = null;
-            case 26:
+            case 31:
               conditionalConfigs = {
                 dates_moment_format: {
                   key: 'dates_moment_format',
@@ -207,22 +221,22 @@ var ConfigProvider = function ConfigProvider(_ref) {
                 loading: false,
                 configs: error ? {} : configsResult
               }));
-              _context.next = 34;
+              _context.next = 39;
               break;
-            case 31:
-              _context.prev = 31;
-              _context.t1 = _context["catch"](0);
+            case 36:
+              _context.prev = 36;
+              _context.t2 = _context["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
-            case 34:
+            case 39:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 31], [14, 23]]);
+      }, _callee, null, [[0, 36], [19, 28]]);
     }));
-    return function refreshConfigs() {
+    return function refreshConfigs(_x2) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -234,6 +248,15 @@ var ConfigProvider = function ConfigProvider(_ref) {
       refreshConfigs();
     }
   }, [languageState]);
+  (0, _react.useEffect)(function () {
+    var handleUpdateConfigs = function handleUpdateConfigs(countryCode) {
+      refreshConfigs(countryCode);
+    };
+    events.on('country_code_changed', handleUpdateConfigs);
+    return function () {
+      events.off('country_code_changed', handleUpdateConfigs);
+    };
+  }, []);
   return /*#__PURE__*/_react.default.createElement(ConfigContext.Provider, {
     value: [state, functions]
   }, children);
