@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useApi } from '../ApiContext'
 import { useLanguage } from '../LanguageContext'
+import { useEvent } from '../EventContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -21,6 +22,7 @@ export const ConfigProvider = ({ children, strategy }) => {
   const [state, setState] = useState({ loading: true, configs: {} })
   const [languageState] = useLanguage()
   const [ordering] = useApi()
+  const [events] = useEvent()
 
   const customConfigs = {
     max_days_preorder: {
@@ -105,10 +107,10 @@ export const ConfigProvider = ({ children, strategy }) => {
     }
   }
 
-  const refreshConfigs = async () => {
+  const refreshConfigs = async (newCountryCode) => {
     try {
       !state.loading && setState({ ...state, loading: true })
-      const countryCode = await strategy.getItem('country-code')
+      const countryCode = newCountryCode ?? await strategy.getItem('country-code')
       const options = {}
 
       if (countryCode) {
@@ -164,6 +166,16 @@ export const ConfigProvider = ({ children, strategy }) => {
       refreshConfigs()
     }
   }, [languageState])
+
+  useEffect(() => {
+    const handleUpdateConfigs = (countryCode) => {
+      refreshConfigs(countryCode)
+    }
+    events.on('country_code_changed', handleUpdateConfigs)
+    return () => {
+      events.off('country_code_changed', handleUpdateConfigs)
+    }
+  }, [])
 
   return (
     <ConfigContext.Provider value={[state, functions]}>
