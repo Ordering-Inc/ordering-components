@@ -198,10 +198,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * Change order address
    */
   const changeAddress = async (addressId, params) => {
-    let isCountryCodeChanged = false
-    if (state.options?.address?.country_code !== params?.country_code) {
-      isCountryCodeChanged = true
-    }
+    const isCountryCodeChanged = state.options?.address?.country_code !== params?.country_code
     if (typeof addressId === 'object') {
       const optionsStorage = await strategy.getItem('options', true)
       const options = {
