@@ -42,6 +42,7 @@ export const OrderListGroups = (props) => {
     loading: false,
     error: null,
     orders: [],
+    ordersGrouped: [],
     pagination: {
       currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
         ? paginationSettings.initialPage - 1
@@ -306,18 +307,21 @@ export const OrderListGroups = (props) => {
         newFetch
       })
 
+      const _ordersCleaned = (prop) => error
+        ? (newFetch || newFetchCurrent)
+          ? []
+          : sortOrders(ordersGroup[currentTabSelected]?.[prop])
+        : (newFetch || newFetchCurrent)
+          ? sortOrders(result)
+          : sortOrders(ordersGroup[currentTabSelected]?.[prop].concat(result))
+
       setOrdersGroup({
         ...ordersGroup,
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           loading: false,
-          orders: error
-            ? (newFetch || newFetchCurrent)
-              ? []
-              : sortOrders(ordersGroup[currentTabSelected]?.orders)
-            : (newFetch || newFetchCurrent)
-              ? sortOrders(result)
-              : sortOrders(ordersGroup[currentTabSelected]?.orders.concat(result)),
+          orders: _ordersCleaned('orders').filter(o => !o?.cart_group_id),
+          ordersGrouped: _ordersCleaned('ordersGrouped').filter(o => o?.cart_group_id),
           error: error ? result : null,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
@@ -359,14 +363,17 @@ export const OrderListGroups = (props) => {
         newFetch: true
       })
 
+      const _ordersCleaned = (prop) => error
+        ? sortOrders(ordersGroup[currentTabSelected]?.[prop])
+        : sortOrders(ordersGroup[currentTabSelected]?.[prop]?.concat(result))
+
       setOrdersGroup({
         ...ordersGroup,
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           loading: false,
-          orders: error
-            ? sortOrders(ordersGroup[currentTabSelected]?.orders)
-            : sortOrders(ordersGroup[currentTabSelected]?.orders?.concat(result)),
+          orders: _ordersCleaned('orders').filter(o => !o?.cart_group_id),
+          ordersGrouped: _ordersCleaned('ordersGrouped').filter(o => o?.cart_group_id),
           error: error ? result : null,
           pagination: !error
             ? {
@@ -501,6 +508,19 @@ export const OrderListGroups = (props) => {
     return ordersSorted
   }
 
+  const formatOrdersGrouped = (orders) => {
+    if (!orders?.length) return orders
+    const _obj = {}
+    orders.map(o => {
+      if (_obj?.[`${o.cart_group_id}`]) {
+        _obj[`${o.cart_group_id}`].push(o)
+      } else {
+        _obj[`${o.cart_group_id}`] = [o]
+      }
+    })
+    return _obj
+  }
+
   const getStatusById = (id) => {
     if (!id && id !== 0) return
     const pending = orderGroupStatusCustom?.pending ?? [0, 13]
@@ -520,7 +540,7 @@ export const OrderListGroups = (props) => {
   }
 
   const actionOrderToTab = (orderAux, status, type) => {
-    const orderList = ordersGroup[status]?.orders
+    const orderList = ordersGroup[status]?.[orderAux?.cart_group_id ? 'ordersGrouped' : 'orders']
     let orders
     const order = {
       ...orderAux,
@@ -536,7 +556,7 @@ export const OrderListGroups = (props) => {
         : orderList.filter((_order) => _order.id !== order.id)
     }
 
-    ordersGroup[status].orders = sortOrders(orders)
+    ordersGroup[status][orderAux?.cart_group_id ? 'ordersGrouped' : 'orders'] = sortOrders(orders)
 
     if (type !== 'update') {
       ordersGroup[status].pagination = {
@@ -554,21 +574,21 @@ export const OrderListGroups = (props) => {
     const ordersGroups = order?.order_group?.orders
     if (!ordersGroups) {
       const status = getStatusById(order?.status)
-      const orderList = ordersGroup[status]?.orders
+      const orderList = ordersGroup[status]?.[order?.cart_group_id ? 'ordersGrouped' : 'orders']
       const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
       orderList[indexToUpdate] = order
       setOrdersGroup({
         ...ordersGroup,
         [status]: {
           ...ordersGroup[status],
-          orders: sortOrders(orderList)
+          [order?.cart_group_id ? 'ordersGrouped' : 'orders']: sortOrders(orderList)
         }
       })
     } else {
       const status = getStatusById(order?.order_group?.orders?.[0]?.status)
       let orderList
       ordersGroups.map(order => {
-        orderList = ordersGroup[status]?.orders
+        orderList = ordersGroup[status]?.[order?.cart_group_id ? 'ordersGrouped' : 'orders']
         const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
         orderList[indexToUpdate] = order
       })
@@ -576,7 +596,7 @@ export const OrderListGroups = (props) => {
         ...ordersGroup,
         [status]: {
           ...ordersGroup[status],
-          orders: sortOrders(orderList)
+          [order?.cart_group_id ? 'ordersGrouped' : 'orders']: sortOrders(orderList)
         }
       })
     }
@@ -618,6 +638,74 @@ export const OrderListGroups = (props) => {
     }
   }
 
+  const handleChangeOrderStatus = async (status, orderIds, body = {}) => {
+    try {
+      delete body.id
+      const bodyToSend = Object.keys(body || {}).length > 0 ? body : { status }
+      const setOrderStatus = async (id) => {
+        try {
+          const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders(id).save({ ...bodyToSend, id })
+          return error ? null : result
+        } catch {
+          return null
+        }
+      }
+
+      const result = await Promise.all(orderIds.map(id => setOrderStatus(id)))
+      return result
+    } catch (err) {
+      return err?.message ?? err
+    }
+  }
+
+  const handleSendCustomerReview = async ({ customerId, orderIds, body, onClose }) => {
+    try {
+      const setCustomerReview = async (body) => {
+        try {
+          const response = await fetch(`${ordering.root}/users/${customerId}/user_reviews`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${session.token}`,
+              'Content-Type': 'application/json',
+              'X-App-X': ordering.appId
+            },
+            body: JSON.stringify(body)
+          })
+          const { result, error } = await response.json()
+          return error ? null : result
+        } catch (err) {
+          return null
+        }
+      }
+
+      const result = await Promise.all(orderIds.map(id => setCustomerReview({ ...body, order_id: id, user_id: customerId })))
+      if (result?.length) {
+        const ordersGrupped = ordersGroup[currentTabSelected].ordersGrouped
+        result.map(order => {
+          let orderFound = ordersGrupped.find(o => o.id === order.order_id)
+          const idxOrderFound = ordersGrupped.findIndex(o => o.id === order.order_id)
+
+          if (orderFound) {
+            orderFound = { ...orderFound, user_review: order }
+            ordersGrupped[idxOrderFound] = orderFound
+            setOrdersGroup({
+              ...ordersGroup,
+              ordersGrouped: ordersGrupped
+            })
+          }
+        })
+        showToast(
+          ToastType.Success,
+          t('ORDERS_SUCCESSFULLY_REVIEWED', 'Orders successfully reviewed')
+        )
+      }
+      onClose && onClose()
+      return result
+    } catch (err) {
+      return err?.message ?? err
+    }
+  }
+
   useEffect(() => {
     setCurrentFilters(ordersGroup[currentTabSelected]?.currentFilter)
     if (currentTabSelected === 'logisticOrders') {
@@ -649,7 +737,7 @@ export const OrderListGroups = (props) => {
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
         if (order?.products) {
-          orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === order.id)
+          orderFound = ordersGroup[status]?.[order?.cart_group_id ? 'ordersGrouped' : 'orders']?.find((_order) => _order.id === order.id)
         }
         if (orderFound) break
       }
@@ -839,7 +927,8 @@ export const OrderListGroups = (props) => {
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
-        orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === review.order_id)
+        orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === review.order_id) ??
+          ordersGroup[status]?.ordersGrouped?.find((_order) => _order.id === review.order_id)
         if (orderFound) break
       }
       if (orderFound) {
@@ -879,6 +968,9 @@ export const OrderListGroups = (props) => {
           handleClickLogisticOrder={handleClickLogisticOrder}
           filtered={filtered}
           onFiltered={setFiltered}
+          handleChangeOrderStatus={handleChangeOrderStatus}
+          handleSendCustomerReview={handleSendCustomerReview}
+          ordersGroupedFormatted={formatOrdersGrouped(ordersGroup[currentTabSelected]?.ordersGrouped)}
           isLogisticActivated={isLogisticActivated}
         />
       )}
