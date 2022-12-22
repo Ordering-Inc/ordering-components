@@ -21,7 +21,6 @@ export const RedeemGiftCard = (props) => {
 
   const handleApply = async (values) => {
     try {
-      console.log(values)
       setActionState({ ...actionState, loading: true })
       const requestOptions = {
         method: 'POST',
@@ -37,8 +36,10 @@ export const RedeemGiftCard = (props) => {
         loading: false,
         error: error ? result : null
       })
-      setRedeemedGiftCard(result)
-      events.emit('gift_card_redeemed')
+      if (!error) {
+        setRedeemedGiftCard(result)
+        events.emit('gift_card_redeemed')
+      }
     } catch (err) {
       setActionState({
         loading: false,
