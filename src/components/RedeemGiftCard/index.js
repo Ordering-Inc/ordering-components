@@ -55,6 +55,7 @@ export const RedeemGiftCard = (props) => {
           actionState={actionState}
           redeemedGiftCard={redeemedGiftCard}
           handleApply={handleApply}
+          setRedeemedGiftCard={setRedeemedGiftCard}
         />
       )}
     </>
