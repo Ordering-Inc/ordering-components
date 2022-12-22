@@ -10,7 +10,8 @@ import { useEvent } from '../../contexts/EventContext'
  */
 export const PurchaseGiftCard = (props) => {
   const {
-    UIComponent
+    UIComponent,
+    handleCustomGoToCheckout
   } = props
 
   const [{ token }] = useSession()
@@ -73,14 +74,22 @@ export const PurchaseGiftCard = (props) => {
       quantity: 1
     }
     if (giftCart && selectedProduct?.id === giftCart.products[0]?.id) {
-      events.emit('go_to_page', { page: 'checkout', params: { cartUuid: giftCart.uuid } })
+      if (handleCustomGoToCheckout) {
+        handleCustomGoToCheckout(giftCart.uuid)
+      } else {
+        events.emit('go_to_page', { page: 'checkout', params: { cartUuid: giftCart.uuid } })
+      }
     } else {
       if (giftCart) {
         removeProduct(giftCart.products[0], giftCart)
       }
       const { error, result } = await addProduct(giftCard, null, null, true)
       if (!error) {
-        events.emit('go_to_page', { page: 'checkout', params: { cartUuid: result.uuid } })
+        if (handleCustomGoToCheckout) {
+          handleCustomGoToCheckout(result.uuid)
+        } else {
+          events.emit('go_to_page', { page: 'checkout', params: { cartUuid: result.uuid } })
+        }
       }
     }
   }
