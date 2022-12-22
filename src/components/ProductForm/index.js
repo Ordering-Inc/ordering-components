@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
@@ -20,6 +21,8 @@ export const ProductForm = (props) => {
     productAddedToCartLength,
     professionalList,
     handleUpdateProducts,
+    handleUpdateProfessionals,
+    handleChangeProfessional
   } = props
 
   const requestsState = {}
@@ -477,6 +480,18 @@ export const ProductForm = (props) => {
       }
       if (successful) {
         onSave(productCart, !props.productCart?.code)
+
+        if (isService) {
+          const updatedProfessional = JSON.parse(JSON.stringify(values?.professional))
+          const duration = product?.product?.duration
+          updatedProfessional.busy_times.push({
+            start: values?.serviceTime,
+            end: moment(values?.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
+            duration
+          })
+          handleUpdateProfessionals && handleUpdateProfessionals(updatedProfessional)
+          handleChangeProfessional && handleChangeProfessional(updatedProfessional)
+        }
       }
     }
   }
