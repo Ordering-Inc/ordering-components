@@ -739,6 +739,19 @@ export const BusinessAndProductList = (props) => {
     await Promise.all(allPromise) && setAlertState({ open: true, content: [t('NOT_AVAILABLE_PRODUCTS', 'These products are not available.')] })
   }
 
+  const handleUpdateProfessionals = (selectedProfessional) => {
+    const professionals = businessState?.business?.professionals.map(professional => {
+      if (selectedProfessional?.id === professional?.id) {
+        return {
+          ...professional,
+          ...selectedProfessional
+        }
+      }
+      return professional
+    })
+    setBusinessState({ ...businessState, business: { ...businessState?.business, professionals } })
+  }
+
   useEffect(() => {
     if (!businessState.loading) {
       loadProducts({ newFetch: true })
@@ -856,6 +869,7 @@ export const BusinessAndProductList = (props) => {
           handleChangeProfessionalSelected={handleChangeProfessionalSelected}
           priceFilterValues={priceFilterValues}
           handleChangePriceFilterValues={handleChangePriceFilterValues}
+          handleUpdateProfessionals={handleUpdateProfessionals}
         />
       )}
     </>
