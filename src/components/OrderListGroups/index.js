@@ -42,7 +42,6 @@ export const OrderListGroups = (props) => {
     loading: false,
     error: null,
     orders: [],
-    ordersGrouped: [],
     pagination: {
       currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1)
         ? paginationSettings.initialPage - 1
@@ -307,21 +306,20 @@ export const OrderListGroups = (props) => {
         newFetch
       })
 
-      const _ordersCleaned = (prop) => error
+      const _ordersCleaned = error
         ? (newFetch || newFetchCurrent)
           ? []
-          : sortOrders(ordersGroup[currentTabSelected]?.[prop])
+          : sortOrders(ordersGroup[currentTabSelected]?.orders)
         : (newFetch || newFetchCurrent)
           ? sortOrders(result)
-          : sortOrders(ordersGroup[currentTabSelected]?.[prop].concat(result))
+          : sortOrders(ordersGroup[currentTabSelected]?.orders.concat(result))
 
       setOrdersGroup({
         ...ordersGroup,
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           loading: false,
-          orders: _ordersCleaned('orders').filter(o => !o?.cart_group_id),
-          ordersGrouped: _ordersCleaned('ordersGrouped').filter(o => o?.cart_group_id),
+          orders: _ordersCleaned,
           error: error ? result : null,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
@@ -363,17 +361,16 @@ export const OrderListGroups = (props) => {
         newFetch: true
       })
 
-      const _ordersCleaned = (prop) => error
-        ? sortOrders(ordersGroup[currentTabSelected]?.[prop])
-        : sortOrders(ordersGroup[currentTabSelected]?.[prop]?.concat(result))
+      const _ordersCleaned = error
+        ? sortOrders(ordersGroup[currentTabSelected]?.orders)
+        : sortOrders(ordersGroup[currentTabSelected]?.orders?.concat(result))
 
       setOrdersGroup({
         ...ordersGroup,
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           loading: false,
-          orders: _ordersCleaned('orders').filter(o => !o?.cart_group_id),
-          ordersGrouped: _ordersCleaned('ordersGrouped').filter(o => o?.cart_group_id),
+          orders: _ordersCleaned,
           error: error ? result : null,
           pagination: !error
             ? {
@@ -499,16 +496,21 @@ export const OrderListGroups = (props) => {
   }
 
   const formatOrdersGrouped = (orders) => {
-    if (!orders?.length) return orders
-    const _obj = {}
-    orders.map(o => {
-      if (_obj?.[`${o.cart_group_id}`]) {
-        _obj[`${o.cart_group_id}`].push(o)
-      } else {
-        _obj[`${o.cart_group_id}`] = [o]
-      }
-    })
-    return _obj
+    let totalOrders = orders
+    const ordersGroupids = []
+
+    totalOrders = totalOrders
+      .map(item => {
+        if (!item?.cart_group_id) return item
+
+        const groupIds = totalOrders.filter(o => o.cart_group_id === item?.cart_group_id)
+        const _item = !ordersGroupids.includes(item?.cart_group_id)
+          ? Object.entries({ [item?.cart_group_id]: groupIds }) : ''
+
+        if (_item) ordersGroupids.push(item?.cart_group_id)
+        return _item
+      }).filter(item => item)
+    return totalOrders
   }
 
   const getStatusById = (id) => {
@@ -530,7 +532,7 @@ export const OrderListGroups = (props) => {
   }
 
   const actionOrderToTab = (orderAux, status, type) => {
-    const orderList = ordersGroup[status]?.[orderAux?.cart_group_id ? 'ordersGrouped' : 'orders']
+    const orderList = ordersGroup[status]?.orders
     let orders
     const order = {
       ...orderAux,
@@ -546,14 +548,23 @@ export const OrderListGroups = (props) => {
         : orderList.filter((_order) => _order.id !== order.id)
     }
 
-    ordersGroup[status][orderAux?.cart_group_id ? 'ordersGrouped' : 'orders'] = sortOrders(orders)
+    ordersGroup[status].orders = sortOrders(orders)
+
+    let _pagination = ordersGroup[status].pagination
 
     if (type !== 'update') {
-      ordersGroup[status].pagination = {
+      _pagination = {
         ...ordersGroup[status].pagination,
         total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
       }
+      ordersGroup[status].pagination = _pagination
     }
+
+    setOrdersGroup({
+      ...ordersGroup,
+      orders: sortOrders(orders),
+      pagination: _pagination
+    })
   }
 
   const handleClickOrder = (orderAux) => {
@@ -564,21 +575,21 @@ export const OrderListGroups = (props) => {
     const ordersGroups = order?.order_group?.orders
     if (!ordersGroups) {
       const status = getStatusById(order?.status)
-      const orderList = ordersGroup[status]?.[order?.cart_group_id ? 'ordersGrouped' : 'orders']
+      const orderList = ordersGroup[status]?.orders
       const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
       orderList[indexToUpdate] = order
       setOrdersGroup({
         ...ordersGroup,
         [status]: {
           ...ordersGroup[status],
-          [order?.cart_group_id ? 'ordersGrouped' : 'orders']: sortOrders(orderList)
+          orders: sortOrders(orderList)
         }
       })
     } else {
       const status = getStatusById(order?.order_group?.orders?.[0]?.status)
       let orderList
       ordersGroups.map(order => {
-        orderList = ordersGroup[status]?.[order?.cart_group_id ? 'ordersGrouped' : 'orders']
+        orderList = ordersGroup[status]?.orders
         const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
         orderList[indexToUpdate] = order
       })
@@ -586,7 +597,7 @@ export const OrderListGroups = (props) => {
         ...ordersGroup,
         [status]: {
           ...ordersGroup[status],
-          [order?.cart_group_id ? 'ordersGrouped' : 'orders']: sortOrders(orderList)
+          orders: sortOrders(orderList)
         }
       })
     }
@@ -670,18 +681,15 @@ export const OrderListGroups = (props) => {
 
       const result = await Promise.all(orderIds.map(id => setCustomerReview({ ...body, order_id: id, user_id: customerId })))
       if (result?.length) {
-        const ordersGrupped = ordersGroup[currentTabSelected].ordersGrouped
+        const orders = ordersGroup[currentTabSelected].orders
         result.map(order => {
-          let orderFound = ordersGrupped.find(o => o.id === order.order_id)
-          const idxOrderFound = ordersGrupped.findIndex(o => o.id === order.order_id)
+          let orderFound = orders.find(o => o.id === order.order_id)
+          const idxOrderFound = orders.findIndex(o => o.id === order.order_id)
 
           if (orderFound) {
             orderFound = { ...orderFound, user_review: order }
-            ordersGrupped[idxOrderFound] = orderFound
-            setOrdersGroup({
-              ...ordersGroup,
-              ordersGrouped: ordersGrupped
-            })
+            orders[idxOrderFound] = orderFound
+            setOrdersGroup({ ...ordersGroup, orders })
           }
         })
         showToast(
@@ -727,7 +735,7 @@ export const OrderListGroups = (props) => {
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
         if (order?.products) {
-          orderFound = ordersGroup[status]?.[order?.cart_group_id ? 'ordersGrouped' : 'orders']?.find((_order) => _order.id === order.id)
+          orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === order.id)
         }
         if (orderFound) break
       }
@@ -917,8 +925,7 @@ export const OrderListGroups = (props) => {
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {
         const status = ordersStatusArray[i]
-        orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === review.order_id) ??
-          ordersGroup[status]?.ordersGrouped?.find((_order) => _order.id === review.order_id)
+        orderFound = ordersGroup[status]?.orders?.find((_order) => _order.id === review.order_id)
         if (orderFound) break
       }
       if (orderFound) {
@@ -960,7 +967,7 @@ export const OrderListGroups = (props) => {
           onFiltered={setFiltered}
           handleChangeOrderStatus={handleChangeOrderStatus}
           handleSendCustomerReview={handleSendCustomerReview}
-          ordersGroupedFormatted={formatOrdersGrouped(ordersGroup[currentTabSelected]?.ordersGrouped)}
+          ordersFormatted={formatOrdersGrouped(ordersGroup[currentTabSelected]?.orders)}
           isLogisticActivated={isLogisticActivated}
         />
       )}
