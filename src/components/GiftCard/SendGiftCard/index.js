@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
-import { useLanguage } from '../../contexts/LanguageContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useToast, ToastType } from '../../../contexts/ToastContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
 
 /**
  * Component to manage to send gift card behavior without UI component

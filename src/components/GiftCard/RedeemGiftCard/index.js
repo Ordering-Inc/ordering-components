@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useEvent } from '../../../contexts/EventContext'
 
 /**
  * Component to manage redeem gift card behavior without UI component

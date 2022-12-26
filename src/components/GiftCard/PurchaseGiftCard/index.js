@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useSession } from '../../contexts/SessionContext'
-import { useApi } from '../../contexts/ApiContext'
-import { useOrder } from '../../contexts/OrderContext'
-import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../../contexts/SessionContext'
+import { useApi } from '../../../contexts/ApiContext'
+import { useOrder } from '../../../contexts/OrderContext'
+import { useEvent } from '../../../contexts/EventContext'
 
 /**
  * Component to manage purchase gift card behavior without UI component
