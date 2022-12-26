@@ -1789,7 +1789,7 @@ var OrderProvider = function OrderProvider(_ref) {
         while (1) switch (_context21.prev = _context21.next) {
           case 0:
             if (!(session !== null && session !== void 0 && session.token)) {
-              _context21.next = 37;
+              _context21.next = 38;
               break;
             }
             pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17];
@@ -1797,14 +1797,26 @@ var OrderProvider = function OrderProvider(_ref) {
               attribute: 'status',
               value: pastOrderTypes
             }];
-            if (franchiseId || typeof businessSlug === 'number') {
+            if (franchiseId) {
               where.push({
                 attribute: 'ref_business',
                 conditions: [{
                   attribute: 'franchise_id',
                   value: {
                     condition: '=',
-                    value: franchiseId || businessSlug
+                    value: franchiseId
+                  }
+                }]
+              });
+            }
+            if (typeof businessSlug === 'number' && businessSlug) {
+              where.push({
+                attribute: 'ref_business',
+                conditions: [{
+                  attribute: 'id',
+                  value: {
+                    condition: '=',
+                    value: businessSlug
                   }
                 }]
               });
@@ -1829,22 +1841,22 @@ var OrderProvider = function OrderProvider(_ref) {
                 where: where
               }
             };
-            _context21.next = 8;
+            _context21.next = 9;
             return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(options);
-          case 8:
+          case 9:
             _yield$ordering$setAc20 = _context21.sent;
             _yield$ordering$setAc21 = _yield$ordering$setAc20.content;
             result = _yield$ordering$setAc21.result;
             error = _yield$ordering$setAc21.error;
             if (!(!error && (result === null || result === void 0 ? void 0 : result.length) > 0)) {
-              _context21.next = 34;
+              _context21.next = 35;
               break;
             }
             _noRviewOrder = result === null || result === void 0 ? void 0 : result.find(function (order) {
               return !(order !== null && order !== void 0 && order.review);
             });
             if (!(_noRviewOrder !== null && _noRviewOrder !== void 0 && _noRviewOrder.cart_group_id)) {
-              _context21.next = 31;
+              _context21.next = 32;
               break;
             }
             where.push({
@@ -1858,39 +1870,39 @@ var OrderProvider = function OrderProvider(_ref) {
                 page_size: 10
               }
             };
-            _context21.next = 19;
+            _context21.next = 20;
             return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(_options4);
-          case 19:
+          case 20:
             _yield$ordering$setAc22 = _context21.sent;
             _yield$ordering$setAc23 = _yield$ordering$setAc22.content;
             _result3 = _yield$ordering$setAc23.result;
             _error2 = _yield$ordering$setAc23.error;
             if (_error2) {
-              _context21.next = 28;
+              _context21.next = 29;
               break;
             }
             noReviewOrders = _result3.filter(function (order) {
               return !(order !== null && order !== void 0 && order.review);
             });
             return _context21.abrupt("return", noReviewOrders);
-          case 28:
-            return _context21.abrupt("return", null);
           case 29:
-            _context21.next = 32;
+            return _context21.abrupt("return", null);
+          case 30:
+            _context21.next = 33;
             break;
-          case 31:
-            return _context21.abrupt("return", _noRviewOrder);
           case 32:
-            _context21.next = 35;
+            return _context21.abrupt("return", _noRviewOrder);
+          case 33:
+            _context21.next = 36;
             break;
-          case 34:
-            return _context21.abrupt("return", null);
           case 35:
-            _context21.next = 38;
-            break;
-          case 37:
             return _context21.abrupt("return", null);
+          case 36:
+            _context21.next = 39;
+            break;
           case 38:
+            return _context21.abrupt("return", null);
+          case 39:
           case "end":
             return _context21.stop();
         }
