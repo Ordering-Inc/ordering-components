@@ -287,7 +287,7 @@ var Checkout = function Checkout(props) {
                 error: null
               }));
               _context.next = 7;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/va_por_mi_cuenta.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/va_por_mi_cuenta.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   uuid: cart.uuid
@@ -775,7 +775,7 @@ var Checkout = function Checkout(props) {
             case 0:
               _context7.prev = 0;
               _context7.next = 3;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/is_cash_external_driver_group.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/is_cash_external_driver_group.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   uuid: cart.uuid
@@ -830,7 +830,7 @@ var Checkout = function Checkout(props) {
             case 0:
               _context8.prev = 0;
               _context8.next = 3;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/max_cash_delivery.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/max_cash_delivery.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   uuid: cart.uuid
@@ -889,7 +889,7 @@ var Checkout = function Checkout(props) {
                 loading: true
               }));
               _context9.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/is_catering.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/is_catering.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   uuid: cart.uuid,
@@ -961,7 +961,7 @@ var Checkout = function Checkout(props) {
                 loading: true
               }));
               _context10.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/points_convert.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/points_convert.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   type: 3,
@@ -1052,7 +1052,7 @@ var Checkout = function Checkout(props) {
               case 0:
                 _context11.prev = 0;
                 _context11.next = 3;
-                return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php"), {
+                return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php"), {
                   method: 'POST',
                   body: JSON.stringify({
                     uuid: cart.uuid,

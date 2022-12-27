@@ -731,7 +731,7 @@ var LoginForm = function LoginForm(props) {
               }
 
               _context5.next = 18;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/cellphone_new_user_code.php"), requestParams);
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/cellphone_new_user_code.php"), requestParams);
 
             case 18:
               responseOtp = _context5.sent;
@@ -784,7 +784,7 @@ var LoginForm = function LoginForm(props) {
               }
 
               _context5.next = 37;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
 
             case 37:
               _responseOtp = _context5.sent;
@@ -864,7 +864,7 @@ var LoginForm = function LoginForm(props) {
             case 0:
               _context6.prev = 0;
               _context6.next = 3;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform//wow_search_recover.php?").concat(params), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform//wow_search_recover.php?").concat(params), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -926,7 +926,7 @@ var LoginForm = function LoginForm(props) {
               }
 
               _context7.next = 6;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/cellphone_new_user_signup.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/cellphone_new_user_signup.php"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -1008,7 +1008,7 @@ var LoginForm = function LoginForm(props) {
                 social_id: fbdata === null || fbdata === void 0 ? void 0 : fbdata.social_id
               });
               _context8.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api/facebook.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/facebook.php"), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'

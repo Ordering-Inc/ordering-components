@@ -157,7 +157,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 error: null
               }));
               _context.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api/openpay/cards/cards.php?language=").concat(ordering.language, "&user_id=").concat(user === null || user === void 0 ? void 0 : user.id), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/cards.php?language=").concat(ordering.language, "&user_id=").concat(user === null || user === void 0 ? void 0 : user.id), {
                 method: 'GET',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -271,7 +271,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 error: null
               }));
               _context2.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api/openpay/cards/token.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/token.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   card_number: data.cardNumber,
@@ -309,7 +309,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
             case 11:
               deviceSessionId = window.OpenPay.deviceData.setup();
               _context2.next = 14;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api/openpay/cards/add.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/add.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   language: ordering.language,
@@ -401,7 +401,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 error: null
               }));
               _context3.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api/openpay/cards/delete.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/delete.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   language: ordering.language,
