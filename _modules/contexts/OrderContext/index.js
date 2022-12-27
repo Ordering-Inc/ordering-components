@@ -624,31 +624,46 @@ var OrderProvider = function OrderProvider(_ref) {
    */
   var addProduct = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(product, cart, isQuickAddProduct) {
-      var customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result;
+      var isPlatformProduct,
+        customerFromLocalStorage,
+        userCustomerId,
+        body,
+        _yield$ordering$setAc5,
+        _yield$ordering$setAc6,
+        error,
+        result,
+        _args6 = arguments;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
-            _context6.prev = 0;
+            isPlatformProduct = _args6.length > 3 && _args6[3] !== undefined ? _args6[3] : false;
+            _context6.prev = 1;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context6.next = 4;
+            _context6.next = 5;
             return strategy.getItem('user-customer', true);
-          case 4:
+          case 5:
             customerFromLocalStorage = _context6.sent;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
-            body = {
-              product: product,
-              business_id: cart.business_id,
-              user_id: userCustomerId || session.user.id
-            };
-            _context6.next = 9;
+            if (!isPlatformProduct) {
+              body = {
+                product: product,
+                business_id: cart.business_id,
+                user_id: userCustomerId || session.user.id
+              };
+            } else {
+              body = {
+                platform_product: _objectSpread({}, product)
+              };
+            }
+            _context6.next = 10;
             return ordering.setAccessToken(session.token).carts().addProduct(body, {
               headers: {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
-          case 9:
+          case 10:
             _yield$ordering$setAc5 = _context6.sent;
             _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
             error = _yield$ordering$setAc6.error;
@@ -668,19 +683,40 @@ var OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
+            if (!isPlatformProduct) {
+              _context6.next = 20;
+              break;
+            }
+            return _context6.abrupt("return", {
+              error: error,
+              result: result
+            });
+          case 20:
             return _context6.abrupt("return", !error);
-          case 18:
-            _context6.prev = 18;
-            _context6.t0 = _context6["catch"](0);
+          case 21:
+            _context6.next = 31;
+            break;
+          case 23:
+            _context6.prev = 23;
+            _context6.t0 = _context6["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
+            if (!isPlatformProduct) {
+              _context6.next = 30;
+              break;
+            }
+            return _context6.abrupt("return", {
+              error: true,
+              result: _context6.t0.message
+            });
+          case 30:
             return _context6.abrupt("return", false);
-          case 22:
+          case 31:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[0, 18]]);
+      }, _callee6, null, [[1, 23]]);
     }));
     return function addProduct(_x7, _x8, _x9) {
       return _ref8.apply(this, arguments);

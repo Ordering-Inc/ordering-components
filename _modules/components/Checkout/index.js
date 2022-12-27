@@ -39,7 +39,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Checkout page behavior without UI component
  */
 var Checkout = function Checkout(props) {
-  var _cartState$cart$spot_, _cartState$cart, _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$options2;
+  var _cartState$cart$spot_, _cartState$cart, _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$carts2, _orderState$options2;
   var cartState = props.cartState,
     propsToFetch = props.propsToFetch,
     actionsBeforePlace = props.actionsBeforePlace,
@@ -154,7 +154,7 @@ var Checkout = function Checkout(props) {
   /**
    * Current cart
    */
-  var cart = (_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts["businessId:".concat(businessId)];
+  var cart = businessId && typeof businessId === 'number' ? (_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts["businessId:".concat(businessId)] : (_orderState$carts2 = orderState.carts) === null || _orderState$carts2 === void 0 ? void 0 : _orderState$carts2['businessId:null'];
   /**
    * Timeout for update cart comment
    */
@@ -255,7 +255,7 @@ var Checkout = function Checkout(props) {
             }
             if (orderState.options.type === 1) {
               payload = _objectSpread(_objectSpread({}, payload), {}, {
-                delivery_zone_id: cart.delivery_zone_id
+                delivery_zone_id: cart !== null && cart !== void 0 && cart.business_id ? cart.delivery_zone_id : 0
               });
             }
             if (!handleCustomClick) {
