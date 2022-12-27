@@ -377,15 +377,23 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
-  const addProduct = async (product, cart, isQuickAddProduct) => {
+  const addProduct = async (product, cart, isQuickAddProduct, isPlatformProduct = false) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-      const body = {
-        product,
-        business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id
+
+      let body
+      if (!isPlatformProduct) {
+        body = {
+          product,
+          business_id: cart.business_id,
+          user_id: userCustomerId || session.user.id
+        }
+      } else {
+        body = {
+          platform_product: { ...product }
+        }
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -398,10 +406,18 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
-      return !error
+      if (isPlatformProduct) {
+        return { error, result }
+      } else {
+        return !error
+      }
     } catch (err) {
       setState({ ...state, loading: false })
-      return false
+      if (isPlatformProduct) {
+        return { error: true, result: err.message }
+      } else {
+        return false
+      }
     }
   }
 
