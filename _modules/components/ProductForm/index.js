@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.ProductForm = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
+var _moment = _interopRequireDefault(require("moment"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 var _ApiContext = require("../../contexts/ApiContext");
@@ -47,7 +48,9 @@ var ProductForm = function ProductForm(props) {
     isCartProduct = props.isCartProduct,
     productAddedToCartLength = props.productAddedToCartLength,
     professionalList = props.professionalList,
-    handleUpdateProducts = props.handleUpdateProducts;
+    handleUpdateProducts = props.handleUpdateProducts,
+    handleUpdateProfessionals = props.handleUpdateProfessionals,
+    handleChangeProfessional = props.handleChangeProfessional;
   var requestsState = {};
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
@@ -595,7 +598,7 @@ var ProductForm = function ProductForm(props) {
    */
   var handleSave = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
-      var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, changes, currentProduct, _props$productCart7;
+      var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, changes, currentProduct, _props$productCart7, _product$product8, updatedProfessional, duration;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -641,6 +644,17 @@ var ProductForm = function ProductForm(props) {
           case 18:
             if (successful) {
               onSave(productCart, !((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code));
+              if (isService) {
+                updatedProfessional = JSON.parse(JSON.stringify(values === null || values === void 0 ? void 0 : values.professional));
+                duration = product === null || product === void 0 ? void 0 : (_product$product8 = product.product) === null || _product$product8 === void 0 ? void 0 : _product$product8.duration;
+                updatedProfessional.busy_times.push({
+                  start: values === null || values === void 0 ? void 0 : values.serviceTime,
+                  end: (0, _moment.default)(values === null || values === void 0 ? void 0 : values.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
+                  duration: duration
+                });
+                handleUpdateProfessionals && handleUpdateProfessionals(updatedProfessional);
+                handleChangeProfessional && handleChangeProfessional(updatedProfessional);
+              }
             }
           case 19:
           case "end":
