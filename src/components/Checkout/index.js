@@ -74,7 +74,7 @@ export const Checkout = (props) => {
   /**
    * Current cart
    */
-  const cart = orderState.carts?.[`businessId:${businessId}`]
+  const cart = businessId && typeof businessId === 'number' ? orderState.carts?.[`businessId:${businessId}`] : orderState.carts?.['businessId:null']
   /**
    * Timeout for update cart comment
    */
@@ -153,7 +153,7 @@ export const Checkout = (props) => {
     if (orderState.options.type === 1) {
       payload = {
         ...payload,
-        delivery_zone_id: cart.delivery_zone_id
+        delivery_zone_id: cart?.business_id ? cart.delivery_zone_id : 0
       }
     }
 
