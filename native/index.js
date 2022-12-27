@@ -66,11 +66,14 @@ import { ProductOptionSuboption } from '../src/components/ProductOptionSuboption
 import { ProductsList } from '../src/components/ProductsList'
 import { ProductsListing } from '../src/components/ProductsListing'
 import { PromotionsController } from '../src/components/PromotionsController'
+import { PurchaseGiftCard } from '../src/components/GiftCard/PurchaseGiftCard'
+import { RedeemGiftCard } from '../src/components/GiftCard/RedeemGiftCard'
 import { ResetPassword } from '../src/components/ResetPassword'
 import { ReviewCustomer } from '../src/components/ReviewCustomer'
 import { ReviewDriver } from '../src/components/ReviewDriver'
 import { ReviewProduct } from '../src/components/ReviewProduct'
 import { SearchOptions } from '../src/components/SearchOptions'
+import { SendGiftCard } from '../src/components/GiftCard/SendGiftCard'
 import { Sessions } from '../src/components/Sessions'
 import { SignupForm } from '../src/components/SignupForm'
 import { SingleBusinessCard } from '../src/components/SingleBusinessCard'
@@ -173,11 +176,14 @@ export {
   ProductsList,
   ProductsListing,
   PromotionsController,
+  PurchaseGiftCard,
+  RedeemGiftCard,
   ResetPassword,
   ReviewCustomer,
   ReviewDriver,
   ReviewProduct,
   SearchOptions,
+  SendGiftCard,
   Sessions,
   SignupForm,
   SingleBusinessCard,

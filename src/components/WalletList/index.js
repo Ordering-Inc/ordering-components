@@ -14,6 +14,7 @@ export const WalletList = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ token, user }] = useSession()
+  const [events] = useEvent()
   const [walletSelected, setWalletSelected] = useState(null)
 
   const [state, setState] = useState({ wallets: [], loading: true, error: null })
@@ -132,6 +133,13 @@ export const WalletList = (props) => {
       getTransactions(walletSelected)
     }
   }, [walletSelected])
+
+  useEffect(() => {
+    events.on('gift_card_redeemed', getWallets)
+    return () => {
+      events.off('gift_card_redeemed', getWallets)
+    }
+  }, [])
 
   return (
     <>
