@@ -63,7 +63,7 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api/openpay/cards/cards.php?language=${ordering.language}&user_id=${user?.id}`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/cards.php?language=${ordering.language}&user_id=${user?.id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -138,7 +138,7 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api/openpay/cards/token.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/token.php`, {
         method: 'POST',
         body: JSON.stringify({
           card_number: data.cardNumber,
@@ -163,7 +163,7 @@ export const PaymentOptionOpenPay = (props) => {
         return
       }
       const deviceSessionId = window.OpenPay.deviceData.setup()
-      const responseCard = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api/openpay/cards/add.php`, {
+      const responseCard = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/add.php`, {
         method: 'POST',
         body: JSON.stringify({
           language: ordering.language,
@@ -226,7 +226,7 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api/openpay/cards/delete.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/delete.php`, {
         method: 'POST',
         body: JSON.stringify({
           language: ordering.language,
