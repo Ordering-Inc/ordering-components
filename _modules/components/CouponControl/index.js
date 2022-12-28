@@ -91,7 +91,7 @@ var CouponControl = function CouponControl(props) {
         coupon: couponInput,
         force: true
       };
-      if (user.id) dataOffer.userId = user === null || user === void 0 ? void 0 : user.id; // Callcenter
+      if (user !== null && user !== void 0 && user.id) dataOffer.userId = user === null || user === void 0 ? void 0 : user.id; // Callcenter
       applyOffer(dataOffer);
     }
   };
