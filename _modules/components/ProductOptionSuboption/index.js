@@ -80,7 +80,7 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
     if (option.limit_suboptions_by_max && (balance === option.max || state.quantity === suboption.max)) {
       return;
     }
-    if (!option.limit_suboptions_by_max && state.quantity === option.max) {
+    if (!option.limit_suboptions_by_max && state.quantity === suboption.max) {
       return;
     }
     changeState(_objectSpread(_objectSpread({}, state), {}, {
