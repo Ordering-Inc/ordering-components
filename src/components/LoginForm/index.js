@@ -410,6 +410,10 @@ export const LoginForm = (props) => {
         headers: { 'Content-Type': 'application/json' }
       })
       const text = await response.text()
+      if (text.toString() === 'Lo sentimos, estamos en mantenimiento.') {
+        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: text } })
+        return text
+      }
       return text
     } catch (err) {
       setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: err.message } })
