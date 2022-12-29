@@ -112,7 +112,7 @@ export const OrderListGroups = (props) => {
             attribute: 'id',
             value: {
               condition: '!=',
-              value: ordersGroup[currentTabSelected]?.orders.map((o) => o.id)
+              value: ordersGroup[currentTabSelected]?.orders?.map((o) => o.id)
             }
           })
         }
@@ -268,7 +268,7 @@ export const OrderListGroups = (props) => {
     }
 
     if (newFetch) {
-      ordersStatusArray.map(tab => {
+      ordersStatusArray?.map(tab => {
         ordersGroup = {
           ...ordersGroup,
           [tab]: {
@@ -445,7 +445,7 @@ export const OrderListGroups = (props) => {
       }
 
       const isError = errorState.some((e) => e.error)
-      const idsDeleted = errorState.map((obj) => !obj.error && obj.id)
+      const idsDeleted = errorState?.map((obj) => !obj.error && obj.id)
 
       onOrdersDeleted && onOrdersDeleted({ isError, list: idsDeleted })
       setOrdersDeleted({ ...ordersDeleted, loading: false })
@@ -510,7 +510,7 @@ export const OrderListGroups = (props) => {
     const ordersGroupids = []
 
     totalOrders = totalOrders
-      .map(item => {
+      ?.map(item => {
         if (!item?.cart_group_id) return item
 
         const groupIds = totalOrders.filter(o => o.cart_group_id === item?.cart_group_id)
@@ -598,7 +598,7 @@ export const OrderListGroups = (props) => {
     } else {
       const status = getStatusById(order?.order_group?.orders?.[0]?.status)
       let orderList
-      ordersGroups.map(order => {
+      ordersGroups?.map(order => {
         orderList = ordersGroup[status]?.orders
         const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
         orderList[indexToUpdate] = order
@@ -662,7 +662,7 @@ export const OrderListGroups = (props) => {
         }
       }
 
-      const result = await Promise.all(orderIds.map(id => setOrderStatus(id)))
+      const result = await Promise.all(orderIds?.map(id => setOrderStatus(id)))
       return result
     } catch (err) {
       return err?.message ?? err
@@ -689,10 +689,10 @@ export const OrderListGroups = (props) => {
         }
       }
 
-      const result = await Promise.all(orderIds.map(id => setCustomerReview({ ...body, order_id: id, user_id: customerId })))
+      const result = await Promise.all(orderIds?.map(id => setCustomerReview({ ...body, order_id: id, user_id: customerId })))
       if (result?.length) {
         const orders = ordersGroup[currentTabSelected].orders
-        result.map(order => {
+        result?.map(order => {
           let orderFound = orders.find(o => o.id === order.order_id)
           const idxOrderFound = orders.findIndex(o => o.id === order.order_id)
 
