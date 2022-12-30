@@ -100,18 +100,15 @@ export const CardForm = (props) => {
     setLoading(true)
     event.preventDefault()
     let card = elements?.getElement(CardElement)
+    const userName = user?.lastname ? `${user?.name} ${user?.lastname}` : user?.name
+    const userAddress = user?.address && { line1: user?.address }
 
-    let billing_data = {
-      name: (!user?.name || !user?.lastname) ? `${user?.name && user?.name} ${user?.lastname && user?.lastname}`.replace(/ /g, '') : `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
-      email: user.email,
-    }
+    const billingData = { email: user.email }
+    userName && (billingData.name = userName)
+    userAddress && (billingData.address = userAddress)
 
     if (isSplitForm) {
       card = elements?.getElement(CardNumberElement)
-      billing_data = {
-        name: (!user?.name || !user?.lastname) ? `${user?.name && user?.name} ${user?.lastname && user?.lastname}`.replace(/ /g, '') : `${user?.name && user?.name} ${user?.lastname && user?.lastname}`,
-        email: user.email,
-      }
     }
 
     if (!requirements) {
@@ -122,7 +119,7 @@ export const CardForm = (props) => {
       const result = await stripe.createPaymentMethod({
         type: 'card',
         card: card,
-        billing_details: !user?.address ? billing_data : { ...billing_data, address: user?.address },
+        billing_details: billingData
       })
       if (result.error) {
         setLoading(false)
@@ -140,7 +137,6 @@ export const CardForm = (props) => {
             last4: result?.paymentMethod.card.last4
           }
         })
-        // props.handlerToken(result?.paymentMethod)
       }
     } else {
       if (!stripe) {
@@ -152,7 +148,7 @@ export const CardForm = (props) => {
         {
           payment_method: {
             card: card,
-            billing_details: billing_data
+            billing_details: billingData
           }
         }
       )
