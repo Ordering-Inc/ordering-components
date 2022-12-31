@@ -10,6 +10,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../contexts/SessionContext");
 var _EventContext = require("../../contexts/EventContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
+var _ConfigContext = require("../../contexts/ConfigContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -20,6 +21,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var NewOrderNotification = function NewOrderNotification(props) {
+  var _configs$logistic_mod;
   var UIComponent = props.UIComponent;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
@@ -30,16 +32,22 @@ var NewOrderNotification = function NewOrderNotification(props) {
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+    _useConfig2 = _slicedToArray(_useConfig, 1),
+    configs = _useConfig2[0].configs;
+  var isLogisticActivated = configs === null || configs === void 0 ? void 0 : (_configs$logistic_mod = configs.logistic_module) === null || _configs$logistic_mod === void 0 ? void 0 : _configs$logistic_mod.value;
+  var handleActionEvent = function handleActionEvent(event, value) {
+    var evts = {
+      messages: 'message_added_notification',
+      order_added: 'order_added_notification',
+      order_updated: 'order_updated_notification',
+      request_register: 'request_register_notification',
+      request_update: 'request_update_notification'
+    };
+    events.emit(evts[event], value);
+  };
   (0, _react.useEffect)(function () {
     if (!token) return;
-    var handleActionEvent = function handleActionEvent(event, value) {
-      var evts = {
-        messages: 'message_added_notification',
-        order_added: 'order_added_notification',
-        order_updated: 'order_updated_notification'
-      };
-      events.emit(evts[event], value);
-    };
     socket.on('message', function (e) {
       return handleActionEvent('messages', e);
     });
@@ -62,18 +70,40 @@ var NewOrderNotification = function NewOrderNotification(props) {
     };
   }, [socket, user]);
   (0, _react.useEffect)(function () {
+    if (isLogisticActivated) {
+      socket.on('request_register', function (e) {
+        return handleActionEvent('request_register', e);
+      });
+      socket.on('request_update', function (e) {
+        return handleActionEvent('request_update', e);
+      });
+    }
+    return function () {
+      socket.off('request_register');
+      socket.off('request_update');
+    };
+  }, [socket, user, isLogisticActivated]);
+  (0, _react.useEffect)(function () {
     if (!token) return;
     socket.on('disconnect', function () {
       socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
       socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.join("requests_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.join("ordergroups_".concat(user === null || user === void 0 ? void 0 : user.id));
     });
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id);
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id);
+    var requestsRoom = "requests_".concat(user === null || user === void 0 ? void 0 : user.id);
+    var groupsRoom = "ordergroups_".concat(user === null || user === void 0 ? void 0 : user.id);
     socket.join(messagesOrdersRoom);
     socket.join(ordersRoom);
+    socket.join(requestsRoom);
+    socket.join(groupsRoom);
     return function () {
       socket.leave(messagesOrdersRoom);
       socket.leave(ordersRoom);
+      socket.leave(requestsRoom);
+      socket.leave(groupsRoom);
     };
   }, [socket, user]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));
