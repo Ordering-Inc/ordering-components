@@ -271,8 +271,8 @@ export const ProductForm = (props) => {
    * @param {number} suboptionId Suboption id
    */
   const removeRelatedOptions = (productCart, suboptionId) => {
-    product?.product?.extras?.forEach(_extra => {
-      _extra?.options?.forEach(_option => {
+    product.product.extras.forEach(_extra => {
+      _extra.options.forEach(_option => {
         if (_option.respect_to === suboptionId) {
           const suboptions = productCart.options[`id:${_option.id}`]?.suboptions
           if (suboptions) {
@@ -415,32 +415,32 @@ export const ProductForm = (props) => {
     if (!product?.product) {
       return errors
     }
-    product?.product?.extras?.forEach(extra => {
-      extra?.options?.map(option => {
-        const suboptions = productCart?.options[`id:${option.id}`]?.suboptions
+    product.product?.extras?.forEach(extra => {
+      extra.options.map(option => {
+        const suboptions = productCart.options[`id:${option.id}`]?.suboptions
         const quantity = suboptions
-          ? (option?.limit_suboptions_by_max
-            ? Object?.values(suboptions)?.reduce((count, suboption) => {
-              return count + suboption?.quantity
-            }, 0) : Object?.keys(suboptions)?.length)
+          ? (option.limit_suboptions_by_max
+            ? Object.values(suboptions).reduce((count, suboption) => {
+              return count + suboption.quantity
+            }, 0) : Object.keys(suboptions)?.length)
           : 0
         let evaluateRespectTo = false
-        if (option?.respect_to && productCart?.options) {
+        if (option.respect_to && productCart.options) {
           const options = productCart?.options
           for (const key in options) {
             const _option = options[key]
-            if (_option.suboptions[`id:${option?.respect_to}`]?.selected) {
+            if (_option.suboptions[`id:${option.respect_to}`]?.selected) {
               evaluateRespectTo = true
               break
             }
           }
         }
-        const evaluate = option?.respect_to ? evaluateRespectTo : true
+        const evaluate = option.respect_to ? evaluateRespectTo : true
         if (option?.suboptions?.length > 0 && evaluate) {
-          if (option?.min > quantity) {
-            errors[`id:${option?.id}`] = true
-          } else if (option?.max < quantity) {
-            errors[`id:${option?.id}`] = true
+          if (option.min > quantity) {
+            errors[`id:${option.id}`] = true
+          } else if (option.max < quantity) {
+            errors[`id:${option.id}`] = true
           }
         }
       })
@@ -616,13 +616,13 @@ export const ProductForm = (props) => {
    * Check if there is an option required with one suboption
    */
   useEffect(() => {
-    if (product?.product && product?.product?.extras?.length > 0) {
-      const options = [].concat(...product?.product?.extras?.map(extra => extra?.options?.filter(
+    if (product?.product && product.product?.extras?.length > 0) {
+      const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
         option => (
-          (option?.min === 1 &&
-            option?.max === 1 &&
-            option?.suboptions?.filter(suboption => suboption?.enabled)?.length === 1) ||
-          option?.suboptions?.filter(suboption => suboption?.preselected)?.length > 0
+          (option.min === 1 &&
+            option.max === 1 &&
+            option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
+          option.suboptions.filter(suboption => suboption.preselected).length > 0
         )
       )))
 
@@ -670,7 +670,7 @@ export const ProductForm = (props) => {
   if (isStarbucks) {
     useEffect(() => {
       if (product?.product && Object.keys(product?.product).length) {
-        const options = [].concat(...product?.product?.extras?.map(extra => extra.options.filter(
+        const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
           option => (
             option.name === 'Tamaño' &&
             option.suboptions.filter(suboption => suboption.name === 'Grande (16oz - 437ml)').length === 1
