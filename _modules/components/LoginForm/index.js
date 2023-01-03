@@ -878,10 +878,24 @@ var LoginForm = function LoginForm(props) {
 
             case 6:
               text = _context6.sent;
+
+              if (!(text.toString() === 'Lo sentimos, estamos en mantenimiento.')) {
+                _context6.next = 10;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: text
+                }
+              }));
               return _context6.abrupt("return", text);
 
             case 10:
-              _context6.prev = 10;
+              return _context6.abrupt("return", text);
+
+            case 13:
+              _context6.prev = 13;
               _context6.t0 = _context6["catch"](0);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
@@ -889,12 +903,12 @@ var LoginForm = function LoginForm(props) {
                 }
               }));
 
-            case 13:
+            case 16:
             case "end":
               return _context6.stop();
           }
         }
-      }, _callee6, null, [[0, 10]]);
+      }, _callee6, null, [[0, 13]]);
     }));
 
     return function alseaOtpConsult(_x8) {
