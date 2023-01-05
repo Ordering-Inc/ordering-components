@@ -525,6 +525,18 @@ Object.defineProperty(exports, "NewOrderNotification", {
     return _NewOrderNotification.NewOrderNotification;
   }
 });
+Object.defineProperty(exports, "OptimizationLoadContext", {
+  enumerable: true,
+  get: function get() {
+    return _OptimizationLoadContext.OptimizationLoadContext;
+  }
+});
+Object.defineProperty(exports, "OptimizationLoadProvider", {
+  enumerable: true,
+  get: function get() {
+    return _OptimizationLoadContext.OptimizationLoadProvider;
+  }
+});
 Object.defineProperty(exports, "OrderContext", {
   enumerable: true,
   get: function get() {
@@ -993,6 +1005,12 @@ Object.defineProperty(exports, "WalletList", {
     return _WalletList.WalletList;
   }
 });
+Object.defineProperty(exports, "WebStrategy", {
+  enumerable: true,
+  get: function get() {
+    return _webStrategy.WebStrategy;
+  }
+});
 Object.defineProperty(exports, "WebsocketContext", {
   enumerable: true,
   get: function get() {
@@ -1045,6 +1063,12 @@ Object.defineProperty(exports, "useLanguage", {
   enumerable: true,
   get: function get() {
     return _LanguageContext.useLanguage;
+  }
+});
+Object.defineProperty(exports, "useOptimizationLoad", {
+  enumerable: true,
+  get: function get() {
+    return _OptimizationLoadContext.useOptimizationLoad;
   }
 });
 Object.defineProperty(exports, "useOrder", {
@@ -1201,6 +1225,8 @@ var _CustomerContext = require("./contexts/CustomerContext");
 var _ValidationsFieldsContext = require("./contexts/ValidationsFieldsContext");
 var _ToastContext = require("./contexts/ToastContext");
 var _OrderingThemeContext = require("./contexts/OrderingThemeContext");
+var _OptimizationLoadContext = require("./contexts/OptimizationLoadContext");
+var _webStrategy = require("./webStrategy");
 var _PlaceSpot = require("./components/PlaceSpot");
 var _PaymethodList = require("./components/PaymethodList");
 var _PaymentOptionCash = require("./components/PaymentOptionCash");
