@@ -142,7 +142,7 @@ export const PhoneAutocomplete = (props) => {
     if (
       phone &&
       phone.length >= 7 &&
-      customersPhones?.users?.length === 0
+      (customersPhones?.users?.length === 0 || phone.length === 7)
     ) {
       getUsers()
     }

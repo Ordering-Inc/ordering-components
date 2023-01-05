@@ -38,13 +38,13 @@ export const MultiCheckout = (props) => {
   */
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
 
-  const openCarts = (Object.values(carts)?.filter(cart => cart?.valid && cart?.group?.uuid === cartUuid) || null) || []
-  const totalCartsPrice = openCarts && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
-  const cartsUuids = openCarts.reduce((uuids, cart) => [...uuids, cart.uuid], [])
-
   const [placing, setPlacing] = useState(false)
   const [paymethodSelected, setPaymethodSelected] = useState({})
   const [cartGroup, setCartGroup] = useState({ loading: true, error: null, result: null })
+
+  const openCarts = (cartGroup?.result?.carts?.filter(cart => cart?.valid && cart?.status !== 1) || null) || []
+  const totalCartsPrice = openCarts?.length && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
+  const totalCartsFee = openCarts?.length && openCarts?.filter(cart => cart?.status !== 1 && cart?.valid)?.reduce((total, cart) => { return total + (cart?.delivery_price_with_discount) }, 0)
 
   const handleGroupPlaceOrder = async () => {
     let paymethodData = paymethodSelected?.paymethod_data
@@ -237,6 +237,7 @@ export const MultiCheckout = (props) => {
           deliveryOptionSelected={deliveryOptionSelected}
           instructionsOptions={instructionsOptions}
           cartGroup={cartGroup}
+          totalCartsFee={totalCartsFee}
         />
       )}
     </>
