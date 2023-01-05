@@ -104,6 +104,8 @@ import { CustomerContext, CustomerProvider, useCustomer } from './contexts/Custo
 import { ValidationFieldsContext, ValidationFieldsProvider, useValidationFields } from './contexts/ValidationsFieldsContext'
 import { ToastContext, ToastProvider, useToast, ToastType } from './contexts/ToastContext'
 import { OrderingThemeContext, OrderingThemeProvider, useOrderingTheme } from './contexts/OrderingThemeContext'
+import { OptimizationLoadContext, OptimizationLoadProvider, useOptimizationLoad } from './contexts/OptimizationLoadContext'
+import { WebStrategy } from './webStrategy'
 import { PlaceSpot } from './components/PlaceSpot'
 import { PaymethodList } from './components/PaymethodList'
 import { PaymentOptionCash } from './components/PaymentOptionCash'
@@ -336,6 +338,10 @@ export {
   OrderingThemeContext,
   OrderingThemeProvider,
   useOrderingTheme,
+  OptimizationLoadContext,
+  OptimizationLoadProvider,
+  useOptimizationLoad,
+  WebStrategy,
   // Constants
   CODES
 }
