@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useApi } from '../ApiContext'
 import { useLanguage } from '../LanguageContext'
 import { useEvent } from '../EventContext'
+import { useOptimizationLoad } from '../OptimizationLoadContext'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -23,6 +24,7 @@ export const ConfigProvider = ({ children, strategy }) => {
   const [languageState] = useLanguage()
   const [ordering] = useApi()
   const [events] = useEvent()
+  const [optimizationLoad] = useOptimizationLoad()
 
   const customConfigs = {
     max_days_preorder: {
@@ -107,7 +109,7 @@ export const ConfigProvider = ({ children, strategy }) => {
     }
   }
 
-  const refreshConfigs = async (newCountryCode) => {
+  const refreshConfigs = async (newCountryCode, configs = null) => {
     try {
       !state.loading && setState({ ...state, loading: true })
       const countryCode = newCountryCode ?? await strategy.getItem('country-code')
@@ -118,7 +120,13 @@ export const ConfigProvider = ({ children, strategy }) => {
           'X-Country-Code-X': countryCode
         }
       }
-      const { content: { error, result } } = await ordering.configs().asDictionary().get(options)
+      let error = configs?.error ?? null
+      let result = configs?.result ?? null
+      if (!configs) {
+        const { content } = await ordering.configs().asDictionary().get(options)
+        error = content.error
+        result = content.result
+      }
       let data = null
       try {
         const response = await fetch('https://ipapi.co/json/')
@@ -162,10 +170,16 @@ export const ConfigProvider = ({ children, strategy }) => {
   }
 
   useEffect(() => {
-    if (!languageState.loading) {
-      refreshConfigs()
-    }
-  }, [languageState])
+    if (languageState.loading || optimizationLoad.loading) return
+    const _configs = optimizationLoad.result ? {
+      error: optimizationLoad.error,
+      result: {
+        ...optimizationLoad.result?.configs,
+        ...optimizationLoad.result?.features
+      }
+    } : null
+    refreshConfigs(null, _configs)
+  }, [languageState, optimizationLoad])
 
   useEffect(() => {
     const handleUpdateConfigs = (countryCode) => {
