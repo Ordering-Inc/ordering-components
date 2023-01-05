@@ -1,12 +1,12 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
-import { useTheme } from 'styled-components'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useOrderingTheme } from '../../contexts/OrderingThemeContext'
 dayjs.extend(utc)
 
 export const BusinessList = (props) => {
@@ -52,7 +52,7 @@ export const BusinessList = (props) => {
   const [orderByValue, setOrderByValue] = useState(initialOrderByValue ?? null)
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
-  const theme = useTheme()
+  const [orderingTheme] = useOrderingTheme()
   const [ordering] = useApi()
   const [{ auth, token }] = useSession()
   const [requestsState, setRequestsState] = useState({})
@@ -62,7 +62,7 @@ export const BusinessList = (props) => {
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   const advancedSearchEnabled = configs?.advanced_business_search_enabled?.value === '1'
-  const showCities = (!theme?.business_listing_view?.components?.cities?.hidden && orderState?.options?.type === 2 && !props.disabledCities) ?? false
+  const showCities = (!orderingTheme?.business_listing_view?.components?.cities?.hidden && orderState?.options?.type === 2 && !props.disabledCities) ?? false
 
   const sortBusinesses = (array, option) => {
     if (option === 'review') {
