@@ -149,6 +149,10 @@ var OrderListGroups = function OrderListGroups(props) {
     _useState16 = _slicedToArray(_useState15, 2),
     controlsState = _useState16[0],
     setControlsState = _useState16[1];
+  var _useState17 = (0, _react.useState)([]),
+    _useState18 = _slicedToArray(_useState17, 2),
+    businessIDs = _useState18[0],
+    setBusinessIDs = _useState18[1];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var getOrders = /*#__PURE__*/function () {
@@ -1083,6 +1087,54 @@ var OrderListGroups = function OrderListGroups(props) {
       return _ref14.apply(this, arguments);
     };
   }();
+  var getBusinessesIDs = /*#__PURE__*/function () {
+    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
+      var propsToFetch, _yield$ordering$busin, _yield$ordering$busin2, error, result, _businessIDs, _err$message6;
+      return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+        while (1) switch (_context13.prev = _context13.next) {
+          case 0:
+            propsToFetch = ['id', 'name'];
+            _context13.prev = 1;
+            _context13.next = 4;
+            return ordering.businesses().asDashboard().select(propsToFetch).get();
+          case 4:
+            _yield$ordering$busin = _context13.sent;
+            _yield$ordering$busin2 = _yield$ordering$busin.content;
+            error = _yield$ordering$busin2.error;
+            result = _yield$ordering$busin2.result;
+            if (!error) {
+              _businessIDs = result.length > 0 && result.map(function (_ref17) {
+                var id = _ref17.id;
+                return id;
+              });
+              setBusinessIDs(_businessIDs);
+            }
+            _context13.next = 14;
+            break;
+          case 11:
+            _context13.prev = 11;
+            _context13.t0 = _context13["catch"](1);
+            if (_context13.t0.constructor.name !== 'Cancel') {
+              setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
+                loading: false,
+                error: [(_err$message6 = _context13.t0 === null || _context13.t0 === void 0 ? void 0 : _context13.t0.message) !== null && _err$message6 !== void 0 ? _err$message6 : 'ERROR']
+              }))));
+            }
+          case 14:
+          case "end":
+            return _context13.stop();
+        }
+      }, _callee13, null, [[1, 11]]);
+    }));
+    return function getBusinessesIDs() {
+      return _ref16.apply(this, arguments);
+    };
+  }();
+  (0, _react.useEffect)(function () {
+    var _session$user4;
+    if ((session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) !== 2) return;
+    getBusinessesIDs();
+  }, []);
   (0, _react.useEffect)(function () {
     var _ordersGroup$currentT16;
     setCurrentFilters((_ordersGroup$currentT16 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT16 === void 0 ? void 0 : _ordersGroup$currentT16.currentFilter);
@@ -1109,10 +1161,11 @@ var OrderListGroups = function OrderListGroups(props) {
     });
   }, [filtered]);
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT19, _session$user5, _session$user6;
+    var _ordersGroup$currentT19, _session$user7, _session$user8;
     if ((_ordersGroup$currentT19 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT19 !== void 0 && _ordersGroup$currentT19.loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _orderFound, _orderFound$driver, _order$driver, _session$user4;
+      var _session$user5, _orderFound, _orderFound$driver, _order$driver, _session$user6;
+      if ((session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
       events.emit('order_updated', order);
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
@@ -1137,7 +1190,7 @@ var OrderListGroups = function OrderListGroups(props) {
         !currentFilter.includes(order.status) ? actionOrderToTab(order, getStatusById(order === null || order === void 0 ? void 0 : order.status), 'remove') : actionOrderToTab(order, getStatusById(order === null || order === void 0 ? void 0 : order.status), 'add');
         return;
       }
-      if (orderFound.id === order.id && ((_orderFound = orderFound) === null || _orderFound === void 0 ? void 0 : (_orderFound$driver = _orderFound.driver) === null || _orderFound$driver === void 0 ? void 0 : _orderFound$driver.id) !== (order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) && (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 4) {
+      if (orderFound.id === order.id && ((_orderFound = orderFound) === null || _orderFound === void 0 ? void 0 : (_orderFound$driver = _orderFound.driver) === null || _orderFound$driver === void 0 ? void 0 : _orderFound$driver.id) !== (order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) && (session === null || session === void 0 ? void 0 : (_session$user6 = session.user) === null || _session$user6 === void 0 ? void 0 : _session$user6.level) === 4) {
         actionOrderToTab(orderFound, getStatusById(orderFound.status), 'remove');
       }
       if (orderFound.id === order.id) {
@@ -1176,7 +1229,7 @@ var OrderListGroups = function OrderListGroups(props) {
     };
     socket.on('orders_register', handleAddNewOrder);
     socket.on('update_order', handleUpdateOrder);
-    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user6 = session.user) === null || _session$user6 === void 0 ? void 0 : _session$user6.id);
+    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
     return function () {
       socket.off('orders_register', handleAddNewOrder);
@@ -1237,20 +1290,20 @@ var OrderListGroups = function OrderListGroups(props) {
     };
   }, [socket, session, isLogisticActivated]);
   (0, _react.useEffect)(function () {
-    var _session$user11, _session$user12, _session$user13, _session$user14;
+    var _session$user13, _session$user14, _session$user15, _session$user16;
     if (!session.user) return;
     socket.on('disconnect', function () {
-      var _session$user7, _session$user8, _session$user9, _session$user10;
-      var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
+      var _session$user9, _session$user10, _session$user11, _session$user12;
+      var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user9 = session.user) === null || _session$user9 === void 0 ? void 0 : _session$user9.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user10 = session.user) === null || _session$user10 === void 0 ? void 0 : _session$user10.id);
       socket.join(ordersRoom);
-      var requestsRoom = "requests_".concat(session === null || session === void 0 ? void 0 : (_session$user9 = session.user) === null || _session$user9 === void 0 ? void 0 : _session$user9.id);
+      var requestsRoom = "requests_".concat(session === null || session === void 0 ? void 0 : (_session$user11 = session.user) === null || _session$user11 === void 0 ? void 0 : _session$user11.id);
       socket.join(requestsRoom);
-      var groupsRoom = "ordergroups_".concat(session === null || session === void 0 ? void 0 : (_session$user10 = session.user) === null || _session$user10 === void 0 ? void 0 : _session$user10.id);
+      var groupsRoom = "ordergroups_".concat(session === null || session === void 0 ? void 0 : (_session$user12 = session.user) === null || _session$user12 === void 0 ? void 0 : _session$user12.id);
       socket.join(groupsRoom);
     });
-    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user11 = session.user) === null || _session$user11 === void 0 ? void 0 : _session$user11.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user12 = session.user) === null || _session$user12 === void 0 ? void 0 : _session$user12.id);
-    var requestsRoom = "requests_".concat(session === null || session === void 0 ? void 0 : (_session$user13 = session.user) === null || _session$user13 === void 0 ? void 0 : _session$user13.id);
-    var groupsRoom = "ordergroups_".concat(session === null || session === void 0 ? void 0 : (_session$user14 = session.user) === null || _session$user14 === void 0 ? void 0 : _session$user14.id);
+    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user13 = session.user) === null || _session$user13 === void 0 ? void 0 : _session$user13.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user14 = session.user) === null || _session$user14 === void 0 ? void 0 : _session$user14.id);
+    var requestsRoom = "requests_".concat(session === null || session === void 0 ? void 0 : (_session$user15 = session.user) === null || _session$user15 === void 0 ? void 0 : _session$user15.id);
+    var groupsRoom = "ordergroups_".concat(session === null || session === void 0 ? void 0 : (_session$user16 = session.user) === null || _session$user16 === void 0 ? void 0 : _session$user16.id);
     socket.join(ordersRoom);
     socket.join(requestsRoom);
     socket.join(groupsRoom);
