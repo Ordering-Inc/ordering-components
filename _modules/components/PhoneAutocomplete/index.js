@@ -117,12 +117,17 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
                 condition: 'ilike',
                 value: isIos ? "%".concat(phone, "%") : encodeURI("%".concat(phone, "%"))
               }
+            }, {
+              attribute: 'enabled',
+              value: {
+                condition: '=',
+                value: isIos ? 'true' : encodeURI('true')
+              }
             }];
             _context.prev = 2;
             _context.next = 5;
             return ordering.setAccessToken(token).users().where({
-              conditions: conditions,
-              conector: 'OR'
+              conditions: conditions
             }).get();
           case 5:
             _yield$ordering$setAc = _context.sent;
