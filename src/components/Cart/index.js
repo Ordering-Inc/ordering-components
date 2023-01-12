@@ -10,7 +10,8 @@ export const Cart = (props) => {
   const {
     cart,
     UIComponent,
-    handleEditProduct
+    handleEditProduct,
+    commentDelayTime
   } = props
 
   /**
@@ -122,7 +123,7 @@ export const Cart = (props) => {
             return
           }
           setCommentState({ ...commentState, loading: false, error: null, result })
-        }, 750)
+        }, commentDelayTime ?? 750)
       }
       previousComment = value
     } catch (err) {
