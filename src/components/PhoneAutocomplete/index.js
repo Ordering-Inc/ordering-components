@@ -38,20 +38,14 @@ export const PhoneAutocomplete = (props) => {
         condition: 'ilike',
         value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
       }
-    },
-    {
-      attribute: 'enabled',
-      value: {
-        condition: '=',
-        value: isIos ? 'true' : encodeURI('true')
-      }
     }]
     try {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
         .where({
-          conditions
+          conditions,
+          conector: 'OR'
         })
         .get()
       setCustomersPhones({ ...customersPhones, users: result, loading: false })
