@@ -361,7 +361,8 @@ var BusinessList = function BusinessList(props) {
               loading: false,
               error: error,
               businesses: businesses,
-              result: result
+              result: result,
+              fetched: true
             }));
             _context.next = 40;
             break;
@@ -372,6 +373,7 @@ var BusinessList = function BusinessList(props) {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false,
                 error: true,
+                fetched: true,
                 result: [_context.t0.message]
               }));
             }

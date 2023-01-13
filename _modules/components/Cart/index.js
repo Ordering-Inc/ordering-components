@@ -34,7 +34,8 @@ var Cart = function Cart(props) {
   var _stateConfig$order;
   var cart = props.cart,
     UIComponent = props.UIComponent,
-    handleEditProduct = props.handleEditProduct;
+    handleEditProduct = props.handleEditProduct,
+    commentDelayTime = props.commentDelayTime;
 
   /**
    * Order context manager
@@ -197,7 +198,7 @@ var Cart = function Cart(props) {
                 return _context.stop();
             }
           }, _callee);
-        })), 750);
+        })), commentDelayTime !== null && commentDelayTime !== void 0 ? commentDelayTime : 750);
       }
       previousComment = value;
     } catch (err) {

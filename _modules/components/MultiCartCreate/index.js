@@ -10,7 +10,6 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _ApiContext = require("../../contexts/ApiContext");
 var _OrderContext = require("../../contexts/OrderContext");
 var _SessionContext = require("../../contexts/SessionContext");
-var _EventContext = require("../../contexts/EventContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -25,10 +24,8 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCartCreate = function MultiCartCreate(props) {
   var UIComponent = props.UIComponent,
-    cartGroupFound = props.cartGroup,
-    cartUuid = props.cartUuid,
-    handleOnRedirectMultiCheckout = props.handleOnRedirectMultiCheckout,
-    handleOnRedirectCheckout = props.handleOnRedirectCheckout;
+    handleOnRedirectCheckout = props.handleOnRedirectCheckout,
+    handleOnRedirectMultiCheckout = props.handleOnRedirectMultiCheckout;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     token = _useSession2[0].token;
@@ -39,45 +36,21 @@ var MultiCartCreate = function MultiCartCreate(props) {
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
     refreshOrderOptions = _useOrder2[1].refreshOrderOptions;
-  var _useEvent = (0, _EventContext.useEvent)(),
-    _useEvent2 = _slicedToArray(_useEvent, 1),
-    events = _useEvent2[0];
-  var filtValidation = function filtValidation(cart) {
-    var _cart$group, _cart$group2;
-    return (cart === null || cart === void 0 ? void 0 : cart.status) !== 2 && (cart === null || cart === void 0 ? void 0 : cart.valid) && (cartGroupFound === 'create' ? !(cart !== null && cart !== void 0 && (_cart$group = cart.group) !== null && _cart$group !== void 0 && _cart$group.uuid) : (cart === null || cart === void 0 ? void 0 : (_cart$group2 = cart.group) === null || _cart$group2 === void 0 ? void 0 : _cart$group2.uuid) === cartGroupFound);
-  };
   var createMultiCart = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var cartsUuidForGroup, response, _yield$response$json, result, error;
+      var cartList, _cartList$, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            cartsUuidForGroup = Object.values(orderState === null || orderState === void 0 ? void 0 : orderState.carts).filter(function (cart) {
-              return filtValidation(cart);
+            cartList = Object.values(orderState === null || orderState === void 0 ? void 0 : orderState.carts).filter(function (cart) {
+              return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2;
             }).map(function (cart) {
               return cart === null || cart === void 0 ? void 0 : cart.uuid;
             });
-            cartsUuidForGroup.push(cartUuid);
-            if (!((cartsUuidForGroup === null || cartsUuidForGroup === void 0 ? void 0 : cartsUuidForGroup.length) === 1)) {
-              _context.next = 8;
-              break;
+            if ((cartList === null || cartList === void 0 ? void 0 : cartList.length) === 1) {
+              handleOnRedirectCheckout && handleOnRedirectCheckout((_cartList$ = cartList[0]) === null || _cartList$ === void 0 ? void 0 : _cartList$.uuid);
             }
-            if (!handleOnRedirectCheckout) {
-              _context.next = 6;
-              break;
-            }
-            handleOnRedirectCheckout(cartsUuidForGroup[0]);
-            return _context.abrupt("return");
-          case 6:
-            events.emit('go_to_page', {
-              page: 'checkout',
-              params: {
-                cartUuid: cartsUuidForGroup[0]
-              }
-            });
-            return _context.abrupt("return");
-          case 8:
-            _context.next = 10;
+            _context.next = 4;
             return fetch("".concat(ordering.root, "/cart_groups"), {
               method: 'POST',
               headers: {
@@ -86,38 +59,24 @@ var MultiCartCreate = function MultiCartCreate(props) {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                carts: cartsUuidForGroup
+                carts: cartList
               })
             });
-          case 10:
+          case 4:
             response = _context.sent;
-            _context.next = 13;
+            _context.next = 7;
             return response.json();
-          case 13:
+          case 7:
             _yield$response$json = _context.sent;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
-            _context.next = 18;
+            _context.next = 12;
             return refreshOrderOptions();
-          case 18:
-            if (error) {
-              _context.next = 23;
-              break;
+          case 12:
+            if (!error) {
+              handleOnRedirectMultiCheckout && handleOnRedirectMultiCheckout(result === null || result === void 0 ? void 0 : result.uuid);
             }
-            if (!handleOnRedirectMultiCheckout) {
-              _context.next = 22;
-              break;
-            }
-            handleOnRedirectMultiCheckout(result === null || result === void 0 ? void 0 : result.uuid);
-            return _context.abrupt("return");
-          case 22:
-            events.emit('go_to_page', {
-              page: 'multi_checkout',
-              params: {
-                cartUuid: result === null || result === void 0 ? void 0 : result.uuid
-              }
-            });
-          case 23:
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -138,10 +97,4 @@ MultiCartCreate.propTypes = {
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType
-};
-MultiCartCreate.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
 };
