@@ -281,7 +281,8 @@ export const BusinessList = (props) => {
         loading: false,
         error,
         businesses,
-        result
+        result,
+        fetched: true
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
@@ -289,6 +290,7 @@ export const BusinessList = (props) => {
           ...businessesList,
           loading: false,
           error: true,
+          fetched: true,
           result: [err.message]
         })
       }
