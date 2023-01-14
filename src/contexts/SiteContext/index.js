@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useApi } from '../ApiContext'
 import { useLanguage } from '../LanguageContext'
+import { useOptimizationLoad } from '../OptimizationLoadContext'
 
 /**
  * Create SiteContext
@@ -17,8 +18,9 @@ export const SiteProvider = ({ appId, children }) => {
   const [state, setState] = useState({ loading: true, site: {} })
   const [languageState] = useLanguage()
   const [ordering] = useApi()
+  const [optimizationLoad] = useOptimizationLoad()
 
-  const refreshSite = async () => {
+  const refreshSite = async (sites = null) => {
     try {
       setState({ ...state, loading: true })
       const requestOptions = {
@@ -29,8 +31,14 @@ export const SiteProvider = ({ appId, children }) => {
         }
       }
 
-      const response = await fetch(`${ordering.root}/sites/current`, requestOptions)
-      const { error, result } = await response.json()
+      let error = sites?.error ?? null
+      let result = sites?.result ?? null
+      if (!sites) {
+        const response = await fetch(`${ordering.root}/sites/current`, requestOptions)
+        const res = await response.json()
+        error = res?.error
+        result = res?.result
+      }
 
       setState({
         ...state,
@@ -47,10 +55,13 @@ export const SiteProvider = ({ appId, children }) => {
   }
 
   useEffect(() => {
-    if (!languageState.loading) {
-      refreshSite()
-    }
-  }, [languageState])
+    if (languageState.loading || optimizationLoad.loading) return
+    const _sites = optimizationLoad.result ? {
+      error: optimizationLoad.error,
+      result: optimizationLoad.result?.site
+    } : null
+    refreshSite(_sites)
+  }, [languageState, optimizationLoad])
 
   return (
     <SiteContext.Provider value={[state, functions]}>

@@ -111,7 +111,7 @@ export const PaymentOptions = (props) => {
         id: paymethod?.id,
         gateway: paymethod?.gateway,
         paymethod: paymethod,
-        credentials : paymethod?.credentials ?? null,
+        credentials: paymethod?.credentials ?? null,
         data
       })
       return
@@ -164,7 +164,19 @@ export const PaymentOptions = (props) => {
       })
     } else {
       if (businessId) {
-        getPaymentOptions()
+        if (businessId === -1) {
+          setPaymethodsList({
+            ...paymethodsList,
+            loading: false,
+            paymethods: [{
+              gateway: 'stripe',
+              name: 'Stripe',
+              id: 1
+            }]
+          })
+        } else {
+          getPaymentOptions()
+        }
       }
     }
   }, [isLoading, businessId])

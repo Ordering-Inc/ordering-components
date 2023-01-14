@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../contexts/SessionContext'
+import { ToastType, useToast } from '../../contexts/ToastContext'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 export const ProductForm = (props) => {
   const {
@@ -15,10 +19,17 @@ export const ProductForm = (props) => {
     isService,
     isCartProduct,
     productAddedToCartLength,
-    professionalList
+    professionalList,
+    handleUpdateProducts,
+    handleUpdateProfessionals,
+    handleChangeProfessional
   } = props
 
   const requestsState = {}
+
+  const [{ user, token }] = useSession()
+  const [, { showToast }] = useToast()
+  const [, t] = useLanguage()
 
   const [ordering] = useApi()
   /**
@@ -171,6 +182,51 @@ export const ProductForm = (props) => {
       }
     }
     return product.product?.price + subtotal
+  }
+  /**
+   * Method to add, remove favorite info for user from API
+   */
+  const handleFavoriteProduct = async (productFav, isAdd = false) => {
+    if (!product || !user) return
+    showToast(ToastType.Info, t('LOADING', 'loading'))
+    try {
+      setProduct({ ...product, loading: true, error: null })
+      const productId = productFav?.id
+      const changes = { object_id: productId }
+      const requestOptions = {
+        method: isAdd ? 'POST' : 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId
+        },
+        ...(isAdd && { body: JSON.stringify(changes) })
+      }
+      const fetchEndpoint = isAdd
+        ? `${ordering.root}/users/${user?.id}/favorite_products`
+        : `${ordering.root}/users/${user.id}/favorite_products/${productId}`
+      const response = await fetch(fetchEndpoint, requestOptions)
+      const content = await response.json()
+      if (!content.error) {
+        loadProductWithOptions()
+        handleUpdateProducts && handleUpdateProducts(productId, { favorite: isAdd })
+        showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
+      } else {
+        setProduct({
+          ...product,
+          loading: false,
+          error: content.result
+        })
+        showToast(ToastType.Error, content.result)
+      }
+    } catch (error) {
+      setProduct({
+        ...product,
+        loading: false,
+        error: [error.message]
+      })
+      showToast(ToastType.Error, [error.message])
+    }
   }
 
   /**
@@ -356,21 +412,21 @@ export const ProductForm = (props) => {
    */
   const checkErrors = () => {
     const errors = {}
-    if (!product.product) {
+    if (!product?.product) {
       return errors
     }
-    product.product.extras.forEach(extra => {
+    product.product?.extras?.forEach(extra => {
       extra.options.map(option => {
         const suboptions = productCart.options[`id:${option.id}`]?.suboptions
         const quantity = suboptions
           ? (option.limit_suboptions_by_max
             ? Object.values(suboptions).reduce((count, suboption) => {
               return count + suboption.quantity
-            }, 0) : Object.keys(suboptions).length)
+            }, 0) : Object.keys(suboptions)?.length)
           : 0
         let evaluateRespectTo = false
         if (option.respect_to && productCart.options) {
-          const options = productCart.options
+          const options = productCart?.options
           for (const key in options) {
             const _option = options[key]
             if (_option.suboptions[`id:${option.respect_to}`]?.selected) {
@@ -424,6 +480,18 @@ export const ProductForm = (props) => {
       }
       if (successful) {
         onSave(productCart, !props.productCart?.code)
+
+        if (isService) {
+          const updatedProfessional = JSON.parse(JSON.stringify(values?.professional))
+          const duration = product?.product?.duration
+          updatedProfessional.busy_times.push({
+            start: values?.serviceTime,
+            end: moment(values?.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
+            duration
+          })
+          handleUpdateProfessionals && handleUpdateProfessionals(updatedProfessional)
+          handleChangeProfessional && handleChangeProfessional(updatedProfessional)
+        }
       }
     }
   }
@@ -548,7 +616,7 @@ export const ProductForm = (props) => {
    * Check if there is an option required with one suboption
    */
   useEffect(() => {
-    if (product?.product && Object.keys(product?.product).length) {
+    if (product?.product && product.product?.extras?.length > 0) {
       const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
         option => (
           (option.min === 1 &&
@@ -614,8 +682,6 @@ export const ProductForm = (props) => {
         const suboptions = []
           .concat(...options.map(option => option.suboptions))
           .filter(suboption => suboption.name === 'Grande (16oz - 437ml)')
-        // console.log(suboptions)
-
         const states = suboptions.map((suboption, i) => {
           const price = options[i].with_half_option && suboption.half_price && suboption?.position !== 'whole'
             ? suboption.half_price
@@ -698,6 +764,7 @@ export const ProductForm = (props) => {
             handleChangeProductCartQuantity={handleChangeProductCartQuantity}
             handleSave={handleSave}
             showOption={showOption}
+            handleFavoriteProduct={handleFavoriteProduct}
             handleChangeIngredientState={handleChangeIngredientState}
             handleChangeSuboptionState={handleChangeSuboptionState}
             handleChangeCommentState={handleChangeCommentState}

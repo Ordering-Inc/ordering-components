@@ -48,6 +48,7 @@ import { OrdersControlFilters } from '../src/components/OrdersControlFilters'
 import { OrderDetails } from '../src/components/OrderDetails'
 import { OrderVerticalList } from '../src/components/OrderVerticalList'
 import { OrderReview } from '../src/components/OrderReview'
+import { PageBanner } from '../src/components/PageBanner'
 import { PaymethodList } from '../src/components/PaymethodList'
 import { PaymentOptions } from '../src/components/PaymentOptions'
 import { PaymentOptionCash } from '../src/components/PaymentOptionCash'
@@ -65,11 +66,14 @@ import { ProductOptionSuboption } from '../src/components/ProductOptionSuboption
 import { ProductsList } from '../src/components/ProductsList'
 import { ProductsListing } from '../src/components/ProductsListing'
 import { PromotionsController } from '../src/components/PromotionsController'
+import { PurchaseGiftCard } from '../src/components/GiftCard/PurchaseGiftCard'
+import { RedeemGiftCard } from '../src/components/GiftCard/RedeemGiftCard'
 import { ResetPassword } from '../src/components/ResetPassword'
 import { ReviewCustomer } from '../src/components/ReviewCustomer'
 import { ReviewDriver } from '../src/components/ReviewDriver'
 import { ReviewProduct } from '../src/components/ReviewProduct'
 import { SearchOptions } from '../src/components/SearchOptions'
+import { SendGiftCard } from '../src/components/GiftCard/SendGiftCard'
 import { Sessions } from '../src/components/Sessions'
 import { SignupForm } from '../src/components/SignupForm'
 import { SingleBusinessCard } from '../src/components/SingleBusinessCard'
@@ -82,6 +86,8 @@ import { UpsellingPage } from '../src/components/UpsellingPage'
 import { MapView } from '../src/components/MapView'
 import { UserVerification } from '../src/components/UserVerification'
 import { WalletList } from '../src/components/WalletList'
+import { MultiCartCreate } from '../src/components/MultiCartCreate'
+
 import { ApiContext, ApiProvider, useApi } from '../src/contexts/ApiContext'
 import { BusinessContext, BusinessProvider, useBusiness } from '../src/contexts/BusinessContext'
 import { ConfigContext, ConfigProvider, useConfig } from '../src/contexts/ConfigContext'
@@ -151,6 +157,7 @@ export {
   OrderChange,
   OrderDetails,
   OrderReview,
+  PageBanner,
   PaymethodList,
   PaymentOptions,
   PaymentOptionCash,
@@ -168,11 +175,14 @@ export {
   ProductsList,
   ProductsListing,
   PromotionsController,
+  PurchaseGiftCard,
+  RedeemGiftCard,
   ResetPassword,
   ReviewCustomer,
   ReviewDriver,
   ReviewProduct,
   SearchOptions,
+  SendGiftCard,
   Sessions,
   SignupForm,
   SingleBusinessCard,
@@ -184,6 +194,7 @@ export {
   UpsellingPage,
   UserVerification,
   WalletList,
+  MultiCartCreate,
   // Contexts
   ApiContext,
   ApiProvider,

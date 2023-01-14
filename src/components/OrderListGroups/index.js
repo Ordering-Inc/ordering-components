@@ -80,6 +80,8 @@ export const OrderListGroups = (props) => {
   const [filtered, setFiltered] = useState(null)
   const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
+  const [businessIDs, setBusinessIDs] = useState([])
+
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
 
@@ -112,7 +114,7 @@ export const OrderListGroups = (props) => {
             attribute: 'id',
             value: {
               condition: '!=',
-              value: ordersGroup[currentTabSelected]?.orders.map((o) => o.id)
+              value: ordersGroup[currentTabSelected]?.orders?.map((o) => o.id)
             }
           })
         }
@@ -268,7 +270,7 @@ export const OrderListGroups = (props) => {
     }
 
     if (newFetch) {
-      ordersStatusArray.map(tab => {
+      ordersStatusArray?.map(tab => {
         ordersGroup = {
           ...ordersGroup,
           [tab]: {
@@ -306,18 +308,20 @@ export const OrderListGroups = (props) => {
         newFetch
       })
 
+      const _ordersCleaned = error
+        ? (newFetch || newFetchCurrent)
+          ? []
+          : sortOrders(ordersGroup[currentTabSelected]?.orders)
+        : (newFetch || newFetchCurrent)
+          ? sortOrders(result)
+          : sortOrders(ordersGroup[currentTabSelected]?.orders.concat(result))
+
       setOrdersGroup({
         ...ordersGroup,
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           loading: false,
-          orders: error
-            ? (newFetch || newFetchCurrent)
-              ? []
-              : sortOrders(ordersGroup[currentTabSelected]?.orders)
-            : (newFetch || newFetchCurrent)
-              ? sortOrders(result)
-              : sortOrders(ordersGroup[currentTabSelected]?.orders.concat(result)),
+          orders: _ordersCleaned,
           error: error ? result : null,
           pagination: {
             ...ordersGroup[currentTabSelected].pagination,
@@ -359,14 +363,16 @@ export const OrderListGroups = (props) => {
         newFetch: true
       })
 
+      const _ordersCleaned = error
+        ? sortOrders(ordersGroup[currentTabSelected]?.orders)
+        : sortOrders(ordersGroup[currentTabSelected]?.orders?.concat(result))
+
       setOrdersGroup({
         ...ordersGroup,
         [currentTabSelected]: {
           ...ordersGroup[currentTabSelected],
           loading: false,
-          orders: error
-            ? sortOrders(ordersGroup[currentTabSelected]?.orders)
-            : sortOrders(ordersGroup[currentTabSelected]?.orders?.concat(result)),
+          orders: _ordersCleaned,
           error: error ? result : null,
           pagination: !error
             ? {
@@ -441,7 +447,7 @@ export const OrderListGroups = (props) => {
       }
 
       const isError = errorState.some((e) => e.error)
-      const idsDeleted = errorState.map((obj) => !obj.error && obj.id)
+      const idsDeleted = errorState?.map((obj) => !obj.error && obj.id)
 
       onOrdersDeleted && onOrdersDeleted({ isError, list: idsDeleted })
       setOrdersDeleted({ ...ordersDeleted, loading: false })
@@ -501,6 +507,24 @@ export const OrderListGroups = (props) => {
     return ordersSorted
   }
 
+  const formatOrdersGrouped = (orders) => {
+    let totalOrders = orders
+    const ordersGroupids = []
+
+    totalOrders = totalOrders
+      ?.map(item => {
+        if (!item?.cart_group_id) return item
+
+        const groupIds = totalOrders.filter(o => o.cart_group_id === item?.cart_group_id)
+        const _item = !ordersGroupids.includes(item?.cart_group_id)
+          ? Object.entries({ [item?.cart_group_id]: groupIds }) : ''
+
+        if (_item) ordersGroupids.push(item?.cart_group_id)
+        return _item
+      }).filter(item => item)
+    return totalOrders
+  }
+
   const getStatusById = (id) => {
     if (!id && id !== 0) return
     const pending = orderGroupStatusCustom?.pending ?? [0, 13]
@@ -538,12 +562,21 @@ export const OrderListGroups = (props) => {
 
     ordersGroup[status].orders = sortOrders(orders)
 
+    let _pagination = ordersGroup[status].pagination
+
     if (type !== 'update') {
-      ordersGroup[status].pagination = {
+      _pagination = {
         ...ordersGroup[status].pagination,
         total: ordersGroup[status].pagination.total + (type === 'add' ? 1 : -1)
       }
+      ordersGroup[status].pagination = _pagination
     }
+
+    setOrdersGroup({
+      ...ordersGroup,
+      orders: sortOrders(orders),
+      pagination: _pagination
+    })
   }
 
   const handleClickOrder = (orderAux) => {
@@ -567,7 +600,7 @@ export const OrderListGroups = (props) => {
     } else {
       const status = getStatusById(order?.order_group?.orders?.[0]?.status)
       let orderList
-      ordersGroups.map(order => {
+      ordersGroups?.map(order => {
         orderList = ordersGroup[status]?.orders
         const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
         orderList[indexToUpdate] = order
@@ -618,6 +651,98 @@ export const OrderListGroups = (props) => {
     }
   }
 
+  const handleChangeOrderStatus = async (status, orderIds, body = {}) => {
+    try {
+      delete body.id
+      const bodyToSend = Object.keys(body || {}).length > 0 ? body : { status }
+      const setOrderStatus = async (id) => {
+        try {
+          const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders(id).save({ ...bodyToSend, id })
+          return error ? null : result
+        } catch {
+          return null
+        }
+      }
+
+      const result = await Promise.all(orderIds?.map(id => setOrderStatus(id)))
+      return result
+    } catch (err) {
+      return err?.message ?? err
+    }
+  }
+
+  const handleSendCustomerReview = async ({ customerId, orderIds, body, onClose }) => {
+    try {
+      const setCustomerReview = async (body) => {
+        try {
+          const response = await fetch(`${ordering.root}/users/${customerId}/user_reviews`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${session.token}`,
+              'Content-Type': 'application/json',
+              'X-App-X': ordering.appId
+            },
+            body: JSON.stringify(body)
+          })
+          const { result, error } = await response.json()
+          return error ? null : result
+        } catch (err) {
+          return null
+        }
+      }
+
+      const result = await Promise.all(orderIds?.map(id => setCustomerReview({ ...body, order_id: id, user_id: customerId })))
+      if (result?.length) {
+        const orders = ordersGroup[currentTabSelected].orders
+        result?.map(order => {
+          let orderFound = orders.find(o => o.id === order.order_id)
+          const idxOrderFound = orders.findIndex(o => o.id === order.order_id)
+
+          if (orderFound) {
+            orderFound = { ...orderFound, user_review: order }
+            orders[idxOrderFound] = orderFound
+            setOrdersGroup({ ...ordersGroup, orders })
+          }
+        })
+        showToast(
+          ToastType.Success,
+          t('ORDERS_SUCCESSFULLY_REVIEWED', 'Orders successfully reviewed')
+        )
+      }
+      onClose && onClose()
+      return result
+    } catch (err) {
+      return err?.message ?? err
+    }
+  }
+
+  const getBusinessesIDs = async () => {
+   const propsToFetch = ['id', 'name']
+   try {
+      const { content: { error, result } } = await ordering.businesses().asDashboard().select(propsToFetch).get()
+      if (!error) {
+        const _businessIDs = result.length > 0 && result.map(({id}) => id)
+        setBusinessIDs(_businessIDs)
+      }
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setOrdersGroup({
+          ...ordersGroup,
+          [currentTabSelected]: {
+            ...ordersGroup[currentTabSelected],
+            loading: false,
+            error: [err?.message ?? 'ERROR']
+          }
+        })
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (session?.user?.level !== 2) return
+    getBusinessesIDs()
+  }, [])
+
   useEffect(() => {
     setCurrentFilters(ordersGroup[currentTabSelected]?.currentFilter)
     if (currentTabSelected === 'logisticOrders') {
@@ -644,6 +769,7 @@ export const OrderListGroups = (props) => {
     if (ordersGroup[currentTabSelected]?.loading) return
 
     const handleUpdateOrder = (order) => {
+      if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
       events.emit('order_updated', order)
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {
@@ -879,6 +1005,9 @@ export const OrderListGroups = (props) => {
           handleClickLogisticOrder={handleClickLogisticOrder}
           filtered={filtered}
           onFiltered={setFiltered}
+          handleChangeOrderStatus={handleChangeOrderStatus}
+          handleSendCustomerReview={handleSendCustomerReview}
+          ordersFormatted={formatOrdersGrouped(ordersGroup[currentTabSelected]?.orders)}
           isLogisticActivated={isLogisticActivated}
         />
       )}

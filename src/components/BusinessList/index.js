@@ -34,7 +34,8 @@ export const BusinessList = (props) => {
     franchiseId,
     businessId,
     cityId,
-    actualSlug
+    actualSlug,
+    searchValueCustom
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -51,17 +52,17 @@ export const BusinessList = (props) => {
   const [orderByValue, setOrderByValue] = useState(initialOrderByValue ?? null)
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
+  const [orderingTheme] = useOrderingTheme()
   const [ordering] = useApi()
   const [{ auth, token }] = useSession()
-  const [orderingTheme] = useOrderingTheme()
   const [requestsState, setRequestsState] = useState({})
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
-  const [{ configs }, { refreshConfigs }] = useConfig()
+  const [{ configs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   const advancedSearchEnabled = configs?.advanced_business_search_enabled?.value === '1'
-  const showCities = !orderingTheme?.theme?.business_listing_view?.components?.cities?.hidden
+  const showCities = (!orderingTheme?.business_listing_view?.components?.cities?.hidden && orderState?.options?.type === 2 && !props.disabledCities) ?? false
   const unaddressedTypes = configs?.unaddressed_order_types_allowed?.value.split('|').map(value => Number(value)) || []
   const isAllowUnaddressOrderType = unaddressedTypes.includes(orderState?.options?.type)
 
@@ -82,7 +83,6 @@ export const BusinessList = (props) => {
         loading: true,
         businesses: newFetch ? [] : businessesList.businesses
       })
-      refreshConfigs()
 
       const defaultLatitude = Number(configs?.location_default_latitude?.value)
       const defaultLongitude = Number(configs?.location_default_longitude?.value)
@@ -298,7 +298,8 @@ export const BusinessList = (props) => {
         loading: false,
         error,
         businesses,
-        result
+        result,
+        fetched: true
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
@@ -306,6 +307,7 @@ export const BusinessList = (props) => {
           ...businessesList,
           loading: false,
           error: true,
+          fetched: true,
           result: [err.message]
         })
       }
@@ -324,7 +326,7 @@ export const BusinessList = (props) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
           'X-App-X': ordering.appId
-        },
+        }
       }
       const functionFetch = `${ordering.root}/franchises/${franchiseId}`
 
@@ -378,7 +380,19 @@ export const BusinessList = (props) => {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
-  }, [JSON.stringify(orderState.options), orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId])
+  }, [
+    JSON.stringify(orderState.options),
+    orderState.loading,
+    businessTypeSelected,
+    priceLevelSelected,
+    searchValue,
+    initialPricelevel,
+    initialBuisnessType,
+    timeLimitValue,
+    orderByValue,
+    maxDeliveryFee,
+    businessId
+  ])
 
   useEffect(() => {
     if ((orderState.loading || (!orderState.options?.address?.location && !isAllowUnaddressOrderType && !asDashboard && !customLocation))) {
@@ -427,10 +441,15 @@ export const BusinessList = (props) => {
   }, [initialFilterKey, initialFilterValue])
 
   useEffect(() => {
+    if (citiesState.loading) return
     if (showCities) {
       getCities()
     }
   }, [showCities])
+
+  useEffect(() => {
+    handleChangeSearch(searchValueCustom)
+  }, [searchValueCustom])
 
   /**
    * Default behavior business click

@@ -23,7 +23,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast, franchiseId, isDisabledDefaultOpts }) => {
+export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast, franchiseId, isDisabledDefaultOpts, businessSlug }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -198,6 +198,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * Change order address
    */
   const changeAddress = async (addressId, params) => {
+    const isCountryCodeChanged = state.options?.address?.country_code !== params?.country_code
     if (typeof addressId === 'object') {
       const optionsStorage = await strategy.getItem('options', true)
       const options = {
@@ -220,7 +221,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
 
     if (params && params?.address && !checkAddress(params?.address)) {
-      updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
+      await updateOrderOptions({ address_id: params?.address?.id, country_code: params?.country_code })
+      if (isCountryCodeChanged) {
+        events.emit('country_code_changed', params?.country_code)
+      }
       return
     }
 
@@ -228,10 +232,16 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (addressId !== state.options.address_id) {
         return
       }
-      updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+      await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+      if (isCountryCodeChanged) {
+        events.emit('country_code_changed', params?.country_code)
+      }
       return
     }
-    updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+    await updateOrderOptions({ address_id: addressId, country_code: params?.country_code })
+    if (isCountryCodeChanged) {
+      events.emit('country_code_changed', params?.country_code)
+    }
   }
 
   /**
@@ -254,7 +264,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       })
     }
 
-    updateOrderOptions({ type })
+    const cityId = state.options?.city_id
+    const params = { type }
+
+    if (cityId && type !== 2) {
+      params.city_id = null
+    }
+
+    updateOrderOptions(params)
   }
 
   /**
@@ -297,8 +314,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       try {
         setState({ ...state, loading: true })
+        const options = {}
         state.loading = true
-        let headers = {
+        options.headers = {
           'X-Socket-Id-X': socket?.getId()
         }
         const countryCode = changes?.country_code && changes?.country_code !== state?.options?.address?.country_code
@@ -306,11 +324,17 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           : countryCodeFromLocalStorage ?? changes?.country_code ?? state?.options?.address?.country_code
 
         if (countryCode) {
-          headers = {
-            ...headers,
+          options.headers = {
+            ...options.headers,
             'X-Country-Code-X': countryCode
           }
           await strategy.setItem('country-code', countryCode)
+        }
+        if (franchiseId) {
+          options.query = {
+            ...options.query,
+            franchise_id: franchiseId
+          }
         }
         if (body?.country_code) {
           delete body?.country_code
@@ -318,7 +342,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         const { content: { error, result } } = await ordering
           .setAccessToken(session.token)
           .orderOptions()
-          .save(body, { headers })
+          .save(body, options)
         if (!error) {
           const { carts, ...options } = result
           state.carts = {}
@@ -353,15 +377,23 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
-  const addProduct = async (product, cart, isQuickAddProduct) => {
+  const addProduct = async (product, cart, isQuickAddProduct, isPlatformProduct = false) => {
     try {
       setState({ ...state, loading: true })
       const customerFromLocalStorage = await strategy.getItem('user-customer', true)
       const userCustomerId = customerFromLocalStorage?.id
-      const body = {
-        product,
-        business_id: cart.business_id,
-        user_id: userCustomerId || session.user.id
+
+      let body
+      if (!isPlatformProduct) {
+        body = {
+          product,
+          business_id: cart.business_id,
+          user_id: userCustomerId || session.user.id
+        }
+      } else {
+        body = {
+          platform_product: { ...product }
+        }
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, { headers: { 'X-Socket-Id-X': socket?.getId() } })
       if (!error) {
@@ -374,10 +406,18 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
-      return !error
+      if (isPlatformProduct) {
+        return { error, result }
+      } else {
+        return !error
+      }
     } catch (err) {
       setState({ ...state, loading: false })
-      return false
+      if (isPlatformProduct) {
+        return { error: true, result: err.message }
+      } else {
+        return false
+      }
     }
   }
 
@@ -589,12 +629,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
     try {
       setState({ ...state, loading: true })
+      const offerRemoveData = {
+        business_id: offerData.business_id,
+        offer_id: offerData.offer_id
+      }
+      if (offerData.user_id) offerRemoveData.user_id = offerData.user_id
       const response = await fetch(`${ordering.root}/carts/remove_offer`, {
         method: 'POST',
-        body: JSON.stringify({
-          business_id: offerData.business_id,
-          offer_id: offerData.offer_id
-        }),
+        body: JSON.stringify(offerRemoveData),
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session.token}`,
@@ -740,7 +782,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Place multi carts
    */
-  const placeMulitCarts = async (data) => {
+  const placeMulitCarts = async (data, cartUuid) => {
     try {
       setState({ ...state, loading: true })
       const requestOptions = {
@@ -753,7 +795,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         body: JSON.stringify(data)
       }
 
-      const response = await fetch(`${ordering.root}/carts/place_group`, requestOptions)
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/place`, requestOptions)
       const { error, result } = await response.json()
       if (!error) {
         result.carts.forEach(cart => {
@@ -824,6 +866,43 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   }
 
   /**
+ * Confirm multi carts
+ */
+  const confirmMultiCarts = async (cartUuid) => {
+    try {
+      setState({ ...state, loading: true })
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `bearer ${session.token}`,
+          'X-App-X': ordering.appId
+        }
+      }
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/confirm`, requestOptions)
+      const { result, error } = await response.json()
+      if (!error) {
+        result.carts.forEach(cart => {
+          if (result.status !== 'completed') {
+            state.carts[`businessId:${cart.business_id}`] = result
+            events.emit('cart_updated', result)
+          } else {
+            delete state.carts[`businessId:${cart.business_id}`]
+          }
+        })
+      }
+      setState({ ...state, loading: false })
+      return { error, result }
+    } catch (err) {
+      setState({ ...state, loading: false })
+      return {
+        error: true,
+        result: [err.message]
+      }
+    }
+  }
+
+  /**
    * Reorder an order and get cart
    */
   const reorder = async (orderId) => {
@@ -881,19 +960,80 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const getLastOrderHasNoReview = async () => {
     if (session?.token) {
       const pastOrderTypes = [1, 2, 5, 6, 10, 11, 12, 15, 16, 17]
+      const where = [{ attribute: 'status', value: pastOrderTypes }]
+      if (franchiseId) {
+        where.push({
+          attribute: 'ref_business',
+          conditions: [
+            {
+              attribute: 'franchise_id',
+              value: {
+                condition: '=',
+                value: franchiseId
+              }
+            }
+          ]
+        })
+      }
+      if (typeof businessSlug === 'number' && businessSlug) {
+        where.push({
+          attribute: 'ref_business',
+          conditions: [
+            {
+              attribute: 'id',
+              value: {
+                condition: '=',
+                value: businessSlug
+              }
+            }
+          ]
+        })
+      }
+      if (typeof businessSlug === 'string' && businessSlug) {
+        where.push({
+          attribute: 'ref_business',
+          conditions: [
+            {
+              attribute: 'slug',
+              value: {
+                condition: '=',
+                value: businessSlug
+              }
+            }
+          ]
+        })
+      }
       const options = {
         query: {
           orderBy: '-delivery_datetime',
           page: 1,
           page_size: 10,
-          where: [{ attribute: 'status', value: pastOrderTypes }]
+          where
         }
       }
       const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders().get(options)
 
       if (!error && result?.length > 0) {
         const _noRviewOrder = result?.find(order => !order?.review)
-        return _noRviewOrder
+        if (_noRviewOrder?.cart_group_id) {
+          where.push({ attribute: 'cart_group_id', value: _noRviewOrder?.cart_group_id })
+          const options = {
+            query: {
+              where,
+              page: 1,
+              page_size: 10
+            }
+          }
+          const { content: { result, error } } = await ordering.setAccessToken(session?.token).orders().get(options)
+          if (!error) {
+            const noReviewOrders = result.filter(order => !order?.review)
+            return noReviewOrders
+          } else {
+            return null
+          }
+        } else {
+          return _noRviewOrder
+        }
       } else {
         return null
       }
@@ -1032,7 +1172,8 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     setStateValues,
     placeMulitCarts,
     getLastOrderHasNoReview,
-    changeCityFilter
+    changeCityFilter,
+    confirmMultiCarts
   }
 
   const copyState = JSON.parse(JSON.stringify(state))

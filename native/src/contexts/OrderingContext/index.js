@@ -11,6 +11,7 @@ import { UtilsProviders } from '../../../../src/contexts/UtilsContext'
 import { ValidationFieldsProvider } from '../../../../src/contexts/ValidationsFieldsContext'
 import { ToastProvider } from '../../../../src/contexts/ToastContext'
 import { CustomerProvider } from '../../../../src/contexts/CustomerContext'
+import { OptimizationLoadProvider } from '../../../../src/contexts/OptimizationLoadContext'
 import { OrderingThemeProvider } from '../../../../src/contexts/OrderingThemeContext'
 import { NativeStrategy } from '../../NativeStrategy'
 
@@ -31,43 +32,47 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast, is
     project: settings.project,
     appId: settings.app_id,
     use_root_point: settings.use_root_point,
-    countryCode: settings.countryCode
+    countryCode: settings.countryCode,
+    useOptimizeLoad: settings?.useOptimizeLoad
   }
   return (
     <OrderingContext.Provider>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, restOfSettings)}>
-          <LanguageProvider strategy={nativeStrategy}>
-            <ConfigProvider strategy={nativeStrategy}>
-              <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
-                <UtilsProviders>
-                  <ToastProvider>
-                    <ValidationFieldsProvider>
-                      <SessionProvider strategy={nativeStrategy}>
-                        <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, restOfSettings)}>
-                          <CustomerProvider strategy={nativeStrategy}>
-                            <OrderProvider
-                              isDisabledDefaultOpts={isDisabledDefaultOpts}
-                              strategy={nativeStrategy}
-                              Alert={Alert}
-                              isDisableToast={isDisableToast}
-                              franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
-                            >
-                              <BusinessProvider
-                                businessId={settings?.businessSlug ?? settings?.businessId}
+          <OptimizationLoadProvider settings={Object.assign(settings.api, restOfSettings)}>
+            <LanguageProvider strategy={nativeStrategy}>
+              <ConfigProvider strategy={nativeStrategy}>
+                <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
+                  <UtilsProviders>
+                    <ToastProvider>
+                      <ValidationFieldsProvider>
+                        <SessionProvider strategy={nativeStrategy}>
+                          <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, restOfSettings)}>
+                            <CustomerProvider strategy={nativeStrategy}>
+                              <OrderProvider
+                                isDisabledDefaultOpts={isDisabledDefaultOpts}
+                                strategy={nativeStrategy}
+                                Alert={Alert}
+                                isDisableToast={isDisableToast}
+                                franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                                businessSlug={settings?.businessSlug}
                               >
-                                {children}
-                              </BusinessProvider>
-                            </OrderProvider>
-                          </CustomerProvider>
-                        </WebsocketProvider>
-                      </SessionProvider>
-                    </ValidationFieldsProvider>
-                  </ToastProvider>
-                </UtilsProviders>
-              </OrderingThemeProvider>
-            </ConfigProvider>
-          </LanguageProvider>
+                                <BusinessProvider
+                                  businessId={settings?.businessSlug ?? settings?.businessId}
+                                >
+                                  {children}
+                                </BusinessProvider>
+                              </OrderProvider>
+                            </CustomerProvider>
+                          </WebsocketProvider>
+                        </SessionProvider>
+                      </ValidationFieldsProvider>
+                    </ToastProvider>
+                  </UtilsProviders>
+                </OrderingThemeProvider>
+              </ConfigProvider>
+            </LanguageProvider>
+          </OptimizationLoadProvider>
         </ApiProvider>
       </EventProvider>
     </OrderingContext.Provider>

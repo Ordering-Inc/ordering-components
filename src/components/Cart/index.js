@@ -10,7 +10,8 @@ export const Cart = (props) => {
   const {
     cart,
     UIComponent,
-    handleEditProduct
+    handleEditProduct,
+    commentDelayTime
   } = props
 
   /**
@@ -123,7 +124,7 @@ export const Cart = (props) => {
             return
           }
           setCommentState({ ...commentState, loading: false, error: null, result })
-        }, 750)
+        }, commentDelayTime ?? 750)
       }
       previousComment = value
     } catch (err) {
@@ -135,11 +136,13 @@ export const Cart = (props) => {
   /**
    * method to manage remove offer assigned
    */
-  const handleRemoveOfferClick = (id) => {
-    removeOffer({
+  const handleRemoveOfferClick = (id, userId) => {
+    const dataOffer = {
       business_id: cart?.business_id,
       offer_id: id
-    })
+    }
+    if (userId) dataOffer.user_id = userId
+    removeOffer(dataOffer)
   }
 
   return (

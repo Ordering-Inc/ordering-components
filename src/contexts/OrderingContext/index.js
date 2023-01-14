@@ -14,6 +14,7 @@ import { CustomerProvider } from '../CustomerContext'
 import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
 import { OrderingThemeProvider } from '../OrderingThemeContext'
+import { OptimizationLoadProvider } from '../OptimizationLoadContext'
 
 /**
  * Create OrderingContext
@@ -31,45 +32,49 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
   const restOfSettings = {
     project: settings.project,
     appId: settings.app_id,
-    countryCode: settings.countryCode
+    countryCode: settings.countryCode,
+    useOptimizeLoad: settings.useOptimizeLoad
   }
   return (
     <OrderingContext.Provider>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, restOfSettings)}>
-          <LanguageProvider strategy={webStrategy}>
-            <ConfigProvider strategy={webStrategy}>
-              <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
-                <SiteProvider appId={settings.app_id}>
-                  <UtilsProviders>
-                    <ToastProvider>
-                      <ValidationFieldsProvider>
-                        <SessionProvider strategy={webStrategy}>
-                          <WebsocketProvider
-                            strategy={webStrategy}
-                            settings={Object.assign(settings.socket, restOfSettings)}
-                          >
-                            <CustomerProvider strategy={webStrategy}>
-                              <OrderProvider
-                                strategy={webStrategy}
-                                Alert={Alert}
-                                isAlsea={isAlsea}
-                                franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
-                              >
-                                <BusinessProvider>
-                                  {children}
-                                </BusinessProvider>
-                              </OrderProvider>
-                            </CustomerProvider>
-                          </WebsocketProvider>
-                        </SessionProvider>
-                      </ValidationFieldsProvider>
-                    </ToastProvider>
-                  </UtilsProviders>
-                </SiteProvider>
-              </OrderingThemeProvider>
-            </ConfigProvider>
-          </LanguageProvider>
+          <OptimizationLoadProvider settings={Object.assign(settings.api, restOfSettings)}>
+            <LanguageProvider strategy={webStrategy}>
+              <ConfigProvider strategy={webStrategy}>
+                <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
+                  <SiteProvider appId={settings.app_id}>
+                    <UtilsProviders>
+                      <ToastProvider>
+                        <ValidationFieldsProvider>
+                          <SessionProvider strategy={webStrategy}>
+                            <WebsocketProvider
+                              strategy={webStrategy}
+                              settings={Object.assign(settings.socket, restOfSettings)}
+                            >
+                              <CustomerProvider strategy={webStrategy}>
+                                <OrderProvider
+                                  strategy={webStrategy}
+                                  Alert={Alert}
+                                  isAlsea={isAlsea}
+                                  franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                                  businessSlug={settings?.businessSlug}
+                                >
+                                  <BusinessProvider>
+                                    {children}
+                                  </BusinessProvider>
+                                </OrderProvider>
+                              </CustomerProvider>
+                            </WebsocketProvider>
+                          </SessionProvider>
+                        </ValidationFieldsProvider>
+                      </ToastProvider>
+                    </UtilsProviders>
+                  </SiteProvider>
+                </OrderingThemeProvider>
+              </ConfigProvider>
+            </LanguageProvider>
+          </OptimizationLoadProvider>
         </ApiProvider>
       </EventProvider>
     </OrderingContext.Provider>

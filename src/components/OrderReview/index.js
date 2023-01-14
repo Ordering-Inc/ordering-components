@@ -6,7 +6,7 @@ import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 
 export const OrderReview = (props) => {
-  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast, defaultStar } = props
+  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast, defaultStar, handleUpdateOrderList } = props
 
   const [ordering] = useApi()
   const [session] = useSession()
@@ -14,6 +14,20 @@ export const OrderReview = (props) => {
   const [, { showToast }] = useToast()
   const [stars, setStars] = useState({ quality: defaultStar, punctiality: defaultStar, service: defaultStar, packaging: defaultStar, comments: '' })
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
+
+  const reviewOrder = async (body) => {
+    const response = await fetch(`${ordering.root}/business/${body.business_id}/reviews`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+        'Content-Type': 'application/json',
+        'X-App-X': ordering.appId
+      },
+      body: JSON.stringify(body)
+    })
+    const { result, error } = await response.json()
+    return { response, result, error }
+  }
   /**
    * Function that load and send the review order to ordering
    */
@@ -22,30 +36,42 @@ export const OrderReview = (props) => {
       handleCustomSendReview && handleCustomSendReview(stars)
     }
     setFormState({ ...formState, loading: true })
+    const staticBody = {
+      quality: stars.quality,
+      delivery: stars.punctiality,
+      service: stars.service,
+      package: stars.packaging,
+      comment: stars.comments,
+      user_id: session?.user?.id
+    }
     try {
-      const body = {
-        order_id: order.id,
-        quality: stars.quality,
-        delivery: stars.punctiality,
-        service: stars.service,
-        package: stars.packaging,
-        comment: stars.comments,
-        user_id: session?.user?.id,
-        business_id: order.business_id
+      if (order?.business?.length > 1) {
+        // eslint-disable-next-line no-unused-expressions
+        order?.business?.forEach(async (_business, i) => {
+          const body = {
+            ...staticBody,
+            order_id: order.id[i],
+            business_id: order?.business_id[i]
+          }
+          const { result, error } = await reviewOrder(body)
+          if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id[i], { review: result })
+          if (order?.business?.length - 1 === i) {
+            setFormState({ loading: false, result: result, error: error })
+            if (!error && isToast) showToast(ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'))
+          }
+        })
+      } else {
+        const body = {
+          ...staticBody,
+          order_id: order.id,
+          business_id: order.business_id
+        }
+        const { response, result, error } = await reviewOrder(body)
+        onSaveReview && onSaveReview(response)
+        setFormState({ loading: false, result: result, error: error })
+        if (!error && isToast) showToast(ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'))
+        if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id, { review: result })
       }
-      const response = await fetch(`${ordering.root}/business/${order.business_id}/reviews`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-          'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
-        },
-        body: JSON.stringify(body)
-      })
-      const { result, error } = await response.json()
-      onSaveReview && onSaveReview(response)
-      setFormState({ loading: false, result: result, error: error })
-      if (!error && isToast) showToast(ToastType.Success, t('ORDER_REVIEW_SUCCESS_CONTENT', 'Thank you, Order review successfully submitted!'))
     } catch (err) {
       setFormState({
         result: {
