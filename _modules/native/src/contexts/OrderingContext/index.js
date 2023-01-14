@@ -33,6 +33,8 @@ var _ToastContext = require("../../../../src/contexts/ToastContext");
 
 var _CustomerContext = require("../../../../src/contexts/CustomerContext");
 
+var _OptimizationLoadContext = require("../../../../src/contexts/OptimizationLoadContext");
+
 var _OrderingThemeContext = require("../../../../src/contexts/OrderingThemeContext");
 
 var _NativeStrategy = require("../../NativeStrategy");
@@ -67,9 +69,12 @@ var OrderingProvider = function OrderingProvider(_ref) {
     project: settings.project,
     appId: settings.app_id,
     use_root_point: settings.use_root_point,
-    countryCode: settings.countryCode
+    countryCode: settings.countryCode,
+    useOptimizeLoad: settings === null || settings === void 0 ? void 0 : settings.useOptimizeLoad
   };
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
+    settings: Object.assign(settings.api, restOfSettings)
+  }, /*#__PURE__*/_react.default.createElement(_OptimizationLoadContext.OptimizationLoadProvider, {
     settings: Object.assign(settings.api, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: nativeStrategy
@@ -89,10 +94,11 @@ var OrderingProvider = function OrderingProvider(_ref) {
     strategy: nativeStrategy,
     Alert: Alert,
     isDisableToast: isDisableToast,
-    franchiseId: (_settings$franchiseSl = settings === null || settings === void 0 ? void 0 : settings.franchiseSlug) !== null && _settings$franchiseSl !== void 0 ? _settings$franchiseSl : settings === null || settings === void 0 ? void 0 : settings.franchiseId
+    franchiseId: (_settings$franchiseSl = settings === null || settings === void 0 ? void 0 : settings.franchiseSlug) !== null && _settings$franchiseSl !== void 0 ? _settings$franchiseSl : settings === null || settings === void 0 ? void 0 : settings.franchiseId,
+    businessSlug: settings === null || settings === void 0 ? void 0 : settings.businessSlug
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, {
     businessId: (_settings$businessSlu = settings === null || settings === void 0 ? void 0 : settings.businessSlug) !== null && _settings$businessSlu !== void 0 ? _settings$businessSlu : settings === null || settings === void 0 ? void 0 : settings.businessId
-  }, children))))))))))))));
+  }, children)))))))))))))));
 };
 
 exports.OrderingProvider = OrderingProvider;

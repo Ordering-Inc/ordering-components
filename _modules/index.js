@@ -117,6 +117,12 @@ Object.defineProperty(exports, "BusinessProductsCategories", {
     return _BusinessProductsCategories.BusinessProductsCategories;
   }
 });
+Object.defineProperty(exports, "BusinessProductsListing", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.BusinessProductsListing;
+  }
+});
 Object.defineProperty(exports, "BusinessProductsSearch", {
   enumerable: true,
   get: function get() {
@@ -183,10 +189,22 @@ Object.defineProperty(exports, "CartStoresListing", {
     return _CartStoresListing.CartStoresListing;
   }
 });
+Object.defineProperty(exports, "CheckPassword", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.CheckPassword;
+  }
+});
 Object.defineProperty(exports, "Checkout", {
   enumerable: true,
   get: function get() {
     return _Checkout.Checkout;
+  }
+});
+Object.defineProperty(exports, "CityList", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.CityList;
   }
 });
 Object.defineProperty(exports, "CmsContent", {
@@ -213,6 +231,12 @@ Object.defineProperty(exports, "Contacts", {
     return _Contacts.Contacts;
   }
 });
+Object.defineProperty(exports, "CountryList", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.CountryList;
+  }
+});
 Object.defineProperty(exports, "CouponControl", {
   enumerable: true,
   get: function get() {
@@ -231,6 +255,18 @@ Object.defineProperty(exports, "CustomerProvider", {
     return _CustomerContext.CustomerProvider;
   }
 });
+Object.defineProperty(exports, "DashboardBusinessList", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.DashboardBusinessList;
+  }
+});
+Object.defineProperty(exports, "DashboardOrdersList", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.DashboardOrdersList;
+  }
+});
 Object.defineProperty(exports, "DragAndDrop", {
   enumerable: true,
   get: function get() {
@@ -241,6 +277,12 @@ Object.defineProperty(exports, "DriverList", {
   enumerable: true,
   get: function get() {
     return _DriverList.DriverList;
+  }
+});
+Object.defineProperty(exports, "DriverListDashboard", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.DriversList;
   }
 });
 Object.defineProperty(exports, "DriverTips", {
@@ -265,6 +307,12 @@ Object.defineProperty(exports, "ExamineClick", {
   enumerable: true,
   get: function get() {
     return _ExamineClick.ExamineClick;
+  }
+});
+Object.defineProperty(exports, "ExportCSV", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.ExportCSV;
   }
 });
 Object.defineProperty(exports, "FacebookLoginButton", {
@@ -333,6 +381,12 @@ Object.defineProperty(exports, "GoogleMaps", {
     return _GoogleMaps.GoogleMaps;
   }
 });
+Object.defineProperty(exports, "GoogleMapsApiKeySetting", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.GoogleMapsApiKeySetting;
+  }
+});
 Object.defineProperty(exports, "GoogleMapsMap", {
   enumerable: true,
   get: function get() {
@@ -369,6 +423,18 @@ Object.defineProperty(exports, "LoginForm", {
     return _LoginForm.LoginForm;
   }
 });
+Object.defineProperty(exports, "LogisticInformation", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.LogisticInformation;
+  }
+});
+Object.defineProperty(exports, "Logistics", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.Logistics;
+  }
+});
 Object.defineProperty(exports, "LogoutAction", {
   enumerable: true,
   get: function get() {
@@ -399,10 +465,28 @@ Object.defineProperty(exports, "Messages", {
     return _Messages.Messages;
   }
 });
+Object.defineProperty(exports, "MessagesDasboard", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.Messages;
+  }
+});
+Object.defineProperty(exports, "MetaFields", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.MetaFields;
+  }
+});
 Object.defineProperty(exports, "MomentOption", {
   enumerable: true,
   get: function get() {
     return _MomentOption.MomentOption;
+  }
+});
+Object.defineProperty(exports, "MultiCartCreate", {
+  enumerable: true,
+  get: function get() {
+    return _MultiCartCreate.MultiCartCreate;
   }
 });
 Object.defineProperty(exports, "MultiCartsPaymethodsAndWallets", {
@@ -441,6 +525,18 @@ Object.defineProperty(exports, "NewOrderNotification", {
     return _NewOrderNotification.NewOrderNotification;
   }
 });
+Object.defineProperty(exports, "OptimizationLoadContext", {
+  enumerable: true,
+  get: function get() {
+    return _OptimizationLoadContext.OptimizationLoadContext;
+  }
+});
+Object.defineProperty(exports, "OptimizationLoadProvider", {
+  enumerable: true,
+  get: function get() {
+    return _OptimizationLoadContext.OptimizationLoadProvider;
+  }
+});
 Object.defineProperty(exports, "OrderContext", {
   enumerable: true,
   get: function get() {
@@ -453,6 +549,12 @@ Object.defineProperty(exports, "OrderDetails", {
     return _OrderDetails.OrderDetails;
   }
 });
+Object.defineProperty(exports, "OrderDetailsDashboard", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.OrderDetails;
+  }
+});
 Object.defineProperty(exports, "OrderList", {
   enumerable: true,
   get: function get() {
@@ -463,6 +565,12 @@ Object.defineProperty(exports, "OrderListGroups", {
   enumerable: true,
   get: function get() {
     return _OrderListGroups.OrderListGroups;
+  }
+});
+Object.defineProperty(exports, "OrderNotification", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.OrderNotification;
   }
 });
 Object.defineProperty(exports, "OrderProvider", {
@@ -517,6 +625,18 @@ Object.defineProperty(exports, "OrdersControlFilters", {
   enumerable: true,
   get: function get() {
     return _OrdersControlFilters.OrdersControlFilters;
+  }
+});
+Object.defineProperty(exports, "OrdersFilter", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.OrdersFilter;
+  }
+});
+Object.defineProperty(exports, "OrdersManage", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.OrdersManage;
   }
 });
 Object.defineProperty(exports, "PageBanner", {
@@ -591,6 +711,12 @@ Object.defineProperty(exports, "PlaceSpot", {
     return _PlaceSpot.PlaceSpot;
   }
 });
+Object.defineProperty(exports, "PointsWalletLevels", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.PointsWalletLevels;
+  }
+});
 Object.defineProperty(exports, "Popup", {
   enumerable: true,
   get: function get() {
@@ -663,10 +789,22 @@ Object.defineProperty(exports, "PromotionsController", {
     return _PromotionsController.PromotionsController;
   }
 });
+Object.defineProperty(exports, "PurchaseGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _PurchaseGiftCard.PurchaseGiftCard;
+  }
+});
 Object.defineProperty(exports, "ReCaptcha", {
   enumerable: true,
   get: function get() {
     return _ReCaptcha.ReCaptcha;
+  }
+});
+Object.defineProperty(exports, "RedeemGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _RedeemGiftCard.RedeemGiftCard;
   }
 });
 Object.defineProperty(exports, "ResetPassword", {
@@ -693,10 +831,22 @@ Object.defineProperty(exports, "ReviewProduct", {
     return _ReviewProduct.ReviewProduct;
   }
 });
+Object.defineProperty(exports, "Schedule", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.Schedule;
+  }
+});
 Object.defineProperty(exports, "SearchOptions", {
   enumerable: true,
   get: function get() {
     return _SearchOptions.SearchOptions;
+  }
+});
+Object.defineProperty(exports, "SendGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _SendGiftCard.SendGiftCard;
   }
 });
 Object.defineProperty(exports, "SessionContext", {
@@ -715,6 +865,12 @@ Object.defineProperty(exports, "Sessions", {
   enumerable: true,
   get: function get() {
     return _Sessions.Sessions;
+  }
+});
+Object.defineProperty(exports, "SettingsList", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.SettingsList;
   }
 });
 Object.defineProperty(exports, "SignupForm", {
@@ -813,6 +969,12 @@ Object.defineProperty(exports, "UserVerification", {
     return _UserVerification.UserVerification;
   }
 });
+Object.defineProperty(exports, "UsersList", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.UsersList;
+  }
+});
 Object.defineProperty(exports, "UtilsContext", {
   enumerable: true,
   get: function get() {
@@ -841,6 +1003,12 @@ Object.defineProperty(exports, "WalletList", {
   enumerable: true,
   get: function get() {
     return _WalletList.WalletList;
+  }
+});
+Object.defineProperty(exports, "WebStrategy", {
+  enumerable: true,
+  get: function get() {
+    return _webStrategy.WebStrategy;
   }
 });
 Object.defineProperty(exports, "WebsocketContext", {
@@ -895,6 +1063,12 @@ Object.defineProperty(exports, "useLanguage", {
   enumerable: true,
   get: function get() {
     return _LanguageContext.useLanguage;
+  }
+});
+Object.defineProperty(exports, "useOptimizationLoad", {
+  enumerable: true,
+  get: function get() {
+    return _OptimizationLoadContext.useOptimizationLoad;
   }
 });
 Object.defineProperty(exports, "useOrder", {
@@ -1030,6 +1204,8 @@ var _MenuControl = require("./components/MenuControl");
 
 var _MomentOption = require("./components/MomentOption");
 
+var _MultiCartCreate = require("./components/MultiCartCreate");
+
 var _MultiCheckout = require("./components/MultiCheckout");
 
 var _MultiCartsPaymethodsAndWallets = require("./components/MultiCartsPaymethodsAndWallets");
@@ -1078,9 +1254,15 @@ var _ProfessionalInfo = require("./components/ProfessionalInfo");
 
 var _PromotionsController = require("./components/PromotionsController");
 
+var _PurchaseGiftCard = require("./components/GiftCard/PurchaseGiftCard");
+
 var _Messages = require("./components/Messages");
 
+var _RedeemGiftCard = require("./components/GiftCard/RedeemGiftCard");
+
 var _SearchOptions = require("./components/SearchOptions");
+
+var _SendGiftCard = require("./components/GiftCard/SendGiftCard");
 
 var _Sessions = require("./components/Sessions");
 
@@ -1150,6 +1332,10 @@ var _ToastContext = require("./contexts/ToastContext");
 
 var _OrderingThemeContext = require("./contexts/OrderingThemeContext");
 
+var _OptimizationLoadContext = require("./contexts/OptimizationLoadContext");
+
+var _webStrategy = require("./webStrategy");
+
 var _PlaceSpot = require("./components/PlaceSpot");
 
 var _PaymethodList = require("./components/PaymethodList");
@@ -1191,5 +1377,7 @@ var _ReviewDriver = require("./components/ReviewDriver");
 var _UserVerification = require("./components/UserVerification");
 
 var _WalletList = require("./components/WalletList");
+
+var _OrdersDashboardComponents = require("./components/OrdersDashboardComponents");
 
 var _codeNumbers = require("./constants/code-numbers");

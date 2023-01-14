@@ -92,7 +92,7 @@ var ProductOptionSuboption = function ProductOptionSuboption(props) {
       return;
     }
 
-    if (!option.limit_suboptions_by_max && state.quantity === option.max) {
+    if (!option.limit_suboptions_by_max && state.quantity === suboption.max) {
       return;
     }
 

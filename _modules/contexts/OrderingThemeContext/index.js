@@ -13,6 +13,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _ApiContext = require("../ApiContext");
 
+var _OptimizationLoadContext = require("../OptimizationLoadContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -71,36 +73,58 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useOptimizationLoad = (0, _OptimizationLoadContext.useOptimizationLoad)(),
+      _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
+      optimizationLoad = _useOptimizationLoad2[0];
+
   var getThemes = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var requestOptions, response, _yield$response$json, result, error;
+      var themes,
+          requestOptions,
+          _themes$error,
+          _themes$result,
+          error,
+          result,
+          response,
+          res,
+          _args = arguments;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              themes = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
               requestOptions = {
                 method: 'GET',
                 headers: {
                   'X-App-X': settings.appId
                 }
               };
-              _context.prev = 1;
-              _context.next = 4;
+              _context.prev = 2;
+              error = (_themes$error = themes === null || themes === void 0 ? void 0 : themes.error) !== null && _themes$error !== void 0 ? _themes$error : null;
+              result = (_themes$result = themes === null || themes === void 0 ? void 0 : themes.result) !== null && _themes$result !== void 0 ? _themes$result : null;
+
+              if (themes) {
+                _context.next = 14;
+                break;
+              }
+
+              _context.next = 8;
               return fetch("".concat(ordering.root, "/theme"), requestOptions);
 
-            case 4:
+            case 8:
               response = _context.sent;
-              _context.next = 7;
+              _context.next = 11;
               return response.json();
 
-            case 7:
-              _yield$response$json = _context.sent;
-              result = _yield$response$json.result;
-              error = _yield$response$json.error;
+            case 11:
+              res = _context.sent;
+              error = res === null || res === void 0 ? void 0 : res.error;
+              result = res === null || res === void 0 ? void 0 : res.result;
 
+            case 14:
               if (error) {
-                _context.next = 13;
+                _context.next = 17;
                 break;
               }
 
@@ -111,30 +135,30 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
               }));
               return _context.abrupt("return");
 
-            case 13:
+            case 17:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 theme: {},
                 loading: false,
                 error: true
               }));
-              _context.next = 19;
+              _context.next = 23;
               break;
 
-            case 16:
-              _context.prev = 16;
-              _context.t0 = _context["catch"](1);
+            case 20:
+              _context.prev = 20;
+              _context.t0 = _context["catch"](2);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 theme: {},
                 loading: false,
                 error: _context.t0
               }));
 
-            case 19:
+            case 23:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 16]]);
+      }, _callee, null, [[2, 20]]);
     }));
 
     return function getThemes() {
@@ -147,8 +171,19 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
   };
 
   (0, _react.useEffect)(function () {
-    getThemes();
-  }, []);
+    var _optimizationLoad$res;
+
+    if (optimizationLoad.loading) return;
+
+    var _themes = optimizationLoad.result ? {
+      error: optimizationLoad.error,
+      result: {
+        values: (_optimizationLoad$res = optimizationLoad.result) === null || _optimizationLoad$res === void 0 ? void 0 : _optimizationLoad$res.theme
+      }
+    } : null;
+
+    getThemes(_themes);
+  }, [optimizationLoad]);
   var functions = {
     refreshTheme: refreshTheme
   };

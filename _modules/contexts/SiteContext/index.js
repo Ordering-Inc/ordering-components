@@ -15,6 +15,8 @@ var _ApiContext = require("../ApiContext");
 
 var _LanguageContext = require("../LanguageContext");
 
+var _OptimizationLoadContext = require("../OptimizationLoadContext");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -76,15 +78,28 @@ var SiteProvider = function SiteProvider(_ref) {
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
 
+  var _useOptimizationLoad = (0, _OptimizationLoadContext.useOptimizationLoad)(),
+      _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
+      optimizationLoad = _useOptimizationLoad2[0];
+
   var refreshSite = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var requestOptions, response, _yield$response$json, error, result;
+      var sites,
+          _sites$error,
+          _sites$result,
+          requestOptions,
+          error,
+          result,
+          response,
+          res,
+          _args = arguments;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              sites = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
+              _context.prev = 1;
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
@@ -95,38 +110,48 @@ var SiteProvider = function SiteProvider(_ref) {
                   'X-APP-X': appId
                 }
               };
-              _context.next = 5;
+              error = (_sites$error = sites === null || sites === void 0 ? void 0 : sites.error) !== null && _sites$error !== void 0 ? _sites$error : null;
+              result = (_sites$result = sites === null || sites === void 0 ? void 0 : sites.result) !== null && _sites$result !== void 0 ? _sites$result : null;
+
+              if (sites) {
+                _context.next = 15;
+                break;
+              }
+
+              _context.next = 9;
               return fetch("".concat(ordering.root, "/sites/current"), requestOptions);
 
-            case 5:
+            case 9:
               response = _context.sent;
-              _context.next = 8;
+              _context.next = 12;
               return response.json();
 
-            case 8:
-              _yield$response$json = _context.sent;
-              error = _yield$response$json.error;
-              result = _yield$response$json.result;
+            case 12:
+              res = _context.sent;
+              error = res === null || res === void 0 ? void 0 : res.error;
+              result = res === null || res === void 0 ? void 0 : res.result;
+
+            case 15:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false,
                 site: error ? {} : result
               }));
-              _context.next = 17;
+              _context.next = 21;
               break;
 
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](0);
+            case 18:
+              _context.prev = 18;
+              _context.t0 = _context["catch"](1);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 17:
+            case 21:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 14]]);
+      }, _callee, null, [[1, 18]]);
     }));
 
     return function refreshSite() {
@@ -138,10 +163,17 @@ var SiteProvider = function SiteProvider(_ref) {
     refreshSite: refreshSite
   };
   (0, _react.useEffect)(function () {
-    if (!languageState.loading) {
-      refreshSite();
-    }
-  }, [languageState]);
+    var _optimizationLoad$res;
+
+    if (languageState.loading || optimizationLoad.loading) return;
+
+    var _sites = optimizationLoad.result ? {
+      error: optimizationLoad.error,
+      result: (_optimizationLoad$res = optimizationLoad.result) === null || _optimizationLoad$res === void 0 ? void 0 : _optimizationLoad$res.site
+    } : null;
+
+    refreshSite(_sites);
+  }, [languageState, optimizationLoad]);
   return /*#__PURE__*/_react.default.createElement(SiteContext.Provider, {
     value: [state, functions]
   }, children);

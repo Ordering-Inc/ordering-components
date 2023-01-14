@@ -67,7 +67,8 @@ var FavoriteList = function FavoriteList(props) {
       location = props.location,
       propsToFetch = props.propsToFetch,
       isProduct = props.isProduct,
-      isProfessional = props.isProfessional;
+      isProfessional = props.isProfessional,
+      franchiseId = props.franchiseId;
 
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
@@ -134,7 +135,8 @@ var FavoriteList = function FavoriteList(props) {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(page) {
       var pageSize,
           requestOptions,
-          fetchEndpoint,
+          params,
+          url,
           response,
           content,
           updatedProducts,
@@ -173,20 +175,26 @@ var FavoriteList = function FavoriteList(props) {
                   'X-App-X': ordering.appId
                 }
               };
-              fetchEndpoint = "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/").concat(favoriteURL, "?page=").concat(page, "&page_size=").concat(pageSize);
-              _context.next = 9;
-              return fetch(fetchEndpoint, requestOptions);
+              params = {};
 
-            case 9:
+              if (franchiseId) {
+                params = params + "&franchise_id=".concat(franchiseId);
+              }
+
+              url = "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/").concat(favoriteURL, "?page=").concat(page, "&page_size=").concat(pageSize).concat(params);
+              _context.next = 11;
+              return fetch(url, requestOptions);
+
+            case 11:
               response = _context.sent;
-              _context.next = 12;
+              _context.next = 14;
               return response.json();
 
-            case 12:
+            case 14:
               content = _context.sent;
 
               if (content.error) {
-                _context.next = 34;
+                _context.next = 36;
                 break;
               }
 
@@ -200,7 +208,7 @@ var FavoriteList = function FavoriteList(props) {
               });
 
               if (!isProduct) {
-                _context.next = 20;
+                _context.next = 22;
                 break;
               }
 
@@ -212,12 +220,12 @@ var FavoriteList = function FavoriteList(props) {
                 favorites: [].concat(_toConsumableArray(favoriteList === null || favoriteList === void 0 ? void 0 : favoriteList.favorites), _toConsumableArray(updatedProducts)),
                 error: null
               });
-              _context.next = 32;
+              _context.next = 34;
               break;
 
-            case 20:
+            case 22:
               if (!isProfessional) {
-                _context.next = 25;
+                _context.next = 27;
                 break;
               }
 
@@ -229,17 +237,17 @@ var FavoriteList = function FavoriteList(props) {
                 favorites: [].concat(_toConsumableArray(favoriteList === null || favoriteList === void 0 ? void 0 : favoriteList.favorites), _toConsumableArray(updatedUsers)),
                 error: null
               });
-              _context.next = 32;
+              _context.next = 34;
               break;
 
-            case 25:
+            case 27:
               idList = content === null || content === void 0 ? void 0 : (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.reduce(function (ids, product) {
                 return [].concat(_toConsumableArray(ids), [product === null || product === void 0 ? void 0 : product.object_id]);
               }, []);
-              _context.next = 28;
+              _context.next = 30;
               return getOriginalList(idList);
 
-            case 28:
+            case 30:
               _yield$getOriginalLis = _context.sent;
               error = _yield$getOriginalLis.error;
               result = _yield$getOriginalLis.result;
@@ -257,34 +265,34 @@ var FavoriteList = function FavoriteList(props) {
                 }));
               }
 
-            case 32:
-              _context.next = 35;
+            case 34:
+              _context.next = 37;
               break;
 
-            case 34:
+            case 36:
               setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                 loading: false,
                 error: content.result
               }));
 
-            case 35:
-              _context.next = 40;
+            case 37:
+              _context.next = 42;
               break;
 
-            case 37:
-              _context.prev = 37;
+            case 39:
+              _context.prev = 39;
               _context.t0 = _context["catch"](3);
               setFavoriteList(_objectSpread(_objectSpread({}, favoriteList), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
 
-            case 40:
+            case 42:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 37]]);
+      }, _callee, null, [[3, 39]]);
     }));
 
     return function getFavoriteList(_x) {
@@ -310,6 +318,13 @@ var FavoriteList = function FavoriteList(props) {
                 value: ids
               });
 
+              if (franchiseId) {
+                conditions.push({
+                  attribute: 'franchise_id',
+                  value: franchiseId
+                });
+              }
+
               if (conditions.length) {
                 where = {
                   conditions: conditions,
@@ -328,18 +343,18 @@ var FavoriteList = function FavoriteList(props) {
               fetchEndpoint = "".concat(ordering.root, "/").concat(originalURL, "?where=").concat(JSON.stringify(where));
               if (location) fetchEndpoint = "".concat(fetchEndpoint, "&location=").concat(location);
               if (propsToFetch) fetchEndpoint = "".concat(fetchEndpoint, "&params=").concat(propsToFetch);
-              _context2.next = 10;
+              _context2.next = 11;
               return fetch(fetchEndpoint, requestOptions);
 
-            case 10:
+            case 11:
               response = _context2.sent;
-              _context2.next = 13;
+              _context2.next = 14;
               return response.json();
 
-            case 13:
+            case 14:
               return _context2.abrupt("return", _context2.sent);
 
-            case 14:
+            case 15:
             case "end":
               return _context2.stop();
           }

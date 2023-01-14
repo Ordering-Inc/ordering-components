@@ -15,6 +15,10 @@ var _ApiContext = require("../ApiContext");
 
 var _LanguageContext = require("../LanguageContext");
 
+var _EventContext = require("../EventContext");
+
+var _OptimizationLoadContext = require("../OptimizationLoadContext");
+
 var _dayjs = _interopRequireDefault(require("dayjs"));
 
 var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
@@ -82,6 +86,14 @@ var ConfigProvider = function ConfigProvider(_ref) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
+
+  var _useOptimizationLoad = (0, _OptimizationLoadContext.useOptimizationLoad)(),
+      _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
+      optimizationLoad = _useOptimizationLoad2[0];
 
   var customConfigs = {
     max_days_preorder: {
@@ -170,22 +182,60 @@ var ConfigProvider = function ConfigProvider(_ref) {
   };
 
   var refreshConfigs = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var _result$dates_moment_, _result$format_time, _result$dates_general, _result$format_time2, _data, _data2, countryCode, options, _yield$ordering$confi, _yield$ordering$confi2, error, result, data, response, conditionalConfigs, configsResult;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee(newCountryCode) {
+      var configs,
+          _configs$error,
+          _configs$result,
+          _result,
+          _result$dates_moment_,
+          _result2,
+          _result2$format_time,
+          _result3,
+          _result3$dates_genera,
+          _result4,
+          _result4$format_time,
+          _data,
+          _data2,
+          countryCode,
+          options,
+          error,
+          result,
+          _yield$ordering$confi,
+          content,
+          data,
+          response,
+          conditionalConfigs,
+          configsResult,
+          _args = arguments;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.prev = 0;
+              configs = _args.length > 1 && _args[1] !== undefined ? _args[1] : null;
+              _context.prev = 1;
               !state.loading && setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: true
               }));
-              _context.next = 4;
+
+              if (!(newCountryCode !== null && newCountryCode !== void 0)) {
+                _context.next = 7;
+                break;
+              }
+
+              _context.t0 = newCountryCode;
+              _context.next = 10;
+              break;
+
+            case 7:
+              _context.next = 9;
               return strategy.getItem('country-code');
 
-            case 4:
-              countryCode = _context.sent;
+            case 9:
+              _context.t0 = _context.sent;
+
+            case 10:
+              countryCode = _context.t0;
               options = {};
 
               if (countryCode) {
@@ -194,43 +244,53 @@ var ConfigProvider = function ConfigProvider(_ref) {
                 };
               }
 
-              _context.next = 9;
+              error = (_configs$error = configs === null || configs === void 0 ? void 0 : configs.error) !== null && _configs$error !== void 0 ? _configs$error : null;
+              result = (_configs$result = configs === null || configs === void 0 ? void 0 : configs.result) !== null && _configs$result !== void 0 ? _configs$result : null;
+
+              if (configs) {
+                _context.next = 22;
+                break;
+              }
+
+              _context.next = 18;
               return ordering.configs().asDictionary().get(options);
 
-            case 9:
+            case 18:
               _yield$ordering$confi = _context.sent;
-              _yield$ordering$confi2 = _yield$ordering$confi.content;
-              error = _yield$ordering$confi2.error;
-              result = _yield$ordering$confi2.result;
+              content = _yield$ordering$confi.content;
+              error = content.error;
+              result = content.result;
+
+            case 22:
               data = null;
-              _context.prev = 14;
-              _context.next = 17;
+              _context.prev = 23;
+              _context.next = 26;
               return fetch('https://ipapi.co/json/');
 
-            case 17:
+            case 26:
               response = _context.sent;
-              _context.next = 20;
+              _context.next = 29;
               return response.json();
 
-            case 20:
+            case 29:
               data = _context.sent;
-              _context.next = 26;
+              _context.next = 35;
               break;
 
-            case 23:
-              _context.prev = 23;
-              _context.t0 = _context["catch"](14);
+            case 32:
+              _context.prev = 32;
+              _context.t1 = _context["catch"](23);
               data = null;
 
-            case 26:
+            case 35:
               conditionalConfigs = {
                 dates_moment_format: {
                   key: 'dates_moment_format',
-                  value: (result === null || result === void 0 ? void 0 : (_result$dates_moment_ = result.dates_moment_format) === null || _result$dates_moment_ === void 0 ? void 0 : _result$dates_moment_.value) || ((result === null || result === void 0 ? void 0 : (_result$format_time = result.format_time) === null || _result$format_time === void 0 ? void 0 : _result$format_time.value) === '24' ? 'MM/DD HH:mm' : 'MM/DD hh:mma')
+                  value: ((_result = result) === null || _result === void 0 ? void 0 : (_result$dates_moment_ = _result.dates_moment_format) === null || _result$dates_moment_ === void 0 ? void 0 : _result$dates_moment_.value) || (((_result2 = result) === null || _result2 === void 0 ? void 0 : (_result2$format_time = _result2.format_time) === null || _result2$format_time === void 0 ? void 0 : _result2$format_time.value) === '24' ? 'MM/DD HH:mm' : 'MM/DD hh:mma')
                 },
                 dates_general_format: {
                   key: 'dates_general_format',
-                  value: (result === null || result === void 0 ? void 0 : (_result$dates_general = result.dates_general_format) === null || _result$dates_general === void 0 ? void 0 : _result$dates_general.value) || ((result === null || result === void 0 ? void 0 : (_result$format_time2 = result.format_time) === null || _result$format_time2 === void 0 ? void 0 : _result$format_time2.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
+                  value: ((_result3 = result) === null || _result3 === void 0 ? void 0 : (_result3$dates_genera = _result3.dates_general_format) === null || _result3$dates_genera === void 0 ? void 0 : _result3$dates_genera.value) || (((_result4 = result) === null || _result4 === void 0 ? void 0 : (_result4$format_time = _result4.format_time) === null || _result4$format_time === void 0 ? void 0 : _result4$format_time.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
                 }
               };
               configsResult = _objectSpread(_objectSpread(_objectSpread({}, customConfigs), {}, {
@@ -243,25 +303,25 @@ var ConfigProvider = function ConfigProvider(_ref) {
                 loading: false,
                 configs: error ? {} : configsResult
               }));
-              _context.next = 34;
+              _context.next = 43;
               break;
 
-            case 31:
-              _context.prev = 31;
-              _context.t1 = _context["catch"](0);
+            case 40:
+              _context.prev = 40;
+              _context.t2 = _context["catch"](1);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
 
-            case 34:
+            case 43:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 31], [14, 23]]);
+      }, _callee, null, [[1, 40], [23, 32]]);
     }));
 
-    return function refreshConfigs() {
+    return function refreshConfigs(_x) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -270,10 +330,27 @@ var ConfigProvider = function ConfigProvider(_ref) {
     refreshConfigs: refreshConfigs
   };
   (0, _react.useEffect)(function () {
-    if (!languageState.loading) {
-      refreshConfigs();
-    }
-  }, [languageState]);
+    var _optimizationLoad$res, _optimizationLoad$res2;
+
+    if (languageState.loading || optimizationLoad.loading) return;
+
+    var _configs = optimizationLoad.result ? {
+      error: optimizationLoad.error,
+      result: _objectSpread(_objectSpread({}, (_optimizationLoad$res = optimizationLoad.result) === null || _optimizationLoad$res === void 0 ? void 0 : _optimizationLoad$res.configs), (_optimizationLoad$res2 = optimizationLoad.result) === null || _optimizationLoad$res2 === void 0 ? void 0 : _optimizationLoad$res2.features)
+    } : null;
+
+    refreshConfigs(null, _configs);
+  }, [languageState, optimizationLoad]);
+  (0, _react.useEffect)(function () {
+    var handleUpdateConfigs = function handleUpdateConfigs(countryCode) {
+      refreshConfigs(countryCode);
+    };
+
+    events.on('country_code_changed', handleUpdateConfigs);
+    return function () {
+      events.off('country_code_changed', handleUpdateConfigs);
+    };
+  }, []);
   return /*#__PURE__*/_react.default.createElement(ConfigContext.Provider, {
     value: [state, functions]
   }, children);

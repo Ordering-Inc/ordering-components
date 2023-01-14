@@ -239,7 +239,6 @@ var SignupForm = function SignupForm(props) {
 
               if (isCustomerMode) {
                 data.phone = data.cellphone;
-                delete data.country_phone_code;
               }
 
               newData = Object.fromEntries(Object.entries(data).filter(function (_ref2) {

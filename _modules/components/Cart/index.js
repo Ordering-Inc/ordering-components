@@ -58,7 +58,8 @@ var Cart = function Cart(props) {
 
   var cart = props.cart,
       UIComponent = props.UIComponent,
-      handleEditProduct = props.handleEditProduct;
+      handleEditProduct = props.handleEditProduct,
+      commentDelayTime = props.commentDelayTime;
   /**
    * Order context manager
    */
@@ -243,7 +244,7 @@ var Cart = function Cart(props) {
               }
             }
           }, _callee);
-        })), 750);
+        })), commentDelayTime !== null && commentDelayTime !== void 0 ? commentDelayTime : 750);
       }
 
       previousComment = value;
@@ -261,11 +262,13 @@ var Cart = function Cart(props) {
    */
 
 
-  var handleRemoveOfferClick = function handleRemoveOfferClick(id) {
-    removeOffer({
+  var handleRemoveOfferClick = function handleRemoveOfferClick(id, userId) {
+    var dataOffer = {
       business_id: cart === null || cart === void 0 ? void 0 : cart.business_id,
       offer_id: id
-    });
+    };
+    if (userId) dataOffer.user_id = userId;
+    removeOffer(dataOffer);
   };
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

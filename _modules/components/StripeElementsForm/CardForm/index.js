@@ -74,10 +74,20 @@ var CardForm = function CardForm(props) {
       error = _useState2[0],
       setError = _useState2[1];
 
-  var _useState3 = (0, _react.useState)(false),
+  var _useState3 = (0, _react.useState)(null),
       _useState4 = _slicedToArray(_useState3, 2),
-      loading = _useState4[0],
-      setLoading = _useState4[1];
+      errorExpiry = _useState4[0],
+      setErrorExpiry = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      errorCvc = _useState6[0],
+      setErrorCvc = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      loading = _useState8[0],
+      setLoading = _useState8[1];
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
@@ -148,9 +158,25 @@ var CardForm = function CardForm(props) {
 
   var handleChange = function handleChange(event) {
     if (event.error) {
-      setError(event.error.message);
+      (event.elementType === 'cardNumber' || 'card') && setError(event.error.message);
     } else {
       setError(null);
+    }
+  };
+
+  var handleChangeExpiry = function handleChangeExpiry(event) {
+    if (event.error) {
+      setErrorExpiry(event.error.message);
+    } else {
+      setErrorExpiry(null);
+    }
+  };
+
+  var handleChangeCvc = function handleChangeCvc(event) {
+    if (event.error) {
+      setErrorCvc(event.error.message);
+    } else {
+      setErrorCvc(null);
     }
   };
   /**
@@ -161,7 +187,7 @@ var CardForm = function CardForm(props) {
 
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2(event) {
-      var _card, card, result, _result;
+      var _card, card, userName, userAddress, billingData, result, _result;
 
       return _regenerator.default.wrap(function _callee2$(_context2) {
         while (1) {
@@ -179,37 +205,42 @@ var CardForm = function CardForm(props) {
               setLoading(true);
               event.preventDefault();
               card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
+              userName = user !== null && user !== void 0 && user.lastname ? "".concat(user === null || user === void 0 ? void 0 : user.name, " ").concat(user === null || user === void 0 ? void 0 : user.lastname) : user === null || user === void 0 ? void 0 : user.name;
+              userAddress = (user === null || user === void 0 ? void 0 : user.address) && {
+                line1: user === null || user === void 0 ? void 0 : user.address
+              };
+              billingData = {
+                email: user.email
+              };
+              userName && (billingData.name = userName);
+              userAddress && (billingData.address = userAddress);
 
               if (isSplitForm) {
                 card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardNumberElement);
               }
 
               if (requirements) {
-                _context2.next = 17;
+                _context2.next = 22;
                 break;
               }
 
               if (stripe) {
-                _context2.next = 11;
+                _context2.next = 16;
                 break;
               }
 
               setError(t('STRIPE_LOAD_ERROR', 'Failed to load Stripe properly'));
               return _context2.abrupt("return");
 
-            case 11:
-              _context2.next = 13;
+            case 16:
+              _context2.next = 18;
               return stripe.createPaymentMethod({
                 type: 'card',
                 card: card,
-                billing_details: {
-                  name: "".concat(user.name, " ").concat(user.lastname),
-                  email: user.email,
-                  address: user.address
-                }
+                billing_details: billingData
               });
 
-            case 13:
+            case 18:
               result = _context2.sent;
 
               if (result.error) {
@@ -218,6 +249,8 @@ var CardForm = function CardForm(props) {
               } else {
                 setLoading(false);
                 setError(null);
+                setErrorExpiry(null);
+                setErrorCvc(null);
                 handleSource && handleSource({
                   id: result === null || result === void 0 ? void 0 : result.paymentMethod.id,
                   type: 'card',
@@ -225,35 +258,31 @@ var CardForm = function CardForm(props) {
                     brand: result === null || result === void 0 ? void 0 : result.paymentMethod.card.brand,
                     last4: result === null || result === void 0 ? void 0 : result.paymentMethod.card.last4
                   }
-                }); // props.handlerToken(result?.paymentMethod)
+                });
               }
 
-              _context2.next = 24;
+              _context2.next = 29;
               break;
 
-            case 17:
+            case 22:
               if (stripe) {
-                _context2.next = 20;
+                _context2.next = 25;
                 break;
               }
 
               setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'));
               return _context2.abrupt("return");
 
-            case 20:
-              _context2.next = 22;
+            case 25:
+              _context2.next = 27;
               return stripe.confirmCardSetup(requirements, {
                 payment_method: {
                   card: card,
-                  billing_details: {
-                    name: "".concat(user.name, " ").concat(user.lastname),
-                    email: user.email,
-                    address: user.address
-                  }
+                  billing_details: billingData
                 }
               });
 
-            case 22:
+            case 27:
               _result = _context2.sent;
 
               if (_result.error) {
@@ -262,6 +291,8 @@ var CardForm = function CardForm(props) {
               } else {
                 setLoading(false);
                 setError(null);
+                setErrorExpiry(null);
+                setErrorCvc(null);
 
                 if (businessIds) {
                   businessIds.forEach(function (_businessId, index) {
@@ -274,7 +305,7 @@ var CardForm = function CardForm(props) {
                 }
               }
 
-            case 24:
+            case 29:
             case "end":
               return _context2.stop();
           }
@@ -290,7 +321,11 @@ var CardForm = function CardForm(props) {
   return /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     handleSubmit: handleSubmit,
     error: error,
+    errorExpiry: errorExpiry,
+    errorCvc: errorCvc,
     loading: loading,
+    handleChangeExpiry: handleChangeExpiry,
+    handleChangeCvc: handleChangeCvc,
     handleChange: handleChange
   }));
 };

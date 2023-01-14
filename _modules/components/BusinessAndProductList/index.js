@@ -1171,6 +1171,23 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     };
   }();
 
+  var handleUpdateProfessionals = function handleUpdateProfessionals(selectedProfessional) {
+    var _businessState$busine18;
+
+    var professionals = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine18 = businessState.business) === null || _businessState$busine18 === void 0 ? void 0 : _businessState$busine18.professionals.map(function (professional) {
+      if ((selectedProfessional === null || selectedProfessional === void 0 ? void 0 : selectedProfessional.id) === (professional === null || professional === void 0 ? void 0 : professional.id)) {
+        return _objectSpread(_objectSpread({}, professional), selectedProfessional);
+      }
+
+      return professional;
+    });
+    setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+      business: _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
+        professionals: professionals
+      })
+    }));
+  };
+
   (0, _react.useEffect)(function () {
     if (!businessState.loading) {
       loadProducts({
@@ -1294,7 +1311,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     professionalSelected: professionalSelected,
     handleChangeProfessionalSelected: handleChangeProfessionalSelected,
     priceFilterValues: priceFilterValues,
-    handleChangePriceFilterValues: handleChangePriceFilterValues
+    handleChangePriceFilterValues: handleChangePriceFilterValues,
+    handleUpdateProfessionals: handleUpdateProfessionals
   })));
 };
 

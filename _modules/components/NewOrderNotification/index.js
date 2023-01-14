@@ -17,6 +17,8 @@ var _EventContext = require("../../contexts/EventContext");
 
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 
+var _ConfigContext = require("../../contexts/ConfigContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -36,6 +38,8 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var NewOrderNotification = function NewOrderNotification(props) {
+  var _configs$logistic_mod;
+
   var UIComponent = props.UIComponent;
 
   var _useSession = (0, _SessionContext.useSession)(),
@@ -50,18 +54,25 @@ var NewOrderNotification = function NewOrderNotification(props) {
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
 
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
+
+  var isLogisticActivated = configs === null || configs === void 0 ? void 0 : (_configs$logistic_mod = configs.logistic_module) === null || _configs$logistic_mod === void 0 ? void 0 : _configs$logistic_mod.value;
+
+  var handleActionEvent = function handleActionEvent(event, value) {
+    var evts = {
+      messages: 'message_added_notification',
+      order_added: 'order_added_notification',
+      order_updated: 'order_updated_notification',
+      request_register: 'request_register_notification',
+      request_update: 'request_update_notification'
+    };
+    events.emit(evts[event], value);
+  };
+
   (0, _react.useEffect)(function () {
     if (!token) return;
-
-    var handleActionEvent = function handleActionEvent(event, value) {
-      var evts = {
-        messages: 'message_added_notification',
-        order_added: 'order_added_notification',
-        order_updated: 'order_updated_notification'
-      };
-      events.emit(evts[event], value);
-    };
-
     socket.on('message', function (e) {
       return handleActionEvent('messages', e);
     });
@@ -84,18 +95,41 @@ var NewOrderNotification = function NewOrderNotification(props) {
     };
   }, [socket, user]);
   (0, _react.useEffect)(function () {
+    if (isLogisticActivated) {
+      socket.on('request_register', function (e) {
+        return handleActionEvent('request_register', e);
+      });
+      socket.on('request_update', function (e) {
+        return handleActionEvent('request_update', e);
+      });
+    }
+
+    return function () {
+      socket.off('request_register');
+      socket.off('request_update');
+    };
+  }, [socket, user, isLogisticActivated]);
+  (0, _react.useEffect)(function () {
     if (!token) return;
     socket.on('disconnect', function () {
       socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
       socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.join("requests_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.join("ordergroups_".concat(user === null || user === void 0 ? void 0 : user.id));
     });
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id);
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id);
+    var requestsRoom = "requests_".concat(user === null || user === void 0 ? void 0 : user.id);
+    var groupsRoom = "ordergroups_".concat(user === null || user === void 0 ? void 0 : user.id);
     socket.join(messagesOrdersRoom);
     socket.join(ordersRoom);
+    socket.join(requestsRoom);
+    socket.join(groupsRoom);
     return function () {
       socket.leave(messagesOrdersRoom);
       socket.leave(ordersRoom);
+      socket.leave(requestsRoom);
+      socket.leave(groupsRoom);
     };
   }, [socket, user]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));

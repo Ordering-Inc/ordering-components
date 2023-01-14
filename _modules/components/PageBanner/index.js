@@ -23,6 +23,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -68,7 +76,7 @@ var PageBanner = function PageBanner(props) {
 
   var handleGetPageBanner = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {
-      var requestOptions, response, _yield$response$json, error, result;
+      var requestOptions, response, _yield$response$json, error, result, totalItems;
 
       return _regenerator.default.wrap(function _callee$(_context) {
         while (1) {
@@ -97,28 +105,33 @@ var PageBanner = function PageBanner(props) {
               _yield$response$json = _context.sent;
               error = _yield$response$json.error;
               result = _yield$response$json.result;
+              totalItems = result.reduce(function (items, banner) {
+                return [].concat(_toConsumableArray(items), _toConsumableArray(banner === null || banner === void 0 ? void 0 : banner.items));
+              }, []);
               setPageBannerState({
                 loading: false,
-                banner: error ? null : result,
+                banner: error ? null : {
+                  items: totalItems
+                },
                 error: error ? result : null
               });
-              _context.next = 17;
+              _context.next = 18;
               break;
 
-            case 14:
-              _context.prev = 14;
+            case 15:
+              _context.prev = 15;
               _context.t0 = _context["catch"](0);
               setPageBannerState(_objectSpread(_objectSpread({}, pageBannerState), {}, {
                 loading: false,
                 error: [_context.t0.message]
               }));
 
-            case 17:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 14]]);
+      }, _callee, null, [[0, 15]]);
     }));
 
     return function handleGetPageBanner() {
