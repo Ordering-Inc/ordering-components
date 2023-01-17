@@ -15,8 +15,11 @@ export const MultiCheckout = (props) => {
     UIComponent,
     onPlaceOrderClick,
     cartUuid,
+    userId,
     actionsBeforePlace
   } = props
+
+  const qParams = userId ? `?user_id=${userId}` : ''
 
   const [ordering] = useApi()
   /**
@@ -120,7 +123,7 @@ export const MultiCheckout = (props) => {
 
   const getDeliveryOptions = async () => {
     try {
-      const response = await fetch(`${ordering.root}/delivery_options`, {
+      const response = await fetch(`${ordering.root}/delivery_options${qParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -145,6 +148,8 @@ export const MultiCheckout = (props) => {
     try {
       const allPromise = cartUuidArr.map(cartId => {
         return new Promise(async (resolve, reject) => {
+          const body = { delivery_option_id: value }
+          if (userId) body.user_id = userId
           const response = await fetch(`${ordering.root}/carts/${cartId}`, {
             method: 'PUT',
             headers: {
@@ -152,9 +157,7 @@ export const MultiCheckout = (props) => {
               Authorization: `bearer ${token}`,
               'X-App-X': ordering.appId
             },
-            body: JSON.stringify({
-              delivery_option_id: value
-            })
+            body: JSON.stringify(body)
           })
           const { result, error } = await response.json()
           if (!error && result?.delivery_option_id === value) {
@@ -182,7 +185,7 @@ export const MultiCheckout = (props) => {
         ...cartGroup,
         loading: true
       })
-      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}`, {
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}${qParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
