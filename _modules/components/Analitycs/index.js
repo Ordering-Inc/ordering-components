@@ -302,7 +302,7 @@ var Analytics = function Analytics(props) {
         events.off('change_view', handlechangeView);
         events.off('userLogin', handleLogin);
         events.off('product_clicked', handleClickProduct);
-        events.off('cart_product_added', handleProductAdded);
+        events.off('product_added', handleProductAdded);
         events.off('order_placed', handleOrderPlaced);
       }
     };
