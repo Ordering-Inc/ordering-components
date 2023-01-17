@@ -105,25 +105,31 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
             setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
               loading: true
             }));
-            conditions = [{
-              attribute: 'cellphone',
-              value: {
-                condition: 'ilike',
-                value: isIos ? "%".concat(phone, "%") : encodeURI("%".concat(phone, "%"))
-              }
-            }, {
-              attribute: 'phone',
-              value: {
-                condition: 'ilike',
-                value: isIos ? "%".concat(phone, "%") : encodeURI("%".concat(phone, "%"))
-              }
-            }];
+            conditions = {
+              conector: 'AND',
+              conditions: [{
+                attribute: 'enabled',
+                value: isIos ? true : encodeURI(true)
+              }, {
+                conector: 'OR',
+                conditions: [{
+                  attribute: 'cellphone',
+                  value: {
+                    condition: 'ilike',
+                    value: isIos ? "%".concat(phone, "%") : encodeURI("%".concat(phone, "%"))
+                  }
+                }, {
+                  attribute: 'phone',
+                  value: {
+                    condition: 'ilike',
+                    value: isIos ? "%".concat(phone, "%") : encodeURI("%".concat(phone, "%"))
+                  }
+                }]
+              }]
+            };
             _context.prev = 2;
             _context.next = 5;
-            return ordering.setAccessToken(token).users().where({
-              conditions: conditions,
-              conector: 'OR'
-            }).get();
+            return ordering.setAccessToken(token).users().where(conditions).get();
           case 5:
             _yield$ordering$setAc = _context.sent;
             result = _yield$ordering$setAc.content.result;

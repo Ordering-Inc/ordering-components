@@ -42,7 +42,9 @@ var MultiCheckout = function MultiCheckout(props) {
   var UIComponent = props.UIComponent,
     onPlaceOrderClick = props.onPlaceOrderClick,
     cartUuid = props.cartUuid,
+    userId = props.userId,
     actionsBeforePlace = props.actionsBeforePlace;
+  var qParams = userId ? "?user_id=".concat(userId) : '';
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -206,7 +208,7 @@ var MultiCheckout = function MultiCheckout(props) {
           case 0:
             _context2.prev = 0;
             _context2.next = 3;
-            return fetch("".concat(ordering.root, "/delivery_options"), {
+            return fetch("".concat(ordering.root, "/delivery_options").concat(qParams), {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -269,11 +271,15 @@ var MultiCheckout = function MultiCheckout(props) {
             allPromise = cartUuidArr.map(function (cartId) {
               return new Promise( /*#__PURE__*/function () {
                 var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve, reject) {
-                  var response, _yield$response$json2, result, error;
+                  var body, response, _yield$response$json2, result, error;
                   return _regeneratorRuntime().wrap(function _callee3$(_context3) {
                     while (1) switch (_context3.prev = _context3.next) {
                       case 0:
-                        _context3.next = 2;
+                        body = {
+                          delivery_option_id: value
+                        };
+                        if (userId) body.user_id = userId;
+                        _context3.next = 4;
                         return fetch("".concat(ordering.root, "/carts/").concat(cartId), {
                           method: 'PUT',
                           headers: {
@@ -281,15 +287,13 @@ var MultiCheckout = function MultiCheckout(props) {
                             Authorization: "bearer ".concat(token),
                             'X-App-X': ordering.appId
                           },
-                          body: JSON.stringify({
-                            delivery_option_id: value
-                          })
+                          body: JSON.stringify(body)
                         });
-                      case 2:
+                      case 4:
                         response = _context3.sent;
-                        _context3.next = 5;
+                        _context3.next = 7;
                         return response.json();
-                      case 5:
+                      case 7:
                         _yield$response$json2 = _context3.sent;
                         result = _yield$response$json2.result;
                         error = _yield$response$json2.error;
@@ -298,7 +302,7 @@ var MultiCheckout = function MultiCheckout(props) {
                         } else {
                           reject(false);
                         }
-                      case 9:
+                      case 11:
                       case "end":
                         return _context3.stop();
                     }
@@ -372,7 +376,7 @@ var MultiCheckout = function MultiCheckout(props) {
               loading: true
             }));
             _context6.next = 6;
-            return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid), {
+            return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid).concat(qParams), {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',

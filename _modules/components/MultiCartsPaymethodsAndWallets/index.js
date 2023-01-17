@@ -9,7 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _ApiContext = require("../../contexts/ApiContext");
 var _SessionContext = require("../../contexts/SessionContext");
-var _OrderContext = require("../../contexts/OrderContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -38,8 +37,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
   var UIComponent = props.UIComponent,
     openCarts = props.openCarts,
-    propsToFetch = props.propsToFetch,
+    userId = props.userId,
     cartUuid = props.cartUuid;
+  var qParams = userId ? "?user_id=".concat(userId) : '';
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -96,7 +96,7 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
               }
             };
             _context.next = 5;
-            return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/prepare"), requestOptions);
+            return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/prepare").concat(qParams), requestOptions);
           case 5:
             response = _context.sent;
             _context.next = 8;
@@ -147,7 +147,7 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
           case 0:
             _context2.prev = 0;
             _context2.next = 3;
-            return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets"), {
+            return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets").concat(qParams), {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
