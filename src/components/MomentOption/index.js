@@ -17,7 +17,13 @@ export const MomentOption = (props) => {
     currentDate,
     useOrderContext,
     onChangeMoment,
-    UIComponent
+    preorderSlotInterval,
+    cateringPreorder,
+    preorderLeadTime,
+    business,
+    UIComponent,
+    preorderTimeRange,
+    preorderMinimumDays
   } = props
 
   const [orderStatus, { changeMoment }] = useOrder()
@@ -61,8 +67,7 @@ export const MomentOption = (props) => {
    */
   const [hoursList, setHourList] = useState([])
   const [datesList, setDatesList] = useState([])
-
-  const [dateSelected, setDateSelected] = useState(dayjs(validDate(_currentDate)).format('YYYY-MM-DD'))
+  const [dateSelected, setDateSelected] = useState(dayjs(validDate(_currentDate)).add(preorderMinimumDays || 0, 'day').format('YYYY-MM-DD'))
   const [timeSelected, setTimeSelected] = useState(null)
 
   const handleChangeDate = (date) => {
@@ -134,9 +139,15 @@ export const MomentOption = (props) => {
     }
   }, [scheduleSelected])
 
+  const getActualSchedule = () => {
+    const dayNumber = dayjs(dateSelected).day()
+    const schedule = business.schedule.find((s, i) => dayNumber === i)
+    return schedule?.enabled && schedule
+  }
+
   useEffect(() => {
     if (isAsap && datesList[0]) {
-      setDateSelected(datesList[0])
+      setDateSelected(datesList[preorderMinimumDays || 0])
       setTimeSelected(null)
     }
   }, [isAsap, datesList])
@@ -144,35 +155,50 @@ export const MomentOption = (props) => {
   /**
    * generate a list of available hours
    */
-  const generateHourList = () => {
+  const generateHourList = (preorderLeadTime, preorderTimeRange, preorderSlotInterval) => {
     const hoursAvailable = []
 
     const isToday = dateSelected === dayjs().format('YYYY-MM-DD')
     const isLastDate = dateSelected === dayjs(maxDate).format('YYYY-MM-DD')
     const now = new Date()
-    for (let hour = 0; hour < 24; hour++) {
-      /**
-       * Continue if is today and hour is smaller than current hour
-       */
-      if (isToday && hour < now?.getHours()) continue
-      /**
-       * Continue if is max date and hour is greater than max date hour
-       */
-      if (isLastDate && hour > maxDate?.getHours()) continue
-      for (let minute = 0; minute < 59; minute += 15) {
+    if (!cateringPreorder) {
+      for (let hour = 0; hour < 24; hour++) {
         /**
-         * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
-         */
-        if (isToday && hour === now?.getHours() && minute <= now.getMinutes()) continue
+         * Continue if is today and hour is smaller than current hour
+        */
+        if (isToday && hour < now?.getHours()) continue
         /**
-         * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
-         */
-        if (isLastDate && hour === maxDate?.getHours() && minute > maxDate.getMinutes()) continue
-        const _hour = hour < 10 ? `0${hour}` : hour
-        const startMinute = minute < 10 ? `0${minute}` : minute
-        const endMinute = (minute + 14) < 10 ? `0${minute + 14}` : minute + 14
-        const startTime = `${_hour}:${startMinute}`
-        const endTime = `${_hour}:${endMinute}`
+        * Continue if is max date and hour is greater than max date hour
+        */
+        if (isLastDate && hour > maxDate?.getHours()) continue
+        for (let minute = 0; minute < 59; minute += 15) {
+          /**
+           * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
+          */
+          if (isToday && hour === now?.getHours() && minute <= now.getMinutes()) continue
+          /**
+           * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
+          */
+          if (isLastDate && hour === maxDate?.getHours() && minute > maxDate.getMinutes()) continue
+          const _hour = hour < 10 ? `0${hour}` : hour
+          const startMinute = minute < 10 ? `0${minute}` : minute
+          const endMinute = (minute + 14) < 10 ? `0${minute + 14}` : minute + 14
+          const startTime = `${_hour}:${startMinute}`
+          const endTime = `${_hour}:${endMinute}`
+          hoursAvailable.push({
+            startTime,
+            endTime
+          })
+        }
+      }
+    } else {
+      let startTimeAcc = preorderLeadTime
+      let endTimeAcc = preorderTimeRange + preorderLeadTime
+      while (startTimeAcc > 0 && dayjs().startOf('day').add(startTimeAcc || 0, 'minute') < dayjs().startOf('day').add(1, 'day')) {
+        const startTime = dayjs().startOf('day').add(startTimeAcc || 0, 'minute').format('HH:mm')
+        const endTime = dayjs().startOf('day').add(endTimeAcc, 'minute').format('HH:mm')
+        startTimeAcc = startTimeAcc + preorderSlotInterval
+        endTimeAcc = endTimeAcc + preorderSlotInterval
         hoursAvailable.push({
           startTime,
           endTime
@@ -197,14 +223,14 @@ export const MomentOption = (props) => {
 
   useEffect(() => {
     if (!dateSelected) return
-    generateHourList()
+    generateHourList(preorderLeadTime, preorderTimeRange, preorderSlotInterval)
   }, [dateSelected])
 
   useEffect(() => {
     const interval = setInterval(() => {
       const diff = dayjs(dateSelected).diff(dayjs(currentDate), 'day')
       if (diff === 0) {
-        generateHourList()
+        generateHourList(preorderLeadTime, preorderTimeRange, preorderSlotInterval)
       }
     }, 1000)
     return () => clearInterval(interval)
@@ -229,6 +255,8 @@ export const MomentOption = (props) => {
           datesList={datesList}
           hoursList={hoursList}
           handleAsap={handleAsap}
+          getActualSchedule={getActualSchedule}
+          scheduleSelected={scheduleSelected}
         />
       )}
     </>
@@ -287,5 +315,8 @@ MomentOption.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  preorderSlotInterval: 15,
+  preorderLeadTime: 0,
+  preorderTimeRange: 30
 }
