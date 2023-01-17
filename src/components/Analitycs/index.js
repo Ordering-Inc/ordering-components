@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../contexts/SessionContext'
 import PropTypes from 'prop-types'
 
 export const Analytics = (props) => {
   const {
     trackId,
+    googleTagManager,
+    slug,
     children
   } = props
 
   const [events] = useEvent()
+  const [{ auth, user }] = useSession()
   const [analyticsReady, setAnalyticsReady] = useState(false)
+
+
+  const formatForAnalytics = (str, limit, replaceSpace) => {
+    let formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
+    if (limit) formattedStr = formattedStr.substr(0, limit);
+    return formattedStr;
+  };
 
   useEffect(() => {
     if (!trackId) {
@@ -46,45 +58,175 @@ export const Analytics = (props) => {
    * @param {String} pageName
    */
   const handlechangeView = (pageName) => {
-    window.ga('set', 'page', pageName?.page)
-    window.ga('send', 'pageview')
+    if (window.ga) {
+      window.ga('set', 'page', pageName?.page)
+      window.ga('send', 'pageview')
+    }
+    // if (googleTagManager) {
+    //   console.log('event: pageview', pageName?.page)
+    //   window.dataLayer.push({
+    //     event: 'pageview',
+    //     page: {
+    //       title: pageName?.page
+    //     }
+    //   });
+    // }
   }
   const handleClickProduct = (product) => {
-    window.ga('ec:addProduct', {
-      id: product.id,
-      name: product.name,
-      category: product.category_id,
-      price: product.price
-    })
-    window.ga('ec:setAction', 'click')
-    window.ga('send', 'event', 'UI', 'click', 'add to cart')
+    if (window.ga) {
+      window.ga('ec:addProduct', {
+        id: product.id,
+        name: product.name,
+        category: product.category_id,
+        price: product.price
+      })
+      window.ga('ec:setAction', 'click')
+      window.ga('send', 'event', 'UI', 'click', 'add to cart')
+    }
+    if (googleTagManager) {
+      const digitalData = {
+        'flow': 'MarketPlace '+slug,
+				'ecommerce': {
+					'click': {
+						'products': [{
+							'name': product.name,
+							'id': product.sku ? product.sku : 'producto sin sku',
+							'price': product.price.toString(),
+							'brand': 'MarketPlace '+slug,
+							'category': formatForAnalytics(product.category.name, 40),
+							'variant': 'NA',
+							'list': formatForAnalytics(product.category.name, 40),
+							// 'position': 
+						}]
+					}
+				},
+				event: "evProductClick",
+			};
+      console.log('evPageView', digitalData)
+      window.dataLayer.push(digitalData)
+    }
   }
   const handleProductAdded = (product) => {
-    window.ga('ec:addProduct', {
-      id: product.id,
-      name: product.name,
-      category: product.category_id,
-      price: product.price,
-      quantity: product.quantity
-    })
-    window.ga('ec:setAction', 'add')
-    window.ga('send', 'event', 'UI', 'click', 'add to cart')
+    if (window.ga) {
+      window.ga('ec:addProduct', {
+        id: product.id,
+        name: product.name,
+        category: product.category_id,
+        price: product.price,
+        quantity: product.quantity
+      })
+      window.ga('ec:setAction', 'add')
+      window.ga('send', 'event', 'UI', 'click', 'add to cart')
+    }
+    if (googleTagManager) {
+      const digitalData = {
+        'flow': 'MarketPlace '+slug,
+        'ecommerce': {
+          'add': {
+            'products': [{
+              'name': formatForAnalytics(product.name),
+              'id': product.sku ? product.sku : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace '+slug,
+              'category': formatForAnalytics(product_category.name),
+              'variant': formatForAnalytics(variants, 40),
+              'quantity': `${product.quantity}`,
+            }]
+          },
+        },
+        event: "evAddToCart",
+      };
+      console.log('evPageView', digitalData)
+      window.dataLayer.push(digitalData)
+    }
   }
   const handleLogin = (data) => {
-    window.ga('set', 'userId', data.id)
+    if (window.ga) {
+      window.ga('set', 'userId', data.id)
+    }
+    if (googleTagManager) {
+      const digitalData = {
+        event: "evPageView",
+        version: "1.0",
+        page: {
+          pageInfo: {
+            hostName: location.protocol + "//" + location.hostname + "/",
+            currentURL: location.href,
+          },
+        },
+        user: {
+          profile: {
+            statusLogged: user.id > 0 ? "Logged" : "NotLogged",
+            languajeUser: "null",
+            isGeoActive: "null",
+            profileInfo: "NA",
+            social: {
+              network: 'NA',
+            },
+          }
+        }
+      };
+      console.log('evPageView', digitalData)
+      window.dataLayer.push(digitalData)
+    }
   }
   const handleOrderPlaced = (order) => {
-    window.ga('ec:setAction', 'purchase', { // Transaction details are provided in an actionFieldObject.
-      id: order.id, // (Required) Transaction id (string).
-      affiliation: order.business?.name, // Affiliation (string).
-      revenue: order.total, // Revenue (number).
-      tax: order.tax_total, // Tax (number).
-      shipping: order.delivery_zone_price // Shipping (number).
-    })
+    if (window.ga) {
+      window.ga('ec:setAction', 'purchase', { // Transaction details are provided in an actionFieldObject.
+        id: order.id, // (Required) Transaction id (string).
+        affiliation: order.business?.name, // Affiliation (string).
+        revenue: order.total, // Revenue (number).
+        tax: order.tax_total, // Tax (number).
+        shipping: order.delivery_zone_price // Shipping (number).
+      })
+    }
+    if (googleTagManager) {
+      let analyticsPaymethod = null;
+      if (order.paymethod_id == 33 || order.paymethod_id == 2){
+        analyticsPaymethod = 'Tarjeta';
+      } else if (order.paymethod_id == 36) {
+        analyticsPaymethod = 'Wow+';
+      } else {
+        analyticsPaymethod = 'Efectivo';
+      }
+      const productFormated = order.products.map((product) => {
+            return {
+              'name': formatForAnalytics(product.name, 40),
+              'id': product.sku ? product.sku : 'producto sin sku',
+              'price': product.price ? product.price.toString() : '0',
+              'brand': 'MarketPlace '+slug,
+              'category': formatForAnalytics(product.category_id, 40),
+              'list': formatForAnalytics(product.category_id, 40),
+              'quantity': product.quantity.toString(),
+            }
+      })
+      const digitalData = {
+        'metodoPago': analyticsPaymethod,
+        'rewardsPoints': order.paymethod_id == 33 ? order.summary.total.toString() : '',
+        'couponMoney': order.offer ? order.discount.toString() : '',
+        'flow': 'MarketPlace '+slug,
+        'ecommerce': {
+          'purchase': {
+            'actionField': {
+              'id': order.integration_id,
+              'affiliation': order.integration_id,
+              'revenue': order.summary.total.toString(),
+              'tax': order.summary.tax.toString(),
+              'shipping': order.delivery_zone_price.toString(),
+              'coupon': order.offer ? order.offer.coupon ? order.offer.coupon : 'NA' : 'NA',
+            },
+            'products': productFormated,
+          }
+        },
+        event: "evPurchase",
+      };
+      console.log('evPageView', digitalData)
+      window.dataLayer.push(digitalData)
+    }
   }
   useEffect(() => {
     console.log('Analytic Ready')
-    if (analyticsReady && window.ga) {
+    if (analyticsReady && window.ga || googleTagManager) {
       events.on('change_view', handlechangeView)
       events.on('userLogin', handleLogin)
       events.on('product_clicked', handleClickProduct)
@@ -96,7 +238,7 @@ export const Analytics = (props) => {
         events.off('change_view', handlechangeView)
         events.off('userLogin', handleLogin)
         events.off('product_clicked', handleClickProduct)
-        events.off('product_added', handleProductAdded)
+        events.off('cart_product_added', handleProductAdded)
         events.off('order_placed', handleOrderPlaced)
       }
     }
@@ -113,7 +255,7 @@ Analytics.propTypes = {
    * Your Google Analytics trackId
    * @see trackId What is trackID ? https://developers.google.com/analytics/devguides/collection/analyticsjs
    */
-  trackId: PropTypes.string.isRequired
+  // trackId: PropTypes.string.isRequired
 }
 
 Analytics.defaultProps = {}
