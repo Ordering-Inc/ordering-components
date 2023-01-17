@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
-import { useOrder } from '../../contexts/OrderContext'
 
 /**
  * Component to manage Multi carts paymethods and wallets behavior without UI component
@@ -11,9 +10,11 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const {
     UIComponent,
     openCarts,
-    propsToFetch,
+    userId,
     cartUuid
   } = props
+
+  const qParams = userId ? `?user_id=${userId}` : ''
 
   const [ordering] = useApi()
   const [{ token, user }] = useSession()
@@ -37,7 +38,7 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
           'X-App-X': ordering.appId
         }
       }
-      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/prepare`, requestOptions)
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/prepare${qParams}`, requestOptions)
       const content = await response.json()
       if (!content.error) {
         setPaymethodsAndWallets({
@@ -68,7 +69,7 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const getUserWallets = async () => {
     try {
       const response = await fetch(
-        `${ordering.root}/users/${user.id}/wallets`,
+        `${ordering.root}/users/${user.id}/wallets${qParams}`,
         {
           method: 'GET',
           headers: {
