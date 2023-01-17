@@ -23,7 +23,7 @@ export const MultiCheckout = (props) => {
    * Session content
    */
   const [{ token }] = useSession()
-  const [{ carts }, { placeMulitCarts }] = useOrder()
+  const [{ carts }, { placeMultiCarts }] = useOrder()
   /**
 * Toast state
 */
@@ -76,7 +76,7 @@ export const MultiCheckout = (props) => {
       }
     }
     setPlacing(true)
-    const { error, result } = await placeMulitCarts(payload, cartUuid)
+    const { error, result } = await placeMultiCarts(payload, cartUuid)
 
     if (result?.paymethod_data?.status === 2 && actionsBeforePlace) {
       await actionsBeforePlace(paymethodSelected, result)
