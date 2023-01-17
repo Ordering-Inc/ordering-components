@@ -7,6 +7,7 @@ import { useSession } from '../../contexts/SessionContext'
 export const MultiCartCreate = (props) => {
   const {
     UIComponent,
+    userId,
     handleOnRedirectCheckout,
     handleOnRedirectMultiCheckout
   } = props
@@ -21,6 +22,10 @@ export const MultiCartCreate = (props) => {
       handleOnRedirectCheckout &&
       handleOnRedirectCheckout(cartList[0]?.uuid)
     }
+
+    const body = { carts: cartList }
+    if (userId) body.user_id = userId
+
     const response = await fetch(`${ordering.root}/cart_groups`, {
       method: 'POST',
       headers: {
@@ -28,7 +33,7 @@ export const MultiCartCreate = (props) => {
         'X-App-X': ordering.appId,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ carts: cartList })
+      body: JSON.stringify(body)
     })
     const { result, error } = await response.json()
     await refreshOrderOptions()
