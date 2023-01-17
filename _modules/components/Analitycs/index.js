@@ -43,12 +43,6 @@ var Analytics = function Analytics(props) {
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
 
-  var _useSession = (0, _SessionContext.useSession)(),
-      _useSession2 = _slicedToArray(_useSession, 1),
-      _useSession2$ = _useSession2[0],
-      auth = _useSession2$.auth,
-      user = _useSession2$.user;
-
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       analyticsReady = _useState2[0],
@@ -204,7 +198,7 @@ var Analytics = function Analytics(props) {
         },
         user: {
           profile: {
-            statusLogged: (user === null || user === void 0 ? void 0 : user.id) > 0 ? "Logged" : "NotLogged",
+            statusLogged: data.id > 0 ? "Logged" : "NotLogged",
             languajeUser: "null",
             isGeoActive: "null",
             profileInfo: "NA",

@@ -12,7 +12,6 @@ export const Analytics = (props) => {
   } = props
 
   const [events] = useEvent()
-  const [{ auth, user }] = useSession()
   const [analyticsReady, setAnalyticsReady] = useState(false)
 
 
@@ -155,7 +154,7 @@ export const Analytics = (props) => {
         },
         user: {
           profile: {
-            statusLogged: user?.id > 0 ? "Logged" : "NotLogged",
+            statusLogged: data.id > 0 ? "Logged" : "NotLogged",
             languajeUser: "null",
             isGeoActive: "null",
             profileInfo: "NA",
