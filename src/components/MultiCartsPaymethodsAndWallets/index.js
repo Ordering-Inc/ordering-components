@@ -12,8 +12,11 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const {
     UIComponent,
     openCarts,
+    userId,
     cartUuid
   } = props
+
+  const qParams = userId ? `?user_id=${userId}` : ''
 
   const [ordering] = useApi()
   const socket = useWebsocket()
@@ -39,7 +42,7 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
           'X-Socket-Id-X': socket?.getId()
         }
       }
-      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/prepare`, requestOptions)
+      const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/prepare${qParams}`, requestOptions)
       const content = await response.json()
       if (!content.error) {
         setPaymethodsAndWallets({
@@ -70,7 +73,7 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const getUserWallets = async () => {
     try {
       const response = await fetch(
-        `${ordering.root}/users/${user.id}/wallets`,
+        `${ordering.root}/users/${user.id}/wallets${qParams}`,
         {
           method: 'GET',
           headers: {
