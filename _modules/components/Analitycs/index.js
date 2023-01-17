@@ -171,13 +171,12 @@ var Analytics = function Analytics(props) {
         'ecommerce': {
           'add': {
             'products': [{
-              'name': formatForAnalytics(product.name),
+              'name': formatForAnalytics(product.name, 40),
               'id': product.sku ? product.sku : 'producto sin sku',
-              'price': product.price.toString(),
+              'price': product.price,
               'brand': 'MarketPlace ' + slug,
-              'category': formatForAnalytics(product_category.name),
-              'variant': formatForAnalytics(variants, 40),
-              'quantity': "".concat(product.quantity)
+              'category': product.categoryId,
+              'quantity': product.quantity
             }]
           }
         },
@@ -205,7 +204,7 @@ var Analytics = function Analytics(props) {
         },
         user: {
           profile: {
-            statusLogged: user.id > 0 ? "Logged" : "NotLogged",
+            statusLogged: (user === null || user === void 0 ? void 0 : user.id) > 0 ? "Logged" : "NotLogged",
             languajeUser: "null",
             isGeoActive: "null",
             profileInfo: "NA",

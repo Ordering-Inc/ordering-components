@@ -124,13 +124,12 @@ export const Analytics = (props) => {
         'ecommerce': {
           'add': {
             'products': [{
-              'name': formatForAnalytics(product.name),
+              'name': formatForAnalytics(product.name, 40),
               'id': product.sku ? product.sku : 'producto sin sku',
-              'price': product.price.toString(),
+              'price': product.price,
               'brand': 'MarketPlace '+slug,
-              'category': formatForAnalytics(product_category.name),
-              'variant': formatForAnalytics(variants, 40),
-              'quantity': `${product.quantity}`,
+              'category': product.categoryId,
+              'quantity': product.quantity
             }]
           },
         },
@@ -152,22 +151,22 @@ export const Analytics = (props) => {
           pageInfo: {
             hostName: location.protocol + "//" + location.hostname + "/",
             currentURL: location.href,
-          },
+          }
         },
         user: {
           profile: {
-            statusLogged: user.id > 0 ? "Logged" : "NotLogged",
+            statusLogged: user?.id > 0 ? "Logged" : "NotLogged",
             languajeUser: "null",
             isGeoActive: "null",
             profileInfo: "NA",
             social: {
-              network: 'NA',
-            },
+              network: 'NA'
+            }
           }
         }
-      };
-      console.log('evPageView', digitalData)
-      window.dataLayer.push(digitalData)
+      }
+      console.log('evPageView', digitalData);
+      window.dataLayer.push(digitalData);
     }
   }
   const handleOrderPlaced = (order) => {
@@ -226,7 +225,7 @@ export const Analytics = (props) => {
   }
   useEffect(() => {
     console.log('Analytic Ready')
-    if (analyticsReady && window.ga || googleTagManager) {
+    if ((analyticsReady && window.ga) || googleTagManager) {
       events.on('change_view', handlechangeView)
       events.on('userLogin', handleLogin)
       events.on('product_clicked', handleClickProduct)
