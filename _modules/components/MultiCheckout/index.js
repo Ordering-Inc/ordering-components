@@ -55,7 +55,7 @@ var MultiCheckout = function MultiCheckout(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     carts = _useOrder2[0].carts,
-    placeMulitCarts = _useOrder2[1].placeMulitCarts;
+    placeMultiCarts = _useOrder2[1].placeMultiCarts;
   /**
   * Toast state
   */
@@ -117,7 +117,7 @@ var MultiCheckout = function MultiCheckout(props) {
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _paymethodSelected$pa, _cartGroup$result2, _result$paymethod_dat;
-      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMulitCart, error, result;
+      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -148,11 +148,11 @@ var MultiCheckout = function MultiCheckout(props) {
             }
             setPlacing(true);
             _context.next = 9;
-            return placeMulitCarts(payload, cartUuid);
+            return placeMultiCarts(payload, cartUuid);
           case 9:
-            _yield$placeMulitCart = _context.sent;
-            error = _yield$placeMulitCart.error;
-            result = _yield$placeMulitCart.result;
+            _yield$placeMultiCart = _context.sent;
+            error = _yield$placeMultiCart.error;
+            result = _yield$placeMultiCart.result;
             if (!((result === null || result === void 0 ? void 0 : (_result$paymethod_dat = result.paymethod_data) === null || _result$paymethod_dat === void 0 ? void 0 : _result$paymethod_dat.status) === 2 && actionsBeforePlace)) {
               _context.next = 15;
               break;
