@@ -11,6 +11,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _EventContext = require("../../contexts/EventContext");
 
+var _SessionContext = require("../../contexts/SessionContext");
+
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -33,16 +35,31 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var Analytics = function Analytics(props) {
   var trackId = props.trackId,
+      googleTagManager = props.googleTagManager,
+      slug = props.slug,
       children = props.children;
 
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
       events = _useEvent2[0];
 
+  var _useSession = (0, _SessionContext.useSession)(),
+      _useSession2 = _slicedToArray(_useSession, 1),
+      _useSession2$ = _useSession2[0],
+      auth = _useSession2$.auth,
+      user = _useSession2$.user;
+
   var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
       analyticsReady = _useState2[0],
       setAnalyticsReady = _useState2[1];
+
+  var formatForAnalytics = function formatForAnalytics(str, limit, replaceSpace) {
+    var formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
+    if (limit) formattedStr = formattedStr.substr(0, limit);
+    return formattedStr;
+  };
 
   (0, _react.useEffect)(function () {
     var _window;
@@ -84,59 +101,195 @@ var Analytics = function Analytics(props) {
    */
 
   var handlechangeView = function handlechangeView(pageName) {
-    window.ga('set', 'page', pageName === null || pageName === void 0 ? void 0 : pageName.page);
-    window.ga('send', 'pageview');
+    if (window.ga) {
+      window.ga('set', 'page', pageName === null || pageName === void 0 ? void 0 : pageName.page);
+      window.ga('send', 'pageview');
+    } // if (googleTagManager) {
+    //   console.log('event: pageview', pageName?.page)
+    //   window.dataLayer.push({
+    //     event: 'pageview',
+    //     page: {
+    //       title: pageName?.page
+    //     }
+    //   });
+    // }
+
   };
 
   var handleClickProduct = function handleClickProduct(product) {
-    window.ga('ec:addProduct', {
-      id: product.id,
-      name: product.name,
-      category: product.category_id,
-      price: product.price
-    });
-    window.ga('ec:setAction', 'click');
-    window.ga('send', 'event', 'UI', 'click', 'add to cart');
+    if (window.ga) {
+      window.ga('ec:addProduct', {
+        id: product.id,
+        name: product.name,
+        category: product.category_id,
+        price: product.price
+      });
+      window.ga('ec:setAction', 'click');
+      window.ga('send', 'event', 'UI', 'click', 'add to cart');
+    }
+
+    if (googleTagManager) {
+      var digitalData = {
+        'flow': 'MarketPlace ' + slug,
+        'ecommerce': {
+          'click': {
+            'products': [{
+              'name': product.name,
+              'id': product.sku ? product.sku : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace ' + slug,
+              'category': formatForAnalytics(product.category.name, 40),
+              'variant': 'NA',
+              'list': formatForAnalytics(product.category.name, 40) // 'position': 
+
+            }]
+          }
+        },
+        event: "evProductClick"
+      };
+      console.log('evPageView', digitalData);
+      window.dataLayer.push(digitalData);
+    }
   };
 
   var handleProductAdded = function handleProductAdded(product) {
-    window.ga('ec:addProduct', {
-      id: product.id,
-      name: product.name,
-      category: product.category_id,
-      price: product.price,
-      quantity: product.quantity
-    });
-    window.ga('ec:setAction', 'add');
-    window.ga('send', 'event', 'UI', 'click', 'add to cart');
+    if (window.ga) {
+      window.ga('ec:addProduct', {
+        id: product.id,
+        name: product.name,
+        category: product.category_id,
+        price: product.price,
+        quantity: product.quantity
+      });
+      window.ga('ec:setAction', 'add');
+      window.ga('send', 'event', 'UI', 'click', 'add to cart');
+    }
+
+    if (googleTagManager) {
+      var digitalData = {
+        'flow': 'MarketPlace ' + slug,
+        'ecommerce': {
+          'add': {
+            'products': [{
+              'name': formatForAnalytics(product.name),
+              'id': product.sku ? product.sku : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace ' + slug,
+              'category': formatForAnalytics(product_category.name),
+              'variant': formatForAnalytics(variants, 40),
+              'quantity': "".concat(product.quantity)
+            }]
+          }
+        },
+        event: "evAddToCart"
+      };
+      console.log('evPageView', digitalData);
+      window.dataLayer.push(digitalData);
+    }
   };
 
   var handleLogin = function handleLogin(data) {
-    window.ga('set', 'userId', data.id);
+    if (window.ga) {
+      window.ga('set', 'userId', data.id);
+    }
+
+    if (googleTagManager) {
+      var digitalData = {
+        event: "evPageView",
+        version: "1.0",
+        page: {
+          pageInfo: {
+            hostName: location.protocol + "//" + location.hostname + "/",
+            currentURL: location.href
+          }
+        },
+        user: {
+          profile: {
+            statusLogged: user.id > 0 ? "Logged" : "NotLogged",
+            languajeUser: "null",
+            isGeoActive: "null",
+            profileInfo: "NA",
+            social: {
+              network: 'NA'
+            }
+          }
+        }
+      };
+      console.log('evPageView', digitalData);
+      window.dataLayer.push(digitalData);
+    }
   };
 
   var handleOrderPlaced = function handleOrderPlaced(order) {
-    var _order$business;
+    if (window.ga) {
+      var _order$business;
 
-    window.ga('ec:setAction', 'purchase', {
-      // Transaction details are provided in an actionFieldObject.
-      id: order.id,
-      // (Required) Transaction id (string).
-      affiliation: (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.name,
-      // Affiliation (string).
-      revenue: order.total,
-      // Revenue (number).
-      tax: order.tax_total,
-      // Tax (number).
-      shipping: order.delivery_zone_price // Shipping (number).
+      window.ga('ec:setAction', 'purchase', {
+        // Transaction details are provided in an actionFieldObject.
+        id: order.id,
+        // (Required) Transaction id (string).
+        affiliation: (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.name,
+        // Affiliation (string).
+        revenue: order.total,
+        // Revenue (number).
+        tax: order.tax_total,
+        // Tax (number).
+        shipping: order.delivery_zone_price // Shipping (number).
 
-    });
+      });
+    }
+
+    if (googleTagManager) {
+      var analyticsPaymethod = null;
+
+      if (order.paymethod_id == 33 || order.paymethod_id == 2) {
+        analyticsPaymethod = 'Tarjeta';
+      } else if (order.paymethod_id == 36) {
+        analyticsPaymethod = 'Wow+';
+      } else {
+        analyticsPaymethod = 'Efectivo';
+      }
+
+      var productFormated = order.products.map(function (product) {
+        return {
+          'name': formatForAnalytics(product.name, 40),
+          'id': product.sku ? product.sku : 'producto sin sku',
+          'price': product.price ? product.price.toString() : '0',
+          'brand': 'MarketPlace ' + slug,
+          'category': formatForAnalytics(product.category_id, 40),
+          'list': formatForAnalytics(product.category_id, 40),
+          'quantity': product.quantity.toString()
+        };
+      });
+      var digitalData = {
+        'metodoPago': analyticsPaymethod,
+        'rewardsPoints': order.paymethod_id == 33 ? order.summary.total.toString() : '',
+        'couponMoney': order.offer ? order.discount.toString() : '',
+        'flow': 'MarketPlace ' + slug,
+        'ecommerce': {
+          'purchase': {
+            'actionField': {
+              'id': order.integration_id,
+              'affiliation': order.integration_id,
+              'revenue': order.summary.total.toString(),
+              'tax': order.summary.tax.toString(),
+              'shipping': order.delivery_zone_price.toString(),
+              'coupon': order.offer ? order.offer.coupon ? order.offer.coupon : 'NA' : 'NA'
+            },
+            'products': productFormated
+          }
+        },
+        event: "evPurchase"
+      };
+      console.log('evPageView', digitalData);
+      window.dataLayer.push(digitalData);
+    }
   };
 
   (0, _react.useEffect)(function () {
     console.log('Analytic Ready');
 
-    if (analyticsReady && window.ga) {
+    if (analyticsReady && window.ga || googleTagManager) {
       events.on('change_view', handlechangeView);
       events.on('userLogin', handleLogin);
       events.on('product_clicked', handleClickProduct);
@@ -149,7 +302,7 @@ var Analytics = function Analytics(props) {
         events.off('change_view', handlechangeView);
         events.off('userLogin', handleLogin);
         events.off('product_clicked', handleClickProduct);
-        events.off('product_added', handleProductAdded);
+        events.off('cart_product_added', handleProductAdded);
         events.off('order_placed', handleOrderPlaced);
       }
     };
@@ -163,6 +316,6 @@ Analytics.propTypes = {
    * Your Google Analytics trackId
    * @see trackId What is trackID ? https://developers.google.com/analytics/devguides/collection/analyticsjs
    */
-  trackId: _propTypes.default.string.isRequired
+  // trackId: PropTypes.string.isRequired
 };
 Analytics.defaultProps = {};
