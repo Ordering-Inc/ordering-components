@@ -48,6 +48,7 @@ var OrderDetails = function OrderDetails(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
@@ -92,7 +93,6 @@ var OrderDetails = function OrderDetails(props) {
     _useState10 = _slicedToArray(_useState9, 2),
     messagesReadList = _useState10[0],
     setMessagesReadList = _useState10[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
   var accessToken = props.accessToken || token;
 
   /**
@@ -184,6 +184,8 @@ var OrderDetails = function OrderDetails(props) {
               method: 'post',
               headers: {
                 Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
@@ -306,6 +308,8 @@ var OrderDetails = function OrderDetails(props) {
               method: 'PUT',
               headers: {
                 Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
@@ -355,6 +359,8 @@ var OrderDetails = function OrderDetails(props) {
               method: 'GET',
               headers: {
                 Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'Content-Type': 'application/json'
               }
             });
@@ -397,6 +403,8 @@ var OrderDetails = function OrderDetails(props) {
               method: 'POST',
               headers: {
                 Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({

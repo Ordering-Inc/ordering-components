@@ -50,13 +50,13 @@ var OrderListGroups = function OrderListGroups(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     session = _useSession2[0];
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
-  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     t = _useLanguage2[1];
@@ -536,7 +536,8 @@ var OrderListGroups = function OrderListGroups(props) {
               headers: {
                 'Content-Type': 'application/json',
                 Authorization: "Bearer ".concat(accessToken),
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 5:
@@ -704,7 +705,8 @@ var OrderListGroups = function OrderListGroups(props) {
               headers: {
                 'Content-Type': 'application/json',
                 Authorization: "Bearer ".concat(accessToken),
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 7:
@@ -1014,7 +1016,8 @@ var OrderListGroups = function OrderListGroups(props) {
                         headers: {
                           Authorization: "Bearer ".concat(session.token),
                           'Content-Type': 'application/json',
-                          'X-App-X': ordering.appId
+                          'X-App-X': ordering.appId,
+                          'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                         },
                         body: JSON.stringify(body)
                       });

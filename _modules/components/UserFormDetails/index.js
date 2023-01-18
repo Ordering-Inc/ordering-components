@@ -10,6 +10,7 @@ var _SessionContext = require("../../contexts/SessionContext");
 var _ApiContext = require("../../contexts/ApiContext");
 var _CustomerContext = require("../../contexts/CustomerContext");
 var _ValidationsFieldsContext = require("../../contexts/ValidationsFieldsContext");
+var _WebsocketContext = require("../../contexts/WebsocketContext");
 var _excluded = ["photo"];
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -50,6 +51,7 @@ var UserFormDetails = function UserFormDetails(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 2),
     session = _useSession2[0],
@@ -408,7 +410,8 @@ var UserFormDetails = function UserFormDetails(props) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify(body)
             });
@@ -562,7 +565,8 @@ var UserFormDetails = function UserFormDetails(props) {
               headers: {
                 'Content-Type': 'application/json',
                 Authorization: "Bearer ".concat(accessToken),
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 5:

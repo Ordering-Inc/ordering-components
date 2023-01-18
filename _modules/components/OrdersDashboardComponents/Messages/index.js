@@ -44,6 +44,7 @@ var Messages = function Messages(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
@@ -90,7 +91,6 @@ var Messages = function Messages(props) {
     _useState12 = _slicedToArray(_useState11, 2),
     image = _useState12[0],
     setImage = _useState12[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
 
   /**
    * Method to send message
@@ -139,7 +139,9 @@ var Messages = function Messages(props) {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(accessToken)
+                Authorization: "Bearer ".concat(accessToken),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify(body)
             });
@@ -205,7 +207,9 @@ var Messages = function Messages(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(accessToken)
+                Authorization: "Bearer ".concat(accessToken),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 5:
@@ -274,7 +278,9 @@ var Messages = function Messages(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(accessToken)
+                Authorization: "Bearer ".concat(accessToken),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 7:

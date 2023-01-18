@@ -62,6 +62,7 @@ var OrderList = function OrderList(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
@@ -72,7 +73,6 @@ var OrderList = function OrderList(props) {
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
-  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     t = _useLanguage2[1];
@@ -447,7 +447,8 @@ var OrderList = function OrderList(props) {
               headers: {
                 'Content-Type': 'application/json',
                 Authorization: "Bearer ".concat(accessToken),
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 5:

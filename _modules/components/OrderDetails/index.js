@@ -56,6 +56,7 @@ var OrderDetails = function OrderDetails(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
@@ -104,7 +105,6 @@ var OrderDetails = function OrderDetails(props) {
     _useState8 = _slicedToArray(_useState7, 2),
     messages = _useState8[0],
     setMessages = _useState8[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useState9 = (0, _react.useState)(((_props$order2 = props.order) === null || _props$order2 === void 0 ? void 0 : (_props$order2$driver = _props$order2.driver) === null || _props$order2$driver === void 0 ? void 0 : _props$order2$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
     _useState10 = _slicedToArray(_useState9, 2),
     driverLocation = _useState10[0],
@@ -181,7 +181,8 @@ var OrderDetails = function OrderDetails(props) {
               headers: {
                 'Content-Type': 'application/json',
                 Authorization: "Bearer ".concat(accessToken),
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 5:
@@ -250,7 +251,8 @@ var OrderDetails = function OrderDetails(props) {
               headers: {
                 Authorization: "Bearer ".concat(token),
                 'Content-Type': 'application/json',
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify({
                 can_see: '0,2,3',
@@ -576,7 +578,8 @@ var OrderDetails = function OrderDetails(props) {
               headers: {
                 Authorization: "Bearer ".concat(token),
                 'Content-Type': 'application/json',
-                'X-App-X': ordering.appId
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 6:
