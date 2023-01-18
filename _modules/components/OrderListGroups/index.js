@@ -36,7 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderListGroups = function OrderListGroups(props) {
-  var _configs$logistic_mod, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _paginationSettings$p, _ordersGroup$currentT19;
+  var _configs$logistic_mod, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _paginationSettings$p, _ordersGroup$currentT20;
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     isIos = props.isIos,
@@ -154,7 +154,7 @@ var OrderListGroups = function OrderListGroups(props) {
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
       var _filtered$customer, _filtered$customer2, _filtered$date, _filtered$date3;
-      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _ordersGroup$currentT, _ordersGroup$currentT2, _ordersGroup$currentT3, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer6, customerOptions, _filtered$customer4, _filtered$customer5, _filtered$customer7, _filtered$customer8, _filtered$date2, _filtered$date4, source, functionFetch;
+      var page, _ref$pageSize, pageSize, orderStatus, newFetch, options, _ordersGroup$currentT, _ordersGroup$currentT2, _ordersGroup$currentT3, _ordersGroup$currentT4, _paymethodResult, paymethodResult, _filtered$driver_grou, _filtered$customer3, _filtered$customer6, customerOptions, _filtered$customer4, _filtered$customer5, _filtered$customer7, _filtered$customer8, _filtered$date2, _filtered$date4, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -183,7 +183,7 @@ var OrderListGroups = function OrderListGroups(props) {
                     attribute: 'id',
                     value: {
                       condition: '!=',
-                      value: (_ordersGroup$currentT3 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT3 === void 0 ? void 0 : _ordersGroup$currentT3.orders.map(function (o) {
+                      value: (_ordersGroup$currentT3 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT3 === void 0 ? void 0 : (_ordersGroup$currentT4 = _ordersGroup$currentT3.orders) === null || _ordersGroup$currentT4 === void 0 ? void 0 : _ordersGroup$currentT4.map(function (o) {
                         return o.id;
                       })
                     }
@@ -369,11 +369,11 @@ var OrderListGroups = function OrderListGroups(props) {
       var _ref5,
         newFetch,
         newFetchCurrent,
-        _ordersGroup$currentT4,
-        pageSize,
         _ordersGroup$currentT5,
+        pageSize,
         _ordersGroup$currentT6,
         _ordersGroup$currentT7,
+        _ordersGroup$currentT8,
         _yield$getOrders,
         _yield$getOrders$cont,
         error,
@@ -393,7 +393,7 @@ var OrderListGroups = function OrderListGroups(props) {
             return _context3.abrupt("return");
           case 3:
             if (newFetch) {
-              ordersStatusArray.map(function (tab) {
+              ordersStatusArray === null || ordersStatusArray === void 0 ? void 0 : ordersStatusArray.map(function (tab) {
                 ordersGroup = _objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, tab, _objectSpread(_objectSpread({}, orderStructure), {}, {
                   defaultFilter: ordersGroupStatus[tab],
                   currentFilter: ordersGroup[tab].currentFilter
@@ -402,7 +402,7 @@ var OrderListGroups = function OrderListGroups(props) {
             } else if (newFetchCurrent) {
               ordersGroup = _objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, orderStructure), {}, {
                 defaultFilter: ordersGroupStatus[currentTabSelected],
-                currentFilter: (_ordersGroup$currentT4 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT4 === void 0 ? void 0 : _ordersGroup$currentT4.currentFilter
+                currentFilter: (_ordersGroup$currentT5 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT5 === void 0 ? void 0 : _ordersGroup$currentT5.currentFilter
               })));
             }
             pageSize = paginationSettings.pageSize;
@@ -414,7 +414,7 @@ var OrderListGroups = function OrderListGroups(props) {
             return getOrders({
               page: 1,
               pageSize: pageSize,
-              orderStatus: (_ordersGroup$currentT5 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT5 === void 0 ? void 0 : _ordersGroup$currentT5.currentFilter,
+              orderStatus: (_ordersGroup$currentT6 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT6 === void 0 ? void 0 : _ordersGroup$currentT6.currentFilter,
               newFetch: newFetch
             });
           case 9:
@@ -423,7 +423,7 @@ var OrderListGroups = function OrderListGroups(props) {
             error = _yield$getOrders$cont.error;
             result = _yield$getOrders$cont.result;
             pagination = _yield$getOrders$cont.pagination;
-            _ordersCleaned = error ? newFetch || newFetchCurrent ? [] : sortOrders((_ordersGroup$currentT6 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT6 === void 0 ? void 0 : _ordersGroup$currentT6.orders) : newFetch || newFetchCurrent ? sortOrders(result) : sortOrders((_ordersGroup$currentT7 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT7 === void 0 ? void 0 : _ordersGroup$currentT7.orders.concat(result));
+            _ordersCleaned = error ? newFetch || newFetchCurrent ? [] : sortOrders((_ordersGroup$currentT7 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT7 === void 0 ? void 0 : _ordersGroup$currentT7.orders) : newFetch || newFetchCurrent ? sortOrders(result) : sortOrders((_ordersGroup$currentT8 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT8 === void 0 ? void 0 : _ordersGroup$currentT8.orders.concat(result));
             setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
               loading: false,
               orders: _ordersCleaned,
@@ -460,7 +460,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   var loadMoreOrders = /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var _ordersGroup$currentT8, _ordersGroup$currentT9, _ordersGroup$currentT10, _ordersGroup$currentT11, _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _ordersCleaned, _err$message2;
+      var _ordersGroup$currentT9, _ordersGroup$currentT10, _ordersGroup$currentT11, _ordersGroup$currentT12, _yield$getOrders2, _yield$getOrders2$con, error, result, pagination, _ordersCleaned, _err$message2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
@@ -471,7 +471,7 @@ var OrderListGroups = function OrderListGroups(props) {
             _context4.next = 4;
             return getOrders({
               page: ordersGroup[currentTabSelected].pagination.currentPage + 1,
-              orderStatus: (_ordersGroup$currentT8 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT8 === void 0 ? void 0 : _ordersGroup$currentT8.currentFilter,
+              orderStatus: (_ordersGroup$currentT9 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT9 === void 0 ? void 0 : _ordersGroup$currentT9.currentFilter,
               newFetch: true
             });
           case 4:
@@ -480,7 +480,7 @@ var OrderListGroups = function OrderListGroups(props) {
             error = _yield$getOrders2$con.error;
             result = _yield$getOrders2$con.result;
             pagination = _yield$getOrders2$con.pagination;
-            _ordersCleaned = error ? sortOrders((_ordersGroup$currentT9 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT9 === void 0 ? void 0 : _ordersGroup$currentT9.orders) : sortOrders((_ordersGroup$currentT10 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT10 === void 0 ? void 0 : (_ordersGroup$currentT11 = _ordersGroup$currentT10.orders) === null || _ordersGroup$currentT11 === void 0 ? void 0 : _ordersGroup$currentT11.concat(result));
+            _ordersCleaned = error ? sortOrders((_ordersGroup$currentT10 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT10 === void 0 ? void 0 : _ordersGroup$currentT10.orders) : sortOrders((_ordersGroup$currentT11 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT11 === void 0 ? void 0 : (_ordersGroup$currentT12 = _ordersGroup$currentT11.orders) === null || _ordersGroup$currentT12 === void 0 ? void 0 : _ordersGroup$currentT12.concat(result));
             setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
               loading: false,
               orders: _ordersCleaned,
@@ -577,7 +577,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }();
   var deleteOrders = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderIds) {
-      var _ordersGroup$currentT12, _ordersGroup$currentT13, _ordersGroup$currentT14, errorState, _yield$ordering$setAc3, error, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
+      var _ordersGroup$currentT13, _ordersGroup$currentT14, _ordersGroup$currentT15, errorState, _yield$ordering$setAc3, error, _iterator, _step, id, _yield$ordering$setAc4, multiError, isError, idsDeleted, _err$message3;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -642,7 +642,7 @@ var OrderListGroups = function OrderListGroups(props) {
             isError = errorState.some(function (e) {
               return e.error;
             });
-            idsDeleted = errorState.map(function (obj) {
+            idsDeleted = errorState === null || errorState === void 0 ? void 0 : errorState.map(function (obj) {
               return !obj.error && obj.id;
             });
             onOrdersDeleted && onOrdersDeleted({
@@ -653,9 +653,9 @@ var OrderListGroups = function OrderListGroups(props) {
               loading: false
             }));
             setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, _defineProperty({}, currentTabSelected, _objectSpread(_objectSpread({}, ordersGroup[currentTabSelected]), {}, {
-              orders: idsDeleted.length ? sortOrders((_ordersGroup$currentT12 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT12 === void 0 ? void 0 : (_ordersGroup$currentT13 = _ordersGroup$currentT12.orders) === null || _ordersGroup$currentT13 === void 0 ? void 0 : _ordersGroup$currentT13.filter(function (order) {
+              orders: idsDeleted.length ? sortOrders((_ordersGroup$currentT13 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT13 === void 0 ? void 0 : (_ordersGroup$currentT14 = _ordersGroup$currentT13.orders) === null || _ordersGroup$currentT14 === void 0 ? void 0 : _ordersGroup$currentT14.filter(function (order) {
                 return !idsDeleted.includes(order.id);
-              })) : sortOrders((_ordersGroup$currentT14 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT14 === void 0 ? void 0 : _ordersGroup$currentT14.orders)
+              })) : sortOrders((_ordersGroup$currentT15 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT15 === void 0 ? void 0 : _ordersGroup$currentT15.orders)
             }))));
             _context6.next = 42;
             break;
@@ -762,9 +762,10 @@ var OrderListGroups = function OrderListGroups(props) {
     return ordersSorted;
   };
   var formatOrdersGrouped = function formatOrdersGrouped(orders) {
+    var _totalOrders;
     var totalOrders = orders;
     var ordersGroupids = [];
-    totalOrders = totalOrders.map(function (item) {
+    totalOrders = (_totalOrders = totalOrders) === null || _totalOrders === void 0 ? void 0 : _totalOrders.map(function (item) {
       if (!(item !== null && item !== void 0 && item.cart_group_id)) return item;
       var groupIds = totalOrders.filter(function (o) {
         return o.cart_group_id === (item === null || item === void 0 ? void 0 : item.cart_group_id);
@@ -840,7 +841,7 @@ var OrderListGroups = function OrderListGroups(props) {
       var _order$order_group3, _order$order_group3$o, _order$order_group3$o2;
       var _status = getStatusById(order === null || order === void 0 ? void 0 : (_order$order_group3 = order.order_group) === null || _order$order_group3 === void 0 ? void 0 : (_order$order_group3$o = _order$order_group3.orders) === null || _order$order_group3$o === void 0 ? void 0 : (_order$order_group3$o2 = _order$order_group3$o[0]) === null || _order$order_group3$o2 === void 0 ? void 0 : _order$order_group3$o2.status);
       var _orderList;
-      ordersGroups.map(function (order) {
+      ordersGroups === null || ordersGroups === void 0 ? void 0 : ordersGroups.map(function (order) {
         var _ordersGroup$_status, _orderList2;
         _orderList = (_ordersGroup$_status = ordersGroup[_status]) === null || _ordersGroup$_status === void 0 ? void 0 : _ordersGroup$_status.orders;
         var indexToUpdate = (_orderList2 = _orderList) === null || _orderList2 === void 0 ? void 0 : _orderList2.findIndex(function (o) {
@@ -970,7 +971,7 @@ var OrderListGroups = function OrderListGroups(props) {
               };
             }();
             _context10.next = 7;
-            return Promise.all(orderIds.map(function (id) {
+            return Promise.all(orderIds === null || orderIds === void 0 ? void 0 : orderIds.map(function (id) {
               return setOrderStatus(id);
             }));
           case 7:
@@ -1040,7 +1041,7 @@ var OrderListGroups = function OrderListGroups(props) {
               };
             }();
             _context12.next = 5;
-            return Promise.all(orderIds.map(function (id) {
+            return Promise.all(orderIds === null || orderIds === void 0 ? void 0 : orderIds.map(function (id) {
               return setCustomerReview(_objectSpread(_objectSpread({}, body), {}, {
                 order_id: id,
                 user_id: customerId
@@ -1050,7 +1051,7 @@ var OrderListGroups = function OrderListGroups(props) {
             result = _context12.sent;
             if (result !== null && result !== void 0 && result.length) {
               orders = ordersGroup[currentTabSelected].orders;
-              result.map(function (order) {
+              result === null || result === void 0 ? void 0 : result.map(function (order) {
                 var orderFound = orders.find(function (o) {
                   return o.id === order.order_id;
                 });
@@ -1086,14 +1087,14 @@ var OrderListGroups = function OrderListGroups(props) {
     };
   }();
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT15;
-    setCurrentFilters((_ordersGroup$currentT15 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT15 === void 0 ? void 0 : _ordersGroup$currentT15.currentFilter);
+    var _ordersGroup$currentT16;
+    setCurrentFilters((_ordersGroup$currentT16 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT16 === void 0 ? void 0 : _ordersGroup$currentT16.currentFilter);
     if (currentTabSelected === 'logisticOrders') {
       loadLogisticOrders(!!(logisticOrders !== null && logisticOrders !== void 0 && logisticOrders.orders));
     } else {
-      var _ordersGroup$currentT16, _ordersGroup$currentT17;
+      var _ordersGroup$currentT17, _ordersGroup$currentT18;
       loadOrders({
-        newFetchCurrent: ((_ordersGroup$currentT16 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT16 === void 0 ? void 0 : (_ordersGroup$currentT17 = _ordersGroup$currentT16.pagination) === null || _ordersGroup$currentT17 === void 0 ? void 0 : _ordersGroup$currentT17.total) === null
+        newFetchCurrent: ((_ordersGroup$currentT17 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT17 === void 0 ? void 0 : (_ordersGroup$currentT18 = _ordersGroup$currentT17.pagination) === null || _ordersGroup$currentT18 === void 0 ? void 0 : _ordersGroup$currentT18.total) === null
       });
     }
   }, [currentTabSelected]);
@@ -1111,8 +1112,8 @@ var OrderListGroups = function OrderListGroups(props) {
     });
   }, [filtered]);
   (0, _react.useEffect)(function () {
-    var _ordersGroup$currentT18, _session$user5, _session$user6;
-    if ((_ordersGroup$currentT18 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT18 !== void 0 && _ordersGroup$currentT18.loading) return;
+    var _ordersGroup$currentT19, _session$user5, _session$user6;
+    if ((_ordersGroup$currentT19 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT19 !== void 0 && _ordersGroup$currentT19.loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _orderFound, _orderFound$driver, _order$driver, _session$user4;
       events.emit('order_updated', order);
@@ -1314,7 +1315,7 @@ var OrderListGroups = function OrderListGroups(props) {
     onFiltered: setFiltered,
     handleChangeOrderStatus: handleChangeOrderStatus,
     handleSendCustomerReview: handleSendCustomerReview,
-    ordersFormatted: formatOrdersGrouped((_ordersGroup$currentT19 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT19 === void 0 ? void 0 : _ordersGroup$currentT19.orders),
+    ordersFormatted: formatOrdersGrouped((_ordersGroup$currentT20 = ordersGroup[currentTabSelected]) === null || _ordersGroup$currentT20 === void 0 ? void 0 : _ordersGroup$currentT20.orders),
     isLogisticActivated: isLogisticActivated
   })));
 };
