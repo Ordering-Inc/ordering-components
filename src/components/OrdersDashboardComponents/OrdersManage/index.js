@@ -136,7 +136,9 @@ export const OrdersManage = (props) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${session.token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({ status: updateStatus })
       }
@@ -228,7 +230,9 @@ export const OrdersManage = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${session.token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
       const response = await fetch(`${ordering.root}/controls/orders`, requestOptions)
@@ -515,7 +519,9 @@ export const OrdersManage = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${session.token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
       const response = await fetch(`${ordering.root}/orders/dashboard?where=${JSON.stringify(where)}`, requestOptions)

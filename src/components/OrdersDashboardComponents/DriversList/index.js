@@ -19,11 +19,11 @@ export const DriversList = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const requestsState = {}
   const [driverActionStatus, setDriverActionStatus] = useState({ loading: true, error: null })
-  const socket = useWebsocket()
 
   /**
    * Get session
@@ -229,7 +229,9 @@ export const DriversList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
+          Authorization: `Bearer ${session.token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
       const response = await fetch(`${ordering.root}/controls/orders/${orderId}`, requestOptions)

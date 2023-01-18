@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../../contexts/ApiContext'
 import { useSession } from '../../../contexts/SessionContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const CheckPassword = (props) => {
   const {
@@ -9,6 +10,7 @@ export const CheckPassword = (props) => {
   } = props
   const [ordering] = useApi()
   const [{ token }] = useSession()
+  const socket = useWebsocket()
 
   const [passwordValue, setPasswordValue] = useState(null)
   const [checkPasswordStatus, setCheckPasswordStatus] = useState({ result: null, loading: false, error: null })
@@ -31,7 +33,9 @@ export const CheckPassword = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({ password: passwordValue })
       }

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useOrder } from '../../contexts/OrderContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage Multi carts paymethods and wallets behavior without UI component
@@ -17,6 +19,7 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const qParams = userId ? `?user_id=${userId}` : ''
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ token, user }] = useSession()
 
   const [cartsUuids, setCartsUuids] = useState([])
@@ -35,7 +38,8 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
       const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/prepare${qParams}`, requestOptions)
@@ -75,7 +79,8 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
-            'X-App-X': ordering.appId
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
           }
         }
       )
