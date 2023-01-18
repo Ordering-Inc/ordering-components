@@ -80,6 +80,8 @@ export const OrderListGroups = (props) => {
   const [filtered, setFiltered] = useState(null)
   const [ordersDeleted, setOrdersDeleted] = useState({ loading: false, error: null, result: [] })
   const [controlsState, setControlsState] = useState({ loading: true, error: null, paymethods: [] })
+  const [businessIDs, setBusinessIDs] = useState([])
+
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
   const requestsState = {}
 
@@ -721,6 +723,33 @@ export const OrderListGroups = (props) => {
     }
   }
 
+  const getBusinessesIDs = async () => {
+   const propsToFetch = ['id', 'name']
+   try {
+      const { content: { error, result } } = await ordering.businesses().asDashboard().select(propsToFetch).get()
+      if (!error) {
+        const _businessIDs = result.length > 0 && result.map(({id}) => id)
+        setBusinessIDs(_businessIDs)
+      }
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setOrdersGroup({
+          ...ordersGroup,
+          [currentTabSelected]: {
+            ...ordersGroup[currentTabSelected],
+            loading: false,
+            error: [err?.message ?? 'ERROR']
+          }
+        })
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (session?.user?.level !== 2) return
+    getBusinessesIDs()
+  }, [])
+
   useEffect(() => {
     setCurrentFilters(ordersGroup[currentTabSelected]?.currentFilter)
     if (currentTabSelected === 'logisticOrders') {
@@ -747,6 +776,7 @@ export const OrderListGroups = (props) => {
     if (ordersGroup[currentTabSelected]?.loading) return
 
     const handleUpdateOrder = (order) => {
+      if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
       events.emit('order_updated', order)
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {

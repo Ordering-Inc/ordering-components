@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useApi } from '../ApiContext'
+import { useOptimizationLoad } from '../OptimizationLoadContext'
 
 /**
  * Create OrderingThemeContext
@@ -13,7 +14,6 @@ export const OrderingThemeContext = createContext()
  * @param {props} props
  */
 export const OrderingThemeProvider = ({ children, settings }) => {
-
   const [state, setState] = useState({
     loading: true,
     theme: {},
@@ -21,8 +21,9 @@ export const OrderingThemeProvider = ({ children, settings }) => {
   })
 
   const [ordering] = useApi()
+  const [optimizationLoad] = useOptimizationLoad()
 
-  const getThemes = async () => {
+  const getThemes = async (themes = null) => {
     const requestOptions = {
       method: 'GET',
       headers: {
@@ -30,8 +31,14 @@ export const OrderingThemeProvider = ({ children, settings }) => {
       }
     }
     try {
-      const response = await fetch(`${ordering.root}/theme`, requestOptions)
-      const { result, error } = await response.json()
+      let error = themes?.error ?? null
+      let result = themes?.result ?? null
+      if (!themes) {
+        const response = await fetch(`${ordering.root}/theme`, requestOptions)
+        const res = await response.json()
+        error = res?.error
+        result = res?.result
+      }
       if (!error) {
         setState({
           ...state,
@@ -62,8 +69,13 @@ export const OrderingThemeProvider = ({ children, settings }) => {
   }
 
   useEffect(() => {
-    getThemes()
-  }, [])
+    if (optimizationLoad.loading) return
+    const _themes = optimizationLoad.result ? {
+      error: optimizationLoad.error,
+      result: { values: optimizationLoad.result?.theme }
+    } : null
+    getThemes(_themes)
+  }, [optimizationLoad])
 
   const functions = {
     refreshTheme

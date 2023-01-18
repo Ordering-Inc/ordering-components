@@ -847,10 +847,16 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Place multi carts
    */
-  const placeMulitCarts = async (data, cartUuid) => {
+  const placeMultiCarts = async (data, cartUuid) => {
     try {
       setState({ ...state, loading: true })
       const countryCode = await strategy.getItem('country-code')
+      const customerFromLocalStorage = await strategy.getItem('user-customer', true)
+      const userCustomerId = customerFromLocalStorage?.id
+      const body = {
+        ...data,
+        user_id: userCustomerId || session.user.id
+      }
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -860,7 +866,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(body)
       }
 
       const response = await fetch(`${ordering.root}/cart_groups/${cartUuid}/place`, requestOptions)
@@ -1259,7 +1265,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     changePaymethod,
     setUserCustomerOptions,
     setStateValues,
-    placeMulitCarts,
+    placeMultiCarts,
     getLastOrderHasNoReview,
     changeCityFilter,
     confirmMultiCarts

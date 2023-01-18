@@ -84,7 +84,6 @@ export const SignupForm = (props) => {
 
     if (isCustomerMode) {
       data.phone = data.cellphone
-      delete data.country_phone_code
     }
     const newData = Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== ''))
     try {

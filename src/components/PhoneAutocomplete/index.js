@@ -25,28 +25,35 @@ export const PhoneAutocomplete = (props) => {
    */
   const getUsers = async () => {
     setCustomersPhones({ ...customersPhones, loading: true })
-    const conditions = [{
-      attribute: 'cellphone',
-      value: {
-        condition: 'ilike',
-        value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
-      }
-    },
-    {
-      attribute: 'phone',
-      value: {
-        condition: 'ilike',
-        value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
-      }
-    }]
+    const conditions = {
+      conector: 'AND',
+      conditions: [{
+        attribute: 'enabled',
+        value: isIos ? true : encodeURI(true)
+      },
+      {
+        conector: 'OR',
+        conditions: [{
+          attribute: 'cellphone',
+          value: {
+            condition: 'ilike',
+            value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
+          }
+        },
+        {
+          attribute: 'phone',
+          value: {
+            condition: 'ilike',
+            value: isIos ? `%${phone}%` : encodeURI(`%${phone}%`)
+          }
+        }]
+      }]
+    }
     try {
       const { content: { result } } = await ordering
         .setAccessToken(token)
         .users()
-        .where({
-          conditions,
-          conector: 'OR'
-        })
+        .where(conditions)
         .get()
       setCustomersPhones({ ...customersPhones, users: result, loading: false })
     } catch (e) {
@@ -142,7 +149,7 @@ export const PhoneAutocomplete = (props) => {
     if (
       phone &&
       phone.length >= 7 &&
-      customersPhones?.users?.length === 0
+      (customersPhones?.users?.length === 0 || phone.length === 7)
     ) {
       getUsers()
     }

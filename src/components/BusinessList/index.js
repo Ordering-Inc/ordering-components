@@ -53,18 +53,20 @@ export const BusinessList = (props) => {
   const [orderByValue, setOrderByValue] = useState(initialOrderByValue ?? null)
   const [maxDeliveryFee, setMaxDeliveryFee] = useState(null)
   const [orderState] = useOrder()
+  const [orderingTheme] = useOrderingTheme()
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ auth, token }] = useSession()
-  const [orderingTheme] = useOrderingTheme()
   const [requestsState, setRequestsState] = useState({})
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
-  const [{ configs }, { refreshConfigs }] = useConfig()
+  const [{ configs }] = useConfig()
   const [franchiseEnabled, setFranchiseEnabled] = useState(false)
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
   const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
   const advancedSearchEnabled = configs?.advanced_business_search_enabled?.value === '1'
-  const showCities = !orderingTheme?.theme?.business_listing_view?.components?.cities?.hidden
+  const showCities = (!orderingTheme?.business_listing_view?.components?.cities?.hidden && orderState?.options?.type === 2 && !props.disabledCities) ?? false
+  const unaddressedTypes = configs?.unaddressed_order_types_allowed?.value.split('|').map(value => Number(value)) || []
+  const isAllowUnaddressOrderType = unaddressedTypes.includes(orderState?.options?.type)
 
   const sortBusinesses = (array, option) => {
     if (option === 'review') {
@@ -83,9 +85,20 @@ export const BusinessList = (props) => {
         loading: true,
         businesses: newFetch ? [] : businessesList.businesses
       })
+
+      const defaultLatitude = Number(configs?.location_default_latitude?.value)
+      const defaultLongitude = Number(configs?.location_default_longitude?.value)
+      const isInvalidDefaultLocation = isNaN(defaultLatitude) || isNaN(defaultLongitude)
+      const defaultLocation = {
+        lat: !isInvalidDefaultLocation ? defaultLatitude : 40.7744146,
+        lng: !isInvalidDefaultLocation ? defaultLongitude : -73.9678064
+      }
+
       let parameters = asDashboard ? {} : {
         location: !customLocation
-          ? `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
+          ? (isAllowUnaddressOrderType && !orderState.options?.address?.location)
+            ? defaultLocation
+            : `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`
           : `${customLocation.lat},${customLocation.lng}`,
         type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
       }
@@ -100,7 +113,11 @@ export const BusinessList = (props) => {
           ...parameters,
           term: searchValue,
           order_type_id: orderState?.options?.type,
-          location: JSON.stringify({ lat: orderState.options?.address?.location?.lat, lng: orderState.options?.address?.location?.lng })
+          location: JSON.stringify(
+            (isAllowUnaddressOrderType && !orderState.options?.address?.location)
+              ? defaultLocation
+              : { lat: orderState.options?.address?.location?.lat, lng: orderState.options?.address?.location?.lng }
+          )
         }
       }
       if (!isSortByReview && !isOfferBusinesses) {
@@ -283,7 +300,8 @@ export const BusinessList = (props) => {
         loading: false,
         error,
         businesses,
-        result
+        result,
+        fetched: true
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
@@ -291,6 +309,7 @@ export const BusinessList = (props) => {
           ...businessesList,
           loading: false,
           error: true,
+          fetched: true,
           result: [err.message]
         })
       }
@@ -361,10 +380,7 @@ export const BusinessList = (props) => {
    * Listening order option and filter changes
    */
   useEffect(() => {
-    if (
-      (orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation)) ||
-      (auth && !orderState?.options?.user_id)
-    ) return
+    if ((orderState.loading || ((!orderState.options?.address?.location && !isAllowUnaddressOrderType) && !asDashboard && !customLocation)) || (auth && !orderState?.options?.user_id)) return
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam)
     }
@@ -383,7 +399,7 @@ export const BusinessList = (props) => {
   ])
 
   useEffect(() => {
-    if ((orderState.loading || (!orderState.options?.address?.location && !asDashboard && !customLocation))) {
+    if ((orderState.loading || (!orderState.options?.address?.location && !isAllowUnaddressOrderType && !asDashboard && !customLocation))) {
       setBusinessesList({ ...businessesList, loading: false })
       return
     }
