@@ -10,6 +10,7 @@ import {
 import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useLanguage } from '../../../contexts/LanguageContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 /**
  * Component to manage card form for stripe elements form behavior without UI component
@@ -27,7 +28,8 @@ export const CardForm = (props) => {
   } = props
 
   const [{ user }] = useSession()
-const [ordering] = useApi()  const socket = useWebsocket()
+  const [ordering] = useApi()
+  const socket = useWebsocket()
   const stripe = useStripe()
   const elements = useElements()
 
@@ -50,7 +52,7 @@ const [ordering] = useApi()  const socket = useWebsocket()
         Authorization: `Bearer ${user?.session?.access_token}`,
         'Content-Type': 'application/json',
         'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+        'X-Socket-Id-X': socket?.getId()
       },
       body: JSON.stringify({
         business_id: businessId,
