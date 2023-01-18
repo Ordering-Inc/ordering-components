@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const ProfessionalInfo = (props) => {
   const {
@@ -11,6 +12,7 @@ export const ProfessionalInfo = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [userReviewState, setUserReviewState] = useState({ reviews: [], loading: false, error: null })
   const [userState, setUserState] = useState({ user: null, loading: false, error: null })
@@ -52,7 +54,8 @@ export const ProfessionalInfo = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
 

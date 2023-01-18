@@ -6,6 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 /**
  * Component to manage Checkout page behavior without UI component
  */
@@ -21,6 +22,7 @@ export const Checkout = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ options }] = useOrder()
   const [, { refreshConfigs }] = useConfig()
 
@@ -265,7 +267,8 @@ export const Checkout = (props) => {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
-              'X-App-X': ordering.appId
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket?.getId()
             }
           })
           const { result, error } = await response.json()
@@ -291,7 +294,8 @@ export const Checkout = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result, error } = await response.json()
@@ -314,7 +318,8 @@ export const Checkout = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           delivery_option_id: value

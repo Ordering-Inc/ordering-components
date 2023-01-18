@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
 import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const LogisticInformation = (props) => {
   const {
@@ -10,6 +11,7 @@ export const LogisticInformation = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [session] = useSession()
   /**
    * Array to save logistics
@@ -26,7 +28,9 @@ export const LogisticInformation = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
+          Authorization: `Bearer ${session.token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
       const response = await fetch(`${ordering.root}/logistic/orders/${orderId}/information`, requestOptions)

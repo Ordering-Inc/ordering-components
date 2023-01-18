@@ -17,6 +17,7 @@ export const Messages = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ user, token }] = useSession()
   const accessToken = props.accessToken || token
 
@@ -26,7 +27,6 @@ export const Messages = (props) => {
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
   const [readMessages, setReadMessages] = useState({ loading: true, error: null, messages: [] })
   const [image, setImage] = useState(null)
-  const socket = useWebsocket()
 
   /**
    * Method to send message
@@ -59,7 +59,16 @@ export const Messages = (props) => {
         body.type = 3
         body.file = image
       }
-      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }, body: JSON.stringify(body) })
+      const response = await fetch(`${ordering.root}/orders/${orderId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        },
+        body: JSON.stringify(body)
+      })
       const { error, result } = await response.json()
       if (!error) {
         if (setOrderMessages && orderMessages) {
@@ -95,7 +104,15 @@ export const Messages = (props) => {
       const functionFetch = asDashboard
         ? `${ordering.root}/orders/${orderId}/messages?mode=dashboard`
         : `${ordering.root}/orders/${orderId}/messages`
-      const response = await fetch(functionFetch, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(functionFetch, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        }
+      })
       const { error, result } = await response.json()
       if (!error) {
         setMessages({
@@ -124,7 +141,15 @@ export const Messages = (props) => {
     try {
       setReadMessages({ ...readMessages, loading: true })
       const functionFetch = `${ordering.root}/orders/${orderId}/messages/${messageId}/read?order_id=${orderId}&order_message_id=${messageId}`
-      const response = await fetch(functionFetch, { method: 'GET', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` } })
+      const response = await fetch(functionFetch, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        }
+      })
       const { error, result } = await response.json()
       if (!error) {
         setReadMessages({

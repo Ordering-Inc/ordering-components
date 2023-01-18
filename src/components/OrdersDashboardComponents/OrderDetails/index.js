@@ -21,6 +21,7 @@ export const OrderDetails = (props) => {
 
   const [{ user, token, loading }] = useSession()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [events] = useEvent()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
@@ -30,8 +31,6 @@ export const OrderDetails = (props) => {
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [messagesReadList, setMessagesReadList] = useState(false)
-
-  const socket = useWebsocket()
 
   const accessToken = props.accessToken || token
 
@@ -82,6 +81,8 @@ export const OrderDetails = (props) => {
         method: 'post',
         headers: {
           Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId(),
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -169,6 +170,8 @@ export const OrderDetails = (props) => {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId(),
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ status: order.newStatus })
@@ -190,6 +193,8 @@ export const OrderDetails = (props) => {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId(),
           'Content-Type': 'application/json'
         }
       })
@@ -209,6 +214,8 @@ export const OrderDetails = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId(),
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

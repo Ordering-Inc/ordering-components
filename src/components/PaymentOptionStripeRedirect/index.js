@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage payment option stripe redirect behavior without UI component
@@ -15,7 +16,7 @@ export const PaymentOptionStripeRedirect = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-
+  const socket = useWebsocket()
   /**
    * save stripe public key
    */
@@ -44,7 +45,8 @@ export const PaymentOptionStripeRedirect = (props) => {
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
     )

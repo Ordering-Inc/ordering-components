@@ -22,9 +22,9 @@ export const OrderListGroups = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [session] = useSession()
   const [events] = useEvent()
-  const socket = useWebsocket()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
   const [{ configs }] = useConfig()
@@ -407,7 +407,10 @@ export const OrderListGroups = (props) => {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { error, result } = await response.json()
@@ -480,7 +483,10 @@ export const OrderListGroups = (props) => {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result, error } = await response.json()
@@ -678,7 +684,8 @@ export const OrderListGroups = (props) => {
             headers: {
               Authorization: `Bearer ${session.token}`,
               'Content-Type': 'application/json',
-              'X-App-X': ordering.appId
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket?.getId()
             },
             body: JSON.stringify(body)
           })

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useEvent } from '../../../contexts/EventContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 /**
  * Component to manage redeem gift card behavior without UI component
@@ -14,6 +15,7 @@ export const RedeemGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [events] = useEvent()
 
   const [actionState, setActionState] = useState({ loading: false, error: null })
@@ -26,7 +28,9 @@ export const RedeemGiftCard = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify(values)
       }

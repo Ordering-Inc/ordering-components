@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../../contexts/SessionContext'
 import { useEvent } from '../../../contexts/EventContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const BusinessProductsListing = (props) => {
   const {
@@ -18,6 +19,7 @@ export const BusinessProductsListing = (props) => {
 
   const [{ token }] = useSession()
   const [events] = useEvent()
+  const socket = useWebsocket()
   const [categorySelected, setCategorySelected] = useState(null)
   const [searchValue, setSearchValue] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: true, error: null })
@@ -265,7 +267,9 @@ export const BusinessProductsListing = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
       }
     })
     const { error, result } = await response.json()
@@ -294,7 +298,9 @@ export const BusinessProductsListing = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
       }
     })
     const { error, result } = await response.json()

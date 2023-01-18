@@ -27,8 +27,7 @@ export const CardForm = (props) => {
   } = props
 
   const [{ user }] = useSession()
-  const [ordering] = useApi()
-
+const [ordering] = useApi()  const socket = useWebsocket()
   const stripe = useStripe()
   const elements = useElements()
 
@@ -50,7 +49,8 @@ export const CardForm = (props) => {
       headers: {
         Authorization: `Bearer ${user?.session?.access_token}`,
         'Content-Type': 'application/json',
-        'X-App-X': ordering.appId
+        'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
       },
       body: JSON.stringify({
         business_id: businessId,

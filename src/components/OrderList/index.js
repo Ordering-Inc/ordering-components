@@ -35,10 +35,10 @@ export const OrderList = props => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [orderState, { reorder }] = useOrder()
   const [session] = useSession()
   const [, { showToast }] = useToast()
-  const socket = useWebsocket()
   const [, t] = useLanguage()
   const [orderList, setOrderList] = useState({
     loading: !orders,
@@ -257,7 +257,8 @@ export const OrderList = props => {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { error, result } = await response.json()

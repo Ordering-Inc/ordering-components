@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage payment option stripe behavior without UI component
@@ -15,7 +16,7 @@ export const PaymentOptionStripe = (props) => {
   const [{ token, user }] = useSession()
 
   const [ordering] = useApi()
-
+  const socket = useWebsocket()
   /**
    * Contains and object to save cards, handle loading and error
    */
@@ -94,7 +95,8 @@ export const PaymentOptionStripe = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           business_id: businessId,

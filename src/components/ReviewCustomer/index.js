@@ -5,6 +5,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const ReviewCustomer = (props) => {
   const {
@@ -13,6 +14,7 @@ export const ReviewCustomer = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
@@ -37,7 +39,8 @@ export const ReviewCustomer = (props) => {
         headers: {
           Authorization: `Bearer ${session.token}`,
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify(reviewState)
       })
