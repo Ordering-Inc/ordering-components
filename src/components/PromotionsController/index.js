@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const PromotionsController = (props) => {
   const {
@@ -12,6 +13,7 @@ export const PromotionsController = (props) => {
 
   const [session] = useSession()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ options }] = useOrder()
 
   const [searchValue, setSearchValue] = useState('')
@@ -33,7 +35,8 @@ export const PromotionsController = (props) => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.token}`,
-        'X-App-X': ordering.appId
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
       }
     })
     return await response.json()

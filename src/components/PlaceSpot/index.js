@@ -4,6 +4,7 @@ import { useOrder } from '../../contexts/OrderContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const PlaceSpot = (props) => {
   const {
@@ -16,6 +17,7 @@ export const PlaceSpot = (props) => {
 
   const [orderState] = useOrder()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
@@ -45,14 +47,16 @@ export const PlaceSpot = (props) => {
       const responsePlaceGroups = await fetch(`${ordering.root}/business/${cart?.business_id}/place_groups`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        'X-App-X': ordering.appId
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
       })
       const { result: resultPlaceGroups, error: errorPlaceGroups } = await responsePlaceGroups.json()
 
       const responsePlaces = await fetch(`${ordering.root}/business/${cart?.business_id}/places`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        'X-App-X': ordering.appId
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
       })
       const { result: resultPlaces, error: errorPlaces } = await responsePlaces.json()
 

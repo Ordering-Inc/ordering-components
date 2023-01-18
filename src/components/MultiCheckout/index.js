@@ -6,6 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage Multi businesses checkout page behavior without UI component
@@ -22,6 +23,7 @@ export const MultiCheckout = (props) => {
   const qParams = userId ? `?user_id=${userId}` : ''
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   /**
    * Session content
    */
@@ -128,7 +130,8 @@ export const MultiCheckout = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result, error } = await response.json()
@@ -155,7 +158,8 @@ export const MultiCheckout = (props) => {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `bearer ${token}`,
-              'X-App-X': ordering.appId
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket?.getId()
             },
             body: JSON.stringify(body)
           })
@@ -190,7 +194,8 @@ export const MultiCheckout = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result, error } = await response.json()

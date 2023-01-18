@@ -23,6 +23,7 @@ export const OrderDetails = (props) => {
   const [{ user, token, loading }] = useSession()
   const accessToken = props.accessToken || token
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [events] = useEvent()
@@ -32,7 +33,6 @@ export const OrderDetails = (props) => {
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
-  const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
@@ -73,7 +73,10 @@ export const OrderDetails = (props) => {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { error, result } = await response.json()
@@ -113,7 +116,8 @@ export const OrderDetails = (props) => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           can_see: '0,2,3',
@@ -283,7 +287,8 @@ export const OrderDetails = (props) => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result } = await response.json()

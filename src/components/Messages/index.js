@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const Messages = (props) => {
   const {
@@ -13,6 +14,7 @@ export const Messages = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const accessToken = props.accessToken || token
 
@@ -56,7 +58,8 @@ export const Messages = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify(body)
       })

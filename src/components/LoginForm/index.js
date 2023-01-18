@@ -6,6 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage login behavior without UI component
@@ -23,6 +24,7 @@ export const LoginForm = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   let { defaultLoginTab } = props
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
@@ -217,7 +219,8 @@ export const LoginForm = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           cellphone: values.cellphone,
@@ -264,7 +267,8 @@ export const LoginForm = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify(body)
       })
@@ -322,7 +326,8 @@ export const LoginForm = (props) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify(body)
       })

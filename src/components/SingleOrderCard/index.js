@@ -5,6 +5,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const SingleOrderCard = (props) => {
   const {
@@ -15,6 +16,7 @@ export const SingleOrderCard = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ user, token }] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
@@ -38,7 +40,8 @@ export const SingleOrderCard = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         ...(isAdd && { body: JSON.stringify(changes) })
       }

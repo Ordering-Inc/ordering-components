@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useEvent } from '../../contexts/EventContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const MultiCartCreate = (props) => {
   const {
@@ -14,6 +16,7 @@ export const MultiCartCreate = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [orderState, { refreshOrderOptions }] = useOrder()
 
   const createMultiCart = async () => {
@@ -31,6 +34,7 @@ export const MultiCartCreate = (props) => {
       headers: {
         Authorization: `Bearer ${token}`,
         'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId(),
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)

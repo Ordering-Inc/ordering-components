@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const WalletList = (props) => {
   const {
@@ -11,6 +12,7 @@ export const WalletList = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ token, user }] = useSession()
   const [events] = useEvent()
   const [walletSelected, setWalletSelected] = useState(null)
@@ -32,7 +34,8 @@ export const WalletList = (props) => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
-            'X-App-X': ordering.appId
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
           }
         }
       )
@@ -67,7 +70,8 @@ export const WalletList = (props) => {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
-            'X-App-X': ordering.appId
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
           }
         }
       )
