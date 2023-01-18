@@ -45,6 +45,7 @@ var DriversList = function DriversList(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
@@ -59,7 +60,6 @@ var DriversList = function DriversList(props) {
     _useState2 = _slicedToArray(_useState, 2),
     driverActionStatus = _useState2[0],
     setDriverActionStatus = _useState2[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
 
   /**
    * Get session
@@ -345,7 +345,9 @@ var DriversList = function DriversList(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(session.token)
+                Authorization: "Bearer ".concat(session.token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             };
             _context3.next = 5;

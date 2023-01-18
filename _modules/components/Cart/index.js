@@ -12,6 +12,7 @@ var _ConfigContext = require("../../contexts/ConfigContext");
 var _ApiContext = require("../../contexts/ApiContext");
 var _SessionContext = require("../../contexts/SessionContext");
 var _ToastContext = require("../../contexts/ToastContext");
+var _WebsocketContext = require("../../contexts/WebsocketContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -31,10 +32,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Cart = function Cart(props) {
-  var _stateConfig$order;
+  var _stateConfig$order, _orderState$options, _orderState$options2;
   var cart = props.cart,
     UIComponent = props.UIComponent,
     handleEditProduct = props.handleEditProduct,
+    businessConfigs = props.businessConfigs,
     commentDelayTime = props.commentDelayTime;
 
   /**
@@ -62,7 +64,7 @@ var Cart = function Cart(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-
+  var socket = (0, _WebsocketContext.useWebsocket)();
   /**
    * Session content
    */
@@ -106,6 +108,24 @@ var Cart = function Cart(props) {
    * Cart comment stagged
    */
   var previousComment;
+  /**
+   * Catering preorder
+   */
+  var cateringTypes = [7, 8];
+  var cateringTypeString = (orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) === 7 ? 'catering_delivery' : (orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 8 ? 'catering_pickup' : null;
+  var splitCateringValue = function splitCateringValue(configName) {
+    var _businessConfigs$find, _businessConfigs$find2, _businessConfigs$find3, _businessConfigs$find4;
+    return (_businessConfigs$find = businessConfigs.find(function (config) {
+      return config.key === configName;
+    })) === null || _businessConfigs$find === void 0 ? void 0 : (_businessConfigs$find2 = _businessConfigs$find.value) === null || _businessConfigs$find2 === void 0 ? void 0 : (_businessConfigs$find3 = _businessConfigs$find2.split('|')) === null || _businessConfigs$find3 === void 0 ? void 0 : (_businessConfigs$find4 = _businessConfigs$find3.find(function (val) {
+      return val === null || val === void 0 ? void 0 : val.includes(cateringTypeString);
+    })) === null || _businessConfigs$find4 === void 0 ? void 0 : _businessConfigs$find4.split(',')[1];
+  };
+  var preorderSlotInterval = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_slot_interval'));
+  var preorderLeadTime = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_lead_time'));
+  var preorderTimeRange = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_time_range'));
+  var preorderMaximumDays = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_maximum_days'));
+  var preorderMinimumDays = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_minimum_days'));
   /**
    * Calc balance by product id
    */
@@ -165,7 +185,9 @@ var Cart = function Cart(props) {
                   }),
                   headers: {
                     'Content-Type': 'application/json',
-                    Authorization: "Bearer ".concat(token)
+                    Authorization: "Bearer ".concat(token),
+                    'X-App-X': ordering.appId,
+                    'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                   }
                 });
               case 4:
@@ -228,6 +250,12 @@ var Cart = function Cart(props) {
     clearCart: clearCart,
     removeProduct: removeProduct,
     commentState: commentState,
+    preorderSlotInterval: preorderSlotInterval,
+    preorderLeadTime: preorderLeadTime,
+    preorderTimeRange: preorderTimeRange,
+    preorderMaximumDays: preorderMaximumDays,
+    preorderMinimumDays: preorderMinimumDays,
+    cateringTypes: cateringTypes,
     changeQuantity: changeQuantity,
     getProductMax: getProductMax,
     offsetDisabled: offsetDisabled,

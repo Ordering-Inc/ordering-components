@@ -248,7 +248,9 @@ var OrdersManage = function OrdersManage(props) {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
+                Authorization: "Bearer ".concat(session.token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
               body: JSON.stringify({
                 status: updateStatus
@@ -416,7 +418,9 @@ var OrdersManage = function OrdersManage(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
+                Authorization: "Bearer ".concat(session.token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             };
             _context4.next = 5;
@@ -695,7 +699,9 @@ var OrdersManage = function OrdersManage(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
+                Authorization: "Bearer ".concat(session.token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             };
             _context5.next = 15;

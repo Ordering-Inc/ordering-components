@@ -1607,22 +1607,22 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@segment/analytics-core@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-core/-/analytics-core-1.2.0.tgz#a722d047d71a6c51575bd6d81a1dad1ad150da77"
-  integrity sha512-2BSliLJi1RWq8+eE+UKcMEiC5WfZZp3SHIA/fGhFftOg2s1OkFaQRHuKFzdgbDuKZMEsRwqek3EITNGSThJ5rg==
+"@segment/analytics-core@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-core/-/analytics-core-1.2.1.tgz#6f551b74a6af2331cb86c7e29428487f3d135266"
+  integrity sha512-FaKE7uIBXsclO4GcA7cEgb4iyQ23aFHRcxqLpxaCGeB5nqIdVQHigmGgL3hAjCZeBqtojLEV6as27ozXHQXCkg==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
     dset "^3.1.2"
     tslib "^2.4.1"
 
 "@segment/analytics-next@^1.35.1":
-  version "1.49.1"
-  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.49.1.tgz#1dd3285b55b824d6932a8abdd6d667c3d328e9eb"
-  integrity sha512-KOrYRcUH2N3cRmhfmRRbc9Si3aQ9IXRKaZ7TCkQrj9h7YuBqJs4zlQhO4vjqGcmOlEPk3unpiPEcrw1NZG/aJQ==
+  version "1.49.2"
+  resolved "https://registry.yarnpkg.com/@segment/analytics-next/-/analytics-next-1.49.2.tgz#7499f0adbdf8ad5eca840e4e31f3858bd716792a"
+  integrity sha512-i1Z5OfapDQQkielF9Cz9q8PeLvRTgBMPxHn5SoIx3SZJEzWTzFkvrmg/v98P8TcyjzbSa6hsVySm4E0tVdj8mA==
   dependencies:
     "@lukeed/uuid" "^2.0.0"
-    "@segment/analytics-core" "1.2.0"
+    "@segment/analytics-core" "1.2.1"
     "@segment/analytics.js-video-plugins" "^0.2.1"
     "@segment/facade" "^3.4.9"
     "@segment/tsub" "1.0.1"
@@ -3563,9 +3563,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001400:
-  version "1.0.30001444"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001444.tgz#c0a530776eb44d933b493de1d05346f2527b30fc"
-  integrity sha512-ecER9xgJQVMqcrxThKptsW0pPxSae8R2RB87LNa+ivW9ppNWRHEplXcDzkCOP4LYWGj8hunXLqaiC41iBATNyg==
+  version "1.0.30001445"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001445.tgz#cf2d4eb93f2bcdf0310de9dd6d18be271bc0b447"
+  integrity sha512-8sdQIdMztYmzfTMO6KfLny878Ln9c2M0fc7EH60IjlP4Dc4PiCy7K2Vl3ITmWgOyPgVQKa5x+UP/KqFsxj4mBg==
 
 caseless@~0.12.0:
   version "0.12.0"
