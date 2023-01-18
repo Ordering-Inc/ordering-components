@@ -4,6 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useCustomer } from '../../contexts/CustomerContext'
 import { useValidationFields as useValidationsFieldsController } from '../../contexts/ValidationsFieldsContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage user form details behavior without UI component
@@ -24,6 +25,7 @@ export const UserFormDetails = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [session, { changeUser }] = useSession()
   const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()
@@ -294,7 +296,11 @@ export const UserFormDetails = (props) => {
       setVerifyPhoneState({ ...verifyPhoneState, loading: true })
       const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        },
         body: JSON.stringify(body)
       })
       const res = await response.json()
@@ -412,7 +418,9 @@ export const UserFormDetails = (props) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const res = await response.json()

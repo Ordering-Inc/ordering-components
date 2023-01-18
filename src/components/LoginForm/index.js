@@ -6,6 +6,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage login behavior without UI component
@@ -23,6 +24,7 @@ export const LoginForm = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   let { defaultLoginTab } = props
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })
@@ -215,7 +217,11 @@ export const LoginForm = (props) => {
       setVerifyPhoneState({ ...verifyPhoneState, loading: true })
       const response = await fetch(`${ordering.root}/auth/sms/twilio/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        },
         body: JSON.stringify({
           cellphone: values.cellphone,
           country_phone_code: `+${values.country_phone_code}`
@@ -259,7 +265,11 @@ export const LoginForm = (props) => {
       }
       const response = await fetch(`${ordering.root}/auth/sms/twilio`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        },
         body: JSON.stringify(body)
       })
       const res = await response.json()
@@ -314,7 +324,11 @@ export const LoginForm = (props) => {
       }
       const response = await fetch(`${ordering.root}/codes/generate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        },
         body: JSON.stringify(body)
       })
       const { result, error } = await response.json()

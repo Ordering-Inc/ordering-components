@@ -5,12 +5,14 @@ import { useConfig } from '../../contexts/ConfigContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const Cart = (props) => {
   const {
     cart,
     UIComponent,
     handleEditProduct,
+    businessConfigs,
     commentDelayTime
   } = props
 
@@ -28,7 +30,7 @@ export const Cart = (props) => {
    * Api context
    */
   const [ordering] = useApi()
-
+  const socket = useWebsocket()
   /**
    * Session content
    */
@@ -61,6 +63,21 @@ export const Cart = (props) => {
    * Cart comment stagged
    */
   let previousComment
+  /**
+   * Catering preorder
+   */
+  const cateringTypes = [7, 8]
+  const cateringTypeString = orderState?.options?.type === 7
+    ? 'catering_delivery'
+    : orderState?.options?.type === 8
+      ? 'catering_pickup'
+      : null
+  const splitCateringValue = (configName) => businessConfigs.find((config) => config.key === configName)?.value?.split('|')?.find((val) => val?.includes(cateringTypeString))?.split(',')[1]
+  const preorderSlotInterval = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_slot_interval'))
+  const preorderLeadTime = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_lead_time'))
+  const preorderTimeRange = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_time_range'))
+  const preorderMaximumDays = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_maximum_days'))
+  const preorderMinimumDays = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_minimum_days'))
   /**
    * Calc balance by product id
    */
@@ -113,7 +130,9 @@ export const Cart = (props) => {
             }),
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket?.getId()
             }
           })
           const { result, error } = await response.json()
@@ -154,6 +173,12 @@ export const Cart = (props) => {
           clearCart={clearCart}
           removeProduct={removeProduct}
           commentState={commentState}
+          preorderSlotInterval={preorderSlotInterval}
+          preorderLeadTime={preorderLeadTime}
+          preorderTimeRange={preorderTimeRange}
+          preorderMaximumDays={preorderMaximumDays}
+          preorderMinimumDays={preorderMinimumDays}
+          cateringTypes={cateringTypes}
           changeQuantity={changeQuantity}
           getProductMax={getProductMax}
           offsetDisabled={offsetDisabled}

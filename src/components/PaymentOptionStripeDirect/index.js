@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage payment option stripe direct behavior without UI component
@@ -12,7 +13,7 @@ export const PaymentOptionStripeDirect = (props) => {
   } = props
 
   const [ordering] = useApi()
-
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   /**
    * save stripe public key
@@ -32,7 +33,9 @@ export const PaymentOptionStripeDirect = (props) => {
       `${ordering.root}/payments/stripe/credentials`,
       {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
     )
@@ -49,7 +52,9 @@ export const PaymentOptionStripeDirect = (props) => {
       `${ordering.root}/payments/stripe/requirements?type=add_card`,
       {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
     )

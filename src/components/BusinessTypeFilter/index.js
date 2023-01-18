@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const BusinessTypeFilter = (props) => {
   const {
@@ -11,6 +12,7 @@ export const BusinessTypeFilter = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
 
   /**
    * This property is used to set in state the current value
@@ -37,7 +39,11 @@ export const BusinessTypeFilter = (props) => {
     try {
       const response = await fetch(`${ordering.root}/business_types?where=[{"attribute":"enabled","value":true}]`, {
         method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        }
       })
       const { error, result, pagination } = await response.json()
       if (!error) {

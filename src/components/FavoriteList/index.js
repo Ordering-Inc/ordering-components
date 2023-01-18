@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const FavoriteList = (props) => {
   const {
@@ -17,6 +18,7 @@ export const FavoriteList = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ user, token }] = useSession()
   const [, { reorder }] = useOrder()
 
@@ -55,7 +57,9 @@ export const FavoriteList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
 
@@ -143,7 +147,9 @@ export const FavoriteList = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
       }
     }
 

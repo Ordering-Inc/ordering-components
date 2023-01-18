@@ -4,6 +4,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrderingTheme } from '../../contexts/OrderingThemeContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const BusinessSearchList = (props) => {
   const {
@@ -28,6 +29,7 @@ export const BusinessSearchList = (props) => {
   })
   const [orderState] = useOrder()
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [orderingTheme] = useOrderingTheme()
 
@@ -150,7 +152,9 @@ export const BusinessSearchList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
       const location = { lat: orderState.options?.address?.location?.lat || defaultLocation?.lat, lng: orderState.options?.address?.location?.lng || defaultLocation?.lng }
@@ -204,7 +208,9 @@ export const BusinessSearchList = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
 
@@ -239,7 +245,9 @@ export const BusinessSearchList = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-App-X': ordering.appId,
+        'X-Socket-Id-X': socket?.getId()
       }
     }
     setCitiesState({ ...citiesState, loading: true })
@@ -266,7 +274,9 @@ export const BusinessSearchList = (props) => {
       const requestOptions = {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
 

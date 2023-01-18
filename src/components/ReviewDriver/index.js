@@ -4,11 +4,13 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const ReviewDriver = (props) => {
   const { UIComponent, order, isToast, isProfessional } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
@@ -28,7 +30,9 @@ export const ReviewDriver = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${session.token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({ ...reviews, order_id: order?.id, user_id: userId })
       })

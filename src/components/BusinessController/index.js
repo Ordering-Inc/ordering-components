@@ -10,6 +10,7 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import isBetween from 'dayjs/plugin/isBetween'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 dayjs.extend(timezone)
 dayjs.extend(isBetween)
@@ -30,6 +31,7 @@ export const BusinessController = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ user, token }] = useSession()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
@@ -53,6 +55,7 @@ export const BusinessController = (props) => {
   /**
    * timer in minutes when the business is going to close
    */
+
   const [businessWillCloseSoonMinutes, setBusinessWillCloseSoonMinutes] = useState(null)
   const [actionState, setActionState] = useState({ loading: false, error: null })
 
@@ -122,7 +125,9 @@ export const BusinessController = (props) => {
         method: isAdd ? 'POST' : 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         ...(isAdd && { body: JSON.stringify(changes) })
       }

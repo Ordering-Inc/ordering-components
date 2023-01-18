@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const PaymentOptionWallet = (props) => {
   const {
@@ -10,6 +11,7 @@ export const PaymentOptionWallet = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [orderState, { setStateValues }] = useOrder()
   const [{ token, user }] = useSession()
 
@@ -41,7 +43,9 @@ export const PaymentOptionWallet = (props) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
           }
         }
       )
@@ -53,7 +57,9 @@ export const PaymentOptionWallet = (props) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
           }
         }
       )
@@ -101,7 +107,9 @@ export const PaymentOptionWallet = (props) => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
           },
           body: JSON.stringify({
             wallet_id: wallet.id
@@ -129,7 +137,9 @@ export const PaymentOptionWallet = (props) => {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
           }
         }
       )

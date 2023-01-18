@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const Sessions = (props) => {
   const {
@@ -9,6 +10,7 @@ export const Sessions = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ user, token }, { login, logout }] = useSession()
 
   const [sessionsList, setSessionsList] = useState({ sessions: [], loading: true, error: null })
@@ -27,7 +29,9 @@ export const Sessions = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result, error } = await response.json()
@@ -64,7 +68,9 @@ export const Sessions = (props) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result, error } = await response.json()
@@ -105,7 +111,9 @@ export const Sessions = (props) => {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({ delete_current: deleteCurrent })
       })

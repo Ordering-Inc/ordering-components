@@ -8,6 +8,7 @@ import { useEvent } from '../../contexts/EventContext'
 import { useSession } from '../../contexts/SessionContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const ProductForm = (props) => {
   const {
@@ -32,6 +33,7 @@ export const ProductForm = (props) => {
   const [, t] = useLanguage()
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   /**
    * Events context
   */
@@ -198,7 +200,8 @@ export const ProductForm = (props) => {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         ...(isAdd && { body: JSON.stringify(changes) })
       }

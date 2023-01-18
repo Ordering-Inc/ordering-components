@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const AppleLogin = (props) => {
   const { UIComponent, onSuccess, onFailure, initParams: initParamsCustom, handleButtonAppleLoginClick } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [{ configs }] = useConfig()
 
@@ -59,7 +61,11 @@ export const AppleLogin = (props) => {
       setFormState({ ...formState, loading: true })
       const response = await fetch(`${ordering.root}/auth/apple`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
+        },
         body: JSON.stringify({
           code: data.code
         })

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
  * Component to manage User Verification behavior without UI component
@@ -11,6 +12,7 @@ export const UserVerification = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ user, token }, { changeUser }] = useSession()
 
   const [verifyEmailState, setVerifyEmailState] = useState({
@@ -42,7 +44,9 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           type: values?.type ?? 3,
@@ -81,7 +85,9 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           channel: values?.channel ?? 1,
@@ -91,7 +97,7 @@ export const UserVerification = (props) => {
       const { error, result } = await response.json()
 
       if (result?.id && !error) {
-        changeUser({ ...user, ...result})
+        changeUser({ ...user, ...result })
       }
 
       setVerifyEmailState({
@@ -135,7 +141,7 @@ export const UserVerification = (props) => {
    * function to send verify code with twilio
    * @param {Object} values object with cellphone and country code values
    */
-   const sendVerifyPhoneCode = async (values) => {
+  const sendVerifyPhoneCode = async (values) => {
     try {
       setVerifyPhoneState({
         ...verifyPhoneState,
@@ -146,7 +152,9 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           type: values?.type ?? 2,
@@ -185,7 +193,9 @@ export const UserVerification = (props) => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           channel: values?.channel ?? 2,
@@ -194,7 +204,7 @@ export const UserVerification = (props) => {
       })
       const { error, result } = await response.json()
       if (result?.id && !error) {
-        changeUser({ ...user, ...result})
+        changeUser({ ...user, ...result })
       }
       setVerifyPhoneState({
         ...verifyPhoneState,
