@@ -115,19 +115,19 @@ export const Cart = (props) => {
   /**
    * change comment for cart
    */
-  const handleChangeComment = (value) => {
+  const handleChangeComment = (value, userId) => {
     try {
       if (previousComment !== value) {
         clearTimeout(timeout)
         timeout = setTimeout(async function () {
           setCommentState({ ...commentState, loading: true })
           const uuid = cart?.uuid
+          const body = { comment: value }
+          if (userId) body.user_id = userId
           const response = await fetch(`${ordering.root}/carts/${uuid}`, {
             'Content-Type': 'application/json',
             method: 'PUT',
-            body: JSON.stringify({
-              comment: value
-            }),
+            body: JSON.stringify(body),
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
