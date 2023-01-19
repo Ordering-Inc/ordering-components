@@ -9,6 +9,7 @@ import { useSession } from '../../contexts/SessionContext'
 export const MultiOrdersDetails = (props) => {
   const {
     orderId,
+    userId,
     onRedirectPage,
     UIComponent
   } = props
@@ -32,6 +33,9 @@ export const MultiOrdersDetails = (props) => {
           orderBy: '-',
           where: [{ attribute: 'cart_group_id', value: orderId }]
         }
+      }
+      if (userId) {
+        options.query.mode = 'dashboard'
       }
       const { content: { error, result } } = await ordering.setAccessToken(token).orders().get(options)
       setOrdersList({
