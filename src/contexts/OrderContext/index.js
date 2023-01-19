@@ -794,7 +794,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Place cart
    */
-  const placeCart = async (cardId, data, parameters = {}) => {
+  const placeCart = async (cardId, data) => {
     try {
       setState({ ...state, loading: true })
       const countryCode = await strategy.getItem('country-code')
@@ -810,7 +810,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
-      }).parameters(parameters)
+      })
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result

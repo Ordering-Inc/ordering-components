@@ -1440,52 +1440,41 @@ var OrderProvider = function OrderProvider(_ref) {
    */
   var placeCart = /*#__PURE__*/function () {
     var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(cardId, data) {
-      var parameters,
-        countryCode,
-        customerFromLocalStorage,
-        userCustomerId,
-        body,
-        _yield$ordering$setAc16,
-        _yield$ordering$setAc17,
-        error,
-        result,
-        orderObject,
-        _args15 = arguments;
+      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
       return _regeneratorRuntime().wrap(function _callee15$(_context15) {
         while (1) switch (_context15.prev = _context15.next) {
           case 0:
-            parameters = _args15.length > 2 && _args15[2] !== undefined ? _args15[2] : {};
-            _context15.prev = 1;
+            _context15.prev = 0;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true
             }));
-            _context15.next = 5;
+            _context15.next = 4;
             return strategy.getItem('country-code');
-          case 5:
+          case 4:
             countryCode = _context15.sent;
-            _context15.next = 8;
+            _context15.next = 7;
             return strategy.getItem('user-customer', true);
-          case 8:
+          case 7:
             customerFromLocalStorage = _context15.sent;
             userCustomerId = customerFromLocalStorage === null || customerFromLocalStorage === void 0 ? void 0 : customerFromLocalStorage.id;
             body = _objectSpread(_objectSpread({}, data), {}, {
               user_id: userCustomerId || session.user.id
             });
-            _context15.next = 13;
+            _context15.next = 12;
             return ordering.setAccessToken(session.token).carts(cardId).place(body, {
               headers: {
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
-            }).parameters(parameters);
-          case 13:
+            });
+          case 12:
             _yield$ordering$setAc16 = _context15.sent;
             _yield$ordering$setAc17 = _yield$ordering$setAc16.content;
             error = _yield$ordering$setAc17.error;
             result = _yield$ordering$setAc17.result;
             if (error) {
-              _context15.next = 21;
+              _context15.next = 20;
               break;
             }
             if (result.status !== 1) {
@@ -1506,9 +1495,9 @@ var OrderProvider = function OrderProvider(_ref) {
               };
               events.emit('order_placed', orderObject);
             }
-            _context15.next = 24;
+            _context15.next = 23;
             break;
-          case 21:
+          case 20:
             setAlert({
               show: true,
               content: result
@@ -1517,7 +1506,7 @@ var OrderProvider = function OrderProvider(_ref) {
               loading: false
             }));
             return _context15.abrupt("return");
-          case 24:
+          case 23:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
@@ -1525,9 +1514,9 @@ var OrderProvider = function OrderProvider(_ref) {
               error: error,
               result: result
             });
-          case 28:
-            _context15.prev = 28;
-            _context15.t0 = _context15["catch"](1);
+          case 27:
+            _context15.prev = 27;
+            _context15.t0 = _context15["catch"](0);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
@@ -1535,11 +1524,11 @@ var OrderProvider = function OrderProvider(_ref) {
               error: true,
               result: [_context15.t0.message]
             });
-          case 32:
+          case 31:
           case "end":
             return _context15.stop();
         }
-      }, _callee15, null, [[1, 28]]);
+      }, _callee15, null, [[0, 27]]);
     }));
     return function placeCart(_x24, _x25) {
       return _ref17.apply(this, arguments);
