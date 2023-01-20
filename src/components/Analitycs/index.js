@@ -62,7 +62,6 @@ export const Analytics = (props) => {
       window.ga('send', 'pageview')
     }
     // if (googleTagManager) {
-    //   console.log('event: pageview', pageName?.page)
     //   window.dataLayer.push({
     //     event: 'pageview',
     //     page: {
@@ -95,13 +94,13 @@ export const Analytics = (props) => {
 							'category': formatForAnalytics(product.category.name, 40),
 							'variant': 'NA',
 							'list': formatForAnalytics(product.category.name, 40),
-							// 'position': 
+							// 'position':
 						}]
 					}
 				},
 				event: "evProductClick",
 			};
-      console.log('evPageView', digitalData)
+      console.log('evProductClick', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -134,7 +133,7 @@ export const Analytics = (props) => {
         },
         event: "evAddToCart",
       };
-      console.log('evPageView', digitalData)
+      console.log('evAddToCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -143,28 +142,23 @@ export const Analytics = (props) => {
       window.ga('set', 'userId', data.id)
     }
     if (googleTagManager) {
-      const digitalData = {
-        event: "evPageView",
-        version: "1.0",
-        page: {
-          pageInfo: {
-            hostName: location.protocol + "//" + location.hostname + "/",
-            currentURL: location.href,
-          }
-        },
-        user: {
-          profile: {
-            statusLogged: data.id > 0 ? "Logged" : "NotLogged",
-            languajeUser: "null",
-            isGeoActive: "null",
-            profileInfo: "NA",
-            social: {
-              network: 'NA'
-            }
-          }
-        }
+      let digitalData = null
+      if (data?.bySocial) {
+        digitalData = {
+          action: "Exito",
+          error: "NA",
+          loginMethod: data?.bySocial,
+          event: "evLogIn",
+        };
+      } else {
+        digitalData = {
+          action: "Exito",
+          error: "NA",
+          loginMethod: 'Sistema',
+          event: "evLogIn",
+        };
       }
-      console.log('evPageView', digitalData);
+      console.log('evLogIn', digitalData);
       window.dataLayer.push(digitalData);
     }
   }
@@ -222,6 +216,103 @@ export const Analytics = (props) => {
       window.dataLayer.push(digitalData)
     }
   }
+  const handleSignUp = (user) => {
+    console.log(user)
+    if (googleTagManager) {
+      const dlAnalytics = {
+        action: 'Exito',
+        signupMethod: "Sistema",
+        error: 'NA',
+        event: "evSignUp",
+      };
+      console.log('evSignUp', dlAnalytics)
+      window.dataLayer.push(dlAnalytics)
+    }
+  }
+  const handleRemoveProduct = (product, result) => {
+    if (googleTagManager) {
+      const digitalData = {
+        'flow': 'MarketPlace '+slug,
+        'ecommerce': {
+          'remove': {
+            'products': [{
+              'name': formatForAnalytics(product.name),
+              'id': product.sku ? product.sku : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': slug,
+              'category': product.category_id,
+              // 'variant': formatForAnalytics(variants, 40),
+              'quantity': product.quantity,
+            }]
+          },
+        },
+        event: "evRemoveFromCart",
+      };
+      console.log('evRemoveFromCart', digitalData)
+      window.dataLayer.push(digitalData)
+    }
+  }
+  const handleGoToBusiness = (storeData) => {
+    if (googleTagManager) {
+      const dlAnalytics = {
+        restaurant: formatForAnalytics(storeData?.params?.store),
+        event: "evClickRestaurant",
+      };
+      console.log('evClickRestaurant', dlAnalytics)
+      window.dataLayer.push(dlAnalytics)
+    }
+  }
+  const handleGoToCheckout = (cartData) => {
+    if (googleTagManager) {
+      const dlAnalytics = {
+        'flow': 'MarketPlace '+slug,
+        'ecommerce': {
+          'checkout': {
+            'actionField': {'step': 1},
+            'products': cartData.params.cart.products
+          }
+        },
+        event: "evCheckout",
+      };
+      console.log('evCheckout', dlAnalytics)
+      window.dataLayer.push(dlAnalytics)
+    }
+  }
+  const handleAddressEvent = (addressEvent) => {
+    if (googleTagManager) {
+      let dlAnalytics = null
+      if (addressEvent.page === 'new_address') {
+        dlAnalytics = {
+          actionType: "Agregar",
+          action: "Exito",
+          tag: addressEvent.params.tag ? addressEvent.params.tag : 'NA',
+          error: "NA",
+          event: "evDirectionActions"
+        };
+      }
+      if (addressEvent.page === 'edit_address') {
+        dlAnalytics = {
+          actionType: "Editar",
+          action: "Exito",
+          tag: addressEvent.params.tag ? addressEvent.params.tag : 'NA',
+          error: "NA",
+          event: "evDirectionActions"
+        }
+      }
+      console.log('evDirectionActions', dlAnalytics);
+      dataLayer.push(dlAnalytics);
+    }
+  }
+  const handleChangeOrderType = (orderTypeData) => {
+    if (googleTagManager) {
+      const dlAnalytics = {
+        action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
+        event: "evClickOrderType",
+      };
+      console.log('evClickOrderType', dlAnalytics)
+      window.dataLayer.push(dlAnalytics)
+    }
+  }
   useEffect(() => {
     console.log('Analytic Ready')
     if ((analyticsReady && window.ga) || googleTagManager) {
@@ -230,6 +321,12 @@ export const Analytics = (props) => {
       events.on('product_clicked', handleClickProduct)
       events.on('product_added', handleProductAdded)
       events.on('order_placed', handleOrderPlaced)
+      events.on('singup_user', handleSignUp)
+      events.on('cart_product_removed', handleRemoveProduct)
+      events.on('go_to_business', handleGoToBusiness)
+      events.on('go_to_checkout', handleGoToCheckout)
+      events.on('address_event', handleAddressEvent)
+      events.on('order_type_change', handleChangeOrderType)
     }
     return () => {
       if (analyticsReady && window.ga) {
@@ -238,6 +335,12 @@ export const Analytics = (props) => {
         events.off('product_clicked', handleClickProduct)
         events.off('product_added', handleProductAdded)
         events.off('order_placed', handleOrderPlaced)
+        events.off('singup_user', handleSignUp)
+        events.off('cart_product_removed', handleRemoveProduct)
+        events.off('go_to_business', handleGoToBusiness)
+        events.off('go_to_checkout', handleGoToCheckout)
+        events.off('address_event', handleAddressEvent)
+        events.off('order_type_change', handleChangeOrderType)
       }
     }
   }, [analyticsReady])

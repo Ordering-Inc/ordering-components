@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
+import { useEvent } from '../../contexts/EventContext'
 
 /**
  * Component to manage Facebook login behavior without UI component
@@ -19,6 +20,8 @@ export const FacebookLoginButton = (props) => {
   } = props
 
   const [ordering] = useApi()
+  const [events] = useEvent()
+
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [facebookStatus, setFacebookStatus] = useState({ ready: false, logged: false })
   let wasUnmounted = false
@@ -79,6 +82,7 @@ export const FacebookLoginButton = (props) => {
         if (handleSuccessFacebookLogin) {
           handleSuccessFacebookLogin(response.content.result)
         }
+        events.emit('userLogin', { ...result, bySocial: 'Facebook' })
       } else {
         handleFacebookLogout()
       }

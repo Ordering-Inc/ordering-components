@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useEvent } from '../../contexts/EventContext'
 import * as firebase from 'firebase/app'
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 
@@ -13,6 +14,7 @@ export const FirebaseGoogleLoginButton = (props) => {
 
   const [ordering] = useApi()
   const [{ configs }] = useConfig()
+  const [events] = useEvent()
   const [actionState, setActionState] = useState({ loading: false, error: null })
 
   /**
@@ -55,6 +57,7 @@ export const FirebaseGoogleLoginButton = (props) => {
         loading: false,
         error: error ? result : null
       })
+      events.emit('userLogin', { ...result, bySocial: 'Google' })
     } catch (error) {
       setActionState({
         loading: false,
