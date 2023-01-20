@@ -254,7 +254,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         options
       })
     }
-
+    events.emit('order_type_change', { params: { type: type } })
     updateOrderOptions({ type })
   }
 
