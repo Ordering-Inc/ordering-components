@@ -553,11 +553,16 @@ var OrderProvider = function OrderProvider(_ref) {
               }));
 
             case 7:
+              events.emit('order_type_change', {
+                params: {
+                  type: type
+                }
+              });
               updateOrderOptions({
                 type: type
               });
 
-            case 8:
+            case 9:
             case "end":
               return _context3.stop();
           }

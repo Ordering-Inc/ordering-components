@@ -13,6 +13,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _ApiContext = require("../../contexts/ApiContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -62,6 +64,10 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
   var _useState = (0, _react.useState)({
     loading: false,
@@ -162,6 +168,10 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
                 if (handleSuccessFacebookLogin) {
                   handleSuccessFacebookLogin(response.content.result);
                 }
+
+                events.emit('userLogin', _objectSpread(_objectSpread({}, result), {}, {
+                  bySocial: 'Facebook'
+                }));
               } else {
                 handleFacebookLogout();
               }

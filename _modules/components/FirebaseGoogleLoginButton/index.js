@@ -15,6 +15,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 var firebase = _interopRequireWildcard(require("firebase/app"));
 
 var _auth = require("firebase/auth");
@@ -62,6 +64,10 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
   var _useConfig = (0, _ConfigContext.useConfig)(),
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configs = _useConfig2[0].configs;
+
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
 
   var _useState = (0, _react.useState)({
     loading: false,
@@ -161,23 +167,26 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
                 loading: false,
                 error: error ? result : null
               });
-              _context2.next = 14;
+              events.emit('userLogin', _objectSpread(_objectSpread({}, result), {}, {
+                bySocial: 'Google'
+              }));
+              _context2.next = 15;
               break;
 
-            case 11:
-              _context2.prev = 11;
+            case 12:
+              _context2.prev = 12;
               _context2.t0 = _context2["catch"](0);
               setActionState({
                 loading: false,
                 error: [_context2.t0.message]
               });
 
-            case 14:
+            case 15:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 11]]);
+      }, _callee2, null, [[0, 12]]);
     }));
 
     return function handleSigninSuccess(_x) {
