@@ -250,7 +250,7 @@ var MomentOption = function MomentOption(props) {
   (0, _react.useEffect)(function () {
     if (!dateSelected) return;
     generateHourList(preorderLeadTime, preorderTimeRange, preorderSlotInterval);
-  }, [dateSelected]);
+  }, [dateSelected, preorderLeadTime, preorderTimeRange, preorderSlotInterval]);
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       var diff = (0, _dayjs.default)(dateSelected).diff((0, _dayjs.default)(currentDate), 'day');
@@ -261,7 +261,7 @@ var MomentOption = function MomentOption(props) {
     return function () {
       return clearInterval(interval);
     };
-  }, [dateSelected]);
+  }, [dateSelected, preorderLeadTime, preorderTimeRange, preorderSlotInterval]);
   (0, _react.useEffect)(function () {
     generateDatesList();
   }, [maxDate, minDate]);
