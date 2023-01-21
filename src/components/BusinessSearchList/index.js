@@ -49,7 +49,7 @@ export const BusinessSearchList = (props) => {
 
   const handleChangeTermValue = (val) => {
     setTermValue(val)
-    if ((termValue?.length === 0 || termValue?.length >= 3)) {
+    if ((termValue?.length === 0 || termValue?.length >= 2)) {
       handleSearchbusinessAndProducts(true, {}, val)
     }
   }
