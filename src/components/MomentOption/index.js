@@ -224,7 +224,7 @@ export const MomentOption = (props) => {
   useEffect(() => {
     if (!dateSelected) return
     generateHourList(preorderLeadTime, preorderTimeRange, preorderSlotInterval)
-  }, [dateSelected])
+  }, [dateSelected, preorderLeadTime, preorderTimeRange, preorderSlotInterval])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -234,7 +234,7 @@ export const MomentOption = (props) => {
       }
     }, 1000)
     return () => clearInterval(interval)
-  }, [dateSelected])
+  }, [dateSelected, preorderLeadTime, preorderTimeRange, preorderSlotInterval])
 
   useEffect(() => {
     generateDatesList()
