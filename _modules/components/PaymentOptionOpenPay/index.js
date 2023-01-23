@@ -17,6 +17,8 @@ var _OrderContext = require("../../contexts/OrderContext");
 
 var _ConfigContext = require("../../contexts/ConfigContext");
 
+var _EventContext = require("../../contexts/EventContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -110,6 +112,10 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
       _useConfig2 = _slicedToArray(_useConfig, 1),
       configs = _useConfig2[0].configs;
 
+  var _useEvent = (0, _EventContext.useEvent)(),
+      _useEvent2 = _slicedToArray(_useEvent, 1),
+      events = _useEvent2[0];
+
   var isAlsea = ordering.project === 'alsea';
   (0, _react.useEffect)(function () {
     var _window, _window$OpenPay, _window$OpenPay$devic;
@@ -179,6 +185,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                   cards: [],
                   error: result === null || result === void 0 ? void 0 : result.result
                 });
+                events.emit('general_errors', result === null || result === void 0 ? void 0 : result.result);
               } else {
                 setCardsList({
                   loading: false,
@@ -333,7 +340,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
               resultCard = _context2.sent;
 
               if (!resultCard.error) {
-                _context2.next = 21;
+                _context2.next = 22;
                 break;
               }
 
@@ -341,9 +348,10 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 loading: false,
                 error: resultCard === null || resultCard === void 0 ? void 0 : resultCard.result
               }));
+              events.emit('general_errors', resultCard === null || resultCard === void 0 ? void 0 : resultCard.result);
               return _context2.abrupt("return");
 
-            case 21:
+            case 22:
               setCardsList({
                 cards: [].concat(_toConsumableArray(cardsList.cards), [_objectSpread(_objectSpread({}, resultCard === null || resultCard === void 0 ? void 0 : resultCard.result), {}, {
                   brand: resultCard === null || resultCard === void 0 ? void 0 : resultCard.brandCardName
@@ -363,23 +371,24 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                   device_session_id: deviceSessionId
                 }
               }));
-              _context2.next = 28;
+              _context2.next = 30;
               break;
 
-            case 25:
-              _context2.prev = 25;
+            case 26:
+              _context2.prev = 26;
               _context2.t0 = _context2["catch"](0);
+              events.emit('general_errors', _context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message);
               setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                 loading: false,
                 error: [_context2.t0.message]
               }));
 
-            case 28:
+            case 30:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 25]]);
+      }, _callee2, null, [[0, 26]]);
     }));
 
     return function handleNewCard(_x) {
@@ -431,24 +440,26 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                   error: null
                 });
               } else {
+                events.emit('general_errors', result === null || result === void 0 ? void 0 : result.result);
                 setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                   loading: false,
                   error: [result === null || result === void 0 ? void 0 : result.result]
                 }));
               }
 
-              _context3.next = 14;
+              _context3.next = 15;
               break;
 
             case 11:
               _context3.prev = 11;
               _context3.t0 = _context3["catch"](0);
+              events.emit('general_errors', _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message);
               setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                 loading: false,
                 error: [_context3.t0.message]
               }));
 
-            case 14:
+            case 15:
             case "end":
               return _context3.stop();
           }

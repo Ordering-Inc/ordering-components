@@ -807,6 +807,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 events.emit('product_added', product);
                 isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name));
               } else {
+                events.emit('general_errors', result);
                 setAlert({
                   show: true,
                   content: result
@@ -821,12 +822,13 @@ var OrderProvider = function OrderProvider(_ref) {
             case 18:
               _context6.prev = 18;
               _context6.t0 = _context6["catch"](0);
+              events.emit('general_errors', _context6.t0 === null || _context6.t0 === void 0 ? void 0 : _context6.t0.message);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context6.abrupt("return", false);
 
-            case 22:
+            case 23:
             case "end":
               return _context6.stop();
           }
@@ -888,6 +890,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 events.emit('cart_product_removed', product, result);
                 events.emit('cart_updated', result);
               } else {
+                events.emit('general_errors', result);
                 setAlert({
                   show: true,
                   content: result
@@ -902,12 +905,13 @@ var OrderProvider = function OrderProvider(_ref) {
             case 18:
               _context7.prev = 18;
               _context7.t0 = _context7["catch"](0);
+              events.emit('general_errors', _context7.t0 === null || _context7.t0 === void 0 ? void 0 : _context7.t0.message);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
               return _context7.abrupt("return", false);
 
-            case 22:
+            case 23:
             case "end":
               return _context7.stop();
           }
@@ -1595,6 +1599,10 @@ var OrderProvider = function OrderProvider(_ref) {
               if (!error) {
                 state.carts["businessId:".concat(result.business_id)] = result;
                 events.emit('cart_updated', result);
+              } else {
+                events.emit('general_errors', {
+                  result: result
+                });
               }
 
               setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -1605,9 +1613,10 @@ var OrderProvider = function OrderProvider(_ref) {
             case 26:
               _context14.prev = 26;
               _context14.t0 = _context14["catch"](8);
+              events.emit('general_errors', _context14.t0 === null || _context14.t0 === void 0 ? void 0 : _context14.t0.message);
               return _context14.abrupt("return", false);
 
-            case 29:
+            case 30:
             case "end":
               return _context14.stop();
           }
@@ -1683,7 +1692,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 sendLogData(cardId);
               }
 
-              _context15.next = 21;
+              _context15.next = 22;
               break;
 
             case 17:
@@ -1695,9 +1704,12 @@ var OrderProvider = function OrderProvider(_ref) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
+              events.emit('general_errors', {
+                result: result
+              });
               return _context15.abrupt("return");
 
-            case 21:
+            case 22:
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
@@ -1706,23 +1718,24 @@ var OrderProvider = function OrderProvider(_ref) {
                 result: result
               });
 
-            case 25:
-              _context15.prev = 25;
+            case 26:
+              _context15.prev = 26;
               _context15.t0 = _context15["catch"](0);
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
               }));
+              events.emit('general_errors', _context15.t0 === null || _context15.t0 === void 0 ? void 0 : _context15.t0.message);
               return _context15.abrupt("return", {
                 error: true,
                 result: [_context15.t0.message]
               });
 
-            case 29:
+            case 31:
             case "end":
               return _context15.stop();
           }
         }
-      }, _callee15, null, [[0, 25]]);
+      }, _callee15, null, [[0, 26]]);
     }));
 
     return function placeCart(_x25, _x26) {

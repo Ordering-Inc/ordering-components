@@ -353,12 +353,14 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 52;
+              events.emit('general_errors', result);
+              _context.next = 54;
               break;
 
-            case 49:
-              _context.prev = 49;
+            case 50:
+              _context.prev = 50;
               _context.t1 = _context["catch"](3);
+              events.emit('general_errors', _context.t1 === null || _context.t1 === void 0 ? void 0 : _context.t1.message);
               setFormState({
                 result: {
                   error: true,
@@ -367,12 +369,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 52:
+            case 54:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 49], [29, 38]]);
+      }, _callee, null, [[3, 50], [29, 38]]);
     }));
 
     return function handleLoginClick(_x) {

@@ -315,11 +315,13 @@ var Analytics = function Analytics(props) {
   };
 
   var handleGoToBusiness = function handleGoToBusiness(storeData) {
-    if (googleTagManager) {
-      var _storeData$params;
+    var _storeData$params;
+
+    if (googleTagManager && (storeData === null || storeData === void 0 ? void 0 : (_storeData$params = storeData.params) === null || _storeData$params === void 0 ? void 0 : _storeData$params.store) !== ':store') {
+      var _storeData$params2;
 
       var dlAnalytics = {
-        restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params = storeData.params) === null || _storeData$params === void 0 ? void 0 : _storeData$params.store),
+        restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params2 = storeData.params) === null || _storeData$params2 === void 0 ? void 0 : _storeData$params2.store),
         event: "evClickRestaurant"
       };
       console.log('evClickRestaurant', dlAnalytics);
@@ -386,6 +388,31 @@ var Analytics = function Analytics(props) {
     }
   };
 
+  var handleCategorySelect = function handleCategorySelect(data) {
+    if (googleTagManager) {
+      var _data$params, _data$params2;
+
+      var dlAnalytics = {
+        menuRestaurantOption: formatForAnalytics(data === null || data === void 0 ? void 0 : (_data$params = data.params) === null || _data$params === void 0 ? void 0 : _data$params.category.name),
+        restaurant: formatForAnalytics(data === null || data === void 0 ? void 0 : (_data$params2 = data.params) === null || _data$params2 === void 0 ? void 0 : _data$params2.business),
+        event: "evClickRestaurantMenu"
+      };
+      console.log('evClickRestaurantMenu', dlAnalytics);
+      window.dataLayer.push(dlAnalytics);
+    }
+  };
+
+  var handleGeneralError = function handleGeneralError(data) {
+    if (googleTagManager) {
+      var dlAnalytics = {
+        error: data,
+        event: "evGeneralError"
+      };
+      console.log('evGeneralError', dlAnalytics);
+      window.dataLayer.push(dlAnalytics);
+    }
+  };
+
   (0, _react.useEffect)(function () {
     console.log('Analytic Ready');
 
@@ -401,6 +428,8 @@ var Analytics = function Analytics(props) {
       events.on('go_to_checkout', handleGoToCheckout);
       events.on('address_event', handleAddressEvent);
       events.on('order_type_change', handleChangeOrderType);
+      events.on('category_selected', handleCategorySelect);
+      events.on('general_errors', handleGeneralError);
     }
 
     return function () {
@@ -416,6 +445,8 @@ var Analytics = function Analytics(props) {
         events.off('go_to_checkout', handleGoToCheckout);
         events.off('address_event', handleAddressEvent);
         events.off('order_type_change', handleChangeOrderType);
+        events.off('category_selected', handleCategorySelect);
+        events.off('general_errors', handleGeneralError);
       }
     };
   }, [analyticsReady]);

@@ -173,15 +173,17 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
                   bySocial: 'Facebook'
                 }));
               } else {
+                events.emit('general_errors', response.content.result);
                 handleFacebookLogout();
               }
 
-              _context.next = 15;
+              _context.next = 16;
               break;
 
             case 12:
               _context.prev = 12;
               _context.t0 = _context["catch"](3);
+              events.emit('general_errors', _context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message);
               setFormState({
                 result: {
                   error: true,
@@ -190,7 +192,7 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
                 loading: false
               });
 
-            case 15:
+            case 16:
             case "end":
               return _context.stop();
           }

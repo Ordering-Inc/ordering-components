@@ -158,24 +158,28 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
               result = _yield$ordering$users2.result;
 
               if (!error) {
+                events.emit('userLogin', _objectSpread(_objectSpread({}, result), {}, {
+                  bySocial: 'Google'
+                }));
+
                 if (handleSuccessGoogleLogin) {
                   handleSuccessGoogleLogin(result);
                 }
+              } else {
+                events.emit('general_errors', result);
               }
 
               setActionState({
                 loading: false,
                 error: error ? result : null
               });
-              events.emit('userLogin', _objectSpread(_objectSpread({}, result), {}, {
-                bySocial: 'Google'
-              }));
               _context2.next = 15;
               break;
 
-            case 12:
-              _context2.prev = 12;
+            case 11:
+              _context2.prev = 11;
               _context2.t0 = _context2["catch"](0);
+              events.emit('general_errors', _context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message);
               setActionState({
                 loading: false,
                 error: [_context2.t0.message]
@@ -186,7 +190,7 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 12]]);
+      }, _callee2, null, [[0, 11]]);
     }));
 
     return function handleSigninSuccess(_x) {
