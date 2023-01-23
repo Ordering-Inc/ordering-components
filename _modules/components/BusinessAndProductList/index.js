@@ -36,7 +36,7 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 var BusinessAndProductList = function BusinessAndProductList(props) {
-  var _configs$use_parent_c, _configs$use_parent_c2, _businessState$busine17, _orderState$options26, _orderState$options27, _orderState$options28, _orderState$options29;
+  var _configs$use_parent_c, _configs$use_parent_c2, _businessState$busine18, _orderState$options26, _orderState$options27, _orderState$options28, _orderState$options29;
   var isSearchByName = props.isSearchByName,
     isSearchByDescription = props.isSearchByDescription,
     slug = props.slug,
@@ -48,7 +48,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     menusProps = props.menusProps,
     isGetMenus = props.isGetMenus,
     UIComponent = props.UIComponent,
-    location = props.location;
+    location = props.location,
+    avoidProductDuplicate = props.avoidProductDuplicate;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
@@ -291,7 +292,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   var getProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _categoryState$produc;
-      var i, _ref2, _businessState$busine3, _businessState$busine4, _businessState$busine5, _category$products, category, isFeatured, categoryState, _businessState$busine6, _ref3, _businessState$busine7, _businessState$busine8, _categories$find, _subCategoriesList$fi, _businessState$busine9, _businessState$busine10, _businessState$busine11, categoriesList, categories, parentCategory, categoryFinded, productsFiltered, _businessState$busine12, _businessState$busine13, _productsFiltered, _businessState$busine14, _businessState$busine15, _productsFiltered2;
+      var i, _ref2, _businessState$busine3, _businessState$busine4, _businessState$busine5, _category$products, category, isFeatured, categoryState, _businessState$busine6, _ref3, _businessState$busine7, _businessState$busine8, _categories$find, _subCategoriesList$fi, _businessState$busine9, _businessState$busine10, _businessState$busine11, categoriesList, categories, parentCategory, categoryFinded, productsFiltered, _businessState$busine12, _businessState$busine13, _productsFiltered, _businessState$busine16, _categoriesCustom, _businessState$busine14, _businessState$busine15, customCategories, productsToFilter, _productsFiltered2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -348,7 +349,16 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               });
               categoryState.products = _productsFiltered || [];
             } else {
-              _productsFiltered2 = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine14 = businessState.business) === null || _businessState$busine14 === void 0 ? void 0 : (_businessState$busine15 = _businessState$busine14.categories) === null || _businessState$busine15 === void 0 ? void 0 : _businessState$busine15.reduce(function (products, category) {
+              _categoriesCustom = null;
+              if (avoidProductDuplicate) {
+                customCategories = ['favorites'];
+                _categoriesCustom = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine14 = businessState.business) === null || _businessState$busine14 === void 0 ? void 0 : (_businessState$busine15 = _businessState$busine14.categories) === null || _businessState$busine15 === void 0 ? void 0 : _businessState$busine15.filter(function (_ref4) {
+                  var id = _ref4.id;
+                  return !customCategories.includes(id);
+                });
+              }
+              productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState === null || businessState === void 0 ? void 0 : (_businessState$busine16 = businessState.business) === null || _businessState$busine16 === void 0 ? void 0 : _businessState$busine16.categories;
+              _productsFiltered2 = productsToFilter === null || productsToFilter === void 0 ? void 0 : productsToFilter.reduce(function (products, category) {
                 return [].concat(_toConsumableArray(products), _toConsumableArray(category.products));
               }, []).filter(function (product) {
                 return isMatchSearch(product.name, product.description, product === null || product === void 0 ? void 0 : product.price);
@@ -369,13 +379,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     };
   }();
   var getLazyProducts = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref4) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
       var _orderState$options$t, _orderState$options, _orderState$options2, _orderState$options3, _where, _where$conditions, _where2, _where2$conditions;
-      var page, _ref4$pageSize, pageSize, parameters, _orderState$options4, moment, where, searchConditions, source, promises, functionFetch, productEndpoint, _where3, _where3$conditions;
+      var page, _ref5$pageSize, pageSize, parameters, _orderState$options4, moment, where, searchConditions, source, promises, functionFetch, productEndpoint, _where3, _where3$conditions;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            page = _ref4.page, _ref4$pageSize = _ref4.pageSize, pageSize = _ref4$pageSize === void 0 ? categoryStateDefault.pagination.pageSize : _ref4$pageSize;
+            page = _ref5.page, _ref5$pageSize = _ref5.pageSize, pageSize = _ref5$pageSize === void 0 ? categoryStateDefault.pagination.pageSize : _ref5$pageSize;
             parameters = {
               type: (_orderState$options$t = (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) !== null && _orderState$options$t !== void 0 ? _orderState$options$t : 1,
               page: page,
@@ -481,13 +491,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       }, _callee2);
     }));
     return function getLazyProducts(_x2) {
-      return _ref5.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
   var loadProducts = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var _categoriesState$cate, _curCategoryState$pro, _businessState$busine16;
-      var _ref7,
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var _categoriesState$cate, _curCategoryState$pro, _businessState$busine17;
+      var _ref8,
         newFetch,
         curCategoryState,
         isLazy,
@@ -522,7 +532,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         _categoriesState$feat4,
         newcategoryState,
         isFeatured,
-        _ref8,
+        _ref9,
         _featuredRes$content$,
         _featuredRes$content13,
         _categoriesState$feat5,
@@ -547,7 +557,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            _ref7 = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : {}, newFetch = _ref7.newFetch;
+            _ref8 = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : {}, newFetch = _ref8.newFetch;
             curCategoryState = (_categoriesState$cate = categoriesState[categoryKey]) !== null && _categoriesState$cate !== void 0 ? _categoriesState$cate : categoryStateDefault;
             if (!(!newFetch && (curCategoryState.pagination.currentPage > 0 && curCategoryState.pagination.currentPage === curCategoryState.pagination.totalPages || (curCategoryState === null || curCategoryState === void 0 ? void 0 : (_curCategoryState$pro = curCategoryState.products) === null || _curCategoryState$pro === void 0 ? void 0 : _curCategoryState$pro.length) > 0 && curCategoryState.pagination.totalPages > 0))) {
               _context3.next = 5;
@@ -558,7 +568,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             }));
             return _context3.abrupt("return");
           case 5:
-            isLazy = !!(businessState !== null && businessState !== void 0 && (_businessState$busine16 = businessState.business) !== null && _businessState$busine16 !== void 0 && _businessState$busine16.lazy_load_products_recommended);
+            isLazy = !!(businessState !== null && businessState !== void 0 && (_businessState$busine17 = businessState.business) !== null && _businessState$busine17 !== void 0 && _businessState$busine17.lazy_load_products_recommended);
             if (isLazy) {
               _context3.next = 9;
               break;
@@ -636,7 +646,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               setFeaturedProducts(isFeatured);
             }
             if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
-              productsList = searchValue ? _toConsumableArray(result) : (_ref8 = []).concat.apply(_ref8, _toConsumableArray(result.map(function (category) {
+              productsList = searchValue ? _toConsumableArray(result) : (_ref9 = []).concat.apply(_ref9, _toConsumableArray(result.map(function (category) {
                 return category === null || category === void 0 ? void 0 : category.products;
               }))).filter(function (item) {
                 return item;
@@ -680,13 +690,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       }, _callee3, null, [[10, 31]]);
     }));
     return function loadProducts() {
-      return _ref6.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
   var loadMoreProducts = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _categoriesState$cate2;
-      var curCategoryState, _featuredRes$content20, _yield$getLazyProduct3, _yield$getLazyProduct4, lazyRes, featuredRes, _lazyRes$content2, error, result, pagination, errorsList, _featuredRes$content21, _featuredRes$content22, _featuredRes$content23, _featuredRes$content24, _featuredRes$content25, _featuredRes$content26, _featuredRes$content27, _featuredRes$content28, oldFeatured, featureState, _categoriesState$feat9, _categoriesState$feat10, newcategoryState, isFeatured, _ref10, _featuredRes$content$2, _featuredRes$content29, _categoriesState$feat11, _categoriesState$feat12, _curCategoryState$pag2, _featuredRes$content30, _featuredRes$content31, _featuredRes$content32, _featuredRes$content33, _featuredRes$content34, _featuredRes$content35, _categoriesState$feat13, _categoriesState$feat14, productsList, productsListFeatured, paginationData, _newcategoryState2, _isFeatured2, _err$constructor2, _err$message2;
+      var curCategoryState, _featuredRes$content20, _yield$getLazyProduct3, _yield$getLazyProduct4, lazyRes, featuredRes, _lazyRes$content2, error, result, pagination, errorsList, _featuredRes$content21, _featuredRes$content22, _featuredRes$content23, _featuredRes$content24, _featuredRes$content25, _featuredRes$content26, _featuredRes$content27, _featuredRes$content28, oldFeatured, featureState, _categoriesState$feat9, _categoriesState$feat10, newcategoryState, isFeatured, _ref11, _featuredRes$content$2, _featuredRes$content29, _categoriesState$feat11, _categoriesState$feat12, _curCategoryState$pag2, _featuredRes$content30, _featuredRes$content31, _featuredRes$content32, _featuredRes$content33, _featuredRes$content34, _featuredRes$content35, _categoriesState$feat13, _categoriesState$feat14, productsList, productsListFeatured, paginationData, _newcategoryState2, _isFeatured2, _err$constructor2, _err$message2;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
@@ -757,7 +767,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               setFeaturedProducts(isFeatured);
             }
             if (isUseParentCategory && (!categorySelected.id || categorySelected.id === 'featured')) {
-              productsList = (_ref10 = []).concat.apply(_ref10, _toConsumableArray(result.map(function (category) {
+              productsList = (_ref11 = []).concat.apply(_ref11, _toConsumableArray(result.map(function (category) {
                 return category === null || category === void 0 ? void 0 : category.products;
               }))).filter(function (item) {
                 return item;
@@ -805,11 +815,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       }, _callee4, null, [[2, 23]]);
     }));
     return function loadMoreProducts() {
-      return _ref9.apply(this, arguments);
+      return _ref10.apply(this, arguments);
     };
   }();
   var getProduct = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _props$product, _props$product2, _props$product3;
       var _orderState$options5, _orderState$options6, _orderState$options7, _orderState$options8, _props$product4, _props$product5, _props$product6, source, parameters, _orderState$options9, moment, _yield$ordering$busin, result, product;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -861,16 +871,16 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       }, _callee5, null, [[1, 15]]);
     }));
     return function getProduct() {
-      return _ref11.apply(this, arguments);
+      return _ref12.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
     if (isInitialRender) {
       getProduct();
     }
-  }, [JSON.stringify((_businessState$busine17 = businessState.business) === null || _businessState$busine17 === void 0 ? void 0 : _businessState$busine17.id), isInitialRender]);
+  }, [JSON.stringify((_businessState$busine18 = businessState.business) === null || _businessState$busine18 === void 0 ? void 0 : _businessState$busine18.id), isInitialRender]);
   var getBusiness = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18, _orderState$options19, _orderState$options20, _result$categories, source, parameters, _orderState$options21, moment, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -935,11 +945,11 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       }, _callee6, null, [[0, 23]]);
     }));
     return function getBusiness() {
-      return _ref12.apply(this, arguments);
+      return _ref13.apply(this, arguments);
     };
   }();
   var multiRemoveProducts = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(unavailableProducts, carts) {
+    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(unavailableProducts, carts) {
       var allPromise;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -969,12 +979,12 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       }, _callee7);
     }));
     return function multiRemoveProducts(_x3, _x4) {
-      return _ref13.apply(this, arguments);
+      return _ref14.apply(this, arguments);
     };
   }();
   var handleUpdateProfessionals = function handleUpdateProfessionals(selectedProfessional) {
-    var _businessState$busine18;
-    var professionals = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine18 = businessState.business) === null || _businessState$busine18 === void 0 ? void 0 : _businessState$busine18.professionals.map(function (professional) {
+    var _businessState$busine19;
+    var professionals = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine19 = businessState.business) === null || _businessState$busine19 === void 0 ? void 0 : _businessState$busine19.professionals.map(function (professional) {
       if ((selectedProfessional === null || selectedProfessional === void 0 ? void 0 : selectedProfessional.id) === (professional === null || professional === void 0 ? void 0 : professional.id)) {
         return _objectSpread(_objectSpread({}, professional), selectedProfessional);
       }
