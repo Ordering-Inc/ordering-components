@@ -20,7 +20,8 @@ export const BusinessAndProductList = (props) => {
     menusProps,
     isGetMenus,
     UIComponent,
-    location
+    location,
+    avoidProductDuplicate
   } = props
 
   const [orderState, { removeProduct }] = useOrder()
@@ -265,7 +266,14 @@ export const BusinessAndProductList = (props) => {
       )
       categoryState.products = productsFiltered || []
     } else {
-      const productsFiltered = businessState?.business?.categories?.reduce(
+      let _categoriesCustom = null
+      if (avoidProductDuplicate) {
+        const customCategories = ['favorites']
+        _categoriesCustom = businessState?.business?.categories?.filter(({id}) => (!customCategories.includes(id)))
+      }
+
+      const productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState?.business?.categories
+      const productsFiltered = productsToFilter?.reduce(
         (products, category) => [...products, ...category.products], []
       ).filter(
         product => isMatchSearch(product.name, product.description, product?.price)
