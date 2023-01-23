@@ -28,7 +28,7 @@ export const ProductForm = (props) => {
 
   const requestsState = {}
 
-  const [{ user, token }] = useSession()
+  const [{ user, token }, { login }] = useSession()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
 
@@ -64,6 +64,11 @@ export const ProductForm = (props) => {
   const [customDefaultSubOptions, setCustomDefaultSubOptions] = useState([])
 
   const [professionalListState, setProfessionalListState] = useState({ loading: false, professionals: [], error: null })
+
+  /**
+   * Action status
+   */
+  const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
 
   /**
    * Edit mode
@@ -500,6 +505,24 @@ export const ProductForm = (props) => {
     }
   }
 
+  const handleCreateGuestUser = async (values) => {
+    try {
+      setActionStatus({ ...actionStatus, loading: true })
+      const { content: { error, result } } = await ordering.users().save(values)
+      if (!error) {
+        setActionStatus({ error: null, loading: false })
+        login({
+          user: result,
+          token: result.session?.access_token
+        })
+      } else {
+        setActionStatus({ error: result, loading: false })
+      }
+    } catch (err) {
+      setActionStatus({ error: err.message, loading: false })
+    }
+  }
+
   const increment = () => {
     if (maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity) {
       return
@@ -773,12 +796,14 @@ export const ProductForm = (props) => {
             errors={errors}
             editMode={editMode}
             isSoldOut={isSoldOut}
+            actionStatus={actionStatus}
             maxProductQuantity={maxProductQuantity}
             increment={increment}
             decrement={decrement}
             handleChangeProductCartQuantity={handleChangeProductCartQuantity}
             handleSave={handleSave}
             showOption={showOption}
+            handleCreateGuestUser={handleCreateGuestUser}
             handleFavoriteProduct={handleFavoriteProduct}
             handleChangeIngredientState={handleChangeIngredientState}
             handleChangeSuboptionState={handleChangeSuboptionState}

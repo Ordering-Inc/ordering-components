@@ -7,6 +7,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+
 /**
  * Component to manage signup behavior without UI component
  */
@@ -20,7 +21,8 @@ export const SignupForm = (props) => {
     handleCustomSignup,
     notificationState,
     isCustomerMode,
-    numOtpInputs
+    numOtpInputs,
+    isGuest
   } = props
   const requestsState = {}
 
@@ -28,7 +30,7 @@ export const SignupForm = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [, t] = useLanguage()
-  const [, { login }] = useSession()
+  const [{ user }, { login }] = useSession()
   const [validationFields] = useValidationFields()
 
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
@@ -57,6 +59,9 @@ export const SignupForm = (props) => {
       return
     }
     const data = values || signupData
+
+    if (isGuest && user?.guest_id) data.guest_token = user?.guest_id
+
     if (isReCaptchaEnable) {
       if (reCaptchaValue?.code === '') {
         setFormState({
