@@ -45,7 +45,8 @@ var SignupForm = function SignupForm(props) {
     handleCustomSignup = props.handleCustomSignup,
     notificationState = props.notificationState,
     isCustomerMode = props.isCustomerMode,
-    numOtpInputs = props.numOtpInputs;
+    numOtpInputs = props.numOtpInputs,
+    isGuest = props.isGuest;
   var requestsState = {};
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
@@ -59,6 +60,7 @@ var SignupForm = function SignupForm(props) {
     t = _useLanguage2[1];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 2),
+    user = _useSession2[0].user,
     login = _useSession2[1].login;
   var _useValidationFields = (0, _ValidationsFieldsContext.useValidationFields)(),
     _useValidationFields2 = _slicedToArray(_useValidationFields, 1),
@@ -149,12 +151,13 @@ var SignupForm = function SignupForm(props) {
             return _context.abrupt("return");
           case 3:
             data = values || signupData;
+            if (isGuest && user !== null && user !== void 0 && user.guest_id) data.guest_token = user === null || user === void 0 ? void 0 : user.guest_id;
             if (!isReCaptchaEnable) {
-              _context.next = 12;
+              _context.next = 13;
               break;
             }
             if (!((reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code) === '')) {
-              _context.next = 10;
+              _context.next = 11;
               break;
             }
             setFormState({
@@ -165,10 +168,10 @@ var SignupForm = function SignupForm(props) {
               loading: false
             });
             return _context.abrupt("return");
-          case 10:
+          case 11:
             data.verification_code = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.code;
             data.recaptcha_type = reCaptchaValue === null || reCaptchaValue === void 0 ? void 0 : reCaptchaValue.version;
-          case 12:
+          case 13:
             if (notificationState !== null && notificationState !== void 0 && notificationState.notification_token) {
               data.notification_token = notificationState.notification_token;
               data.notification_app = notificationState.notification_app;
@@ -194,17 +197,17 @@ var SignupForm = function SignupForm(props) {
                 v = _ref3[1];
               return v !== '';
             }));
-            _context.prev = 16;
+            _context.prev = 17;
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: true
             }));
             source = {};
             requestsState.signup = source;
-            _context.next = 22;
+            _context.next = 23;
             return ordering.users().save(newData, {
               cancelToken: source
             });
-          case 22:
+          case 23:
             response = _context.sent;
             setFormState({
               result: response.content,
@@ -216,11 +219,11 @@ var SignupForm = function SignupForm(props) {
                 handleSuccessSignup(response.content.result);
               }
             }
-            _context.next = 30;
+            _context.next = 31;
             break;
-          case 27:
-            _context.prev = 27;
-            _context.t0 = _context["catch"](16);
+          case 28:
+            _context.prev = 28;
+            _context.t0 = _context["catch"](17);
             if (_context.t0.constructor.name !== 'Cancel') {
               setFormState({
                 result: {
@@ -230,11 +233,11 @@ var SignupForm = function SignupForm(props) {
                 loading: false
               });
             }
-          case 30:
+          case 31:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[16, 27]]);
+      }, _callee, null, [[17, 28]]);
     }));
     return function handleSignupClick(_x2) {
       return _ref.apply(this, arguments);
