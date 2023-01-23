@@ -732,7 +732,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
             business_id: result.business_id,
             paymethod: result.paymethod_data.gateway
           }
-          events.emit('order_placed', orderObject)
+          events.emit('order_placed', orderObject, result)
           sendLogData(cardId)
         }
       } else {
