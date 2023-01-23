@@ -84,9 +84,11 @@ export const FacebookLoginButton = (props) => {
         }
         events.emit('userLogin', { ...result, bySocial: 'Facebook' })
       } else {
+        events.emit('general_errors', response.content.result)
         handleFacebookLogout()
       }
     } catch (err) {
+      events.emit('general_errors', err?.message)
       setFormState({
         result: {
           error: true,

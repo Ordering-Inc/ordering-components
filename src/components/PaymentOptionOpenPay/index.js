@@ -4,6 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useEvent } from '../../contexts/EventContext'
 /**
  * Component to manage payment option paypal behavior without UI component
  */
@@ -24,6 +25,7 @@ export const PaymentOptionOpenPay = (props) => {
   const [cardSelected, setCardSelected] = useState(null)
   const [ , { applyCoupon, applyOffer, removeOffer }] = useOrder()
   const [{ configs }] = useConfig()
+  const [events] = useEvent()
 
   const isAlsea = ordering.project === 'alsea'
 
@@ -77,6 +79,7 @@ export const PaymentOptionOpenPay = (props) => {
           cards: [],
           error: result?.result
         })
+        events.emit('general_errors', result?.result)
       } else {
         setCardsList({
           loading: false,
@@ -184,6 +187,7 @@ export const PaymentOptionOpenPay = (props) => {
           loading: false,
           error: resultCard?.result
         })
+        events.emit('general_errors', resultCard?.result)
         return
       }
       setCardsList({
@@ -211,6 +215,7 @@ export const PaymentOptionOpenPay = (props) => {
         }
       })
     } catch (err) {
+      events.emit('general_errors', err?.message)
       setCardsList({
         ...cardsList,
         loading: false,
@@ -246,6 +251,7 @@ export const PaymentOptionOpenPay = (props) => {
           error: null
         })
       } else {
+        events.emit('general_errors', result?.result)
         setCardsList({
           ...cardsList,
           loading: false,
@@ -253,6 +259,7 @@ export const PaymentOptionOpenPay = (props) => {
         })
       }
     } catch (err) {
+      events.emit('general_errors', err?.message)
       setCardsList({
         ...cardsList,
         loading: false,

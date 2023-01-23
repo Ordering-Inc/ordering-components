@@ -49,19 +49,22 @@ export const FirebaseGoogleLoginButton = (props) => {
     try {
       const { content: { error, result } } = await ordering.users().authGoogle({ access_token: token })
       if (!error) {
+        events.emit('userLogin', { ...result, bySocial: 'Google' })
         if (handleSuccessGoogleLogin) {
           handleSuccessGoogleLogin(result)
         }
+      } else {
+        events.emit('general_errors', result)
       }
       setActionState({
         loading: false,
         error: error ? result : null
       })
-      events.emit('userLogin', { ...result, bySocial: 'Google' })
-    } catch (error) {
+    } catch (err) {
+      events.emit('general_errors', err?.message)
       setActionState({
         loading: false,
-        error: [error.message]
+        error: [err.message]
       })
     }
   }

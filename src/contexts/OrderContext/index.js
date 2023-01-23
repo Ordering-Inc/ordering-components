@@ -382,11 +382,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         events.emit('product_added', product)
         isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
       } else {
+        events.emit('general_errors', result)
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
       return !error
     } catch (err) {
+      events.emit('general_errors', err?.message)
       setState({ ...state, loading: false })
       return false
     }
@@ -415,11 +417,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         events.emit('cart_product_removed', product, result)
         events.emit('cart_updated', result)
       } else {
+        events.emit('general_errors', result)
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
       return !error
     } catch (err) {
+      events.emit('general_errors', err?.message)
       setState({ ...state, loading: false })
       return false
     }
@@ -696,10 +700,13 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_updated', result)
+      } else {
+        events.emit('general_errors', { result })
       }
       setState({ ...state, loading: false })
       return !error
     } catch (err) {
+      events.emit('general_errors', err?.message)
       return false
     }
   }
@@ -739,12 +746,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         sendLogData(cardId, result)
         setAlert({ show: true, content: result })
         setState({ ...state, loading: false })
+        events.emit('general_errors', { result })
         return
       }
       setState({ ...state, loading: false })
       return { error, result }
     } catch (err) {
       setState({ ...state, loading: false })
+      events.emit('general_errors', err?.message)
       return {
         error: true,
         result: [err.message]

@@ -170,7 +170,9 @@ export const LoginForm = (props) => {
         },
         loading: false
       })
+      events.emit('general_errors', result)
     } catch (err) {
+      events.emit('general_errors', err?.message)
       setFormState({
         result: {
           error: true,

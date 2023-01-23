@@ -253,7 +253,7 @@ export const Analytics = (props) => {
     }
   }
   const handleGoToBusiness = (storeData) => {
-    if (googleTagManager) {
+    if (googleTagManager && storeData?.params?.store !== ':store') {
       const dlAnalytics = {
         restaurant: formatForAnalytics(storeData?.params?.store),
         event: "evClickRestaurant",
@@ -313,6 +313,28 @@ export const Analytics = (props) => {
       window.dataLayer.push(dlAnalytics)
     }
   }
+  const handleCategorySelect = (data) => {
+    if (googleTagManager) {
+      const dlAnalytics = {
+        menuRestaurantOption: formatForAnalytics(data?.params?.category.name),
+        restaurant: formatForAnalytics(data?.params?.business),
+        event: "evClickRestaurantMenu",
+      };
+      console.log('evClickRestaurantMenu', dlAnalytics)
+      window.dataLayer.push(dlAnalytics)
+    }
+  }
+  const handleGeneralError = (data) => {
+    if (googleTagManager) {
+      const dlAnalytics = {
+       error: data,
+       event: "evGeneralError",
+      };
+      console.log('evGeneralError', dlAnalytics)
+      window.dataLayer.push(dlAnalytics)
+    }
+  }
+
   useEffect(() => {
     console.log('Analytic Ready')
     if ((analyticsReady && window.ga) || googleTagManager) {
@@ -327,6 +349,8 @@ export const Analytics = (props) => {
       events.on('go_to_checkout', handleGoToCheckout)
       events.on('address_event', handleAddressEvent)
       events.on('order_type_change', handleChangeOrderType)
+      events.on('category_selected', handleCategorySelect)
+      events.on('general_errors', handleGeneralError)
     }
     return () => {
       if (analyticsReady && window.ga) {
@@ -341,6 +365,8 @@ export const Analytics = (props) => {
         events.off('go_to_checkout', handleGoToCheckout)
         events.off('address_event', handleAddressEvent)
         events.off('order_type_change', handleChangeOrderType)
+        events.off('category_selected', handleCategorySelect)
+        events.off('general_errors', handleGeneralError)
       }
     }
   }, [analyticsReady])
