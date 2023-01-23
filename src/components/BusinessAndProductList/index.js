@@ -266,13 +266,13 @@ export const BusinessAndProductList = (props) => {
       )
       categoryState.products = productsFiltered || []
     } else {
-      let _categoriesAlsea = null
+      let _categoriesCustom = null
       if (avoidProductDuplicate) {
         const customCategories = ['favorites']
-        _categoriesAlsea = businessState?.business?.categories?.filter(({id}) => (!customCategories.includes(id)))
+        _categoriesCustom = businessState?.business?.categories?.filter(({id}) => (!customCategories.includes(id)))
       }
 
-      const productsToFilter = avoidProductDuplicate ? _categoriesAlsea : businessState?.business?.categories
+      const productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState?.business?.categories
       const productsFiltered = productsToFilter?.reduce(
         (products, category) => [...products, ...category.products], []
       ).filter(
