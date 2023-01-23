@@ -162,7 +162,7 @@ export const Analytics = (props) => {
       window.dataLayer.push(digitalData);
     }
   }
-  const handleOrderPlaced = (order) => {
+  const handleOrderPlaced = (order, orderD) => {
     if (window.ga) {
       window.ga('ec:setAction', 'purchase', { // Transaction details are provided in an actionFieldObject.
         id: order.id, // (Required) Transaction id (string).
@@ -174,45 +174,45 @@ export const Analytics = (props) => {
     }
     if (googleTagManager) {
       let analyticsPaymethod = null;
-      if (order.paymethod_id == 33 || order.paymethod_id == 2){
+      if (orderD.paymethod_id === 33 || orderD.paymethod_id === 2){
         analyticsPaymethod = 'Tarjeta';
-      } else if (order.paymethod_id == 36) {
+      } else if (orderD.paymethod_id === 36) {
         analyticsPaymethod = 'Wow+';
       } else {
         analyticsPaymethod = 'Efectivo';
       }
-      const productFormated = order.products.map((product) => {
+      const productFormated = orderD.products.map((product) => {
             return {
               'name': formatForAnalytics(product.name, 40),
               'id': product.sku ? product.sku : 'producto sin sku',
               'price': product.price ? product.price.toString() : '0',
               'brand': 'MarketPlace '+slug,
-              'category': formatForAnalytics(product.category_id, 40),
-              'list': formatForAnalytics(product.category_id, 40),
+              'category': product.category_id,
+              'list': product.category_id,
               'quantity': product.quantity.toString(),
             }
       })
       const digitalData = {
         'metodoPago': analyticsPaymethod,
-        'rewardsPoints': order.paymethod_id == 33 ? order.summary.total.toString() : '',
-        'couponMoney': order.offer ? order.discount.toString() : '',
+        'rewardsPoints': orderD.paymethod_id === 33 ? orderD.total.toString() : '',
+        'couponMoney': orderD.offer ? orderD.discount.toString() : '',
         'flow': 'MarketPlace '+slug,
         'ecommerce': {
           'purchase': {
             'actionField': {
-              'id': order.integration_id,
-              'affiliation': order.integration_id,
-              'revenue': order.summary.total.toString(),
-              'tax': order.summary.tax.toString(),
-              'shipping': order.delivery_zone_price.toString(),
-              'coupon': order.offer ? order.offer.coupon ? order.offer.coupon : 'NA' : 'NA',
+              'id': orderD.integration_id || orderD.uuid,
+              'affiliation': orderD.integration_id || orderD.uuid,
+              'revenue': orderD.total.toString(),
+              'tax': orderD.tax.toString(),
+              'shipping': orderD.delivery_price.toString(),
+              'coupon': orderD.offer ? orderD.offer.coupon ? orderD.offer.coupon : 'NA' : 'NA',
             },
             'products': productFormated,
           }
         },
         event: "evPurchase",
       };
-      console.log('evPageView', digitalData)
+      console.log('evPurchase', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
