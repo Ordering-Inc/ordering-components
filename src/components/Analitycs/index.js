@@ -253,7 +253,7 @@ export const Analytics = (props) => {
     }
   }
   const handleGoToBusiness = (storeData) => {
-    if (googleTagManager && storeData?.params?.store !== ':store') {
+    if (googleTagManager && storeData?.params?.store !== ':store' && storeData?.params?.store !== 'undefined') {
       const dlAnalytics = {
         restaurant: formatForAnalytics(storeData?.params?.store),
         event: "evClickRestaurant",

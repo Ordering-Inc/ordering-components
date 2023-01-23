@@ -315,13 +315,13 @@ var Analytics = function Analytics(props) {
   };
 
   var handleGoToBusiness = function handleGoToBusiness(storeData) {
-    var _storeData$params;
+    var _storeData$params, _storeData$params2;
 
-    if (googleTagManager && (storeData === null || storeData === void 0 ? void 0 : (_storeData$params = storeData.params) === null || _storeData$params === void 0 ? void 0 : _storeData$params.store) !== ':store') {
-      var _storeData$params2;
+    if (googleTagManager && (storeData === null || storeData === void 0 ? void 0 : (_storeData$params = storeData.params) === null || _storeData$params === void 0 ? void 0 : _storeData$params.store) !== ':store' && (storeData === null || storeData === void 0 ? void 0 : (_storeData$params2 = storeData.params) === null || _storeData$params2 === void 0 ? void 0 : _storeData$params2.store) !== 'undefined') {
+      var _storeData$params3;
 
       var dlAnalytics = {
-        restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params2 = storeData.params) === null || _storeData$params2 === void 0 ? void 0 : _storeData$params2.store),
+        restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params3 = storeData.params) === null || _storeData$params3 === void 0 ? void 0 : _storeData$params3.store),
         event: "evClickRestaurant"
       };
       console.log('evClickRestaurant', dlAnalytics);
