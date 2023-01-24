@@ -11,6 +11,7 @@ import { useOrder } from '../../contexts/OrderContext'
 export const OrderDetails = (props) => {
   const {
     orderId,
+    orderAssingId,
     hashKey,
     UIComponent,
     userCustomerId,
@@ -23,7 +24,6 @@ export const OrderDetails = (props) => {
   const [{ user, token, loading }] = useSession()
   const accessToken = props.accessToken || token
   const [ordering] = useApi()
-  const socket = useWebsocket()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [events] = useEvent()
@@ -33,6 +33,7 @@ export const OrderDetails = (props) => {
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
+  const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
@@ -116,8 +117,7 @@ export const OrderDetails = (props) => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          'X-App-X': ordering.appId
         },
         body: JSON.stringify({
           can_see: '0,2,3',
@@ -246,8 +246,21 @@ export const OrderDetails = (props) => {
     }
 
     try {
-      const { content: { error, result } } = await ordering.setAccessToken(token).orders(orderId).get({ ...options, cancelToken: source })
-      const order = error ? null : result
+      let response
+      if (orderAssingId) {
+        response = await fetch(`${ordering.root}/drivers/${user.id}/assign_requests/${orderAssingId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          }
+        })
+      } else {
+        response = await ordering.setAccessToken(token).orders(orderId).get({ ...options, cancelToken: source })
+      }
+      const { result, error } = await response.json()
+      const order = error ? null : result?.order || result
       const err = error ? result : null
       let businessData = null
       try {
@@ -287,8 +300,7 @@ export const OrderDetails = (props) => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          'X-App-X': ordering.appId
         }
       })
       const { result } = await response.json()
