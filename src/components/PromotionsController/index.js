@@ -67,7 +67,7 @@ export const PromotionsController = (props) => {
 
   useEffect(() => {
     loadOffers()
-  }, [])
+  }, [JSON.stringify(location), options?.type])
 
   return (
     <>
