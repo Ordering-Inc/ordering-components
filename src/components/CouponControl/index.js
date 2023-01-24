@@ -50,13 +50,13 @@ export const CouponControl = (props) => {
         })
       }
     } else {
-        const dataOffer = {
-            business_id: businessId,
-            coupon: couponInput,
-            force: true
-        }
-        if (user?.id) dataOffer.userId = user?.id // Callcenter
-        applyOffer(dataOffer)
+      const dataOffer = {
+        business_id: businessId,
+        coupon: couponInput,
+        force: true
+      }
+      if (user?.id) dataOffer.userId = user?.id // Callcenter
+      applyOffer(dataOffer)
     }
   }
 
