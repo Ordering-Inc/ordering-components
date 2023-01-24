@@ -136,7 +136,7 @@ export const OrdersManage = (props) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`,
+          Authorization: `Bearer ${token}`,
           'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId()
         },
@@ -230,7 +230,7 @@ export const OrdersManage = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`,
+          Authorization: `Bearer ${token}`,
           'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId()
         }
@@ -519,7 +519,7 @@ export const OrdersManage = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`,
+          Authorization: `Bearer ${token}`,
           'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId()
         }
