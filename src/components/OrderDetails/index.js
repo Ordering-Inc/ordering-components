@@ -117,7 +117,8 @@ export const OrderDetails = (props) => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         },
         body: JSON.stringify({
           can_see: '0,2,3',
@@ -300,7 +301,8 @@ export const OrderDetails = (props) => {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
-          'X-App-X': ordering.appId
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       })
       const { result } = await response.json()
