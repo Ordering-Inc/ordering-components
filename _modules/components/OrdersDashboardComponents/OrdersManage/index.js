@@ -248,7 +248,7 @@ var OrdersManage = function OrdersManage(props) {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(session.token),
+                Authorization: "Bearer ".concat(token),
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               },
@@ -418,7 +418,7 @@ var OrdersManage = function OrdersManage(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(session.token),
+                Authorization: "Bearer ".concat(token),
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
@@ -699,7 +699,7 @@ var OrdersManage = function OrdersManage(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(session.token),
+                Authorization: "Bearer ".concat(token),
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
