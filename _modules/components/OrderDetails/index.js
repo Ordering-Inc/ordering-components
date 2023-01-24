@@ -482,7 +482,7 @@ var OrderDetails = function OrderDetails(props) {
    */
   var getOrder = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var source, options, response, _yield$response$json2, result, error, order, err, businessData, _yield$ordering$setAc7, content, _order$id, _orderState$error;
+      var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -502,7 +502,7 @@ var OrderDetails = function OrderDetails(props) {
             }
             _context6.prev = 6;
             if (!orderAssingId) {
-              _context6.next = 13;
+              _context6.next = 18;
               break;
             }
             _context6.next = 10;
@@ -516,42 +516,45 @@ var OrderDetails = function OrderDetails(props) {
             });
           case 10:
             response = _context6.sent;
-            _context6.next = 16;
-            break;
+            _context6.next = 13;
+            return response.json();
           case 13:
-            _context6.next = 15;
+            res = _context6.sent;
+            result = res.result;
+            error = res.error;
+            _context6.next = 24;
+            break;
+          case 18:
+            _context6.next = 20;
             return ordering.setAccessToken(token).orders(orderId).get(_objectSpread(_objectSpread({}, options), {}, {
               cancelToken: source
             }));
-          case 15:
-            response = _context6.sent;
-          case 16:
-            _context6.next = 18;
-            return response.json();
-          case 18:
-            _yield$response$json2 = _context6.sent;
-            result = _yield$response$json2.result;
-            error = _yield$response$json2.error;
-            order = error ? null : (result === null || result === void 0 ? void 0 : result.order) || result;
+          case 20:
+            _yield$ordering$setAc7 = _context6.sent;
+            content = _yield$ordering$setAc7.content;
+            result = content.result;
+            error = content.error;
+          case 24:
+            order = error ? null : ((_result = result) === null || _result === void 0 ? void 0 : _result.order) || result;
             err = error ? result : null;
             businessData = null;
-            _context6.prev = 24;
-            _context6.next = 27;
+            _context6.prev = 27;
+            _context6.next = 30;
             return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({
               cancelToken: source
             });
-          case 27:
-            _yield$ordering$setAc7 = _context6.sent;
-            content = _yield$ordering$setAc7.content;
-            businessData = content.result;
-            content.error && err.push(content.result[0]);
-            _context6.next = 36;
+          case 30:
+            _yield$ordering$setAc8 = _context6.sent;
+            _content = _yield$ordering$setAc8.content;
+            businessData = _content.result;
+            _content.error && (err = _content.result[0]);
+            _context6.next = 39;
             break;
-          case 33:
-            _context6.prev = 33;
-            _context6.t0 = _context6["catch"](24);
-            err.push(_context6.t0.message);
           case 36:
+            _context6.prev = 36;
+            _context6.t0 = _context6["catch"](27);
+            err = [(_e$message = _context6.t0.message) !== null && _e$message !== void 0 ? _e$message : 'ERROR'];
+          case 39:
             if (isFetchDrivers) {
               getDrivers((_order$id = order === null || order === void 0 ? void 0 : order.id) !== null && _order$id !== void 0 ? _order$id : orderId);
             }
@@ -561,20 +564,20 @@ var OrderDetails = function OrderDetails(props) {
               businessData: businessData,
               error: err
             }));
-            _context6.next = 43;
+            _context6.next = 46;
             break;
-          case 40:
-            _context6.prev = 40;
+          case 43:
+            _context6.prev = 43;
             _context6.t1 = _context6["catch"](6);
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
               loading: false,
-              error: _context6.t1.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context6.t1 === null || _context6.t1 === void 0 ? void 0 : _context6.t1.message) : ['ERROR']
+              error: [(_e$message2 = _context6.t1.message) !== null && _e$message2 !== void 0 ? _e$message2 : 'ERROR']
             }));
-          case 43:
+          case 46:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[6, 40], [24, 33]]);
+      }, _callee6, null, [[6, 43], [27, 36]]);
     }));
     return function getOrder() {
       return _ref7.apply(this, arguments);
@@ -583,7 +586,7 @@ var OrderDetails = function OrderDetails(props) {
   var readMessages = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var _messages$messages, _messages$messages2;
-      var messageId, _orderState$order8, response, _yield$response$json3, result;
+      var messageId, _orderState$order8, response, _yield$response$json2, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
           case 0:
@@ -610,8 +613,8 @@ var OrderDetails = function OrderDetails(props) {
             _context7.next = 9;
             return response.json();
           case 9:
-            _yield$response$json3 = _context7.sent;
-            result = _yield$response$json3.result;
+            _yield$response$json2 = _context7.sent;
+            result = _yield$response$json2.result;
             setMessagesReadList(result);
             _context7.next = 17;
             break;
@@ -631,7 +634,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   var getDrivers = /*#__PURE__*/function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(orderId) {
-      var _yield$ordering$setAc8, _yield$ordering$setAc9, error, result, _drivers$error2;
+      var _yield$ordering$setAc9, _yield$ordering$setAc10, error, result, _drivers$error2;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
           case 0:
@@ -642,10 +645,10 @@ var OrderDetails = function OrderDetails(props) {
             _context8.next = 4;
             return ordering.setAccessToken(token).controls(orderId).get();
           case 4:
-            _yield$ordering$setAc8 = _context8.sent;
-            _yield$ordering$setAc9 = _yield$ordering$setAc8.content;
-            error = _yield$ordering$setAc9.error;
-            result = _yield$ordering$setAc9.result;
+            _yield$ordering$setAc9 = _context8.sent;
+            _yield$ordering$setAc10 = _yield$ordering$setAc9.content;
+            error = _yield$ordering$setAc10.error;
+            result = _yield$ordering$setAc10.result;
             setDrivers(_objectSpread(_objectSpread({}, drivers), {}, {
               loadingDriver: false,
               drivers: result.drivers,
