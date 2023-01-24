@@ -247,9 +247,9 @@ export const OrderDetails = (props) => {
     }
 
     try {
-      let response
+      let result, error
       if (orderAssingId) {
-        response = await fetch(`${ordering.root}/drivers/${user.id}/assign_requests/${orderAssingId}`, {
+        const response = await fetch(`${ordering.root}/drivers/${user.id}/assign_requests/${orderAssingId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -257,19 +257,23 @@ export const OrderDetails = (props) => {
             'X-Socket-Id-X': socket?.getId()
           }
         })
+        const res = await response.json()
+        result = res.result
+        error = res.error
       } else {
-        response = await ordering.setAccessToken(token).orders(orderId).get({ ...options, cancelToken: source })
+        const { content } = await ordering.setAccessToken(token).orders(orderId).get({ ...options, cancelToken: source })
+        result = content.result
+        error = content.error
       }
-      const { result, error } = await response.json()
       const order = error ? null : result?.order || result
-      const err = error ? result : null
+      let err = error ? result : null
       let businessData = null
       try {
         const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
-        content.error && err.push(content.result[0])
+        content.error && (err = content.result[0])
       } catch (e) {
-        err.push(e.message)
+        err = [e.message ?? 'ERROR']
       }
 
       if (isFetchDrivers) {
@@ -287,7 +291,7 @@ export const OrderDetails = (props) => {
       setOrderState({
         ...orderState,
         loading: false,
-        error: e.message ? orderState.error?.push(e?.message) : ['ERROR']
+        error: [e.message ?? 'ERROR']
       })
     }
   }
