@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const Messages = (props) => {
   const {
@@ -14,6 +15,7 @@ export const Messages = (props) => {
 
   const [ordering] = useApi()
   const [{ token }] = useSession()
+  const socket = useWebsocket()
   const accessToken = props.accessToken || token
 
   const [canRead, setCanRead] = useState({ administrator: true, business: true, customer: true, driver: true })
@@ -75,6 +77,24 @@ export const Messages = (props) => {
       setSendMessages({ loading: false, error: [error.Messages] })
     }
   }
+
+  useEffect(() => {
+    if (messages.loading) return
+    const handleNewMessage = (message) => {
+      const actualChat = messages?.messages?.find(_message => _message?.order_id === message?.order?.id)
+      const found = messages.messages.find(_message => _message.id === message.id)
+      if (!found && actualChat) {
+        setMessages({
+          ...messages,
+          messages: [...messages.messages, message]
+        })
+      }
+    }
+    socket.on('message', handleNewMessage)
+    return () => {
+      socket.off('message', handleNewMessage)
+    }
+  }, [messages, socket])
 
   return (
     <>
