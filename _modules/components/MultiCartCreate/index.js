@@ -26,6 +26,7 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCartCreate = function MultiCartCreate(props) {
   var UIComponent = props.UIComponent,
+    userId = props.userId,
     handleOnRedirectCheckout = props.handleOnRedirectCheckout,
     handleOnRedirectMultiCheckout = props.handleOnRedirectMultiCheckout;
   var _useSession = (0, _SessionContext.useSession)(),
@@ -41,7 +42,7 @@ var MultiCartCreate = function MultiCartCreate(props) {
     refreshOrderOptions = _useOrder2[1].refreshOrderOptions;
   var createMultiCart = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var cartList, _cartList$, response, _yield$response$json, result, error;
+      var cartList, _cartList$, body, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -53,7 +54,11 @@ var MultiCartCreate = function MultiCartCreate(props) {
             if ((cartList === null || cartList === void 0 ? void 0 : cartList.length) === 1) {
               handleOnRedirectCheckout && handleOnRedirectCheckout((_cartList$ = cartList[0]) === null || _cartList$ === void 0 ? void 0 : _cartList$.uuid);
             }
-            _context.next = 4;
+            body = {
+              carts: cartList
+            };
+            if (userId) body.user_id = userId;
+            _context.next = 6;
             return fetch("".concat(ordering.root, "/cart_groups"), {
               method: 'POST',
               headers: {
@@ -62,25 +67,23 @@ var MultiCartCreate = function MultiCartCreate(props) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({
-                carts: cartList
-              })
+              body: JSON.stringify(body)
             });
-          case 4:
+          case 6:
             response = _context.sent;
-            _context.next = 7;
+            _context.next = 9;
             return response.json();
-          case 7:
+          case 9:
             _yield$response$json = _context.sent;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
-            _context.next = 12;
+            _context.next = 14;
             return refreshOrderOptions();
-          case 12:
+          case 14:
             if (!error) {
               handleOnRedirectMultiCheckout && handleOnRedirectMultiCheckout(result === null || result === void 0 ? void 0 : result.uuid);
             }
-          case 13:
+          case 15:
           case "end":
             return _context.stop();
         }

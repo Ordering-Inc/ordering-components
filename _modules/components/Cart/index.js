@@ -163,12 +163,12 @@ var Cart = function Cart(props) {
   /**
    * change comment for cart
    */
-  var handleChangeComment = function handleChangeComment(value) {
+  var handleChangeComment = function handleChangeComment(value, userId) {
     try {
       if (previousComment !== value) {
         clearTimeout(timeout);
         timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-          var uuid, response, _yield$response$json, result, error;
+          var uuid, body, response, _yield$response$json, result, error;
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
               case 0:
@@ -176,13 +176,15 @@ var Cart = function Cart(props) {
                   loading: true
                 }));
                 uuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
-                _context.next = 4;
+                body = {
+                  comment: value
+                };
+                if (userId) body.user_id = userId;
+                _context.next = 6;
                 return fetch("".concat(ordering.root, "/carts/").concat(uuid), {
                   'Content-Type': 'application/json',
                   method: 'PUT',
-                  body: JSON.stringify({
-                    comment: value
-                  }),
+                  body: JSON.stringify(body),
                   headers: {
                     'Content-Type': 'application/json',
                     Authorization: "Bearer ".concat(token),
@@ -190,16 +192,16 @@ var Cart = function Cart(props) {
                     'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
                   }
                 });
-              case 4:
+              case 6:
                 response = _context.sent;
-                _context.next = 7;
+                _context.next = 9;
                 return response.json();
-              case 7:
+              case 9:
                 _yield$response$json = _context.sent;
                 result = _yield$response$json.result;
                 error = _yield$response$json.error;
                 if (!error) {
-                  _context.next = 14;
+                  _context.next = 16;
                   break;
                 }
                 setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
@@ -209,13 +211,13 @@ var Cart = function Cart(props) {
                 }));
                 showToast(_ToastContext.ToastType.Error, result);
                 return _context.abrupt("return");
-              case 14:
+              case 16:
                 setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
                   loading: false,
                   error: null,
                   result: result
                 }));
-              case 15:
+              case 17:
               case "end":
                 return _context.stop();
             }

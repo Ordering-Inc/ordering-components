@@ -39,7 +39,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
   var UIComponent = props.UIComponent,
     openCarts = props.openCarts,
+    userId = props.userId,
     cartUuid = props.cartUuid;
+  var qParams = userId ? "?user_id=".concat(userId) : '';
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -98,7 +100,7 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
               }
             };
             _context.next = 5;
-            return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/prepare"), requestOptions);
+            return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid, "/prepare").concat(qParams), requestOptions);
           case 5:
             response = _context.sent;
             _context.next = 8;
@@ -149,7 +151,7 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
           case 0:
             _context2.prev = 0;
             _context2.next = 3;
-            return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets"), {
+            return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets").concat(qParams), {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',

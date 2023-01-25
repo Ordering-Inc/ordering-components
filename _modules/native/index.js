@@ -609,6 +609,12 @@ Object.defineProperty(exports, "SingleProductCard", {
     return _SingleProductCard.SingleProductCard;
   }
 });
+Object.defineProperty(exports, "SingleProfessionalCard", {
+  enumerable: true,
+  get: function get() {
+    return _SingleProfessionalCard.SingleProfessionalCard;
+  }
+});
 Object.defineProperty(exports, "StripeElementsForm", {
   enumerable: true,
   get: function get() {
@@ -855,6 +861,7 @@ var _SignupForm = require("../src/components/SignupForm");
 var _SingleBusinessCard = require("../src/components/SingleBusinessCard");
 var _SingleOrderCard = require("../src/components/SingleOrderCard");
 var _SingleProductCard = require("../src/components/SingleProductCard");
+var _SingleProfessionalCard = require("../src/components/SingleProfessionalCard");
 var _StripeElementsForm = require("../src/components/StripeElementsForm");
 var _StripeRedirectForm = require("../src/components/PaymentOptionStripeRedirect/StripeRedirectForm");
 var _UserFormDetails = require("../src/components/UserFormDetails");

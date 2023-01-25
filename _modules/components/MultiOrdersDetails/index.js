@@ -33,6 +33,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiOrdersDetails = function MultiOrdersDetails(props) {
   var _ordersList$orders$, _ordersList$orders$2;
   var orderId = props.orderId,
+    userId = props.userId,
     onRedirectPage = props.onRedirectPage,
     UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -76,9 +77,12 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
                 }]
               }
             };
-            _context.next = 5;
+            if (userId) {
+              options.query.mode = 'dashboard';
+            }
+            _context.next = 6;
             return ordering.setAccessToken(token).orders().get(options);
-          case 5:
+          case 6:
             _yield$ordering$setAc = _context.sent;
             _yield$ordering$setAc2 = _yield$ordering$setAc.content;
             error = _yield$ordering$setAc2.error;
@@ -107,20 +111,20 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
                 tax: _tax
               });
             }
-            _context.next = 16;
+            _context.next = 17;
             break;
-          case 13:
-            _context.prev = 13;
+          case 14:
+            _context.prev = 14;
             _context.t0 = _context["catch"](0);
             setOrdersList(_objectSpread(_objectSpread({}, ordersList), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
-          case 16:
+          case 17:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 13]]);
+      }, _callee, null, [[0, 14]]);
     }));
     return function getOrders() {
       return _ref.apply(this, arguments);
