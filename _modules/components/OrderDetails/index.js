@@ -482,7 +482,7 @@ var OrderDetails = function OrderDetails(props) {
    */
   var getOrder = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
+      var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _err, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -538,23 +538,33 @@ var OrderDetails = function OrderDetails(props) {
             order = error ? null : ((_result = result) === null || _result === void 0 ? void 0 : _result.order) || result;
             err = error ? result : null;
             businessData = null;
-            _context6.prev = 27;
-            _context6.next = 30;
-            return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({
+            if (!err) {
+              _context6.next = 30;
+              break;
+            }
+            setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+              loading: false,
+              error: [(_err = err) !== null && _err !== void 0 ? _err : 'ERROR']
+            }));
+            return _context6.abrupt("return");
+          case 30:
+            _context6.prev = 30;
+            _context6.next = 33;
+            return ordering.setAccessToken(token).businesses(order === null || order === void 0 ? void 0 : order.business_id).select(propsToFetch).get({
               cancelToken: source
             });
-          case 30:
+          case 33:
             _yield$ordering$setAc8 = _context6.sent;
             _content = _yield$ordering$setAc8.content;
             businessData = _content.result;
             _content.error && (err = _content.result[0]);
-            _context6.next = 39;
+            _context6.next = 42;
             break;
-          case 36:
-            _context6.prev = 36;
-            _context6.t0 = _context6["catch"](27);
-            err = [(_e$message = _context6.t0.message) !== null && _e$message !== void 0 ? _e$message : 'ERROR'];
           case 39:
+            _context6.prev = 39;
+            _context6.t0 = _context6["catch"](30);
+            err = [(_e$message = _context6.t0.message) !== null && _e$message !== void 0 ? _e$message : 'ERROR'];
+          case 42:
             if (isFetchDrivers) {
               getDrivers((_order$id = order === null || order === void 0 ? void 0 : order.id) !== null && _order$id !== void 0 ? _order$id : orderId);
             }
@@ -564,20 +574,20 @@ var OrderDetails = function OrderDetails(props) {
               businessData: businessData,
               error: err
             }));
-            _context6.next = 46;
+            _context6.next = 49;
             break;
-          case 43:
-            _context6.prev = 43;
+          case 46:
+            _context6.prev = 46;
             _context6.t1 = _context6["catch"](6);
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
               loading: false,
               error: [(_e$message2 = _context6.t1.message) !== null && _e$message2 !== void 0 ? _e$message2 : 'ERROR']
             }));
-          case 46:
+          case 49:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[6, 43], [27, 36]]);
+      }, _callee6, null, [[6, 46], [30, 39]]);
     }));
     return function getOrder() {
       return _ref7.apply(this, arguments);

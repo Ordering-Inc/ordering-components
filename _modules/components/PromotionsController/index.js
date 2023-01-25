@@ -65,7 +65,7 @@ var PromotionsController = function PromotionsController(props) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             location = JSON.stringify(options === null || options === void 0 ? void 0 : (_options$address = options.address) === null || _options$address === void 0 ? void 0 : _options$address.location);
-            params = "?enabled=true&params=".concat(paramsToFetch.join(), "&location=").concat(location);
+            params = "?enabled=true&params=".concat(paramsToFetch.join(), "&location=").concat(location, "&order_type_id=").concat(options === null || options === void 0 ? void 0 : options.type);
             if (franchiseId) {
               params = params + "&franchise_id=".concat(franchiseId);
             }
@@ -141,7 +141,7 @@ var PromotionsController = function PromotionsController(props) {
   };
   (0, _react.useEffect)(function () {
     loadOffers();
-  }, []);
+  }, [JSON.stringify(location), options === null || options === void 0 ? void 0 : options.type]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     offersState: offersState,
     searchValue: searchValue,
