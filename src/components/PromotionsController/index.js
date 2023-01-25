@@ -25,7 +25,7 @@ export const PromotionsController = (props) => {
   })
   const getOffers = async () => {
     const location = JSON.stringify(options?.address?.location)
-    let params = `?enabled=true&params=${paramsToFetch.join()}&location=${location}`
+    let params = `?enabled=true&params=${paramsToFetch.join()}&location=${location}&order_type_id=${options?.type}`
     if (franchiseId) {
       params = params + `&franchise_id=${franchiseId}`
     }
@@ -67,7 +67,7 @@ export const PromotionsController = (props) => {
 
   useEffect(() => {
     loadOffers()
-  }, [])
+  }, [JSON.stringify(location), options?.type])
 
   return (
     <>

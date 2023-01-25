@@ -268,8 +268,16 @@ export const OrderDetails = (props) => {
       const order = error ? null : result?.order || result
       let err = error ? result : null
       let businessData = null
+      if (err) {
+        setOrderState({
+          ...orderState,
+          loading: false,
+          error: [err ?? 'ERROR']
+        })
+        return
+      }
       try {
-        const { content } = await ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({ cancelToken: source })
+        const { content } = await ordering.setAccessToken(token).businesses(order?.business_id).select(propsToFetch).get({ cancelToken: source })
         businessData = content.result
         content.error && (err = content.result[0])
       } catch (e) {
