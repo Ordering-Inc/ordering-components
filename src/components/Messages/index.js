@@ -16,7 +16,6 @@ export const Messages = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ token }] = useSession()
-  const socket = useWebsocket()
   const accessToken = props.accessToken || token
 
   const [canRead, setCanRead] = useState({ administrator: true, business: true, customer: true, driver: true })
