@@ -159,6 +159,28 @@ var Messages = function Messages(props) {
       return _ref.apply(this, arguments);
     };
   }();
+  (0, _react.useEffect)(function () {
+    if (messages.loading) return;
+    var handleNewMessage = function handleNewMessage(message) {
+      var _messages$messages;
+      var actualChat = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages) === null || _messages$messages === void 0 ? void 0 : _messages$messages.find(function (_message) {
+        var _message$order;
+        return (_message === null || _message === void 0 ? void 0 : _message.order_id) === (message === null || message === void 0 ? void 0 : (_message$order = message.order) === null || _message$order === void 0 ? void 0 : _message$order.id);
+      });
+      var found = messages.messages.find(function (_message) {
+        return _message.id === message.id;
+      });
+      if (!found && actualChat) {
+        setMessages(_objectSpread(_objectSpread({}, messages), {}, {
+          messages: [].concat(_toConsumableArray(messages.messages), [message])
+        }));
+      }
+    };
+    socket.on('message', handleNewMessage);
+    return function () {
+      socket.off('message', handleNewMessage);
+    };
+  }, [messages, socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     messages: messages,
     image: image,
