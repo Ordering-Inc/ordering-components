@@ -7,6 +7,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useEvent } from '../../contexts/EventContext'
 import dayjs from 'dayjs'
 
 export const OrderList = props => {
