@@ -72,7 +72,7 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
             return (0, _auth.signInWithPopup)(auth, googleProvider);
           case 8:
             response = _context.sent;
-            handleSigninSuccess(response._tokenResponse.oauthIdToken);
+            handleSigninSuccess(response._tokenResponse);
             _context.next = 15;
             break;
           case 12:
@@ -98,7 +98,7 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
    * @param {object} res from Google
    */
   var handleSigninSuccess = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(token) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(tokenResponse) {
       var _yield$ordering$users, _yield$ordering$users2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -106,7 +106,9 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
             _context2.prev = 0;
             _context2.next = 3;
             return ordering.users().authGoogle({
-              access_token: token
+              access_token: tokenResponse.oauthIdToken,
+              name: tokenResponse.firstName,
+              lastname: tokenResponse.lastName
             });
           case 3:
             _yield$ordering$users = _context2.sent;
