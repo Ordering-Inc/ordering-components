@@ -20,7 +20,8 @@ export const LoginForm = (props) => {
     urlToRedirect,
     allowedLevels,
     handleCustomLogin,
-    notificationState
+    notificationState,
+    isGuest
   } = props
 
   const [ordering] = useApi()
@@ -48,7 +49,7 @@ export const LoginForm = (props) => {
   const [otpType, setOtpType] = useState((!useLoginOtpEmail && useLoginOtpCellphone) ? 'cellphone' : 'email')
   const [otpState, setOtpState] = useState('')
 
-  const [, { login, logout }] = useSession()
+  const [{ user }, { login, logout }] = useSession()
   const [, t] = useLanguage()
 
   /**
@@ -108,6 +109,8 @@ export const LoginForm = (props) => {
         _credentials.notification_app = notificationState.notification_app
         _credentials.notification_token = notificationState.notification_token
       }
+
+      if (isGuest && user?.guest_id) _credentials.guest_token = user?.guest_id
 
       const { content: { error, result } } = await ordering.users().auth(_credentials)
 
