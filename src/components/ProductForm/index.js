@@ -622,10 +622,10 @@ export const ProductForm = (props) => {
     if (product?.product && product.product?.extras?.length > 0) {
       const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
         option => (
-          (option.min === 1 &&
+          ((option.min === 1 &&
             option.max === 1 &&
             option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
-          option.suboptions.filter(suboption => suboption.preselected).length > 0
+          option.suboptions.filter(suboption => suboption.preselected).length > 0) && (!option.respect_to && option.conditioned)
         )
       )))
 
