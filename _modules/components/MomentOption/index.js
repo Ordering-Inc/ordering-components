@@ -121,7 +121,7 @@ var MomentOption = function MomentOption(props) {
     onChangeMoment && onChangeMoment(_moment);
   };
   var handleAsap = function handleAsap() {
-    if (isAsap) return;
+    if (isAsap || business && cateringPreorder) return;
     setIsAsap(true);
     if (useOrderContext) {
       changeMoment(null);
