@@ -89,7 +89,10 @@ export const Checkout = (props) => {
    * Cart comment stagged
    */
   let previousComment
-
+  /**
+   * order types delivery
+   */
+  const orderTypesDelivery = [1, 7]
   /**
    * Method to get business from API
    */
@@ -159,7 +162,7 @@ export const Checkout = (props) => {
       }
     }
 
-    if (orderState.options.type === 1) {
+    if (orderTypesDelivery.includes(orderState?.options?.type)) {
       payload = {
         ...payload,
         delivery_zone_id: cart?.business_id ? cart.delivery_zone_id : 0
