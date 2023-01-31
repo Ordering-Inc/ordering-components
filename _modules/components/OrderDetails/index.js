@@ -39,6 +39,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderDetails = function OrderDetails(props) {
   var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order10, _orderState$order11, _orderState$order16, _orderState$order17, _orderState$order18;
   var orderId = props.orderId,
+    orderAssingId = props.orderAssingId,
     hashKey = props.hashKey,
     UIComponent = props.UIComponent,
     userCustomerId = props.userCustomerId,
@@ -56,7 +57,6 @@ var OrderDetails = function OrderDetails(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
@@ -105,6 +105,7 @@ var OrderDetails = function OrderDetails(props) {
     _useState8 = _slicedToArray(_useState7, 2),
     messages = _useState8[0],
     setMessages = _useState8[1];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useState9 = (0, _react.useState)(((_props$order2 = props.order) === null || _props$order2 === void 0 ? void 0 : (_props$order2$driver = _props$order2.driver) === null || _props$order2$driver === void 0 ? void 0 : _props$order2$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
     _useState10 = _slicedToArray(_useState9, 2),
     driverLocation = _useState10[0],
@@ -481,7 +482,7 @@ var OrderDetails = function OrderDetails(props) {
    */
   var getOrder = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var source, options, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result, order, err, businessData, _yield$ordering$setAc9, content, _order$id, _orderState$error;
+      var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _err, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -500,35 +501,70 @@ var OrderDetails = function OrderDetails(props) {
               };
             }
             _context6.prev = 6;
-            _context6.next = 9;
+            if (!orderAssingId) {
+              _context6.next = 18;
+              break;
+            }
+            _context6.next = 10;
+            return fetch("".concat(ordering.root, "/drivers/").concat(user.id, "/assign_requests/").concat(orderAssingId), {
+              headers: {
+                Authorization: "Bearer ".concat(token),
+                'Content-Type': 'application/json',
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              }
+            });
+          case 10:
+            response = _context6.sent;
+            _context6.next = 13;
+            return response.json();
+          case 13:
+            res = _context6.sent;
+            result = res.result;
+            error = res.error;
+            _context6.next = 24;
+            break;
+          case 18:
+            _context6.next = 20;
             return ordering.setAccessToken(token).orders(orderId).get(_objectSpread(_objectSpread({}, options), {}, {
               cancelToken: source
             }));
-          case 9:
+          case 20:
             _yield$ordering$setAc7 = _context6.sent;
-            _yield$ordering$setAc8 = _yield$ordering$setAc7.content;
-            error = _yield$ordering$setAc8.error;
-            result = _yield$ordering$setAc8.result;
-            order = error ? null : result;
+            content = _yield$ordering$setAc7.content;
+            result = content.result;
+            error = content.error;
+          case 24:
+            order = error ? null : ((_result = result) === null || _result === void 0 ? void 0 : _result.order) || result;
             err = error ? result : null;
             businessData = null;
-            _context6.prev = 16;
-            _context6.next = 19;
-            return ordering.setAccessToken(token).businesses(order.business_id).select(propsToFetch).get({
+            if (!err) {
+              _context6.next = 30;
+              break;
+            }
+            setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+              loading: false,
+              error: [(_err = err) !== null && _err !== void 0 ? _err : 'ERROR']
+            }));
+            return _context6.abrupt("return");
+          case 30:
+            _context6.prev = 30;
+            _context6.next = 33;
+            return ordering.setAccessToken(token).businesses(order === null || order === void 0 ? void 0 : order.business_id).select(propsToFetch).get({
               cancelToken: source
             });
-          case 19:
-            _yield$ordering$setAc9 = _context6.sent;
-            content = _yield$ordering$setAc9.content;
-            businessData = content.result;
-            content.error && err.push(content.result[0]);
-            _context6.next = 28;
+          case 33:
+            _yield$ordering$setAc8 = _context6.sent;
+            _content = _yield$ordering$setAc8.content;
+            businessData = _content.result;
+            _content.error && (err = _content.result[0]);
+            _context6.next = 42;
             break;
-          case 25:
-            _context6.prev = 25;
-            _context6.t0 = _context6["catch"](16);
-            err.push(_context6.t0.message);
-          case 28:
+          case 39:
+            _context6.prev = 39;
+            _context6.t0 = _context6["catch"](30);
+            err = [(_e$message = _context6.t0.message) !== null && _e$message !== void 0 ? _e$message : 'ERROR'];
+          case 42:
             if (isFetchDrivers) {
               getDrivers((_order$id = order === null || order === void 0 ? void 0 : order.id) !== null && _order$id !== void 0 ? _order$id : orderId);
             }
@@ -538,20 +574,20 @@ var OrderDetails = function OrderDetails(props) {
               businessData: businessData,
               error: err
             }));
-            _context6.next = 35;
+            _context6.next = 49;
             break;
-          case 32:
-            _context6.prev = 32;
+          case 46:
+            _context6.prev = 46;
             _context6.t1 = _context6["catch"](6);
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
               loading: false,
-              error: _context6.t1.message ? (_orderState$error = orderState.error) === null || _orderState$error === void 0 ? void 0 : _orderState$error.push(_context6.t1 === null || _context6.t1 === void 0 ? void 0 : _context6.t1.message) : ['ERROR']
+              error: [(_e$message2 = _context6.t1.message) !== null && _e$message2 !== void 0 ? _e$message2 : 'ERROR']
             }));
-          case 35:
+          case 49:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[6, 32], [16, 25]]);
+      }, _callee6, null, [[6, 46], [30, 39]]);
     }));
     return function getOrder() {
       return _ref7.apply(this, arguments);
@@ -608,7 +644,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   var getDrivers = /*#__PURE__*/function () {
     var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(orderId) {
-      var _yield$ordering$setAc10, _yield$ordering$setAc11, error, result, _drivers$error2;
+      var _yield$ordering$setAc9, _yield$ordering$setAc10, error, result, _drivers$error2;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
           case 0:
@@ -619,10 +655,10 @@ var OrderDetails = function OrderDetails(props) {
             _context8.next = 4;
             return ordering.setAccessToken(token).controls(orderId).get();
           case 4:
-            _yield$ordering$setAc10 = _context8.sent;
-            _yield$ordering$setAc11 = _yield$ordering$setAc10.content;
-            error = _yield$ordering$setAc11.error;
-            result = _yield$ordering$setAc11.result;
+            _yield$ordering$setAc9 = _context8.sent;
+            _yield$ordering$setAc10 = _yield$ordering$setAc9.content;
+            error = _yield$ordering$setAc10.error;
+            result = _yield$ordering$setAc10.result;
             setDrivers(_objectSpread(_objectSpread({}, drivers), {}, {
               loadingDriver: false,
               drivers: result.drivers,
