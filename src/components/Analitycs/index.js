@@ -14,14 +14,6 @@ export const Analytics = (props) => {
   const [events] = useEvent()
   const [analyticsReady, setAnalyticsReady] = useState(false)
 
-
-  const formatForAnalytics = (str, limit, replaceSpace) => {
-    let formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
-    if (limit) formattedStr = formattedStr.substr(0, limit);
-    return formattedStr;
-  };
-
   useEffect(() => {
     if (!trackId) {
       return
@@ -52,6 +44,52 @@ export const Analytics = (props) => {
     }
   }, [trackId])
 
+  const sha256 = (message) => {
+    return new Promise(function(resolve, reject){
+      // encode as UTF-8
+      const msgBuffer = new TextEncoder().encode(message);
+      // hash the message
+      crypto.subtle.digest('SHA-256', msgBuffer).then(function(res){
+        const hashBuffer = res;
+        // convert ArrayBuffer to Array
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        // convert bytes to hex string
+        const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
+        if (hashHex){
+          resolve(hashHex);
+        } else {
+          reject('error parsing ' + message + ' to hash')
+        }
+      });
+    });
+  }
+
+  const isGeoActive = () => {
+    return new Promise((resolve, reject) =>
+      navigator.permissions ?
+
+        // Permission API is implemented
+        navigator.permissions.query({
+          name: 'geolocation'
+        }).then(permission =>
+          // is geolocation granted?
+          permission.state === "granted"
+            ? resolve(true)
+            : resolve(false)
+        ) :
+
+      // Permission API was not implemented
+      reject(false)
+    )
+  }
+
+  const formatForAnalytics = (str, limit, replaceSpace) => {
+    let formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
+    if (limit) formattedStr = formattedStr.substr(0, limit);
+    return formattedStr;
+  };
+
   /**
    * Method to handle Pageview send to analytics
    * @param {String} pageName
@@ -61,14 +99,42 @@ export const Analytics = (props) => {
       window.ga('set', 'page', pageName?.page)
       window.ga('send', 'pageview')
     }
-    // if (googleTagManager) {
-    //   window.dataLayer.push({
-    //     event: 'pageview',
-    //     page: {
-    //       title: pageName?.page
-    //     }
-    //   });
-    // }
+    if (googleTagManager) {
+      const userCustomer = JSON.parse(window.localStorage.getItem('user'))
+      const language = JSON.parse(window.localStorage.getItem('language'))
+      const digitalData = {
+        event: "evPageView",
+        version: "1.0",
+        page: {
+          pageInfo: {
+            hostName: window.location.protocol + "//" + window.location.hostname + "/",
+            currentURL: window.location.href,
+          },
+        },
+        user: {
+          profile: {
+            statusLogged: userCustomer?.id > 0 ? "Logged" : "NotLogged",
+            languajeUser: language ? language.code : "null",
+            isGeoActive: isGeoActive() ? "Yes": "No",
+            profileInfo: userCustomer?.id > 0 ?
+              {
+                segment_user_id: userCustomer?.wow_rewards_user_id ? userCustomer?.wow_rewards_user_id : "NA",
+                email: sha256(userCustomer?.email),
+                zipCode: userCustomer?.zipcode ? userCustomer?.zipcode : "null",
+                city: userCustomer ? userCustomer?.locality ? $rootScope.formatForAnalytics(userCustomer?.locality, 40) : 'NA' : 'NA',
+                municipio: userCustomer ? userCustomer?.administrative_area_level_3 ? $rootScope.formatForAnalytics(userCustomer?.administrative_area_level_3, 40) : 'NA' : 'NA',
+                colonia: userCustomer ? userCustomer?.sublocality ? $rootScope.formatForAnalytics(userCustomer?.sublocality, 40) : 'NA' : 'NA',
+              } :
+              "NA",
+            social: {
+              network: 'NA',
+            },
+          }
+        }
+      };
+      console.log('evPageView', digitalData)
+      window.dataLayer.push(digitalData);
+    }
   }
   const handleClickProduct = (product) => {
     if (window.ga) {
@@ -123,7 +189,7 @@ export const Analytics = (props) => {
           'add': {
             'products': [{
               'name': formatForAnalytics(product.name, 40),
-              'id': product.sku ? product.sku : 'producto sin sku',
+              'id': product.id ? product.id : 'producto sin sku',
               'price': product.price,
               'brand': 'MarketPlace '+slug,
               'category': product.categoryId,
