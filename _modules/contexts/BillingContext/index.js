@@ -14,6 +14,7 @@ var _EventContext = require("../EventContext");
 var _ToastContext = require("../ToastContext");
 var _webStrategy = require("../../webStrategy");
 var _OrderContext = require("../OrderContext");
+var _OptimizationLoadContext = require("../OptimizationLoadContext");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
@@ -33,11 +34,19 @@ var BillingProvider = function BillingProvider(_ref) {
     settings = _ref.settings,
     children = _ref.children;
   var webStrategy = new _webStrategy.WebStrategy();
+  var restOfSettings = {
+    project: settings.project,
+    appId: settings.app_id,
+    countryCode: settings.countryCode,
+    useOptimizeLoad: settings.useOptimizeLoad
+  };
   return /*#__PURE__*/_react.default.createElement(BillingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, {
       project: settings.project,
       appId: settings.app_id
     })
+  }, /*#__PURE__*/_react.default.createElement(_OptimizationLoadContext.OptimizationLoadProvider, {
+    settings: Object.assign(settings.api, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, {
@@ -47,6 +56,6 @@ var BillingProvider = function BillingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,
     Alert: Alert
-  }, children))))))));
+  }, children)))))))));
 };
 exports.BillingProvider = BillingProvider;
