@@ -48,13 +48,6 @@ var Analytics = function Analytics(props) {
       analyticsReady = _useState2[0],
       setAnalyticsReady = _useState2[1];
 
-  var formatForAnalytics = function formatForAnalytics(str, limit, replaceSpace) {
-    var formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
-    if (limit) formattedStr = formattedStr.substr(0, limit);
-    return formattedStr;
-  };
-
   (0, _react.useEffect)(function () {
     var _window;
 
@@ -89,24 +82,96 @@ var Analytics = function Analytics(props) {
       js.onload = null;
     };
   }, [trackId]);
+
+  var sha256 = function sha256(message) {
+    return new Promise(function (resolve, reject) {
+      // encode as UTF-8
+      var msgBuffer = new TextEncoder().encode(message); // hash the message
+
+      crypto.subtle.digest('SHA-256', msgBuffer).then(function (res) {
+        var hashBuffer = res; // convert ArrayBuffer to Array
+
+        var hashArray = Array.from(new Uint8Array(hashBuffer)); // convert bytes to hex string
+
+        var hashHex = hashArray.map(function (b) {
+          return ('00' + b.toString(16)).slice(-2);
+        }).join('');
+
+        if (hashHex) {
+          resolve(hashHex);
+        } else {
+          reject('error parsing ' + message + ' to hash');
+        }
+      });
+    });
+  };
+
+  var isGeoActive = function isGeoActive() {
+    return new Promise(function (resolve, reject) {
+      return navigator.permissions ? // Permission API is implemented
+      navigator.permissions.query({
+        name: 'geolocation'
+      }).then(function (permission) {
+        return (// is geolocation granted?
+          permission.state === "granted" ? resolve(true) : resolve(false)
+        );
+      }) : // Permission API was not implemented
+      reject(false);
+    });
+  };
+
+  var formatForAnalytics = function formatForAnalytics(str, limit, replaceSpace) {
+    var formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
+    if (limit) formattedStr = formattedStr.substr(0, limit);
+    return formattedStr;
+  };
   /**
    * Method to handle Pageview send to analytics
    * @param {String} pageName
    */
 
+
   var handlechangeView = function handlechangeView(pageName) {
     if (window.ga) {
       window.ga('set', 'page', pageName === null || pageName === void 0 ? void 0 : pageName.page);
       window.ga('send', 'pageview');
-    } // if (googleTagManager) {
-    //   window.dataLayer.push({
-    //     event: 'pageview',
-    //     page: {
-    //       title: pageName?.page
-    //     }
-    //   });
-    // }
+    }
 
+    if (googleTagManager) {
+      var userCustomer = JSON.parse(window.localStorage.getItem('user'));
+      var language = JSON.parse(window.localStorage.getItem('language'));
+      var digitalData = {
+        event: "evPageView",
+        version: "1.0",
+        page: {
+          pageInfo: {
+            hostName: window.location.protocol + "//" + window.location.hostname + "/",
+            currentURL: window.location.href
+          }
+        },
+        user: {
+          profile: {
+            statusLogged: (userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id) > 0 ? "Logged" : "NotLogged",
+            languajeUser: language ? language.code : "null",
+            isGeoActive: isGeoActive() ? "Yes" : "No",
+            profileInfo: (userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id) > 0 ? {
+              segment_user_id: userCustomer !== null && userCustomer !== void 0 && userCustomer.wow_rewards_user_id ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.wow_rewards_user_id : "NA",
+              email: sha256(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.email),
+              zipCode: userCustomer !== null && userCustomer !== void 0 && userCustomer.zipcode ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.zipcode : "null",
+              city: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.locality ? $rootScope.formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.locality, 40) : 'NA' : 'NA',
+              municipio: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.administrative_area_level_3 ? $rootScope.formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.administrative_area_level_3, 40) : 'NA' : 'NA',
+              colonia: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.sublocality ? $rootScope.formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.sublocality, 40) : 'NA' : 'NA'
+            } : "NA",
+            social: {
+              network: 'NA'
+            }
+          }
+        }
+      };
+      console.log('evPageView', digitalData);
+      window.dataLayer.push(digitalData);
+    }
   };
 
   var handleClickProduct = function handleClickProduct(product) {
@@ -165,7 +230,7 @@ var Analytics = function Analytics(props) {
           'add': {
             'products': [{
               'name': formatForAnalytics(product.name, 40),
-              'id': product.sku ? product.sku : 'producto sin sku',
+              'id': product.id ? product.id : 'producto sin sku',
               'price': product.price,
               'brand': 'MarketPlace ' + slug,
               'category': product.categoryId,
