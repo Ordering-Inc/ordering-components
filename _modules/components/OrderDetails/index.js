@@ -37,7 +37,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order10, _orderState$order11, _orderState$order16, _orderState$order17, _orderState$order18;
+  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order11, _orderState$order12, _orderState$order17, _orderState$order18, _orderState$order19;
   var orderId = props.orderId,
     orderAssingId = props.orderAssingId,
     hashKey = props.hashKey,
@@ -596,7 +596,7 @@ var OrderDetails = function OrderDetails(props) {
   var readMessages = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var _messages$messages, _messages$messages2;
-      var messageId, _orderState$order8, response, _yield$response$json2, result;
+      var messageId, _orderState$order8, _orderState$order9, response, _yield$response$json2, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
           case 0:
@@ -626,17 +626,18 @@ var OrderDetails = function OrderDetails(props) {
             _yield$response$json2 = _context7.sent;
             result = _yield$response$json2.result;
             setMessagesReadList(result);
-            _context7.next = 17;
+            events.emit('order_message_read', (_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.id);
+            _context7.next = 18;
             break;
-          case 14:
-            _context7.prev = 14;
+          case 15:
+            _context7.prev = 15;
             _context7.t0 = _context7["catch"](3);
             console.log(_context7.t0.message);
-          case 17:
+          case 18:
           case "end":
             return _context7.stop();
         }
-      }, _callee7, null, [[3, 14]]);
+      }, _callee7, null, [[3, 15]]);
     }));
     return function readMessages() {
       return _ref8.apply(this, arguments);
@@ -744,7 +745,7 @@ var OrderDetails = function OrderDetails(props) {
   var handleRemoveCart = /*#__PURE__*/function () {
     var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
       var _carts;
-      var uuid, content, _orderState$order9;
+      var uuid, content, _orderState$order10;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
           case 0:
@@ -764,7 +765,7 @@ var OrderDetails = function OrderDetails(props) {
           case 7:
             content = _context10.sent;
             if (!(content !== null && content !== void 0 && content.error)) {
-              handleReorder(orderState === null || orderState === void 0 ? void 0 : (_orderState$order9 = orderState.order) === null || _orderState$order9 === void 0 ? void 0 : _orderState$order9.id);
+              handleReorder(orderState === null || orderState === void 0 ? void 0 : (_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.id);
               setCartState({
                 loading: false,
                 error: null
@@ -796,7 +797,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
-  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.status, orderState.loading]);
+  }, [orderId, orderState === null || orderState === void 0 ? void 0 : (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.status, orderState.loading]);
   (0, _react.useEffect)(function () {
     if (props.order) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -818,13 +819,13 @@ var OrderDetails = function OrderDetails(props) {
         requestsState.business.cancel();
       }
     };
-  }, [props.order, (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.id]);
+  }, [props.order, (_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.id]);
   (0, _react.useEffect)(function () {
-    var _orderState$order14;
+    var _orderState$order15;
     if (orderState.loading || loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _orderState$order12;
-      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.id)) return;
+      var _orderState$order13;
+      if ((order === null || order === void 0 ? void 0 : order.id) !== ((_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.id)) return;
       showToast(_ToastContext.ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000);
       delete order.total;
       delete order.subtotal;
@@ -834,7 +835,7 @@ var OrderDetails = function OrderDetails(props) {
       events.emit('order_updated', Object.assign(orderState.order, order));
     };
     var handleTrackingDriver = function handleTrackingDriver(_ref12) {
-      var _orderState$order13;
+      var _orderState$order14;
       var location = _ref12.location;
       var newLocation = location !== null && location !== void 0 ? location : {
         lat: -37.9722342,
@@ -843,7 +844,7 @@ var OrderDetails = function OrderDetails(props) {
       setDriverLocation(newLocation);
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         order: _objectSpread(_objectSpread({}, orderState.order), {}, {
-          driver: _objectSpread(_objectSpread({}, (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.driver), {}, {
+          driver: _objectSpread(_objectSpread({}, (_orderState$order14 = orderState.order) === null || _orderState$order14 === void 0 ? void 0 : _orderState$order14.driver), {}, {
             location: newLocation
           })
         })
@@ -851,9 +852,9 @@ var OrderDetails = function OrderDetails(props) {
     };
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     if (!isDisabledOrdersRoom) socket.join(ordersRoom);
-    if ((_orderState$order14 = orderState.order) !== null && _orderState$order14 !== void 0 && _orderState$order14.driver_id) {
-      var _orderState$order15;
-      socket.join("drivers_".concat((_orderState$order15 = orderState.order) === null || _orderState$order15 === void 0 ? void 0 : _orderState$order15.driver_id));
+    if ((_orderState$order15 = orderState.order) !== null && _orderState$order15 !== void 0 && _orderState$order15.driver_id) {
+      var _orderState$order16;
+      socket.join("drivers_".concat((_orderState$order16 = orderState.order) === null || _orderState$order16 === void 0 ? void 0 : _orderState$order16.driver_id));
     }
     socket.on('tracking_driver', handleTrackingDriver);
     socket.on('update_order', handleUpdateOrder);
@@ -863,7 +864,7 @@ var OrderDetails = function OrderDetails(props) {
       socket.off('update_order', handleUpdateOrder);
       socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState.order, socket, loading, userCustomerId, (_orderState$order16 = orderState.order) === null || _orderState$order16 === void 0 ? void 0 : _orderState$order16.driver_id, (_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.id]);
+  }, [orderState.order, socket, loading, userCustomerId, (_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.driver_id, (_orderState$order18 = orderState.order) === null || _orderState$order18 === void 0 ? void 0 : _orderState$order18.id]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
@@ -885,7 +886,7 @@ var OrderDetails = function OrderDetails(props) {
     return function () {
       socket.off('message', handleNewMessage);
     };
-  }, [messages, socket, (_orderState$order18 = orderState.order) === null || _orderState$order18 === void 0 ? void 0 : _orderState$order18.status, userCustomerId]);
+  }, [messages, socket, (_orderState$order19 = orderState.order) === null || _orderState$order19 === void 0 ? void 0 : _orderState$order19.status, userCustomerId]);
   (0, _react.useEffect)(function () {
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     socket.join(messagesOrdersRoom);
