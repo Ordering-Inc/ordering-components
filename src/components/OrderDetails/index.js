@@ -40,6 +40,42 @@ export const OrderDetails = (props) => {
   const [forceUpdate, setForceUpdate] = useState(null)
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
   const [cartState, setCartState] = useState({ loading: false, error: null })
+  /**
+   * Method to accept or reject a logistic order
+   */
+
+  const handleClickLogisticOrder = async (status, orderId, orders) => {
+    try {
+      const response = await fetch(`${ordering.root}/drivers/${user?.id}/assign_requests/${orderId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({
+          status,
+          user_id: user?.id
+        })
+      })
+      const { result, error } = await response.json()
+      if (!error) {
+        if (status === 1) {
+          console.log('here', orders)
+          showToast(
+            ToastType.Success,
+            t('SPECIFIC_ORDER_ACCEPTED', 'Your accepted the order number _NUMBER_').replace('_NUMBER_', orders?.id)
+          )
+        } else {
+          showToast(
+            ToastType.Info,
+            t('SPECIFIC_ORDER_REJECTED', 'Your rejected the order number _NUMBER_').replace('_NUMBER_', orders?.id)
+          )
+        }
+        return
+      }
+      showToast(ToastType.Error, result)
+    } catch (err) {
+      console.log("wtf", err)
+      showToast(ToastType.Error, err.message)
+    }
+  }
 
   const propsToFetch = ['header', 'slug']
 
@@ -548,6 +584,7 @@ export const OrderDetails = (props) => {
           handleReorder={handleReorder}
           handleRemoveCart={handleRemoveCart}
           cartState={cartState}
+          handleClickLogisticOrder={handleClickLogisticOrder}
         />
       )}
     </>
