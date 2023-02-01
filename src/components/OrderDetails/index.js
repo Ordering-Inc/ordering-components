@@ -356,6 +356,7 @@ export const OrderDetails = (props) => {
       const { result } = await response.json()
 
       setMessagesReadList(result)
+      events.emit('order_message_read', orderState.order?.id)
     } catch (e) {
       console.log(e.message)
     }

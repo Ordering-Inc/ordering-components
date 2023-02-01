@@ -7,6 +7,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useOrder } from '../../contexts/OrderContext'
+import { useEvent } from '../../contexts/EventContext'
 import dayjs from 'dayjs'
 
 export const OrderList = props => {
@@ -38,6 +39,7 @@ export const OrderList = props => {
   const socket = useWebsocket()
   const [orderState, { reorder }] = useOrder()
   const [session] = useSession()
+  const [events] = useEvent()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [orderList, setOrderList] = useState({
@@ -597,6 +599,25 @@ export const OrderList = props => {
   useEffect(() => {
     setIsEmptyBusinesses && setIsEmptyBusinesses(businessOrderIds?.length === 0)
   }, [businessOrderIds])
+
+  useEffect(() => {
+    const handleOrderMessageRead = (orderId) => {
+      const updatedOrders = orderList.orders.map(order => {
+        if (order.id === orderId) {
+          return { ...order, unread_count: 0 }
+        }
+        return order
+      })
+      setOrderList({
+        ...orderList,
+        orders: updatedOrders
+      })
+    }
+    events.on('order_message_read', handleOrderMessageRead)
+    return () => {
+      events.off('order_message_read', handleOrderMessageRead)
+    }
+  }, [orderList.orders])
 
   return (
     <>
