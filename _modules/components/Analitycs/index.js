@@ -159,9 +159,9 @@ var Analytics = function Analytics(props) {
               segment_user_id: userCustomer !== null && userCustomer !== void 0 && userCustomer.wow_rewards_user_id ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.wow_rewards_user_id : "NA",
               email: sha256(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.email),
               zipCode: userCustomer !== null && userCustomer !== void 0 && userCustomer.zipcode ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.zipcode : "null",
-              city: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.locality ? $rootScope.formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.locality, 40) : 'NA' : 'NA',
-              municipio: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.administrative_area_level_3 ? $rootScope.formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.administrative_area_level_3, 40) : 'NA' : 'NA',
-              colonia: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.sublocality ? $rootScope.formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.sublocality, 40) : 'NA' : 'NA'
+              city: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.locality ? formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.locality, 40) : 'NA' : 'NA',
+              municipio: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.administrative_area_level_3 ? formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.administrative_area_level_3, 40) : 'NA' : 'NA',
+              colonia: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.sublocality ? formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.sublocality, 40) : 'NA' : 'NA'
             } : "NA",
             social: {
               network: 'NA'
@@ -169,12 +169,11 @@ var Analytics = function Analytics(props) {
           }
         }
       };
-      console.log('evPageView', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
 
-  var handleClickProduct = function handleClickProduct(product) {
+  var handleClickProduct = function handleClickProduct(product, productPosition) {
     if (window.ga) {
       window.ga('ec:addProduct', {
         id: product.id,
@@ -198,15 +197,32 @@ var Analytics = function Analytics(props) {
               'brand': 'MarketPlace ' + slug,
               'category': formatForAnalytics(product.category.name, 40),
               'variant': 'NA',
-              'list': formatForAnalytics(product.category.name, 40) // 'position':
-
+              'list': formatForAnalytics(product.category.name, 40),
+              'position': productPosition ? productPosition : 'NA'
             }]
           }
         },
         event: "evProductClick"
       };
-      console.log('evProductClick', digitalData);
       window.dataLayer.push(digitalData);
+      var dlAnalytics = {
+        'flow': 'MarketPlace ' + slug,
+        'ecommerce': {
+          'detail': {
+            'products': [{
+              'name': formatForAnalytics(product.name),
+              'id': product.id ? product.id : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace ' + slug,
+              'category': formatForAnalytics(product.category.name),
+              'variant': 'NA',
+              'list': formatForAnalytics(product.category.name)
+            }]
+          }
+        },
+        event: "evProductDetail"
+      };
+      dataLayer.push(dlAnalytics);
     }
   };
 
@@ -240,7 +256,6 @@ var Analytics = function Analytics(props) {
         },
         event: "evAddToCart"
       };
-      console.log('evAddToCart', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -269,7 +284,6 @@ var Analytics = function Analytics(props) {
         };
       }
 
-      console.log('evLogIn', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -335,14 +349,11 @@ var Analytics = function Analytics(props) {
         },
         event: "evPurchase"
       };
-      console.log('evPurchase', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
 
   var handleSignUp = function handleSignUp(user) {
-    console.log(user);
-
     if (googleTagManager) {
       var dlAnalytics = {
         action: 'Exito',
@@ -350,7 +361,6 @@ var Analytics = function Analytics(props) {
         error: 'NA',
         event: "evSignUp"
       };
-      console.log('evSignUp', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -374,7 +384,6 @@ var Analytics = function Analytics(props) {
         },
         event: "evRemoveFromCart"
       };
-      console.log('evRemoveFromCart', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -389,7 +398,6 @@ var Analytics = function Analytics(props) {
         restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params3 = storeData.params) === null || _storeData$params3 === void 0 ? void 0 : _storeData$params3.store),
         event: "evClickRestaurant"
       };
-      console.log('evClickRestaurant', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -408,7 +416,6 @@ var Analytics = function Analytics(props) {
         },
         event: "evCheckout"
       };
-      console.log('evCheckout', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -437,7 +444,6 @@ var Analytics = function Analytics(props) {
         };
       }
 
-      console.log('evDirectionActions', dlAnalytics);
       dataLayer.push(dlAnalytics);
     }
   };
@@ -448,7 +454,6 @@ var Analytics = function Analytics(props) {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
         event: "evClickOrderType"
       };
-      console.log('evClickOrderType', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -473,8 +478,82 @@ var Analytics = function Analytics(props) {
         error: data,
         event: "evGeneralError"
       };
-      console.log('evGeneralError', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
+    }
+  };
+
+  var handleSocialMediaClick = function handleSocialMediaClick(data) {
+    if (googleTagManager) {
+      var dlAnalytics = {
+        socialNetwork: data.social,
+        event: "evClickSocialNetwork"
+      };
+      window.dataLayer.push(dlAnalytics);
+    }
+  };
+
+  var handleProductImpressions = function handleProductImpressions(data) {
+    if (googleTagManager) {
+      if (data.page === 'all') {
+        var _data$params3, _data$params3$categor;
+
+        var impressions = [];
+        var positionList = 1;
+        data === null || data === void 0 ? void 0 : (_data$params3 = data.params) === null || _data$params3 === void 0 ? void 0 : (_data$params3$categor = _data$params3.categories) === null || _data$params3$categor === void 0 ? void 0 : _data$params3$categor.map(function (category) {
+          category.products.map(function (product) {
+            impressions.push({
+              'name': formatForAnalytics(product.name, 40),
+              'id': product.id ? product.id.toString() : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace ' + slug,
+              'category': formatForAnalytics(category.name, 40),
+              'variant': 'NA',
+              'list': formatForAnalytics(category.name, 40),
+              'position': positionList
+            });
+            positionList += 1;
+          });
+        });
+
+        while (impressions.length > 0) {
+          var dlAnalytics = {
+            'flow': 'MarketPlace ' + slug,
+            'ecommerce': {
+              'impressions': impressions.slice(0, 15)
+            },
+            event: "evProductImpression"
+          };
+          dataLayer.push(dlAnalytics);
+          impressions = impressions.slice(15);
+        }
+      }
+
+      if (data.page === 'categoryProducts') {
+        var _impressions = [];
+        var _positionList = 1;
+        data.params.category.products.map(function (product) {
+          _impressions.push({
+            'name': formatForAnalytics(product.name, 40),
+            'id': product.id ? product.id.toString() : 'producto sin sku',
+            'price': product.price.toString(),
+            'brand': 'MarketPlace ' + slug,
+            'category': formatForAnalytics(data.params.category.name, 40),
+            'variant': 'NA',
+            'list': formatForAnalytics(data.params.category.name, 40),
+            'position': _positionList
+          });
+
+          _positionList += 1;
+        });
+        var _dlAnalytics = {
+          'flow': 'MarketPlace ' + slug,
+          'ecommerce': {
+            'impressions': _impressions.slice(0, 15)
+          },
+          event: "evProductImpression"
+        };
+        dataLayer.push(_dlAnalytics);
+      }
     }
   };
 
@@ -495,6 +574,8 @@ var Analytics = function Analytics(props) {
       events.on('order_type_change', handleChangeOrderType);
       events.on('category_selected', handleCategorySelect);
       events.on('general_errors', handleGeneralError);
+      events.on('social_media_click', handleSocialMediaClick);
+      events.on('product-impressions', handleProductImpressions);
     }
 
     return function () {
@@ -512,6 +593,8 @@ var Analytics = function Analytics(props) {
         events.off('order_type_change', handleChangeOrderType);
         events.off('category_selected', handleCategorySelect);
         events.off('general_errors', handleGeneralError);
+        events.off('social_media_click', handleSocialMediaClick);
+        events.off('product-impressions', handleProductImpressions);
       }
     };
   }, [analyticsReady]);
