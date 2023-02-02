@@ -121,9 +121,9 @@ export const Analytics = (props) => {
                 segment_user_id: userCustomer?.wow_rewards_user_id ? userCustomer?.wow_rewards_user_id : "NA",
                 email: sha256(userCustomer?.email),
                 zipCode: userCustomer?.zipcode ? userCustomer?.zipcode : "null",
-                city: userCustomer ? userCustomer?.locality ? $rootScope.formatForAnalytics(userCustomer?.locality, 40) : 'NA' : 'NA',
-                municipio: userCustomer ? userCustomer?.administrative_area_level_3 ? $rootScope.formatForAnalytics(userCustomer?.administrative_area_level_3, 40) : 'NA' : 'NA',
-                colonia: userCustomer ? userCustomer?.sublocality ? $rootScope.formatForAnalytics(userCustomer?.sublocality, 40) : 'NA' : 'NA',
+                city: userCustomer ? userCustomer?.locality ? formatForAnalytics(userCustomer?.locality, 40) : 'NA' : 'NA',
+                municipio: userCustomer ? userCustomer?.administrative_area_level_3 ? formatForAnalytics(userCustomer?.administrative_area_level_3, 40) : 'NA' : 'NA',
+                colonia: userCustomer ? userCustomer?.sublocality ? formatForAnalytics(userCustomer?.sublocality, 40) : 'NA' : 'NA',
               } :
               "NA",
             social: {
@@ -132,11 +132,10 @@ export const Analytics = (props) => {
           }
         }
       };
-      console.log('evPageView', digitalData)
       window.dataLayer.push(digitalData);
     }
   }
-  const handleClickProduct = (product) => {
+  const handleClickProduct = (product, productPosition) => {
     if (window.ga) {
       window.ga('ec:addProduct', {
         id: product.id,
@@ -160,14 +159,32 @@ export const Analytics = (props) => {
 							'category': formatForAnalytics(product.category.name, 40),
 							'variant': 'NA',
 							'list': formatForAnalytics(product.category.name, 40),
-							// 'position':
+							'position': productPosition ? productPosition : 'NA'
 						}]
 					}
 				},
 				event: "evProductClick",
 			};
-      console.log('evProductClick', digitalData)
       window.dataLayer.push(digitalData)
+
+      const dlAnalytics = {
+        'flow': 'MarketPlace '+slug,
+        'ecommerce': {
+          'detail': {
+            'products': [{
+              'name': formatForAnalytics(product.name),
+              'id': product.id ? product.id : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace '+slug,
+              'category': formatForAnalytics(product.category.name),
+              'variant': 'NA',
+              'list': formatForAnalytics(product.category.name),
+            }]
+          }
+        },
+        event: "evProductDetail",
+      };
+      dataLayer.push(dlAnalytics);
     }
   }
   const handleProductAdded = (product) => {
@@ -199,7 +216,6 @@ export const Analytics = (props) => {
         },
         event: "evAddToCart",
       };
-      console.log('evAddToCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -224,7 +240,6 @@ export const Analytics = (props) => {
           event: "evLogIn",
         };
       }
-      console.log('evLogIn', digitalData);
       window.dataLayer.push(digitalData);
     }
   }
@@ -278,12 +293,10 @@ export const Analytics = (props) => {
         },
         event: "evPurchase",
       };
-      console.log('evPurchase', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
   const handleSignUp = (user) => {
-    console.log(user)
     if (googleTagManager) {
       const dlAnalytics = {
         action: 'Exito',
@@ -291,7 +304,6 @@ export const Analytics = (props) => {
         error: 'NA',
         event: "evSignUp",
       };
-      console.log('evSignUp', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -314,7 +326,6 @@ export const Analytics = (props) => {
         },
         event: "evRemoveFromCart",
       };
-      console.log('evRemoveFromCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -324,7 +335,6 @@ export const Analytics = (props) => {
         restaurant: formatForAnalytics(storeData?.params?.store),
         event: "evClickRestaurant",
       };
-      console.log('evClickRestaurant', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -340,7 +350,6 @@ export const Analytics = (props) => {
         },
         event: "evCheckout",
       };
-      console.log('evCheckout', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -365,7 +374,6 @@ export const Analytics = (props) => {
           event: "evDirectionActions"
         }
       }
-      console.log('evDirectionActions', dlAnalytics);
       dataLayer.push(dlAnalytics);
     }
   }
@@ -375,7 +383,6 @@ export const Analytics = (props) => {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
         event: "evClickOrderType",
       };
-      console.log('evClickOrderType', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -396,8 +403,76 @@ export const Analytics = (props) => {
        error: data,
        event: "evGeneralError",
       };
-      console.log('evGeneralError', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
+    }
+  }
+  const handleSocialMediaClick = (data) => {
+    if (googleTagManager) {
+      const dlAnalytics = {
+				socialNetwork: data.social,
+				event: "evClickSocialNetwork",
+			};
+      window.dataLayer.push(dlAnalytics)
+    }
+  }
+  const handleProductImpressions = (data) => {
+    if (googleTagManager) {
+      if (data.page === 'all') {
+        let impressions = [];
+        let positionList = 1;
+        data?.params?.categories?.map((category) => {
+          category.products.map((product) => {
+            impressions.push({
+              'name': formatForAnalytics(product.name, 40),
+              'id': product.id ? product.id.toString() : 'producto sin sku',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace '+slug,
+              'category': formatForAnalytics(category.name, 40),
+              'variant': 'NA',
+              'list': formatForAnalytics(category.name, 40),
+              'position': positionList
+            })
+            positionList += 1;
+          })
+        })
+        while (impressions.length > 0) {
+          const dlAnalytics = {
+            'flow': 'MarketPlace '+slug,
+            'ecommerce': {
+              'impressions': impressions.slice(0,15),
+            },
+            event: "evProductImpression",
+          };
+
+          dataLayer.push(dlAnalytics);
+          impressions = impressions.slice(15)
+        }
+      }
+      if (data.page === 'categoryProducts') {
+        let impressions = [];
+        let positionList = 1;
+        data.params.category.products.map((product) => {
+          impressions.push({
+            'name': formatForAnalytics(product.name, 40),
+            'id': product.id ? product.id.toString() : 'producto sin sku',
+            'price': product.price.toString(),
+            'brand': 'MarketPlace '+slug,
+            'category': formatForAnalytics(data.params.category.name, 40),
+            'variant': 'NA',
+            'list': formatForAnalytics(data.params.category.name, 40),
+            'position': positionList
+          })
+          positionList += 1;
+        })
+        const dlAnalytics = {
+          'flow': 'MarketPlace '+slug,
+          'ecommerce': {
+            'impressions': impressions.slice(0,15),
+          },
+          event: "evProductImpression",
+        };
+        dataLayer.push(dlAnalytics);
+      }
     }
   }
 
@@ -417,6 +492,8 @@ export const Analytics = (props) => {
       events.on('order_type_change', handleChangeOrderType)
       events.on('category_selected', handleCategorySelect)
       events.on('general_errors', handleGeneralError)
+      events.on('social_media_click', handleSocialMediaClick)
+      events.on('product-impressions', handleProductImpressions)
     }
     return () => {
       if (analyticsReady && window.ga) {
@@ -433,6 +510,8 @@ export const Analytics = (props) => {
         events.off('order_type_change', handleChangeOrderType)
         events.off('category_selected', handleCategorySelect)
         events.off('general_errors', handleGeneralError)
+        events.off('social_media_click', handleSocialMediaClick)
+        events.off('product-impressions', handleProductImpressions)
       }
     }
   }, [analyticsReady])
