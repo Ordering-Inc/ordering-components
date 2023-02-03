@@ -36,7 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var LoginForm = function LoginForm(props) {
-  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo;
+  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena;
   var UIComponent = props.UIComponent,
     handleButtonLoginClick = props.handleButtonLoginClick,
     handleSuccessLogin = props.handleSuccessLogin,
@@ -107,6 +107,7 @@ var LoginForm = function LoginForm(props) {
   var useLoginOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$opt_email_en = configs.opt_email_enabled) === null || _configs$opt_email_en === void 0 ? void 0 : _configs$opt_email_en.value) === '1';
   var useLoginOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$otp_cellphon = configs.otp_cellphone_enabled) === null || _configs$otp_cellphon === void 0 ? void 0 : _configs$otp_cellphon.value) === '1';
   var useLoginByEmail = useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$email_passwo = configs.email_password_login_enabled) === null || _configs$email_passwo === void 0 ? void 0 : _configs$email_passwo.value) === '1' : true;
+  var useLoginSpoonity = (configs === null || configs === void 0 ? void 0 : (_configs$spoonity_ena = configs.spoonity_enabled) === null || _configs$spoonity_ena === void 0 ? void 0 : _configs$spoonity_ena.value) === '1';
   var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
   defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp';
   var _useState13 = (0, _react.useState)(defaultLoginTab),
@@ -546,6 +547,81 @@ var LoginForm = function LoginForm(props) {
       return _ref4.apply(this, arguments);
     };
   }();
+  var handleLoginSpoonity = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _result$session2, response, _yield$response$json2, result, error;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: true
+            }));
+            _context5.next = 4;
+            return fetch("".concat(ordering.root, "/auth/spoonity"), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password
+              })
+            });
+          case 4:
+            response = _context5.sent;
+            _context5.next = 7;
+            return response.json();
+          case 7:
+            _yield$response$json2 = _context5.sent;
+            result = _yield$response$json2.result;
+            error = _yield$response$json2.error;
+            if (!error) {
+              _context5.next = 13;
+              break;
+            }
+            setFormState({
+              result: {
+                error: true,
+                result: result
+              },
+              loading: false
+            });
+            return _context5.abrupt("return");
+          case 13:
+            login({
+              user: result,
+              token: result === null || result === void 0 ? void 0 : (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
+            });
+            setFormState({
+              result: {
+                error: error,
+                result: result
+              },
+              loading: false
+            });
+            _context5.next = 20;
+            break;
+          case 17:
+            _context5.prev = 17;
+            _context5.t0 = _context5["catch"](0);
+            setFormState({
+              result: {
+                error: true,
+                result: _context5.t0.message
+              },
+              loading: false
+            });
+          case 20:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5, null, [[0, 17]]);
+    }));
+    return function handleLoginSpoonity() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     loginTab: loginTab,
@@ -569,7 +645,9 @@ var LoginForm = function LoginForm(props) {
     useLoginByEmail: useLoginByEmail,
     useLoginByCellphone: useLoginByCellphone,
     useLoginOtpEmail: useLoginOtpEmail,
-    useLoginOtpCellphone: useLoginOtpCellphone
+    useLoginOtpCellphone: useLoginOtpCellphone,
+    useLoginSpoonity: useLoginSpoonity,
+    handleLoginSpoonity: handleLoginSpoonity
   })));
 };
 exports.LoginForm = LoginForm;
