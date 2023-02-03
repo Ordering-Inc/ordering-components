@@ -41,7 +41,7 @@ export const LoginForm = (props) => {
   const useLoginOtpCellphone = configs?.otp_cellphone_enabled?.value === '1'
   const useLoginByEmail = (useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone)
     ? configs?.email_password_login_enabled?.value === '1' : true
-
+  const useLoginSpoonity = configs?.spoonity_enabled?.value === '1'
   const useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone
 
   defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp'
@@ -345,6 +345,55 @@ export const LoginForm = (props) => {
     }
   }
 
+  const handleLoginSpoonity = async () => {
+    try {
+      setFormState({
+        ...formState,
+        loading: true
+      })
+      const response = await fetch(`${ordering.root}/auth/spoonity`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: credentials.email,
+          password: credentials.password
+        })
+      })
+      const { result, error } = await response.json()
+      if (error) {
+        setFormState({
+          result: {
+            error: true,
+            result: result
+          },
+          loading: false
+        })
+        return
+      }
+      login({
+        user: result,
+        token: result?.session?.access_token
+      })
+      setFormState({
+        result: {
+          error,
+          result
+        },
+        loading: false
+      })
+    } catch (err) {
+      setFormState({
+        result: {
+          error: true,
+          result: err.message
+        },
+        loading: false
+      })
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -373,6 +422,8 @@ export const LoginForm = (props) => {
           useLoginByCellphone={useLoginByCellphone}
           useLoginOtpEmail={useLoginOtpEmail}
           useLoginOtpCellphone={useLoginOtpCellphone}
+          useLoginSpoonity={useLoginSpoonity}
+          handleLoginSpoonity={handleLoginSpoonity}
         />
       )}
     </>
