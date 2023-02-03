@@ -47,6 +47,8 @@ var BillingProvider = function BillingProvider(_ref) {
     })
   }, /*#__PURE__*/_react.default.createElement(_OptimizationLoadContext.OptimizationLoadProvider, {
     settings: Object.assign(settings.api, restOfSettings)
+  }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
+    strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_ConfigContext.ConfigProvider, {
     strategy: webStrategy
   }, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
@@ -54,6 +56,6 @@ var BillingProvider = function BillingProvider(_ref) {
   }, /*#__PURE__*/_react.default.createElement(_OrderContext.OrderProvider, {
     strategy: webStrategy,
     Alert: Alert
-  }, children))))))));
+  }, children)))))))));
 };
 exports.BillingProvider = BillingProvider;
