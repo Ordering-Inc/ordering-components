@@ -32,18 +32,20 @@ export const BillingProvider = ({ Alert, settings, children }) => {
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, { project: settings.project, appId: settings.app_id })}>
           <OptimizationLoadProvider settings={Object.assign(settings.api, restOfSettings)}>
-            <ConfigProvider strategy={webStrategy}>
-              <ToastProvider>
-                <SessionProvider strategy={webStrategy}>
-                  <OrderProvider
-                    strategy={webStrategy}
-                    Alert={Alert}
-                  >
-                    {children}
-                  </OrderProvider>
-                </SessionProvider>
-              </ToastProvider>
-            </ConfigProvider>
+            <LanguageProvider strategy={webStrategy}>
+              <ConfigProvider strategy={webStrategy}>
+                <ToastProvider>
+                  <SessionProvider strategy={webStrategy}>
+                    <OrderProvider
+                      strategy={webStrategy}
+                      Alert={Alert}
+                    >
+                      {children}
+                    </OrderProvider>
+                  </SessionProvider>
+                </ToastProvider>
+              </ConfigProvider>
+            </LanguageProvider>
           </OptimizationLoadProvider>
         </ApiProvider>
       </EventProvider>
