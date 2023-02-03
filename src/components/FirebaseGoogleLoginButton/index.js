@@ -30,7 +30,7 @@ export const FirebaseGoogleLoginButton = (props) => {
       googleProvider.setCustomParameters({ prompt: 'select_account' })
 
       const response = await signInWithPopup(auth, googleProvider)
-      handleSigninSuccess(response._tokenResponse.oauthIdToken)
+      handleSigninSuccess(response._tokenResponse)
     } catch (error) {
       setActionState({
         loading: false,
@@ -43,9 +43,13 @@ export const FirebaseGoogleLoginButton = (props) => {
    * Function that return token of the user
    * @param {object} res from Google
    */
-  const handleSigninSuccess = async (token) => {
+  const handleSigninSuccess = async (tokenResponse) => {
     try {
-      const { content: { error, result } } = await ordering.users().authGoogle({ access_token: token })
+      const { content: { error, result } } = await ordering.users().authGoogle({
+        access_token: tokenResponse.oauthIdToken,
+        name: tokenResponse.firstName,
+        lastname: tokenResponse.lastName
+      })
       if (!error) {
         if (handleSuccessGoogleLogin) {
           handleSuccessGoogleLogin(result)
