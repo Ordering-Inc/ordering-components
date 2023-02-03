@@ -724,11 +724,11 @@ export const OrderListGroups = (props) => {
   }
 
   const getBusinessesIDs = async () => {
-   const propsToFetch = ['id', 'name']
-   try {
+    const propsToFetch = ['id', 'name']
+    try {
       const { content: { error, result } } = await ordering.businesses().asDashboard().select(propsToFetch).get()
       if (!error) {
-        const _businessIDs = result.length > 0 && result.map(({id}) => id)
+        const _businessIDs = result.length > 0 && result.map(({ id }) => id)
         setBusinessIDs(_businessIDs)
       }
     } catch (err) {
@@ -866,7 +866,7 @@ export const OrderListGroups = (props) => {
       )
       const status = getStatusById(order?.status) ?? ''
       const currentFilter = ordersGroup[status]?.currentFilter
-      if (currentFilter.includes(order.status)) {
+      if (currentFilter?.includes(order?.status)) {
         actionOrderToTab(order, status, 'add')
       }
     }
@@ -883,7 +883,7 @@ export const OrderListGroups = (props) => {
 
   const handleAddAssignRequest = useCallback(
     (order) => {
-      setlogisticOrders(prevState => ({ ...prevState, orders: sortOrders([...prevState?.orders, order]) }))
+      setlogisticOrders({ ...logisticOrders, orders: sortOrders([...logisticOrders?.orders, order]) })
       showToast(
         ToastType.Info,
         t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
