@@ -1226,7 +1226,7 @@ var OrderListGroups = function OrderListGroups(props) {
       showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id), 1000);
       var status = (_getStatusById4 = getStatusById(order === null || order === void 0 ? void 0 : order.status)) !== null && _getStatusById4 !== void 0 ? _getStatusById4 : '';
       var currentFilter = (_ordersGroup$status4 = ordersGroup[status]) === null || _ordersGroup$status4 === void 0 ? void 0 : _ordersGroup$status4.currentFilter;
-      if (currentFilter.includes(order.status)) {
+      if (currentFilter !== null && currentFilter !== void 0 && currentFilter.includes(order === null || order === void 0 ? void 0 : order.status)) {
         actionOrderToTab(order, status, 'add');
       }
     };
@@ -1241,11 +1241,9 @@ var OrderListGroups = function OrderListGroups(props) {
   }, [ordersGroup, socket, session]);
   var handleAddAssignRequest = (0, _react.useCallback)(function (order) {
     var _order$order$id3, _order$order4;
-    setlogisticOrders(function (prevState) {
-      return _objectSpread(_objectSpread({}, prevState), {}, {
-        orders: sortOrders([].concat(_toConsumableArray(prevState === null || prevState === void 0 ? void 0 : prevState.orders), [order]))
-      });
-    });
+    setlogisticOrders(_objectSpread(_objectSpread({}, logisticOrders), {}, {
+      orders: sortOrders([].concat(_toConsumableArray(logisticOrders === null || logisticOrders === void 0 ? void 0 : logisticOrders.orders), [order]))
+    }));
     showToast(_ToastContext.ToastType.Info, t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', (_order$order$id3 = order === null || order === void 0 ? void 0 : (_order$order4 = order.order) === null || _order$order4 === void 0 ? void 0 : _order$order4.id) !== null && _order$order$id3 !== void 0 ? _order$order$id3 : order.id), 1000);
   }, []);
   var handleDeleteAssignRequest = (0, _react.useCallback)(function (order) {
