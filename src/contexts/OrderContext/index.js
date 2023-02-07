@@ -775,7 +775,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changePaymethod(body, {
         headers: {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
@@ -806,7 +805,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts(cardId).place(body, {
         headers: {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
