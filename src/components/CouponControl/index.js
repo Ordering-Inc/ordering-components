@@ -11,6 +11,7 @@ import { useConfig } from '../../contexts/ConfigContext'
 export const CouponControl = (props) => {
   const {
     businessId,
+    businessIds,
     price,
     UIComponent
   } = props
@@ -36,6 +37,18 @@ export const CouponControl = (props) => {
     setCouponInput('')
     if (!configs?.advanced_offers_module?.value) {
       if (user?.id) { // Callcenter
+        if (businessIds) {
+          businessIds.map(businessId => (
+            applyCoupon({
+              business_id: businessId,
+              coupon: couponInput
+            }, {
+              businessId,
+              userId: user?.id
+            })
+          ))
+          return
+        }
         applyCoupon({
           business_id: businessId,
           coupon: couponInput
@@ -44,12 +57,30 @@ export const CouponControl = (props) => {
           userId: user?.id
         })
       } else {
+        if (businessIds) {
+          businessIds.map(businessId => (
+            applyCoupon({ business_id: businessId, coupon: couponInput })
+          ))
+          return
+        }
         applyCoupon({
           business_id: businessId,
           coupon: couponInput
         })
       }
     } else {
+      if (businessIds) {
+        businessIds.forEach(businessId => {
+          const dataOffer = {
+            business_id: businessId,
+            coupon: couponInput,
+            force: true
+          }
+          if (user?.id) dataOffer.userId = user?.id // Callcenter
+          applyOffer(dataOffer)
+        })
+        return
+      }
       const dataOffer = {
         business_id: businessId,
         coupon: couponInput,
@@ -64,6 +95,12 @@ export const CouponControl = (props) => {
    * method to manage remove coupon assigned
    */
   const handleRemoveCouponClick = () => {
+    if (businessIds) {
+      businessIds.map(businessId => (
+        applyCoupon({ business_id: businessId, coupon: null })
+      ))
+      return
+    }
     applyCoupon({
       business_id: businessId,
       coupon: null
