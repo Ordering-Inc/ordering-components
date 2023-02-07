@@ -32,6 +32,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var CouponControl = function CouponControl(props) {
   var _orderState$carts, _orderState$carts2;
   var businessId = props.businessId,
+    businessIds = props.businessIds,
     price = props.price,
     UIComponent = props.UIComponent;
   var _useConfig = (0, _ConfigContext.useConfig)(),
@@ -72,6 +73,18 @@ var CouponControl = function CouponControl(props) {
     if (!(configs !== null && configs !== void 0 && (_configs$advanced_off = configs.advanced_offers_module) !== null && _configs$advanced_off !== void 0 && _configs$advanced_off.value)) {
       if (user !== null && user !== void 0 && user.id) {
         // Callcenter
+        if (businessIds) {
+          businessIds.map(function (businessId) {
+            return applyCoupon({
+              business_id: businessId,
+              coupon: couponInput
+            }, {
+              businessId: businessId,
+              userId: user === null || user === void 0 ? void 0 : user.id
+            });
+          });
+          return;
+        }
         applyCoupon({
           business_id: businessId,
           coupon: couponInput
@@ -80,12 +93,33 @@ var CouponControl = function CouponControl(props) {
           userId: user === null || user === void 0 ? void 0 : user.id
         });
       } else {
+        if (businessIds) {
+          businessIds.map(function (businessId) {
+            return applyCoupon({
+              business_id: businessId,
+              coupon: couponInput
+            });
+          });
+          return;
+        }
         applyCoupon({
           business_id: businessId,
           coupon: couponInput
         });
       }
     } else {
+      if (businessIds) {
+        businessIds.forEach(function (businessId) {
+          var dataOffer = {
+            business_id: businessId,
+            coupon: couponInput,
+            force: true
+          };
+          if (user !== null && user !== void 0 && user.id) dataOffer.userId = user === null || user === void 0 ? void 0 : user.id; // Callcenter
+          applyOffer(dataOffer);
+        });
+        return;
+      }
       var dataOffer = {
         business_id: businessId,
         coupon: couponInput,
@@ -100,6 +134,15 @@ var CouponControl = function CouponControl(props) {
    * method to manage remove coupon assigned
    */
   var handleRemoveCouponClick = function handleRemoveCouponClick() {
+    if (businessIds) {
+      businessIds.map(function (businessId) {
+        return applyCoupon({
+          business_id: businessId,
+          coupon: null
+        });
+      });
+      return;
+    }
     applyCoupon({
       business_id: businessId,
       coupon: null
