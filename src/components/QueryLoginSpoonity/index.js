@@ -31,7 +31,7 @@ export const QueryLoginSpoonity = (props) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          spoonity_token: token
+          access_token: token
         })
       }
       const response = await fetch(`${ordering.root}/auth/spoonity`, requestOptions)
@@ -39,7 +39,7 @@ export const QueryLoginSpoonity = (props) => {
       if (!error) {
         login({
           user: result,
-          token: token
+          token: result?.session?.token
         })
       } else {
         setUserState({
