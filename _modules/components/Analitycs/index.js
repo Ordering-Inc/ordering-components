@@ -488,7 +488,6 @@ var Analytics = function Analytics(props) {
         socialNetwork: data.social,
         event: "evClickSocialNetwork"
       };
-      console.log('evClickSocialNetwork', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
