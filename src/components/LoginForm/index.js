@@ -186,9 +186,8 @@ export const LoginForm = (props) => {
       Object.keys(configs).length > 0 &&
       configs?.security_recaptcha_auth?.value === '1')
 
-    if (useLoginOtpCellphone && !useLoginOtpEmail) {
-      setOtpType('cellphone')
-    }
+    setOtpType((!useLoginOtpEmail && useLoginOtpCellphone) ? 'cellphone' : 'email')
+    setLoginTab(useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp')
   }, [configs])
 
   /**
