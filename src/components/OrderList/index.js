@@ -372,7 +372,7 @@ export const OrderList = props => {
         requestsState.orders.cancel()
       }
     }
-  }, [])
+  }, [isBusiness])
 
   useEffect(() => {
     if (orderList.loading) return
