@@ -29,7 +29,8 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PaymentOptionWallet = function PaymentOptionWallet(props) {
   var cart = props.cart,
-    UIComponent = props.UIComponent;
+    UIComponent = props.UIComponent,
+    loyaltyPlansState = props.loyaltyPlansState;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -74,7 +75,7 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
   };
   var getWallets = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var response, _yield$response$json, error, result, reqLoyalty, resLoyalty, wallets, loyaltyPlans;
+      var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -97,7 +98,12 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
             _yield$response$json = _context.sent;
             error = _yield$response$json.error;
             result = _yield$response$json.result;
-            _context.next = 11;
+            resLoyalty = loyaltyPlansState !== null && loyaltyPlansState !== void 0 ? loyaltyPlansState : null;
+            if (loyaltyPlansState) {
+              _context.next = 17;
+              break;
+            }
+            _context.next = 13;
             return fetch("".concat(ordering.root, "/loyalty_plans"), {
               method: 'GET',
               headers: {
@@ -107,12 +113,13 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
-          case 11:
+          case 13:
             reqLoyalty = _context.sent;
-            _context.next = 14;
+            _context.next = 16;
             return reqLoyalty.json();
-          case 14:
+          case 16:
             resLoyalty = _context.sent;
+          case 17:
             wallets = [];
             if (!error) {
               loyaltyPlans = resLoyalty.result;
@@ -132,12 +139,12 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
               loading: false,
               error: error ? result : null,
               result: error ? null : wallets,
-              loyaltyPlans: resLoyalty !== null && resLoyalty !== void 0 && resLoyalty.error ? [] : resLoyalty === null || resLoyalty === void 0 ? void 0 : resLoyalty.result
+              loyaltyPlans: (_resLoyalty = resLoyalty) !== null && _resLoyalty !== void 0 && _resLoyalty.error ? [] : (_resLoyalty2 = resLoyalty) === null || _resLoyalty2 === void 0 ? void 0 : _resLoyalty2.result
             }));
-            _context.next = 23;
+            _context.next = 25;
             break;
-          case 20:
-            _context.prev = 20;
+          case 22:
+            _context.prev = 22;
             _context.t0 = _context["catch"](0);
             if (_context.t0.constructor.name !== 'Cancel') {
               setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
@@ -145,11 +152,11 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
                 error: [_context.t0.message]
               }));
             }
-          case 23:
+          case 25:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 20]]);
+      }, _callee, null, [[0, 22]]);
     }));
     return function getWallets() {
       return _ref.apply(this, arguments);

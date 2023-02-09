@@ -91,22 +91,30 @@ var MultiCheckout = function MultiCheckout(props) {
     _useState4 = _slicedToArray(_useState3, 2),
     deliveryOptionSelected = _useState4[0],
     setDeliveryOptionSelected = _useState4[1];
-  var _useState5 = (0, _react.useState)(false),
+  var _useState5 = (0, _react.useState)({
+      loading: true,
+      error: null,
+      result: []
+    }),
     _useState6 = _slicedToArray(_useState5, 2),
-    placing = _useState6[0],
-    setPlacing = _useState6[1];
-  var _useState7 = (0, _react.useState)({}),
+    loyaltyPlansState = _useState6[0],
+    setLoyaltyPlansState = _useState6[1];
+  var _useState7 = (0, _react.useState)(false),
     _useState8 = _slicedToArray(_useState7, 2),
-    paymethodSelected = _useState8[0],
-    setPaymethodSelected = _useState8[1];
-  var _useState9 = (0, _react.useState)({
+    placing = _useState8[0],
+    setPlacing = _useState8[1];
+  var _useState9 = (0, _react.useState)({}),
+    _useState10 = _slicedToArray(_useState9, 2),
+    paymethodSelected = _useState10[0],
+    setPaymethodSelected = _useState10[1];
+  var _useState11 = (0, _react.useState)({
       loading: true,
       error: null,
       result: null
     }),
-    _useState10 = _slicedToArray(_useState9, 2),
-    cartGroup = _useState10[0],
-    setCartGroup = _useState10[1];
+    _useState12 = _slicedToArray(_useState11, 2),
+    cartGroup = _useState12[0],
+    setCartGroup = _useState12[1];
   var openCarts = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : (_cartGroup$result$car = _cartGroup$result.carts) === null || _cartGroup$result$car === void 0 ? void 0 : _cartGroup$result$car.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
   })) || null || [];
@@ -421,13 +429,64 @@ var MultiCheckout = function MultiCheckout(props) {
       return _ref6.apply(this, arguments);
     };
   }();
+  var getLoyaltyPlans = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      var _result$find$accumula, _result$find, req, _yield$req$json, error, result;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.prev = 0;
+            _context7.next = 3;
+            return fetch("".concat(ordering.root, "/loyalty_plans"), {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              }
+            });
+          case 3:
+            req = _context7.sent;
+            _context7.next = 6;
+            return req.json();
+          case 6:
+            _yield$req$json = _context7.sent;
+            error = _yield$req$json.error;
+            result = _yield$req$json.result;
+            setLoyaltyPlansState(_objectSpread(_objectSpread({}, loyaltyPlansState), {}, {
+              loading: false,
+              result: error ? [] : result,
+              rewardRate: (_result$find$accumula = result === null || result === void 0 ? void 0 : (_result$find = result.find(function (loyal) {
+                return loyal.type === 'credit_point';
+              })) === null || _result$find === void 0 ? void 0 : _result$find.accumulation_rate) !== null && _result$find$accumula !== void 0 ? _result$find$accumula : 0
+            }));
+            _context7.next = 15;
+            break;
+          case 12:
+            _context7.prev = 12;
+            _context7.t0 = _context7["catch"](0);
+            setLoyaltyPlansState(_objectSpread(_objectSpread({}, loyaltyPlansState), {}, {
+              loading: false,
+              result: []
+            }));
+          case 15:
+          case "end":
+            return _context7.stop();
+        }
+      }, _callee7, null, [[0, 12]]);
+    }));
+    return function getLoyaltyPlans() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (deliveryOptionSelected === undefined) {
       setDeliveryOptionSelected(null);
     }
   }, [instructionsOptions]);
   (0, _react.useEffect)(function () {
-    getDeliveryOptions();
+    Promise.any([getDeliveryOptions(), getLoyaltyPlans()]);
   }, []);
   (0, _react.useEffect)(function () {
     getMultiCart();
@@ -435,6 +494,7 @@ var MultiCheckout = function MultiCheckout(props) {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     placing: placing,
     openCarts: openCarts,
+    rewardRate: loyaltyPlansState === null || loyaltyPlansState === void 0 ? void 0 : loyaltyPlansState.rewardRate,
     totalCartsPrice: totalCartsPrice,
     paymethodSelected: paymethodSelected,
     handleSelectPaymethod: handleSelectPaymethod,
