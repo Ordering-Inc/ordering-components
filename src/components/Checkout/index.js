@@ -54,10 +54,6 @@ export const Checkout = (props) => {
    */
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
   /**
-   * Place spot state from chackout
-   */
-  const [placeSpotNumber, setPlaceSpotNumber] = useState(cartState?.cart?.spot_number ?? cart?.spot_number)
-  /**
  * Comment state
  */
   const [commentState, setCommentState] = useState({ loading: false, result: null, error: null })
@@ -69,6 +65,10 @@ export const Checkout = (props) => {
    * This must be contains an object with info about paymente selected
    */
   const [paymethodSelected, setPaymethodSelected] = useState(null)
+  /**
+   * Loyalty plans state
+   */
+  const [loyaltyPlansState, setLoyaltyPlansState] = useState({ loading: true, error: null, result: [] })
 
   const businessId = props.uuid
     ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
@@ -77,6 +77,10 @@ export const Checkout = (props) => {
    * Current cart
    */
   const cart = orderState.carts?.[`businessId:${businessId}`]
+  /**
+   * Place spot state from chackout
+   */
+  const [placeSpotNumber, setPlaceSpotNumber] = useState(cartState?.cart?.spot_number ?? cart?.spot_number)
   /**
    * Timeout for update cart comment
    */
@@ -335,6 +339,34 @@ export const Checkout = (props) => {
     }
   }
 
+  const getLoyaltyPlans = async () => {
+    try {
+      const req = await fetch(`${ordering.root}/loyalty_plans`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          }
+        }
+      )
+      const { error, result } = await req.json()
+      setLoyaltyPlansState({
+        ...loyaltyPlansState,
+        loading: false,
+        result: error ? [] : result
+      })
+    } catch (error) {
+      setLoyaltyPlansState({
+        ...loyaltyPlansState,
+        loading: false,
+        result: []
+      })
+    }
+  }
+
   useEffect(() => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
@@ -364,7 +396,7 @@ export const Checkout = (props) => {
   }, [cart?.delivery_option_id])
 
   useEffect(() => {
-    getDeliveryOptions()
+    Promise.any([getDeliveryOptions(), getLoyaltyPlans()])
   }, [])
 
   return (
@@ -375,6 +407,7 @@ export const Checkout = (props) => {
           cart={cart}
           placing={placing}
           errors={errors}
+          loyaltyPlansState={loyaltyPlansState}
           orderOptions={orderState.options}
           paymethodSelected={paymethodSelected}
           businessDetails={businessDetails}
