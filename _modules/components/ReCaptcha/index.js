@@ -21,6 +21,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ReCaptcha = function ReCaptcha(props) {
   var handleReCaptcha = props.handleReCaptcha,
     reCaptchaVersion = props.reCaptchaVersion;
+  var captchaRef = (0, _react.useRef)(null);
   var _useState = (0, _react.useState)(reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version),
     _useState2 = _slicedToArray(_useState, 2),
     currVersion = _useState2[0],
@@ -36,18 +37,19 @@ var ReCaptcha = function ReCaptcha(props) {
   }, [reCaptchaVersion]);
   (0, _react.useEffect)(function () {
     if ((reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.siteKey) === '') return;
-    if ((currVersion === null || currVersion === void 0 ? void 0 : currVersion.version) !== reCaptchaVersion && window.grecaptcha) {
+    if (currVersion !== (reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version) && !!window.grecaptcha && (captchaRef === null || captchaRef === void 0 ? void 0 : captchaRef.current) !== null) {
       window.grecaptcha = undefined;
     }
     setCurrVersion(reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version);
-  }, [reCaptchaVersion]);
+  }, [reCaptchaVersion, captchaRef === null || captchaRef === void 0 ? void 0 : captchaRef.current]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, (reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version) === 'v3' && currVersion === 'v3' && /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptchaV.GoogleReCaptchaProvider, {
     reCaptchaKey: reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.siteKey
   }, /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptchaV.GoogleReCaptcha, {
     onVerify: onChange
   })), (reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.version) === 'v2' && currVersion === 'v2' && /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptcha.default, {
     sitekey: reCaptchaVersion === null || reCaptchaVersion === void 0 ? void 0 : reCaptchaVersion.siteKey,
-    onChange: onChange
+    onChange: onChange,
+    ref: captchaRef
   }));
 };
 exports.ReCaptcha = ReCaptcha;
