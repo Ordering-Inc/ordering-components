@@ -810,11 +810,11 @@ var ProductForm = function ProductForm(props) {
       var _ref6, _ref7;
       var options = (_ref6 = []).concat.apply(_ref6, _toConsumableArray(product.product.extras.map(function (extra) {
         return extra.options.filter(function (option) {
-          return option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
+          return (option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
             return suboption.enabled;
           }).length === 1 || option.suboptions.filter(function (suboption) {
             return suboption.preselected;
-          }).length > 0;
+          }).length > 0) && !option.respect_to && option.conditioned;
         });
       })));
       if (!(options !== null && options !== void 0 && options.length)) {
