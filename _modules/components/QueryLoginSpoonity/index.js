@@ -4,12 +4,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PaymentOptionStripe = void 0;
+exports.QueryLoginSpoonity = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../contexts/SessionContext");
 var _ApiContext = require("../../contexts/ApiContext");
-var _WebsocketContext = require("../../contexts/WebsocketContext");
+var _EventContext = require("../../contexts/EventContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -29,344 +29,139 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
- * Component to manage payment option stripe behavior without UI component
+ * Component to manage query login behavior without UI component
  */
-var PaymentOptionStripe = function PaymentOptionStripe(props) {
-  var businessId = props.businessId,
-    UIComponent = props.UIComponent,
-    setCardList = props.setCardList;
-  var _useSession = (0, _SessionContext.useSession)(),
-    _useSession2 = _slicedToArray(_useSession, 1),
-    _useSession2$ = _useSession2[0],
-    token = _useSession2$.token,
-    user = _useSession2$.user;
+var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
+  var UIComponent = props.UIComponent,
+    token = props.token;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var socket = (0, _WebsocketContext.useWebsocket)();
-  /**
-   * Contains and object to save cards, handle loading and error
-   */
+  var _useSession = (0, _SessionContext.useSession)(),
+    _useSession2 = _slicedToArray(_useSession, 2),
+    login = _useSession2[1].login;
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
   var _useState = (0, _react.useState)({
-      cards: [],
       loading: true,
+      user: {},
       error: null
     }),
     _useState2 = _slicedToArray(_useState, 2),
-    cardsList = _useState2[0],
-    setCardsList = _useState2[1];
-  /**
-   * save stripe public key
-   */
-  var _useState3 = (0, _react.useState)(props.publicKey),
-    _useState4 = _slicedToArray(_useState3, 2),
-    publicKey = _useState4[0],
-    setPublicKey = _useState4[1];
-  var _useState5 = (0, _react.useState)(null),
-    _useState6 = _slicedToArray(_useState5, 2),
-    cardSelected = _useState6[0],
-    setCardSelected = _useState6[1];
-  var _useState7 = (0, _react.useState)(null),
-    _useState8 = _slicedToArray(_useState7, 2),
-    cardDefault = _useState8[0],
-    setCardDefault = _useState8[1];
-  var _useState9 = (0, _react.useState)({
-      loading: false,
-      error: null
-    }),
-    _useState10 = _slicedToArray(_useState9, 2),
-    defaultCardSetActionStatus = _useState10[0],
-    setDefaultCardSetActionStatus = _useState10[1];
-  var requestState = {};
+    userState = _useState2[0],
+    setUserState = _useState2[1];
 
   /**
-   * method to get cards from API
+   * Method to get the user from token
    */
-  var getCards = /*#__PURE__*/function () {
+  var handleGetUser = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var source, _yield$ordering$setAc, result, defaultCard;
+      var requestOptions, response, _yield$response$json, error, result, _result$session;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: true
-            }));
-            _context.prev = 1;
-            source = {};
-            requestState.paymentCards = source;
-            // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
-            _context.next = 6;
-            return ordering.setAccessToken(token).paymentCards(businessId, user.id).get({
-              cancelToken: source
-            });
-          case 6:
-            _yield$ordering$setAc = _context.sent;
-            result = _yield$ordering$setAc.content.result;
-            defaultCard = result === null || result === void 0 ? void 0 : result.find(function (card) {
-              return card.default;
-            });
-            if (defaultCard) {
-              setCardDefault({
-                id: defaultCard.id,
-                type: 'card',
-                card: {
-                  brand: defaultCard.brand,
-                  last4: defaultCard.last4
-                }
-              });
-            }
-            setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              cards: result
-            }));
-            setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              cards: result
-            }));
-            _context.next = 18;
-            break;
-          case 14:
-            _context.prev = 14;
-            _context.t0 = _context["catch"](1);
-            setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              error: _context.t0
-            }));
-            setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              error: _context.t0
-            }));
-          case 18:
-          case "end":
-            return _context.stop();
-        }
-      }, _callee, null, [[1, 14]]);
-    }));
-    return function getCards() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  /**
-   * method to get cards from API
-   */
-  var deleteCard = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(card) {
-      var _yield$ordering$payme, error;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return ordering.paymentCards(-1, user.id, card.id).delete();
-          case 3:
-            _yield$ordering$payme = _context2.sent;
-            error = _yield$ordering$payme.content.error;
-            if (!error) {
-              cardsList.cards = cardsList.cards.filter(function (_card) {
-                return _card.id !== card.id;
-              });
-              setCardsList(_objectSpread({}, cardsList));
-              getCards();
-            }
-            _context2.next = 11;
-            break;
-          case 8:
-            _context2.prev = 8;
-            _context2.t0 = _context2["catch"](0);
-            console.error(_context2.t0.message);
-          case 11:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2, null, [[0, 8]]);
-    }));
-    return function deleteCard(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  /**
-   * method to set card as default
-   */
-  var setDefaultCard = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(card) {
-      var requestOptions, functionFetch, response, content;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.prev = 0;
-            setDefaultCardSetActionStatus(_objectSpread(_objectSpread({}, defaultCardSetActionStatus), {}, {
+            _context.prev = 0;
+            setUserState(_objectSpread(_objectSpread({}, userState), {}, {
               loading: true
             }));
             requestOptions = {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token),
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+                'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                business_id: businessId,
-                user_id: user.id,
-                card_id: card.id
+                access_token: token
               })
             };
-            functionFetch = "".concat(ordering.root, "/payments/stripe/cards/default");
-            _context3.next = 6;
-            return fetch(functionFetch, requestOptions);
-          case 6:
-            response = _context3.sent;
-            _context3.next = 9;
+            _context.next = 5;
+            return fetch("".concat(ordering.root, "/auth/spoonity"), requestOptions);
+          case 5:
+            response = _context.sent;
+            _context.next = 8;
             return response.json();
-          case 9:
-            content = _context3.sent;
-            if (!content.error) {
-              setCardDefault({
-                id: card.id,
-                type: 'card',
-                card: {
-                  brand: card.brand,
-                  last4: card.last4
-                }
-              });
-              setDefaultCardSetActionStatus({
-                loading: false,
-                error: null
+          case 8:
+            _yield$response$json = _context.sent;
+            error = _yield$response$json.error;
+            result = _yield$response$json.result;
+            if (!error) {
+              login({
+                user: result,
+                token: result === null || result === void 0 ? void 0 : (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.token
               });
             } else {
-              setDefaultCardSetActionStatus({
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: false,
-                error: content.result
-              });
+                error: result
+              }));
+              handleGoToLogin();
             }
-            _context3.next = 16;
+            _context.next = 18;
             break;
-          case 13:
-            _context3.prev = 13;
-            _context3.t0 = _context3["catch"](0);
-            setDefaultCardSetActionStatus({
+          case 14:
+            _context.prev = 14;
+            _context.t0 = _context["catch"](0);
+            setUserState(_objectSpread(_objectSpread({}, userState), {}, {
               loading: false,
-              error: _context3.t0
-            });
-          case 16:
+              error: [_context.t0.message]
+            }));
+            handleGoToLogin();
+          case 18:
           case "end":
-            return _context3.stop();
+            return _context.stop();
         }
-      }, _callee3, null, [[0, 13]]);
+      }, _callee, null, [[0, 14]]);
     }));
-    return function setDefaultCard(_x3) {
-      return _ref3.apply(this, arguments);
+    return function handleGetUser() {
+      return _ref.apply(this, arguments);
     };
   }();
+
   /**
-   * Method to get stripe credentials from API
+   * Method to redirect login page
    */
-  var getCredentials = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var _yield$ordering$setAc2, result;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
-          case 0:
-            _context4.prev = 0;
-            _context4.next = 3;
-            return ordering.setAccessToken(token).paymentCards().getCredentials();
-          case 3:
-            _yield$ordering$setAc2 = _context4.sent;
-            result = _yield$ordering$setAc2.content.result;
-            setPublicKey(result.publishable);
-            _context4.next = 11;
-            break;
-          case 8:
-            _context4.prev = 8;
-            _context4.t0 = _context4["catch"](0);
-            console.error(_context4.t0.message);
-          case 11:
-          case "end":
-            return _context4.stop();
-        }
-      }, _callee4, null, [[0, 8]]);
-    }));
-    return function getCredentials() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var handleCardClick = function handleCardClick(card) {
-    setCardSelected({
-      id: card.id,
-      type: 'card',
-      card: {
-        brand: card.brand,
-        last4: card.last4
-      }
+  var handleGoToLogin = function handleGoToLogin() {
+    events.emit('go_to_page', {
+      page: 'login'
     });
-  };
-  var handleNewCard = function handleNewCard(card) {
-    cardsList.cards.push(card);
-    setCardsList(_objectSpread({}, cardsList));
-    handleCardClick(card);
   };
   (0, _react.useEffect)(function () {
     if (token) {
-      getCards();
-      if (!props.publicKey) {
-        getCredentials();
-      }
+      handleGetUser();
     }
-    return function () {
-      if (requestState.paymentCards && requestState.paymentCards.cancel) {
-        requestState.paymentCards.cancel();
-      }
-    };
-  }, [token, businessId]);
+  }, [token]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    cardSelected: cardSelected,
-    cardDefault: cardDefault,
-    cardsList: cardsList,
-    handleCardClick: handleCardClick,
-    publicKey: publicKey,
-    handleNewCard: handleNewCard,
-    deleteCard: deleteCard,
-    setDefaultCard: setDefaultCard,
-    defaultCardSetActionStatus: defaultCardSetActionStatus
+    userState: userState
   })));
 };
-exports.PaymentOptionStripe = PaymentOptionStripe;
-PaymentOptionStripe.propTypes = {
+exports.QueryLoginSpoonity = QueryLoginSpoonity;
+QueryLoginSpoonity.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
   UIComponent: _propTypes.default.elementType,
   /**
-   * Business id to get cards from API
-   */
-  businessId: _propTypes.default.number.isRequired,
-  /**
-   * User id to pass in endpoint to get cards from API,
-   */
-  userId: _propTypes.default.number,
-  /**
-   * Components types before payment option stripe
+   * Components types before login
    * Array of type components, the parent props will pass to these components
    */
   beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
   /**
-   * Components types after payment option stripe
+   * Components types after login
    * Array of type components, the parent props will pass to these components
    */
   afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
   /**
-   * Elements before payment option stripe
+   * Elements before login
    * Array of HTML/Components elements, these components will not get the parent props
    */
   beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
   /**
-   * Elements after payment option stripe
+   * Elements after login
    * Array of HTML/Components elements, these components will not get the parent props
    */
   afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
 };
-PaymentOptionStripe.defaultProps = {
+QueryLoginSpoonity.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],

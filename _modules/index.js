@@ -795,6 +795,12 @@ Object.defineProperty(exports, "PurchaseGiftCard", {
     return _PurchaseGiftCard.PurchaseGiftCard;
   }
 });
+Object.defineProperty(exports, "QueryLoginSpoonity", {
+  enumerable: true,
+  get: function get() {
+    return _QueryLoginSpoonity.QueryLoginSpoonity;
+  }
+});
 Object.defineProperty(exports, "ReCaptcha", {
   enumerable: true,
   get: function get() {
@@ -1248,5 +1254,6 @@ var _ReviewProduct = require("./components/ReviewProduct");
 var _ReviewDriver = require("./components/ReviewDriver");
 var _UserVerification = require("./components/UserVerification");
 var _WalletList = require("./components/WalletList");
+var _QueryLoginSpoonity = require("./components/QueryLoginSpoonity");
 var _OrdersDashboardComponents = require("./components/OrdersDashboardComponents");
 var _codeNumbers = require("./constants/code-numbers");

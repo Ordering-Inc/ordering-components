@@ -587,7 +587,7 @@ var OrderList = function OrderList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, []);
+  }, [isBusiness]);
   (0, _react.useEffect)(function () {
     var _session$user2, _session$user3;
     if (orderList.loading) return;
