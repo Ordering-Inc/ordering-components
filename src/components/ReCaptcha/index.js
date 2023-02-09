@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3'
 import PropTypes from 'prop-types'
@@ -8,6 +8,8 @@ export const ReCaptcha = (props) => {
     handleReCaptcha,
     reCaptchaVersion
   } = props
+
+  const captchaRef = useRef(null)
 
   const [currVersion, setCurrVersion] = useState(reCaptchaVersion?.version)
   /**
@@ -19,11 +21,11 @@ export const ReCaptcha = (props) => {
 
   useEffect(() => {
     if (reCaptchaVersion?.siteKey === '') return
-    if (currVersion?.version !== reCaptchaVersion && window.grecaptcha) {
+    if (currVersion !== reCaptchaVersion?.version && !!window.grecaptcha && captchaRef?.current !== null) {
       window.grecaptcha = undefined
     }
     setCurrVersion(reCaptchaVersion?.version)
-  }, [reCaptchaVersion])
+  }, [reCaptchaVersion, captchaRef?.current])
 
   return (
     <>
@@ -36,6 +38,7 @@ export const ReCaptcha = (props) => {
         <ReCAPTCHA
           sitekey={reCaptchaVersion?.siteKey}
           onChange={onChange}
+          ref={captchaRef}
         />
       )}
     </>
