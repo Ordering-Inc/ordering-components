@@ -124,6 +124,7 @@ import { ReviewProduct } from './components/ReviewProduct'
 import { ReviewDriver } from './components/ReviewDriver'
 import { UserVerification } from './components/UserVerification'
 import { WalletList } from './components/WalletList'
+import { QueryLoginSpoonity } from './components/QueryLoginSpoonity'
 
 import {
   BusinessProductsListing,
@@ -262,6 +263,7 @@ export {
   UserVerification,
   WalletList,
   MultiCartCreate,
+  QueryLoginSpoonity,
   // CallcenterDashboard
   BusinessProductsListing,
   CheckPassword,
