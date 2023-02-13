@@ -4,12 +4,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PaymentOptionWallet = void 0;
+exports.QueryLoginSpoonity = void 0;
 var _react = _interopRequireWildcard(require("react"));
-var _ApiContext = require("../../contexts/ApiContext");
+var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../contexts/SessionContext");
-var _OrderContext = require("../../contexts/OrderContext");
-var _WebsocketContext = require("../../contexts/WebsocketContext");
+var _ApiContext = require("../../contexts/ApiContext");
+var _EventContext = require("../../contexts/EventContext");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -27,260 +28,142 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-var PaymentOptionWallet = function PaymentOptionWallet(props) {
-  var cart = props.cart,
-    UIComponent = props.UIComponent,
-    loyaltyPlansState = props.loyaltyPlansState;
+/**
+ * Component to manage query login behavior without UI component
+ */
+var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
+  var UIComponent = props.UIComponent,
+    token = props.token;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var socket = (0, _WebsocketContext.useWebsocket)();
-  var _useOrder = (0, _OrderContext.useOrder)(),
-    _useOrder2 = _slicedToArray(_useOrder, 2),
-    orderState = _useOrder2[0],
-    setStateValues = _useOrder2[1].setStateValues;
   var _useSession = (0, _SessionContext.useSession)(),
-    _useSession2 = _slicedToArray(_useSession, 1),
-    _useSession2$ = _useSession2[0],
-    token = _useSession2$.token,
-    user = _useSession2$.user;
+    _useSession2 = _slicedToArray(_useSession, 2),
+    login = _useSession2[1].login;
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
   var _useState = (0, _react.useState)({
-      result: [],
-      loyaltyPlans: [],
       loading: true,
+      user: {},
       error: null
     }),
     _useState2 = _slicedToArray(_useState, 2),
-    walletsState = _useState2[0],
-    setWalletsState = _useState2[1];
-  var _useState3 = (0, _react.useState)(null),
-    _useState4 = _slicedToArray(_useState3, 2),
-    errorState = _useState4[0],
-    setErrorState = _useState4[1];
-  var getRedemptionRate = function getRedemptionRate(wallet, loyaltyPlans) {
-    var _businessLoyaltyPlan$;
-    if (wallet.type === 'cash') return 100;
-    if (!(loyaltyPlans !== null && loyaltyPlans !== void 0 && loyaltyPlans.length)) return false;
-    var loyaltyPlan = loyaltyPlans.find(function (plan) {
-      return plan.type === wallet.type;
-    });
-    if (!loyaltyPlan) return false;
-    var businessLoyaltyPlan = loyaltyPlan.businesses.find(function (business) {
-      return business.business_id === cart.business_id;
-    });
-    if (!businessLoyaltyPlan && loyaltyPlan.businesses.length) return false;
-    if (businessLoyaltyPlan && !businessLoyaltyPlan.redeems) return false;
-    var redemptionRate = (_businessLoyaltyPlan$ = businessLoyaltyPlan === null || businessLoyaltyPlan === void 0 ? void 0 : businessLoyaltyPlan.redemption_rate) !== null && _businessLoyaltyPlan$ !== void 0 ? _businessLoyaltyPlan$ : loyaltyPlan === null || loyaltyPlan === void 0 ? void 0 : loyaltyPlan.redemption_rate;
-    return redemptionRate;
-  };
-  var getWallets = /*#__PURE__*/function () {
+    userState = _useState2[0],
+    setUserState = _useState2[1];
+
+  /**
+   * Method to get the user from token
+   */
+  var handleGetUser = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
+      var requestOptions, response, _yield$response$json, error, result, _result$session;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             _context.prev = 0;
-            _context.next = 3;
-            return fetch("".concat(ordering.root, "/users/").concat(user.id, "/wallets"), {
-              method: 'GET',
+            setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+              loading: true
+            }));
+            requestOptions = {
+              method: 'POST',
               headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token),
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-              }
-            });
-          case 3:
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                access_token: token
+              })
+            };
+            _context.next = 5;
+            return fetch("".concat(ordering.root, "/auth/spoonity"), requestOptions);
+          case 5:
             response = _context.sent;
-            _context.next = 6;
+            _context.next = 8;
             return response.json();
-          case 6:
+          case 8:
             _yield$response$json = _context.sent;
             error = _yield$response$json.error;
             result = _yield$response$json.result;
-            resLoyalty = loyaltyPlansState !== null && loyaltyPlansState !== void 0 ? loyaltyPlansState : null;
-            if (loyaltyPlansState) {
-              _context.next = 17;
-              break;
-            }
-            _context.next = 13;
-            return fetch("".concat(ordering.root, "/loyalty_plans"), {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token),
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-              }
-            });
-          case 13:
-            reqLoyalty = _context.sent;
-            _context.next = 16;
-            return reqLoyalty.json();
-          case 16:
-            resLoyalty = _context.sent;
-          case 17:
-            wallets = [];
             if (!error) {
-              loyaltyPlans = resLoyalty.result;
-              wallets = result.map(function (wallet) {
-                var redemptionRate = getRedemptionRate(wallet, loyaltyPlans);
-                if (redemptionRate === false) {
-                  wallet.valid = false;
-                  wallet.redemption_rate = null;
-                } else {
-                  wallet.valid = true;
-                  wallet.redemption_rate = redemptionRate;
-                }
-                return wallet;
+              login({
+                user: result,
+                token: result === null || result === void 0 ? void 0 : (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.token
               });
-            }
-            setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
-              loading: false,
-              error: error ? result : null,
-              result: error ? null : wallets,
-              loyaltyPlans: (_resLoyalty = resLoyalty) !== null && _resLoyalty !== void 0 && _resLoyalty.error ? [] : (_resLoyalty2 = resLoyalty) === null || _resLoyalty2 === void 0 ? void 0 : _resLoyalty2.result
-            }));
-            _context.next = 25;
-            break;
-          case 22:
-            _context.prev = 22;
-            _context.t0 = _context["catch"](0);
-            if (_context.t0.constructor.name !== 'Cancel') {
-              setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
+            } else {
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: false,
-                error: [_context.t0.message]
+                error: result
               }));
+              handleGoToLogin();
             }
-          case 25:
+            _context.next = 18;
+            break;
+          case 14:
+            _context.prev = 14;
+            _context.t0 = _context["catch"](0);
+            setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+              loading: false,
+              error: [_context.t0.message]
+            }));
+            handleGoToLogin();
+          case 18:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 22]]);
+      }, _callee, null, [[0, 14]]);
     }));
-    return function getWallets() {
+    return function handleGetUser() {
       return _ref.apply(this, arguments);
     };
   }();
-  var selectWallet = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(wallet) {
-      var response, _yield$response$json2, error, result, carts;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return fetch("".concat(ordering.root, "/carts/").concat(cart.uuid, "/wallets"), {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token),
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-              },
-              body: JSON.stringify({
-                wallet_id: wallet.id
-              })
-            });
-          case 3:
-            response = _context2.sent;
-            _context2.next = 6;
-            return response.json();
-          case 6:
-            _yield$response$json2 = _context2.sent;
-            error = _yield$response$json2.error;
-            result = _yield$response$json2.result;
-            if (!error) {
-              _context2.next = 12;
-              break;
-            }
-            setErrorState(result);
-            return _context2.abrupt("return");
-          case 12:
-            carts = orderState.carts;
-            carts["businessId:".concat(result.business_id)] = result;
-            setStateValues({
-              carts: carts
-            });
-            _context2.next = 20;
-            break;
-          case 17:
-            _context2.prev = 17;
-            _context2.t0 = _context2["catch"](0);
-            setErrorState([_context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message]);
-          case 20:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2, null, [[0, 17]]);
-    }));
-    return function selectWallet(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var deletetWalletSelected = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(wallet) {
-      var response, _yield$response$json3, error, result, carts;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.prev = 0;
-            _context3.next = 3;
-            return fetch("".concat(ordering.root, "/carts/").concat(cart.uuid, "/wallets/").concat(wallet.id), {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token),
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-              }
-            });
-          case 3:
-            response = _context3.sent;
-            _context3.next = 6;
-            return response.json();
-          case 6:
-            _yield$response$json3 = _context3.sent;
-            error = _yield$response$json3.error;
-            result = _yield$response$json3.result;
-            if (!error) {
-              _context3.next = 12;
-              break;
-            }
-            setErrorState(result);
-            return _context3.abrupt("return");
-          case 12:
-            carts = orderState.carts;
-            carts["businessId:".concat(result.business_id)] = result;
-            setStateValues({
-              carts: carts
-            });
-            _context3.next = 20;
-            break;
-          case 17:
-            _context3.prev = 17;
-            _context3.t0 = _context3["catch"](0);
-            setErrorState([_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message]);
-          case 20:
-          case "end":
-            return _context3.stop();
-        }
-      }, _callee3, null, [[0, 17]]);
-    }));
-    return function deletetWalletSelected(_x3) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+
+  /**
+   * Method to redirect login page
+   */
+  var handleGoToLogin = function handleGoToLogin() {
+    events.emit('go_to_page', {
+      page: 'login'
+    });
+  };
   (0, _react.useEffect)(function () {
-    getWallets();
-  }, []);
+    if (token) {
+      handleGetUser();
+    }
+  }, [token]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    errorState: errorState,
-    setErrorState: setErrorState,
-    walletsState: walletsState,
-    selectWallet: selectWallet,
-    deletetWalletSelected: deletetWalletSelected
+    userState: userState
   })));
 };
-exports.PaymentOptionWallet = PaymentOptionWallet;
-PaymentOptionWallet.defaultProps = {};
+exports.QueryLoginSpoonity = QueryLoginSpoonity;
+QueryLoginSpoonity.propTypes = {
+  /**
+   * UI Component, this must be containt all graphic elements and use parent props
+   */
+  UIComponent: _propTypes.default.elementType,
+  /**
+   * Components types before login
+   * Array of type components, the parent props will pass to these components
+   */
+  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+  /**
+   * Components types after login
+   * Array of type components, the parent props will pass to these components
+   */
+  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
+  /**
+   * Elements before login
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
+  /**
+   * Elements after login
+   * Array of HTML/Components elements, these components will not get the parent props
+   */
+  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
+};
+QueryLoginSpoonity.defaultProps = {
+  beforeComponents: [],
+  afterComponents: [],
+  beforeElements: [],
+  afterElements: []
+};

@@ -36,7 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var LoginForm = function LoginForm(props) {
-  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo;
+  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena;
   var UIComponent = props.UIComponent,
     handleButtonLoginClick = props.handleButtonLoginClick,
     handleSuccessLogin = props.handleSuccessLogin,
@@ -44,7 +44,8 @@ var LoginForm = function LoginForm(props) {
     urlToRedirect = props.urlToRedirect,
     allowedLevels = props.allowedLevels,
     handleCustomLogin = props.handleCustomLogin,
-    notificationState = props.notificationState;
+    notificationState = props.notificationState,
+    isGuest = props.isGuest;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -106,6 +107,7 @@ var LoginForm = function LoginForm(props) {
   var useLoginOtpEmail = (configs === null || configs === void 0 ? void 0 : (_configs$opt_email_en = configs.opt_email_enabled) === null || _configs$opt_email_en === void 0 ? void 0 : _configs$opt_email_en.value) === '1';
   var useLoginOtpCellphone = (configs === null || configs === void 0 ? void 0 : (_configs$otp_cellphon = configs.otp_cellphone_enabled) === null || _configs$otp_cellphon === void 0 ? void 0 : _configs$otp_cellphon.value) === '1';
   var useLoginByEmail = useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone ? (configs === null || configs === void 0 ? void 0 : (_configs$email_passwo = configs.email_password_login_enabled) === null || _configs$email_passwo === void 0 ? void 0 : _configs$email_passwo.value) === '1' : true;
+  var useLoginSpoonity = (configs === null || configs === void 0 ? void 0 : (_configs$spoonity_ena = configs.spoonity_enabled) === null || _configs$spoonity_ena === void 0 ? void 0 : _configs$spoonity_ena.value) === '1';
   var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
   defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp';
   var _useState13 = (0, _react.useState)(defaultLoginTab),
@@ -122,6 +124,7 @@ var LoginForm = function LoginForm(props) {
     setOtpState = _useState18[1];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 2),
+    user = _useSession2[0].user,
     _useSession2$ = _useSession2[1],
     login = _useSession2$.login,
     logout = _useSession2$.logout;
@@ -189,9 +192,10 @@ var LoginForm = function LoginForm(props) {
               _credentials.notification_app = notificationState.notification_app;
               _credentials.notification_token = notificationState.notification_token;
             }
-            _context.next = 18;
+            if (isGuest && user !== null && user !== void 0 && user.guest_id) _credentials.guest_token = user === null || user === void 0 ? void 0 : user.guest_id;
+            _context.next = 19;
             return ordering.users().auth(_credentials);
-          case 18:
+          case 19:
             _yield$ordering$users = _context.sent;
             _yield$ordering$users2 = _yield$ordering$users.content;
             error = _yield$ordering$users2.error;
@@ -204,27 +208,27 @@ var LoginForm = function LoginForm(props) {
               });
             }
             if (error) {
-              _context.next = 46;
+              _context.next = 47;
               break;
             }
             if (!useDefualtSessionManager) {
-              _context.next = 43;
+              _context.next = 44;
               break;
             }
             if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-              _context.next = 42;
+              _context.next = 43;
               break;
             }
             level = result.level, session = result.session;
             accessToken = session === null || session === void 0 ? void 0 : session.access_token;
             if (allowedLevels.includes(level)) {
-              _context.next = 42;
+              _context.next = 43;
               break;
             }
-            _context.prev = 29;
-            _context.next = 32;
+            _context.prev = 30;
+            _context.next = 33;
             return ordering.setAccessToken(accessToken).users().logout();
-          case 32:
+          case 33:
             _yield$ordering$setAc = _context.sent;
             logoutResp = _yield$ordering$setAc.content;
             if (!logoutResp.error) {
@@ -237,11 +241,11 @@ var LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            _context.next = 41;
+            _context.next = 42;
             break;
-          case 38:
-            _context.prev = 38;
-            _context.t0 = _context["catch"](29);
+          case 39:
+            _context.prev = 39;
+            _context.t0 = _context["catch"](30);
             setFormState({
               result: {
                 error: true,
@@ -249,14 +253,14 @@ var LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-          case 41:
-            return _context.abrupt("return");
           case 42:
+            return _context.abrupt("return");
+          case 43:
             login({
               user: result,
               token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
             });
-          case 43:
+          case 44:
             events.emit('userLogin', result);
             if (handleSuccessLogin) {
               handleSuccessLogin(result);
@@ -264,7 +268,7 @@ var LoginForm = function LoginForm(props) {
             if (urlToRedirect) {
               window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
             }
-          case 46:
+          case 47:
             setFormState({
               result: {
                 error: error,
@@ -272,10 +276,10 @@ var LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            _context.next = 52;
+            _context.next = 53;
             break;
-          case 49:
-            _context.prev = 49;
+          case 50:
+            _context.prev = 50;
             _context.t1 = _context["catch"](3);
             setFormState({
               result: {
@@ -284,11 +288,11 @@ var LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-          case 52:
+          case 53:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[3, 49], [29, 38]]);
+      }, _callee, null, [[3, 50], [30, 39]]);
     }));
     return function handleLoginClick(_x2) {
       return _ref.apply(this, arguments);
@@ -543,6 +547,81 @@ var LoginForm = function LoginForm(props) {
       return _ref4.apply(this, arguments);
     };
   }();
+  var handleLoginSpoonity = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _result$session2, response, _yield$response$json2, result, error;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+              loading: true
+            }));
+            _context5.next = 4;
+            return fetch("".concat(ordering.root, "/auth/spoonity"), {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password
+              })
+            });
+          case 4:
+            response = _context5.sent;
+            _context5.next = 7;
+            return response.json();
+          case 7:
+            _yield$response$json2 = _context5.sent;
+            result = _yield$response$json2.result;
+            error = _yield$response$json2.error;
+            if (!error) {
+              _context5.next = 13;
+              break;
+            }
+            setFormState({
+              result: {
+                error: true,
+                result: result
+              },
+              loading: false
+            });
+            return _context5.abrupt("return");
+          case 13:
+            login({
+              user: result,
+              token: result === null || result === void 0 ? void 0 : (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
+            });
+            setFormState({
+              result: {
+                error: error,
+                result: result
+              },
+              loading: false
+            });
+            _context5.next = 20;
+            break;
+          case 17:
+            _context5.prev = 17;
+            _context5.t0 = _context5["catch"](0);
+            setFormState({
+              result: {
+                error: true,
+                result: _context5.t0.message
+              },
+              loading: false
+            });
+          case 20:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5, null, [[0, 17]]);
+    }));
+    return function handleLoginSpoonity() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     loginTab: loginTab,
@@ -566,7 +645,9 @@ var LoginForm = function LoginForm(props) {
     useLoginByEmail: useLoginByEmail,
     useLoginByCellphone: useLoginByCellphone,
     useLoginOtpEmail: useLoginOtpEmail,
-    useLoginOtpCellphone: useLoginOtpCellphone
+    useLoginOtpCellphone: useLoginOtpCellphone,
+    useLoginSpoonity: useLoginSpoonity,
+    handleLoginSpoonity: handleLoginSpoonity
   })));
 };
 exports.LoginForm = LoginForm;

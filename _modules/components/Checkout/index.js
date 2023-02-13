@@ -40,7 +40,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Checkout page behavior without UI component
  */
 var Checkout = function Checkout(props) {
-  var _cartState$cart$spot_, _cartState$cart, _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$options2;
+  var _Object$values$find$b, _Object$values$find, _orderState$carts, _cartState$cart$spot_, _cartState$cart, _orderState$options2;
   var cartState = props.cartState,
     propsToFetch = props.propsToFetch,
     actionsBeforePlace = props.actionsBeforePlace,
@@ -115,41 +115,45 @@ var Checkout = function Checkout(props) {
     deliveryOptionSelected = _useState8[0],
     setDeliveryOptionSelected = _useState8[1];
   /**
-   * Place spot state from chackout
-   */
-  var _useState9 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
-    _useState10 = _slicedToArray(_useState9, 2),
-    placeSpotNumber = _useState10[0],
-    setPlaceSpotNumber = _useState10[1];
-  /**
   * Comment state
   */
-  var _useState11 = (0, _react.useState)({
+  var _useState9 = (0, _react.useState)({
       loading: false,
       result: null,
       error: null
     }),
-    _useState12 = _slicedToArray(_useState11, 2),
-    commentState = _useState12[0],
-    setCommentState = _useState12[1];
+    _useState10 = _slicedToArray(_useState9, 2),
+    commentState = _useState10[0],
+    setCommentState = _useState10[1];
   /**
    * Object to save an object with business information
    */
-  var _useState13 = (0, _react.useState)({
+  var _useState11 = (0, _react.useState)({
       business: null,
       loading: true,
       error: null
     }),
-    _useState14 = _slicedToArray(_useState13, 2),
-    businessDetails = _useState14[0],
-    setBusinessDetails = _useState14[1];
+    _useState12 = _slicedToArray(_useState11, 2),
+    businessDetails = _useState12[0],
+    setBusinessDetails = _useState12[1];
   /**
    * This must be contains an object with info about paymente selected
    */
-  var _useState15 = (0, _react.useState)(null),
+  var _useState13 = (0, _react.useState)(null),
+    _useState14 = _slicedToArray(_useState13, 2),
+    paymethodSelected = _useState14[0],
+    setPaymethodSelected = _useState14[1];
+  /**
+   * Loyalty plans state
+   */
+  var _useState15 = (0, _react.useState)({
+      loading: true,
+      error: null,
+      result: []
+    }),
     _useState16 = _slicedToArray(_useState15, 2),
-    paymethodSelected = _useState16[0],
-    setPaymethodSelected = _useState16[1];
+    loyaltyPlansState = _useState16[0],
+    setLoyaltyPlansState = _useState16[1];
   var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
     return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
   })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
@@ -157,6 +161,13 @@ var Checkout = function Checkout(props) {
    * Current cart
    */
   var cart = (_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts["businessId:".concat(businessId)];
+  /**
+   * Place spot state from chackout
+   */
+  var _useState17 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
+    _useState18 = _slicedToArray(_useState17, 2),
+    placeSpotNumber = _useState18[0],
+    setPlaceSpotNumber = _useState18[1];
   /**
    * Timeout for update cart comment
    */
@@ -580,6 +591,54 @@ var Checkout = function Checkout(props) {
       return _ref8.apply(this, arguments);
     };
   }();
+  var getLoyaltyPlans = /*#__PURE__*/function () {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      var req, _yield$req$json, error, result;
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
+          case 0:
+            _context8.prev = 0;
+            _context8.next = 3;
+            return fetch("".concat(ordering.root, "/loyalty_plans"), {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              }
+            });
+          case 3:
+            req = _context8.sent;
+            _context8.next = 6;
+            return req.json();
+          case 6:
+            _yield$req$json = _context8.sent;
+            error = _yield$req$json.error;
+            result = _yield$req$json.result;
+            setLoyaltyPlansState(_objectSpread(_objectSpread({}, loyaltyPlansState), {}, {
+              loading: false,
+              result: error ? [] : result
+            }));
+            _context8.next = 15;
+            break;
+          case 12:
+            _context8.prev = 12;
+            _context8.t0 = _context8["catch"](0);
+            setLoyaltyPlansState(_objectSpread(_objectSpread({}, loyaltyPlansState), {}, {
+              loading: false,
+              result: []
+            }));
+          case 15:
+          case "end":
+            return _context8.stop();
+        }
+      }, _callee8, null, [[0, 12]]);
+    }));
+    return function getLoyaltyPlans() {
+      return _ref9.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (businessId && typeof businessId === 'number') {
       getBusiness();
@@ -608,12 +667,13 @@ var Checkout = function Checkout(props) {
     }
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
   (0, _react.useEffect)(function () {
-    getDeliveryOptions();
+    Promise.any([getDeliveryOptions(), getLoyaltyPlans()]);
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
     placing: placing,
     errors: errors,
+    loyaltyPlansState: loyaltyPlansState,
     orderOptions: orderState.options,
     paymethodSelected: paymethodSelected,
     businessDetails: businessDetails,

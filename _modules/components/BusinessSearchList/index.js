@@ -112,7 +112,7 @@ var BusinessSearchList = function BusinessSearchList(props) {
   }, [filters, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : orderState.options)]);
   var handleChangeTermValue = function handleChangeTermValue(val) {
     setTermValue(val);
-    if ((termValue === null || termValue === void 0 ? void 0 : termValue.length) === 0 || (termValue === null || termValue === void 0 ? void 0 : termValue.length) >= 3) {
+    if ((termValue === null || termValue === void 0 ? void 0 : termValue.length) === 0 || (termValue === null || termValue === void 0 ? void 0 : termValue.length) >= 2) {
       handleSearchbusinessAndProducts(true, {}, val);
     }
   };

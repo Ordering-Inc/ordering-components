@@ -1402,7 +1402,6 @@ var OrderProvider = function OrderProvider(_ref) {
             _context14.next = 20;
             return ordering.setAccessToken(session.token).carts().changePaymethod(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
@@ -1463,7 +1462,6 @@ var OrderProvider = function OrderProvider(_ref) {
             _context15.next = 12;
             return ordering.setAccessToken(session.token).carts(cardId).place(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
