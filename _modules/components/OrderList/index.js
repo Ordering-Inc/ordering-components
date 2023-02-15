@@ -12,6 +12,7 @@ var _WebsocketContext = require("../../contexts/WebsocketContext");
 var _ToastContext = require("../../contexts/ToastContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _OrderContext = require("../../contexts/OrderContext");
+var _EventContext = require("../../contexts/EventContext");
 var _dayjs = _interopRequireDefault(require("dayjs"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -70,6 +71,9 @@ var OrderList = function OrderList(props) {
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     session = _useSession2[0];
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
@@ -870,6 +874,25 @@ var OrderList = function OrderList(props) {
   (0, _react.useEffect)(function () {
     setIsEmptyBusinesses && setIsEmptyBusinesses((businessOrderIds === null || businessOrderIds === void 0 ? void 0 : businessOrderIds.length) === 0);
   }, [businessOrderIds]);
+  (0, _react.useEffect)(function () {
+    var handleOrderMessageRead = function handleOrderMessageRead(orderId) {
+      var updatedOrders = orderList.orders.map(function (order) {
+        if (order.id === orderId) {
+          return _objectSpread(_objectSpread({}, order), {}, {
+            unread_count: 0
+          });
+        }
+        return order;
+      });
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        orders: updatedOrders
+      }));
+    };
+    events.on('order_message_read', handleOrderMessageRead);
+    return function () {
+      events.off('order_message_read', handleOrderMessageRead);
+    };
+  }, [orderList.orders]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     sortOrders: sortOrders,
     setSortBy: setSortBy,
