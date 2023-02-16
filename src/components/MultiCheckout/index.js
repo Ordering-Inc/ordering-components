@@ -125,7 +125,6 @@ export const MultiCheckout = (props) => {
         }
       )
       const { error, result } = await response.json()
-      console.log(result);
       if (!error) {
         setCartGroup({
           ...cartGroup,
