@@ -5101,7 +5101,7 @@ findup-sync@^3.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
-firebase@^9.9.2:
+firebase@9.15.0:
   version "9.15.0"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-9.15.0.tgz#c48bad2d9ab490b147c18aab591635dd738236b9"
   integrity sha512-Fa8qFahDY/pMYMzwPGcfpUkAS3Q55qJ0QKD+5xnXjSX/jVHsJqoXtxapmyDCfAKktiLhXIcRElW1VDVd9xGwQQ==
