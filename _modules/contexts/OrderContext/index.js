@@ -166,7 +166,6 @@ var OrderProvider = function OrderProvider(_ref) {
             countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== (state === null || state === void 0 ? void 0 : (_state$options = state.options) === null || _state$options === void 0 ? void 0 : (_state$options$addres = _state$options.address) === null || _state$options$addres === void 0 ? void 0 : _state$options$addres.country_code) ? countryCodeFromLocalStorage : state === null || state === void 0 ? void 0 : (_state$options2 = state.options) === null || _state$options2 === void 0 ? void 0 : (_state$options2$addre = _state$options2.address) === null || _state$options2$addre === void 0 ? void 0 : _state$options2$addre.country_code;
             if (countryCode) {
               options.headers = {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               };
@@ -668,7 +667,6 @@ var OrderProvider = function OrderProvider(_ref) {
             _context6.next = 13;
             return ordering.setAccessToken(session.token).carts().addProduct(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
@@ -915,7 +913,6 @@ var OrderProvider = function OrderProvider(_ref) {
             _context9.next = 12;
             return ordering.setAccessToken(session.token).carts().updateProduct(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
@@ -1305,7 +1302,6 @@ var OrderProvider = function OrderProvider(_ref) {
             _context13.next = 20;
             return ordering.setAccessToken(session.token).carts().changeDriverTip(body, {
               headers: {
-                'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               }
