@@ -86,6 +86,7 @@ var PageBanner = function PageBanner(props) {
               banner: error ? null : {
                 items: totalItems
               },
+              result: result,
               error: error ? result : null
             });
             _context.next = 18;
