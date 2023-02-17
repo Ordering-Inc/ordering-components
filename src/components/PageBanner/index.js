@@ -33,6 +33,7 @@ export const PageBanner = (props) => {
       setPageBannerState({
         loading: false,
         banner: error ? null : { items: totalItems },
+        result: result,
         error: error ? result : null
       })
     } catch (error) {
