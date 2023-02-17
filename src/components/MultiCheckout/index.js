@@ -266,6 +266,7 @@ export const MultiCheckout = (props) => {
           placing={placing}
           openCarts={openCarts}
           rewardRate={loyaltyPlansState?.rewardRate}
+          loyaltyPlansState={loyaltyPlansState}
           totalCartsPrice={totalCartsPrice}
           paymethodSelected={paymethodSelected}
           handleSelectPaymethod={handleSelectPaymethod}
