@@ -89,7 +89,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
 
       if (countryCode) {
         options.headers = {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
@@ -401,7 +400,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().addProduct(body, {
         headers: {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
@@ -525,7 +523,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().updateProduct(body, {
         headers: {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }
@@ -650,8 +647,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
+        events.emit('offer_applied', { ...result.result, ...offerData })
       } else {
         setAlert({ show: true, content: result.result })
+        events.emit('offer_denied', { ...offerData, reason: result.result })
       }
       setState({ ...state, loading: false })
       return !result.error
@@ -691,6 +690,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
+        events.emit('offer_removed', offerData)
       } else {
         setAlert({ show: true, content: result.result })
       }
@@ -727,7 +727,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       const { content: { error, result } } = await ordering.setAccessToken(session.token).carts().changeDriverTip(body, {
         headers: {
-          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId(),
           'X-Country-Code-X': countryCode
         }

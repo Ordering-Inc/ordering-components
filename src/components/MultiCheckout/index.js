@@ -42,6 +42,7 @@ export const MultiCheckout = (props) => {
   * Delivery instructions selected
   */
   const [deliveryOptionSelected, setDeliveryOptionSelected] = useState(undefined)
+  const [loyaltyPlansState, setLoyaltyPlansState] = useState({ loading: true, error: null, result: [] })
 
   const [placing, setPlacing] = useState(false)
   const [paymethodSelected, setPaymethodSelected] = useState({})
@@ -247,6 +248,35 @@ export const MultiCheckout = (props) => {
     }
   }
 
+  const getLoyaltyPlans = async () => {
+    try {
+      const req = await fetch(`${ordering.root}/loyalty_plans`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          }
+        }
+      )
+      const { error, result } = await req.json()
+      setLoyaltyPlansState({
+        ...loyaltyPlansState,
+        loading: false,
+        result: error ? [] : result,
+        rewardRate: result?.find(loyal => loyal.type === 'credit_point')?.accumulation_rate ?? 0
+      })
+    } catch (error) {
+      setLoyaltyPlansState({
+        ...loyaltyPlansState,
+        loading: false,
+        result: []
+      })
+    }
+  }
+
   useEffect(() => {
     if (deliveryOptionSelected === undefined) {
       setDeliveryOptionSelected(null)
@@ -254,7 +284,7 @@ export const MultiCheckout = (props) => {
   }, [instructionsOptions])
 
   useEffect(() => {
-    getDeliveryOptions()
+    Promise.any([getDeliveryOptions(), getLoyaltyPlans()])
   }, [])
 
   useEffect(() => {
@@ -268,6 +298,8 @@ export const MultiCheckout = (props) => {
           {...props}
           placing={placing}
           openCarts={openCarts}
+          rewardRate={loyaltyPlansState?.rewardRate}
+          loyaltyPlansState={loyaltyPlansState}
           totalCartsPrice={totalCartsPrice}
           paymethodSelected={paymethodSelected}
           handleSelectPaymethod={handleSelectPaymethod}

@@ -19,7 +19,7 @@ export const Cart = (props) => {
   /**
    * Order context manager
    */
-  const [orderState, { updateProduct, removeProduct, clearCart, removeOffer }] = useOrder()
+  const [orderState, { updateProduct, removeProduct, clearCart, removeOffer, setStateValues }] = useOrder()
 
   /**
    * Config context manager
@@ -141,6 +141,9 @@ export const Cart = (props) => {
             showToast(ToastType.Error, result)
             return
           }
+          const carts = orderState.carts
+          carts[`businessId:${result.business_id}`] = result
+          setStateValues({ carts })
           setCommentState({ ...commentState, loading: false, error: null, result })
         }, commentDelayTime ?? 750)
       }
