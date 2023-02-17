@@ -49,7 +49,8 @@ var Cart = function Cart(props) {
     updateProduct = _useOrder2$.updateProduct,
     removeProduct = _useOrder2$.removeProduct,
     clearCart = _useOrder2$.clearCart,
-    removeOffer = _useOrder2$.removeOffer;
+    removeOffer = _useOrder2$.removeOffer,
+    setStateValues = _useOrder2$.setStateValues;
 
   /**
    * Config context manager
@@ -168,7 +169,7 @@ var Cart = function Cart(props) {
       if (previousComment !== value) {
         clearTimeout(timeout);
         timeout = setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-          var uuid, body, response, _yield$response$json, result, error;
+          var uuid, body, response, _yield$response$json, result, error, carts;
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
               case 0:
@@ -212,12 +213,17 @@ var Cart = function Cart(props) {
                 showToast(_ToastContext.ToastType.Error, result);
                 return _context.abrupt("return");
               case 16:
+                carts = orderState.carts;
+                carts["businessId:".concat(result.business_id)] = result;
+                setStateValues({
+                  carts: carts
+                });
                 setCommentState(_objectSpread(_objectSpread({}, commentState), {}, {
                   loading: false,
                   error: null,
                   result: result
                 }));
-              case 17:
+              case 20:
               case "end":
                 return _context.stop();
             }
