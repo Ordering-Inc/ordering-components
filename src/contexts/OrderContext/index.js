@@ -650,8 +650,10 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
+        events.emit('offer_applied', { ...result.result, ...offerData })
       } else {
         setAlert({ show: true, content: result.result })
+        events.emit('offer_denied', { ...offerData, reason: result.result })
       }
       setState({ ...state, loading: false })
       return !result.error
@@ -691,6 +693,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!result.error) {
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
+        events.emit('offer_removed', offerData)
       } else {
         setAlert({ show: true, content: result.result })
       }
