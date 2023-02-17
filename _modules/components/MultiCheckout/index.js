@@ -495,6 +495,7 @@ var MultiCheckout = function MultiCheckout(props) {
     placing: placing,
     openCarts: openCarts,
     rewardRate: loyaltyPlansState === null || loyaltyPlansState === void 0 ? void 0 : loyaltyPlansState.rewardRate,
+    loyaltyPlansState: loyaltyPlansState,
     totalCartsPrice: totalCartsPrice,
     paymethodSelected: paymethodSelected,
     handleSelectPaymethod: handleSelectPaymethod,
