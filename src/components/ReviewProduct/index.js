@@ -5,6 +5,7 @@ import { useApi } from '../../contexts/ApiContext'
 import { ToastType, useToast } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const ReviewProduct = (props) => {
   const { UIComponent, order, isToast } = props
@@ -14,6 +15,7 @@ export const ReviewProduct = (props) => {
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()
+  const [events] = useEvent()
   const [formState, setFormState] = useState({ loading: false, changes: [], result: { error: false } })
 
   /**
@@ -65,6 +67,7 @@ export const ReviewProduct = (props) => {
         result = _result.result
       }
       if (!error) {
+        events.emit('product_reviewed', formState.changes)
         setFormState({
           loading: false,
           changes: [],
