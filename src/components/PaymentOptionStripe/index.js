@@ -59,7 +59,7 @@ export const PaymentOptionStripe = (props) => {
         loading: false,
         cards: result
       })
-      setCardList({
+      setCardList && setCardList({
         ...cardsList,
         loading: false,
         cards: result
@@ -70,7 +70,7 @@ export const PaymentOptionStripe = (props) => {
         loading: false,
         error
       })
-      setCardList({
+      setCardList && setCardList({
         ...cardsList,
         loading: false,
         error
