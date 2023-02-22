@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
-import { useOrder } from '../../contexts/OrderContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
 /**
@@ -12,6 +11,7 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const {
     UIComponent,
     openCarts,
+    loyaltyPlansState,
     userId,
     cartUuid
   } = props
@@ -106,19 +106,23 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
       )
       const { error, result } = await response.json()
 
-      const reqLoyalty = await fetch(
-        `${ordering.root}/loyalty_plans`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-            'X-App-X': ordering.appId,
-            'X-Socket-Id-X': socket?.getId()
+      let resLoyalty = loyaltyPlansState ?? null
+
+      if (!loyaltyPlansState) {
+        const reqLoyalty = await fetch(
+          `${ordering.root}/loyalty_plans`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket?.getId()
+            }
           }
-        }
-      )
-      const resLoyalty = await reqLoyalty.json()
+        )
+        resLoyalty = await reqLoyalty.json()
+      }
 
       let wallets = []
       if (!error) {
