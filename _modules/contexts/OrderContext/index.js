@@ -1135,11 +1135,15 @@ var OrderProvider = function OrderProvider(_ref) {
             if (!result.error) {
               state.carts["businessId:".concat(result.result.business_id)] = result.result;
               events.emit('cart_updated', result.result);
+              events.emit('offer_applied', _objectSpread(_objectSpread({}, result.result), offerData));
             } else {
               setAlert({
                 show: true,
                 content: result.result
               });
+              events.emit('offer_denied', _objectSpread(_objectSpread({}, offerData), {}, {
+                reason: result.result
+              }));
             }
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
@@ -1214,6 +1218,7 @@ var OrderProvider = function OrderProvider(_ref) {
             if (!result.error) {
               state.carts["businessId:".concat(result.result.business_id)] = result.result;
               events.emit('cart_updated', result.result);
+              events.emit('offer_removed', offerData);
             } else {
               setAlert({
                 show: true,
