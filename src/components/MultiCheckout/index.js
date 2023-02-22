@@ -47,6 +47,7 @@ export const MultiCheckout = (props) => {
   const [placing, setPlacing] = useState(false)
   const [paymethodSelected, setPaymethodSelected] = useState({})
   const [cartGroup, setCartGroup] = useState({ loading: true, error: null, result: null })
+  const [walletState, setWalletState] = useState({ loading: false, error: null, result: null })
 
   const openCarts = (cartGroup?.result?.carts?.filter(cart => cart?.valid && cart?.status !== 1) || null) || []
   const totalCartsPrice = openCarts?.length && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
@@ -102,18 +103,52 @@ export const MultiCheckout = (props) => {
     })
   }
 
-  const handleSelectWallet = (checked, wallet) => {
-    if (checked) {
-      setPaymethodSelected({
-        ...paymethodSelected,
-        wallet_id: wallet.id,
-        wallet_data: wallet.balance > totalCartsPrice ? totalCartsPrice : wallet.balance
+  const handleSelectWallet = async (isChecked, wallet) => {
+    setWalletState({ ...walletState, loading: true, error: null })
+    const url = isChecked
+      ? `${ordering.root}/cart_groups/${cartGroup?.result?.uuid}/wallets`
+      : `${ordering.root}/cart_groups/${cartGroup?.result?.uuid}/wallets/${wallet.id}`
+    try {
+      const response = await fetch(url,
+        {
+          method: isChecked ? 'POST' : 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          },
+          ...(isChecked && {
+            body: JSON.stringify({
+              wallet_id: wallet.id
+            })
+          })
+        }
+      )
+      const { error, result } = await response.json()
+      if (!error) {
+        setCartGroup({
+          ...cartGroup,
+          result: {
+            ...cartGroup.result,
+            wallets: result?.wallets,
+            payment_events: result?.payment_events,
+            balance: result?.balance
+          }
+        })
+      }
+      setWalletState({
+        ...walletState,
+        loading: false,
+        error: error ? result : null,
+        result: error ? null : result,
       })
-    } else {
-      const _paymethodSelected = { ...paymethodSelected }
-      delete _paymethodSelected.wallet_id
-      delete _paymethodSelected.wallet_data
-      setPaymethodSelected(_paymethodSelected)
+    } catch (err) {
+      setWalletState({
+        ...walletState,
+        loading: false,
+        error: err?.message ?? err
+      })
     }
   }
 
@@ -277,6 +312,7 @@ export const MultiCheckout = (props) => {
           deliveryOptionSelected={deliveryOptionSelected}
           instructionsOptions={instructionsOptions}
           cartGroup={cartGroup}
+          walletState={walletState}
           totalCartsFee={totalCartsFee}
         />
       )}
