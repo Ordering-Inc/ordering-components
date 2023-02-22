@@ -9,7 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _ApiContext = require("../../contexts/ApiContext");
 var _SessionContext = require("../../contexts/SessionContext");
-var _OrderContext = require("../../contexts/OrderContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -39,6 +38,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
   var UIComponent = props.UIComponent,
     openCarts = props.openCarts,
+    loyaltyPlansState = props.loyaltyPlansState,
     userId = props.userId,
     cartUuid = props.cartUuid;
   var qParams = userId ? "?user_id=".concat(userId) : '';
@@ -167,7 +167,7 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
    */
   var getUserWallets = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var response, _yield$response$json, error, result, reqLoyalty, resLoyalty, wallets, loyaltyPlans;
+      var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -190,7 +190,12 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
             _yield$response$json = _context2.sent;
             error = _yield$response$json.error;
             result = _yield$response$json.result;
-            _context2.next = 11;
+            resLoyalty = loyaltyPlansState !== null && loyaltyPlansState !== void 0 ? loyaltyPlansState : null;
+            if (loyaltyPlansState) {
+              _context2.next = 17;
+              break;
+            }
+            _context2.next = 13;
             return fetch("".concat(ordering.root, "/loyalty_plans"), {
               method: 'GET',
               headers: {
@@ -200,12 +205,13 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
-          case 11:
+          case 13:
             reqLoyalty = _context2.sent;
-            _context2.next = 14;
+            _context2.next = 16;
             return reqLoyalty.json();
-          case 14:
+          case 16:
             resLoyalty = _context2.sent;
+          case 17:
             wallets = [];
             if (!error) {
               loyaltyPlans = resLoyalty.result;
@@ -225,12 +231,12 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
               loading: false,
               error: error ? result : null,
               result: error ? null : wallets,
-              loyaltyPlans: resLoyalty !== null && resLoyalty !== void 0 && resLoyalty.error ? [] : resLoyalty === null || resLoyalty === void 0 ? void 0 : resLoyalty.result
+              loyaltyPlans: (_resLoyalty = resLoyalty) !== null && _resLoyalty !== void 0 && _resLoyalty.error ? [] : (_resLoyalty2 = resLoyalty) === null || _resLoyalty2 === void 0 ? void 0 : _resLoyalty2.result
             }));
-            _context2.next = 23;
+            _context2.next = 25;
             break;
-          case 20:
-            _context2.prev = 20;
+          case 22:
+            _context2.prev = 22;
             _context2.t0 = _context2["catch"](0);
             if (_context2.t0.constructor.name !== 'Cancel') {
               setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
@@ -238,11 +244,11 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 error: [_context2.t0.message]
               }));
             }
-          case 23:
+          case 25:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[0, 20]]);
+      }, _callee2, null, [[0, 22]]);
     }));
     return function getUserWallets() {
       return _ref2.apply(this, arguments);
