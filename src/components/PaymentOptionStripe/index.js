@@ -10,7 +10,8 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 export const PaymentOptionStripe = (props) => {
   const {
     businessId,
-    UIComponent
+    UIComponent,
+    setCardList
   } = props
 
   const [{ token, user }] = useSession()
@@ -58,8 +59,18 @@ export const PaymentOptionStripe = (props) => {
         loading: false,
         cards: result
       })
+      setCardList && setCardList({
+        ...cardsList,
+        loading: false,
+        cards: result
+      })
     } catch (error) {
       setCardsList({
+        ...cardsList,
+        loading: false,
+        error
+      })
+      setCardList && setCardList({
         ...cardsList,
         loading: false,
         error
@@ -79,6 +90,7 @@ export const PaymentOptionStripe = (props) => {
         setCardsList({
           ...cardsList
         })
+        getCards()
       }
     } catch (error) {
       console.error(error.message)
@@ -167,7 +179,7 @@ export const PaymentOptionStripe = (props) => {
         requestState.paymentCards.cancel()
       }
     }
-  }, [token])
+  }, [token, businessId])
 
   return (
     <>
