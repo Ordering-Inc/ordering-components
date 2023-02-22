@@ -27,6 +27,26 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const [paymethodsAndWallets, setPaymethodsAndWallets] = useState({ loading: true, paymethods: [], wallets: [], error: null })
   const [walletsState, setWalletsState] = useState({ result: [], loading: true, error: null })
 
+  const getRedemptionRate = (wallet, loyaltyPlans) => {
+    if (wallet.type === 'cash') return 100
+
+    if (!loyaltyPlans?.length) return false
+
+    const loyaltyPlan = loyaltyPlans.find(plan => plan.type === wallet.type)
+    if (!loyaltyPlan) return false
+
+    const loyalBusinessesIds = loyaltyPlan.businesses.map(b => b.business_id)
+    const isBusinessContained = businessIds.every(business => loyalBusinessesIds.includes(business))
+
+    const businessLoyaltyPlans = loyaltyPlan.businesses.filter(business => businessIds.includes(business.business_id))
+
+    if (!isBusinessContained && loyaltyPlan.businesses.length) return false
+
+    if (isBusinessContained && !businessLoyaltyPlans.every(bl => bl.redeems)) return false
+
+    return loyaltyPlan?.redemption_rate
+  }
+
   /**
    * Method to get available wallets and paymethods from API
    */
@@ -86,11 +106,42 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
       )
       const { error, result } = await response.json()
 
+      const reqLoyalty = await fetch(
+        `${ordering.root}/loyalty_plans`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          }
+        }
+      )
+      const resLoyalty = await reqLoyalty.json()
+
+      let wallets = []
+      if (!error) {
+        const loyaltyPlans = resLoyalty.result
+        wallets = result.map(wallet => {
+          const redemptionRate = getRedemptionRate(wallet, loyaltyPlans)
+          if (redemptionRate === false) {
+            wallet.valid = false
+            wallet.redemption_rate = null
+          } else {
+            wallet.valid = true
+            wallet.redemption_rate = redemptionRate
+          }
+          return wallet
+        })
+      }
+
       setWalletsState({
         ...walletsState,
         loading: false,
         error: error ? result : null,
-        result: error ? null : result
+        result: error ? null : wallets,
+        loyaltyPlans: resLoyalty?.error ? [] : resLoyalty?.result
       })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {

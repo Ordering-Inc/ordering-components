@@ -104,7 +104,7 @@ export const MultiCheckout = (props) => {
   }
 
   const handleSelectWallet = async (isChecked, wallet) => {
-    setWalletState({ ...walletState, loading: true })
+    setWalletState({ ...walletState, loading: true, error: null })
     const url = isChecked
       ? `${ordering.root}/cart_groups/${cartGroup?.result?.uuid}/wallets`
       : `${ordering.root}/cart_groups/${cartGroup?.result?.uuid}/wallets/${wallet.id}`
@@ -131,7 +131,9 @@ export const MultiCheckout = (props) => {
           ...cartGroup,
           result: {
             ...cartGroup.result,
-            wallets: result?.wallets
+            wallets: result?.wallets,
+            payment_events: result?.payment_events,
+            balance: result?.balance
           }
         })
       }
@@ -310,6 +312,7 @@ export const MultiCheckout = (props) => {
           deliveryOptionSelected={deliveryOptionSelected}
           instructionsOptions={instructionsOptions}
           cartGroup={cartGroup}
+          walletState={walletState}
           totalCartsFee={totalCartsFee}
         />
       )}
