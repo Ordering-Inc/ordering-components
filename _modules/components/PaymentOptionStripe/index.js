@@ -119,7 +119,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
               loading: false,
               cards: result
             }));
-            setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
+            setCardList && setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
               loading: false,
               cards: result
             }));
@@ -132,7 +132,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
               loading: false,
               error: _context.t0
             }));
-            setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
+            setCardList && setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
               loading: false,
               error: _context.t0
             }));

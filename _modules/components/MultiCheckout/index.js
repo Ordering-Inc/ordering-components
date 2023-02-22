@@ -115,6 +115,14 @@ var MultiCheckout = function MultiCheckout(props) {
     _useState12 = _slicedToArray(_useState11, 2),
     cartGroup = _useState12[0],
     setCartGroup = _useState12[1];
+  var _useState13 = (0, _react.useState)({
+      loading: false,
+      error: null,
+      result: null
+    }),
+    _useState14 = _slicedToArray(_useState13, 2),
+    walletState = _useState14[0],
+    setWalletState = _useState14[1];
   var openCarts = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : (_cartGroup$result$car = _cartGroup$result.carts) === null || _cartGroup$result$car === void 0 ? void 0 : _cartGroup$result$car.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
   })) || null || [];
@@ -192,32 +200,87 @@ var MultiCheckout = function MultiCheckout(props) {
       paymethod_data: paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_data
     }));
   };
-  var handleSelectWallet = function handleSelectWallet(checked, wallet) {
-    if (checked) {
-      setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
-        wallet_id: wallet.id,
-        wallet_data: wallet.balance > totalCartsPrice ? totalCartsPrice : wallet.balance
-      }));
-    } else {
-      var _paymethodSelected = _objectSpread({}, paymethodSelected);
-      delete _paymethodSelected.wallet_id;
-      delete _paymethodSelected.wallet_data;
-      setPaymethodSelected(_paymethodSelected);
-    }
-  };
+  var handleSelectWallet = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(isChecked, wallet) {
+      var _cartGroup$result3, _cartGroup$result4;
+      var url, response, _yield$response$json, error, result, _err$message;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            setWalletState(_objectSpread(_objectSpread({}, walletState), {}, {
+              loading: true,
+              error: null
+            }));
+            url = isChecked ? "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result3 = cartGroup.result) === null || _cartGroup$result3 === void 0 ? void 0 : _cartGroup$result3.uuid, "/wallets") : "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result4 = cartGroup.result) === null || _cartGroup$result4 === void 0 ? void 0 : _cartGroup$result4.uuid, "/wallets/").concat(wallet.id);
+            _context2.prev = 2;
+            _context2.next = 5;
+            return fetch(url, _objectSpread({
+              method: isChecked ? 'POST' : 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              }
+            }, isChecked && {
+              body: JSON.stringify({
+                wallet_id: wallet.id
+              })
+            }));
+          case 5:
+            response = _context2.sent;
+            _context2.next = 8;
+            return response.json();
+          case 8:
+            _yield$response$json = _context2.sent;
+            error = _yield$response$json.error;
+            result = _yield$response$json.result;
+            if (!error) {
+              setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
+                result: _objectSpread(_objectSpread({}, cartGroup.result), {}, {
+                  wallets: result === null || result === void 0 ? void 0 : result.wallets,
+                  payment_events: result === null || result === void 0 ? void 0 : result.payment_events,
+                  balance: result === null || result === void 0 ? void 0 : result.balance
+                })
+              }));
+            }
+            setWalletState(_objectSpread(_objectSpread({}, walletState), {}, {
+              loading: false,
+              error: error ? result : null,
+              result: error ? null : result
+            }));
+            _context2.next = 18;
+            break;
+          case 15:
+            _context2.prev = 15;
+            _context2.t0 = _context2["catch"](2);
+            setWalletState(_objectSpread(_objectSpread({}, walletState), {}, {
+              loading: false,
+              error: (_err$message = _context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message) !== null && _err$message !== void 0 ? _err$message : _context2.t0
+            }));
+          case 18:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2, null, [[2, 15]]);
+    }));
+    return function handleSelectWallet(_x2, _x3) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
   var handlePaymethodDataChange = function handlePaymethodDataChange(data) {
     setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
       paymethod_data: data
     }));
   };
   var getDeliveryOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var response, _yield$response$json, result, error;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var response, _yield$response$json2, result, error;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
+            _context3.prev = 0;
+            _context3.next = 3;
             return fetch("".concat(ordering.root, "/delivery_options").concat(qParams), {
               method: 'GET',
               headers: {
@@ -228,22 +291,22 @@ var MultiCheckout = function MultiCheckout(props) {
               }
             });
           case 3:
-            response = _context2.sent;
-            _context2.next = 6;
+            response = _context3.sent;
+            _context3.next = 6;
             return response.json();
           case 6:
-            _yield$response$json = _context2.sent;
-            result = _yield$response$json.result;
-            error = _yield$response$json.error;
+            _yield$response$json2 = _context3.sent;
+            result = _yield$response$json2.result;
+            error = _yield$response$json2.error;
             if (error) {
-              _context2.next = 12;
+              _context3.next = 12;
               break;
             }
             setInstructionsOptions({
               loading: false,
               result: [].concat(_toConsumableArray(instructionsOptions.result), _toConsumableArray(result))
             });
-            return _context2.abrupt("return");
+            return _context3.abrupt("return");
           case 12:
             setInstructionsOptions({
               loading: false,
@@ -251,46 +314,46 @@ var MultiCheckout = function MultiCheckout(props) {
               result: result
             });
             showToast(_ToastContext.ToastType.Error, result);
-            _context2.next = 20;
+            _context3.next = 20;
             break;
           case 16:
-            _context2.prev = 16;
-            _context2.t0 = _context2["catch"](0);
+            _context3.prev = 16;
+            _context3.t0 = _context3["catch"](0);
             setInstructionsOptions({
               loading: false,
               error: true,
-              result: _context2.t0.message
+              result: _context3.t0.message
             });
-            showToast(_ToastContext.ToastType.Error, _context2.t0.message);
+            showToast(_ToastContext.ToastType.Error, _context3.t0.message);
           case 20:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
-      }, _callee2, null, [[0, 16]]);
+      }, _callee3, null, [[0, 16]]);
     }));
     return function getDeliveryOptions() {
-      return _ref2.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
   var multiHandleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(value, cartUuidArr) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value, cartUuidArr) {
       var allPromise;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
           case 0:
-            _context4.prev = 0;
+            _context5.prev = 0;
             allPromise = cartUuidArr.map(function (cartId) {
               return new Promise( /*#__PURE__*/function () {
-                var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(resolve, reject) {
-                  var body, response, _yield$response$json2, result, error;
-                  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                    while (1) switch (_context3.prev = _context3.next) {
+                var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(resolve, reject) {
+                  var body, response, _yield$response$json3, result, error;
+                  return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+                    while (1) switch (_context4.prev = _context4.next) {
                       case 0:
                         body = {
                           delivery_option_id: value
                         };
                         if (userId) body.user_id = userId;
-                        _context3.next = 4;
+                        _context4.next = 4;
                         return fetch("".concat(ordering.root, "/carts/").concat(cartId), {
                           method: 'PUT',
                           headers: {
@@ -302,13 +365,13 @@ var MultiCheckout = function MultiCheckout(props) {
                           body: JSON.stringify(body)
                         });
                       case 4:
-                        response = _context3.sent;
-                        _context3.next = 7;
+                        response = _context4.sent;
+                        _context4.next = 7;
                         return response.json();
                       case 7:
-                        _yield$response$json2 = _context3.sent;
-                        result = _yield$response$json2.result;
-                        error = _yield$response$json2.error;
+                        _yield$response$json3 = _context4.sent;
+                        result = _yield$response$json3.result;
+                        error = _yield$response$json3.error;
                         if (!error && (result === null || result === void 0 ? void 0 : result.delivery_option_id) === value) {
                           resolve(result);
                         } else {
@@ -316,46 +379,46 @@ var MultiCheckout = function MultiCheckout(props) {
                         }
                       case 11:
                       case "end":
-                        return _context3.stop();
+                        return _context4.stop();
                     }
-                  }, _callee3);
+                  }, _callee4);
                 }));
-                return function (_x4, _x5) {
-                  return _ref4.apply(this, arguments);
+                return function (_x6, _x7) {
+                  return _ref5.apply(this, arguments);
                 };
               }());
             });
-            _context4.next = 4;
+            _context5.next = 4;
             return Promise.all(allPromise);
           case 4:
-            _context4.t0 = _context4.sent;
-            if (!_context4.t0) {
-              _context4.next = 7;
+            _context5.t0 = _context5.sent;
+            if (!_context5.t0) {
+              _context5.next = 7;
               break;
             }
             setDeliveryOptionSelected(value);
           case 7:
-            _context4.next = 12;
+            _context5.next = 12;
             break;
           case 9:
-            _context4.prev = 9;
-            _context4.t1 = _context4["catch"](0);
-            showToast(_ToastContext.ToastType.Error, _context4.t1.message);
+            _context5.prev = 9;
+            _context5.t1 = _context5["catch"](0);
+            showToast(_ToastContext.ToastType.Error, _context5.t1.message);
           case 12:
           case "end":
-            return _context4.stop();
+            return _context5.stop();
         }
-      }, _callee4, null, [[0, 9]]);
+      }, _callee5, null, [[0, 9]]);
     }));
-    return function multiHandleChangeDeliveryOption(_x2, _x3) {
-      return _ref3.apply(this, arguments);
+    return function multiHandleChangeDeliveryOption(_x4, _x5) {
+      return _ref4.apply(this, arguments);
     };
   }();
   var handleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(value) {
       var cartUuidArr;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
           case 0:
             cartUuidArr = openCarts.map(function (cart) {
               return cart === null || cart === void 0 ? void 0 : cart.uuid;
@@ -363,31 +426,31 @@ var MultiCheckout = function MultiCheckout(props) {
             multiHandleChangeDeliveryOption(value, cartUuidArr);
           case 2:
           case "end":
-            return _context5.stop();
+            return _context6.stop();
         }
-      }, _callee5);
+      }, _callee6);
     }));
-    return function handleChangeDeliveryOption(_x6) {
-      return _ref5.apply(this, arguments);
+    return function handleChangeDeliveryOption(_x8) {
+      return _ref6.apply(this, arguments);
     };
   }();
   var getMultiCart = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var response, _yield$response$json3, result, error;
-      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-        while (1) switch (_context6.prev = _context6.next) {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      var response, _yield$response$json4, result, error;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) switch (_context7.prev = _context7.next) {
           case 0:
-            _context6.prev = 0;
+            _context7.prev = 0;
             if (cartUuid) {
-              _context6.next = 3;
+              _context7.next = 3;
               break;
             }
-            return _context6.abrupt("return");
+            return _context7.abrupt("return");
           case 3:
             setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
               loading: true
             }));
-            _context6.next = 6;
+            _context7.next = 6;
             return fetch("".concat(ordering.root, "/cart_groups/").concat(cartUuid).concat(qParams), {
               method: 'GET',
               headers: {
@@ -398,45 +461,45 @@ var MultiCheckout = function MultiCheckout(props) {
               }
             });
           case 6:
-            response = _context6.sent;
-            _context6.next = 9;
+            response = _context7.sent;
+            _context7.next = 9;
             return response.json();
           case 9:
-            _yield$response$json3 = _context6.sent;
-            result = _yield$response$json3.result;
-            error = _yield$response$json3.error;
+            _yield$response$json4 = _context7.sent;
+            result = _yield$response$json4.result;
+            error = _yield$response$json4.error;
             setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
               loading: false,
               result: result,
               error: error
             }));
-            _context6.next = 18;
+            _context7.next = 18;
             break;
           case 15:
-            _context6.prev = 15;
-            _context6.t0 = _context6["catch"](0);
+            _context7.prev = 15;
+            _context7.t0 = _context7["catch"](0);
             setCartGroup(_objectSpread(_objectSpread({}, cartGroup), {}, {
               loading: false,
-              error: _context6.t0.message
+              error: _context7.t0.message
             }));
           case 18:
           case "end":
-            return _context6.stop();
+            return _context7.stop();
         }
-      }, _callee6, null, [[0, 15]]);
+      }, _callee7, null, [[0, 15]]);
     }));
     return function getMultiCart() {
-      return _ref6.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
   var getLoyaltyPlans = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var _result$find$accumula, _result$find, req, _yield$req$json, error, result;
-      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-        while (1) switch (_context7.prev = _context7.next) {
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
           case 0:
-            _context7.prev = 0;
-            _context7.next = 3;
+            _context8.prev = 0;
+            _context8.next = 3;
             return fetch("".concat(ordering.root, "/loyalty_plans"), {
               method: 'GET',
               headers: {
@@ -447,11 +510,11 @@ var MultiCheckout = function MultiCheckout(props) {
               }
             });
           case 3:
-            req = _context7.sent;
-            _context7.next = 6;
+            req = _context8.sent;
+            _context8.next = 6;
             return req.json();
           case 6:
-            _yield$req$json = _context7.sent;
+            _yield$req$json = _context8.sent;
             error = _yield$req$json.error;
             result = _yield$req$json.result;
             setLoyaltyPlansState(_objectSpread(_objectSpread({}, loyaltyPlansState), {}, {
@@ -461,23 +524,23 @@ var MultiCheckout = function MultiCheckout(props) {
                 return loyal.type === 'credit_point';
               })) === null || _result$find === void 0 ? void 0 : _result$find.accumulation_rate) !== null && _result$find$accumula !== void 0 ? _result$find$accumula : 0
             }));
-            _context7.next = 15;
+            _context8.next = 15;
             break;
           case 12:
-            _context7.prev = 12;
-            _context7.t0 = _context7["catch"](0);
+            _context8.prev = 12;
+            _context8.t0 = _context8["catch"](0);
             setLoyaltyPlansState(_objectSpread(_objectSpread({}, loyaltyPlansState), {}, {
               loading: false,
               result: []
             }));
           case 15:
           case "end":
-            return _context7.stop();
+            return _context8.stop();
         }
-      }, _callee7, null, [[0, 12]]);
+      }, _callee8, null, [[0, 12]]);
     }));
     return function getLoyaltyPlans() {
-      return _ref7.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
@@ -506,6 +569,7 @@ var MultiCheckout = function MultiCheckout(props) {
     deliveryOptionSelected: deliveryOptionSelected,
     instructionsOptions: instructionsOptions,
     cartGroup: cartGroup,
+    walletState: walletState,
     totalCartsFee: totalCartsFee
   })));
 };
