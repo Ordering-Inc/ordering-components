@@ -5,6 +5,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+import { useEvent } from '../../contexts/EventContext'
 
 export const SingleProductCard = (props) => {
   const {
@@ -19,6 +20,7 @@ export const SingleProductCard = (props) => {
   const [{ user, token }] = useSession()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
+  const [events] = useEvent()
 
   const [actionState, setActionState] = useState({ loading: false, error: null })
 
@@ -52,6 +54,11 @@ export const SingleProductCard = (props) => {
       if (!content.error) {
         setActionState({ ...actionState, loading: false })
         handleUpdateProducts && handleUpdateProducts(productId, { favorite: isAdd })
+        if (isAdd) {
+          events.emit('product_added_to_wishlist', product)
+        } else {
+          events.emit('product_removed_from_wishlist', product)
+        }
         showToast(ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'))
       } else {
         setActionState({

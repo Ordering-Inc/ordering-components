@@ -160,7 +160,8 @@ export const ProductForm = (props) => {
       ingredients: props.productCart?.ingredients || ingredients,
       options: props.productCart?.options || {},
       comment: props.productCart?.comment || null,
-      quantity: quantity || 1
+      quantity: quantity || 1,
+      favorite: product?.favorite
     }
     newProductCart.unitTotal = getUnitTotal(newProductCart)
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
