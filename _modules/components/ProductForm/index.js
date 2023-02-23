@@ -242,7 +242,8 @@ var ProductForm = function ProductForm(props) {
       ingredients: ((_props$productCart3 = props.productCart) === null || _props$productCart3 === void 0 ? void 0 : _props$productCart3.ingredients) || ingredients,
       options: ((_props$productCart4 = props.productCart) === null || _props$productCart4 === void 0 ? void 0 : _props$productCart4.options) || {},
       comment: ((_props$productCart5 = props.productCart) === null || _props$productCart5 === void 0 ? void 0 : _props$productCart5.comment) || null,
-      quantity: quantity || 1
+      quantity: quantity || 1,
+      favorite: product === null || product === void 0 ? void 0 : product.favorite
     });
     newProductCart.unitTotal = getUnitTotal(newProductCart);
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity;
