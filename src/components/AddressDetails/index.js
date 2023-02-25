@@ -26,6 +26,7 @@ export const AddressDetails = (props) => {
    * This must be contains an object with business location
    */
   const [location, setLocation] = useState(null)
+  const [formatUrl, setFormatUrl] = useState(null)
   const [logo, setLogo] = useState(null)
   const [ordering] = useApi()
   const businessId = props.uuid
@@ -34,7 +35,7 @@ export const AddressDetails = (props) => {
   /**
    * Method to format google url for business location
    */
-  const formatUrl = (location) => {
+  const formatUrlMethod = (location) => {
     const orderLocation = props.orderLocation || orderState?.options?.address?.location
     let businessesMarkers = ''
     if (isMultiCheckout) {
@@ -76,14 +77,19 @@ export const AddressDetails = (props) => {
         requestsState.business.cancel()
       }
     }
-  }, [businessId, isMultiCheckout])
+  }, [businessId, isMultiCheckout, props.location])
+
+  useEffect(() => {
+    if (!logo || !location) return
+    setFormatUrl(formatUrlMethod(location))
+  }, [logo, location])
 
   return (
     <>
       {UIComponent && (
         <UIComponent
           {...props}
-          googleMapsUrl={formatUrl(location)}
+          googleMapsUrl={formatUrl}
         />
       )}
     </>
