@@ -301,9 +301,8 @@ var LoginForm = function LoginForm(props) {
   (0, _react.useEffect)(function () {
     var _configs$security_rec;
     setIsReCaptchaEnable(props.isRecaptchaEnable && configs && Object.keys(configs).length > 0 && (configs === null || configs === void 0 ? void 0 : (_configs$security_rec = configs.security_recaptcha_auth) === null || _configs$security_rec === void 0 ? void 0 : _configs$security_rec.value) === '1');
-    if (useLoginOtpCellphone && !useLoginOtpEmail) {
-      setOtpType('cellphone');
-    }
+    setOtpType(!useLoginOtpEmail && useLoginOtpCellphone ? 'cellphone' : 'email');
+    setLoginTab(useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp');
   }, [configs]);
 
   /**

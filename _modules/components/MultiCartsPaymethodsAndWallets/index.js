@@ -9,7 +9,6 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _ApiContext = require("../../contexts/ApiContext");
 var _SessionContext = require("../../contexts/SessionContext");
-var _OrderContext = require("../../contexts/OrderContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -39,6 +38,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
   var UIComponent = props.UIComponent,
     openCarts = props.openCarts,
+    loyaltyPlansState = props.loyaltyPlansState,
     userId = props.userId,
     cartUuid = props.cartUuid;
   var qParams = userId ? "?user_id=".concat(userId) : '';
@@ -76,6 +76,28 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
     _useState8 = _slicedToArray(_useState7, 2),
     walletsState = _useState8[0],
     setWalletsState = _useState8[1];
+  var getRedemptionRate = function getRedemptionRate(wallet, loyaltyPlans) {
+    if (wallet.type === 'cash') return 100;
+    if (!(loyaltyPlans !== null && loyaltyPlans !== void 0 && loyaltyPlans.length)) return false;
+    var loyaltyPlan = loyaltyPlans.find(function (plan) {
+      return plan.type === wallet.type;
+    });
+    if (!loyaltyPlan) return false;
+    var loyalBusinessesIds = loyaltyPlan.businesses.map(function (b) {
+      return b.business_id;
+    });
+    var isBusinessContained = businessIds.every(function (business) {
+      return loyalBusinessesIds.includes(business);
+    });
+    var businessLoyaltyPlans = loyaltyPlan.businesses.filter(function (business) {
+      return businessIds.includes(business.business_id);
+    });
+    if (!isBusinessContained && loyaltyPlan.businesses.length) return false;
+    if (isBusinessContained && !businessLoyaltyPlans.every(function (bl) {
+      return bl.redeems;
+    })) return false;
+    return loyaltyPlan === null || loyaltyPlan === void 0 ? void 0 : loyaltyPlan.redemption_rate;
+  };
 
   /**
    * Method to get available wallets and paymethods from API
@@ -145,7 +167,7 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
    */
   var getUserWallets = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var response, _yield$response$json, error, result;
+      var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -168,15 +190,53 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
             _yield$response$json = _context2.sent;
             error = _yield$response$json.error;
             result = _yield$response$json.result;
+            resLoyalty = loyaltyPlansState !== null && loyaltyPlansState !== void 0 ? loyaltyPlansState : null;
+            if (loyaltyPlansState) {
+              _context2.next = 17;
+              break;
+            }
+            _context2.next = 13;
+            return fetch("".concat(ordering.root, "/loyalty_plans"), {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+              }
+            });
+          case 13:
+            reqLoyalty = _context2.sent;
+            _context2.next = 16;
+            return reqLoyalty.json();
+          case 16:
+            resLoyalty = _context2.sent;
+          case 17:
+            wallets = [];
+            if (!error) {
+              loyaltyPlans = resLoyalty.result;
+              wallets = result.map(function (wallet) {
+                var redemptionRate = getRedemptionRate(wallet, loyaltyPlans);
+                if (redemptionRate === false) {
+                  wallet.valid = false;
+                  wallet.redemption_rate = null;
+                } else {
+                  wallet.valid = true;
+                  wallet.redemption_rate = redemptionRate;
+                }
+                return wallet;
+              });
+            }
             setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
               loading: false,
               error: error ? result : null,
-              result: error ? null : result
+              result: error ? null : wallets,
+              loyaltyPlans: (_resLoyalty = resLoyalty) !== null && _resLoyalty !== void 0 && _resLoyalty.error ? [] : (_resLoyalty2 = resLoyalty) === null || _resLoyalty2 === void 0 ? void 0 : _resLoyalty2.result
             }));
-            _context2.next = 15;
+            _context2.next = 25;
             break;
-          case 12:
-            _context2.prev = 12;
+          case 22:
+            _context2.prev = 22;
             _context2.t0 = _context2["catch"](0);
             if (_context2.t0.constructor.name !== 'Cancel') {
               setWalletsState(_objectSpread(_objectSpread({}, walletsState), {}, {
@@ -184,11 +244,11 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
                 error: [_context2.t0.message]
               }));
             }
-          case 15:
+          case 25:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[0, 12]]);
+      }, _callee2, null, [[0, 22]]);
     }));
     return function getUserWallets() {
       return _ref2.apply(this, arguments);
