@@ -57,8 +57,8 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
     orderState = _useOrder2[0];
   var getData = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _addressFromLocalStor;
-      var requestOptions, countryCodeFromLocalStorage, addressFromLocalStorage, countryCode, response, _yield$response$json, result, error;
+      var _localOptions$address;
+      var requestOptions, countryCodeFromLocalStorage, localOptions, countryCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -79,25 +79,28 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
           case 5:
             countryCodeFromLocalStorage = _context.sent;
             _context.next = 8;
-            return strategy.getItem('options');
+            return strategy.getItem('options', true);
           case 8:
-            addressFromLocalStorage = _context.sent;
-            countryCode = countryCodeFromLocalStorage || (addressFromLocalStorage === null || addressFromLocalStorage === void 0 ? void 0 : (_addressFromLocalStor = addressFromLocalStorage.address) === null || _addressFromLocalStor === void 0 ? void 0 : _addressFromLocalStor.country_code) || null;
+            localOptions = _context.sent;
+            countryCode = countryCodeFromLocalStorage || (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.country_code);
+            console.log('countryCodeFromLocalStorage', countryCodeFromLocalStorage);
+            console.log('addressFromLocalStorage', localOptions);
             console.log('orderState', orderState);
+            console.log('countryCode', countryCode);
             if (countryCode) {
               requestOptions.headers = _objectSpread(_objectSpread({}, requestOptions.headers), {}, {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               });
             }
-            _context.prev = 12;
-            _context.next = 15;
-            return fetch("".concat(ordering.root, "/frontends/first_load"), requestOptions);
-          case 15:
-            response = _context.sent;
+            _context.prev = 15;
             _context.next = 18;
-            return response.json();
+            return fetch("".concat(ordering.root, "/frontends/first_load"), requestOptions);
           case 18:
+            response = _context.sent;
+            _context.next = 21;
+            return response.json();
+          case 21:
             _yield$response$json = _context.sent;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
@@ -106,20 +109,20 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
               result: error ? null : result,
               error: error ? result : null
             }));
-            _context.next = 27;
+            _context.next = 30;
             break;
-          case 24:
-            _context.prev = 24;
-            _context.t0 = _context["catch"](12);
+          case 27:
+            _context.prev = 27;
+            _context.t0 = _context["catch"](15);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: _context.t0
             }));
-          case 27:
+          case 30:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[12, 24]]);
+      }, _callee, null, [[15, 27]]);
     }));
     return function getData() {
       return _ref2.apply(this, arguments);

@@ -31,9 +31,12 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
       headers: { 'X-App-X': settings.appId }
     }
     const countryCodeFromLocalStorage = await strategy.getItem('country-code')
-    const addressFromLocalStorage = await strategy.getItem('options')
-    const countryCode = countryCodeFromLocalStorage || addressFromLocalStorage?.address?.country_code || null
+    const localOptions = await strategy.getItem('options', true)
+    const countryCode = countryCodeFromLocalStorage || localOptions?.address?.country_code
+    console.log('countryCodeFromLocalStorage', countryCodeFromLocalStorage)
+    console.log('addressFromLocalStorage', localOptions)
     console.log('orderState', orderState)
+    console.log('countryCode', countryCode)
     if (countryCode) {
       requestOptions.headers = {
         ...requestOptions.headers,
