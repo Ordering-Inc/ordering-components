@@ -45,29 +45,28 @@ export const Analytics = (props) => {
   }, [trackId])
 
   const sha256 = (message) => {
-    return new Promise(function(resolve, reject){
+    return new Promise(function (resolve, reject) {
       // encode as UTF-8
       const msgBuffer = new TextEncoder().encode(message);
       // hash the message
-      crypto.subtle.digest('SHA-256', msgBuffer).then(function(res){
+      crypto.subtle.digest('SHA-256', msgBuffer).then(function (res) {
         const hashBuffer = res;
         // convert ArrayBuffer to Array
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         // convert bytes to hex string
         const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
-        if (hashHex){
+        if (hashHex) {
           resolve(hashHex);
         } else {
           reject('error parsing ' + message + ' to hash')
         }
-      });
-    });
+      })
+    })
   }
 
   const isGeoActive = () => {
     return new Promise((resolve, reject) =>
       navigator.permissions ?
-
         // Permission API is implemented
         navigator.permissions.query({
           name: 'geolocation'
@@ -132,7 +131,8 @@ export const Analytics = (props) => {
           }
         }
       };
-      window.dataLayer.push(digitalData);
+      console.log('evPageView', digitalData)
+      window.dataLayer.push(digitalData)
     }
   }
   const handleClickProduct = (product, productPosition) => {
@@ -165,6 +165,7 @@ export const Analytics = (props) => {
 				},
 				event: "evProductClick",
 			};
+      console.log('evProductClick', digitalData)
       window.dataLayer.push(digitalData)
 
       const dlAnalytics = {
@@ -184,7 +185,8 @@ export const Analytics = (props) => {
         },
         event: "evProductDetail",
       };
-      dataLayer.push(dlAnalytics);
+      console.log('evProductDetail', dlAnalytics)
+      window.dataLayer.push(dlAnalytics)
     }
   }
   const handleProductAdded = (product) => {
@@ -216,6 +218,7 @@ export const Analytics = (props) => {
         },
         event: "evAddToCart",
       };
+      console.log('evAddToCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -240,7 +243,8 @@ export const Analytics = (props) => {
           event: "evLogIn",
         };
       }
-      window.dataLayer.push(digitalData);
+      console.log('evLogIn', digitalData)
+      window.dataLayer.push(digitalData)
     }
   }
   const handleOrderPlaced = (order, orderD) => {
@@ -255,12 +259,12 @@ export const Analytics = (props) => {
     }
     if (googleTagManager) {
       let analyticsPaymethod = null;
-      if (orderD.paymethod_id === 33 || orderD.paymethod_id === 2){
-        analyticsPaymethod = 'Tarjeta';
+      if (orderD.paymethod_id === 33 || orderD.paymethod_id === 2) {
+        analyticsPaymethod = 'Tarjeta'
       } else if (orderD.paymethod_id === 36) {
-        analyticsPaymethod = 'Wow+';
+        analyticsPaymethod = 'Wow+'
       } else {
-        analyticsPaymethod = 'Efectivo';
+        analyticsPaymethod = 'Efectivo'
       }
       const productFormated = orderD.products.map((product) => {
             return {
@@ -293,6 +297,7 @@ export const Analytics = (props) => {
         },
         event: "evPurchase",
       };
+      console.log('evPurchase', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -304,6 +309,7 @@ export const Analytics = (props) => {
         error: 'NA',
         event: "evSignUp",
       };
+      console.log('evSignUp', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -326,6 +332,7 @@ export const Analytics = (props) => {
         },
         event: "evRemoveFromCart",
       };
+      console.log('evRemoveFromCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -334,7 +341,8 @@ export const Analytics = (props) => {
       const dlAnalytics = {
         restaurant: formatForAnalytics(storeData?.params?.store),
         event: "evClickRestaurant",
-      };
+      }
+      console.log('evClickRestaurant', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -350,6 +358,7 @@ export const Analytics = (props) => {
         },
         event: "evCheckout",
       };
+      console.log('evCheckout', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -374,15 +383,17 @@ export const Analytics = (props) => {
           event: "evDirectionActions"
         }
       }
-      dataLayer.push(dlAnalytics);
+      console.log('evDirectionActions', dlAnalytics)
+      window.dataLayer.push(dlAnalytics);
     }
   }
   const handleChangeOrderType = (orderTypeData) => {
     if (googleTagManager) {
       const dlAnalytics = {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
-        event: "evClickOrderType",
-      };
+        event: 'evClickOrderType'
+      }
+      console.log('evClickOrderType', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -403,6 +414,7 @@ export const Analytics = (props) => {
        error: data,
        event: "evGeneralError",
       };
+      console.log('evGeneralError', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -412,6 +424,7 @@ export const Analytics = (props) => {
 				socialNetwork: data.social,
 				event: "evClickSocialNetwork",
 			};
+      console.log('evClickSocialNetwork', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -443,8 +456,8 @@ export const Analytics = (props) => {
             },
             event: "evProductImpression",
           };
-
-          dataLayer.push(dlAnalytics);
+          console.log('evProductImpression', dlAnalytics)
+          window.dataLayer.push(dlAnalytics)
           impressions = impressions.slice(15)
         }
       }
@@ -471,7 +484,8 @@ export const Analytics = (props) => {
           },
           event: "evProductImpression",
         };
-        dataLayer.push(dlAnalytics);
+        console.log('evProductImpression', dlAnalytics)
+        window.dataLayer.push(dlAnalytics)
       }
     }
   }

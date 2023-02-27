@@ -169,6 +169,7 @@ var Analytics = function Analytics(props) {
           }
         }
       };
+      console.log('evPageView', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -204,6 +205,7 @@ var Analytics = function Analytics(props) {
         },
         event: "evProductClick"
       };
+      console.log('evProductClick', digitalData);
       window.dataLayer.push(digitalData);
       var dlAnalytics = {
         'flow': 'MarketPlace ' + slug,
@@ -222,7 +224,8 @@ var Analytics = function Analytics(props) {
         },
         event: "evProductDetail"
       };
-      dataLayer.push(dlAnalytics);
+      console.log('evProductDetail', dlAnalytics);
+      window.dataLayer.push(dlAnalytics);
     }
   };
 
@@ -256,6 +259,7 @@ var Analytics = function Analytics(props) {
         },
         event: "evAddToCart"
       };
+      console.log('evAddToCart', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -284,6 +288,7 @@ var Analytics = function Analytics(props) {
         };
       }
 
+      console.log('evLogIn', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -349,6 +354,7 @@ var Analytics = function Analytics(props) {
         },
         event: "evPurchase"
       };
+      console.log('evPurchase', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -361,6 +367,7 @@ var Analytics = function Analytics(props) {
         error: 'NA',
         event: "evSignUp"
       };
+      console.log('evSignUp', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -384,6 +391,7 @@ var Analytics = function Analytics(props) {
         },
         event: "evRemoveFromCart"
       };
+      console.log('evRemoveFromCart', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -398,6 +406,7 @@ var Analytics = function Analytics(props) {
         restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params3 = storeData.params) === null || _storeData$params3 === void 0 ? void 0 : _storeData$params3.store),
         event: "evClickRestaurant"
       };
+      console.log('evClickRestaurant', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -416,6 +425,7 @@ var Analytics = function Analytics(props) {
         },
         event: "evCheckout"
       };
+      console.log('evCheckout', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -444,7 +454,8 @@ var Analytics = function Analytics(props) {
         };
       }
 
-      dataLayer.push(dlAnalytics);
+      console.log('evDirectionActions', dlAnalytics);
+      window.dataLayer.push(dlAnalytics);
     }
   };
 
@@ -452,8 +463,9 @@ var Analytics = function Analytics(props) {
     if (googleTagManager) {
       var dlAnalytics = {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
-        event: "evClickOrderType"
+        event: 'evClickOrderType'
       };
+      console.log('evClickOrderType', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -478,6 +490,7 @@ var Analytics = function Analytics(props) {
         error: data,
         event: "evGeneralError"
       };
+      console.log('evGeneralError', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -488,6 +501,7 @@ var Analytics = function Analytics(props) {
         socialNetwork: data.social,
         event: "evClickSocialNetwork"
       };
+      console.log('evClickSocialNetwork', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -523,7 +537,8 @@ var Analytics = function Analytics(props) {
             },
             event: "evProductImpression"
           };
-          dataLayer.push(dlAnalytics);
+          console.log('evProductImpression', dlAnalytics);
+          window.dataLayer.push(dlAnalytics);
           impressions = impressions.slice(15);
         }
       }
@@ -552,7 +567,8 @@ var Analytics = function Analytics(props) {
           },
           event: "evProductImpression"
         };
-        dataLayer.push(_dlAnalytics);
+        console.log('evProductImpression', _dlAnalytics);
+        window.dataLayer.push(_dlAnalytics);
       }
     }
   };
