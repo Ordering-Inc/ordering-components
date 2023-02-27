@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useApi } from '../ApiContext'
 import { useWebsocket } from '../WebsocketContext'
+import { useOrder } from '../OrderContext'
 
 /**
  * Create OptimizationLoadContext
@@ -21,6 +22,7 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
 
   const [ordering] = useApi()
   const socket = useWebsocket()
+  const [orderState] = useOrder()
 
   const getData = async () => {
     if (!settings?.useOptimizeLoad) return
@@ -29,11 +31,14 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
       headers: { 'X-App-X': settings.appId }
     }
     const countryCodeFromLocalStorage = await strategy.getItem('country-code')
+    const countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== orderState?.options?.address?.country_code
+      ? countryCodeFromLocalStorage
+      : orderState?.options?.address?.country_code
 
-    if (countryCodeFromLocalStorage) {
+    if (countryCode) {
       requestOptions.headers = {
         'X-Socket-Id-X': socket?.getId(),
-        'X-Country-Code-X': countryCodeFromLocalStorage
+        'X-Country-Code-X': countryCode
       }
     }
     try {
