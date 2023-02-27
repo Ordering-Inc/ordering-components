@@ -57,8 +57,8 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
     orderState = _useOrder2[0];
   var getData = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _orderState$options, _orderState$options$a, _orderState$options2, _orderState$options2$;
-      var requestOptions, countryCodeFromLocalStorage, countryCode, response, _yield$response$json, result, error;
+      var _addressFromLocalStor;
+      var requestOptions, countryCodeFromLocalStorage, addressFromLocalStorage, countryCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -78,23 +78,26 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
             return strategy.getItem('country-code');
           case 5:
             countryCodeFromLocalStorage = _context.sent;
-            countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== (orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : _orderState$options$a.country_code) ? countryCodeFromLocalStorage : orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : _orderState$options2$.country_code;
-            console.log('countryCode', countryCode);
+            _context.next = 8;
+            return strategy.getItem('options');
+          case 8:
+            addressFromLocalStorage = _context.sent;
+            countryCode = countryCodeFromLocalStorage || (addressFromLocalStorage === null || addressFromLocalStorage === void 0 ? void 0 : (_addressFromLocalStor = addressFromLocalStorage.address) === null || _addressFromLocalStor === void 0 ? void 0 : _addressFromLocalStor.country_code) || null;
+            console.log('orderState', orderState);
             if (countryCode) {
               requestOptions.headers = _objectSpread(_objectSpread({}, requestOptions.headers), {}, {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
               });
             }
-            console.log('requestOptions', requestOptions);
-            _context.prev = 10;
-            _context.next = 13;
+            _context.prev = 12;
+            _context.next = 15;
             return fetch("".concat(ordering.root, "/frontends/first_load"), requestOptions);
-          case 13:
+          case 15:
             response = _context.sent;
-            _context.next = 16;
+            _context.next = 18;
             return response.json();
-          case 16:
+          case 18:
             _yield$response$json = _context.sent;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
@@ -103,20 +106,20 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
               result: error ? null : result,
               error: error ? result : null
             }));
-            _context.next = 25;
+            _context.next = 27;
             break;
-          case 22:
-            _context.prev = 22;
-            _context.t0 = _context["catch"](10);
+          case 24:
+            _context.prev = 24;
+            _context.t0 = _context["catch"](12);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: _context.t0
             }));
-          case 25:
+          case 27:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[10, 22]]);
+      }, _callee, null, [[12, 24]]);
     }));
     return function getData() {
       return _ref2.apply(this, arguments);

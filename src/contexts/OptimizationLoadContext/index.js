@@ -31,10 +31,9 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
       headers: { 'X-App-X': settings.appId }
     }
     const countryCodeFromLocalStorage = await strategy.getItem('country-code')
-    const countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== orderState?.options?.address?.country_code
-      ? countryCodeFromLocalStorage
-      : orderState?.options?.address?.country_code
-    console.log('countryCode', countryCode)
+    const addressFromLocalStorage = await strategy.getItem('options')
+    const countryCode = countryCodeFromLocalStorage || addressFromLocalStorage?.address?.country_code || null
+    console.log('orderState', orderState)
     if (countryCode) {
       requestOptions.headers = {
         ...requestOptions.headers,
@@ -42,7 +41,7 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
         'X-Country-Code-X': countryCode
       }
     }
-    console.log('requestOptions', requestOptions)
+
     try {
       const response = await fetch(`${ordering.root}/frontends/first_load`, requestOptions)
       const { result, error } = await response.json()
