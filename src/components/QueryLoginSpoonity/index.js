@@ -31,7 +31,7 @@ export const QueryLoginSpoonity = (props) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          access_token: token
+          spoonity_token: token
         })
       }
       const response = await fetch(`${ordering.root}/auth/spoonity`, requestOptions)
