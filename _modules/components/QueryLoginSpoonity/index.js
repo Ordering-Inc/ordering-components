@@ -10,6 +10,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../contexts/SessionContext");
 var _ApiContext = require("../../contexts/ApiContext");
 var _EventContext = require("../../contexts/EventContext");
+var _OrderContext = require("../../contexts/OrderContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -39,10 +40,16 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
     ordering = _useApi2[0];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 2),
+    auth = _useSession2[0].auth,
     login = _useSession2[1].login;
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
+  var _useOrder = (0, _OrderContext.useOrder)(),
+    _useOrder2 = _slicedToArray(_useOrder, 2),
+    setStateValues = _useOrder2[1].setStateValues;
+  var querylat;
+  var querylng;
   var _useState = (0, _react.useState)({
       loading: true,
       user: {},
@@ -51,7 +58,11 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
     _useState2 = _slicedToArray(_useState, 2),
     userState = _useState2[0],
     setUserState = _useState2[1];
-
+  if (location.search) {
+    var query = new URLSearchParams(location.search);
+    querylat = query.get('lat');
+    querylng = query.get('lng');
+  }
   /**
    * Method to get the user from token
    */
@@ -71,7 +82,7 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
                 'Content-Type': 'application/json'
               },
               body: JSON.stringify({
-                access_token: token
+                spoonity_token: token
               })
             };
             _context.next = 5;
@@ -87,8 +98,12 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
             if (!error) {
               login({
                 user: result,
-                token: result === null || result === void 0 ? void 0 : (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.token
+                token: result === null || result === void 0 ? void 0 : (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loading: false,
+                error: result
+              }));
             } else {
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: false,
@@ -126,10 +141,25 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
     });
   };
   (0, _react.useEffect)(function () {
-    if (token) {
+    if (token && !auth) {
       handleGetUser();
     }
-  }, [token]);
+  }, [token, auth]);
+  (0, _react.useEffect)(function () {
+    if (auth) {
+      if (querylat && querylng) {
+        setStateValues({
+          location: {
+            lat: querylat,
+            lng: querylng
+          }
+        });
+      }
+      events.emit('go_to_page', {
+        page: 'search'
+      });
+    }
+  }, [auth]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     userState: userState
   })));
