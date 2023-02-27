@@ -136,7 +136,8 @@ export const ProductForm = (props) => {
       ingredients: props.productCart?.ingredients || ingredients,
       options: props.productCart?.options || {},
       comment: props.productCart?.comment || null,
-      quantity: props.productCart?.quantity || 1
+      quantity: props.productCart?.quantity || 1,
+      integration_id: props.product.integration_id || null
     }
     newProductCart.unitTotal = getUnitTotal(newProductCart)
     newProductCart.total = newProductCart.unitTotal * newProductCart.quantity
