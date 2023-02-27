@@ -39,7 +39,7 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
     <OrderingContext.Provider>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, restOfSettings)}>
-          <OptimizationLoadProvider settings={Object.assign(settings.api, restOfSettings)}>
+          <OptimizationLoadProvider settings={Object.assign(settings.api, restOfSettings)} strategy={webStrategy}>
             <LanguageProvider strategy={webStrategy}>
               <ConfigProvider strategy={webStrategy}>
                 <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useApi } from '../ApiContext'
+import { useWebsocket } from '../WebsocketContext'
 
 /**
  * Create OptimizationLoadContext
@@ -11,7 +12,7 @@ export const OptimizationLoadContext = createContext()
  * Api provider to manage api request
  * @param {props} props
  */
-export const OptimizationLoadProvider = ({ settings, children }) => {
+export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
   const [state, setState] = useState({
     loading: settings?.useOptimizeLoad,
     result: null,
@@ -19,12 +20,21 @@ export const OptimizationLoadProvider = ({ settings, children }) => {
   })
 
   const [ordering] = useApi()
+  const socket = useWebsocket()
 
   const getData = async () => {
     if (!settings?.useOptimizeLoad) return
     const requestOptions = {
       method: 'GET',
       headers: { 'X-App-X': settings.appId }
+    }
+    const countryCodeFromLocalStorage = await strategy.getItem('country-code')
+
+    if (countryCodeFromLocalStorage) {
+      requestOptions.headers = {
+        'X-Socket-Id-X': socket?.getId(),
+        'X-Country-Code-X': countryCodeFromLocalStorage
+      }
     }
     try {
       const response = await fetch(`${ordering.root}/frontends/first_load`, requestOptions)
