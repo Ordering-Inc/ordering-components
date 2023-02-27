@@ -55,8 +55,12 @@ var AddressDetails = function AddressDetails(props) {
     setLocation = _useState2[1];
   var _useState3 = (0, _react.useState)(null),
     _useState4 = _slicedToArray(_useState3, 2),
-    logo = _useState4[0],
-    setLogo = _useState4[1];
+    formatUrl = _useState4[0],
+    setFormatUrl = _useState4[1];
+  var _useState5 = (0, _react.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    logo = _useState6[0],
+    setLogo = _useState6[1];
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -66,7 +70,7 @@ var AddressDetails = function AddressDetails(props) {
   /**
    * Method to format google url for business location
    */
-  var formatUrl = function formatUrl(location) {
+  var formatUrlMethod = function formatUrlMethod(location) {
     var _orderState$options, _orderState$options$a, _mapConfigs$mapSize, _mapConfigs$mapSize2, _mapConfigs$mapSize3, _mapConfigs$mapSize4, _mapConfigs$mapSize5, _mapConfigs$mapSize6;
     var orderLocation = props.orderLocation || (orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : _orderState$options$a.location);
     var businessesMarkers = '';
@@ -128,9 +132,13 @@ var AddressDetails = function AddressDetails(props) {
         requestsState.business.cancel();
       }
     };
-  }, [businessId, isMultiCheckout]);
+  }, [businessId, isMultiCheckout, props.location]);
+  (0, _react.useEffect)(function () {
+    if (!logo || !location) return;
+    setFormatUrl(formatUrlMethod(location));
+  }, [logo, location]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    googleMapsUrl: formatUrl(location)
+    googleMapsUrl: formatUrl
   })));
 };
 exports.AddressDetails = AddressDetails;
