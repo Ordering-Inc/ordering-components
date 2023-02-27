@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useOrder } from '../../contexts/OrderContext'
 
 /**
  * Component to manage query login behavior without UI component
@@ -14,11 +15,18 @@ export const QueryLoginSpoonity = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [, { login }] = useSession()
+  const [{ auth }, { login }] = useSession()
   const [events] = useEvent()
-
+  const [, { setStateValues }] = useOrder()
+  let querylat
+  let querylng
   const [userState, setUserState] = useState({ loading: true, user: {}, error: null })
 
+  if (location.search) {
+    const query = new URLSearchParams(location.search)
+    querylat = query.get('lat')
+    querylng = query.get('lng')
+  }
   /**
    * Method to get the user from token
    */
@@ -39,7 +47,12 @@ export const QueryLoginSpoonity = (props) => {
       if (!error) {
         login({
           user: result,
-          token: result?.session?.token
+          token: result?.session?.access_token
+        })
+        setUserState({
+          ...userState,
+          loading: false,
+          error: result
         })
       } else {
         setUserState({
@@ -67,10 +80,19 @@ export const QueryLoginSpoonity = (props) => {
   }
 
   useEffect(() => {
-    if (token) {
+    if (token && !auth) {
       handleGetUser()
     }
-  }, [token])
+  }, [token, auth])
+
+  useEffect(() => {
+    if (auth) {
+      if (querylat && querylng) {
+        setStateValues({ location: { lat: querylat, lng: querylng } })
+      }
+      events.emit('go_to_page', { page: 'search' })
+    }
+  }, [auth])
 
   return (
     <>
