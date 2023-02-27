@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import { useApi } from '../ApiContext'
+import { useConfig } from '../ConfigContext'
 
 /**
  * Create LanguageContext
@@ -12,11 +13,12 @@ export const LanguageContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const LanguageProvider = ({ children, strategy }) => {
+export const LanguageProvider = ({ settings, children, strategy }) => {
   const [state, setState] = useState({
     loading: true,
     dictionary: {}
   })
+  const [, { refreshConfigs }] = useConfig()
 
   /**
    * Load language from localstorage and set state or load default language
@@ -44,6 +46,11 @@ export const LanguageProvider = ({ children, strategy }) => {
       })
     } catch (err) {
       setState({ ...state, loading: false })
+    }
+    if (settings?.useOptimizeLoad) {
+      const localOptions = await strategy.getItem('options', true)
+      const countryCode = localOptions?.address?.country_code || null
+      refreshConfigs(countryCode)
     }
   }
 
