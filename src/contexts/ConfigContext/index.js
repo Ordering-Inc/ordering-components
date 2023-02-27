@@ -24,7 +24,7 @@ export const ConfigProvider = ({ children, strategy }) => {
   const [languageState] = useLanguage()
   const [ordering] = useApi()
   const [events] = useEvent()
-  const [optimizationLoad] = useOptimizationLoad()
+  const [optimizationLoad, { handleUpdateOptimizationConfigs }] = useOptimizationLoad()
 
   const customConfigs = {
     max_days_preorder: {
@@ -126,6 +126,7 @@ export const ConfigProvider = ({ children, strategy }) => {
         const { content } = await ordering.configs().asDictionary().get(options)
         error = content.error
         result = content.result
+        handleUpdateOptimizationConfigs(result)
       }
       let data = null
       try {
@@ -178,8 +179,6 @@ export const ConfigProvider = ({ children, strategy }) => {
         ...optimizationLoad.result?.features
       }
     } : null
-    console.log('languageState', languageState)
-    console.log('_configs', _configs)
     refreshConfigs(null, _configs)
   }, [languageState, optimizationLoad])
 

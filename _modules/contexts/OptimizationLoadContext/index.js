@@ -117,11 +117,23 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
+  var handleUpdateOptimizationConfigs = function handleUpdateOptimizationConfigs(configs) {
+    var _state$result;
+    setState(_objectSpread(_objectSpread({}, state), {}, {
+      result: _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : state.result), {}, {
+        configs: _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : (_state$result = state.result) === null || _state$result === void 0 ? void 0 : _state$result.configs), configs)
+      })
+    }));
+  };
   (0, _react.useEffect)(function () {
     getData();
   }, [settings === null || settings === void 0 ? void 0 : settings.useOptimizeLoad]);
+  var functions = {
+    getData: getData,
+    handleUpdateOptimizationConfigs: handleUpdateOptimizationConfigs
+  };
   return /*#__PURE__*/_react.default.createElement(OptimizationLoadContext.Provider, {
-    value: [state]
+    value: [state, functions]
   }, children);
 };
 

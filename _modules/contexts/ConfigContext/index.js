@@ -63,8 +63,9 @@ var ConfigProvider = function ConfigProvider(_ref) {
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
   var _useOptimizationLoad = (0, _OptimizationLoadContext.useOptimizationLoad)(),
-    _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 1),
-    optimizationLoad = _useOptimizationLoad2[0];
+    _useOptimizationLoad2 = _slicedToArray(_useOptimizationLoad, 2),
+    optimizationLoad = _useOptimizationLoad2[0],
+    handleUpdateOptimizationConfigs = _useOptimizationLoad2[1].handleUpdateOptimizationConfigs;
   var customConfigs = {
     max_days_preorder: {
       key: 'max_days_preorder',
@@ -207,7 +208,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
             error = (_configs$error = configs === null || configs === void 0 ? void 0 : configs.error) !== null && _configs$error !== void 0 ? _configs$error : null;
             result = (_configs$result = configs === null || configs === void 0 ? void 0 : configs.result) !== null && _configs$result !== void 0 ? _configs$result : null;
             if (configs) {
-              _context.next = 22;
+              _context.next = 23;
               break;
             }
             _context.next = 18;
@@ -217,24 +218,25 @@ var ConfigProvider = function ConfigProvider(_ref) {
             content = _yield$ordering$confi.content;
             error = content.error;
             result = content.result;
-          case 22:
+            handleUpdateOptimizationConfigs(result);
+          case 23:
             data = null;
-            _context.prev = 23;
-            _context.next = 26;
+            _context.prev = 24;
+            _context.next = 27;
             return fetch('https://ipapi.co/json/');
-          case 26:
+          case 27:
             response = _context.sent;
-            _context.next = 29;
+            _context.next = 30;
             return response.json();
-          case 29:
+          case 30:
             data = _context.sent;
-            _context.next = 35;
+            _context.next = 36;
             break;
-          case 32:
-            _context.prev = 32;
-            _context.t1 = _context["catch"](23);
+          case 33:
+            _context.prev = 33;
+            _context.t1 = _context["catch"](24);
             data = null;
-          case 35:
+          case 36:
             conditionalConfigs = {
               dates_moment_format: {
                 key: 'dates_moment_format',
@@ -255,19 +257,19 @@ var ConfigProvider = function ConfigProvider(_ref) {
               loading: false,
               configs: error ? {} : configsResult
             }));
-            _context.next = 43;
+            _context.next = 44;
             break;
-          case 40:
-            _context.prev = 40;
+          case 41:
+            _context.prev = 41;
             _context.t2 = _context["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-          case 43:
+          case 44:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 40], [23, 32]]);
+      }, _callee, null, [[1, 41], [24, 33]]);
     }));
     return function refreshConfigs(_x2) {
       return _ref2.apply(this, arguments);
@@ -283,8 +285,6 @@ var ConfigProvider = function ConfigProvider(_ref) {
       error: optimizationLoad.error,
       result: _objectSpread(_objectSpread({}, (_optimizationLoad$res = optimizationLoad.result) === null || _optimizationLoad$res === void 0 ? void 0 : _optimizationLoad$res.configs), (_optimizationLoad$res2 = optimizationLoad.result) === null || _optimizationLoad$res2 === void 0 ? void 0 : _optimizationLoad$res2.features)
     } : null;
-    console.log('languageState', languageState);
-    console.log('_configs', _configs);
     refreshConfigs(null, _configs);
   }, [languageState, optimizationLoad]);
   (0, _react.useEffect)(function () {

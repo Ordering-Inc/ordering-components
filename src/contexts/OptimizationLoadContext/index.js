@@ -55,12 +55,30 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
     }
   }
 
+  const handleUpdateOptimizationConfigs = (configs) => {
+    setState({
+      ...state,
+      result: {
+        ...state?.result,
+        configs: {
+          ...state?.result?.configs,
+          ...configs
+        }
+      }
+    })
+  }
+
   useEffect(() => {
     getData()
   }, [settings?.useOptimizeLoad])
 
+  const functions = {
+    getData,
+    handleUpdateOptimizationConfigs
+  }
+
   return (
-    <OptimizationLoadContext.Provider value={[state]}>
+    <OptimizationLoadContext.Provider value={[state, functions]}>
       {children}
     </OptimizationLoadContext.Provider>
   )
