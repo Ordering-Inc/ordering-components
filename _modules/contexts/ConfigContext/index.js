@@ -283,6 +283,8 @@ var ConfigProvider = function ConfigProvider(_ref) {
       error: optimizationLoad.error,
       result: _objectSpread(_objectSpread({}, (_optimizationLoad$res = optimizationLoad.result) === null || _optimizationLoad$res === void 0 ? void 0 : _optimizationLoad$res.configs), (_optimizationLoad$res2 = optimizationLoad.result) === null || _optimizationLoad$res2 === void 0 ? void 0 : _optimizationLoad$res2.features)
     } : null;
+    console.log('languageState', languageState);
+    console.log('_configs', _configs);
     refreshConfigs(null, _configs);
   }, [languageState, optimizationLoad]);
   (0, _react.useEffect)(function () {

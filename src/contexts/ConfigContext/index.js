@@ -178,6 +178,8 @@ export const ConfigProvider = ({ children, strategy }) => {
         ...optimizationLoad.result?.features
       }
     } : null
+    console.log('languageState', languageState)
+    console.log('_configs', _configs)
     refreshConfigs(null, _configs)
   }, [languageState, optimizationLoad])
 
