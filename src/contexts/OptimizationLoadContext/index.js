@@ -34,13 +34,15 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
     const countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== orderState?.options?.address?.country_code
       ? countryCodeFromLocalStorage
       : orderState?.options?.address?.country_code
-
+    console.log('countryCode', countryCode)
     if (countryCode) {
       requestOptions.headers = {
+        ...requestOptions.headers,
         'X-Socket-Id-X': socket?.getId(),
         'X-Country-Code-X': countryCode
       }
     }
+    console.log('requestOptions', requestOptions)
     try {
       const response = await fetch(`${ordering.root}/frontends/first_load`, requestOptions)
       const { result, error } = await response.json()

@@ -79,20 +79,22 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
           case 5:
             countryCodeFromLocalStorage = _context.sent;
             countryCode = countryCodeFromLocalStorage && countryCodeFromLocalStorage !== (orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : _orderState$options$a.country_code) ? countryCodeFromLocalStorage : orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : _orderState$options2$.country_code;
+            console.log('countryCode', countryCode);
             if (countryCode) {
-              requestOptions.headers = {
+              requestOptions.headers = _objectSpread(_objectSpread({}, requestOptions.headers), {}, {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
                 'X-Country-Code-X': countryCode
-              };
+              });
             }
-            _context.prev = 8;
-            _context.next = 11;
+            console.log('requestOptions', requestOptions);
+            _context.prev = 10;
+            _context.next = 13;
             return fetch("".concat(ordering.root, "/frontends/first_load"), requestOptions);
-          case 11:
+          case 13:
             response = _context.sent;
-            _context.next = 14;
+            _context.next = 16;
             return response.json();
-          case 14:
+          case 16:
             _yield$response$json = _context.sent;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
@@ -101,20 +103,20 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
               result: error ? null : result,
               error: error ? result : null
             }));
-            _context.next = 23;
+            _context.next = 25;
             break;
-          case 20:
-            _context.prev = 20;
-            _context.t0 = _context["catch"](8);
+          case 22:
+            _context.prev = 22;
+            _context.t0 = _context["catch"](10);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: _context.t0
             }));
-          case 23:
+          case 25:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[8, 20]]);
+      }, _callee, null, [[10, 22]]);
     }));
     return function getData() {
       return _ref2.apply(this, arguments);
