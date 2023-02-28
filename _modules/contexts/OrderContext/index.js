@@ -679,6 +679,9 @@ var OrderProvider = function OrderProvider(_ref) {
             if (!error) {
               state.carts["businessId:".concat(result.business_id)] = result;
               events.emit('cart_product_added', product, result);
+              if (product !== null && product !== void 0 && product.favorite) {
+                events.emit('wishlist_product_added_to_cart', product, result);
+              }
               events.emit('cart_updated', result);
               events.emit('product_added', product);
               isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name));
