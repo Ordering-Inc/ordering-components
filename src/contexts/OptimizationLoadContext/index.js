@@ -55,14 +55,16 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
     }
   }
 
-  const handleUpdateOptimizationConfigs = (configs) => {
+  const handleUpdateOptimizationState = (key, data) => {
+    const keysAllowed = ['configs', 'features', 'site', 'theme', 'validation_fields']
+    if (!keysAllowed.includes(key)) return
     setState({
       ...state,
       result: {
         ...state?.result,
-        configs: {
-          ...state?.result?.configs,
-          ...configs
+        [key]: {
+          ...state?.result?.[key],
+          ...data
         }
       }
     })
@@ -74,7 +76,7 @@ export const OptimizationLoadProvider = ({ settings, children, strategy }) => {
 
   const functions = {
     getData,
-    handleUpdateOptimizationConfigs
+    handleUpdateOptimizationState
   }
 
   return (
