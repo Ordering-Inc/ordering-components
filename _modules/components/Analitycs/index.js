@@ -113,7 +113,7 @@ var Analytics = function Analytics(props) {
         name: 'geolocation'
       }).then(function (permission) {
         return (// is geolocation granted?
-          permission.state === "granted" ? resolve(true) : resolve(false)
+          permission.state === 'granted' ? resolve(true) : resolve(false)
         );
       }) : // Permission API was not implemented
       reject(false);
@@ -121,7 +121,7 @@ var Analytics = function Analytics(props) {
   };
 
   var formatForAnalytics = function formatForAnalytics(str, limit, replaceSpace) {
-    var formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    var formattedStr = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
     if (limit) formattedStr = formattedStr.substr(0, limit);
     return formattedStr;
@@ -142,34 +142,34 @@ var Analytics = function Analytics(props) {
       var userCustomer = JSON.parse(window.localStorage.getItem('user'));
       var language = JSON.parse(window.localStorage.getItem('language'));
       var digitalData = {
-        event: "evPageView",
-        version: "1.0",
+        event: 'evPageView',
+        version: '1.0',
         page: {
           pageInfo: {
-            hostName: window.location.protocol + "//" + window.location.hostname + "/",
+            hostName: window.location.protocol + '//' + window.location.hostname + '/',
             currentURL: window.location.href
           }
         },
         user: {
           profile: {
-            statusLogged: (userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id) > 0 ? "Logged" : "NotLogged",
-            languajeUser: language ? language.code : "null",
-            isGeoActive: isGeoActive() ? "Yes" : "No",
+            statusLogged: (userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id) > 0 ? 'Logged' : 'NotLogged',
+            languajeUser: language ? language.code : 'null',
+            isGeoActive: isGeoActive() ? 'Yes' : 'No',
             profileInfo: (userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.id) > 0 ? {
-              segment_user_id: userCustomer !== null && userCustomer !== void 0 && userCustomer.wow_rewards_user_id ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.wow_rewards_user_id : "NA",
+              segment_user_id: userCustomer !== null && userCustomer !== void 0 && userCustomer.wow_rewards_user_id ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.wow_rewards_user_id : 'NA',
               email: sha256(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.email),
-              zipCode: userCustomer !== null && userCustomer !== void 0 && userCustomer.zipcode ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.zipcode : "null",
+              zipCode: userCustomer !== null && userCustomer !== void 0 && userCustomer.zipcode ? userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.zipcode : 'null',
               city: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.locality ? formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.locality, 40) : 'NA' : 'NA',
               municipio: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.administrative_area_level_3 ? formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.administrative_area_level_3, 40) : 'NA' : 'NA',
               colonia: userCustomer ? userCustomer !== null && userCustomer !== void 0 && userCustomer.sublocality ? formatForAnalytics(userCustomer === null || userCustomer === void 0 ? void 0 : userCustomer.sublocality, 40) : 'NA' : 'NA'
-            } : "NA",
+            } : 'NA',
             social: {
               network: 'NA'
             }
           }
         }
-      };
-      console.log('evPageView', digitalData);
+      }; // console.log('evPageView', digitalData)
+
       window.dataLayer.push(digitalData);
     }
   };
@@ -203,9 +203,9 @@ var Analytics = function Analytics(props) {
             }]
           }
         },
-        event: "evProductClick"
-      };
-      console.log('evProductClick', digitalData);
+        event: 'evProductClick'
+      }; // console.log('evProductClick', digitalData)
+
       window.dataLayer.push(digitalData);
       var dlAnalytics = {
         'flow': 'MarketPlace ' + slug,
@@ -222,9 +222,9 @@ var Analytics = function Analytics(props) {
             }]
           }
         },
-        event: "evProductDetail"
-      };
-      console.log('evProductDetail', dlAnalytics);
+        event: 'evProductDetail'
+      }; // console.log('evProductDetail', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -257,9 +257,9 @@ var Analytics = function Analytics(props) {
             }]
           }
         },
-        event: "evAddToCart"
-      };
-      console.log('evAddToCart', digitalData);
+        event: 'evAddToCart'
+      }; // console.log('evAddToCart', digitalData)
+
       window.dataLayer.push(digitalData);
     }
   };
@@ -274,21 +274,21 @@ var Analytics = function Analytics(props) {
 
       if (data !== null && data !== void 0 && data.bySocial) {
         digitalData = {
-          action: "Exito",
-          error: "NA",
+          action: 'Exito',
+          error: 'NA',
           loginMethod: data === null || data === void 0 ? void 0 : data.bySocial,
-          event: "evLogIn"
+          event: 'evLogIn'
         };
       } else {
         digitalData = {
-          action: "Exito",
-          error: "NA",
+          action: 'Exito',
+          error: 'NA',
           loginMethod: 'Sistema',
-          event: "evLogIn"
+          event: 'evLogIn'
         };
-      }
+      } // console.log('evLogIn', digitalData)
 
-      console.log('evLogIn', digitalData);
+
       window.dataLayer.push(digitalData);
     }
   };
@@ -352,9 +352,9 @@ var Analytics = function Analytics(props) {
             'products': productFormated
           }
         },
-        event: "evPurchase"
-      };
-      console.log('evPurchase', digitalData);
+        event: 'evPurchase'
+      }; // console.log('evPurchase', digitalData)
+
       window.dataLayer.push(digitalData);
     }
   };
@@ -363,11 +363,11 @@ var Analytics = function Analytics(props) {
     if (googleTagManager) {
       var dlAnalytics = {
         action: 'Exito',
-        signupMethod: "Sistema",
+        signupMethod: 'Sistema',
         error: 'NA',
-        event: "evSignUp"
-      };
-      console.log('evSignUp', dlAnalytics);
+        event: 'evSignUp'
+      }; // console.log('evSignUp', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -389,9 +389,9 @@ var Analytics = function Analytics(props) {
             }]
           }
         },
-        event: "evRemoveFromCart"
-      };
-      console.log('evRemoveFromCart', digitalData);
+        event: 'evRemoveFromCart'
+      }; // console.log('evRemoveFromCart', digitalData)
+
       window.dataLayer.push(digitalData);
     }
   };
@@ -404,9 +404,9 @@ var Analytics = function Analytics(props) {
 
       var dlAnalytics = {
         restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params3 = storeData.params) === null || _storeData$params3 === void 0 ? void 0 : _storeData$params3.store),
-        event: "evClickRestaurant"
-      };
-      console.log('evClickRestaurant', dlAnalytics);
+        event: 'evClickRestaurant'
+      }; // console.log('evClickRestaurant', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -423,9 +423,9 @@ var Analytics = function Analytics(props) {
             'products': cartData.params.cart.products
           }
         },
-        event: "evCheckout"
-      };
-      console.log('evCheckout', dlAnalytics);
+        event: 'evCheckout'
+      }; // console.log('evCheckout', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -436,25 +436,25 @@ var Analytics = function Analytics(props) {
 
       if (addressEvent.page === 'new_address') {
         dlAnalytics = {
-          actionType: "Agregar",
-          action: "Exito",
+          actionType: 'Agregar',
+          action: 'Exito',
           tag: addressEvent.params.tag ? addressEvent.params.tag : 'NA',
-          error: "NA",
-          event: "evDirectionActions"
+          error: 'NA',
+          event: 'evDirectionActions'
         };
       }
 
       if (addressEvent.page === 'edit_address') {
         dlAnalytics = {
-          actionType: "Editar",
-          action: "Exito",
+          actionType: 'Editar',
+          action: 'Exito',
           tag: addressEvent.params.tag ? addressEvent.params.tag : 'NA',
-          error: "NA",
-          event: "evDirectionActions"
+          error: 'NA',
+          event: 'evDirectionActions'
         };
-      }
+      } // console.log('evDirectionActions', dlAnalytics)
 
-      console.log('evDirectionActions', dlAnalytics);
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -464,8 +464,8 @@ var Analytics = function Analytics(props) {
       var dlAnalytics = {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
         event: 'evClickOrderType'
-      };
-      console.log('evClickOrderType', dlAnalytics);
+      }; // console.log('evClickOrderType', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -477,9 +477,9 @@ var Analytics = function Analytics(props) {
       var dlAnalytics = {
         menuRestaurantOption: formatForAnalytics(data === null || data === void 0 ? void 0 : (_data$params = data.params) === null || _data$params === void 0 ? void 0 : _data$params.category.name),
         restaurant: formatForAnalytics(data === null || data === void 0 ? void 0 : (_data$params2 = data.params) === null || _data$params2 === void 0 ? void 0 : _data$params2.business),
-        event: "evClickRestaurantMenu"
-      };
-      console.log('evClickRestaurantMenu', dlAnalytics);
+        event: 'evClickRestaurantMenu'
+      }; // console.log('evClickRestaurantMenu', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -488,9 +488,9 @@ var Analytics = function Analytics(props) {
     if (googleTagManager) {
       var dlAnalytics = {
         error: data,
-        event: "evGeneralError"
-      };
-      console.log('evGeneralError', dlAnalytics);
+        event: 'evGeneralError'
+      }; // console.log('evGeneralError', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -499,9 +499,9 @@ var Analytics = function Analytics(props) {
     if (googleTagManager) {
       var dlAnalytics = {
         socialNetwork: data.social,
-        event: "evClickSocialNetwork"
-      };
-      console.log('evClickSocialNetwork', dlAnalytics);
+        event: 'evClickSocialNetwork'
+      }; // console.log('evClickSocialNetwork', dlAnalytics)
+
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -535,9 +535,9 @@ var Analytics = function Analytics(props) {
             'ecommerce': {
               'impressions': impressions.slice(0, 15)
             },
-            event: "evProductImpression"
-          };
-          console.log('evProductImpression', dlAnalytics);
+            event: 'evProductImpression'
+          }; // console.log('evProductImpression', dlAnalytics)
+
           window.dataLayer.push(dlAnalytics);
           impressions = impressions.slice(15);
         }
@@ -565,9 +565,9 @@ var Analytics = function Analytics(props) {
           'ecommerce': {
             'impressions': _impressions.slice(0, 15)
           },
-          event: "evProductImpression"
-        };
-        console.log('evProductImpression', _dlAnalytics);
+          event: 'evProductImpression'
+        }; // console.log('evProductImpression', dlAnalytics)
+
         window.dataLayer.push(_dlAnalytics);
       }
     }

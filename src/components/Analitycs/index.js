@@ -72,7 +72,7 @@ export const Analytics = (props) => {
           name: 'geolocation'
         }).then(permission =>
           // is geolocation granted?
-          permission.state === "granted"
+          permission.state === 'granted'
             ? resolve(true)
             : resolve(false)
         ) :
@@ -83,7 +83,7 @@ export const Analytics = (props) => {
   }
 
   const formatForAnalytics = (str, limit, replaceSpace) => {
-    let formattedStr = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    let formattedStr = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
     if (limit) formattedStr = formattedStr.substr(0, limit);
     return formattedStr;
@@ -102,36 +102,36 @@ export const Analytics = (props) => {
       const userCustomer = JSON.parse(window.localStorage.getItem('user'))
       const language = JSON.parse(window.localStorage.getItem('language'))
       const digitalData = {
-        event: "evPageView",
-        version: "1.0",
+        event: 'evPageView',
+        version: '1.0',
         page: {
           pageInfo: {
-            hostName: window.location.protocol + "//" + window.location.hostname + "/",
+            hostName: window.location.protocol + '//' + window.location.hostname + '/',
             currentURL: window.location.href,
           },
         },
         user: {
           profile: {
-            statusLogged: userCustomer?.id > 0 ? "Logged" : "NotLogged",
-            languajeUser: language ? language.code : "null",
-            isGeoActive: isGeoActive() ? "Yes": "No",
+            statusLogged: userCustomer?.id > 0 ? 'Logged' : 'NotLogged',
+            languajeUser: language ? language.code : 'null',
+            isGeoActive: isGeoActive() ? 'Yes' : 'No',
             profileInfo: userCustomer?.id > 0 ?
               {
-                segment_user_id: userCustomer?.wow_rewards_user_id ? userCustomer?.wow_rewards_user_id : "NA",
+                segment_user_id: userCustomer?.wow_rewards_user_id ? userCustomer?.wow_rewards_user_id : 'NA',
                 email: sha256(userCustomer?.email),
-                zipCode: userCustomer?.zipcode ? userCustomer?.zipcode : "null",
+                zipCode: userCustomer?.zipcode ? userCustomer?.zipcode : 'null',
                 city: userCustomer ? userCustomer?.locality ? formatForAnalytics(userCustomer?.locality, 40) : 'NA' : 'NA',
                 municipio: userCustomer ? userCustomer?.administrative_area_level_3 ? formatForAnalytics(userCustomer?.administrative_area_level_3, 40) : 'NA' : 'NA',
                 colonia: userCustomer ? userCustomer?.sublocality ? formatForAnalytics(userCustomer?.sublocality, 40) : 'NA' : 'NA',
               } :
-              "NA",
+              'NA',
             social: {
               network: 'NA',
             },
           }
         }
       };
-      console.log('evPageView', digitalData)
+      // console.log('evPageView', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -163,9 +163,9 @@ export const Analytics = (props) => {
 						}]
 					}
 				},
-				event: "evProductClick",
+				event: 'evProductClick',
 			};
-      console.log('evProductClick', digitalData)
+      // console.log('evProductClick', digitalData)
       window.dataLayer.push(digitalData)
 
       const dlAnalytics = {
@@ -183,9 +183,9 @@ export const Analytics = (props) => {
             }]
           }
         },
-        event: "evProductDetail",
+        event: 'evProductDetail',
       };
-      console.log('evProductDetail', dlAnalytics)
+      // console.log('evProductDetail', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -216,9 +216,9 @@ export const Analytics = (props) => {
             }]
           },
         },
-        event: "evAddToCart",
+        event: 'evAddToCart',
       };
-      console.log('evAddToCart', digitalData)
+      // console.log('evAddToCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -230,20 +230,20 @@ export const Analytics = (props) => {
       let digitalData = null
       if (data?.bySocial) {
         digitalData = {
-          action: "Exito",
-          error: "NA",
+          action: 'Exito',
+          error: 'NA',
           loginMethod: data?.bySocial,
-          event: "evLogIn",
+          event: 'evLogIn',
         };
       } else {
         digitalData = {
-          action: "Exito",
-          error: "NA",
+          action: 'Exito',
+          error: 'NA',
           loginMethod: 'Sistema',
-          event: "evLogIn",
+          event: 'evLogIn',
         };
       }
-      console.log('evLogIn', digitalData)
+      // console.log('evLogIn', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -295,9 +295,9 @@ export const Analytics = (props) => {
             'products': productFormated,
           }
         },
-        event: "evPurchase",
+        event: 'evPurchase',
       };
-      console.log('evPurchase', digitalData)
+      // console.log('evPurchase', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -305,11 +305,11 @@ export const Analytics = (props) => {
     if (googleTagManager) {
       const dlAnalytics = {
         action: 'Exito',
-        signupMethod: "Sistema",
+        signupMethod: 'Sistema',
         error: 'NA',
-        event: "evSignUp",
+        event: 'evSignUp',
       };
-      console.log('evSignUp', dlAnalytics)
+      // console.log('evSignUp', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -330,9 +330,9 @@ export const Analytics = (props) => {
             }]
           },
         },
-        event: "evRemoveFromCart",
+        event: 'evRemoveFromCart',
       };
-      console.log('evRemoveFromCart', digitalData)
+      // console.log('evRemoveFromCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -340,9 +340,9 @@ export const Analytics = (props) => {
     if (googleTagManager && storeData?.params?.store !== ':store' && storeData?.params?.store !== 'undefined') {
       const dlAnalytics = {
         restaurant: formatForAnalytics(storeData?.params?.store),
-        event: "evClickRestaurant",
+        event: 'evClickRestaurant',
       }
-      console.log('evClickRestaurant', dlAnalytics)
+      // console.log('evClickRestaurant', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -356,9 +356,9 @@ export const Analytics = (props) => {
             'products': cartData.params.cart.products
           }
         },
-        event: "evCheckout",
+        event: 'evCheckout',
       };
-      console.log('evCheckout', dlAnalytics)
+      // console.log('evCheckout', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -367,23 +367,23 @@ export const Analytics = (props) => {
       let dlAnalytics = null
       if (addressEvent.page === 'new_address') {
         dlAnalytics = {
-          actionType: "Agregar",
-          action: "Exito",
+          actionType: 'Agregar',
+          action: 'Exito',
           tag: addressEvent.params.tag ? addressEvent.params.tag : 'NA',
-          error: "NA",
-          event: "evDirectionActions"
+          error: 'NA',
+          event: 'evDirectionActions'
         };
       }
       if (addressEvent.page === 'edit_address') {
         dlAnalytics = {
-          actionType: "Editar",
-          action: "Exito",
+          actionType: 'Editar',
+          action: 'Exito',
           tag: addressEvent.params.tag ? addressEvent.params.tag : 'NA',
-          error: "NA",
-          event: "evDirectionActions"
+          error: 'NA',
+          event: 'evDirectionActions'
         }
       }
-      console.log('evDirectionActions', dlAnalytics)
+      // console.log('evDirectionActions', dlAnalytics)
       window.dataLayer.push(dlAnalytics);
     }
   }
@@ -393,7 +393,7 @@ export const Analytics = (props) => {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
         event: 'evClickOrderType'
       }
-      console.log('evClickOrderType', dlAnalytics)
+      // console.log('evClickOrderType', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -402,9 +402,9 @@ export const Analytics = (props) => {
       const dlAnalytics = {
         menuRestaurantOption: formatForAnalytics(data?.params?.category.name),
         restaurant: formatForAnalytics(data?.params?.business),
-        event: "evClickRestaurantMenu",
+        event: 'evClickRestaurantMenu',
       };
-      console.log('evClickRestaurantMenu', dlAnalytics)
+      // console.log('evClickRestaurantMenu', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -412,9 +412,9 @@ export const Analytics = (props) => {
     if (googleTagManager) {
       const dlAnalytics = {
        error: data,
-       event: "evGeneralError",
+       event: 'evGeneralError',
       };
-      console.log('evGeneralError', dlAnalytics)
+      // console.log('evGeneralError', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -422,9 +422,9 @@ export const Analytics = (props) => {
     if (googleTagManager) {
       const dlAnalytics = {
 				socialNetwork: data.social,
-				event: "evClickSocialNetwork",
+				event: 'evClickSocialNetwork',
 			};
-      console.log('evClickSocialNetwork', dlAnalytics)
+      // console.log('evClickSocialNetwork', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -454,9 +454,9 @@ export const Analytics = (props) => {
             'ecommerce': {
               'impressions': impressions.slice(0,15),
             },
-            event: "evProductImpression",
+            event: 'evProductImpression',
           };
-          console.log('evProductImpression', dlAnalytics)
+          // console.log('evProductImpression', dlAnalytics)
           window.dataLayer.push(dlAnalytics)
           impressions = impressions.slice(15)
         }
@@ -482,9 +482,9 @@ export const Analytics = (props) => {
           'ecommerce': {
             'impressions': impressions.slice(0,15),
           },
-          event: "evProductImpression",
+          event: 'evProductImpression',
         };
-        console.log('evProductImpression', dlAnalytics)
+        // console.log('evProductImpression', dlAnalytics)
         window.dataLayer.push(dlAnalytics)
       }
     }
