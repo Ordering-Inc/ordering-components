@@ -12,7 +12,7 @@ export const LanguageContext = createContext()
  * This provider has a reducer for manage languages state
  * @param {props} props
  */
-export const LanguageProvider = ({ children, strategy }) => {
+export const LanguageProvider = ({ settings, children, strategy }) => {
   const [state, setState] = useState({
     loading: true,
     dictionary: {}
