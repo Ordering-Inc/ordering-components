@@ -36,7 +36,8 @@ var OptimizationLoadContext = /*#__PURE__*/(0, _react.createContext)();
 exports.OptimizationLoadContext = OptimizationLoadContext;
 var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
   var settings = _ref.settings,
-    children = _ref.children;
+    children = _ref.children,
+    strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
       loading: settings === null || settings === void 0 ? void 0 : settings.useOptimizeLoad,
       result: null,
@@ -50,7 +51,8 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
     ordering = _useApi2[0];
   var getData = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var requestOptions, response, _yield$response$json, result, error;
+      var _localOptions$address;
+      var requestOptions, countryCodeFromLocalStorage, localOptions, countryCode, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -66,14 +68,28 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
                 'X-App-X': settings.appId
               }
             };
-            _context.prev = 3;
-            _context.next = 6;
+            _context.next = 5;
+            return strategy.getItem('country-code');
+          case 5:
+            countryCodeFromLocalStorage = _context.sent;
+            _context.next = 8;
+            return strategy.getItem('options', true);
+          case 8:
+            localOptions = _context.sent;
+            countryCode = countryCodeFromLocalStorage || (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.country_code);
+            if (countryCode) {
+              requestOptions.headers = _objectSpread(_objectSpread({}, requestOptions.headers), {}, {
+                'X-Country-Code-X': countryCode
+              });
+            }
+            _context.prev = 11;
+            _context.next = 14;
             return fetch("".concat(ordering.root, "/frontends/first_load"), requestOptions);
-          case 6:
+          case 14:
             response = _context.sent;
-            _context.next = 9;
+            _context.next = 17;
             return response.json();
-          case 9:
+          case 17:
             _yield$response$json = _context.sent;
             result = _yield$response$json.result;
             error = _yield$response$json.error;
@@ -82,30 +98,42 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
               result: error ? null : result,
               error: error ? result : null
             }));
-            _context.next = 18;
+            _context.next = 26;
             break;
-          case 15:
-            _context.prev = 15;
-            _context.t0 = _context["catch"](3);
+          case 23:
+            _context.prev = 23;
+            _context.t0 = _context["catch"](11);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: _context.t0
             }));
-          case 18:
+          case 26:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[3, 15]]);
+      }, _callee, null, [[11, 23]]);
     }));
     return function getData() {
       return _ref2.apply(this, arguments);
     };
   }();
+  var handleUpdateOptimizationState = function handleUpdateOptimizationState(key, data) {
+    var _state$result;
+    var keysAllowed = ['configs', 'features', 'site', 'theme', 'validation_fields'];
+    if (!keysAllowed.includes(key)) return;
+    setState(_objectSpread(_objectSpread({}, state), {}, {
+      result: _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : state.result), {}, _defineProperty({}, key, _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : (_state$result = state.result) === null || _state$result === void 0 ? void 0 : _state$result[key]), data)))
+    }));
+  };
   (0, _react.useEffect)(function () {
     getData();
   }, [settings === null || settings === void 0 ? void 0 : settings.useOptimizeLoad]);
+  var functions = {
+    getData: getData,
+    handleUpdateOptimizationState: handleUpdateOptimizationState
+  };
   return /*#__PURE__*/_react.default.createElement(OptimizationLoadContext.Provider, {
-    value: [state]
+    value: [state, functions]
   }, children);
 };
 
