@@ -45,7 +45,7 @@ export const AddressDetails = (props) => {
     }
     const staticmapUrl = isMultiCheckout
       ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}${businessesMarkers}&key=${GM_API_KEY}`
-      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&markers=icon:${optimizeImage(logo, 'w_60,h_60,r_max')}%7Ccolor:white%7C${location?.lat},${location?.lng}&key=${GM_API_KEY}`
+      : `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C|${orderLocation?.lat},${orderLocation?.lng}&markers=icon:${logo ? optimizeImage(logo, 'w_60,h_60,r_max') : '%7Ccolor:white%7C'}|${location?.lat},${location?.lng}&key=${GM_API_KEY}`
     return orderState.options.type === 1
       ? `https://maps.googleapis.com/maps/api/staticmap?size=${mapConfigs?.mapSize?.width || 500}x${mapConfigs?.mapSize?.height || 190}&center=${orderLocation?.lat},${orderLocation?.lng}&zoom=${mapConfigs?.mapZoom || 15}&scale=2&maptype=roadmap&markers=icon:%7Ccolor:red%7C${orderLocation?.lat},${orderLocation?.lng}&key=${GM_API_KEY}`
       : `${staticmapUrl}`
@@ -89,7 +89,11 @@ export const AddressDetails = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
-          googleMapsUrl={formatUrl}
+          googleMapsUrl={
+            isMultiCheckout
+              ? formatUrlMethod()
+              : formatUrl
+          }
         />
       )}
     </>
