@@ -265,8 +265,9 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
     setBusinessIds(_businessIds);
   }, [openCarts]);
   (0, _react.useEffect)(function () {
+    if (loyaltyPlansState && loyaltyPlansState !== null && loyaltyPlansState !== void 0 && loyaltyPlansState.loading) return;
     getUserWallets();
-  }, []);
+  }, [loyaltyPlansState]);
   (0, _react.useEffect)(function () {
     if (!cartsUuids.length) return;
     getPaymethodsAndWallets();
