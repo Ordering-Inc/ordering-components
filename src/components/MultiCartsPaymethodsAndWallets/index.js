@@ -166,8 +166,9 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   }, [openCarts])
 
   useEffect(() => {
+    if (loyaltyPlansState && loyaltyPlansState?.loading) return
     getUserWallets()
-  }, [])
+  }, [loyaltyPlansState])
 
   useEffect(() => {
     if (!cartsUuids.length) return
