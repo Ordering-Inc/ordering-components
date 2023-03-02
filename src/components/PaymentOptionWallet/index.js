@@ -162,8 +162,9 @@ export const PaymentOptionWallet = (props) => {
   }
 
   useEffect(() => {
+    if (loyaltyPlansState && loyaltyPlansState?.loading) return
     getWallets()
-  }, [])
+  }, [loyaltyPlansState])
 
   return (
     <>
