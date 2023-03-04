@@ -372,6 +372,7 @@ export const BusinessList = (props) => {
     }
   }, [
     JSON.stringify(orderState.options),
+    ordering?.countryCode,
     orderState.loading,
     businessTypeSelected,
     priceLevelSelected,
