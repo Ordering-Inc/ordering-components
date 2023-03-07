@@ -127,7 +127,7 @@ export const AnalyticsSegment = (props) => {
 
   const handleGoToBusiness = (storeData) => {
     if (storeData?.params?.store !== ':store' && storeData?.params?.store !== 'undefined') {
-      console.log('Checkout Started', storeData)
+      console.log('Abrir negocio', storeData)
       analytics.track('Abrir negocio', {
         restaurant: storeData?.params?.store
       })
