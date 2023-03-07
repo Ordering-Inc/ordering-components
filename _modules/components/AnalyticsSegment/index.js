@@ -42,7 +42,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var AnalyticsSegment = function AnalyticsSegment(props) {
   var writeKey = props.writeKey,
       children = props.children,
-      customData = props.customData;
+      customData = props.customData,
+      debugMode = props.debugMode;
 
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
@@ -54,7 +55,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       setAnalytics = _useState2[1];
 
   var handleClickProduct = function handleClickProduct(product) {
-    console.log('Segment Product Clicked', product);
+    if (debugMode) console.log('Segment Product Clicked', product);
     analytics.track('Product Clicked', {
       id: product.id,
       name: product.name,
@@ -64,7 +65,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleClickPromotionProduct = function handleClickPromotionProduct(product, featured) {
-    console.log('Promotion Clicked', product);
+    if (debugMode) console.log('Promotion Clicked', product);
     analytics.track('Promotion Clicked', {
       id: product.id,
       name: product.name,
@@ -74,7 +75,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleProductAdded = function handleProductAdded(product) {
-    console.log('Segment Product Added', product);
+    if (debugMode) console.log('Segment Product Added', product);
     analytics.track('Product Added', {
       id: product.id,
       name: product.name,
@@ -85,7 +86,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleProductRemoved = function handleProductRemoved(product) {
-    console.log('Segment Product Removed', product);
+    if (debugMode) console.log('Segment Product Removed', product);
     analytics.track('Product Removed', {
       id: product.id,
       name: product.name,
@@ -98,7 +99,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleOrderPlaced = function handleOrderPlaced(order) {
     var _order$customer, _order$customer2, _order$business, _order$business2;
 
-    console.log('Segment Order Placed', order);
+    if (debugMode) console.log('Segment Order Placed', order);
     analytics.track('Order Placed', {
       total: order === null || order === void 0 ? void 0 : order.total,
       business_id: order === null || order === void 0 ? void 0 : order.business_id,
@@ -125,7 +126,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleUpdateOrder = function handleUpdateOrder(order) {
     var _order$business3;
 
-    console.log('Segment Order Updated', order);
+    if (debugMode) console.log('Segment Order Updated', order);
     analytics.track('Order Updated', {
       id: order.id,
       affiliation: (_order$business3 = order.business) === null || _order$business3 === void 0 ? void 0 : _order$business3.name,
@@ -138,7 +139,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleAddOrder = function handleAddOrder(order) {
     var _order$business4;
 
-    console.log('Segment Order Added', order);
+    if (debugMode) console.log('Segment Order Added', order);
     analytics.track('Order Added', {
       id: order.id,
       affiliation: (_order$business4 = order.business) === null || _order$business4 === void 0 ? void 0 : _order$business4.name,
@@ -149,7 +150,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleLogin = function handleLogin(data) {
-    console.log('Segment Login', data);
+    if (debugMode) console.log('Segment Login', data);
     analytics.identify(data.id, {
       email: data.email,
       name: data.name
@@ -159,7 +160,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleCategorySelect = function handleCategorySelect(data) {
     var _data$params;
 
-    console.log('Category Clicked', data);
+    if (debugMode) console.log('Category Clicked', data);
     analytics.track('Category Clicked', {
       category: data === null || data === void 0 ? void 0 : (_data$params = data.params) === null || _data$params === void 0 ? void 0 : _data$params.category.name
     });
@@ -168,7 +169,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   var handleInCheckout = function handleInCheckout(data) {
     var _data$business;
 
-    console.log('Checkout Started', data);
+    if (debugMode) console.log('Checkout Started', data);
     analytics.track('Checkout Started', {
       nombre_de_la_tienda: data === null || data === void 0 ? void 0 : (_data$business = data.business) === null || _data$business === void 0 ? void 0 : _data$business.name,
       total: data === null || data === void 0 ? void 0 : data.total,
@@ -182,7 +183,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
     if ((storeData === null || storeData === void 0 ? void 0 : (_storeData$params = storeData.params) === null || _storeData$params === void 0 ? void 0 : _storeData$params.store) !== ':store' && (storeData === null || storeData === void 0 ? void 0 : (_storeData$params2 = storeData.params) === null || _storeData$params2 === void 0 ? void 0 : _storeData$params2.store) !== 'undefined') {
       var _storeData$params3;
 
-      console.log('Abrir negocio', storeData);
+      if (debugMode) console.log('Abrir negocio', storeData);
       analytics.track('Abrir negocio', {
         restaurant: storeData === null || storeData === void 0 ? void 0 : (_storeData$params3 = storeData.params) === null || _storeData$params3 === void 0 ? void 0 : _storeData$params3.store
       });
@@ -210,7 +211,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
 
     switch (type) {
       case 'Aplicar Cupon':
-        console.log('Segment Aplicar Cupon', data);
+        if (debugMode) console.log('Segment Aplicar Cupon', data);
         analytics.track('Aplicar Cupon', {
           id: data.id,
           name: data.name
@@ -218,7 +219,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         break;
 
       case 'Calificar Orden':
-        console.log('Segment Calificar Orden', data);
+        if (debugMode) console.log('Segment Calificar Orden', data);
         analytics.track('Calificar Orden', {
           business_id: data.business_id,
           order_id: data.order_id,
@@ -227,7 +228,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         break;
 
       case 'Abrir banner':
-        console.log('Segment Abrir banner', data);
+        if (debugMode) console.log('Segment Abrir banner', data);
         analytics.track('Abrir banner', {
           type: data.type,
           brand: data.brand
@@ -235,7 +236,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         break;
 
       case 'Abrir negocio':
-        console.log('Segment Abrir negocio', data);
+        if (debugMode) console.log('Segment Abrir negocio', data);
         analytics.track('Abrir negocio', {
           id: data.id,
           name: data.name

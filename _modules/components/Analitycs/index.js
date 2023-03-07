@@ -11,12 +11,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _EventContext = require("../../contexts/EventContext");
 
-var _SessionContext = require("../../contexts/SessionContext");
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -37,7 +31,8 @@ var Analytics = function Analytics(props) {
   var trackId = props.trackId,
       googleTagManager = props.googleTagManager,
       slug = props.slug,
-      children = props.children;
+      children = props.children,
+      debugMode = props.debugMode;
 
   var _useEvent = (0, _EventContext.useEvent)(),
       _useEvent2 = _slicedToArray(_useEvent, 1),
@@ -168,8 +163,8 @@ var Analytics = function Analytics(props) {
             }
           }
         }
-      }; // console.log('evPageView', digitalData)
-
+      };
+      if (debugMode) console.log('evPageView', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -204,8 +199,8 @@ var Analytics = function Analytics(props) {
           }
         },
         event: 'evProductClick'
-      }; // console.log('evProductClick', digitalData)
-
+      };
+      if (debugMode) console.log('evProductClick', digitalData);
       window.dataLayer.push(digitalData);
       var dlAnalytics = {
         'flow': 'MarketPlace ' + slug,
@@ -223,8 +218,8 @@ var Analytics = function Analytics(props) {
           }
         },
         event: 'evProductDetail'
-      }; // console.log('evProductDetail', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evProductDetail', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -258,8 +253,8 @@ var Analytics = function Analytics(props) {
           }
         },
         event: 'evAddToCart'
-      }; // console.log('evAddToCart', digitalData)
-
+      };
+      if (debugMode) console.log('evAddToCart', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -286,9 +281,9 @@ var Analytics = function Analytics(props) {
           loginMethod: 'Sistema',
           event: 'evLogIn'
         };
-      } // console.log('evLogIn', digitalData)
+      }
 
-
+      if (debugMode) console.log('evLogIn', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -353,8 +348,8 @@ var Analytics = function Analytics(props) {
           }
         },
         event: 'evPurchase'
-      }; // console.log('evPurchase', digitalData)
-
+      };
+      if (debugMode) console.log('evPurchase', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -366,8 +361,8 @@ var Analytics = function Analytics(props) {
         signupMethod: 'Sistema',
         error: 'NA',
         event: 'evSignUp'
-      }; // console.log('evSignUp', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evSignUp', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -390,8 +385,8 @@ var Analytics = function Analytics(props) {
           }
         },
         event: 'evRemoveFromCart'
-      }; // console.log('evRemoveFromCart', digitalData)
-
+      };
+      if (debugMode) console.log('evRemoveFromCart', digitalData);
       window.dataLayer.push(digitalData);
     }
   };
@@ -405,8 +400,8 @@ var Analytics = function Analytics(props) {
       var dlAnalytics = {
         restaurant: formatForAnalytics(storeData === null || storeData === void 0 ? void 0 : (_storeData$params3 = storeData.params) === null || _storeData$params3 === void 0 ? void 0 : _storeData$params3.store),
         event: 'evClickRestaurant'
-      }; // console.log('evClickRestaurant', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evClickRestaurant', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -424,8 +419,8 @@ var Analytics = function Analytics(props) {
           }
         },
         event: 'evCheckout'
-      }; // console.log('evCheckout', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evCheckout', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -452,9 +447,9 @@ var Analytics = function Analytics(props) {
           error: 'NA',
           event: 'evDirectionActions'
         };
-      } // console.log('evDirectionActions', dlAnalytics)
+      }
 
-
+      if (debugMode) console.log('evDirectionActions', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -464,8 +459,8 @@ var Analytics = function Analytics(props) {
       var dlAnalytics = {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
         event: 'evClickOrderType'
-      }; // console.log('evClickOrderType', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evClickOrderType', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -478,8 +473,8 @@ var Analytics = function Analytics(props) {
         menuRestaurantOption: formatForAnalytics(data === null || data === void 0 ? void 0 : (_data$params = data.params) === null || _data$params === void 0 ? void 0 : _data$params.category.name),
         restaurant: formatForAnalytics(data === null || data === void 0 ? void 0 : (_data$params2 = data.params) === null || _data$params2 === void 0 ? void 0 : _data$params2.business),
         event: 'evClickRestaurantMenu'
-      }; // console.log('evClickRestaurantMenu', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evClickRestaurantMenu', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -489,8 +484,8 @@ var Analytics = function Analytics(props) {
       var dlAnalytics = {
         error: data,
         event: 'evGeneralError'
-      }; // console.log('evGeneralError', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evGeneralError', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -500,8 +495,8 @@ var Analytics = function Analytics(props) {
       var dlAnalytics = {
         socialNetwork: data.social,
         event: 'evClickSocialNetwork'
-      }; // console.log('evClickSocialNetwork', dlAnalytics)
-
+      };
+      if (debugMode) console.log('evClickSocialNetwork', dlAnalytics);
       window.dataLayer.push(dlAnalytics);
     }
   };
@@ -536,8 +531,8 @@ var Analytics = function Analytics(props) {
               'impressions': impressions.slice(0, 15)
             },
             event: 'evProductImpression'
-          }; // console.log('evProductImpression', dlAnalytics)
-
+          };
+          if (debugMode) console.log('evProductImpression', dlAnalytics);
           window.dataLayer.push(dlAnalytics);
           impressions = impressions.slice(15);
         }
@@ -566,15 +561,15 @@ var Analytics = function Analytics(props) {
             'impressions': _impressions.slice(0, 15)
           },
           event: 'evProductImpression'
-        }; // console.log('evProductImpression', dlAnalytics)
-
+        };
+        if (debugMode) console.log('evProductImpression', _dlAnalytics);
         window.dataLayer.push(_dlAnalytics);
       }
     }
   };
 
   (0, _react.useEffect)(function () {
-    console.log('Analytic Ready');
+    if (debugMode) console.log('Analytic Ready');
 
     if (analyticsReady && window.ga || googleTagManager) {
       events.on('change_view', handlechangeView);
