@@ -7,14 +7,15 @@ export const AnalyticsSegment = (props) => {
   const {
     writeKey,
     children,
-    customData
+    customData,
+    debugMode
   } = props
 
   const [events] = useEvent()
   const [analytics, setAnalytics] = useState(undefined)
 
   const handleClickProduct = (product) => {
-    console.log('Segment Product Clicked', product)
+    if (debugMode) console.log('Segment Product Clicked', product)
     analytics.track('Product Clicked', {
       id: product.id,
       name: product.name,
@@ -24,7 +25,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleClickPromotionProduct = (product, featured) => {
-    console.log('Promotion Clicked', product)
+    if (debugMode) console.log('Promotion Clicked', product)
     analytics.track('Promotion Clicked', {
       id: product.id,
       name: product.name,
@@ -34,7 +35,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleProductAdded = (product) => {
-    console.log('Segment Product Added', product)
+    if (debugMode) console.log('Segment Product Added', product)
     analytics.track('Product Added', {
       id: product.id,
       name: product.name,
@@ -45,7 +46,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleProductRemoved = (product) => {
-    console.log('Segment Product Removed', product)
+    if (debugMode) console.log('Segment Product Removed', product)
     analytics.track('Product Removed', {
       id: product.id,
       name: product.name,
@@ -56,7 +57,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleOrderPlaced = (order) => {
-    console.log('Segment Order Placed', order)
+    if (debugMode) console.log('Segment Order Placed', order)
     analytics.track('Order Placed', {
       total: order?.total,
       business_id: order?.business_id,
@@ -81,7 +82,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleUpdateOrder = (order) => {
-    console.log('Segment Order Updated', order)
+    if (debugMode) console.log('Segment Order Updated', order)
     analytics.track('Order Updated', {
       id: order.id,
       affiliation: order.business?.name,
@@ -92,7 +93,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleAddOrder = (order) => {
-    console.log('Segment Order Added', order)
+    if (debugMode) console.log('Segment Order Added', order)
     analytics.track('Order Added', {
       id: order.id,
       affiliation: order.business?.name,
@@ -103,7 +104,7 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleLogin = (data) => {
-    console.log('Segment Login', data)
+    if (debugMode) console.log('Segment Login', data)
     analytics.identify(data.id, {
       email: data.email,
       name: data.name
@@ -111,14 +112,14 @@ export const AnalyticsSegment = (props) => {
   }
 
   const handleCategorySelect = (data) => {
-    console.log('Category Clicked', data)
+    if (debugMode) console.log('Category Clicked', data)
     analytics.track('Category Clicked', {
       category: data?.params?.category.name
     })
   }
 
   const handleInCheckout = (data) => {
-    console.log('Checkout Started', data)
+    if (debugMode) console.log('Checkout Started', data)
     analytics.track('Checkout Started', {
       nombre_de_la_tienda: data?.business?.name,
       total: data?.total,
@@ -128,7 +129,7 @@ export const AnalyticsSegment = (props) => {
 
   const handleGoToBusiness = (storeData) => {
     if (storeData?.params?.store !== ':store' && storeData?.params?.store !== 'undefined') {
-      console.log('Abrir negocio', storeData)
+      if (debugMode) console.log('Abrir negocio', storeData)
       analytics.track('Abrir negocio', {
         restaurant: storeData?.params?.store
       })
@@ -153,14 +154,14 @@ export const AnalyticsSegment = (props) => {
     const { type, data } = customData
     switch (type) {
       case 'Aplicar Cupon':
-        console.log('Segment Aplicar Cupon', data)
+        if (debugMode) console.log('Segment Aplicar Cupon', data)
         analytics.track('Aplicar Cupon', {
           id: data.id,
           name: data.name
         })
         break
       case 'Calificar Orden':
-        console.log('Segment Calificar Orden', data)
+        if (debugMode) console.log('Segment Calificar Orden', data)
         analytics.track('Calificar Orden', {
           business_id: data.business_id,
           order_id: data.order_id,
@@ -168,14 +169,14 @@ export const AnalyticsSegment = (props) => {
         })
         break
       case 'Abrir banner':
-        console.log('Segment Abrir banner', data)
+        if (debugMode) console.log('Segment Abrir banner', data)
         analytics.track('Abrir banner', {
           type: data.type,
           brand: data.brand
         })
         break
       case 'Abrir negocio':
-        console.log('Segment Abrir negocio', data)
+        if (debugMode) console.log('Segment Abrir negocio', data)
         analytics.track('Abrir negocio', {
           id: data.id,
           name: data.name

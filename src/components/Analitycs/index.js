@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useEvent } from '../../contexts/EventContext'
-import { useSession } from '../../contexts/SessionContext'
-import PropTypes from 'prop-types'
 
 export const Analytics = (props) => {
   const {
     trackId,
     googleTagManager,
     slug,
-    children
+    children,
+    debugMode
   } = props
 
   const [events] = useEvent()
@@ -87,7 +86,7 @@ export const Analytics = (props) => {
     if (replaceSpace) formattedStr = formattedStr.replaceAll(' ', '_');
     if (limit) formattedStr = formattedStr.substr(0, limit);
     return formattedStr;
-  };
+  }
 
   /**
    * Method to handle Pageview send to analytics
@@ -130,8 +129,8 @@ export const Analytics = (props) => {
             },
           }
         }
-      };
-      // console.log('evPageView', digitalData)
+      }
+      if (debugMode) console.log('evPageView', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -165,7 +164,7 @@ export const Analytics = (props) => {
 				},
 				event: 'evProductClick',
 			};
-      // console.log('evProductClick', digitalData)
+      if (debugMode) console.log('evProductClick', digitalData)
       window.dataLayer.push(digitalData)
 
       const dlAnalytics = {
@@ -185,7 +184,7 @@ export const Analytics = (props) => {
         },
         event: 'evProductDetail',
       };
-      // console.log('evProductDetail', dlAnalytics)
+      if (debugMode) console.log('evProductDetail', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -218,7 +217,7 @@ export const Analytics = (props) => {
         },
         event: 'evAddToCart',
       };
-      // console.log('evAddToCart', digitalData)
+      if (debugMode) console.log('evAddToCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -243,7 +242,7 @@ export const Analytics = (props) => {
           event: 'evLogIn',
         };
       }
-      // console.log('evLogIn', digitalData)
+      if (debugMode) console.log('evLogIn', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -297,7 +296,7 @@ export const Analytics = (props) => {
         },
         event: 'evPurchase',
       };
-      // console.log('evPurchase', digitalData)
+      if (debugMode) console.log('evPurchase', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -309,7 +308,7 @@ export const Analytics = (props) => {
         error: 'NA',
         event: 'evSignUp',
       };
-      // console.log('evSignUp', dlAnalytics)
+      if (debugMode) console.log('evSignUp', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -332,7 +331,7 @@ export const Analytics = (props) => {
         },
         event: 'evRemoveFromCart',
       };
-      // console.log('evRemoveFromCart', digitalData)
+      if (debugMode) console.log('evRemoveFromCart', digitalData)
       window.dataLayer.push(digitalData)
     }
   }
@@ -342,7 +341,7 @@ export const Analytics = (props) => {
         restaurant: formatForAnalytics(storeData?.params?.store),
         event: 'evClickRestaurant',
       }
-      // console.log('evClickRestaurant', dlAnalytics)
+      if (debugMode) console.log('evClickRestaurant', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -358,7 +357,7 @@ export const Analytics = (props) => {
         },
         event: 'evCheckout',
       };
-      // console.log('evCheckout', dlAnalytics)
+      if (debugMode) console.log('evCheckout', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -383,7 +382,7 @@ export const Analytics = (props) => {
           event: 'evDirectionActions'
         }
       }
-      // console.log('evDirectionActions', dlAnalytics)
+      if (debugMode) console.log('evDirectionActions', dlAnalytics)
       window.dataLayer.push(dlAnalytics);
     }
   }
@@ -393,7 +392,7 @@ export const Analytics = (props) => {
         action: orderTypeData.params.type == 1 ? 'Entrega' : 'Recoger',
         event: 'evClickOrderType'
       }
-      // console.log('evClickOrderType', dlAnalytics)
+      if (debugMode) console.log('evClickOrderType', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -404,7 +403,7 @@ export const Analytics = (props) => {
         restaurant: formatForAnalytics(data?.params?.business),
         event: 'evClickRestaurantMenu',
       };
-      // console.log('evClickRestaurantMenu', dlAnalytics)
+      if (debugMode) console.log('evClickRestaurantMenu', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -414,7 +413,7 @@ export const Analytics = (props) => {
        error: data,
        event: 'evGeneralError',
       };
-      // console.log('evGeneralError', dlAnalytics)
+      if (debugMode) console.log('evGeneralError', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -424,7 +423,7 @@ export const Analytics = (props) => {
 				socialNetwork: data.social,
 				event: 'evClickSocialNetwork',
 			};
-      // console.log('evClickSocialNetwork', dlAnalytics)
+      if (debugMode) console.log('evClickSocialNetwork', dlAnalytics)
       window.dataLayer.push(dlAnalytics)
     }
   }
@@ -456,7 +455,7 @@ export const Analytics = (props) => {
             },
             event: 'evProductImpression',
           };
-          // console.log('evProductImpression', dlAnalytics)
+          if (debugMode) console.log('evProductImpression', dlAnalytics)
           window.dataLayer.push(dlAnalytics)
           impressions = impressions.slice(15)
         }
@@ -484,14 +483,14 @@ export const Analytics = (props) => {
           },
           event: 'evProductImpression',
         };
-        // console.log('evProductImpression', dlAnalytics)
+        if (debugMode) console.log('evProductImpression', dlAnalytics)
         window.dataLayer.push(dlAnalytics)
       }
     }
   }
 
   useEffect(() => {
-    console.log('Analytic Ready')
+    if (debugMode) console.log('Analytic Ready')
     if ((analyticsReady && window.ga) || googleTagManager) {
       events.on('change_view', handlechangeView)
       events.on('userLogin', handleLogin)
