@@ -645,12 +645,15 @@ export const ProductForm = (props) => {
   useEffect(() => {
     if (product?.product && product.product?.extras?.length > 0) {
       const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
-        option => (
-          ((option.min === 1 &&
+        option => {
+          const preselected = extra.options.filter(option1 => option1?.suboptions?.filter(suboption1 => option.respect_to === suboption1?.id && suboption1.preselected).length > 0)
+          return (
+            ((option.min === 1 &&
             option.max === 1 &&
             option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
-          option.suboptions.filter(suboption => suboption.preselected).length > 0) && (!option.respect_to && option.conditioned)
-        )
+          option.suboptions.filter(suboption => suboption.preselected).length > 0) && (!option.respect_to || (option?.respect_to && preselected))
+          )
+        }
       )))
 
       if (!options?.length) {
