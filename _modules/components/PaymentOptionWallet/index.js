@@ -272,8 +272,9 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
     };
   }();
   (0, _react.useEffect)(function () {
+    if (loyaltyPlansState && loyaltyPlansState !== null && loyaltyPlansState !== void 0 && loyaltyPlansState.loading) return;
     getWallets();
-  }, []);
+  }, [loyaltyPlansState]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     errorState: errorState,
     setErrorState: setErrorState,

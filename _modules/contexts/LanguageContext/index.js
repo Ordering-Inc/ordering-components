@@ -37,7 +37,8 @@ var LanguageContext = /*#__PURE__*/(0, _react.createContext)();
 exports.LanguageContext = LanguageContext;
 var LanguageProvider = function LanguageProvider(_ref) {
   var _state$language4;
-  var children = _ref.children,
+  var settings = _ref.settings,
+    children = _ref.children,
     strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
       loading: true,
