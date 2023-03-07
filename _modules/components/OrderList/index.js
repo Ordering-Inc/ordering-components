@@ -146,98 +146,137 @@ var OrderList = function OrderList(props) {
     return _dayjs.default.utc(date, format).format(format) === date;
   };
   var handleReorder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId) {
-      var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, choosedOrder, _businessId, _businessData, _businessSlug;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) switch (_context.prev = _context.next) {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(value) {
+      var orderId, _reordersArray$, _reordersArray$$resul, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            if (orderId) {
-              _context.next = 2;
+            orderId = Array.isArray(value) ? value : [value];
+            if (orderId !== null && orderId !== void 0 && orderId.length) {
+              _context3.next = 3;
               break;
             }
-            return _context.abrupt("return");
-          case 2:
-            _context.prev = 2;
+            return _context3.abrupt("return");
+          case 3:
+            _context3.prev = 3;
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: true
             }));
-            _context.next = 6;
-            return reorder(orderId);
-          case 6:
-            _yield$reorder = _context.sent;
-            error = _yield$reorder.error;
-            result = _yield$reorder.result;
-            if (error) {
-              _context.next = 13;
-              break;
-            }
-            setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
-              loading: false,
-              result: _objectSpread(_objectSpread({}, result), {}, {
-                orderId: orderId
-              })
-            }));
-            _context.next = 22;
-            break;
-          case 13:
+            fetchOrders = /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+                var promises, data;
+                return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                  while (1) switch (_context2.prev = _context2.next) {
+                    case 0:
+                      promises = ids.map( /*#__PURE__*/function () {
+                        var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
+                          var res;
+                          return _regeneratorRuntime().wrap(function _callee$(_context) {
+                            while (1) switch (_context.prev = _context.next) {
+                              case 0:
+                                _context.next = 2;
+                                return reorder(id, (ids === null || ids === void 0 ? void 0 : ids.length) > 1);
+                              case 2:
+                                res = _context.sent;
+                                return _context.abrupt("return", res);
+                              case 4:
+                              case "end":
+                                return _context.stop();
+                            }
+                          }, _callee);
+                        }));
+                        return function (_x4) {
+                          return _ref3.apply(this, arguments);
+                        };
+                      }());
+                      _context2.next = 3;
+                      return Promise.all(promises);
+                    case 3:
+                      data = _context2.sent;
+                      return _context2.abrupt("return", data);
+                    case 5:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }, _callee2);
+              }));
+              return function fetchOrders(_x3) {
+                return _ref2.apply(this, arguments);
+              };
+            }();
+            _context3.next = 8;
+            return fetchOrders(orderId);
+          case 8:
+            reordersArray = _context3.sent;
+            error = reordersArray.length && reordersArray.every(function (obj) {
+              return obj.error;
+            }) && ((_reordersArray$ = reordersArray[0]) === null || _reordersArray$ === void 0 ? void 0 : (_reordersArray$$resul = _reordersArray$.result) === null || _reordersArray$$resul === void 0 ? void 0 : _reordersArray$$resul[0]);
+            result = reordersArray.length && reordersArray.map(function (obj) {
+              var _obj$result$, _obj$result;
+              return (_obj$result$ = (_obj$result = obj.result) === null || _obj$result === void 0 ? void 0 : _obj$result[0]) !== null && _obj$result$ !== void 0 ? _obj$result$ : obj.result;
+            }).filter(function (o) {
+              return typeof o !== 'string';
+            });
             choosedOrder = orderList.orders.find(function (_order) {
-              return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId;
+              return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId[0];
             });
             _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 ? void 0 : (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
-            _context.next = 17;
+            _context3.next = 15;
             return ordering.businesses(_businessId).select(['slug']).get();
-          case 17:
-            _businessData = _context.sent;
-            _context.next = 20;
+          case 15:
+            _businessData = _context3.sent;
+            _context3.next = 18;
             return _businessData === null || _businessData === void 0 ? void 0 : (_businessData$content = _businessData.content) === null || _businessData$content === void 0 ? void 0 : (_businessData$content2 = _businessData$content.result) === null || _businessData$content2 === void 0 ? void 0 : _businessData$content2.slug;
-          case 20:
-            _businessSlug = _context.sent;
+          case 18:
+            _businessSlug = _context3.sent;
+            orderResult = {
+              orderId: orderId[0],
+              business_id: _businessId,
+              business: {
+                slug: _businessSlug
+              }
+            };
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: false,
-              error: true,
-              result: _objectSpread(_objectSpread({}, result), {}, {
-                orderId: orderId,
-                business_id: _businessId,
-                business: {
-                  slug: _businessSlug
-                }
+              error: error,
+              result: error ? orderResult : _objectSpread(_objectSpread({}, result[0]), {}, {
+                orderId: orderId[0]
               })
             }));
-          case 22:
-            _context.next = 27;
+            _context3.next = 26;
             break;
-          case 24:
-            _context.prev = 24;
-            _context.t0 = _context["catch"](2);
+          case 23:
+            _context3.prev = 23;
+            _context3.t0 = _context3["catch"](3);
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: false,
               error: true,
-              result: [_context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message]
+              result: [_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message]
             }));
-          case 27:
+          case 26:
           case "end":
-            return _context.stop();
+            return _context3.stop();
         }
-      }, _callee, null, [[2, 24]]);
+      }, _callee3, null, [[3, 23]]);
     }));
     return function handleReorder(_x2) {
       return _ref.apply(this, arguments);
     };
   }();
   var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(page) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(page) {
       var otherStatus,
         pageSize,
         options,
         searchByStatus,
         source,
         functionFetch,
-        _args2 = arguments;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+        _args4 = arguments;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
           case 0:
-            otherStatus = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : [];
-            pageSize = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : paginationSettings.pageSize;
+            otherStatus = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : [];
+            pageSize = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : paginationSettings.pageSize;
             options = {
               query: {
                 orderBy: "".concat(sortBy.direction === 'desc' ? '-' : '').concat(sortBy.param),
@@ -286,51 +325,51 @@ var OrderList = function OrderList(props) {
             requestsState.orders = source;
             options.cancelToken = source;
             functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-            _context2.next = 13;
+            _context4.next = 13;
             return functionFetch.get(options);
           case 13:
-            return _context2.abrupt("return", _context2.sent);
+            return _context4.abrupt("return", _context4.sent);
           case 14:
           case "end":
-            return _context2.stop();
+            return _context4.stop();
         }
-      }, _callee2);
+      }, _callee4);
     }));
-    return function getOrders(_x3) {
-      return _ref2.apply(this, arguments);
+    return function getOrders(_x5) {
+      return _ref4.apply(this, arguments);
     };
   }();
   var loadOrders = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(isNextPage, searchByOtherStatus) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(isNextPage, searchByOtherStatus) {
       var keepOrders,
         getFirstOrder,
         pageSize,
         nextPage,
         response,
         businessIds,
-        _args3 = arguments;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
+        _args5 = arguments;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
           case 0:
-            keepOrders = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : false;
-            getFirstOrder = _args3.length > 3 ? _args3[3] : undefined;
+            keepOrders = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : false;
+            getFirstOrder = _args5.length > 3 ? _args5[3] : undefined;
             if (!((pagination === null || pagination === void 0 ? void 0 : pagination.currentPage) === (pagination === null || pagination === void 0 ? void 0 : pagination.totalPages) && (pagination === null || pagination === void 0 ? void 0 : pagination.total) !== null && !getFirstOrder)) {
-              _context3.next = 4;
+              _context5.next = 4;
               break;
             }
-            return _context3.abrupt("return");
+            return _context5.abrupt("return");
           case 4:
             pageSize = keepOrders ? paginationSettings.pageSize * pagination.currentPage : paginationSettings.pageSize;
             if (session.token) {
-              _context3.next = 8;
+              _context5.next = 8;
               break;
             }
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
               loading: false
             }));
-            return _context3.abrupt("return");
+            return _context5.abrupt("return");
           case 8:
-            _context3.prev = 8;
+            _context5.prev = 8;
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
               loading: true
             }));
@@ -340,10 +379,10 @@ var OrderList = function OrderList(props) {
               }));
             }
             nextPage = !isNextPage ? pagination.currentPage + 1 : 1;
-            _context3.next = 14;
+            _context5.next = 14;
             return getOrders(getFirstOrder ? 0 : nextPage, searchByOtherStatus, pageSize);
           case 14:
-            response = _context3.sent;
+            response = _context5.sent;
             if (searchByOtherStatus) {
               setOrderList({
                 loading: false,
@@ -399,15 +438,15 @@ var OrderList = function OrderList(props) {
                 to: keepOrders ? pagination.to : response.content.pagination.to
               });
             }
-            _context3.next = 27;
+            _context5.next = 27;
             break;
           case 24:
-            _context3.prev = 24;
-            _context3.t0 = _context3["catch"](8);
-            if (_context3.t0.constructor.name !== 'Cancel') {
+            _context5.prev = 24;
+            _context5.t0 = _context5["catch"](8);
+            if (_context5.t0.constructor.name !== 'Cancel') {
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: false,
-                error: [_context3.t0.message]
+                error: [_context5.t0.message]
               }));
               setBusinesses(_objectSpread(_objectSpread({}, businesses), {}, {
                 loading: false
@@ -415,12 +454,12 @@ var OrderList = function OrderList(props) {
             }
           case 27:
           case "end":
-            return _context3.stop();
+            return _context5.stop();
         }
-      }, _callee3, null, [[8, 24]]);
+      }, _callee5, null, [[8, 24]]);
     }));
-    return function loadOrders(_x4, _x5) {
-      return _ref3.apply(this, arguments);
+    return function loadOrders(_x6, _x7) {
+      return _ref5.apply(this, arguments);
     };
   }();
   var handleUpdateOrderList = function handleUpdateOrderList(orderId, changes) {
@@ -435,17 +474,17 @@ var OrderList = function OrderList(props) {
     }));
   };
   var loadMessages = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(orderId) {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderId) {
       var url, response, _yield$response$json, error, result;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
           case 0:
-            _context4.prev = 0;
+            _context6.prev = 0;
             setMessages(_objectSpread(_objectSpread({}, messages), {}, {
               loading: true
             }));
             url = "".concat(ordering.root, "/orders/").concat(orderId, "/messages?mode=dashboard");
-            _context4.next = 5;
+            _context6.next = 5;
             return fetch(url, {
               method: 'GET',
               headers: {
@@ -456,11 +495,11 @@ var OrderList = function OrderList(props) {
               }
             });
           case 5:
-            response = _context4.sent;
-            _context4.next = 8;
+            response = _context6.sent;
+            _context6.next = 8;
             return response.json();
           case 8:
-            _yield$response$json = _context4.sent;
+            _yield$response$json = _context6.sent;
             error = _yield$response$json.error;
             result = _yield$response$json.result;
             if (!error) {
@@ -475,32 +514,32 @@ var OrderList = function OrderList(props) {
                 error: result
               }));
             }
-            _context4.next = 17;
+            _context6.next = 17;
             break;
           case 14:
-            _context4.prev = 14;
-            _context4.t0 = _context4["catch"](0);
+            _context6.prev = 14;
+            _context6.t0 = _context6["catch"](0);
             setMessages(_objectSpread(_objectSpread({}, messages), {}, {
               loading: false,
-              error: [_context4.t0.message]
+              error: [_context6.t0.message]
             }));
           case 17:
           case "end":
-            return _context4.stop();
+            return _context6.stop();
         }
-      }, _callee4, null, [[0, 14]]);
+      }, _callee6, null, [[0, 14]]);
     }));
-    return function loadMessages(_x6) {
-      return _ref4.apply(this, arguments);
+    return function loadMessages(_x8) {
+      return _ref6.apply(this, arguments);
     };
   }();
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(businessIds) {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
       var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, parameters, _orderState$options5, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) switch (_context7.prev = _context7.next) {
           case 0:
-            _context5.prev = 0;
+            _context7.prev = 0;
             parameters = {
               location: "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng)
             };
@@ -525,12 +564,12 @@ var OrderList = function OrderList(props) {
             source = {};
             requestsState.businesses = source;
             fetchEndpoint = ordering.businesses().select(propsToFetchBusiness).parameters(parameters).where(where);
-            _context5.next = 12;
+            _context7.next = 12;
             return fetchEndpoint.get({
               cancelToken: source
             });
           case 12:
-            _yield$fetchEndpoint$ = _context5.sent;
+            _yield$fetchEndpoint$ = _context7.sent;
             _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
             error = _yield$fetchEndpoint$2.error;
             result = _yield$fetchEndpoint$2.result;
@@ -541,25 +580,25 @@ var OrderList = function OrderList(props) {
                 loading: false
               });
             }
-            _context5.next = 22;
+            _context7.next = 22;
             break;
           case 19:
-            _context5.prev = 19;
-            _context5.t0 = _context5["catch"](0);
-            if (_context5.t0.constructor.name !== 'Cancel') {
+            _context7.prev = 19;
+            _context7.t0 = _context7["catch"](0);
+            if (_context7.t0.constructor.name !== 'Cancel') {
               setBusinesses(_objectSpread(_objectSpread({}, businesses), {}, {
-                err: _context5.t0.message,
+                err: _context7.t0.message,
                 loading: false
               }));
             }
           case 22:
           case "end":
-            return _context5.stop();
+            return _context7.stop();
         }
-      }, _callee5, null, [[0, 19]]);
+      }, _callee7, null, [[0, 19]]);
     }));
-    return function getBusinesses(_x7) {
-      return _ref5.apply(this, arguments);
+    return function getBusinesses(_x9) {
+      return _ref7.apply(this, arguments);
     };
   }();
 
@@ -663,19 +702,19 @@ var OrderList = function OrderList(props) {
     };
   }, [socket, session, userCustomerId]);
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(searchByOtherStatus) {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
       var response;
-      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-        while (1) switch (_context6.prev = _context6.next) {
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
           case 0:
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
               loading: true
             }));
-            _context6.prev = 1;
-            _context6.next = 4;
+            _context8.prev = 1;
+            _context8.next = 4;
             return getOrders(pagination.currentPage + 1, searchByOtherStatus);
           case 4:
-            response = _context6.sent;
+            response = _context8.sent;
             setOrderList({
               loading: false,
               orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
@@ -691,41 +730,41 @@ var OrderList = function OrderList(props) {
                 to: response.content.pagination.to
               });
             }
-            _context6.next = 12;
+            _context8.next = 12;
             break;
           case 9:
-            _context6.prev = 9;
-            _context6.t0 = _context6["catch"](1);
-            if (_context6.t0.constructor.name !== 'Cancel') {
+            _context8.prev = 9;
+            _context8.t0 = _context8["catch"](1);
+            if (_context8.t0.constructor.name !== 'Cancel') {
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: false,
-                error: [_context6.t0.message]
+                error: [_context8.t0.message]
               }));
             }
           case 12:
           case "end":
-            return _context6.stop();
+            return _context8.stop();
         }
-      }, _callee6, null, [[1, 9]]);
+      }, _callee8, null, [[1, 9]]);
     }));
-    return function loadMoreOrders(_x8) {
-      return _ref6.apply(this, arguments);
+    return function loadMoreOrders(_x10) {
+      return _ref8.apply(this, arguments);
     };
   }();
   var goToPage = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(page) {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(page) {
       var response;
-      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-        while (1) switch (_context7.prev = _context7.next) {
+      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        while (1) switch (_context9.prev = _context9.next) {
           case 0:
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
               loading: true
             }));
-            _context7.prev = 1;
-            _context7.next = 4;
+            _context9.prev = 1;
+            _context9.next = 4;
             return getOrders(page);
           case 4:
-            response = _context7.sent;
+            response = _context9.sent;
             setOrderList({
               loading: false,
               orders: response.content.error ? [] : response.content.result,
@@ -741,25 +780,25 @@ var OrderList = function OrderList(props) {
                 to: response.content.pagination.to
               });
             }
-            _context7.next = 12;
+            _context9.next = 12;
             break;
           case 9:
-            _context7.prev = 9;
-            _context7.t0 = _context7["catch"](1);
-            if (_context7.t0.constructor.name !== 'Cancel') {
+            _context9.prev = 9;
+            _context9.t0 = _context9["catch"](1);
+            if (_context9.t0.constructor.name !== 'Cancel') {
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: false,
-                error: [_context7.t0.message]
+                error: [_context9.t0.message]
               }));
             }
           case 12:
           case "end":
-            return _context7.stop();
+            return _context9.stop();
         }
-      }, _callee7, null, [[1, 9]]);
+      }, _callee9, null, [[1, 9]]);
     }));
-    return function goToPage(_x9) {
-      return _ref7.apply(this, arguments);
+    return function goToPage(_x11) {
+      return _ref9.apply(this, arguments);
     };
   }();
   var sortOrders = function sortOrders(orders) {
@@ -794,19 +833,19 @@ var OrderList = function OrderList(props) {
     }));
   };
   var getPage = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(page, pageSize) {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(page, pageSize) {
       var response;
-      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-        while (1) switch (_context8.prev = _context8.next) {
+      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        while (1) switch (_context10.prev = _context10.next) {
           case 0:
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
               loading: true
             }));
-            _context8.prev = 1;
-            _context8.next = 4;
+            _context10.prev = 1;
+            _context10.next = 4;
             return getOrders(page, pageSize);
           case 4:
-            response = _context8.sent;
+            response = _context10.sent;
             setOrderList({
               loading: false,
               orders: response.content.error ? orderList.orders : response.content.result,
@@ -822,25 +861,25 @@ var OrderList = function OrderList(props) {
                 to: response.content.pagination.to
               });
             }
-            _context8.next = 12;
+            _context10.next = 12;
             break;
           case 9:
-            _context8.prev = 9;
-            _context8.t0 = _context8["catch"](1);
-            if (_context8.t0.constructor.name !== 'Cancel') {
+            _context10.prev = 9;
+            _context10.t0 = _context10["catch"](1);
+            if (_context10.t0.constructor.name !== 'Cancel') {
               setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
                 loading: false,
-                error: [_context8.t0.message]
+                error: [_context10.t0.message]
               }));
             }
           case 12:
           case "end":
-            return _context8.stop();
+            return _context10.stop();
         }
-      }, _callee8, null, [[1, 9]]);
+      }, _callee10, null, [[1, 9]]);
     }));
-    return function getPage(_x10, _x11) {
-      return _ref8.apply(this, arguments);
+    return function getPage(_x12, _x13) {
+      return _ref10.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {

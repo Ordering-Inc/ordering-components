@@ -867,7 +867,10 @@ var OrderProvider = function OrderProvider(_ref) {
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-            return _context8.abrupt("return", !error);
+            return _context8.abrupt("return", {
+              error: error,
+              result: result
+            });
           case 23:
             _context8.prev = 23;
             _context8.t0 = _context8["catch"](0);
@@ -1804,7 +1807,7 @@ var OrderProvider = function OrderProvider(_ref) {
    * Reorder an order and get cart
    */
   var reorder = /*#__PURE__*/function () {
-    var _ref21 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(orderId) {
+    var _ref21 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(orderId, offAlert) {
       var countryCode, customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
       return _regeneratorRuntime().wrap(function _callee19$(_context19) {
         while (1) switch (_context19.prev = _context19.next) {
@@ -1845,7 +1848,7 @@ var OrderProvider = function OrderProvider(_ref) {
             if (!error) {
               state.carts["businessId:".concat(result.business_id)] = result;
               events.emit('cart_added', result);
-            } else {
+            } else if (!offAlert) {
               setAlert({
                 show: true,
                 content: result
@@ -1874,7 +1877,7 @@ var OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee19, null, [[0, 23]]);
     }));
-    return function reorder(_x31) {
+    return function reorder(_x31, _x32) {
       return _ref21.apply(this, arguments);
     };
   }();
@@ -2079,7 +2082,7 @@ var OrderProvider = function OrderProvider(_ref) {
         }
       }, _callee22);
     }));
-    return function setUserCustomerOptions(_x32) {
+    return function setUserCustomerOptions(_x33) {
       return _ref24.apply(this, arguments);
     };
   }();
