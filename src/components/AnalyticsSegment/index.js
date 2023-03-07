@@ -13,7 +13,7 @@ export const AnalyticsSegment = (props) => {
   const [events] = useEvent()
   const [analytics, setAnalytics] = useState(undefined)
 
-  const handleClickProduct = (product, featured) => {
+  const handleClickProduct = (product) => {
     console.log('Segment Product Clicked', product)
     analytics.track('Product Clicked', {
       id: product.id,
@@ -21,15 +21,16 @@ export const AnalyticsSegment = (props) => {
       category: product.category_id,
       price: product.price
     })
-    if (featured) {
-      console.log('Promotion Clicked', product)
-      analytics.track('Promotion Clicked', {
-        id: product.id,
-        name: product.name,
-        category: product.category_id,
-        price: product.price
-      })
-    }
+  }
+
+  const handleClickPromotionProduct = (product, featured) => {
+    console.log('Promotion Clicked', product)
+    analytics.track('Promotion Clicked', {
+      id: product.id,
+      name: product.name,
+      category: product.category_id,
+      price: product.price
+    })
   }
 
   const handleProductAdded = (product) => {
@@ -144,7 +145,7 @@ export const AnalyticsSegment = (props) => {
       // events.on('order_added', handleAddOrder)
       events.on('cart_product_removed', handleProductRemoved)
       events.on('category_selected', handleCategorySelect)
-      events.on('product_promotion_clicked', handleCategorySelect)
+      events.on('product_promotion_clicked', handleClickPromotionProduct)
       events.on('in-checkout', handleInCheckout)
       events.on('go_to_business', handleGoToBusiness)
     }
@@ -193,7 +194,7 @@ export const AnalyticsSegment = (props) => {
         // events.off('order_added', handleAddOrder)
         events.off('cart_product_removed', handleProductRemoved)
         events.off('category_selected', handleCategorySelect)
-        events.off('product_promotion_clicked', handleCategorySelect)
+        events.off('product_promotion_clicked', handleClickPromotionProduct)
         events.off('in-checkout', handleInCheckout)
         events.off('go_to_business', handleGoToBusiness)
       }

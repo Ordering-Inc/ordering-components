@@ -53,7 +53,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       analytics = _useState2[0],
       setAnalytics = _useState2[1];
 
-  var handleClickProduct = function handleClickProduct(product, featured) {
+  var handleClickProduct = function handleClickProduct(product) {
     console.log('Segment Product Clicked', product);
     analytics.track('Product Clicked', {
       id: product.id,
@@ -61,16 +61,16 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       category: product.category_id,
       price: product.price
     });
+  };
 
-    if (featured) {
-      console.log('Promotion Clicked', product);
-      analytics.track('Promotion Clicked', {
-        id: product.id,
-        name: product.name,
-        category: product.category_id,
-        price: product.price
-      });
-    }
+  var handleClickPromotionProduct = function handleClickPromotionProduct(product, featured) {
+    console.log('Promotion Clicked', product);
+    analytics.track('Promotion Clicked', {
+      id: product.id,
+      name: product.name,
+      category: product.category_id,
+      price: product.price
+    });
   };
 
   var handleProductAdded = function handleProductAdded(product) {
@@ -199,7 +199,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
 
       events.on('cart_product_removed', handleProductRemoved);
       events.on('category_selected', handleCategorySelect);
-      events.on('product_promotion_clicked', handleCategorySelect);
+      events.on('product_promotion_clicked', handleClickPromotionProduct);
       events.on('in-checkout', handleInCheckout);
       events.on('go_to_business', handleGoToBusiness);
     }
@@ -256,7 +256,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
 
         events.off('cart_product_removed', handleProductRemoved);
         events.off('category_selected', handleCategorySelect);
-        events.off('product_promotion_clicked', handleCategorySelect);
+        events.off('product_promotion_clicked', handleClickPromotionProduct);
         events.off('in-checkout', handleInCheckout);
         events.off('go_to_business', handleGoToBusiness);
       }
