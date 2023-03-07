@@ -23,7 +23,7 @@ export const MultiCartCreate = (props) => {
     const cartList = Object.values(orderState?.carts).filter(cart => cart?.valid && cart?.status !== 2).map(cart => cart?.uuid)
     if (cartList?.length === 1) {
       handleOnRedirectCheckout &&
-      handleOnRedirectCheckout(cartList[0]?.uuid)
+      handleOnRedirectCheckout(cartList?.[0])
     }
 
     const body = { carts: cartList }

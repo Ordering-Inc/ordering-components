@@ -65,33 +65,39 @@ export const OrderList = props => {
   const requestsState = {}
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
 
-  const handleReorder = async (orderId) => {
-    if (!orderId) return
+  const handleReorder = async (value) => {
+    const orderId = Array.isArray(value) ? value : [value]
+    if (!orderId?.length) return
+
     try {
+      setReorderState({ ...reorderState, loading: true })
+
+      const fetchOrders = async (ids) => {
+        const promises = ids.map(async id => {
+          const res = await reorder(id, ids?.length > 1)
+          return res
+        })
+        const data = await Promise.all(promises)
+        return data
+      }
+
+      const reordersArray = await fetchOrders(orderId)
+
+      const error = reordersArray.length && reordersArray.every(obj => obj.error) && reordersArray[0]?.result?.[0]
+      const result = reordersArray.length && reordersArray.map(obj => (obj.result?.[0] ?? obj.result)).filter(o => typeof o !== 'string')
+
+      const choosedOrder = orderList.orders.find(_order => _order?.id === orderId[0])
+      const _businessId = choosedOrder?.business_id ?? choosedOrder?.original?.business_id
+      const _businessData = await ordering.businesses(_businessId).select(['slug']).get()
+      const _businessSlug = await _businessData?.content?.result?.slug
+      const orderResult = { orderId: orderId[0], business_id: _businessId, business: { slug: _businessSlug } }
+
       setReorderState({
         ...reorderState,
-        loading: true
+        loading: false,
+        error,
+        result: error ? orderResult : { ...(result[0]), orderId: orderId[0] }
       })
-      const { error, result } = await reorder(orderId)
-      if (!error) {
-        setReorderState({
-          ...reorderState,
-          loading: false,
-          result: { ...result, orderId: orderId }
-        })
-      } else {
-        const choosedOrder = orderList.orders.find(_order => _order?.id === orderId)
-        const _businessId = choosedOrder?.business_id ?? choosedOrder?.original?.business_id
-        const _businessData = await ordering.businesses(_businessId).select(['slug']).get()
-        const _businessSlug = await _businessData?.content?.result?.slug
-
-        setReorderState({
-          ...reorderState,
-          loading: false,
-          error: true,
-          result: { ...result, orderId: orderId, business_id: _businessId, business: { slug: _businessSlug } }
-        })
-      }
     } catch (err) {
       setReorderState({
         ...reorderState,
@@ -259,7 +265,9 @@ export const OrderList = props => {
       const response = await fetch(url, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}`, 'X-App-X': ordering.appId,
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          'X-App-X': ordering.appId,
           'X-Socket-Id-X': socket?.getId()
         }
       })
