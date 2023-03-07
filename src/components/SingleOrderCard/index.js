@@ -77,27 +77,25 @@ export const SingleOrderCard = (props) => {
   /**
    * Method to remove products from cart
    */
-  const handleRemoveCart = async () => {
-    const uuid = carts[`businessId:${order.business_id}`]?.uuid
-    if (!uuid) return
+  const handleRemoveCart = async (_order) => {
+    const _businessIds = Array.isArray(_order?.business_id) ? _order?.business_id : [order?.business_id]
+    const orderIds = Array.isArray(_order?.id) ? _order?.id : [order?.id]
+    const uuids = _businessIds.map((b, index) => ({ uuid: carts[`businessId:${b}`]?.uuid, orderIdx: index })) ?? []
+
+    if (!uuids?.length) return
     try {
-      setCartState({
-        ...cartState,
-        loading: true
-      })
-      const content = await clearCart(uuid)
-      if (!content?.error) {
-        handleReorder(order?.id)
-        setCartState({
-          loading: false,
-          error: null
-        })
-      } else {
-        setCartState({
-          loading: false,
-          error: content?.result
-        })
+      setCartState({ ...cartState, loading: true })
+      const errors = []
+      for (const item of uuids) {
+        let _error = null
+        if (item.uuid) {
+          const { error, result } = await clearCart(item.uuid)
+          _error = error ? result[0] : false
+        }
+        _error && errors.push(_error)
       }
+      handleReorder(orderIds)
+      setCartState({ loading: false, error: errors })
     } catch (error) {
       setCartState({
         loading: false,
