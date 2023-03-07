@@ -53,7 +53,7 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       analytics = _useState2[0],
       setAnalytics = _useState2[1];
 
-  var handleClickProduct = function handleClickProduct(product) {
+  var handleClickProduct = function handleClickProduct(product, featured) {
     console.log('Segment Product Clicked', product);
     analytics.track('Product Clicked', {
       id: product.id,
@@ -61,6 +61,16 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
       category: product.category_id,
       price: product.price
     });
+
+    if (featured) {
+      console.log('Promotion Clicked', product);
+      analytics.track('Promotion Clicked', {
+        id: product.id,
+        name: product.name,
+        category: product.category_id,
+        price: product.price
+      });
+    }
   };
 
   var handleProductAdded = function handleProductAdded(product) {
@@ -86,15 +96,20 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
   };
 
   var handleOrderPlaced = function handleOrderPlaced(order) {
-    var _order$business, _order$business2;
+    var _order$customer, _order$customer2, _order$business, _order$business2;
 
     console.log('Segment Order Placed', order);
     analytics.track('Order Placed', {
-      id: order.id,
-      affiliation: (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.name,
-      revenue: order.total,
-      tax: order.tax_total,
-      shipping: order.delivery_zone_price
+      total: order === null || order === void 0 ? void 0 : order.total,
+      business_id: order === null || order === void 0 ? void 0 : order.business_id,
+      customer_email: order === null || order === void 0 ? void 0 : (_order$customer = order.customer) === null || _order$customer === void 0 ? void 0 : _order$customer.email,
+      customer_phone: order === null || order === void 0 ? void 0 : (_order$customer2 = order.customer) === null || _order$customer2 === void 0 ? void 0 : _order$customer2.cellphone,
+      coupon: (order === null || order === void 0 ? void 0 : order.coupon) || 'NA',
+      coupon_price: (order === null || order === void 0 ? void 0 : order.offer) || 'NA',
+      marca: order === null || order === void 0 ? void 0 : order.app_id,
+      nombre_de_la_tienda: order === null || order === void 0 ? void 0 : (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.name,
+      order: order === null || order === void 0 ? void 0 : order.id,
+      products: order === null || order === void 0 ? void 0 : order.products
     });
     analytics.track('Payment Info Entered', {
       order: order.id,
@@ -141,15 +156,52 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
     });
   };
 
+  var handleCategorySelect = function handleCategorySelect(data) {
+    var _data$params;
+
+    console.log('Category Clicked', data);
+    analytics.track('Category Clicked', {
+      category: data === null || data === void 0 ? void 0 : (_data$params = data.params) === null || _data$params === void 0 ? void 0 : _data$params.category.name
+    });
+  };
+
+  var handleInCheckout = function handleInCheckout(data) {
+    var _data$business;
+
+    console.log('Checkout Started', data);
+    analytics.track('Checkout Started', {
+      nombre_de_la_tienda: data === null || data === void 0 ? void 0 : (_data$business = data.business) === null || _data$business === void 0 ? void 0 : _data$business.name,
+      total: data === null || data === void 0 ? void 0 : data.total,
+      products: data === null || data === void 0 ? void 0 : data.products
+    });
+  };
+
+  var handleGoToBusiness = function handleGoToBusiness(storeData) {
+    var _storeData$params, _storeData$params2;
+
+    if ((storeData === null || storeData === void 0 ? void 0 : (_storeData$params = storeData.params) === null || _storeData$params === void 0 ? void 0 : _storeData$params.store) !== ':store' && (storeData === null || storeData === void 0 ? void 0 : (_storeData$params2 = storeData.params) === null || _storeData$params2 === void 0 ? void 0 : _storeData$params2.store) !== 'undefined') {
+      var _storeData$params3;
+
+      console.log('Checkout Started', storeData);
+      analytics.track('Abrir negocio', {
+        restaurant: storeData === null || storeData === void 0 ? void 0 : (_storeData$params3 = storeData.params) === null || _storeData$params3 === void 0 ? void 0 : _storeData$params3.store
+      });
+    }
+  };
+
   (0, _react.useEffect)(function () {
     if (analytics && !customData) {
       events.on('product_clicked', handleClickProduct);
       events.on('product_added', handleProductAdded);
       events.on('userLogin', handleLogin);
       events.on('order_placed', handleOrderPlaced);
-      events.on('order_updated', handleUpdateOrder);
-      events.on('order_added', handleAddOrder);
+      events.on('order_updated', handleUpdateOrder); // events.on('order_added', handleAddOrder)
+
       events.on('cart_product_removed', handleProductRemoved);
+      events.on('category_selected', handleCategorySelect);
+      events.on('product_promotion_clicked', handleCategorySelect);
+      events.on('in-checkout', handleInCheckout);
+      events.on('go_to_business', handleGoToBusiness);
     }
 
     if (!customData || !analytics) return;
@@ -200,9 +252,13 @@ var AnalyticsSegment = function AnalyticsSegment(props) {
         events.off('product_added', handleProductAdded);
         events.off('userLogin', handleLogin);
         events.off('order_placed', handleOrderPlaced);
-        events.off('order_updated', handleUpdateOrder);
-        events.off('order_added', handleAddOrder);
+        events.off('order_updated', handleUpdateOrder); // events.off('order_added', handleAddOrder)
+
         events.off('cart_product_removed', handleProductRemoved);
+        events.off('category_selected', handleCategorySelect);
+        events.off('product_promotion_clicked', handleCategorySelect);
+        events.off('in-checkout', handleInCheckout);
+        events.off('go_to_business', handleGoToBusiness);
       }
     };
   }, [analytics, customData]);
