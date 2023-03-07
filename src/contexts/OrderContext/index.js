@@ -503,7 +503,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
-      return !error
+      return { error, result }
     } catch (err) {
       setState({ ...state, loading: false })
       return false
@@ -995,7 +995,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   /**
    * Reorder an order and get cart
    */
-  const reorder = async (orderId) => {
+  const reorder = async (orderId, offAlert) => {
     try {
       setState({ ...state, loading: true })
       const countryCode = await strategy.getItem('country-code')
@@ -1018,7 +1018,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       if (!error) {
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_added', result)
-      } else {
+      } else if (!offAlert) {
         setAlert({ show: true, content: result })
       }
       setState({ ...state, loading: false })
