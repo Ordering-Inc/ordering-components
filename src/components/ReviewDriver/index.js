@@ -22,11 +22,11 @@ export const ReviewDriver = (props) => {
    */
   const handleSendDriverReview = async () => {
     setFormState({ ...formState, loading: true })
-    try {
-      const userId = isProfessional
-        ? order?.products[0]?.calendar_event?.professional?.id
-        : order?.driver?.id
-    if(!order?.id.length){
+    const userId = isProfessional
+      ? order?.products[0]?.calendar_event?.professional?.id
+      : order?.driver?.id
+      if(!order?.id.length){
+      try {
       const response = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
         method: 'POST',
         headers: {
@@ -63,47 +63,7 @@ export const ReviewDriver = (props) => {
           }
         })
       }
-    }else{
-      order?.id.map(async (orderId) => {
-      const response = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-          'Content-Type': 'application/json',
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
-        },
-        body: JSON.stringify({ ...reviews, order_id: orderId, user_id: userId })
-      })
-      const { result, error } = await response.json()
-      if (!error) {
-        setFormState({
-          loading: false,
-          result: {
-            result: result,
-            error: false
-          }
-        })
-        if (isToast) {
-          showToast(
-            ToastType.Success,
-            isProfessional
-              ? t('PROFESSIONAL_REVIEW_SUCCESS_CONTENT', 'Thank you, Professional review successfully submitted!')
-              : t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'))
-        }
-      } else {
-        setFormState({
-          ...formState,
-          loading: false,
-          result: {
-            result: result,
-            error: true
-          }
-        })
-      }
-    })
-    }
-    } catch (err) {
+    }catch (err) {
       setFormState({
         ...formState,
         result: {
@@ -113,8 +73,49 @@ export const ReviewDriver = (props) => {
         loading: false
       })
     }
+  }else{
+      let requests = order?.id?.map((orderId) => {
+        return fetch(`${ordering.root}/users/${userId}/user_reviews`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${session.token}`,
+            'Content-Type': 'application/json',
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          },
+          body: JSON.stringify({ ...reviews, order_id: orderId, user_id: userId })
+        })
+      })
+     await Promise.all(requests.map(response => response.then(async (response) => {
+      const { result } = await response.json()
+      setFormState({
+        loading: false,
+        result: {
+          result: result,
+          error: false
+        }
+      })
+      if (isToast) {
+        showToast(
+          ToastType.Success,
+          isProfessional
+            ? t('PROFESSIONAL_REVIEW_SUCCESS_CONTENT', 'Thank you, Professional review successfully submitted!')
+            : t('DRIVER_REVIEW_SUCCESS_CONTENT', 'Thank you, Driver review successfully submitted!'))
+      }
+    })
+    .catch(error => {
+            setFormState({
+              ...formState,
+              loading: false,
+              result: {
+                result: error,
+                error: true
+              }
+            })
+          })
+        ))
   }
-
+  }
   return (
     <>
       {UIComponent && (
