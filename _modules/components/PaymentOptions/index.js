@@ -222,7 +222,18 @@ var PaymentOptions = function PaymentOptions(props) {
       }));
     } else {
       if (businessId) {
-        getPaymentOptions();
+        if (businessId === -1) {
+          setPaymethodsList(_objectSpread(_objectSpread({}, paymethodsList), {}, {
+            loading: false,
+            paymethods: [{
+              gateway: 'stripe',
+              name: 'Stripe',
+              id: 1
+            }]
+          }));
+        } else {
+          getPaymentOptions();
+        }
       }
     }
   }, [isLoading, businessId]);

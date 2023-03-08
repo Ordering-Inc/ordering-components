@@ -4,12 +4,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PaymentOptionStripe = void 0;
+exports.PurchaseGiftCard = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
-var _SessionContext = require("../../contexts/SessionContext");
-var _ApiContext = require("../../contexts/ApiContext");
-var _WebsocketContext = require("../../contexts/WebsocketContext");
+var _SessionContext = require("../../../contexts/SessionContext");
+var _ApiContext = require("../../../contexts/ApiContext");
+var _OrderContext = require("../../../contexts/OrderContext");
+var _EventContext = require("../../../contexts/EventContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -29,346 +30,182 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
- * Component to manage payment option stripe behavior without UI component
+ * Component to manage purchase gift card behavior without UI component
  */
-var PaymentOptionStripe = function PaymentOptionStripe(props) {
-  var businessId = props.businessId,
-    UIComponent = props.UIComponent,
-    setCardList = props.setCardList;
+var PurchaseGiftCard = function PurchaseGiftCard(props) {
+  var UIComponent = props.UIComponent,
+    handleCustomGoToCheckout = props.handleCustomGoToCheckout;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
-    _useSession2$ = _useSession2[0],
-    token = _useSession2$.token,
-    user = _useSession2$.user;
+    token = _useSession2[0].token;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var socket = (0, _WebsocketContext.useWebsocket)();
-  /**
-   * Contains and object to save cards, handle loading and error
-   */
+  var _useOrder = (0, _OrderContext.useOrder)(),
+    _useOrder2 = _slicedToArray(_useOrder, 2),
+    orderState = _useOrder2[0],
+    _useOrder2$ = _useOrder2[1],
+    addProduct = _useOrder2$.addProduct,
+    removeProduct = _useOrder2$.removeProduct;
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
+  var giftCart = Object.values(orderState.carts).find(function (_cart) {
+    return !(_cart !== null && _cart !== void 0 && _cart.business_id);
+  });
   var _useState = (0, _react.useState)({
-      cards: [],
       loading: true,
+      products: [],
       error: null
     }),
     _useState2 = _slicedToArray(_useState, 2),
-    cardsList = _useState2[0],
-    setCardsList = _useState2[1];
-  /**
-   * save stripe public key
-   */
-  var _useState3 = (0, _react.useState)(props.publicKey),
+    productsListState = _useState2[0],
+    setProductsListState = _useState2[1];
+  var _useState3 = (0, _react.useState)(giftCart ? giftCart === null || giftCart === void 0 ? void 0 : giftCart.products[0] : null),
     _useState4 = _slicedToArray(_useState3, 2),
-    publicKey = _useState4[0],
-    setPublicKey = _useState4[1];
-  var _useState5 = (0, _react.useState)(null),
-    _useState6 = _slicedToArray(_useState5, 2),
-    cardSelected = _useState6[0],
-    setCardSelected = _useState6[1];
-  var _useState7 = (0, _react.useState)(null),
-    _useState8 = _slicedToArray(_useState7, 2),
-    cardDefault = _useState8[0],
-    setCardDefault = _useState8[1];
-  var _useState9 = (0, _react.useState)({
-      loading: false,
-      error: null
-    }),
-    _useState10 = _slicedToArray(_useState9, 2),
-    defaultCardSetActionStatus = _useState10[0],
-    setDefaultCardSetActionStatus = _useState10[1];
-  var requestState = {};
+    selectedProduct = _useState4[0],
+    setSelectedProduct = _useState4[1];
 
   /**
-   * method to get cards from API
+   * Method to get the gift products from API
    */
-  var getCards = /*#__PURE__*/function () {
+  var getPlatformProductsList = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var source, _yield$ordering$setAc, result, defaultCard;
+      var where, conditions, requestOptions, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: true
-            }));
-            _context.prev = 1;
-            source = {};
-            requestState.paymentCards = source;
-            // The order of paymentCards params is businessId, userId. This sdk needs to be improved in the future,
-            _context.next = 6;
-            return ordering.setAccessToken(token).paymentCards(businessId, user.id).get({
-              cancelToken: source
+            _context.prev = 0;
+            where = null;
+            conditions = [];
+            conditions.push({
+              attribute: 'type',
+              value: 'gift_card'
             });
-          case 6:
-            _yield$ordering$setAc = _context.sent;
-            result = _yield$ordering$setAc.content.result;
-            defaultCard = result === null || result === void 0 ? void 0 : result.find(function (card) {
-              return card.default;
-            });
-            if (defaultCard) {
-              setCardDefault({
-                id: defaultCard.id,
-                type: 'card',
-                card: {
-                  brand: defaultCard.brand,
-                  last4: defaultCard.last4
-                }
-              });
+            if (conditions.length) {
+              where = {
+                conditions: conditions,
+                conector: 'AND'
+              };
             }
-            setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              cards: result
-            }));
-            setCardList && setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              cards: result
-            }));
-            _context.next = 18;
-            break;
-          case 14:
-            _context.prev = 14;
-            _context.t0 = _context["catch"](1);
-            setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              error: _context.t0
-            }));
-            setCardList && setCardList(_objectSpread(_objectSpread({}, cardsList), {}, {
-              loading: false,
-              error: _context.t0
-            }));
-          case 18:
-          case "end":
-            return _context.stop();
-        }
-      }, _callee, null, [[1, 14]]);
-    }));
-    return function getCards() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  /**
-   * method to get cards from API
-   */
-  var deleteCard = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(card) {
-      var _yield$ordering$payme, error;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return ordering.paymentCards(-1, user.id, card.id).delete();
-          case 3:
-            _yield$ordering$payme = _context2.sent;
-            error = _yield$ordering$payme.content.error;
-            if (!error) {
-              cardsList.cards = cardsList.cards.filter(function (_card) {
-                return _card.id !== card.id;
-              });
-              setCardsList(_objectSpread({}, cardsList));
-              getCards();
-            }
-            _context2.next = 11;
-            break;
-          case 8:
-            _context2.prev = 8;
-            _context2.t0 = _context2["catch"](0);
-            console.error(_context2.t0.message);
-          case 11:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2, null, [[0, 8]]);
-    }));
-    return function deleteCard(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  /**
-   * method to set card as default
-   */
-  var setDefaultCard = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(card) {
-      var requestOptions, functionFetch, response, content;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            _context3.prev = 0;
-            setDefaultCardSetActionStatus(_objectSpread(_objectSpread({}, defaultCardSetActionStatus), {}, {
+            setProductsListState(_objectSpread(_objectSpread({}, productsListState), {}, {
               loading: true
             }));
             requestOptions = {
-              method: 'POST',
+              method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token),
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-              },
-              body: JSON.stringify({
-                business_id: businessId,
-                user_id: user.id,
-                card_id: card.id
-              })
+                Authorization: "Bearer ".concat(token)
+              }
             };
-            functionFetch = "".concat(ordering.root, "/payments/stripe/cards/default");
-            _context3.next = 6;
-            return fetch(functionFetch, requestOptions);
-          case 6:
-            response = _context3.sent;
-            _context3.next = 9;
-            return response.json();
+            _context.next = 9;
+            return fetch("".concat(ordering.root, "/platform_products?where=").concat(JSON.stringify(where)), requestOptions);
           case 9:
-            content = _context3.sent;
-            if (!content.error) {
-              setCardDefault({
-                id: card.id,
-                type: 'card',
-                card: {
-                  brand: card.brand,
-                  last4: card.last4
+            response = _context.sent;
+            _context.next = 12;
+            return response.json();
+          case 12:
+            _yield$response$json = _context.sent;
+            error = _yield$response$json.error;
+            result = _yield$response$json.result;
+            setProductsListState({
+              loading: false,
+              products: error ? [] : result,
+              error: error ? result : null
+            });
+            _context.next = 21;
+            break;
+          case 18:
+            _context.prev = 18;
+            _context.t0 = _context["catch"](0);
+            setProductsListState(_objectSpread(_objectSpread({}, productsListState), {}, {
+              loading: false,
+              error: [_context.t0.message]
+            }));
+          case 21:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[0, 18]]);
+    }));
+    return function getPlatformProductsList() {
+      return _ref.apply(this, arguments);
+    };
+  }();
+  var handleAccept = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var _giftCart$products$;
+      var giftCard, _yield$addProduct, error, result;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            giftCard = {
+              id: selectedProduct === null || selectedProduct === void 0 ? void 0 : selectedProduct.id,
+              quantity: 1
+            };
+            if (!(giftCart && (selectedProduct === null || selectedProduct === void 0 ? void 0 : selectedProduct.id) === ((_giftCart$products$ = giftCart.products[0]) === null || _giftCart$products$ === void 0 ? void 0 : _giftCart$products$.id))) {
+              _context2.next = 5;
+              break;
+            }
+            if (handleCustomGoToCheckout) {
+              handleCustomGoToCheckout(giftCart.uuid);
+            } else {
+              events.emit('go_to_page', {
+                page: 'checkout',
+                params: {
+                  cartUuid: giftCart.uuid
                 }
               });
-              setDefaultCardSetActionStatus({
-                loading: false,
-                error: null
-              });
-            } else {
-              setDefaultCardSetActionStatus({
-                loading: false,
-                error: content.result
-              });
             }
-            _context3.next = 16;
+            _context2.next = 12;
             break;
-          case 13:
-            _context3.prev = 13;
-            _context3.t0 = _context3["catch"](0);
-            setDefaultCardSetActionStatus({
-              loading: false,
-              error: _context3.t0
-            });
-          case 16:
-          case "end":
-            return _context3.stop();
-        }
-      }, _callee3, null, [[0, 13]]);
-    }));
-    return function setDefaultCard(_x3) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  /**
-   * Method to get stripe credentials from API
-   */
-  var getCredentials = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var _yield$ordering$setAc2, result;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
-          case 0:
-            _context4.prev = 0;
-            _context4.next = 3;
-            return ordering.setAccessToken(token).paymentCards().getCredentials();
-          case 3:
-            _yield$ordering$setAc2 = _context4.sent;
-            result = _yield$ordering$setAc2.content.result;
-            setPublicKey(result.publishable);
-            _context4.next = 11;
-            break;
+          case 5:
+            if (giftCart) {
+              removeProduct(giftCart.products[0], giftCart);
+            }
+            _context2.next = 8;
+            return addProduct(giftCard, null, null, true);
           case 8:
-            _context4.prev = 8;
-            _context4.t0 = _context4["catch"](0);
-            console.error(_context4.t0.message);
-          case 11:
+            _yield$addProduct = _context2.sent;
+            error = _yield$addProduct.error;
+            result = _yield$addProduct.result;
+            if (!error) {
+              if (handleCustomGoToCheckout) {
+                handleCustomGoToCheckout(result.uuid);
+              } else {
+                events.emit('go_to_page', {
+                  page: 'checkout',
+                  params: {
+                    cartUuid: result.uuid
+                  }
+                });
+              }
+            }
+          case 12:
           case "end":
-            return _context4.stop();
+            return _context2.stop();
         }
-      }, _callee4, null, [[0, 8]]);
+      }, _callee2);
     }));
-    return function getCredentials() {
-      return _ref4.apply(this, arguments);
+    return function handleAccept() {
+      return _ref2.apply(this, arguments);
     };
   }();
-  var handleCardClick = function handleCardClick(card) {
-    setCardSelected({
-      id: card.id,
-      type: 'card',
-      card: {
-        brand: card.brand,
-        last4: card.last4
-      }
-    });
-  };
-  var handleNewCard = function handleNewCard(card) {
-    cardsList.cards.push(card);
-    setCardsList(_objectSpread({}, cardsList));
-    handleCardClick(card);
-  };
   (0, _react.useEffect)(function () {
-    if (token) {
-      getCards();
-      if (!props.publicKey) {
-        getCredentials();
-      }
-    }
-    return function () {
-      if (requestState.paymentCards && requestState.paymentCards.cancel) {
-        requestState.paymentCards.cancel();
-      }
-    };
-  }, [token, businessId]);
+    getPlatformProductsList();
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    cardSelected: cardSelected,
-    cardDefault: cardDefault,
-    cardsList: cardsList,
-    handleCardClick: handleCardClick,
-    publicKey: publicKey,
-    handleNewCard: handleNewCard,
-    deleteCard: deleteCard,
-    setDefaultCard: setDefaultCard,
-    defaultCardSetActionStatus: defaultCardSetActionStatus
+    productsListState: productsListState,
+    selectedProduct: selectedProduct,
+    setSelectedProduct: setSelectedProduct,
+    handleAccept: handleAccept
   })));
 };
-exports.PaymentOptionStripe = PaymentOptionStripe;
-PaymentOptionStripe.propTypes = {
+exports.PurchaseGiftCard = PurchaseGiftCard;
+PurchaseGiftCard.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
-  UIComponent: _propTypes.default.elementType,
-  /**
-   * Business id to get cards from API
-   */
-  businessId: _propTypes.default.number.isRequired,
-  /**
-   * User id to pass in endpoint to get cards from API,
-   */
-  userId: _propTypes.default.number,
-  /**
-   * Components types before payment option stripe
-   * Array of type components, the parent props will pass to these components
-   */
-  beforeComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-  /**
-   * Components types after payment option stripe
-   * Array of type components, the parent props will pass to these components
-   */
-  afterComponents: _propTypes.default.arrayOf(_propTypes.default.elementType),
-  /**
-   * Elements before payment option stripe
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  beforeElements: _propTypes.default.arrayOf(_propTypes.default.element),
-  /**
-   * Elements after payment option stripe
-   * Array of HTML/Components elements, these components will not get the parent props
-   */
-  afterElements: _propTypes.default.arrayOf(_propTypes.default.element)
+  UIComponent: _propTypes.default.elementType
 };
-PaymentOptionStripe.defaultProps = {
-  beforeComponents: [],
-  afterComponents: [],
-  beforeElements: [],
-  afterElements: []
-};
+PurchaseGiftCard.defaultProps = {};

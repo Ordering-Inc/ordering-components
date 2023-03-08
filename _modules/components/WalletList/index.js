@@ -40,6 +40,9 @@ var WalletList = function WalletList(props) {
     _useSession2$ = _useSession2[0],
     token = _useSession2$.token,
     user = _useSession2$.user;
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
   var _useState = (0, _react.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     walletSelected = _useState2[0],
@@ -241,6 +244,12 @@ var WalletList = function WalletList(props) {
       getTransactions(walletSelected);
     }
   }, [walletSelected]);
+  (0, _react.useEffect)(function () {
+    events.on('gift_card_redeemed', getWallets);
+    return function () {
+      events.off('gift_card_redeemed', getWallets);
+    };
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     walletList: state,
     userLoyaltyLevel: userLoyaltyLevel,

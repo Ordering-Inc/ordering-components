@@ -537,6 +537,18 @@ Object.defineProperty(exports, "PromotionsController", {
     return _PromotionsController.PromotionsController;
   }
 });
+Object.defineProperty(exports, "PurchaseGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _PurchaseGiftCard.PurchaseGiftCard;
+  }
+});
+Object.defineProperty(exports, "RedeemGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _RedeemGiftCard.RedeemGiftCard;
+  }
+});
 Object.defineProperty(exports, "ResetPassword", {
   enumerable: true,
   get: function get() {
@@ -565,6 +577,12 @@ Object.defineProperty(exports, "SearchOptions", {
   enumerable: true,
   get: function get() {
     return _SearchOptions.SearchOptions;
+  }
+});
+Object.defineProperty(exports, "SendGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _SendGiftCard.SendGiftCard;
   }
 });
 Object.defineProperty(exports, "SessionContext", {
@@ -851,11 +869,14 @@ var _ProductOptionSuboption = require("../src/components/ProductOptionSuboption"
 var _ProductsList = require("../src/components/ProductsList");
 var _ProductsListing = require("../src/components/ProductsListing");
 var _PromotionsController = require("../src/components/PromotionsController");
+var _PurchaseGiftCard = require("../src/components/GiftCard/PurchaseGiftCard");
+var _RedeemGiftCard = require("../src/components/GiftCard/RedeemGiftCard");
 var _ResetPassword = require("../src/components/ResetPassword");
 var _ReviewCustomer = require("../src/components/ReviewCustomer");
 var _ReviewDriver = require("../src/components/ReviewDriver");
 var _ReviewProduct = require("../src/components/ReviewProduct");
 var _SearchOptions = require("../src/components/SearchOptions");
+var _SendGiftCard = require("../src/components/GiftCard/SendGiftCard");
 var _Sessions = require("../src/components/Sessions");
 var _SignupForm = require("../src/components/SignupForm");
 var _SingleBusinessCard = require("../src/components/SingleBusinessCard");

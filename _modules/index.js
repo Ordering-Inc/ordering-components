@@ -789,6 +789,12 @@ Object.defineProperty(exports, "PromotionsController", {
     return _PromotionsController.PromotionsController;
   }
 });
+Object.defineProperty(exports, "PurchaseGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _PurchaseGiftCard.PurchaseGiftCard;
+  }
+});
 Object.defineProperty(exports, "QueryLoginSpoonity", {
   enumerable: true,
   get: function get() {
@@ -799,6 +805,12 @@ Object.defineProperty(exports, "ReCaptcha", {
   enumerable: true,
   get: function get() {
     return _ReCaptcha.ReCaptcha;
+  }
+});
+Object.defineProperty(exports, "RedeemGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _RedeemGiftCard.RedeemGiftCard;
   }
 });
 Object.defineProperty(exports, "ResetPassword", {
@@ -835,6 +847,12 @@ Object.defineProperty(exports, "SearchOptions", {
   enumerable: true,
   get: function get() {
     return _SearchOptions.SearchOptions;
+  }
+});
+Object.defineProperty(exports, "SendGiftCard", {
+  enumerable: true,
+  get: function get() {
+    return _SendGiftCard.SendGiftCard;
   }
 });
 Object.defineProperty(exports, "SessionContext", {
@@ -1174,8 +1192,11 @@ var _ProductsList = require("./components/ProductsList");
 var _ProductsListing = require("./components/ProductsListing");
 var _ProfessionalInfo = require("./components/ProfessionalInfo");
 var _PromotionsController = require("./components/PromotionsController");
+var _PurchaseGiftCard = require("./components/GiftCard/PurchaseGiftCard");
 var _Messages = require("./components/Messages");
+var _RedeemGiftCard = require("./components/GiftCard/RedeemGiftCard");
 var _SearchOptions = require("./components/SearchOptions");
+var _SendGiftCard = require("./components/GiftCard/SendGiftCard");
 var _Sessions = require("./components/Sessions");
 var _SignupForm = require("./components/SignupForm");
 var _SingleBusinessCard = require("./components/SingleBusinessCard");
