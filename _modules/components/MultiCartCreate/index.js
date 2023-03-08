@@ -42,7 +42,7 @@ var MultiCartCreate = function MultiCartCreate(props) {
     refreshOrderOptions = _useOrder2[1].refreshOrderOptions;
   var createMultiCart = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var cartList, _cartList$, body, response, _yield$response$json, result, error;
+      var cartList, body, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -52,7 +52,7 @@ var MultiCartCreate = function MultiCartCreate(props) {
               return cart === null || cart === void 0 ? void 0 : cart.uuid;
             });
             if ((cartList === null || cartList === void 0 ? void 0 : cartList.length) === 1) {
-              handleOnRedirectCheckout && handleOnRedirectCheckout((_cartList$ = cartList[0]) === null || _cartList$ === void 0 ? void 0 : _cartList$.uuid);
+              handleOnRedirectCheckout && handleOnRedirectCheckout(cartList === null || cartList === void 0 ? void 0 : cartList[0]);
             }
             body = {
               carts: cartList
