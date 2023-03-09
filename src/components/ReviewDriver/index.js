@@ -49,7 +49,7 @@ export const ReviewDriver = (props) => {
           return data
         }
 
-      const reviewsArray = await fetchOrders(orderId)
+      const reviewsArray = await fetchReviews(orderId)
 
       const error = reviewsArray.length && reviewsArray.every(obj => obj.error) && reviewsArray[0]?.result?.[0]
       const result = reviewsArray.length && reviewsArray.map(obj => (obj.result?.[0] ?? obj.result)).filter(o => typeof o !== 'string')
