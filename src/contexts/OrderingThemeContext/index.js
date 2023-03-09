@@ -70,7 +70,7 @@ export const OrderingThemeProvider = ({ children, settings }) => {
 
   useEffect(() => {
     if (optimizationLoad.loading) return
-    const _themes = optimizationLoad.result ? {
+    const _themes = optimizationLoad.result && !!optimizationLoad.result?.theme ? {
       error: optimizationLoad.error,
       result: { values: optimizationLoad.result?.theme }
     } : null
