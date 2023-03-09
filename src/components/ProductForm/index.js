@@ -639,6 +639,13 @@ export const ProductForm = (props) => {
     setProduct({ ...product, product: props.product })
   }, [props.product])
 
+  const checkHasPreselected = (options, option) => {
+    if (!option?.respect_to) return true
+    const selectedOption = options.filter(option1 => option1?.suboptions?.filter(suboption => option.respect_to === suboption?.id && suboption.preselected).length > 0)
+    if (!selectedOption) return false
+    checkHasPreselected(options, selectedOption)
+  }
+
   /**
    * Check if there is an option required with one suboption
    */
@@ -646,12 +653,13 @@ export const ProductForm = (props) => {
     if (product?.product && product.product?.extras?.length > 0) {
       const options = [].concat(...product.product.extras.map(extra => extra.options.filter(
         option => {
-          const preselected = extra.options.filter(option1 => option1?.suboptions?.filter(suboption1 => option.respect_to === suboption1?.id && suboption1.preselected).length > 0)
+          const preselected = checkHasPreselected(extra.options, option)
           return (
             ((option.min === 1 &&
             option.max === 1 &&
             option.suboptions.filter(suboption => suboption.enabled).length === 1) ||
-          option.suboptions.filter(suboption => suboption.preselected).length > 0) && (!option.respect_to || (option?.respect_to && preselected))
+          option.suboptions.filter(suboption => suboption.preselected).length > 0) &&
+          (!option?.conditioned || (option?.conditioned && preselected))
           )
         }
       )))
