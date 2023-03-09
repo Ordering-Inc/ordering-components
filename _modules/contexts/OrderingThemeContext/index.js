@@ -132,12 +132,12 @@ var OrderingThemeProvider = function OrderingThemeProvider(_ref) {
     getThemes();
   };
   (0, _react.useEffect)(function () {
-    var _optimizationLoad$res;
+    var _optimizationLoad$res, _optimizationLoad$res2;
     if (optimizationLoad.loading) return;
-    var _themes = optimizationLoad.result ? {
+    var _themes = optimizationLoad.result && !!((_optimizationLoad$res = optimizationLoad.result) !== null && _optimizationLoad$res !== void 0 && _optimizationLoad$res.theme) ? {
       error: optimizationLoad.error,
       result: {
-        values: (_optimizationLoad$res = optimizationLoad.result) === null || _optimizationLoad$res === void 0 ? void 0 : _optimizationLoad$res.theme
+        values: (_optimizationLoad$res2 = optimizationLoad.result) === null || _optimizationLoad$res2 === void 0 ? void 0 : _optimizationLoad$res2.theme
       }
     } : null;
     getThemes(_themes);
