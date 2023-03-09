@@ -30,7 +30,7 @@ export const ReviewDriver = (props) => {
         ? order?.products[0]?.calendar_event?.professional?.id
         : order?.driver?.id
 
-        const fetchOrders = async (ids) => {
+        const fetchReviews = async (ids) => {
           const promises = ids.map(async id => {
             const res = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
               method: 'POST',
