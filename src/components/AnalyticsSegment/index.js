@@ -17,7 +17,8 @@ export const AnalyticsSegment = (props) => {
       id: product.id,
       name: product.name,
       category: product.category_id,
-      price: product.price
+      price: product.price,
+      featured: product.featured
     })
   }
 
@@ -87,6 +88,12 @@ export const AnalyticsSegment = (props) => {
     })
   }
 
+  const handleChangeView = (pageName) => {
+    analytics.track('Page View', {
+      page: pageName?.page
+    })
+  }
+
   useEffect(() => {
     if (analytics) {
       events.on('product_clicked', handleClickProduct)
@@ -96,6 +103,7 @@ export const AnalyticsSegment = (props) => {
       events.on('order_updated', handleUpdateOrder)
       events.on('order_added', handleAddOrder)
       events.on('cart_product_removed', handleProductRemoved)
+      events.on('change_view', handleChangeView)
     }
     return () => {
       if (analytics) {
@@ -106,6 +114,7 @@ export const AnalyticsSegment = (props) => {
         events.off('order_updated', handleUpdateOrder)
         events.off('order_added', handleAddOrder)
         events.off('cart_product_removed', handleProductRemoved)
+        events.off('change_view', handleChangeView)
       }
     }
   }, [analytics])
