@@ -150,7 +150,7 @@ var ReviewDriver = function ReviewDriver(props) {
               };
             }();
             _context3.next = 9;
-            return fetchOrders(orderId);
+            return fetchReviews(orderId);
           case 9:
             reviewsArray = _context3.sent;
             error = reviewsArray.length && reviewsArray.every(function (obj) {

@@ -864,6 +864,17 @@ var ProductForm = function ProductForm(props) {
       product: props.product
     }));
   }, [props.product]);
+  var checkHasPreselected = function checkHasPreselected(options, option) {
+    if (!(option !== null && option !== void 0 && option.respect_to)) return true;
+    var selectedOption = options.filter(function (option1) {
+      var _option1$suboptions;
+      return (option1 === null || option1 === void 0 ? void 0 : (_option1$suboptions = option1.suboptions) === null || _option1$suboptions === void 0 ? void 0 : _option1$suboptions.filter(function (suboption) {
+        return option.respect_to === (suboption === null || suboption === void 0 ? void 0 : suboption.id) && suboption.preselected;
+      }).length) > 0;
+    });
+    if (!selectedOption) return false;
+    checkHasPreselected(options, selectedOption);
+  };
 
   /**
    * Check if there is an option required with one suboption
@@ -874,17 +885,12 @@ var ProductForm = function ProductForm(props) {
       var _ref7, _ref8;
       var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
         return extra.options.filter(function (option) {
-          var preselected = extra.options.filter(function (option1) {
-            var _option1$suboptions;
-            return (option1 === null || option1 === void 0 ? void 0 : (_option1$suboptions = option1.suboptions) === null || _option1$suboptions === void 0 ? void 0 : _option1$suboptions.filter(function (suboption1) {
-              return option.respect_to === (suboption1 === null || suboption1 === void 0 ? void 0 : suboption1.id) && suboption1.preselected;
-            }).length) > 0;
-          });
+          var preselected = checkHasPreselected(extra.options, option);
           return (option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
             return suboption.enabled;
           }).length === 1 || option.suboptions.filter(function (suboption) {
             return suboption.preselected;
-          }).length > 0) && (!option.respect_to || (option === null || option === void 0 ? void 0 : option.respect_to) && preselected);
+          }).length > 0) && (!(option !== null && option !== void 0 && option.conditioned) || (option === null || option === void 0 ? void 0 : option.conditioned) && preselected);
         });
       })));
       if (!(options !== null && options !== void 0 && options.length)) {
