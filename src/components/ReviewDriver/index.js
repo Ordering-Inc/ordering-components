@@ -22,21 +22,38 @@ export const ReviewDriver = (props) => {
    */
   const handleSendDriverReview = async () => {
     setFormState({ ...formState, loading: true })
+    const orderId = Array.isArray(order?.id) ? order?.id : [order?.id]
+    if (!orderId?.length) return
+
     try {
       const userId = isProfessional
         ? order?.products[0]?.calendar_event?.professional?.id
         : order?.driver?.id
-      const response = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${session.token}`,
-          'Content-Type': 'application/json',
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
-        },
-        body: JSON.stringify({ ...reviews, order_id: order?.id, user_id: userId })
-      })
-      const { result, error } = await response.json()
+
+        const fetchReviews = async (ids) => {
+          const promises = ids.map(async id => {
+            const res = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${session.token}`,
+                'Content-Type': 'application/json',
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket?.getId()
+              },
+              body: JSON.stringify({ ...reviews, order_id: id, user_id: userId })
+            })
+            const { result, error } = await res.json()
+            return { result, error }
+          })
+          const data = await Promise.all(promises)
+          return data
+        }
+
+      const reviewsArray = await fetchOrders(orderId)
+
+      const error = reviewsArray.length && reviewsArray.every(obj => obj.error) && reviewsArray[0]?.result?.[0]
+      const result = reviewsArray.length && reviewsArray.map(obj => (obj.result?.[0] ?? obj.result)).filter(o => typeof o !== 'string')
+
       if (!error) {
         setFormState({
           loading: false,
