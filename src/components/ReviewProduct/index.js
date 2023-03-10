@@ -54,8 +54,7 @@ export const ReviewProduct = (props) => {
         order?.business?.forEach(async (business, i) => {
           const productsOfOrder = Object.values(formState.changes)
             .filter(product =>
-              order?.products
-                ?.some(_product => product?.product_id === _product[0]?.product_id && _product[0]?.order_id === order?.id[i]))
+              order?.products[i]?.some(_product => product?.product_id === _product?.product_id && _product?.order_id === order?.id[i]))
           const _result = await reviewProducts(order?.id[i], productsOfOrder)
           error = _result.error
           result = _result.result
