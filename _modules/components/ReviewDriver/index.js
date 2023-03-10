@@ -177,7 +177,7 @@ var ReviewDriver = function ReviewDriver(props) {
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 loading: false,
                 result: {
-                  result: result,
+                  result: error,
                   error: true
                 }
               }));
