@@ -143,10 +143,9 @@ var ReviewProduct = function ReviewProduct(props) {
                   while (1) switch (_context2.prev = _context2.next) {
                     case 0:
                       productsOfOrder = Object.values(formState.changes).filter(function (product) {
-                        var _order$products;
-                        return order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.some(function (_product) {
-                          var _product$, _product$2;
-                          return (product === null || product === void 0 ? void 0 : product.product_id) === ((_product$ = _product[0]) === null || _product$ === void 0 ? void 0 : _product$.product_id) && ((_product$2 = _product[0]) === null || _product$2 === void 0 ? void 0 : _product$2.order_id) === (order === null || order === void 0 ? void 0 : order.id[i]);
+                        var _order$products$i;
+                        return order === null || order === void 0 ? void 0 : (_order$products$i = order.products[i]) === null || _order$products$i === void 0 ? void 0 : _order$products$i.some(function (_product) {
+                          return (product === null || product === void 0 ? void 0 : product.product_id) === (_product === null || _product === void 0 ? void 0 : _product.product_id) && (_product === null || _product === void 0 ? void 0 : _product.order_id) === (order === null || order === void 0 ? void 0 : order.id[i]);
                         });
                       });
                       _context2.next = 3;
