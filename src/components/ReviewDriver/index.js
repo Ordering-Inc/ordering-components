@@ -74,7 +74,7 @@ export const ReviewDriver = (props) => {
           ...formState,
           loading: false,
           result: {
-            result: result,
+            result: error,
             error: true
           }
         })
