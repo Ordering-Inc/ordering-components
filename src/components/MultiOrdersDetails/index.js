@@ -19,6 +19,22 @@ export const MultiOrdersDetails = (props) => {
   const [ordersList, setOrdersList] = useState({ loading: true, error: null, orders: [] })
   const [ordersSummary, setOrdersSummary] = useState({})
 
+  const formatPaymentEvents = (payments) => {
+    const list = [].concat(...payments)
+
+    const uniqueArr = []
+    const uniqueObj = {}
+
+    list.forEach((item) => {
+      if (!uniqueObj[item?.wallet_event?.id]) {
+        uniqueObj[item?.wallet_event?.id] = true
+        uniqueArr.push(item)
+      }
+    })
+
+    return uniqueArr ?? []
+  }
+
   /**
    * Get orders from API
    */
@@ -77,7 +93,7 @@ export const MultiOrdersDetails = (props) => {
           {...props}
           ordersList={ordersList}
           customer={ordersList.orders[0]?.customer}
-          paymentEvents={ordersList.orders[0]?.payment_events || []}
+          paymentEvents={formatPaymentEvents(ordersList.orders.map(order => order?.payment_events) || [])}
           ordersSummary={ordersSummary}
         />
       )}
