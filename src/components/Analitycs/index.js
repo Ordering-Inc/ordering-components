@@ -461,30 +461,32 @@ export const Analytics = (props) => {
         }
       }
       if (data.page === 'categoryProducts') {
-        let impressions = [];
-        let positionList = 1;
-        data.params.category.products.map((product) => {
-          impressions.push({
-            'name': formatForAnalytics(product.name, 40),
-            'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
-            'price': product.price.toString(),
-            'brand': 'MarketPlace '+slug,
-            'category': formatForAnalytics(data.params.category.name, 40),
-            'variant': 'NA',
-            'list': formatForAnalytics(data.params.category.name, 40),
-            'position': positionList
+        const impressions = []
+        let positionList = 1
+        if (data.params.category.product && data.params.category.product.length > 0) {
+          data.params.category.products.map((product) => {
+            impressions.push({
+              'name': formatForAnalytics(product.name, 40),
+              'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace '+slug,
+              'category': formatForAnalytics(data.params.category.name, 40),
+              'variant': 'NA',
+              'list': formatForAnalytics(data.params.category.name, 40),
+              'position': positionList
+            })
+            positionList += 1
           })
-          positionList += 1;
-        })
-        const dlAnalytics = {
-          'flow': 'MarketPlace '+slug,
-          'ecommerce': {
-            'impressions': impressions.slice(0,15),
-          },
-          event: 'evProductImpression',
-        };
-        if (debugMode) console.log('evProductImpression', dlAnalytics)
-        window.dataLayer.push(dlAnalytics)
+          const dlAnalytics = {
+            'flow': 'MarketPlace '+slug,
+            'ecommerce': {
+              'impressions': impressions.slice(0,15),
+            },
+            event: 'evProductImpression'
+          }
+          if (debugMode) console.log('evProductImpression', dlAnalytics)
+          window.dataLayer.push(dlAnalytics)
+        }
       }
     }
   }

@@ -541,29 +541,32 @@ var Analytics = function Analytics(props) {
       if (data.page === 'categoryProducts') {
         var _impressions = [];
         var _positionList = 1;
-        data.params.category.products.map(function (product) {
-          _impressions.push({
-            'name': formatForAnalytics(product.name, 40),
-            'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
-            'price': product.price.toString(),
-            'brand': 'MarketPlace ' + slug,
-            'category': formatForAnalytics(data.params.category.name, 40),
-            'variant': 'NA',
-            'list': formatForAnalytics(data.params.category.name, 40),
-            'position': _positionList
-          });
 
-          _positionList += 1;
-        });
-        var _dlAnalytics = {
-          'flow': 'MarketPlace ' + slug,
-          'ecommerce': {
-            'impressions': _impressions.slice(0, 15)
-          },
-          event: 'evProductImpression'
-        };
-        if (debugMode) console.log('evProductImpression', _dlAnalytics);
-        window.dataLayer.push(_dlAnalytics);
+        if (data.params.category.product && data.params.category.product.length > 0) {
+          data.params.category.products.map(function (product) {
+            _impressions.push({
+              'name': formatForAnalytics(product.name, 40),
+              'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
+              'price': product.price.toString(),
+              'brand': 'MarketPlace ' + slug,
+              'category': formatForAnalytics(data.params.category.name, 40),
+              'variant': 'NA',
+              'list': formatForAnalytics(data.params.category.name, 40),
+              'position': _positionList
+            });
+
+            _positionList += 1;
+          });
+          var _dlAnalytics = {
+            'flow': 'MarketPlace ' + slug,
+            'ecommerce': {
+              'impressions': _impressions.slice(0, 15)
+            },
+            event: 'evProductImpression'
+          };
+          if (debugMode) console.log('evProductImpression', _dlAnalytics);
+          window.dataLayer.push(_dlAnalytics);
+        }
       }
     }
   };
