@@ -508,7 +508,7 @@ var BusinessList = function BusinessList(props) {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
     }
-  }, [JSON.stringify(orderState.options), orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
+  }, [JSON.stringify(orderState.options), ordering === null || ordering === void 0 ? void 0 : ordering.countryCode, orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useEffect)(function () {
     var _orderState$options18, _orderState$options19;
     if (orderState.loading || !((_orderState$options18 = orderState.options) !== null && _orderState$options18 !== void 0 && (_orderState$options19 = _orderState$options18.address) !== null && _orderState$options19 !== void 0 && _orderState$options19.location) && !asDashboard && !customLocation) {
