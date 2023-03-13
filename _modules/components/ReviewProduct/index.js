@@ -143,19 +143,18 @@ var ReviewProduct = function ReviewProduct(props) {
                   while (1) switch (_context2.prev = _context2.next) {
                     case 0:
                       productsOfOrder = Object.values(formState.changes).filter(function (product) {
-                        var _order$products;
-                        return order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.some(function (_product) {
+                        var _order$products$i;
+                        return order === null || order === void 0 ? void 0 : (_order$products$i = order.products[i]) === null || _order$products$i === void 0 ? void 0 : _order$products$i.some(function (_product) {
                           return (product === null || product === void 0 ? void 0 : product.product_id) === (_product === null || _product === void 0 ? void 0 : _product.product_id) && (_product === null || _product === void 0 ? void 0 : _product.order_id) === (order === null || order === void 0 ? void 0 : order.id[i]);
                         });
                       });
-                      reviewProducts(order.id[i]);
-                      _context2.next = 4;
+                      _context2.next = 3;
                       return reviewProducts(order === null || order === void 0 ? void 0 : order.id[i], productsOfOrder);
-                    case 4:
+                    case 3:
                       _result = _context2.sent;
                       error = _result.error;
                       result = _result.result;
-                    case 7:
+                    case 6:
                     case "end":
                       return _context2.stop();
                   }
