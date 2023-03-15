@@ -68,8 +68,9 @@ var DriverTips = function DriverTips(props) {
     driverTip = typeof driverTip === 'string' ? parseFloat(driverTip) : driverTip;
     if (useOrderContext) {
       if (businessIds) {
+        var _driveTip = isFixedPrice ? driverTip / (businessIds === null || businessIds === void 0 ? void 0 : businessIds.length) : driverTip;
         Promise.all(businessIds.map(function (id) {
-          return changeDriverTip(id, driverTip, isFixedPrice);
+          return changeDriverTip(id, _driveTip, isFixedPrice);
         }));
       } else {
         changeDriverTip(businessId, driverTip, isFixedPrice);
