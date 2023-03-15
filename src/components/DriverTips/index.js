@@ -43,7 +43,8 @@ export const DriverTips = (props) => {
     driverTip = typeof driverTip === 'string' ? parseFloat(driverTip) : driverTip
     if (useOrderContext) {
       if (businessIds) {
-        Promise.all(businessIds.map(id => changeDriverTip(id, driverTip, isFixedPrice)))
+        const _driveTip = isFixedPrice ? driverTip / businessIds?.length : driverTip
+        Promise.all(businessIds.map(id => changeDriverTip(id, _driveTip, isFixedPrice)))
       } else {
         changeDriverTip(businessId, driverTip, isFixedPrice)
       }
