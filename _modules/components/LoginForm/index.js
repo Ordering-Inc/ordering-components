@@ -208,7 +208,7 @@ var LoginForm = function LoginForm(props) {
               });
             }
             if (error) {
-              _context.next = 47;
+              _context.next = 48;
               break;
             }
             if (!useDefualtSessionManager) {
@@ -268,7 +268,8 @@ var LoginForm = function LoginForm(props) {
             if (urlToRedirect) {
               window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
             }
-          case 47:
+            return _context.abrupt("return", true);
+          case 48:
             setFormState({
               result: {
                 error: error,
@@ -276,10 +277,9 @@ var LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-            _context.next = 53;
-            break;
-          case 50:
-            _context.prev = 50;
+            return _context.abrupt("return", false);
+          case 52:
+            _context.prev = 52;
             _context.t1 = _context["catch"](3);
             setFormState({
               result: {
@@ -288,11 +288,11 @@ var LoginForm = function LoginForm(props) {
               },
               loading: false
             });
-          case 53:
+          case 55:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[3, 50], [30, 39]]);
+      }, _callee, null, [[3, 52], [30, 39]]);
     }));
     return function handleLoginClick(_x2) {
       return _ref.apply(this, arguments);
