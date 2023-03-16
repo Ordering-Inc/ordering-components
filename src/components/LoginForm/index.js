@@ -170,6 +170,7 @@ export const LoginForm = (props) => {
         },
         loading: false
       })
+      return false
     } catch (err) {
       setFormState({
         result: {
