@@ -162,6 +162,7 @@ export const LoginForm = (props) => {
         if (urlToRedirect) {
           window.location.href = `${window.location.origin}${urlToRedirect}`
         }
+        return true
       }
       setFormState({
         result: {
@@ -170,6 +171,7 @@ export const LoginForm = (props) => {
         },
         loading: false
       })
+      return false
     } catch (err) {
       setFormState({
         result: {
