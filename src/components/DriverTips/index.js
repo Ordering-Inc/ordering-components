@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import Decimal from 'decimal.js'
 import { useOrder } from '../../contexts/OrderContext'
 import { useConfig } from '../../contexts/ConfigContext'
 
@@ -43,7 +44,19 @@ export const DriverTips = (props) => {
     driverTip = typeof driverTip === 'string' ? parseFloat(driverTip) : driverTip
     if (useOrderContext) {
       if (businessIds) {
-        Promise.all(businessIds.map(id => changeDriverTip(id, driverTip, isFixedPrice)))
+        const tip = new Decimal(driverTip)
+
+        const tipPerCart = !isFixedPrice ? driverTip
+          : parseFloat((Math.trunc(tip.dividedBy(businessIds?.length) * 100) / 100).toFixed(2))
+
+        const correctionValue = !isFixedPrice ? 0
+          : parseFloat(tip.minus(new Decimal(tipPerCart).times(businessIds?.length)).toFixed(2))
+
+        const tipsPerCart = businessIds.map((bid, idx) => {
+          return { bid, value: parseFloat(new Decimal(tipPerCart).plus(idx === 0 ? correctionValue : 0).toFixed(2)) }
+        })
+
+        Promise.all(tipsPerCart.map(tip => changeDriverTip(tip.bid, tip.value, isFixedPrice)))
       } else {
         changeDriverTip(businessId, driverTip, isFixedPrice)
       }
