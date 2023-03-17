@@ -53,7 +53,7 @@ export const MultiCheckout = (props) => {
   const totalCartsPrice = openCarts?.length && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
   const totalCartsFee = openCarts?.length && openCarts?.filter(cart => cart?.status !== 1 && cart?.valid)?.reduce((total, cart) => { return total + (cart?.delivery_price_with_discount) }, 0)
 
-  const handleGroupPlaceOrder = async () => {
+  const handleGroupPlaceOrder = async (confirmPayment) => {
     let paymethodData = paymethodSelected?.paymethod_data
     if (paymethodSelected?.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = JSON.stringify({
@@ -88,10 +88,17 @@ export const MultiCheckout = (props) => {
     if (result?.paymethod_data?.status === 2 && actionsBeforePlace) {
       await actionsBeforePlace(paymethodSelected, result)
     }
-    setPlacing(false)
-    if (!error) {
-      // const orderUuids = result.carts.reduce((uuids, cart) => [...uuids, cart.order.uuid], [])
-      onPlaceOrderClick && onPlaceOrderClick(result)
+
+    if (confirmPayment && paymethodSelected?.gateway === 'global_apple_pay') {
+      const paymentEvent = result?.payment_events?.find(event => event?.event === 'payment')
+      const { error: confirmApplePayError } = await confirmPayment(paymentEvent?.data?.extra?.client_secret)
+      if (confirmApplePayError?.message || confirmApplePayError?.localizedMessage) {
+        showToast(ToastType.Error, confirmApplePayError?.message || confirmApplePayError?.localizedMessage)
+      }
+      setPlacing(false)
+      if (!error) {
+        onPlaceOrderClick && onPlaceOrderClick(result)
+      }
     }
   }
 
