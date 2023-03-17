@@ -135,9 +135,9 @@ var MultiCheckout = function MultiCheckout(props) {
     return total + (cart === null || cart === void 0 ? void 0 : cart.delivery_price_with_discount);
   }, 0));
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(confirmPayment) {
       var _paymethodSelected$pa, _cartGroup$result2, _result$paymethod_dat;
-      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result;
+      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result, _result$payment_event, _paymentEvent$data, _paymentEvent$data$ex, paymentEvent, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -180,18 +180,32 @@ var MultiCheckout = function MultiCheckout(props) {
             _context.next = 15;
             return actionsBeforePlace(paymethodSelected, result);
           case 15:
+            if (!(confirmPayment && (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway) === 'global_apple_pay')) {
+              _context.next = 24;
+              break;
+            }
+            paymentEvent = result === null || result === void 0 ? void 0 : (_result$payment_event = result.payment_events) === null || _result$payment_event === void 0 ? void 0 : _result$payment_event.find(function (event) {
+              return (event === null || event === void 0 ? void 0 : event.event) === 'payment';
+            });
+            _context.next = 19;
+            return confirmPayment(paymentEvent === null || paymentEvent === void 0 ? void 0 : (_paymentEvent$data = paymentEvent.data) === null || _paymentEvent$data === void 0 ? void 0 : (_paymentEvent$data$ex = _paymentEvent$data.extra) === null || _paymentEvent$data$ex === void 0 ? void 0 : _paymentEvent$data$ex.client_secret);
+          case 19:
+            _yield$confirmPayment = _context.sent;
+            confirmApplePayError = _yield$confirmPayment.error;
+            if (confirmApplePayError !== null && confirmApplePayError !== void 0 && confirmApplePayError.message || confirmApplePayError !== null && confirmApplePayError !== void 0 && confirmApplePayError.localizedMessage) {
+              showToast(_ToastContext.ToastType.Error, (confirmApplePayError === null || confirmApplePayError === void 0 ? void 0 : confirmApplePayError.message) || (confirmApplePayError === null || confirmApplePayError === void 0 ? void 0 : confirmApplePayError.localizedMessage));
+            }
             setPlacing(false);
             if (!error) {
-              // const orderUuids = result.carts.reduce((uuids, cart) => [...uuids, cart.order.uuid], [])
               onPlaceOrderClick && onPlaceOrderClick(result);
             }
-          case 17:
+          case 24:
           case "end":
             return _context.stop();
         }
       }, _callee);
     }));
-    return function handleGroupPlaceOrder() {
+    return function handleGroupPlaceOrder(_x2) {
       return _ref.apply(this, arguments);
     };
   }();
@@ -264,7 +278,7 @@ var MultiCheckout = function MultiCheckout(props) {
         }
       }, _callee2, null, [[2, 15]]);
     }));
-    return function handleSelectWallet(_x2, _x3) {
+    return function handleSelectWallet(_x3, _x4) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -383,7 +397,7 @@ var MultiCheckout = function MultiCheckout(props) {
                     }
                   }, _callee4);
                 }));
-                return function (_x6, _x7) {
+                return function (_x7, _x8) {
                   return _ref5.apply(this, arguments);
                 };
               }());
@@ -410,7 +424,7 @@ var MultiCheckout = function MultiCheckout(props) {
         }
       }, _callee5, null, [[0, 9]]);
     }));
-    return function multiHandleChangeDeliveryOption(_x4, _x5) {
+    return function multiHandleChangeDeliveryOption(_x5, _x6) {
       return _ref4.apply(this, arguments);
     };
   }();
@@ -430,7 +444,7 @@ var MultiCheckout = function MultiCheckout(props) {
         }
       }, _callee6);
     }));
-    return function handleChangeDeliveryOption(_x8) {
+    return function handleChangeDeliveryOption(_x9) {
       return _ref6.apply(this, arguments);
     };
   }();
