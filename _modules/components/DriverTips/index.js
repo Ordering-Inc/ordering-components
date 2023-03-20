@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.DriverTips = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
+var _decimal = _interopRequireDefault(require("decimal.js"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -68,8 +69,17 @@ var DriverTips = function DriverTips(props) {
     driverTip = typeof driverTip === 'string' ? parseFloat(driverTip) : driverTip;
     if (useOrderContext) {
       if (businessIds) {
-        Promise.all(businessIds.map(function (id) {
-          return changeDriverTip(id, driverTip, isFixedPrice);
+        var tip = new _decimal.default(driverTip);
+        var tipPerCart = !isFixedPrice ? driverTip : parseFloat((Math.trunc(tip.dividedBy(businessIds === null || businessIds === void 0 ? void 0 : businessIds.length) * 100) / 100).toFixed(2));
+        var correctionValue = !isFixedPrice ? 0 : parseFloat(tip.minus(new _decimal.default(tipPerCart).times(businessIds === null || businessIds === void 0 ? void 0 : businessIds.length)).toFixed(2));
+        var tipsPerCart = businessIds.map(function (bid, idx) {
+          return {
+            bid: bid,
+            value: parseFloat(new _decimal.default(tipPerCart).plus(idx === 0 ? correctionValue : 0).toFixed(2))
+          };
+        });
+        Promise.all(tipsPerCart.map(function (tip) {
+          return changeDriverTip(tip.bid, tip.value, isFixedPrice);
         }));
       } else {
         changeDriverTip(businessId, driverTip, isFixedPrice);
