@@ -181,7 +181,7 @@ var MultiCheckout = function MultiCheckout(props) {
             return actionsBeforePlace(paymethodSelected, result);
           case 15:
             if (!(confirmPayment && (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway) === 'global_apple_pay')) {
-              _context.next = 24;
+              _context.next = 26;
               break;
             }
             paymentEvent = result === null || result === void 0 ? void 0 : (_result$payment_event = result.payment_events) === null || _result$payment_event === void 0 ? void 0 : _result$payment_event.find(function (event) {
@@ -199,7 +199,12 @@ var MultiCheckout = function MultiCheckout(props) {
             if (!error) {
               onPlaceOrderClick && onPlaceOrderClick(result);
             }
-          case 24:
+            _context.next = 28;
+            break;
+          case 26:
+            setPlacing(false);
+            onPlaceOrderClick && onPlaceOrderClick(result);
+          case 28:
           case "end":
             return _context.stop();
         }
