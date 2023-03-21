@@ -46,6 +46,10 @@ export const Checkout = (props) => {
    */
   const [, { showToast }] = useToast()
   /**
+   * Configs state
+   */
+  const [{ configs }] = useConfig()
+  /**
    * Delivery Instructions options
    */
   const [instructionsOptions, setInstructionsOptions] = useState({ loading: false, result: [{ id: null, enabled: true, name: t('EITHER_WAY', 'Either way') }], error: null })
@@ -182,7 +186,10 @@ export const Checkout = (props) => {
 
     setPlacing(true)
     await onChangeSpot()
-    const result = await placeCart(cart.uuid, payload)
+    if (paymethodSelected?.paymethod?.gateway === 'credomatic') {
+      delete payload.paymethod_data
+    }
+    const result = await placeCart(cart.uuid, payload) // remover el paymethoData para credomatic
 
     if (result?.error) {
       setErrors(result?.result)
@@ -199,6 +206,12 @@ export const Checkout = (props) => {
       if (confirmApplePayError) {
         setErrors(confirmApplePayError)
       }
+    }
+    if (cartResult?.paymethod_data?.gateway === 'credomatic' &&
+      cartResult?.paymethod_data?.result?.hash &&
+      cartResult?.paymethod_data?.status === 2
+    ) {
+      handleConfirmCredomaticPage(cartResult, paymethodSelected)
     }
     setPlacing(false)
     onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
@@ -342,31 +355,38 @@ export const Checkout = (props) => {
     }
   }
 
-  const getLoyaltyPlans = async () => {
+  const handleConfirmCredomaticPage = async (cart, paymethodSelected) => {
+    const isSandbox = configs?.credomatic_integration_sandbox?.value === '1'
+    const keyId = isSandbox ? configs?.credomatic_integration_public_sandbox_key?.value : configs?.credomatic_integration_public_production_key?.value
     try {
-      const req = await fetch(`${ordering.root}/loyalty_plans`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-            'X-App-X': ordering.appId,
-            'X-Socket-Id-X': socket?.getId()
-          }
-        }
-      )
-      const { error, result } = await req.json()
-      setLoyaltyPlansState({
-        ...loyaltyPlansState,
-        loading: false,
-        result: error ? [] : result
+      const cartUuid = cart?.uuid
+      const data = {
+        type: 'auth',
+        key_id: keyId,
+        hash: cart?.paymethod_data?.result?.hash,
+        time: cart?.paymethod_data?.result?.time,
+        amount: cart?.total,
+        orderid: cartUuid,
+        ccnumber: paymethodSelected?.data?.ccnumber,
+        cvv: paymethodSelected?.data?.cvv,
+        ccexp: paymethodSelected?.data?.ccexp,
+        redirect: window.location.href.replace(window.location.search, '')
+      }
+      const form = document.createElement('form')
+      form.method = 'POST'
+      form.action = 'https://credomatic.compassmerchantsolutions.com/api/transact.php'
+      form.style.display = 'none'
+      // eslint-disable-next-line no-unused-expressions
+      Object.keys(data)?.map(key => {
+        const formInputName = document.createElement('input')
+        formInputName.name = key
+        formInputName.value = data[key]
+        form.appendChild(formInputName)
       })
-    } catch (error) {
-      setLoyaltyPlansState({
-        ...loyaltyPlansState,
-        loading: false,
-        result: []
-      })
+      document.body.appendChild(form)
+      form.submit()
+    } catch (err) {
+      showToast(ToastType.Error, err.message)
     }
   }
 
@@ -425,6 +445,7 @@ export const Checkout = (props) => {
           handleChangeSpot={handleChangeSpot}
           onChangeSpot={onChangeSpot}
           handleChangeDeliveryOption={handleChangeDeliveryOption}
+          handleConfirmCredomaticPage={handleConfirmCredomaticPage}
         />
       )}
     </>
