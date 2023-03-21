@@ -939,7 +939,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         user_id: userCustomerId || session.user.id
       }
       let fetchurl
-      if (body.user_id === userCustomerId) {
+      if (body.user_id === userCustomerId || data) {
         fetchurl = await ordering.setAccessToken(session.token).carts(cardId).confirmWithData(body, {
           headers: {
             'X-App-X': ordering.appId,

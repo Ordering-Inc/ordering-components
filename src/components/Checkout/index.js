@@ -24,7 +24,7 @@ export const Checkout = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ options }] = useOrder()
-  const [, { refreshConfigs }] = useConfig()
+  const [{ configs }, { refreshConfigs }] = useConfig()
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
@@ -93,6 +93,9 @@ export const Checkout = (props) => {
   /**
    * Method to get business from API
    */
+
+  const paymethodsWithoutSaveCard = ['credomatic']
+
   const getBusiness = async () => {
     refreshConfigs()
     try {
@@ -179,7 +182,10 @@ export const Checkout = (props) => {
 
     setPlacing(true)
     await onChangeSpot()
-    const result = await placeCart(cart.uuid, payload)
+    if (paymethodsWithoutSaveCard.includes(paymethodSelected?.paymethod?.gateway)) {
+      delete payload.paymethod_data
+    }
+    const result = await placeCart(cart.uuid, payload) // remover el paymethoData para credomatic
 
     if (result?.error) {
       setErrors(result?.result)
@@ -196,6 +202,12 @@ export const Checkout = (props) => {
       if (confirmApplePayError) {
         setErrors(confirmApplePayError)
       }
+    }
+    if (paymethodsWithoutSaveCard.includes(cartResult?.paymethod_data?.gateway) &&
+      cartResult?.paymethod_data?.result?.hash &&
+      cartResult?.paymethod_data?.status === 2
+    ) {
+      handleConfirmCredomaticPage(cartResult, paymethodSelected)
     }
     setPlacing(false)
     onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
@@ -367,6 +379,41 @@ export const Checkout = (props) => {
     }
   }
 
+  const handleConfirmCredomaticPage = async (cart, paymethodSelected) => {
+    const isSandbox = configs?.credomatic_integration_sandbox?.value === '1'
+    const keyId = isSandbox ? configs?.credomatic_integration_public_sandbox_key?.value : configs?.credomatic_integration_public_production_key?.value
+    try {
+      const cartUuid = cart?.uuid
+      const data = {
+        type: 'auth',
+        key_id: keyId,
+        hash: cart?.paymethod_data?.result?.hash,
+        time: cart?.paymethod_data?.result?.time,
+        amount: cart?.total,
+        orderid: cartUuid,
+        ccnumber: paymethodSelected?.data?.ccnumber,
+        cvv: paymethodSelected?.data?.cvv,
+        ccexp: paymethodSelected?.data?.ccexp,
+        redirect: window.location.href.replace(window.location.search, '')
+      }
+      const form = document.createElement('form')
+      form.method = 'POST'
+      form.action = 'https://credomatic.compassmerchantsolutions.com/api/transact.php'
+      form.style.display = 'none'
+      // eslint-disable-next-line no-unused-expressions
+      Object.keys(data)?.map(key => {
+        const formInputName = document.createElement('input')
+        formInputName.name = key
+        formInputName.value = data[key]
+        form.appendChild(formInputName)
+      })
+      document.body.appendChild(form)
+      form.submit()
+    } catch (err) {
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
   useEffect(() => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
@@ -422,6 +469,7 @@ export const Checkout = (props) => {
           handleChangeSpot={handleChangeSpot}
           onChangeSpot={onChangeSpot}
           handleChangeDeliveryOption={handleChangeDeliveryOption}
+          handleConfirmCredomaticPage={handleConfirmCredomaticPage}
         />
       )}
     </>
