@@ -100,6 +100,9 @@ export const Checkout = (props) => {
   /**
    * Method to get business from API
    */
+
+  const paymethodsWithoutSaveCard = ['credomatic']
+
   const getBusiness = async () => {
     refreshConfigs()
     try {
@@ -186,7 +189,7 @@ export const Checkout = (props) => {
 
     setPlacing(true)
     await onChangeSpot()
-    if (paymethodSelected?.paymethod?.gateway === 'credomatic') {
+    if (paymethodsWithoutSaveCard.includes(paymethodSelected?.paymethod?.gateway)) {
       delete payload.paymethod_data
     }
     const result = await placeCart(cart.uuid, payload) // remover el paymethoData para credomatic
@@ -207,7 +210,7 @@ export const Checkout = (props) => {
         setErrors(confirmApplePayError)
       }
     }
-    if (cartResult?.paymethod_data?.gateway === 'credomatic' &&
+    if (paymethodsWithoutSaveCard.includes(cartResult?.paymethod_data?.gateway) &&
       cartResult?.paymethod_data?.result?.hash &&
       cartResult?.paymethod_data?.status === 2
     ) {
@@ -352,6 +355,34 @@ export const Checkout = (props) => {
       }
     } catch (err) {
       showToast(ToastType.Error, err.message)
+    }
+  }
+
+  const getLoyaltyPlans = async () => {
+    try {
+      const req = await fetch(`${ordering.root}/loyalty_plans`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          }
+        }
+      )
+      const { error, result } = await req.json()
+      setLoyaltyPlansState({
+        ...loyaltyPlansState,
+        loading: false,
+        result: error ? [] : result
+      })
+    } catch (error) {
+      setLoyaltyPlansState({
+        ...loyaltyPlansState,
+        loading: false,
+        result: []
+      })
     }
   }
 
