@@ -24,7 +24,7 @@ export const Checkout = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ options }] = useOrder()
-  const [, { refreshConfigs }] = useConfig()
+  const [{ configs }, { refreshConfigs }] = useConfig()
 
   const [placing, setPlacing] = useState(false)
   const [errors, setErrors] = useState(null)
@@ -45,10 +45,6 @@ export const Checkout = (props) => {
    * Toast state
    */
   const [, { showToast }] = useToast()
-  /**
-   * Configs state
-   */
-  const [{ configs }] = useConfig()
   /**
    * Delivery Instructions options
    */
