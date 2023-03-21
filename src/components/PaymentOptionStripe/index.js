@@ -11,7 +11,8 @@ export const PaymentOptionStripe = (props) => {
   const {
     businessId,
     UIComponent,
-    setCardList
+    setCardList,
+    gateway
   } = props
 
   const [{ token, user }] = useSession()
@@ -33,10 +34,17 @@ export const PaymentOptionStripe = (props) => {
 
   const requestState = {}
 
+  const paymethodsWithoutSaveCards = ['credomatic']
+
   /**
    * method to get cards from API
    */
   const getCards = async () => {
+    if (paymethodsWithoutSaveCards.includes(gateway)) {
+      setCardsList({ cards: [], loading: false, error: null })
+      setCardList({ cards: [], loading: false, error: null })
+      return
+    }
     setCardsList({ ...cardsList, loading: true })
     try {
       const source = {}
@@ -83,6 +91,12 @@ export const PaymentOptionStripe = (props) => {
    */
   const deleteCard = async (card) => {
     try {
+      if (paymethodsWithoutSaveCards.includes(gateway)) {
+        setCardsList({ cards: [], loading: false, error: null })
+        setCardSelected(null)
+        setCardList({ cards: [], loading: false, error: null })
+        return
+      }
       // The order of paymentCards params is businessId, userId, cardId. This sdk needs to be improved in the future,
       const { content: { error } } = await ordering.paymentCards(-1, user.id, card.id).delete()
       if (!error) {
@@ -100,6 +114,7 @@ export const PaymentOptionStripe = (props) => {
    * method to set card as default
    */
   const setDefaultCard = async (card) => {
+    if (paymethodsWithoutSaveCards.includes(gateway)) return
     try {
       setDefaultCardSetActionStatus({ ...defaultCardSetActionStatus, loading: true })
       const requestOptions = {
@@ -140,6 +155,7 @@ export const PaymentOptionStripe = (props) => {
    * Method to get stripe credentials from API
    */
   const getCredentials = async () => {
+    if (paymethodsWithoutSaveCards.includes(gateway)) return
     try {
       const { content: { result } } = await ordering.setAccessToken(token).paymentCards().getCredentials()
       setPublicKey(result.publishable)
@@ -149,21 +165,32 @@ export const PaymentOptionStripe = (props) => {
   }
 
   const handleCardClick = (card) => {
-    setCardSelected({
-      id: card.id,
-      type: 'card',
-      card: {
-        brand: card.brand,
-        last4: card.last4
-      }
-    })
+    if (paymethodsWithoutSaveCards.includes(gateway)) {
+      setCardSelected(card)
+    } else {
+      setCardSelected({
+        id: card.id,
+        type: 'card',
+        card: {
+          brand: card.brand,
+          last4: card.last4
+        }
+      })
+    }
   }
 
   const handleNewCard = (card) => {
     cardsList.cards.push(card)
     setCardsList({
-      ...cardsList
+      ...cardsList,
+      card
     })
+    if (paymethodsWithoutSaveCards.includes(gateway)) {
+      setCardList({
+        ...cardsList,
+        card
+      })
+    }
     handleCardClick(card)
   }
 
@@ -195,6 +222,7 @@ export const PaymentOptionStripe = (props) => {
           deleteCard={deleteCard}
           setDefaultCard={setDefaultCard}
           defaultCardSetActionStatus={defaultCardSetActionStatus}
+          paymethodsWithoutSaveCards={paymethodsWithoutSaveCards}
         />
       )}
     </>
