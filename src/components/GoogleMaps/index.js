@@ -119,9 +119,10 @@ export const GoogleMaps = (props) => {
           }
           const address = {
             address: results[0].formatted_address,
-            location: { lat: pos?.lat(), lng: pos?.lng() },
-            zipcode
+            location: { lat: pos?.lat(), lng: pos?.lng() }
           }
+          if (zipcode) address.zipcode = zipcode
+
           handleChangeAddressMap && handleChangeAddressMap(address)
 
           center.lat = address.location?.lat
