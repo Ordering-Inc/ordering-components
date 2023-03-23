@@ -188,7 +188,7 @@ export const Checkout = (props) => {
     if (paymethodsWithoutSaveCard.includes(paymethodSelected?.paymethod?.gateway)) {
       delete payload.paymethod_data
     }
-    const result = await placeCart(cart.uuid, payload) // remover el paymethoData para credomatic
+    const result = await placeCart(cart.uuid, payload)
 
     if (result?.error) {
       setErrors(result?.result)
@@ -208,9 +208,10 @@ export const Checkout = (props) => {
     }
     if (paymethodsWithoutSaveCard.includes(cartResult?.paymethod_data?.gateway) &&
       cartResult?.paymethod_data?.result?.hash &&
-      cartResult?.paymethod_data?.status === 2
+      cartResult?.paymethod_data?.status === 2 &&
+      !payloadProps.isNative
     ) {
-      handleConfirmCredomaticPage(cartResult, paymethodSelected)
+      await handleConfirmCredomaticPage(cartResult, paymethodSelected)
     }
     setPlacing(false)
     onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
@@ -399,6 +400,7 @@ export const Checkout = (props) => {
         ccexp: paymethodSelected?.data?.ccexp,
         redirect: window.location.href.replace(window.location.search, '')
       }
+      console.log('data', data)
       const form = document.createElement('form')
       form.method = 'POST'
       form.action = 'https://credomatic.compassmerchantsolutions.com/api/transact.php'
