@@ -211,7 +211,7 @@ export const Checkout = (props) => {
       cartResult?.paymethod_data?.status === 2 &&
       !payloadProps.isNative
     ) {
-      await handleConfirmCredomaticPage(cartResult, paymethodSelected)
+      handleConfirmCredomaticPage(cartResult, paymethodSelected)
     }
     setPlacing(false)
     onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult)
@@ -400,7 +400,6 @@ export const Checkout = (props) => {
         ccexp: paymethodSelected?.data?.ccexp,
         redirect: window.location.href.replace(window.location.search, '')
       }
-      console.log('data', data)
       const form = document.createElement('form')
       form.method = 'POST'
       form.action = 'https://credomatic.compassmerchantsolutions.com/api/transact.php'
