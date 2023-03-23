@@ -191,9 +191,9 @@ var GoogleMaps = function GoogleMaps(props) {
             location: {
               lat: pos === null || pos === void 0 ? void 0 : pos.lat(),
               lng: pos === null || pos === void 0 ? void 0 : pos.lng()
-            },
-            zipcode: zipcode
+            }
           };
+          if (zipcode) address.zipcode = zipcode;
           handleChangeAddressMap && handleChangeAddressMap(address);
           center.lat = (_address$location = address.location) === null || _address$location === void 0 ? void 0 : _address$location.lat;
           center.lng = (_address$location2 = address.location) === null || _address$location2 === void 0 ? void 0 : _address$location2.lng;
