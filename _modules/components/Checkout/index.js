@@ -326,7 +326,7 @@ var Checkout = function Checkout(props) {
               setErrors(confirmApplePayError);
             }
           case 29:
-            if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod4 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod4 !== void 0 && _cartResult$paymethod4.hash && (cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod5 = cartResult.paymethod_data) === null || _cartResult$paymethod5 === void 0 ? void 0 : _cartResult$paymethod5.status) === 2) {
+            if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod4 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod4 !== void 0 && _cartResult$paymethod4.hash && (cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod5 = cartResult.paymethod_data) === null || _cartResult$paymethod5 === void 0 ? void 0 : _cartResult$paymethod5.status) === 2 && !payloadProps.isNative) {
               handleConfirmCredomaticPage(cartResult, paymethodSelected);
             }
             setPlacing(false);
