@@ -185,7 +185,7 @@ export const Checkout = (props) => {
     if (paymethodsWithoutSaveCard.includes(paymethodSelected?.paymethod?.gateway)) {
       delete payload.paymethod_data
     }
-    const result = await placeCart(cart.uuid, payload) // remover el paymethoData para credomatic
+    const result = await placeCart(cart.uuid, payload)
 
     if (result?.error) {
       setErrors(result?.result)
@@ -205,7 +205,8 @@ export const Checkout = (props) => {
     }
     if (paymethodsWithoutSaveCard.includes(cartResult?.paymethod_data?.gateway) &&
       cartResult?.paymethod_data?.result?.hash &&
-      cartResult?.paymethod_data?.status === 2
+      cartResult?.paymethod_data?.status === 2 &&
+      !payloadProps.isNative
     ) {
       handleConfirmCredomaticPage(cartResult, paymethodSelected)
     }
