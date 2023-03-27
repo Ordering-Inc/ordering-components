@@ -159,6 +159,9 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         if (localOptions?.address_id) {
           options.address_id = localOptions?.address_id
         }
+        if (localOptions?.city_id) {
+          options.city_id = localOptions?.city_id
+        }
         if (options && Object.keys(options).length > 0) {
           updateOrderOptions(options)
         } else {
@@ -299,6 +302,29 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
     }
 
     updateOrderOptions({ moment: momentUnix })
+  }
+
+  /**
+   * Change order city
+   */
+  const changeCityFilter = async (id) => {
+    const options = {
+      ...state.options,
+      city_id: id
+    }
+    if (state.options.city_id === id) {
+      return
+    }
+
+    if (!session.auth) {
+      await strategy.setItem('options', options, true)
+      setState({
+        ...state,
+        options
+      })
+    }
+
+    updateOrderOptions({ city_id: id })
   }
   /**
    * Update order option data
@@ -1027,10 +1053,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       setState({ ...state, loading: false })
       return { error: true, result: [err.message] }
     }
-  }
-
-  const changeCityFilter = (id) => {
-    updateOrderOptions({ city_id: id })
   }
 
   const setOptionFromLocalStorage = async () => {
