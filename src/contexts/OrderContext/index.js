@@ -260,19 +260,20 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       return
     }
 
-    if (!session.auth) {
-      await strategy.setItem('options', options, true)
-      setState({
-        ...state,
-        options
-      })
-    }
-
     const cityId = state.options?.city_id
     const params = { type }
 
     if (cityId && type !== 2) {
       params.city_id = null
+    }
+
+    if (!session.auth) {
+      const _options = { ...options, ...params }
+      await strategy.setItem('options', _options, true)
+      setState({
+        ...state,
+        options: _options
+      })
     }
 
     updateOrderOptions(params)
