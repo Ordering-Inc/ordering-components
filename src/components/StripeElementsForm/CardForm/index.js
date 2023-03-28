@@ -11,7 +11,7 @@ import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useLanguage } from '../../../contexts/LanguageContext'
 import { useWebsocket } from '../../../contexts/WebsocketContext'
-
+import { useValidationFields } from '../../../contexts/ValidationsFieldsContext'
 /**
  * Component to manage card form for stripe elements form behavior without UI component
  */
@@ -29,13 +29,18 @@ export const CardForm = (props) => {
 
   const [{ user }] = useSession()
   const [ordering] = useApi()
+  const [validationFields] = useValidationFields()
   const socket = useWebsocket()
   const stripe = useStripe()
   const elements = useElements()
+  const zipCodeRequired = validationFields?.checkout?.zipcode?.required
+  const zipCodeEnabled = validationFields?.checkout?.zipcode?.required
 
   const [error, setError] = useState(null)
   const [errorExpiry, setErrorExpiry] = useState(null)
   const [errorCvc, setErrorCvc] = useState(null)
+  const [zipcode, setZipcode] = useState(null)
+  const [errorZipcode, setErrorZipcode] = useState(false)
   const [loading, setLoading] = useState(false)
   const [, t] = useLanguage()
 
@@ -72,6 +77,15 @@ export const CardForm = (props) => {
   const handleChange = (event) => {
     if (event.error) {
       (event.elementType === 'cardNumber' || 'card') && setError(event.error.message)
+    } else if (event?.target?.name === 'zipcode') {
+      event.target.value = event?.target?.value?.slice(0, 6)
+      elements.update({ value: { postalCode: event?.target?.value } })
+      if (!event.target.value && zipCodeRequired && zipCodeEnabled) {
+        setErrorZipcode(true)
+      } else {
+        setErrorZipcode(false)
+      }
+      setZipcode(event?.target?.value)
     } else {
       setError(null)
     }
@@ -104,7 +118,7 @@ export const CardForm = (props) => {
     event.preventDefault()
     let card = elements?.getElement(CardElement)
     const userName = user?.lastname ? `${user?.name} ${user?.lastname}` : user?.name
-    const userAddress = user?.address && { line1: user?.address }
+    const userAddress = user?.address && { line1: user?.address, postal_code: zipcode }
 
     const billingData = { email: user.email }
     userName && (billingData.name = userName)
@@ -146,6 +160,10 @@ export const CardForm = (props) => {
         setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'))
         return
       }
+      if (!zipcode && zipCodeRequired && zipCodeEnabled) {
+        setErrorZipcode(true)
+        setLoading(false)
+      }
       const result = await stripe.confirmCardSetup(
         requirements,
         {
@@ -183,6 +201,8 @@ export const CardForm = (props) => {
       errorExpiry={errorExpiry}
       errorCvc={errorCvc}
       loading={loading}
+      zipcode={zipcode}
+      errorZipcode={errorZipcode}
       handleChangeExpiry={handleChangeExpiry}
       handleChangeCvc={handleChangeCvc}
       handleChange={handleChange}
