@@ -12,6 +12,7 @@ var _SessionContext = require("../../../contexts/SessionContext");
 var _ApiContext = require("../../../contexts/ApiContext");
 var _LanguageContext = require("../../../contexts/LanguageContext");
 var _WebsocketContext = require("../../../contexts/WebsocketContext");
+var _ValidationsFieldsContext = require("../../../contexts/ValidationsFieldsContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -29,6 +30,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage card form for stripe elements form behavior without UI component
  */
 var CardForm = function CardForm(props) {
+  var _validationFields$che, _validationFields$che2, _validationFields$che3, _validationFields$che4;
   var UIComponent = props.UIComponent,
     requirements = props.requirements,
     toSave = props.toSave,
@@ -43,9 +45,14 @@ var CardForm = function CardForm(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var _useValidationFields = (0, _ValidationsFieldsContext.useValidationFields)(),
+    _useValidationFields2 = _slicedToArray(_useValidationFields, 1),
+    validationFields = _useValidationFields2[0];
   var socket = (0, _WebsocketContext.useWebsocket)();
   var stripe = (0, _reactStripeJs.useStripe)();
   var elements = (0, _reactStripeJs.useElements)();
+  var zipCodeRequired = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$che = validationFields.checkout) === null || _validationFields$che === void 0 ? void 0 : (_validationFields$che2 = _validationFields$che.zipcode) === null || _validationFields$che2 === void 0 ? void 0 : _validationFields$che2.required;
+  var zipCodeEnabled = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$che3 = validationFields.checkout) === null || _validationFields$che3 === void 0 ? void 0 : (_validationFields$che4 = _validationFields$che3.zipcode) === null || _validationFields$che4 === void 0 ? void 0 : _validationFields$che4.required;
   var _useState = (0, _react.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     error = _useState2[0],
@@ -58,10 +65,18 @@ var CardForm = function CardForm(props) {
     _useState6 = _slicedToArray(_useState5, 2),
     errorCvc = _useState6[0],
     setErrorCvc = _useState6[1];
-  var _useState7 = (0, _react.useState)(false),
+  var _useState7 = (0, _react.useState)(null),
     _useState8 = _slicedToArray(_useState7, 2),
-    loading = _useState8[0],
-    setLoading = _useState8[1];
+    zipcode = _useState8[0],
+    setZipcode = _useState8[1];
+  var _useState9 = (0, _react.useState)(false),
+    _useState10 = _slicedToArray(_useState9, 2),
+    errorZipcode = _useState10[0],
+    setErrorZipcode = _useState10[1];
+  var _useState11 = (0, _react.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    loading = _useState12[0],
+    setLoading = _useState12[1];
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     t = _useLanguage2[1];
@@ -122,8 +137,23 @@ var CardForm = function CardForm(props) {
    * @param {*event} event
    */
   var handleChange = function handleChange(event) {
+    var _event$target;
     if (event.error) {
       (event.elementType === 'cardNumber' || 'card') && setError(event.error.message);
+    } else if ((event === null || event === void 0 ? void 0 : (_event$target = event.target) === null || _event$target === void 0 ? void 0 : _event$target.name) === 'zipcode') {
+      var _event$target2, _event$target2$value, _event$target3, _event$target4;
+      event.target.value = event === null || event === void 0 ? void 0 : (_event$target2 = event.target) === null || _event$target2 === void 0 ? void 0 : (_event$target2$value = _event$target2.value) === null || _event$target2$value === void 0 ? void 0 : _event$target2$value.slice(0, 6);
+      elements.update({
+        value: {
+          postalCode: event === null || event === void 0 ? void 0 : (_event$target3 = event.target) === null || _event$target3 === void 0 ? void 0 : _event$target3.value
+        }
+      });
+      if (!event.target.value && zipCodeRequired && zipCodeEnabled) {
+        setErrorZipcode(true);
+      } else {
+        setErrorZipcode(false);
+      }
+      setZipcode(event === null || event === void 0 ? void 0 : (_event$target4 = event.target) === null || _event$target4 === void 0 ? void 0 : _event$target4.value);
     } else {
       setError(null);
     }
@@ -165,7 +195,8 @@ var CardForm = function CardForm(props) {
             card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
             userName = user !== null && user !== void 0 && user.lastname ? "".concat(user === null || user === void 0 ? void 0 : user.name, " ").concat(user === null || user === void 0 ? void 0 : user.lastname) : user === null || user === void 0 ? void 0 : user.name;
             userAddress = (user === null || user === void 0 ? void 0 : user.address) && {
-              line1: user === null || user === void 0 ? void 0 : user.address
+              line1: user === null || user === void 0 ? void 0 : user.address,
+              postal_code: zipcode
             };
             billingData = {
               email: user.email
@@ -211,7 +242,7 @@ var CardForm = function CardForm(props) {
                 }
               });
             }
-            _context2.next = 29;
+            _context2.next = 30;
             break;
           case 22:
             if (stripe) {
@@ -221,14 +252,18 @@ var CardForm = function CardForm(props) {
             setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'));
             return _context2.abrupt("return");
           case 25:
-            _context2.next = 27;
+            if (!zipcode && zipCodeRequired && zipCodeEnabled) {
+              setErrorZipcode(true);
+              setLoading(false);
+            }
+            _context2.next = 28;
             return stripe.confirmCardSetup(requirements, {
               payment_method: {
                 card: card,
                 billing_details: billingData
               }
             });
-          case 27:
+          case 28:
             _result = _context2.sent;
             if (_result.error) {
               setLoading(false);
@@ -247,7 +282,7 @@ var CardForm = function CardForm(props) {
                 toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
               }
             }
-          case 29:
+          case 30:
           case "end":
             return _context2.stop();
         }
@@ -263,6 +298,8 @@ var CardForm = function CardForm(props) {
     errorExpiry: errorExpiry,
     errorCvc: errorCvc,
     loading: loading,
+    zipcode: zipcode,
+    errorZipcode: errorZipcode,
     handleChangeExpiry: handleChangeExpiry,
     handleChangeCvc: handleChangeCvc,
     handleChange: handleChange
