@@ -133,7 +133,7 @@ var OrderProvider = function OrderProvider(_ref) {
    */
   var refreshOrderOptions = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _state$options, _state$options$addres, _state$options2, _state$options2$addre, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options$address, carts, _options, _options$address2, localOptions, _options2, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
+      var _state$options, _state$options$addres, _state$options2, _state$options2$addre, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options2$address, carts, _options2, _options2$address2, localOptions, _options3, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -180,19 +180,19 @@ var OrderProvider = function OrderProvider(_ref) {
               _context.next = 27;
               break;
             }
-            carts = result.carts, _options = _objectWithoutProperties(result, _excluded);
+            carts = result.carts, _options2 = _objectWithoutProperties(result, _excluded);
             state.carts = {};
             carts.forEach(function (cart) {
               state.carts["businessId:".concat(cart.business_id)] = cart;
             });
-            state.options = _objectSpread(_objectSpread({}, state.options), _options);
-            if (!(!countryCodeFromLocalStorage && _options !== null && _options !== void 0 && (_options$address = _options.address) !== null && _options$address !== void 0 && _options$address.country_code)) {
+            state.options = _objectSpread(_objectSpread({}, state.options), _options2);
+            if (!(!countryCodeFromLocalStorage && _options2 !== null && _options2 !== void 0 && (_options2$address = _options2.address) !== null && _options2$address !== void 0 && _options2$address.country_code)) {
               _context.next = 27;
               break;
             }
             _context.next = 27;
             return updateOrderOptions({
-              country_code: _options === null || _options === void 0 ? void 0 : (_options$address2 = _options.address) === null || _options$address2 === void 0 ? void 0 : _options$address2.country_code
+              country_code: _options2 === null || _options2 === void 0 ? void 0 : (_options2$address2 = _options2.address) === null || _options2$address2 === void 0 ? void 0 : _options2$address2.country_code
             });
           case 27:
             if (error) {
@@ -212,7 +212,7 @@ var OrderProvider = function OrderProvider(_ref) {
               _context.next = 63;
               break;
             }
-            _options2 = {};
+            _options3 = {};
             if (!(Object.keys(localOptions.address).length > 0)) {
               _context.next = 54;
               break;
@@ -259,22 +259,22 @@ var OrderProvider = function OrderProvider(_ref) {
               default: true
             });
           case 53:
-            address && (_options2.address_id = address.id);
+            address && (_options3.address_id = address.id);
           case 54:
             if (localOptions.type) {
-              _options2.type = localOptions.type;
+              _options3.type = localOptions.type;
             }
             if (localOptions.moment) {
-              _options2.moment = _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix();
+              _options3.moment = _dayjs.default.utc(localOptions.moment, 'YYYY-MM-DD HH:mm:ss').unix();
             }
             if (localOptions !== null && localOptions !== void 0 && localOptions.address_id) {
-              _options2.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
+              _options3.address_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.address_id;
             }
             if (localOptions !== null && localOptions !== void 0 && localOptions.city_id) {
-              _options2.city_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.city_id;
+              _options3.city_id = localOptions === null || localOptions === void 0 ? void 0 : localOptions.city_id;
             }
-            if (_options2 && Object.keys(_options2).length > 0) {
-              updateOrderOptions(_options2);
+            if (_options3 && Object.keys(_options3).length > 0) {
+              updateOrderOptions(_options3);
             } else {
               setState(_objectSpread(_objectSpread({}, state), {}, {
                 loading: false
@@ -430,7 +430,7 @@ var OrderProvider = function OrderProvider(_ref) {
   var changeType = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(type) {
       var _state$options10;
-      var options, cityId, params;
+      var options, cityId, params, _options;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -443,17 +443,6 @@ var OrderProvider = function OrderProvider(_ref) {
             }
             return _context3.abrupt("return");
           case 3:
-            if (session.auth) {
-              _context3.next = 7;
-              break;
-            }
-            _context3.next = 6;
-            return strategy.setItem('options', options, true);
-          case 6:
-            setState(_objectSpread(_objectSpread({}, state), {}, {
-              options: options
-            }));
-          case 7:
             cityId = (_state$options10 = state.options) === null || _state$options10 === void 0 ? void 0 : _state$options10.city_id;
             params = {
               type: type
@@ -461,8 +450,20 @@ var OrderProvider = function OrderProvider(_ref) {
             if (cityId && type !== 2) {
               params.city_id = null;
             }
-            updateOrderOptions(params);
+            if (session.auth) {
+              _context3.next = 11;
+              break;
+            }
+            _options = _objectSpread(_objectSpread({}, options), params);
+            _context3.next = 10;
+            return strategy.setItem('options', _options, true);
+          case 10:
+            setState(_objectSpread(_objectSpread({}, state), {}, {
+              options: _options
+            }));
           case 11:
+            updateOrderOptions(params);
+          case 12:
           case "end":
             return _context3.stop();
         }
@@ -566,7 +567,7 @@ var OrderProvider = function OrderProvider(_ref) {
    */
   var updateOrderOptions = /*#__PURE__*/function () {
     var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(changes) {
-      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options11, _state$options11$addr, _ref8, _state$options12, _state$options12$addr, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options3, _err$message2, message;
+      var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options11, _state$options11$addr, _ref8, _state$options12, _state$options12$addr, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options4, _err$message2, message;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -623,12 +624,12 @@ var OrderProvider = function OrderProvider(_ref) {
             error = _yield$ordering$setAc4.error;
             result = _yield$ordering$setAc4.result;
             if (!error) {
-              carts = result.carts, _options3 = _objectWithoutProperties(result, _excluded2);
+              carts = result.carts, _options4 = _objectWithoutProperties(result, _excluded2);
               state.carts = {};
               carts.forEach(function (cart) {
                 state.carts["businessId:".concat(cart.business_id)] = cart;
               });
-              state.options = _objectSpread(_objectSpread({}, state.options), _options3);
+              state.options = _objectSpread(_objectSpread({}, state.options), _options4);
             } else {
               setAlert({
                 show: true,
@@ -1966,7 +1967,7 @@ var OrderProvider = function OrderProvider(_ref) {
   */
   var getLastOrderHasNoReview = /*#__PURE__*/function () {
     var _ref24 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
-      var pastOrderTypes, where, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder, _options4, _yield$ordering$setAc22, _yield$ordering$setAc23, _result3, _error2, noReviewOrders;
+      var pastOrderTypes, where, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder, _options5, _yield$ordering$setAc22, _yield$ordering$setAc23, _result3, _error2, noReviewOrders;
       return _regeneratorRuntime().wrap(function _callee22$(_context22) {
         while (1) switch (_context22.prev = _context22.next) {
           case 0:
@@ -2069,7 +2070,7 @@ var OrderProvider = function OrderProvider(_ref) {
               attribute: 'cart_group_id',
               value: _noRviewOrder === null || _noRviewOrder === void 0 ? void 0 : _noRviewOrder.cart_group_id
             });
-            _options4 = {
+            _options5 = {
               query: {
                 where: where,
                 page: 1,
@@ -2077,7 +2078,7 @@ var OrderProvider = function OrderProvider(_ref) {
               }
             };
             _context22.next = 22;
-            return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(_options4);
+            return ordering.setAccessToken(session === null || session === void 0 ? void 0 : session.token).orders().get(_options5);
           case 22:
             _yield$ordering$setAc22 = _context22.sent;
             _yield$ordering$setAc23 = _yield$ordering$setAc22.content;
