@@ -108,15 +108,11 @@ export const MultiCheckout = (props) => {
   }
 
   const handleSelectPaymethod = (paymethod) => {
-    if (paymethod === null) {
-      setPaymethodSelected({})
-    } else {
-      setPaymethodSelected({
-        ...paymethodSelected,
-        ...paymethod,
-        paymethod_data: paymethod?.paymethod_data
-      })
-    }
+    setPaymethodSelected(paymethod === null ? {} : {
+      ...paymethodSelected,
+      ...paymethod,
+      paymethod_data: paymethod?.paymethod_data
+    })
   }
 
   const handleSelectWallet = async (isChecked, wallet) => {
