@@ -137,7 +137,7 @@ var MultiCheckout = function MultiCheckout(props) {
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(confirmPayment) {
       var _paymethodSelected$pa, _cartGroup$result2, _result$paymethod_dat;
-      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result, _result$payment_event, _paymentEvent$data, _paymentEvent$data$ex, paymentEvent, _yield$confirmPayment, confirmApplePayError;
+      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result, _result$payment_event, _paymentEvent$data, _paymentEvent$data$ex, paymentEvent, _paymentEvent$data2, _paymentEvent$data2$e, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -181,30 +181,35 @@ var MultiCheckout = function MultiCheckout(props) {
             return actionsBeforePlace(paymethodSelected, result);
           case 15:
             if (!(confirmPayment && (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.gateway) === 'global_apple_pay')) {
-              _context.next = 26;
+              _context.next = 27;
               break;
             }
             paymentEvent = result === null || result === void 0 ? void 0 : (_result$payment_event = result.payment_events) === null || _result$payment_event === void 0 ? void 0 : _result$payment_event.find(function (event) {
               return (event === null || event === void 0 ? void 0 : event.event) === 'payment';
             });
-            _context.next = 19;
-            return confirmPayment(paymentEvent === null || paymentEvent === void 0 ? void 0 : (_paymentEvent$data = paymentEvent.data) === null || _paymentEvent$data === void 0 ? void 0 : (_paymentEvent$data$ex = _paymentEvent$data.extra) === null || _paymentEvent$data$ex === void 0 ? void 0 : _paymentEvent$data$ex.client_secret);
-          case 19:
+            if (!(paymentEvent !== null && paymentEvent !== void 0 && (_paymentEvent$data = paymentEvent.data) !== null && _paymentEvent$data !== void 0 && (_paymentEvent$data$ex = _paymentEvent$data.extra) !== null && _paymentEvent$data$ex !== void 0 && _paymentEvent$data$ex.client_secret)) {
+              _context.next = 23;
+              break;
+            }
+            _context.next = 20;
+            return confirmPayment(paymentEvent === null || paymentEvent === void 0 ? void 0 : (_paymentEvent$data2 = paymentEvent.data) === null || _paymentEvent$data2 === void 0 ? void 0 : (_paymentEvent$data2$e = _paymentEvent$data2.extra) === null || _paymentEvent$data2$e === void 0 ? void 0 : _paymentEvent$data2$e.client_secret);
+          case 20:
             _yield$confirmPayment = _context.sent;
             confirmApplePayError = _yield$confirmPayment.error;
             if (confirmApplePayError !== null && confirmApplePayError !== void 0 && confirmApplePayError.message || confirmApplePayError !== null && confirmApplePayError !== void 0 && confirmApplePayError.localizedMessage) {
               showToast(_ToastContext.ToastType.Error, (confirmApplePayError === null || confirmApplePayError === void 0 ? void 0 : confirmApplePayError.message) || (confirmApplePayError === null || confirmApplePayError === void 0 ? void 0 : confirmApplePayError.localizedMessage));
             }
+          case 23:
             setPlacing(false);
             if (!error) {
               onPlaceOrderClick && onPlaceOrderClick(result);
             }
-            _context.next = 28;
+            _context.next = 29;
             break;
-          case 26:
+          case 27:
             setPlacing(false);
             onPlaceOrderClick && onPlaceOrderClick(result);
-          case 28:
+          case 29:
           case "end":
             return _context.stop();
         }
@@ -215,7 +220,7 @@ var MultiCheckout = function MultiCheckout(props) {
     };
   }();
   var handleSelectPaymethod = function handleSelectPaymethod(paymethod) {
-    setPaymethodSelected(_objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
+    setPaymethodSelected(paymethod === null ? {} : _objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
       paymethod_data: paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_data
     }));
   };
