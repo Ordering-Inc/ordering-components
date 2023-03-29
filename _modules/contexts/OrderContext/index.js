@@ -1707,7 +1707,7 @@ var OrderProvider = function OrderProvider(_ref) {
             body = _objectSpread(_objectSpread({}, data), {}, {
               user_id: userCustomerId || session.user.id
             });
-            if (!(body.user_id === userCustomerId)) {
+            if (!(body.user_id === userCustomerId || data)) {
               _context18.next = 16;
               break;
             }
