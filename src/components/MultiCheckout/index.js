@@ -91,9 +91,11 @@ export const MultiCheckout = (props) => {
 
     if (confirmPayment && paymethodSelected?.gateway === 'global_apple_pay') {
       const paymentEvent = result?.payment_events?.find(event => event?.event === 'payment')
-      const { error: confirmApplePayError } = await confirmPayment(paymentEvent?.data?.extra?.client_secret)
-      if (confirmApplePayError?.message || confirmApplePayError?.localizedMessage) {
-        showToast(ToastType.Error, confirmApplePayError?.message || confirmApplePayError?.localizedMessage)
+      if (paymentEvent?.data?.extra?.client_secret) {
+        const { error: confirmApplePayError } = await confirmPayment(paymentEvent?.data?.extra?.client_secret)
+        if (confirmApplePayError?.message || confirmApplePayError?.localizedMessage) {
+          showToast(ToastType.Error, confirmApplePayError?.message || confirmApplePayError?.localizedMessage)
+        }
       }
       setPlacing(false)
       if (!error) {
@@ -106,11 +108,15 @@ export const MultiCheckout = (props) => {
   }
 
   const handleSelectPaymethod = (paymethod) => {
-    setPaymethodSelected({
-      ...paymethodSelected,
-      ...paymethod,
-      paymethod_data: paymethod?.paymethod_data
-    })
+    if (paymethod === null) {
+      setPaymethodSelected({})
+    } else {
+      setPaymethodSelected({
+        ...paymethodSelected,
+        ...paymethod,
+        paymethod_data: paymethod?.paymethod_data
+      })
+    }
   }
 
   const handleSelectWallet = async (isChecked, wallet) => {
