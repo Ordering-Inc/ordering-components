@@ -427,7 +427,10 @@ export const BusinessAndProductList = (props) => {
       setCategoryState({ ...curCategoryState, loading: true })
       const [lazyRes, featuredRes] = await getLazyProducts({ page: 1, pageSize })
 
-      const { content: { error, result, pagination } } = lazyRes
+      const { content } = lazyRes
+      const error = content?.error
+      const result = content?.result
+      const pagination = content?.pagination
 
       const errorsList = []
 
@@ -494,13 +497,13 @@ export const BusinessAndProductList = (props) => {
             ...paginationData,
             currentPage: categorySelected.id === 'featured'
               ? featuredRes?.content?.pagination?.current_page
-              : pagination.current_page,
+              : pagination?.current_page,
             totalItems: categorySelected.id === 'featured'
               ? featuredRes?.content?.pagination?.total
-              : pagination.total,
+              : pagination?.total,
             totalPages: categorySelected.id === 'featured'
               ? featuredRes?.content?.pagination?.total_pages
-              : pagination.total_pages
+              : pagination?.total_pages
           },
           loading: false,
           products: categorySelected.id === 'featured'
@@ -533,7 +536,10 @@ export const BusinessAndProductList = (props) => {
         page: curCategoryState.pagination.currentPage + 1
       })
 
-      const { content: { error, result, pagination } } = lazyRes
+      const { content } = lazyRes
+      const error = content?.error
+      const result = content?.result
+      const pagination = content?.pagination
 
       const errorsList = []
 
@@ -553,13 +559,13 @@ export const BusinessAndProductList = (props) => {
         const oldFeatured = categoriesState?.featured
         const featureState = {
           pagination: {
-            ...oldFeatured.pagination,
+            ...oldFeatured?.pagination,
             currentPage: featuredRes?.content?.pagination?.current_page,
             totalItems: featuredRes?.content?.pagination?.total,
             totalPages: featuredRes?.content?.pagination?.total_pages
           },
           loading: false,
-          products: [...oldFeatured.products, ...featuredRes?.content?.result]
+          products: [...(oldFeatured?.products ?? []), ...(featuredRes?.content?.result ?? [])]
         }
         categoriesState.featured = featureState
       }
@@ -567,13 +573,13 @@ export const BusinessAndProductList = (props) => {
       if ((categorySelected.id && categorySelected.id !== 'featured') || !isUseParentCategory) {
         const newcategoryState = {
           pagination: {
-            ...curCategoryState.pagination,
-            currentPage: pagination.current_page,
-            totalItems: pagination.total,
-            totalPages: pagination.total_pages
+            ...curCategoryState?.pagination,
+            currentPage: pagination?.current_page,
+            totalItems: pagination?.total,
+            totalPages: pagination?.total_pages
           },
           loading: false,
-          products: [...curCategoryState.products, ...result]
+          products: [...(curCategoryState?.products ?? []), ...result]
         }
 
         categoriesState[categoryKey] = newcategoryState
@@ -581,7 +587,7 @@ export const BusinessAndProductList = (props) => {
         setCategoryState({ ...categoryState, ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
-        const isFeatured = categoriesState.all.products.some(product => product.featured) ||
+        const isFeatured = categoriesState?.all?.products?.some(product => product.featured) ||
           categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
       }
@@ -591,24 +597,24 @@ export const BusinessAndProductList = (props) => {
         const productsListFeatured = featuredRes?.content?.result ?? []
         const paginationData = categorySelected.id === 'featured'
           ? categoriesState?.featured?.pagination ?? {}
-          : curCategoryState.pagination ?? {}
+          : curCategoryState?.pagination ?? {}
         const newcategoryState = {
           pagination: {
             ...paginationData,
             currentPage: categorySelected.id === 'featured'
               ? featuredRes?.content?.pagination?.current_page
-              : pagination.current_page,
+              : pagination?.current_page,
             totalItems: categorySelected.id === 'featured'
               ? featuredRes?.content?.pagination?.total
-              : pagination.total,
+              : pagination?.total,
             totalPages: categorySelected.id === 'featured'
               ? featuredRes?.content?.pagination?.total_pages
-              : pagination.total_pages
+              : pagination?.total_pages
           },
           loading: false,
           products: categorySelected.id === 'featured'
             ? productsListFeatured
-            : [...productsListFeatured, ...curCategoryState.products.concat(productsList)]
+            : [...productsListFeatured, ...(curCategoryState?.products?.concat(productsList) ?? [])]
         }
 
         categoriesState[categoryKey] = newcategoryState
@@ -616,7 +622,7 @@ export const BusinessAndProductList = (props) => {
         setCategoryState({ ...newcategoryState })
         setCategoriesState({ ...categoriesState })
 
-        const isFeatured = categoriesState.all.products.some(product => product.featured) ||
+        const isFeatured = categoriesState?.all?.products?.some(product => product.featured) ||
           categoriesState?.featured?.products?.some(product => product.featured)
         setFeaturedProducts(isFeatured)
       }
