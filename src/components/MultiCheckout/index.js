@@ -90,7 +90,7 @@ export const MultiCheckout = (props) => {
     }
 
     if (confirmPayment && paymethodSelected?.gateway === 'global_apple_pay') {
-      const paymentEvent = result?.payment_events?.find(event => event?.event === 'payment')
+      const paymentEvent = result?.payment_events?.find(event => event?.data?.extra?.client_secret)
       if (paymentEvent?.data?.extra?.client_secret) {
         const { error: confirmApplePayError } = await confirmPayment(paymentEvent?.data?.extra?.client_secret)
         if (confirmApplePayError?.message || confirmApplePayError?.localizedMessage) {
