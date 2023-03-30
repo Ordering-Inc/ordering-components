@@ -185,7 +185,8 @@ var MultiCheckout = function MultiCheckout(props) {
               break;
             }
             paymentEvent = result === null || result === void 0 ? void 0 : (_result$payment_event = result.payment_events) === null || _result$payment_event === void 0 ? void 0 : _result$payment_event.find(function (event) {
-              return (event === null || event === void 0 ? void 0 : event.event) === 'payment';
+              var _event$data, _event$data$extra;
+              return event === null || event === void 0 ? void 0 : (_event$data = event.data) === null || _event$data === void 0 ? void 0 : (_event$data$extra = _event$data.extra) === null || _event$data$extra === void 0 ? void 0 : _event$data$extra.client_secret;
             });
             if (!(paymentEvent !== null && paymentEvent !== void 0 && (_paymentEvent$data = paymentEvent.data) !== null && _paymentEvent$data !== void 0 && (_paymentEvent$data$ex = _paymentEvent$data.extra) !== null && _paymentEvent$data$ex !== void 0 && _paymentEvent$data$ex.client_secret)) {
               _context.next = 23;
