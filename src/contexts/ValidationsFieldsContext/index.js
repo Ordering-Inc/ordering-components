@@ -37,7 +37,8 @@ export const ValidationFieldsProvider = ({ children }) => {
         loading: false,
         fields: {
           checkout,
-          address
+          address,
+          card
         }
       })
     } catch (err) {
