@@ -75,7 +75,8 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
               loading: false,
               fields: {
                 checkout: checkout,
-                address: address
+                address: address,
+                card: card
               }
             });
             _context.next = 17;
