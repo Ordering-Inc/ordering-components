@@ -18,6 +18,7 @@ export const ValidationFieldsProvider = ({ children }) => {
       const { content: { result, error } } = await ordering.validationFields().get()
       const checkout = {}
       const address = {}
+      const card = {}
       if (!error) {
         convertArrayToObject(
           result.filter(field => field.validate === 'checkout'),
@@ -26,6 +27,10 @@ export const ValidationFieldsProvider = ({ children }) => {
         convertArrayToObject(
           result.filter(field => field.validate === 'address'),
           address
+        )
+        convertArrayToObject(
+          result.filter(field => field.validate === 'card'),
+          card
         )
       }
       setState({
