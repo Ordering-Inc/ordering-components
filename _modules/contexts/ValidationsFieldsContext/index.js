@@ -45,7 +45,7 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
   };
   var loadValidationFields = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address;
+      var _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address, card;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -59,6 +59,7 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
             error = _yield$ordering$valid2.error;
             checkout = {};
             address = {};
+            card = {};
             if (!error) {
               convertArrayToObject(result.filter(function (field) {
                 return field.validate === 'checkout';
@@ -66,28 +67,32 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
               convertArrayToObject(result.filter(function (field) {
                 return field.validate === 'address';
               }), address);
+              convertArrayToObject(result.filter(function (field) {
+                return field.validate === 'card';
+              }), card);
             }
             setState({
               loading: false,
               fields: {
                 checkout: checkout,
-                address: address
+                address: address,
+                card: card
               }
             });
-            _context.next = 16;
+            _context.next = 17;
             break;
-          case 13:
-            _context.prev = 13;
+          case 14:
+            _context.prev = 14;
             _context.t0 = _context["catch"](0);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
-          case 16:
+          case 17:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 13]]);
+      }, _callee, null, [[0, 14]]);
     }));
     return function loadValidationFields() {
       return _ref2.apply(this, arguments);
