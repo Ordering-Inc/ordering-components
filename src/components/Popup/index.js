@@ -101,7 +101,7 @@ export const Popup = (props) => {
     left: 0,
     bottom: 0,
     right: 0,
-    zIndex: 2001,
+    zIndex: 20001,
     outline: 'none'
   }
 
