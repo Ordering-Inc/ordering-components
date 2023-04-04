@@ -122,7 +122,7 @@ var Popup = function Popup(props) {
     left: 0,
     bottom: 0,
     right: 0,
-    zIndex: 2001,
+    zIndex: 20001,
     outline: 'none'
   };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, open && root && /*#__PURE__*/_reactDom.default.createPortal( /*#__PURE__*/_react.default.createElement("div", {
