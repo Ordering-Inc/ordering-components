@@ -149,11 +149,12 @@ export const ConfigProvider = ({ children, strategy }) => {
       }
       const configsResult = {
         ...customConfigs,
-        default_country_code: {
-          value: (data && data?.country_code) || 'US',
-          calling_number: (data && data?.country_calling_code) || '+1'
-        },
         ...result,
+        default_country_code: {
+          ...result?.default_country_code,
+          value: result?.default_country_code?.value || (data && data?.country_code) || 'US',
+          calling_number: result?.default_country_code?.calling_number || (data && data?.country_calling_code) || '+1'
+        },
         ...conditionalConfigs
       }
       setState({
