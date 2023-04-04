@@ -164,7 +164,12 @@ var ConfigProvider = function ConfigProvider(_ref) {
         _result3$dates_genera,
         _result4,
         _result4$format_time,
+        _result5,
+        _result6,
+        _result6$default_coun,
         _data,
+        _result7,
+        _result7$default_coun,
         _data2,
         countryCode,
         options,
@@ -247,12 +252,12 @@ var ConfigProvider = function ConfigProvider(_ref) {
                 value: ((_result3 = result) === null || _result3 === void 0 ? void 0 : (_result3$dates_genera = _result3.dates_general_format) === null || _result3$dates_genera === void 0 ? void 0 : _result3$dates_genera.value) || (((_result4 = result) === null || _result4 === void 0 ? void 0 : (_result4$format_time = _result4.format_time) === null || _result4$format_time === void 0 ? void 0 : _result4$format_time.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
               }
             };
-            configsResult = _objectSpread(_objectSpread(_objectSpread({}, customConfigs), {}, {
-              default_country_code: {
-                value: data && ((_data = data) === null || _data === void 0 ? void 0 : _data.country_code) || 'US',
-                calling_number: data && ((_data2 = data) === null || _data2 === void 0 ? void 0 : _data2.country_calling_code) || '+1'
-              }
-            }, result), conditionalConfigs);
+            configsResult = _objectSpread(_objectSpread(_objectSpread({}, customConfigs), result), {}, {
+              default_country_code: _objectSpread(_objectSpread({}, (_result5 = result) === null || _result5 === void 0 ? void 0 : _result5.default_country_code), {}, {
+                value: ((_result6 = result) === null || _result6 === void 0 ? void 0 : (_result6$default_coun = _result6.default_country_code) === null || _result6$default_coun === void 0 ? void 0 : _result6$default_coun.value) || data && ((_data = data) === null || _data === void 0 ? void 0 : _data.country_code) || 'US',
+                calling_number: ((_result7 = result) === null || _result7 === void 0 ? void 0 : (_result7$default_coun = _result7.default_country_code) === null || _result7$default_coun === void 0 ? void 0 : _result7$default_coun.calling_number) || data && ((_data2 = data) === null || _data2 === void 0 ? void 0 : _data2.country_calling_code) || '+1'
+              })
+            }, conditionalConfigs);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               configs: error ? {} : configsResult
