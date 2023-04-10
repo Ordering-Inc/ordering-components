@@ -558,35 +558,36 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
             _ref8 = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : {}, newFetch = _ref8.newFetch;
+            setErrors(null);
             curCategoryState = (_categoriesState$cate = categoriesState[categoryKey]) !== null && _categoriesState$cate !== void 0 ? _categoriesState$cate : categoryStateDefault;
             if (!(!newFetch && (curCategoryState.pagination.currentPage > 0 && curCategoryState.pagination.currentPage === curCategoryState.pagination.totalPages || (curCategoryState === null || curCategoryState === void 0 ? void 0 : (_curCategoryState$pro = curCategoryState.products) === null || _curCategoryState$pro === void 0 ? void 0 : _curCategoryState$pro.length) > 0 && curCategoryState.pagination.totalPages > 0))) {
-              _context3.next = 5;
+              _context3.next = 6;
               break;
             }
             setCategoryState(_objectSpread(_objectSpread({}, curCategoryState), {}, {
               loading: false
             }));
             return _context3.abrupt("return");
-          case 5:
+          case 6:
             isLazy = !!(businessState !== null && businessState !== void 0 && (_businessState$busine17 = businessState.business) !== null && _businessState$busine17 !== void 0 && _businessState$busine17.lazy_load_products_recommended);
             if (isLazy) {
-              _context3.next = 9;
+              _context3.next = 10;
               break;
             }
             getProducts();
             return _context3.abrupt("return");
-          case 9:
+          case 10:
             pageSize = categoryStateDefault.pagination.pageSize;
-            _context3.prev = 10;
+            _context3.prev = 11;
             setCategoryState(_objectSpread(_objectSpread({}, curCategoryState), {}, {
               loading: true
             }));
-            _context3.next = 14;
+            _context3.next = 15;
             return getLazyProducts({
               page: 1,
               pageSize: pageSize
             });
-          case 14:
+          case 15:
             _yield$getLazyProduct = _context3.sent;
             _yield$getLazyProduct2 = _slicedToArray(_yield$getLazyProduct, 2);
             lazyRes = _yield$getLazyProduct2[0];
@@ -603,7 +604,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               errorsList.push(featuredRes === null || featuredRes === void 0 ? void 0 : (_featuredRes$content2 = featuredRes.content) === null || _featuredRes$content2 === void 0 ? void 0 : _featuredRes$content2.result[0]);
             }
             if (!(errorsList !== null && errorsList !== void 0 && errorsList.length)) {
-              _context3.next = 29;
+              _context3.next = 30;
               break;
             }
             setErrors(errorsList[0]);
@@ -611,7 +612,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               loading: false
             }));
             return _context3.abrupt("return");
-          case 29:
+          case 30:
             if (featuredRes !== null && featuredRes !== void 0 && (_featuredRes$content3 = featuredRes.content) !== null && _featuredRes$content3 !== void 0 && (_featuredRes$content4 = _featuredRes$content3.result) !== null && _featuredRes$content4 !== void 0 && _featuredRes$content4.length) {
               oldFeatured = categoriesState === null || categoriesState === void 0 ? void 0 : categoriesState.featured;
               featureState = {
@@ -675,22 +676,22 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               }));
               setFeaturedProducts(_isFeatured);
             }
-            _context3.next = 37;
+            _context3.next = 38;
             break;
-          case 34:
-            _context3.prev = 34;
-            _context3.t0 = _context3["catch"](10);
+          case 35:
+            _context3.prev = 35;
+            _context3.t0 = _context3["catch"](11);
             if ((_context3.t0 === null || _context3.t0 === void 0 ? void 0 : (_err$constructor = _context3.t0.constructor) === null || _err$constructor === void 0 ? void 0 : _err$constructor.name) !== 'Cancel') {
               setErrors([(_err$message = _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message) !== null && _err$message !== void 0 ? _err$message : 'ERROR']);
               setCategoryState(_objectSpread(_objectSpread({}, curCategoryState), {}, {
                 loading: false
               }));
             }
-          case 37:
+          case 38:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[10, 34]]);
+      }, _callee3, null, [[11, 35]]);
     }));
     return function loadProducts() {
       return _ref7.apply(this, arguments);
@@ -703,16 +704,17 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
           case 0:
+            setErrors(null);
             curCategoryState = (_categoriesState$cate2 = categoriesState[categoryKey]) !== null && _categoriesState$cate2 !== void 0 ? _categoriesState$cate2 : categoryStateDefault;
             setCategoryState(_objectSpread(_objectSpread({}, curCategoryState), {}, {
               loading: true
             }));
-            _context4.prev = 2;
-            _context4.next = 5;
+            _context4.prev = 3;
+            _context4.next = 6;
             return getLazyProducts({
               page: curCategoryState.pagination.currentPage + 1
             });
-          case 5:
+          case 6:
             _yield$getLazyProduct3 = _context4.sent;
             _yield$getLazyProduct4 = _slicedToArray(_yield$getLazyProduct3, 2);
             lazyRes = _yield$getLazyProduct4[0];
@@ -729,7 +731,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               errorsList.push(featuredRes === null || featuredRes === void 0 ? void 0 : (_featuredRes$content21 = featuredRes.content) === null || _featuredRes$content21 === void 0 ? void 0 : _featuredRes$content21.result[0]);
             }
             if (!(errorsList !== null && errorsList !== void 0 && errorsList.length)) {
-              _context4.next = 20;
+              _context4.next = 21;
               break;
             }
             setErrors(errorsList[0]);
@@ -737,7 +739,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
               loading: false
             }));
             return _context4.abrupt("return");
-          case 20:
+          case 21:
             if (featuredRes) {
               oldFeatured = categoriesState === null || categoriesState === void 0 ? void 0 : categoriesState.featured;
               featureState = {
@@ -803,22 +805,22 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             setCategoryState(_objectSpread(_objectSpread({}, categoryState), {}, {
               loading: false
             }));
-            _context4.next = 29;
+            _context4.next = 30;
             break;
-          case 26:
-            _context4.prev = 26;
-            _context4.t0 = _context4["catch"](2);
+          case 27:
+            _context4.prev = 27;
+            _context4.t0 = _context4["catch"](3);
             if ((_context4.t0 === null || _context4.t0 === void 0 ? void 0 : (_err$constructor2 = _context4.t0.constructor) === null || _err$constructor2 === void 0 ? void 0 : _err$constructor2.name) !== 'Cancel') {
               setErrors([(_err$message2 = _context4.t0 === null || _context4.t0 === void 0 ? void 0 : _context4.t0.message) !== null && _err$message2 !== void 0 ? _err$message2 : 'ERROR']);
               setCategoryState(_objectSpread(_objectSpread({}, curCategoryState), {}, {
                 loading: false
               }));
             }
-          case 29:
+          case 30:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[2, 26]]);
+      }, _callee4, null, [[3, 27]]);
     }));
     return function loadMoreProducts() {
       return _ref10.apply(this, arguments);
