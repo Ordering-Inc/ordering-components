@@ -269,7 +269,7 @@ export const BusinessAndProductList = (props) => {
       let _categoriesCustom = null
       if (avoidProductDuplicate) {
         const customCategories = ['favorites']
-        _categoriesCustom = businessState?.business?.categories?.filter(({id}) => (!customCategories.includes(id)))
+        _categoriesCustom = businessState?.business?.categories?.filter(({ id }) => (!customCategories.includes(id)))
       }
 
       const productsToFilter = avoidProductDuplicate ? _categoriesCustom : businessState?.business?.categories
@@ -403,6 +403,7 @@ export const BusinessAndProductList = (props) => {
   }
 
   const loadProducts = async ({ newFetch } = {}) => {
+    setErrors(null)
     const curCategoryState = categoriesState[categoryKey] ?? categoryStateDefault
     if (
       !newFetch &&
@@ -528,6 +529,7 @@ export const BusinessAndProductList = (props) => {
   }
 
   const loadMoreProducts = async () => {
+    setErrors(null)
     const curCategoryState = categoriesState[categoryKey] ?? categoryStateDefault
     setCategoryState({ ...curCategoryState, loading: true })
 
