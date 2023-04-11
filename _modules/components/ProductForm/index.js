@@ -218,7 +218,7 @@ var ProductForm = function ProductForm(props) {
    */
 
   var initProductCart = function initProductCart(product) {
-    var _props$productCart2, _props$productCart3, _props$productCart4, _props$productCart5;
+    var _props$productCart2, _props$productCart3, _props$productCart4, _props$productCart5, _props$product;
 
     var ingredients = {};
 
@@ -241,7 +241,7 @@ var ProductForm = function ProductForm(props) {
       options: ((_props$productCart3 = props.productCart) === null || _props$productCart3 === void 0 ? void 0 : _props$productCart3.options) || {},
       comment: ((_props$productCart4 = props.productCart) === null || _props$productCart4 === void 0 ? void 0 : _props$productCart4.comment) || null,
       quantity: ((_props$productCart5 = props.productCart) === null || _props$productCart5 === void 0 ? void 0 : _props$productCart5.quantity) || 1,
-      integration_id: props.product.integration_id || null
+      integration_id: (props === null || props === void 0 ? void 0 : (_props$product = props.product) === null || _props$product === void 0 ? void 0 : _props$product.integration_id) || null
     });
 
     newProductCart.unitTotal = getUnitTotal(newProductCart);
