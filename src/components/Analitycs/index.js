@@ -152,7 +152,7 @@ export const Analytics = (props) => {
 					'click': {
 						'products': [{
 							'name': product.name,
-							'id': product.integration_id ? product.integration_id : 'producto sin id',
+							'id': product?.integration_id ? product?.integration_id : 'producto sin id',
 							'price': product.price.toString(),
 							'brand': 'MarketPlace '+slug,
 							'category': formatForAnalytics(product.category.name, 40),
@@ -173,7 +173,7 @@ export const Analytics = (props) => {
           'detail': {
             'products': [{
               'name': formatForAnalytics(product.name),
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price.toString(),
               'brand': 'MarketPlace '+slug,
               'category': formatForAnalytics(product.category.name),
@@ -207,7 +207,7 @@ export const Analytics = (props) => {
           'add': {
             'products': [{
               'name': formatForAnalytics(product.name, 40),
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price,
               'brand': 'MarketPlace '+slug,
               'category': product.categoryId,
@@ -268,7 +268,7 @@ export const Analytics = (props) => {
       const productFormated = orderD.products.map((product) => {
             return {
               'name': formatForAnalytics(product.name, 40),
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price ? product.price.toString() : '0',
               'brand': 'MarketPlace '+slug,
               'category': product.category_id,
@@ -284,8 +284,8 @@ export const Analytics = (props) => {
         'ecommerce': {
           'purchase': {
             'actionField': {
-              'id': orderD.integration_id || orderD.uuid,
-              'affiliation': orderD.integration_id || orderD.uuid,
+              'id': orderD?.integration_id || orderD.uuid,
+              'affiliation': orderD?.integration_id || orderD.uuid,
               'revenue': orderD.total.toString(),
               'tax': orderD.tax.toString(),
               'shipping': orderD.delivery_price.toString(),
@@ -320,7 +320,7 @@ export const Analytics = (props) => {
           'remove': {
             'products': [{
               'name': formatForAnalytics(product.name),
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price.toString(),
               'brand': slug,
               'category': product.category_id,
@@ -436,7 +436,7 @@ export const Analytics = (props) => {
           category.products.map((product) => {
             impressions.push({
               'name': formatForAnalytics(product.name, 40),
-              'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id.toString() : 'producto sin id',
               'price': product.price.toString(),
               'brand': 'MarketPlace '+slug,
               'category': formatForAnalytics(category.name, 40),
@@ -467,7 +467,7 @@ export const Analytics = (props) => {
           data.params.category.products.map((product) => {
             impressions.push({
               'name': formatForAnalytics(product.name, 40),
-              'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id.toString() : 'producto sin id',
               'price': product.price.toString(),
               'brand': 'MarketPlace '+slug,
               'category': formatForAnalytics(data.params.category.name, 40),

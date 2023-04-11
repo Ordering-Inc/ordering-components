@@ -188,7 +188,7 @@ var Analytics = function Analytics(props) {
           'click': {
             'products': [{
               'name': product.name,
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price.toString(),
               'brand': 'MarketPlace ' + slug,
               'category': formatForAnalytics(product.category.name, 40),
@@ -208,7 +208,7 @@ var Analytics = function Analytics(props) {
           'detail': {
             'products': [{
               'name': formatForAnalytics(product.name),
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price.toString(),
               'brand': 'MarketPlace ' + slug,
               'category': formatForAnalytics(product.category.name),
@@ -244,7 +244,7 @@ var Analytics = function Analytics(props) {
           'add': {
             'products': [{
               'name': formatForAnalytics(product.name, 40),
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price,
               'brand': 'MarketPlace ' + slug,
               'category': product.categoryId,
@@ -321,7 +321,7 @@ var Analytics = function Analytics(props) {
       var productFormated = orderD.products.map(function (product) {
         return {
           'name': formatForAnalytics(product.name, 40),
-          'id': product.integration_id ? product.integration_id : 'producto sin id',
+          'id': product?.integration_id ? product?.integration_id : 'producto sin id',
           'price': product.price ? product.price.toString() : '0',
           'brand': 'MarketPlace ' + slug,
           'category': product.category_id,
@@ -337,8 +337,8 @@ var Analytics = function Analytics(props) {
         'ecommerce': {
           'purchase': {
             'actionField': {
-              'id': orderD.integration_id || orderD.uuid,
-              'affiliation': orderD.integration_id || orderD.uuid,
+              'id': orderD?.integration_id || orderD.uuid,
+              'affiliation': orderD?.integration_id || orderD.uuid,
               'revenue': orderD.total.toString(),
               'tax': orderD.tax.toString(),
               'shipping': orderD.delivery_price.toString(),
@@ -375,7 +375,7 @@ var Analytics = function Analytics(props) {
           'remove': {
             'products': [{
               'name': formatForAnalytics(product.name),
-              'id': product.integration_id ? product.integration_id : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id : 'producto sin id',
               'price': product.price.toString(),
               'brand': slug,
               'category': product.category_id,
@@ -512,7 +512,7 @@ var Analytics = function Analytics(props) {
           category.products.map(function (product) {
             impressions.push({
               'name': formatForAnalytics(product.name, 40),
-              'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id.toString() : 'producto sin id',
               'price': product.price.toString(),
               'brand': 'MarketPlace ' + slug,
               'category': formatForAnalytics(category.name, 40),
@@ -546,7 +546,7 @@ var Analytics = function Analytics(props) {
           data.params.category.products.map(function (product) {
             _impressions.push({
               'name': formatForAnalytics(product.name, 40),
-              'id': product.integration_id ? product.integration_id.toString() : 'producto sin id',
+              'id': product?.integration_id ? product?.integration_id.toString() : 'producto sin id',
               'price': product.price.toString(),
               'brand': 'MarketPlace ' + slug,
               'category': formatForAnalytics(data.params.category.name, 40),
