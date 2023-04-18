@@ -728,7 +728,13 @@ var Checkout = function Checkout(props) {
     }
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
   (0, _react.useEffect)(function () {
-    Promise.any([getDeliveryOptions(), getLoyaltyPlans()]);
+    return Promise.all([getDeliveryOptions(), getLoyaltyPlans()].map(function (promise) {
+      return promise.then(function (value) {
+        return Promise.reject(value);
+      }, function (error) {
+        return Promise.resolve(error);
+      });
+    }));
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
