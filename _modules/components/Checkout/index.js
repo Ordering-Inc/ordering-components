@@ -728,7 +728,7 @@ var Checkout = function Checkout(props) {
     }
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
   (0, _react.useEffect)(function () {
-    return Promise.all([getDeliveryOptions(), getLoyaltyPlans()].map(function (promise) {
+    Promise.all([getDeliveryOptions(), getLoyaltyPlans()].map(function (promise) {
       return promise.then(function (value) {
         return Promise.reject(value);
       }, function (error) {
