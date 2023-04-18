@@ -444,7 +444,7 @@ export const Checkout = (props) => {
   }, [cart?.delivery_option_id])
 
   useEffect(() => {
-    return Promise.all(
+    Promise.all(
       [getDeliveryOptions(), getLoyaltyPlans()].map(promise => {
         return promise.then(
           value => Promise.reject(value),
