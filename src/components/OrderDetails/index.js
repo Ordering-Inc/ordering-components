@@ -57,7 +57,6 @@ export const OrderDetails = (props) => {
       const { result, error } = await response.json()
       if (!error) {
         if (status === 1) {
-          console.log('here', orders)
           showToast(
             ToastType.Success,
             t('SPECIFIC_ORDER_ACCEPTED', 'Your accepted the order number _NUMBER_').replace('_NUMBER_', orders?.id)
@@ -72,7 +71,6 @@ export const OrderDetails = (props) => {
       }
       showToast(ToastType.Error, result)
     } catch (err) {
-      console.log("wtf", err)
       showToast(ToastType.Error, err.message)
     }
   }
@@ -451,7 +449,7 @@ export const OrderDetails = (props) => {
 
   useEffect(() => {
     !orderState.loading && loadMessages()
-  }, [orderId, orderState?.order?.status, orderState.loading])
+  }, [orderState?.order?.id, orderState?.order?.status, orderState.loading])
 
   useEffect(() => {
     if (props.order) {
