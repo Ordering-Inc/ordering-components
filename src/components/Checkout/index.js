@@ -238,7 +238,7 @@ export const Checkout = (props) => {
           ...paymentOptions,
           data: {
             ...paymethodData.data,
-            ...paymentOptions
+            ...paymentOptions.data
           }
         }
       }

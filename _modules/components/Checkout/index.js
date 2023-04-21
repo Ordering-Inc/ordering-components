@@ -478,7 +478,7 @@ var Checkout = function Checkout(props) {
               if (paymentOptions !== null && paymentOptions !== void 0 && paymentOptions.data && paymentOptions !== null && paymentOptions !== void 0 && (_paymentOptions$data = paymentOptions.data) !== null && _paymentOptions$data !== void 0 && _paymentOptions$data.externalcardid) {
                 payload = _objectSpread(_objectSpread(_objectSpread({}, payload), payloadProps), {}, {
                   paymethod_data: _objectSpread(_objectSpread(_objectSpread({}, paymethodData), paymentOptions), {}, {
-                    data: _objectSpread(_objectSpread({}, paymethodData.data), paymentOptions)
+                    data: _objectSpread(_objectSpread({}, paymethodData.data), paymentOptions.data)
                   })
                 });
               } else {
