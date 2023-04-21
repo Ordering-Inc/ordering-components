@@ -432,7 +432,7 @@ var Checkout = function Checkout(props) {
 
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(paymentOptions, payloadProps, confirmPayment) {
-      var _paymethodSelected$pa5, _cart$balance, _cartResult$paymethod, _result$result, _result$result$paymet;
+      var _paymethodSelected$pa5, _cart$balance, _paymentOptions$data, _cartResult$paymethod, _result$result, _result$result$paymet;
 
       var paymethodData, _paymethodSelected$da, payload, result, cartResult, _result$result2, _result$result2$payme, _result$result2$payme2, _yield$confirmPayment, confirmApplePayError;
 
@@ -475,9 +475,18 @@ var Checkout = function Checkout(props) {
               return _context3.abrupt("return");
 
             case 8:
-              payload = _objectSpread(_objectSpread(_objectSpread({}, payload), payloadProps), {}, {
-                paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
-              });
+              if (paymentOptions !== null && paymentOptions !== void 0 && paymentOptions.data && paymentOptions !== null && paymentOptions !== void 0 && (_paymentOptions$data = paymentOptions.data) !== null && _paymentOptions$data !== void 0 && _paymentOptions$data.externalcardid) {
+                payload = _objectSpread(_objectSpread(_objectSpread({}, payload), payloadProps), {}, {
+                  paymethod_data: _objectSpread(_objectSpread(_objectSpread({}, paymethodData), paymentOptions), {}, {
+                    data: _objectSpread(_objectSpread({}, paymethodData.data), paymentOptions)
+                  })
+                });
+              } else {
+                payload = _objectSpread(_objectSpread(_objectSpread({}, payload), payloadProps), {}, {
+                  paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
+                });
+              }
+
               setPlacing(true);
               _context3.next = 12;
               return placeCart(cart.uuid, payload);
