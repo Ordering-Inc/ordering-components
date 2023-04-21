@@ -229,13 +229,27 @@ export const Checkout = (props) => {
       handleCustomClick(payload, paymethodSelected, cart)
       return
     }
-
-    payload = {
-      ...payload,
-      ...payloadProps,
-      paymethod_data: {
-        ...paymethodData,
-        ...paymentOptions
+    if (paymentOptions?.data && paymentOptions?.data?.externalcardid) {
+      payload = {
+        ...payload,
+        ...payloadProps,
+        paymethod_data: {
+          ...paymethodData,
+          ...paymentOptions,
+          data: {
+            ...paymethodData.data,
+            ...paymentOptions
+          }
+        }
+      }
+    } else {
+      payload = {
+        ...payload,
+        ...payloadProps,
+        paymethod_data: {
+          ...paymethodData,
+          ...paymentOptions
+        }
       }
     }
 
