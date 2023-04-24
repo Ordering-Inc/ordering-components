@@ -12,7 +12,8 @@ export const PaymentOptionStripe = (props) => {
     businessId,
     UIComponent,
     setCardList,
-    gateway
+    gateway,
+    onPaymentChange
   } = props
 
   const [{ token, user }] = useSession()
@@ -104,6 +105,10 @@ export const PaymentOptionStripe = (props) => {
         setCardsList({
           ...cardsList
         })
+        if (cardSelected?.id === card?.id) {
+          setCardSelected(null)
+          onPaymentChange && onPaymentChange(null)
+        }
         getCards()
       }
     } catch (error) {
@@ -216,6 +221,7 @@ export const PaymentOptionStripe = (props) => {
           cardSelected={cardSelected}
           cardDefault={cardDefault}
           cardsList={cardsList}
+          setCardsList={setCardsList}
           handleCardClick={handleCardClick}
           publicKey={publicKey}
           handleNewCard={handleNewCard}
