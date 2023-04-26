@@ -18,7 +18,9 @@ export const GoogleMaps = (props) => {
     businessMap,
     onBusinessClick,
     setNearBusinessList,
-    noDistanceValidation
+    noDistanceValidation,
+    businessZones,
+    fillStyle
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -33,6 +35,11 @@ export const GoogleMaps = (props) => {
 
   const location = fixedLocation || props.location
   const center = { lat: location?.lat, lng: location?.lng }
+
+  const units = {
+    mi: 1609,
+    km: 1000
+  }
 
   /**
    * Function to generate multiple markers
@@ -220,6 +227,48 @@ export const GoogleMaps = (props) => {
           draggable: !!mapControls?.isMarkerDraggable
         })
         setGoogleMapMarker(marker)
+      }
+
+      if (businessZones?.length > 0) {
+        const bounds = new window.google.maps.LatLngBounds()
+        for (const deliveryZone of businessZones) {
+          if (deliveryZone.type === 1 && deliveryZone?.data?.center && deliveryZone?.data?.radio) {
+            const newCircleZone = new window.google.maps.Circle({
+              ...fillStyle,
+              editable: false,
+              center: deliveryZone?.data.center,
+              radius: deliveryZone?.data.radio * 1000
+            })
+            newCircleZone.setMap(map)
+            bounds.union(newCircleZone.getBounds())
+            map.fitBounds(bounds)
+          }
+          if (deliveryZone.type === 5 && deliveryZone?.data?.distance) {
+            const newCircleZone = new window.google.maps.Circle({
+              ...fillStyle,
+              editable: false,
+              center: center,
+              radius: deliveryZone?.data.distance * units[deliveryZone?.data?.unit]
+            })
+            newCircleZone.setMap(map)
+            bounds.union(newCircleZone.getBounds())
+            map.fitBounds(bounds)
+          }
+          if (deliveryZone?.type === 2 && Array.isArray(deliveryZone?.data)) {
+            const newPolygonZone = new window.google.maps.Polygon({
+              ...fillStyle,
+              editable: false,
+              paths: deliveryZone?.data
+            })
+            newPolygonZone.setMap(map)
+            if (Array.isArray(deliveryZone?.data)) {
+              for (const position of deliveryZone?.data) {
+                bounds.extend(position)
+              }
+              map.fitBounds(bounds)
+            }
+          }
+        }
       }
     }
   }, [googleReady])
