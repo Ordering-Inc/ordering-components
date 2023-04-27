@@ -37,7 +37,9 @@ var GoogleMaps = function GoogleMaps(props) {
     businessMap = props.businessMap,
     onBusinessClick = props.onBusinessClick,
     setNearBusinessList = props.setNearBusinessList,
-    noDistanceValidation = props.noDistanceValidation;
+    noDistanceValidation = props.noDistanceValidation,
+    businessZones = props.businessZones,
+    fillStyle = props.fillStyle;
   var _useUtils = (0, _UtilsContext.useUtils)(),
     _useUtils2 = _slicedToArray(_useUtils, 1),
     optimizeImage = _useUtils2[0].optimizeImage;
@@ -70,6 +72,10 @@ var GoogleMaps = function GoogleMaps(props) {
   var center = {
     lat: location === null || location === void 0 ? void 0 : location.lat,
     lng: location === null || location === void 0 ? void 0 : location.lng
+  };
+  var units = {
+    mi: 1609,
+    km: 1000
   };
 
   /**
@@ -288,6 +294,64 @@ var GoogleMaps = function GoogleMaps(props) {
           draggable: !!(mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable)
         });
         setGoogleMapMarker(marker);
+      }
+      if ((businessZones === null || businessZones === void 0 ? void 0 : businessZones.length) > 0) {
+        var bounds = new window.google.maps.LatLngBounds();
+        var _iterator3 = _createForOfIteratorHelper(businessZones),
+          _step3;
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var _deliveryZone$data, _deliveryZone$data2, _deliveryZone$data3;
+            var deliveryZone = _step3.value;
+            if (deliveryZone.type === 1 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data = deliveryZone.data) !== null && _deliveryZone$data !== void 0 && _deliveryZone$data.center && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data2 = deliveryZone.data) !== null && _deliveryZone$data2 !== void 0 && _deliveryZone$data2.radio) {
+              var newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
+                editable: false,
+                center: deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.center,
+                radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.radio) * 1000
+              }));
+              newCircleZone.setMap(map);
+              bounds.union(newCircleZone.getBounds());
+              map.fitBounds(bounds);
+            }
+            if (deliveryZone.type === 5 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data3 = deliveryZone.data) !== null && _deliveryZone$data3 !== void 0 && _deliveryZone$data3.distance) {
+              var _deliveryZone$data4;
+              var _newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
+                editable: false,
+                center: center,
+                radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.distance) * units[deliveryZone === null || deliveryZone === void 0 ? void 0 : (_deliveryZone$data4 = deliveryZone.data) === null || _deliveryZone$data4 === void 0 ? void 0 : _deliveryZone$data4.unit]
+              }));
+              _newCircleZone.setMap(map);
+              bounds.union(_newCircleZone.getBounds());
+              map.fitBounds(bounds);
+            }
+            if ((deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.type) === 2 && Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
+              var newPolygonZone = new window.google.maps.Polygon(_objectSpread(_objectSpread({}, fillStyle), {}, {
+                editable: false,
+                paths: deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data
+              }));
+              newPolygonZone.setMap(map);
+              if (Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
+                var _iterator4 = _createForOfIteratorHelper(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data),
+                  _step4;
+                try {
+                  for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+                    var position = _step4.value;
+                    bounds.extend(position);
+                  }
+                } catch (err) {
+                  _iterator4.e(err);
+                } finally {
+                  _iterator4.f();
+                }
+                map.fitBounds(bounds);
+              }
+            }
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
       }
     }
   }, [googleReady]);
