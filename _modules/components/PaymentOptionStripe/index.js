@@ -35,7 +35,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
   var businessId = props.businessId,
     UIComponent = props.UIComponent,
     setCardList = props.setCardList,
-    gateway = props.gateway;
+    gateway = props.gateway,
+    onPaymentChange = props.onPaymentChange;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
@@ -202,6 +203,10 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
                 return _card.id !== card.id;
               });
               setCardsList(_objectSpread({}, cardsList));
+              if ((cardSelected === null || cardSelected === void 0 ? void 0 : cardSelected.id) === (card === null || card === void 0 ? void 0 : card.id)) {
+                setCardSelected(null);
+                onPaymentChange && onPaymentChange(null);
+              }
               getCards();
             }
             _context2.next = 16;
@@ -381,6 +386,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     cardSelected: cardSelected,
     cardDefault: cardDefault,
     cardsList: cardsList,
+    setCardsList: setCardsList,
     handleCardClick: handleCardClick,
     publicKey: publicKey,
     handleNewCard: handleNewCard,
