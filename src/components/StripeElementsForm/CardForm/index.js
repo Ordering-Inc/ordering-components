@@ -33,8 +33,8 @@ export const CardForm = (props) => {
   const socket = useWebsocket()
   const stripe = useStripe()
   const elements = useElements()
-  const zipCodeRequired = validationFields?.checkout?.zipcode?.required
-  const zipCodeEnabled = validationFields?.checkout?.zipcode?.required
+  const zipCodeRequired = validationFields?.fields?.card?.zipcode?.required
+  const zipCodeEnabled = validationFields?.fields?.card?.zipcode?.required
 
   const [error, setError] = useState(null)
   const [errorExpiry, setErrorExpiry] = useState(null)
@@ -116,6 +116,11 @@ export const CardForm = (props) => {
     }
     setLoading(true)
     event.preventDefault()
+    if (!zipcode && zipCodeRequired && zipCodeEnabled) {
+      setErrorZipcode(true)
+      setLoading(false)
+      return
+    }
     let card = elements?.getElement(CardElement)
     const userName = user?.lastname ? `${user?.name} ${user?.lastname}` : user?.name
     const userAddress = user?.address && { line1: user?.address, postal_code: zipcode }
@@ -159,10 +164,6 @@ export const CardForm = (props) => {
       if (!stripe) {
         setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'))
         return
-      }
-      if (!zipcode && zipCodeRequired && zipCodeEnabled) {
-        setErrorZipcode(true)
-        setLoading(false)
       }
       const result = await stripe.confirmCardSetup(
         requirements,
