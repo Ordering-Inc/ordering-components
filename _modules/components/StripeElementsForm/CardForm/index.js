@@ -30,7 +30,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage card form for stripe elements form behavior without UI component
  */
 var CardForm = function CardForm(props) {
-  var _validationFields$che, _validationFields$che2, _validationFields$che3, _validationFields$che4;
+  var _validationFields$fie, _validationFields$fie2, _validationFields$fie3, _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
   var UIComponent = props.UIComponent,
     requirements = props.requirements,
     toSave = props.toSave,
@@ -51,8 +51,8 @@ var CardForm = function CardForm(props) {
   var socket = (0, _WebsocketContext.useWebsocket)();
   var stripe = (0, _reactStripeJs.useStripe)();
   var elements = (0, _reactStripeJs.useElements)();
-  var zipCodeRequired = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$che = validationFields.checkout) === null || _validationFields$che === void 0 ? void 0 : (_validationFields$che2 = _validationFields$che.zipcode) === null || _validationFields$che2 === void 0 ? void 0 : _validationFields$che2.required;
-  var zipCodeEnabled = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$che3 = validationFields.checkout) === null || _validationFields$che3 === void 0 ? void 0 : (_validationFields$che4 = _validationFields$che3.zipcode) === null || _validationFields$che4 === void 0 ? void 0 : _validationFields$che4.required;
+  var zipCodeRequired = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$fie = validationFields.fields) === null || _validationFields$fie === void 0 ? void 0 : (_validationFields$fie2 = _validationFields$fie.card) === null || _validationFields$fie2 === void 0 ? void 0 : (_validationFields$fie3 = _validationFields$fie2.zipcode) === null || _validationFields$fie3 === void 0 ? void 0 : _validationFields$fie3.required;
+  var zipCodeEnabled = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : (_validationFields$fie5 = _validationFields$fie4.card) === null || _validationFields$fie5 === void 0 ? void 0 : (_validationFields$fie6 = _validationFields$fie5.zipcode) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.required;
   var _useState = (0, _react.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     error = _useState2[0],
@@ -192,6 +192,14 @@ var CardForm = function CardForm(props) {
           case 3:
             setLoading(true);
             event.preventDefault();
+            if (!(!zipcode && zipCodeRequired && zipCodeEnabled)) {
+              _context2.next = 9;
+              break;
+            }
+            setErrorZipcode(true);
+            setLoading(false);
+            return _context2.abrupt("return");
+          case 9:
             card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardElement);
             userName = user !== null && user !== void 0 && user.lastname ? "".concat(user === null || user === void 0 ? void 0 : user.name, " ").concat(user === null || user === void 0 ? void 0 : user.lastname) : user === null || user === void 0 ? void 0 : user.name;
             userAddress = (user === null || user === void 0 ? void 0 : user.address) && {
@@ -207,23 +215,23 @@ var CardForm = function CardForm(props) {
               card = elements === null || elements === void 0 ? void 0 : elements.getElement(_reactStripeJs.CardNumberElement);
             }
             if (requirements) {
-              _context2.next = 22;
+              _context2.next = 26;
               break;
             }
             if (stripe) {
-              _context2.next = 16;
+              _context2.next = 20;
               break;
             }
             setError(t('STRIPE_LOAD_ERROR', 'Failed to load Stripe properly'));
             return _context2.abrupt("return");
-          case 16:
-            _context2.next = 18;
+          case 20:
+            _context2.next = 22;
             return stripe.createPaymentMethod({
               type: 'card',
               card: card,
               billing_details: billingData
             });
-          case 18:
+          case 22:
             result = _context2.sent;
             if (result.error) {
               setLoading(false);
@@ -242,28 +250,24 @@ var CardForm = function CardForm(props) {
                 }
               });
             }
-            _context2.next = 30;
+            _context2.next = 33;
             break;
-          case 22:
+          case 26:
             if (stripe) {
-              _context2.next = 25;
+              _context2.next = 29;
               break;
             }
             setError(t('STRIPE_LOAD_ERROR', 'Faile to load Stripe properly'));
             return _context2.abrupt("return");
-          case 25:
-            if (!zipcode && zipCodeRequired && zipCodeEnabled) {
-              setErrorZipcode(true);
-              setLoading(false);
-            }
-            _context2.next = 28;
+          case 29:
+            _context2.next = 31;
             return stripe.confirmCardSetup(requirements, {
               payment_method: {
                 card: card,
                 billing_details: billingData
               }
             });
-          case 28:
+          case 31:
             _result = _context2.sent;
             if (_result.error) {
               setLoading(false);
@@ -282,7 +286,7 @@ var CardForm = function CardForm(props) {
                 toSave && stripeTokenHandler(_result.setupIntent.payment_method, user, props.businessId);
               }
             }
-          case 30:
+          case 33:
           case "end":
             return _context2.stop();
         }
