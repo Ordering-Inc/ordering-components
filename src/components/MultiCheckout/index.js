@@ -50,6 +50,7 @@ export const MultiCheckout = (props) => {
   const [walletState, setWalletState] = useState({ loading: false, error: null, result: null })
 
   const openCarts = (cartGroup?.result?.carts?.filter(cart => cart?.valid && cart?.status !== 1) || null) || []
+  const cartsInvalid = (cartGroup?.result?.carts?.filter(cart => cart?.status !== 1) || null) || []
   const totalCartsPrice = openCarts?.length && openCarts.reduce((total, cart) => { return total + cart?.total }, 0)
   const totalCartsFee = openCarts?.length && openCarts?.filter(cart => cart?.status !== 1 && cart?.valid)?.reduce((total, cart) => { return total + (cart?.delivery_price_with_discount) }, 0)
 
@@ -326,6 +327,7 @@ export const MultiCheckout = (props) => {
           cartGroup={cartGroup}
           walletState={walletState}
           totalCartsFee={totalCartsFee}
+          cartsInvalid={cartsInvalid}
         />
       )}
     </>
