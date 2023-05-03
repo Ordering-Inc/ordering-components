@@ -38,6 +38,7 @@ export const BusinessAndProductList = (props) => {
   const [categoriesState, setCategoriesState] = useState({})
   const [orderOptions, setOrderOptions] = useState({})
   const [productModal, setProductModal] = useState({ product: null, loading: false, error: null })
+  const [notFound, setNotFound] = useState(false)
   const [featuredProducts, setFeaturedProducts] = useState(false)
   const [openCategories, setOpenCategories] = useState({ values: [] })
   const [priceFilterValues, setPriceFilterValues] = useState({ min: null, max: null })
@@ -664,11 +665,20 @@ export const BusinessAndProductList = (props) => {
           .parameters(parameters)
           .get({ cancelToken: source })
         const product = Array.isArray(result) ? null : result
-        setProductModal({
-          ...productModal,
-          product,
-          loading: false
-        })
+        if(!result) {
+          setProductModal({
+            ...productModal,
+            loading: false
+          })
+          setNotFound(true)
+        } else {
+          setNotFound(false)
+          setProductModal({
+            ...productModal,
+            product,
+            loading: false
+          })
+        }
       } catch (e) {
         setProductModal({
           ...productModal,
@@ -886,6 +896,8 @@ export const BusinessAndProductList = (props) => {
           priceFilterValues={priceFilterValues}
           handleChangePriceFilterValues={handleChangePriceFilterValues}
           handleUpdateProfessionals={handleUpdateProfessionals}
+          notFound={notFound}
+          setNotFound={setNotFound}
         />
       )}
     </>

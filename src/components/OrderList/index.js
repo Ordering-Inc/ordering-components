@@ -364,7 +364,7 @@ export const OrderList = props => {
         loading: false
       })
     } else if (!businessesSearchList) {
-      loadOrders()
+      loadOrders(false, false, false, true)
     }
 
     return () => {
