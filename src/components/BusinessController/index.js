@@ -161,7 +161,7 @@ export const BusinessController = (props) => {
           loading: false,
           error: content.result
         })
-        showToast(ToastType.Error, t(content.result[0], 'Error adding favorite'))
+        showToast(ToastType.Error, t(content.result, 'Error adding favorite'))
       }
     } catch (error) {
       setActionState({
