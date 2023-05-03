@@ -291,7 +291,7 @@ var BusinessController = function BusinessController(props) {
                 loading: false,
                 error: content.result
               }));
-              showToast(_ToastContext.ToastType.Error, content.result);
+              showToast(_ToastContext.ToastType.Error, t(content.result, 'Error adding favorite'));
             }
             _context2.next = 22;
             break;

@@ -39,7 +39,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Multi businesses checkout page behavior without UI component
  */
 var MultiCheckout = function MultiCheckout(props) {
-  var _cartGroup$result, _cartGroup$result$car, _openCarts$filter;
+  var _cartGroup$result, _cartGroup$result$car, _cartGroup$result2, _cartGroup$result2$ca, _openCarts$filter;
   var UIComponent = props.UIComponent,
     onPlaceOrderClick = props.onPlaceOrderClick,
     cartUuid = props.cartUuid,
@@ -126,6 +126,9 @@ var MultiCheckout = function MultiCheckout(props) {
   var openCarts = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : (_cartGroup$result$car = _cartGroup$result.carts) === null || _cartGroup$result$car === void 0 ? void 0 : _cartGroup$result$car.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
   })) || null || [];
+  var cartsInvalid = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result2 = cartGroup.result) === null || _cartGroup$result2 === void 0 ? void 0 : (_cartGroup$result2$ca = _cartGroup$result2.carts) === null || _cartGroup$result2$ca === void 0 ? void 0 : _cartGroup$result2$ca.filter(function (cart) {
+    return (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
+  })) || null || [];
   var totalCartsPrice = (openCarts === null || openCarts === void 0 ? void 0 : openCarts.length) && openCarts.reduce(function (total, cart) {
     return total + (cart === null || cart === void 0 ? void 0 : cart.total);
   }, 0);
@@ -136,7 +139,7 @@ var MultiCheckout = function MultiCheckout(props) {
   }, 0));
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(confirmPayment) {
-      var _paymethodSelected$pa, _cartGroup$result2, _result$paymethod_dat;
+      var _paymethodSelected$pa, _cartGroup$result3, _result$paymethod_dat;
       var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result, _result$payment_event, _paymentEvent$data, _paymentEvent$data$ex, paymentEvent, _paymentEvent$data2, _paymentEvent$data2$e, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -148,7 +151,7 @@ var MultiCheckout = function MultiCheckout(props) {
               });
             }
             payload = {
-              amount: cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result2 = cartGroup.result) === null || _cartGroup$result2 === void 0 ? void 0 : _cartGroup$result2.balance
+              amount: cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result3 = cartGroup.result) === null || _cartGroup$result3 === void 0 ? void 0 : _cartGroup$result3.balance
             };
             if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
               payload = _objectSpread(_objectSpread({}, payload), {}, {
@@ -227,7 +230,7 @@ var MultiCheckout = function MultiCheckout(props) {
   };
   var handleSelectWallet = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(isChecked, wallet) {
-      var _cartGroup$result3, _cartGroup$result4;
+      var _cartGroup$result4, _cartGroup$result5;
       var url, response, _yield$response$json, error, result, _err$message;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -236,7 +239,7 @@ var MultiCheckout = function MultiCheckout(props) {
               loading: true,
               error: null
             }));
-            url = isChecked ? "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result3 = cartGroup.result) === null || _cartGroup$result3 === void 0 ? void 0 : _cartGroup$result3.uuid, "/wallets") : "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result4 = cartGroup.result) === null || _cartGroup$result4 === void 0 ? void 0 : _cartGroup$result4.uuid, "/wallets/").concat(wallet.id);
+            url = isChecked ? "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result4 = cartGroup.result) === null || _cartGroup$result4 === void 0 ? void 0 : _cartGroup$result4.uuid, "/wallets") : "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result5 = cartGroup.result) === null || _cartGroup$result5 === void 0 ? void 0 : _cartGroup$result5.uuid, "/wallets/").concat(wallet.id);
             _context2.prev = 2;
             _context2.next = 5;
             return fetch(url, _objectSpread({
@@ -595,7 +598,8 @@ var MultiCheckout = function MultiCheckout(props) {
     instructionsOptions: instructionsOptions,
     cartGroup: cartGroup,
     walletState: walletState,
-    totalCartsFee: totalCartsFee
+    totalCartsFee: totalCartsFee,
+    cartsInvalid: cartsInvalid
   })));
 };
 exports.MultiCheckout = MultiCheckout;
