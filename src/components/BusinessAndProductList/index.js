@@ -665,20 +665,12 @@ export const BusinessAndProductList = (props) => {
           .parameters(parameters)
           .get({ cancelToken: source })
         const product = Array.isArray(result) ? null : result
-        if(!result) {
-          setProductModal({
-            ...productModal,
-            loading: false
-          })
-          setNotFound(true)
-        } else {
-          setNotFound(false)
-          setProductModal({
-            ...productModal,
-            product,
-            loading: false
-          })
-        }
+        setNotFound(!result)
+        setProductModal({
+          ...productModal,
+          product,
+          loading: false
+        })
       } catch (e) {
         setProductModal({
           ...productModal,
