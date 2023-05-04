@@ -127,7 +127,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
       return;
     }
 
-    var scripts = ['https://js.openpay.mx/openpay.v1.min.js', 'https://js.openpay.mx/openpay-data.v1.min.js'];
+    var scripts = ['https://js.openpay.mx/openpay.v1.min.js', 'https://resources.openpay.mx/lib/openpay-data-js/1.2.38/openpay-data.v1.min.js'];
     scripts.forEach(function (s) {
       var script = document.createElement('script');
       script.type = 'text/javascript';
@@ -136,9 +136,12 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
       script.async = true;
 
       script.onload = function () {
-        window.OpenPay.setId(merchantId);
-        window.OpenPay.setApiKey(publicKey);
-        window.OpenPay.setSandboxMode(isSandbox);
+        console.log('onload', isAlsea);
+        window.OpenPay.setId(isAlsea ? merchantId : 'mdcd0jbyt3l0nptkyftl');
+        window.OpenPay.setApiKey(isAlsea ? publicKey : 'pk_d076c726815841c3be83a3c7917c039b');
+        window.OpenPay.Group.setId(isAlsea ? 'gquhxdrqw0eqdwtbcw0o' : 'gbuk3cxhqpapnqznndcg');
+        window.OpenPay.Group.setApiKey(isAlsea ? 'pk_6fe12174eefa4930b4c17c5cfeec398e' : 'pk_fd69e364498d442f9e7340687c8eed90');
+        window.OpenPay.setSandboxMode(!isAlsea);
         setIsSdkReady(true);
       };
 
@@ -163,7 +166,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 error: null
               }));
               _context.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/cards.php?language=").concat(ordering.language, "&user_id=").concat(user === null || user === void 0 ? void 0 : user.id), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/api/openpay/cards/cards.php?language=").concat(ordering.language, "&user_id=").concat(user === null || user === void 0 ? void 0 : user.id), {
                 method: 'GET',
                 headers: {
                   Authorization: "Bearer ".concat(token),
@@ -265,20 +268,26 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
   };
 
   var handleNewCard = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data) {
-      var _resultCard$result, response, result, deviceSessionId, responseCard, resultCard;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(data) {
+      var _configs$payment_grou, response, result, deviceSessionId, CardData;
 
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
-          switch (_context2.prev = _context2.next) {
+          switch (_context3.prev = _context3.next) {
             case 0:
-              _context2.prev = 0;
+              _context3.prev = 0;
               setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                 loading: true,
                 error: null
               }));
-              _context2.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/token.php"), {
+
+              if (!((configs === null || configs === void 0 ? void 0 : (_configs$payment_grou = configs.payment_group_tokenization) === null || _configs$payment_grou === void 0 ? void 0 : _configs$payment_grou.value) !== '1')) {
+                _context3.next = 16;
+                break;
+              }
+
+              _context3.next = 5;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/api/openpay/cards/token.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   card_number: data.cardNumber,
@@ -294,16 +303,16 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 }
               });
 
-            case 4:
-              response = _context2.sent;
-              _context2.next = 7;
+            case 5:
+              response = _context3.sent;
+              _context3.next = 8;
               return response.json();
 
-            case 7:
-              result = _context2.sent;
+            case 8:
+              result = _context3.sent;
 
               if (!(_typeof(result) !== 'object' || result !== null && result !== void 0 && result.error)) {
-                _context2.next = 11;
+                _context3.next = 12;
                 break;
               }
 
@@ -311,17 +320,98 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 loading: false,
                 error: result === null || result === void 0 ? void 0 : result.result
               }));
-              return _context2.abrupt("return");
+              return _context3.abrupt("return");
 
-            case 11:
+            case 12:
               deviceSessionId = window.OpenPay.deviceData.setup();
-              _context2.next = 14;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/add.php"), {
+              addCardPlugin(result === null || result === void 0 ? void 0 : result.id, deviceSessionId);
+              _context3.next = 18;
+              break;
+
+            case 16:
+              CardData = {
+                card_number: data.cardNumber,
+                cvv2: data.cardSecurityCode,
+                // expiry: data.expiry,
+                expiration_month: data.cardMonth,
+                expiration_year: data.cardYear,
+                holder_name: data.cardName
+              };
+              window.OpenPay.Group.token.create(CardData, /*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(success) {
+                  var _deviceSessionId;
+
+                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          if (_typeof(success) === 'object') {
+                            _deviceSessionId = window.OpenPay.deviceData.setup();
+                            addCardPlugin(success.data.id, _deviceSessionId);
+                          }
+
+                        case 1:
+                        case "end":
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2);
+                }));
+
+                return function (_x2) {
+                  return _ref3.apply(this, arguments);
+                };
+              }(), function (fallback) {
+                var _fallback$data;
+
+                setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
+                  loading: false,
+                  error: fallback === null || fallback === void 0 ? void 0 : (_fallback$data = fallback.data) === null || _fallback$data === void 0 ? void 0 : _fallback$data.description
+                }));
+              });
+
+            case 18:
+              _context3.next = 24;
+              break;
+
+            case 20:
+              _context3.prev = 20;
+              _context3.t0 = _context3["catch"](0);
+              events.emit('general_errors', _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message);
+              setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
+                loading: false,
+                error: [_context3.t0.message]
+              }));
+
+            case 24:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[0, 20]]);
+    }));
+
+    return function handleNewCard(_x) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  var addCardPlugin = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(tokenId, deviceSessionId) {
+      var _resultCard$result;
+
+      var responseCard, resultCard;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/api/openpay/cards/add.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   language: ordering.language,
                   user_id: user === null || user === void 0 ? void 0 : user.id,
-                  token_id: result === null || result === void 0 ? void 0 : result.id,
+                  token_id: tokenId,
                   device_session_id: deviceSessionId
                 }),
                 headers: {
@@ -331,16 +421,16 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 }
               });
 
-            case 14:
-              responseCard = _context2.sent;
-              _context2.next = 17;
+            case 2:
+              responseCard = _context4.sent;
+              _context4.next = 5;
               return responseCard.json();
 
-            case 17:
-              resultCard = _context2.sent;
+            case 5:
+              resultCard = _context4.sent;
 
               if (!resultCard.error) {
-                _context2.next = 22;
+                _context4.next = 10;
                 break;
               }
 
@@ -349,9 +439,9 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 error: resultCard === null || resultCard === void 0 ? void 0 : resultCard.result
               }));
               events.emit('general_errors', resultCard === null || resultCard === void 0 ? void 0 : resultCard.result);
-              return _context2.abrupt("return");
+              return _context4.abrupt("return");
 
-            case 22:
+            case 10:
               setCardsList({
                 cards: [].concat(_toConsumableArray(cardsList.cards), [_objectSpread(_objectSpread({}, resultCard === null || resultCard === void 0 ? void 0 : resultCard.result), {}, {
                   brand: resultCard === null || resultCard === void 0 ? void 0 : resultCard.brandCardName
@@ -371,46 +461,35 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                   device_session_id: deviceSessionId
                 }
               }));
-              _context2.next = 30;
-              break;
 
-            case 26:
-              _context2.prev = 26;
-              _context2.t0 = _context2["catch"](0);
-              events.emit('general_errors', _context2.t0 === null || _context2.t0 === void 0 ? void 0 : _context2.t0.message);
-              setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
-                loading: false,
-                error: [_context2.t0.message]
-              }));
-
-            case 30:
+            case 12:
             case "end":
-              return _context2.stop();
+              return _context4.stop();
           }
         }
-      }, _callee2, null, [[0, 26]]);
+      }, _callee4);
     }));
 
-    return function handleNewCard(_x) {
-      return _ref2.apply(this, arguments);
+    return function addCardPlugin(_x3, _x4) {
+      return _ref4.apply(this, arguments);
     };
   }();
 
   var deleteCard = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(card) {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(card) {
       var response, result, _cardsList$cards;
 
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context5.prev = _context5.next) {
             case 0:
-              _context3.prev = 0;
+              _context5.prev = 0;
               setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                 loading: true,
                 error: null
               }));
-              _context3.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/api/openpay/cards/delete.php"), {
+              _context5.next = 4;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/api/openpay/cards/delete.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   language: ordering.language,
@@ -424,12 +503,12 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
               });
 
             case 4:
-              response = _context3.sent;
-              _context3.next = 7;
+              response = _context5.sent;
+              _context5.next = 7;
               return response.json();
 
             case 7:
-              result = _context3.sent;
+              result = _context5.sent;
 
               if ((result === null || result === void 0 ? void 0 : result.result) === 'OK') {
                 setCardsList({
@@ -447,28 +526,28 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
                 }));
               }
 
-              _context3.next = 15;
+              _context5.next = 15;
               break;
 
             case 11:
-              _context3.prev = 11;
-              _context3.t0 = _context3["catch"](0);
-              events.emit('general_errors', _context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message);
+              _context5.prev = 11;
+              _context5.t0 = _context5["catch"](0);
+              events.emit('general_errors', _context5.t0 === null || _context5.t0 === void 0 ? void 0 : _context5.t0.message);
               setCardsList(_objectSpread(_objectSpread({}, cardsList), {}, {
                 loading: false,
-                error: [_context3.t0.message]
+                error: [_context5.t0.message]
               }));
 
             case 15:
             case "end":
-              return _context3.stop();
+              return _context5.stop();
           }
         }
-      }, _callee3, null, [[0, 11]]);
+      }, _callee5, null, [[0, 11]]);
     }));
 
-    return function deleteCard(_x2) {
-      return _ref3.apply(this, arguments);
+    return function deleteCard(_x5) {
+      return _ref5.apply(this, arguments);
     };
   }();
 

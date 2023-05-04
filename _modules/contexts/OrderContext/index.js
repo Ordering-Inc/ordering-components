@@ -2213,7 +2213,7 @@ var OrderProvider = function OrderProvider(_ref) {
               deviceInfo = _context22.sent;
               _context22.prev = 9;
               _context22.next = 12;
-              return fetch("https://alsea-plugins".concat(isAlseaProject ? '' : '-staging-temp', ".ordering.co/alseaplatform/placeorder_error_log.php"), {
+              return fetch("https://alsea-plugins".concat(isAlseaProject ? '' : '-staging-development', ".ordering.co/alseaplatform/placeorder_error_log.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   user_id: (customerState === null || customerState === void 0 ? void 0 : (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id) || session.user.id,
@@ -2259,7 +2259,7 @@ var OrderProvider = function OrderProvider(_ref) {
             case 25:
               _context22.prev = 25;
               _context22.next = 28;
-              return fetch("https://alsea-plugins".concat(isAlseaProject ? '' : '-staging-temp', ".ordering.co/alseaplatform/placeorder_error_log.php"), {
+              return fetch("https://alsea-plugins".concat(isAlseaProject ? '' : '-staging-development', ".ordering.co/alseaplatform/placeorder_error_log.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   user_id: (customerState === null || customerState === void 0 ? void 0 : (_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || session.user.id,

@@ -279,7 +279,7 @@ var PaymentOptions = function PaymentOptions(props) {
                 loading: true
               }));
               _context2.next = 4;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-temp', ".ordering.co/alseaplatform/wow_check_profile.php"), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/wow_check_profile.php"), {
                 method: 'POST',
                 body: JSON.stringify({
                   id: user === null || user === void 0 ? void 0 : user.id,
