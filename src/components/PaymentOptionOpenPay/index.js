@@ -23,7 +23,7 @@ export const PaymentOptionOpenPay = (props) => {
   const [isSdkReady, setIsSdkReady] = useState(false)
   const [ordering] = useApi()
   const [cardSelected, setCardSelected] = useState(null)
-  const [ , { applyCoupon, applyOffer, removeOffer }] = useOrder()
+  const [, { applyCoupon, applyOffer, removeOffer }] = useOrder()
   const [{ configs }] = useConfig()
   const [events] = useEvent()
 
@@ -37,7 +37,7 @@ export const PaymentOptionOpenPay = (props) => {
     }
     const scripts = [
       'https://js.openpay.mx/openpay.v1.min.js',
-      'https://js.openpay.mx/openpay-data.v1.min.js'
+      'https://resources.openpay.mx/lib/openpay-data-js/1.2.38/openpay-data.v1.min.js'
     ]
     scripts.forEach(s => {
       const script = document.createElement('script')
@@ -46,9 +46,12 @@ export const PaymentOptionOpenPay = (props) => {
       script.defer = true
       script.async = true
       script.onload = () => {
-        window.OpenPay.setId(merchantId)
-        window.OpenPay.setApiKey(publicKey)
-        window.OpenPay.setSandboxMode(isSandbox)
+        console.log('onload', isAlsea)
+        window.OpenPay.setId(isAlsea ? merchantId : 'mdcd0jbyt3l0nptkyftl')
+        window.OpenPay.setApiKey(isAlsea ? publicKey : 'pk_d076c726815841c3be83a3c7917c039b')
+        window.OpenPay.Group.setId(isAlsea ? 'gquhxdrqw0eqdwtbcw0o' : 'gbuk3cxhqpapnqznndcg')
+        window.OpenPay.Group.setApiKey(isAlsea ? 'pk_6fe12174eefa4930b4c17c5cfeec398e' : 'pk_fd69e364498d442f9e7340687c8eed90')
+        window.OpenPay.setSandboxMode(!isAlsea)
         setIsSdkReady(true)
       }
       script.onerror = () => {
@@ -65,7 +68,7 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/cards.php?language=${ordering.language}&user_id=${user?.id}`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/cards.php?language=${ordering.language}&user_id=${user?.id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -141,79 +144,55 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/token.php`, {
-        method: 'POST',
-        body: JSON.stringify({
+      if (configs?.payment_group_tokenization?.value !== '1') {
+        const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/token.php`, {
+          method: 'POST',
+          body: JSON.stringify({
+            card_number: data.cardNumber,
+            cvv2: data.cardSecurityCode,
+            // expiry: data.expiry,
+            expiration_month: data.cardMonth,
+            expiration_year: data.cardYear,
+            holder_name: data.cardName
+          }),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-APP-X': ordering.appId
+          }
+        })
+        const result = await response.json()
+        if (typeof result !== 'object' || result?.error) {
+          setCardsList({
+            ...cardsList,
+            loading: false,
+            error: result?.result
+          })
+          return
+        }
+        const deviceSessionId = window.OpenPay.deviceData.setup()
+        addCardPlugin(result?.id, deviceSessionId)
+      } else {
+        const CardData = {
           card_number: data.cardNumber,
           cvv2: data.cardSecurityCode,
           // expiry: data.expiry,
           expiration_month: data.cardMonth,
           expiration_year: data.cardYear,
           holder_name: data.cardName
-        }),
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'X-APP-X': ordering.appId
         }
-      })
-      const result = await response.json()
-      if (typeof result !== 'object' || result?.error) {
-        setCardsList({
-          ...cardsList,
-          loading: false,
-          error: result?.result
-        })
-        return
-      }
-      const deviceSessionId = window.OpenPay.deviceData.setup()
-      const responseCard = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/add.php`, {
-        method: 'POST',
-        body: JSON.stringify({
-          language: ordering.language,
-          user_id: user?.id,
-          token_id: result?.id,
-          device_session_id: deviceSessionId
-        }),
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'X-APP-X': ordering.appId,
-          'Content-Type': 'application/json'
-        }
-      })
-      const resultCard = await responseCard.json()
-      if (resultCard.error) {
-        setCardsList({
-          ...cardsList,
-          loading: false,
-          error: resultCard?.result
-        })
-        events.emit('general_errors', resultCard?.result)
-        return
-      }
-      setCardsList({
-        cards: [
-          ...cardsList.cards,
-          {
-            ...resultCard?.result,
-            brand: resultCard?.brandCardName
+        window.OpenPay.Group.token.create(CardData, async (success) => {
+          if (typeof success === 'object') {
+            const deviceSessionId = window.OpenPay.deviceData.setup()
+            addCardPlugin(success.data.id, deviceSessionId)
           }
-        ],
-        loading: false,
-        error: null
-      })
-      handleCardClick({
-        ...resultCard?.result,
-        brand: resultCard?.brandCardName,
-        type: 'card',
-        card: {
-          brand: resultCard.brandCardName,
-          last4: resultCard?.last4
-        },
-        data: {
-          card_id: resultCard?.result?.id,
-          device_session_id: deviceSessionId
-        }
-      })
+        }, (fallback) => {
+          setCardsList({
+            ...cardsList,
+            loading: false,
+            error: fallback?.data?.description
+          })
+        })
+      }
     } catch (err) {
       events.emit('general_errors', err?.message)
       setCardsList({
@@ -224,6 +203,57 @@ export const PaymentOptionOpenPay = (props) => {
     }
   }
 
+  const addCardPlugin = async (tokenId, deviceSessionId) => {
+    const responseCard = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/add.php`, {
+      method: 'POST',
+      body: JSON.stringify({
+        language: ordering.language,
+        user_id: user?.id,
+        token_id: tokenId,
+        device_session_id: deviceSessionId
+      }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'X-APP-X': ordering.appId,
+        'Content-Type': 'application/json'
+      }
+    })
+    const resultCard = await responseCard.json()
+    if (resultCard.error) {
+      setCardsList({
+        ...cardsList,
+        loading: false,
+        error: resultCard?.result
+      })
+      events.emit('general_errors', resultCard?.result)
+      return
+    }
+    setCardsList({
+      cards: [
+        ...cardsList.cards,
+        {
+          ...resultCard?.result,
+          brand: resultCard?.brandCardName
+        }
+      ],
+      loading: false,
+      error: null
+    })
+    handleCardClick({
+      ...resultCard?.result,
+      brand: resultCard?.brandCardName,
+      type: 'card',
+      card: {
+        brand: resultCard.brandCardName,
+        last4: resultCard?.last4
+      },
+      data: {
+        card_id: resultCard?.result?.id,
+        device_session_id: deviceSessionId
+      }
+    })
+  }
+
   const deleteCard = async (card) => {
     try {
       setCardsList({
@@ -231,7 +261,7 @@ export const PaymentOptionOpenPay = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/openpay/cards/delete.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/openpay/cards/delete.php`, {
         method: 'POST',
         body: JSON.stringify({
           language: ordering.language,

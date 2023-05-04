@@ -401,7 +401,7 @@ export const SignupForm = (props) => {
 
   const deleteOtpUser = async () => {
     try {
-      await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/delete_new_user.php`, {
+      await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/delete_new_user.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -422,7 +422,7 @@ export const SignupForm = (props) => {
 
   const alseaOtpConsult = async (params, type) => {
     try {
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
@@ -486,7 +486,7 @@ export const SignupForm = (props) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       }
-      const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
+      const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
       const resultOtp = await responseOtp.json()
       if (resultOtp.error) {
         setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })

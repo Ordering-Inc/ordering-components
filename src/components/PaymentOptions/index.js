@@ -139,7 +139,7 @@ export const PaymentOptions = (props) => {
         ...wowPoints,
         loading: true
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/wow_check_profile.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/wow_check_profile.php`, {
         method: 'POST',
         body: JSON.stringify({
           id: user?.id,

@@ -112,7 +112,7 @@ export const Checkout = (props) => {
         loading: true,
         error: null
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/va_por_mi_cuenta.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/va_por_mi_cuenta.php`, {
         method: 'POST',
         body: JSON.stringify({
           uuid: cart.uuid
@@ -373,7 +373,7 @@ export const Checkout = (props) => {
 
   const checkUberDirect = async () => {
     try {
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/is_cash_external_driver_group.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/is_cash_external_driver_group.php`, {
         method: 'POST',
         body: JSON.stringify({
           uuid: cart.uuid
@@ -397,7 +397,7 @@ export const Checkout = (props) => {
 
   const checkAmountToHideCash = async () => {
     try {
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/max_cash_delivery.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/max_cash_delivery.php`, {
         method: 'POST',
         body: JSON.stringify({
           uuid: cart.uuid
@@ -425,7 +425,7 @@ export const Checkout = (props) => {
         ...hasCateringProducts,
         loading: true
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/is_catering.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/is_catering.php`, {
         method: 'POST',
         body: JSON.stringify({
           uuid: cart.uuid,
@@ -465,7 +465,7 @@ export const Checkout = (props) => {
         ...wowAcumulationPoints,
         loading: true
       })
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/points_convert.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/points_convert.php`, {
         method: 'POST',
         body: JSON.stringify({
           type: 3,
@@ -518,7 +518,7 @@ export const Checkout = (props) => {
     if (!vaXMiCuenta.selectedOption || vaXMiCuenta.selectedOption.default) return
     const applyDonation = async () => {
       try {
-        const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php`, {
+        const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/va_por_mi_cuenta_metafield.php`, {
           method: 'POST',
           body: JSON.stringify({
             uuid: cart.uuid,

@@ -373,7 +373,7 @@ export const LoginForm = (props) => {
       }
       if (result === 'new_user') {
         if (otpType === 'cellphone') {
-          const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
+          const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
           const resultOtp = await responseOtp.json()
           if (resultOtp.error) {
             setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
@@ -387,7 +387,7 @@ export const LoginForm = (props) => {
           setOtpType('cellphone')
         }
       } else if (result === 'existing_user') {
-        const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/otp_create.php`, requestParams)
+        const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/otp_create.php`, requestParams)
         const resultOtp = await responseOtp.json()
         if (resultOtp.error) {
           setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
@@ -407,7 +407,7 @@ export const LoginForm = (props) => {
 
   const alseaOtpConsult = async (params) => {
     try {
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
@@ -437,7 +437,7 @@ export const LoginForm = (props) => {
       } else {
         body.email = values?.email || credentials?.email
       }
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/cellphone_new_user_signup.php`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/cellphone_new_user_signup.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
@@ -474,7 +474,7 @@ export const LoginForm = (props) => {
         access_token: fbdata?.authResponse?.accessToken,
         social_id: fbdata?.social_id
       })
-      const responsefb = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-temp'}.ordering.co/alseaplatform/api/facebook.php`, {
+      const responsefb = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/api/facebook.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: fbBody

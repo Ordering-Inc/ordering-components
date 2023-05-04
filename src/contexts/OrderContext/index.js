@@ -950,7 +950,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         })
         const deviceInfo = await deviceInfoResponse.json()
         try {
-          const responseLog = await fetch(`https://alsea-plugins${isAlseaProject ? '' : '-staging-temp'}.ordering.co/alseaplatform/placeorder_error_log.php`, {
+          const responseLog = await fetch(`https://alsea-plugins${isAlseaProject ? '' : '-staging-development'}.ordering.co/alseaplatform/placeorder_error_log.php`, {
             method: 'POST',
             body: JSON.stringify({
               user_id: customerState?.user?.id || session.user.id,
@@ -977,7 +977,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
     } else {
       try {
-        const responseLog = await fetch(`https://alsea-plugins${isAlseaProject ? '' : '-staging-temp'}.ordering.co/alseaplatform/placeorder_error_log.php`, {
+        const responseLog = await fetch(`https://alsea-plugins${isAlseaProject ? '' : '-staging-development'}.ordering.co/alseaplatform/placeorder_error_log.php`, {
           method: 'POST',
           body: JSON.stringify({
             user_id: customerState?.user?.id || session.user.id,
