@@ -150,7 +150,11 @@ var LoginForm = function LoginForm(props) {
             return _context.abrupt("return");
           case 3:
             _context.prev = 3;
-            if (loginTab === 'otp') {
+            if (loginTab === 'device_code') {
+              _credentials = {
+                device_code: values === null || values === void 0 ? void 0 : values.device_code
+              };
+            } else if (loginTab === 'otp') {
               _credentials = (_credentials2 = {}, _defineProperty(_credentials2, otpType, values && values[otpType] || credentials[otpType]), _defineProperty(_credentials2, "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState), _credentials2);
               if (otpType === 'cellphone') {
                 _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
