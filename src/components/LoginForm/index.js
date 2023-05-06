@@ -63,7 +63,11 @@ export const LoginForm = (props) => {
     }
     try {
       let _credentials
-      if (loginTab === 'otp') {
+      if (loginTab === 'device_code') {
+        _credentials = {
+          device_code: values?.device_code
+        }
+      } else if (loginTab === 'otp') {
         _credentials = {
           [otpType]: values && values[otpType] || credentials[otpType],
           one_time_password: values && values?.code || otpState
