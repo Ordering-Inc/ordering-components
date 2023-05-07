@@ -22,7 +22,8 @@ export const UserFormDetails = (props) => {
     handleSuccessUpdate,
     isCustomerMode,
     isSuccess,
-    onClose
+    onClose,
+    dontToggleEditMode
   } = props
 
   const [ordering] = useApi()
@@ -158,7 +159,7 @@ export const UserFormDetails = (props) => {
 
         onClose && onClose()
 
-        if (!image) {
+        if (!image && !dontToggleEditMode) {
           setIsEdit(!isEdit)
         }
       }
