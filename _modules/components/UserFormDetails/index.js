@@ -48,7 +48,8 @@ var UserFormDetails = function UserFormDetails(props) {
     handleSuccessUpdate = props.handleSuccessUpdate,
     isCustomerMode = props.isCustomerMode,
     isSuccess = props.isSuccess,
-    onClose = props.onClose;
+    onClose = props.onClose,
+    dontToggleEditMode = props.dontToggleEditMode;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -250,7 +251,7 @@ var UserFormDetails = function UserFormDetails(props) {
                 handleSuccessUpdate(response.content.result);
               }
               onClose && onClose();
-              if (!image) {
+              if (!image && !dontToggleEditMode) {
                 setIsEdit(!isEdit);
               }
             }
