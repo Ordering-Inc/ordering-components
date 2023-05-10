@@ -118,21 +118,25 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     setProductModal = _useState20[1];
   var _useState21 = (0, _react.useState)(false),
     _useState22 = _slicedToArray(_useState21, 2),
-    featuredProducts = _useState22[0],
-    setFeaturedProducts = _useState22[1];
-  var _useState23 = (0, _react.useState)({
+    notFound = _useState22[0],
+    setNotFound = _useState22[1];
+  var _useState23 = (0, _react.useState)(false),
+    _useState24 = _slicedToArray(_useState23, 2),
+    featuredProducts = _useState24[0],
+    setFeaturedProducts = _useState24[1];
+  var _useState25 = (0, _react.useState)({
       values: []
     }),
-    _useState24 = _slicedToArray(_useState23, 2),
-    openCategories = _useState24[0],
-    setOpenCategories = _useState24[1];
-  var _useState25 = (0, _react.useState)({
+    _useState26 = _slicedToArray(_useState25, 2),
+    openCategories = _useState26[0],
+    setOpenCategories = _useState26[1];
+  var _useState27 = (0, _react.useState)({
       min: null,
       max: null
     }),
-    _useState26 = _slicedToArray(_useState25, 2),
-    priceFilterValues = _useState26[0],
-    setPriceFilterValues = _useState26[1];
+    _useState28 = _slicedToArray(_useState27, 2),
+    priceFilterValues = _useState28[0],
+    setPriceFilterValues = _useState28[1];
   var requestsState = {};
   var categoryStateDefault = {
     loading: true,
@@ -145,18 +149,18 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     },
     products: []
   };
-  var _useState27 = (0, _react.useState)(categoryStateDefault),
-    _useState28 = _slicedToArray(_useState27, 2),
-    categoryState = _useState28[0],
-    setCategoryState = _useState28[1];
-  var _useState29 = (0, _react.useState)(null),
+  var _useState29 = (0, _react.useState)(categoryStateDefault),
     _useState30 = _slicedToArray(_useState29, 2),
-    errors = _useState30[0],
-    setErrors = _useState30[1];
-  var _useState31 = (0, _react.useState)(false),
+    categoryState = _useState30[0],
+    setCategoryState = _useState30[1];
+  var _useState31 = (0, _react.useState)(null),
     _useState32 = _slicedToArray(_useState31, 2),
-    errorQuantityProducts = _useState32[0],
-    setErrorQuantityProducts = _useState32[1];
+    errors = _useState32[0],
+    setErrors = _useState32[1];
+  var _useState33 = (0, _react.useState)(false),
+    _useState34 = _slicedToArray(_useState33, 2),
+    errorQuantityProducts = _useState34[0],
+    setErrorQuantityProducts = _useState34[1];
   var categoryKey = searchValue ? 'search' : categorySelected.id === 'featured' ? 'featured' : categorySelected.id ? "categoryId:".concat(categorySelected.id) : 'all';
   var isUseParentCategory = (configs === null || configs === void 0 ? void 0 : (_configs$use_parent_c = configs.use_parent_category) === null || _configs$use_parent_c === void 0 ? void 0 : _configs$use_parent_c.value) === 'true' || (configs === null || configs === void 0 ? void 0 : (_configs$use_parent_c2 = configs.use_parent_category) === null || _configs$use_parent_c2 === void 0 ? void 0 : _configs$use_parent_c2.value) === '1';
 
@@ -834,7 +838,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         while (1) switch (_context5.prev = _context5.next) {
           case 0:
             if (!(categoryId && productId && businessState.business.id || (_props$product = props.product) !== null && _props$product !== void 0 && _props$product.businessId && (_props$product2 = props.product) !== null && _props$product2 !== void 0 && _props$product2.categoryId && (_props$product3 = props.product) !== null && _props$product3 !== void 0 && _props$product3.id)) {
-              _context5.next = 18;
+              _context5.next = 19;
               break;
             }
             _context5.prev = 1;
@@ -859,24 +863,25 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             _yield$ordering$busin = _context5.sent;
             result = _yield$ordering$busin.content.result;
             product = Array.isArray(result) ? null : result;
+            setNotFound(!result);
             setProductModal(_objectSpread(_objectSpread({}, productModal), {}, {
               product: product,
               loading: false
             }));
-            _context5.next = 18;
+            _context5.next = 19;
             break;
-          case 15:
-            _context5.prev = 15;
+          case 16:
+            _context5.prev = 16;
             _context5.t0 = _context5["catch"](1);
             setProductModal(_objectSpread(_objectSpread({}, productModal), {}, {
               loading: false,
               error: [_context5.t0]
             }));
-          case 18:
+          case 19:
           case "end":
             return _context5.stop();
         }
-      }, _callee5, null, [[1, 15]]);
+      }, _callee5, null, [[1, 16]]);
     }));
     return function getProduct() {
       return _ref12.apply(this, arguments);
@@ -1125,7 +1130,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     handleChangeProfessionalSelected: handleChangeProfessionalSelected,
     priceFilterValues: priceFilterValues,
     handleChangePriceFilterValues: handleChangePriceFilterValues,
-    handleUpdateProfessionals: handleUpdateProfessionals
+    handleUpdateProfessionals: handleUpdateProfessionals,
+    notFound: notFound,
+    setNotFound: setNotFound
   })));
 };
 exports.BusinessAndProductList = BusinessAndProductList;

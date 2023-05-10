@@ -619,7 +619,7 @@ var OrderList = function OrderList(props) {
         loading: false
       }));
     } else if (!businessesSearchList) {
-      loadOrders();
+      loadOrders(false, false, false, true);
     }
     return function () {
       if (requestsState.orders) {
