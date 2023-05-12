@@ -5,7 +5,6 @@ import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useConfig } from '../../contexts/ConfigContext'
-import { useToast, ToastType } from '../../contexts/ToastContext'
 dayjs.extend(utc)
 
 export const BusinessAndProductList = (props) => {
@@ -29,7 +28,6 @@ export const BusinessAndProductList = (props) => {
   const [alertState, setAlertState] = useState({ open: false, content: [] })
   const [{ configs }] = useConfig()
   const [languageState, t] = useLanguage()
-  const [, { showToast }] = useToast()
 
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
   const [searchValue, setSearchValue] = useState(null)
@@ -659,16 +657,14 @@ export const BusinessAndProductList = (props) => {
           const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
           parameters.timestamp = moment
         }
-        const { content: { result, error } } = await ordering
+        const { content: { result } } = await ordering
           .businesses(businessState.business.id || props.product?.businessId)
           .categories(categoryId || props.product?.categoryId)
           .products(productId || props.product?.id)
           .parameters(parameters)
           .get({ cancelToken: source })
         const product = Array.isArray(result) ? null : result
-        if (error) {
-          showToast(ToastType.Error, result)
-        }
+
         setNotFound(!result)
         setProductModal({
           ...productModal,
