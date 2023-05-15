@@ -595,7 +595,7 @@ var OrderDetails = function OrderDetails(props) {
             error = content.error;
           case 24:
             order = error ? null : ((_result = result) === null || _result === void 0 ? void 0 : _result.order) || result;
-            err = error ? result : null;
+            err = error ? Array.isArray(result) ? result[0] : result : null;
             businessData = null;
             if (!err) {
               _context7.next = 30;

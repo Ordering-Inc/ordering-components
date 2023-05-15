@@ -122,7 +122,7 @@ var AddressList = function AddressList(props) {
   (0, _react.useEffect)(function () {
     loadAddresses();
     return function () {
-      if (requestsState.list) {
+      if (typeof requestsState.list.cancel === 'function') {
         requestsState.list.cancel();
       }
     };

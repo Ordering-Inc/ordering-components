@@ -47,7 +47,8 @@ var Checkout = function Checkout(props) {
     handleCustomClick = props.handleCustomClick,
     onPlaceOrderClick = props.onPlaceOrderClick,
     UIComponent = props.UIComponent,
-    isApp = props.isApp;
+    isApp = props.isApp,
+    isKiosk = props.isKiosk;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -263,7 +264,7 @@ var Checkout = function Checkout(props) {
               };
             }
             payload = {
-              offer_id: cart.offer_id,
+              offer_id: cart === null || cart === void 0 ? void 0 : cart.offer_id,
               amount: (_cart$balance = cart === null || cart === void 0 ? void 0 : cart.balance) !== null && _cart$balance !== void 0 ? _cart$balance : cart === null || cart === void 0 ? void 0 : cart.total
             };
             if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
@@ -284,54 +285,60 @@ var Checkout = function Checkout(props) {
             handleCustomClick(payload, paymethodSelected, cart);
             return _context2.abrupt("return");
           case 8:
+            if (cart) {
+              _context2.next = 10;
+              break;
+            }
+            return _context2.abrupt("return");
+          case 10:
             payload = _objectSpread(_objectSpread(_objectSpread({}, payload), payloadProps), {}, {
               paymethod_data: _objectSpread(_objectSpread({}, paymethodData), paymentOptions)
             });
             setPlacing(true);
-            _context2.next = 12;
+            _context2.next = 14;
             return onChangeSpot();
-          case 12:
+          case 14:
             if (paymethodsWithoutSaveCard.includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa6 = paymethodSelected.paymethod) === null || _paymethodSelected$pa6 === void 0 ? void 0 : _paymethodSelected$pa6.gateway)) {
               delete payload.paymethod_data;
             }
-            _context2.next = 15;
+            _context2.next = 17;
             return placeCart(cart.uuid, payload);
-          case 15:
+          case 17:
             result = _context2.sent;
             if (!(result !== null && result !== void 0 && result.error)) {
-              _context2.next = 19;
+              _context2.next = 21;
               break;
             }
             setErrors(result === null || result === void 0 ? void 0 : result.result);
             return _context2.abrupt("return");
-          case 19:
+          case 21:
             cartResult = result === null || result === void 0 ? void 0 : result.result;
             if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-              _context2.next = 23;
+              _context2.next = 25;
               break;
             }
-            _context2.next = 23;
+            _context2.next = 25;
             return actionsBeforePlace(paymethodSelected, result.result);
-          case 23:
+          case 25:
             if (!(confirmPayment && (result === null || result === void 0 ? void 0 : (_result$result = result.result) === null || _result$result === void 0 ? void 0 : (_result$result$paymet = _result$result.paymethod_data) === null || _result$result$paymet === void 0 ? void 0 : _result$result$paymet.gateway) === 'apple_pay')) {
-              _context2.next = 29;
+              _context2.next = 31;
               break;
             }
-            _context2.next = 26;
+            _context2.next = 28;
             return confirmPayment(result === null || result === void 0 ? void 0 : (_result$result2 = result.result) === null || _result$result2 === void 0 ? void 0 : (_result$result2$payme = _result$result2.paymethod_data) === null || _result$result2$payme === void 0 ? void 0 : (_result$result2$payme2 = _result$result2$payme.result) === null || _result$result2$payme2 === void 0 ? void 0 : _result$result2$payme2.client_secret);
-          case 26:
+          case 28:
             _yield$confirmPayment = _context2.sent;
             confirmApplePayError = _yield$confirmPayment.error;
             if (confirmApplePayError) {
               setErrors(confirmApplePayError);
             }
-          case 29:
+          case 31:
             if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod4 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod4 !== void 0 && _cartResult$paymethod4.hash && (cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod5 = cartResult.paymethod_data) === null || _cartResult$paymethod5 === void 0 ? void 0 : _cartResult$paymethod5.status) === 2 && !payloadProps.isNative) {
               handleConfirmCredomaticPage(cartResult, paymethodSelected);
             }
             setPlacing(false);
             onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
-          case 32:
+          case 34:
           case "end":
             return _context2.stop();
         }
@@ -728,13 +735,15 @@ var Checkout = function Checkout(props) {
     }
   }, [cart === null || cart === void 0 ? void 0 : cart.delivery_option_id]);
   (0, _react.useEffect)(function () {
-    Promise.all([getDeliveryOptions(), getLoyaltyPlans()].map(function (promise) {
-      return promise.then(function (value) {
-        return Promise.reject(value);
-      }, function (error) {
-        return Promise.resolve(error);
-      });
-    }));
+    if (!isKiosk) {
+      Promise.all([getDeliveryOptions(), getLoyaltyPlans()].map(function (promise) {
+        return promise.then(function (value) {
+          return Promise.reject(value);
+        }, function (error) {
+          return Promise.resolve(error);
+        });
+      }));
+    }
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
