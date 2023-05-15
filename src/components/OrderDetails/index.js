@@ -301,7 +301,7 @@ export const OrderDetails = (props) => {
         error = content.error
       }
       const order = error ? null : result?.order || result
-      let err = error ? result : null
+      let err = error ? Array.isArray(result) ? result[0] : result : null
       let businessData = null
       if (err) {
         setOrderState({
