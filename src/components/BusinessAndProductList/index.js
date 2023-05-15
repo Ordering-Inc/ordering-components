@@ -657,7 +657,6 @@ export const BusinessAndProductList = (props) => {
           const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
           parameters.timestamp = moment
         }
-
         const { content: { result } } = await ordering
           .businesses(businessState.business.id || props.product?.businessId)
           .categories(categoryId || props.product?.categoryId)
@@ -665,6 +664,7 @@ export const BusinessAndProductList = (props) => {
           .parameters(parameters)
           .get({ cancelToken: source })
         const product = Array.isArray(result) ? null : result
+
         setNotFound(!result)
         setProductModal({
           ...productModal,

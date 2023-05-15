@@ -52,7 +52,7 @@ export const AddressList = (props) => {
   useEffect(() => {
     loadAddresses()
     return () => {
-      if (requestsState.list) {
+      if (typeof requestsState.list.cancel === 'function') {
         requestsState.list.cancel()
       }
     }

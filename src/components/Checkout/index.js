@@ -18,7 +18,8 @@ export const Checkout = (props) => {
     handleCustomClick,
     onPlaceOrderClick,
     UIComponent,
-    isApp
+    isApp,
+    isKiosk
   } = props
 
   const [ordering] = useApi()
@@ -150,7 +151,7 @@ export const Checkout = (props) => {
       }
     }
     let payload = {
-      offer_id: cart.offer_id,
+      offer_id: cart?.offer_id,
       amount: cart?.balance ?? cart?.total
     }
 
@@ -173,7 +174,7 @@ export const Checkout = (props) => {
       handleCustomClick(payload, paymethodSelected, cart)
       return
     }
-
+    if (!cart) return
     payload = {
       ...payload,
       ...payloadProps,
@@ -447,14 +448,16 @@ export const Checkout = (props) => {
   }, [cart?.delivery_option_id])
 
   useEffect(() => {
-    Promise.all(
-      [getDeliveryOptions(), getLoyaltyPlans()].map(promise => {
-        return promise.then(
-          value => Promise.reject(value),
-          error => Promise.resolve(error)
-        )
-      })
-    )
+    if (!isKiosk) {
+      Promise.all(
+        [getDeliveryOptions(), getLoyaltyPlans()].map(promise => {
+          return promise.then(
+            value => Promise.reject(value),
+            error => Promise.resolve(error)
+          )
+        })
+      )
+    }
   }, [])
 
   return (
