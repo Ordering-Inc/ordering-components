@@ -54,10 +54,11 @@ var ProductForm = function ProductForm(props) {
     handleChangeProfessional = props.handleChangeProfessional;
   var requestsState = {};
   var _useSession = (0, _SessionContext.useSession)(),
-    _useSession2 = _slicedToArray(_useSession, 1),
+    _useSession2 = _slicedToArray(_useSession, 2),
     _useSession2$ = _useSession2[0],
     user = _useSession2$.user,
-    token = _useSession2$.token;
+    token = _useSession2$.token,
+    login = _useSession2[1].login;
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
@@ -128,6 +129,17 @@ var ProductForm = function ProductForm(props) {
     _useState12 = _slicedToArray(_useState11, 2),
     professionalListState = _useState12[0],
     setProfessionalListState = _useState12[1];
+
+  /**
+   * Action status
+   */
+  var _useState13 = (0, _react.useState)({
+      loading: false,
+      error: null
+    }),
+    _useState14 = _slicedToArray(_useState13, 2),
+    actionStatus = _useState14[0],
+    setActionStatus = _useState14[1];
 
   /**
    * Edit mode
@@ -671,6 +683,57 @@ var ProductForm = function ProductForm(props) {
       return _ref4.apply(this, arguments);
     };
   }();
+  var handleCreateGuestUser = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
+      var _yield$ordering$users, _yield$ordering$users2, error, result, _result$session;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.prev = 0;
+            setActionStatus(_objectSpread(_objectSpread({}, actionStatus), {}, {
+              loading: true
+            }));
+            _context4.next = 4;
+            return ordering.users().save(values);
+          case 4:
+            _yield$ordering$users = _context4.sent;
+            _yield$ordering$users2 = _yield$ordering$users.content;
+            error = _yield$ordering$users2.error;
+            result = _yield$ordering$users2.result;
+            if (!error) {
+              setActionStatus({
+                error: null,
+                loading: false
+              });
+              login({
+                user: result,
+                token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
+              });
+            } else {
+              setActionStatus({
+                error: result,
+                loading: false
+              });
+            }
+            _context4.next = 14;
+            break;
+          case 11:
+            _context4.prev = 11;
+            _context4.t0 = _context4["catch"](0);
+            setActionStatus({
+              error: _context4.t0.message,
+              loading: false
+            });
+          case 14:
+          case "end":
+            return _context4.stop();
+        }
+      }, _callee4, null, [[0, 11]]);
+    }));
+    return function handleCreateGuestUser(_x4) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
   var increment = function increment() {
     if (maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity) {
       return;
@@ -727,53 +790,53 @@ var ProductForm = function ProductForm(props) {
    * Load professionals from API
    */
   var getProfessionalList = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _yield$ordering$busin3, _yield$ordering$busin4, result, error, _result$professionals;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
           case 0:
-            _context4.prev = 0;
+            _context5.prev = 0;
             setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
               loading: true
             }));
-            _context4.next = 4;
+            _context5.next = 4;
             return ordering.businesses(props.businessId).select(['id', 'professionals']).get();
           case 4:
-            _yield$ordering$busin3 = _context4.sent;
+            _yield$ordering$busin3 = _context5.sent;
             _yield$ordering$busin4 = _yield$ordering$busin3.content;
             result = _yield$ordering$busin4.result;
             error = _yield$ordering$busin4.error;
             if (error) {
-              _context4.next = 11;
+              _context5.next = 11;
               break;
             }
             setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
               loading: false,
               professionals: (_result$professionals = result === null || result === void 0 ? void 0 : result.professionals) !== null && _result$professionals !== void 0 ? _result$professionals : []
             }));
-            return _context4.abrupt("return");
+            return _context5.abrupt("return");
           case 11:
             setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
               loading: false,
               error: [result]
             }));
-            _context4.next = 17;
+            _context5.next = 17;
             break;
           case 14:
-            _context4.prev = 14;
-            _context4.t0 = _context4["catch"](0);
+            _context5.prev = 14;
+            _context5.t0 = _context5["catch"](0);
             setProfessionalListState(_objectSpread(_objectSpread({}, professionalListState), {}, {
               loading: false,
-              error: [_context4.t0.message]
+              error: [_context5.t0.message]
             }));
           case 17:
           case "end":
-            return _context4.stop();
+            return _context5.stop();
         }
-      }, _callee4, null, [[0, 14]]);
+      }, _callee5, null, [[0, 14]]);
     }));
     return function getProfessionalList() {
-      return _ref5.apply(this, arguments);
+      return _ref6.apply(this, arguments);
     };
   }();
 
@@ -819,8 +882,8 @@ var ProductForm = function ProductForm(props) {
   (0, _react.useEffect)(function () {
     var _product$product10, _product$product10$ex;
     if (product !== null && product !== void 0 && product.product && ((_product$product10 = product.product) === null || _product$product10 === void 0 ? void 0 : (_product$product10$ex = _product$product10.extras) === null || _product$product10$ex === void 0 ? void 0 : _product$product10$ex.length) > 0) {
-      var _ref6, _ref7;
-      var options = (_ref6 = []).concat.apply(_ref6, _toConsumableArray(product.product.extras.map(function (extra) {
+      var _ref7, _ref8;
+      var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
         return extra.options.filter(function (option) {
           var preselected = checkHasPreselected(extra.options, option);
           return (option.min === 1 && option.max === 1 && option.suboptions.filter(function (suboption) {
@@ -833,7 +896,7 @@ var ProductForm = function ProductForm(props) {
       if (!(options !== null && options !== void 0 && options.length)) {
         return;
       }
-      var suboptions = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(options.map(function (option) {
+      var suboptions = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(options.map(function (option) {
         return option.suboptions;
       }))).filter(function (suboption) {
         return suboption.enabled;
@@ -874,8 +937,8 @@ var ProductForm = function ProductForm(props) {
   if (isStarbucks) {
     (0, _react.useEffect)(function () {
       if (product !== null && product !== void 0 && product.product && Object.keys(product === null || product === void 0 ? void 0 : product.product).length) {
-        var _ref8, _ref9;
-        var options = (_ref8 = []).concat.apply(_ref8, _toConsumableArray(product.product.extras.map(function (extra) {
+        var _ref9, _ref10;
+        var options = (_ref9 = []).concat.apply(_ref9, _toConsumableArray(product.product.extras.map(function (extra) {
           return extra.options.filter(function (option) {
             return option.name === 'Tamaño' && option.suboptions.filter(function (suboption) {
               return suboption.name === 'Grande (16oz - 437ml)';
@@ -885,7 +948,7 @@ var ProductForm = function ProductForm(props) {
         if (!(options !== null && options !== void 0 && options.length)) {
           return;
         }
-        var suboptions = (_ref9 = []).concat.apply(_ref9, _toConsumableArray(options.map(function (option) {
+        var suboptions = (_ref10 = []).concat.apply(_ref10, _toConsumableArray(options.map(function (option) {
           return option.suboptions;
         }))).filter(function (suboption) {
           return suboption.name === 'Grande (16oz - 437ml)';
@@ -954,12 +1017,14 @@ var ProductForm = function ProductForm(props) {
     errors: errors,
     editMode: editMode,
     isSoldOut: isSoldOut,
+    actionStatus: actionStatus,
     maxProductQuantity: maxProductQuantity,
     increment: increment,
     decrement: decrement,
     handleChangeProductCartQuantity: handleChangeProductCartQuantity,
     handleSave: handleSave,
     showOption: showOption,
+    handleCreateGuestUser: handleCreateGuestUser,
     handleFavoriteProduct: handleFavoriteProduct,
     handleChangeIngredientState: handleChangeIngredientState,
     handleChangeSuboptionState: handleChangeSuboptionState,
