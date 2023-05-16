@@ -139,7 +139,7 @@ export const Checkout = (props) => {
   /**
    * Method to handle click on Place order
    */
-  const handlerClickPlaceOrder = async (paymentOptions, payloadProps, confirmPayment) => {
+  const handlerClickPlaceOrder = async (paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) => {
     let paymethodData = paymethodSelected?.data
     if (paymethodSelected?.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected?.paymethod?.gateway)) {
       paymethodData = {
@@ -189,6 +189,9 @@ export const Checkout = (props) => {
 
     if (result?.error) {
       setErrors(result?.result)
+      if (dismissPlatformPay && paymethodSelected?.paymethod?.gateway === 'apple_pay') {
+        await dismissPlatformPay()
+      }
       return
     }
 
