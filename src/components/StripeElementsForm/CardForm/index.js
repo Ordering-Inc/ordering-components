@@ -155,6 +155,7 @@ export const CardForm = (props) => {
           id: result?.paymentMethod.id,
           type: 'card',
           card: {
+            zipcode,
             brand: result?.paymentMethod.card.brand,
             last4: result?.paymentMethod.card.last4
           }
