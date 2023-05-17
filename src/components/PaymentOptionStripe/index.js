@@ -59,7 +59,8 @@ export const PaymentOptionStripe = (props) => {
           type: 'card',
           card: {
             brand: defaultCard.brand,
-            last4: defaultCard.last4
+            last4: defaultCard.last4,
+            zipcode: defaultCard?.zipcode
           }
         })
       }
@@ -145,7 +146,8 @@ export const PaymentOptionStripe = (props) => {
           type: 'card',
           card: {
             brand: card.brand,
-            last4: card.last4
+            last4: card.last4,
+            zipcode: card.zipcode
           }
         })
         setDefaultCardSetActionStatus({ loading: false, error: null })
@@ -178,7 +180,8 @@ export const PaymentOptionStripe = (props) => {
         type: 'card',
         card: {
           brand: card.brand,
-          last4: card.last4
+          last4: card.last4,
+          zipcode: card.zipcode
         }
       })
     }
