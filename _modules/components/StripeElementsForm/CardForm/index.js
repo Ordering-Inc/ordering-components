@@ -245,6 +245,7 @@ var CardForm = function CardForm(props) {
                 id: result === null || result === void 0 ? void 0 : result.paymentMethod.id,
                 type: 'card',
                 card: {
+                  zipcode: zipcode,
                   brand: result === null || result === void 0 ? void 0 : result.paymentMethod.card.brand,
                   last4: result === null || result === void 0 ? void 0 : result.paymentMethod.card.last4
                 }
