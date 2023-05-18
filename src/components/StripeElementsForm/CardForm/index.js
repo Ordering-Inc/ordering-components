@@ -67,7 +67,11 @@ export const CardForm = (props) => {
       })
     })
     const response = await result.json()
-    isNewCard && onNewCard && onNewCard(response.result)
+    isNewCard && onNewCard && onNewCard({
+      ...response.result,
+      zipcode
+    })
+    setZipcode(null)
   }
 
   /**
@@ -123,7 +127,7 @@ export const CardForm = (props) => {
     }
     let card = elements?.getElement(CardElement)
     const userName = user?.lastname ? `${user?.name} ${user?.lastname}` : user?.name
-    const userAddress = user?.address && { line1: user?.address, postal_code: zipcode }
+    const userAddress = (user?.address || zipcode) && { line1: user?.address, postal_code: zipcode }
 
     const billingData = { email: user.email }
     userName && (billingData.name = userName)
