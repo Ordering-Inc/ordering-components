@@ -39,7 +39,7 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 var BusinessList = function BusinessList(props) {
-  var _paginationSettings$p, _configs$advanced_bus, _ref, _orderingTheme$busine, _orderingTheme$busine2, _orderingTheme$busine3, _orderState$options;
+  var _paginationSettings$p, _configs$advanced_bus, _ref, _orderingTheme$busine, _orderingTheme$busine2, _orderingTheme$busine3, _orderState$options, _configs$unaddressed_, _orderState$options2;
   var UIComponent = props.UIComponent,
     initialBuisnessType = props.initialBuisnessType,
     initialOrderType = props.initialOrderType,
@@ -146,6 +146,10 @@ var BusinessList = function BusinessList(props) {
   var rex = new RegExp(/^[A-Za-z0-9\s]+$/g);
   var advancedSearchEnabled = (configs === null || configs === void 0 ? void 0 : (_configs$advanced_bus = configs.advanced_business_search_enabled) === null || _configs$advanced_bus === void 0 ? void 0 : _configs$advanced_bus.value) === '1';
   var showCities = (_ref = !(orderingTheme !== null && orderingTheme !== void 0 && (_orderingTheme$busine = orderingTheme.business_listing_view) !== null && _orderingTheme$busine !== void 0 && (_orderingTheme$busine2 = _orderingTheme$busine.components) !== null && _orderingTheme$busine2 !== void 0 && (_orderingTheme$busine3 = _orderingTheme$busine2.cities) !== null && _orderingTheme$busine3 !== void 0 && _orderingTheme$busine3.hidden) && (orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) === 2 && !props.disabledCities) !== null && _ref !== void 0 ? _ref : false;
+  var unaddressedTypes = (configs === null || configs === void 0 ? void 0 : (_configs$unaddressed_ = configs.unaddressed_order_types_allowed) === null || _configs$unaddressed_ === void 0 ? void 0 : _configs$unaddressed_.value.split('|').map(function (value) {
+    return Number(value);
+  })) || [];
+  var isAllowUnaddressOrderType = unaddressedTypes.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type);
   var sortBusinesses = function sortBusinesses(array, option) {
     if (option === 'review') {
       return array.sort(function (a, b) {
@@ -160,7 +164,7 @@ var BusinessList = function BusinessList(props) {
    */
   var getBusinesses = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, specificPagination, prev) {
-      var _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options3$, _orderState$options3$2, _orderState$options4, _orderState$options8, _orderState$options9, _orderState$options13, parameters, _orderState$options5, _orderState$options6, _orderState$options6$, _orderState$options6$2, _orderState$options7, _orderState$options7$, _orderState$options7$2, paginationParams, _orderState$options10, moment, where, conditions, _orderState$options11, _orderState$options12, searchConditions, isSpecialCharacter, _orderState$options14, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems, businesses, fromIndex, toIndex, element;
+      var _configs$location_def, _configs$location_def2, _orderState$options3, _orderState$options3$, _orderState$options4, _orderState$options4$, _orderState$options4$2, _orderState$options5, _orderState$options5$, _orderState$options5$2, _orderState$options6, _orderState$options13, _orderState$options14, _orderState$options18, defaultLatitude, defaultLongitude, isInvalidDefaultLocation, defaultLocation, parameters, _orderState$options7, _orderState$options8, _orderState$options8$, _orderState$options9, _orderState$options9$, _orderState$options9$2, _orderState$options10, _orderState$options11, _orderState$options12, paginationParams, _orderState$options15, moment, where, conditions, _orderState$options16, _orderState$options17, searchConditions, isSpecialCharacter, _orderState$options19, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems, businesses, fromIndex, toIndex, element;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -169,9 +173,16 @@ var BusinessList = function BusinessList(props) {
               loading: true,
               businesses: newFetch ? [] : businessesList.businesses
             }));
+            defaultLatitude = Number(configs === null || configs === void 0 ? void 0 : (_configs$location_def = configs.location_default_latitude) === null || _configs$location_def === void 0 ? void 0 : _configs$location_def.value);
+            defaultLongitude = Number(configs === null || configs === void 0 ? void 0 : (_configs$location_def2 = configs.location_default_longitude) === null || _configs$location_def2 === void 0 ? void 0 : _configs$location_def2.value);
+            isInvalidDefaultLocation = isNaN(defaultLatitude) || isNaN(defaultLongitude);
+            defaultLocation = {
+              lat: !isInvalidDefaultLocation ? defaultLatitude : 40.7744146,
+              lng: !isInvalidDefaultLocation ? defaultLongitude : -73.9678064
+            };
             parameters = asDashboard ? {} : {
-              location: !customLocation ? "".concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lat, ",").concat((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : (_orderState$options3$2 = _orderState$options3$.location) === null || _orderState$options3$2 === void 0 ? void 0 : _orderState$options3$2.lng) : "".concat(customLocation.lat, ",").concat(customLocation.lng),
-              type: !initialOrderType ? ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type) || 1 : initialOrderType
+              location: !customLocation ? isAllowUnaddressOrderType && !((_orderState$options3 = orderState.options) !== null && _orderState$options3 !== void 0 && (_orderState$options3$ = _orderState$options3.address) !== null && _orderState$options3$ !== void 0 && _orderState$options3$.location) ? defaultLocation : "".concat((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : (_orderState$options4$ = _orderState$options4.address) === null || _orderState$options4$ === void 0 ? void 0 : (_orderState$options4$2 = _orderState$options4$.location) === null || _orderState$options4$2 === void 0 ? void 0 : _orderState$options4$2.lat, ",").concat((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : (_orderState$options5$2 = _orderState$options5$.location) === null || _orderState$options5$2 === void 0 ? void 0 : _orderState$options5$2.lng) : "".concat(customLocation.lat, ",").concat(customLocation.lng),
+              type: !initialOrderType ? ((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type) || 1 : initialOrderType
             };
             if (orderByValue) {
               parameters = _objectSpread(_objectSpread({}, parameters), {}, {
@@ -181,10 +192,10 @@ var BusinessList = function BusinessList(props) {
             if ((searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3 && advancedSearchEnabled) {
               parameters = _objectSpread(_objectSpread({}, parameters), {}, {
                 term: searchValue,
-                order_type_id: orderState === null || orderState === void 0 ? void 0 : (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.type,
-                location: JSON.stringify({
-                  lat: (_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : (_orderState$options6$ = _orderState$options6.address) === null || _orderState$options6$ === void 0 ? void 0 : (_orderState$options6$2 = _orderState$options6$.location) === null || _orderState$options6$2 === void 0 ? void 0 : _orderState$options6$2.lat,
-                  lng: (_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : (_orderState$options7$ = _orderState$options7.address) === null || _orderState$options7$ === void 0 ? void 0 : (_orderState$options7$2 = _orderState$options7$.location) === null || _orderState$options7$2 === void 0 ? void 0 : _orderState$options7$2.lng
+                order_type_id: orderState === null || orderState === void 0 ? void 0 : (_orderState$options7 = orderState.options) === null || _orderState$options7 === void 0 ? void 0 : _orderState$options7.type,
+                location: JSON.stringify(isAllowUnaddressOrderType && !((_orderState$options8 = orderState.options) !== null && _orderState$options8 !== void 0 && (_orderState$options8$ = _orderState$options8.address) !== null && _orderState$options8$ !== void 0 && _orderState$options8$.location) ? defaultLocation : {
+                  lat: (_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : (_orderState$options9$ = _orderState$options9.address) === null || _orderState$options9$ === void 0 ? void 0 : (_orderState$options9$2 = _orderState$options9$.location) === null || _orderState$options9$2 === void 0 ? void 0 : _orderState$options9$2.lat,
+                  lng: (_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : (_orderState$options11 = _orderState$options10.address) === null || _orderState$options11 === void 0 ? void 0 : (_orderState$options12 = _orderState$options11.location) === null || _orderState$options12 === void 0 ? void 0 : _orderState$options12.lng
                 })
               });
             }
@@ -195,8 +206,8 @@ var BusinessList = function BusinessList(props) {
               };
               parameters = _objectSpread(_objectSpread({}, parameters), paginationParams);
             }
-            if ((_orderState$options8 = orderState.options) !== null && _orderState$options8 !== void 0 && _orderState$options8.moment && isValidMoment((_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.moment, 'YYYY-MM-DD HH:mm:ss')) {
-              moment = _dayjs.default.utc((_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+            if ((_orderState$options13 = orderState.options) !== null && _orderState$options13 !== void 0 && _orderState$options13.moment && isValidMoment((_orderState$options14 = orderState.options) === null || _orderState$options14 === void 0 ? void 0 : _orderState$options14.moment, 'YYYY-MM-DD HH:mm:ss')) {
+              moment = _dayjs.default.utc((_orderState$options15 = orderState.options) === null || _orderState$options15 === void 0 ? void 0 : _orderState$options15.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
               parameters.timestamp = moment;
             }
             where = null;
@@ -235,7 +246,7 @@ var BusinessList = function BusinessList(props) {
               });
             }
             if (timeLimitValue) {
-              if (((_orderState$options11 = orderState.options) === null || _orderState$options11 === void 0 ? void 0 : _orderState$options11.type) === 1) {
+              if (((_orderState$options16 = orderState.options) === null || _orderState$options16 === void 0 ? void 0 : _orderState$options16.type) === 1) {
                 conditions.push({
                   attribute: 'delivery_time',
                   value: {
@@ -244,7 +255,7 @@ var BusinessList = function BusinessList(props) {
                   }
                 });
               }
-              if (((_orderState$options12 = orderState.options) === null || _orderState$options12 === void 0 ? void 0 : _orderState$options12.type) === 2) {
+              if (((_orderState$options17 = orderState.options) === null || _orderState$options17 === void 0 ? void 0 : _orderState$options17.type) === 2) {
                 conditions.push({
                   attribute: 'pickup_time',
                   value: {
@@ -289,10 +300,10 @@ var BusinessList = function BusinessList(props) {
                 conditions: searchConditions
               });
             }
-            if (orderState !== null && orderState !== void 0 && (_orderState$options13 = orderState.options) !== null && _orderState$options13 !== void 0 && _orderState$options13.city_id || cityId) {
+            if (orderState !== null && orderState !== void 0 && (_orderState$options18 = orderState.options) !== null && _orderState$options18 !== void 0 && _orderState$options18.city_id || cityId) {
               conditions.push({
                 attribute: 'city_id',
-                value: cityId || (orderState === null || orderState === void 0 ? void 0 : (_orderState$options14 = orderState.options) === null || _orderState$options14 === void 0 ? void 0 : _orderState$options14.city_id)
+                value: cityId || (orderState === null || orderState === void 0 ? void 0 : (_orderState$options19 = orderState.options) === null || _orderState$options19 === void 0 ? void 0 : _orderState$options19.city_id)
               });
             }
             if (conditions.length) {
@@ -312,12 +323,12 @@ var BusinessList = function BusinessList(props) {
             requestsState.businesses = source;
             setRequestsState(_objectSpread({}, requestsState));
             fetchEndpoint = advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3 || !where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters) : where && asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where).asDashboard() : where && !asDashboard ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where) : ordering.businesses().select(propsToFetch).parameters(parameters).asDashboard();
-            _context.next = 26;
+            _context.next = 30;
             return fetchEndpoint.get({
               cancelToken: source,
               advancedSearch: advancedSearchEnabled && (searchValue === null || searchValue === void 0 ? void 0 : searchValue.length) >= 3
             });
-          case 26:
+          case 30:
             _yield$fetchEndpoint$ = _context.sent;
             _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
             error = _yield$fetchEndpoint$2.error;
@@ -365,10 +376,10 @@ var BusinessList = function BusinessList(props) {
               result: result,
               fetched: true
             }));
-            _context.next = 40;
+            _context.next = 44;
             break;
-          case 37:
-            _context.prev = 37;
+          case 41:
+            _context.prev = 41;
             _context.t0 = _context["catch"](0);
             if (_context.t0.constructor.name !== 'Cancel') {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
@@ -378,11 +389,11 @@ var BusinessList = function BusinessList(props) {
                 result: [_context.t0.message]
               }));
             }
-          case 40:
+          case 44:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 37]]);
+      }, _callee, null, [[0, 41]]);
     }));
     return function getBusinesses(_x2, _x3, _x4) {
       return _ref2.apply(this, arguments);
@@ -503,15 +514,15 @@ var BusinessList = function BusinessList(props) {
    * Listening order option and filter changes
    */
   (0, _react.useEffect)(function () {
-    var _orderState$options15, _orderState$options16, _orderState$options17;
-    if (orderState.loading || !((_orderState$options15 = orderState.options) !== null && _orderState$options15 !== void 0 && (_orderState$options16 = _orderState$options15.address) !== null && _orderState$options16 !== void 0 && _orderState$options16.location) && !asDashboard && !customLocation || auth && !(orderState !== null && orderState !== void 0 && (_orderState$options17 = orderState.options) !== null && _orderState$options17 !== void 0 && _orderState$options17.user_id)) return;
+    var _orderState$options20, _orderState$options21, _orderState$options22;
+    if (orderState.loading || !((_orderState$options20 = orderState.options) !== null && _orderState$options20 !== void 0 && (_orderState$options21 = _orderState$options20.address) !== null && _orderState$options21 !== void 0 && _orderState$options21.location) && !isAllowUnaddressOrderType && !asDashboard && !customLocation || auth && !(orderState !== null && orderState !== void 0 && (_orderState$options22 = orderState.options) !== null && _orderState$options22 !== void 0 && _orderState$options22.user_id)) return;
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
     }
   }, [JSON.stringify(orderState.options), ordering === null || ordering === void 0 ? void 0 : ordering.countryCode, orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useEffect)(function () {
-    var _orderState$options18, _orderState$options19;
-    if (orderState.loading || !((_orderState$options18 = orderState.options) !== null && _orderState$options18 !== void 0 && (_orderState$options19 = _orderState$options18.address) !== null && _orderState$options19 !== void 0 && _orderState$options19.location) && !asDashboard && !customLocation) {
+    var _orderState$options23, _orderState$options24;
+    if (orderState.loading || !((_orderState$options23 = orderState.options) !== null && _orderState$options23 !== void 0 && (_orderState$options24 = _orderState$options23.address) !== null && _orderState$options24 !== void 0 && _orderState$options24.location) && !isAllowUnaddressOrderType && !asDashboard && !customLocation) {
       setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
         loading: false
       }));
