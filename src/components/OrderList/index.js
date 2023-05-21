@@ -32,7 +32,8 @@ export const OrderList = props => {
     businessOrderIds,
     setBusinessOrderIds,
     propsToFetchBusiness,
-    isBusiness
+    isBusiness,
+    noGiftCardOrders
   } = props
 
   const [ordering] = useApi()
@@ -134,6 +135,18 @@ export const OrderList = props => {
     }
     if (franchiseId) {
       options.query.where.push({ attribute: 'ref_business', conditions: [{ attribute: 'franchise_id', value: parseInt(franchiseId, 10) }] })
+    }
+    if (noGiftCardOrders) {
+      options.query.where.push({
+        attribute: 'products',
+        conditions: [{
+          attribute: 'type',
+          value: {
+            condition: '=',
+            value: 'item'
+          }
+        }]
+      })
     }
     const source = {}
     requestsState.orders = source
