@@ -59,7 +59,8 @@ var OrderList = function OrderList(props) {
     businessOrderIds = props.businessOrderIds,
     setBusinessOrderIds = props.setBusinessOrderIds,
     propsToFetchBusiness = props.propsToFetchBusiness,
-    isBusiness = props.isBusiness;
+    isBusiness = props.isBusiness,
+    noGiftCardOrders = props.noGiftCardOrders;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -321,15 +322,27 @@ var OrderList = function OrderList(props) {
                 }]
               });
             }
+            if (noGiftCardOrders) {
+              options.query.where.push({
+                attribute: 'products',
+                conditions: [{
+                  attribute: 'type',
+                  value: {
+                    condition: '=',
+                    value: 'item'
+                  }
+                }]
+              });
+            }
             source = {};
             requestsState.orders = source;
             options.cancelToken = source;
             functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-            _context4.next = 13;
+            _context4.next = 14;
             return functionFetch.get(options);
-          case 13:
-            return _context4.abrupt("return", _context4.sent);
           case 14:
+            return _context4.abrupt("return", _context4.sent);
+          case 15:
           case "end":
             return _context4.stop();
         }
