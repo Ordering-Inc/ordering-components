@@ -130,7 +130,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
                 type: 'card',
                 card: {
                   brand: defaultCard.brand,
-                  last4: defaultCard.last4
+                  last4: defaultCard.last4,
+                  zipcode: defaultCard === null || defaultCard === void 0 ? void 0 : defaultCard.zipcode
                 }
               });
             }
@@ -273,7 +274,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
                 type: 'card',
                 card: {
                   brand: card.brand,
-                  last4: card.last4
+                  last4: card.last4,
+                  zipcode: card.zipcode
                 }
               });
               setDefaultCardSetActionStatus({
@@ -352,7 +354,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
         type: 'card',
         card: {
           brand: card.brand,
-          last4: card.last4
+          last4: card.last4,
+          zipcode: card.zipcode
         }
       });
     }
