@@ -78,7 +78,7 @@ var UtilsProviders = function UtilsProviders(_ref) {
         // e.g. in 2 hours, %s been replaced with 2hours
         past: t('RELATIVE_TIME_AGO', '%s ago'),
         s: t('RELATIVE_TIME_FEW_SECONDS', 'a few seconds'),
-        m: t('RELATIVE_TIME_MINUTES', 'a minute'),
+        m: t('RELATIVE_TIME_MINUTE', 'a minute'),
         mm: t('RELATIVE_TIME_MINUTES', '%d minutes'),
         h: t('RELATIVE_TIME_HOUR', 'an hour'),
         hh: t('RELATIVE_TIME_HOURS', '%d hours'),
