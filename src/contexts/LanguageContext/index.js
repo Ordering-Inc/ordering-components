@@ -78,8 +78,8 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     try {
       const { content: { error, result } } = await ordering.languages().where([{ attribute: 'default', value: true }]).get()
       if (error) {
-        setState({
-          ...state,
+        setStateApp({
+          ...stateApp,
           loading: false,
           error: typeof result === 'string' ? result : result?.[0]
         })
@@ -87,13 +87,13 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
       }
       const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
       await strategy.setItem('language', language, true)
-      apiHelper.setLanguage(state?.language?.code)
-      setState({
-        ...state,
+      apiHelper.setLanguage(stateApp?.language?.code)
+      setStateApp({
+        ...stateApp,
         language
       })
     } catch (err) {
-      setState({ ...state, loading: false })
+      setStateApp({ ...stateApp, loading: false })
     }
   }
 
