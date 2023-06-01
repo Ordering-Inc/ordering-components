@@ -194,7 +194,7 @@ export const MomentOption = (props) => {
     } else {
       let startTimeAcc = preorderLeadTime
       let endTimeAcc = preorderTimeRange + preorderLeadTime
-      while (startTimeAcc > 0 && dayjs().startOf('day').add(startTimeAcc || 0, 'minute') < dayjs().startOf('day').add(1, 'day')) {
+      while (startTimeAcc >= 0 && dayjs().startOf('day').add(startTimeAcc || 0, 'minute') < dayjs().startOf('day').add(1, 'day')) {
         const startTime = dayjs().startOf('day').add(startTimeAcc || 0, 'minute').format('HH:mm')
         const endTime = dayjs().startOf('day').add(endTimeAcc, 'minute').format('HH:mm')
         startTimeAcc = startTimeAcc + preorderSlotInterval
