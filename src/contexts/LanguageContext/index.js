@@ -17,6 +17,11 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     loading: true,
     dictionary: {}
   })
+  const [stateApp, setStateApp] = useState({
+    loading: true,
+    dictionary: {}
+  })
+
 
   /**
    * Load language from localstorage and set state or load default language
@@ -69,6 +74,29 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     }
   }
 
+  const loadDefaultLanguageApp = async () => {
+    try {
+      const { content: { error, result } } = await ordering.languages().where([{ attribute: 'default', value: true }]).get()
+      if (error) {
+        setStateApp({
+          ...stateApp,
+          loading: false,
+          error: typeof result === 'string' ? result : result?.[0]
+        })
+        return
+      }
+      const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
+      await strategy.setItem('language', language, true)
+      apiHelper.setLanguage(stateApp?.language?.code)
+      setStateApp({
+        ...stateApp,
+        language
+      })
+    } catch (err) {
+      setStateApp({ ...stateApp, loading: false })
+    }
+  }
+
   const setLanguage = async (language) => {
     if (!language || language.id === state.language?.id) return
     const _language = { id: language.id, code: language.code, rtl: language.rtl }
@@ -98,7 +126,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   }
 
   return (
-    <LanguageContext.Provider value={[state, t, setLanguage, refreshTranslations]}>
+    <LanguageContext.Provider value={[state, t, setLanguage, refreshTranslations, loadDefaultLanguageApp]}>
       {children}
     </LanguageContext.Provider>
   )
