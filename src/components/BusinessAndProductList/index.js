@@ -21,7 +21,8 @@ export const BusinessAndProductList = (props) => {
     isGetMenus,
     UIComponent,
     location,
-    avoidProductDuplicate
+    avoidProductDuplicate,
+    isApp
   } = props
 
   const [orderState, { removeProduct }] = useOrder()
@@ -46,7 +47,7 @@ export const BusinessAndProductList = (props) => {
 
   const categoryStateDefault = {
     loading: true,
-    pagination: { currentPage: 0, pageSize: 20, totalItems: null, totalPages: 0, nextPageItems: 10 },
+    pagination: { currentPage: 0, pageSize: isApp ? 5 : 20, totalItems: null, totalPages: 0, nextPageItems: 10 },
     products: []
   }
 
