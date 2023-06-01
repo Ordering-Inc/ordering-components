@@ -49,7 +49,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     isGetMenus = props.isGetMenus,
     UIComponent = props.UIComponent,
     location = props.location,
-    avoidProductDuplicate = props.avoidProductDuplicate;
+    avoidProductDuplicate = props.avoidProductDuplicate,
+    isApp = props.isApp;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
@@ -142,7 +143,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     loading: true,
     pagination: {
       currentPage: 0,
-      pageSize: 20,
+      pageSize: isApp ? 5 : 20,
       totalItems: null,
       totalPages: 0,
       nextPageItems: 10
