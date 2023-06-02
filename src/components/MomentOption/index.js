@@ -55,7 +55,7 @@ export const MomentOption = (props) => {
    * This must be containt schedule selected by user
    */
   const _currentDate = useOrderContext ? orderStatus.options?.moment : currentDate
-  const [scheduleSelected, setScheduleSelected] = useState(_currentDate ? dayjs(validDate(_currentDate)).format('YYYY-MM-DD HH:mm') : null)
+  const [scheduleSelected, setScheduleSelected] = useState(_currentDate ? dayjs.utc(validDate(_currentDate)).local().format('YYYY-MM-DD HH:mm') : null)
 
   /**
    * Flag to know if user select asap time
