@@ -71,7 +71,7 @@ var MomentOption = function MomentOption(props) {
    * This must be containt schedule selected by user
    */
   var _currentDate = useOrderContext ? (_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.moment : currentDate;
-  var _useState = (0, _react.useState)(_currentDate ? (0, _dayjs.default)(validDate(_currentDate)).format('YYYY-MM-DD HH:mm') : null),
+  var _useState = (0, _react.useState)(_currentDate ? _dayjs.default.utc(validDate(_currentDate)).local().format('YYYY-MM-DD HH:mm') : null),
     _useState2 = _slicedToArray(_useState, 2),
     scheduleSelected = _useState2[0],
     setScheduleSelected = _useState2[1];
@@ -222,7 +222,7 @@ var MomentOption = function MomentOption(props) {
     } else {
       var startTimeAcc = preorderLeadTime;
       var endTimeAcc = preorderTimeRange + preorderLeadTime;
-      while (startTimeAcc > 0 && (0, _dayjs.default)().startOf('day').add(startTimeAcc || 0, 'minute') < (0, _dayjs.default)().startOf('day').add(1, 'day')) {
+      while (startTimeAcc >= 0 && (0, _dayjs.default)().startOf('day').add(startTimeAcc || 0, 'minute') < (0, _dayjs.default)().startOf('day').add(1, 'day')) {
         var _startTime = (0, _dayjs.default)().startOf('day').add(startTimeAcc || 0, 'minute').format('HH:mm');
         var _endTime = (0, _dayjs.default)().startOf('day').add(endTimeAcc, 'minute').format('HH:mm');
         startTimeAcc = startTimeAcc + preorderSlotInterval;
