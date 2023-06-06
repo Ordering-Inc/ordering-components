@@ -79,9 +79,6 @@ export const BusinessList = (props) => {
    * @param {boolean} newFetch Make a new request or next page
    */
   const getBusinesses = async (newFetch, specificPagination, prev) => {
-    console.log(
-      searchValue
-    )
     try {
       setBusinessesList({
         ...businessesList,
