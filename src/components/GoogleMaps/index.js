@@ -201,24 +201,25 @@ export const GoogleMaps = (props) => {
       setGoogleMap(map)
 
       if (locations) {
+        if (locations.length > 0) {
+          generateMarkers(map)
+        }
         if (businessMap) {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center.lat, center.lng),
             map
           })
-          setGoogleMapMarker(marker)
+          map.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
+        } else {
+          marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(center?.lat, center?.lng),
+            map,
+            icon: {
+              url: locations[0].icon,
+              scaledSize: new window.google.maps.Size(35, 35)
+            }
+          })
         }
-        if (locations.length > 0) {
-          generateMarkers(map)
-        }
-        marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center?.lat, center?.lng),
-          map,
-          icon: {
-            url: locations[0].icon,
-            scaledSize: new window.google.maps.Size(35, 35)
-          }
-        })
         setGoogleMapMarker(marker)
       } else {
         marker = new window.google.maps.Marker({
@@ -342,6 +343,13 @@ export const GoogleMaps = (props) => {
       return () => clearInterval(interval)
     }
   }, [locations, userActivity])
+
+  useEffect(() => {
+    if (boundMap && businessMap) {
+      boundMap.extend(center)
+      googleMap.fitBounds(boundMap)
+    }
+  }, [boundMap])
 
   return (
     googleReady && (
