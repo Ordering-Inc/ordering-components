@@ -513,6 +513,18 @@ export const OrderListGroups = (props) => {
     return ordersSorted
   }
 
+  const filterByIdUnique = (array) => {
+    const status = ordersGroupStatus[currentTabSelected] ?? []
+
+    return Array.from(
+      array.reduce(
+        (map, objeto) => map.has(objeto.id)
+          ? map
+          : map.set(objeto.id, objeto),
+      new Map()).values()
+    ).filter(item => status.includes(item.status))
+  }
+
   const formatOrdersGrouped = (orders) => {
     let totalOrders = orders
     const ordersGroupids = []
@@ -528,7 +540,7 @@ export const OrderListGroups = (props) => {
         if (_item) ordersGroupids.push(item?.cart_group_id)
         return _item
       }).filter(item => item)
-    return totalOrders
+    return filterByIdUnique(totalOrders)
   }
 
   const getStatusById = (id) => {
