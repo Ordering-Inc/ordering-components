@@ -54,8 +54,9 @@ var Checkout = function Checkout(props) {
     ordering = _useApi2[0];
   var socket = (0, _WebsocketContext.useWebsocket)();
   var _useOrder = (0, _OrderContext.useOrder)(),
-    _useOrder2 = _slicedToArray(_useOrder, 1),
-    options = _useOrder2[0].options;
+    _useOrder2 = _slicedToArray(_useOrder, 2),
+    options = _useOrder2[0].options,
+    refreshOrderOptions = _useOrder2[1].refreshOrderOptions;
   var _useConfig = (0, _ConfigContext.useConfig)(),
     _useConfig2 = _slicedToArray(_useConfig, 2),
     configs = _useConfig2[0].configs,
@@ -306,7 +307,7 @@ var Checkout = function Checkout(props) {
           case 17:
             result = _context2.sent;
             if (!(result !== null && result !== void 0 && result.error)) {
-              _context2.next = 24;
+              _context2.next = 25;
               break;
             }
             setErrors(result === null || result === void 0 ? void 0 : result.result);
@@ -317,35 +318,36 @@ var Checkout = function Checkout(props) {
             _context2.next = 23;
             return dismissPlatformPay();
           case 23:
+            refreshOrderOptions();
             return _context2.abrupt("return");
-          case 24:
+          case 25:
             cartResult = result === null || result === void 0 ? void 0 : result.result;
             if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
-              _context2.next = 28;
+              _context2.next = 29;
               break;
             }
-            _context2.next = 28;
+            _context2.next = 29;
             return actionsBeforePlace(paymethodSelected, result.result);
-          case 28:
+          case 29:
             if (!(confirmPayment && (result === null || result === void 0 ? void 0 : (_result$result = result.result) === null || _result$result === void 0 ? void 0 : (_result$result$paymet = _result$result.paymethod_data) === null || _result$result$paymet === void 0 ? void 0 : _result$result$paymet.gateway) === 'apple_pay')) {
-              _context2.next = 34;
+              _context2.next = 35;
               break;
             }
-            _context2.next = 31;
+            _context2.next = 32;
             return confirmPayment(result === null || result === void 0 ? void 0 : (_result$result2 = result.result) === null || _result$result2 === void 0 ? void 0 : (_result$result2$payme = _result$result2.paymethod_data) === null || _result$result2$payme === void 0 ? void 0 : (_result$result2$payme2 = _result$result2$payme.result) === null || _result$result2$payme2 === void 0 ? void 0 : _result$result2$payme2.client_secret);
-          case 31:
+          case 32:
             _yield$confirmPayment = _context2.sent;
             confirmApplePayError = _yield$confirmPayment.error;
             if (confirmApplePayError) {
               setErrors(confirmApplePayError);
             }
-          case 34:
+          case 35:
             if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod4 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod4 !== void 0 && _cartResult$paymethod4.hash && (cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod5 = cartResult.paymethod_data) === null || _cartResult$paymethod5 === void 0 ? void 0 : _cartResult$paymethod5.status) === 2 && !payloadProps.isNative) {
               handleConfirmCredomaticPage(cartResult, paymethodSelected);
             }
             setPlacing(false);
             onPlaceOrderClick && onPlaceOrderClick(payload, paymethodSelected, cartResult);
-          case 37:
+          case 38:
           case "end":
             return _context2.stop();
         }
