@@ -625,7 +625,9 @@ var BusinessList = function BusinessList(props) {
         loading: false
       }));
     }
-    setSearchValue(search);
+    if (search !== undefined) {
+      setSearchValue(search);
+    }
   };
 
   /**
@@ -737,7 +739,6 @@ BusinessList.propTypes = {
   onBusinessClick: _propTypes.default.func
 };
 BusinessList.defaultProps = {
-  propsToFetch: ['id', 'name', 'header', 'logo', 'location', 'schedule', 'open', 'ribbon', 'delivery_price', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers', 'food', 'laundry', 'alcohol', 'groceries', 'slug', 'city', 'city_id', 'menus'],
   paginationSettings: {
     initialPage: 1,
     pageSize: 10,
