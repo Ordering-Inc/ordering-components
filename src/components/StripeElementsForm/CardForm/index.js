@@ -82,7 +82,7 @@ export const CardForm = (props) => {
     if (event.error) {
       (event.elementType === 'cardNumber' || 'card') && setError(event.error.message)
     } else if (event?.target?.name === 'zipcode') {
-      event.target.value = event?.target?.value?.slice(0, 6)
+      event.target.value = event?.target?.value?.slice(0, 10)
       elements.update({ value: { postalCode: event?.target?.value } })
       if (!event.target.value && zipCodeRequired && zipCodeEnabled) {
         setErrorZipcode(true)

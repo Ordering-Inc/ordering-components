@@ -150,7 +150,7 @@ var CardForm = function CardForm(props) {
       (event.elementType === 'cardNumber' || 'card') && setError(event.error.message);
     } else if ((event === null || event === void 0 ? void 0 : (_event$target = event.target) === null || _event$target === void 0 ? void 0 : _event$target.name) === 'zipcode') {
       var _event$target2, _event$target2$value, _event$target3, _event$target4;
-      event.target.value = event === null || event === void 0 ? void 0 : (_event$target2 = event.target) === null || _event$target2 === void 0 ? void 0 : (_event$target2$value = _event$target2.value) === null || _event$target2$value === void 0 ? void 0 : _event$target2$value.slice(0, 6);
+      event.target.value = event === null || event === void 0 ? void 0 : (_event$target2 = event.target) === null || _event$target2 === void 0 ? void 0 : (_event$target2$value = _event$target2.value) === null || _event$target2$value === void 0 ? void 0 : _event$target2$value.slice(0, 10);
       elements.update({
         value: {
           postalCode: event === null || event === void 0 ? void 0 : (_event$target3 = event.target) === null || _event$target3 === void 0 ? void 0 : _event$target3.value
