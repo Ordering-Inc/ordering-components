@@ -268,24 +268,25 @@ var GoogleMaps = function GoogleMaps(props) {
       var marker = null;
       setGoogleMap(map);
       if (locations) {
+        if (locations.length > 0) {
+          generateMarkers(map);
+        }
         if (businessMap) {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center.lat, center.lng),
             map: map
           });
-          setGoogleMapMarker(marker);
+          map.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
+        } else {
+          marker = new window.google.maps.Marker({
+            position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
+            map: map,
+            icon: {
+              url: locations[0].icon,
+              scaledSize: new window.google.maps.Size(35, 35)
+            }
+          });
         }
-        if (locations.length > 0) {
-          generateMarkers(map);
-        }
-        marker = new window.google.maps.Marker({
-          position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
-          map: map,
-          icon: {
-            url: locations[0].icon,
-            scaledSize: new window.google.maps.Size(35, 35)
-          }
-        });
         setGoogleMapMarker(marker);
       } else {
         marker = new window.google.maps.Marker({
@@ -423,6 +424,12 @@ var GoogleMaps = function GoogleMaps(props) {
       };
     }
   }, [locations, userActivity]);
+  (0, _react.useEffect)(function () {
+    if (boundMap && businessMap) {
+      boundMap.extend(center);
+      googleMap.fitBounds(boundMap);
+    }
+  }, [boundMap]);
   return googleReady && /*#__PURE__*/_react.default.createElement("div", {
     onMouseOver: function onMouseOver() {
       return setUserActivity(true);
