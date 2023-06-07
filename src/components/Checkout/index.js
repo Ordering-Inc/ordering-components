@@ -24,7 +24,7 @@ export const Checkout = (props) => {
 
   const [ordering] = useApi()
   const socket = useWebsocket()
-  const [{ options }] = useOrder()
+  const [{ options }, { refreshOrderOptions }] = useOrder()
   const [{ configs }, { refreshConfigs }] = useConfig()
 
   const [placing, setPlacing] = useState(false)
@@ -196,6 +196,7 @@ export const Checkout = (props) => {
       if (dismissPlatformPay && paymethodSelected?.paymethod?.gateway === 'apple_pay') {
         await dismissPlatformPay()
       }
+      refreshOrderOptions()
       return
     }
 
