@@ -765,6 +765,15 @@ var OrderListGroups = function OrderListGroups(props) {
     });
     return ordersSorted;
   };
+  var filterByIdUnique = function filterByIdUnique(array) {
+    var _ordersGroupStatus$cu;
+    var status = (_ordersGroupStatus$cu = ordersGroupStatus[currentTabSelected]) !== null && _ordersGroupStatus$cu !== void 0 ? _ordersGroupStatus$cu : [];
+    return Array.from(array.reduce(function (map, objeto) {
+      return map.has(objeto.id) ? map : map.set(objeto.id, objeto);
+    }, new Map()).values()).filter(function (item) {
+      return status.includes(item.status);
+    });
+  };
   var formatOrdersGrouped = function formatOrdersGrouped(orders) {
     var _totalOrders;
     var totalOrders = orders;
@@ -780,7 +789,7 @@ var OrderListGroups = function OrderListGroups(props) {
     }).filter(function (item) {
       return item;
     });
-    return totalOrders;
+    return filterByIdUnique(totalOrders);
   };
   var getStatusById = function getStatusById(id) {
     var _orderGroupStatusCust5, _orderGroupStatusCust6, _orderGroupStatusCust7;
