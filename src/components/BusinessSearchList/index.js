@@ -40,7 +40,8 @@ export const BusinessSearchList = (props) => {
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
-    price_level: null
+    price_level: null,
+    max_distance: 25000
   })
   const [termValue, setTermValue] = useState(defaultTerm || '')
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
@@ -53,7 +54,7 @@ export const BusinessSearchList = (props) => {
           force_max_distance: true
         })
       }
-      handleSearchbusinessAndProducts(true)
+      // handleSearchbusinessAndProducts(true)
     }
   }, [filters, JSON.stringify(orderState?.options)])
 
@@ -340,7 +341,7 @@ export const BusinessSearchList = (props) => {
         handleSearchbusinessAndProducts(true, {
           force_max_distance: true
         })
-        handleSearchbusinessAndProducts(true)
+        // handleSearchbusinessAndProducts(true)
         setAllFetched(true)
       }
     }
