@@ -22,7 +22,8 @@ export const BusinessAndProductList = (props) => {
     UIComponent,
     location,
     avoidProductDuplicate,
-    isApp
+    isApp,
+    isFeatchAllProducts
   } = props
 
   const [orderState, { removeProduct }] = useOrder()
@@ -290,8 +291,8 @@ export const BusinessAndProductList = (props) => {
   const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
       type: orderState.options?.type ?? 1,
-      page,
-      page_size: pageSize
+      ...(!isFeatchAllProducts && { page }),
+      ...(!isFeatchAllProducts && { page_size: pageSize })
     }
 
     if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
