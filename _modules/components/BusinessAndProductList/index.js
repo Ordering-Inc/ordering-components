@@ -50,7 +50,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     UIComponent = props.UIComponent,
     location = props.location,
     avoidProductDuplicate = props.avoidProductDuplicate,
-    isApp = props.isApp;
+    isApp = props.isApp,
+    isFetchAllProducts = props.isFetchAllProducts;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
@@ -391,11 +392,13 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
             page = _ref5.page, _ref5$pageSize = _ref5.pageSize, pageSize = _ref5$pageSize === void 0 ? categoryStateDefault.pagination.pageSize : _ref5$pageSize;
-            parameters = {
-              type: (_orderState$options$t = (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) !== null && _orderState$options$t !== void 0 ? _orderState$options$t : 1,
-              page: page,
+            parameters = _objectSpread(_objectSpread({
+              type: (_orderState$options$t = (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) !== null && _orderState$options$t !== void 0 ? _orderState$options$t : 1
+            }, !isFetchAllProducts && {
+              page: page
+            }), !isFetchAllProducts && {
               page_size: pageSize
-            };
+            });
             if ((_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && _orderState$options2.moment && isValidMoment((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.moment, 'YYYY-MM-DD HH:mm:ss')) {
               moment = _dayjs.default.utc((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
               parameters.timestamp = moment;
