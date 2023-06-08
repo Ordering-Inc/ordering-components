@@ -514,6 +514,7 @@ export const OrderListGroups = (props) => {
   }
 
   const filterByIdUnique = (array) => {
+    if (!array) return array
     const status = ordersGroupStatus[currentTabSelected] ?? []
 
     return Array.from(
