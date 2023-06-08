@@ -767,6 +767,7 @@ var OrderListGroups = function OrderListGroups(props) {
   };
   var filterByIdUnique = function filterByIdUnique(array) {
     var _ordersGroupStatus$cu;
+    if (!array) return array;
     var status = (_ordersGroupStatus$cu = ordersGroupStatus[currentTabSelected]) !== null && _ordersGroupStatus$cu !== void 0 ? _ordersGroupStatus$cu : [];
     return Array.from(array.reduce(function (map, objeto) {
       return map.has(objeto.id) ? map : map.set(objeto.id, objeto);
