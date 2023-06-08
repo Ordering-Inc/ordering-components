@@ -138,7 +138,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
     business_types: [],
     orderBy: 'distance',
     franchise_ids: [],
-    price_level: null
+    price_level: null,
+    max_distance: 25000
   }),
       _useState12 = _slicedToArray(_useState11, 2),
       filters = _useState12[0],
@@ -167,9 +168,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
         handleSearchbusinessAndProducts(true, {
           force_max_distance: true
         });
-      }
+      } // handleSearchbusinessAndProducts(true)
 
-      handleSearchbusinessAndProducts(true);
     }
   }, [filters, JSON.stringify(orderState === null || orderState === void 0 ? void 0 : orderState.options)]);
 
@@ -584,8 +584,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
       if (!allFetched) {
         handleSearchbusinessAndProducts(true, {
           force_max_distance: true
-        });
-        handleSearchbusinessAndProducts(true);
+        }); // handleSearchbusinessAndProducts(true)
+
         setAllFetched(true);
       }
     }
