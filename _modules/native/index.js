@@ -723,6 +723,12 @@ Object.defineProperty(exports, "WebsocketProvider", {
     return _WebsocketContext.WebsocketProvider;
   }
 });
+Object.defineProperty(exports, "WebsocketStatus", {
+  enumerable: true,
+  get: function get() {
+    return _WebsocketStatus.WebsocketStatus;
+  }
+});
 Object.defineProperty(exports, "useApi", {
   enumerable: true,
   get: function get() {
@@ -891,6 +897,7 @@ var _MapView = require("../src/components/MapView");
 var _UserVerification = require("../src/components/UserVerification");
 var _WalletList = require("../src/components/WalletList");
 var _MultiCartCreate = require("../src/components/MultiCartCreate");
+var _WebsocketStatus = require("../src/components/WebsocketStatus");
 var _ApiContext = require("../src/contexts/ApiContext");
 var _BusinessContext = require("../src/contexts/BusinessContext");
 var _ConfigContext = require("../src/contexts/ConfigContext");

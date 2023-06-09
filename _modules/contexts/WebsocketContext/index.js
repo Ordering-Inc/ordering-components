@@ -114,6 +114,20 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
       return clearInterval(projectInputInterval);
     };
   }, [session]);
+  (0, _react.useEffect)(function () {
+    if (socket !== null && socket !== void 0 && socket.socket) {
+      socket.socket.on('disconnect', function (reason) {
+        if (reason === 'io server disconnect' && session.auth) {
+          setTimeout(socket.socket.connect(), 1000);
+        }
+      });
+      socket.socket.on('connect_error', function () {
+        if (session.auth) {
+          setTimeout(socket.socket.connect(), 1000);
+        }
+      });
+    }
+  }, [socket === null || socket === void 0 ? void 0 : socket.socket, session]);
   return /*#__PURE__*/_react.default.createElement(WebsocketContext.Provider, {
     value: socket
   }, children);

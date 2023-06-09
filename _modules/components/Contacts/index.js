@@ -416,12 +416,12 @@ var Contacts = function Contacts(props) {
     }
   }, [sortBy]);
   (0, _react.useEffect)(function () {
-    if (!token) return;
+    if (!token || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id);
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id);
-    socket.on('disconnect', function (reason) {
-      socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-      socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    socket.socket.on('connect', function () {
+      socket.join(messagesOrdersRoom);
+      socket.join(ordersRoom);
     });
     socket.join(messagesOrdersRoom);
     socket.join(ordersRoom);
@@ -429,7 +429,7 @@ var Contacts = function Contacts(props) {
       socket.leave(messagesOrdersRoom);
       socket.leave(ordersRoom);
     };
-  }, [socket, user]);
+  }, [socket === null || socket === void 0 ? void 0 : socket.socket, user]);
   var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(message) {
       var orderId, _yield$ordering$setAc5, _yield$ordering$setAc6, result, error;
