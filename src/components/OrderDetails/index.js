@@ -476,7 +476,7 @@ export const OrderDetails = (props) => {
   }, [props.order, orderState.order?.id])
 
   useEffect(() => {
-    if (orderState.loading || loading) return
+    if (orderState.loading || loading || !socket?.socket) return
     const handleUpdateOrder = (order) => {
       if (order?.id !== orderState.order?.id) return
       showToast(ToastType.Info, t('UPDATING_ORDER', 'Updating order...'), 1000)
@@ -507,6 +507,12 @@ export const OrderDetails = (props) => {
     if (orderState.order?.driver_id) {
       socket.join(`drivers_${orderState.order?.driver_id}`)
     }
+    socket.socket.on('connect', () => {
+      if (!isDisabledOrdersRoom) socket.join(ordersRoom)
+      if (orderState.order?.driver_id) {
+        socket.join(`drivers_${orderState.order?.driver_id}`)
+      }
+    })
     socket.on('tracking_driver', handleTrackingDriver)
     socket.on('update_order', handleUpdateOrder)
     return () => {
@@ -515,7 +521,7 @@ export const OrderDetails = (props) => {
       socket.off('update_order', handleUpdateOrder)
       socket.off('tracking_driver', handleTrackingDriver)
     }
-  }, [orderState.order, socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id])
+  }, [orderState.order, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id])
 
   useEffect(() => {
     if (messages.loading) return
@@ -536,13 +542,17 @@ export const OrderDetails = (props) => {
   }, [messages, socket, orderState.order?.status, userCustomerId])
 
   useEffect(() => {
+    if (!socket?.socket) return
     const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${userCustomerId || user?.id}`
     socket.join(messagesOrdersRoom)
+    socket.socket.on('connect', () => {
+      socket.join(messagesOrdersRoom)
+    })
     return () => {
       // neccesary refactor
       if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
     }
-  }, [socket, userCustomerId])
+  }, [socket?.socket, userCustomerId])
 
   useEffect(() => {
     const handleCustomerReviewed = (review) => {

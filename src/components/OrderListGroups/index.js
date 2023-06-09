@@ -799,7 +799,7 @@ export const OrderListGroups = (props) => {
   }, [filtered])
 
   useEffect(() => {
-    if (ordersGroup[currentTabSelected]?.loading) return
+    if (ordersGroup[currentTabSelected]?.loading || !socket?.socket) return
 
     const handleUpdateOrder = (order) => {
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
@@ -901,11 +901,14 @@ export const OrderListGroups = (props) => {
     socket.on('update_order', handleUpdateOrder)
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
+    socket.socket.on('connect', () => {
+      socket.join(ordersRoom)
+    })
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)
     }
-  }, [ordersGroup, socket, session])
+  }, [ordersGroup, socket?.socket, session])
 
   const handleAddAssignRequest = useCallback(
     (order) => {
