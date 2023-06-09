@@ -283,7 +283,6 @@ export const BusinessAndProductList = (props) => {
       )
       categoryState.products = productsFiltered || []
     }
-    categoryState.products = sortProductsArray(sortByValue, categoryState.products)
     setErrorQuantityProducts(!categoryState.products?.length)
     setCategoryState({ ...categoryState })
   }
