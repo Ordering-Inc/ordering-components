@@ -59,6 +59,22 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
     return () => clearInterval(projectInputInterval)
   }, [session])
 
+  useEffect(() => {
+    if (socket?.socket) {
+      socket.socket.on('disconnect', (reason) => {
+        if (reason === 'io server disconnect' && session.auth) {
+          setTimeout(socket.socket.connect(), 1000)
+        }
+      })
+
+      socket.socket.on('connect_error', () => {
+        if (session.auth) {
+          setTimeout(socket.socket.connect(), 1000)
+        }
+      })
+    }
+  }, [socket?.socket, session])
+
   return (
     <WebsocketContext.Provider value={socket}>
       {children}

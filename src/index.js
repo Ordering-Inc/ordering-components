@@ -128,6 +128,7 @@ import { ReviewDriver } from './components/ReviewDriver'
 import { UserVerification } from './components/UserVerification'
 import { WalletList } from './components/WalletList'
 import { QueryLoginSpoonity } from './components/QueryLoginSpoonity'
+import { WebsocketStatus } from './components/WebsocketStatus'
 
 import {
   BusinessProductsListing,
@@ -270,6 +271,7 @@ export {
   WalletList,
   MultiCartCreate,
   QueryLoginSpoonity,
+  WebsocketStatus,
   // CallcenterDashboard
   BusinessProductsListing,
   CheckPassword,
