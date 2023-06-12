@@ -155,7 +155,7 @@ export const BusinessAndProductList = (props) => {
         (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
       )
     }
-    return array
+    setCategoriesState({...categoriesState, products: array })
   }
 
   const subCategoriesList = []
@@ -283,16 +283,16 @@ export const BusinessAndProductList = (props) => {
       )
       categoryState.products = productsFiltered || []
     }
-    categoryState.products = sortProductsArray(sortByValue, categoryState.products)
     setErrorQuantityProducts(!categoryState.products?.length)
     setCategoryState({ ...categoryState })
   }
-
+  
   const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
       type: orderState.options?.type ?? 1,
       ...(!isFetchAllProducts && { page }),
-      ...(!isFetchAllProducts && { page_size: pageSize })
+      ...(!isFetchAllProducts && { page_size: pageSize }),
+      ...(!isFetchAllProducts && { orderBy: 'rank' })
     }
 
     if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
@@ -788,6 +788,7 @@ export const BusinessAndProductList = (props) => {
 
   useEffect(() => {
     loadProducts({ newFetch: !!searchValue })
+    sortProductsArray(sortByValue, categoryState?.products)
   }, [sortByValue])
 
   useEffect(() => {
