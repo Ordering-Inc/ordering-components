@@ -5,6 +5,7 @@ import utc from 'dayjs/plugin/utc'
 import { useOrder } from '../../contexts/OrderContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useConfig } from '../../contexts/ConfigContext'
+import { useToast, ToastType } from '../../contexts/ToastContext'
 dayjs.extend(utc)
 
 export const BusinessAndProductList = (props) => {
@@ -23,12 +24,14 @@ export const BusinessAndProductList = (props) => {
     location,
     avoidProductDuplicate,
     isApp,
-    isFetchAllProducts
+    isFetchAllProducts,
+    asDashboard
   } = props
 
   const [orderState, { removeProduct }] = useOrder()
   const [alertState, setAlertState] = useState({ open: false, content: [] })
   const [{ configs }] = useConfig()
+  const [, { showToast }] = useToast()
   const [languageState, t] = useLanguage()
 
   const [categorySelected, setCategorySelected] = useState({ id: null, name: t('ALL', 'All') })
@@ -155,7 +158,7 @@ export const BusinessAndProductList = (props) => {
         (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)
       )
     }
-    return array
+    setCategoriesState({...categoriesState, products: array })
   }
 
   const subCategoriesList = []
@@ -283,16 +286,16 @@ export const BusinessAndProductList = (props) => {
       )
       categoryState.products = productsFiltered || []
     }
-    categoryState.products = sortProductsArray(sortByValue, categoryState.products)
     setErrorQuantityProducts(!categoryState.products?.length)
     setCategoryState({ ...categoryState })
   }
-
+  
   const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
-      type: orderState.options?.type ?? 1,
+      ...(!asDashboard && { type: orderState.options?.type ?? 1 }),
       ...(!isFetchAllProducts && { page }),
-      ...(!isFetchAllProducts && { page_size: pageSize })
+      ...(!isFetchAllProducts && { page_size: pageSize }),
+      ...(!isFetchAllProducts && { orderBy: 'rank' })
     }
 
     if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
@@ -715,11 +718,11 @@ export const BusinessAndProductList = (props) => {
         parameters.professional_id = professionalSelected?.id
       }
 
-      const { content: { result } } = await ordering
-        .businesses(slug)
-        .select(businessProps)
-        .parameters(parameters)
-        .get({ cancelToken: source })
+      const fetchEndpoint = asDashboard
+        ? ordering.businesses(slug).asDashboard().select(businessProps).parameters(parameters)
+        : ordering.businesses(slug).select(businessProps).parameters(parameters)
+
+      const { content: { result } } = await fetchEndpoint.get({ cancelToken: source })
 
       setErrorQuantityProducts(!result?.categories || result?.categories?.length === 0)
 
@@ -772,6 +775,70 @@ export const BusinessAndProductList = (props) => {
     setBusinessState({ ...businessState, business: { ...businessState?.business, professionals } })
   }
 
+  const updateCategories = (categories, result) => {
+    return categories.map((category) => {
+      if (category.id === result.id) {
+        return {
+          ...category,
+          ...result
+        };
+      }
+      if (Array.isArray(category?.subcategories) && category.subcategories.length > 0) {
+        return {
+          ...category,
+          subcategories: updateCategories(category.subcategories, result),
+        };
+      }
+      return category;
+    });
+  };
+
+  const updateStoreProduct = async (categoryId, productId, updateParams = {}) => {
+    try {
+      const { content: { result, error } } = await ordering.businesses(businessState?.business?.id).categories(categoryId).products(productId).save(updateParams);
+
+      if (!error) {
+        const updatedProducts = categoryState.products.map(product => {
+          if (product.id === result.id) {
+            return {
+              ...product,
+              ...result
+            }
+          }
+          return product
+        }) 
+        setCategoryState({ ...categoryState, products: updatedProducts })
+        showToast(ToastType.Success, result?.enabled
+          ? t('ENABLED_PRODUCT', 'Enabled product')
+          : t('DISABLED_PRODUCT', 'Disabled product'))
+      } else {
+        showToast(ToastType.Error, result)
+      }
+    } catch (err) {
+      showToast(ToastType.Error, err.message)
+    }
+  }
+  
+
+  const updateStoreCategory = async (categoryId, updateParams = {}) => {
+    try {
+      const { content: { result, error } } = await ordering.businesses(businessState?.business?.id).categories(categoryId).save(updateParams)
+
+      if (!error) {
+        const updatedCategories = updateCategories(businessState?.business.categories, result);
+        const updatedBusiness = { ...businessState?.business, categories: updatedCategories }
+        setBusinessState({ ...businessState, business: updatedBusiness })
+        showToast(ToastType.Success, result?.enabled
+          ? t('ENABLED_CATEGORY', 'Enabled category')
+          : t('DISABLED_CATEGORY', 'Disabled category'))
+      } else {
+        showToast(ToastType.Error, result)
+      }
+    } catch (err) {
+      showToast(ToastType.Error, err.message)
+    }
+  }
+
   useEffect(() => {
     if (!businessState.loading) {
       loadProducts({ newFetch: true })
@@ -788,6 +855,7 @@ export const BusinessAndProductList = (props) => {
 
   useEffect(() => {
     loadProducts({ newFetch: !!searchValue })
+    sortProductsArray(sortByValue, categoryState?.products)
   }, [sortByValue])
 
   useEffect(() => {
@@ -892,6 +960,8 @@ export const BusinessAndProductList = (props) => {
           handleUpdateProfessionals={handleUpdateProfessionals}
           notFound={notFound}
           setNotFound={setNotFound}
+          updateStoreCategory={updateStoreCategory}
+          updateStoreProduct={updateStoreProduct}
         />
       )}
     </>
