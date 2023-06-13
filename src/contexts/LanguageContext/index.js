@@ -17,11 +17,6 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     loading: true,
     dictionary: {}
   })
-  const [stateApp, setStateApp] = useState({
-    loading: true,
-    dictionary: {}
-  })
-
 
   /**
    * Load language from localstorage and set state or load default language
@@ -65,6 +60,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
       }
       const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
       await strategy.setItem('language', language, true)
+      apiHelper.setLanguage(result[0].code)
       setState({
         ...state,
         language
@@ -74,33 +70,11 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     }
   }
 
-  const loadDefaultLanguageApp = async () => {
-    try {
-      const { content: { error, result } } = await ordering.languages().where([{ attribute: 'default', value: true }]).get()
-      if (error) {
-        setStateApp({
-          ...stateApp,
-          loading: false,
-          error: typeof result === 'string' ? result : result?.[0]
-        })
-        return
-      }
-      const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
-      await strategy.setItem('language', language, true)
-      apiHelper.setLanguage(stateApp?.language?.code)
-      setStateApp({
-        ...stateApp,
-        language
-      })
-    } catch (err) {
-      setStateApp({ ...stateApp, loading: false })
-    }
-  }
-
   const setLanguage = async (language) => {
     if (!language || language.id === state.language?.id) return
     const _language = { id: language.id, code: language.code, rtl: language.rtl }
     await strategy.setItem('language', _language, true)
+    apiHelper.setLanguage(language?.code)
     setState({ ...state, loading: true, language: _language })
   }
 
@@ -118,6 +92,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   }, [])
 
   useEffect(() => {
+    if(ordering.language !== state?.language?.code) return
     apiHelper.setLanguage(state?.language?.code)
   }, [state.language])
 
@@ -126,7 +101,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   }
 
   return (
-    <LanguageContext.Provider value={[state, t, setLanguage, refreshTranslations, loadDefaultLanguageApp]}>
+    <LanguageContext.Provider value={[state, t, setLanguage, refreshTranslations, loadDefaultLanguage]}>
       {children}
     </LanguageContext.Provider>
   )
