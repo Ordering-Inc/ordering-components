@@ -60,6 +60,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
       }
       const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
       await strategy.setItem('language', language, true)
+      apiHelper.setLanguage(result[0].code)
       setState({
         ...state,
         language
@@ -73,6 +74,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     if (!language || language.id === state.language?.id) return
     const _language = { id: language.id, code: language.code, rtl: language.rtl }
     await strategy.setItem('language', _language, true)
+    apiHelper.setLanguage(language?.code)
     setState({ ...state, loading: true, language: _language })
   }
 
@@ -90,6 +92,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   }, [])
 
   useEffect(() => {
+    if (ordering.language !== state?.language?.code) return
     apiHelper.setLanguage(state?.language?.code)
   }, [state.language])
 
@@ -98,7 +101,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   }
 
   return (
-    <LanguageContext.Provider value={[state, t, setLanguage, refreshTranslations]}>
+    <LanguageContext.Provider value={[state, t, setLanguage, refreshTranslations, loadDefaultLanguage]}>
       {children}
     </LanguageContext.Provider>
   )
