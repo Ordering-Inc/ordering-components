@@ -1,228 +1,213 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string } from 'prop-types'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../../contexts/ApiContext'
-import { useSession } from '../../../contexts/SessionContext'
+import { useOrder } from '../../../contexts/OrderContext'
+
+dayjs.extend(utc)
 
 export const DashboardBusinessList = (props) => {
   const {
-    asDashboard,
     UIComponent,
-    paginationSettings,
+    initialOrderType,
+    initialFilterKey,
+    initialFilterValue,
+    isSortByReview,
+    isSearchByName,
+    isSearchByDescription,
     propsToFetch,
-    initialPageSize,
-    loadMorePageSize,
-    isSearchByBusinessId,
-    isSearchByBusinessName,
-    isSearchByBusinessEmail,
-    isSearchByBusinessPhone,
-    noActiveStatusCondition
+    onBusinessClick
   } = props
 
-  const [ordering] = useApi()
-  const [session] = useSession()
-
-  const [businessList, setBusinessList] = useState({ loading: false, error: null, businesses: [] })
-  const [pagination, setPagination] = useState({
-    currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
-    pageSize: paginationSettings.pageSize ?? 10
-  })
-
-  const [searchValue, setSearchValue] = useState(null)
-  const [selectedBusinessActiveState, setSelectedBusinessActiveState] = useState(true)
+  const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
+  const [paginationProps, setPaginationProps] = useState({ currentPage: 0, pageSize: 10, totalItems: null, totalPages: null })
   const [businessTypeSelected, setBusinessTypeSelected] = useState(null)
+  const [searchValue, setSearchValue] = useState('')
+  const [timeLimitValue, setTimeLimitValue] = useState(null)
+  const [orderState] = useOrder()
+  const [ordering] = useApi()
+  const [requestsState, setRequestsState] = useState({})
 
-  /**
-   * Method to get businesses from API
-   * @param {number, number} pageSize page
-   */
-  const getBusinesses = async (pageSize, page) => {
-    let where = []
-    const conditions = []
-    const options = {
-      query: {
-        page: page,
-        page_size: pageSize
-      }
+  const isValidMoment = (date, format) => dayjs(date, format).format(format) === date
+  const rex = new RegExp(/^[A-Za-z0-9\s]+$/g)
+
+  const sortBusinesses = (array, option) => {
+    if (option === 'review') {
+      return array.sort((a, b) => b.reviews.total - a.reviews.total)
     }
-
-    if (!noActiveStatusCondition) {
-      conditions.push({ attribute: 'enabled', value: selectedBusinessActiveState })
-    }
-
-    if (businessTypeSelected) {
-      conditions.push({
-        attribute: 'types',
-        conditions: [{
-          attribute: 'id',
-          value: businessTypeSelected
-        }]
-      })
-    }
-
-    if (searchValue) {
-      const searchConditions = []
-      if (isSearchByBusinessId) {
-        searchConditions.push(
-          {
-            attribute: 'id',
-            value: {
-              condition: 'ilike',
-              value: encodeURI(`%${searchValue}%`)
-            }
-          }
-        )
-      }
-
-      if (isSearchByBusinessName) {
-        searchConditions.push(
-          {
-            attribute: 'name',
-            value: {
-              condition: 'ilike',
-              value: encodeURI(`%${searchValue}%`)
-            }
-          }
-        )
-      }
-
-      if (isSearchByBusinessEmail) {
-        searchConditions.push(
-          {
-            attribute: 'email',
-            value: {
-              condition: 'ilike',
-              value: encodeURI(`%${searchValue}%`)
-            }
-          }
-        )
-      }
-
-      if (isSearchByBusinessPhone) {
-        searchConditions.push(
-          {
-            attribute: 'phone',
-            value: {
-              condition: 'ilike',
-              value: encodeURI(`%${searchValue}%`)
-            }
-          }
-        )
-      }
-      conditions.push({
-        conector: 'OR',
-        conditions: searchConditions
-      })
-    }
-
-    if (conditions.length) {
-      where = {
-        conditions,
-        conector: 'AND'
-      }
-    }
-
-    const functionFetch = asDashboard
-      ? ordering.setAccessToken(session.token).businesses().select(propsToFetch).asDashboard().where(where)
-      : ordering.setAccessToken(session.token).businesses().select(propsToFetch).where(where)
-
-    return await functionFetch.get(options)
+    return array
   }
-
   /**
-   * Method to load businesses
+   * Get businesses by params, order options and filters
+   * @param {boolean} newFetch Make a new request or next page
    */
-  const loadBusinesses = async () => {
-    if (!session.token) return
+  const getBusinesses = async (newFetch) => {
     try {
-      setBusinessList({ ...businessList, loading: true })
-      const response = await getBusinesses((initialPageSize || pagination.pageSize), 1)
+      setBusinessesList({ ...businessesList, loading: true })
 
-      setBusinessList({
-        loading: false,
-        businesses: response.content.error ? [] : response.content.result,
-        error: response.content.error ? response.content.result : null
-      })
+      let parameters = {
+        location: `${orderState.options?.address?.location?.lat},${orderState.options?.address?.location?.lng}`,
+        type: !initialOrderType ? (orderState.options?.type || 1) : initialOrderType
+      }
+      if (!isSortByReview) {
+        const paginationParams = {
+          page: newFetch ? 1 : paginationProps.currentPage + 1,
+          page_size: paginationProps.pageSize
+        }
+        parameters = { ...parameters, ...paginationParams }
+      }
+      if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+        const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+        parameters.timestamp = moment
+      }
 
-      if (!response.content.error) {
-        setPagination({
-          currentPage: response.content.pagination.current_page,
-          pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
-          totalPages: response.content.pagination.total_pages,
-          total: response.content.pagination.total,
-          from: response.content.pagination.from,
-          to: response.content.pagination.to
+      let where = null
+      const conditions = []
+      if (businessTypeSelected) {
+        conditions.push({ attribute: businessTypeSelected, value: true })
+      }
+
+      if (timeLimitValue) {
+        if (orderState.options?.type === 1) {
+          conditions.push({
+            attribute: 'delivery_time',
+            value: {
+              condition: '<=',
+              value: timeLimitValue
+            }
+          })
+        }
+        if (orderState.options?.type === 2) {
+          conditions.push({
+            attribute: 'pickup_time',
+            value: {
+              condition: '<=',
+              value: timeLimitValue
+            }
+          })
+        }
+      }
+
+      if (searchValue) {
+        const searchConditions = []
+        const isSpecialCharacter = rex.test(searchValue)
+        if (isSearchByName) {
+          searchConditions.push(
+            {
+              attribute: 'name',
+              value: {
+                condition: 'ilike',
+                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+              }
+            }
+          )
+        }
+        if (isSearchByDescription) {
+          searchConditions.push(
+            {
+              attribute: 'description',
+              value: {
+                condition: 'ilike',
+                value: !isSpecialCharacter ? `%${searchValue}%` : encodeURI(`%${searchValue}%`)
+              }
+            }
+          )
+        }
+        conditions.push({
+          conector: 'OR',
+          conditions: searchConditions
         })
       }
-    } catch (err) {
-      if (err?.constructor?.name !== 'Cancel') {
-        setBusinessList({ ...businessList, loading: false, error: [err.message] })
-      }
-    }
-  }
 
-  /**
-   * Method to get businesses more
-   */
-  const loadMoreBusinesses = async () => {
-    setBusinessList({ ...businessList, loading: true })
-    try {
-      const response = await getBusinesses(loadMorePageSize, Math.ceil(pagination?.to / loadMorePageSize) + 1)
-      setBusinessList({
-        loading: false,
-        businesses: response.content.error ? businessList.businesses : businessList.businesses.concat(response.content.result),
-        error: response.content.error ? response.content.result : null
-      })
-      if (!response.content.error) {
-        setPagination({
-          currentPage: response.content.pagination.current_page,
-          pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
-          totalPages: response.content.pagination.total_pages,
-          total: response.content.pagination.total,
-          from: response.content.pagination.from,
-          to: response.content.pagination.to
-        })
+      if (conditions.length) {
+        where = {
+          conditions,
+          conector: 'AND'
+        }
       }
+
+      const source = {}
+      requestsState.businesses = source
+      setRequestsState({ ...requestsState })
+      const fetchEndpoint = where
+        ? ordering.businesses().select(propsToFetch).parameters(parameters).where(where)
+        : ordering.businesses().select(propsToFetch).parameters(parameters)
+      const { content: { result, pagination } } = await fetchEndpoint.get({ cancelToken: source })
+      if (isSortByReview) {
+        const _result = sortBusinesses(result, 'review')
+        businessesList.businesses = _result
+      } else {
+        businessesList.businesses = newFetch ? result : [...businessesList.businesses, ...result]
+      }
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
+      let nextPageItems = 0
+      if (pagination.current_page !== pagination.total_pages) {
+        const remainingItems = pagination.total - businessesList.businesses.length
+        nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size
+      }
+      setPaginationProps({
+        ...paginationProps,
+        currentPage: pagination.current_page,
+        totalPages: pagination.total_pages,
+        totalItems: pagination.total,
+        nextPageItems
+      })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
-        setBusinessList({ ...businessList, loading: false, error: [err.message] })
-      }
-    }
-  }
-
-  /**
-   * Method to get businesses for page and pageSize
-   */
-  const getPageBusinesses = async (pageSize, page) => {
-    setBusinessList({ ...businessList, loading: true })
-    try {
-      const response = await getBusinesses(pageSize, page)
-      setBusinessList({
-        loading: false,
-        businesses: response.content.error ? businessList.businesses : response.content.result,
-        error: response.content.error ? response.content.result : null
-      })
-      if (!response.content.error) {
-        setPagination({
-          currentPage: response.content.pagination.current_page,
-          pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
-          totalPages: response.content.pagination.total_pages,
-          total: response.content.pagination.total,
-          from: response.content.pagination.from,
-          to: response.content.pagination.to
+        setBusinessesList({
+          ...businessesList,
+          loading: false,
+          error: [err.message]
         })
       }
-    } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setBusinessList({ ...businessList, loading: false, error: [err.message] })
-      }
     }
   }
 
   /**
-   * Method to change user active state for filter
+   * Cancel businesses request
    */
-  const handleChangeBusinessActiveState = () => {
-    setSelectedBusinessActiveState(!selectedBusinessActiveState)
+  useEffect(() => {
+    const request = requestsState.businesses
+    return () => {
+      request && request.cancel()
+    }
+  }, [requestsState.businesses])
+
+  /**
+   * Listening order option and filter changes
+   */
+  useEffect(() => {
+    if (orderState.loading || !orderState.options?.address?.location) return
+    getBusinesses(true)
+  }, [JSON.stringify(orderState.options), businessTypeSelected, searchValue, timeLimitValue])
+
+  /**
+   * Listening initial filter
+   */
+  useEffect(() => {
+    if (!initialFilterKey && !initialFilterValue) return
+    switch (initialFilterKey) {
+      case 'category':
+        handleChangeBusinessType(initialFilterValue)
+        break
+      case 'timeLimit':
+        handleChangeTimeLimit(initialFilterValue)
+        break
+      case 'search':
+        handleChangeSearch(initialFilterValue)
+    }
+  }, [initialFilterKey, initialFilterValue])
+
+  /**
+   * Default behavior business click
+   * @param {object} business Business clicked
+   */
+  const handleBusinessClick = (business) => {
+    onBusinessClick && onBusinessClick(business)
   }
 
   /**
@@ -231,8 +216,8 @@ export const DashboardBusinessList = (props) => {
    */
   const handleChangeBusinessType = (businessType) => {
     if (businessType !== businessTypeSelected) {
-      setBusinessList({
-        ...businessList,
+      setBusinessesList({
+        ...businessesList,
         businesses: [],
         loading: true
       })
@@ -241,84 +226,44 @@ export const DashboardBusinessList = (props) => {
   }
 
   /**
-   * Method to remove the business from business list
-   * @param {Number} businessId business id to remove
+   * Change text to search
+   * @param {string} search Search value
    */
-  const handleSucessRemoveBusiness = (businessId) => {
-    const businesses = businessList.businesses.filter(business => business.id !== businessId)
-    setPagination({
-      ...pagination,
-      to: pagination?.to - 1,
-      total: pagination?.total - 1
-    })
-    setBusinessList({ ...businessList, businesses })
-  }
-
-  /**
-   * Method to add the business in the business list
-   * @param {Object} business business to add
-   */
-  const handleSucessAddBusiness = (business) => {
-    const businesses = [...businessList.businesses, business]
-    setPagination({
-      ...pagination,
-      to: pagination?.to + 1,
-      total: pagination?.total + 1
-    })
-    setBusinessList({ ...businessList, businesses })
-  }
-
-  /**
-   * Method to update the business from the business list
-   * @param {Object} business business to update
-   */
-  const handleSucessUpdateBusiness = (business) => {
-    const found = businessList.businesses.find(_business => _business.id === business.id)
-    if (found) {
-      if (selectedBusinessActiveState === business?.enabled) {
-        const businesses = businessList.businesses.filter(_business => {
-          if (_business.id === business.id) {
-            Object.assign(_business, business)
-          }
-          return true
-        })
-        setBusinessList({ ...businessList, businesses: businesses })
-      } else {
-        handleSucessRemoveBusiness(business.id)
-      }
-    } else {
-      if (selectedBusinessActiveState === business?.enabled) {
-        handleSucessAddBusiness(business)
-      } else {
-        handleSucessRemoveBusiness(business.id)
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (businessList.loading || businessList.businesses.length > 0) return
-    if (pagination?.currentPage !== 0 && pagination?.total !== 0) {
-      if (Math.ceil(pagination?.total / pagination.pageSize) >= pagination?.currentPage) {
-        getPageBusinesses(pagination.pageSize, pagination.currentPage)
-      } else {
-        getPageBusinesses(pagination.pageSize, pagination.currentPage - 1)
-      }
-    }
-  }, [businessList.businesses])
-
-  /**
-   * Listening session
-   */
-  useEffect(() => {
-    if (props.businesses) {
-      setBusinessList({
-        ...businessList,
-        businesses: props.businesses
+  const handleChangeSearch = (search) => {
+    if (!!search !== !!searchValue) {
+      setBusinessesList({
+        ...businessesList,
+        businesses: [],
+        loading: true
       })
     } else {
-      loadBusinesses()
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
     }
-  }, [session, searchValue, selectedBusinessActiveState, businessTypeSelected])
+    setSearchValue(search)
+  }
+
+  /**
+   * Change time limt value
+   * @param {string} time time limt value (for example: 0:30)
+   */
+  const handleChangeTimeLimit = (time) => {
+    if (!!time !== !!timeLimitValue) {
+      setBusinessesList({
+        ...businessesList,
+        businesses: [],
+        loading: true
+      })
+    } else {
+      setBusinessesList({
+        ...businessesList,
+        loading: false
+      })
+    }
+    setTimeLimitValue(time)
+  }
 
   return (
     <>
@@ -326,19 +271,16 @@ export const DashboardBusinessList = (props) => {
         UIComponent && (
           <UIComponent
             {...props}
-            businessList={businessList}
-            pagination={pagination}
+            businessesList={businessesList}
+            paginationProps={paginationProps}
             searchValue={searchValue}
-            onSearch={setSearchValue}
-            selectedBusinessActiveState={selectedBusinessActiveState}
-            loadBusinesses={loadBusinesses}
-            loadMoreBusinesses={loadMoreBusinesses}
-            getPageBusinesses={getPageBusinesses}
-            handleChangeBusinessActiveState={handleChangeBusinessActiveState}
+            timeLimitValue={timeLimitValue}
+            businessTypeSelected={businessTypeSelected}
+            getBusinesses={getBusinesses}
+            handleChangeSearch={handleChangeSearch}
+            handleChangeTimeLimit={handleChangeTimeLimit}
+            handleBusinessClick={handleBusinessClick}
             handleChangeBusinessType={handleChangeBusinessType}
-            handleSucessRemoveBusiness={handleSucessRemoveBusiness}
-            handleSucessAddBusiness={handleSucessAddBusiness}
-            handleSucessUpdateBusiness={handleSucessUpdateBusiness}
           />
         )
       }
@@ -352,28 +294,15 @@ DashboardBusinessList.propTypes = {
    */
   UIComponent: PropTypes.elementType,
   /**
-   * Enable/Disable search option
-   * Search Businesses list by a business ID
+   * Array of business props to fetch
    */
-  isSearchByBusinessId: PropTypes.bool,
+  propsToFetch: PropTypes.arrayOf(string),
   /**
-   * Enable/Disable search option
-   * Search Businesses list by a business email
+   * Function to get business clicked
    */
-  isSearchByBusinessEmail: PropTypes.bool,
-  /**
-   * Enable/Disable search option
-   * Search Businesses list by a business phone
-   */
-  isSearchByBusinessPhone: PropTypes.bool,
-  /**
-   * Array of user props to fetch
-   */
-  propsToFetch: PropTypes.arrayOf(string)
+  onBusinessClick: PropTypes.func
 }
 
 DashboardBusinessList.defaultProps = {
-  loadMorePageSize: 10,
-  propsToFetch: ['id', 'alcohol', 'city', 'delivery_price', 'distance', 'delivery_time', 'ribbon', 'enabled', 'featured', 'food', 'groceries', 'header', 'laundry', 'logo', 'minimum', 'name', 'pickup_time', 'slug', 'reviews'],
-  paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' }
+  propsToFetch: ['id', 'name', 'header', 'logo', 'name', 'schedule', 'open', 'delivery_price', 'distance', 'delivery_time', 'pickup_time', 'reviews', 'featured', 'offers', 'food', 'laundry', 'alcohol', 'groceries', 'slug']
 }

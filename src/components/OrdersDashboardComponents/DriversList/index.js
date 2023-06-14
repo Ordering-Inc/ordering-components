@@ -13,17 +13,17 @@ export const DriversList = (props) => {
     propsToFetch,
     isSearchByName,
     isSearchByCellphone,
-    asDashboard,
     isOrderDrivers,
     orderId
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const requestsState = {}
   const [driverActionStatus, setDriverActionStatus] = useState({ loading: true, error: null })
+  const [companyActionStatus, setCompanyActionStatus] = useState({ loading: true, error: null })
+  const socket = useWebsocket()
 
   /**
    * Get session
@@ -34,6 +34,10 @@ export const DriversList = (props) => {
    * Array to save drivers
    */
   const [driversList, setDriversList] = useState({ drivers: [], loading: true, error: null })
+  /**
+   * Array to save companys
+   */
+  const [companysList, setCompanysList] = useState({ companys: [], loading: true, error: null })
   /**
    * Array to save online drivers
    */
@@ -95,6 +99,45 @@ export const DriversList = (props) => {
       }
     } catch (err) {
       setDriverActionStatus({ ...driverActionStatus, loading: false, error: [err.message] })
+    }
+  }
+
+  /**
+ * Method to assign driver_company to order from API
+ * @param {object} assign assigned order_id and driver_company_id
+ */
+  const handleAssignDriverCompany = async (assign) => {
+    try {
+      showToast(ToastType.Info, t('LOADING', 'Loading'))
+      setCompanyActionStatus({ ...companyActionStatus, loading: true })
+
+      const requestOptions = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${session.token}`
+        },
+        body: JSON.stringify({
+          driver_company_id: assign.companyId
+        })
+      }
+      const response = await fetch(`${ordering.root}/orders/${assign.orderId}`, requestOptions)
+      const { error, result } = await response.json()
+
+      setCompanyActionStatus({
+        loading: false,
+        error: result.error ? result.result : null
+      })
+
+      if (!error) {
+        if (assign.driverId) {
+          showToast(ToastType.Success, t('ORDER_COMPANY_ASSIGNED', 'Company assigned to order'))
+        } else {
+          showToast(ToastType.Success, t('ORDER_COMPANY_REMOVED', 'Company removed from the order'))
+        }
+      }
+    } catch (err) {
+      setCompanyActionStatus({ ...companyActionStatus, loading: false, error: [err.message] })
     }
   }
 
@@ -225,13 +268,12 @@ export const DriversList = (props) => {
   const getOrderDrivers = async () => {
     try {
       setDriversList({ ...driversList, loading: true })
+      setCompanysList({ ...companysList, loading: true })
       const requestOptions = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          Authorization: `Bearer ${session.token}`
         }
       }
       const response = await fetch(`${ordering.root}/controls/orders/${orderId}`, requestOptions)
@@ -241,9 +283,19 @@ export const DriversList = (props) => {
         drivers: error ? [] : result?.drivers,
         error: error ? result : null
       })
+      setCompanysList({
+        loading: false,
+        companys: error ? [] : result?.driver_companies,
+        error: error ? result : null
+      })
     } catch (err) {
       setDriversList({
         ...driversList,
+        loading: false,
+        error: err.message
+      })
+      setCompanysList({
+        ...companysList,
         loading: false,
         error: err.message
       })
@@ -253,7 +305,6 @@ export const DriversList = (props) => {
   /**
    * listen for busy/not busy filter
    */
-
   useEffect(() => {
     getOnlineOfflineDrivers(driversList.drivers)
   }, [driversSubfilter])
@@ -330,11 +381,6 @@ export const DriversList = (props) => {
   }, [socket, session?.loading, driversList.drivers])
 
   useEffect(() => {
-    if (!session?.user || drivers) return
-    socket.join('drivers')
-  }, [socket, session?.user, asDashboard])
-
-  useEffect(() => {
     getOnlineOfflineDrivers(driversList.drivers)
   }, [driversList.drivers])
 
@@ -344,12 +390,14 @@ export const DriversList = (props) => {
         <UIComponent
           {...props}
           driversList={driversList}
+          companysList={companysList}
           onlineDrivers={onlineDrivers}
           offlineDrivers={offlineDrivers}
           driverActionStatus={driverActionStatus}
           driversIsOnline={driversIsOnline}
           driversSubfilter={driversSubfilter}
           searchValue={searchValue}
+          handleAssignDriverCompany={handleAssignDriverCompany}
           handleChangeSearch={handleChangeSearch}
           handleChangeDriverIsOnline={handleChangeDriverIsOnline}
           handleChangeDriversSubFilter={handleChangeDriversSubFilter}

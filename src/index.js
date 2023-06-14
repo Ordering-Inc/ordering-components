@@ -131,6 +131,7 @@ import { QueryLoginSpoonity } from './components/QueryLoginSpoonity'
 import { WebsocketStatus } from './components/WebsocketStatus'
 
 import {
+  Appointments,
   BusinessProductsListing,
   CheckPassword,
   CityList,
@@ -139,19 +140,23 @@ import {
   DashboardOrdersList,
   DriversList as DriverListDashboard,
   ExportCSV,
+  GiftCardsList,
   GoogleMapsApiKeySetting,
   LogisticInformation,
   Logistics,
-  Messages as MessagesDasboard,
+  Messages as MessagesDashboard,
   MetaFields,
   OrderDetails as OrderDetailsDashboard,
   OrderNotification,
   OrdersFilter,
   OrdersManage,
   PointsWalletLevels,
+  ReviewCustomer as ReviewCustomerDashboard,
   Schedule,
   SettingsList,
-  UsersList
+  UserFormDetails as UserFormDetailsDashboard,
+  UsersList,
+  WebsocketContext as WebsocketContextDashboard
 } from './components/OrdersDashboardComponents'
 
 import { CODES } from './constants/code-numbers'
@@ -273,6 +278,7 @@ export {
   QueryLoginSpoonity,
   WebsocketStatus,
   // CallcenterDashboard
+  Appointments,
   BusinessProductsListing,
   CheckPassword,
   CityList,
@@ -281,19 +287,23 @@ export {
   DashboardOrdersList,
   DriverListDashboard,
   ExportCSV,
+  GiftCardsList,
   GoogleMapsApiKeySetting,
   LogisticInformation,
   Logistics,
-  MessagesDasboard,
+  MessagesDashboard,
   MetaFields,
   OrderDetailsDashboard,
   OrderNotification,
   OrdersFilter,
   OrdersManage,
   PointsWalletLevels,
+  ReviewCustomerDashboard,
   Schedule,
   SettingsList,
+  UserFormDetailsDashboard,
   UsersList,
+  WebsocketContextDashboard,
   // Contexts
   ConfigContext,
   ConfigProvider,

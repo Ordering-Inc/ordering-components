@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes, { string, object, number } from 'prop-types'
-import { useSession } from '../../../contexts/SessionContext'
-import { useApi } from '../../../contexts/ApiContext'
-import { useWebsocket } from '../../../contexts/WebsocketContext'
-import { useEvent } from '../../../contexts/EventContext'
-import { useConfig } from '../../../contexts/ConfigContext'
-import { useLanguage } from '../../../contexts/LanguageContext'
+import { useSession } from '../../contexts/SessionContext'
+import { useApi } from '../../contexts/ApiContext'
+import { useWebsocket } from '../../contexts/WebsocketContext'
 
-export const DashboardOrdersList = (props) => {
+export const DashboardOrderList = (props) => {
   const {
     UIComponent,
     propsToFetch,
     orders,
-    isOnlyDelivery,
-    driverId,
-    customerId,
-    businessId,
     orderIds,
     deletedOrderId,
     orderStatus,
@@ -23,37 +16,17 @@ export const DashboardOrdersList = (props) => {
     orderDirection,
     useDefualtSessionManager,
     paginationSettings,
+    asDashboard,
     filterValues,
     searchValue,
     isSearchByOrderId,
     isSearchByCustomerEmail,
     isSearchByCustomerPhone,
-    isSearchByBusinessName,
-    orderIdForUnreadCountUpdate,
-    timeStatus,
-    driversList
+    orderIdForUnreadCountUpdate
   } = props
 
   const [ordering] = useApi()
-  const [events] = useEvent()
-  const [configState] = useConfig()
-  const [, t] = useLanguage()
-
   const [orderList, setOrderList] = useState({ loading: !orders, error: null, orders: [] })
-  const allowColumnsModel = {
-    slaBar: { visable: false, title: '', className: '', draggable: false, colSpan: 1, order: -2 },
-    orderNumber: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: -1 },
-    status: { visable: true, title: t('STATUS', 'Status'), className: 'statusInfo', draggable: true, colSpan: 1, order: 1 },
-    dateTime: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: 0 },
-    business: { visable: true, title: t('BUSINESS', 'Business'), className: 'businessInfo', draggable: true, colSpan: 1, order: 2 },
-    customer: { visable: true, title: t('CUSTOMER', 'Customer'), className: 'customerInfo', draggable: true, colSpan: 1, order: 3 },
-    driver: { visable: true, title: t('DRIVER', 'Driver'), className: 'driverInfo', draggable: true, colSpan: 1, order: 4 },
-    advanced: { visable: true, title: t('ADVANCED_LOGISTICS', 'Advanced logistics'), className: 'advanced', draggable: true, colSpan: 3, order: 5 },
-    timer: { visable: false, title: t('SLA_TIMER', 'SLA’s timer'), className: 'timer', draggable: true, colSpan: 1, order: 6 },
-    total: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: 10 }
-  }
-
-  const [allowColumns, setAllowColumns] = useState(null)
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
@@ -64,6 +37,14 @@ export const DashboardOrdersList = (props) => {
 
   const requestsState = {}
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
+  const [registerOrderId, setRegisterOrderId] = useState(null)
+
+  /**
+   * Reset registerOrderId
+   */
+  const handleResetNotification = () => {
+    setRegisterOrderId(null)
+  }
 
   const sortOrdersArray = (option, array) => {
     if (option === 'id') {
@@ -109,14 +90,23 @@ export const DashboardOrdersList = (props) => {
    * Method to get orders from API
    * @param {number} page page number
    */
-  const getOrders = async (pageSize, page) => {
+  const getOrders = async (page) => {
+    let options = null
     let where = []
     const conditions = []
-    const options = {
-      query: {
-        orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
-        page: page,
-        page_size: pageSize
+    if (!asDashboard) {
+      options = {
+        query: {
+          orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
+          page: page,
+          page_size: paginationSettings.pageSize
+        }
+      }
+    } else {
+      options = {
+        query: {
+          orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy
+        }
       }
     }
 
@@ -130,71 +120,25 @@ export const DashboardOrdersList = (props) => {
       }
     } else {
       if (filterValues.statuses.length > 0) {
-        // const checkInnerContain = filterValues.statuses.every((el) => {
-        //   return orderStatus.indexOf(el) !== -1
-        // })
+        const checkInnerContain = filterValues.statuses.every((el) => {
+          return orderStatus.indexOf(el) !== -1
+        })
 
-        // const checkOutContain = orderStatus.every((el) => {
-        //   return filterValues.statuses.indexOf(el) !== -1
-        // })
+        const checkOutContain = orderStatus.every((el) => {
+          return filterValues.statuses.indexOf(el) !== -1
+        })
 
-        // if (checkInnerContain) conditions.push({ attribute: 'status', value: filterValues.statuses })
-        // if (checkOutContain) {
-        //   if (orderStatus) {
-        //     conditions.push({ attribute: 'status', value: orderStatus })
-        //   }
-        // }
-        const getFilterStatusInOrderStatus = filterValues.statuses.filter(status => orderStatus.includes(status))
-        conditions.push({ attribute: 'status', value: getFilterStatusInOrderStatus })
+        if (checkInnerContain) conditions.push({ attribute: 'status', value: filterValues.statuses })
+        if (checkOutContain) {
+          if (orderStatus) {
+            conditions.push({ attribute: 'status', value: orderStatus })
+          }
+        }
       } else {
         if (orderStatus) {
           conditions.push({ attribute: 'status', value: orderStatus })
         }
       }
-    }
-
-    if (isOnlyDelivery) {
-      conditions.push(
-        {
-          attribute: 'delivery_type',
-          value: 1
-        }
-      )
-    }
-    if (driverId) {
-      conditions.push(
-        {
-          attribute: 'driver_id',
-          value: driverId
-        }
-      )
-    }
-
-    if (customerId) {
-      conditions.push(
-        {
-          attribute: 'customer_id',
-          value: customerId
-        }
-      )
-    }
-
-    if (businessId) {
-      conditions.push(
-        {
-          attribute: 'business_id',
-          value: businessId
-        }
-      )
-    }
-
-    if (timeStatus) {
-      conditions.push(
-        {
-          attribute: 'time_status',
-          value: timeStatus
-        }
-      )
     }
 
     if (searchValue) {
@@ -243,24 +187,6 @@ export const DashboardOrdersList = (props) => {
           }
         )
       }
-
-      if (isSearchByBusinessName) {
-        searchConditions.push(
-          {
-            attribute: 'business',
-            conditions: [
-              {
-                attribute: 'name',
-                value: {
-                  condition: 'ilike',
-                  value: encodeURI(`%${searchValue}%`)
-                }
-              }
-            ]
-          }
-        )
-      }
-
       conditions.push({
         conector: 'OR',
         conditions: searchConditions
@@ -269,17 +195,6 @@ export const DashboardOrdersList = (props) => {
 
     if (Object.keys(filterValues).length) {
       const filterConditons = []
-      if (filterValues?.orderId) {
-        filterConditons.push(
-          {
-            attribute: 'id',
-            value: {
-              condition: 'ilike',
-              value: encodeURI(`%${filterValues?.orderId}%`)
-            }
-          }
-        )
-      }
       if (filterValues.deliveryFromDatetime !== null) {
         filterConditons.push(
           {
@@ -310,22 +225,6 @@ export const DashboardOrdersList = (props) => {
           }
         )
       }
-      if (filterValues?.countryCode.length !== 0) {
-        filterConditons.push(
-          {
-            attribute: 'country_code',
-            value: filterValues?.countryCode
-          }
-        )
-      }
-      if (filterValues?.currency.length !== 0) {
-        filterConditons.push(
-          {
-            attribute: 'currency',
-            value: filterValues?.currency
-          }
-        )
-      }
       if (filterValues.driverIds.length !== 0) {
         filterConditons.push(
           {
@@ -339,14 +238,6 @@ export const DashboardOrdersList = (props) => {
           {
             attribute: 'delivery_type',
             value: filterValues.deliveryTypes
-          }
-        )
-      }
-      if (filterValues.driverGroupIds.length !== 0) {
-        filterConditons.push(
-          {
-            attribute: 'driver_id',
-            value: filterValues.driverGroupIds
           }
         )
       }
@@ -379,9 +270,13 @@ export const DashboardOrdersList = (props) => {
     options.cancelToken = source
     let functionFetch
     if (propsToFetch) {
-      functionFetch = ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch).where(where)
+      functionFetch = asDashboard
+        ? ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch).where(where)
+        : ordering.setAccessToken(accessToken).orders().select(propsToFetch).where(where)
     } else {
-      functionFetch = ordering.setAccessToken(accessToken).orders().asDashboard().where(where)
+      functionFetch = asDashboard
+        ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where)
+        : ordering.setAccessToken(accessToken).orders().where(where)
     }
     return await functionFetch.get(options)
   }
@@ -424,7 +319,7 @@ export const DashboardOrdersList = (props) => {
     if (!session.token) return
     try {
       setOrderList({ ...orderList, loading: true })
-      const response = await getOrders(pagination.pageSize, 1)
+      const response = await getOrders(pagination.currentPage + 1)
 
       setOrderList({
         loading: false,
@@ -435,7 +330,7 @@ export const DashboardOrdersList = (props) => {
       if (!response.content.error) {
         setPagination({
           currentPage: response.content.pagination.current_page,
-          pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
+          pageSize: response.content.pagination.page_size,
           totalPages: response.content.pagination.total_pages,
           total: response.content.pagination.total,
           from: response.content.pagination.from,
@@ -446,102 +341,10 @@ export const DashboardOrdersList = (props) => {
       if (err.constructor.name !== 'Cancel') {
         setOrderList({ ...orderList, loading: false, error: [err.message] })
       }
-    }
-  }
-  const loadMoreOrders = async () => {
-    setOrderList({ ...orderList, loading: true })
-    try {
-      const response = await getOrders(pagination.pageSize, pagination.currentPage + 1)
-      setOrderList({
-        loading: false,
-        orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
-        error: response.content.error ? response.content.result : null
-      })
-      if (!response.content.error) {
-        setPagination({
-          currentPage: response.content.pagination.current_page,
-          pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
-          totalPages: response.content.pagination.total_pages,
-          total: response.content.pagination.total,
-          from: response.content.pagination.from,
-          to: response.content.pagination.to
-        })
-      }
-    } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setOrderList({ ...orderList, loading: false, error: [err.message] })
-      }
-    }
-  }
-  const getPageOrders = async (pageSize, page) => {
-    setOrderList({ ...orderList, loading: true })
-    try {
-      const response = await getOrders(pageSize, page)
-      setOrderList({
-        loading: false,
-        orders: response.content.error ? orderList.orders : response.content.result,
-        error: response.content.error ? response.content.result : null
-      })
-      if (!response.content.error) {
-        setPagination({
-          currentPage: response.content.pagination.current_page,
-          pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
-          totalPages: response.content.pagination.total_pages,
-          total: response.content.pagination.total,
-          from: response.content.pagination.from,
-          to: response.content.pagination.to
-        })
-      }
-    } catch (err) {
-      if (err.constructor.name !== 'Cancel') {
-        setOrderList({ ...orderList, loading: false, error: [err.message] })
-      }
-    }
-  }
-
-  /**
- * Method to handle drag drop
- */
-  const handleDrop = (event, columnName) => {
-    event.preventDefault()
-    const transferColumnName = event.dataTransfer.getData('transferColumnName')
-    if (columnName === transferColumnName) return
-    const transferColumnOrder = allowColumns[transferColumnName]?.order
-    const currentColumnOrder = allowColumns[columnName]?.order
-
-    const [lessOrder, greaterOrder] = transferColumnOrder < currentColumnOrder ? [transferColumnOrder, currentColumnOrder] : [currentColumnOrder, transferColumnOrder]
-    const _remainAllowColumns = {}
-    const shouldUpdateColumns = Object.keys(allowColumns).filter(col => col !== transferColumnName && allowColumns[col]?.order >= lessOrder && allowColumns[col]?.order <= greaterOrder)
-    shouldUpdateColumns.forEach(col => {
-      _remainAllowColumns[col] = {
-        ...allowColumns[col],
-        order: allowColumns[col]?.order + ((transferColumnOrder < currentColumnOrder) ? -1 : 1)
-      }
-    })
-
-    const _allowColumnsUpdated = {
-      ...allowColumns,
-      [transferColumnName]: { ...allowColumns[transferColumnName], order: currentColumnOrder },
-      ..._remainAllowColumns
-    }
-    saveUserSettings(_allowColumnsUpdated)
-    setAllowColumns(_allowColumnsUpdated)
-  }
-
-  const saveUserSettings = async (allowColumnsUpdated) => {
-    try {
-      if (!session?.user?.id) return
-      const _settings = session?.user?.settings
-      const _allowColumnsUpdated = { ...allowColumnsUpdated, timer: { ...allowColumnsUpdated?.timer, visable: false } }
-      await ordering.users(session?.user?.id).save({ settings: { ..._settings, orderColumns: _allowColumnsUpdated } }, {
-        accessToken: accessToken
-      })
-    } catch (err) {
-      console.warn(err, 'error')
     }
   }
   /**
-   * Listening order id to update for unread_count parameter
+   * Listening order id to updatea for unread_count parameter
    */
   useEffect(() => {
     if (orderIdForUnreadCountUpdate === null || orderList.orders.length === 0) return
@@ -555,46 +358,63 @@ export const DashboardOrdersList = (props) => {
     })
     setOrderList({ ...orderList, orders: _orders })
   }, [orderIdForUnreadCountUpdate])
+  /**
+   * Listening orderBy value change
+   */
+  useEffect(() => {
+    if (orderList.loading) return
+    const _orders = sortOrdersArray(orderBy, orderList.orders)
+    setOrderList({
+      ...orderList,
+      orders: _orders
+    })
+  }, [orderBy, orderList.orders])
 
   /**
    * Listening deleted order
    */
   useEffect(() => {
-    if (!deletedOrderId) return
+    if (deletedOrderId === null) return
     const orders = orderList.orders.filter(_order => {
       return _order?.id !== deletedOrderId
     })
-
-    loadOrders()
-
     setOrderList({ ...orderList, orders })
   }, [deletedOrderId])
+
+  /**
+   * Listening search value change
+   */
+  useEffect(() => {
+    if (searchValue === null) return
+    loadOrders()
+  }, [searchValue])
 
   /**
    * Listening sesssion and filter values change
    */
   useEffect(() => {
-    if (session?.loading) return
     if (orders) {
       setOrderList({
         ...orderList,
         orders
       })
     } else {
-      // if (Object.keys(filterValues).length > 0) {
-      //   const checkInnerContain = filterValues.statuses.every((el) => {
-      //     return orderStatus.indexOf(el) !== -1
-      //   })
+      let checkInnerContain = false
+      let checkOutContain = false
+      if (Object.keys(filterValues).length > 0) {
+        checkInnerContain = filterValues.statuses.every((el) => {
+          return orderStatus.indexOf(el) !== -1
+        })
 
-      //   const checkOutContain = orderStatus.every((el) => {
-      //     return filterValues.statuses.indexOf(el) !== -1
-      //   })
+        checkOutContain = orderStatus.every((el) => {
+          return filterValues.statuses.indexOf(el) !== -1
+        })
 
-      //   if (!checkInnerContain && !checkOutContain) {
-      //     setOrderList({ loading: false, orders: [], error: null })
-      //     return
-      //   }
-      // }
+        if (!checkInnerContain && !checkOutContain) {
+          setOrderList({ loading: false, orders: [], error: null })
+          return
+        }
+      }
       loadOrders()
     }
     return () => {
@@ -602,18 +422,11 @@ export const DashboardOrdersList = (props) => {
         requestsState.orders.cancel()
       }
     }
-  }, [session, searchValue, orderBy, filterValues, isOnlyDelivery, driverId, customerId, businessId, orders, orderStatus, timeStatus])
+  }, [session, filterValues, orders])
 
   useEffect(() => {
     if (orderList.loading) return
     const handleUpdateOrder = (order) => {
-      if (isOnlyDelivery && order?.delivery_type !== 1) return
-      if (!order?.driver && order?.driver_id) {
-        const updatedDriver = driversList?.drivers.find(driver => driver.id === order.driver_id)
-        if (updatedDriver) {
-          order.driver = { ...updatedDriver }
-        }
-      }
       const found = orderList.orders.find(_order => _order?.id === order?.id)
       let orders = []
       if (found) {
@@ -650,30 +463,27 @@ export const DashboardOrdersList = (props) => {
             })
             setOrderList({
               ...orderList,
-              orders: _orders.slice(0, pagination.pageSize)
+              orders: _orders
             })
           }
         }
       }
     }
-    const handleRegisterOrder = (order) => {
-      if (isOnlyDelivery && order?.delivery_type !== 1) return
-      const found = orderList.orders.find(_order => _order?.id === order?.id)
-      if (found) return
+    const handleRegisterOrder = (_order) => {
+      setRegisterOrderId(_order?.id)
+      const order = { ..._order, status: 0 }
       let orders = []
-      if (isFilteredOrder(order)) {
-        if ((orderStatus.includes(0) && order.status === 0) || (orderStatus.includes(13) && order.status === 13)) {
-          orders = [order, ...orderList.orders]
-          const _orders = sortOrdersArray(orderBy, orders)
-          pagination.total++
-          setPagination({
-            ...pagination
-          })
-          setOrderList({
-            ...orderList,
-            orders: _orders.slice(0, pagination.pageSize)
-          })
-        }
+      if (orderStatus.includes(0) && isFilteredOrder(_order)) {
+        orders = [order, ...orderList.orders]
+        const _orders = sortOrdersArray(orderBy, orders)
+        pagination.total++
+        setPagination({
+          ...pagination
+        })
+        setOrderList({
+          ...orderList,
+          orders: _orders
+        })
       }
     }
 
@@ -707,16 +517,6 @@ export const DashboardOrdersList = (props) => {
         setOrderList({ ...orderList, orders: _sortedOrders })
       }
     }
-
-    if (!orderList.loading && orderList.orders.length === 0) {
-      if (pagination?.currentPage !== 0 && pagination?.total !== 0) {
-        if (Math.ceil(pagination?.total / pagination.pageSize) >= pagination?.currentPage) {
-          getPageOrders(pagination.pageSize, pagination.currentPage)
-        } else {
-          getPageOrders(pagination.pageSize, pagination.currentPage - 1)
-        }
-      }
-    }
     socket.on('update_order', handleUpdateOrder)
     socket.on('orders_register', handleRegisterOrder)
     socket.on('message', handleNewMessage)
@@ -725,55 +525,60 @@ export const DashboardOrdersList = (props) => {
       socket.off('orders_register', handleRegisterOrder)
       socket.off('message', handleNewMessage)
     }
-  }, [orderList.orders, pagination, orderBy, socket, driversList])
+  }, [orderList.orders, pagination, orderBy, socket])
 
-  // Listening for customer rating
-  useEffect(() => {
-    const handleCustomerReviewed = (review) => {
-      const orders = orderList.orders.filter(_order => {
-        if (_order?.id === review.order_id) {
-          _order.user_review = review
-        }
-        return true
-      })
-      const _orders = sortOrdersArray(orderBy, orders)
+  const loadMoreOrders = async () => {
+    setOrderList({ ...orderList, loading: true })
+    try {
+      const response = await getOrders(pagination.currentPage + 1)
       setOrderList({
-        ...orderList,
-        orders: _orders
+        loading: false,
+        orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
+        error: response.content.error ? response.content.result : null
       })
-    }
-    events.on('customer_reviewed', handleCustomerReviewed)
-    return () => {
-      events.off('customer_reviewed', handleCustomerReviewed)
-    }
-  }, [orderList, orderBy])
-
-  useEffect(() => {
-    if (!session?.user.id || !configState || allowColumns) return
-    const getUser = async () => {
-      try {
-        const response = await ordering.users(session?.user.id).select(['settings']).get()
-        const { content: { error, result } } = response
-        if (!error && result.settings?.orderColumns) {
-          setAllowColumns(result.settings?.orderColumns)
-          return
-        }
-
-        setAllowColumns({
-          ...allowColumnsModel,
-          slaBar: { ...allowColumnsModel?.slaBar, visable: configState?.configs?.order_deadlines_enabled?.value === '1' },
-          timer: { ...allowColumnsModel?.timer, visable: configState?.configs?.order_deadlines_enabled?.value === '1' }
-        })
-      } catch (err) {
-        setAllowColumns({
-          ...allowColumnsModel,
-          slaBar: { ...allowColumnsModel?.slaBar, visable: configState?.configs?.order_deadlines_enabled?.value === '1' },
-          timer: { ...allowColumnsModel?.timer, visable: configState?.configs?.order_deadlines_enabled?.value === '1' }
+      if (!response.content.error) {
+        setPagination({
+          currentPage: response.content.pagination.current_page,
+          pageSize: response.content.pagination.page_size,
+          totalPages: response.content.pagination.total_pages,
+          total: response.content.pagination.total,
+          from: response.content.pagination.from,
+          to: response.content.pagination.to
         })
       }
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setOrderList({ ...orderList, loading: false, error: [err.message] })
+      }
     }
-    getUser()
-  }, [session?.user, configState])
+  }
+
+  const goToPage = async (page) => {
+    setOrderList({ ...orderList, loading: true })
+    try {
+      const response = await getOrders(page)
+      setOrderList({
+        loading: false,
+        orders: response.content.error ? [] : response.content.result,
+        error: response.content.error ? response.content.result : null
+      })
+      if (!response.content.error) {
+        setPagination({
+          currentPage: response.content.pagination.current_page,
+          pageSize: response.content.pagination.page_size,
+          totalPages: response.content.pagination.total_pages,
+          total: response.content.pagination.total,
+          from: response.content.pagination.from,
+          to: response.content.pagination.to
+        })
+      }
+    } catch (err) {
+      if (err.constructor.name !== 'Cancel') {
+        setOrderList({ ...orderList, loading: false, error: [err.message] })
+      }
+    }
+  }
+
   return (
     <>
       {UIComponent && (
@@ -781,19 +586,18 @@ export const DashboardOrdersList = (props) => {
           {...props}
           orderList={orderList}
           pagination={pagination}
+          registerOrderId={registerOrderId}
           loadMoreOrders={loadMoreOrders}
-          getPageOrders={getPageOrders}
+          goToPage={goToPage}
           handleUpdateOrderStatus={handleUpdateOrderStatus}
-          allowColumns={allowColumns}
-          setAllowColumns={setAllowColumns}
-          handleDrop={handleDrop}
+          handleResetNotification={handleResetNotification}
         />
       )}
     </>
   )
 }
 
-DashboardOrdersList.propTypes = {
+DashboardOrderList.propTypes = {
   /**
    * UI Component, this must be containt all graphic elements and use parent props
    */
@@ -874,7 +678,7 @@ DashboardOrdersList.propTypes = {
   afterElements: PropTypes.arrayOf(PropTypes.element)
 }
 
-DashboardOrdersList.defaultProps = {
+DashboardOrderList.defaultProps = {
   orderBy: 'id',
   orderDirection: 'desc',
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },
