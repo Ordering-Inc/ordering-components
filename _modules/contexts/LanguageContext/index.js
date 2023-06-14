@@ -157,22 +157,23 @@ var LanguageProvider = function LanguageProvider(_ref) {
             _context3.next = 13;
             return strategy.setItem('language', language, true);
           case 13:
+            apiHelper.setLanguage(result[0].code);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               language: language
             }));
-            _context3.next = 19;
+            _context3.next = 20;
             break;
-          case 16:
-            _context3.prev = 16;
+          case 17:
+            _context3.prev = 17;
             _context3.t0 = _context3["catch"](0);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-          case 19:
+          case 20:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[0, 16]]);
+      }, _callee3, null, [[0, 17]]);
     }));
     return function loadDefaultLanguage() {
       return _ref4.apply(this, arguments);
@@ -199,11 +200,12 @@ var LanguageProvider = function LanguageProvider(_ref) {
             _context4.next = 5;
             return strategy.setItem('language', _language, true);
           case 5:
+            apiHelper.setLanguage(language === null || language === void 0 ? void 0 : language.code);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: true,
               language: _language
             }));
-          case 6:
+          case 7:
           case "end":
             return _context4.stop();
         }
@@ -227,15 +229,16 @@ var LanguageProvider = function LanguageProvider(_ref) {
     setLanguageFromLocalStorage();
   }, []);
   (0, _react.useEffect)(function () {
-    var _state$language5;
-    apiHelper.setLanguage(state === null || state === void 0 ? void 0 : (_state$language5 = state.language) === null || _state$language5 === void 0 ? void 0 : _state$language5.code);
+    var _state$language5, _state$language6;
+    if (ordering.language !== (state === null || state === void 0 ? void 0 : (_state$language5 = state.language) === null || _state$language5 === void 0 ? void 0 : _state$language5.code)) return;
+    apiHelper.setLanguage(state === null || state === void 0 ? void 0 : (_state$language6 = state.language) === null || _state$language6 === void 0 ? void 0 : _state$language6.code);
   }, [state.language]);
   var t = function t(key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     return (state === null || state === void 0 ? void 0 : state.dictionary) && Object.keys(state === null || state === void 0 ? void 0 : state.dictionary).length > 0 && state.dictionary[key] || fallback || key;
   };
   return /*#__PURE__*/_react.default.createElement(LanguageContext.Provider, {
-    value: [state, t, setLanguage, refreshTranslations]
+    value: [state, t, setLanguage, refreshTranslations, loadDefaultLanguage]
   }, children);
 };
 
