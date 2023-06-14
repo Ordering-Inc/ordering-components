@@ -10,6 +10,7 @@ var _propTypes = _interopRequireWildcard(require("prop-types"));
 var _SessionContext = require("../../../contexts/SessionContext");
 var _ApiContext = require("../../../contexts/ApiContext");
 var _WebsocketContext = require("../../../contexts/WebsocketContext");
+var _EventContext = require("../../../contexts/EventContext");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -36,23 +37,35 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
   var UIComponent = props.UIComponent,
     propsToFetch = props.propsToFetch,
     orders = props.orders,
+    isOnlyDelivery = props.isOnlyDelivery,
+    driverId = props.driverId,
+    customerId = props.customerId,
+    businessId = props.businessId,
     orderIds = props.orderIds,
-    deletedOrderId = props.deletedOrderId,
+    deletedOrderIds = props.deletedOrderIds,
     orderStatus = props.orderStatus,
     orderBy = props.orderBy,
     orderDirection = props.orderDirection,
     useDefualtSessionManager = props.useDefualtSessionManager,
     paginationSettings = props.paginationSettings,
-    asDashboard = props.asDashboard,
     filterValues = props.filterValues,
     searchValue = props.searchValue,
     isSearchByOrderId = props.isSearchByOrderId,
     isSearchByCustomerEmail = props.isSearchByCustomerEmail,
     isSearchByCustomerPhone = props.isSearchByCustomerPhone,
-    orderIdForUnreadCountUpdate = props.orderIdForUnreadCountUpdate;
+    isSearchByBusinessName = props.isSearchByBusinessName,
+    isSearchByDriverName = props.isSearchByDriverName,
+    orderIdForUnreadCountUpdate = props.orderIdForUnreadCountUpdate,
+    timeStatus = props.timeStatus,
+    driversList = props.driversList,
+    allowColumns = props.allowColumns,
+    setAllowColumns = props.setAllowColumns;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
   var _useState = (0, _react.useState)({
       loading: !orders,
       error: null,
@@ -81,17 +94,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     _useState6 = _slicedToArray(_useState5, 2),
     actionStatus = _useState6[0],
     setActionStatus = _useState6[1];
-  var _useState7 = (0, _react.useState)(null),
-    _useState8 = _slicedToArray(_useState7, 2),
-    registerOrderId = _useState8[0],
-    setRegisterOrderId = _useState8[1];
-
-  /**
-   * Reset registerOrderId
-   */
-  var handleResetNotification = function handleResetNotification() {
-    setRegisterOrderId(null);
-  };
   var sortOrdersArray = function sortOrdersArray(option, array) {
     if (option === 'id') {
       if (orderDirection === 'desc') {
@@ -175,29 +177,30 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
    * @param {number} page page number
    */
   var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(page) {
-      var options, where, conditions, checkInnerContain, checkOutContain, searchConditions, filterConditons, source, functionFetch;
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(pageSize, page) {
+      var where, conditions, options, getFilterStatusInOrderStatus, searchConditions, _filterValues$metafie, filterConditons, metafieldConditions, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            options = null;
             where = [];
             conditions = [];
-            if (!asDashboard) {
-              options = {
-                query: {
-                  orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
-                  page: page,
-                  page_size: paginationSettings.pageSize
+            options = {
+              query: {
+                orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy,
+                page: page,
+                page_size: pageSize
+              }
+            };
+            conditions.push({
+              attribute: 'products',
+              conditions: [{
+                attribute: 'type',
+                value: {
+                  condition: '=',
+                  value: 'item'
                 }
-              };
-            } else {
-              options = {
-                query: {
-                  orderBy: (orderDirection === 'desc' ? '-' : '') + orderBy
-                }
-              };
-            }
+              }]
+            });
             if (orderIds) {
               conditions.push({
                 attribute: 'id',
@@ -213,24 +216,25 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
               }
             } else {
               if (filterValues.statuses.length > 0) {
-                checkInnerContain = filterValues.statuses.every(function (el) {
-                  return orderStatus.indexOf(el) !== -1;
+                // const checkInnerContain = filterValues.statuses.every((el) => {
+                //   return orderStatus.indexOf(el) !== -1
+                // })
+                // const checkOutContain = orderStatus.every((el) => {
+                //   return filterValues.statuses.indexOf(el) !== -1
+                // })
+                // if (checkInnerContain) conditions.push({ attribute: 'status', value: filterValues.statuses })
+                // if (checkOutContain) {
+                //   if (orderStatus) {
+                //     conditions.push({ attribute: 'status', value: orderStatus })
+                //   }
+                // }
+                getFilterStatusInOrderStatus = filterValues.statuses.filter(function (status) {
+                  return orderStatus.includes(status);
                 });
-                checkOutContain = orderStatus.every(function (el) {
-                  return filterValues.statuses.indexOf(el) !== -1;
-                });
-                if (checkInnerContain) conditions.push({
+                conditions.push({
                   attribute: 'status',
-                  value: filterValues.statuses
+                  value: getFilterStatusInOrderStatus
                 });
-                if (checkOutContain) {
-                  if (orderStatus) {
-                    conditions.push({
-                      attribute: 'status',
-                      value: orderStatus
-                    });
-                  }
-                }
               } else {
                 if (orderStatus) {
                   conditions.push({
@@ -239,6 +243,36 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                   });
                 }
               }
+            }
+            if (isOnlyDelivery) {
+              conditions.push({
+                attribute: 'delivery_type',
+                value: 1
+              });
+            }
+            if (driverId) {
+              conditions.push({
+                attribute: 'driver_id',
+                value: driverId
+              });
+            }
+            if (customerId) {
+              conditions.push({
+                attribute: 'customer_id',
+                value: customerId
+              });
+            }
+            if (businessId) {
+              conditions.push({
+                attribute: 'business_id',
+                value: businessId
+              });
+            }
+            if (timeStatus) {
+              conditions.push({
+                attribute: 'time_status',
+                value: timeStatus
+              });
             }
             if (searchValue) {
               searchConditions = [];
@@ -275,6 +309,30 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                   }]
                 });
               }
+              if (isSearchByBusinessName) {
+                searchConditions.push({
+                  attribute: 'business',
+                  conditions: [{
+                    attribute: 'name',
+                    value: {
+                      condition: 'ilike',
+                      value: encodeURI("%".concat(searchValue, "%"))
+                    }
+                  }]
+                });
+              }
+              if (isSearchByDriverName) {
+                searchConditions.push({
+                  attribute: 'driver',
+                  conditions: [{
+                    attribute: 'name',
+                    value: {
+                      condition: 'ilike',
+                      value: encodeURI("%".concat(searchValue, "%"))
+                    }
+                  }]
+                });
+              }
               conditions.push({
                 conector: 'OR',
                 conditions: searchConditions
@@ -282,6 +340,46 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             }
             if (Object.keys(filterValues).length) {
               filterConditons = [];
+              if (filterValues !== null && filterValues !== void 0 && filterValues.orderId) {
+                filterConditons.push({
+                  attribute: 'id',
+                  value: {
+                    condition: 'ilike',
+                    value: encodeURI("%".concat(filterValues === null || filterValues === void 0 ? void 0 : filterValues.orderId, "%"))
+                  }
+                });
+              }
+              if (filterValues !== null && filterValues !== void 0 && filterValues.externalId) {
+                filterConditons.push({
+                  attribute: 'external_id',
+                  value: {
+                    condition: 'ilike',
+                    value: encodeURI("%".concat(filterValues === null || filterValues === void 0 ? void 0 : filterValues.externalId, "%"))
+                  }
+                });
+              }
+              if ((filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$metafie = filterValues.metafield) === null || _filterValues$metafie === void 0 ? void 0 : _filterValues$metafie.length) > 0) {
+                metafieldConditions = filterValues === null || filterValues === void 0 ? void 0 : filterValues.metafield.map(function (item) {
+                  return {
+                    attribute: 'metafields',
+                    conditions: [{
+                      attribute: 'key',
+                      value: item === null || item === void 0 ? void 0 : item.key
+                    }, {
+                      attribute: 'value',
+                      value: {
+                        condition: 'ilike',
+                        value: encodeURI("%".concat(item === null || item === void 0 ? void 0 : item.value, "%"))
+                      }
+                    }],
+                    conector: 'AND'
+                  };
+                });
+                filterConditons.push({
+                  conector: 'OR',
+                  conditions: metafieldConditions
+                });
+              }
               if (filterValues.deliveryFromDatetime !== null) {
                 filterConditons.push({
                   attribute: 'delivery_datetime',
@@ -306,6 +404,18 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                   value: filterValues.businessIds
                 });
               }
+              if ((filterValues === null || filterValues === void 0 ? void 0 : filterValues.countryCode.length) !== 0) {
+                filterConditons.push({
+                  attribute: 'country_code',
+                  value: filterValues === null || filterValues === void 0 ? void 0 : filterValues.countryCode
+                });
+              }
+              if ((filterValues === null || filterValues === void 0 ? void 0 : filterValues.currency.length) !== 0) {
+                filterConditons.push({
+                  attribute: 'currency',
+                  value: filterValues === null || filterValues === void 0 ? void 0 : filterValues.currency
+                });
+              }
               if (filterValues.driverIds.length !== 0) {
                 filterConditons.push({
                   attribute: 'driver_id',
@@ -318,10 +428,25 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                   value: filterValues.deliveryTypes
                 });
               }
+              if (filterValues.driverGroupIds.length !== 0) {
+                filterConditons.push({
+                  attribute: 'driver_id',
+                  value: filterValues.driverGroupIds
+                });
+              }
               if (filterValues.paymethodIds.length !== 0) {
                 filterConditons.push({
                   attribute: 'paymethod_id',
                   value: filterValues.paymethodIds
+                });
+              }
+              if ((filterValues === null || filterValues === void 0 ? void 0 : filterValues.cityIds.length) !== 0) {
+                filterConditons.push({
+                  attribute: 'business',
+                  conditions: [{
+                    attribute: 'city_id',
+                    value: filterValues === null || filterValues === void 0 ? void 0 : filterValues.cityIds
+                  }]
                 });
               }
               if (filterConditons.length) {
@@ -341,21 +466,21 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             requestsState.orders = source;
             options.cancelToken = source;
             if (propsToFetch) {
-              functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch).where(where) : ordering.setAccessToken(accessToken).orders().select(propsToFetch).where(where);
+              functionFetch = ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch).where(where);
             } else {
-              functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().where(where) : ordering.setAccessToken(accessToken).orders().where(where);
+              functionFetch = ordering.setAccessToken(accessToken).orders().asDashboard().where(where);
             }
-            _context2.next = 15;
+            _context2.next = 20;
             return functionFetch.get(options);
-          case 15:
+          case 20:
             return _context2.abrupt("return", _context2.sent);
-          case 16:
+          case 21:
           case "end":
             return _context2.stop();
         }
       }, _callee2);
     }));
-    return function getOrders(_x3) {
+    return function getOrders(_x3, _x4) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -410,7 +535,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
               loading: true
             }));
             _context3.next = 6;
-            return getOrders(pagination.currentPage + 1);
+            return getOrders(pagination.pageSize, 1);
           case 6:
             response = _context3.sent;
             setOrderList({
@@ -421,7 +546,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             if (!response.content.error) {
               setPagination({
                 currentPage: response.content.pagination.current_page,
-                pageSize: response.content.pagination.page_size,
+                pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
                 totalPages: response.content.pagination.total_pages,
                 total: response.content.pagination.total,
                 from: response.content.pagination.from,
@@ -449,8 +574,184 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
       return _ref3.apply(this, arguments);
     };
   }();
+  var loadMoreOrders = /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) switch (_context4.prev = _context4.next) {
+          case 0:
+            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+              loading: true
+            }));
+            _context4.prev = 1;
+            _context4.next = 4;
+            return getOrders(pagination.pageSize, pagination.currentPage + 1);
+          case 4:
+            response = _context4.sent;
+            setOrderList({
+              loading: false,
+              orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
+              error: response.content.error ? response.content.result : null
+            });
+            if (!response.content.error) {
+              setPagination({
+                currentPage: response.content.pagination.current_page,
+                pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
+                totalPages: response.content.pagination.total_pages,
+                total: response.content.pagination.total,
+                from: response.content.pagination.from,
+                to: response.content.pagination.to
+              });
+            }
+            _context4.next = 12;
+            break;
+          case 9:
+            _context4.prev = 9;
+            _context4.t0 = _context4["catch"](1);
+            if (_context4.t0.constructor.name !== 'Cancel') {
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: false,
+                error: [_context4.t0.message]
+              }));
+            }
+          case 12:
+          case "end":
+            return _context4.stop();
+        }
+      }, _callee4, null, [[1, 9]]);
+    }));
+    return function loadMoreOrders() {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+  var getPageOrders = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(pageSize, page) {
+      var response;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+              loading: true
+            }));
+            _context5.prev = 1;
+            _context5.next = 4;
+            return getOrders(pageSize, page);
+          case 4:
+            response = _context5.sent;
+            setOrderList({
+              loading: false,
+              orders: response.content.error ? orderList.orders : response.content.result,
+              error: response.content.error ? response.content.result : null
+            });
+            if (!response.content.error) {
+              setPagination({
+                currentPage: response.content.pagination.current_page,
+                pageSize: response.content.pagination.page_size === 0 ? pagination.pageSize : response.content.pagination.page_size,
+                totalPages: response.content.pagination.total_pages,
+                total: response.content.pagination.total,
+                from: response.content.pagination.from,
+                to: response.content.pagination.to
+              });
+            }
+            _context5.next = 12;
+            break;
+          case 9:
+            _context5.prev = 9;
+            _context5.t0 = _context5["catch"](1);
+            if (_context5.t0.constructor.name !== 'Cancel') {
+              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+                loading: false,
+                error: [_context5.t0.message]
+              }));
+            }
+          case 12:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5, null, [[1, 9]]);
+    }));
+    return function getPageOrders(_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
   /**
-   * Listening order id to updatea for unread_count parameter
+  * Method to handle drag drop
+  */
+  var handleDrop = function handleDrop(event, columnName) {
+    var _allowColumns$transfe, _allowColumns$columnN;
+    event.preventDefault();
+    var transferColumnName = event.dataTransfer.getData('transferColumnName');
+    if (columnName === transferColumnName) return;
+    var transferColumnOrder = (_allowColumns$transfe = allowColumns[transferColumnName]) === null || _allowColumns$transfe === void 0 ? void 0 : _allowColumns$transfe.order;
+    var currentColumnOrder = (_allowColumns$columnN = allowColumns[columnName]) === null || _allowColumns$columnN === void 0 ? void 0 : _allowColumns$columnN.order;
+    var _ref6 = transferColumnOrder < currentColumnOrder ? [transferColumnOrder, currentColumnOrder] : [currentColumnOrder, transferColumnOrder],
+      _ref7 = _slicedToArray(_ref6, 2),
+      lessOrder = _ref7[0],
+      greaterOrder = _ref7[1];
+    var _remainAllowColumns = {};
+    var shouldUpdateColumns = Object.keys(allowColumns).filter(function (col) {
+      var _allowColumns$col, _allowColumns$col2;
+      return col !== transferColumnName && ((_allowColumns$col = allowColumns[col]) === null || _allowColumns$col === void 0 ? void 0 : _allowColumns$col.order) >= lessOrder && ((_allowColumns$col2 = allowColumns[col]) === null || _allowColumns$col2 === void 0 ? void 0 : _allowColumns$col2.order) <= greaterOrder;
+    });
+    shouldUpdateColumns.forEach(function (col) {
+      var _allowColumns$col3;
+      _remainAllowColumns[col] = _objectSpread(_objectSpread({}, allowColumns[col]), {}, {
+        order: ((_allowColumns$col3 = allowColumns[col]) === null || _allowColumns$col3 === void 0 ? void 0 : _allowColumns$col3.order) + (transferColumnOrder < currentColumnOrder ? -1 : 1)
+      });
+    });
+    var _allowColumnsUpdated = _objectSpread(_objectSpread({}, allowColumns), {}, _defineProperty({}, transferColumnName, _objectSpread(_objectSpread({}, allowColumns[transferColumnName]), {}, {
+      order: currentColumnOrder
+    })), _remainAllowColumns);
+    saveUserSettings(_allowColumnsUpdated);
+    setAllowColumns(_allowColumnsUpdated);
+  };
+  var saveUserSettings = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(allowColumnsUpdated) {
+      var _session$user, _session$user2, _session$user3, _settings, _allowColumnsUpdated;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            if (session !== null && session !== void 0 && (_session$user = session.user) !== null && _session$user !== void 0 && _session$user.id) {
+              _context6.next = 3;
+              break;
+            }
+            return _context6.abrupt("return");
+          case 3:
+            _settings = session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.settings;
+            _allowColumnsUpdated = _objectSpread(_objectSpread({}, allowColumnsUpdated), {}, {
+              timer: _objectSpread(_objectSpread({}, allowColumnsUpdated === null || allowColumnsUpdated === void 0 ? void 0 : allowColumnsUpdated.timer), {}, {
+                visable: false
+              })
+            });
+            _context6.next = 7;
+            return ordering.users(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id).save({
+              settings: _objectSpread(_objectSpread({}, _settings), {}, {
+                orderColumns: _allowColumnsUpdated
+              })
+            }, {
+              accessToken: accessToken
+            });
+          case 7:
+            _context6.next = 12;
+            break;
+          case 9:
+            _context6.prev = 9;
+            _context6.t0 = _context6["catch"](0);
+            console.warn(_context6.t0, 'error');
+          case 12:
+          case "end":
+            return _context6.stop();
+        }
+      }, _callee6, null, [[0, 9]]);
+    }));
+    return function saveUserSettings(_x7) {
+      return _ref8.apply(this, arguments);
+    };
+  }();
+  /**
+   * Listening order id to update for unread_count parameter
    */
   (0, _react.useEffect)(function () {
     if (orderIdForUnreadCountUpdate === null || orderList.orders.length === 0) return;
@@ -466,65 +767,53 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
       orders: _orders
     }));
   }, [orderIdForUnreadCountUpdate]);
-  /**
-   * Listening orderBy value change
-   */
-  (0, _react.useEffect)(function () {
-    if (orderList.loading) return;
-    var _orders = sortOrdersArray(orderBy, orderList.orders);
-    setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-      orders: _orders
-    }));
-  }, [orderBy, orderList.orders]);
 
   /**
    * Listening deleted order
    */
   (0, _react.useEffect)(function () {
-    if (deletedOrderId === null) return;
+    if (!deletedOrderIds) return;
+    var totalDeletedCount = 0;
     var orders = orderList.orders.filter(function (_order) {
-      return (_order === null || _order === void 0 ? void 0 : _order.id) !== deletedOrderId;
+      if (deletedOrderIds.includes(_order === null || _order === void 0 ? void 0 : _order.id)) {
+        totalDeletedCount = totalDeletedCount + 1;
+        return false;
+      } else {
+        return true;
+      }
     });
     setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
       orders: orders
     }));
-  }, [deletedOrderId]);
-
-  /**
-   * Listening search value change
-   */
-  (0, _react.useEffect)(function () {
-    if (searchValue === null) return;
-    loadOrders();
-  }, [searchValue]);
+    setPagination(_objectSpread(_objectSpread({}, pagination), {}, {
+      total: (pagination === null || pagination === void 0 ? void 0 : pagination.total) - totalDeletedCount
+    }));
+  }, [JSON.stringify(deletedOrderIds)]);
 
   /**
    * Listening sesssion and filter values change
    */
   (0, _react.useEffect)(function () {
+    if (session !== null && session !== void 0 && session.loading) return;
     if (orders) {
       setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
         orders: orders
       }));
     } else {
-      var checkInnerContain = false;
-      var checkOutContain = false;
-      if (Object.keys(filterValues).length > 0) {
-        checkInnerContain = filterValues.statuses.every(function (el) {
-          return orderStatus.indexOf(el) !== -1;
-        });
-        checkOutContain = orderStatus.every(function (el) {
-          return filterValues.statuses.indexOf(el) !== -1;
-        });
-        if (!checkInnerContain && !checkOutContain) {
-          setOrderList({
-            loading: false,
-            orders: [],
-            error: null
-          });
-          return;
-        }
-      }
+      // if (Object.keys(filterValues).length > 0) {
+      //   const checkInnerContain = filterValues.statuses.every((el) => {
+      //     return orderStatus.indexOf(el) !== -1
+      //   })
+
+      //   const checkOutContain = orderStatus.every((el) => {
+      //     return filterValues.statuses.indexOf(el) !== -1
+      //   })
+
+      //   if (!checkInnerContain && !checkOutContain) {
+      //     setOrderList({ loading: false, orders: [], error: null })
+      //     return
+      //   }
+      // }
       loadOrders();
     }
     return function () {
@@ -532,10 +821,20 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
         requestsState.orders.cancel();
       }
     };
-  }, [session, filterValues, orders]);
+  }, [session, searchValue, orderBy, filterValues, isOnlyDelivery, driverId, customerId, businessId, orders, orderStatus, timeStatus]);
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
+      if (customerId && (order === null || order === void 0 ? void 0 : order.customer_id) !== customerId) return;
+      if (isOnlyDelivery && (order === null || order === void 0 ? void 0 : order.delivery_type) !== 1) return;
+      if (!(order !== null && order !== void 0 && order.driver) && order !== null && order !== void 0 && order.driver_id) {
+        var updatedDriver = driversList === null || driversList === void 0 ? void 0 : driversList.drivers.find(function (driver) {
+          return driver.id === order.driver_id;
+        });
+        if (updatedDriver) {
+          order.driver = _objectSpread({}, updatedDriver);
+        }
+      }
       var found = orderList.orders.find(function (_order) {
         return (_order === null || _order === void 0 ? void 0 : _order.id) === (order === null || order === void 0 ? void 0 : order.id);
       });
@@ -568,26 +867,32 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             pagination.total++;
             setPagination(_objectSpread({}, pagination));
             setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-              orders: _orders3
+              orders: _orders3.slice(0, pagination.pageSize)
             }));
           }
         }
       }
     };
-    var handleRegisterOrder = function handleRegisterOrder(_order) {
-      setRegisterOrderId(_order === null || _order === void 0 ? void 0 : _order.id);
-      var order = _objectSpread(_objectSpread({}, _order), {}, {
-        status: 0
+    var handleRegisterOrder = function handleRegisterOrder(order) {
+      var _order$products, _order$products$;
+      if ((order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : (_order$products$ = _order$products[0]) === null || _order$products$ === void 0 ? void 0 : _order$products$.type) === 'gift_card') return;
+      if (customerId && (order === null || order === void 0 ? void 0 : order.customer_id) !== customerId) return;
+      if (isOnlyDelivery && (order === null || order === void 0 ? void 0 : order.delivery_type) !== 1) return;
+      var found = orderList.orders.find(function (_order) {
+        return (_order === null || _order === void 0 ? void 0 : _order.id) === (order === null || order === void 0 ? void 0 : order.id);
       });
+      if (found) return;
       var orders = [];
-      if (orderStatus.includes(0) && isFilteredOrder(_order)) {
-        orders = [order].concat(_toConsumableArray(orderList.orders));
-        var _orders = sortOrdersArray(orderBy, orders);
-        pagination.total++;
-        setPagination(_objectSpread({}, pagination));
-        setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-          orders: _orders
-        }));
+      if (isFilteredOrder(order)) {
+        if (orderStatus.includes(0) && order.status === 0 || orderStatus.includes(13) && order.status === 13) {
+          orders = [order].concat(_toConsumableArray(orderList.orders));
+          var _orders = sortOrdersArray(orderBy, orders);
+          pagination.total++;
+          setPagination(_objectSpread({}, pagination));
+          setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+            orders: _orders.slice(0, pagination.pageSize)
+          }));
+        }
       }
     };
     var handleNewMessage = function handleNewMessage(message) {
@@ -626,6 +931,15 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
         }));
       }
     };
+    if (!orderList.loading && orderList.orders.length === 0) {
+      if ((pagination === null || pagination === void 0 ? void 0 : pagination.currentPage) !== 0 && (pagination === null || pagination === void 0 ? void 0 : pagination.total) !== 0) {
+        if (Math.ceil((pagination === null || pagination === void 0 ? void 0 : pagination.total) / pagination.pageSize) >= (pagination === null || pagination === void 0 ? void 0 : pagination.currentPage)) {
+          getPageOrders(pagination.pageSize, pagination.currentPage);
+        } else {
+          getPageOrders(pagination.pageSize, pagination.currentPage - 1);
+        }
+      }
+    }
     socket.on('update_order', handleUpdateOrder);
     socket.on('orders_register', handleRegisterOrder);
     socket.on('message', handleNewMessage);
@@ -634,115 +948,37 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
       socket.off('orders_register', handleRegisterOrder);
       socket.off('message', handleNewMessage);
     };
-  }, [orderList.orders, pagination, orderBy, socket]);
-  var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
-          case 0:
-            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-              loading: true
-            }));
-            _context4.prev = 1;
-            _context4.next = 4;
-            return getOrders(pagination.currentPage + 1);
-          case 4:
-            response = _context4.sent;
-            setOrderList({
-              loading: false,
-              orders: response.content.error ? orderList.orders : orderList.orders.concat(response.content.result),
-              error: response.content.error ? response.content.result : null
-            });
-            if (!response.content.error) {
-              setPagination({
-                currentPage: response.content.pagination.current_page,
-                pageSize: response.content.pagination.page_size,
-                totalPages: response.content.pagination.total_pages,
-                total: response.content.pagination.total,
-                from: response.content.pagination.from,
-                to: response.content.pagination.to
-              });
-            }
-            _context4.next = 12;
-            break;
-          case 9:
-            _context4.prev = 9;
-            _context4.t0 = _context4["catch"](1);
-            if (_context4.t0.constructor.name !== 'Cancel') {
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: false,
-                error: [_context4.t0.message]
-              }));
-            }
-          case 12:
-          case "end":
-            return _context4.stop();
+  }, [orderList.orders, pagination, orderBy, socket, driversList, customerId]);
+
+  // Listening for customer rating
+  (0, _react.useEffect)(function () {
+    var handleCustomerReviewed = function handleCustomerReviewed(review) {
+      var orders = orderList.orders.filter(function (_order) {
+        if ((_order === null || _order === void 0 ? void 0 : _order.id) === review.order_id) {
+          _order.user_review = review;
         }
-      }, _callee4, null, [[1, 9]]);
-    }));
-    return function loadMoreOrders() {
-      return _ref4.apply(this, arguments);
+        return true;
+      });
+      var _orders = sortOrdersArray(orderBy, orders);
+      setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
+        orders: _orders
+      }));
     };
-  }();
-  var goToPage = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(page) {
-      var response;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
-          case 0:
-            setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-              loading: true
-            }));
-            _context5.prev = 1;
-            _context5.next = 4;
-            return getOrders(page);
-          case 4:
-            response = _context5.sent;
-            setOrderList({
-              loading: false,
-              orders: response.content.error ? [] : response.content.result,
-              error: response.content.error ? response.content.result : null
-            });
-            if (!response.content.error) {
-              setPagination({
-                currentPage: response.content.pagination.current_page,
-                pageSize: response.content.pagination.page_size,
-                totalPages: response.content.pagination.total_pages,
-                total: response.content.pagination.total,
-                from: response.content.pagination.from,
-                to: response.content.pagination.to
-              });
-            }
-            _context5.next = 12;
-            break;
-          case 9:
-            _context5.prev = 9;
-            _context5.t0 = _context5["catch"](1);
-            if (_context5.t0.constructor.name !== 'Cancel') {
-              setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
-                loading: false,
-                error: [_context5.t0.message]
-              }));
-            }
-          case 12:
-          case "end":
-            return _context5.stop();
-        }
-      }, _callee5, null, [[1, 9]]);
-    }));
-    return function goToPage(_x4) {
-      return _ref5.apply(this, arguments);
+    events.on('customer_reviewed', handleCustomerReviewed);
+    return function () {
+      events.off('customer_reviewed', handleCustomerReviewed);
     };
-  }();
+  }, [orderList, orderBy]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderList: orderList,
     pagination: pagination,
-    registerOrderId: registerOrderId,
     loadMoreOrders: loadMoreOrders,
-    goToPage: goToPage,
+    getPageOrders: getPageOrders,
     handleUpdateOrderStatus: handleUpdateOrderStatus,
-    handleResetNotification: handleResetNotification
+    allowColumns: allowColumns,
+    setAllowColumns: setAllowColumns,
+    handleDrop: handleDrop,
+    saveUserSettings: saveUserSettings
   })));
 };
 exports.DashboardOrdersList = DashboardOrdersList;
