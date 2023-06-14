@@ -249,6 +249,12 @@ Object.defineProperty(exports, "CouponControl", {
     return _CouponControl.CouponControl;
   }
 });
+Object.defineProperty(exports, "CustomOrderDetails", {
+  enumerable: true,
+  get: function get() {
+    return _OrdersDashboardComponents.CustomOrderDetails;
+  }
+});
 Object.defineProperty(exports, "CustomerContext", {
   enumerable: true,
   get: function get() {
