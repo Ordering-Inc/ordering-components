@@ -47,7 +47,7 @@ export const PageBanner = (props) => {
         }
         const location = (isAllowUnaddressOrderType && !orderState.options?.address?.location)
           ? defaultLocation
-          : `${orderState.options?.address?.location}`
+          : orderState.options?.address?.location
         const type = orderState.options?.type || 1
         fetchEndpoint = `${ordering.root}/banner?position=${position}&location=${JSON.stringify(location)}&order_type_id=${type}`
       }
