@@ -77,6 +77,7 @@ import { SingleOrderCard } from './components/SingleOrderCard'
 import { SingleProductCard } from './components/SingleProductCard'
 import { SingleProfessionalCard } from './components/SingleProfessionalCard'
 import { SmartAppBanner } from './components/SmartAppBanner'
+import { StoreProductList } from './components/StoreProductList'
 import { UserFormDetails } from './components/UserFormDetails'
 import { UpsellingPage } from './components/UpsellingPage'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
@@ -242,6 +243,7 @@ export {
   SingleProductCard,
   SingleProfessionalCard,
   SmartAppBanner,
+  StoreProductList,
   UserFormDetails,
   UpsellingPage,
   WrapperGoogleMaps,
