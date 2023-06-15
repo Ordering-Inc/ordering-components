@@ -24,8 +24,7 @@ export const BusinessAndProductList = (props) => {
     location,
     avoidProductDuplicate,
     isApp,
-    isFetchAllProducts,
-    asDashboard
+    isFetchAllProducts
   } = props
 
   const [orderState, { removeProduct }] = useOrder()
@@ -292,7 +291,7 @@ export const BusinessAndProductList = (props) => {
   
   const getLazyProducts = async ({ page, pageSize = categoryStateDefault.pagination.pageSize }) => {
     const parameters = {
-      ...(!asDashboard && { type: orderState.options?.type ?? 1 }),
+      type: orderState.options?.type ?? 1,
       ...(!isFetchAllProducts && { page }),
       ...(!isFetchAllProducts && { page_size: pageSize }),
       ...(!isFetchAllProducts && { orderBy: 'rank' })
@@ -718,11 +717,7 @@ export const BusinessAndProductList = (props) => {
         parameters.professional_id = professionalSelected?.id
       }
 
-      const fetchEndpoint = asDashboard
-        ? ordering.businesses(slug).asDashboard().select(businessProps).parameters(parameters)
-        : ordering.businesses(slug).select(businessProps).parameters(parameters)
-
-      const { content: { result } } = await fetchEndpoint.get({ cancelToken: source })
+      const { content: { result } } = await ordering.businesses(slug).select(businessProps).parameters(parameters).get({ cancelToken: source })
 
       setErrorQuantityProducts(!result?.categories || result?.categories?.length === 0)
 
