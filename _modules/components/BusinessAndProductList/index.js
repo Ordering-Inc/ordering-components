@@ -52,8 +52,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     location = props.location,
     avoidProductDuplicate = props.avoidProductDuplicate,
     isApp = props.isApp,
-    isFetchAllProducts = props.isFetchAllProducts,
-    asDashboard = props.asDashboard;
+    isFetchAllProducts = props.isFetchAllProducts;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
@@ -398,9 +397,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
             page = _ref5.page, _ref5$pageSize = _ref5.pageSize, pageSize = _ref5$pageSize === void 0 ? categoryStateDefault.pagination.pageSize : _ref5$pageSize;
-            parameters = _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, !asDashboard && {
+            parameters = _objectSpread(_objectSpread(_objectSpread({
               type: (_orderState$options$t = (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) !== null && _orderState$options$t !== void 0 ? _orderState$options$t : 1
-            }), !isFetchAllProducts && {
+            }, !isFetchAllProducts && {
               page: page
             }), !isFetchAllProducts && {
               page_size: pageSize
@@ -906,7 +905,7 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   }, [JSON.stringify((_businessState$busine18 = businessState.business) === null || _businessState$busine18 === void 0 ? void 0 : _businessState$busine18.id), isInitialRender]);
   var getBusiness = /*#__PURE__*/function () {
     var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18, _orderState$options19, _orderState$options20, _result$categories, source, parameters, _orderState$options21, moment, fetchEndpoint, _yield$fetchEndpoint$, result, data, _yield$ordering$busin2, menus;
+      var _orderState$options10, _orderState$options11, _orderState$options12, _orderState$options13, _orderState$options14, _orderState$options15, _orderState$options16, _orderState$options17, _orderState$options18, _orderState$options19, _orderState$options20, _result$categories, source, parameters, _orderState$options21, moment, _yield$ordering$busin2, result, data, _yield$ordering$busin3, menus;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -930,45 +929,44 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             if (professionalSelected) {
               parameters.professional_id = professionalSelected === null || professionalSelected === void 0 ? void 0 : professionalSelected.id;
             }
-            fetchEndpoint = asDashboard ? ordering.businesses(slug).asDashboard().select(businessProps).parameters(parameters) : ordering.businesses(slug).select(businessProps).parameters(parameters);
-            _context6.next = 11;
-            return fetchEndpoint.get({
+            _context6.next = 10;
+            return ordering.businesses(slug).select(businessProps).parameters(parameters).get({
               cancelToken: source
             });
-          case 11:
-            _yield$fetchEndpoint$ = _context6.sent;
-            result = _yield$fetchEndpoint$.content.result;
+          case 10:
+            _yield$ordering$busin2 = _context6.sent;
+            result = _yield$ordering$busin2.content.result;
             setErrorQuantityProducts(!(result !== null && result !== void 0 && result.categories) || (result === null || result === void 0 ? void 0 : (_result$categories = result.categories) === null || _result$categories === void 0 ? void 0 : _result$categories.length) === 0);
             data = _objectSpread(_objectSpread({}, businessState), {}, {
               business: result,
               loading: false
             });
             if (!(menusProps && isGetMenus)) {
-              _context6.next = 21;
+              _context6.next = 20;
               break;
             }
-            _context6.next = 18;
+            _context6.next = 17;
             return ordering.businesses(result.id).menus().select(menusProps).get();
-          case 18:
-            _yield$ordering$busin2 = _context6.sent;
-            menus = _yield$ordering$busin2.content.result;
+          case 17:
+            _yield$ordering$busin3 = _context6.sent;
+            menus = _yield$ordering$busin3.content.result;
             data.menus = menus;
-          case 21:
+          case 20:
             setBusinessState(data);
-            _context6.next = 27;
+            _context6.next = 26;
             break;
-          case 24:
-            _context6.prev = 24;
+          case 23:
+            _context6.prev = 23;
             _context6.t0 = _context6["catch"](0);
             setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
               loading: false,
               error: [_context6.t0.message]
             }));
-          case 27:
+          case 26:
           case "end":
             return _context6.stop();
         }
-      }, _callee6, null, [[0, 24]]);
+      }, _callee6, null, [[0, 23]]);
     }));
     return function getBusiness() {
       return _ref13.apply(this, arguments);
@@ -1039,8 +1037,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(categoryId, productId) {
       var updateParams,
         _businessState$busine20,
-        _yield$ordering$busin3,
         _yield$ordering$busin4,
+        _yield$ordering$busin5,
         result,
         error,
         updatedProducts,
@@ -1053,10 +1051,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             _context8.next = 4;
             return ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine20 = businessState.business) === null || _businessState$busine20 === void 0 ? void 0 : _businessState$busine20.id).categories(categoryId).products(productId).save(updateParams);
           case 4:
-            _yield$ordering$busin3 = _context8.sent;
-            _yield$ordering$busin4 = _yield$ordering$busin3.content;
-            result = _yield$ordering$busin4.result;
-            error = _yield$ordering$busin4.error;
+            _yield$ordering$busin4 = _context8.sent;
+            _yield$ordering$busin5 = _yield$ordering$busin4.content;
+            result = _yield$ordering$busin5.result;
+            error = _yield$ordering$busin5.error;
             if (!error) {
               updatedProducts = categoryState.products.map(function (product) {
                 if (product.id === result.id) {
@@ -1091,8 +1089,8 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(categoryId) {
       var updateParams,
         _businessState$busine21,
-        _yield$ordering$busin5,
         _yield$ordering$busin6,
+        _yield$ordering$busin7,
         result,
         error,
         updatedCategories,
@@ -1106,10 +1104,10 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
             _context9.next = 4;
             return ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine21 = businessState.business) === null || _businessState$busine21 === void 0 ? void 0 : _businessState$busine21.id).categories(categoryId).save(updateParams);
           case 4:
-            _yield$ordering$busin5 = _context9.sent;
-            _yield$ordering$busin6 = _yield$ordering$busin5.content;
-            result = _yield$ordering$busin6.result;
-            error = _yield$ordering$busin6.error;
+            _yield$ordering$busin6 = _context9.sent;
+            _yield$ordering$busin7 = _yield$ordering$busin6.content;
+            result = _yield$ordering$busin7.result;
+            error = _yield$ordering$busin7.error;
             if (!error) {
               updatedCategories = updateCategories(businessState === null || businessState === void 0 ? void 0 : businessState.business.categories, result);
               updatedBusiness = _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {

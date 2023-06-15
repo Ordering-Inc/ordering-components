@@ -91,7 +91,7 @@ var PageBanner = function PageBanner(props) {
                 lat: !isInvalidDefaultLocation ? defaultLatitude : 40.7744146,
                 lng: !isInvalidDefaultLocation ? defaultLongitude : -73.9678064
               };
-              location = isAllowUnaddressOrderType && !((_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && (_orderState$options2$ = _orderState$options2.address) !== null && _orderState$options2$ !== void 0 && _orderState$options2$.location) ? defaultLocation : "".concat((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : _orderState$options3$.location);
+              location = isAllowUnaddressOrderType && !((_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && (_orderState$options2$ = _orderState$options2.address) !== null && _orderState$options2$ !== void 0 && _orderState$options2$.location) ? defaultLocation : (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : _orderState$options3$.location;
               type = ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type) || 1;
               fetchEndpoint = "".concat(ordering.root, "/banner?position=").concat(position, "&location=").concat(JSON.stringify(location), "&order_type_id=").concat(type);
             }

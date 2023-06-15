@@ -767,12 +767,31 @@ var OrderListGroups = function OrderListGroups(props) {
   };
   var filterByIdUnique = function filterByIdUnique(array) {
     var _ordersGroupStatus$cu;
-    if (!array) return array;
+    if (!array) return [];
+    var tempObj = {};
     var status = (_ordersGroupStatus$cu = ordersGroupStatus[currentTabSelected]) !== null && _ordersGroupStatus$cu !== void 0 ? _ordersGroupStatus$cu : [];
-    return Array.from(array.reduce(function (map, objeto) {
-      return map.has(objeto.id) ? map : map.set(objeto.id, objeto);
-    }, new Map()).values()).filter(function (item) {
-      return status.includes(item.status);
+    return array.map(function (element) {
+      if (Array.isArray(element)) {
+        var _array$;
+        var _array = element[0][1].map(function (item) {
+          if (!tempObj[item.id] && status.includes(item.status)) {
+            tempObj[item.id] = true;
+            return item;
+          }
+          return null;
+        }).filter(function (item) {
+          return item !== null;
+        });
+        return _array.length ? [[(_array$ = _array[0]) === null || _array$ === void 0 ? void 0 : _array$.cart_group_id.toString(), _array]] : null;
+      } else {
+        if (!tempObj[element.id] && status.includes(element.status)) {
+          tempObj[element.id] = true;
+          return element;
+        }
+        return null;
+      }
+    }).filter(function (item) {
+      return Array.isArray(item) ? item.length : item;
     });
   };
   var formatOrdersGrouped = function formatOrdersGrouped(orders) {
