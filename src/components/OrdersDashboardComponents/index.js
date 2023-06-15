@@ -1,6 +1,7 @@
 import { Appointments } from './Appointments'
 import { BusinessProductsListing } from './BusinessProductsListing'
 import { CheckPassword } from './CheckPassword'
+import { CustomOrderDetails } from './CustomOrderDetails'
 import { CityList } from './CityList'
 import { CountryList } from './CountryList'
 import { DashboardBusinessList } from './DashboardBusinessList'
@@ -31,6 +32,7 @@ export {
   CheckPassword,
   CityList,
   CountryList,
+  CustomOrderDetails,
   DashboardBusinessList,
   DashboardOrdersList,
   DriversList,

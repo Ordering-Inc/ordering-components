@@ -33,6 +33,12 @@ Object.defineProperty(exports, "CountryList", {
     return _CountryList.CountryList;
   }
 });
+Object.defineProperty(exports, "CustomOrderDetails", {
+  enumerable: true,
+  get: function get() {
+    return _CustomOrderDetails.CustomOrderDetails;
+  }
+});
 Object.defineProperty(exports, "DashboardBusinessList", {
   enumerable: true,
   get: function get() {
@@ -162,6 +168,7 @@ Object.defineProperty(exports, "WebsocketContext", {
 var _Appointments = require("./Appointments");
 var _BusinessProductsListing = require("./BusinessProductsListing");
 var _CheckPassword = require("./CheckPassword");
+var _CustomOrderDetails = require("./CustomOrderDetails");
 var _CityList = require("./CityList");
 var _CountryList = require("./CountryList");
 var _DashboardBusinessList = require("./DashboardBusinessList");
