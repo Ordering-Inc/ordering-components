@@ -514,16 +514,29 @@ export const OrderListGroups = (props) => {
   }
 
   const filterByIdUnique = (array) => {
-    if (!array) return array
+    if (!array) return []
+
+    const tempObj = {}
     const status = ordersGroupStatus[currentTabSelected] ?? []
 
-    return Array.from(
-      array.reduce(
-        (map, objeto) => map.has(objeto.id)
-          ? map
-          : map.set(objeto.id, objeto),
-      new Map()).values()
-    ).filter(item => status.includes(item.status))
+    return array.map((element) => {
+      if (Array.isArray(element)) {
+        const _array = element[0][1].map((item) => {
+          if (!tempObj[item.id] && status.includes(item.status)) {
+            tempObj[item.id] = true
+            return item
+          }
+          return null
+        }).filter((item) => item !== null)
+        return _array.length ? [[_array[0]?.cart_group_id.toString(), _array]] : null
+      } else {
+        if (!tempObj[element.id] && status.includes(element.status)) {
+          tempObj[element.id] = true
+          return element
+        }
+        return null
+      }
+    }).filter((item) => Array.isArray(item) ? item.length : item)
   }
 
   const formatOrdersGrouped = (orders) => {
