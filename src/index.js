@@ -77,6 +77,7 @@ import { SingleOrderCard } from './components/SingleOrderCard'
 import { SingleProductCard } from './components/SingleProductCard'
 import { SingleProfessionalCard } from './components/SingleProfessionalCard'
 import { SmartAppBanner } from './components/SmartAppBanner'
+import { StoreProductList } from './components/StoreProductList'
 import { UserFormDetails } from './components/UserFormDetails'
 import { UpsellingPage } from './components/UpsellingPage'
 import { WrapperGoogleMaps } from './components/WrapperGoogleMaps'
@@ -131,27 +132,33 @@ import { QueryLoginSpoonity } from './components/QueryLoginSpoonity'
 import { WebsocketStatus } from './components/WebsocketStatus'
 
 import {
+  Appointments,
   BusinessProductsListing,
   CheckPassword,
   CityList,
   CountryList,
+  CustomOrderDetails,
   DashboardBusinessList,
   DashboardOrdersList,
   DriversList as DriverListDashboard,
   ExportCSV,
+  GiftCardsList,
   GoogleMapsApiKeySetting,
   LogisticInformation,
   Logistics,
-  Messages as MessagesDasboard,
+  Messages as MessagesDashboard,
   MetaFields,
   OrderDetails as OrderDetailsDashboard,
   OrderNotification,
   OrdersFilter,
   OrdersManage,
   PointsWalletLevels,
+  ReviewCustomer as ReviewCustomerDashboard,
   Schedule,
   SettingsList,
-  UsersList
+  UserFormDetails as UserFormDetailsDashboard,
+  UsersList,
+  WebsocketContext as WebsocketContextDashboard
 } from './components/OrdersDashboardComponents'
 
 import { CODES } from './constants/code-numbers'
@@ -180,6 +187,7 @@ export {
   Checkout,
   CouponControl,
   Contacts,
+  CustomOrderDetails,
   OrderListGroups,
   DragAndDrop,
   DriverList,
@@ -242,6 +250,7 @@ export {
   SingleProductCard,
   SingleProfessionalCard,
   SmartAppBanner,
+  StoreProductList,
   UserFormDetails,
   UpsellingPage,
   WrapperGoogleMaps,
@@ -273,6 +282,7 @@ export {
   QueryLoginSpoonity,
   WebsocketStatus,
   // CallcenterDashboard
+  Appointments,
   BusinessProductsListing,
   CheckPassword,
   CityList,
@@ -281,19 +291,23 @@ export {
   DashboardOrdersList,
   DriverListDashboard,
   ExportCSV,
+  GiftCardsList,
   GoogleMapsApiKeySetting,
   LogisticInformation,
   Logistics,
-  MessagesDasboard,
+  MessagesDashboard,
   MetaFields,
   OrderDetailsDashboard,
   OrderNotification,
   OrdersFilter,
   OrdersManage,
   PointsWalletLevels,
+  ReviewCustomerDashboard,
   Schedule,
   SettingsList,
+  UserFormDetailsDashboard,
   UsersList,
+  WebsocketContextDashboard,
   // Contexts
   ConfigContext,
   ConfigProvider,
