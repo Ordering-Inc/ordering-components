@@ -4,8 +4,6 @@ import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useWebsocket } from '../../../contexts/WebsocketContext'
 import { useEvent } from '../../../contexts/EventContext'
-import { useConfig } from '../../../contexts/ConfigContext'
-import { useLanguage } from '../../../contexts/LanguageContext'
 
 export const DashboardOrdersList = (props) => {
   const {
@@ -17,7 +15,7 @@ export const DashboardOrdersList = (props) => {
     customerId,
     businessId,
     orderIds,
-    deletedOrderId,
+    deletedOrderIds,
     orderStatus,
     orderBy,
     orderDirection,
@@ -29,31 +27,17 @@ export const DashboardOrdersList = (props) => {
     isSearchByCustomerEmail,
     isSearchByCustomerPhone,
     isSearchByBusinessName,
+    isSearchByDriverName,
     orderIdForUnreadCountUpdate,
     timeStatus,
-    driversList
+    driversList,
+    allowColumns,
+    setAllowColumns
   } = props
 
   const [ordering] = useApi()
   const [events] = useEvent()
-  const [configState] = useConfig()
-  const [, t] = useLanguage()
-
   const [orderList, setOrderList] = useState({ loading: !orders, error: null, orders: [] })
-  const allowColumnsModel = {
-    slaBar: { visable: false, title: '', className: '', draggable: false, colSpan: 1, order: -2 },
-    orderNumber: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: -1 },
-    status: { visable: true, title: t('STATUS', 'Status'), className: 'statusInfo', draggable: true, colSpan: 1, order: 1 },
-    dateTime: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: 0 },
-    business: { visable: true, title: t('BUSINESS', 'Business'), className: 'businessInfo', draggable: true, colSpan: 1, order: 2 },
-    customer: { visable: true, title: t('CUSTOMER', 'Customer'), className: 'customerInfo', draggable: true, colSpan: 1, order: 3 },
-    driver: { visable: true, title: t('DRIVER', 'Driver'), className: 'driverInfo', draggable: true, colSpan: 1, order: 4 },
-    advanced: { visable: true, title: t('ADVANCED_LOGISTICS', 'Advanced logistics'), className: 'advanced', draggable: true, colSpan: 3, order: 5 },
-    timer: { visable: false, title: t('SLA_TIMER', 'SLA’s timer'), className: 'timer', draggable: true, colSpan: 1, order: 6 },
-    total: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: 10 }
-  }
-
-  const [allowColumns, setAllowColumns] = useState(null)
   const [pagination, setPagination] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
     pageSize: paginationSettings.pageSize ?? 10
@@ -119,6 +103,17 @@ export const DashboardOrdersList = (props) => {
         page_size: pageSize
       }
     }
+
+    conditions.push({
+      attribute: 'products',
+      conditions: [{
+        attribute: 'type',
+        value: {
+          condition: '=',
+          value: 'item'
+        }
+      }]
+    })
 
     if (orderIds) {
       conditions.push({ attribute: 'id', value: orderIds })
@@ -261,6 +256,23 @@ export const DashboardOrdersList = (props) => {
         )
       }
 
+      if (isSearchByDriverName) {
+        searchConditions.push(
+          {
+            attribute: 'driver',
+            conditions: [
+              {
+                attribute: 'name',
+                value: {
+                  condition: 'ilike',
+                  value: encodeURI(`%${searchValue}%`)
+                }
+              }
+            ]
+          }
+        )
+      }
+
       conditions.push({
         conector: 'OR',
         conditions: searchConditions
@@ -279,6 +291,42 @@ export const DashboardOrdersList = (props) => {
             }
           }
         )
+      }
+      if (filterValues?.externalId) {
+        filterConditons.push(
+          {
+            attribute: 'external_id',
+            value: {
+              condition: 'ilike',
+              value: encodeURI(`%${filterValues?.externalId}%`)
+            }
+          }
+        )
+      }
+      if (filterValues?.metafield?.length > 0) {
+        const metafieldConditions = filterValues?.metafield.map(item => (
+          {
+            attribute: 'metafields',
+            conditions: [
+              {
+                attribute: 'key',
+                value: item?.key
+              },
+              {
+                attribute: 'value',
+                value: {
+                  condition: 'ilike',
+                  value: encodeURI(`%${item?.value}%`)
+                }
+              }
+            ],
+            conector: 'AND'
+          }
+        ))
+        filterConditons.push({
+          conector: 'OR',
+          conditions: metafieldConditions
+        })
       }
       if (filterValues.deliveryFromDatetime !== null) {
         filterConditons.push(
@@ -355,6 +403,19 @@ export const DashboardOrdersList = (props) => {
           {
             attribute: 'paymethod_id',
             value: filterValues.paymethodIds
+          }
+        )
+      }
+      if (filterValues?.cityIds.length !== 0) {
+        filterConditons.push(
+          {
+            attribute: 'business',
+            conditions: [
+              {
+                attribute: 'city_id',
+                value: filterValues?.cityIds
+              }
+            ]
           }
         )
       }
@@ -560,15 +621,23 @@ export const DashboardOrdersList = (props) => {
    * Listening deleted order
    */
   useEffect(() => {
-    if (!deletedOrderId) return
+    if (!deletedOrderIds) return
+    let totalDeletedCount = 0
     const orders = orderList.orders.filter(_order => {
-      return _order?.id !== deletedOrderId
+      if (deletedOrderIds.includes(_order?.id)) {
+        totalDeletedCount = totalDeletedCount + 1
+        return false
+      } else {
+        return true
+      }
     })
 
-    loadOrders()
-
     setOrderList({ ...orderList, orders })
-  }, [deletedOrderId])
+    setPagination({
+      ...pagination,
+      total: pagination?.total - totalDeletedCount
+    })
+  }, [JSON.stringify(deletedOrderIds)])
 
   /**
    * Listening sesssion and filter values change
@@ -607,6 +676,7 @@ export const DashboardOrdersList = (props) => {
   useEffect(() => {
     if (orderList.loading) return
     const handleUpdateOrder = (order) => {
+      if (customerId && order?.customer_id !== customerId) return
       if (isOnlyDelivery && order?.delivery_type !== 1) return
       if (!order?.driver && order?.driver_id) {
         const updatedDriver = driversList?.drivers.find(driver => driver.id === order.driver_id)
@@ -657,6 +727,8 @@ export const DashboardOrdersList = (props) => {
       }
     }
     const handleRegisterOrder = (order) => {
+      if (order?.products?.[0]?.type === 'gift_card') return
+      if (customerId && order?.customer_id !== customerId) return
       if (isOnlyDelivery && order?.delivery_type !== 1) return
       const found = orderList.orders.find(_order => _order?.id === order?.id)
       if (found) return
@@ -725,7 +797,7 @@ export const DashboardOrdersList = (props) => {
       socket.off('orders_register', handleRegisterOrder)
       socket.off('message', handleNewMessage)
     }
-  }, [orderList.orders, pagination, orderBy, socket, driversList])
+  }, [orderList.orders, pagination, orderBy, socket, driversList, customerId])
 
   // Listening for customer rating
   useEffect(() => {
@@ -748,32 +820,6 @@ export const DashboardOrdersList = (props) => {
     }
   }, [orderList, orderBy])
 
-  useEffect(() => {
-    if (!session?.user.id || !configState || allowColumns) return
-    const getUser = async () => {
-      try {
-        const response = await ordering.users(session?.user.id).select(['settings']).get()
-        const { content: { error, result } } = response
-        if (!error && result.settings?.orderColumns) {
-          setAllowColumns(result.settings?.orderColumns)
-          return
-        }
-
-        setAllowColumns({
-          ...allowColumnsModel,
-          slaBar: { ...allowColumnsModel?.slaBar, visable: configState?.configs?.order_deadlines_enabled?.value === '1' },
-          timer: { ...allowColumnsModel?.timer, visable: configState?.configs?.order_deadlines_enabled?.value === '1' }
-        })
-      } catch (err) {
-        setAllowColumns({
-          ...allowColumnsModel,
-          slaBar: { ...allowColumnsModel?.slaBar, visable: configState?.configs?.order_deadlines_enabled?.value === '1' },
-          timer: { ...allowColumnsModel?.timer, visable: configState?.configs?.order_deadlines_enabled?.value === '1' }
-        })
-      }
-    }
-    getUser()
-  }, [session?.user, configState])
   return (
     <>
       {UIComponent && (
@@ -787,6 +833,7 @@ export const DashboardOrdersList = (props) => {
           allowColumns={allowColumns}
           setAllowColumns={setAllowColumns}
           handleDrop={handleDrop}
+          saveUserSettings={saveUserSettings}
         />
       )}
     </>

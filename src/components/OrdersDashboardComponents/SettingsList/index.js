@@ -20,7 +20,7 @@ export const SettingsList = (props) => {
   } = props
 
   const [configs, setConfigs] = useState(null)
-  const [{ loading }] = useSession()
+  const [{ loading, token }] = useSession()
   const [ordering] = useApi()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
@@ -118,7 +118,7 @@ export const SettingsList = (props) => {
         loading: true,
         API: false
       })
-      const { content: { error, result } } = await ordering.configs(id).save(params)
+      const { content: { error, result } } = await ordering.setAccessToken(token).configs(id).save(params)
       if (!error) {
         const changes = formState?.changes ? formState?.changes.filter(item => item.id !== result.id) : []
         const _configs = formState?.finalResult.map(config => {

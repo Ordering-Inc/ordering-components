@@ -4,7 +4,6 @@ import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useLanguage } from '../../../contexts/LanguageContext'
 import { useUtils } from '../../../contexts/UtilsContext'
-import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const Logistics = (props) => {
   const {
@@ -13,7 +12,6 @@ export const Logistics = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
   const [session] = useSession()
   const [, t] = useLanguage()
   const [{ getOrderState, parseDistance }] = useUtils()
@@ -33,9 +31,7 @@ export const Logistics = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          Authorization: `Bearer ${session.token}`
         }
       }
       const response = await fetch(`${ordering.root}/orders/${orderId}/logs?order_id=${orderId}`, requestOptions)
@@ -132,6 +128,7 @@ export const Logistics = (props) => {
           {...props}
           logisticList={logisticList}
           parseLog={parseLog}
+          getLogistics={getLogistics}
         />
       )}
     </>
