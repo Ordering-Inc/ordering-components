@@ -1194,7 +1194,7 @@ var OrderListGroups = function OrderListGroups(props) {
   }, [filtered]);
   (0, _react.useEffect)(function () {
     var _ordersGroup$currentT19, _session$user7, _session$user8;
-    if ((_ordersGroup$currentT19 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT19 !== void 0 && _ordersGroup$currentT19.loading) return;
+    if ((_ordersGroup$currentT19 = ordersGroup[currentTabSelected]) !== null && _ordersGroup$currentT19 !== void 0 && _ordersGroup$currentT19.loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _session$user5, _orderFound, _orderFound$driver, _order$driver, _session$user6;
       if ((session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.level) === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return;
@@ -1263,11 +1263,14 @@ var OrderListGroups = function OrderListGroups(props) {
     socket.on('update_order', handleUpdateOrder);
     var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user8 = session.user) === null || _session$user8 === void 0 ? void 0 : _session$user8.id);
     socket.join(ordersRoom);
+    socket.socket.on('connect', function () {
+      socket.join(ordersRoom);
+    });
     return function () {
       socket.off('orders_register', handleAddNewOrder);
       socket.off('update_order', handleUpdateOrder);
     };
-  }, [ordersGroup, socket, session]);
+  }, [ordersGroup, socket === null || socket === void 0 ? void 0 : socket.socket, session]);
   var handleAddAssignRequest = (0, _react.useCallback)(function (order) {
     var _order$order$id3, _order$order4;
     setlogisticOrders(_objectSpread(_objectSpread({}, logisticOrders), {}, {

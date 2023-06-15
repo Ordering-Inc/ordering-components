@@ -1029,6 +1029,12 @@ Object.defineProperty(exports, "WebsocketProvider", {
     return _WebsocketContext.WebsocketProvider;
   }
 });
+Object.defineProperty(exports, "WebsocketStatus", {
+  enumerable: true,
+  get: function get() {
+    return _WebsocketStatus.WebsocketStatus;
+  }
+});
 Object.defineProperty(exports, "WrapperGoogleMaps", {
   enumerable: true,
   get: function get() {
@@ -1255,5 +1261,6 @@ var _ReviewDriver = require("./components/ReviewDriver");
 var _UserVerification = require("./components/UserVerification");
 var _WalletList = require("./components/WalletList");
 var _QueryLoginSpoonity = require("./components/QueryLoginSpoonity");
+var _WebsocketStatus = require("./components/WebsocketStatus");
 var _OrdersDashboardComponents = require("./components/OrdersDashboardComponents");
 var _codeNumbers = require("./constants/code-numbers");
