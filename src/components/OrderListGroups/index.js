@@ -131,6 +131,16 @@ export const OrderListGroups = (props) => {
       })
     }
 
+    if (filtered?.external_id) {
+      options.query.where.push({
+        attribute: 'external_id',
+        value: {
+          condition: 'ilike',
+          value: isIos ? `%${filtered?.external_id}%` : encodeURI(`%${filtered?.external_id}%`)
+        }
+      })
+    }
+
     if (filtered?.state) {
       options.query.where.push({ attribute: 'status', value: filtered.state })
     }
