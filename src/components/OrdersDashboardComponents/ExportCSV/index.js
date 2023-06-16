@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useApi } from '../../../contexts/ApiContext'
 import { useSession } from '../../../contexts/SessionContext'
+import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const ExportCSV = (props) => {
   const {
@@ -9,6 +10,7 @@ export const ExportCSV = (props) => {
     filterValues
   } = props
   const [ordering] = useApi()
+  const socket = useWebsocket()
   const [{ token, loading }] = useSession()
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null, result: null })
 
@@ -23,7 +25,9 @@ export const ExportCSV = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'X-App-X': ordering.appId,
+          'X-Socket-Id-X': socket?.getId()
         }
       }
 
