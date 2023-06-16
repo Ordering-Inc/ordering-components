@@ -304,7 +304,7 @@ var Schedule = function Schedule(props) {
             },
             close: {
               hour: 23,
-              minute: 59
+              minute: 45
             }
           }]
         });

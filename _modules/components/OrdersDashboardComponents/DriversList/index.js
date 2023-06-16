@@ -39,11 +39,13 @@ var DriversList = function DriversList(props) {
     propsToFetch = props.propsToFetch,
     isSearchByName = props.isSearchByName,
     isSearchByCellphone = props.isSearchByCellphone,
+    asDashboard = props.asDashboard,
     isOrderDrivers = props.isOrderDrivers,
     orderId = props.orderId;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useToast = (0, _ToastContext.useToast)(),
     _useToast2 = _slicedToArray(_useToast, 2),
     showToast = _useToast2[1].showToast;
@@ -58,14 +60,6 @@ var DriversList = function DriversList(props) {
     _useState2 = _slicedToArray(_useState, 2),
     driverActionStatus = _useState2[0],
     setDriverActionStatus = _useState2[1];
-  var _useState3 = (0, _react.useState)({
-      loading: true,
-      error: null
-    }),
-    _useState4 = _slicedToArray(_useState3, 2),
-    companyActionStatus = _useState4[0],
-    setCompanyActionStatus = _useState4[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
 
   /**
    * Get session
@@ -77,63 +71,52 @@ var DriversList = function DriversList(props) {
   /**
    * Array to save drivers
    */
-  var _useState5 = (0, _react.useState)({
+  var _useState3 = (0, _react.useState)({
       drivers: [],
       loading: true,
       error: null
     }),
-    _useState6 = _slicedToArray(_useState5, 2),
-    driversList = _useState6[0],
-    setDriversList = _useState6[1];
-  /**
-   * Array to save companys
-   */
-  var _useState7 = (0, _react.useState)({
-      companys: [],
-      loading: true,
-      error: null
-    }),
-    _useState8 = _slicedToArray(_useState7, 2),
-    companysList = _useState8[0],
-    setCompanysList = _useState8[1];
+    _useState4 = _slicedToArray(_useState3, 2),
+    driversList = _useState4[0],
+    setDriversList = _useState4[1];
   /**
    * Array to save online drivers
    */
-  var _useState9 = (0, _react.useState)([]),
-    _useState10 = _slicedToArray(_useState9, 2),
-    onlineDrivers = _useState10[0],
-    setOnlineDrivers = _useState10[1];
+  var _useState5 = (0, _react.useState)([]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    onlineDrivers = _useState6[0],
+    setOnlineDrivers = _useState6[1];
   /**
    * Array to save offline drivers
    */
-  var _useState11 = (0, _react.useState)([]),
-    _useState12 = _slicedToArray(_useState11, 2),
-    offlineDrivers = _useState12[0],
-    setOfflineDrivers = _useState12[1];
+  var _useState7 = (0, _react.useState)([]),
+    _useState8 = _slicedToArray(_useState7, 2),
+    offlineDrivers = _useState8[0],
+    setOfflineDrivers = _useState8[1];
   /**
    * state for drivers online / offline filter
    */
-  var _useState13 = (0, _react.useState)(true),
-    _useState14 = _slicedToArray(_useState13, 2),
-    driversIsOnline = _useState14[0],
-    setDriversIsOnline = _useState14[1];
+  var _useState9 = (0, _react.useState)(true),
+    _useState10 = _slicedToArray(_useState9, 2),
+    driversIsOnline = _useState10[0],
+    setDriversIsOnline = _useState10[1];
   /**
    * state for drivers busy / not busy sub filter
    */
-  var _useState15 = (0, _react.useState)({
+  var _useState11 = (0, _react.useState)({
       busy: true,
       notBusy: true
     }),
-    _useState16 = _slicedToArray(_useState15, 2),
-    driversSubfilter = _useState16[0],
-    setDriversSubfilter = _useState16[1];
+    _useState12 = _slicedToArray(_useState11, 2),
+    driversSubfilter = _useState12[0],
+    setDriversSubfilter = _useState12[1];
   /**
    * search value
    */
-  var _useState17 = (0, _react.useState)(null),
-    _useState18 = _slicedToArray(_useState17, 2),
-    searchValue = _useState18[0],
-    setSearchValue = _useState18[1];
+  var _useState13 = (0, _react.useState)(null),
+    _useState14 = _slicedToArray(_useState13, 2),
+    searchValue = _useState14[0],
+    setSearchValue = _useState14[1];
 
   /**
    * Change text to search
@@ -203,72 +186,6 @@ var DriversList = function DriversList(props) {
   }();
 
   /**
-  * Method to assign driver_company to order from API
-  * @param {object} assign assigned order_id and driver_company_id
-  */
-  var handleAssignDriverCompany = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(assign) {
-      var requestOptions, response, _yield$response$json, error, result;
-      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            showToast(_ToastContext.ToastType.Info, t('LOADING', 'Loading'));
-            setCompanyActionStatus(_objectSpread(_objectSpread({}, companyActionStatus), {}, {
-              loading: true
-            }));
-            requestOptions = {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(session.token)
-              },
-              body: JSON.stringify({
-                driver_company_id: assign.companyId
-              })
-            };
-            _context2.next = 6;
-            return fetch("".concat(ordering.root, "/orders/").concat(assign.orderId), requestOptions);
-          case 6:
-            response = _context2.sent;
-            _context2.next = 9;
-            return response.json();
-          case 9:
-            _yield$response$json = _context2.sent;
-            error = _yield$response$json.error;
-            result = _yield$response$json.result;
-            setCompanyActionStatus({
-              loading: false,
-              error: result.error ? result.result : null
-            });
-            if (!error) {
-              if (assign.driverId) {
-                showToast(_ToastContext.ToastType.Success, t('ORDER_COMPANY_ASSIGNED', 'Company assigned to order'));
-              } else {
-                showToast(_ToastContext.ToastType.Success, t('ORDER_COMPANY_REMOVED', 'Company removed from the order'));
-              }
-            }
-            _context2.next = 19;
-            break;
-          case 16:
-            _context2.prev = 16;
-            _context2.t0 = _context2["catch"](0);
-            setCompanyActionStatus(_objectSpread(_objectSpread({}, companyActionStatus), {}, {
-              loading: false,
-              error: [_context2.t0.message]
-            }));
-          case 19:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2, null, [[0, 16]]);
-    }));
-    return function handleAssignDriverCompany(_x3) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  /**
    * change online state for drivers
    * @param {Boolean} isOnline
    */
@@ -324,12 +241,12 @@ var DriversList = function DriversList(props) {
    * Method to get drivers from API
    */
   var getDrivers = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var source, where, conditions, searchConditions, _yield$ordering$setAc2, result;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            _context3.prev = 0;
+            _context2.prev = 0;
             setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
               loading: true
             }));
@@ -379,35 +296,35 @@ var DriversList = function DriversList(props) {
                 conector: 'AND'
               };
             }
-            _context3.next = 11;
+            _context2.next = 11;
             return ordering.setAccessToken(session.token).users().select(propsToFetch).where(where).get({
               cancelToken: source
             });
           case 11:
-            _yield$ordering$setAc2 = _context3.sent;
+            _yield$ordering$setAc2 = _context2.sent;
             result = _yield$ordering$setAc2.content.result;
             setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
               loading: false,
               drivers: result
             }));
             getOnlineOfflineDrivers(result);
-            _context3.next = 20;
+            _context2.next = 20;
             break;
           case 17:
-            _context3.prev = 17;
-            _context3.t0 = _context3["catch"](0);
+            _context2.prev = 17;
+            _context2.t0 = _context2["catch"](0);
             setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
               loading: false,
-              error: _context3.t0.message
+              error: _context2.t0.message
             }));
           case 20:
           case "end":
-            return _context3.stop();
+            return _context2.stop();
         }
-      }, _callee3, null, [[0, 17]]);
+      }, _callee2, null, [[0, 17]]);
     }));
     return function getDrivers() {
-      return _ref3.apply(this, arguments);
+      return _ref2.apply(this, arguments);
     };
   }();
 
@@ -415,72 +332,63 @@ var DriversList = function DriversList(props) {
    * Method to get the drivers of order from API
    */
   var getOrderDrivers = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-      var requestOptions, response, _yield$response$json2, error, result;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var requestOptions, response, _yield$response$json, error, result;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            _context4.prev = 0;
+            _context3.prev = 0;
             setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
-              loading: true
-            }));
-            setCompanysList(_objectSpread(_objectSpread({}, companysList), {}, {
               loading: true
             }));
             requestOptions = {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(session.token)
+                Authorization: "Bearer ".concat(session.token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             };
-            _context4.next = 6;
+            _context3.next = 5;
             return fetch("".concat(ordering.root, "/controls/orders/").concat(orderId), requestOptions);
-          case 6:
-            response = _context4.sent;
-            _context4.next = 9;
+          case 5:
+            response = _context3.sent;
+            _context3.next = 8;
             return response.json();
-          case 9:
-            _yield$response$json2 = _context4.sent;
-            error = _yield$response$json2.error;
-            result = _yield$response$json2.result;
+          case 8:
+            _yield$response$json = _context3.sent;
+            error = _yield$response$json.error;
+            result = _yield$response$json.result;
             setDriversList({
               loading: false,
               drivers: error ? [] : result === null || result === void 0 ? void 0 : result.drivers,
               error: error ? result : null
             });
-            setCompanysList({
-              loading: false,
-              companys: error ? [] : result === null || result === void 0 ? void 0 : result.driver_companies,
-              error: error ? result : null
-            });
-            _context4.next = 20;
+            _context3.next = 17;
             break;
-          case 16:
-            _context4.prev = 16;
-            _context4.t0 = _context4["catch"](0);
+          case 14:
+            _context3.prev = 14;
+            _context3.t0 = _context3["catch"](0);
             setDriversList(_objectSpread(_objectSpread({}, driversList), {}, {
               loading: false,
-              error: _context4.t0.message
+              error: _context3.t0.message
             }));
-            setCompanysList(_objectSpread(_objectSpread({}, companysList), {}, {
-              loading: false,
-              error: _context4.t0.message
-            }));
-          case 20:
+          case 17:
           case "end":
-            return _context4.stop();
+            return _context3.stop();
         }
-      }, _callee4, null, [[0, 16]]);
+      }, _callee3, null, [[0, 14]]);
     }));
     return function getOrderDrivers() {
-      return _ref4.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
 
   /**
    * listen for busy/not busy filter
    */
+
   (0, _react.useEffect)(function () {
     getOnlineOfflineDrivers(driversList.drivers);
   }, [driversSubfilter]);
@@ -560,18 +468,20 @@ var DriversList = function DriversList(props) {
     };
   }, [socket, session === null || session === void 0 ? void 0 : session.loading, driversList.drivers]);
   (0, _react.useEffect)(function () {
+    if (!(session !== null && session !== void 0 && session.user) || drivers) return;
+    socket.join('drivers');
+  }, [socket, session === null || session === void 0 ? void 0 : session.user, asDashboard]);
+  (0, _react.useEffect)(function () {
     getOnlineOfflineDrivers(driversList.drivers);
   }, [driversList.drivers]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     driversList: driversList,
-    companysList: companysList,
     onlineDrivers: onlineDrivers,
     offlineDrivers: offlineDrivers,
     driverActionStatus: driverActionStatus,
     driversIsOnline: driversIsOnline,
     driversSubfilter: driversSubfilter,
     searchValue: searchValue,
-    handleAssignDriverCompany: handleAssignDriverCompany,
     handleChangeSearch: handleChangeSearch,
     handleChangeDriverIsOnline: handleChangeDriverIsOnline,
     handleChangeDriversSubFilter: handleChangeDriversSubFilter,

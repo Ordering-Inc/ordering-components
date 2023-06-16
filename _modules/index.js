@@ -51,12 +51,6 @@ Object.defineProperty(exports, "AppleLogin", {
     return _AppleLogin.AppleLogin;
   }
 });
-Object.defineProperty(exports, "Appointments", {
-  enumerable: true,
-  get: function get() {
-    return _OrdersDashboardComponents.Appointments;
-  }
-});
 Object.defineProperty(exports, "BaseComponent", {
   enumerable: true,
   get: function get() {
@@ -249,12 +243,6 @@ Object.defineProperty(exports, "CouponControl", {
     return _CouponControl.CouponControl;
   }
 });
-Object.defineProperty(exports, "CustomOrderDetails", {
-  enumerable: true,
-  get: function get() {
-    return _OrdersDashboardComponents.CustomOrderDetails;
-  }
-});
 Object.defineProperty(exports, "CustomerContext", {
   enumerable: true,
   get: function get() {
@@ -361,12 +349,6 @@ Object.defineProperty(exports, "ForgotPasswordForm", {
   enumerable: true,
   get: function get() {
     return _ForgotPasswordForm.ForgotPasswordForm;
-  }
-});
-Object.defineProperty(exports, "GiftCardsList", {
-  enumerable: true,
-  get: function get() {
-    return _OrdersDashboardComponents.GiftCardsList;
   }
 });
 Object.defineProperty(exports, "GoogleAutocompleteInput", {
@@ -483,7 +465,7 @@ Object.defineProperty(exports, "Messages", {
     return _Messages.Messages;
   }
 });
-Object.defineProperty(exports, "MessagesDashboard", {
+Object.defineProperty(exports, "MessagesDasboard", {
   enumerable: true,
   get: function get() {
     return _OrdersDashboardComponents.Messages;
@@ -843,12 +825,6 @@ Object.defineProperty(exports, "ReviewCustomer", {
     return _ReviewCustomer.ReviewCustomer;
   }
 });
-Object.defineProperty(exports, "ReviewCustomerDashboard", {
-  enumerable: true,
-  get: function get() {
-    return _OrdersDashboardComponents.ReviewCustomer;
-  }
-});
 Object.defineProperty(exports, "ReviewDriver", {
   enumerable: true,
   get: function get() {
@@ -999,12 +975,6 @@ Object.defineProperty(exports, "UserFormDetails", {
     return _UserFormDetails.UserFormDetails;
   }
 });
-Object.defineProperty(exports, "UserFormDetailsDashboard", {
-  enumerable: true,
-  get: function get() {
-    return _OrdersDashboardComponents.UserFormDetails;
-  }
-});
 Object.defineProperty(exports, "UserVerification", {
   enumerable: true,
   get: function get() {
@@ -1057,12 +1027,6 @@ Object.defineProperty(exports, "WebsocketContext", {
   enumerable: true,
   get: function get() {
     return _WebsocketContext.WebsocketContext;
-  }
-});
-Object.defineProperty(exports, "WebsocketContextDashboard", {
-  enumerable: true,
-  get: function get() {
-    return _OrdersDashboardComponents.WebsocketContext;
   }
 });
 Object.defineProperty(exports, "WebsocketProvider", {

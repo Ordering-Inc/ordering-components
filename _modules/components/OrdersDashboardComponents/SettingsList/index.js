@@ -49,9 +49,7 @@ var SettingsList = function SettingsList(props) {
     setConfigs = _useState2[1];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
-    _useSession2$ = _useSession2[0],
-    loading = _useSession2$.loading,
-    token = _useSession2$.token;
+    loading = _useSession2[0].loading;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -175,7 +173,7 @@ var SettingsList = function SettingsList(props) {
    */
   var saveConfig = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id, params) {
-      var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, changes, _configs, _categories;
+      var _yield$ordering$confi, _yield$ordering$confi2, error, result, changes, _configs, _categories;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -192,12 +190,12 @@ var SettingsList = function SettingsList(props) {
               API: false
             }));
             _context.next = 7;
-            return ordering.setAccessToken(token).configs(id).save(params);
+            return ordering.configs(id).save(params);
           case 7:
-            _yield$ordering$setAc = _context.sent;
-            _yield$ordering$setAc2 = _yield$ordering$setAc.content;
-            error = _yield$ordering$setAc2.error;
-            result = _yield$ordering$setAc2.result;
+            _yield$ordering$confi = _context.sent;
+            _yield$ordering$confi2 = _yield$ordering$confi.content;
+            error = _yield$ordering$confi2.error;
+            result = _yield$ordering$confi2.result;
             if (!error) {
               changes = formState !== null && formState !== void 0 && formState.changes ? formState === null || formState === void 0 ? void 0 : formState.changes.filter(function (item) {
                 return item.id !== result.id;

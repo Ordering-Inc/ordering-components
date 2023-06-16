@@ -9,6 +9,7 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _SessionContext = require("../../../contexts/SessionContext");
 var _EventContext = require("../../../contexts/EventContext");
+var _WebsocketContext = require("../../../contexts/WebsocketContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -48,6 +49,7 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useState = (0, _react.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     categorySelected = _useState2[0],
@@ -123,18 +125,6 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
     _useState26 = _slicedToArray(_useState25, 2),
     formFeeState = _useState26[0],
     setFormFeeState = _useState26[1];
-  var _useState27 = (0, _react.useState)([]),
-    _useState28 = _slicedToArray(_useState27, 2),
-    businessTypes = _useState28[0],
-    setBusinessTypes = _useState28[1];
-  var _useState29 = (0, _react.useState)({
-      site: null,
-      loading: false,
-      error: null
-    }),
-    _useState30 = _slicedToArray(_useState29, 2),
-    siteState = _useState30[0],
-    setSiteState = _useState30[1];
   var categoryStateDefault = {
     loading: true,
     pagination: {
@@ -146,18 +136,18 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
     },
     products: []
   };
-  var _useState31 = (0, _react.useState)(categoryStateDefault),
+  var _useState27 = (0, _react.useState)(categoryStateDefault),
+    _useState28 = _slicedToArray(_useState27, 2),
+    categoryState = _useState28[0],
+    setCategoryState = _useState28[1];
+  var _useState29 = (0, _react.useState)(null),
+    _useState30 = _slicedToArray(_useState29, 2),
+    errors = _useState30[0],
+    setErrors = _useState30[1];
+  var _useState31 = (0, _react.useState)(false),
     _useState32 = _slicedToArray(_useState31, 2),
-    categoryState = _useState32[0],
-    setCategoryState = _useState32[1];
-  var _useState33 = (0, _react.useState)(null),
-    _useState34 = _slicedToArray(_useState33, 2),
-    errors = _useState34[0],
-    setErrors = _useState34[1];
-  var _useState35 = (0, _react.useState)(false),
-    _useState36 = _slicedToArray(_useState35, 2),
-    errorQuantityProducts = _useState36[0],
-    setErrorQuantityProducts = _useState36[1];
+    errorQuantityProducts = _useState32[0],
+    setErrorQuantityProducts = _useState32[1];
 
   /**
    * Change category selected
@@ -208,7 +198,7 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
   var getProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, currentPage, currentPageSize) {
       var _businessState$busine;
-      var _categoryState, _businessState$busine2, _categoryFinded, _categoryFinded2, _productsFinded, categoryFinded, _categories, productsFinded, productsFiltered, _categorySelected$pro, _businessState$busine3, _businessState$busine4, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, searchConditions, _businessState$busine5, _businessState$busine6, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
+      var _categoryState, _businessState$busine2, _categoryFiltered, _categoryFiltered$pro, categoryFiltered, _categories, productsFiltered, _categorySelected$pro, _businessState$busine3, _businessState$busine4, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, searchConditions, _businessState$busine5, _businessState$busine6, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -223,18 +213,11 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
               _categories = _toConsumableArray(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : _businessState$busine2.categories);
               _categories.forEach(function iterate(category) {
                 if ((category === null || category === void 0 ? void 0 : category.id) === (categorySelected === null || categorySelected === void 0 ? void 0 : categorySelected.id)) {
-                  categoryFinded = category;
+                  categoryFiltered = category;
                 }
                 Array.isArray(category === null || category === void 0 ? void 0 : category.subcategories) && category.subcategories.forEach(iterate);
               });
-              productsFinded = _toConsumableArray((_categoryFinded = categoryFinded) === null || _categoryFinded === void 0 ? void 0 : _categoryFinded.products);
-              if (categoryFinded && (_categoryFinded2 = categoryFinded) !== null && _categoryFinded2 !== void 0 && _categoryFinded2.subcategories) {
-                categoryFinded.subcategories.forEach(function iterate(category) {
-                  productsFinded = [].concat(_toConsumableArray(productsFinded), _toConsumableArray(category.products));
-                  Array.isArray(category === null || category === void 0 ? void 0 : category.subcategories) && category.subcategories.forEach(iterate);
-                });
-              }
-              productsFiltered = (_productsFinded = productsFinded) === null || _productsFinded === void 0 ? void 0 : _productsFinded.filter(function (product) {
+              productsFiltered = (_categoryFiltered = categoryFiltered) === null || _categoryFiltered === void 0 ? void 0 : (_categoryFiltered$pro = _categoryFiltered.products) === null || _categoryFiltered$pro === void 0 ? void 0 : _categoryFiltered$pro.filter(function (product) {
                 return isMatchSearch(product.name, product.description);
               });
               if (!productsFiltered) {
@@ -415,7 +398,9 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 4:
@@ -468,7 +453,9 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
+                Authorization: "Bearer ".concat(token),
+                'X-App-X': ordering.appId,
+                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             });
           case 4:
@@ -506,111 +493,6 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
       return _ref4.apply(this, arguments);
     };
   }();
-
-  /**
-   * Method to get the themes from API
-   */
-  var getSites = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-      var requestOptions, response, _yield$response$json3, error, result, site;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
-          case 0:
-            _context5.prev = 0;
-            setSiteState(_objectSpread(_objectSpread({}, siteState), {}, {
-              loading: true
-            }));
-            requestOptions = {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: "Bearer ".concat(token)
-              }
-            };
-            _context5.next = 5;
-            return fetch("".concat(ordering.root, "/sites"), requestOptions);
-          case 5:
-            response = _context5.sent;
-            _context5.next = 8;
-            return response.json();
-          case 8:
-            _yield$response$json3 = _context5.sent;
-            error = _yield$response$json3.error;
-            result = _yield$response$json3.result;
-            if (!error) {
-              site = result.find(function (site) {
-                return site.code === 'website';
-              });
-              setSiteState(_objectSpread(_objectSpread({}, siteState), {}, {
-                loading: false,
-                site: site
-              }));
-            } else {
-              setSiteState(_objectSpread(_objectSpread({}, siteState), {}, {
-                loading: false,
-                error: result
-              }));
-            }
-            _context5.next = 17;
-            break;
-          case 14:
-            _context5.prev = 14;
-            _context5.t0 = _context5["catch"](0);
-            setSiteState(_objectSpread(_objectSpread({}, siteState), {}, {
-              loading: false,
-              error: [_context5.t0.message]
-            }));
-          case 17:
-          case "end":
-            return _context5.stop();
-        }
-      }, _callee5, null, [[0, 14]]);
-    }));
-    return function getSites() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-  var getBusinessTypes = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-      var response, _yield$response$json4, error, result;
-      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-        while (1) switch (_context6.prev = _context6.next) {
-          case 0:
-            _context6.prev = 0;
-            _context6.next = 3;
-            return fetch("".concat(ordering.root, "/business_types?where=[{\"attribute\":\"enabled\",\"value\":true}]"), {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
-          case 3:
-            response = _context6.sent;
-            _context6.next = 6;
-            return response.json();
-          case 6:
-            _yield$response$json4 = _context6.sent;
-            error = _yield$response$json4.error;
-            result = _yield$response$json4.result;
-            if (!error) {
-              setBusinessTypes(result);
-            }
-            _context6.next = 15;
-            break;
-          case 12:
-            _context6.prev = 12;
-            _context6.t0 = _context6["catch"](0);
-            console.log(_context6.t0 === null || _context6.t0 === void 0 ? void 0 : _context6.t0.message);
-          case 15:
-          case "end":
-            return _context6.stop();
-        }
-      }, _callee6, null, [[0, 12]]);
-    }));
-    return function getBusinessTypes() {
-      return _ref6.apply(this, arguments);
-    };
-  }();
   (0, _react.useEffect)(function () {
     if (isInitialRender) {
       getProduct();
@@ -620,22 +502,22 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
     setBusinessSlug(slug);
   }, [slug]);
   var getBusiness = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _result$categories, source, _yield$ordering$busin2, result;
-      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-        while (1) switch (_context7.prev = _context7.next) {
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
           case 0:
-            _context7.prev = 0;
+            _context5.prev = 0;
             setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
               loading: true
             }));
             source = {};
             requestsState.business = source;
             setRequestsState(_objectSpread({}, requestsState));
-            _context7.next = 7;
+            _context5.next = 7;
             return ordering.businesses(businessSlug).asDashboard().get();
           case 7:
-            _yield$ordering$busin2 = _context7.sent;
+            _yield$ordering$busin2 = _context5.sent;
             result = _yield$ordering$busin2.content.result;
             if (!(result !== null && result !== void 0 && result.categories) || (result === null || result === void 0 ? void 0 : (_result$categories = result.categories) === null || _result$categories === void 0 ? void 0 : _result$categories.length) === 0) {
               setErrorQuantityProducts(true);
@@ -644,23 +526,23 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
               business: result,
               loading: false
             }));
-            _context7.next = 16;
+            _context5.next = 16;
             break;
           case 13:
-            _context7.prev = 13;
-            _context7.t0 = _context7["catch"](0);
+            _context5.prev = 13;
+            _context5.t0 = _context5["catch"](0);
             setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
               loading: false,
-              error: [_context7.t0.message]
+              error: [_context5.t0.message]
             }));
           case 16:
           case "end":
-            return _context7.stop();
+            return _context5.stop();
         }
-      }, _callee7, null, [[0, 13]]);
+      }, _callee5, null, [[0, 13]]);
     }));
     return function getBusiness() {
-      return _ref7.apply(this, arguments);
+      return _ref5.apply(this, arguments);
     };
   }();
 
@@ -690,11 +572,11 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
   var handleUpdateCategoryState = function handleUpdateCategoryState(updatedCategory) {
     setCategoryState(updatedCategory);
   };
-  var handleUpdateTaxesProducts = function handleUpdateTaxesProducts(_ref8) {
+  var handleUpdateTaxesProducts = function handleUpdateTaxesProducts(_ref6) {
     var _businessState$busine10;
-    var tax = _ref8.tax,
-      isRemove = _ref8.isRemove,
-      id = _ref8.id;
+    var tax = _ref6.tax,
+      isRemove = _ref6.isRemove,
+      id = _ref6.id;
     var _categories = _toConsumableArray(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 ? void 0 : _businessState$busine10.categories);
     var replaceSameTaxes = function replaceSameTaxes(categories, tax) {
       for (var i = 0; i < (categories === null || categories === void 0 ? void 0 : categories.length); i++) {
@@ -723,10 +605,10 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
       })
     }));
   };
-  var handleUpdateFeesProducts = function handleUpdateFeesProducts(_ref9) {
+  var handleUpdateFeesProducts = function handleUpdateFeesProducts(_ref7) {
     var _businessState$busine11;
-    var fee = _ref9.fee,
-      isRemove = _ref9.isRemove;
+    var fee = _ref7.fee,
+      isRemove = _ref7.isRemove;
     var _categories = _toConsumableArray(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine11 = businessState.business) === null || _businessState$busine11 === void 0 ? void 0 : _businessState$busine11.categories);
     var replaceSameFees = function replaceSameFees(categories, fee) {
       for (var i = 0; i < (categories === null || categories === void 0 ? void 0 : categories.length); i++) {
@@ -756,9 +638,13 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
     }));
   };
   (0, _react.useEffect)(function () {
+    var _businessState$busine12;
     if (businessState.loading) return;
     if (!businessState.loading && (categorySelected || isAllCategoryProducts)) {
       getProducts(true);
+    } else if (businessState !== null && businessState !== void 0 && (_businessState$busine12 = businessState.business) !== null && _businessState$busine12 !== void 0 && _businessState$busine12.categories) {
+      var _businessState$busine13;
+      setCategorySelected(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine13 = businessState.business) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.categories[0]);
     }
   }, [businessState]);
   (0, _react.useEffect)(function () {
@@ -821,8 +707,6 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
   (0, _react.useEffect)(function () {
     getTaxes();
     getFees();
-    getBusinessTypes();
-    getSites();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     errors: errors,
@@ -853,10 +737,7 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
     taxes: taxes,
     setTaxes: setTaxes,
     fees: fees,
-    setFees: setFees,
-    businessTypes: businessTypes,
-    setBusinessTypes: setBusinessTypes,
-    siteState: siteState
+    setFees: setFees
   })));
 };
 exports.BusinessProductsListing = BusinessProductsListing;

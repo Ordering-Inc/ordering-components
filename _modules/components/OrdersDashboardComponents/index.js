@@ -3,12 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "Appointments", {
-  enumerable: true,
-  get: function get() {
-    return _Appointments.Appointments;
-  }
-});
 Object.defineProperty(exports, "BusinessProductsListing", {
   enumerable: true,
   get: function get() {
@@ -33,12 +27,6 @@ Object.defineProperty(exports, "CountryList", {
     return _CountryList.CountryList;
   }
 });
-Object.defineProperty(exports, "CustomOrderDetails", {
-  enumerable: true,
-  get: function get() {
-    return _CustomOrderDetails.CustomOrderDetails;
-  }
-});
 Object.defineProperty(exports, "DashboardBusinessList", {
   enumerable: true,
   get: function get() {
@@ -61,12 +49,6 @@ Object.defineProperty(exports, "ExportCSV", {
   enumerable: true,
   get: function get() {
     return _ExportCSV.ExportCSV;
-  }
-});
-Object.defineProperty(exports, "GiftCardsList", {
-  enumerable: true,
-  get: function get() {
-    return _GiftCardsList.GiftCardsList;
   }
 });
 Object.defineProperty(exports, "GoogleMapsApiKeySetting", {
@@ -129,12 +111,6 @@ Object.defineProperty(exports, "PointsWalletLevels", {
     return _PointsWalletLevels.PointsWalletLevels;
   }
 });
-Object.defineProperty(exports, "ReviewCustomer", {
-  enumerable: true,
-  get: function get() {
-    return _ReviewCustomer.ReviewCustomer;
-  }
-});
 Object.defineProperty(exports, "Schedule", {
   enumerable: true,
   get: function get() {
@@ -147,35 +123,20 @@ Object.defineProperty(exports, "SettingsList", {
     return _SettingsList.SettingsList;
   }
 });
-Object.defineProperty(exports, "UserFormDetails", {
-  enumerable: true,
-  get: function get() {
-    return _UserFormDetails.UserFormDetails;
-  }
-});
 Object.defineProperty(exports, "UsersList", {
   enumerable: true,
   get: function get() {
     return _UsersList.UsersList;
   }
 });
-Object.defineProperty(exports, "WebsocketContext", {
-  enumerable: true,
-  get: function get() {
-    return _WebsocketContext.WebsocketContext;
-  }
-});
-var _Appointments = require("./Appointments");
 var _BusinessProductsListing = require("./BusinessProductsListing");
 var _CheckPassword = require("./CheckPassword");
-var _CustomOrderDetails = require("./CustomOrderDetails");
 var _CityList = require("./CityList");
 var _CountryList = require("./CountryList");
 var _DashboardBusinessList = require("./DashboardBusinessList");
 var _DashboardOrdersList = require("./DashboardOrdersList");
 var _DriversList = require("./DriversList");
 var _ExportCSV = require("./ExportCSV");
-var _GiftCardsList = require("./GiftCardsList");
 var _GoogleMapsApiKeySetting = require("./GoogleMapsApiKeySetting");
 var _LogisticInformation = require("./LogisticInformation");
 var _Logistics = require("./Logistics");
@@ -186,9 +147,6 @@ var _OrderNotification = require("./OrderNotification");
 var _OrdersFilter = require("./OrdersFilter");
 var _OrdersManage = require("./OrdersManage");
 var _PointsWalletLevels = require("./PointsWalletLevels");
-var _ReviewCustomer = require("./ReviewCustomer");
 var _Schedule = require("./Schedule");
 var _SettingsList = require("./SettingsList");
-var _UserFormDetails = require("./UserFormDetails");
 var _UsersList = require("./UsersList");
-var _WebsocketContext = require("../../contexts/WebsocketContext");

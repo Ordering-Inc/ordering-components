@@ -35,6 +35,11 @@ var OrderNotification = function OrderNotification(props) {
     var handleRegisterOrder = function handleRegisterOrder(order) {
       events.emit('order_added', order);
     };
+    if (user.level === 0) {
+      socket.join('orders');
+    } else {
+      socket.join("orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+    }
     socket.on('orders_register', handleRegisterOrder);
     return function () {
       socket.off('orders_register', handleRegisterOrder);

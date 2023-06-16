@@ -11,6 +11,8 @@ var _SessionContext = require("../../../contexts/SessionContext");
 var _ApiContext = require("../../../contexts/ApiContext");
 var _WebsocketContext = require("../../../contexts/WebsocketContext");
 var _EventContext = require("../../../contexts/EventContext");
+var _ConfigContext = require("../../../contexts/ConfigContext");
+var _LanguageContext = require("../../../contexts/LanguageContext");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -42,7 +44,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     customerId = props.customerId,
     businessId = props.businessId,
     orderIds = props.orderIds,
-    deletedOrderIds = props.deletedOrderIds,
+    deletedOrderId = props.deletedOrderId,
     orderStatus = props.orderStatus,
     orderBy = props.orderBy,
     orderDirection = props.orderDirection,
@@ -54,18 +56,21 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     isSearchByCustomerEmail = props.isSearchByCustomerEmail,
     isSearchByCustomerPhone = props.isSearchByCustomerPhone,
     isSearchByBusinessName = props.isSearchByBusinessName,
-    isSearchByDriverName = props.isSearchByDriverName,
     orderIdForUnreadCountUpdate = props.orderIdForUnreadCountUpdate,
     timeStatus = props.timeStatus,
-    driversList = props.driversList,
-    allowColumns = props.allowColumns,
-    setAllowColumns = props.setAllowColumns;
+    driversList = props.driversList;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+    _useConfig2 = _slicedToArray(_useConfig, 1),
+    configState = _useConfig2[0];
+  var _useLanguage = (0, _LanguageContext.useLanguage)(),
+    _useLanguage2 = _slicedToArray(_useLanguage, 2),
+    t = _useLanguage2[1];
   var _useState = (0, _react.useState)({
       loading: !orders,
       error: null,
@@ -74,26 +79,112 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     _useState2 = _slicedToArray(_useState, 2),
     orderList = _useState2[0],
     setOrderList = _useState2[1];
-  var _useState3 = (0, _react.useState)({
+  var allowColumnsModel = {
+    slaBar: {
+      visable: false,
+      title: '',
+      className: '',
+      draggable: false,
+      colSpan: 1,
+      order: -2
+    },
+    orderNumber: {
+      visable: true,
+      title: '',
+      className: '',
+      draggable: false,
+      colSpan: 1,
+      order: -1
+    },
+    status: {
+      visable: true,
+      title: t('STATUS', 'Status'),
+      className: 'statusInfo',
+      draggable: true,
+      colSpan: 1,
+      order: 1
+    },
+    dateTime: {
+      visable: true,
+      title: '',
+      className: '',
+      draggable: false,
+      colSpan: 1,
+      order: 0
+    },
+    business: {
+      visable: true,
+      title: t('BUSINESS', 'Business'),
+      className: 'businessInfo',
+      draggable: true,
+      colSpan: 1,
+      order: 2
+    },
+    customer: {
+      visable: true,
+      title: t('CUSTOMER', 'Customer'),
+      className: 'customerInfo',
+      draggable: true,
+      colSpan: 1,
+      order: 3
+    },
+    driver: {
+      visable: true,
+      title: t('DRIVER', 'Driver'),
+      className: 'driverInfo',
+      draggable: true,
+      colSpan: 1,
+      order: 4
+    },
+    advanced: {
+      visable: true,
+      title: t('ADVANCED_LOGISTICS', 'Advanced logistics'),
+      className: 'advanced',
+      draggable: true,
+      colSpan: 3,
+      order: 5
+    },
+    timer: {
+      visable: false,
+      title: t('SLA_TIMER', 'SLA’s timer'),
+      className: 'timer',
+      draggable: true,
+      colSpan: 1,
+      order: 6
+    },
+    total: {
+      visable: true,
+      title: '',
+      className: '',
+      draggable: false,
+      colSpan: 1,
+      order: 10
+    }
+  };
+  var _useState3 = (0, _react.useState)(null),
+    _useState4 = _slicedToArray(_useState3, 2),
+    allowColumns = _useState4[0],
+    setAllowColumns = _useState4[1];
+  var _useState5 = (0, _react.useState)({
       currentPage: paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1 ? paginationSettings.initialPage - 1 : 0,
       pageSize: (_paginationSettings$p = paginationSettings.pageSize) !== null && _paginationSettings$p !== void 0 ? _paginationSettings$p : 10
     }),
-    _useState4 = _slicedToArray(_useState3, 2),
-    pagination = _useState4[0],
-    setPagination = _useState4[1];
+    _useState6 = _slicedToArray(_useState5, 2),
+    pagination = _useState6[0],
+    setPagination = _useState6[1];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     session = _useSession2[0];
   var socket = (0, _WebsocketContext.useWebsocket)();
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
-  var _useState5 = (0, _react.useState)({
+  var _useState7 = (0, _react.useState)({
       loading: false,
       error: null
     }),
-    _useState6 = _slicedToArray(_useState5, 2),
-    actionStatus = _useState6[0],
-    setActionStatus = _useState6[1];
+    _useState8 = _slicedToArray(_useState7, 2),
+    actionStatus = _useState8[0],
+    setActionStatus = _useState8[1];
   var sortOrdersArray = function sortOrdersArray(option, array) {
     if (option === 'id') {
       if (orderDirection === 'desc') {
@@ -178,7 +269,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
    */
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(pageSize, page) {
-      var where, conditions, options, getFilterStatusInOrderStatus, searchConditions, _filterValues$metafie, filterConditons, metafieldConditions, source, functionFetch;
+      var where, conditions, options, getFilterStatusInOrderStatus, searchConditions, filterConditons, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -191,16 +282,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                 page_size: pageSize
               }
             };
-            conditions.push({
-              attribute: 'products',
-              conditions: [{
-                attribute: 'type',
-                value: {
-                  condition: '=',
-                  value: 'item'
-                }
-              }]
-            });
             if (orderIds) {
               conditions.push({
                 attribute: 'id',
@@ -321,18 +402,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                   }]
                 });
               }
-              if (isSearchByDriverName) {
-                searchConditions.push({
-                  attribute: 'driver',
-                  conditions: [{
-                    attribute: 'name',
-                    value: {
-                      condition: 'ilike',
-                      value: encodeURI("%".concat(searchValue, "%"))
-                    }
-                  }]
-                });
-              }
               conditions.push({
                 conector: 'OR',
                 conditions: searchConditions
@@ -347,37 +416,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                     condition: 'ilike',
                     value: encodeURI("%".concat(filterValues === null || filterValues === void 0 ? void 0 : filterValues.orderId, "%"))
                   }
-                });
-              }
-              if (filterValues !== null && filterValues !== void 0 && filterValues.externalId) {
-                filterConditons.push({
-                  attribute: 'external_id',
-                  value: {
-                    condition: 'ilike',
-                    value: encodeURI("%".concat(filterValues === null || filterValues === void 0 ? void 0 : filterValues.externalId, "%"))
-                  }
-                });
-              }
-              if ((filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$metafie = filterValues.metafield) === null || _filterValues$metafie === void 0 ? void 0 : _filterValues$metafie.length) > 0) {
-                metafieldConditions = filterValues === null || filterValues === void 0 ? void 0 : filterValues.metafield.map(function (item) {
-                  return {
-                    attribute: 'metafields',
-                    conditions: [{
-                      attribute: 'key',
-                      value: item === null || item === void 0 ? void 0 : item.key
-                    }, {
-                      attribute: 'value',
-                      value: {
-                        condition: 'ilike',
-                        value: encodeURI("%".concat(item === null || item === void 0 ? void 0 : item.value, "%"))
-                      }
-                    }],
-                    conector: 'AND'
-                  };
-                });
-                filterConditons.push({
-                  conector: 'OR',
-                  conditions: metafieldConditions
                 });
               }
               if (filterValues.deliveryFromDatetime !== null) {
@@ -440,15 +478,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                   value: filterValues.paymethodIds
                 });
               }
-              if ((filterValues === null || filterValues === void 0 ? void 0 : filterValues.cityIds.length) !== 0) {
-                filterConditons.push({
-                  attribute: 'business',
-                  conditions: [{
-                    attribute: 'city_id',
-                    value: filterValues === null || filterValues === void 0 ? void 0 : filterValues.cityIds
-                  }]
-                });
-              }
               if (filterConditons.length) {
                 conditions.push({
                   conector: 'AND',
@@ -470,11 +499,11 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             } else {
               functionFetch = ordering.setAccessToken(accessToken).orders().asDashboard().where(where);
             }
-            _context2.next = 20;
+            _context2.next = 19;
             return functionFetch.get(options);
-          case 20:
+          case 19:
             return _context2.abrupt("return", _context2.sent);
-          case 21:
+          case 20:
           case "end":
             return _context2.stop();
         }
@@ -772,23 +801,15 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
    * Listening deleted order
    */
   (0, _react.useEffect)(function () {
-    if (!deletedOrderIds) return;
-    var totalDeletedCount = 0;
+    if (!deletedOrderId) return;
     var orders = orderList.orders.filter(function (_order) {
-      if (deletedOrderIds.includes(_order === null || _order === void 0 ? void 0 : _order.id)) {
-        totalDeletedCount = totalDeletedCount + 1;
-        return false;
-      } else {
-        return true;
-      }
+      return (_order === null || _order === void 0 ? void 0 : _order.id) !== deletedOrderId;
     });
+    loadOrders();
     setOrderList(_objectSpread(_objectSpread({}, orderList), {}, {
       orders: orders
     }));
-    setPagination(_objectSpread(_objectSpread({}, pagination), {}, {
-      total: (pagination === null || pagination === void 0 ? void 0 : pagination.total) - totalDeletedCount
-    }));
-  }, [JSON.stringify(deletedOrderIds)]);
+  }, [deletedOrderId]);
 
   /**
    * Listening sesssion and filter values change
@@ -825,7 +846,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
   (0, _react.useEffect)(function () {
     if (orderList.loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      if (customerId && (order === null || order === void 0 ? void 0 : order.customer_id) !== customerId) return;
       if (isOnlyDelivery && (order === null || order === void 0 ? void 0 : order.delivery_type) !== 1) return;
       if (!(order !== null && order !== void 0 && order.driver) && order !== null && order !== void 0 && order.driver_id) {
         var updatedDriver = driversList === null || driversList === void 0 ? void 0 : driversList.drivers.find(function (driver) {
@@ -874,9 +894,6 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
       }
     };
     var handleRegisterOrder = function handleRegisterOrder(order) {
-      var _order$products, _order$products$;
-      if ((order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : (_order$products$ = _order$products[0]) === null || _order$products$ === void 0 ? void 0 : _order$products$.type) === 'gift_card') return;
-      if (customerId && (order === null || order === void 0 ? void 0 : order.customer_id) !== customerId) return;
       if (isOnlyDelivery && (order === null || order === void 0 ? void 0 : order.delivery_type) !== 1) return;
       var found = orderList.orders.find(function (_order) {
         return (_order === null || _order === void 0 ? void 0 : _order.id) === (order === null || order === void 0 ? void 0 : order.id);
@@ -948,7 +965,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
       socket.off('orders_register', handleRegisterOrder);
       socket.off('message', handleNewMessage);
     };
-  }, [orderList.orders, pagination, orderBy, socket, driversList, customerId]);
+  }, [orderList.orders, pagination, orderBy, socket, driversList]);
 
   // Listening for customer rating
   (0, _react.useEffect)(function () {
@@ -969,6 +986,60 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
       events.off('customer_reviewed', handleCustomerReviewed);
     };
   }, [orderList, orderBy]);
+  (0, _react.useEffect)(function () {
+    if (!(session !== null && session !== void 0 && session.user.id) || !configState || allowColumns) return;
+    var getUser = /*#__PURE__*/function () {
+      var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var _result$settings, _configState$configs, _configState$configs$, _configState$configs2, _configState$configs3, response, _response$content, error, result, _result$settings2, _configState$configs4, _configState$configs5, _configState$configs6, _configState$configs7;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.prev = 0;
+              _context7.next = 3;
+              return ordering.users(session === null || session === void 0 ? void 0 : session.user.id).select(['settings']).get();
+            case 3:
+              response = _context7.sent;
+              _response$content = response.content, error = _response$content.error, result = _response$content.result;
+              if (!(!error && (_result$settings = result.settings) !== null && _result$settings !== void 0 && _result$settings.orderColumns)) {
+                _context7.next = 8;
+                break;
+              }
+              setAllowColumns((_result$settings2 = result.settings) === null || _result$settings2 === void 0 ? void 0 : _result$settings2.orderColumns);
+              return _context7.abrupt("return");
+            case 8:
+              setAllowColumns(_objectSpread(_objectSpread({}, allowColumnsModel), {}, {
+                slaBar: _objectSpread(_objectSpread({}, allowColumnsModel === null || allowColumnsModel === void 0 ? void 0 : allowColumnsModel.slaBar), {}, {
+                  visable: (configState === null || configState === void 0 ? void 0 : (_configState$configs = configState.configs) === null || _configState$configs === void 0 ? void 0 : (_configState$configs$ = _configState$configs.order_deadlines_enabled) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value) === '1'
+                }),
+                timer: _objectSpread(_objectSpread({}, allowColumnsModel === null || allowColumnsModel === void 0 ? void 0 : allowColumnsModel.timer), {}, {
+                  visable: (configState === null || configState === void 0 ? void 0 : (_configState$configs2 = configState.configs) === null || _configState$configs2 === void 0 ? void 0 : (_configState$configs3 = _configState$configs2.order_deadlines_enabled) === null || _configState$configs3 === void 0 ? void 0 : _configState$configs3.value) === '1'
+                })
+              }));
+              _context7.next = 14;
+              break;
+            case 11:
+              _context7.prev = 11;
+              _context7.t0 = _context7["catch"](0);
+              setAllowColumns(_objectSpread(_objectSpread({}, allowColumnsModel), {}, {
+                slaBar: _objectSpread(_objectSpread({}, allowColumnsModel === null || allowColumnsModel === void 0 ? void 0 : allowColumnsModel.slaBar), {}, {
+                  visable: (configState === null || configState === void 0 ? void 0 : (_configState$configs4 = configState.configs) === null || _configState$configs4 === void 0 ? void 0 : (_configState$configs5 = _configState$configs4.order_deadlines_enabled) === null || _configState$configs5 === void 0 ? void 0 : _configState$configs5.value) === '1'
+                }),
+                timer: _objectSpread(_objectSpread({}, allowColumnsModel === null || allowColumnsModel === void 0 ? void 0 : allowColumnsModel.timer), {}, {
+                  visable: (configState === null || configState === void 0 ? void 0 : (_configState$configs6 = configState.configs) === null || _configState$configs6 === void 0 ? void 0 : (_configState$configs7 = _configState$configs6.order_deadlines_enabled) === null || _configState$configs7 === void 0 ? void 0 : _configState$configs7.value) === '1'
+                })
+              }));
+            case 14:
+            case "end":
+              return _context7.stop();
+          }
+        }, _callee7, null, [[0, 11]]);
+      }));
+      return function getUser() {
+        return _ref9.apply(this, arguments);
+      };
+    }();
+    getUser();
+  }, [session === null || session === void 0 ? void 0 : session.user, configState]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     orderList: orderList,
     pagination: pagination,
@@ -977,8 +1048,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     handleUpdateOrderStatus: handleUpdateOrderStatus,
     allowColumns: allowColumns,
     setAllowColumns: setAllowColumns,
-    handleDrop: handleDrop,
-    saveUserSettings: saveUserSettings
+    handleDrop: handleDrop
   })));
 };
 exports.DashboardOrdersList = DashboardOrdersList;

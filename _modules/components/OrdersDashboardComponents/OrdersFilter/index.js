@@ -37,7 +37,6 @@ var OrdersFilter = function OrdersFilter(props) {
    */
   var _useState = (0, _react.useState)({
       orderId: null,
-      externalId: null,
       groupTypes: [],
       dateType: null,
       deliveryFromDatetime: null,
@@ -50,8 +49,7 @@ var OrdersFilter = function OrdersFilter(props) {
       deliveryTypes: [],
       paymethodIds: [],
       countryCode: [],
-      currency: [],
-      metafield: []
+      currency: []
     }),
     _useState2 = _slicedToArray(_useState, 2),
     filterValues = _useState2[0],
@@ -65,45 +63,6 @@ var OrdersFilter = function OrdersFilter(props) {
     var orderId = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
       orderId: orderId
-    }));
-  };
-
-  /**
-   * Changer external Id
-   * @param {EventTarget} e Related HTML event
-   */
-  var handleChangeExternalId = function handleChangeExternalId(e) {
-    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      externalId: e.target.value
-    }));
-  };
-
-  /**
-   * Changer filter value
-   * @param {EventTarget} e Related HTML event
-   */
-  var handleChangeMetaFieldValue = function handleChangeMetaFieldValue(e, id) {
-    var metafield = filterValues === null || filterValues === void 0 ? void 0 : filterValues.metafield.map(function (item) {
-      if (id === item.id) {
-        return _objectSpread(_objectSpread({}, item), {}, _defineProperty({}, e.target.name, e.target.value));
-      }
-      return item;
-    });
-    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      metafield: metafield
-    }));
-  };
-  var handleAddMetaField = function handleAddMetaField(item) {
-    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      metafield: [].concat(_toConsumableArray(filterValues === null || filterValues === void 0 ? void 0 : filterValues.metafield), [item])
-    }));
-  };
-  var handleDeleteMetafield = function handleDeleteMetafield(id) {
-    var metafield = filterValues === null || filterValues === void 0 ? void 0 : filterValues.metafield.filter(function (item) {
-      return item.id !== id;
-    });
-    setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
-      metafield: metafield
     }));
   };
 
@@ -212,7 +171,7 @@ var OrdersFilter = function OrdersFilter(props) {
     if (endDate !== null) {
       endDatetime = (0, _dayjs.default)(endDate).format('YYYY-MM-DD HH:mm:ss');
     } else {
-      endDatetime = null;
+      endDate = null;
     }
     setFilterValues(_objectSpread(_objectSpread({}, filterValues), {}, {
       deliveryEndDatetime: endDatetime
@@ -362,7 +321,6 @@ var OrdersFilter = function OrdersFilter(props) {
   var handleResetFilterValues = function handleResetFilterValues() {
     setFilterValues({
       orderId: null,
-      externalId: null,
       groupTypes: [],
       deliveryFromDatetime: null,
       deliveryEndDatetime: null,
@@ -373,8 +331,7 @@ var OrdersFilter = function OrdersFilter(props) {
       deliveryTypes: [],
       paymethodIds: [],
       countryCode: [],
-      currency: [],
-      metafield: []
+      currency: []
     });
   };
   (0, _react.useEffect)(function () {
@@ -423,11 +380,7 @@ var OrdersFilter = function OrdersFilter(props) {
     handleChangePaymethodType: handleChangePaymethodType,
     handleResetFilterValues: handleResetFilterValues,
     handleChangeCountryCode: handleChangeCountryCode,
-    handleChangeCurrency: handleChangeCurrency,
-    handleChangeMetaFieldValue: handleChangeMetaFieldValue,
-    handleAddMetaField: handleAddMetaField,
-    handleDeleteMetafield: handleDeleteMetafield,
-    handleChangeExternalId: handleChangeExternalId
+    handleChangeCurrency: handleChangeCurrency
   })));
 };
 exports.OrdersFilter = OrdersFilter;
