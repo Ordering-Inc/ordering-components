@@ -33,7 +33,9 @@ export const OrderList = props => {
     setBusinessOrderIds,
     propsToFetchBusiness,
     isBusiness,
-    noGiftCardOrders
+    noGiftCardOrders,
+    propsToFetch,
+    handleRedirectToCheckout
   } = props
 
   const [ordering] = useApi()
@@ -92,6 +94,9 @@ export const OrderList = props => {
       const _businessData = await ordering.businesses(_businessId).select(['slug']).get()
       const _businessSlug = await _businessData?.content?.result?.slug
       const orderResult = { orderId: orderId[0], business_id: _businessId, business: { slug: _businessSlug } }
+      if (result[0].uuid) {
+        handleRedirectToCheckout(result[0].uuid)
+      }
 
       setReorderState({
         ...reorderState,
@@ -148,12 +153,13 @@ export const OrderList = props => {
         }]
       })
     }
+
     const source = {}
     requestsState.orders = source
     options.cancelToken = source
     const functionFetch = asDashboard
-      ? ordering.setAccessToken(accessToken).orders().asDashboard()
-      : ordering.setAccessToken(accessToken).orders()
+      ? ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch)
+      : ordering.setAccessToken(accessToken).orders().select(propsToFetch)
     return await functionFetch.get(options)
   }
 
@@ -211,17 +217,17 @@ export const OrderList = props => {
         })
       }
       setProfessionals([...response.content.result, ...orderList.orders]
-        .reduce((previousValue, currentValue) => previousValue.concat(currentValue?.products[0]?.calendar_event?.professional), [])
-        .filter((professional, i, hash) => professional && hash.map(_professional => _professional?.id).indexOf(professional?.id) === i)
+        .reduce((previousValue, currentValue) => previousValue.concat(currentValue?.products?.[0]?.calendar_event?.professional), [])
+        .filter((professional, i, hash) => professional && hash?.map(_professional => _professional?.id)?.indexOf(professional?.id) === i)
       )
       const businessIds = [...response.content.result, ...orderList.orders].map(order => order.business_id)
       setBusinessOrderIds && setBusinessOrderIds(businessIds)
       setProducts(
         [...response.content.result, ...orderList.orders]
-          .filter(order => !businessesSearchList || businessesSearchList?.businesses?.some(business => order?.business_id === business?.id))
-          .map(order => order.products.map(product => ({ ...product, business: order?.business, businessId: order?.business_id })))
-          .flat()
-          .filter((product, i, hash) => hash.map(_product => _product?.product_id).indexOf(product?.product_id) === i)
+          ?.filter(order => !businessesSearchList || businessesSearchList?.businesses?.some(business => order?.business_id === business?.id))
+          ?.map(order => order?.products?.map(product => ({ ...product, business: order?.business, businessId: order?.business_id })))
+          ?.flat()
+          ?.filter((product, i, hash) => hash.map(_product => _product?.product_id).indexOf(product?.product_id) === i)
       )
       if (isBusiness) {
         getBusinesses(businessIds)
