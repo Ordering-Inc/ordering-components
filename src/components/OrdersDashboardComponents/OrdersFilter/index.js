@@ -12,7 +12,6 @@ export const OrdersFilter = (props) => {
    */
   const [filterValues, setFilterValues] = useState({
     orderId: null,
-    externalId: null,
     groupTypes: [],
     dateType: null,
     deliveryFromDatetime: null,
@@ -25,8 +24,7 @@ export const OrdersFilter = (props) => {
     deliveryTypes: [],
     paymethodIds: [],
     countryCode: [],
-    currency: [],
-    metafield: []
+    currency: []
   })
 
   /**
@@ -36,44 +34,6 @@ export const OrdersFilter = (props) => {
   const handleChangeOrderId = (e) => {
     const orderId = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
     setFilterValues({ ...filterValues, orderId })
-  }
-
-  /**
-   * Changer external Id
-   * @param {EventTarget} e Related HTML event
-   */
-  const handleChangeExternalId = (e) => {
-    setFilterValues({ ...filterValues, externalId: e.target.value })
-  }
-
-  /**
-   * Changer filter value
-   * @param {EventTarget} e Related HTML event
-   */
-  const handleChangeMetaFieldValue = (e, id) => {
-    const metafield = filterValues?.metafield.map(item => {
-      if (id === item.id) {
-        return {
-          ...item,
-          [e.target.name]: e.target.value
-        }
-      }
-      return item
-    })
-
-    setFilterValues({ ...filterValues, metafield })
-  }
-
-  const handleAddMetaField = (item) => {
-    setFilterValues({
-      ...filterValues,
-      metafield: [...filterValues?.metafield, item]
-    })
-  }
-
-  const handleDeleteMetafield = (id) => {
-    const metafield = filterValues?.metafield.filter(item => item.id !== id)
-    setFilterValues({ ...filterValues, metafield })
   }
 
   /**
@@ -151,7 +111,7 @@ export const OrdersFilter = (props) => {
     if (endDate !== null) {
       endDatetime = dayjs(endDate).format('YYYY-MM-DD HH:mm:ss')
     } else {
-      endDatetime = null
+      endDate = null
     }
     setFilterValues({ ...filterValues, deliveryEndDatetime: endDatetime })
   }
@@ -267,7 +227,6 @@ export const OrdersFilter = (props) => {
   const handleResetFilterValues = () => {
     setFilterValues({
       orderId: null,
-      externalId: null,
       groupTypes: [],
       deliveryFromDatetime: null,
       deliveryEndDatetime: null,
@@ -278,8 +237,7 @@ export const OrdersFilter = (props) => {
       deliveryTypes: [],
       paymethodIds: [],
       countryCode: [],
-      currency: [],
-      metafield: []
+      currency: []
     })
   }
 
@@ -318,10 +276,6 @@ export const OrdersFilter = (props) => {
           handleResetFilterValues={handleResetFilterValues}
           handleChangeCountryCode={handleChangeCountryCode}
           handleChangeCurrency={handleChangeCurrency}
-          handleChangeMetaFieldValue={handleChangeMetaFieldValue}
-          handleAddMetaField={handleAddMetaField}
-          handleDeleteMetafield={handleDeleteMetafield}
-          handleChangeExternalId={handleChangeExternalId}
         />
       )}
     </>

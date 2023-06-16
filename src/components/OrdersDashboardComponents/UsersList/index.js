@@ -4,12 +4,10 @@ import { useApi } from '../../../contexts/ApiContext'
 import { useSession } from '../../../contexts/SessionContext'
 import { useToast, ToastType } from '../../../contexts/ToastContext'
 import { useLanguage } from '../../../contexts/LanguageContext'
-import { useEvent } from '../../../contexts/EventContext'
 
 export const UsersList = (props) => {
   const {
     UIComponent,
-    defaultUserActiveState,
     paginationSettings,
     propsToFetch,
     isSearchByUserId,
@@ -27,7 +25,6 @@ export const UsersList = (props) => {
   const [session] = useSession()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
-  const [events] = useEvent()
 
   const [usersList, setUsersList] = useState({ users: [], loading: false, error: null })
   const [filterValues, setFilterValues] = useState({ clear: false, changes: {} })
@@ -41,24 +38,12 @@ export const UsersList = (props) => {
     totalPages: null
   })
   const [paginationDetail, setPaginationDetail] = useState({})
-  const [selectedUserActiveState, setSelectedUserActiveState] = useState(defaultUserActiveState)
+  const [selectedUserActiveState, setSelectedUserActiveState] = useState(true)
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
   const [selectedUsers, setSelectedUsers] = useState([])
   const [deleteUsersActionState, setDeleteUsersActionState] = useState({ loading: false, error: null })
   const [occupationsState, setOccupationsState] = useState({ occupations: [], loading: false, error: null })
   const [selectedOccupation, setSelectedOccupation] = useState(null)
-  const [orderFilterValue, setOrderFilterValue] = useState(null)
-  const [multiFilterValues, setMultiFilterValues] = useState({})
-  const [actionDisabled, setActionDisabled] = useState(true)
-  const [driversGroupsState, setDriversGroupsState] = useState({ groups: [], loading: false, error: null })
-
-  /**
-   * Save filter type values
-   * @param {object} types
-   */
-  const handleChangeMultiFilterValues = (types) => {
-    setMultiFilterValues(types)
-  }
 
   /**
    * Get users by params, order options and filters
@@ -76,14 +61,6 @@ export const UsersList = (props) => {
 
       if (!isBusinessOwners) {
         parameters = { ...paginationParams }
-      }
-
-      if (orderFilterValue !== null) {
-        parameters = {
-          ...parameters,
-          orders_count_condition: orderFilterValue === 0 ? 'eq' : 'ge',
-          orders_count_value: orderFilterValue
-        }
       }
 
       let where = null
@@ -263,150 +240,6 @@ export const UsersList = (props) => {
         }
       }
 
-      if (Object.keys(multiFilterValues).length > 0) {
-        const filterConditons = []
-
-        if (multiFilterValues?.name && multiFilterValues?.name !== null) {
-          filterConditons.push(
-            {
-              attribute: 'name',
-              value: {
-                condition: 'ilike',
-                value: encodeURI(`%${multiFilterValues?.name}%`)
-              }
-            }
-          )
-        }
-        if (multiFilterValues?.lastname && multiFilterValues?.lastname !== null) {
-          filterConditons.push(
-            {
-              attribute: 'lastname',
-              value: {
-                condition: 'ilike',
-                value: encodeURI(`%${multiFilterValues?.lastname}%`)
-              }
-            }
-          )
-        }
-        if (multiFilterValues?.email && multiFilterValues?.email !== null) {
-          filterConditons.push(
-            {
-              attribute: 'email',
-              value: {
-                condition: 'ilike',
-                value: encodeURI(`%${multiFilterValues?.email}%`)
-              }
-            }
-          )
-        }
-        if (multiFilterValues?.cellphone && multiFilterValues?.cellphone !== null) {
-          filterConditons.push(
-            {
-              attribute: 'cellphone',
-              value: {
-                condition: 'ilike',
-                value: encodeURI(`%${multiFilterValues?.cellphone}%`)
-              }
-            }
-          )
-        }
-        if (multiFilterValues?.countryPhoneCode !== null) {
-          filterConditons.push(
-            {
-              attribute: 'country_phone_code',
-              value: {
-                condition: 'ilike',
-                value: encodeURI(`%${multiFilterValues?.countryPhoneCode}%`)
-              }
-            }
-          )
-        }
-        if (multiFilterValues?.cityIds.length !== 0) {
-          filterConditons.push(
-            {
-              attribute: 'city_id',
-              value: multiFilterValues?.cityIds
-            }
-          )
-        }
-        if (multiFilterValues?.phoneVerified !== null) {
-          filterConditons.push(
-            {
-              attribute: 'phone_verified',
-              value: multiFilterValues?.phoneVerified
-            }
-          )
-        }
-        if (multiFilterValues?.ordersCount?.value !== '') {
-          parameters = {
-            ...parameters,
-            orders_count_condition: multiFilterValues?.ordersCount?.condition,
-            orders_count_value: multiFilterValues?.ordersCount?.value
-          }
-        }
-        if (multiFilterValues?.emailVerified !== null) {
-          filterConditons.push(
-            {
-              attribute: 'email_verified',
-              value: multiFilterValues?.emailVerified
-            }
-          )
-        }
-        if (multiFilterValues?.userType !== null) {
-          filterConditons.push(
-            {
-              attribute: 'level',
-              value: multiFilterValues?.userType
-            }
-          )
-        }
-        if (multiFilterValues?.loyaltyLevel !== null) {
-          filterConditons.push(
-            {
-              attribute: 'loyalty_level_id',
-              value: multiFilterValues?.loyaltyLevel
-            }
-          )
-        }
-        if (multiFilterValues?.enabled !== null) {
-          filterConditons.push(
-            {
-              attribute: 'enabled',
-              value: multiFilterValues?.enabled
-            }
-          )
-        }
-        if (multiFilterValues?.deliveryFromDatetime !== null) {
-          filterConditons.push(
-            {
-              attribute: 'created_at',
-              value: {
-                condition: '>=',
-                value: multiFilterValues?.deliveryFromDatetime
-              }
-            }
-          )
-        }
-        if (multiFilterValues?.deliveryEndDatetime !== null) {
-          filterConditons.push(
-            {
-              attribute: 'created_at',
-              value: {
-                condition: '<=',
-                value: multiFilterValues?.deliveryEndDatetime
-              }
-            }
-          )
-        }
-
-        if (filterConditons.length) {
-          conditions.push({
-            conector: 'AND',
-            conditions: filterConditons
-          })
-        }
-      }
-
       if (conditions.length) {
         where = {
           conditions,
@@ -414,61 +247,32 @@ export const UsersList = (props) => {
         }
       }
 
-      let fetchEndpoint = null
-      let content = {}
+      const fetchEndpoint = where
+        ? ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters).where(where)
+        : ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters)
+      const { content: { result, pagination } } = await fetchEndpoint.get()
+      usersList.users = result
 
-      if (session.user?.level !== 2) {
-        fetchEndpoint = where
-          ? ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters).where(where)
-          : ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters)
-        const response = await fetchEndpoint.get()
-        content = response.content
-      } else {
-        const requestOptions = {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.token}`
-          }
-        }
-        const fetchEndpoint = where
-          ? `${ordering.root}/professionals?page=${page}&page_size=${pageSize}&&where=${JSON.stringify(where)}`
-          : `${ordering.root}/professionals?page=${page}&page_size=${pageSize}`
-
-        const response = await fetch(fetchEndpoint, requestOptions)
-        content = await response.json()
+      setUsersList({
+        ...usersList,
+        loading: false
+      })
+      let nextPageItems = 0
+      if (pagination.current_page !== pagination.total_pages) {
+        const remainingItems = pagination.total - usersList.users.length
+        nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size
       }
-
-      const { result, pagination, error } = content
-      if (error) {
-        setUsersList({
-          ...usersList,
-          loading: false,
-          error: result
-        })
-      } else {
-        usersList.users = result
-        setUsersList({
-          ...usersList,
-          loading: false
-        })
-        let nextPageItems = 0
-        if (pagination.current_page !== pagination.total_pages) {
-          const remainingItems = pagination.total - usersList.users.length
-          nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size
-        }
-        setPaginationProps({
-          ...paginationProps,
-          currentPage: pagination.current_page,
-          pageSize: pagination.page_size === 0 ? paginationProps.pageSize : pagination.page_size,
-          totalPages: pagination.total_pages,
-          totalItems: pagination.total,
-          from: pagination.from,
-          to: pagination.to,
-          nextPageItems
-        })
-        setPaginationDetail({ ...pagination })
-      }
+      setPaginationProps({
+        ...paginationProps,
+        currentPage: pagination.current_page,
+        pageSize: pagination.page_size === 0 ? paginationProps.pageSize : pagination.page_size,
+        totalPages: pagination.total_pages,
+        totalItems: pagination.total,
+        from: pagination.from,
+        to: pagination.to,
+        nextPageItems
+      })
+      setPaginationDetail({ ...pagination })
     } catch (err) {
       if (err.constructor.name !== 'Cancel') {
         setUsersList({
@@ -654,54 +458,8 @@ export const UsersList = (props) => {
   /**
    * Method to delete several users from API
    */
-  const handleDeleteSeveralUsers = async (code) => {
-    try {
-      showToast(ToastType.Info, t('LOADING', 'Loading'))
-      setDeleteUsersActionState({
-        ...deleteUsersActionState,
-        loading: true
-      })
-      const payload = {
-        users_id: selectedUsers
-      }
-      if (code) {
-        payload.deleted_action_code = code
-      }
-      const requestOptions = {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
-        },
-        body: JSON.stringify(payload)
-      }
-      const response = await fetch(`${ordering.root}/users`, requestOptions)
-      const content = await response.json()
-      if (!content.error) {
-        const users = usersList.users.filter(user => !selectedUsers.includes(user.id))
-        setUsersList({ ...usersList, users })
-        setPaginationDetail({
-          ...paginationDetail,
-          total: paginationDetail?.total - selectedUsers.length
-        })
-        setSelectedUsers([])
-        setDeleteUsersActionState({
-          loading: false,
-          error: null
-        })
-        showToast(ToastType.Success, t('USER_DELETED', 'User deleted'))
-      } else {
-        setDeleteUsersActionState({
-          loading: false,
-          error: content.result
-        })
-      }
-    } catch (error) {
-      setDeleteUsersActionState({
-        loading: false,
-        error: [error.message]
-      })
-    }
+  const handleDeleteSeveralUsers = () => {
+    setDeleteUsersActionState({ ...deleteUsersActionState, loading: true })
   }
 
   /**
@@ -787,39 +545,12 @@ export const UsersList = (props) => {
   }
 
   /**
-   * Method to get the drivers groups from API
+   * Listening action start to delete several users
    */
-  const getDriversGroups = async () => {
-    try {
-      setDriversGroupsState({ ...driversGroupsState, loading: true })
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.token}`
-        }
-      }
-      const response = await fetch(`${ordering.root}/drivergroups`, requestOptions)
-      const content = await response.json()
-      if (!content.error) {
-        const found = content.result.find(group => group?.administrator_id === session?.user?.id)
-        if (found) setActionDisabled(false)
-        else setActionDisabled(true)
-        const driverManagerGroups = content.result?.filter(group => group.administrator_id === session?.user?.id)
-        setDriversGroupsState({ ...driversGroupsState, groups: driverManagerGroups, loading: false })
-      }
-    } catch (err) {
-      setDriversGroupsState({ ...driversGroupsState, loading: false, error: [err.message] })
-    }
-  }
-
   useEffect(() => {
-    if (session?.user?.level === 5) {
-      getDriversGroups()
-    } else {
-      setActionDisabled(false)
-    }
-  }, [session])
+    if (!deleteUsersActionState.loading || selectedUsers.length === 0) return
+    handleDeleteUser(selectedUsers[0])
+  }, [selectedUsers, deleteUsersActionState])
 
   useEffect(() => {
     if (usersList.loading) return
@@ -831,30 +562,10 @@ export const UsersList = (props) => {
   }, [filterValues])
 
   useEffect(() => {
-    getUsers(1, null)
-  }, [multiFilterValues])
-
-  useEffect(() => {
-    if (!usersList.loading) getUsers(1, null)
-  }, [orderFilterValue])
-
-  useEffect(() => {
     if (isProfessional) {
       getOccupations()
     }
   }, [isProfessional])
-
-  useEffect(() => {
-    events.on('occupations_update', (data) => {
-      setOccupationsState({
-        ...occupationsState,
-        occupations: data
-      })
-    })
-    return () => {
-      events.off('occupations_update')
-    }
-  }, [events])
 
   return (
     <>
@@ -892,12 +603,6 @@ export const UsersList = (props) => {
             selectedOccupation={selectedOccupation}
             handleSelectOccupation={setSelectedOccupation}
             setSelectedUsers={setSelectedUsers}
-            orderFilterValue={orderFilterValue}
-            handleChangeOrderFilterValue={setOrderFilterValue}
-            multiFilterValues={multiFilterValues}
-            handleChangeMultiFilterValues={handleChangeMultiFilterValues}
-            actionDisabled={actionDisabled}
-            driversGroupsState={driversGroupsState}
           />
         )
       }
@@ -936,9 +641,8 @@ UsersList.defaultProps = {
     'name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'schedule',
     'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'max_days_in_future',
     'address_notes', 'driver_zone_restriction', 'dropdown_option_id', 'dropdown_option', 'location',
-    'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'birthdate', 'drivergroups', 'created_at', 'timezone'
+    'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'birthdate', 'drivergroups'
   ],
   paginationSettings: { initialPage: 1, pageSize: 10, controlType: 'infinity' },
-  defaultUserTypesSelected: [0, 1, 2, 3],
-  defaultUserActiveState: true
+  defaultUserTypesSelected: [0, 1, 2, 3]
 }
