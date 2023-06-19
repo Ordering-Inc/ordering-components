@@ -204,6 +204,15 @@ var OrderListGroups = function OrderListGroups(props) {
                 }
               });
             }
+            if (filtered !== null && filtered !== void 0 && filtered.external_id) {
+              options.query.where.push({
+                attribute: 'external_id',
+                value: {
+                  condition: 'ilike',
+                  value: isIos ? "%".concat(filtered === null || filtered === void 0 ? void 0 : filtered.external_id, "%") : encodeURI("%".concat(filtered === null || filtered === void 0 ? void 0 : filtered.external_id, "%"))
+                }
+              });
+            }
             if (filtered !== null && filtered !== void 0 && filtered.state) {
               options.query.where.push({
                 attribute: 'status',
@@ -220,24 +229,24 @@ var OrderListGroups = function OrderListGroups(props) {
               });
             }
             if (!(filtered !== null && filtered !== void 0 && filtered.paymethod || customPaymethods)) {
-              _context.next = 14;
+              _context.next = 15;
               break;
             }
             paymethodResult = controlsState;
             if (controlsState.paymethods.length) {
-              _context.next = 13;
+              _context.next = 14;
               break;
             }
-            _context.next = 12;
+            _context.next = 13;
             return getControls();
-          case 12:
-            paymethodResult = _context.sent;
           case 13:
+            paymethodResult = _context.sent;
+          case 14:
             options.query.where.push({
               attribute: 'paymethod_id',
               value: !!(filtered !== null && filtered !== void 0 && filtered.paymethod) && (filtered === null || filtered === void 0 ? void 0 : filtered.paymethod) || ((_paymethodResult = paymethodResult) === null || _paymethodResult === void 0 ? void 0 : _paymethodResult.paymethods)
             });
-          case 14:
+          case 15:
             if (filtered !== null && filtered !== void 0 && filtered.driver) {
               options.query.where.push({
                 attribute: 'driver_id',
@@ -309,11 +318,11 @@ var OrderListGroups = function OrderListGroups(props) {
             requestsState.orders = source;
             options.cancelToken = source;
             functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
-            _context.next = 27;
+            _context.next = 28;
             return functionFetch.get(options);
-          case 27:
-            return _context.abrupt("return", _context.sent);
           case 28:
+            return _context.abrupt("return", _context.sent);
+          case 29:
           case "end":
             return _context.stop();
         }
