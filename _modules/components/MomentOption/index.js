@@ -34,7 +34,13 @@ var MomentOption = function MomentOption(props) {
     currentDate = props.currentDate,
     useOrderContext = props.useOrderContext,
     onChangeMoment = props.onChangeMoment,
-    UIComponent = props.UIComponent;
+    preorderSlotInterval = props.preorderSlotInterval,
+    cateringPreorder = props.cateringPreorder,
+    preorderLeadTime = props.preorderLeadTime,
+    business = props.business,
+    UIComponent = props.UIComponent,
+    preorderTimeRange = props.preorderTimeRange,
+    preorderMinimumDays = props.preorderMinimumDays;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderStatus = _useOrder2[0],
@@ -89,7 +95,7 @@ var MomentOption = function MomentOption(props) {
     _useState8 = _slicedToArray(_useState7, 2),
     datesList = _useState8[0],
     setDatesList = _useState8[1];
-  var _useState9 = (0, _react.useState)((0, _dayjs.default)(validDate(_currentDate)).format('YYYY-MM-DD')),
+  var _useState9 = (0, _react.useState)((0, _dayjs.default)(validDate(_currentDate)).add(preorderMinimumDays || 0, 'day').format('YYYY-MM-DD')),
     _useState10 = _slicedToArray(_useState9, 2),
     dateSelected = _useState10[0],
     setDateSelected = _useState10[1];
@@ -115,7 +121,7 @@ var MomentOption = function MomentOption(props) {
     onChangeMoment && onChangeMoment(_moment);
   };
   var handleAsap = function handleAsap() {
-    if (isAsap) return;
+    if (isAsap || business && cateringPreorder) return;
     setIsAsap(true);
     if (useOrderContext) {
       changeMoment(null);
@@ -161,9 +167,16 @@ var MomentOption = function MomentOption(props) {
       clearTimeout(checkTime);
     };
   }, [scheduleSelected]);
+  var getActualSchedule = function getActualSchedule() {
+    var dayNumber = (0, _dayjs.default)(dateSelected).day();
+    var schedule = business.schedule.find(function (s, i) {
+      return dayNumber === i;
+    });
+    return (schedule === null || schedule === void 0 ? void 0 : schedule.enabled) && schedule;
+  };
   (0, _react.useEffect)(function () {
     if (isAsap && datesList[0]) {
-      setDateSelected(datesList[0]);
+      setDateSelected(datesList[preorderMinimumDays || 0]);
       setTimeSelected(null);
     }
   }, [isAsap, datesList]);
@@ -171,37 +184,52 @@ var MomentOption = function MomentOption(props) {
   /**
    * generate a list of available hours
    */
-  var generateHourList = function generateHourList() {
+  var generateHourList = function generateHourList(preorderLeadTime, preorderTimeRange, preorderSlotInterval) {
     var hoursAvailable = [];
     var isToday = dateSelected === (0, _dayjs.default)().format('YYYY-MM-DD');
     var isLastDate = dateSelected === (0, _dayjs.default)(maxDate).format('YYYY-MM-DD');
     var now = new Date();
-    for (var hour = 0; hour < 24; hour++) {
-      /**
-       * Continue if is today and hour is smaller than current hour
-       */
-      if (isToday && hour < (now === null || now === void 0 ? void 0 : now.getHours())) continue;
-      /**
-       * Continue if is max date and hour is greater than max date hour
-       */
-      if (isLastDate && hour > (maxDate === null || maxDate === void 0 ? void 0 : maxDate.getHours())) continue;
-      for (var minute = 0; minute < 59; minute += 15) {
+    if (!cateringPreorder) {
+      for (var hour = 0; hour < 24; hour++) {
         /**
-         * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
-         */
-        if (isToday && hour === (now === null || now === void 0 ? void 0 : now.getHours()) && minute <= now.getMinutes()) continue;
+         * Continue if is today and hour is smaller than current hour
+        */
+        if (isToday && hour < (now === null || now === void 0 ? void 0 : now.getHours())) continue;
         /**
-         * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
-         */
-        if (isLastDate && hour === (maxDate === null || maxDate === void 0 ? void 0 : maxDate.getHours()) && minute > maxDate.getMinutes()) continue;
-        var _hour = hour < 10 ? "0".concat(hour) : hour;
-        var startMinute = minute < 10 ? "0".concat(minute) : minute;
-        var endMinute = minute + 14 < 10 ? "0".concat(minute + 14) : minute + 14;
-        var startTime = "".concat(_hour, ":").concat(startMinute);
-        var endTime = "".concat(_hour, ":").concat(endMinute);
+        * Continue if is max date and hour is greater than max date hour
+        */
+        if (isLastDate && hour > (maxDate === null || maxDate === void 0 ? void 0 : maxDate.getHours())) continue;
+        for (var minute = 0; minute < 59; minute += 15) {
+          /**
+           * Continue if is today and hour is equal to current hour and minutes is smaller than current minute
+          */
+          if (isToday && hour === (now === null || now === void 0 ? void 0 : now.getHours()) && minute <= now.getMinutes()) continue;
+          /**
+           * Continue if is today and hour is equal to max date hour and minutes is greater than max date minute
+          */
+          if (isLastDate && hour === (maxDate === null || maxDate === void 0 ? void 0 : maxDate.getHours()) && minute > maxDate.getMinutes()) continue;
+          var _hour = hour < 10 ? "0".concat(hour) : hour;
+          var startMinute = minute < 10 ? "0".concat(minute) : minute;
+          var endMinute = minute + 14 < 10 ? "0".concat(minute + 14) : minute + 14;
+          var startTime = "".concat(_hour, ":").concat(startMinute);
+          var endTime = "".concat(_hour, ":").concat(endMinute);
+          hoursAvailable.push({
+            startTime: startTime,
+            endTime: endTime
+          });
+        }
+      }
+    } else {
+      var startTimeAcc = preorderLeadTime;
+      var endTimeAcc = preorderTimeRange + preorderLeadTime;
+      while (startTimeAcc >= 0 && (0, _dayjs.default)().startOf('day').add(startTimeAcc || 0, 'minute') < (0, _dayjs.default)().startOf('day').add(1, 'day')) {
+        var _startTime = (0, _dayjs.default)().startOf('day').add(startTimeAcc || 0, 'minute').format('HH:mm');
+        var _endTime = (0, _dayjs.default)().startOf('day').add(endTimeAcc, 'minute').format('HH:mm');
+        startTimeAcc = startTimeAcc + preorderSlotInterval;
+        endTimeAcc = endTimeAcc + preorderSlotInterval;
         hoursAvailable.push({
-          startTime: startTime,
-          endTime: endTime
+          startTime: _startTime,
+          endTime: _endTime
         });
       }
     }
@@ -221,19 +249,19 @@ var MomentOption = function MomentOption(props) {
   };
   (0, _react.useEffect)(function () {
     if (!dateSelected) return;
-    generateHourList();
-  }, [dateSelected]);
+    generateHourList(preorderLeadTime, preorderTimeRange, preorderSlotInterval);
+  }, [dateSelected, preorderLeadTime, preorderTimeRange, preorderSlotInterval]);
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       var diff = (0, _dayjs.default)(dateSelected).diff((0, _dayjs.default)(currentDate), 'day');
       if (diff === 0) {
-        generateHourList();
+        generateHourList(preorderLeadTime, preorderTimeRange, preorderSlotInterval);
       }
     }, 1000);
     return function () {
       return clearInterval(interval);
     };
-  }, [dateSelected]);
+  }, [dateSelected, preorderLeadTime, preorderTimeRange, preorderSlotInterval]);
   (0, _react.useEffect)(function () {
     generateDatesList();
   }, [maxDate, minDate]);
@@ -247,7 +275,9 @@ var MomentOption = function MomentOption(props) {
     handleChangeTime: handleChangeTime,
     datesList: datesList,
     hoursList: hoursList,
-    handleAsap: handleAsap
+    handleAsap: handleAsap,
+    getActualSchedule: getActualSchedule,
+    scheduleSelected: scheduleSelected
   })));
 };
 exports.MomentOption = MomentOption;
@@ -302,5 +332,8 @@ MomentOption.defaultProps = {
   beforeComponents: [],
   afterComponents: [],
   beforeElements: [],
-  afterElements: []
+  afterElements: [],
+  preorderSlotInterval: 15,
+  preorderLeadTime: 0,
+  preorderTimeRange: 30
 };

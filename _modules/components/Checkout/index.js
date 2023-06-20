@@ -40,7 +40,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Checkout page behavior without UI component
  */
 var Checkout = function Checkout(props) {
-  var _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$carts2, _cartState$cart$spot_, _cartState$cart, _orderState$options2;
+  var _Object$values$find$b, _Object$values$find, _orderState$carts, _orderState$carts2, _cartState$cart$spot_, _cartState$cart, _orderState$options3;
   var cartState = props.cartState,
     propsToFetch = props.propsToFetch,
     actionsBeforePlace = props.actionsBeforePlace,
@@ -178,7 +178,10 @@ var Checkout = function Checkout(props) {
    * Cart comment stagged
    */
   var previousComment;
-
+  /**
+   * order types delivery
+   */
+  var orderTypesDelivery = [1, 7];
   /**
    * Method to get business from API
    */
@@ -249,7 +252,7 @@ var Checkout = function Checkout(props) {
    */
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) {
-      var _paymethodSelected$pa5, _cart$balance, _paymethodSelected$pa6, _cartResult$paymethod, _result$result, _result$result$paymet, _cartResult$paymethod2, _cartResult$paymethod3, _cartResult$paymethod4, _cartResult$paymethod5;
+      var _paymethodSelected$pa5, _cart$balance, _orderState$options2, _paymethodSelected$pa6, _cartResult$paymethod, _result$result, _result$result$paymet, _cartResult$paymethod2, _cartResult$paymethod3, _cartResult$paymethod4, _cartResult$paymethod5;
       var paymethodData, _paymethodSelected$da, payload, result, _paymethodSelected$pa7, cartResult, _result$result2, _result$result2$payme, _result$result2$payme2, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -270,7 +273,7 @@ var Checkout = function Checkout(props) {
                 paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data
               });
             }
-            if (orderState.options.type === 1) {
+            if (orderTypesDelivery.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type)) {
               payload = _objectSpread(_objectSpread({}, payload), {}, {
                 delivery_zone_id: cart !== null && cart !== void 0 && cart.business_id ? cart.delivery_zone_id : 0
               });
@@ -710,7 +713,7 @@ var Checkout = function Checkout(props) {
     if (businessId && typeof businessId === 'number') {
       getBusiness();
     }
-  }, [businessId, (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type]);
+  }, [businessId, (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.type]);
 
   /**
    * Update carts from sockets
