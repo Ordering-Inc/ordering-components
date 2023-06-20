@@ -11,6 +11,7 @@ var _ApiContext = require("../../../contexts/ApiContext");
 var _SessionContext = require("../../../contexts/SessionContext");
 var _ToastContext = require("../../../contexts/ToastContext");
 var _LanguageContext = require("../../../contexts/LanguageContext");
+var _EventContext = require("../../../contexts/EventContext");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -35,6 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var UsersList = function UsersList(props) {
   var _paginationSettings$p;
   var UIComponent = props.UIComponent,
+    defaultUserActiveState = props.defaultUserActiveState,
     paginationSettings = props.paginationSettings,
     propsToFetch = props.propsToFetch,
     isSearchByUserId = props.isSearchByUserId,
@@ -58,6 +60,9 @@ var UsersList = function UsersList(props) {
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     t = _useLanguage2[1];
+  var _useEvent = (0, _EventContext.useEvent)(),
+    _useEvent2 = _slicedToArray(_useEvent, 1),
+    events = _useEvent2[0];
   var _useState = (0, _react.useState)({
       users: [],
       loading: false,
@@ -98,7 +103,7 @@ var UsersList = function UsersList(props) {
     _useState14 = _slicedToArray(_useState13, 2),
     paginationDetail = _useState14[0],
     setPaginationDetail = _useState14[1];
-  var _useState15 = (0, _react.useState)(true),
+  var _useState15 = (0, _react.useState)(defaultUserActiveState),
     _useState16 = _slicedToArray(_useState15, 2),
     selectedUserActiveState = _useState16[0],
     setSelectedUserActiveState = _useState16[1];
@@ -132,6 +137,34 @@ var UsersList = function UsersList(props) {
     _useState26 = _slicedToArray(_useState25, 2),
     selectedOccupation = _useState26[0],
     setSelectedOccupation = _useState26[1];
+  var _useState27 = (0, _react.useState)(null),
+    _useState28 = _slicedToArray(_useState27, 2),
+    orderFilterValue = _useState28[0],
+    setOrderFilterValue = _useState28[1];
+  var _useState29 = (0, _react.useState)({}),
+    _useState30 = _slicedToArray(_useState29, 2),
+    multiFilterValues = _useState30[0],
+    setMultiFilterValues = _useState30[1];
+  var _useState31 = (0, _react.useState)(true),
+    _useState32 = _slicedToArray(_useState31, 2),
+    actionDisabled = _useState32[0],
+    setActionDisabled = _useState32[1];
+  var _useState33 = (0, _react.useState)({
+      groups: [],
+      loading: false,
+      error: null
+    }),
+    _useState34 = _slicedToArray(_useState33, 2),
+    driversGroupsState = _useState34[0],
+    setDriversGroupsState = _useState34[1];
+
+  /**
+   * Save filter type values
+   * @param {object} types
+   */
+  var handleChangeMultiFilterValues = function handleChangeMultiFilterValues(types) {
+    setMultiFilterValues(types);
+  };
 
   /**
    * Get users by params, order options and filters
@@ -139,7 +172,7 @@ var UsersList = function UsersList(props) {
    */
   var getUsers = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page, pageSize) {
-      var parameters, paginationParams, where, conditions, verifiedConditions, searchConditions, _filterValues$changes, _filterValues$changes2, filterConditions, _filterValues$changes3, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, pagination, nextPageItems, remainingItems;
+      var _session$user, parameters, paginationParams, where, conditions, verifiedConditions, searchConditions, _filterValues$changes, _filterValues$changes2, filterConditions, _filterValues$changes3, _multiFilterValues$or, filterConditons, _multiFilterValues$or2, _multiFilterValues$or3, fetchEndpoint, content, response, requestOptions, _fetchEndpoint, _response, _content, result, pagination, error, nextPageItems, remainingItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -154,6 +187,12 @@ var UsersList = function UsersList(props) {
             };
             if (!isBusinessOwners) {
               parameters = _objectSpread({}, paginationParams);
+            }
+            if (orderFilterValue !== null) {
+              parameters = _objectSpread(_objectSpread({}, parameters), {}, {
+                orders_count_condition: orderFilterValue === 0 ? 'eq' : 'ge',
+                orders_count_value: orderFilterValue
+              });
             }
             where = null;
             conditions = [];
@@ -303,43 +342,189 @@ var UsersList = function UsersList(props) {
                 });
               }
             }
+            if (Object.keys(multiFilterValues).length > 0) {
+              filterConditons = [];
+              if (multiFilterValues !== null && multiFilterValues !== void 0 && multiFilterValues.name && (multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.name) !== null) {
+                filterConditons.push({
+                  attribute: 'name',
+                  value: {
+                    condition: 'ilike',
+                    value: encodeURI("%".concat(multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.name, "%"))
+                  }
+                });
+              }
+              if (multiFilterValues !== null && multiFilterValues !== void 0 && multiFilterValues.lastname && (multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.lastname) !== null) {
+                filterConditons.push({
+                  attribute: 'lastname',
+                  value: {
+                    condition: 'ilike',
+                    value: encodeURI("%".concat(multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.lastname, "%"))
+                  }
+                });
+              }
+              if (multiFilterValues !== null && multiFilterValues !== void 0 && multiFilterValues.email && (multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.email) !== null) {
+                filterConditons.push({
+                  attribute: 'email',
+                  value: {
+                    condition: 'ilike',
+                    value: encodeURI("%".concat(multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.email, "%"))
+                  }
+                });
+              }
+              if (multiFilterValues !== null && multiFilterValues !== void 0 && multiFilterValues.cellphone && (multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.cellphone) !== null) {
+                filterConditons.push({
+                  attribute: 'cellphone',
+                  value: {
+                    condition: 'ilike',
+                    value: encodeURI("%".concat(multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.cellphone, "%"))
+                  }
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.countryPhoneCode) !== null) {
+                filterConditons.push({
+                  attribute: 'country_phone_code',
+                  value: {
+                    condition: 'ilike',
+                    value: encodeURI("%".concat(multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.countryPhoneCode, "%"))
+                  }
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.cityIds.length) !== 0) {
+                filterConditons.push({
+                  attribute: 'city_id',
+                  value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.cityIds
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.phoneVerified) !== null) {
+                filterConditons.push({
+                  attribute: 'phone_verified',
+                  value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.phoneVerified
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : (_multiFilterValues$or = multiFilterValues.ordersCount) === null || _multiFilterValues$or === void 0 ? void 0 : _multiFilterValues$or.value) !== '') {
+                parameters = _objectSpread(_objectSpread({}, parameters), {}, {
+                  orders_count_condition: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : (_multiFilterValues$or2 = multiFilterValues.ordersCount) === null || _multiFilterValues$or2 === void 0 ? void 0 : _multiFilterValues$or2.condition,
+                  orders_count_value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : (_multiFilterValues$or3 = multiFilterValues.ordersCount) === null || _multiFilterValues$or3 === void 0 ? void 0 : _multiFilterValues$or3.value
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.emailVerified) !== null) {
+                filterConditons.push({
+                  attribute: 'email_verified',
+                  value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.emailVerified
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.userType) !== null) {
+                filterConditons.push({
+                  attribute: 'level',
+                  value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.userType
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.loyaltyLevel) !== null) {
+                filterConditons.push({
+                  attribute: 'loyalty_level_id',
+                  value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.loyaltyLevel
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.enabled) !== null) {
+                filterConditons.push({
+                  attribute: 'enabled',
+                  value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.enabled
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.deliveryFromDatetime) !== null) {
+                filterConditons.push({
+                  attribute: 'created_at',
+                  value: {
+                    condition: '>=',
+                    value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.deliveryFromDatetime
+                  }
+                });
+              }
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.deliveryEndDatetime) !== null) {
+                filterConditons.push({
+                  attribute: 'created_at',
+                  value: {
+                    condition: '<=',
+                    value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.deliveryEndDatetime
+                  }
+                });
+              }
+              if (filterConditons.length) {
+                conditions.push({
+                  conector: 'AND',
+                  conditions: filterConditons
+                });
+              }
+            }
             if (conditions.length) {
               where = {
                 conditions: conditions,
                 conector: 'AND'
               };
             }
-            fetchEndpoint = where ? ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters).where(where) : ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters);
-            _context.next = 17;
-            return fetchEndpoint.get();
-          case 17:
-            _yield$fetchEndpoint$ = _context.sent;
-            _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
-            result = _yield$fetchEndpoint$2.result;
-            pagination = _yield$fetchEndpoint$2.pagination;
-            usersList.users = result;
-            setUsersList(_objectSpread(_objectSpread({}, usersList), {}, {
-              loading: false
-            }));
-            nextPageItems = 0;
-            if (pagination.current_page !== pagination.total_pages) {
-              remainingItems = pagination.total - usersList.users.length;
-              nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size;
+            fetchEndpoint = null;
+            content = {};
+            if (!(((_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) !== 2)) {
+              _context.next = 26;
+              break;
             }
-            setPaginationProps(_objectSpread(_objectSpread({}, paginationProps), {}, {
-              currentPage: pagination.current_page,
-              pageSize: pagination.page_size === 0 ? paginationProps.pageSize : pagination.page_size,
-              totalPages: pagination.total_pages,
-              totalItems: pagination.total,
-              from: pagination.from,
-              to: pagination.to,
-              nextPageItems: nextPageItems
-            }));
-            setPaginationDetail(_objectSpread({}, pagination));
-            _context.next = 32;
+            fetchEndpoint = where ? ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters).where(where) : ordering.setAccessToken(session.token).users().select(propsToFetch).parameters(parameters);
+            _context.next = 22;
+            return fetchEndpoint.get();
+          case 22:
+            response = _context.sent;
+            content = response.content;
+            _context.next = 34;
             break;
-          case 29:
-            _context.prev = 29;
+          case 26:
+            requestOptions = {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(session.token)
+              }
+            };
+            _fetchEndpoint = where ? "".concat(ordering.root, "/professionals?page=").concat(page, "&page_size=").concat(pageSize, "&&where=").concat(JSON.stringify(where)) : "".concat(ordering.root, "/professionals?page=").concat(page, "&page_size=").concat(pageSize);
+            _context.next = 30;
+            return fetch(_fetchEndpoint, requestOptions);
+          case 30:
+            _response = _context.sent;
+            _context.next = 33;
+            return _response.json();
+          case 33:
+            content = _context.sent;
+          case 34:
+            _content = content, result = _content.result, pagination = _content.pagination, error = _content.error;
+            if (error) {
+              setUsersList(_objectSpread(_objectSpread({}, usersList), {}, {
+                loading: false,
+                error: result
+              }));
+            } else {
+              usersList.users = result;
+              setUsersList(_objectSpread(_objectSpread({}, usersList), {}, {
+                loading: false
+              }));
+              nextPageItems = 0;
+              if (pagination.current_page !== pagination.total_pages) {
+                remainingItems = pagination.total - usersList.users.length;
+                nextPageItems = remainingItems < pagination.page_size ? remainingItems : pagination.page_size;
+              }
+              setPaginationProps(_objectSpread(_objectSpread({}, paginationProps), {}, {
+                currentPage: pagination.current_page,
+                pageSize: pagination.page_size === 0 ? paginationProps.pageSize : pagination.page_size,
+                totalPages: pagination.total_pages,
+                totalItems: pagination.total,
+                from: pagination.from,
+                to: pagination.to,
+                nextPageItems: nextPageItems
+              }));
+              setPaginationDetail(_objectSpread({}, pagination));
+            }
+            _context.next = 41;
+            break;
+          case 38:
+            _context.prev = 38;
             _context.t0 = _context["catch"](0);
             if (_context.t0.constructor.name !== 'Cancel') {
               setUsersList(_objectSpread(_objectSpread({}, usersList), {}, {
@@ -347,11 +532,11 @@ var UsersList = function UsersList(props) {
                 error: [_context.t0.message]
               }));
             }
-          case 32:
+          case 41:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 29]]);
+      }, _callee, null, [[0, 38]]);
     }));
     return function getUsers(_x2, _x3) {
       return _ref.apply(this, arguments);
@@ -651,11 +836,80 @@ var UsersList = function UsersList(props) {
   /**
    * Method to delete several users from API
    */
-  var handleDeleteSeveralUsers = function handleDeleteSeveralUsers() {
-    setDeleteUsersActionState(_objectSpread(_objectSpread({}, deleteUsersActionState), {}, {
-      loading: true
+  var handleDeleteSeveralUsers = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(code) {
+      var payload, requestOptions, response, content, users;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            showToast(_ToastContext.ToastType.Info, t('LOADING', 'Loading'));
+            setDeleteUsersActionState(_objectSpread(_objectSpread({}, deleteUsersActionState), {}, {
+              loading: true
+            }));
+            payload = {
+              users_id: selectedUsers
+            };
+            if (code) {
+              payload.deleted_action_code = code;
+            }
+            requestOptions = {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(session.token)
+              },
+              body: JSON.stringify(payload)
+            };
+            _context6.next = 8;
+            return fetch("".concat(ordering.root, "/users"), requestOptions);
+          case 8:
+            response = _context6.sent;
+            _context6.next = 11;
+            return response.json();
+          case 11:
+            content = _context6.sent;
+            if (!content.error) {
+              users = usersList.users.filter(function (user) {
+                return !selectedUsers.includes(user.id);
+              });
+              setUsersList(_objectSpread(_objectSpread({}, usersList), {}, {
+                users: users
+              }));
+              setPaginationDetail(_objectSpread(_objectSpread({}, paginationDetail), {}, {
+                total: (paginationDetail === null || paginationDetail === void 0 ? void 0 : paginationDetail.total) - selectedUsers.length
+              }));
+              setSelectedUsers([]);
+              setDeleteUsersActionState({
+                loading: false,
+                error: null
+              });
+              showToast(_ToastContext.ToastType.Success, t('USER_DELETED', 'User deleted'));
+            } else {
+              setDeleteUsersActionState({
+                loading: false,
+                error: content.result
+              });
+            }
+            _context6.next = 18;
+            break;
+          case 15:
+            _context6.prev = 15;
+            _context6.t0 = _context6["catch"](0);
+            setDeleteUsersActionState({
+              loading: false,
+              error: [_context6.t0.message]
+            });
+          case 18:
+          case "end":
+            return _context6.stop();
+        }
+      }, _callee6, null, [[0, 15]]);
     }));
-  };
+    return function handleDeleteSeveralUsers(_x7) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
 
   /**
    * Method to change selected users
@@ -735,12 +989,75 @@ var UsersList = function UsersList(props) {
   };
 
   /**
-   * Listening action start to delete several users
+   * Method to get the drivers groups from API
    */
+  var getDriversGroups = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+      var requestOptions, response, content, _content$result, found, driverManagerGroups;
+      return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+        while (1) switch (_context7.prev = _context7.next) {
+          case 0:
+            _context7.prev = 0;
+            setDriversGroupsState(_objectSpread(_objectSpread({}, driversGroupsState), {}, {
+              loading: true
+            }));
+            requestOptions = {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(session.token)
+              }
+            };
+            _context7.next = 5;
+            return fetch("".concat(ordering.root, "/drivergroups"), requestOptions);
+          case 5:
+            response = _context7.sent;
+            _context7.next = 8;
+            return response.json();
+          case 8:
+            content = _context7.sent;
+            if (!content.error) {
+              found = content.result.find(function (group) {
+                var _session$user2;
+                return (group === null || group === void 0 ? void 0 : group.administrator_id) === (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id);
+              });
+              if (found) setActionDisabled(false);else setActionDisabled(true);
+              driverManagerGroups = (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.filter(function (group) {
+                var _session$user3;
+                return group.administrator_id === (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
+              });
+              setDriversGroupsState(_objectSpread(_objectSpread({}, driversGroupsState), {}, {
+                groups: driverManagerGroups,
+                loading: false
+              }));
+            }
+            _context7.next = 15;
+            break;
+          case 12:
+            _context7.prev = 12;
+            _context7.t0 = _context7["catch"](0);
+            setDriversGroupsState(_objectSpread(_objectSpread({}, driversGroupsState), {}, {
+              loading: false,
+              error: [_context7.t0.message]
+            }));
+          case 15:
+          case "end":
+            return _context7.stop();
+        }
+      }, _callee7, null, [[0, 12]]);
+    }));
+    return function getDriversGroups() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
-    if (!deleteUsersActionState.loading || selectedUsers.length === 0) return;
-    handleDeleteUser(selectedUsers[0]);
-  }, [selectedUsers, deleteUsersActionState]);
+    var _session$user4;
+    if ((session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 5) {
+      getDriversGroups();
+    } else {
+      setActionDisabled(false);
+    }
+  }, [session]);
   (0, _react.useEffect)(function () {
     if (usersList.loading) return;
     getUsers(1, null);
@@ -749,10 +1066,26 @@ var UsersList = function UsersList(props) {
     if ((Object.keys(filterValues === null || filterValues === void 0 ? void 0 : filterValues.changes).length > 0 || filterValues.clear) && !usersList.loading) getUsers(1, null);
   }, [filterValues]);
   (0, _react.useEffect)(function () {
+    getUsers(1, null);
+  }, [multiFilterValues]);
+  (0, _react.useEffect)(function () {
+    if (!usersList.loading) getUsers(1, null);
+  }, [orderFilterValue]);
+  (0, _react.useEffect)(function () {
     if (isProfessional) {
       getOccupations();
     }
   }, [isProfessional]);
+  (0, _react.useEffect)(function () {
+    events.on('occupations_update', function (data) {
+      setOccupationsState(_objectSpread(_objectSpread({}, occupationsState), {}, {
+        occupations: data
+      }));
+    });
+    return function () {
+      events.off('occupations_update');
+    };
+  }, [events]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     actionStatus: actionStatus,
     usersList: usersList,
@@ -783,7 +1116,13 @@ var UsersList = function UsersList(props) {
     occupationsState: occupationsState,
     selectedOccupation: selectedOccupation,
     handleSelectOccupation: setSelectedOccupation,
-    setSelectedUsers: setSelectedUsers
+    setSelectedUsers: setSelectedUsers,
+    orderFilterValue: orderFilterValue,
+    handleChangeOrderFilterValue: setOrderFilterValue,
+    multiFilterValues: multiFilterValues,
+    handleChangeMultiFilterValues: handleChangeMultiFilterValues,
+    actionDisabled: actionDisabled,
+    driversGroupsState: driversGroupsState
   })));
 };
 exports.UsersList = UsersList;
@@ -813,11 +1152,12 @@ UsersList.propTypes = {
   propsToFetch: _propTypes.default.arrayOf(_propTypes.string)
 };
 UsersList.defaultProps = {
-  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'schedule', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'max_days_in_future', 'address_notes', 'driver_zone_restriction', 'dropdown_option_id', 'dropdown_option', 'location', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'birthdate', 'drivergroups'],
+  propsToFetch: ['name', 'lastname', 'email', 'phone', 'photo', 'cellphone', 'schedule', 'country_phone_code', 'city_id', 'city', 'address', 'addresses', 'max_days_in_future', 'address_notes', 'driver_zone_restriction', 'dropdown_option_id', 'dropdown_option', 'location', 'zipcode', 'level', 'enabled', 'middle_name', 'second_lastname', 'birthdate', 'drivergroups', 'created_at', 'timezone'],
   paginationSettings: {
     initialPage: 1,
     pageSize: 10,
     controlType: 'infinity'
   },
-  defaultUserTypesSelected: [0, 1, 2, 3]
+  defaultUserTypesSelected: [0, 1, 2, 3],
+  defaultUserActiveState: true
 };
