@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import { useSession } from '../../../contexts/SessionContext'
 import { useApi } from '../../../contexts/ApiContext'
 import { useWebsocket } from '../../../contexts/WebsocketContext'
+import { useConfig } from '../../../contexts/ConfigContext'
+import { useLanguage } from '../../../contexts/LanguageContext'
+import { useToast, ToastType } from '../../../contexts/ToastContext'
 
 export const OrdersManage = (props) => {
   const {
@@ -11,12 +14,16 @@ export const OrdersManage = (props) => {
     driversPropsToFetch,
     driverId,
     customerId,
-    businessId
+    businessId,
+    isOnlyDelivery
   } = props
 
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ user, token, loading }] = useSession()
+  const [configState] = useConfig()
+  const [, t] = useLanguage()
+  const [, { showToast }] = useToast()
 
   const requestsState = {}
   const orderStatuesList = {
@@ -29,12 +36,30 @@ export const OrdersManage = (props) => {
   const [searchValue, setSearchValue] = useState(null)
   const [ordersStatusGroup, setOrdersStatusGroup] = useState(statusGroup || 'pending')
   const [filterValues, setFilterValues] = useState({})
+  const [timeStatus, setTimeStatus] = useState(null)
   const [updateStatus, setUpdateStatus] = useState(null)
   const [startMulitOrderStatusChange, setStartMulitOrderStatusChange] = useState(false)
-  const [startMulitOrderDelete, setStartMulitOrderDelete] = useState(false)
   const [actionStatus, setActionStatus] = useState({ loading: false, error: null })
-  const [deletedOrderId, setDeletedOrderId] = useState(null)
+  const [deletedOrderIds, setDeletedOrderIds] = useState([])
   const [numberOfOrdersByStatus, setNumberOfOrdersByStatus] = useState({ result: null, loading: false, error: false })
+  const allowColumnsModel = {
+    slaBar: { visable: false, title: '', className: '', draggable: false, colSpan: 1, order: -2 },
+    orderNumber: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: -1 },
+    dateTime: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: 0 },
+    externalId: { visable: false, title: t('EXTERNAL_ID', 'External id'), className: 'externalId', draggable: true, colSpan: 1, order: 1 },
+    status: { visable: true, title: t('STATUS', 'Status'), className: 'statusInfo', draggable: true, colSpan: 1, order: 2 },
+    cartGroupId: { visable: true, title: t('GROUP_ORDER', 'Group Order'), className: 'groupOrderId', draggable: true, colSpan: 1, order: 3 },
+    driverGroupId: { visable: true, title: t('EXPORT_DRIVER_GROUP_ID', 'Driver Group Id'), className: 'driverGroupId', draggable: true, colSpan: 1, order: 4 },
+    business: { visable: true, title: t('BUSINESS', 'Business'), className: 'businessInfo', draggable: true, colSpan: 1, order: 5 },
+    customer: { visable: true, title: t('CUSTOMER', 'Customer'), className: 'customerInfo', draggable: true, colSpan: 1, order: 6 },
+    driver: { visable: true, title: t('DRIVER', 'Driver'), className: 'driverInfo', draggable: true, colSpan: 1, order: 7 },
+    advanced: { visable: true, title: t('ADVANCED_LOGISTICS', 'Advanced logistics'), className: 'advanced', draggable: true, colSpan: 3, order: 8 },
+    timer: { visable: false, title: t('SLA_TIMER', 'SLA’s timer'), className: 'timer', draggable: true, colSpan: 1, order: 9 },
+    eta: { visable: true, title: t('ETA', 'ETA'), className: 'eta', draggable: true, colSpan: 1, order: 10 },
+    total: { visable: true, title: '', className: '', draggable: false, colSpan: 1, order: 11 }
+  }
+  const [allowColumns, setAllowColumns] = useState(allowColumnsModel)
+
   /**
    * Object to save driver group list
    */
@@ -136,14 +161,12 @@ export const OrdersManage = (props) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({ status: updateStatus })
       }
       const response = await fetch(`${ordering.root}/orders/${orderId}`, requestOptions)
-      const { result } = await response.json()
+      const { result, error } = await response.json()
 
       if (parseInt(result.status) === updateStatus) {
         const _ordersIds = [...selectedOrderIds]
@@ -153,7 +176,10 @@ export const OrdersManage = (props) => {
         }
         setSelectedOrderIds(_ordersIds)
       }
-      setActionStatus({ ...actionStatus, loading: false })
+      setActionStatus({
+        loading: false,
+        error: error ? result : null
+      })
     } catch (err) {
       setActionStatus({ loading: false, error: [err.message] })
       setStartMulitOrderStatusChange(false)
@@ -163,34 +189,39 @@ export const OrdersManage = (props) => {
   /**
    * Delete orders for orders selected
    */
-  const handleDeleteMultiOrders = () => {
-    setStartMulitOrderDelete(true)
-  }
-  /**
-   * Method to delete order from API
-   */
-  const deleteOrder = async (id) => {
+  const handleDeleteMultiOrders = async (code) => {
     try {
+      showToast(ToastType.Info, t('LOADING', 'Loading'))
       setActionStatus({ ...actionStatus, loading: true })
-      const source = {}
-      requestsState.deleteOrder = source
-      const { content } = await ordering.setAccessToken(token).orders(id).delete({ cancelToken: source })
-      if (!content.error) {
-        setDeletedOrderId(id)
-        const _ordersIds = [...selectedOrderIds]
-        _ordersIds.shift()
-        if (_ordersIds.length === 0) {
-          setStartMulitOrderDelete(false)
-        }
-        setSelectedOrderIds(_ordersIds)
+
+      const payload = {
+        orders_id: selectedOrderIds
       }
-      setActionStatus({
-        loading: false,
-        error: content.error ? content.result : null
-      })
-    } catch (err) {
-      setActionStatus({ loading: false, error: [err.message] })
-      setStartMulitOrderDelete(false)
+      if (code) {
+        payload.deleted_action_code = code
+      }
+      const requestOptions = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      }
+      const response = await fetch(`${ordering.root}/orders`, requestOptions)
+      const content = await response.json()
+      if (!content.error) {
+        setDeletedOrderIds(selectedOrderIds)
+        setSelectedOrderIds([])
+        showToast(ToastType.Success, t('ORDERS_DELETED', 'Orders deleted'))
+      } else {
+        setActionStatus({
+          loading: true,
+          error: content.result
+        })
+      }
+    } catch (error) {
+      setActionStatus({ loading: false, error: [error.message] })
     }
   }
 
@@ -230,9 +261,7 @@ export const OrdersManage = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          Authorization: `Bearer ${token}`
         }
       }
       const response = await fetch(`${ordering.root}/controls/orders`, requestOptions)
@@ -314,6 +343,16 @@ export const OrdersManage = (props) => {
   const getOrderNumbersByStatus = async () => {
     let where = []
     const conditions = []
+    conditions.push({
+      attribute: 'products',
+      conditions: [{
+        attribute: 'type',
+        value: {
+          condition: '=',
+          value: 'item'
+        }
+      }]
+    })
     if (Object.keys(filterValues).length > 0) {
       const filterConditons = []
       if (filterValues?.statuses.length > 0) {
@@ -330,6 +369,42 @@ export const OrdersManage = (props) => {
             }
           }
         )
+      }
+      if (filterValues?.externalId) {
+        filterConditons.push(
+          {
+            attribute: 'external_id',
+            value: {
+              condition: 'ilike',
+              value: encodeURI(`%${filterValues?.externalId}%`)
+            }
+          }
+        )
+      }
+      if (filterValues?.metafield?.length > 0) {
+        const metafieldConditions = filterValues?.metafield.map(item => (
+          {
+            attribute: 'metafields',
+            conditions: [
+              {
+                attribute: 'key',
+                value: item?.key
+              },
+              {
+                attribute: 'value',
+                value: {
+                  condition: 'ilike',
+                  value: encodeURI(`%${item?.value}%`)
+                }
+              }
+            ],
+            conector: 'AND'
+          }
+        ))
+        filterConditons.push({
+          conector: 'OR',
+          conditions: metafieldConditions
+        })
       }
       if (filterValues?.deliveryFromDatetime !== null) {
         filterConditons.push(
@@ -393,6 +468,19 @@ export const OrdersManage = (props) => {
           }
         )
       }
+      if (filterValues?.cityIds.length !== 0) {
+        filterConditons.push(
+          {
+            attribute: 'business',
+            conditions: [
+              {
+                attribute: 'city_id',
+                value: filterValues?.cityIds
+              }
+            ]
+          }
+        )
+      }
       if (filterValues?.driverGroupIds.length !== 0) {
         filterConditons.push(
           {
@@ -419,6 +507,14 @@ export const OrdersManage = (props) => {
     }
 
     const additionalConditions = []
+
+    if (isOnlyDelivery) {
+      additionalConditions.push({
+        attribute: 'delivery_type',
+        value: 1
+      })
+    }
+
     if (driverId) {
       additionalConditions.push({
         attribute: 'driver_id',
@@ -436,6 +532,14 @@ export const OrdersManage = (props) => {
         attribute: 'business_id',
         value: businessId
       })
+    }
+    if (timeStatus) {
+      additionalConditions.push(
+        {
+          attribute: 'time_status',
+          value: timeStatus
+        }
+      )
     }
     if (additionalConditions.length) {
       conditions.push({
@@ -501,6 +605,21 @@ export const OrdersManage = (props) => {
         }
       )
 
+      searchConditions.push(
+        {
+          attribute: 'driver',
+          conditions: [
+            {
+              attribute: 'name',
+              value: {
+                condition: 'ilike',
+                value: encodeURI(`%${searchValue}%`)
+              }
+            }
+          ]
+        }
+      )
+
       conditions.push({
         conector: 'OR',
         conditions: searchConditions
@@ -519,12 +638,10 @@ export const OrdersManage = (props) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          Authorization: `Bearer ${token}`
         }
       }
-      const response = await fetch(`${ordering.root}/orders/dashboard?where=${JSON.stringify(where)}`, requestOptions)
+      const response = await fetch(`${ordering.root}/orders/dashboard?v=2&where=${JSON.stringify(where)}`, requestOptions)
       const content = await response.json()
       if (!content?.error) {
         const _orderStatusNumbers = Object.keys(orderStatuesList).reduce((sum, curr, index) => {
@@ -562,29 +679,61 @@ export const OrdersManage = (props) => {
     }
   }
 
-  const handleUpdateOrder = () => {
-    getOrderNumbersByStatus()
+  const handleNewOrder = (order) => {
+    if (customerId && order?.customer_id !== customerId) return
+    if (!numberOfOrdersByStatus.result) return
+    const _orderStatusNumbers = numberOfOrdersByStatus.result
+    _orderStatusNumbers.pending += 1
+    setNumberOfOrdersByStatus({
+      ...numberOfOrdersByStatus,
+      loading: false,
+      error: false,
+      result: _orderStatusNumbers
+    })
   }
-  useEffect(() => {
-    socket.on('update_order', handleUpdateOrder)
-    socket.on('orders_register', handleUpdateOrder)
-    return () => {
-      socket.off('update_order', handleUpdateOrder)
-      socket.off('orders_register', handleUpdateOrder)
+
+  const handleUpdateOrder = (order) => {
+    if (!order?.history) return
+    if (customerId && order?.customer_id !== customerId) return
+    const length = order.history.length
+    const lastHistoryData = order?.history[length - 1].data
+    const statusChange = lastHistoryData?.find(({ attribute }) => (attribute === 'status'))
+    if (statusChange && numberOfOrdersByStatus.result) {
+      const from = statusChange.old
+      const to = statusChange.new
+      const _orderStatusNumbers = numberOfOrdersByStatus.result
+      let fromTab = null
+      let toTab = null
+
+      Object.values(orderStatuesList).map((statusTabs, key) => {
+        if (statusTabs.includes(from)) {
+          fromTab = Object.keys(orderStatuesList)[key]
+          if (_orderStatusNumbers[fromTab] > 0) {
+            _orderStatusNumbers[fromTab] -= 1
+          }
+        }
+        if (statusTabs.includes(to)) {
+          toTab = Object.keys(orderStatuesList)[key]
+          _orderStatusNumbers[toTab] += 1
+        }
+      })
+      setNumberOfOrdersByStatus({
+        ...numberOfOrdersByStatus,
+        loading: false,
+        error: false,
+        result: _orderStatusNumbers
+      })
     }
-  }, [socket, filterValues, searchValue, numberOfOrdersByStatus])
+  }
 
   useEffect(() => {
-    if (!user) return
-    socket.join('drivers')
-    if (user.level === 0) {
-      socket.join('orders')
-      socket.join('messages_orders')
-    } else {
-      socket.join(`orders_${user?.id}`)
-      socket.join(`messages_orders_${user?.id}`)
+    socket.on('update_order', handleUpdateOrder)
+    socket.on('orders_register', handleNewOrder)
+    return () => {
+      socket.off('update_order', handleUpdateOrder)
+      socket.off('orders_register', handleNewOrder)
     }
-  }, [socket, loading, user])
+  }, [socket, filterValues, searchValue, JSON.stringify(numberOfOrdersByStatus)])
 
   /**
    * Listening multi orders action start to change status
@@ -593,14 +742,6 @@ export const OrdersManage = (props) => {
     if (!startMulitOrderStatusChange || selectedOrderIds.length === 0) return
     handleChangeMultiOrderStatus(selectedOrderIds[0])
   }, [selectedOrderIds, startMulitOrderStatusChange])
-
-  /**
-  * Listening mulit orders delete action start
-  */
-  useEffect(() => {
-    if (!startMulitOrderDelete || selectedOrderIds.length === 0) return
-    deleteOrder(selectedOrderIds[0])
-  }, [selectedOrderIds, startMulitOrderDelete])
 
   useEffect(() => {
     if (loading) return
@@ -617,10 +758,35 @@ export const OrdersManage = (props) => {
   }, [user, loading])
 
   useEffect(() => {
-    if (!actionStatus?.error && !actionStatus?.loading) {
-      getOrderNumbersByStatus()
+    getOrderNumbersByStatus()
+  }, [filterValues, searchValue, driverId, customerId, businessId, timeStatus])
+
+  useEffect(() => {
+    if (!user.id || configState?.loading) return
+    const getUser = async () => {
+      try {
+        const response = await ordering.users(user.id).select(['settings']).get()
+        const { content: { error, result } } = response
+        if (!error && result.settings?.orderColumns) {
+          setAllowColumns(result.settings?.orderColumns)
+          return
+        }
+
+        setAllowColumns({
+          ...allowColumnsModel,
+          slaBar: { ...allowColumnsModel?.slaBar, visable: configState?.configs?.order_deadlines_enabled?.value === '1' },
+          timer: { ...allowColumnsModel?.timer, visable: configState?.configs?.order_deadlines_enabled?.value === '1' }
+        })
+      } catch (err) {
+        setAllowColumns({
+          ...allowColumnsModel,
+          slaBar: { ...allowColumnsModel?.slaBar, visable: configState?.configs?.order_deadlines_enabled?.value === '1' },
+          timer: { ...allowColumnsModel?.timer, visable: configState?.configs?.order_deadlines_enabled?.value === '1' }
+        })
+      }
     }
-  }, [actionStatus, filterValues, searchValue, driverId, customerId, businessId])
+    getUser()
+  }, [user, configState])
 
   return (
     <>
@@ -637,9 +803,8 @@ export const OrdersManage = (props) => {
           filterValues={filterValues}
           multiOrderUpdateStatus={updateStatus}
           selectedOrderIds={selectedOrderIds}
-          deletedOrderId={deletedOrderId}
+          deletedOrderIds={deletedOrderIds}
           startMulitOrderStatusChange={startMulitOrderStatusChange}
-          startMulitOrderDelete={startMulitOrderDelete}
           selectedSubOrderStatus={selectedSubOrderStatus}
           handleSelectedSubOrderStatus={setSelectedSubOrderStatus}
           handleSelectedOrderIds={handleSelectedOrderIds}
@@ -651,6 +816,10 @@ export const OrdersManage = (props) => {
           handleDeleteMultiOrders={handleDeleteMultiOrders}
           setSelectedOrderIds={setSelectedOrderIds}
           numberOfOrdersByStatus={numberOfOrdersByStatus}
+          allowColumns={allowColumns}
+          setAllowColumns={setAllowColumns}
+          timeStatus={timeStatus}
+          setTimeStatus={setTimeStatus}
         />
       )}
     </>

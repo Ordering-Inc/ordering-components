@@ -5,7 +5,6 @@ import { useApi } from '../../../contexts/ApiContext'
 import { useToast, ToastType } from '../../../contexts/ToastContext'
 import { useLanguage } from '../../../contexts/LanguageContext'
 import { useConfig } from '../../../contexts/ConfigContext'
-import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const GoogleMapsApiKeySetting = (props) => {
   const {
@@ -13,7 +12,6 @@ export const GoogleMapsApiKeySetting = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
@@ -33,9 +31,7 @@ export const GoogleMapsApiKeySetting = (props) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          'X-App-X': ordering.appId,
-          'X-Socket-Id-X': socket?.getId()
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           key: 'google_maps_api_key',
