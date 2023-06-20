@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSession } from '../../../contexts/SessionContext'
 import { useEvent } from '../../../contexts/EventContext'
-import { useWebsocket } from '../../../contexts/WebsocketContext'
 
 export const BusinessProductsListing = (props) => {
   const {
@@ -19,7 +18,6 @@ export const BusinessProductsListing = (props) => {
 
   const [{ token }] = useSession()
   const [events] = useEvent()
-  const socket = useWebsocket()
   const [categorySelected, setCategorySelected] = useState(null)
   const [searchValue, setSearchValue] = useState(null)
   const [businessState, setBusinessState] = useState({ business: {}, menus: null, loading: true, error: null })
@@ -33,6 +31,8 @@ export const BusinessProductsListing = (props) => {
   const [fees, setFees] = useState({})
   const [formTaxState, setFormTaxState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [formFeeState, setFormFeeState] = useState({ loading: false, changes: {}, result: { error: false } })
+  const [businessTypes, setBusinessTypes] = useState([])
+  const [siteState, setSiteState] = useState({ site: null, loading: false, error: null })
   const categoryStateDefault = {
     loading: true,
     pagination: { currentPage: 0, pageSize: 10, totalItems: null, totalPages: 0, nextPageItems: 10 },
@@ -95,16 +95,24 @@ export const BusinessProductsListing = (props) => {
         loading: false
       }
       if (categorySelected) {
-        let categoryFiltered
+        let categoryFinded
         const _categories = [...businessState?.business?.categories]
         _categories.forEach(function iterate (category) {
           if (category?.id === categorySelected?.id) {
-            categoryFiltered = category
+            categoryFinded = category
           }
           Array.isArray(category?.subcategories) && category.subcategories.forEach(iterate)
         })
 
-        let productsFiltered = categoryFiltered?.products?.filter(
+        let productsFinded = [...categoryFinded?.products]
+        if (categoryFinded && categoryFinded?.subcategories) {
+          categoryFinded.subcategories.forEach(function iterate (category) {
+            productsFinded = [...productsFinded, ...category.products]
+            Array.isArray(category?.subcategories) && category.subcategories.forEach(iterate)
+          })
+        }
+
+        let productsFiltered = productsFinded?.filter(
           product => isMatchSearch(product.name, product.description)
         )
 
@@ -267,9 +275,7 @@ export const BusinessProductsListing = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'X-App-X': ordering.appId,
-        'X-Socket-Id-X': socket?.getId()
+        Authorization: `Bearer ${token}`
       }
     })
     const { error, result } = await response.json()
@@ -298,9 +304,7 @@ export const BusinessProductsListing = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'X-App-X': ordering.appId,
-        'X-Socket-Id-X': socket?.getId()
+        Authorization: `Bearer ${token}`
       }
     })
     const { error, result } = await response.json()
@@ -317,6 +321,47 @@ export const BusinessProductsListing = (props) => {
       },
       loading: false
     })
+  }
+
+  /**
+   * Method to get the themes from API
+   */
+  const getSites = async () => {
+    try {
+      setSiteState({ ...siteState, loading: true })
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const response = await fetch(`${ordering.root}/sites`, requestOptions)
+      const { error, result } = await response.json()
+      if (!error) {
+        const site = result.find(site => site.code === 'website')
+        setSiteState({ ...siteState, loading: false, site: site })
+      } else {
+        setSiteState({ ...siteState, loading: false, error: result })
+      }
+    } catch (err) {
+      setSiteState({ ...siteState, loading: false, error: [err.message] })
+    }
+  }
+
+  const getBusinessTypes = async () => {
+    try {
+      const response = await fetch(`${ordering.root}/business_types?where=[{"attribute":"enabled","value":true}]`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      const { error, result } = await response.json()
+      if (!error) {
+        setBusinessTypes(result)
+      }
+    } catch (error) {
+      console.log(error?.message)
+    }
   }
 
   useEffect(() => {
@@ -448,8 +493,6 @@ export const BusinessProductsListing = (props) => {
     if (businessState.loading) return
     if (!businessState.loading && (categorySelected || isAllCategoryProducts)) {
       getProducts(true)
-    } else if (businessState?.business?.categories) {
-      setCategorySelected(businessState?.business?.categories[0])
     }
   }, [businessState])
 
@@ -511,6 +554,8 @@ export const BusinessProductsListing = (props) => {
   useEffect(() => {
     getTaxes()
     getFees()
+    getBusinessTypes()
+    getSites()
   }, [])
 
   return (
@@ -543,6 +588,9 @@ export const BusinessProductsListing = (props) => {
           setTaxes={setTaxes}
           fees={fees}
           setFees={setFees}
+          businessTypes={businessTypes}
+          setBusinessTypes={setBusinessTypes}
+          siteState={siteState}
         />
       )}
     </>
