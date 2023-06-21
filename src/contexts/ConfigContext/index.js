@@ -144,7 +144,7 @@ export const ConfigProvider = ({ children, strategy }) => {
         dates_general_format: {
           key: 'dates_general_format',
           value: result?.dates_general_format?.value ||
-          (result?.format_time?.value === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
+            (result?.format_time?.value === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
         }
       }
       const configsResult = {
@@ -193,6 +193,12 @@ export const ConfigProvider = ({ children, strategy }) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!state.loading && ordering?.project) {
+      refreshConfigs()
+    }
+  }, [ordering?.project])
+
   return (
     <ConfigContext.Provider value={[state, functions]}>
       {children}
@@ -205,5 +211,5 @@ export const ConfigProvider = ({ children, strategy }) => {
  */
 export const useConfig = () => {
   const configManager = useContext(ConfigContext)
-  return configManager || [{}, async () => {}]
+  return configManager || [{}, async () => { }]
 }
