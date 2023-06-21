@@ -12,6 +12,7 @@ var _utc = _interopRequireDefault(require("dayjs/plugin/utc"));
 var _OrderContext = require("../../contexts/OrderContext");
 var _LanguageContext = require("../../contexts/LanguageContext");
 var _ConfigContext = require("../../contexts/ConfigContext");
+var _ToastContext = require("../../contexts/ToastContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -66,6 +67,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
   var _useConfig = (0, _ConfigContext.useConfig)(),
     _useConfig2 = _slicedToArray(_useConfig, 1),
     configs = _useConfig2[0].configs;
+  var _useToast = (0, _ToastContext.useToast)(),
+    _useToast2 = _slicedToArray(_useToast, 2),
+    showToast = _useToast2[1].showToast;
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     languageState = _useLanguage2[0],
@@ -1016,6 +1020,122 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
       })
     }));
   };
+  var updateCategories = function updateCategories(categories, result) {
+    return categories.map(function (category) {
+      if (category.id === result.id) {
+        return _objectSpread(_objectSpread({}, category), result);
+      }
+      if (Array.isArray(category === null || category === void 0 ? void 0 : category.subcategories) && category.subcategories.length > 0) {
+        return _objectSpread(_objectSpread({}, category), {}, {
+          subcategories: updateCategories(category.subcategories, result)
+        });
+      }
+      return category;
+    });
+  };
+  var updateStoreProduct = /*#__PURE__*/function () {
+    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(categoryId, productId) {
+      var updateParams,
+        _businessState$busine20,
+        _yield$ordering$busin4,
+        _yield$ordering$busin5,
+        result,
+        error,
+        updatedProducts,
+        _args8 = arguments;
+      return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
+          case 0:
+            updateParams = _args8.length > 2 && _args8[2] !== undefined ? _args8[2] : {};
+            _context8.prev = 1;
+            _context8.next = 4;
+            return ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine20 = businessState.business) === null || _businessState$busine20 === void 0 ? void 0 : _businessState$busine20.id).categories(categoryId).products(productId).save(updateParams);
+          case 4:
+            _yield$ordering$busin4 = _context8.sent;
+            _yield$ordering$busin5 = _yield$ordering$busin4.content;
+            result = _yield$ordering$busin5.result;
+            error = _yield$ordering$busin5.error;
+            if (!error) {
+              updatedProducts = categoryState.products.map(function (product) {
+                if (product.id === result.id) {
+                  return _objectSpread(_objectSpread({}, product), result);
+                }
+                return product;
+              });
+              setCategoryState(_objectSpread(_objectSpread({}, categoryState), {}, {
+                products: updatedProducts
+              }));
+              showToast(_ToastContext.ToastType.Success, result !== null && result !== void 0 && result.enabled ? t('ENABLED_PRODUCT', 'Enabled product') : t('DISABLED_PRODUCT', 'Disabled product'));
+            } else {
+              showToast(_ToastContext.ToastType.Error, result);
+            }
+            _context8.next = 14;
+            break;
+          case 11:
+            _context8.prev = 11;
+            _context8.t0 = _context8["catch"](1);
+            showToast(_ToastContext.ToastType.Error, _context8.t0.message);
+          case 14:
+          case "end":
+            return _context8.stop();
+        }
+      }, _callee8, null, [[1, 11]]);
+    }));
+    return function updateStoreProduct(_x5, _x6) {
+      return _ref15.apply(this, arguments);
+    };
+  }();
+  var updateStoreCategory = /*#__PURE__*/function () {
+    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(categoryId) {
+      var updateParams,
+        _businessState$busine21,
+        _yield$ordering$busin6,
+        _yield$ordering$busin7,
+        result,
+        error,
+        updatedCategories,
+        updatedBusiness,
+        _args9 = arguments;
+      return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+        while (1) switch (_context9.prev = _context9.next) {
+          case 0:
+            updateParams = _args9.length > 1 && _args9[1] !== undefined ? _args9[1] : {};
+            _context9.prev = 1;
+            _context9.next = 4;
+            return ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine21 = businessState.business) === null || _businessState$busine21 === void 0 ? void 0 : _businessState$busine21.id).categories(categoryId).save(updateParams);
+          case 4:
+            _yield$ordering$busin6 = _context9.sent;
+            _yield$ordering$busin7 = _yield$ordering$busin6.content;
+            result = _yield$ordering$busin7.result;
+            error = _yield$ordering$busin7.error;
+            if (!error) {
+              updatedCategories = updateCategories(businessState === null || businessState === void 0 ? void 0 : businessState.business.categories, result);
+              updatedBusiness = _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
+                categories: updatedCategories
+              });
+              setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
+                business: updatedBusiness
+              }));
+              showToast(_ToastContext.ToastType.Success, result !== null && result !== void 0 && result.enabled ? t('ENABLED_CATEGORY', 'Enabled category') : t('DISABLED_CATEGORY', 'Disabled category'));
+            } else {
+              showToast(_ToastContext.ToastType.Error, result);
+            }
+            _context9.next = 14;
+            break;
+          case 11:
+            _context9.prev = 11;
+            _context9.t0 = _context9["catch"](1);
+            showToast(_ToastContext.ToastType.Error, _context9.t0.message);
+          case 14:
+          case "end":
+            return _context9.stop();
+        }
+      }, _callee9, null, [[1, 11]]);
+    }));
+    return function updateStoreCategory(_x7) {
+      return _ref16.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (!businessState.loading) {
       loadProducts({
@@ -1141,7 +1261,9 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     handleChangePriceFilterValues: handleChangePriceFilterValues,
     handleUpdateProfessionals: handleUpdateProfessionals,
     notFound: notFound,
-    setNotFound: setNotFound
+    setNotFound: setNotFound,
+    updateStoreCategory: updateStoreCategory,
+    updateStoreProduct: updateStoreProduct
   })));
 };
 exports.BusinessAndProductList = BusinessAndProductList;
