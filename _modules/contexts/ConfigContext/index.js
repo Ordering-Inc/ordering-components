@@ -301,6 +301,11 @@ var ConfigProvider = function ConfigProvider(_ref) {
       events.off('country_code_changed', handleUpdateConfigs);
     };
   }, []);
+  (0, _react.useEffect)(function () {
+    if (!state.loading && ordering !== null && ordering !== void 0 && ordering.project) {
+      refreshConfigs();
+    }
+  }, [ordering === null || ordering === void 0 ? void 0 : ordering.project]);
   return /*#__PURE__*/_react.default.createElement(ConfigContext.Provider, {
     value: [state, functions]
   }, children);
