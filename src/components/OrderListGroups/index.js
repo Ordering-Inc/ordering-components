@@ -594,16 +594,15 @@ export const OrderListGroups = (props) => {
     }
     if (type === 'update') {
       const indexToUpdate = orderList.findIndex((o) => o.id === order.id)
-      orderList[indexToUpdate] = order
+      orderList[indexToUpdate] = { ...order, action: type + order?.status }
       orders = orderList
     } else {
       orders = type === 'add'
-        ? [order, ...orderList]
+        ? [{ ...order, action: type + order?.status }, ...orderList]
         : orderList.filter((_order) => _order.id !== order.id)
     }
 
     ordersGroup[status].orders = sortOrders(orders)
-
     let _pagination = ordersGroup[status].pagination
 
     if (type !== 'update') {
@@ -616,7 +615,7 @@ export const OrderListGroups = (props) => {
 
     setOrdersGroup({
       ...ordersGroup,
-      orders: sortOrders(orders),
+      orders: filterByIdUnique(sortOrders(orders)),
       pagination: _pagination
     })
   }
