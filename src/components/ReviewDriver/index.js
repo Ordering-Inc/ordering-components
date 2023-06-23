@@ -7,7 +7,7 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const ReviewDriver = (props) => {
-  const { UIComponent, order, isToast, isProfessional } = props
+  const { UIComponent, order, isToast, isProfessional, hashKey } = props
 
   const [ordering] = useApi()
   const socket = useWebsocket()
@@ -30,24 +30,31 @@ export const ReviewDriver = (props) => {
         ? order?.products[0]?.calendar_event?.professional?.id
         : order?.driver?.id
 
-        const fetchReviews = async (ids) => {
-          const promises = ids.map(async id => {
-            const res = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
-              method: 'POST',
-              headers: {
-                Authorization: `Bearer ${session.token}`,
-                'Content-Type': 'application/json',
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket?.getId()
-              },
-              body: JSON.stringify({ ...reviews, order_id: id, user_id: userId })
-            })
-            const { result, error } = await res.json()
-            return { result, error }
+      const fetchReviews = async (ids) => {
+        const promises = ids.map(async id => {
+          let headers = {
+            Authorization: `Bearer ${session.token}`,
+            'Content-Type': 'application/json',
+            'X-App-X': ordering.appId,
+            'X-Socket-Id-X': socket?.getId()
+          }
+          if (hashKey && !session.token) {
+            headers = {
+              ...headers,
+              'X-uuid-access-X': hashKey
+            }
+          }
+          const res = await fetch(`${ordering.root}/users/${userId}/user_reviews`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ ...reviews, order_id: id, user_id: userId })
           })
-          const data = await Promise.all(promises)
-          return data
-        }
+          const { result, error } = await res.json()
+          return { result, error }
+        })
+        const data = await Promise.all(promises)
+        return data
+      }
 
       const reviewsArray = await fetchReviews(orderId)
 

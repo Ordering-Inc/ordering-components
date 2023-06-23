@@ -8,7 +8,7 @@ import { useWebsocket } from '../../contexts/WebsocketContext'
 import { useEvent } from '../../contexts/EventContext'
 
 export const ReviewProduct = (props) => {
-  const { UIComponent, order, isToast } = props
+  const { UIComponent, order, isToast, hashKey } = props
 
   const [ordering] = useApi()
   const socket = useWebsocket()
@@ -28,14 +28,21 @@ export const ReviewProduct = (props) => {
 
   const reviewProducts = async (orderId, changes) => {
     if (!changes) return
+    let headers = {
+      Authorization: `Bearer ${session.token}`,
+      'Content-Type': 'application/json',
+      'X-App-X': ordering.appId,
+      'X-Socket-Id-X': socket?.getId()
+    }
+    if (hashKey && !session.token) {
+      headers = {
+        ...headers,
+        'X-uuid-access-X': hashKey
+      }
+    }
     const response = await fetch(`${ordering.root}/orders/${orderId}/product_reviews`, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-        'Content-Type': 'application/json',
-        'X-App-X': ordering.appId,
-        'X-Socket-Id-X': socket?.getId()
-      },
+      headers,
       body: JSON.stringify({ reviews: JSON.stringify(changes) })
     })
     const result = await response.json()
