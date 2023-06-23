@@ -7,7 +7,16 @@ import { useLanguage } from '../../contexts/LanguageContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 
 export const OrderReview = (props) => {
-  const { UIComponent, order, onSaveReview, handleCustomSendReview, isToast, defaultStar, handleUpdateOrderList } = props
+  const {
+    UIComponent,
+    order,
+    hashKey,
+    onSaveReview,
+    handleCustomSendReview,
+    isToast,
+    defaultStar,
+    handleUpdateOrderList
+  } = props
 
   const [ordering] = useApi()
   const socket = useWebsocket()
@@ -18,14 +27,21 @@ export const OrderReview = (props) => {
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
 
   const reviewOrder = async (body) => {
+    let headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.token}`,
+      'X-App-X': ordering.appId,
+      'X-Socket-Id-X': socket?.getId()
+    }
+    if (hashKey && !session.token) {
+      headers = {
+        ...headers,
+        'X-uuid-access-X': hashKey
+      }
+    }
     const response = await fetch(`${ordering.root}/business/${body.business_id}/reviews`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.token}`,
-        'X-App-X': ordering.appId,
-        'X-Socket-Id-X': socket?.getId()
-      },
+      headers,
       body: JSON.stringify(body)
     })
     const { result, error } = await response.json()
