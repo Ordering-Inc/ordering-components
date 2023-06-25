@@ -23,8 +23,13 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
   useEffect(() => {
     if (session.loading) return
     if (configs.url && configs.project) {
-      const _socket = new Socket({ ...configs, accessToken: session?.token })
-      setSocket(_socket)
+      if (session.auth) {
+        const _socket = new Socket({ ...configs, accessToken: session?.token })
+        setSocket(_socket)
+      } else {
+        const _socket = new Socket({ ...configs })
+        setSocket(_socket)
+      }
     }
     // if (!session.auth) {
     //   socket && socket.close()
