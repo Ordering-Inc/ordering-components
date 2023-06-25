@@ -13,7 +13,7 @@ export const PromotionsController = (props) => {
 
   const [session] = useSession()
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ options }] = useOrder()
 
   const [searchValue, setSearchValue] = useState('')

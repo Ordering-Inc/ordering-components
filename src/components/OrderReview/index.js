@@ -19,7 +19,7 @@ export const OrderReview = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()

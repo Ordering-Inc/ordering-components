@@ -12,7 +12,7 @@ export const WebsocketStatus = (props) => {
   } = props
 
   const [, t] = useLanguage()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
 
   const [socketStatus, setSocketStatus] = useState(socket?.socket?.connected ? 1 : 2)
   const [connectedDate, setConnectedDate] = useState(
@@ -35,17 +35,17 @@ export const WebsocketStatus = (props) => {
 
   useEffect(() => {
     if (socket?.socket) {
-      socket.socket.on('connect', () => {
+      socket?.socket?.on('connect', () => {
         setReconnectAttemptCount(0)
         setSocketStatus(1)
         setConnectedDate(new Date())
       })
 
-      socket.socket.on('disconnect', (reason) => {
+      socket?.socket?.on('disconnect', (reason) => {
         setSocketStatus(2)
       })
 
-      socket.socket.on('reconnect_attempt', () => {
+      socket?.socket?.on('reconnect_attempt', () => {
         setReconnectAttemptCount(prev => prev + 1)
         setSocketStatus(0)
       })

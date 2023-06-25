@@ -27,7 +27,7 @@ export const UserFormDetails = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [session, { changeUser }] = useSession()
   const [customer, { setUserCustomer }] = useCustomer()
   const [validationFields] = useValidationsFieldsController()

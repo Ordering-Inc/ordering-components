@@ -18,7 +18,7 @@ export const SendGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
 

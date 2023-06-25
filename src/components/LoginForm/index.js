@@ -25,7 +25,7 @@ export const LoginForm = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   let { defaultLoginTab } = props
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [credentials, setCredentials] = useState({ email: '', cellphone: '', password: '' })

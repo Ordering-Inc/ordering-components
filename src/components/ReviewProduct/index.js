@@ -11,7 +11,7 @@ export const ReviewProduct = (props) => {
   const { UIComponent, order, isToast, hashKey } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [session] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()

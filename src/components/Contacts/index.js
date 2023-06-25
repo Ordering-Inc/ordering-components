@@ -26,7 +26,7 @@ export const Contacts = (props) => {
 
   const [{ token, user }] = useSession();
   const [ordering] = useApi();
-  const socket = useWebsocket();
+  const [socket] = useWebsocket();
 
   const [sortBy, setSortBy] = useState(sortParams);
   const [orders, setOrders] = useState({
@@ -300,17 +300,17 @@ export const Contacts = (props) => {
       user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`;
     const ordersRoom = user?.level === 0 ? 'orders' : `orders_${user?.id}`;
 
-    socket.socket.on('connect', () => {
-      socket.join(messagesOrdersRoom);
-      socket.join(ordersRoom);
+    socket?.socket?.on('connect', () => {
+      socket?.join(messagesOrdersRoom);
+      socket?.join(ordersRoom);
     })
 
-    socket.join(messagesOrdersRoom);
-    socket.join(ordersRoom);
+    socket?.join(messagesOrdersRoom);
+    socket?.join(ordersRoom);
 
     return () => {
-      socket.leave(messagesOrdersRoom);
-      socket.leave(ordersRoom);
+      socket?.leave(messagesOrdersRoom);
+      socket?.leave(ordersRoom);
     };
   }, [socket?.socket, user]);
 
@@ -383,13 +383,13 @@ export const Contacts = (props) => {
   }, []);
 
   useEffect(() => {
-    socket.on('message', handleMessage);
-    socket.on('orders_register', handleOrder);
-    socket.on('update_order', handleOrder);
+    socket?.on('message', handleMessage);
+    socket?.on('orders_register', handleOrder);
+    socket?.on('update_order', handleOrder);
 
     return () => {
-      socket.off('message', handleMessage);
-      socket.off('update_order', handleOrder);
+      socket?.off('message', handleMessage);
+      socket?.off('update_order', handleOrder);
     };
   }, [socket, user]);
 
