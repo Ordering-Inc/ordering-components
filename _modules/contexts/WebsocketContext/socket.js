@@ -66,14 +66,18 @@ var Socket = /*#__PURE__*/function () {
   }, {
     key: "join",
     value: function join(room) {
-      var _this$socket3;
-      if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
-        this.socket.emit('join', "".concat(this.project, "_").concat(room));
+      if (typeof room === 'string') {
+        var _this$socket3;
+        if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
+          this.socket.emit('join', "".concat(this.project, "_").concat(room));
+        } else {
+          this.queue.push({
+            action: 'join',
+            room: room
+          });
+        }
       } else {
-        this.queue.push({
-          action: 'join',
-          room: room
-        });
+        this.socket.emit('join', room);
       }
       return this;
     }
