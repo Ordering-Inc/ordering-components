@@ -17,7 +17,7 @@ export class Socket {
       query: this.accessToken ? `token=${this.accessToken}&project=${this.project}` : this.hashKey ? `hash_key=${this.hashKey}&project=${this.project}` : `project=${this.project}`,
       transports: ['websocket']
     })
-    this.socket.on('connect', () => {
+    this.socket?.on('connect', () => {
       let item
       while ((item = this.queue.shift()) !== undefined) {
         if (item.action === 'on') {
@@ -39,26 +39,26 @@ export class Socket {
 
   close () {
     if (this.socket?.connected) {
-      this.socket.close()
+      this.socket?.close()
     }
   }
 
   join (room) {
     if (typeof room === 'string') {
       if (this.socket?.connected) {
-        this.socket.emit('join', `${this.project}_${room}`)
+        this.socket?.emit('join', `${this.project}_${room}`)
       } else {
         this.queue.push({ action: 'join', room })
       }
     } else {
-      this.socket.emit('join', room)
+      this.socket?.emit('join', room)
     }
     return this
   }
 
   leave (room) {
     if (this.socket?.connected) {
-      this.socket.emit('leave', `${this.project}_${room}`)
+      this.socket?.emit('leave', `${this.project}_${room}`)
     } else {
       this.queue.push({ action: 'leave', room })
     }
@@ -67,7 +67,7 @@ export class Socket {
 
   on (event, func = () => {}) {
     if (this.socket?.connected) {
-      this.socket.on(event, func)
+      this.socket?.on(event, func)
     } else {
       this.queue.push({ action: 'on', event, func })
     }
@@ -76,7 +76,7 @@ export class Socket {
 
   off (event, func = () => {}) {
     if (this.socket?.connected) {
-      this.socket.off(event, func)
+      this.socket?.off(event, func)
     } else {
       this.queue.push({ action: 'off', event, func })
     }

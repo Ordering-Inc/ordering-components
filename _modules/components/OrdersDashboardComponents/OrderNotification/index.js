@@ -37,9 +37,9 @@ var OrderNotification = function OrderNotification(props) {
     var handleRegisterOrder = function handleRegisterOrder(order) {
       events.emit('order_added', order);
     };
-    socket.on('orders_register', handleRegisterOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleRegisterOrder);
     return function () {
-      socket.off('orders_register', handleRegisterOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', handleRegisterOrder);
     };
   }, [socket, loading, user]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));

@@ -653,11 +653,11 @@ var OrdersManage = function OrdersManage(props) {
         drivers: drivers
       }));
     };
-    socket.on('drivers_update', handleUpdateDriver);
-    socket.on('tracking_driver', handleTrackingDriver);
+    socket === null || socket === void 0 ? void 0 : socket.on('drivers_update', handleUpdateDriver);
+    socket === null || socket === void 0 ? void 0 : socket.on('tracking_driver', handleTrackingDriver);
     return function () {
-      socket.off('drivers_update', handleUpdateDriver);
-      socket.off('tracking_driver', handleTrackingDriver);
+      socket === null || socket === void 0 ? void 0 : socket.off('drivers_update', handleUpdateDriver);
+      socket === null || socket === void 0 ? void 0 : socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [socket, loading, driversList.drivers]);
   var getOrderNumbersByStatus = /*#__PURE__*/function () {
@@ -1016,11 +1016,11 @@ var OrdersManage = function OrdersManage(props) {
     }
   };
   (0, _react.useEffect)(function () {
-    socket.on('update_order', handleUpdateOrder);
-    socket.on('orders_register', handleNewOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleNewOrder);
     return function () {
-      socket.off('update_order', handleUpdateOrder);
-      socket.off('orders_register', handleNewOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', handleNewOrder);
     };
   }, [socket, filterValues, searchValue, JSON.stringify(numberOfOrdersByStatus)]);
 

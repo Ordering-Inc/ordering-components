@@ -449,26 +449,26 @@ export const OrderList = props => {
       })
     }
 
-    socket.on('orders_register', handleAddNewOrder)
-    socket.on('update_order', handleUpdateOrder)
+    socket?.on('orders_register', handleAddNewOrder)
+    socket?.on('update_order', handleUpdateOrder)
     const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-    socket.join(ordersRoom)
+    socket?.join(ordersRoom)
     return () => {
-      socket.off('update_order', handleUpdateOrder)
-      socket.off('orders_register', handleAddNewOrder)
+      socket?.off('update_order', handleUpdateOrder)
+      socket?.off('orders_register', handleAddNewOrder)
     }
   }, [orderList.orders, pagination, socket, session])
 
   useEffect(() => {
     if (!session.user) return
-    socket.on('disconnect', (reason) => {
+    socket?.on('disconnect', (reason) => {
       const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-      socket.join(ordersRoom)
+      socket?.join(ordersRoom)
     })
     const ordersRoom = !props.isAsCustomer && session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-    socket.join(ordersRoom)
+    socket?.join(ordersRoom)
     return () => {
-      socket.leave(ordersRoom)
+      socket?.leave(ordersRoom)
     }
   }, [socket, session, userCustomerId])
 

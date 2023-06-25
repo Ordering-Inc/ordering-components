@@ -45,7 +45,7 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     session = _useSession2[0];
-  var _useState = (0, _react.useState)({}),
+  var _useState = (0, _react.useState)(),
     _useState2 = _slicedToArray(_useState, 2),
     socket = _useState2[0],
     setSocket = _useState2[1];
@@ -73,15 +73,15 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
       }
     }
     // if (!session.auth) {
-    //   socket && socket.close()
+    //   socket && socket?.close()
     // }
   }, [session, configs, hashKey]);
   (0, _react.useEffect)(function () {
     if (socket) {
-      socket.connect();
+      socket === null || socket === void 0 ? void 0 : socket.connect();
     }
     return function () {
-      socket && socket.close();
+      socket && (socket === null || socket === void 0 ? void 0 : socket.close());
     };
   }, [socket, hashKey]);
   (0, _react.useEffect)(function () {
@@ -127,13 +127,16 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
   }, [session]);
   (0, _react.useEffect)(function () {
     if (socket !== null && socket !== void 0 && socket.socket) {
-      socket.socket.on('disconnect', function (reason) {
+      var _socket$socket, _socket$socket3;
+      socket === null || socket === void 0 ? void 0 : (_socket$socket = socket.socket) === null || _socket$socket === void 0 ? void 0 : _socket$socket.on('disconnect', function (reason) {
         if (reason === 'io server disconnect' && session.auth) {
-          setTimeout(socket.socket.connect(), 1000);
+          var _socket$socket2;
+          setTimeout(socket === null || socket === void 0 ? void 0 : (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 ? void 0 : _socket$socket2.connect(), 1000);
         }
       });
-      socket.socket.on('connect_error', function () {
-        setTimeout(socket.socket.connect(), 1000);
+      socket === null || socket === void 0 ? void 0 : (_socket$socket3 = socket.socket) === null || _socket$socket3 === void 0 ? void 0 : _socket$socket3.on('connect_error', function () {
+        var _socket$socket4;
+        setTimeout(socket === null || socket === void 0 ? void 0 : (_socket$socket4 = socket.socket) === null || _socket$socket4 === void 0 ? void 0 : _socket$socket4.connect(), 1000);
       });
     }
   }, [socket === null || socket === void 0 ? void 0 : socket.socket, session, hashKey]);

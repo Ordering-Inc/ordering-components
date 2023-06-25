@@ -418,18 +418,19 @@ var Contacts = function Contacts(props) {
     }
   }, [sortBy]);
   (0, _react.useEffect)(function () {
+    var _socket$socket;
     if (!token || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id);
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id);
-    socket.socket.on('connect', function () {
-      socket.join(messagesOrdersRoom);
-      socket.join(ordersRoom);
+    socket === null || socket === void 0 ? void 0 : (_socket$socket = socket.socket) === null || _socket$socket === void 0 ? void 0 : _socket$socket.on('connect', function () {
+      socket === null || socket === void 0 ? void 0 : socket.join(messagesOrdersRoom);
+      socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     });
-    socket.join(messagesOrdersRoom);
-    socket.join(ordersRoom);
+    socket === null || socket === void 0 ? void 0 : socket.join(messagesOrdersRoom);
+    socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     return function () {
-      socket.leave(messagesOrdersRoom);
-      socket.leave(ordersRoom);
+      socket === null || socket === void 0 ? void 0 : socket.leave(messagesOrdersRoom);
+      socket === null || socket === void 0 ? void 0 : socket.leave(ordersRoom);
     };
   }, [socket === null || socket === void 0 ? void 0 : socket.socket, user]);
   var handleMessage = (0, _react.useCallback)( /*#__PURE__*/function () {
@@ -523,12 +524,12 @@ var Contacts = function Contacts(props) {
     };
   }(), []);
   (0, _react.useEffect)(function () {
-    socket.on('message', handleMessage);
-    socket.on('orders_register', handleOrder);
-    socket.on('update_order', handleOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('message', handleMessage);
+    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleOrder);
     return function () {
-      socket.off('message', handleMessage);
-      socket.off('update_order', handleOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('message', handleMessage);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleOrder);
     };
   }, [socket, user]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

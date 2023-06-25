@@ -178,9 +178,9 @@ var Messages = function Messages(props) {
         }));
       }
     };
-    socket.on('message', handleNewMessage);
+    socket === null || socket === void 0 ? void 0 : socket.on('message', handleNewMessage);
     return function () {
-      socket.off('message', handleNewMessage);
+      socket === null || socket === void 0 ? void 0 : socket.off('message', handleNewMessage);
     };
   }, [messages, socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

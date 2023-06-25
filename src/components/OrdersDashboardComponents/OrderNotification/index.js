@@ -18,9 +18,9 @@ export const OrderNotification = (props) => {
     const handleRegisterOrder = (order) => {
       events.emit('order_added', order)
     }
-    socket.on('orders_register', handleRegisterOrder)
+    socket?.on('orders_register', handleRegisterOrder)
     return () => {
-      socket.off('orders_register', handleRegisterOrder)
+      socket?.off('orders_register', handleRegisterOrder)
     }
   }, [socket, loading, user])
 

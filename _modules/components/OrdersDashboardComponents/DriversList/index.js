@@ -554,11 +554,11 @@ var DriversList = function DriversList(props) {
         drivers: drivers
       }));
     };
-    socket.on('drivers_update', handleUpdateDriver);
-    socket.on('tracking_driver', handleTrackingDriver);
+    socket === null || socket === void 0 ? void 0 : socket.on('drivers_update', handleUpdateDriver);
+    socket === null || socket === void 0 ? void 0 : socket.on('tracking_driver', handleTrackingDriver);
     return function () {
-      socket.off('drivers_update', handleUpdateDriver);
-      socket.off('tracking_driver', handleTrackingDriver);
+      socket === null || socket === void 0 ? void 0 : socket.off('drivers_update', handleUpdateDriver);
+      socket === null || socket === void 0 ? void 0 : socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [socket, session === null || session === void 0 ? void 0 : session.loading, driversList.drivers]);
   (0, _react.useEffect)(function () {

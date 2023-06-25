@@ -91,9 +91,9 @@ export const Messages = (props) => {
         })
       }
     }
-    socket.on('message', handleNewMessage)
+    socket?.on('message', handleNewMessage)
     return () => {
-      socket.off('message', handleNewMessage)
+      socket?.off('message', handleNewMessage)
     }
   }, [messages, socket])
 

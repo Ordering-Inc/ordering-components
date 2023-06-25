@@ -446,30 +446,31 @@ var Messages = function Messages(props) {
         }
       }
     };
-    socket.on('message', handleNewMessage);
+    socket === null || socket === void 0 ? void 0 : socket.on('message', handleNewMessage);
     return function () {
-      socket.off('message', handleNewMessage);
+      socket === null || socket === void 0 ? void 0 : socket.off('message', handleNewMessage);
     };
   }, [messages, socket, order === null || order === void 0 ? void 0 : order.status]);
   (0, _react.useEffect)(function () {
+    var _socket$socket;
     if (!(socket !== null && socket !== void 0 && socket.socket)) return;
     if (asDashboard) {
-      socket.join("messages_orders_".concat(orderId, "_").concat(user === null || user === void 0 ? void 0 : user.level));
+      socket === null || socket === void 0 ? void 0 : socket.join("messages_orders_".concat(orderId, "_").concat(user === null || user === void 0 ? void 0 : user.level));
     } else {
-      socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket === null || socket === void 0 ? void 0 : socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
     }
-    socket.socket.on('connect', function () {
+    socket === null || socket === void 0 ? void 0 : (_socket$socket = socket.socket) === null || _socket$socket === void 0 ? void 0 : _socket$socket.on('connect', function () {
       if (asDashboard) {
-        socket.join("messages_orders_".concat(orderId, "_").concat(user === null || user === void 0 ? void 0 : user.level));
+        socket === null || socket === void 0 ? void 0 : socket.join("messages_orders_".concat(orderId, "_").concat(user === null || user === void 0 ? void 0 : user.level));
       } else {
-        socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+        socket === null || socket === void 0 ? void 0 : socket.join("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
       }
     });
     return function () {
       if (asDashboard) {
-        socket.leave("messages_orders_".concat(orderId, "_").concat(user === null || user === void 0 ? void 0 : user.level));
+        socket === null || socket === void 0 ? void 0 : socket.leave("messages_orders_".concat(orderId, "_").concat(user === null || user === void 0 ? void 0 : user.level));
       } else {
-        socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+        socket === null || socket === void 0 ? void 0 : socket.leave("messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
       }
     };
   }, [socket === null || socket === void 0 ? void 0 : socket.socket, orderId]);

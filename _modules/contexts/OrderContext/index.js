@@ -2206,11 +2206,11 @@ var OrderProvider = function OrderProvider(_ref) {
         loading: false
       }));
     };
-    socket.on('carts_update', handleCartUpdate);
-    socket.on('order_options_update', handleOrderOptionUpdate);
+    socket === null || socket === void 0 ? void 0 : socket.on('carts_update', handleCartUpdate);
+    socket === null || socket === void 0 ? void 0 : socket.on('order_options_update', handleOrderOptionUpdate);
     return function () {
-      socket.off('carts_update', handleCartUpdate);
-      socket.off('order_options_update', handleOrderOptionUpdate);
+      socket === null || socket === void 0 ? void 0 : socket.off('carts_update', handleCartUpdate);
+      socket === null || socket === void 0 ? void 0 : socket.off('order_options_update', handleOrderOptionUpdate);
     };
   }, [state, socket]);
 
@@ -2220,12 +2220,12 @@ var OrderProvider = function OrderProvider(_ref) {
   (0, _react.useEffect)(function () {
     var _customerState$user, _session$user, _customerState$user2, _session$user2;
     if (!session.auth || session.loading) return;
-    socket.join("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id) || (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id)));
-    socket.join("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.id) || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id)));
+    socket === null || socket === void 0 ? void 0 : socket.join("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user = customerState.user) === null || _customerState$user === void 0 ? void 0 : _customerState$user.id) || (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id)));
+    socket === null || socket === void 0 ? void 0 : socket.join("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user2 = customerState.user) === null || _customerState$user2 === void 0 ? void 0 : _customerState$user2.id) || (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id)));
     return function () {
       var _customerState$user3, _session$user3, _customerState$user4, _session$user4;
-      socket.leave("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.id) || (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id)));
-      socket.leave("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id)));
+      socket === null || socket === void 0 ? void 0 : socket.leave("carts_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user3 = customerState.user) === null || _customerState$user3 === void 0 ? void 0 : _customerState$user3.id) || (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id)));
+      socket === null || socket === void 0 ? void 0 : socket.leave("orderoptions_".concat((customerState === null || customerState === void 0 ? void 0 : (_customerState$user4 = customerState.user) === null || _customerState$user4 === void 0 ? void 0 : _customerState$user4.id) || (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.id)));
     };
   }, [socket, session, customerState === null || customerState === void 0 ? void 0 : (_customerState$user5 = customerState.user) === null || _customerState$user5 === void 0 ? void 0 : _customerState$user5.id]);
   var functions = {

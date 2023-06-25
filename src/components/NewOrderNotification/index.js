@@ -29,35 +29,35 @@ export const NewOrderNotification = (props) => {
 
   useEffect(() => {
     if (!token) return
-    socket.on('message', (e) => handleActionEvent('messages', e))
-    socket.on('orders_register', (e) => handleActionEvent('order_added', e))
-    socket.on('update_order', (e) => handleActionEvent('order_updated', e))
+    socket?.on('message', (e) => handleActionEvent('messages', e))
+    socket?.on('orders_register', (e) => handleActionEvent('order_added', e))
+    socket?.on('update_order', (e) => handleActionEvent('order_updated', e))
 
     return () => {
-      socket.off('message', (e) => handleActionEvent('messages', e))
-      socket.off('orders_register', (e) => handleActionEvent('order_added', e))
-      socket.off('update_order', (e) => handleActionEvent('order_updated', e))
+      socket?.off('message', (e) => handleActionEvent('messages', e))
+      socket?.off('orders_register', (e) => handleActionEvent('order_added', e))
+      socket?.off('update_order', (e) => handleActionEvent('order_updated', e))
     }
   }, [socket, user])
 
   useEffect(() => {
     if (isLogisticActivated) {
-      socket.on('request_register', (e) => handleActionEvent('request_register', e))
-      socket.on('request_update', (e) => handleActionEvent('request_update', e))
+      socket?.on('request_register', (e) => handleActionEvent('request_register', e))
+      socket?.on('request_update', (e) => handleActionEvent('request_update', e))
     }
     return () => {
-      socket.off('request_register')
-      socket.off('request_update')
+      socket?.off('request_register')
+      socket?.off('request_update')
     }
   }, [socket, user, isLogisticActivated])
 
   useEffect(() => {
     if (!token) return
-    socket.on('disconnect', () => {
-      socket.join(user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`)
-      socket.join(user?.level === 0 ? 'orders' : `orders_${user?.id}`)
-      socket.join(`requests_${user?.id}`)
-      socket.join(`ordergroups_${user?.id}`)
+    socket?.on('disconnect', () => {
+      socket?.join(user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`)
+      socket?.join(user?.level === 0 ? 'orders' : `orders_${user?.id}`)
+      socket?.join(`requests_${user?.id}`)
+      socket?.join(`ordergroups_${user?.id}`)
     })
 
     const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${user?.id}`
@@ -65,16 +65,16 @@ export const NewOrderNotification = (props) => {
     const requestsRoom = `requests_${user?.id}`
     const groupsRoom = `ordergroups_${user?.id}`
 
-    socket.join(messagesOrdersRoom)
-    socket.join(ordersRoom)
-    socket.join(requestsRoom)
-    socket.join(groupsRoom)
+    socket?.join(messagesOrdersRoom)
+    socket?.join(ordersRoom)
+    socket?.join(requestsRoom)
+    socket?.join(groupsRoom)
 
     return () => {
-      socket.leave(messagesOrdersRoom)
-      socket.leave(ordersRoom)
-      socket.leave(requestsRoom)
-      socket.leave(groupsRoom)
+      socket?.leave(messagesOrdersRoom)
+      socket?.leave(ordersRoom)
+      socket?.leave(requestsRoom)
+      socket?.leave(groupsRoom)
     }
   }, [socket, user])
 

@@ -28,7 +28,8 @@ var Socket = /*#__PURE__*/function () {
   _createClass(Socket, [{
     key: "connect",
     value: function connect() {
-      var _this = this;
+      var _this$socket,
+        _this = this;
       this.socket = (0, _socket.default)(this.url, {
         extraHeaders: {
           Authorization: "Bearer ".concat(this.accessToken)
@@ -36,7 +37,7 @@ var Socket = /*#__PURE__*/function () {
         query: this.accessToken ? "token=".concat(this.accessToken, "&project=").concat(this.project) : this.hashKey ? "hash_key=".concat(this.hashKey, "&project=").concat(this.project) : "project=".concat(this.project),
         transports: ['websocket']
       });
-      this.socket.on('connect', function () {
+      (_this$socket = this.socket) === null || _this$socket === void 0 ? void 0 : _this$socket.on('connect', function () {
         var item;
         while ((item = _this.queue.shift()) !== undefined) {
           if (item.action === 'on') {
@@ -54,24 +55,26 @@ var Socket = /*#__PURE__*/function () {
   }, {
     key: "getId",
     value: function getId() {
-      var _this$socket;
-      return (_this$socket = this.socket) === null || _this$socket === void 0 ? void 0 : _this$socket.id;
+      var _this$socket2;
+      return (_this$socket2 = this.socket) === null || _this$socket2 === void 0 ? void 0 : _this$socket2.id;
     }
   }, {
     key: "close",
     value: function close() {
-      var _this$socket2;
-      if ((_this$socket2 = this.socket) !== null && _this$socket2 !== void 0 && _this$socket2.connected) {
-        this.socket.close();
+      var _this$socket3;
+      if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
+        var _this$socket4;
+        (_this$socket4 = this.socket) === null || _this$socket4 === void 0 ? void 0 : _this$socket4.close();
       }
     }
   }, {
     key: "join",
     value: function join(room) {
       if (typeof room === 'string') {
-        var _this$socket3;
-        if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
-          this.socket.emit('join', "".concat(this.project, "_").concat(room));
+        var _this$socket5;
+        if ((_this$socket5 = this.socket) !== null && _this$socket5 !== void 0 && _this$socket5.connected) {
+          var _this$socket6;
+          (_this$socket6 = this.socket) === null || _this$socket6 === void 0 ? void 0 : _this$socket6.emit('join', "".concat(this.project, "_").concat(room));
         } else {
           this.queue.push({
             action: 'join',
@@ -79,16 +82,18 @@ var Socket = /*#__PURE__*/function () {
           });
         }
       } else {
-        this.socket.emit('join', room);
+        var _this$socket7;
+        (_this$socket7 = this.socket) === null || _this$socket7 === void 0 ? void 0 : _this$socket7.emit('join', room);
       }
       return this;
     }
   }, {
     key: "leave",
     value: function leave(room) {
-      var _this$socket4;
-      if ((_this$socket4 = this.socket) !== null && _this$socket4 !== void 0 && _this$socket4.connected) {
-        this.socket.emit('leave', "".concat(this.project, "_").concat(room));
+      var _this$socket8;
+      if ((_this$socket8 = this.socket) !== null && _this$socket8 !== void 0 && _this$socket8.connected) {
+        var _this$socket9;
+        (_this$socket9 = this.socket) === null || _this$socket9 === void 0 ? void 0 : _this$socket9.emit('leave', "".concat(this.project, "_").concat(room));
       } else {
         this.queue.push({
           action: 'leave',
@@ -100,10 +105,11 @@ var Socket = /*#__PURE__*/function () {
   }, {
     key: "on",
     value: function on(event) {
-      var _this$socket5;
+      var _this$socket10;
       var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
-      if ((_this$socket5 = this.socket) !== null && _this$socket5 !== void 0 && _this$socket5.connected) {
-        this.socket.on(event, func);
+      if ((_this$socket10 = this.socket) !== null && _this$socket10 !== void 0 && _this$socket10.connected) {
+        var _this$socket11;
+        (_this$socket11 = this.socket) === null || _this$socket11 === void 0 ? void 0 : _this$socket11.on(event, func);
       } else {
         this.queue.push({
           action: 'on',
@@ -116,10 +122,11 @@ var Socket = /*#__PURE__*/function () {
   }, {
     key: "off",
     value: function off(event) {
-      var _this$socket6;
+      var _this$socket12;
       var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
-      if ((_this$socket6 = this.socket) !== null && _this$socket6 !== void 0 && _this$socket6.connected) {
-        this.socket.off(event, func);
+      if ((_this$socket12 = this.socket) !== null && _this$socket12 !== void 0 && _this$socket12.connected) {
+        var _this$socket13;
+        (_this$socket13 = this.socket) === null || _this$socket13 === void 0 ? void 0 : _this$socket13.off(event, func);
       } else {
         this.queue.push({
           action: 'off',

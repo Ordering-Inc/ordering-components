@@ -882,7 +882,7 @@ var OrderDetails = function OrderDetails(props) {
     };
   }, [props.order, (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.id]);
   (0, _react.useEffect)(function () {
-    var _orderState$order16;
+    var _orderState$order16, _socket$socket;
     if (orderState.loading || loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
       var _orderState$order14;
@@ -912,26 +912,26 @@ var OrderDetails = function OrderDetails(props) {
       }));
     };
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
-    if (!isDisabledOrdersRoom) socket.join(ordersRoom);
+    if (!isDisabledOrdersRoom) socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     if ((_orderState$order16 = orderState.order) !== null && _orderState$order16 !== void 0 && _orderState$order16.driver_id) {
       var _orderState$order17;
-      socket.join("drivers_".concat((_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.driver_id));
+      socket === null || socket === void 0 ? void 0 : socket.join("drivers_".concat((_orderState$order17 = orderState.order) === null || _orderState$order17 === void 0 ? void 0 : _orderState$order17.driver_id));
     }
-    socket.socket.on('connect', function () {
+    socket === null || socket === void 0 ? void 0 : (_socket$socket = socket.socket) === null || _socket$socket === void 0 ? void 0 : _socket$socket.on('connect', function () {
       var _orderState$order18;
-      if (!isDisabledOrdersRoom) socket.join(ordersRoom);
+      if (!isDisabledOrdersRoom) socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
       if ((_orderState$order18 = orderState.order) !== null && _orderState$order18 !== void 0 && _orderState$order18.driver_id) {
         var _orderState$order19;
-        socket.join("drivers_".concat((_orderState$order19 = orderState.order) === null || _orderState$order19 === void 0 ? void 0 : _orderState$order19.driver_id));
+        socket === null || socket === void 0 ? void 0 : socket.join("drivers_".concat((_orderState$order19 = orderState.order) === null || _orderState$order19 === void 0 ? void 0 : _orderState$order19.driver_id));
       }
     });
-    socket.on('tracking_driver', handleTrackingDriver);
-    socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('tracking_driver', handleTrackingDriver);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
     return function () {
-      if (!isDisabledOrdersRoom) socket.leave(ordersRoom);
-      // socket.leave(`drivers_${orderState.order?.driver_id}`)
-      socket.off('update_order', handleUpdateOrder);
-      socket.off('tracking_driver', handleTrackingDriver);
+      if (!isDisabledOrdersRoom) socket === null || socket === void 0 ? void 0 : socket.leave(ordersRoom);
+      // socket?.leave(`drivers_${orderState.order?.driver_id}`)
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.id]);
   (0, _react.useEffect)(function () {
@@ -951,21 +951,22 @@ var OrderDetails = function OrderDetails(props) {
         }));
       }
     };
-    socket.on('message', handleNewMessage);
+    socket === null || socket === void 0 ? void 0 : socket.on('message', handleNewMessage);
     return function () {
-      socket.off('message', handleNewMessage);
+      socket === null || socket === void 0 ? void 0 : socket.off('message', handleNewMessage);
     };
   }, [messages, socket, (_orderState$order22 = orderState.order) === null || _orderState$order22 === void 0 ? void 0 : _orderState$order22.status, userCustomerId]);
   (0, _react.useEffect)(function () {
+    var _socket$socket2;
     if (!(socket !== null && socket !== void 0 && socket.socket)) return;
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
-    socket.join(messagesOrdersRoom);
-    socket.socket.on('connect', function () {
-      socket.join(messagesOrdersRoom);
+    socket === null || socket === void 0 ? void 0 : socket.join(messagesOrdersRoom);
+    socket === null || socket === void 0 ? void 0 : (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 ? void 0 : _socket$socket2.on('connect', function () {
+      socket === null || socket === void 0 ? void 0 : socket.join(messagesOrdersRoom);
     });
     return function () {
       // neccesary refactor
-      if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom);
+      if (!isDisabledOrdersRoom) socket === null || socket === void 0 ? void 0 : socket.leave(messagesOrdersRoom);
     };
   }, [socket === null || socket === void 0 ? void 0 : socket.socket, userCustomerId]);
   (0, _react.useEffect)(function () {

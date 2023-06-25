@@ -176,11 +176,11 @@ var MyOrders = function MyOrders(props) {
   //       order: Object.assign(orderState.order, order)
   //     })
   //   }
-  //   socket.join(`orders_${user.id}`)
-  //   socket.on('update_order', handleUpdateOrder)
+  //   socket?.join(`orders_${user.id}`)
+  //   socket?.on('update_order', handleUpdateOrder)
   //   return () => {
-  //     socket.leave(`orders_${user.id}`)
-  //     socket.off('update_order', handleUpdateOrder)
+  //     socket?.leave(`orders_${user.id}`)
+  //     socket?.off('update_order', handleUpdateOrder)
   //   }
   // }, [orderState.order, socket])
 

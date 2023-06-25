@@ -306,9 +306,9 @@ export const OrderDetails = (props) => {
         order: Object.assign(orderState.order, order)
       })
     }
-    socket.on('update_order', handleUpdateOrder)
+    socket?.on('update_order', handleUpdateOrder)
     return () => {
-      socket.off('update_order', handleUpdateOrder)
+      socket?.off('update_order', handleUpdateOrder)
     }
   }, [orderState.order, socket, loading, drivers])
 

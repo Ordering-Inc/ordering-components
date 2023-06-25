@@ -906,16 +906,16 @@ export const OrderListGroups = (props) => {
       }
     }
 
-    socket.on('orders_register', handleAddNewOrder)
-    socket.on('update_order', handleUpdateOrder)
+    socket?.on('orders_register', handleAddNewOrder)
+    socket?.on('update_order', handleUpdateOrder)
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-    socket.join(ordersRoom)
-    socket.socket.on('connect', () => {
-      socket.join(ordersRoom)
+    socket?.join(ordersRoom)
+    socket?.socket?.on('connect', () => {
+      socket?.join(ordersRoom)
     })
     return () => {
-      socket.off('orders_register', handleAddNewOrder)
-      socket.off('update_order', handleUpdateOrder)
+      socket?.off('orders_register', handleAddNewOrder)
+      socket?.off('update_order', handleUpdateOrder)
     }
   }, [ordersGroup, socket?.socket, session])
 
@@ -962,39 +962,39 @@ export const OrderListGroups = (props) => {
 
   useEffect(() => {
     if (isLogisticActivated) {
-      socket.on('request_register', handleAddAssignRequest)
-      socket.on('request_update', handleUpdateAssignRequest)
-      socket.on('request_cancel', handleDeleteAssignRequest)
+      socket?.on('request_register', handleAddAssignRequest)
+      socket?.on('request_update', handleUpdateAssignRequest)
+      socket?.on('request_cancel', handleDeleteAssignRequest)
     }
     return () => {
-      socket.off('request_register')
-      socket.off('request_update')
-      socket.off('request_cancel')
+      socket?.off('request_register')
+      socket?.off('request_update')
+      socket?.off('request_cancel')
     }
   }, [socket, session, isLogisticActivated])
 
   useEffect(() => {
     if (!session.user) return
-    socket.on('disconnect', () => {
+    socket?.on('disconnect', () => {
       const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-      socket.join(ordersRoom)
+      socket?.join(ordersRoom)
       const requestsRoom = `requests_${session?.user?.id}`
-      socket.join(requestsRoom)
+      socket?.join(requestsRoom)
       const groupsRoom = `ordergroups_${session?.user?.id}`
-      socket.join(groupsRoom)
+      socket?.join(groupsRoom)
     })
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     const requestsRoom = `requests_${session?.user?.id}`
     const groupsRoom = `ordergroups_${session?.user?.id}`
 
-    socket.join(ordersRoom)
-    socket.join(requestsRoom)
-    socket.join(groupsRoom)
+    socket?.join(ordersRoom)
+    socket?.join(requestsRoom)
+    socket?.join(groupsRoom)
 
     return () => {
-      socket.leave(ordersRoom)
-      socket.leave(requestsRoom)
-      socket.leave(groupsRoom)
+      socket?.leave(ordersRoom)
+      socket?.leave(requestsRoom)
+      socket?.leave(groupsRoom)
     }
   }, [socket, session])
 

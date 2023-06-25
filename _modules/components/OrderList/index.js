@@ -704,27 +704,27 @@ var OrderList = function OrderList(props) {
         loading: false
       }));
     };
-    socket.on('orders_register', handleAddNewOrder);
-    socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleAddNewOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
     var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
-    socket.join(ordersRoom);
+    socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     return function () {
-      socket.off('update_order', handleUpdateOrder);
-      socket.off('orders_register', handleAddNewOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', handleAddNewOrder);
     };
   }, [orderList.orders, pagination, socket, session]);
   (0, _react.useEffect)(function () {
     var _session$user6, _session$user7;
     if (!session.user) return;
-    socket.on('disconnect', function (reason) {
+    socket === null || socket === void 0 ? void 0 : socket.on('disconnect', function (reason) {
       var _session$user4, _session$user5;
       var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id);
-      socket.join(ordersRoom);
+      socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     });
     var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 ? void 0 : (_session$user6 = session.user) === null || _session$user6 === void 0 ? void 0 : _session$user6.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.id);
-    socket.join(ordersRoom);
+    socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     return function () {
-      socket.leave(ordersRoom);
+      socket === null || socket === void 0 ? void 0 : socket.leave(ordersRoom);
     };
   }, [socket, session, userCustomerId]);
   var loadMoreOrders = /*#__PURE__*/function () {

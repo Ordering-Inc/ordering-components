@@ -550,9 +550,9 @@ var OrderDetails = function OrderDetails(props) {
         order: Object.assign(orderState.order, order)
       }));
     };
-    socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
     return function () {
-      socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
     };
   }, [orderState.order, socket, loading, drivers]);
   (0, _react.useEffect)(function () {

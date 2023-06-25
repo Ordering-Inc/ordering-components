@@ -463,25 +463,25 @@ var OrderVerticalList = function OrderVerticalList(props) {
       actionOrderToTab(order, status, 'add');
       actionOrderToTab(order, 'all', 'add');
     };
-    socket.on('orders_register', handleAddNewOrder);
-    socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleAddNewOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
     return function () {
-      socket.off('orders_register', handleAddNewOrder);
-      socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', handleAddNewOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
     };
   }, [ordersGroup, socket, session]);
   (0, _react.useEffect)(function () {
     var _session$user4, _session$user5;
     if (!session.user) return;
-    socket.on('disconnect', function () {
+    socket === null || socket === void 0 ? void 0 : socket.on('disconnect', function () {
       var _session$user2, _session$user3;
       var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
-      socket.join(ordersRoom);
+      socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     });
     var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id);
-    socket.join(ordersRoom);
+    socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     return function () {
-      socket.leave(ordersRoom);
+      socket === null || socket === void 0 ? void 0 : socket.leave(ordersRoom);
     };
   }, [socket, session]);
   (0, _react.useEffect)(function () {
