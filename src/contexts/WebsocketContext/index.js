@@ -32,17 +32,14 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
         setSocket(_socket)
       }
     }
-    // if (!session.auth) {
-    //   socket && socket?.close()
-    // }
   }, [session, configs, hashKey])
 
   useEffect(() => {
     if (socket) {
-      socket?.connect()
+      socket.connect()
     }
     return () => {
-      socket && socket?.close()
+      socket && socket.close()
     }
   }, [socket, hashKey])
 
@@ -67,13 +64,13 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
 
   useEffect(() => {
     if (socket?.socket) {
-      socket?.socket?.on('disconnect', (reason) => {
+      socket.socket.on('disconnect', (reason) => {
         if (reason === 'io server disconnect' && session.auth) {
           setTimeout(socket?.socket?.connect(), 1000)
         }
       })
 
-      socket?.socket?.on('connect_error', () => {
+      socket.socket.on('connect_error', () => {
         setTimeout(socket?.socket?.connect(), 1000)
       })
     }
