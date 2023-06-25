@@ -43,10 +43,14 @@ export class Socket {
   }
 
   join (room) {
-    if (this.socket?.connected) {
-      this.socket.emit('join', `${this.project}_${room}`)
+    if (typeof room === 'string') {
+      if (this.socket?.connected) {
+        this.socket.emit('join', `${this.project}_${room}`)
+      } else {
+        this.queue.push({ action: 'join', room })
+      }
     } else {
-      this.queue.push({ action: 'join', room })
+      this.socket.emit('join', room)
     }
     return this
   }
