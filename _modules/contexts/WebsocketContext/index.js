@@ -61,9 +61,9 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
       }));
       setSocket(_socket);
     }
-    if (!session.auth) {
-      socket && socket.close();
-    }
+    // if (!session.auth) {
+    //   socket && socket.close()
+    // }
   }, [session, configs]);
   (0, _react.useEffect)(function () {
     if (socket) {
