@@ -22,8 +22,8 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
 
   useEffect(() => {
     if (session.loading) return
-    if (session.auth && configs.url && configs.project) {
-      const _socket = new Socket({ ...configs, accessToken: session.token })
+    if (configs.url && configs.project) {
+      const _socket = new Socket({ ...configs, accessToken: session?.token })
       setSocket(_socket)
     }
     if (!session.auth) {
