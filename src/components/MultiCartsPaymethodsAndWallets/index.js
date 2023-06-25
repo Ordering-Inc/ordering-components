@@ -19,7 +19,7 @@ export const MultiCartsPaymethodsAndWallets = (props) => {
   const qParams = userId ? `?user_id=${userId}` : ''
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ token, user }] = useSession()
 
   const [cartsUuids, setCartsUuids] = useState([])

@@ -43,7 +43,7 @@ export const DashboardOrdersList = (props) => {
     pageSize: paginationSettings.pageSize ?? 10
   })
   const [session] = useSession()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   const requestsState = {}
@@ -789,13 +789,13 @@ export const DashboardOrdersList = (props) => {
         }
       }
     }
-    socket.on('update_order', handleUpdateOrder)
-    socket.on('orders_register', handleRegisterOrder)
-    socket.on('message', handleNewMessage)
+    socket?.on('update_order', handleUpdateOrder)
+    socket?.on('orders_register', handleRegisterOrder)
+    socket?.on('message', handleNewMessage)
     return () => {
-      socket.off('update_order', handleUpdateOrder)
-      socket.off('orders_register', handleRegisterOrder)
-      socket.off('message', handleNewMessage)
+      socket?.off('update_order', handleUpdateOrder)
+      socket?.off('orders_register', handleRegisterOrder)
+      socket?.off('message', handleNewMessage)
     }
   }, [orderList.orders, pagination, orderBy, socket, driversList, customerId])
 

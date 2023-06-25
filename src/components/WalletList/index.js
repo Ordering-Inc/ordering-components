@@ -12,7 +12,7 @@ export const WalletList = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ token, user }] = useSession()
   const [events] = useEvent()
   const [walletSelected, setWalletSelected] = useState(null)

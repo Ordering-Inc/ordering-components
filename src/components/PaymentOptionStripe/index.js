@@ -19,7 +19,7 @@ export const PaymentOptionStripe = (props) => {
   const [{ token, user }] = useSession()
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   /**
    * Contains and object to save cards, handle loading and error
    */
