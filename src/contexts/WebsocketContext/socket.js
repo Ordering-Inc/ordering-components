@@ -13,7 +13,7 @@ export class Socket {
       extraHeaders: {
         Authorization: `Bearer ${this.accessToken}`
       },
-      query: this.accessToken ? `project=${this.project}` : `token=${this.accessToken}&project=${this.project}`,
+      query: this.accessToken ? `token=${this.accessToken}&project=${this.project}` : `project=${this.project}`,
       transports: ['websocket']
     })
     this.socket.on('connect', () => {

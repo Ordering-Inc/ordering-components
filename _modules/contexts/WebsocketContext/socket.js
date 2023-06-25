@@ -31,7 +31,7 @@ var Socket = /*#__PURE__*/function () {
         extraHeaders: {
           Authorization: "Bearer ".concat(this.accessToken)
         },
-        query: this.accessToken ? "project=".concat(this.project) : "token=".concat(this.accessToken, "&project=").concat(this.project),
+        query: this.accessToken ? "token=".concat(this.accessToken, "&project=").concat(this.project) : "project=".concat(this.project),
         transports: ['websocket']
       });
       this.socket.on('connect', function () {
