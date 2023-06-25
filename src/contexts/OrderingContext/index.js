@@ -15,9 +15,7 @@ import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
 import { OrderingThemeProvider } from '../OrderingThemeContext'
 import { OptimizationLoadProvider } from '../OptimizationLoadContext'
-import {
-  useLocation
-} from 'react-router-dom'
+
 /**
  * Create OrderingContext
  * Wrapper to use all context to ordering apps
@@ -37,8 +35,7 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
     countryCode: settings.countryCode,
     useOptimizeLoad: settings.useOptimizeLoad
   }
-  const hashKey = new URLSearchParams(useLocation()?.search)?.get('hash') || null
-  console.log(hashKey)
+
   return (
     <OrderingContext.Provider>
       <EventProvider>

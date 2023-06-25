@@ -95,7 +95,9 @@ var OrderDetails = function OrderDetails(props) {
     _useState10 = _slicedToArray(_useState9, 2),
     messagesReadList = _useState10[0],
     setMessagesReadList = _useState10[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var accessToken = props.accessToken || token;
 
   /**

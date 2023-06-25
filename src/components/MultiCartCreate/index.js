@@ -16,7 +16,7 @@ export const MultiCartCreate = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [orderState, { refreshOrderOptions }] = useOrder()
 
   const createMultiCart = async () => {

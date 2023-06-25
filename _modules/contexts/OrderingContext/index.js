@@ -22,7 +22,6 @@ var _ToastContext = require("../ToastContext");
 var _webStrategy = require("../../webStrategy");
 var _OrderingThemeContext = require("../OrderingThemeContext");
 var _OptimizationLoadContext = require("../OptimizationLoadContext");
-var _reactRouterDom = require("react-router-dom");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
@@ -38,7 +37,7 @@ var OrderingContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.OrderingContext = OrderingContext;
 var OrderingProvider = function OrderingProvider(_ref) {
-  var _URLSearchParams, _useLocation, _settings$franchiseSl;
+  var _settings$franchiseSl;
   var Alert = _ref.Alert,
     settings = _ref.settings,
     isAlsea = _ref.isAlsea,
@@ -50,8 +49,6 @@ var OrderingProvider = function OrderingProvider(_ref) {
     countryCode: settings.countryCode,
     useOptimizeLoad: settings.useOptimizeLoad
   };
-  var hashKey = ((_URLSearchParams = new URLSearchParams((_useLocation = (0, _reactRouterDom.useLocation)()) === null || _useLocation === void 0 ? void 0 : _useLocation.search)) === null || _URLSearchParams === void 0 ? void 0 : _URLSearchParams.get('hash')) || null;
-  console.log(hashKey);
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_OptimizationLoadContext.OptimizationLoadProvider, {

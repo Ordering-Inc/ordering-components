@@ -19,7 +19,7 @@ export const OrdersManage = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ user, token, loading }] = useSession()
   const [configState] = useConfig()
   const [, t] = useLanguage()

@@ -39,7 +39,7 @@ export const OrderList = props => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [orderState, { reorder }] = useOrder()
   const [session] = useSession()
   const [events] = useEvent()

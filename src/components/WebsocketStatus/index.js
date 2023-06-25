@@ -12,7 +12,7 @@ export const WebsocketStatus = (props) => {
   } = props
 
   const [, t] = useLanguage()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
 
   const [socketStatus, setSocketStatus] = useState(socket?.socket?.connected ? 1 : 2)
   const [connectedDate, setConnectedDate] = useState(new Date())

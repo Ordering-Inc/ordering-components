@@ -65,7 +65,9 @@ var DriversList = function DriversList(props) {
     _useState4 = _slicedToArray(_useState3, 2),
     companyActionStatus = _useState4[0],
     setCompanyActionStatus = _useState4[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
 
   /**
    * Get session

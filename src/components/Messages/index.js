@@ -14,7 +14,7 @@ export const Messages = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ token }] = useSession()
   const accessToken = props.accessToken || token
 

@@ -22,7 +22,7 @@ export const OrderListGroups = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [session] = useSession()
   const [events] = useEvent()
   const [, t] = useLanguage()

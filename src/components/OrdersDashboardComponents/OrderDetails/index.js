@@ -31,7 +31,7 @@ export const OrderDetails = (props) => {
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
   const [messagesReadList, setMessagesReadList] = useState(false)
 
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
 
   const accessToken = props.accessToken || token
 

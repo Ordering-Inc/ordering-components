@@ -26,7 +26,7 @@ export const Contacts = (props) => {
 
   const [{ token, user }] = useSession();
   const [ordering] = useApi();
-  const socket = useWebsocket();
+  const [socket] = useWebsocket();
 
   const [sortBy, setSortBy] = useState(sortParams);
   const [orders, setOrders] = useState({

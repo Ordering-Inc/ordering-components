@@ -16,12 +16,14 @@ var Socket = /*#__PURE__*/function () {
   function Socket(_ref) {
     var url = _ref.url,
       project = _ref.project,
-      accessToken = _ref.accessToken;
+      accessToken = _ref.accessToken,
+      hashKey = _ref.hashKey;
     _classCallCheck(this, Socket);
     this.url = url;
     this.project = project;
     this.accessToken = accessToken;
     this.queue = [];
+    this.hashKey = hashKey;
   }
   _createClass(Socket, [{
     key: "connect",
@@ -31,7 +33,7 @@ var Socket = /*#__PURE__*/function () {
         extraHeaders: {
           Authorization: "Bearer ".concat(this.accessToken)
         },
-        query: this.accessToken ? "token=".concat(this.accessToken, "&project=").concat(this.project) : "project=".concat(this.project),
+        query: this.accessToken ? "token=".concat(this.accessToken, "&project=").concat(this.project) : this.hashKey ? "hash_key=".concat(this.hashKey, "&project=").concat(this.project) : "project=".concat(this.project),
         transports: ['websocket']
       });
       this.socket.on('connect', function () {

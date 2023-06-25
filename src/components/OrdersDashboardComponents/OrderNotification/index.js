@@ -9,7 +9,7 @@ export const OrderNotification = (props) => {
     UIComponent
   } = props
 
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ user, loading }] = useSession()
   const [events] = useEvent()
 

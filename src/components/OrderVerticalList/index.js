@@ -22,7 +22,7 @@ export const OrderVerticalList = (props) => {
   const [ordering] = useApi()
   const [session] = useSession()
   const [events] = useEvent()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [, t] = useLanguage()
   const [, { reorder }] = useOrder()
   const [, { showToast }] = useToast()

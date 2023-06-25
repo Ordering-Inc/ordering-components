@@ -12,7 +12,7 @@ export const BusinessTypeFilter = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
 
   /**
    * This property is used to set in state the current value

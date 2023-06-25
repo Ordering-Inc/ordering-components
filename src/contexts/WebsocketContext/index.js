@@ -19,6 +19,7 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
   const [session] = useSession()
   const [socket, setSocket] = useState()
   const [configs, setConfigs] = useState(settings)
+  const [hashKey, setHashKey] = useState(null)
 
   useEffect(() => {
     if (session.loading) return
@@ -26,15 +27,15 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
       if (session.auth) {
         const _socket = new Socket({ ...configs, accessToken: session?.token })
         setSocket(_socket)
-      } else {
-        const _socket = new Socket({ ...configs })
+      } else if (hashKey && !session.auth) {
+        const _socket = new Socket({ ...configs, hashKey })
         setSocket(_socket)
       }
     }
     // if (!session.auth) {
     //   socket && socket.close()
     // }
-  }, [session, configs])
+  }, [session, configs, hashKey])
 
   useEffect(() => {
     if (socket) {
@@ -43,7 +44,7 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
     return () => {
       socket && socket.close()
     }
-  }, [socket])
+  }, [socket, hashKey])
 
   useEffect(() => {
     if (session.auth) return
@@ -73,15 +74,16 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
       })
 
       socket.socket.on('connect_error', () => {
-        if (session.auth) {
-          setTimeout(socket.socket.connect(), 1000)
-        }
+        setTimeout(socket.socket.connect(), 1000)
       })
     }
-  }, [socket?.socket, session])
+  }, [socket?.socket, session, hashKey])
 
+  const functions = {
+    setHashKey
+  }
   return (
-    <WebsocketContext.Provider value={socket}>
+    <WebsocketContext.Provider value={[socket, functions]}>
       {children}
     </WebsocketContext.Provider>
   )

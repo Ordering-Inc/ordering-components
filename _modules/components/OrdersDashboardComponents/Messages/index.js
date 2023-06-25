@@ -103,7 +103,9 @@ var Messages = function Messages(props) {
     _useState12 = _slicedToArray(_useState11, 2),
     image = _useState12[0],
     setImage = _useState12[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var googleMapsApiKey = configState === null || configState === void 0 ? void 0 : (_configState$configs = configState.configs) === null || _configState$configs === void 0 ? void 0 : (_configState$configs$ = _configState$configs.google_maps_api_key) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value;
   var getStaticMapByLocation = function getStaticMapByLocation(location, size) {
     if (!size) {

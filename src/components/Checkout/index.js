@@ -23,7 +23,7 @@ export const Checkout = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ options }, { refreshOrderOptions }] = useOrder()
   const [{ configs }, { refreshConfigs }] = useConfig()
 

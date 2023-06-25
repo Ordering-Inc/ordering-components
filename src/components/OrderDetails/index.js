@@ -33,7 +33,7 @@ export const OrderDetails = (props) => {
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })

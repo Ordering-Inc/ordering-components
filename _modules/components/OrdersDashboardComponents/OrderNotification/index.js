@@ -21,7 +21,9 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderNotification = function OrderNotification(props) {
   var UIComponent = props.UIComponent;
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],

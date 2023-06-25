@@ -11,7 +11,7 @@ export const NewOrderNotification = (props) => {
   } = props
 
   const [{ token, user }] = useSession()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [events] = useEvent()
   const [{ configs }] = useConfig()
   const isLogisticActivated = configs?.logistic_module?.value

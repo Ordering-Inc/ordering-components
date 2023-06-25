@@ -12,7 +12,7 @@ export const UserVerification = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const [{ user, token }, { changeUser }] = useSession()
 
   const [verifyEmailState, setVerifyEmailState] = useState({

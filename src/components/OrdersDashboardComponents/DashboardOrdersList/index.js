@@ -43,7 +43,7 @@ export const DashboardOrdersList = (props) => {
     pageSize: paginationSettings.pageSize ?? 10
   })
   const [session] = useSession()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
   const requestsState = {}

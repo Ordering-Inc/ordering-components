@@ -105,7 +105,9 @@ var OrderDetails = function OrderDetails(props) {
     _useState8 = _slicedToArray(_useState7, 2),
     messages = _useState8[0],
     setMessages = _useState8[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var _useState9 = (0, _react.useState)(((_props$order2 = props.order) === null || _props$order2 === void 0 ? void 0 : (_props$order2$driver = _props$order2.driver) === null || _props$order2$driver === void 0 ? void 0 : _props$order2$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
     _useState10 = _slicedToArray(_useState9, 2),
     driverLocation = _useState10[0],

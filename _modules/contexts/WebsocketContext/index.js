@@ -53,6 +53,10 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
     _useState4 = _slicedToArray(_useState3, 2),
     configs = _useState4[0],
     setConfigs = _useState4[1];
+  var _useState5 = (0, _react.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    hashKey = _useState6[0],
+    setHashKey = _useState6[1];
   (0, _react.useEffect)(function () {
     if (session.loading) return;
     if (configs.url && configs.project) {
@@ -61,15 +65,17 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
           accessToken: session === null || session === void 0 ? void 0 : session.token
         }));
         setSocket(_socket);
-      } else {
-        var _socket2 = new _socket3.Socket(_objectSpread({}, configs));
+      } else if (hashKey && !session.auth) {
+        var _socket2 = new _socket3.Socket(_objectSpread(_objectSpread({}, configs), {}, {
+          hashKey: hashKey
+        }));
         setSocket(_socket2);
       }
     }
     // if (!session.auth) {
     //   socket && socket.close()
     // }
-  }, [session, configs]);
+  }, [session, configs, hashKey]);
   (0, _react.useEffect)(function () {
     if (socket) {
       socket.connect();
@@ -77,7 +83,7 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
     return function () {
       socket && socket.close();
     };
-  }, [socket]);
+  }, [socket, hashKey]);
   (0, _react.useEffect)(function () {
     if (session.auth) return;
     var projectInputInterval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -127,14 +133,15 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
         }
       });
       socket.socket.on('connect_error', function () {
-        if (session.auth) {
-          setTimeout(socket.socket.connect(), 1000);
-        }
+        setTimeout(socket.socket.connect(), 1000);
       });
     }
-  }, [socket === null || socket === void 0 ? void 0 : socket.socket, session]);
+  }, [socket === null || socket === void 0 ? void 0 : socket.socket, session, hashKey]);
+  var functions = {
+    setHashKey: setHashKey
+  };
   return /*#__PURE__*/_react.default.createElement(WebsocketContext.Provider, {
-    value: socket
+    value: [socket, functions]
   }, children);
 };
 

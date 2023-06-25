@@ -30,7 +30,7 @@ export const CardForm = (props) => {
   const [{ user }] = useSession()
   const [ordering] = useApi()
   const [validationFields] = useValidationFields()
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
   const stripe = useStripe()
   const elements = useElements()
   const zipCodeRequired = validationFields?.fields?.card?.zipcode?.required

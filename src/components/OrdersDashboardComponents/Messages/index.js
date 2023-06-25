@@ -32,7 +32,7 @@ export const Messages = (props) => {
   const [sendMessage, setSendMessages] = useState({ loading: false, error: null })
   const [readMessages, setReadMessages] = useState({ loading: true, error: null, messages: [] })
   const [image, setImage] = useState(null)
-  const socket = useWebsocket()
+  const [socket] = useWebsocket()
 
   const googleMapsApiKey = configState?.configs?.google_maps_api_key?.value
   const getStaticMapByLocation = (location, size) => {
