@@ -911,7 +911,12 @@ var OrderDetails = function OrderDetails(props) {
         })
       }));
     };
-    var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
+    var ordersRoom = !token && hashKey ? {
+      room: 'orders',
+      project: ordering.project,
+      role: 'public',
+      user_id: hashKey
+    } : (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(userCustomerId || (user === null || user === void 0 ? void 0 : user.id));
     if (!isDisabledOrdersRoom) socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
     if ((_orderState$order16 = orderState.order) !== null && _orderState$order16 !== void 0 && _orderState$order16.driver_id) {
       var _orderState$order17;
@@ -933,7 +938,7 @@ var OrderDetails = function OrderDetails(props) {
       socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
       socket === null || socket === void 0 ? void 0 : socket.off('tracking_driver', handleTrackingDriver);
     };
-  }, [orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.id]);
+  }, [orderState.order, socket === null || socket === void 0 ? void 0 : socket.socket, loading, userCustomerId, (_orderState$order20 = orderState.order) === null || _orderState$order20 === void 0 ? void 0 : _orderState$order20.driver_id, (_orderState$order21 = orderState.order) === null || _orderState$order21 === void 0 ? void 0 : _orderState$order21.id, hashKey]);
   (0, _react.useEffect)(function () {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
