@@ -28,7 +28,9 @@ var WebsocketStatus = function WebsocketStatus(props) {
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     t = _useLanguage2[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var _useState = (0, _react.useState)(socket !== null && socket !== void 0 && (_socket$socket = socket.socket) !== null && _socket$socket !== void 0 && _socket$socket.connected ? 1 : 2),
     _useState2 = _slicedToArray(_useState, 2),
     socketStatus = _useState2[0],
@@ -53,15 +55,16 @@ var WebsocketStatus = function WebsocketStatus(props) {
   };
   (0, _react.useEffect)(function () {
     if (socket !== null && socket !== void 0 && socket.socket) {
-      socket.socket.on('connect', function () {
+      var _socket$socket2, _socket$socket3, _socket$socket4;
+      socket === null || socket === void 0 ? void 0 : (_socket$socket2 = socket.socket) === null || _socket$socket2 === void 0 ? void 0 : _socket$socket2.on('connect', function () {
         setReconnectAttemptCount(0);
         setSocketStatus(1);
         setConnectedDate(new Date());
       });
-      socket.socket.on('disconnect', function (reason) {
+      socket === null || socket === void 0 ? void 0 : (_socket$socket3 = socket.socket) === null || _socket$socket3 === void 0 ? void 0 : _socket$socket3.on('disconnect', function (reason) {
         setSocketStatus(2);
       });
-      socket.socket.on('reconnect_attempt', function () {
+      socket === null || socket === void 0 ? void 0 : (_socket$socket4 = socket.socket) === null || _socket$socket4 === void 0 ? void 0 : _socket$socket4.on('reconnect_attempt', function () {
         setReconnectAttemptCount(function (prev) {
           return prev + 1;
         });

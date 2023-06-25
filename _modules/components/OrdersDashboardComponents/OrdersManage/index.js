@@ -46,7 +46,9 @@ var OrdersManage = function OrdersManage(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
@@ -651,11 +653,11 @@ var OrdersManage = function OrdersManage(props) {
         drivers: drivers
       }));
     };
-    socket.on('drivers_update', handleUpdateDriver);
-    socket.on('tracking_driver', handleTrackingDriver);
+    socket === null || socket === void 0 ? void 0 : socket.on('drivers_update', handleUpdateDriver);
+    socket === null || socket === void 0 ? void 0 : socket.on('tracking_driver', handleTrackingDriver);
     return function () {
-      socket.off('drivers_update', handleUpdateDriver);
-      socket.off('tracking_driver', handleTrackingDriver);
+      socket === null || socket === void 0 ? void 0 : socket.off('drivers_update', handleUpdateDriver);
+      socket === null || socket === void 0 ? void 0 : socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [socket, loading, driversList.drivers]);
   var getOrderNumbersByStatus = /*#__PURE__*/function () {
@@ -1014,11 +1016,11 @@ var OrdersManage = function OrdersManage(props) {
     }
   };
   (0, _react.useEffect)(function () {
-    socket.on('update_order', handleUpdateOrder);
-    socket.on('orders_register', handleNewOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleNewOrder);
     return function () {
-      socket.off('update_order', handleUpdateOrder);
-      socket.off('orders_register', handleNewOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', handleNewOrder);
     };
   }, [socket, filterValues, searchValue, JSON.stringify(numberOfOrdersByStatus)]);
 

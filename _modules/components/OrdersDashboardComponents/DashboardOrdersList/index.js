@@ -84,7 +84,9 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     session = _useSession2[0];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   var requestsState = {};
   var _useState5 = (0, _react.useState)({
@@ -940,13 +942,13 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
         }
       }
     }
-    socket.on('update_order', handleUpdateOrder);
-    socket.on('orders_register', handleRegisterOrder);
-    socket.on('message', handleNewMessage);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleRegisterOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('message', handleNewMessage);
     return function () {
-      socket.off('update_order', handleUpdateOrder);
-      socket.off('orders_register', handleRegisterOrder);
-      socket.off('message', handleNewMessage);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', handleRegisterOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('message', handleNewMessage);
     };
   }, [orderList.orders, pagination, orderBy, socket, driversList, customerId]);
 

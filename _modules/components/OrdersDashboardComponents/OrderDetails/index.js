@@ -95,7 +95,9 @@ var OrderDetails = function OrderDetails(props) {
     _useState10 = _slicedToArray(_useState9, 2),
     messagesReadList = _useState10[0],
     setMessagesReadList = _useState10[1];
-  var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
+    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
+    socket = _useWebsocket2[0];
   var accessToken = props.accessToken || token;
 
   /**
@@ -548,9 +550,9 @@ var OrderDetails = function OrderDetails(props) {
         order: Object.assign(orderState.order, order)
       }));
     };
-    socket.on('update_order', handleUpdateOrder);
+    socket === null || socket === void 0 ? void 0 : socket.on('update_order', handleUpdateOrder);
     return function () {
-      socket.off('update_order', handleUpdateOrder);
+      socket === null || socket === void 0 ? void 0 : socket.off('update_order', handleUpdateOrder);
     };
   }, [orderState.order, socket, loading, drivers]);
   (0, _react.useEffect)(function () {

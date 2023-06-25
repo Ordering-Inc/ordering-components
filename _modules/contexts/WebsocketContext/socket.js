@@ -16,12 +16,14 @@ var Socket = /*#__PURE__*/function () {
   function Socket(_ref) {
     var url = _ref.url,
       project = _ref.project,
-      accessToken = _ref.accessToken;
+      accessToken = _ref.accessToken,
+      hashKey = _ref.hashKey;
     _classCallCheck(this, Socket);
     this.url = url;
     this.project = project;
     this.accessToken = accessToken;
     this.queue = [];
+    this.hashKey = hashKey;
   }
   _createClass(Socket, [{
     key: "connect",
@@ -31,7 +33,7 @@ var Socket = /*#__PURE__*/function () {
         extraHeaders: {
           Authorization: "Bearer ".concat(this.accessToken)
         },
-        query: "token=".concat(this.accessToken, "&project=").concat(this.project),
+        query: this.accessToken ? "token=".concat(this.accessToken, "&project=").concat(this.project) : this.hashKey ? "hash_key=".concat(this.hashKey, "&project=").concat(this.project) : "project=".concat(this.project),
         transports: ['websocket']
       });
       this.socket.on('connect', function () {
@@ -66,14 +68,18 @@ var Socket = /*#__PURE__*/function () {
   }, {
     key: "join",
     value: function join(room) {
-      var _this$socket3;
-      if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
-        this.socket.emit('join', "".concat(this.project, "_").concat(room));
+      if (typeof room === 'string') {
+        var _this$socket3;
+        if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
+          this.socket.emit('join', "".concat(this.project, "_").concat(room));
+        } else {
+          this.queue.push({
+            action: 'join',
+            room: room
+          });
+        }
       } else {
-        this.queue.push({
-          action: 'join',
-          room: room
-        });
+        this.socket.emit('join', room);
       }
       return this;
     }
