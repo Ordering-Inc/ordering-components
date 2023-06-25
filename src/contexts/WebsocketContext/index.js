@@ -17,7 +17,7 @@ export const WebsocketContext = createContext()
  */
 export const WebsocketProvider = ({ settings, children, strategy }) => {
   const [session] = useSession()
-  const [socket, setSocket] = useState()
+  const [socket, setSocket] = useState({})
   const [configs, setConfigs] = useState(settings)
   const [hashKey, setHashKey] = useState(null)
 
