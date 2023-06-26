@@ -23,7 +23,7 @@ export const MultiCheckout = (props) => {
   const qParams = userId ? `?user_id=${userId}` : ''
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   /**
    * Session content
    */

@@ -15,7 +15,7 @@ export const RedeemGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [events] = useEvent()
 
   const [actionState, setActionState] = useState({ loading: false, error: null })

@@ -23,7 +23,7 @@ export const DriversList = (props) => {
   const requestsState = {}
   const [driverActionStatus, setDriverActionStatus] = useState({ loading: true, error: null })
   const [companyActionStatus, setCompanyActionStatus] = useState({ loading: true, error: null })
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
 
   /**
    * Get session
@@ -372,11 +372,11 @@ export const DriversList = (props) => {
       })
       setDriversList({ ...driversList, drivers: drivers })
     }
-    socket?.on('drivers_update', handleUpdateDriver)
-    socket?.on('tracking_driver', handleTrackingDriver)
+    socket.on('drivers_update', handleUpdateDriver)
+    socket.on('tracking_driver', handleTrackingDriver)
     return () => {
-      socket?.off('drivers_update', handleUpdateDriver)
-      socket?.off('tracking_driver', handleTrackingDriver)
+      socket.off('drivers_update', handleUpdateDriver)
+      socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [socket, session?.loading, driversList.drivers])
 

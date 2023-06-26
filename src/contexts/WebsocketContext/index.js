@@ -19,20 +19,17 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
   const [session] = useSession()
   const [socket, setSocket] = useState()
   const [configs, setConfigs] = useState(settings)
-  const [hashKey, setHashKey] = useState(null)
 
   useEffect(() => {
     if (session.loading) return
-    if (configs.url && configs.project) {
-      if (session.auth) {
-        const _socket = new Socket({ ...configs, accessToken: session?.token })
-        setSocket(_socket)
-      } else if (hashKey && !session.auth) {
-        const _socket = new Socket({ ...configs, hashKey })
-        setSocket(_socket)
-      }
+    if (session.auth && configs.url && configs.project) {
+      const _socket = new Socket({ ...configs, accessToken: session.token })
+      setSocket(_socket)
     }
-  }, [session, configs, hashKey])
+    if (!session.auth) {
+      socket && socket.close()
+    }
+  }, [session, configs])
 
   useEffect(() => {
     if (socket) {
@@ -41,7 +38,7 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
     return () => {
       socket && socket.close()
     }
-  }, [socket, hashKey])
+  }, [socket])
 
   useEffect(() => {
     if (session.auth) return
@@ -66,21 +63,20 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
     if (socket?.socket) {
       socket.socket.on('disconnect', (reason) => {
         if (reason === 'io server disconnect' && session.auth) {
-          setTimeout(socket?.socket?.connect(), 1000)
+          setTimeout(socket.socket.connect(), 1000)
         }
       })
 
       socket.socket.on('connect_error', () => {
-        setTimeout(socket?.socket?.connect(), 1000)
+        if (session.auth) {
+          setTimeout(socket.socket.connect(), 1000)
+        }
       })
     }
-  }, [socket?.socket, session, hashKey])
+  }, [socket?.socket, session])
 
-  const functions = {
-    setHashKey
-  }
   return (
-    <WebsocketContext.Provider value={[socket, functions]}>
+    <WebsocketContext.Provider value={socket}>
       {children}
     </WebsocketContext.Provider>
   )

@@ -14,7 +14,7 @@ export const Messages = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const accessToken = props.accessToken || token
 
@@ -91,9 +91,9 @@ export const Messages = (props) => {
         })
       }
     }
-    socket?.on('message', handleNewMessage)
+    socket.on('message', handleNewMessage)
     return () => {
-      socket?.off('message', handleNewMessage)
+      socket.off('message', handleNewMessage)
     }
   }, [messages, socket])
 

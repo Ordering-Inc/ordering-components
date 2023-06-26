@@ -13,7 +13,7 @@ export const PaymentOptionStripeDirect = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   /**
    * save stripe public key

@@ -30,7 +30,7 @@ export const Cart = (props) => {
    * Api context
    */
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   /**
    * Session content
    */

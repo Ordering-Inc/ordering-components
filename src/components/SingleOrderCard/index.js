@@ -16,7 +16,7 @@ export const SingleOrderCard = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ user, token }] = useSession()
   const [, t] = useLanguage()
   const [, { showToast }] = useToast()

@@ -9,7 +9,7 @@ export const OrderNotification = (props) => {
     UIComponent
   } = props
 
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ user, loading }] = useSession()
   const [events] = useEvent()
 
@@ -18,9 +18,9 @@ export const OrderNotification = (props) => {
     const handleRegisterOrder = (order) => {
       events.emit('order_added', order)
     }
-    socket?.on('orders_register', handleRegisterOrder)
+    socket.on('orders_register', handleRegisterOrder)
     return () => {
-      socket?.off('orders_register', handleRegisterOrder)
+      socket.off('orders_register', handleRegisterOrder)
     }
   }, [socket, loading, user])
 

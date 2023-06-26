@@ -17,7 +17,7 @@ export const PurchaseGiftCard = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [orderState, { addProduct, removeProduct }] = useOrder()
   const [events] = useEvent()
 

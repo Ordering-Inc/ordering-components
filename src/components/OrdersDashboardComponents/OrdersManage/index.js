@@ -19,7 +19,7 @@ export const OrdersManage = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ user, token, loading }] = useSession()
   const [configState] = useConfig()
   const [, t] = useLanguage()
@@ -332,11 +332,11 @@ export const OrdersManage = (props) => {
       })
       setDriversList({ ...driversList, drivers: drivers })
     }
-    socket?.on('drivers_update', handleUpdateDriver)
-    socket?.on('tracking_driver', handleTrackingDriver)
+    socket.on('drivers_update', handleUpdateDriver)
+    socket.on('tracking_driver', handleTrackingDriver)
     return () => {
-      socket?.off('drivers_update', handleUpdateDriver)
-      socket?.off('tracking_driver', handleTrackingDriver)
+      socket.off('drivers_update', handleUpdateDriver)
+      socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [socket, loading, driversList.drivers])
 
@@ -727,11 +727,11 @@ export const OrdersManage = (props) => {
   }
 
   useEffect(() => {
-    socket?.on('update_order', handleUpdateOrder)
-    socket?.on('orders_register', handleNewOrder)
+    socket.on('update_order', handleUpdateOrder)
+    socket.on('orders_register', handleNewOrder)
     return () => {
-      socket?.off('update_order', handleUpdateOrder)
-      socket?.off('orders_register', handleNewOrder)
+      socket.off('update_order', handleUpdateOrder)
+      socket.off('orders_register', handleNewOrder)
     }
   }, [socket, filterValues, searchValue, JSON.stringify(numberOfOrdersByStatus)])
 

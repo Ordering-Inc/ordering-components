@@ -22,7 +22,7 @@ export const OrderVerticalList = (props) => {
   const [ordering] = useApi()
   const [session] = useSession()
   const [events] = useEvent()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [, t] = useLanguage()
   const [, { reorder }] = useOrder()
   const [, { showToast }] = useToast()
@@ -366,24 +366,24 @@ export const OrderVerticalList = (props) => {
       actionOrderToTab(order, 'all', 'add')
     }
 
-    socket?.on('orders_register', handleAddNewOrder)
-    socket?.on('update_order', handleUpdateOrder)
+    socket.on('orders_register', handleAddNewOrder)
+    socket.on('update_order', handleUpdateOrder)
     return () => {
-      socket?.off('orders_register', handleAddNewOrder)
-      socket?.off('update_order', handleUpdateOrder)
+      socket.off('orders_register', handleAddNewOrder)
+      socket.off('update_order', handleUpdateOrder)
     }
   }, [ordersGroup, socket, session])
 
   useEffect(() => {
     if (!session.user) return
-    socket?.on('disconnect', () => {
+    socket.on('disconnect', () => {
       const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-      socket?.join(ordersRoom)
+      socket.join(ordersRoom)
     })
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
-    socket?.join(ordersRoom)
+    socket.join(ordersRoom)
     return () => {
-      socket?.leave(ordersRoom)
+      socket.leave(ordersRoom)
     }
   }, [socket, session])
 

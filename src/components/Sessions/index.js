@@ -10,7 +10,7 @@ export const Sessions = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ user, token }, { login, logout }] = useSession()
 
   const [sessionsList, setSessionsList] = useState({ sessions: [], loading: true, error: null })
