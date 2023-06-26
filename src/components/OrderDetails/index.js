@@ -502,7 +502,16 @@ export const OrderDetails = (props) => {
         }
       })
     }
-    const ordersRoom = user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
+    const ordersRoom = !token
+      ? {
+        room: 'orders',
+        project: ordering.project,
+        role: 'public',
+        user_id: hashKey
+      } : user?.level === 0
+        ? 'orders'
+        : `orders_${userCustomerId || user?.id}`
+
     if (!isDisabledOrdersRoom) socket.join(ordersRoom)
     if (orderState.order?.driver_id) {
       socket.join(`drivers_${orderState.order?.driver_id}`)
