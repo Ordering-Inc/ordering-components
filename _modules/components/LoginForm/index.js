@@ -49,9 +49,7 @@ var LoginForm = function LoginForm(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
-    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
-    socket = _useWebsocket2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var defaultLoginTab = props.defaultLoginTab;
   var _useState = (0, _react.useState)({
       loading: false,

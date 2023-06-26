@@ -21,9 +21,7 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderNotification = function OrderNotification(props) {
   var UIComponent = props.UIComponent;
-  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
-    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
-    socket = _useWebsocket2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
@@ -37,9 +35,9 @@ var OrderNotification = function OrderNotification(props) {
     var handleRegisterOrder = function handleRegisterOrder(order) {
       events.emit('order_added', order);
     };
-    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', handleRegisterOrder);
+    socket.on('orders_register', handleRegisterOrder);
     return function () {
-      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', handleRegisterOrder);
+      socket.off('orders_register', handleRegisterOrder);
     };
   }, [socket, loading, user]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));

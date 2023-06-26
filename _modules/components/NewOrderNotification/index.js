@@ -28,9 +28,7 @@ var NewOrderNotification = function NewOrderNotification(props) {
     _useSession2$ = _useSession2[0],
     token = _useSession2$.token,
     user = _useSession2$.user;
-  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
-    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
-    socket = _useWebsocket2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useEvent = (0, _EventContext.useEvent)(),
     _useEvent2 = _slicedToArray(_useEvent, 1),
     events = _useEvent2[0];
@@ -50,62 +48,62 @@ var NewOrderNotification = function NewOrderNotification(props) {
   };
   (0, _react.useEffect)(function () {
     if (!token) return;
-    socket === null || socket === void 0 ? void 0 : socket.on('message', function (e) {
+    socket.on('message', function (e) {
       return handleActionEvent('messages', e);
     });
-    socket === null || socket === void 0 ? void 0 : socket.on('orders_register', function (e) {
+    socket.on('orders_register', function (e) {
       return handleActionEvent('order_added', e);
     });
-    socket === null || socket === void 0 ? void 0 : socket.on('update_order', function (e) {
+    socket.on('update_order', function (e) {
       return handleActionEvent('order_updated', e);
     });
     return function () {
-      socket === null || socket === void 0 ? void 0 : socket.off('message', function (e) {
+      socket.off('message', function (e) {
         return handleActionEvent('messages', e);
       });
-      socket === null || socket === void 0 ? void 0 : socket.off('orders_register', function (e) {
+      socket.off('orders_register', function (e) {
         return handleActionEvent('order_added', e);
       });
-      socket === null || socket === void 0 ? void 0 : socket.off('update_order', function (e) {
+      socket.off('update_order', function (e) {
         return handleActionEvent('order_updated', e);
       });
     };
   }, [socket, user]);
   (0, _react.useEffect)(function () {
     if (isLogisticActivated) {
-      socket === null || socket === void 0 ? void 0 : socket.on('request_register', function (e) {
+      socket.on('request_register', function (e) {
         return handleActionEvent('request_register', e);
       });
-      socket === null || socket === void 0 ? void 0 : socket.on('request_update', function (e) {
+      socket.on('request_update', function (e) {
         return handleActionEvent('request_update', e);
       });
     }
     return function () {
-      socket === null || socket === void 0 ? void 0 : socket.off('request_register');
-      socket === null || socket === void 0 ? void 0 : socket.off('request_update');
+      socket.off('request_register');
+      socket.off('request_update');
     };
   }, [socket, user, isLogisticActivated]);
   (0, _react.useEffect)(function () {
     if (!token) return;
-    socket === null || socket === void 0 ? void 0 : socket.on('disconnect', function () {
-      socket === null || socket === void 0 ? void 0 : socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-      socket === null || socket === void 0 ? void 0 : socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id));
-      socket === null || socket === void 0 ? void 0 : socket.join("requests_".concat(user === null || user === void 0 ? void 0 : user.id));
-      socket === null || socket === void 0 ? void 0 : socket.join("ordergroups_".concat(user === null || user === void 0 ? void 0 : user.id));
+    socket.on('disconnect', function () {
+      socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.join((user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.join("requests_".concat(user === null || user === void 0 ? void 0 : user.id));
+      socket.join("ordergroups_".concat(user === null || user === void 0 ? void 0 : user.id));
     });
     var messagesOrdersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'messages_orders' : "messages_orders_".concat(user === null || user === void 0 ? void 0 : user.id);
     var ordersRoom = (user === null || user === void 0 ? void 0 : user.level) === 0 ? 'orders' : "orders_".concat(user === null || user === void 0 ? void 0 : user.id);
     var requestsRoom = "requests_".concat(user === null || user === void 0 ? void 0 : user.id);
     var groupsRoom = "ordergroups_".concat(user === null || user === void 0 ? void 0 : user.id);
-    socket === null || socket === void 0 ? void 0 : socket.join(messagesOrdersRoom);
-    socket === null || socket === void 0 ? void 0 : socket.join(ordersRoom);
-    socket === null || socket === void 0 ? void 0 : socket.join(requestsRoom);
-    socket === null || socket === void 0 ? void 0 : socket.join(groupsRoom);
+    socket.join(messagesOrdersRoom);
+    socket.join(ordersRoom);
+    socket.join(requestsRoom);
+    socket.join(groupsRoom);
     return function () {
-      socket === null || socket === void 0 ? void 0 : socket.leave(messagesOrdersRoom);
-      socket === null || socket === void 0 ? void 0 : socket.leave(ordersRoom);
-      socket === null || socket === void 0 ? void 0 : socket.leave(requestsRoom);
-      socket === null || socket === void 0 ? void 0 : socket.leave(groupsRoom);
+      socket.leave(messagesOrdersRoom);
+      socket.leave(ordersRoom);
+      socket.leave(requestsRoom);
+      socket.leave(groupsRoom);
     };
   }, [socket, user]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, props));

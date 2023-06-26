@@ -41,9 +41,7 @@ var Messages = function Messages(props) {
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
-  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
-    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
-    socket = _useWebsocket2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     token = _useSession2[0].token;
@@ -178,9 +176,9 @@ var Messages = function Messages(props) {
         }));
       }
     };
-    socket === null || socket === void 0 ? void 0 : socket.on('message', handleNewMessage);
+    socket.on('message', handleNewMessage);
     return function () {
-      socket === null || socket === void 0 ? void 0 : socket.off('message', handleNewMessage);
+      socket.off('message', handleNewMessage);
     };
   }, [messages, socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {

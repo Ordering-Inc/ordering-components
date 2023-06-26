@@ -65,9 +65,7 @@ var DriversList = function DriversList(props) {
     _useState4 = _slicedToArray(_useState3, 2),
     companyActionStatus = _useState4[0],
     setCompanyActionStatus = _useState4[1];
-  var _useWebsocket = (0, _WebsocketContext.useWebsocket)(),
-    _useWebsocket2 = _slicedToArray(_useWebsocket, 1),
-    socket = _useWebsocket2[0];
+  var socket = (0, _WebsocketContext.useWebsocket)();
 
   /**
    * Get session
@@ -554,11 +552,11 @@ var DriversList = function DriversList(props) {
         drivers: drivers
       }));
     };
-    socket === null || socket === void 0 ? void 0 : socket.on('drivers_update', handleUpdateDriver);
-    socket === null || socket === void 0 ? void 0 : socket.on('tracking_driver', handleTrackingDriver);
+    socket.on('drivers_update', handleUpdateDriver);
+    socket.on('tracking_driver', handleTrackingDriver);
     return function () {
-      socket === null || socket === void 0 ? void 0 : socket.off('drivers_update', handleUpdateDriver);
-      socket === null || socket === void 0 ? void 0 : socket.off('tracking_driver', handleTrackingDriver);
+      socket.off('drivers_update', handleUpdateDriver);
+      socket.off('tracking_driver', handleTrackingDriver);
     };
   }, [socket, session === null || session === void 0 ? void 0 : session.loading, driversList.drivers]);
   (0, _react.useEffect)(function () {
