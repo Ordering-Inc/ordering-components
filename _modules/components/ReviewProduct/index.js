@@ -38,7 +38,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ReviewProduct = function ReviewProduct(props) {
   var UIComponent = props.UIComponent,
     order = props.order,
-    isToast = props.isToast;
+    isToast = props.isToast,
+    hashKey = props.hashKey;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -77,7 +78,7 @@ var ReviewProduct = function ReviewProduct(props) {
   };
   var reviewProducts = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId, changes) {
-      var response, result;
+      var headers, response, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -87,27 +88,33 @@ var ReviewProduct = function ReviewProduct(props) {
             }
             return _context.abrupt("return");
           case 2:
-            _context.next = 4;
+            headers = {
+              Authorization: "Bearer ".concat(session.token),
+              'Content-Type': 'application/json',
+              'X-App-X': ordering.appId,
+              'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+            };
+            if (hashKey && !session.token) {
+              headers = _objectSpread(_objectSpread({}, headers), {}, {
+                'X-uuid-access-X': hashKey
+              });
+            }
+            _context.next = 6;
             return fetch("".concat(ordering.root, "/orders/").concat(orderId, "/product_reviews"), {
               method: 'POST',
-              headers: {
-                Authorization: "Bearer ".concat(session.token),
-                'Content-Type': 'application/json',
-                'X-App-X': ordering.appId,
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-              },
+              headers: headers,
               body: JSON.stringify({
                 reviews: JSON.stringify(changes)
               })
             });
-          case 4:
+          case 6:
             response = _context.sent;
-            _context.next = 7;
+            _context.next = 9;
             return response.json();
-          case 7:
+          case 9:
             result = _context.sent;
             return _context.abrupt("return", result);
-          case 9:
+          case 11:
           case "end":
             return _context.stop();
         }

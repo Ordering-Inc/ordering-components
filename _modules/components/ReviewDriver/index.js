@@ -34,7 +34,8 @@ var ReviewDriver = function ReviewDriver(props) {
   var UIComponent = props.UIComponent,
     order = props.order,
     isToast = props.isToast,
-    isProfessional = props.isProfessional;
+    isProfessional = props.isProfessional,
+    hashKey = props.hashKey;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -94,29 +95,35 @@ var ReviewDriver = function ReviewDriver(props) {
                     case 0:
                       promises = ids.map( /*#__PURE__*/function () {
                         var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
-                          var res, _yield$res$json, result, error;
+                          var headers, res, _yield$res$json, result, error;
                           return _regeneratorRuntime().wrap(function _callee$(_context) {
                             while (1) switch (_context.prev = _context.next) {
                               case 0:
-                                _context.next = 2;
+                                headers = {
+                                  Authorization: "Bearer ".concat(session.token),
+                                  'Content-Type': 'application/json',
+                                  'X-App-X': ordering.appId,
+                                  'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
+                                };
+                                if (hashKey && !session.token) {
+                                  headers = _objectSpread(_objectSpread({}, headers), {}, {
+                                    'X-uuid-access-X': hashKey
+                                  });
+                                }
+                                _context.next = 4;
                                 return fetch("".concat(ordering.root, "/users/").concat(userId, "/user_reviews"), {
                                   method: 'POST',
-                                  headers: {
-                                    Authorization: "Bearer ".concat(session.token),
-                                    'Content-Type': 'application/json',
-                                    'X-App-X': ordering.appId,
-                                    'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
-                                  },
+                                  headers: headers,
                                   body: JSON.stringify(_objectSpread(_objectSpread({}, reviews), {}, {
                                     order_id: id,
                                     user_id: userId
                                   }))
                                 });
-                              case 2:
+                              case 4:
                                 res = _context.sent;
-                                _context.next = 5;
+                                _context.next = 7;
                                 return res.json();
-                              case 5:
+                              case 7:
                                 _yield$res$json = _context.sent;
                                 result = _yield$res$json.result;
                                 error = _yield$res$json.error;
@@ -124,7 +131,7 @@ var ReviewDriver = function ReviewDriver(props) {
                                   result: result,
                                   error: error
                                 });
-                              case 9:
+                              case 11:
                               case "end":
                                 return _context.stop();
                             }
