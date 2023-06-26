@@ -12,7 +12,7 @@ export const ProfessionalInfo = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [userReviewState, setUserReviewState] = useState({ reviews: [], loading: false, error: null })
   const [userState, setUserState] = useState({ user: null, loading: false, error: null })

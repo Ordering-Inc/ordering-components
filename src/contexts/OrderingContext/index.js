@@ -35,7 +35,6 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
     countryCode: settings.countryCode,
     useOptimizeLoad: settings.useOptimizeLoad
   }
-
   return (
     <OrderingContext.Provider>
       <EventProvider>

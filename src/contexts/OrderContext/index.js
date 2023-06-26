@@ -27,7 +27,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [languageState, t] = useLanguage()
   const [events] = useEvent()
   const [configState] = useConfig()
@@ -1246,11 +1246,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       }
       setState({ ...newState, loading: false })
     }
-    socket?.on('carts_update', handleCartUpdate)
-    socket?.on('order_options_update', handleOrderOptionUpdate)
+    socket.on('carts_update', handleCartUpdate)
+    socket.on('order_options_update', handleOrderOptionUpdate)
     return () => {
-      socket?.off('carts_update', handleCartUpdate)
-      socket?.off('order_options_update', handleOrderOptionUpdate)
+      socket.off('carts_update', handleCartUpdate)
+      socket.off('order_options_update', handleOrderOptionUpdate)
     }
   }, [state, socket])
 
@@ -1259,11 +1259,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
    */
   useEffect(() => {
     if (!session.auth || session.loading) return
-    socket?.join(`carts_${customerState?.user?.id || session?.user?.id}`)
-    socket?.join(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
+    socket.join(`carts_${customerState?.user?.id || session?.user?.id}`)
+    socket.join(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
     return () => {
-      socket?.leave(`carts_${customerState?.user?.id || session?.user?.id}`)
-      socket?.leave(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
+      socket.leave(`carts_${customerState?.user?.id || session?.user?.id}`)
+      socket.leave(`orderoptions_${customerState?.user?.id || session?.user?.id}`)
     }
   }, [socket, session, customerState?.user?.id])
 

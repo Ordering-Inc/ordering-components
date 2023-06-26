@@ -8,7 +8,7 @@ export const AppleLogin = (props) => {
   const { UIComponent, onSuccess, onFailure, initParams: initParamsCustom, handleButtonAppleLoginClick } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [formState, setFormState] = useState({ loading: false, result: { error: false } })
   const [{ configs }] = useConfig()
 

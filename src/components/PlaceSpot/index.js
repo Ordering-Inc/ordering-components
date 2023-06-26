@@ -17,7 +17,7 @@ export const PlaceSpot = (props) => {
 
   const [orderState] = useOrder()
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()

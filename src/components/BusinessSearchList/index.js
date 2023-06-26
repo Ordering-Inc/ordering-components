@@ -29,7 +29,7 @@ export const BusinessSearchList = (props) => {
   })
   const [orderState] = useOrder()
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [orderingTheme] = useOrderingTheme()
 

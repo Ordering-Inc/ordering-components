@@ -14,7 +14,7 @@ export const StripeElementsForm = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ token }] = useSession()
   const [requirements, setRequirements] = useState()
 

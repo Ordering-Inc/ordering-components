@@ -55,7 +55,7 @@ export const BusinessList = (props) => {
   const [orderState] = useOrder()
   const [orderingTheme] = useOrderingTheme()
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ auth, token }] = useSession()
   const [requestsState, setRequestsState] = useState({})
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
