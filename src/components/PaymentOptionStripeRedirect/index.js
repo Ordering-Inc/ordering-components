@@ -16,7 +16,7 @@ export const PaymentOptionStripeRedirect = (props) => {
 
   const [{ token }] = useSession()
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   /**
    * save stripe public key
    */

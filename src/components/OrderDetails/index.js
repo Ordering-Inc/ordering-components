@@ -33,7 +33,7 @@ export const OrderDetails = (props) => {
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
   const [messageErrors, setMessageErrors] = useState({ status: null, loading: false, error: null })
   const [messages, setMessages] = useState({ loading: true, error: null, messages: [] })
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [driverLocation, setDriverLocation] = useState(props.order?.driver?.location || orderState.order?.driver?.location || null)
   const [messagesReadList, setMessagesReadList] = useState(false)
   const [driverUpdateLocation, setDriverUpdateLocation] = useState({ loading: false, error: null, newLocation: null })
@@ -510,21 +510,21 @@ export const OrderDetails = (props) => {
     } : user?.level === 0 ? 'orders' : `orders_${userCustomerId || user?.id}`
     if (!isDisabledOrdersRoom) socket?.join(ordersRoom)
     if (orderState.order?.driver_id) {
-      socket?.join(`drivers_${orderState.order?.driver_id}`)
+      socket.join(`drivers_${orderState.order?.driver_id}`)
     }
-    socket?.socket?.on('connect', () => {
-      if (!isDisabledOrdersRoom) socket?.join(ordersRoom)
+    socket.socket.on('connect', () => {
+      if (!isDisabledOrdersRoom) socket.join(ordersRoom)
       if (orderState.order?.driver_id) {
-        socket?.join(`drivers_${orderState.order?.driver_id}`)
+        socket.join(`drivers_${orderState.order?.driver_id}`)
       }
     })
-    socket?.on('tracking_driver', handleTrackingDriver)
-    socket?.on('update_order', handleUpdateOrder)
+    socket.on('tracking_driver', handleTrackingDriver)
+    socket.on('update_order', handleUpdateOrder)
     return () => {
-      if (!isDisabledOrdersRoom) socket?.leave(ordersRoom)
-      // socket?.leave(`drivers_${orderState.order?.driver_id}`)
-      socket?.off('update_order', handleUpdateOrder)
-      socket?.off('tracking_driver', handleTrackingDriver)
+      if (!isDisabledOrdersRoom) socket.leave(ordersRoom)
+      // socket.leave(`drivers_${orderState.order?.driver_id}`)
+      socket.off('update_order', handleUpdateOrder)
+      socket.off('tracking_driver', handleTrackingDriver)
     }
   }, [orderState.order, socket?.socket, loading, userCustomerId, orderState.order?.driver_id, orderState.order?.id, hashKey])
 
@@ -540,22 +540,22 @@ export const OrderDetails = (props) => {
         })
       }
     }
-    socket?.on('message', handleNewMessage)
+    socket.on('message', handleNewMessage)
     return () => {
-      socket?.off('message', handleNewMessage)
+      socket.off('message', handleNewMessage)
     }
   }, [messages, socket, orderState.order?.status, userCustomerId])
 
   useEffect(() => {
     if (!socket?.socket) return
     const messagesOrdersRoom = user?.level === 0 ? 'messages_orders' : `messages_orders_${userCustomerId || user?.id}`
-    socket?.join(messagesOrdersRoom)
-    socket?.socket?.on('connect', () => {
-      socket?.join(messagesOrdersRoom)
+    socket.join(messagesOrdersRoom)
+    socket.socket.on('connect', () => {
+      socket.join(messagesOrdersRoom)
     })
     return () => {
       // neccesary refactor
-      if (!isDisabledOrdersRoom) socket?.leave(messagesOrdersRoom)
+      if (!isDisabledOrdersRoom) socket.leave(messagesOrdersRoom)
     }
   }, [socket?.socket, userCustomerId])
 

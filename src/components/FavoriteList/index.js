@@ -19,7 +19,7 @@ export const FavoriteList = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ user, token }] = useSession()
   const [, { reorder }] = useOrder()
 

@@ -13,7 +13,7 @@ export const PageBanner = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ configs }] = useConfig()
   const [orderState] = useOrder()
 

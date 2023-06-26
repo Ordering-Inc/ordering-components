@@ -28,7 +28,7 @@ export const SignupForm = (props) => {
 
   const [events] = useEvent()
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [, t] = useLanguage()
   const [{ user }, { login }] = useSession()
   const [validationFields] = useValidationFields()

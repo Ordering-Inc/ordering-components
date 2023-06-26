@@ -1,12 +1,11 @@
 import io from 'socket.io-client'
 
 export class Socket {
-  constructor ({ url, project, accessToken, hashKey }) {
+  constructor ({ url, project, accessToken }) {
     this.url = url
     this.project = project
     this.accessToken = accessToken
     this.queue = []
-    this.hashKey = hashKey
   }
 
   connect () {
@@ -14,11 +13,7 @@ export class Socket {
       extraHeaders: {
         Authorization: `Bearer ${this.accessToken}`
       },
-      query: this.accessToken
-        ? `token=${this.accessToken}&project=${this.project}`
-        : this.hashKey
-          ? `hash_key=${this.hashKey}&project=${this.project}`
-          : `project=${this.project}`,
+      query: `token=${this.accessToken}&project=${this.project}`,
       transports: ['websocket']
     })
     this.socket.on('connect', () => {
@@ -48,14 +43,10 @@ export class Socket {
   }
 
   join (room) {
-    if (typeof room === 'string') {
-      if (this.socket?.connected) {
-        this.socket.emit('join', `${this.project}_${room}`)
-      } else {
-        this.queue.push({ action: 'join', room })
-      }
+    if (this.socket?.connected) {
+      this.socket.emit('join', `${this.project}_${room}`)
     } else {
-      this.socket.emit('join', room)
+      this.queue.push({ action: 'join', room })
     }
     return this
   }

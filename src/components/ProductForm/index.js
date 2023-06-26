@@ -33,7 +33,7 @@ export const ProductForm = (props) => {
   const [, t] = useLanguage()
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   /**
    * Events context
   */

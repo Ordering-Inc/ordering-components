@@ -14,7 +14,7 @@ export const PaymethodList = (props) => {
   } = props
 
   const [ordering] = useApi()
-  const [socket] = useWebsocket()
+  const socket = useWebsocket()
   const [{ token, loading }] = useSession()
 
   /**
