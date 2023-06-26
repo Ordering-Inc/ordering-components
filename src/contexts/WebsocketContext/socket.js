@@ -9,13 +9,19 @@ export class Socket {
   }
 
   connect () {
-    this.socket = io(this.url, {
-      extraHeaders: {
-        Authorization: `Bearer ${this.accessToken}`
-      },
-      query: `token=${this.accessToken}&project=${this.project}`,
+    const options = {
+      query: `project=${this.project}`,
       transports: ['websocket']
-    })
+    }
+
+    if (this.accessToken) {
+      options.extraHeaders = {
+        Authorization: `Bearer ${this.accessToken}`
+      }
+      options.query = `${options.query}&token=${this.accessToken}`
+    }
+
+    this.socket = io(this.url, options)
     this.socket.on('connect', () => {
       let item
       while ((item = this.queue.shift()) !== undefined) {
@@ -44,7 +50,10 @@ export class Socket {
 
   join (room) {
     if (this.socket?.connected) {
-      this.socket.emit('join', `${this.project}_${room}`)
+      this.socket.emit(
+        'join',
+        typeof room === 'string' ? `${this.project}_${room}` : room
+      )
     } else {
       this.queue.push({ action: 'join', room })
     }
@@ -53,7 +62,10 @@ export class Socket {
 
   leave (room) {
     if (this.socket?.connected) {
-      this.socket.emit('leave', `${this.project}_${room}`)
+      this.socket.emit(
+        'leave',
+        typeof room === 'string' ? `${this.project}_${room}` : room
+      )
     } else {
       this.queue.push({ action: 'leave', room })
     }
