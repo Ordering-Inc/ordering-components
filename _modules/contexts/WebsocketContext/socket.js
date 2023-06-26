@@ -27,13 +27,17 @@ var Socket = /*#__PURE__*/function () {
     key: "connect",
     value: function connect() {
       var _this = this;
-      this.socket = (0, _socket.default)(this.url, {
-        extraHeaders: {
-          Authorization: "Bearer ".concat(this.accessToken)
-        },
-        query: "token=".concat(this.accessToken, "&project=").concat(this.project),
+      var options = {
+        query: "project=".concat(this.project),
         transports: ['websocket']
-      });
+      };
+      if (this.accessToken) {
+        options.extraHeaders = {
+          Authorization: "Bearer ".concat(this.accessToken)
+        };
+        options.query = "".concat(options.query, "&token=").concat(this.accessToken);
+      }
+      this.socket = (0, _socket.default)(this.url, options);
       this.socket.on('connect', function () {
         var item;
         while ((item = _this.queue.shift()) !== undefined) {
@@ -68,7 +72,7 @@ var Socket = /*#__PURE__*/function () {
     value: function join(room) {
       var _this$socket3;
       if ((_this$socket3 = this.socket) !== null && _this$socket3 !== void 0 && _this$socket3.connected) {
-        this.socket.emit('join', "".concat(this.project, "_").concat(room));
+        this.socket.emit('join', typeof room === 'string' ? "".concat(this.project, "_").concat(room) : room);
       } else {
         this.queue.push({
           action: 'join',
@@ -82,7 +86,7 @@ var Socket = /*#__PURE__*/function () {
     value: function leave(room) {
       var _this$socket4;
       if ((_this$socket4 = this.socket) !== null && _this$socket4 !== void 0 && _this$socket4.connected) {
-        this.socket.emit('leave', "".concat(this.project, "_").concat(room));
+        this.socket.emit('leave', typeof room === 'string' ? "".concat(this.project, "_").concat(room) : room);
       } else {
         this.queue.push({
           action: 'leave',

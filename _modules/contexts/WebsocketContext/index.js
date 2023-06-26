@@ -55,14 +55,11 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
     setConfigs = _useState4[1];
   (0, _react.useEffect)(function () {
     if (session.loading) return;
-    if (session.auth && configs.url && configs.project) {
+    if (configs.url && configs.project) {
       var _socket = new _socket2.Socket(_objectSpread(_objectSpread({}, configs), {}, {
         accessToken: session.token
       }));
       setSocket(_socket);
-    }
-    if (!session.auth) {
-      socket && socket.close();
     }
   }, [session, configs]);
   (0, _react.useEffect)(function () {
