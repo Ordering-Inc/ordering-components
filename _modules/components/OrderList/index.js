@@ -60,7 +60,9 @@ var OrderList = function OrderList(props) {
     setBusinessOrderIds = props.setBusinessOrderIds,
     propsToFetchBusiness = props.propsToFetchBusiness,
     isBusiness = props.isBusiness,
-    noGiftCardOrders = props.noGiftCardOrders;
+    noGiftCardOrders = props.noGiftCardOrders,
+    propsToFetch = props.propsToFetch,
+    handleRedirectToCheckout = props.handleRedirectToCheckout;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -237,6 +239,9 @@ var OrderList = function OrderList(props) {
                 slug: _businessSlug
               }
             };
+            if (result[0].uuid) {
+              handleRedirectToCheckout(result[0].uuid);
+            }
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: false,
               error: error,
@@ -244,21 +249,21 @@ var OrderList = function OrderList(props) {
                 orderId: orderId[0]
               })
             }));
-            _context3.next = 26;
+            _context3.next = 27;
             break;
-          case 23:
-            _context3.prev = 23;
+          case 24:
+            _context3.prev = 24;
             _context3.t0 = _context3["catch"](3);
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
               loading: false,
               error: true,
               result: [_context3.t0 === null || _context3.t0 === void 0 ? void 0 : _context3.t0.message]
             }));
-          case 26:
+          case 27:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[3, 23]]);
+      }, _callee3, null, [[3, 24]]);
     }));
     return function handleReorder(_x2) {
       return _ref.apply(this, arguments);
@@ -337,7 +342,7 @@ var OrderList = function OrderList(props) {
             source = {};
             requestsState.orders = source;
             options.cancelToken = source;
-            functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard() : ordering.setAccessToken(accessToken).orders();
+            functionFetch = asDashboard ? ordering.setAccessToken(accessToken).orders().asDashboard().select(propsToFetch) : ordering.setAccessToken(accessToken).orders().select(propsToFetch);
             _context4.next = 14;
             return functionFetch.get(options);
           case 14:
@@ -357,6 +362,10 @@ var OrderList = function OrderList(props) {
       var keepOrders,
         getFirstOrder,
         pageSize,
+        _ref6,
+        _ref6$filter,
+        _ref6$filter$map,
+        _ref6$filter$map$flat,
         nextPage,
         response,
         businessIds,
@@ -410,30 +419,32 @@ var OrderList = function OrderList(props) {
               });
             }
             setProfessionals([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).reduce(function (previousValue, currentValue) {
-              var _currentValue$product, _currentValue$product2;
-              return previousValue.concat(currentValue === null || currentValue === void 0 ? void 0 : (_currentValue$product = currentValue.products[0]) === null || _currentValue$product === void 0 ? void 0 : (_currentValue$product2 = _currentValue$product.calendar_event) === null || _currentValue$product2 === void 0 ? void 0 : _currentValue$product2.professional);
+              var _currentValue$product, _currentValue$product2, _currentValue$product3;
+              return previousValue.concat(currentValue === null || currentValue === void 0 ? void 0 : (_currentValue$product = currentValue.products) === null || _currentValue$product === void 0 ? void 0 : (_currentValue$product2 = _currentValue$product[0]) === null || _currentValue$product2 === void 0 ? void 0 : (_currentValue$product3 = _currentValue$product2.calendar_event) === null || _currentValue$product3 === void 0 ? void 0 : _currentValue$product3.professional);
             }, []).filter(function (professional, i, hash) {
-              return professional && hash.map(function (_professional) {
+              var _hash$map;
+              return professional && (hash === null || hash === void 0 ? void 0 : (_hash$map = hash.map(function (_professional) {
                 return _professional === null || _professional === void 0 ? void 0 : _professional.id;
-              }).indexOf(professional === null || professional === void 0 ? void 0 : professional.id) === i;
+              })) === null || _hash$map === void 0 ? void 0 : _hash$map.indexOf(professional === null || professional === void 0 ? void 0 : professional.id)) === i;
             }));
             businessIds = [].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).map(function (order) {
               return order.business_id;
             });
             setBusinessOrderIds && setBusinessOrderIds(businessIds);
-            setProducts([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).filter(function (order) {
+            setProducts((_ref6 = [].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders))) === null || _ref6 === void 0 ? void 0 : (_ref6$filter = _ref6.filter(function (order) {
               var _businessesSearchList;
               return !businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 ? void 0 : (_businessesSearchList = businessesSearchList.businesses) === null || _businessesSearchList === void 0 ? void 0 : _businessesSearchList.some(function (business) {
                 return (order === null || order === void 0 ? void 0 : order.business_id) === (business === null || business === void 0 ? void 0 : business.id);
               }));
-            }).map(function (order) {
-              return order.products.map(function (product) {
+            })) === null || _ref6$filter === void 0 ? void 0 : (_ref6$filter$map = _ref6$filter.map(function (order) {
+              var _order$products;
+              return order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.map(function (product) {
                 return _objectSpread(_objectSpread({}, product), {}, {
                   business: order === null || order === void 0 ? void 0 : order.business,
                   businessId: order === null || order === void 0 ? void 0 : order.business_id
                 });
               });
-            }).flat().filter(function (product, i, hash) {
+            })) === null || _ref6$filter$map === void 0 ? void 0 : (_ref6$filter$map$flat = _ref6$filter$map.flat()) === null || _ref6$filter$map$flat === void 0 ? void 0 : _ref6$filter$map$flat.filter(function (product, i, hash) {
               return hash.map(function (_product) {
                 return _product === null || _product === void 0 ? void 0 : _product.product_id;
               }).indexOf(product === null || product === void 0 ? void 0 : product.product_id) === i;
@@ -487,7 +498,7 @@ var OrderList = function OrderList(props) {
     }));
   };
   var loadMessages = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderId) {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(orderId) {
       var url, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -543,11 +554,11 @@ var OrderList = function OrderList(props) {
       }, _callee6, null, [[0, 14]]);
     }));
     return function loadMessages(_x8) {
-      return _ref6.apply(this, arguments);
+      return _ref7.apply(this, arguments);
     };
   }();
   var getBusinesses = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
       var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, parameters, _orderState$options5, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -611,7 +622,7 @@ var OrderList = function OrderList(props) {
       }, _callee7, null, [[0, 19]]);
     }));
     return function getBusinesses(_x9) {
-      return _ref7.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
 
@@ -715,7 +726,7 @@ var OrderList = function OrderList(props) {
     };
   }, [socket, session, userCustomerId]);
   var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
+    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(searchByOtherStatus) {
       var response;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -761,11 +772,11 @@ var OrderList = function OrderList(props) {
       }, _callee8, null, [[1, 9]]);
     }));
     return function loadMoreOrders(_x10) {
-      return _ref8.apply(this, arguments);
+      return _ref9.apply(this, arguments);
     };
   }();
   var goToPage = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(page) {
+    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(page) {
       var response;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -811,7 +822,7 @@ var OrderList = function OrderList(props) {
       }, _callee9, null, [[1, 9]]);
     }));
     return function goToPage(_x11) {
-      return _ref9.apply(this, arguments);
+      return _ref10.apply(this, arguments);
     };
   }();
   var sortOrders = function sortOrders(orders) {
@@ -846,7 +857,7 @@ var OrderList = function OrderList(props) {
     }));
   };
   var getPage = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(page, pageSize) {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(page, pageSize) {
       var response;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -892,7 +903,7 @@ var OrderList = function OrderList(props) {
       }, _callee10, null, [[1, 9]]);
     }));
     return function getPage(_x12, _x13) {
-      return _ref10.apply(this, arguments);
+      return _ref11.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {

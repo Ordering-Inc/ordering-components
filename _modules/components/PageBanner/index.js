@@ -9,6 +9,8 @@ var _react = _interopRequireWildcard(require("react"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _ApiContext = require("../../contexts/ApiContext");
 var _WebsocketContext = require("../../contexts/WebsocketContext");
+var _ConfigContext = require("../../contexts/ConfigContext");
+var _OrderContext = require("../../contexts/OrderContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -32,12 +34,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PageBanner = function PageBanner(props) {
+  var _configs$unaddressed_, _orderState$options, _orderState$options5, _orderState$options5$, _orderState$options6;
   var UIComponent = props.UIComponent,
-    position = props.position;
+    position = props.position,
+    businessId = props.businessId;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
   var socket = (0, _WebsocketContext.useWebsocket)();
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+    _useConfig2 = _slicedToArray(_useConfig, 1),
+    configs = _useConfig2[0].configs;
+  var _useOrder = (0, _OrderContext.useOrder)(),
+    _useOrder2 = _slicedToArray(_useOrder, 1),
+    orderState = _useOrder2[0];
   var _useState = (0, _react.useState)({
       loading: true,
       banner: null,
@@ -46,13 +56,17 @@ var PageBanner = function PageBanner(props) {
     _useState2 = _slicedToArray(_useState, 2),
     pageBannerState = _useState2[0],
     setPageBannerState = _useState2[1];
+  var unaddressedTypes = (configs === null || configs === void 0 ? void 0 : (_configs$unaddressed_ = configs.unaddressed_order_types_allowed) === null || _configs$unaddressed_ === void 0 ? void 0 : _configs$unaddressed_.value.split('|').map(function (value) {
+    return Number(value);
+  })) || [];
+  var isAllowUnaddressOrderType = unaddressedTypes.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type);
 
   /**
    * Method to get the page banner from API
    */
   var handleGetPageBanner = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var requestOptions, response, _yield$response$json, error, result, totalItems;
+      var requestOptions, fetchEndpoint, _configs$location_def, _configs$location_def2, _orderState$options2, _orderState$options2$, _orderState$options3, _orderState$options3$, _orderState$options4, defaultLatitude, defaultLongitude, isInvalidDefaultLocation, defaultLocation, location, type, response, _yield$response$json, error, result, totalItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -68,13 +82,29 @@ var PageBanner = function PageBanner(props) {
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
               }
             };
-            _context.next = 5;
-            return fetch("".concat(ordering.root, "/banner?position=").concat(position), requestOptions);
-          case 5:
-            response = _context.sent;
+            fetchEndpoint = "".concat(ordering.root, "/banner?position=").concat(position);
+            if (position === 'web_business_listing' || position === 'app_business_listing') {
+              defaultLatitude = Number(configs === null || configs === void 0 ? void 0 : (_configs$location_def = configs.location_default_latitude) === null || _configs$location_def === void 0 ? void 0 : _configs$location_def.value);
+              defaultLongitude = Number(configs === null || configs === void 0 ? void 0 : (_configs$location_def2 = configs.location_default_longitude) === null || _configs$location_def2 === void 0 ? void 0 : _configs$location_def2.value);
+              isInvalidDefaultLocation = isNaN(defaultLatitude) || isNaN(defaultLongitude);
+              defaultLocation = {
+                lat: !isInvalidDefaultLocation ? defaultLatitude : 40.7744146,
+                lng: !isInvalidDefaultLocation ? defaultLongitude : -73.9678064
+              };
+              location = isAllowUnaddressOrderType && !((_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && (_orderState$options2$ = _orderState$options2.address) !== null && _orderState$options2$ !== void 0 && _orderState$options2$.location) ? defaultLocation : (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : _orderState$options3$.location;
+              type = ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type) || 1;
+              fetchEndpoint = "".concat(ordering.root, "/banner?position=").concat(position, "&location=").concat(JSON.stringify(location), "&order_type_id=").concat(type);
+            }
+            if (position === 'web_business_page' || position === 'app_business_page') {
+              fetchEndpoint = "".concat(ordering.root, "/banner?position=").concat(position, "&business_id=").concat(businessId);
+            }
             _context.next = 8;
-            return response.json();
+            return fetch(fetchEndpoint, requestOptions);
           case 8:
+            response = _context.sent;
+            _context.next = 11;
+            return response.json();
+          case 11:
             _yield$response$json = _context.sent;
             error = _yield$response$json.error;
             result = _yield$response$json.result;
@@ -89,29 +119,29 @@ var PageBanner = function PageBanner(props) {
               result: result,
               error: error ? result : null
             });
-            _context.next = 18;
+            _context.next = 21;
             break;
-          case 15:
-            _context.prev = 15;
+          case 18:
+            _context.prev = 18;
             _context.t0 = _context["catch"](0);
             setPageBannerState(_objectSpread(_objectSpread({}, pageBannerState), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
-          case 18:
+          case 21:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 15]]);
+      }, _callee, null, [[0, 18]]);
     }));
     return function handleGetPageBanner() {
       return _ref.apply(this, arguments);
     };
   }();
   (0, _react.useEffect)(function () {
-    if (!position) return;
+    if (!position || orderState.loading) return;
     handleGetPageBanner();
-  }, [position]);
+  }, [position, businessId, (_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : _orderState$options5$.location, (_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     pageBannerState: pageBannerState
   })));
