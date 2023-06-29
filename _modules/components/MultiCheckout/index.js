@@ -124,7 +124,7 @@ var MultiCheckout = function MultiCheckout(props) {
     walletState = _useState14[0],
     setWalletState = _useState14[1];
   var openCarts = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : (_cartGroup$result$car = _cartGroup$result.carts) === null || _cartGroup$result$car === void 0 ? void 0 : _cartGroup$result$car.filter(function (cart) {
-    return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
+    return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 1 && (cart === null || cart === void 0 ? void 0 : cart.business_id);
   })) || null || [];
   var cartsInvalid = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result2 = cartGroup.result) === null || _cartGroup$result2 === void 0 ? void 0 : (_cartGroup$result2$ca = _cartGroup$result2.carts) === null || _cartGroup$result2$ca === void 0 ? void 0 : _cartGroup$result2$ca.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
