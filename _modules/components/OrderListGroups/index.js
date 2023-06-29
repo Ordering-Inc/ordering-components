@@ -843,10 +843,14 @@ var OrderListGroups = function OrderListGroups(props) {
       var indexToUpdate = orderList.findIndex(function (o) {
         return o.id === order.id;
       });
-      orderList[indexToUpdate] = order;
+      orderList[indexToUpdate] = _objectSpread(_objectSpread({}, order), {}, {
+        action: type + (order === null || order === void 0 ? void 0 : order.status)
+      });
       orders = orderList;
     } else {
-      orders = type === 'add' ? [order].concat(_toConsumableArray(orderList)) : orderList.filter(function (_order) {
+      orders = type === 'add' ? [_objectSpread(_objectSpread({}, order), {}, {
+        action: type + (order === null || order === void 0 ? void 0 : order.status)
+      })].concat(_toConsumableArray(orderList)) : orderList.filter(function (_order) {
         return _order.id !== order.id;
       });
     }
@@ -859,7 +863,7 @@ var OrderListGroups = function OrderListGroups(props) {
       ordersGroup[status].pagination = _pagination;
     }
     setOrdersGroup(_objectSpread(_objectSpread({}, ordersGroup), {}, {
-      orders: sortOrders(orders),
+      orders: filterByIdUnique(sortOrders(orders)),
       pagination: _pagination
     }));
   };
