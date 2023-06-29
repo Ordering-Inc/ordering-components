@@ -46,7 +46,8 @@ var OrderListGroups = function OrderListGroups(props) {
     orderGroupStatusCustom = props.orderGroupStatusCustom,
     onOrdersDeleted = props.onOrdersDeleted,
     customOrderTypes = props.customOrderTypes,
-    customPaymethods = props.customPaymethods;
+    customPaymethods = props.customPaymethods,
+    isDriverApp = props.isDriverApp;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -1189,7 +1190,7 @@ var OrderListGroups = function OrderListGroups(props) {
     }
   }, [currentTabSelected]);
   (0, _react.useEffect)(function () {
-    if (currentFilters) {
+    if (currentFilters && !isDriverApp) {
       loadOrders({
         newFetchCurrent: true
       });
