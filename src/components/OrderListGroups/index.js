@@ -18,7 +18,8 @@ export const OrderListGroups = (props) => {
     orderGroupStatusCustom,
     onOrdersDeleted,
     customOrderTypes,
-    customPaymethods
+    customPaymethods,
+    isDriverApp
   } = props
 
   const [ordering] = useApi()
@@ -797,7 +798,7 @@ export const OrderListGroups = (props) => {
   }, [currentTabSelected])
 
   useEffect(() => {
-    if (currentFilters) {
+    if (currentFilters && !isDriverApp) {
       loadOrders({ newFetchCurrent: true })
     }
   }, [currentFilters])
