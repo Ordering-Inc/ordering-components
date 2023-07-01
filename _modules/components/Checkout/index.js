@@ -157,6 +157,14 @@ var Checkout = function Checkout(props) {
     _useState16 = _slicedToArray(_useState15, 2),
     loyaltyPlansState = _useState16[0],
     setLoyaltyPlansState = _useState16[1];
+  var _useState17 = (0, _react.useState)({
+      fields: [],
+      loading: false,
+      error: null
+    }),
+    _useState18 = _slicedToArray(_useState17, 2),
+    checkoutFieldsState = _useState18[0],
+    setCheckoutFieldsState = _useState18[1];
   var businessId = props.uuid ? (_Object$values$find$b = (_Object$values$find = Object.values(orderState.carts).find(function (_cart) {
     return (_cart === null || _cart === void 0 ? void 0 : _cart.uuid) === props.uuid;
   })) === null || _Object$values$find === void 0 ? void 0 : _Object$values$find.business_id) !== null && _Object$values$find$b !== void 0 ? _Object$values$find$b : {} : props.businessId;
@@ -167,10 +175,10 @@ var Checkout = function Checkout(props) {
   /**
    * Place spot state from chackout
    */
-  var _useState17 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
-    _useState18 = _slicedToArray(_useState17, 2),
-    placeSpotNumber = _useState18[0],
-    setPlaceSpotNumber = _useState18[1];
+  var _useState19 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
+    _useState20 = _slicedToArray(_useState19, 2),
+    placeSpotNumber = _useState20[0],
+    setPlaceSpotNumber = _useState20[1];
   /**
    * Timeout for update cart comment
    */
@@ -716,6 +724,61 @@ var Checkout = function Checkout(props) {
       return _ref10.apply(this, arguments);
     };
   }();
+  var getValidationFieldOrderTypes = /*#__PURE__*/function () {
+    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10() {
+      var requestOptions, response, content;
+      return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+        while (1) switch (_context10.prev = _context10.next) {
+          case 0:
+            _context10.prev = 0;
+            setCheckoutFieldsState(_objectSpread(_objectSpread({}, checkoutFieldsState), {}, {
+              loading: true
+            }));
+            requestOptions = {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: "Bearer ".concat(token)
+              }
+            };
+            _context10.next = 5;
+            return fetch("".concat(ordering.root, "/validation_field_order_types"), requestOptions);
+          case 5:
+            response = _context10.sent;
+            _context10.next = 8;
+            return response.json();
+          case 8:
+            content = _context10.sent;
+            if (!(content !== null && content !== void 0 && content.error)) {
+              setCheckoutFieldsState({
+                fields: content === null || content === void 0 ? void 0 : content.result,
+                loading: false
+              });
+            } else {
+              setCheckoutFieldsState(_objectSpread(_objectSpread({}, checkoutFieldsState), {}, {
+                loading: false,
+                error: content === null || content === void 0 ? void 0 : content.result
+              }));
+            }
+            _context10.next = 15;
+            break;
+          case 12:
+            _context10.prev = 12;
+            _context10.t0 = _context10["catch"](0);
+            setCheckoutFieldsState(_objectSpread(_objectSpread({}, checkoutFieldsState), {}, {
+              loading: false,
+              error: [_context10.t0.message]
+            }));
+          case 15:
+          case "end":
+            return _context10.stop();
+        }
+      }, _callee10, null, [[0, 12]]);
+    }));
+    return function getValidationFieldOrderTypes() {
+      return _ref11.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     if (businessId && typeof businessId === 'number') {
       getBusiness();
@@ -753,6 +816,7 @@ var Checkout = function Checkout(props) {
         });
       }));
     }
+    getValidationFieldOrderTypes();
   }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cart: cart,
@@ -773,7 +837,8 @@ var Checkout = function Checkout(props) {
     handleChangeSpot: handleChangeSpot,
     onChangeSpot: onChangeSpot,
     handleChangeDeliveryOption: handleChangeDeliveryOption,
-    handleConfirmCredomaticPage: handleConfirmCredomaticPage
+    handleConfirmCredomaticPage: handleConfirmCredomaticPage,
+    checkoutFieldsState: checkoutFieldsState
   })));
 };
 exports.Checkout = Checkout;
