@@ -18,7 +18,8 @@ export const OrderDetails = (props) => {
     isFetchDrivers,
     driverAndBusinessId,
     sendCustomMessage,
-    isDisabledOrdersRoom
+    isDisabledOrdersRoom,
+    isDriverNotification
   } = props
 
   const [{ user, token, loading }] = useSession()
@@ -452,7 +453,7 @@ export const OrderDetails = (props) => {
   }, [orderState?.order?.id, orderState?.order?.status, orderState.loading])
 
   useEffect(() => {
-    if (props.order) {
+    if (props.order && !isDriverNotification) {
       setOrderState({
         ...orderState,
         loading: false,
@@ -461,7 +462,7 @@ export const OrderDetails = (props) => {
       if (isFetchDrivers) {
         getDrivers(props.order?.id ?? orderId)
       }
-    } else if (!orderState.order) {
+    } else if (!orderState.order && !isDriverNotification) {
       getOrder()
     }
 
@@ -474,6 +475,12 @@ export const OrderDetails = (props) => {
       }
     }
   }, [props.order, orderState.order?.id])
+
+  useEffect(() => {
+    if (orderId && isDriverNotification) {
+      getOrder()
+    }
+  }, [orderId, isDriverNotification])
 
   useEffect(() => {
     if (orderState.loading || loading || !socket?.socket) return

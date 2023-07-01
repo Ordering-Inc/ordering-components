@@ -57,18 +57,20 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
   }, [session])
 
   useEffect(() => {
-    if (socket?.socket) {
-      socket.socket.on('disconnect', (reason) => {
-        if (reason === 'io server disconnect' && session.auth) {
-          setTimeout(socket.socket.connect(), 1000)
-        }
-      })
+    if (!socket?.socket) return
+    let disconnectTimeout = null
+    let connectionErrorTimeout = null
+    socket.socket.on('disconnect', () => {
+      disconnectTimeout = setTimeout(() => socket.socket.connect(), 1000)
+    })
 
-      socket.socket.on('connect_error', () => {
-        if (session.auth) {
-          setTimeout(socket.socket.connect(), 1000)
-        }
-      })
+    socket.socket.on('connect_error', () => {
+      connectionErrorTimeout = setTimeout(() => socket.socket.connect(), 1000)
+    })
+
+    return () => {
+      clearInterval(disconnectTimeout)
+      clearInterval(connectionErrorTimeout)
     }
   }, [socket?.socket, session])
 
