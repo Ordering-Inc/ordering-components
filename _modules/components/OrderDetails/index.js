@@ -46,7 +46,8 @@ var OrderDetails = function OrderDetails(props) {
     isFetchDrivers = props.isFetchDrivers,
     driverAndBusinessId = props.driverAndBusinessId,
     sendCustomMessage = props.sendCustomMessage,
-    isDisabledOrdersRoom = props.isDisabledOrdersRoom;
+    isDisabledOrdersRoom = props.isDisabledOrdersRoom,
+    isDriverNotification = props.isDriverNotification;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
@@ -858,7 +859,7 @@ var OrderDetails = function OrderDetails(props) {
     !orderState.loading && loadMessages();
   }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.id, orderState === null || orderState === void 0 ? void 0 : (_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.status, orderState.loading]);
   (0, _react.useEffect)(function () {
-    if (props.order) {
+    if (props.order && !isDriverNotification) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
         loading: false,
         order: props.order
@@ -867,7 +868,7 @@ var OrderDetails = function OrderDetails(props) {
         var _props$order$id, _props$order3;
         getDrivers((_props$order$id = (_props$order3 = props.order) === null || _props$order3 === void 0 ? void 0 : _props$order3.id) !== null && _props$order$id !== void 0 ? _props$order$id : orderId);
       }
-    } else if (!orderState.order) {
+    } else if (!orderState.order && !isDriverNotification) {
       getOrder();
     }
     return function () {
@@ -879,6 +880,11 @@ var OrderDetails = function OrderDetails(props) {
       }
     };
   }, [props.order, (_orderState$order13 = orderState.order) === null || _orderState$order13 === void 0 ? void 0 : _orderState$order13.id]);
+  (0, _react.useEffect)(function () {
+    if (orderId && isDriverNotification) {
+      getOrder();
+    }
+  }, [orderId, isDriverNotification]);
   (0, _react.useEffect)(function () {
     var _orderState$order16;
     if (orderState.loading || loading || !(socket !== null && socket !== void 0 && socket.socket)) return;
