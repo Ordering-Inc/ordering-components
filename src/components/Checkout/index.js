@@ -7,6 +7,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useToast, ToastType } from '../../contexts/ToastContext'
 import { useLanguage } from '../../contexts/LanguageContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
+
 /**
  * Component to manage Checkout page behavior without UI component
  */
@@ -18,7 +19,8 @@ export const Checkout = (props) => {
     handleCustomClick,
     onPlaceOrderClick,
     UIComponent,
-    isApp
+    isApp,
+    isKiosk
   } = props
 
   const [ordering] = useApi()
@@ -69,6 +71,8 @@ export const Checkout = (props) => {
    * Loyalty plans state
    */
   const [loyaltyPlansState, setLoyaltyPlansState] = useState({ loading: true, error: null, result: [] })
+
+  const [checkoutFieldsState, setCheckoutFieldsState] = useState({ fields: [], loading: false, error: null })
 
   const businessId = props.uuid
     ? Object.values(orderState.carts).find(_cart => _cart?.uuid === props.uuid)?.business_id ?? {}
@@ -150,7 +154,7 @@ export const Checkout = (props) => {
       }
     }
     let payload = {
-      offer_id: cart.offer_id,
+      offer_id: cart?.offer_id,
       amount: cart?.balance ?? cart?.total
     }
 
@@ -173,7 +177,7 @@ export const Checkout = (props) => {
       handleCustomClick(payload, paymethodSelected, cart)
       return
     }
-
+    if (!cart) return
     payload = {
       ...payload,
       ...payloadProps,
@@ -422,6 +426,29 @@ export const Checkout = (props) => {
     }
   }
 
+  const getValidationFieldOrderTypes = async () => {
+    try {
+      setCheckoutFieldsState({ ...checkoutFieldsState, loading: true })
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const response = await fetch(`${ordering.root}/validation_field_order_types`, requestOptions)
+      const content = await response.json()
+      if (!content?.error) {
+        setCheckoutFieldsState({ fields: content?.result, loading: false })
+      } else {
+        setCheckoutFieldsState({ ...checkoutFieldsState, loading: false, error: content?.result })
+      }
+    } catch (err) {
+      setCheckoutFieldsState({ ...checkoutFieldsState, loading: false, error: [err.message] })
+    }
+  }
+
   useEffect(() => {
     if (businessId && typeof businessId === 'number') {
       getBusiness()
@@ -451,14 +478,17 @@ export const Checkout = (props) => {
   }, [cart?.delivery_option_id])
 
   useEffect(() => {
-    Promise.all(
-      [getDeliveryOptions(), getLoyaltyPlans()].map(promise => {
-        return promise.then(
-          value => Promise.reject(value),
-          error => Promise.resolve(error)
-        )
-      })
-    )
+    if (!isKiosk) {
+      Promise.all(
+        [getDeliveryOptions(), getLoyaltyPlans()].map(promise => {
+          return promise.then(
+            value => Promise.reject(value),
+            error => Promise.resolve(error)
+          )
+        })
+      )
+    }
+    getValidationFieldOrderTypes()
   }, [])
 
   return (
@@ -485,6 +515,7 @@ export const Checkout = (props) => {
           onChangeSpot={onChangeSpot}
           handleChangeDeliveryOption={handleChangeDeliveryOption}
           handleConfirmCredomaticPage={handleConfirmCredomaticPage}
+          checkoutFieldsState={checkoutFieldsState}
         />
       )}
     </>
