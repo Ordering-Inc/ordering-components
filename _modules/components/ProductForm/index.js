@@ -623,7 +623,7 @@ var ProductForm = function ProductForm(props) {
               handleCustomSave && handleCustomSave();
             }
             errors = checkErrors();
-            if (!(Object.keys(errors).length === 0)) {
+            if (!(Object.keys(errors).length === 0 || isService)) {
               _context3.next = 19;
               break;
             }
