@@ -39,7 +39,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Multi businesses checkout page behavior without UI component
  */
 var MultiCheckout = function MultiCheckout(props) {
-  var _cartGroup$result, _cartGroup$result$car, _cartGroup$result2, _cartGroup$result2$ca, _openCarts$filter;
+  var _cartGroup$result, _cartGroup$result2, _openCarts$filter;
   var UIComponent = props.UIComponent,
     onPlaceOrderClick = props.onPlaceOrderClick,
     cartUuid = props.cartUuid,
@@ -123,16 +123,16 @@ var MultiCheckout = function MultiCheckout(props) {
     _useState14 = _slicedToArray(_useState13, 2),
     walletState = _useState14[0],
     setWalletState = _useState14[1];
-  var openCarts = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 ? void 0 : (_cartGroup$result$car = _cartGroup$result.carts) === null || _cartGroup$result$car === void 0 ? void 0 : _cartGroup$result$car.filter(function (cart) {
+  var openCarts = (cartGroup === null || cartGroup === void 0 || (_cartGroup$result = cartGroup.result) === null || _cartGroup$result === void 0 || (_cartGroup$result = _cartGroup$result.carts) === null || _cartGroup$result === void 0 ? void 0 : _cartGroup$result.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
   })) || null || [];
-  var cartsInvalid = (cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result2 = cartGroup.result) === null || _cartGroup$result2 === void 0 ? void 0 : (_cartGroup$result2$ca = _cartGroup$result2.carts) === null || _cartGroup$result2$ca === void 0 ? void 0 : _cartGroup$result2$ca.filter(function (cart) {
+  var cartsInvalid = (cartGroup === null || cartGroup === void 0 || (_cartGroup$result2 = cartGroup.result) === null || _cartGroup$result2 === void 0 || (_cartGroup$result2 = _cartGroup$result2.carts) === null || _cartGroup$result2 === void 0 ? void 0 : _cartGroup$result2.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.status) !== 1;
   })) || null || [];
   var totalCartsPrice = (openCarts === null || openCarts === void 0 ? void 0 : openCarts.length) && openCarts.reduce(function (total, cart) {
     return total + (cart === null || cart === void 0 ? void 0 : cart.total);
   }, 0);
-  var totalCartsFee = (openCarts === null || openCarts === void 0 ? void 0 : openCarts.length) && (openCarts === null || openCarts === void 0 ? void 0 : (_openCarts$filter = openCarts.filter(function (cart) {
+  var totalCartsFee = (openCarts === null || openCarts === void 0 ? void 0 : openCarts.length) && (openCarts === null || openCarts === void 0 || (_openCarts$filter = openCarts.filter(function (cart) {
     return (cart === null || cart === void 0 ? void 0 : cart.status) !== 1 && (cart === null || cart === void 0 ? void 0 : cart.valid);
   })) === null || _openCarts$filter === void 0 ? void 0 : _openCarts$filter.reduce(function (total, cart) {
     return total + (cart === null || cart === void 0 ? void 0 : cart.delivery_price_with_discount);
@@ -140,22 +140,22 @@ var MultiCheckout = function MultiCheckout(props) {
   var handleGroupPlaceOrder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(confirmPayment) {
       var _paymethodSelected$pa, _cartGroup$result3, _result$paymethod_dat;
-      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result, _result$payment_event, _paymentEvent$data, _paymentEvent$data$ex, paymentEvent, _paymentEvent$data2, _paymentEvent$data2$e, _yield$confirmPayment, confirmApplePayError;
+      var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result, _result$payment_event, _paymentEvent$data, paymentEvent, _paymentEvent$data2, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.paymethod_data;
-            if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa = paymethodSelected.paymethod) === null || _paymethodSelected$pa === void 0 ? void 0 : _paymethodSelected$pa.gateway)) {
+            if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod_data && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa = paymethodSelected.paymethod) === null || _paymethodSelected$pa === void 0 ? void 0 : _paymethodSelected$pa.gateway)) {
               paymethodData = JSON.stringify({
-                source_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa2 = paymethodSelected.paymethod_data) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.id
+                source_id: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa2 = paymethodSelected.paymethod_data) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.id
               });
             }
             payload = {
-              amount: cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result3 = cartGroup.result) === null || _cartGroup$result3 === void 0 ? void 0 : _cartGroup$result3.balance
+              amount: cartGroup === null || cartGroup === void 0 || (_cartGroup$result3 = cartGroup.result) === null || _cartGroup$result3 === void 0 ? void 0 : _cartGroup$result3.balance
             };
             if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod) {
               payload = _objectSpread(_objectSpread({}, payload), {}, {
-                paymethod_id: (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id) || (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.id)
+                paymethod_id: (paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa3 = paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.id) || (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.id)
               });
             }
             if (paymethodData) {
@@ -182,7 +182,7 @@ var MultiCheckout = function MultiCheckout(props) {
             }
             return _context.abrupt("return");
           case 14:
-            if (!((result === null || result === void 0 ? void 0 : (_result$paymethod_dat = result.paymethod_data) === null || _result$paymethod_dat === void 0 ? void 0 : _result$paymethod_dat.status) === 2 && actionsBeforePlace)) {
+            if (!((result === null || result === void 0 || (_result$paymethod_dat = result.paymethod_data) === null || _result$paymethod_dat === void 0 ? void 0 : _result$paymethod_dat.status) === 2 && actionsBeforePlace)) {
               _context.next = 17;
               break;
             }
@@ -193,16 +193,16 @@ var MultiCheckout = function MultiCheckout(props) {
               _context.next = 27;
               break;
             }
-            paymentEvent = result === null || result === void 0 ? void 0 : (_result$payment_event = result.payment_events) === null || _result$payment_event === void 0 ? void 0 : _result$payment_event.find(function (event) {
-              var _event$data, _event$data$extra;
-              return event === null || event === void 0 ? void 0 : (_event$data = event.data) === null || _event$data === void 0 ? void 0 : (_event$data$extra = _event$data.extra) === null || _event$data$extra === void 0 ? void 0 : _event$data$extra.client_secret;
+            paymentEvent = result === null || result === void 0 || (_result$payment_event = result.payment_events) === null || _result$payment_event === void 0 ? void 0 : _result$payment_event.find(function (event) {
+              var _event$data;
+              return event === null || event === void 0 || (_event$data = event.data) === null || _event$data === void 0 || (_event$data = _event$data.extra) === null || _event$data === void 0 ? void 0 : _event$data.client_secret;
             });
-            if (!(paymentEvent !== null && paymentEvent !== void 0 && (_paymentEvent$data = paymentEvent.data) !== null && _paymentEvent$data !== void 0 && (_paymentEvent$data$ex = _paymentEvent$data.extra) !== null && _paymentEvent$data$ex !== void 0 && _paymentEvent$data$ex.client_secret)) {
+            if (!(paymentEvent !== null && paymentEvent !== void 0 && (_paymentEvent$data = paymentEvent.data) !== null && _paymentEvent$data !== void 0 && (_paymentEvent$data = _paymentEvent$data.extra) !== null && _paymentEvent$data !== void 0 && _paymentEvent$data.client_secret)) {
               _context.next = 25;
               break;
             }
             _context.next = 22;
-            return confirmPayment(paymentEvent === null || paymentEvent === void 0 ? void 0 : (_paymentEvent$data2 = paymentEvent.data) === null || _paymentEvent$data2 === void 0 ? void 0 : (_paymentEvent$data2$e = _paymentEvent$data2.extra) === null || _paymentEvent$data2$e === void 0 ? void 0 : _paymentEvent$data2$e.client_secret);
+            return confirmPayment(paymentEvent === null || paymentEvent === void 0 || (_paymentEvent$data2 = paymentEvent.data) === null || _paymentEvent$data2 === void 0 || (_paymentEvent$data2 = _paymentEvent$data2.extra) === null || _paymentEvent$data2 === void 0 ? void 0 : _paymentEvent$data2.client_secret);
           case 22:
             _yield$confirmPayment = _context.sent;
             confirmApplePayError = _yield$confirmPayment.error;
@@ -245,7 +245,7 @@ var MultiCheckout = function MultiCheckout(props) {
               loading: true,
               error: null
             }));
-            url = isChecked ? "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result4 = cartGroup.result) === null || _cartGroup$result4 === void 0 ? void 0 : _cartGroup$result4.uuid, "/wallets") : "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 ? void 0 : (_cartGroup$result5 = cartGroup.result) === null || _cartGroup$result5 === void 0 ? void 0 : _cartGroup$result5.uuid, "/wallets/").concat(wallet.id);
+            url = isChecked ? "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 || (_cartGroup$result4 = cartGroup.result) === null || _cartGroup$result4 === void 0 ? void 0 : _cartGroup$result4.uuid, "/wallets") : "".concat(ordering.root, "/cart_groups/").concat(cartGroup === null || cartGroup === void 0 || (_cartGroup$result5 = cartGroup.result) === null || _cartGroup$result5 === void 0 ? void 0 : _cartGroup$result5.uuid, "/wallets/").concat(wallet.id);
             _context2.prev = 2;
             _context2.next = 5;
             return fetch(url, _objectSpread({
@@ -554,7 +554,7 @@ var MultiCheckout = function MultiCheckout(props) {
             setLoyaltyPlansState(_objectSpread(_objectSpread({}, loyaltyPlansState), {}, {
               loading: false,
               result: error ? [] : result,
-              rewardRate: (_result$find$accumula = result === null || result === void 0 ? void 0 : (_result$find = result.find(function (loyal) {
+              rewardRate: (_result$find$accumula = result === null || result === void 0 || (_result$find = result.find(function (loyal) {
                 return loyal.type === 'credit_point';
               })) === null || _result$find === void 0 ? void 0 : _result$find.accumulation_rate) !== null && _result$find$accumula !== void 0 ? _result$find$accumula : 0
             }));

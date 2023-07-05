@@ -119,7 +119,7 @@ var SettingsList = function SettingsList(props) {
         break;
     }
     var _configs = [];
-    var found = formState === null || formState === void 0 ? void 0 : (_formState$changes = formState.changes) === null || _formState$changes === void 0 ? void 0 : _formState$changes.find(function (item) {
+    var found = formState === null || formState === void 0 || (_formState$changes = formState.changes) === null || _formState$changes === void 0 ? void 0 : _formState$changes.find(function (item) {
       return item.id === id;
     });
     if (found) {
@@ -150,7 +150,7 @@ var SettingsList = function SettingsList(props) {
    */
   var handleClickUpdate = function handleClickUpdate() {
     var _formState$changes2;
-    if (!(formState !== null && formState !== void 0 && formState.changes) || (formState === null || formState === void 0 ? void 0 : (_formState$changes2 = formState.changes) === null || _formState$changes2 === void 0 ? void 0 : _formState$changes2.length) === 0) return;
+    if (!(formState !== null && formState !== void 0 && formState.changes) || (formState === null || formState === void 0 || (_formState$changes2 = formState.changes) === null || _formState$changes2 === void 0 ? void 0 : _formState$changes2.length) === 0) return;
     var _changes = formState === null || formState === void 0 ? void 0 : formState.changes.map(function (item) {
       if (item.key === 'driver_tip_options') {
         return _objectSpread(_objectSpread({}, item), {}, {
@@ -299,7 +299,7 @@ var SettingsList = function SettingsList(props) {
   }, [staticConfigs]);
   (0, _react.useEffect)(function () {
     var _formState$changes3;
-    if (formState !== null && formState !== void 0 && formState.API && (formState === null || formState === void 0 ? void 0 : (_formState$changes3 = formState.changes) === null || _formState$changes3 === void 0 ? void 0 : _formState$changes3.length) > 0) {
+    if (formState !== null && formState !== void 0 && formState.API && (formState === null || formState === void 0 || (_formState$changes3 = formState.changes) === null || _formState$changes3 === void 0 ? void 0 : _formState$changes3.length) > 0) {
       var params = {
         key: formState === null || formState === void 0 ? void 0 : formState.changes[0].key,
         value: formState === null || formState === void 0 ? void 0 : formState.changes[0].value

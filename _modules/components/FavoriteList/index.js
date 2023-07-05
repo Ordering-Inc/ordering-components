@@ -188,7 +188,7 @@ var FavoriteList = function FavoriteList(props) {
             _context.next = 32;
             break;
           case 25:
-            idList = content === null || content === void 0 ? void 0 : (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.reduce(function (ids, product) {
+            idList = content === null || content === void 0 || (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.reduce(function (ids, product) {
               return [].concat(_toConsumableArray(ids), [product === null || product === void 0 ? void 0 : product.object_id]);
             }, []);
             _context.next = 28;
@@ -291,7 +291,7 @@ var FavoriteList = function FavoriteList(props) {
   }();
   var handleReorder = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(orderId) {
-      var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, choosedOrder, _businessId, _businessData, _businessSlug;
+      var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, choosedOrder, _businessId, _businessData, _businessSlug;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -327,13 +327,13 @@ var FavoriteList = function FavoriteList(props) {
             choosedOrder = favoriteList.favorites.find(function (_order) {
               return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId;
             });
-            _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 ? void 0 : (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
+            _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 || (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
             _context3.next = 17;
             return ordering.businesses(_businessId).select(['slug']).get();
           case 17:
             _businessData = _context3.sent;
             _context3.next = 20;
-            return _businessData === null || _businessData === void 0 ? void 0 : (_businessData$content = _businessData.content) === null || _businessData$content === void 0 ? void 0 : (_businessData$content2 = _businessData$content.result) === null || _businessData$content2 === void 0 ? void 0 : _businessData$content2.slug;
+            return _businessData === null || _businessData === void 0 || (_businessData$content = _businessData.content) === null || _businessData$content === void 0 || (_businessData$content = _businessData$content.result) === null || _businessData$content === void 0 ? void 0 : _businessData$content.slug;
           case 20:
             _businessSlug = _context3.sent;
             setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {

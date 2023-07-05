@@ -293,7 +293,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
             options = {
               type: type
             };
-            if (addressSelected && !checkAddress(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.address, addressSelected)) {
+            if (addressSelected && !checkAddress(orderState === null || orderState === void 0 || (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.address, addressSelected)) {
               options.address_id = (_addressSelected3 = addressSelected) === null || _addressSelected3 === void 0 ? void 0 : _addressSelected3.id;
             }
             if (!(options !== null && options !== void 0 && options.address_id || (user === null || user === void 0 ? void 0 : user.id) !== (customer === null || customer === void 0 ? void 0 : customer.id))) {
@@ -334,7 +334,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
   }();
   (0, _react.useEffect)(function () {
     var _customersPhones$user;
-    if (phone && phone.length >= 7 && ((customersPhones === null || customersPhones === void 0 ? void 0 : (_customersPhones$user = customersPhones.users) === null || _customersPhones$user === void 0 ? void 0 : _customersPhones$user.length) === 0 || phone.length === 7)) {
+    if (phone && phone.length >= 7 && ((customersPhones === null || customersPhones === void 0 || (_customersPhones$user = customersPhones.users) === null || _customersPhones$user === void 0 ? void 0 : _customersPhones$user.length) === 0 || phone.length === 7)) {
       getUsers();
     }
     if (phone && phone.length < 7 || !phone) {

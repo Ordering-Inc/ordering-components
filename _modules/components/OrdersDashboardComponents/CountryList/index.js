@@ -232,7 +232,7 @@ var CountryList = function CountryList(props) {
   }, [searchValue]);
   (0, _react.useEffect)(function () {
     var _countriesState$count;
-    if (!searchValue && !(countriesState !== null && countriesState !== void 0 && countriesState.loading) && (countriesState === null || countriesState === void 0 ? void 0 : (_countriesState$count = countriesState.countries) === null || _countriesState$count === void 0 ? void 0 : _countriesState$count.length) <= 1) {
+    if (!searchValue && !(countriesState !== null && countriesState !== void 0 && countriesState.loading) && (countriesState === null || countriesState === void 0 || (_countriesState$count = countriesState.countries) === null || _countriesState$count === void 0 ? void 0 : _countriesState$count.length) <= 1) {
       onClose && onClose();
     }
   }, [searchValue, countriesState]);

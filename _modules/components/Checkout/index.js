@@ -166,7 +166,7 @@ var Checkout = function Checkout(props) {
   /**
    * Place spot state from chackout
    */
-  var _useState17 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 ? void 0 : (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
+  var _useState17 = (0, _react.useState)((_cartState$cart$spot_ = cartState === null || cartState === void 0 || (_cartState$cart = cartState.cart) === null || _cartState$cart === void 0 ? void 0 : _cartState$cart.spot_number) !== null && _cartState$cart$spot_ !== void 0 ? _cartState$cart$spot_ : cart === null || cart === void 0 ? void 0 : cart.spot_number),
     _useState18 = _slicedToArray(_useState17, 2),
     placeSpotNumber = _useState18[0],
     setPlaceSpotNumber = _useState18[1];
@@ -206,19 +206,19 @@ var Checkout = function Checkout(props) {
             result = _yield$ordering$busin2.result;
             error = _yield$ordering$busin2.error;
             if (!error && (_cartState$cart2 = cartState.cart) !== null && _cartState$cart2 !== void 0 && _cartState$cart2.paymethod_id) {
-              _paymethodSelected = result === null || result === void 0 ? void 0 : (_result$paymethods = result.paymethods) === null || _result$paymethods === void 0 ? void 0 : _result$paymethods.find(function (paymethod) {
+              _paymethodSelected = result === null || result === void 0 || (_result$paymethods = result.paymethods) === null || _result$paymethods === void 0 ? void 0 : _result$paymethods.find(function (paymethod) {
                 var _cartState$cart3;
                 return (paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_id) === ((_cartState$cart3 = cartState.cart) === null || _cartState$cart3 === void 0 ? void 0 : _cartState$cart3.paymethod_id);
               });
               if (_paymethodSelected !== null && _paymethodSelected !== void 0 && (_paymethodSelected$pa = _paymethodSelected.paymethod) !== null && _paymethodSelected$pa !== void 0 && _paymethodSelected$pa.id) {
                 handlePaymethodChange({
-                  paymethodId: _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa2 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.id,
-                  gateway: _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa3 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.gateway,
+                  paymethodId: _paymethodSelected === null || _paymethodSelected === void 0 || (_paymethodSelected$pa2 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa2 === void 0 ? void 0 : _paymethodSelected$pa2.id,
+                  gateway: _paymethodSelected === null || _paymethodSelected === void 0 || (_paymethodSelected$pa3 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa3 === void 0 ? void 0 : _paymethodSelected$pa3.gateway,
                   paymethod: _objectSpread(_objectSpread({}, _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : _paymethodSelected.paymethod), {}, {
                     credentials: _objectSpread({}, _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : _paymethodSelected.data)
                   }),
                   data: cart === null || cart === void 0 ? void 0 : cart.paymethod_data,
-                  id: _paymethodSelected === null || _paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa4 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa4 === void 0 ? void 0 : _paymethodSelected$pa4.id
+                  id: _paymethodSelected === null || _paymethodSelected === void 0 || (_paymethodSelected$pa4 = _paymethodSelected.paymethod) === null || _paymethodSelected$pa4 === void 0 ? void 0 : _paymethodSelected$pa4.id
                 });
               }
             }
@@ -252,15 +252,15 @@ var Checkout = function Checkout(props) {
    */
   var handlerClickPlaceOrder = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(paymentOptions, payloadProps, confirmPayment, dismissPlatformPay) {
-      var _paymethodSelected$pa5, _cart$balance, _orderState$options2, _paymethodSelected$pa6, _cartResult$paymethod, _result$result, _result$result$paymet, _cartResult$paymethod2, _cartResult$paymethod3, _cartResult$paymethod4, _cartResult$paymethod5;
-      var paymethodData, _paymethodSelected$da, payload, result, _paymethodSelected$pa7, cartResult, _result$result2, _result$result2$payme, _result$result2$payme2, _yield$confirmPayment, confirmApplePayError;
+      var _paymethodSelected$pa5, _cart$balance, _orderState$options2, _paymethodSelected$pa6, _cartResult$paymethod, _result$result, _cartResult$paymethod2, _cartResult$paymethod3, _cartResult$paymethod4;
+      var paymethodData, _paymethodSelected$da, payload, result, _paymethodSelected$pa7, cartResult, _result$result2, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
             paymethodData = paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data;
-            if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa5 = paymethodSelected.paymethod) === null || _paymethodSelected$pa5 === void 0 ? void 0 : _paymethodSelected$pa5.gateway)) {
+            if (paymethodSelected !== null && paymethodSelected !== void 0 && paymethodSelected.paymethod && ['stripe', 'stripe_connect', 'stripe_direct'].includes(paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa5 = paymethodSelected.paymethod) === null || _paymethodSelected$pa5 === void 0 ? void 0 : _paymethodSelected$pa5.gateway)) {
               paymethodData = {
-                source_id: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$da = paymethodSelected.data) === null || _paymethodSelected$da === void 0 ? void 0 : _paymethodSelected$da.id
+                source_id: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da = paymethodSelected.data) === null || _paymethodSelected$da === void 0 ? void 0 : _paymethodSelected$da.id
               };
             }
             payload = {
@@ -273,7 +273,7 @@ var Checkout = function Checkout(props) {
                 paymethod_data: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : paymethodSelected.data
               });
             }
-            if (orderTypesDelivery.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type)) {
+            if (orderTypesDelivery.includes(orderState === null || orderState === void 0 || (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type)) {
               payload = _objectSpread(_objectSpread({}, payload), {}, {
                 delivery_zone_id: cart !== null && cart !== void 0 && cart.business_id ? cart.delivery_zone_id : 0
               });
@@ -292,7 +292,7 @@ var Checkout = function Checkout(props) {
             _context2.next = 12;
             return onChangeSpot();
           case 12:
-            if (paymethodsWithoutSaveCard.includes(paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa6 = paymethodSelected.paymethod) === null || _paymethodSelected$pa6 === void 0 ? void 0 : _paymethodSelected$pa6.gateway)) {
+            if (paymethodsWithoutSaveCard.includes(paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa6 = paymethodSelected.paymethod) === null || _paymethodSelected$pa6 === void 0 ? void 0 : _paymethodSelected$pa6.gateway)) {
               delete payload.paymethod_data;
             }
             _context2.next = 15;
@@ -304,7 +304,7 @@ var Checkout = function Checkout(props) {
               break;
             }
             setErrors(result === null || result === void 0 ? void 0 : result.result);
-            if (!(dismissPlatformPay && (paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$pa7 = paymethodSelected.paymethod) === null || _paymethodSelected$pa7 === void 0 ? void 0 : _paymethodSelected$pa7.gateway) === 'apple_pay')) {
+            if (!(dismissPlatformPay && (paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$pa7 = paymethodSelected.paymethod) === null || _paymethodSelected$pa7 === void 0 ? void 0 : _paymethodSelected$pa7.gateway) === 'apple_pay')) {
               _context2.next = 21;
               break;
             }
@@ -315,19 +315,19 @@ var Checkout = function Checkout(props) {
             return _context2.abrupt("return");
           case 23:
             cartResult = result === null || result === void 0 ? void 0 : result.result;
-            if (!((cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
+            if (!((cartResult === null || cartResult === void 0 || (_cartResult$paymethod = cartResult.paymethod_data) === null || _cartResult$paymethod === void 0 ? void 0 : _cartResult$paymethod.status) === 2 && actionsBeforePlace)) {
               _context2.next = 27;
               break;
             }
             _context2.next = 27;
             return actionsBeforePlace(paymethodSelected, result.result);
           case 27:
-            if (!(confirmPayment && (result === null || result === void 0 ? void 0 : (_result$result = result.result) === null || _result$result === void 0 ? void 0 : (_result$result$paymet = _result$result.paymethod_data) === null || _result$result$paymet === void 0 ? void 0 : _result$result$paymet.gateway) === 'apple_pay')) {
+            if (!(confirmPayment && (result === null || result === void 0 || (_result$result = result.result) === null || _result$result === void 0 || (_result$result = _result$result.paymethod_data) === null || _result$result === void 0 ? void 0 : _result$result.gateway) === 'apple_pay')) {
               _context2.next = 33;
               break;
             }
             _context2.next = 30;
-            return confirmPayment(result === null || result === void 0 ? void 0 : (_result$result2 = result.result) === null || _result$result2 === void 0 ? void 0 : (_result$result2$payme = _result$result2.paymethod_data) === null || _result$result2$payme === void 0 ? void 0 : (_result$result2$payme2 = _result$result2$payme.result) === null || _result$result2$payme2 === void 0 ? void 0 : _result$result2$payme2.client_secret);
+            return confirmPayment(result === null || result === void 0 || (_result$result2 = result.result) === null || _result$result2 === void 0 || (_result$result2 = _result$result2.paymethod_data) === null || _result$result2 === void 0 || (_result$result2 = _result$result2.result) === null || _result$result2 === void 0 ? void 0 : _result$result2.client_secret);
           case 30:
             _yield$confirmPayment = _context2.sent;
             confirmApplePayError = _yield$confirmPayment.error;
@@ -335,7 +335,7 @@ var Checkout = function Checkout(props) {
               setErrors(confirmApplePayError);
             }
           case 33:
-            if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod4 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod4 !== void 0 && _cartResult$paymethod4.hash && (cartResult === null || cartResult === void 0 ? void 0 : (_cartResult$paymethod5 = cartResult.paymethod_data) === null || _cartResult$paymethod5 === void 0 ? void 0 : _cartResult$paymethod5.status) === 2 && !payloadProps.isNative) {
+            if (paymethodsWithoutSaveCard.includes(cartResult === null || cartResult === void 0 || (_cartResult$paymethod2 = cartResult.paymethod_data) === null || _cartResult$paymethod2 === void 0 ? void 0 : _cartResult$paymethod2.gateway) && cartResult !== null && cartResult !== void 0 && (_cartResult$paymethod3 = cartResult.paymethod_data) !== null && _cartResult$paymethod3 !== void 0 && (_cartResult$paymethod3 = _cartResult$paymethod3.result) !== null && _cartResult$paymethod3 !== void 0 && _cartResult$paymethod3.hash && (cartResult === null || cartResult === void 0 || (_cartResult$paymethod4 = cartResult.paymethod_data) === null || _cartResult$paymethod4 === void 0 ? void 0 : _cartResult$paymethod4.status) === 2 && !payloadProps.isNative) {
               handleConfirmCredomaticPage(cartResult, paymethodSelected);
             }
             setPlacing(false);
@@ -384,7 +384,7 @@ var Checkout = function Checkout(props) {
             error = _yield$endpointToFetc2.error;
             result = _yield$endpointToFetc2.result;
             if (!error && !isApp) {
-              onRemoveSpotNumber && onRemoveSpotNumber(cart === null || cart === void 0 ? void 0 : (_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.slug);
+              onRemoveSpotNumber && onRemoveSpotNumber(cart === null || cart === void 0 || (_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.slug);
             }
             showToast(error ? _ToastContext.ToastType.Error : _ToastContext.ToastType.Success, error ? t('ERROR', result[0]) : t('SPOT_CHANGE_SUCCESS_CONTENT', 'Changes applied correctly'));
             _context3.next = 17;
@@ -663,24 +663,24 @@ var Checkout = function Checkout(props) {
   var handleConfirmCredomaticPage = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(cart, paymethodSelected) {
       var _configs$credomatic_i, _configs$credomatic_i2, _configs$credomatic_i3;
-      var isSandbox, keyId, _cart$paymethod_data, _cart$paymethod_data$, _cart$paymethod_data2, _cart$paymethod_data3, _paymethodSelected$da2, _paymethodSelected$da3, _paymethodSelected$da4, _Object$keys, cartUuid, data, form;
+      var isSandbox, keyId, _cart$paymethod_data, _cart$paymethod_data2, _paymethodSelected$da2, _paymethodSelected$da3, _paymethodSelected$da4, _Object$keys, cartUuid, data, form;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
           case 0:
-            isSandbox = (configs === null || configs === void 0 ? void 0 : (_configs$credomatic_i = configs.credomatic_integration_sandbox) === null || _configs$credomatic_i === void 0 ? void 0 : _configs$credomatic_i.value) === '1';
-            keyId = isSandbox ? configs === null || configs === void 0 ? void 0 : (_configs$credomatic_i2 = configs.credomatic_integration_public_sandbox_key) === null || _configs$credomatic_i2 === void 0 ? void 0 : _configs$credomatic_i2.value : configs === null || configs === void 0 ? void 0 : (_configs$credomatic_i3 = configs.credomatic_integration_public_production_key) === null || _configs$credomatic_i3 === void 0 ? void 0 : _configs$credomatic_i3.value;
+            isSandbox = (configs === null || configs === void 0 || (_configs$credomatic_i = configs.credomatic_integration_sandbox) === null || _configs$credomatic_i === void 0 ? void 0 : _configs$credomatic_i.value) === '1';
+            keyId = isSandbox ? configs === null || configs === void 0 || (_configs$credomatic_i2 = configs.credomatic_integration_public_sandbox_key) === null || _configs$credomatic_i2 === void 0 ? void 0 : _configs$credomatic_i2.value : configs === null || configs === void 0 || (_configs$credomatic_i3 = configs.credomatic_integration_public_production_key) === null || _configs$credomatic_i3 === void 0 ? void 0 : _configs$credomatic_i3.value;
             try {
               cartUuid = cart === null || cart === void 0 ? void 0 : cart.uuid;
               data = {
                 type: 'auth',
                 key_id: keyId,
-                hash: cart === null || cart === void 0 ? void 0 : (_cart$paymethod_data = cart.paymethod_data) === null || _cart$paymethod_data === void 0 ? void 0 : (_cart$paymethod_data$ = _cart$paymethod_data.result) === null || _cart$paymethod_data$ === void 0 ? void 0 : _cart$paymethod_data$.hash,
-                time: cart === null || cart === void 0 ? void 0 : (_cart$paymethod_data2 = cart.paymethod_data) === null || _cart$paymethod_data2 === void 0 ? void 0 : (_cart$paymethod_data3 = _cart$paymethod_data2.result) === null || _cart$paymethod_data3 === void 0 ? void 0 : _cart$paymethod_data3.time,
+                hash: cart === null || cart === void 0 || (_cart$paymethod_data = cart.paymethod_data) === null || _cart$paymethod_data === void 0 || (_cart$paymethod_data = _cart$paymethod_data.result) === null || _cart$paymethod_data === void 0 ? void 0 : _cart$paymethod_data.hash,
+                time: cart === null || cart === void 0 || (_cart$paymethod_data2 = cart.paymethod_data) === null || _cart$paymethod_data2 === void 0 || (_cart$paymethod_data2 = _cart$paymethod_data2.result) === null || _cart$paymethod_data2 === void 0 ? void 0 : _cart$paymethod_data2.time,
                 amount: cart === null || cart === void 0 ? void 0 : cart.total,
                 orderid: cartUuid,
-                ccnumber: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$da2 = paymethodSelected.data) === null || _paymethodSelected$da2 === void 0 ? void 0 : _paymethodSelected$da2.ccnumber,
-                cvv: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$da3 = paymethodSelected.data) === null || _paymethodSelected$da3 === void 0 ? void 0 : _paymethodSelected$da3.cvv,
-                ccexp: paymethodSelected === null || paymethodSelected === void 0 ? void 0 : (_paymethodSelected$da4 = paymethodSelected.data) === null || _paymethodSelected$da4 === void 0 ? void 0 : _paymethodSelected$da4.ccexp,
+                ccnumber: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da2 = paymethodSelected.data) === null || _paymethodSelected$da2 === void 0 ? void 0 : _paymethodSelected$da2.ccnumber,
+                cvv: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da3 = paymethodSelected.data) === null || _paymethodSelected$da3 === void 0 ? void 0 : _paymethodSelected$da3.cvv,
+                ccexp: paymethodSelected === null || paymethodSelected === void 0 || (_paymethodSelected$da4 = paymethodSelected.data) === null || _paymethodSelected$da4 === void 0 ? void 0 : _paymethodSelected$da4.ccexp,
                 redirect: window.location.href.replace(window.location.search, '')
               };
               form = document.createElement('form');
