@@ -47,7 +47,7 @@ var MultiCartCreate = function MultiCartCreate(props) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             cartList = Object.values(orderState === null || orderState === void 0 ? void 0 : orderState.carts).filter(function (cart) {
-              return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2;
+              return (cart === null || cart === void 0 ? void 0 : cart.valid) && (cart === null || cart === void 0 ? void 0 : cart.status) !== 2 && (cart === null || cart === void 0 ? void 0 : cart.business_id);
             }).map(function (cart) {
               return cart === null || cart === void 0 ? void 0 : cart.uuid;
             });

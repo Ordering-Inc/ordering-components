@@ -36,7 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage login behavior without UI component
  */
 var LoginForm = function LoginForm(props) {
-  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena;
+  var _configs$phone_passwo, _configs$opt_email_en, _configs$otp_cellphon, _configs$email_passwo, _configs$spoonity_ena, _configs$device_code_;
   var UIComponent = props.UIComponent,
     handleButtonLoginClick = props.handleButtonLoginClick,
     handleSuccessLogin = props.handleSuccessLogin,
@@ -109,6 +109,7 @@ var LoginForm = function LoginForm(props) {
   var useLoginByEmail = useLoginByCellphone || useLoginOtpEmail || useLoginOtpCellphone ? (configs === null || configs === void 0 || (_configs$email_passwo = configs.email_password_login_enabled) === null || _configs$email_passwo === void 0 ? void 0 : _configs$email_passwo.value) === '1' : true;
   var useLoginSpoonity = (configs === null || configs === void 0 || (_configs$spoonity_ena = configs.spoonity_enabled) === null || _configs$spoonity_ena === void 0 ? void 0 : _configs$spoonity_ena.value) === '1';
   var useLoginOtp = useLoginOtpEmail || useLoginOtpCellphone;
+  var isDeviceLoginEnabled = (configs === null || configs === void 0 || (_configs$device_code_ = configs.device_code_login_enabled) === null || _configs$device_code_ === void 0 ? void 0 : _configs$device_code_.value) === '1';
   defaultLoginTab = useLoginByEmail ? 'email' : useLoginByCellphone ? 'cellphone' : 'otp';
   var _useState13 = (0, _react.useState)(defaultLoginTab),
     _useState14 = _slicedToArray(_useState13, 2),
@@ -150,7 +151,11 @@ var LoginForm = function LoginForm(props) {
             return _context.abrupt("return");
           case 3:
             _context.prev = 3;
-            if (loginTab === 'otp') {
+            if (isDeviceLoginEnabled && values !== null && values !== void 0 && values.device_code) {
+              _credentials = {
+                device_code: values === null || values === void 0 ? void 0 : values.device_code
+              };
+            } else if (loginTab === 'otp') {
               _credentials = (_credentials2 = {}, _defineProperty(_credentials2, otpType, values && values[otpType] || credentials[otpType]), _defineProperty(_credentials2, "one_time_password", values && (values === null || values === void 0 ? void 0 : values.code) || otpState), _credentials2);
               if (otpType === 'cellphone') {
                 _credentials = _objectSpread(_objectSpread({}, _credentials), {}, {
