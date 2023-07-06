@@ -23,7 +23,7 @@ export const OrderContext = createContext()
  * This provider has a reducer for manage order state
  * @param {props} props
  */
-export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast, franchiseId, isDisabledDefaultOpts, businessSlug }) => {
+export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToast, franchiseId, isDisabledDefaultOpts, businessSlug, userAgent }) => {
   const [confirmAlert, setConfirm] = useState({ show: false })
   const [alert, setAlert] = useState({ show: false })
   const [ordering] = useApi()
@@ -832,12 +832,14 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         ...data,
         user_id: userCustomerId || session.user.id
       }
-      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts(cardId).place(body, {
-        headers: {
-          'X-Socket-Id-X': socket?.getId(),
-          'X-Country-Code-X': countryCode
-        }
-      })
+      let headers = {
+        'X-Socket-Id-X': socket?.getId(),
+        'X-Country-Code-X': countryCode
+      }
+      if (userAgent) {
+        headers = { ...headers, 'User-Agent': userAgent }
+      }
+      const { content: { error, result } } = await ordering.setAccessToken(session.token).carts(cardId).place(body, { headers: headers })
       if (!error) {
         if (result.status !== 1) {
           state.carts[`businessId:${result.business_id}`] = result
