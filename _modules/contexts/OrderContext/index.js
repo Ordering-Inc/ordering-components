@@ -1237,7 +1237,7 @@ var OrderProvider = function OrderProvider(_ref) {
 
   var applyOffer = /*#__PURE__*/function () {
     var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(offerData) {
-      var _offerData$force, response, result;
+      var _offerData$force, response, result, alertInfo;
 
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {
         while (1) {
@@ -1294,6 +1294,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 console.log('result', result);
 
                 if (result !== null && result !== void 0 && result.type && (result === null || result === void 0 ? void 0 : result.type) === 'question') {
+                  console.log('result inside', result);
                   setConfirm({
                     show: true,
                     content: result.result,
@@ -1302,12 +1303,21 @@ var OrderProvider = function OrderProvider(_ref) {
                       applyOffer(offerData);
                     }
                   });
-                } else {
-                  setAlert({
-                    show: true,
-                    content: result.result
-                  });
                 }
+
+                alertInfo = {
+                  show: true,
+                  content: result.result
+                };
+                alertInfo.title = t('OFFER', 'Offer');
+                alertInfo.acceptText = t('ACCEPT', 'Accept');
+
+                alertInfo.onAccept = function () {
+                  offerData.force = true;
+                  applyOffer(offerData);
+                };
+
+                setAlert(alertInfo);
               }
 
               setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -2458,7 +2468,9 @@ var OrderProvider = function OrderProvider(_ref) {
   }, Alert && /*#__PURE__*/_react.default.createElement(Alert, {
     open: alert.show,
     title: alert.title || t('ERROR', 'Error'),
-    onAccept: function onAccept() {
+    content: alert.content,
+    acceptText: alert.acceptText || null,
+    onAccept: alert.onAccept || function () {
       return setAlert({
         show: false
       });
@@ -2468,7 +2480,11 @@ var OrderProvider = function OrderProvider(_ref) {
         show: false
       });
     },
-    content: alert.content
+    onCancel: alert.onAccept ? function () {
+      return setAlert({
+        show: false
+      });
+    } : null
   }), children);
 };
 /**

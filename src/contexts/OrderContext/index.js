@@ -589,6 +589,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
       } else {
         console.log('result', result)
         if (result?.type && result?.type === 'question') {
+          console.log('result inside', result)
           setConfirm({
             show: true,
             content: result.result,
@@ -597,9 +598,15 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
               applyOffer(offerData)
             }
           })
-        } else {
-          setAlert({ show: true, content: result.result })
         }
+        let alertInfo = { show: true, content: result.result }
+        alertInfo.title = t('OFFER', 'Offer')
+        alertInfo.acceptText = t('ACCEPT', 'Accept')
+        alertInfo.onAccept = () => {
+          offerData.force = true
+          applyOffer(offerData)
+        }
+        setAlert(alertInfo)
       }
       setState({ ...state, loading: false })
       return !result.error
@@ -1144,9 +1151,11 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           <Alert
             open={alert.show}
             title={alert.title || t('ERROR', 'Error')}
-            onAccept={() => setAlert({ show: false })}
-            onClose={() => setAlert({ show: false })}
             content={alert.content}
+            acceptText={alert.acceptText || null}
+            onAccept={alert.onAccept || (() => setAlert({ show: false }))}
+            onClose={() => setAlert({ show: false })}
+            onCancel={alert.onAccept ? () => setAlert({ show: false }) : null}
           />
         )
       }
