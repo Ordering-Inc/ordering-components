@@ -257,16 +257,16 @@ var ProductForm = function ProductForm(props) {
   var getUnitTotal = function getUnitTotal(productCart) {
     var _product$product7;
     var subtotal = 0;
-    for (var i = 0; i < ((_product$product5 = product.product) === null || _product$product5 === void 0 ? void 0 : (_product$product5$ext = _product$product5.extras) === null || _product$product5$ext === void 0 ? void 0 : _product$product5$ext.length); i++) {
-      var _product$product5, _product$product5$ext, _product$product6;
+    for (var i = 0; i < ((_product$product5 = product.product) === null || _product$product5 === void 0 || (_product$product5 = _product$product5.extras) === null || _product$product5 === void 0 ? void 0 : _product$product5.length); i++) {
+      var _product$product5, _product$product6;
       var extra = (_product$product6 = product.product) === null || _product$product6 === void 0 ? void 0 : _product$product6.extras[i];
       for (var j = 0; j < ((_extra$options = extra.options) === null || _extra$options === void 0 ? void 0 : _extra$options.length); j++) {
         var _extra$options;
         var option = extra.options[j];
         for (var k = 0; k < ((_option$suboptions = option.suboptions) === null || _option$suboptions === void 0 ? void 0 : _option$suboptions.length); k++) {
-          var _option$suboptions, _productCart$options, _productCart$options$;
+          var _option$suboptions, _productCart$options;
           var suboption = option.suboptions[k];
-          if ((_productCart$options = productCart.options["id:".concat(option.id)]) !== null && _productCart$options !== void 0 && (_productCart$options$ = _productCart$options.suboptions["id:".concat(suboption.id)]) !== null && _productCart$options$ !== void 0 && _productCart$options$.selected) {
+          if ((_productCart$options = productCart.options["id:".concat(option.id)]) !== null && _productCart$options !== void 0 && (_productCart$options = _productCart$options.suboptions["id:".concat(suboption.id)]) !== null && _productCart$options !== void 0 && _productCart$options.selected) {
             var suboptionState = productCart.options["id:".concat(option.id)].suboptions["id:".concat(suboption.id)];
             var quantity = option.allow_suboption_quantity ? suboptionState.quantity : 1;
             var price = option.with_half_option && suboption.half_price && suboptionState.position !== 'whole' ? suboption.half_price : suboption.price;
@@ -572,12 +572,12 @@ var ProductForm = function ProductForm(props) {
    * Check options to get errors
    */
   var checkErrors = function checkErrors() {
-    var _product$product8, _product$product8$ext;
+    var _product$product8;
     var errors = {};
     if (!(product !== null && product !== void 0 && product.product)) {
       return errors;
     }
-    (_product$product8 = product.product) === null || _product$product8 === void 0 ? void 0 : (_product$product8$ext = _product$product8.extras) === null || _product$product8$ext === void 0 ? void 0 : _product$product8$ext.forEach(function (extra) {
+    (_product$product8 = product.product) === null || _product$product8 === void 0 || (_product$product8 = _product$product8.extras) === null || _product$product8 === void 0 ? void 0 : _product$product8.forEach(function (extra) {
       extra.options.map(function (option) {
         var _productCart$options3, _Object$keys, _option$suboptions3;
         var suboptions = (_productCart$options3 = productCart.options["id:".concat(option.id)]) === null || _productCart$options3 === void 0 ? void 0 : _productCart$options3.suboptions;
@@ -597,7 +597,7 @@ var ProductForm = function ProductForm(props) {
           }
         }
         var evaluate = option.respect_to ? evaluateRespectTo : true;
-        if ((option === null || option === void 0 ? void 0 : (_option$suboptions3 = option.suboptions) === null || _option$suboptions3 === void 0 ? void 0 : _option$suboptions3.length) > 0 && evaluate) {
+        if ((option === null || option === void 0 || (_option$suboptions3 = option.suboptions) === null || _option$suboptions3 === void 0 ? void 0 : _option$suboptions3.length) > 0 && evaluate) {
           if (option.min > quantity) {
             errors["id:".concat(option.id)] = true;
           } else if (option.max < quantity) {
@@ -637,7 +637,7 @@ var ProductForm = function ProductForm(props) {
               business_id: props.businessId
             };
             currentProduct = !isService ? _objectSpread({}, productCart) : _objectSpread(_objectSpread({}, productCart), {}, {
-              professional_id: values === null || values === void 0 ? void 0 : (_values$professional = values.professional) === null || _values$professional === void 0 ? void 0 : _values$professional.id,
+              professional_id: values === null || values === void 0 || (_values$professional = values.professional) === null || _values$professional === void 0 ? void 0 : _values$professional.id,
               service_start: (_values$serviceTime = values === null || values === void 0 ? void 0 : values.serviceTime) !== null && _values$serviceTime !== void 0 ? _values$serviceTime : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.moment
             });
             if ((_props$productCart6 = props.productCart) !== null && _props$productCart6 !== void 0 && _props$productCart6.code) {
@@ -663,7 +663,7 @@ var ProductForm = function ProductForm(props) {
               onSave(productCart, !((_props$productCart7 = props.productCart) !== null && _props$productCart7 !== void 0 && _props$productCart7.code));
               if (isService) {
                 updatedProfessional = JSON.parse(JSON.stringify(values === null || values === void 0 ? void 0 : values.professional));
-                duration = product === null || product === void 0 ? void 0 : (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.duration;
+                duration = product === null || product === void 0 || (_product$product9 = product.product) === null || _product$product9 === void 0 ? void 0 : _product$product9.duration;
                 updatedProfessional.busy_times.push({
                   start: values === null || values === void 0 ? void 0 : values.serviceTime,
                   end: (0, _moment.default)(values === null || values === void 0 ? void 0 : values.serviceTime).add(duration, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
@@ -782,7 +782,7 @@ var ProductForm = function ProductForm(props) {
         }
       }
     }
-    if ((option === null || option === void 0 ? void 0 : (_option$suboptions5 = option.suboptions) === null || _option$suboptions5 === void 0 ? void 0 : _option$suboptions5.length) === 0) showOption = false;
+    if ((option === null || option === void 0 || (_option$suboptions5 = option.suboptions) === null || _option$suboptions5 === void 0 ? void 0 : _option$suboptions5.length) === 0) showOption = false;
     return showOption;
   };
 
@@ -868,7 +868,7 @@ var ProductForm = function ProductForm(props) {
     if (!(option !== null && option !== void 0 && option.respect_to)) return true;
     var selectedOption = options.filter(function (option1) {
       var _option1$suboptions;
-      return (option1 === null || option1 === void 0 ? void 0 : (_option1$suboptions = option1.suboptions) === null || _option1$suboptions === void 0 ? void 0 : _option1$suboptions.filter(function (suboption) {
+      return (option1 === null || option1 === void 0 || (_option1$suboptions = option1.suboptions) === null || _option1$suboptions === void 0 ? void 0 : _option1$suboptions.filter(function (suboption) {
         return option.respect_to === (suboption === null || suboption === void 0 ? void 0 : suboption.id) && suboption.preselected;
       }).length) > 0;
     });
@@ -880,8 +880,8 @@ var ProductForm = function ProductForm(props) {
    * Check if there is an option required with one suboption
    */
   (0, _react.useEffect)(function () {
-    var _product$product10, _product$product10$ex;
-    if (product !== null && product !== void 0 && product.product && ((_product$product10 = product.product) === null || _product$product10 === void 0 ? void 0 : (_product$product10$ex = _product$product10.extras) === null || _product$product10$ex === void 0 ? void 0 : _product$product10$ex.length) > 0) {
+    var _product$product10;
+    if (product !== null && product !== void 0 && product.product && ((_product$product10 = product.product) === null || _product$product10 === void 0 || (_product$product10 = _product$product10.extras) === null || _product$product10 === void 0 ? void 0 : _product$product10.length) > 0) {
       var _ref7, _ref8;
       var options = (_ref7 = []).concat.apply(_ref7, _toConsumableArray(product.product.extras.map(function (extra) {
         return extra.options.filter(function (option) {
@@ -918,7 +918,7 @@ var ProductForm = function ProductForm(props) {
       options.map(function (option) {
         var defaultSuboptions = option.suboptions.filter(function (suboption) {
           var _option$suboptions6;
-          return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 ? void 0 : (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1);
+          return (suboption === null || suboption === void 0 ? void 0 : suboption.enabled) && ((suboption === null || suboption === void 0 ? void 0 : suboption.preselected) || (option === null || option === void 0 || (_option$suboptions6 = option.suboptions) === null || _option$suboptions6 === void 0 ? void 0 : _option$suboptions6.length) === 1);
         }).map(function (suboption) {
           return {
             option: option,

@@ -156,12 +156,12 @@ var CartStoresListing = function CartStoresListing(props) {
               route = window.location.pathname;
               if (isStore) {
                 if (handleCustomStoreRedirect) {
-                  handleCustomStoreRedirect(result === null || result === void 0 ? void 0 : (_result$business = result.business) === null || _result$business === void 0 ? void 0 : _result$business.slug);
+                  handleCustomStoreRedirect(result === null || result === void 0 || (_result$business = result.business) === null || _result$business === void 0 ? void 0 : _result$business.slug);
                 } else if (route.includes('/store/') && pageChangeStore) {
                   events.emit('go_to_page', {
                     page: pageChangeStore,
                     params: {
-                      store: result === null || result === void 0 ? void 0 : (_result$business2 = result.business) === null || _result$business2 === void 0 ? void 0 : _result$business2.slug
+                      store: result === null || result === void 0 || (_result$business2 = result.business) === null || _result$business2 === void 0 ? void 0 : _result$business2.slug
                     }
                   });
                 }

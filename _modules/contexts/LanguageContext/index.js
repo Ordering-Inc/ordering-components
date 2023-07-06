@@ -230,8 +230,8 @@ var LanguageProvider = function LanguageProvider(_ref) {
   }, []);
   (0, _react.useEffect)(function () {
     var _state$language5, _state$language6;
-    if (ordering.language !== (state === null || state === void 0 ? void 0 : (_state$language5 = state.language) === null || _state$language5 === void 0 ? void 0 : _state$language5.code)) return;
-    apiHelper.setLanguage(state === null || state === void 0 ? void 0 : (_state$language6 = state.language) === null || _state$language6 === void 0 ? void 0 : _state$language6.code);
+    if (ordering.language !== (state === null || state === void 0 || (_state$language5 = state.language) === null || _state$language5 === void 0 ? void 0 : _state$language5.code)) return;
+    apiHelper.setLanguage(state === null || state === void 0 || (_state$language6 = state.language) === null || _state$language6 === void 0 ? void 0 : _state$language6.code);
   }, [state.language]);
   var t = function t(key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
