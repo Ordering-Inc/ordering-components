@@ -121,18 +121,19 @@ export const PaymentOptionOpenPay = (props) => {
     if (card.brandCardName === 'mastercard' && isApplyMasterCoupon) {
       applyMasterCardCoupon()
     } else {
-      if (props?.cart?.offers.length > 0 || props?.cart?.coupon && props?.cart?.coupon === 'DLVMASTER30') {
+      if ((props?.cart?.offers.length > 0 || props?.cart?.coupon) && props?.cart?.coupon === 'DLVMASTER30') {
         if (!configs?.advanced_offers_module?.value) {
           applyCoupon({
             business_id: businessId,
             coupon: null
           })
-        } else {
-          removeOffer({
-            business_id: businessId,
-            offer_id: props?.cart?.offers[0].id
-          })
         }
+        // else {
+        //   removeOffer({
+        //     business_id: businessId,
+        //     offer_id: props?.cart?.offers[0].id
+        //   })
+        // }
       }
     }
   }
@@ -304,13 +305,14 @@ export const PaymentOptionOpenPay = (props) => {
         business_id: businessId,
         coupon: 'DLVMASTER30'
       })
-    } else {
-      applyOffer({
-        business_id: businessId,
-        coupon: 'DLVMASTER30',
-        force: true
-      })
     }
+    // else {
+    //   applyOffer({
+    //     business_id: businessId,
+    //     coupon: 'DLVMASTER30',
+    //     force: true
+    //   })
+    // }
   }
 
   useEffect(() => {

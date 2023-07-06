@@ -587,7 +587,18 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
       } else {
-        setAlert({ show: true, content: result.result })
+        if (result?.type && result?.type === 'question') {
+          setConfirm({
+            show: true,
+            content: result.result,
+            onAccept: () => {
+              offerData.force = true
+              applyOffer(offerData)
+            }
+          })
+        } else {
+          setAlert({ show: true, content: result.result })
+        }
       }
       setState({ ...state, loading: false })
       return !result.error
