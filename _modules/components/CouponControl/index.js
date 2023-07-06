@@ -118,8 +118,8 @@ var CouponControl = function CouponControl(props) {
     } else {
       applyOffer({
         business_id: businessId,
-        coupon: couponInput,
-        force: true
+        coupon: couponInput // force: true
+
       });
     }
   };

@@ -247,7 +247,7 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
     } else {
       var _props$cart, _props$cart2, _props$cart3;
 
-      if ((props === null || props === void 0 ? void 0 : (_props$cart = props.cart) === null || _props$cart === void 0 ? void 0 : _props$cart.offers.length) > 0 || props !== null && props !== void 0 && (_props$cart2 = props.cart) !== null && _props$cart2 !== void 0 && _props$cart2.coupon && (props === null || props === void 0 ? void 0 : (_props$cart3 = props.cart) === null || _props$cart3 === void 0 ? void 0 : _props$cart3.coupon) === 'DLVMASTER30') {
+      if (((props === null || props === void 0 ? void 0 : (_props$cart = props.cart) === null || _props$cart === void 0 ? void 0 : _props$cart.offers.length) > 0 || props !== null && props !== void 0 && (_props$cart2 = props.cart) !== null && _props$cart2 !== void 0 && _props$cart2.coupon) && (props === null || props === void 0 ? void 0 : (_props$cart3 = props.cart) === null || _props$cart3 === void 0 ? void 0 : _props$cart3.coupon) === 'DLVMASTER30') {
         var _configs$advanced_off;
 
         if (!(configs !== null && configs !== void 0 && (_configs$advanced_off = configs.advanced_offers_module) !== null && _configs$advanced_off !== void 0 && _configs$advanced_off.value)) {
@@ -255,14 +255,13 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
             business_id: businessId,
             coupon: null
           });
-        } else {
-          var _props$cart4;
+        } // else {
+        //   removeOffer({
+        //     business_id: businessId,
+        //     offer_id: props?.cart?.offers[0].id
+        //   })
+        // }
 
-          removeOffer({
-            business_id: businessId,
-            offer_id: props === null || props === void 0 ? void 0 : (_props$cart4 = props.cart) === null || _props$cart4 === void 0 ? void 0 : _props$cart4.offers[0].id
-          });
-        }
       }
     }
   };
@@ -559,13 +558,14 @@ var PaymentOptionOpenPay = function PaymentOptionOpenPay(props) {
         business_id: businessId,
         coupon: 'DLVMASTER30'
       });
-    } else {
-      applyOffer({
-        business_id: businessId,
-        coupon: 'DLVMASTER30',
-        force: true
-      });
-    }
+    } // else {
+    //   applyOffer({
+    //     business_id: businessId,
+    //     coupon: 'DLVMASTER30',
+    //     force: true
+    //   })
+    // }
+
   };
 
   (0, _react.useEffect)(function () {

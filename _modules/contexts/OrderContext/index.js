@@ -1291,10 +1291,21 @@ var OrderProvider = function OrderProvider(_ref) {
                 state.carts["businessId:".concat(result.result.business_id)] = result.result;
                 events.emit('cart_updated', result.result);
               } else {
-                setAlert({
-                  show: true,
-                  content: result.result
-                });
+                if (result !== null && result !== void 0 && result.type && (result === null || result === void 0 ? void 0 : result.type) === 'question') {
+                  setConfirm({
+                    show: true,
+                    content: result.result,
+                    onAccept: function onAccept() {
+                      offerData.force = true;
+                      applyOffer(offerData);
+                    }
+                  });
+                } else {
+                  setAlert({
+                    show: true,
+                    content: result.result
+                  });
+                }
               }
 
               setState(_objectSpread(_objectSpread({}, state), {}, {
