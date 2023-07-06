@@ -1291,31 +1291,23 @@ var OrderProvider = function OrderProvider(_ref) {
                 state.carts["businessId:".concat(result.result.business_id)] = result.result;
                 events.emit('cart_updated', result.result);
               } else {
-                console.log('result', result);
-
-                if (result !== null && result !== void 0 && result.type && (result === null || result === void 0 ? void 0 : result.type) === 'question') {
-                  console.log('result inside', result);
-                  setConfirm({
-                    show: true,
-                    content: result.result,
-                    onAccept: function onAccept() {
-                      offerData.force = true;
-                      applyOffer(offerData);
-                    }
-                  });
-                }
-
                 alertInfo = {
                   show: true,
                   content: result.result
                 };
-                alertInfo.title = t('OFFER', 'Offer');
-                alertInfo.acceptText = t('ACCEPT', 'Accept');
 
-                alertInfo.onAccept = function () {
-                  offerData.force = true;
-                  applyOffer(offerData);
-                };
+                if (result !== null && result !== void 0 && result.type && (result === null || result === void 0 ? void 0 : result.type) === 'question' && result !== null && result !== void 0 && result.forceable) {
+                  alertInfo.title = t('OFFER', 'Offer');
+                  alertInfo.acceptText = t('ACCEPT', 'Accept');
+
+                  alertInfo.onAccept = function () {
+                    offerData.force = true;
+                    applyOffer(offerData);
+                    setAlert({
+                      show: false
+                    });
+                  };
+                }
 
                 setAlert(alertInfo);
               }

@@ -587,24 +587,15 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
       } else {
-        console.log('result', result)
-        if (result?.type && result?.type === 'question') {
-          console.log('result inside', result)
-          setConfirm({
-            show: true,
-            content: result.result,
-            onAccept: () => {
-              offerData.force = true
-              applyOffer(offerData)
-            }
-          })
-        }
-        let alertInfo = { show: true, content: result.result }
-        alertInfo.title = t('OFFER', 'Offer')
-        alertInfo.acceptText = t('ACCEPT', 'Accept')
-        alertInfo.onAccept = () => {
-          offerData.force = true
-          applyOffer(offerData)
+        const alertInfo = { show: true, content: result.result }
+        if (result?.type && result?.type === 'question' && result?.forceable) {
+          alertInfo.title = t('OFFER', 'Offer')
+          alertInfo.acceptText = t('ACCEPT', 'Accept')
+          alertInfo.onAccept = () => {
+            offerData.force = true
+            applyOffer(offerData)
+            setAlert({ show: false })
+          }
         }
         setAlert(alertInfo)
       }
