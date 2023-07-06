@@ -587,6 +587,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         state.carts[`businessId:${result.result.business_id}`] = result.result
         events.emit('cart_updated', result.result)
       } else {
+        console.log('result', result)
         if (result?.type && result?.type === 'question') {
           setConfirm({
             show: true,
