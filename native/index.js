@@ -27,6 +27,7 @@ import { ExamineClick } from '../src/components/ExamineClick'
 import { FavoriteList } from '../src/components/FavoriteList'
 import { FloatingButton } from '../src/components/FloatingButton'
 import { ForgotPasswordForm } from '../src/components/ForgotPasswordForm'
+import { GiftCardOrdersList } from '../src/components/GiftCard/GiftCardOrdersList'
 import { LanguageSelector } from '../src/components/LanguageSelector'
 import { LoginForm } from '../src/components/LoginForm'
 import { LogoutAction } from '../src/components/LogoutAction'
@@ -140,6 +141,7 @@ export {
   FavoriteList,
   FloatingButton,
   ForgotPasswordForm,
+  GiftCardOrdersList,
   LanguageSelector,
   LoginForm,
   LogoutAction,
