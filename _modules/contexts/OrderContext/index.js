@@ -61,7 +61,8 @@ var OrderProvider = function OrderProvider(_ref) {
     isDisableToast = _ref.isDisableToast,
     franchiseId = _ref.franchiseId,
     isDisabledDefaultOpts = _ref.isDisabledDefaultOpts,
-    businessSlug = _ref.businessSlug;
+    businessSlug = _ref.businessSlug,
+    userAgent = _ref.userAgent;
   var _useState = (0, _react.useState)({
       show: false
     }),
@@ -1493,7 +1494,7 @@ var OrderProvider = function OrderProvider(_ref) {
    */
   var placeCart = /*#__PURE__*/function () {
     var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(cardId, data) {
-      var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
+      var countryCode, customerFromLocalStorage, userCustomerId, body, headers, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
       return _regeneratorRuntime().wrap(function _callee16$(_context16) {
         while (1) switch (_context16.prev = _context16.next) {
           case 0:
@@ -1513,20 +1514,26 @@ var OrderProvider = function OrderProvider(_ref) {
             body = _objectSpread(_objectSpread({}, data), {}, {
               user_id: userCustomerId || session.user.id
             });
-            _context16.next = 12;
+            headers = {
+              'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
+              'X-Country-Code-X': countryCode
+            };
+            if (userAgent) {
+              headers = _objectSpread(_objectSpread({}, headers), {}, {
+                'User-Agent': userAgent
+              });
+            }
+            _context16.next = 14;
             return ordering.setAccessToken(session.token).carts(cardId).place(body, {
-              headers: {
-                'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId(),
-                'X-Country-Code-X': countryCode
-              }
+              headers: headers
             });
-          case 12:
+          case 14:
             _yield$ordering$setAc16 = _context16.sent;
             _yield$ordering$setAc17 = _yield$ordering$setAc16.content;
             error = _yield$ordering$setAc17.error;
             result = _yield$ordering$setAc17.result;
             if (error) {
-              _context16.next = 20;
+              _context16.next = 22;
               break;
             }
             if (result.status !== 1) {
@@ -1547,9 +1554,9 @@ var OrderProvider = function OrderProvider(_ref) {
               };
               events.emit('order_placed', orderObject);
             }
-            _context16.next = 23;
+            _context16.next = 25;
             break;
-          case 20:
+          case 22:
             setAlert({
               show: true,
               content: result
@@ -1558,7 +1565,7 @@ var OrderProvider = function OrderProvider(_ref) {
               loading: false
             }));
             return _context16.abrupt("return");
-          case 23:
+          case 25:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
@@ -1566,8 +1573,8 @@ var OrderProvider = function OrderProvider(_ref) {
               error: error,
               result: result
             });
-          case 27:
-            _context16.prev = 27;
+          case 29:
+            _context16.prev = 29;
             _context16.t0 = _context16["catch"](0);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
@@ -1576,11 +1583,11 @@ var OrderProvider = function OrderProvider(_ref) {
               error: true,
               result: [_context16.t0.message]
             });
-          case 31:
+          case 33:
           case "end":
             return _context16.stop();
         }
-      }, _callee16, null, [[0, 27]]);
+      }, _callee16, null, [[0, 29]]);
     }));
     return function placeCart(_x25, _x26) {
       return _ref18.apply(this, arguments);
