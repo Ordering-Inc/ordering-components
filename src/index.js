@@ -29,6 +29,7 @@ import { FacebookPixel } from './components/FacebookPixel'
 import { FavoriteList } from './components/FavoriteList'
 import { FirebaseGoogleLoginButton } from './components/FirebaseGoogleLoginButton'
 import { ForgotPasswordForm } from './components/ForgotPasswordForm'
+import { GiftCardOrdersList } from './components/GiftCard/GiftCardOrdersList'
 import { GoogleLoginButton } from './components/GoogleLoginButton'
 import { GoogleAutocompleteInput } from './components/GoogleAutocompleteInput'
 import { GoogleMaps, GoogleMapsMap } from './components/GoogleMaps'
@@ -199,6 +200,7 @@ export {
   FirebaseGoogleLoginButton,
   GoogleLoginButton,
   ForgotPasswordForm,
+  GiftCardOrdersList,
   GoogleAutocompleteInput,
   GoogleMaps,
   GoogleMapsMap,
