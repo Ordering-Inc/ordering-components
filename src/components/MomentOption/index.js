@@ -141,7 +141,7 @@ export const MomentOption = (props) => {
 
   const getActualSchedule = () => {
     const dayNumber = dayjs(dateSelected).day()
-    const schedule = business.schedule.find((s, i) => dayNumber === i)
+    const schedule = business?.schedule?.find?.((s, i) => dayNumber === i)
     return schedule?.enabled && schedule
   }
 

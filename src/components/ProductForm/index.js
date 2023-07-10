@@ -466,7 +466,7 @@ export const ProductForm = (props) => {
       handleCustomSave && handleCustomSave()
     }
     const errors = checkErrors()
-    if (Object.keys(errors).length === 0) {
+    if (Object.keys(errors).length === 0 || isService) {
       let successful = true
       if (useOrderContext) {
         successful = false

@@ -20,7 +20,7 @@ export const MultiCartCreate = (props) => {
   const [orderState, { refreshOrderOptions }] = useOrder()
 
   const createMultiCart = async () => {
-    const cartList = Object.values(orderState?.carts).filter(cart => cart?.valid && cart?.status !== 2).map(cart => cart?.uuid)
+    const cartList = Object.values(orderState?.carts).filter(cart => cart?.valid && cart?.status !== 2 && cart?.business_id).map(cart => cart?.uuid)
     if (cartList?.length === 1) {
       handleOnRedirectCheckout &&
       handleOnRedirectCheckout(cartList?.[0])
