@@ -243,6 +243,12 @@ Object.defineProperty(exports, "ForgotPasswordForm", {
     return _ForgotPasswordForm.ForgotPasswordForm;
   }
 });
+Object.defineProperty(exports, "GiftCardOrdersList", {
+  enumerable: true,
+  get: function get() {
+    return _GiftCardOrdersList.GiftCardOrdersList;
+  }
+});
 Object.defineProperty(exports, "LanguageContext", {
   enumerable: true,
   get: function get() {
@@ -842,6 +848,7 @@ var _ExamineClick = require("../src/components/ExamineClick");
 var _FavoriteList = require("../src/components/FavoriteList");
 var _FloatingButton = require("../src/components/FloatingButton");
 var _ForgotPasswordForm = require("../src/components/ForgotPasswordForm");
+var _GiftCardOrdersList = require("../src/components/GiftCard/GiftCardOrdersList");
 var _LanguageSelector = require("../src/components/LanguageSelector");
 var _LoginForm = require("../src/components/LoginForm");
 var _LogoutAction = require("../src/components/LogoutAction");

@@ -363,6 +363,12 @@ Object.defineProperty(exports, "ForgotPasswordForm", {
     return _ForgotPasswordForm.ForgotPasswordForm;
   }
 });
+Object.defineProperty(exports, "GiftCardOrdersList", {
+  enumerable: true,
+  get: function get() {
+    return _GiftCardOrdersList.GiftCardOrdersList;
+  }
+});
 Object.defineProperty(exports, "GiftCardsList", {
   enumerable: true,
   get: function get() {
@@ -1204,6 +1210,7 @@ var _FacebookPixel = require("./components/FacebookPixel");
 var _FavoriteList = require("./components/FavoriteList");
 var _FirebaseGoogleLoginButton = require("./components/FirebaseGoogleLoginButton");
 var _ForgotPasswordForm = require("./components/ForgotPasswordForm");
+var _GiftCardOrdersList = require("./components/GiftCard/GiftCardOrdersList");
 var _GoogleLoginButton = require("./components/GoogleLoginButton");
 var _GoogleAutocompleteInput = require("./components/GoogleAutocompleteInput");
 var _GoogleMaps = require("./components/GoogleMaps");
