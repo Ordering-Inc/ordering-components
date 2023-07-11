@@ -399,8 +399,8 @@ export const OrderList = props => {
       setOrderList({ ...orderList, loading: true })
       const found = orderList.orders.find(_order => _order.id === order.id)
       let orders = []
-      showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id))
       if (found) {
+        showToast(ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id))
         orders = orderList.orders.filter(_order => {
           if (_order.id === order.id && _order?.driver?.id !== order?.driver?.id && session?.user?.level === 4) {
             return false
