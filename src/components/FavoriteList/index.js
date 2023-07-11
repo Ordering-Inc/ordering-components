@@ -20,7 +20,7 @@ export const FavoriteList = (props) => {
   const [ordering] = useApi()
   const socket = useWebsocket()
   const [{ user, token }] = useSession()
-  const [, { reorder }] = useOrder()
+  const [orderStatus, { reorder }] = useOrder()
 
   const [favoriteList, setFavoriteList] = useState({ loading: false, favorites: [], error: null })
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
@@ -141,7 +141,7 @@ export const FavoriteList = (props) => {
       where = {
         conditions,
         conector: 'AND'
-      }
+      } 
     }
     const requestOptions = {
       method: 'GET',
@@ -156,6 +156,7 @@ export const FavoriteList = (props) => {
     let fetchEndpoint = `${ordering.root}/${originalURL}?where=${JSON.stringify(where)}`
     if (location) fetchEndpoint = `${fetchEndpoint}&location=${location}`
     if (propsToFetch) fetchEndpoint = `${fetchEndpoint}&params=${propsToFetch}`
+    fetchEndpoint = `${fetchEndpoint}&type=${orderStatus?.options?.type}`
 
     const response = await fetch(fetchEndpoint, requestOptions)
     return await response.json()
