@@ -54,6 +54,7 @@ var FavoriteList = function FavoriteList(props) {
     token = _useSession2$.token;
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
+    orderStatus = _useOrder2[0],
     reorder = _useOrder2[1].reorder;
   var _useState = (0, _react.useState)({
       loading: false,
@@ -243,6 +244,7 @@ var FavoriteList = function FavoriteList(props) {
    */
   var getOriginalList = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+      var _orderStatus$options;
       var where, conditions, requestOptions, fetchEndpoint, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -271,15 +273,16 @@ var FavoriteList = function FavoriteList(props) {
             fetchEndpoint = "".concat(ordering.root, "/").concat(originalURL, "?where=").concat(JSON.stringify(where));
             if (location) fetchEndpoint = "".concat(fetchEndpoint, "&location=").concat(location);
             if (propsToFetch) fetchEndpoint = "".concat(fetchEndpoint, "&params=").concat(propsToFetch);
-            _context2.next = 10;
+            fetchEndpoint = "".concat(fetchEndpoint, "&type=").concat(orderStatus === null || orderStatus === void 0 || (_orderStatus$options = orderStatus.options) === null || _orderStatus$options === void 0 ? void 0 : _orderStatus$options.type);
+            _context2.next = 11;
             return fetch(fetchEndpoint, requestOptions);
-          case 10:
+          case 11:
             response = _context2.sent;
-            _context2.next = 13;
+            _context2.next = 14;
             return response.json();
-          case 13:
-            return _context2.abrupt("return", _context2.sent);
           case 14:
+            return _context2.abrupt("return", _context2.sent);
+          case 15:
           case "end":
             return _context2.stop();
         }
