@@ -14,6 +14,7 @@ export const DashboardOrdersList = (props) => {
     driverId,
     customerId,
     businessId,
+    franchiseId,
     orderIds,
     deletedOrderIds,
     orderStatus,
@@ -181,6 +182,16 @@ export const DashboardOrdersList = (props) => {
           value: businessId
         }
       )
+    }
+
+    if (franchiseId) {
+      conditions.push({
+        attribute: 'ref_business',
+        conditions: [{
+          attribute: 'franchise_id',
+          value: franchiseId
+        }]
+      })
     }
 
     if (timeStatus) {
