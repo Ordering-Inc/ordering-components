@@ -30,9 +30,11 @@ export const OrderListGroups = (props) => {
   const [, { showToast }] = useToast()
   const [{ configs }] = useConfig()
   const isLogisticActivated = configs?.logistic_module?.value
-  const ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled']
+  const combineTabs = configs?.combine_pending_and_progress_orders?.value === '1'
+  const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled']: ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
+    active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23],
     pending: orderGroupStatusCustom?.pending ?? [0, 13],
     inProgress: orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23],
     completed: orderGroupStatusCustom?.completed ?? [1, 11, 15],
@@ -53,6 +55,11 @@ export const OrderListGroups = (props) => {
   }
 
   let [ordersGroup, setOrdersGroup] = useState({
+    active: {
+      ...orderStructure,
+      defaultFilter: ordersGroupStatus.active,
+      currentFilter: ordersGroupStatus.active
+    },
     pending: {
       ...orderStructure,
       defaultFilter: ordersGroupStatus.pending,
@@ -74,7 +81,7 @@ export const OrderListGroups = (props) => {
       currentFilter: ordersGroupStatus.cancelled
     }
   })
-  const [currentTabSelected, setCurrentTabSelected] = useState('pending')
+  const [currentTabSelected, setCurrentTabSelected] = useState(combineTabs ? 'active' : 'pending')
   const [logisticOrders, setlogisticOrders] = useState({ loading: false, error: null, orders: null })
   const [messages, setMessages] = useState({ loading: false, error: null, messages: [] })
   const [currentFilters, setCurrentFilters] = useState(null)
@@ -570,6 +577,7 @@ export const OrderListGroups = (props) => {
 
   const getStatusById = (id) => {
     if (!id && id !== 0) return
+    const active = orderGroupStatusCustom?.inProgress ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21]
     const pending = orderGroupStatusCustom?.pending ?? [0, 13]
     const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21]
     const completed = orderGroupStatusCustom?.completed ?? [1, 11, 15]
@@ -583,7 +591,13 @@ export const OrderListGroups = (props) => {
           ? 'completed'
           : 'cancelled'
 
-    return status
+    const combinedStatus = active.includes(id)
+    ? 'active'
+    :  completed.includes(id)
+        ? 'completed'
+        : 'cancelled'
+
+    return combineTabs ? combinedStatus : status
   }
 
   const actionOrderToTab = (orderAux, status, type) => {
@@ -844,7 +858,7 @@ export const OrderListGroups = (props) => {
         delete order.subtotal
 
         const currentFilter = ordersGroup[getStatusById(order?.status) ?? '']?.currentFilter
-
+        
         !currentFilter.includes(order.status)
           ? actionOrderToTab(order, getStatusById(order?.status), 'remove')
           : actionOrderToTab(order, getStatusById(order?.status), 'add')
