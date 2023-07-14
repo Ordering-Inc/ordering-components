@@ -6,7 +6,8 @@ import { useSession } from '../../../contexts/SessionContext'
 export const ExportCSV = (props) => {
   const {
     UIComponent,
-    filterValues
+    filterValues,
+    franchiseId
   } = props
   const [ordering] = useApi()
   const [{ token, loading }] = useSession()
@@ -28,6 +29,16 @@ export const ExportCSV = (props) => {
       }
 
       const filterConditons = []
+
+      if (franchiseId) {
+        filterConditons.push({
+          attribute: 'ref_business',
+          conditions: [{
+            attribute: 'franchise_id',
+            value: franchiseId
+          }]
+        })
+      }
 
       if (filterApply) {
         if (Object.keys(filterValues).length) {
@@ -106,7 +117,7 @@ export const ExportCSV = (props) => {
           }
         }
       }
-      const functionFetch = filterApply
+      const functionFetch = (filterApply || franchiseId)
         ? `${ordering.root}/orders.csv?mode=dashboard&orderBy=id&where=${JSON.stringify(filterConditons)}`
         : `${ordering.root}/orders.csv?mode=dashboard&orderBy=id`
 
