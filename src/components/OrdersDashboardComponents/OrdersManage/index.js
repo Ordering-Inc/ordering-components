@@ -15,6 +15,7 @@ export const OrdersManage = (props) => {
     driverId,
     customerId,
     businessId,
+    franchiseId,
     isOnlyDelivery
   } = props
 
@@ -531,6 +532,15 @@ export const OrdersManage = (props) => {
       additionalConditions.push({
         attribute: 'business_id',
         value: businessId
+      })
+    }
+    if (franchiseId) {
+      conditions.push({
+        attribute: 'ref_business',
+        conditions: [{
+          attribute: 'franchise_id',
+          value: franchiseId
+        }]
       })
     }
     if (timeStatus) {
