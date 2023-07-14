@@ -36,7 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderListGroups = function OrderListGroups(props) {
-  var _configs$logistic_mod, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _paginationSettings$p, _ordersGroup$currentT15;
+  var _configs$logistic_mod, _configs$combine_pend, _orderGroupStatusCust, _orderGroupStatusCust2, _orderGroupStatusCust3, _orderGroupStatusCust4, _orderGroupStatusCust5, _paginationSettings$p, _ordersGroup$currentT15;
   var UIComponent = props.UIComponent,
     orderBy = props.orderBy,
     isIos = props.isIos,
@@ -68,12 +68,14 @@ var OrderListGroups = function OrderListGroups(props) {
     _useConfig2 = _slicedToArray(_useConfig, 1),
     configs = _useConfig2[0].configs;
   var isLogisticActivated = configs === null || configs === void 0 || (_configs$logistic_mod = configs.logistic_module) === null || _configs$logistic_mod === void 0 ? void 0 : _configs$logistic_mod.value;
-  var ordersStatusArray = ['pending', 'inProgress', 'completed', 'cancelled'];
+  var combineTabs = (configs === null || configs === void 0 || (_configs$combine_pend = configs.combine_pending_and_progress_orders) === null || _configs$combine_pend === void 0 ? void 0 : _configs$combine_pend.value) === '1';
+  var ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled'];
   var ordersGroupStatus = {
-    pending: (_orderGroupStatusCust = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust !== void 0 ? _orderGroupStatusCust : [0, 13],
-    inProgress: (_orderGroupStatusCust2 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust2 !== void 0 ? _orderGroupStatusCust2 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23],
-    completed: (_orderGroupStatusCust3 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust3 !== void 0 ? _orderGroupStatusCust3 : [1, 11, 15],
-    cancelled: (_orderGroupStatusCust4 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.cancelled) !== null && _orderGroupStatusCust4 !== void 0 ? _orderGroupStatusCust4 : [2, 5, 6, 10, 12, 16, 17]
+    active: (_orderGroupStatusCust = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.active) !== null && _orderGroupStatusCust !== void 0 ? _orderGroupStatusCust : [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23],
+    pending: (_orderGroupStatusCust2 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust2 !== void 0 ? _orderGroupStatusCust2 : [0, 13],
+    inProgress: (_orderGroupStatusCust3 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust3 !== void 0 ? _orderGroupStatusCust3 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21, 22, 23],
+    completed: (_orderGroupStatusCust4 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust4 !== void 0 ? _orderGroupStatusCust4 : [1, 11, 15],
+    cancelled: (_orderGroupStatusCust5 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.cancelled) !== null && _orderGroupStatusCust5 !== void 0 ? _orderGroupStatusCust5 : [2, 5, 6, 10, 12, 16, 17]
   };
   var orderStructure = {
     loading: false,
@@ -86,6 +88,10 @@ var OrderListGroups = function OrderListGroups(props) {
     }
   };
   var _useState = (0, _react.useState)({
+      active: _objectSpread(_objectSpread({}, orderStructure), {}, {
+        defaultFilter: ordersGroupStatus.active,
+        currentFilter: ordersGroupStatus.active
+      }),
       pending: _objectSpread(_objectSpread({}, orderStructure), {}, {
         defaultFilter: ordersGroupStatus.pending,
         currentFilter: ordersGroupStatus.pending
@@ -106,7 +112,7 @@ var OrderListGroups = function OrderListGroups(props) {
     _useState2 = _slicedToArray(_useState, 2),
     ordersGroup = _useState2[0],
     setOrdersGroup = _useState2[1];
-  var _useState3 = (0, _react.useState)('pending'),
+  var _useState3 = (0, _react.useState)(combineTabs ? 'active' : 'pending'),
     _useState4 = _slicedToArray(_useState3, 2),
     currentTabSelected = _useState4[0],
     setCurrentTabSelected = _useState4[1];
@@ -822,15 +828,17 @@ var OrderListGroups = function OrderListGroups(props) {
     return filterByIdUnique(totalOrders);
   };
   var getStatusById = function getStatusById(id) {
-    var _orderGroupStatusCust5, _orderGroupStatusCust6, _orderGroupStatusCust7;
+    var _orderGroupStatusCust6, _orderGroupStatusCust7, _orderGroupStatusCust8, _orderGroupStatusCust9;
     if (!id && id !== 0) return;
-    var pending = (_orderGroupStatusCust5 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust5 !== void 0 ? _orderGroupStatusCust5 : [0, 13];
-    var inProgress = (_orderGroupStatusCust6 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust6 !== void 0 ? _orderGroupStatusCust6 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21];
-    var completed = (_orderGroupStatusCust7 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust7 !== void 0 ? _orderGroupStatusCust7 : [1, 11, 15];
+    var active = (_orderGroupStatusCust6 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust6 !== void 0 ? _orderGroupStatusCust6 : [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21];
+    var pending = (_orderGroupStatusCust7 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.pending) !== null && _orderGroupStatusCust7 !== void 0 ? _orderGroupStatusCust7 : [0, 13];
+    var inProgress = (_orderGroupStatusCust8 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.inProgress) !== null && _orderGroupStatusCust8 !== void 0 ? _orderGroupStatusCust8 : [3, 4, 7, 8, 9, 14, 18, 19, 20, 21];
+    var completed = (_orderGroupStatusCust9 = orderGroupStatusCustom === null || orderGroupStatusCustom === void 0 ? void 0 : orderGroupStatusCustom.completed) !== null && _orderGroupStatusCust9 !== void 0 ? _orderGroupStatusCust9 : [1, 11, 15];
     // const cancelled = orderGroupStatusCustom?.cancelled ?? [2, 5, 6, 10, 12, 16, 17]
 
     var status = pending.includes(id) ? 'pending' : inProgress.includes(id) ? 'inProgress' : completed.includes(id) ? 'completed' : 'cancelled';
-    return status;
+    var combinedStatus = active.includes(id) ? 'active' : completed.includes(id) ? 'completed' : 'cancelled';
+    return combineTabs ? combinedStatus : status;
   };
   var actionOrderToTab = function actionOrderToTab(orderAux, status, type) {
     var _ordersGroup$status;
