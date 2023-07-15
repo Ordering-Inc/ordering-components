@@ -31,7 +31,7 @@ export const OrderListGroups = (props) => {
   const [{ configs }] = useConfig()
   const isLogisticActivated = configs?.logistic_module?.value
   const combineTabs = configs?.combine_pending_and_progress_orders?.value === '1'
-  const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled']: ['pending', 'inProgress', 'completed', 'cancelled']
+  const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
     active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23],
@@ -288,6 +288,7 @@ export const OrderListGroups = (props) => {
     }
 
     if (newFetch) {
+      // eslint-disable-next-line no-unused-expressions
       ordersStatusArray?.map(tab => {
         ordersGroup = {
           ...ordersGroup,
@@ -592,8 +593,8 @@ export const OrderListGroups = (props) => {
           : 'cancelled'
 
     const combinedStatus = active.includes(id)
-    ? 'active'
-    :  completed.includes(id)
+      ? 'active'
+      : completed.includes(id)
         ? 'completed'
         : 'cancelled'
 
@@ -656,6 +657,7 @@ export const OrderListGroups = (props) => {
     } else {
       const status = getStatusById(order?.order_group?.orders?.[0]?.status)
       let orderList
+      // eslint-disable-next-line no-unused-expressions
       ordersGroups?.map(order => {
         orderList = ordersGroup[status]?.orders
         const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
@@ -751,6 +753,7 @@ export const OrderListGroups = (props) => {
       const result = await Promise.all(orderIds?.map(id => setCustomerReview({ ...body, order_id: id, user_id: customerId })))
       if (result?.length) {
         const orders = ordersGroup[currentTabSelected].orders
+        // eslint-disable-next-line no-unused-expressions
         result?.map(order => {
           let orderFound = orders.find(o => o.id === order.order_id)
           const idxOrderFound = orders.findIndex(o => o.id === order.order_id)
@@ -858,7 +861,7 @@ export const OrderListGroups = (props) => {
         delete order.subtotal
 
         const currentFilter = ordersGroup[getStatusById(order?.status) ?? '']?.currentFilter
-        
+
         !currentFilter.includes(order.status)
           ? actionOrderToTab(order, getStatusById(order?.status), 'remove')
           : actionOrderToTab(order, getStatusById(order?.status), 'add')
@@ -927,6 +930,7 @@ export const OrderListGroups = (props) => {
     socket.join(ordersRoom)
     socket.socket.on('connect', () => {
       socket.join(ordersRoom)
+      loadOrders({ newFetch: true })
     })
     return () => {
       socket.off('orders_register', handleAddNewOrder)
@@ -1039,6 +1043,22 @@ export const OrderListGroups = (props) => {
       events.off('customer_reviewed', handleCustomerReviewed)
     }
   }, [ordersGroup])
+
+  useEffect(() => {
+    if (socket?.socket && session?.auth) {
+      // eslint-disable-next-line no-unused-expressions
+      socket?.socket?.on('connect', () => {
+        loadOrders({ newFetch: true })
+      })
+    }
+
+    return () => {
+      if (socket?.socket) {
+        // eslint-disable-next-line no-unused-expressions
+        socket?.socket?.off('connect')
+      }
+    }
+  }, [socket?.socket, session.auth])
 
   return (
     <>
