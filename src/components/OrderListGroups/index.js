@@ -288,7 +288,6 @@ export const OrderListGroups = (props) => {
     }
 
     if (newFetch) {
-      // eslint-disable-next-line no-unused-expressions
       ordersStatusArray?.map(tab => {
         ordersGroup = {
           ...ordersGroup,
@@ -657,7 +656,6 @@ export const OrderListGroups = (props) => {
     } else {
       const status = getStatusById(order?.order_group?.orders?.[0]?.status)
       let orderList
-      // eslint-disable-next-line no-unused-expressions
       ordersGroups?.map(order => {
         orderList = ordersGroup[status]?.orders
         const indexToUpdate = orderList?.findIndex((o) => o?.id === order?.id)
@@ -753,7 +751,6 @@ export const OrderListGroups = (props) => {
       const result = await Promise.all(orderIds?.map(id => setCustomerReview({ ...body, order_id: id, user_id: customerId })))
       if (result?.length) {
         const orders = ordersGroup[currentTabSelected].orders
-        // eslint-disable-next-line no-unused-expressions
         result?.map(order => {
           let orderFound = orders.find(o => o.id === order.order_id)
           const idxOrderFound = orders.findIndex(o => o.id === order.order_id)
@@ -1046,7 +1043,6 @@ export const OrderListGroups = (props) => {
 
   useEffect(() => {
     if (socket?.socket && session?.auth) {
-      // eslint-disable-next-line no-unused-expressions
       socket?.socket?.on('connect', () => {
         loadOrders({ newFetch: true })
       })
@@ -1054,7 +1050,6 @@ export const OrderListGroups = (props) => {
 
     return () => {
       if (socket?.socket) {
-        // eslint-disable-next-line no-unused-expressions
         socket?.socket?.off('connect')
       }
     }
