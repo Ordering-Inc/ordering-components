@@ -31,7 +31,7 @@ export const OrderListGroups = (props) => {
   const [{ configs }] = useConfig()
   const isLogisticActivated = configs?.logistic_module?.value
   const combineTabs = configs?.combine_pending_and_progress_orders?.value === '1'
-  const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled']: ['pending', 'inProgress', 'completed', 'cancelled']
+  const ordersStatusArray = combineTabs ? ['active', 'completed', 'cancelled'] : ['pending', 'inProgress', 'completed', 'cancelled']
 
   const ordersGroupStatus = {
     active: orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21, 22, 23],
@@ -592,8 +592,8 @@ export const OrderListGroups = (props) => {
           : 'cancelled'
 
     const combinedStatus = active.includes(id)
-    ? 'active'
-    :  completed.includes(id)
+      ? 'active'
+      : completed.includes(id)
         ? 'completed'
         : 'cancelled'
 
@@ -858,7 +858,7 @@ export const OrderListGroups = (props) => {
         delete order.subtotal
 
         const currentFilter = ordersGroup[getStatusById(order?.status) ?? '']?.currentFilter
-        
+
         !currentFilter.includes(order.status)
           ? actionOrderToTab(order, getStatusById(order?.status), 'remove')
           : actionOrderToTab(order, getStatusById(order?.status), 'add')
@@ -927,6 +927,7 @@ export const OrderListGroups = (props) => {
     socket.join(ordersRoom)
     socket.socket.on('connect', () => {
       socket.join(ordersRoom)
+      loadOrders({ newFetch: true })
     })
     return () => {
       socket.off('orders_register', handleAddNewOrder)
@@ -1039,6 +1040,20 @@ export const OrderListGroups = (props) => {
       events.off('customer_reviewed', handleCustomerReviewed)
     }
   }, [ordersGroup])
+
+  useEffect(() => {
+    if (socket?.socket && session?.auth) {
+      socket?.socket?.on('connect', () => {
+        loadOrders({ newFetch: true })
+      })
+    }
+
+    return () => {
+      if (socket?.socket) {
+        socket?.socket?.off('connect')
+      }
+    }
+  }, [socket?.socket, session.auth])
 
   return (
     <>
