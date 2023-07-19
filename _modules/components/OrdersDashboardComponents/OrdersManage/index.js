@@ -42,6 +42,7 @@ var OrdersManage = function OrdersManage(props) {
     driverId = props.driverId,
     customerId = props.customerId,
     businessId = props.businessId,
+    franchiseId = props.franchiseId,
     isOnlyDelivery = props.isOnlyDelivery;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -825,6 +826,15 @@ var OrdersManage = function OrdersManage(props) {
                 value: businessId
               });
             }
+            if (franchiseId) {
+              conditions.push({
+                attribute: 'ref_business',
+                conditions: [{
+                  attribute: 'franchise_id',
+                  value: franchiseId
+                }]
+              });
+            }
             if (timeStatus) {
               additionalConditions.push({
                 attribute: 'time_status',
@@ -897,7 +907,7 @@ var OrdersManage = function OrdersManage(props) {
                 conector: 'AND'
               };
             }
-            _context5.prev = 13;
+            _context5.prev = 14;
             setNumberOfOrdersByStatus(_objectSpread(_objectSpread({}, numberOfOrdersByStatus), {}, {
               loading: true
             }));
@@ -908,13 +918,13 @@ var OrdersManage = function OrdersManage(props) {
                 Authorization: "Bearer ".concat(token)
               }
             };
-            _context5.next = 18;
+            _context5.next = 19;
             return fetch("".concat(ordering.root, "/orders/dashboard?v=2&where=").concat(JSON.stringify(where)), requestOptions);
-          case 18:
+          case 19:
             response = _context5.sent;
-            _context5.next = 21;
+            _context5.next = 22;
             return response.json();
-          case 21:
+          case 22:
             content = _context5.sent;
             if (!(content !== null && content !== void 0 && content.error)) {
               _orderStatusNumbers = Object.keys(orderStatuesList).reduce(function (sum, curr, index) {
@@ -949,20 +959,20 @@ var OrdersManage = function OrdersManage(props) {
                 error: true
               }));
             }
-            _context5.next = 28;
+            _context5.next = 29;
             break;
-          case 25:
-            _context5.prev = 25;
-            _context5.t0 = _context5["catch"](13);
+          case 26:
+            _context5.prev = 26;
+            _context5.t0 = _context5["catch"](14);
             setNumberOfOrdersByStatus(_objectSpread(_objectSpread({}, numberOfOrdersByStatus), {}, {
               loading: false,
               error: [_context5.t0.message]
             }));
-          case 28:
+          case 29:
           case "end":
             return _context5.stop();
         }
-      }, _callee5, null, [[13, 25]]);
+      }, _callee5, null, [[14, 26]]);
     }));
     return function getOrderNumbersByStatus() {
       return _ref5.apply(this, arguments);
