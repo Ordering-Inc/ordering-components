@@ -39,7 +39,7 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 var BusinessList = function BusinessList(props) {
-  var _paginationSettings$p, _configs$advanced_bus, _ref, _orderingTheme$busine, _orderState$options, _configs$unaddressed_, _orderState$options2;
+  var _paginationSettings$p, _configs$advanced_bus, _ref, _orderingTheme$busine, _orderState$options, _configs$unaddressed_, _orderState$options2, _orderState$options20, _orderState$options21, _orderState$options22, _orderState$options23, _orderState$options24, _orderState$options25;
   var UIComponent = props.UIComponent,
     initialBuisnessType = props.initialBuisnessType,
     initialOrderType = props.initialOrderType,
@@ -519,10 +519,10 @@ var BusinessList = function BusinessList(props) {
     if (!isDoordash && !franchiseId) {
       getBusinesses(true, currentPageParam);
     }
-  }, [JSON.stringify(orderState.options), ordering === null || ordering === void 0 ? void 0 : ordering.countryCode, orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
+  }, [(_orderState$options20 = orderState.options) === null || _orderState$options20 === void 0 ? void 0 : _orderState$options20.type, (_orderState$options21 = orderState.options) === null || _orderState$options21 === void 0 ? void 0 : _orderState$options21.moment, (_orderState$options22 = orderState.options) === null || _orderState$options22 === void 0 ? void 0 : _orderState$options22.city_id, (_orderState$options23 = orderState.options) === null || _orderState$options23 === void 0 ? void 0 : _orderState$options23.address_id, (_orderState$options24 = orderState.options) === null || _orderState$options24 === void 0 || (_orderState$options24 = _orderState$options24.address) === null || _orderState$options24 === void 0 ? void 0 : _orderState$options24.address, JSON.stringify((_orderState$options25 = orderState.options) === null || _orderState$options25 === void 0 || (_orderState$options25 = _orderState$options25.address) === null || _orderState$options25 === void 0 ? void 0 : _orderState$options25.location), ordering === null || ordering === void 0 ? void 0 : ordering.countryCode, orderState.loading, businessTypeSelected, priceLevelSelected, searchValue, initialPricelevel, initialBuisnessType, timeLimitValue, orderByValue, maxDeliveryFee, businessId]);
   (0, _react.useEffect)(function () {
-    var _orderState$options20;
-    if (orderState.loading || !((_orderState$options20 = orderState.options) !== null && _orderState$options20 !== void 0 && (_orderState$options20 = _orderState$options20.address) !== null && _orderState$options20 !== void 0 && _orderState$options20.location) && !isAllowUnaddressOrderType && !asDashboard && !customLocation) {
+    var _orderState$options26;
+    if (orderState.loading || !((_orderState$options26 = orderState.options) !== null && _orderState$options26 !== void 0 && (_orderState$options26 = _orderState$options26.address) !== null && _orderState$options26 !== void 0 && _orderState$options26.location) && !isAllowUnaddressOrderType && !asDashboard && !customLocation) {
       setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
         loading: false
       }));
