@@ -385,7 +385,12 @@ export const BusinessList = (props) => {
       getBusinesses(true, currentPageParam)
     }
   }, [
-    JSON.stringify(orderState.options),
+    orderState.options?.type,
+    orderState.options?.moment,
+    orderState.options?.city_id,
+    orderState.options?.address_id,
+    orderState.options?.address?.address,
+    JSON.stringify(orderState.options?.address?.location),
     ordering?.countryCode,
     orderState.loading,
     businessTypeSelected,
