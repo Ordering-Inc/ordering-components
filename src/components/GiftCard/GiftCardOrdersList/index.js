@@ -54,8 +54,8 @@ export const GiftCardOrdersList = props => {
       }
     }
     const fetchEndpoint = where
-      ? `${ordering.root}/gift_cards?page=${page}&page_size=${pageSize}&&where=${JSON.stringify(where)}`
-      : `${ordering.root}/gift_cards?page=${page}&page_size=${pageSize}`
+      ? `${ordering.root}/gift_cards?orderBy=-id&&page=${page}&page_size=${pageSize}&&where=${JSON.stringify(where)}`
+      : `${ordering.root}/gift_cards?orderBy=-id&&page=${page}&page_size=${pageSize}`
 
     return await fetch(fetchEndpoint, requestOptions)
   }
