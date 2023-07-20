@@ -138,7 +138,7 @@ export const LoginForm = (props) => {
                 setFormState({
                   result: {
                     error: true,
-                    result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                    result: [t('YOU_DO_NOT_HAVE_PERMISSION', 'Your session have been closed')]
                   },
                   loading: false
                 })
