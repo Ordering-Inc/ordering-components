@@ -19,6 +19,8 @@ var _EventContext = require("../../contexts/EventContext");
 
 var _SessionContext = require("../../contexts/SessionContext");
 
+var _ConfigContext = require("../../contexts/ConfigContext");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -76,6 +78,10 @@ var PaymentOptions = function PaymentOptions(props) {
   var _useApi = (0, _ApiContext.useApi)(),
       _useApi2 = _slicedToArray(_useApi, 1),
       ordering = _useApi2[0];
+
+  var _useConfig = (0, _ConfigContext.useConfig)(),
+      _useConfig2 = _slicedToArray(_useConfig, 1),
+      configs = _useConfig2[0].configs;
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
@@ -237,15 +243,18 @@ var PaymentOptions = function PaymentOptions(props) {
     setPaymethodData(data);
 
     if (Object.keys(data).length) {
-      var _paymethod$credential;
+      var _configs$advanced_off, _paymethodsList$payme, _masterCardPaymethod$, _masterCardPaymethod$2, _masterCardPaymethod$3, _paymethod$credential;
 
       var paymethod = props.paySelected || isOpenMethod.paymethod;
-      setPaymethodsSelected(paymethod);
+      var masterCardPaymethod = (paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway) === 'openpay' && (configs === null || configs === void 0 ? void 0 : (_configs$advanced_off = configs.advanced_offers_module) === null || _configs$advanced_off === void 0 ? void 0 : _configs$advanced_off.value) && (data === null || data === void 0 ? void 0 : data.brandCardName) === 'mastercard' && (paymethodsList === null || paymethodsList === void 0 ? void 0 : (_paymethodsList$payme = paymethodsList.paymethods) === null || _paymethodsList$payme === void 0 ? void 0 : _paymethodsList$payme.find(function (payment) {
+        return (payment === null || payment === void 0 ? void 0 : payment.gateway) === 'openpay_mastercard';
+      }));
+      setPaymethodsSelected(masterCardPaymethod !== null && masterCardPaymethod !== void 0 ? masterCardPaymethod : paymethod);
       onPaymentChange && onPaymentChange({
-        paymethodId: paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
-        id: paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
-        gateway: paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway,
-        paymethod: paymethod,
+        paymethodId: (_masterCardPaymethod$ = masterCardPaymethod === null || masterCardPaymethod === void 0 ? void 0 : masterCardPaymethod.id) !== null && _masterCardPaymethod$ !== void 0 ? _masterCardPaymethod$ : paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
+        id: (_masterCardPaymethod$2 = masterCardPaymethod === null || masterCardPaymethod === void 0 ? void 0 : masterCardPaymethod.id) !== null && _masterCardPaymethod$2 !== void 0 ? _masterCardPaymethod$2 : paymethod === null || paymethod === void 0 ? void 0 : paymethod.id,
+        gateway: (_masterCardPaymethod$3 = masterCardPaymethod.gateway) !== null && _masterCardPaymethod$3 !== void 0 ? _masterCardPaymethod$3 : paymethod === null || paymethod === void 0 ? void 0 : paymethod.gateway,
+        paymethod: masterCardPaymethod !== null && masterCardPaymethod !== void 0 ? masterCardPaymethod : paymethod,
         credentials: (_paymethod$credential = paymethod === null || paymethod === void 0 ? void 0 : paymethod.credentials) !== null && _paymethod$credential !== void 0 ? _paymethod$credential : null,
         data: data
       });
