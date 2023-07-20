@@ -99,7 +99,7 @@ var GiftCardOrdersList = function GiftCardOrdersList(props) {
                 Authorization: "Bearer ".concat(token)
               }
             };
-            fetchEndpoint = where ? "".concat(ordering.root, "/gift_cards?page=").concat(page, "&page_size=").concat(pageSize, "&&where=").concat(JSON.stringify(where)) : "".concat(ordering.root, "/gift_cards?page=").concat(page, "&page_size=").concat(pageSize);
+            fetchEndpoint = where ? "".concat(ordering.root, "/gift_cards?orderBy=-id&&page=").concat(page, "&page_size=").concat(pageSize, "&&where=").concat(JSON.stringify(where)) : "".concat(ordering.root, "/gift_cards?orderBy=-id&&page=").concat(page, "&page_size=").concat(pageSize);
             _context.next = 10;
             return fetch(fetchEndpoint, requestOptions);
           case 10:
