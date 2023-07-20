@@ -4,6 +4,7 @@ import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useSession } from '../../contexts/SessionContext'
+import { useConfig } from '../../contexts/ConfigContext'
 const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal', 'square']
 const paymethodsNotAllowed = ['paypal_express', 'authorize']
 const paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
@@ -24,6 +25,7 @@ export const PaymentOptions = (props) => {
 
   const [events] = useEvent()
   const [ordering] = useApi()
+  const [{ configs }] = useConfig()
   const [orderState, { changePaymethod }] = useOrder()
   const [{ user, token }] = useSession()
   const orderTotal = orderState.carts?.[`businessId:${businessId}`]?.total || 0
@@ -34,6 +36,7 @@ export const PaymentOptions = (props) => {
   const [paymethodData, setPaymethodData] = useState({})
   const [isOpenMethod, setIsOpenMethod] = useState({ paymethod: null })
   const [wowPoints, setWowPoints] = useState({ loading: false, points: null, error: null })
+
   const parsePaymethods = (paymethods) => {
     const _paymethods = paymethods && paymethods
       .filter(credentials => isCustomerMode
@@ -108,12 +111,15 @@ export const PaymentOptions = (props) => {
     setPaymethodData(data)
     if (Object.keys(data).length) {
       const paymethod = props.paySelected || isOpenMethod.paymethod
-      setPaymethodsSelected(paymethod)
+      const masterCardPaymethod = paymethod?.gateway === 'openpay' && configs?.advanced_offers_module?.value && data?.brandCardName === 'mastercard' && paymethodsList?.paymethods?.find((payment) => (payment?.gateway === 'openpay_mastercard'))
+
+      setPaymethodsSelected(masterCardPaymethod ?? paymethod)
+
       onPaymentChange && onPaymentChange({
-        paymethodId: paymethod?.id,
-        id: paymethod?.id,
-        gateway: paymethod?.gateway,
-        paymethod: paymethod,
+        paymethodId: masterCardPaymethod?.id ?? paymethod?.id,
+        id: masterCardPaymethod?.id ?? paymethod?.id,
+        gateway: masterCardPaymethod.gateway ?? paymethod?.gateway,
+        paymethod: masterCardPaymethod ?? paymethod,
         credentials: paymethod?.credentials ?? null,
         data
       })
