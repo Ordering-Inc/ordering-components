@@ -163,6 +163,7 @@ import {
 } from './components/OrdersDashboardComponents'
 
 import { CODES } from './constants/code-numbers'
+import { TIMEZONES } from './constants/timezones'
 
 export {
   AddressDetails,
@@ -363,5 +364,6 @@ export {
   useOptimizationLoad,
   WebStrategy,
   // Constants
-  CODES
+  CODES,
+  TIMEZONES
 }
