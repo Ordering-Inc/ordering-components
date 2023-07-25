@@ -577,7 +577,7 @@ export const OrderListGroups = (props) => {
 
   const getStatusById = (id) => {
     if (!id && id !== 0) return
-    const active = orderGroupStatusCustom?.inProgress ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21]
+    const active = orderGroupStatusCustom?.active ?? [0, 3, 4, 7, 8, 9, 13, 14, 18, 19, 20, 21]
     const pending = orderGroupStatusCustom?.pending ?? [0, 13]
     const inProgress = orderGroupStatusCustom?.inProgress ?? [3, 4, 7, 8, 9, 14, 18, 19, 20, 21]
     const completed = orderGroupStatusCustom?.completed ?? [1, 11, 15]
@@ -858,7 +858,6 @@ export const OrderListGroups = (props) => {
         delete order.subtotal
 
         const currentFilter = ordersGroup[getStatusById(order?.status) ?? '']?.currentFilter
-
         !currentFilter.includes(order.status)
           ? actionOrderToTab(order, getStatusById(order?.status), 'remove')
           : actionOrderToTab(order, getStatusById(order?.status), 'add')
