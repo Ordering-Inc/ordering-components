@@ -4,6 +4,8 @@ import { useApi } from '../../contexts/ApiContext'
 import { useSession } from '../../contexts/SessionContext'
 import { useOrder } from '../../contexts/OrderContext'
 import { useBusiness } from '../../contexts/BusinessContext'
+import { CODES } from '../../constants/code-numbers'
+import { TIMEZONES } from '../../constants/timezones'
 
 export const PhoneAutocomplete = (props) => {
   const { UIComponent, isIos, businessSlug } = props
@@ -20,6 +22,7 @@ export const PhoneAutocomplete = (props) => {
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
   const [optionsState, setOptionsState] = useState({ loading: false })
+  const [localPhoneCode, setLocalPhoneCode] = useState(null)
   /**
    * Get users from API
    */
@@ -164,6 +167,18 @@ export const PhoneAutocomplete = (props) => {
     }
   }, [businessSlug])
 
+  useEffect(() => {
+    if (!window.localStorage.getItem('local_phone_code')) {
+      const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+      const localCountry = TIMEZONES[localTimezone]
+      const localPhoneCode = CODES.find(code => code.countryName === localCountry)?.phoneCode
+      window.localStorage.setItem('local_phone_code', `+${localPhoneCode}`)
+      setLocalPhoneCode(`+${localPhoneCode}`)
+    } else {
+      setLocalPhoneCode(window.localStorage.getItem('local_phone_code'))
+    }
+  }, [])
+
   return (
     <>
       {UIComponent && (
@@ -181,6 +196,7 @@ export const PhoneAutocomplete = (props) => {
           alertState={alertState}
           optionsState={optionsState}
           checkAddress={checkAddress}
+          localPhoneCode={localPhoneCode}
         />
       )}
     </>
