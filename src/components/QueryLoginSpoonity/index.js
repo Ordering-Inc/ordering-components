@@ -4,7 +4,7 @@ import { useSession } from '../../contexts/SessionContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
 import { useOrder } from '../../contexts/OrderContext'
-
+import { useSite } from '../../contexts/SiteContext'
 /**
  * Component to manage query login behavior without UI component
  */
@@ -18,10 +18,13 @@ export const QueryLoginSpoonity = (props) => {
   const [{ auth }, { login }] = useSession()
   const [events] = useEvent()
   const [, { setStateValues }] = useOrder()
+  const [{ site }] = useSite()
   let querylat
   let querylng
   const [userState, setUserState] = useState({ loading: true, user: {}, error: null })
-
+  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [modalPageToShow, setModalPageToShow] = useState(null)
+  const businessUrlTemplate = site?.business_url_template || '/store/:business_slug'
   if (location.search) {
     const query = new URLSearchParams(location.search)
     querylat = query.get('lat')
@@ -76,7 +79,8 @@ export const QueryLoginSpoonity = (props) => {
    * Method to redirect login page
    */
   const handleGoToLogin = () => {
-    events.emit('go_to_page', { page: 'login' })
+    setAuthModalOpen(true)
+    setModalPageToShow('login')
   }
 
   useEffect(() => {
@@ -90,7 +94,16 @@ export const QueryLoginSpoonity = (props) => {
       if (querylat && querylng) {
         setStateValues({ location: { lat: querylat, lng: querylng } })
       }
-      events.emit('go_to_page', { page: 'search' })
+      const store = window.location.pathname.split('/')?.filter(text => text !== '' && text !== 'store')?.[0]
+      if (store) {
+        if (businessUrlTemplate === '/store/:business_slug' || businessUrlTemplate === '/:business_slug') {
+          events.emit('go_to_page', { page: 'business', params: { business_slug: store } })
+        } else {
+          events.emit('go_to_page', { page: 'business', search: `?${businessUrlTemplate.split('?')[1].replace(':business_slug', '')}${store}` })
+        }
+      } else {
+        events.emit('go_to_page', { page: 'search' })
+      }
     }
   }, [auth])
 
@@ -100,6 +113,10 @@ export const QueryLoginSpoonity = (props) => {
         <UIComponent
           {...props}
           userState={userState}
+          authModalOpen={authModalOpen}
+          setAuthModalOpen={setAuthModalOpen}
+          modalPageToShow={modalPageToShow}
+          setModalPageToShow={setModalPageToShow}
         />
       )}
     </>
