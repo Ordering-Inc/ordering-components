@@ -191,6 +191,7 @@ export const OrderDetails = (props) => {
           order: Object.assign(orderState.order, result),
           loading: false
         })
+        return Object.assign(orderState.order, result)
       }
       if (error) {
         const selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery
@@ -207,9 +208,11 @@ export const OrderDetails = (props) => {
 
           setOrderState({ ...orderState, error: [defaultMessage], loading: false })
         }
+        return null
       }
     } catch (err) {
       setOrderState({ ...orderState, loading: false, error: [err?.message || t('NETWORK_ERROR', 'Network Error')] })
+      return null
     }
   }
 
