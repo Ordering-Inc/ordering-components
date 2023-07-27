@@ -11,6 +11,7 @@ var _SessionContext = require("../../contexts/SessionContext");
 var _ApiContext = require("../../contexts/ApiContext");
 var _EventContext = require("../../contexts/EventContext");
 var _OrderContext = require("../../contexts/OrderContext");
+var _SiteContext = require("../../contexts/SiteContext");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -48,6 +49,9 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
     setStateValues = _useOrder2[1].setStateValues;
+  var _useSite = (0, _SiteContext.useSite)(),
+    _useSite2 = _slicedToArray(_useSite, 1),
+    site = _useSite2[0].site;
   var querylat;
   var querylng;
   var _useState = (0, _react.useState)({
@@ -58,6 +62,15 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
     _useState2 = _slicedToArray(_useState, 2),
     userState = _useState2[0],
     setUserState = _useState2[1];
+  var _useState3 = (0, _react.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    authModalOpen = _useState4[0],
+    setAuthModalOpen = _useState4[1];
+  var _useState5 = (0, _react.useState)(null),
+    _useState6 = _slicedToArray(_useState5, 2),
+    modalPageToShow = _useState6[0],
+    setModalPageToShow = _useState6[1];
+  var businessUrlTemplate = (site === null || site === void 0 ? void 0 : site.business_url_template) || '/store/:business_slug';
   if (location.search) {
     var query = new URLSearchParams(location.search);
     querylat = query.get('lat');
@@ -136,9 +149,8 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
    * Method to redirect login page
    */
   var handleGoToLogin = function handleGoToLogin() {
-    events.emit('go_to_page', {
-      page: 'login'
-    });
+    setAuthModalOpen(true);
+    setModalPageToShow('login');
   };
   (0, _react.useEffect)(function () {
     if (token && !auth) {
@@ -147,6 +159,7 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
   }, [token, auth]);
   (0, _react.useEffect)(function () {
     if (auth) {
+      var _window$location$path;
       if (querylat && querylng) {
         setStateValues({
           location: {
@@ -155,13 +168,36 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
           }
         });
       }
-      events.emit('go_to_page', {
-        page: 'search'
-      });
+      var store = (_window$location$path = window.location.pathname.split('/')) === null || _window$location$path === void 0 || (_window$location$path = _window$location$path.filter(function (text) {
+        return text !== '' && text !== 'store';
+      })) === null || _window$location$path === void 0 ? void 0 : _window$location$path[0];
+      if (store) {
+        if (businessUrlTemplate === '/store/:business_slug' || businessUrlTemplate === '/:business_slug') {
+          events.emit('go_to_page', {
+            page: 'business',
+            params: {
+              business_slug: store
+            }
+          });
+        } else {
+          events.emit('go_to_page', {
+            page: 'business',
+            search: "?".concat(businessUrlTemplate.split('?')[1].replace(':business_slug', '')).concat(store)
+          });
+        }
+      } else {
+        events.emit('go_to_page', {
+          page: 'search'
+        });
+      }
     }
   }, [auth]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    userState: userState
+    userState: userState,
+    authModalOpen: authModalOpen,
+    setAuthModalOpen: setAuthModalOpen,
+    modalPageToShow: modalPageToShow,
+    setModalPageToShow: setModalPageToShow
   })));
 };
 exports.QueryLoginSpoonity = QueryLoginSpoonity;
