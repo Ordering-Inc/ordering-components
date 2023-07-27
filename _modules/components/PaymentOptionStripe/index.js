@@ -36,7 +36,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
     UIComponent = props.UIComponent,
     setCardList = props.setCardList,
     gateway = props.gateway,
-    onPaymentChange = props.onPaymentChange;
+    onPaymentChange = props.onPaymentChange,
+    paySelected = props.paySelected;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
     _useSession2$ = _useSession2[0],
@@ -384,7 +385,7 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
         requestState.paymentCards.cancel();
       }
     };
-  }, [token, businessId]);
+  }, [token, businessId, paySelected === null || paySelected === void 0 ? void 0 : paySelected.data]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     cardSelected: cardSelected,
     cardDefault: cardDefault,
