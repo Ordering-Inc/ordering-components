@@ -11,6 +11,8 @@ var _ApiContext = require("../../contexts/ApiContext");
 var _SessionContext = require("../../contexts/SessionContext");
 var _OrderContext = require("../../contexts/OrderContext");
 var _BusinessContext = require("../../contexts/BusinessContext");
+var _codeNumbers = require("../../constants/code-numbers");
+var _timezones = require("../../constants/timezones");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -93,6 +95,10 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     _useState14 = _slicedToArray(_useState13, 2),
     optionsState = _useState14[0],
     setOptionsState = _useState14[1];
+  var _useState15 = (0, _react.useState)(null),
+    _useState16 = _slicedToArray(_useState15, 2),
+    localPhoneCode = _useState16[0],
+    setLocalPhoneCode = _useState16[1];
   /**
    * Get users from API
    */
@@ -349,6 +355,20 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       getBusiness();
     }
   }, [businessSlug]);
+  (0, _react.useEffect)(function () {
+    if (!window.localStorage.getItem('local_phone_code')) {
+      var _CODES$find;
+      var localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      var localCountry = _timezones.TIMEZONES[localTimezone];
+      var _localPhoneCode = (_CODES$find = _codeNumbers.CODES.find(function (code) {
+        return code.countryName === localCountry;
+      })) === null || _CODES$find === void 0 ? void 0 : _CODES$find.phoneCode;
+      window.localStorage.setItem('local_phone_code', "+".concat(_localPhoneCode));
+      setLocalPhoneCode("+".concat(_localPhoneCode));
+    } else {
+      setLocalPhoneCode(window.localStorage.getItem('local_phone_code'));
+    }
+  }, []);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     phone: phone,
     customerState: customerState,
@@ -363,7 +383,8 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     setBusinessAddressToUser: setGuestOptions,
     alertState: alertState,
     optionsState: optionsState,
-    checkAddress: checkAddress
+    checkAddress: checkAddress,
+    localPhoneCode: localPhoneCode
   })));
 };
 exports.PhoneAutocomplete = PhoneAutocomplete;
