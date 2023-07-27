@@ -13,7 +13,8 @@ export const PaymentOptionStripe = (props) => {
     UIComponent,
     setCardList,
     gateway,
-    onPaymentChange
+    onPaymentChange,
+    paySelected
   } = props
 
   const [{ token, user }] = useSession()
@@ -214,7 +215,7 @@ export const PaymentOptionStripe = (props) => {
         requestState.paymentCards.cancel()
       }
     }
-  }, [token, businessId])
+  }, [token, businessId, paySelected?.data])
 
   return (
     <>
