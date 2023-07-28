@@ -137,6 +137,7 @@ var UserFormDetails = function UserFormDetails(props) {
       removeAccountState = _useState10[0],
       setAccountState = _useState10[1];
 
+  var isAlsea = ordering.project === 'alsea';
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
   (0, _react.useEffect)(function () {
@@ -202,7 +203,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
-      var response, _props$userData, _formState$changes, photo, _changes, _props$userData2, _changes$setCustomerI;
+      var response, _props$userData, consult, _formState$changes, photo, _changes, _props$userData2, _consult, _changes$setCustomerI;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -226,43 +227,80 @@ var UserFormDetails = function UserFormDetails(props) {
               }
 
               if (!isImage) {
-                _context.next = 13;
+                _context.next = 17;
                 break;
               }
 
               _context.next = 8;
-              return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData = props.userData) === null || _props$userData === void 0 ? void 0 : _props$userData.id) || userState.result.result.id).save({
-                photo: image || formState.changes.photo
-              }, {
-                accessToken: accessToken
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api_update_user.php?user=").concat((props === null || props === void 0 ? void 0 : (_props$userData = props.userData) === null || _props$userData === void 0 ? void 0 : _props$userData.id) || userState.result.result.id), {
+                method: 'POST',
+                body: JSON.stringify({
+                  photo: image || formState.changes.photo
+                }),
+                mode: 'no-cors',
+                headers: {
+                  Authorization: "Bearer ".concat(accessToken),
+                  'X-APP-X': ordering.appId,
+                  'Content-Type': 'application/json;charset=UTF-8',
+                  accept: 'application/json, text/plain'
+                }
               });
 
             case 8:
-              response = _context.sent;
+              consult = _context.sent;
+              _context.next = 11;
+              return consult.json();
+
+            case 11:
+              _context.t0 = _context.sent;
+              response = {
+                content: _context.t0
+              };
+              // response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ photo: image || formState.changes.photo }, {
+              //   accessToken: accessToken
+              // })
               _formState$changes = formState.changes, photo = _formState$changes.photo, _changes = _objectWithoutProperties(_formState$changes, _excluded);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : _changes,
                 result: response.content,
                 loading: false
               }));
-              _context.next = 17;
+              _context.next = 25;
               break;
 
-            case 13:
-              _context.next = 15;
-              return ordering.users((props === null || props === void 0 ? void 0 : (_props$userData2 = props.userData) === null || _props$userData2 === void 0 ? void 0 : _props$userData2.id) || userState.result.result.id).save(formState.changes, {
-                accessToken: accessToken
+            case 17:
+              _context.next = 19;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api_update_user.php?user=").concat((props === null || props === void 0 ? void 0 : (_props$userData2 = props.userData) === null || _props$userData2 === void 0 ? void 0 : _props$userData2.id) || userState.result.result.id), {
+                method: 'POST',
+                body: JSON.stringify(formState.changes),
+                headers: {
+                  Authorization: "Bearer ".concat(accessToken),
+                  'X-APP-X': ordering.appId,
+                  'Content-Type': 'application/json;charset=UTF-8',
+                  accept: 'application/json, text/plain'
+                }
               });
 
-            case 15:
-              response = _context.sent;
+            case 19:
+              _consult = _context.sent;
+              _context.next = 22;
+              return _consult.json();
+
+            case 22:
+              _context.t1 = _context.sent;
+              response = {
+                content: _context.t1
+              };
+              // response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
+              //   accessToken: accessToken
+              // })
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
                 result: response.content,
                 loading: false
               }));
 
-            case 17:
+            case 25:
               if (!response.content.error) {
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   result: _objectSpread(_objectSpread({}, userState.result), response.content)
@@ -283,26 +321,26 @@ var UserFormDetails = function UserFormDetails(props) {
                 }
               }
 
-              _context.next = 23;
+              _context.next = 31;
               break;
 
-            case 20:
-              _context.prev = 20;
-              _context.t0 = _context["catch"](2);
+            case 28:
+              _context.prev = 28;
+              _context.t2 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
                   error: true,
-                  result: _context.t0.message
+                  result: _context.t2.message
                 },
                 loading: false
               }));
 
-            case 23:
+            case 31:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 20]]);
+      }, _callee, null, [[2, 28]]);
     }));
 
     return function handleUpdateClick(_x, _x2, _x3) {

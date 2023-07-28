@@ -866,7 +866,7 @@ var LoginForm = function LoginForm(props) {
             case 0:
               _context6.prev = 0;
               _context6.next = 3;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform//wow_search_recover.php?").concat(params), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/wow_search_recover.php?").concat(params), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
