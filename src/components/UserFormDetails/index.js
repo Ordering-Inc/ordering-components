@@ -33,6 +33,8 @@ export const UserFormDetails = (props) => {
   const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [removeAccountState, setAccountState] = useState({ loading: false, error: null, result: null })
 
+  const isAlsea = ordering.project === 'alsea'
+
   const requestsState = {}
   const accessToken = useDefualtSessionManager ? session.token : props.accessToken
 
@@ -103,9 +105,24 @@ export const UserFormDetails = (props) => {
         formState.changes = { ...formState.changes, ...changes }
       }
       if (isImage) {
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ photo: image || formState.changes.photo }, {
-          accessToken: accessToken
+        const consult = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api_update_user.php?user=${props?.userData?.id || userState.result.result.id}`, {
+          method: 'POST',
+          body: JSON.stringify({ photo: image || formState.changes.photo }),
+          mode: 'no-cors',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'X-APP-X': ordering.appId,
+            'Content-Type': 'application/json;charset=UTF-8',
+            accept: 'application/json, text/plain'
+
+          }
         })
+        response = {
+          content: await consult.json()
+        }
+        // response = await ordering.users(props?.userData?.id || userState.result.result.id).save({ photo: image || formState.changes.photo }, {
+        //   accessToken: accessToken
+        // })
 
         const { photo, ...changes } = formState.changes
 
@@ -116,9 +133,22 @@ export const UserFormDetails = (props) => {
           loading: false
         })
       } else {
-        response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
-          accessToken: accessToken
+        const consult = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api_update_user.php?user=${props?.userData?.id || userState.result.result.id}`, {
+          method: 'POST',
+          body: JSON.stringify(formState.changes),
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'X-APP-X': ordering.appId,
+            'Content-Type': 'application/json;charset=UTF-8',
+            accept: 'application/json, text/plain'
+          }
         })
+        response = {
+          content: await consult.json()
+        }
+        // response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
+        //   accessToken: accessToken
+        // })
         setFormState({
           ...formState,
           changes: response.content.error ? formState.changes : {},
