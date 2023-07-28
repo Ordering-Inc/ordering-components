@@ -94,7 +94,8 @@ export const QueryLoginSpoonity = (props) => {
       if (querylat && querylng) {
         setStateValues({ location: { lat: querylat, lng: querylng } })
       }
-      const store = window.location.pathname.split('/')?.filter(text => text !== '' && text !== 'store')?.[0]
+      const filters = ['', 'store', 'search']
+      const store = window.location.pathname.split('/')?.filter(text => !filters.includes(text))?.[0]
       if (store) {
         if (businessUrlTemplate === '/store/:business_slug' || businessUrlTemplate === '/:business_slug') {
           events.emit('go_to_page', { page: 'business', params: { business_slug: store } })
