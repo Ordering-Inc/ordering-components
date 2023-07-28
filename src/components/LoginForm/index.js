@@ -66,20 +66,20 @@ export const LoginForm = (props) => {
       let _credentials
       if (loginTab === 'otp') {
         _credentials = {
-          [otpType]: values && values[otpType] || credentials[otpType],
-          one_time_password: values && values?.code || otpState,
-          country_code: values && values?.country_phone_code || credentials?.country_phone_code
+          [otpType]: (values && values[otpType]) || credentials[otpType],
+          one_time_password: (values && values?.code) || otpState,
+          country_code: (values && values?.country_phone_code) || credentials?.country_phone_code
         }
         if (otpType === 'cellphone') {
           _credentials = {
             ..._credentials,
-            country_phone_code: values && values?.country_phone_code || credentials?.country_phone_code,
+            country_phone_code: (values && values?.country_phone_code) || credentials?.country_phone_code,
           }
         }
       } else {
         _credentials = {
-          [loginTab]: values && values[loginTab] || credentials[loginTab],
-          password: values && values?.password || credentials.password
+          [loginTab]: (values && values[loginTab]) || credentials[loginTab],
+          password: (values && values?.password) || credentials.password
         }
       }
 
@@ -407,7 +407,7 @@ export const LoginForm = (props) => {
 
   const alseaOtpConsult = async (params) => {
     try {
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform//wow_search_recover.php?${params}`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/wow_search_recover.php?${params}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
