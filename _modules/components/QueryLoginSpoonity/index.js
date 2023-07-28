@@ -111,7 +111,7 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
             if (!error) {
               login({
                 user: result,
-                token: result === null || result === void 0 || (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
+                token: result === null || result === void 0 ? void 0 : (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: false,
@@ -159,7 +159,7 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
   }, [token, auth]);
   (0, _react.useEffect)(function () {
     if (auth) {
-      var _window$location$path;
+      var _window$location$path, _window$location$path2;
       if (querylat && querylng) {
         setStateValues({
           location: {
@@ -168,9 +168,10 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
           }
         });
       }
-      var store = (_window$location$path = window.location.pathname.split('/')) === null || _window$location$path === void 0 || (_window$location$path = _window$location$path.filter(function (text) {
-        return text !== '' && text !== 'store';
-      })) === null || _window$location$path === void 0 ? void 0 : _window$location$path[0];
+      var filters = ['', 'store', 'search'];
+      var store = (_window$location$path = window.location.pathname.split('/')) === null || _window$location$path === void 0 ? void 0 : (_window$location$path2 = _window$location$path.filter(function (text) {
+        return !filters.includes(text);
+      })) === null || _window$location$path2 === void 0 ? void 0 : _window$location$path2[0];
       if (store) {
         if (businessUrlTemplate === '/store/:business_slug' || businessUrlTemplate === '/:business_slug') {
           events.emit('go_to_page', {

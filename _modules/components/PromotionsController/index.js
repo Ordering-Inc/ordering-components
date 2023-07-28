@@ -58,7 +58,7 @@ var PromotionsController = function PromotionsController(props) {
     _useState6 = _slicedToArray(_useState5, 2),
     offersState = _useState6[0],
     setOffersState = _useState6[1];
-  var location = JSON.stringify(options === null || options === void 0 || (_options$address = options.address) === null || _options$address === void 0 ? void 0 : _options$address.location);
+  var location = JSON.stringify(options === null || options === void 0 ? void 0 : (_options$address = options.address) === null || _options$address === void 0 ? void 0 : _options$address.location);
   var getOffers = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var params, url, response;

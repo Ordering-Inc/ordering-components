@@ -368,7 +368,7 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
                   }
                 });
               }
-              if ((filterValues === null || filterValues === void 0 || (_filterValues$metafie = filterValues.metafield) === null || _filterValues$metafie === void 0 ? void 0 : _filterValues$metafie.length) > 0) {
+              if ((filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$metafie = filterValues.metafield) === null || _filterValues$metafie === void 0 ? void 0 : _filterValues$metafie.length) > 0) {
                 metafieldConditions = filterValues === null || filterValues === void 0 ? void 0 : filterValues.metafield.map(function (item) {
                   return {
                     attribute: 'metafields',
@@ -729,14 +729,14 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             }
             return _context6.abrupt("return");
           case 3:
-            _settings = session === null || session === void 0 || (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.settings;
+            _settings = session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.settings;
             _allowColumnsUpdated = _objectSpread(_objectSpread({}, allowColumnsUpdated), {}, {
               timer: _objectSpread(_objectSpread({}, allowColumnsUpdated === null || allowColumnsUpdated === void 0 ? void 0 : allowColumnsUpdated.timer), {}, {
                 visable: false
               })
             });
             _context6.next = 7;
-            return ordering.users(session === null || session === void 0 || (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id).save({
+            return ordering.users(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id).save({
               settings: _objectSpread(_objectSpread({}, _settings), {}, {
                 orderColumns: _allowColumnsUpdated
               })
@@ -884,8 +884,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
       }
     };
     var handleRegisterOrder = function handleRegisterOrder(order) {
-      var _order$products;
-      if ((order === null || order === void 0 || (_order$products = order.products) === null || _order$products === void 0 || (_order$products = _order$products[0]) === null || _order$products === void 0 ? void 0 : _order$products.type) === 'gift_card') return;
+      var _order$products, _order$products$;
+      if ((order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : (_order$products$ = _order$products[0]) === null || _order$products$ === void 0 ? void 0 : _order$products$.type) === 'gift_card') return;
       if (customerId && (order === null || order === void 0 ? void 0 : order.customer_id) !== customerId) return;
       if (isOnlyDelivery && (order === null || order === void 0 ? void 0 : order.delivery_type) !== 1) return;
       var found = orderList.orders.find(function (_order) {

@@ -36,7 +36,7 @@ var paymethodsCallcenterMode = ['cash', 'card_delivery', 'ivrpay', '100_coupon']
  * Component to manage payment options behavior without UI component
  */
 var PaymentOptions = function PaymentOptions(props) {
-  var _orderState$carts;
+  var _orderState$carts, _orderState$carts2;
   var isLoading = props.isLoading,
     paymethods = props.paymethods,
     businessId = props.businessId,
@@ -54,7 +54,7 @@ var PaymentOptions = function PaymentOptions(props) {
     _useOrder2 = _slicedToArray(_useOrder, 2),
     orderState = _useOrder2[0],
     changePaymethod = _useOrder2[1].changePaymethod;
-  var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 || (_orderState$carts = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts.total) || 0;
+  var orderTotal = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts2 = _orderState$carts["businessId:".concat(businessId)]) === null || _orderState$carts2 === void 0 ? void 0 : _orderState$carts2.total) || 0;
   var _useState = (0, _react.useState)({
       paymethods: [],
       loading: true,
@@ -80,7 +80,7 @@ var PaymentOptions = function PaymentOptions(props) {
   var parsePaymethods = function parsePaymethods(paymethods) {
     var _paymethods = paymethods && paymethods.filter(function (credentials) {
       var _credentials$paymetho, _credentials$paymetho2, _credentials$paymetho3;
-      return isCustomerMode ? !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 || (_credentials$paymetho = credentials.paymethod) === null || _credentials$paymetho === void 0 ? void 0 : _credentials$paymetho.gateway) && paymethodsCallcenterMode.includes(credentials === null || credentials === void 0 || (_credentials$paymetho2 = credentials.paymethod) === null || _credentials$paymetho2 === void 0 ? void 0 : _credentials$paymetho2.gateway) : !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 || (_credentials$paymetho3 = credentials.paymethod) === null || _credentials$paymetho3 === void 0 ? void 0 : _credentials$paymetho3.gateway);
+      return isCustomerMode ? !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho = credentials.paymethod) === null || _credentials$paymetho === void 0 ? void 0 : _credentials$paymetho.gateway) && paymethodsCallcenterMode.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho2 = credentials.paymethod) === null || _credentials$paymetho2 === void 0 ? void 0 : _credentials$paymetho2.gateway) : !paymethodsNotAllowed.includes(credentials === null || credentials === void 0 ? void 0 : (_credentials$paymetho3 = credentials.paymethod) === null || _credentials$paymetho3 === void 0 ? void 0 : _credentials$paymetho3.gateway);
     }).map(function (credentials) {
       return _objectSpread(_objectSpread({}, credentials === null || credentials === void 0 ? void 0 : credentials.paymethod), {}, {
         sandbox: credentials === null || credentials === void 0 ? void 0 : credentials.sandbox,

@@ -105,8 +105,8 @@ var StoreProductList = function StoreProductList(props) {
               }));
             }
             parameters = {
-              page: newFetch ? 1 : (productsList === null || productsList === void 0 || (_productsList$paginat = productsList.pagination) === null || _productsList$paginat === void 0 ? void 0 : _productsList$paginat.currentPage) + 1,
-              page_size: productsList === null || productsList === void 0 || (_productsList$paginat2 = productsList.pagination) === null || _productsList$paginat2 === void 0 ? void 0 : _productsList$paginat2.pageSize
+              page: newFetch ? 1 : (productsList === null || productsList === void 0 ? void 0 : (_productsList$paginat = productsList.pagination) === null || _productsList$paginat === void 0 ? void 0 : _productsList$paginat.currentPage) + 1,
+              page_size: productsList === null || productsList === void 0 ? void 0 : (_productsList$paginat2 = productsList.pagination) === null || _productsList$paginat2 === void 0 ? void 0 : _productsList$paginat2.pageSize
             };
             where = null;
             conditions = [];
@@ -141,7 +141,7 @@ var StoreProductList = function StoreProductList(props) {
                 conector: 'AND'
               };
             }
-            fetchEndpoint = where ? ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.id).categories(category === null || category === void 0 ? void 0 : category.id).products().parameters(parameters).where(where) : ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : _businessState$busine2.id).categories(category === null || category === void 0 ? void 0 : category.id).products().parameters(parameters);
+            fetchEndpoint = where ? ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.id).categories(category === null || category === void 0 ? void 0 : category.id).products().parameters(parameters).where(where) : ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : _businessState$busine2.id).categories(category === null || category === void 0 ? void 0 : category.id).products().parameters(parameters);
             _context.next = 10;
             return fetchEndpoint.get();
           case 10:
@@ -250,7 +250,7 @@ var StoreProductList = function StoreProductList(props) {
             updateParams = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : {};
             _context3.prev = 1;
             _context3.next = 4;
-            return ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine3 = businessState.business) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.id).categories(categoryId).products(productId).save(updateParams);
+            return ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine3 = businessState.business) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.id).categories(categoryId).products(productId).save(updateParams);
           case 4:
             _yield$ordering$busin = _context3.sent;
             _yield$ordering$busin2 = _yield$ordering$busin.content;
@@ -303,7 +303,7 @@ var StoreProductList = function StoreProductList(props) {
             updateParams = _args4.length > 1 && _args4[1] !== undefined ? _args4[1] : {};
             _context4.prev = 1;
             _context4.next = 4;
-            return ordering.businesses(businessState === null || businessState === void 0 || (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.id).categories(categoryId).save(updateParams);
+            return ordering.businesses(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.id).categories(categoryId).save(updateParams);
           case 4:
             _yield$ordering$busin3 = _context4.sent;
             _yield$ordering$busin4 = _yield$ordering$busin3.content;
@@ -339,11 +339,11 @@ var StoreProductList = function StoreProductList(props) {
   }();
   var validCategory = function validCategory(cat, searchVal) {
     var _cat$subcategories, _cat$name, _cat$subcategories2;
-    if ((cat === null || cat === void 0 || (_cat$subcategories = cat.subcategories) === null || _cat$subcategories === void 0 ? void 0 : _cat$subcategories.length) === 0) return;
+    if ((cat === null || cat === void 0 ? void 0 : (_cat$subcategories = cat.subcategories) === null || _cat$subcategories === void 0 ? void 0 : _cat$subcategories.length) === 0) return;
     if (cat !== null && cat !== void 0 && (_cat$name = cat.name) !== null && _cat$name !== void 0 && _cat$name.toLowerCase().includes(searchVal)) return true;
-    var subcategories = cat === null || cat === void 0 || (_cat$subcategories2 = cat.subcategories) === null || _cat$subcategories2 === void 0 ? void 0 : _cat$subcategories2.filter(function (subCat) {
-      var _subCat$name;
-      return (subCat === null || subCat === void 0 || (_subCat$name = subCat.name) === null || _subCat$name === void 0 || (_subCat$name = _subCat$name.toLowerCase()) === null || _subCat$name === void 0 ? void 0 : _subCat$name.includes(searchVal)) || validCategory(subCat, searchVal);
+    var subcategories = cat === null || cat === void 0 ? void 0 : (_cat$subcategories2 = cat.subcategories) === null || _cat$subcategories2 === void 0 ? void 0 : _cat$subcategories2.filter(function (subCat) {
+      var _subCat$name, _subCat$name$toLowerC;
+      return (subCat === null || subCat === void 0 ? void 0 : (_subCat$name = subCat.name) === null || _subCat$name === void 0 ? void 0 : (_subCat$name$toLowerC = _subCat$name.toLowerCase()) === null || _subCat$name$toLowerC === void 0 ? void 0 : _subCat$name$toLowerC.includes(searchVal)) || validCategory(subCat, searchVal);
     });
     return (subcategories === null || subcategories === void 0 ? void 0 : subcategories.length) > 0;
   };
@@ -354,13 +354,13 @@ var StoreProductList = function StoreProductList(props) {
     if (category !== null && category !== void 0 && category.id) getCategoryProducts(true);
   }, [category, productSearch]);
   (0, _react.useEffect)(function () {
-    var _businessState$busine5;
-    if ((businessState === null || businessState === void 0 || (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 || (_businessState$busine5 = _businessState$busine5.categories) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.length) > 0) {
-      var _businessState$busine6;
+    var _businessState$busine5, _businessState$busine6;
+    if ((businessState === null || businessState === void 0 ? void 0 : (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : (_businessState$busine6 = _businessState$busine5.categories) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.length) > 0) {
+      var _businessState$busine7, _businessState$busine8;
       var lowerCaseSearchVal = categorySearch.toLowerCase();
-      var _updateCategories = businessState === null || businessState === void 0 || (_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 || (_businessState$busine6 = _businessState$busine6.categories) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.filter(function (cat) {
-        var _cat$name2;
-        if (cat !== null && cat !== void 0 && (_cat$name2 = cat.name) !== null && _cat$name2 !== void 0 && (_cat$name2 = _cat$name2.toLowerCase()) !== null && _cat$name2 !== void 0 && _cat$name2.includes(lowerCaseSearchVal)) return true;
+      var _updateCategories = businessState === null || businessState === void 0 ? void 0 : (_businessState$busine7 = businessState.business) === null || _businessState$busine7 === void 0 ? void 0 : (_businessState$busine8 = _businessState$busine7.categories) === null || _businessState$busine8 === void 0 ? void 0 : _businessState$busine8.filter(function (cat) {
+        var _cat$name2, _cat$name2$toLowerCas;
+        if (cat !== null && cat !== void 0 && (_cat$name2 = cat.name) !== null && _cat$name2 !== void 0 && (_cat$name2$toLowerCas = _cat$name2.toLowerCase()) !== null && _cat$name2$toLowerCas !== void 0 && _cat$name2$toLowerCas.includes(lowerCaseSearchVal)) return true;
         return validCategory(cat, lowerCaseSearchVal);
       });
       setCategories(_updateCategories);

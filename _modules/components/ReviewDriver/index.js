@@ -71,7 +71,7 @@ var ReviewDriver = function ReviewDriver(props) {
    */
   var handleSendDriverReview = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var orderId, _order$products$, _order$driver, _reviewsArray$, userId, fetchReviews, reviewsArray, error, result;
+      var orderId, _order$products$, _order$products$$cale, _order$products$$cale2, _order$driver, _reviewsArray$, _reviewsArray$$result, userId, fetchReviews, reviewsArray, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -86,7 +86,7 @@ var ReviewDriver = function ReviewDriver(props) {
             return _context3.abrupt("return");
           case 4:
             _context3.prev = 4;
-            userId = isProfessional ? order === null || order === void 0 || (_order$products$ = order.products[0]) === null || _order$products$ === void 0 || (_order$products$ = _order$products$.calendar_event) === null || _order$products$ === void 0 || (_order$products$ = _order$products$.professional) === null || _order$products$ === void 0 ? void 0 : _order$products$.id : order === null || order === void 0 || (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id;
+            userId = isProfessional ? order === null || order === void 0 ? void 0 : (_order$products$ = order.products[0]) === null || _order$products$ === void 0 ? void 0 : (_order$products$$cale = _order$products$.calendar_event) === null || _order$products$$cale === void 0 ? void 0 : (_order$products$$cale2 = _order$products$$cale.professional) === null || _order$products$$cale2 === void 0 ? void 0 : _order$products$$cale2.id : order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id;
             fetchReviews = /*#__PURE__*/function () {
               var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
                 var promises, data;
@@ -162,7 +162,7 @@ var ReviewDriver = function ReviewDriver(props) {
             reviewsArray = _context3.sent;
             error = reviewsArray.length && reviewsArray.every(function (obj) {
               return obj.error;
-            }) && ((_reviewsArray$ = reviewsArray[0]) === null || _reviewsArray$ === void 0 || (_reviewsArray$ = _reviewsArray$.result) === null || _reviewsArray$ === void 0 ? void 0 : _reviewsArray$[0]);
+            }) && ((_reviewsArray$ = reviewsArray[0]) === null || _reviewsArray$ === void 0 ? void 0 : (_reviewsArray$$result = _reviewsArray$.result) === null || _reviewsArray$$result === void 0 ? void 0 : _reviewsArray$$result[0]);
             result = reviewsArray.length && reviewsArray.map(function (obj) {
               var _obj$result$, _obj$result;
               return (_obj$result$ = (_obj$result = obj.result) === null || _obj$result === void 0 ? void 0 : _obj$result[0]) !== null && _obj$result$ !== void 0 ? _obj$result$ : obj.result;

@@ -84,7 +84,7 @@ var MainSearch = function MainSearch(props) {
             _yield$ordering$count = _context.sent;
             response = _yield$ordering$count.response;
             setAllListValues(_objectSpread(_objectSpread({}, allListValues), {}, {
-              countries: response === null || response === void 0 || (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.result
+              countries: response === null || response === void 0 ? void 0 : (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.result
             }));
             _context.next = 11;
             break;
