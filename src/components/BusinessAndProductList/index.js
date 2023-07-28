@@ -899,7 +899,7 @@ export const BusinessAndProductList = (props) => {
         location: orderState?.options?.address?.location
       })
     }
-  }, [orderState?.options?.type, orderState?.options?.moment, JSON.stringify(orderState?.options?.address?.location)])
+  }, [orderState?.loading, orderState?.options?.type, orderState?.options?.moment, JSON.stringify(orderState?.options?.address?.location)])
 
   /**
    * Cancel business request
