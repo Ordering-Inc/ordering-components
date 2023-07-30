@@ -157,13 +157,19 @@ var ConfigProvider = function ConfigProvider(_ref) {
         _configs$error,
         _configs$result,
         _result,
+        _result$dates_moment_,
         _result2,
+        _result2$format_time,
         _result3,
+        _result3$dates_genera,
         _result4,
+        _result4$format_time,
         _result5,
         _result6,
+        _result6$default_coun,
         _data,
         _result7,
+        _result7$default_coun,
         _data2,
         countryCode,
         options,
@@ -239,17 +245,17 @@ var ConfigProvider = function ConfigProvider(_ref) {
             conditionalConfigs = {
               dates_moment_format: {
                 key: 'dates_moment_format',
-                value: ((_result = result) === null || _result === void 0 || (_result = _result.dates_moment_format) === null || _result === void 0 ? void 0 : _result.value) || (((_result2 = result) === null || _result2 === void 0 || (_result2 = _result2.format_time) === null || _result2 === void 0 ? void 0 : _result2.value) === '24' ? 'MM/DD HH:mm' : 'MM/DD hh:mma')
+                value: ((_result = result) === null || _result === void 0 ? void 0 : (_result$dates_moment_ = _result.dates_moment_format) === null || _result$dates_moment_ === void 0 ? void 0 : _result$dates_moment_.value) || (((_result2 = result) === null || _result2 === void 0 ? void 0 : (_result2$format_time = _result2.format_time) === null || _result2$format_time === void 0 ? void 0 : _result2$format_time.value) === '24' ? 'MM/DD HH:mm' : 'MM/DD hh:mma')
               },
               dates_general_format: {
                 key: 'dates_general_format',
-                value: ((_result3 = result) === null || _result3 === void 0 || (_result3 = _result3.dates_general_format) === null || _result3 === void 0 ? void 0 : _result3.value) || (((_result4 = result) === null || _result4 === void 0 || (_result4 = _result4.format_time) === null || _result4 === void 0 ? void 0 : _result4.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
+                value: ((_result3 = result) === null || _result3 === void 0 ? void 0 : (_result3$dates_genera = _result3.dates_general_format) === null || _result3$dates_genera === void 0 ? void 0 : _result3$dates_genera.value) || (((_result4 = result) === null || _result4 === void 0 ? void 0 : (_result4$format_time = _result4.format_time) === null || _result4$format_time === void 0 ? void 0 : _result4$format_time.value) === '24' ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD hh:mm:ssa')
               }
             };
             configsResult = _objectSpread(_objectSpread(_objectSpread({}, customConfigs), result), {}, {
               default_country_code: _objectSpread(_objectSpread({}, (_result5 = result) === null || _result5 === void 0 ? void 0 : _result5.default_country_code), {}, {
-                value: ((_result6 = result) === null || _result6 === void 0 || (_result6 = _result6.default_country_code) === null || _result6 === void 0 ? void 0 : _result6.value) || data && ((_data = data) === null || _data === void 0 ? void 0 : _data.country_code) || 'US',
-                calling_number: ((_result7 = result) === null || _result7 === void 0 || (_result7 = _result7.default_country_code) === null || _result7 === void 0 ? void 0 : _result7.calling_number) || data && ((_data2 = data) === null || _data2 === void 0 ? void 0 : _data2.country_calling_code) || '+1'
+                value: ((_result6 = result) === null || _result6 === void 0 ? void 0 : (_result6$default_coun = _result6.default_country_code) === null || _result6$default_coun === void 0 ? void 0 : _result6$default_coun.value) || data && ((_data = data) === null || _data === void 0 ? void 0 : _data.country_code) || 'US',
+                calling_number: ((_result7 = result) === null || _result7 === void 0 ? void 0 : (_result7$default_coun = _result7.default_country_code) === null || _result7$default_coun === void 0 ? void 0 : _result7$default_coun.calling_number) || data && ((_data2 = data) === null || _data2 === void 0 ? void 0 : _data2.country_calling_code) || '+1'
               })
             }, conditionalConfigs);
             setState(_objectSpread(_objectSpread({}, state), {}, {

@@ -76,7 +76,7 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
             return strategy.getItem('options', true);
           case 8:
             localOptions = _context.sent;
-            countryCode = countryCodeFromLocalStorage || (localOptions === null || localOptions === void 0 || (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.country_code);
+            countryCode = countryCodeFromLocalStorage || (localOptions === null || localOptions === void 0 ? void 0 : (_localOptions$address = localOptions.address) === null || _localOptions$address === void 0 ? void 0 : _localOptions$address.country_code);
             if (countryCode) {
               requestOptions.headers = _objectSpread(_objectSpread({}, requestOptions.headers), {}, {
                 'X-Country-Code-X': countryCode
@@ -122,7 +122,7 @@ var OptimizationLoadProvider = function OptimizationLoadProvider(_ref) {
     var keysAllowed = ['configs', 'features', 'site', 'theme', 'validation_fields'];
     if (!keysAllowed.includes(key)) return;
     setState(_objectSpread(_objectSpread({}, state), {}, {
-      result: _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : state.result), {}, _defineProperty({}, key, _objectSpread(_objectSpread({}, state === null || state === void 0 || (_state$result = state.result) === null || _state$result === void 0 ? void 0 : _state$result[key]), data)))
+      result: _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : state.result), {}, _defineProperty({}, key, _objectSpread(_objectSpread({}, state === null || state === void 0 ? void 0 : (_state$result = state.result) === null || _state$result === void 0 ? void 0 : _state$result[key]), data)))
     }));
   };
   (0, _react.useEffect)(function () {

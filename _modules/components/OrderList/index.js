@@ -150,7 +150,7 @@ var OrderList = function OrderList(props) {
   };
   var handleReorder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(value) {
-      var orderId, _reordersArray$, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
+      var orderId, _reordersArray$, _reordersArray$$resul, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, fetchOrders, reordersArray, error, result, choosedOrder, _businessId, _businessData, _businessSlug, orderResult;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -213,7 +213,7 @@ var OrderList = function OrderList(props) {
             reordersArray = _context3.sent;
             error = reordersArray.length && reordersArray.every(function (obj) {
               return obj.error;
-            }) && ((_reordersArray$ = reordersArray[0]) === null || _reordersArray$ === void 0 || (_reordersArray$ = _reordersArray$.result) === null || _reordersArray$ === void 0 ? void 0 : _reordersArray$[0]);
+            }) && ((_reordersArray$ = reordersArray[0]) === null || _reordersArray$ === void 0 ? void 0 : (_reordersArray$$resul = _reordersArray$.result) === null || _reordersArray$$resul === void 0 ? void 0 : _reordersArray$$resul[0]);
             result = reordersArray.length && reordersArray.map(function (obj) {
               var _obj$result$, _obj$result;
               return (_obj$result$ = (_obj$result = obj.result) === null || _obj$result === void 0 ? void 0 : _obj$result[0]) !== null && _obj$result$ !== void 0 ? _obj$result$ : obj.result;
@@ -223,13 +223,13 @@ var OrderList = function OrderList(props) {
             choosedOrder = orderList.orders.find(function (_order) {
               return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId[0];
             });
-            _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 || (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
+            _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 ? void 0 : (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
             _context3.next = 15;
             return ordering.businesses(_businessId).select(['slug']).get();
           case 15:
             _businessData = _context3.sent;
             _context3.next = 18;
-            return _businessData === null || _businessData === void 0 || (_businessData$content = _businessData.content) === null || _businessData$content === void 0 || (_businessData$content = _businessData$content.result) === null || _businessData$content === void 0 ? void 0 : _businessData$content.slug;
+            return _businessData === null || _businessData === void 0 ? void 0 : (_businessData$content = _businessData.content) === null || _businessData$content === void 0 ? void 0 : (_businessData$content2 = _businessData$content.result) === null || _businessData$content2 === void 0 ? void 0 : _businessData$content2.slug;
           case 18:
             _businessSlug = _context3.sent;
             orderResult = {
@@ -363,6 +363,9 @@ var OrderList = function OrderList(props) {
         getFirstOrder,
         pageSize,
         _ref6,
+        _ref6$filter,
+        _ref6$filter$map,
+        _ref6$filter$map$flat,
         nextPage,
         response,
         businessIds,
@@ -416,11 +419,11 @@ var OrderList = function OrderList(props) {
               });
             }
             setProfessionals([].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders)).reduce(function (previousValue, currentValue) {
-              var _currentValue$product;
-              return previousValue.concat(currentValue === null || currentValue === void 0 || (_currentValue$product = currentValue.products) === null || _currentValue$product === void 0 || (_currentValue$product = _currentValue$product[0]) === null || _currentValue$product === void 0 || (_currentValue$product = _currentValue$product.calendar_event) === null || _currentValue$product === void 0 ? void 0 : _currentValue$product.professional);
+              var _currentValue$product, _currentValue$product2, _currentValue$product3;
+              return previousValue.concat(currentValue === null || currentValue === void 0 ? void 0 : (_currentValue$product = currentValue.products) === null || _currentValue$product === void 0 ? void 0 : (_currentValue$product2 = _currentValue$product[0]) === null || _currentValue$product2 === void 0 ? void 0 : (_currentValue$product3 = _currentValue$product2.calendar_event) === null || _currentValue$product3 === void 0 ? void 0 : _currentValue$product3.professional);
             }, []).filter(function (professional, i, hash) {
               var _hash$map;
-              return professional && (hash === null || hash === void 0 || (_hash$map = hash.map(function (_professional) {
+              return professional && (hash === null || hash === void 0 ? void 0 : (_hash$map = hash.map(function (_professional) {
                 return _professional === null || _professional === void 0 ? void 0 : _professional.id;
               })) === null || _hash$map === void 0 ? void 0 : _hash$map.indexOf(professional === null || professional === void 0 ? void 0 : professional.id)) === i;
             }));
@@ -428,20 +431,20 @@ var OrderList = function OrderList(props) {
               return order.business_id;
             });
             setBusinessOrderIds && setBusinessOrderIds(businessIds);
-            setProducts((_ref6 = [].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders))) === null || _ref6 === void 0 || (_ref6 = _ref6.filter(function (order) {
+            setProducts((_ref6 = [].concat(_toConsumableArray(response.content.result), _toConsumableArray(orderList.orders))) === null || _ref6 === void 0 ? void 0 : (_ref6$filter = _ref6.filter(function (order) {
               var _businessesSearchList;
-              return !businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 || (_businessesSearchList = businessesSearchList.businesses) === null || _businessesSearchList === void 0 ? void 0 : _businessesSearchList.some(function (business) {
+              return !businessesSearchList || (businessesSearchList === null || businessesSearchList === void 0 ? void 0 : (_businessesSearchList = businessesSearchList.businesses) === null || _businessesSearchList === void 0 ? void 0 : _businessesSearchList.some(function (business) {
                 return (order === null || order === void 0 ? void 0 : order.business_id) === (business === null || business === void 0 ? void 0 : business.id);
               }));
-            })) === null || _ref6 === void 0 || (_ref6 = _ref6.map(function (order) {
+            })) === null || _ref6$filter === void 0 ? void 0 : (_ref6$filter$map = _ref6$filter.map(function (order) {
               var _order$products;
-              return order === null || order === void 0 || (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.map(function (product) {
+              return order === null || order === void 0 ? void 0 : (_order$products = order.products) === null || _order$products === void 0 ? void 0 : _order$products.map(function (product) {
                 return _objectSpread(_objectSpread({}, product), {}, {
                   business: order === null || order === void 0 ? void 0 : order.business,
                   businessId: order === null || order === void 0 ? void 0 : order.business_id
                 });
               });
-            })) === null || _ref6 === void 0 || (_ref6 = _ref6.flat()) === null || _ref6 === void 0 ? void 0 : _ref6.filter(function (product, i, hash) {
+            })) === null || _ref6$filter$map === void 0 ? void 0 : (_ref6$filter$map$flat = _ref6$filter$map.flat()) === null || _ref6$filter$map$flat === void 0 ? void 0 : _ref6$filter$map$flat.filter(function (product, i, hash) {
               return hash.map(function (_product) {
                 return _product === null || _product === void 0 ? void 0 : _product.product_id;
               }).indexOf(product === null || product === void 0 ? void 0 : product.product_id) === i;
@@ -556,13 +559,13 @@ var OrderList = function OrderList(props) {
   }();
   var getBusinesses = /*#__PURE__*/function () {
     var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(businessIds) {
-      var _orderState$options, _orderState$options2, _orderState$options3, _orderState$options4, parameters, _orderState$options5, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
+      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, parameters, _orderState$options5, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
           case 0:
             _context7.prev = 0;
             parameters = {
-              location: "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 || (_orderState$options = _orderState$options.address) === null || _orderState$options === void 0 || (_orderState$options = _orderState$options.location) === null || _orderState$options === void 0 ? void 0 : _orderState$options.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 || (_orderState$options2 = _orderState$options2.address) === null || _orderState$options2 === void 0 || (_orderState$options2 = _orderState$options2.location) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.lng)
+              location: "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng)
             };
             if ((_orderState$options3 = orderState.options) !== null && _orderState$options3 !== void 0 && _orderState$options3.moment && isValidMoment((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment, 'YYYY-MM-DD HH:mm:ss')) {
               moment = _dayjs.default.utc((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
@@ -663,7 +666,7 @@ var OrderList = function OrderList(props) {
         showToast(_ToastContext.ToastType.Info, t('SPECIFIC_ORDER_UPDATED', 'Your order number _NUMBER_ has updated').replace('_NUMBER_', order.id));
         orders = orderList.orders.filter(function (_order) {
           var _order$driver, _order$driver2, _session$user;
-          if (_order.id === order.id && (_order === null || _order === void 0 || (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (order === null || order === void 0 || (_order$driver2 = order.driver) === null || _order$driver2 === void 0 ? void 0 : _order$driver2.id) && (session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
+          if (_order.id === order.id && (_order === null || _order === void 0 ? void 0 : (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (order === null || order === void 0 ? void 0 : (_order$driver2 = order.driver) === null || _order$driver2 === void 0 ? void 0 : _order$driver2.id) && (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
             return false;
           }
           if (_order.id === order.id) {
@@ -701,7 +704,7 @@ var OrderList = function OrderList(props) {
     };
     socket.on('orders_register', handleAddNewOrder);
     socket.on('update_order', handleUpdateOrder);
-    var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 || (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
+    var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
     socket.join(ordersRoom);
     return function () {
       socket.off('update_order', handleUpdateOrder);
@@ -713,10 +716,10 @@ var OrderList = function OrderList(props) {
     if (!session.user) return;
     socket.on('disconnect', function (reason) {
       var _session$user4, _session$user5;
-      var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id);
+      var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id);
       socket.join(ordersRoom);
     });
-    var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 || (_session$user6 = session.user) === null || _session$user6 === void 0 ? void 0 : _session$user6.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.id);
+    var ordersRoom = !props.isAsCustomer && (session === null || session === void 0 ? void 0 : (_session$user6 = session.user) === null || _session$user6 === void 0 ? void 0 : _session$user6.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user7 = session.user) === null || _session$user7 === void 0 ? void 0 : _session$user7.id);
     socket.join(ordersRoom);
     return function () {
       socket.leave(ordersRoom);
@@ -843,7 +846,7 @@ var OrderList = function OrderList(props) {
   };
   var handleUpdateBusinesses = function handleUpdateBusinesses(businessId, changes) {
     var _businesses$result;
-    var updatedBusiness = businesses === null || businesses === void 0 || (_businesses$result = businesses.result) === null || _businesses$result === void 0 ? void 0 : _businesses$result.map(function (business) {
+    var updatedBusiness = businesses === null || businesses === void 0 ? void 0 : (_businesses$result = businesses.result) === null || _businesses$result === void 0 ? void 0 : _businesses$result.map(function (business) {
       if ((business === null || business === void 0 ? void 0 : business.id) === businessId) {
         return _objectSpread(_objectSpread({}, business), changes);
       }

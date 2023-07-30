@@ -65,9 +65,9 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
     var uniqueObj = {};
     list.forEach(function (item) {
       var _item$wallet_event;
-      if (!uniqueObj[item === null || item === void 0 || (_item$wallet_event = item.wallet_event) === null || _item$wallet_event === void 0 ? void 0 : _item$wallet_event.id]) {
+      if (!uniqueObj[item === null || item === void 0 ? void 0 : (_item$wallet_event = item.wallet_event) === null || _item$wallet_event === void 0 ? void 0 : _item$wallet_event.id]) {
         var _item$wallet_event2;
-        uniqueObj[item === null || item === void 0 || (_item$wallet_event2 = item.wallet_event) === null || _item$wallet_event2 === void 0 ? void 0 : _item$wallet_event2.id] = true;
+        uniqueObj[item === null || item === void 0 ? void 0 : (_item$wallet_event2 = item.wallet_event) === null || _item$wallet_event2 === void 0 ? void 0 : _item$wallet_event2.id] = true;
         uniqueArr.push(item);
       }
     });
@@ -114,15 +114,15 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
             if (!error) {
               _total = result.reduce(function (total, order) {
                 var _order$summary;
-                return total + (order === null || order === void 0 || (_order$summary = order.summary) === null || _order$summary === void 0 ? void 0 : _order$summary.total);
+                return total + (order === null || order === void 0 ? void 0 : (_order$summary = order.summary) === null || _order$summary === void 0 ? void 0 : _order$summary.total);
               }, 0);
               _subtotal = result.reduce(function (subtotal, order) {
                 var _order$summary2;
-                return subtotal + (order === null || order === void 0 || (_order$summary2 = order.summary) === null || _order$summary2 === void 0 ? void 0 : _order$summary2.subtotal);
+                return subtotal + (order === null || order === void 0 ? void 0 : (_order$summary2 = order.summary) === null || _order$summary2 === void 0 ? void 0 : _order$summary2.subtotal);
               }, 0);
               _tax = result.reduce(function (tax, order) {
                 var _order$summary3;
-                return tax + (order === null || order === void 0 || (_order$summary3 = order.summary) === null || _order$summary3 === void 0 ? void 0 : _order$summary3.tax);
+                return tax + (order === null || order === void 0 ? void 0 : (_order$summary3 = order.summary) === null || _order$summary3 === void 0 ? void 0 : _order$summary3.tax);
               }, 0);
               setOrdersSummary({
                 total: _total,

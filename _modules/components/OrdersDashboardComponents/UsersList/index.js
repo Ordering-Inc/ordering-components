@@ -281,12 +281,12 @@ var UsersList = function UsersList(props) {
             }
             if (Object.keys(filterValues.changes).length) {
               filterConditions = [];
-              if (filterValues !== null && filterValues !== void 0 && (_filterValues$changes = filterValues.changes) !== null && _filterValues$changes !== void 0 && _filterValues$changes.name && (filterValues === null || filterValues === void 0 || (_filterValues$changes2 = filterValues.changes) === null || _filterValues$changes2 === void 0 ? void 0 : _filterValues$changes2.name) !== null) {
+              if (filterValues !== null && filterValues !== void 0 && (_filterValues$changes = filterValues.changes) !== null && _filterValues$changes !== void 0 && _filterValues$changes.name && (filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$changes2 = filterValues.changes) === null || _filterValues$changes2 === void 0 ? void 0 : _filterValues$changes2.name) !== null) {
                 filterConditions.push({
                   attribute: 'name',
                   value: {
                     condition: 'ilike',
-                    value: encodeURI("%".concat(filterValues === null || filterValues === void 0 || (_filterValues$changes3 = filterValues.changes) === null || _filterValues$changes3 === void 0 ? void 0 : _filterValues$changes3.name, "%"))
+                    value: encodeURI("%".concat(filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$changes3 = filterValues.changes) === null || _filterValues$changes3 === void 0 ? void 0 : _filterValues$changes3.name, "%"))
                   }
                 });
               }
@@ -401,10 +401,10 @@ var UsersList = function UsersList(props) {
                   value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.phoneVerified
                 });
               }
-              if ((multiFilterValues === null || multiFilterValues === void 0 || (_multiFilterValues$or = multiFilterValues.ordersCount) === null || _multiFilterValues$or === void 0 ? void 0 : _multiFilterValues$or.value) !== '') {
+              if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : (_multiFilterValues$or = multiFilterValues.ordersCount) === null || _multiFilterValues$or === void 0 ? void 0 : _multiFilterValues$or.value) !== '') {
                 parameters = _objectSpread(_objectSpread({}, parameters), {}, {
-                  orders_count_condition: multiFilterValues === null || multiFilterValues === void 0 || (_multiFilterValues$or2 = multiFilterValues.ordersCount) === null || _multiFilterValues$or2 === void 0 ? void 0 : _multiFilterValues$or2.condition,
-                  orders_count_value: multiFilterValues === null || multiFilterValues === void 0 || (_multiFilterValues$or3 = multiFilterValues.ordersCount) === null || _multiFilterValues$or3 === void 0 ? void 0 : _multiFilterValues$or3.value
+                  orders_count_condition: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : (_multiFilterValues$or2 = multiFilterValues.ordersCount) === null || _multiFilterValues$or2 === void 0 ? void 0 : _multiFilterValues$or2.condition,
+                  orders_count_value: multiFilterValues === null || multiFilterValues === void 0 ? void 0 : (_multiFilterValues$or3 = multiFilterValues.ordersCount) === null || _multiFilterValues$or3 === void 0 ? void 0 : _multiFilterValues$or3.value
                 });
               }
               if ((multiFilterValues === null || multiFilterValues === void 0 ? void 0 : multiFilterValues.emailVerified) !== null) {
@@ -1019,12 +1019,12 @@ var UsersList = function UsersList(props) {
             if (!content.error) {
               found = content.result.find(function (group) {
                 var _session$user2;
-                return (group === null || group === void 0 ? void 0 : group.administrator_id) === (session === null || session === void 0 || (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id);
+                return (group === null || group === void 0 ? void 0 : group.administrator_id) === (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.id);
               });
               if (found) setActionDisabled(false);else setActionDisabled(true);
               driverManagerGroups = (_content$result = content.result) === null || _content$result === void 0 ? void 0 : _content$result.filter(function (group) {
                 var _session$user3;
-                return group.administrator_id === (session === null || session === void 0 || (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
+                return group.administrator_id === (session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
               });
               setDriversGroupsState(_objectSpread(_objectSpread({}, driversGroupsState), {}, {
                 groups: driverManagerGroups,
@@ -1052,7 +1052,7 @@ var UsersList = function UsersList(props) {
   }();
   (0, _react.useEffect)(function () {
     var _session$user4;
-    if ((session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 5) {
+    if ((session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 5) {
       getDriversGroups();
     } else {
       setActionDisabled(false);

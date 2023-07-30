@@ -35,7 +35,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage card form for stripe elements form behavior without UI component
  */
 var CardForm = function CardForm(props) {
-  var _validationFields$fie, _validationFields$fie2;
+  var _validationFields$fie, _validationFields$fie2, _validationFields$fie3, _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
   var UIComponent = props.UIComponent,
     requirements = props.requirements,
     toSave = props.toSave,
@@ -56,8 +56,8 @@ var CardForm = function CardForm(props) {
   var socket = (0, _WebsocketContext.useWebsocket)();
   var stripe = (0, _reactStripeJs.useStripe)();
   var elements = (0, _reactStripeJs.useElements)();
-  var zipCodeRequired = validationFields === null || validationFields === void 0 || (_validationFields$fie = validationFields.fields) === null || _validationFields$fie === void 0 || (_validationFields$fie = _validationFields$fie.card) === null || _validationFields$fie === void 0 || (_validationFields$fie = _validationFields$fie.zipcode) === null || _validationFields$fie === void 0 ? void 0 : _validationFields$fie.required;
-  var zipCodeEnabled = validationFields === null || validationFields === void 0 || (_validationFields$fie2 = validationFields.fields) === null || _validationFields$fie2 === void 0 || (_validationFields$fie2 = _validationFields$fie2.card) === null || _validationFields$fie2 === void 0 || (_validationFields$fie2 = _validationFields$fie2.zipcode) === null || _validationFields$fie2 === void 0 ? void 0 : _validationFields$fie2.required;
+  var zipCodeRequired = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$fie = validationFields.fields) === null || _validationFields$fie === void 0 ? void 0 : (_validationFields$fie2 = _validationFields$fie.card) === null || _validationFields$fie2 === void 0 ? void 0 : (_validationFields$fie3 = _validationFields$fie2.zipcode) === null || _validationFields$fie3 === void 0 ? void 0 : _validationFields$fie3.required;
+  var zipCodeEnabled = validationFields === null || validationFields === void 0 ? void 0 : (_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 ? void 0 : (_validationFields$fie5 = _validationFields$fie4.card) === null || _validationFields$fie5 === void 0 ? void 0 : (_validationFields$fie6 = _validationFields$fie5.zipcode) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.required;
   var _useState = (0, _react.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     error = _useState2[0],
@@ -107,7 +107,7 @@ var CardForm = function CardForm(props) {
             return fetch("".concat(ordering.root, "/payments/stripe/cards"), {
               method: 'POST',
               headers: {
-                Authorization: "Bearer ".concat(user === null || user === void 0 || (_user$session = user.session) === null || _user$session === void 0 ? void 0 : _user$session.access_token),
+                Authorization: "Bearer ".concat(user === null || user === void 0 ? void 0 : (_user$session = user.session) === null || _user$session === void 0 ? void 0 : _user$session.access_token),
                 'Content-Type': 'application/json',
                 'X-App-X': ordering.appId,
                 'X-Socket-Id-X': socket === null || socket === void 0 ? void 0 : socket.getId()
@@ -148,12 +148,12 @@ var CardForm = function CardForm(props) {
     var _event$target;
     if (event.error) {
       (event.elementType === 'cardNumber' || 'card') && setError(event.error.message);
-    } else if ((event === null || event === void 0 || (_event$target = event.target) === null || _event$target === void 0 ? void 0 : _event$target.name) === 'zipcode') {
-      var _event$target2, _event$target3, _event$target4;
-      event.target.value = event === null || event === void 0 || (_event$target2 = event.target) === null || _event$target2 === void 0 || (_event$target2 = _event$target2.value) === null || _event$target2 === void 0 ? void 0 : _event$target2.slice(0, 10);
+    } else if ((event === null || event === void 0 ? void 0 : (_event$target = event.target) === null || _event$target === void 0 ? void 0 : _event$target.name) === 'zipcode') {
+      var _event$target2, _event$target2$value, _event$target3, _event$target4;
+      event.target.value = event === null || event === void 0 ? void 0 : (_event$target2 = event.target) === null || _event$target2 === void 0 ? void 0 : (_event$target2$value = _event$target2.value) === null || _event$target2$value === void 0 ? void 0 : _event$target2$value.slice(0, 10);
       elements.update({
         value: {
-          postalCode: event === null || event === void 0 || (_event$target3 = event.target) === null || _event$target3 === void 0 ? void 0 : _event$target3.value
+          postalCode: event === null || event === void 0 ? void 0 : (_event$target3 = event.target) === null || _event$target3 === void 0 ? void 0 : _event$target3.value
         }
       });
       if (!event.target.value && zipCodeRequired && zipCodeEnabled) {
@@ -161,7 +161,7 @@ var CardForm = function CardForm(props) {
       } else {
         setErrorZipcode(false);
       }
-      setZipcode(event === null || event === void 0 || (_event$target4 = event.target) === null || _event$target4 === void 0 ? void 0 : _event$target4.value);
+      setZipcode(event === null || event === void 0 ? void 0 : (_event$target4 = event.target) === null || _event$target4 === void 0 ? void 0 : _event$target4.value);
     } else {
       setError(null);
     }

@@ -79,7 +79,7 @@ var PointsWalletLevels = function PointsWalletLevels(props) {
    */
   var handleDeleteLevelList = function handleDeleteLevelList(level) {
     var _levelList$levels;
-    var levels = levelList === null || levelList === void 0 || (_levelList$levels = levelList.levels) === null || _levelList$levels === void 0 ? void 0 : _levelList$levels.filter(function (item) {
+    var levels = levelList === null || levelList === void 0 ? void 0 : (_levelList$levels = levelList.levels) === null || _levelList$levels === void 0 ? void 0 : _levelList$levels.filter(function (item) {
       return item.id !== level.id;
     });
     setLevelList(_objectSpread(_objectSpread({}, levelList), {}, {

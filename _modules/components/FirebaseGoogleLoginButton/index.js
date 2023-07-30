@@ -60,8 +60,8 @@ var FirebaseGoogleLoginButton = function FirebaseGoogleLoginButton(props) {
               loading: true
             }));
             firebase.initializeApp({
-              apiKey: configs === null || configs === void 0 || (_configs$google_login = configs.google_login_api_key) === null || _configs$google_login === void 0 ? void 0 : _configs$google_login.value,
-              authDomain: configs === null || configs === void 0 || (_configs$google_login2 = configs.google_login_auth_domain) === null || _configs$google_login2 === void 0 ? void 0 : _configs$google_login2.value
+              apiKey: configs === null || configs === void 0 ? void 0 : (_configs$google_login = configs.google_login_api_key) === null || _configs$google_login === void 0 ? void 0 : _configs$google_login.value,
+              authDomain: configs === null || configs === void 0 ? void 0 : (_configs$google_login2 = configs.google_login_auth_domain) === null || _configs$google_login2 === void 0 ? void 0 : _configs$google_login2.value
             });
             auth = (0, _auth.getAuth)();
             googleProvider = new _auth.GoogleAuthProvider();

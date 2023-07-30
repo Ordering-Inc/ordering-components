@@ -102,7 +102,7 @@ var BusinessReviews = function BusinessReviews(props) {
           case 5:
             _yield$ordering$busin = _context.sent;
             result = _yield$ordering$busin.content.result;
-            list = result === null || result === void 0 || (_result$reviews = result.reviews) === null || _result$reviews === void 0 ? void 0 : _result$reviews.reviews;
+            list = result === null || result === void 0 ? void 0 : (_result$reviews = result.reviews) === null || _result$reviews === void 0 ? void 0 : _result$reviews.reviews;
             list.sort(function (a, b) {
               return new Date(b.created_at) - new Date(a.created_at);
             });

@@ -52,7 +52,7 @@ var AppleLogin = function AppleLogin(props) {
     _useConfig2 = _slicedToArray(_useConfig, 1),
     configs = _useConfig2[0].configs;
   var initParams = initParamsCustom || {
-    clientId: configs === null || configs === void 0 || (_configs$apple_login_ = configs.apple_login_client_id) === null || _configs$apple_login_ === void 0 ? void 0 : _configs$apple_login_.value,
+    clientId: configs === null || configs === void 0 ? void 0 : (_configs$apple_login_ = configs.apple_login_client_id) === null || _configs$apple_login_ === void 0 ? void 0 : _configs$apple_login_.value,
     redirectURI: !window.location.origin.includes('localhost') ? "".concat(window.location.href, "login/apple/callback") : 'https://example-app.com/redirect',
     response_mode: 'form_post',
     response_type: 'code',

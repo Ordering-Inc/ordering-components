@@ -211,21 +211,21 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
                   }
                 });
               }
-              if ((filterValues === null || filterValues === void 0 || (_filterValues$availab = filterValues.availableMenus) === null || _filterValues$availab === void 0 ? void 0 : _filterValues$availab.value) !== '') {
+              if ((filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$availab = filterValues.availableMenus) === null || _filterValues$availab === void 0 ? void 0 : _filterValues$availab.value) !== '') {
                 filterConditons.push({
                   attribute: 'available_menus_count',
                   value: {
-                    condition: filterValues === null || filterValues === void 0 || (_filterValues$availab2 = filterValues.availableMenus) === null || _filterValues$availab2 === void 0 ? void 0 : _filterValues$availab2.condition,
-                    value: filterValues === null || filterValues === void 0 || (_filterValues$availab3 = filterValues.availableMenus) === null || _filterValues$availab3 === void 0 ? void 0 : _filterValues$availab3.value
+                    condition: filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$availab2 = filterValues.availableMenus) === null || _filterValues$availab2 === void 0 ? void 0 : _filterValues$availab2.condition,
+                    value: filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$availab3 = filterValues.availableMenus) === null || _filterValues$availab3 === void 0 ? void 0 : _filterValues$availab3.value
                   }
                 });
               }
-              if ((filterValues === null || filterValues === void 0 || (_filterValues$menus = filterValues.menus) === null || _filterValues$menus === void 0 ? void 0 : _filterValues$menus.value) !== '') {
+              if ((filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$menus = filterValues.menus) === null || _filterValues$menus === void 0 ? void 0 : _filterValues$menus.value) !== '') {
                 filterConditons.push({
                   attribute: 'menus_count',
                   value: {
-                    condition: filterValues === null || filterValues === void 0 || (_filterValues$menus2 = filterValues.menus) === null || _filterValues$menus2 === void 0 ? void 0 : _filterValues$menus2.condition,
-                    value: filterValues === null || filterValues === void 0 || (_filterValues$menus3 = filterValues.menus) === null || _filterValues$menus3 === void 0 ? void 0 : _filterValues$menus3.value
+                    condition: filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$menus2 = filterValues.menus) === null || _filterValues$menus2 === void 0 ? void 0 : _filterValues$menus2.condition,
+                    value: filterValues === null || filterValues === void 0 ? void 0 : (_filterValues$menus3 = filterValues.menus) === null || _filterValues$menus3 === void 0 ? void 0 : _filterValues$menus3.value
                   }
                 });
               }
@@ -301,7 +301,7 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
                 return country === null || country === void 0 ? void 0 : country.enabled;
               }).some(function (country) {
                 var _country$code, _country$name;
-                return allowCodes.includes(country === null || country === void 0 || (_country$code = country.code) === null || _country$code === void 0 ? void 0 : _country$code.toLowerCase()) || allowCodes.includes(country === null || country === void 0 || (_country$name = country.name) === null || _country$name === void 0 ? void 0 : _country$name.toLowerCase());
+                return allowCodes.includes(country === null || country === void 0 ? void 0 : (_country$code = country.code) === null || _country$code === void 0 ? void 0 : _country$code.toLowerCase()) || allowCodes.includes(country === null || country === void 0 ? void 0 : (_country$name = country.name) === null || _country$name === void 0 ? void 0 : _country$name.toLowerCase());
               });
               setCountriesState(_objectSpread(_objectSpread({}, countriesState), {}, {
                 loading: false,
@@ -392,7 +392,7 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
           case 11:
             _context3.prev = 11;
             _context3.t0 = _context3["catch"](2);
-            if ((_context3.t0 === null || _context3.t0 === void 0 || (_err$constructor = _context3.t0.constructor) === null || _err$constructor === void 0 ? void 0 : _err$constructor.name) !== 'Cancel') {
+            if ((_context3.t0 === null || _context3.t0 === void 0 ? void 0 : (_err$constructor = _context3.t0.constructor) === null || _err$constructor === void 0 ? void 0 : _err$constructor.name) !== 'Cancel') {
               setBusinessList(_objectSpread(_objectSpread({}, businessList), {}, {
                 loading: false,
                 error: [_context3.t0.message]
@@ -430,7 +430,7 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
           case 5:
             response = _context4.sent;
             if (!response.content.error) {
-              setInActiveBusinesses(response === null || response === void 0 || (_response$content = response.content) === null || _response$content === void 0 ? void 0 : _response$content.result);
+              setInActiveBusinesses(response === null || response === void 0 ? void 0 : (_response$content = response.content) === null || _response$content === void 0 ? void 0 : _response$content.result);
             }
             _context4.next = 12;
             break;
@@ -813,7 +813,7 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
   }, []);
   (0, _react.useEffect)(function () {
     getInActiveBusinesses();
-  }, [businessList === null || businessList === void 0 || (_businessList$busines = businessList.businesses) === null || _businessList$busines === void 0 ? void 0 : _businessList$busines.length]);
+  }, [businessList === null || businessList === void 0 ? void 0 : (_businessList$busines = businessList.businesses) === null || _businessList$busines === void 0 ? void 0 : _businessList$busines.length]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     pagination: pagination,
     searchValue: searchValue,

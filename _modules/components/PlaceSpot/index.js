@@ -209,7 +209,7 @@ var PlaceSpot = function PlaceSpot(props) {
             error = _yield$endpointToFetc2.error;
             result = _yield$endpointToFetc2.result;
             if (!error) {
-              onRemoveSpotNumber && onRemoveSpotNumber(cart === null || cart === void 0 || (_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.slug);
+              onRemoveSpotNumber && onRemoveSpotNumber(cart === null || cart === void 0 ? void 0 : (_cart$business = cart.business) === null || _cart$business === void 0 ? void 0 : _cart$business.slug);
             }
             if (props.showToastMsg) {
               showToast(error ? _ToastContext.ToastType.Error : _ToastContext.ToastType.Success, error ? t('ERROR', result[0]) : t('SPOT_CHANGE_SUCCESS_CONTENT', 'Changes applied correctly'));
@@ -239,10 +239,10 @@ var PlaceSpot = function PlaceSpot(props) {
   }();
   (0, _react.useEffect)(function () {
     var _orderState$options;
-    if (orderTypesAllowed.includes(orderState === null || orderState === void 0 || (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) && !props.isInputMode) {
+    if (orderTypesAllowed.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) && !props.isInputMode) {
       getPlaces();
     }
-  }, [orderState === null || orderState === void 0 || (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type]);
+  }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type]);
   (0, _react.useEffect)(function () {
     if (spotNumberDefault && spotNumberDefault !== (cart === null || cart === void 0 ? void 0 : cart.spot_number)) {
       handleChangeSpot({

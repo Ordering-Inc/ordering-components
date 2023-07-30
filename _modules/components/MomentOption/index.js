@@ -170,7 +170,7 @@ var MomentOption = function MomentOption(props) {
   var getActualSchedule = function getActualSchedule() {
     var _business$schedule, _business$schedule$fi;
     var dayNumber = (0, _dayjs.default)(dateSelected).day();
-    var schedule = business === null || business === void 0 || (_business$schedule = business.schedule) === null || _business$schedule === void 0 || (_business$schedule$fi = _business$schedule.find) === null || _business$schedule$fi === void 0 ? void 0 : _business$schedule$fi.call(_business$schedule, function (s, i) {
+    var schedule = business === null || business === void 0 ? void 0 : (_business$schedule = business.schedule) === null || _business$schedule === void 0 ? void 0 : (_business$schedule$fi = _business$schedule.find) === null || _business$schedule$fi === void 0 ? void 0 : _business$schedule$fi.call(_business$schedule, function (s, i) {
       return dayNumber === i;
     });
     return (schedule === null || schedule === void 0 ? void 0 : schedule.enabled) && schedule;

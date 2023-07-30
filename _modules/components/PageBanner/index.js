@@ -34,7 +34,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PageBanner = function PageBanner(props) {
-  var _configs$unaddressed_, _orderState$options, _orderState$options5, _orderState$options6;
+  var _configs$unaddressed_, _orderState$options, _orderState$options5, _orderState$options5$, _orderState$options6;
   var UIComponent = props.UIComponent,
     position = props.position,
     businessId = props.businessId;
@@ -56,17 +56,17 @@ var PageBanner = function PageBanner(props) {
     _useState2 = _slicedToArray(_useState, 2),
     pageBannerState = _useState2[0],
     setPageBannerState = _useState2[1];
-  var unaddressedTypes = (configs === null || configs === void 0 || (_configs$unaddressed_ = configs.unaddressed_order_types_allowed) === null || _configs$unaddressed_ === void 0 ? void 0 : _configs$unaddressed_.value.split('|').map(function (value) {
+  var unaddressedTypes = (configs === null || configs === void 0 ? void 0 : (_configs$unaddressed_ = configs.unaddressed_order_types_allowed) === null || _configs$unaddressed_ === void 0 ? void 0 : _configs$unaddressed_.value.split('|').map(function (value) {
     return Number(value);
   })) || [];
-  var isAllowUnaddressOrderType = unaddressedTypes.includes(orderState === null || orderState === void 0 || (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type);
+  var isAllowUnaddressOrderType = unaddressedTypes.includes(orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type);
 
   /**
    * Method to get the page banner from API
    */
   var handleGetPageBanner = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var requestOptions, fetchEndpoint, _configs$location_def, _configs$location_def2, _orderState$options2, _orderState$options3, _orderState$options4, defaultLatitude, defaultLongitude, isInvalidDefaultLocation, defaultLocation, location, type, response, _yield$response$json, error, result, totalItems;
+      var requestOptions, fetchEndpoint, _configs$location_def, _configs$location_def2, _orderState$options2, _orderState$options2$, _orderState$options3, _orderState$options3$, _orderState$options4, defaultLatitude, defaultLongitude, isInvalidDefaultLocation, defaultLocation, location, type, response, _yield$response$json, error, result, totalItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -84,14 +84,14 @@ var PageBanner = function PageBanner(props) {
             };
             fetchEndpoint = "".concat(ordering.root, "/banner?position=").concat(position);
             if (position === 'web_business_listing' || position === 'app_business_listing') {
-              defaultLatitude = Number(configs === null || configs === void 0 || (_configs$location_def = configs.location_default_latitude) === null || _configs$location_def === void 0 ? void 0 : _configs$location_def.value);
-              defaultLongitude = Number(configs === null || configs === void 0 || (_configs$location_def2 = configs.location_default_longitude) === null || _configs$location_def2 === void 0 ? void 0 : _configs$location_def2.value);
+              defaultLatitude = Number(configs === null || configs === void 0 ? void 0 : (_configs$location_def = configs.location_default_latitude) === null || _configs$location_def === void 0 ? void 0 : _configs$location_def.value);
+              defaultLongitude = Number(configs === null || configs === void 0 ? void 0 : (_configs$location_def2 = configs.location_default_longitude) === null || _configs$location_def2 === void 0 ? void 0 : _configs$location_def2.value);
               isInvalidDefaultLocation = isNaN(defaultLatitude) || isNaN(defaultLongitude);
               defaultLocation = {
                 lat: !isInvalidDefaultLocation ? defaultLatitude : 40.7744146,
                 lng: !isInvalidDefaultLocation ? defaultLongitude : -73.9678064
               };
-              location = isAllowUnaddressOrderType && !((_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && (_orderState$options2 = _orderState$options2.address) !== null && _orderState$options2 !== void 0 && _orderState$options2.location) ? defaultLocation : (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 || (_orderState$options3 = _orderState$options3.address) === null || _orderState$options3 === void 0 ? void 0 : _orderState$options3.location;
+              location = isAllowUnaddressOrderType && !((_orderState$options2 = orderState.options) !== null && _orderState$options2 !== void 0 && (_orderState$options2$ = _orderState$options2.address) !== null && _orderState$options2$ !== void 0 && _orderState$options2$.location) ? defaultLocation : (_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : _orderState$options3$.location;
               type = ((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.type) || 1;
               fetchEndpoint = "".concat(ordering.root, "/banner?position=").concat(position, "&location=").concat(JSON.stringify(location), "&order_type_id=").concat(type);
             }
@@ -141,7 +141,7 @@ var PageBanner = function PageBanner(props) {
   (0, _react.useEffect)(function () {
     if (!position || orderState.loading) return;
     handleGetPageBanner();
-  }, [position, businessId, JSON.stringify((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 || (_orderState$options5 = _orderState$options5.address) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.location), orderState === null || orderState === void 0 || (_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type]);
+  }, [position, businessId, JSON.stringify((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : (_orderState$options5$ = _orderState$options5.address) === null || _orderState$options5$ === void 0 ? void 0 : _orderState$options5$.location), orderState === null || orderState === void 0 ? void 0 : (_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.type, orderState.loading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     pageBannerState: pageBannerState
   })));

@@ -163,9 +163,9 @@ var Messages = function Messages(props) {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
       var _messages$messages;
-      var actualChat = messages === null || messages === void 0 || (_messages$messages = messages.messages) === null || _messages$messages === void 0 ? void 0 : _messages$messages.find(function (_message) {
+      var actualChat = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages) === null || _messages$messages === void 0 ? void 0 : _messages$messages.find(function (_message) {
         var _message$order;
-        return (_message === null || _message === void 0 ? void 0 : _message.order_id) === (message === null || message === void 0 || (_message$order = message.order) === null || _message$order === void 0 ? void 0 : _message$order.id);
+        return (_message === null || _message === void 0 ? void 0 : _message.order_id) === (message === null || message === void 0 ? void 0 : (_message$order = message.order) === null || _message$order === void 0 ? void 0 : _message$order.id);
       });
       var found = messages.messages.find(function (_message) {
         return _message.id === message.id;

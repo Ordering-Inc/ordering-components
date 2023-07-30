@@ -37,7 +37,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order2, _orderState$order, _orderState$order11, _orderState$order12, _orderState$order13, _orderState$order20, _orderState$order21, _orderState$order22;
+  var _props$order, _props$order2, _props$order2$driver, _orderState$order, _orderState$order$dri, _orderState$order11, _orderState$order12, _orderState$order13, _orderState$order20, _orderState$order21, _orderState$order22;
   var orderId = props.orderId,
     orderAssingId = props.orderAssingId,
     hashKey = props.hashKey,
@@ -107,7 +107,7 @@ var OrderDetails = function OrderDetails(props) {
     messages = _useState8[0],
     setMessages = _useState8[1];
   var socket = (0, _WebsocketContext.useWebsocket)();
-  var _useState9 = (0, _react.useState)(((_props$order2 = props.order) === null || _props$order2 === void 0 || (_props$order2 = _props$order2.driver) === null || _props$order2 === void 0 ? void 0 : _props$order2.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 || (_orderState$order = _orderState$order.driver) === null || _orderState$order === void 0 ? void 0 : _orderState$order.location) || null),
+  var _useState9 = (0, _react.useState)(((_props$order2 = props.order) === null || _props$order2 === void 0 ? void 0 : (_props$order2$driver = _props$order2.driver) === null || _props$order2$driver === void 0 ? void 0 : _props$order2$driver.location) || ((_orderState$order = orderState.order) === null || _orderState$order === void 0 ? void 0 : (_orderState$order$dri = _orderState$order.driver) === null || _orderState$order$dri === void 0 ? void 0 : _orderState$order$dri.location) || null),
     _useState10 = _slicedToArray(_useState9, 2),
     driverLocation = _useState10[0],
     setDriverLocation = _useState10[1];
@@ -497,7 +497,7 @@ var OrderDetails = function OrderDetails(props) {
               loading: true
             }));
             _context6.next = 5;
-            return ordering.setAccessToken(token).orders((_orderState$order$id2 = orderState === null || orderState === void 0 || (_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.id) !== null && _orderState$order$id2 !== void 0 ? _orderState$order$id2 : orderId).save(bodyToSend);
+            return ordering.setAccessToken(token).orders((_orderState$order$id2 = orderState === null || orderState === void 0 ? void 0 : (_orderState$order7 = orderState.order) === null || _orderState$order7 === void 0 ? void 0 : _orderState$order7.id) !== null && _orderState$order$id2 !== void 0 ? _orderState$order$id2 : orderId).save(bodyToSend);
           case 5:
             _yield$ordering$setAc5 = _context6.sent;
             _yield$ordering$setAc6 = _yield$ordering$setAc5.content;
@@ -660,7 +660,7 @@ var OrderDetails = function OrderDetails(props) {
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
           case 0:
-            messageId = messages === null || messages === void 0 || (_messages$messages = messages.messages[(messages === null || messages === void 0 || (_messages$messages2 = messages.messages) === null || _messages$messages2 === void 0 ? void 0 : _messages$messages2.length) - 1]) === null || _messages$messages === void 0 ? void 0 : _messages$messages.id;
+            messageId = messages === null || messages === void 0 ? void 0 : (_messages$messages = messages.messages[(messages === null || messages === void 0 ? void 0 : (_messages$messages2 = messages.messages) === null || _messages$messages2 === void 0 ? void 0 : _messages$messages2.length) - 1]) === null || _messages$messages === void 0 ? void 0 : _messages$messages.id;
             if (messageId) {
               _context8.next = 3;
               break;
@@ -825,7 +825,7 @@ var OrderDetails = function OrderDetails(props) {
           case 7:
             content = _context11.sent;
             if (!(content !== null && content !== void 0 && content.error)) {
-              handleReorder(orderState === null || orderState === void 0 || (_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.id);
+              handleReorder(orderState === null || orderState === void 0 ? void 0 : (_orderState$order10 = orderState.order) === null || _orderState$order10 === void 0 ? void 0 : _orderState$order10.id);
               setCartState({
                 loading: false,
                 error: null
@@ -857,7 +857,7 @@ var OrderDetails = function OrderDetails(props) {
   }();
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
-  }, [orderState === null || orderState === void 0 || (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.id, orderState === null || orderState === void 0 || (_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.status, orderState.loading]);
+  }, [orderState === null || orderState === void 0 ? void 0 : (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.id, orderState === null || orderState === void 0 ? void 0 : (_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.status, orderState.loading]);
   (0, _react.useEffect)(function () {
     if (props.order && !isDriverNotification) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
@@ -947,9 +947,9 @@ var OrderDetails = function OrderDetails(props) {
     if (messages.loading) return;
     var handleNewMessage = function handleNewMessage(message) {
       var _messages$messages3;
-      var actualChat = messages === null || messages === void 0 || (_messages$messages3 = messages.messages) === null || _messages$messages3 === void 0 ? void 0 : _messages$messages3.find(function (_message) {
+      var actualChat = messages === null || messages === void 0 ? void 0 : (_messages$messages3 = messages.messages) === null || _messages$messages3 === void 0 ? void 0 : _messages$messages3.find(function (_message) {
         var _message$order;
-        return (_message === null || _message === void 0 ? void 0 : _message.order_id) === (message === null || message === void 0 || (_message$order = message.order) === null || _message$order === void 0 ? void 0 : _message$order.id);
+        return (_message === null || _message === void 0 ? void 0 : _message.order_id) === (message === null || message === void 0 ? void 0 : (_message$order = message.order) === null || _message$order === void 0 ? void 0 : _message$order.id);
       });
       var found = messages.messages.find(function (_message) {
         return _message.id === message.id;

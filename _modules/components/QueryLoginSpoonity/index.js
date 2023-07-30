@@ -98,7 +98,7 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
             if (!error) {
               login({
                 user: result,
-                token: result === null || result === void 0 || (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
+                token: result === null || result === void 0 ? void 0 : (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                 loading: false,
