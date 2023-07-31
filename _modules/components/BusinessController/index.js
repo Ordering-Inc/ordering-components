@@ -241,7 +241,7 @@ var BusinessController = function BusinessController(props) {
               error: null
             }));
             changes = {
-              object_id: businessState === null || businessState === void 0 ? void 0 : (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.id
+              object_id: businessState === null || businessState === void 0 || (_businessState$busine = businessState.business) === null || _businessState$busine === void 0 ? void 0 : _businessState$busine.id
             };
             requestOptions = _objectSpread({
               method: isAdd ? 'POST' : 'DELETE',
@@ -254,7 +254,7 @@ var BusinessController = function BusinessController(props) {
             }, isAdd && {
               body: JSON.stringify(changes)
             });
-            fetchEndpoint = isAdd ? "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_businesses") : "".concat(ordering.root, "/users/").concat(user.id, "/favorite_businesses/").concat(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : _businessState$busine2.id);
+            fetchEndpoint = isAdd ? "".concat(ordering.root, "/users/").concat(user === null || user === void 0 ? void 0 : user.id, "/favorite_businesses") : "".concat(ordering.root, "/users/").concat(user.id, "/favorite_businesses/").concat(businessState === null || businessState === void 0 || (_businessState$busine2 = businessState.business) === null || _businessState$busine2 === void 0 ? void 0 : _businessState$busine2.id);
             _context2.next = 11;
             return fetch(fetchEndpoint, requestOptions);
           case 11:
@@ -267,13 +267,13 @@ var BusinessController = function BusinessController(props) {
               setActionState(_objectSpread(_objectSpread({}, actionState), {}, {
                 loading: false
               }));
-              handleUpdateBusinessList && handleUpdateBusinessList(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine3 = businessState.business) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.id, {
+              handleUpdateBusinessList && handleUpdateBusinessList(businessState === null || businessState === void 0 || (_businessState$busine3 = businessState.business) === null || _businessState$busine3 === void 0 ? void 0 : _businessState$busine3.id, {
                 favorite: isAdd
               });
               if (favoriteIds) {
-                updateIds = isAdd ? [].concat(_toConsumableArray(favoriteIds), [businessState === null || businessState === void 0 ? void 0 : (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.id]) : favoriteIds.filter(function (item) {
+                updateIds = isAdd ? [].concat(_toConsumableArray(favoriteIds), [businessState === null || businessState === void 0 || (_businessState$busine4 = businessState.business) === null || _businessState$busine4 === void 0 ? void 0 : _businessState$busine4.id]) : favoriteIds.filter(function (item) {
                   var _businessState$busine5;
-                  return item !== (businessState === null || businessState === void 0 ? void 0 : (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id);
+                  return item !== (businessState === null || businessState === void 0 || (_businessState$busine5 = businessState.business) === null || _businessState$busine5 === void 0 ? void 0 : _businessState$busine5.id);
                 });
                 setFavoriteIds(updateIds);
               }
@@ -282,7 +282,7 @@ var BusinessController = function BusinessController(props) {
                   favorite: isAdd
                 })
               }));
-              props.handleCustomUpdate && props.handleCustomUpdate(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.id, {
+              props.handleCustomUpdate && props.handleCustomUpdate(businessState === null || businessState === void 0 || (_businessState$busine6 = businessState.business) === null || _businessState$busine6 === void 0 ? void 0 : _businessState$busine6.id, {
                 favorite: isAdd
               });
               showToast(_ToastContext.ToastType.Success, isAdd ? t('FAVORITE_ADDED', 'Favorite added') : t('FAVORITE_REMOVED', 'Favorite removed'));
@@ -315,15 +315,15 @@ var BusinessController = function BusinessController(props) {
   }();
   (0, _react.useEffect)(function () {
     if (!isDisabledInterval) {
-      var _businessState$busine7, _businessState$busine8, _businessState$busine9, _businessState$busine10;
+      var _businessState$busine7, _businessState$busine8, _businessState$busine9;
       var timeout = null;
       var timeoutCloseSoon = null;
       if (!((_businessState$busine7 = businessState.business) !== null && _businessState$busine7 !== void 0 && _businessState$busine7.timezone)) return;
       var currentDate = (0, _dayjs.default)().tz((_businessState$busine8 = businessState.business) === null || _businessState$busine8 === void 0 ? void 0 : _businessState$busine8.timezone);
       var lapse = null;
-      if ((_businessState$busine9 = businessState.business) !== null && _businessState$busine9 !== void 0 && (_businessState$busine10 = _businessState$busine9.today) !== null && _businessState$busine10 !== void 0 && _businessState$busine10.enabled) {
-        var _businessState$busine11, _businessState$busine12, _businessState$busine13;
-        lapse = (_businessState$busine11 = businessState.business) === null || _businessState$busine11 === void 0 ? void 0 : (_businessState$busine12 = _businessState$busine11.today) === null || _businessState$busine12 === void 0 ? void 0 : (_businessState$busine13 = _businessState$busine12.lapses) === null || _businessState$busine13 === void 0 ? void 0 : _businessState$busine13.find(function (lapse) {
+      if ((_businessState$busine9 = businessState.business) !== null && _businessState$busine9 !== void 0 && (_businessState$busine9 = _businessState$busine9.today) !== null && _businessState$busine9 !== void 0 && _businessState$busine9.enabled) {
+        var _businessState$busine10;
+        lapse = (_businessState$busine10 = businessState.business) === null || _businessState$busine10 === void 0 || (_businessState$busine10 = _businessState$busine10.today) === null || _businessState$busine10 === void 0 || (_businessState$busine10 = _businessState$busine10.lapses) === null || _businessState$busine10 === void 0 ? void 0 : _businessState$busine10.find(function (lapse) {
           var from = currentDate.hour(lapse.open.hour).minute(lapse.open.minute);
           var to = currentDate.hour(lapse.close.hour).minute(lapse.close.minute);
           return currentDate.unix() >= from.unix() && currentDate.unix() <= to.unix();
@@ -429,9 +429,9 @@ var BusinessController = function BusinessController(props) {
     };
   }();
   (0, _react.useEffect)(function () {
-    var _businessState$busine14;
+    var _businessState$busine11;
     if (!favoriteIds) return;
-    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 ? void 0 : (_businessState$busine14 = businessState.business) === null || _businessState$busine14 === void 0 ? void 0 : _businessState$busine14.id)) {
+    if (favoriteIds !== null && favoriteIds !== void 0 && favoriteIds.includes(businessState === null || businessState === void 0 || (_businessState$busine11 = businessState.business) === null || _businessState$busine11 === void 0 ? void 0 : _businessState$busine11.id)) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {
         business: _objectSpread(_objectSpread({}, businessState === null || businessState === void 0 ? void 0 : businessState.business), {}, {
           favorite: true

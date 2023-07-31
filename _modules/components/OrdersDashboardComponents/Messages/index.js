@@ -36,7 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Messages = function Messages(props) {
-  var _configState$configs, _configState$configs$;
+  var _configState$configs;
   var UIComponent = props.UIComponent,
     orderId = props.orderId,
     customHandleSend = props.customHandleSend,
@@ -104,7 +104,7 @@ var Messages = function Messages(props) {
     image = _useState12[0],
     setImage = _useState12[1];
   var socket = (0, _WebsocketContext.useWebsocket)();
-  var googleMapsApiKey = configState === null || configState === void 0 ? void 0 : (_configState$configs = configState.configs) === null || _configState$configs === void 0 ? void 0 : (_configState$configs$ = _configState$configs.google_maps_api_key) === null || _configState$configs$ === void 0 ? void 0 : _configState$configs$.value;
+  var googleMapsApiKey = configState === null || configState === void 0 || (_configState$configs = configState.configs) === null || _configState$configs === void 0 || (_configState$configs = _configState$configs.google_maps_api_key) === null || _configState$configs === void 0 ? void 0 : _configState$configs.value;
   var getStaticMapByLocation = function getStaticMapByLocation(location, size) {
     if (!size) {
       size = '250x100';
@@ -134,7 +134,7 @@ var Messages = function Messages(props) {
   var getHistoryComment = function getHistoryComment(message) {
     var _message$change;
     var comment = '';
-    var changeAttribute = message === null || message === void 0 ? void 0 : (_message$change = message.change) === null || _message$change === void 0 ? void 0 : _message$change.attribute;
+    var changeAttribute = message === null || message === void 0 || (_message$change = message.change) === null || _message$change === void 0 ? void 0 : _message$change.attribute;
     if (changeAttribute === 'distance') {
       comment = t('THE_DRIVER_IS_CLOSE') + ' <b>(' + message.driver.name + (message.driver.lastname ? ' ' + message.driver.lastname : '') + ')</b>';
     } else if (changeAttribute === 'status') {
