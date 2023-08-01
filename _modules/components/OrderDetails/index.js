@@ -384,43 +384,52 @@ var OrderDetails = function OrderDetails(props) {
             _yield$ordering$setAc2 = _yield$ordering$setAc.content;
             result = _yield$ordering$setAc2.result;
             error = _yield$ordering$setAc2.error;
+            if (error) {
+              _context4.next = 13;
+              break;
+            }
+            setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+              order: Object.assign(orderState.order, result),
+              loading: false
+            }));
+            return _context4.abrupt("return", Object.assign(orderState.order, result));
+          case 13:
             if (!error) {
+              _context4.next = 17;
+              break;
+            }
+            selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery : result.includes(deliveryMessages.pickup.text) ? deliveryMessages.pickup : null;
+            if (selected) {
+              setForceUpdate(null);
               setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                order: Object.assign(orderState.order, result),
+                loading: false
+              }));
+              setForceUpdate(selected.value);
+            } else {
+              message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR';
+              defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error');
+              setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
+                error: [defaultMessage],
                 loading: false
               }));
             }
-            if (error) {
-              selected = result.includes(deliveryMessages.delivery.text) ? deliveryMessages.delivery : result.includes(deliveryMessages.pickup.text) ? deliveryMessages.pickup : null;
-              if (selected) {
-                setForceUpdate(null);
-                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  loading: false
-                }));
-                setForceUpdate(selected.value);
-              } else {
-                message = Array.isArray(result) ? result[0] : typeof result === 'string' ? result : 'INTERNAL_ERROR';
-                defaultMessage = message !== 'INTERNAL_ERROR' ? message : t('INTERNAL_ERROR', 'Internal Error');
-                setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
-                  error: [defaultMessage],
-                  loading: false
-                }));
-              }
-            }
-            _context4.next = 17;
+            return _context4.abrupt("return", null);
+          case 17:
+            _context4.next = 23;
             break;
-          case 14:
-            _context4.prev = 14;
+          case 19:
+            _context4.prev = 19;
             _context4.t0 = _context4["catch"](1);
             setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {
               loading: false,
               error: [(_context4.t0 === null || _context4.t0 === void 0 ? void 0 : _context4.t0.message) || t('NETWORK_ERROR', 'Network Error')]
             }));
-          case 17:
+            return _context4.abrupt("return", null);
+          case 23:
           case "end":
             return _context4.stop();
         }
-      }, _callee4, null, [[1, 14]]);
+      }, _callee4, null, [[1, 19]]);
     }));
     return function handleChangeOrderStatus(_x6) {
       return _ref4.apply(this, arguments);
