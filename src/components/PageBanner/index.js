@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { useApi } from '../../contexts/ApiContext'
 import { useWebsocket } from '../../contexts/WebsocketContext'
 import { useConfig } from '../../contexts/ConfigContext'
 import { useOrder } from '../../contexts/OrderContext'
+dayjs.extend(utc)
 
 export const PageBanner = (props) => {
   const {
@@ -21,6 +24,7 @@ export const PageBanner = (props) => {
 
   const unaddressedTypes = configs?.unaddressed_order_types_allowed?.value.split('|').map(value => Number(value)) || []
   const isAllowUnaddressOrderType = unaddressedTypes.includes(orderState?.options?.type)
+  const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
 
   /**
    * Method to get the page banner from API
@@ -54,6 +58,10 @@ export const PageBanner = (props) => {
       if (position === 'web_business_page' || position === 'app_business_page') {
         fetchEndpoint = `${ordering.root}/banner?position=${position}&business_id=${businessId}`
       }
+      if (orderState.options?.moment && isValidMoment(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss')) {
+        const moment = dayjs.utc(orderState.options?.moment, 'YYYY-MM-DD HH:mm:ss').local().unix()
+        fetchEndpoint += `&timestamp=${moment}`
+      }
       const response = await fetch(fetchEndpoint, requestOptions)
       const { error, result } = await response.json()
       const totalItems = result.reduce((items, banner) => [...items, ...banner?.items], [])
@@ -75,7 +83,7 @@ export const PageBanner = (props) => {
   useEffect(() => {
     if (!position || orderState.loading) return
     handleGetPageBanner()
-  }, [position, businessId, JSON.stringify(orderState.options?.address?.location), orderState?.options?.type, orderState.loading])
+  }, [position, businessId, JSON.stringify(orderState.options?.address?.location), orderState?.options?.type, orderState.options?.moment])
 
   return (
     <>
