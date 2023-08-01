@@ -138,12 +138,12 @@ var ReviewProduct = function ReviewProduct(props) {
               loading: true
             }));
             _context3.prev = 1;
-            if (!((order === null || order === void 0 ? void 0 : (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.length) > 1)) {
+            if (!((order === null || order === void 0 || (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.length) > 1)) {
               _context3.next = 6;
               break;
             }
             // eslint-disable-next-line no-unused-expressions
-            order === null || order === void 0 ? void 0 : (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.forEach( /*#__PURE__*/function () {
+            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.forEach( /*#__PURE__*/function () {
               var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(business, i) {
                 var productsOfOrder, _result;
                 return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -151,7 +151,7 @@ var ReviewProduct = function ReviewProduct(props) {
                     case 0:
                       productsOfOrder = Object.values(formState.changes).filter(function (product) {
                         var _order$products$i;
-                        return order === null || order === void 0 ? void 0 : (_order$products$i = order.products[i]) === null || _order$products$i === void 0 ? void 0 : _order$products$i.some(function (_product) {
+                        return order === null || order === void 0 || (_order$products$i = order.products[i]) === null || _order$products$i === void 0 ? void 0 : _order$products$i.some(function (_product) {
                           return (product === null || product === void 0 ? void 0 : product.product_id) === (_product === null || _product === void 0 ? void 0 : _product.product_id) && (_product === null || _product === void 0 ? void 0 : _product.order_id) === (order === null || order === void 0 ? void 0 : order.id[i]);
                         });
                       });

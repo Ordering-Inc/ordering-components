@@ -26,7 +26,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage payment option paypal behavior without UI component
  */
 var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
-  var _window2, _window2$paypal, _window2$paypal$Butto;
+  var _window2;
   var body = props.body,
     clientId = props.clientId,
     currency = props.currency,
@@ -154,7 +154,7 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
   /**
    * Assign paypal button to an instance of react dom
    */
-  var Button = (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$paypal = _window2.paypal) === null || _window2$paypal === void 0 ? void 0 : (_window2$paypal$Butto = _window2$paypal.Buttons) === null || _window2$paypal$Butto === void 0 ? void 0 : _window2$paypal$Butto.driver('react', {
+  var Button = (_window2 = window) === null || _window2 === void 0 || (_window2 = _window2.paypal) === null || _window2 === void 0 || (_window2 = _window2.Buttons) === null || _window2 === void 0 ? void 0 : _window2.driver('react', {
     React: _react.default,
     ReactDOM: _reactDom.default
   });

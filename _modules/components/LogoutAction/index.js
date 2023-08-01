@@ -64,7 +64,7 @@ var LogoutAction = function LogoutAction(props) {
       window.fbAsyncInit = function () {
         var _configs$facebook_id2;
         window.FB.init({
-          appId: configs === null || configs === void 0 ? void 0 : (_configs$facebook_id2 = configs.facebook_id) === null || _configs$facebook_id2 === void 0 ? void 0 : _configs$facebook_id2.value,
+          appId: configs === null || configs === void 0 || (_configs$facebook_id2 = configs.facebook_id) === null || _configs$facebook_id2 === void 0 ? void 0 : _configs$facebook_id2.value,
           cookie: true,
           xfbml: false,
           version: 'v7.0',
@@ -82,7 +82,7 @@ var LogoutAction = function LogoutAction(props) {
       js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }
-  }, [configs === null || configs === void 0 ? void 0 : (_configs$facebook_id3 = configs.facebook_id) === null || _configs$facebook_id3 === void 0 ? void 0 : _configs$facebook_id3.value]);
+  }, [configs === null || configs === void 0 || (_configs$facebook_id3 = configs.facebook_id) === null || _configs$facebook_id3 === void 0 ? void 0 : _configs$facebook_id3.value]);
   (0, _react.useEffect)(function () {
     var _configs$google_login;
     if (configs !== null && configs !== void 0 && (_configs$google_login = configs.google_login_client_id) !== null && _configs$google_login !== void 0 && _configs$google_login.value && !isNative) {
@@ -102,7 +102,7 @@ var LogoutAction = function LogoutAction(props) {
         }
       };
     }
-  }, [configs === null || configs === void 0 ? void 0 : (_configs$google_login2 = configs.google_login_client_id) === null || _configs$google_login2 === void 0 ? void 0 : _configs$google_login2.value]);
+  }, [configs === null || configs === void 0 || (_configs$google_login2 = configs.google_login_client_id) === null || _configs$google_login2 === void 0 ? void 0 : _configs$google_login2.value]);
 
   /**
    * Default fuction for logout workflow

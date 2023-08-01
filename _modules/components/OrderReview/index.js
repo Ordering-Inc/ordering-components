@@ -139,15 +139,15 @@ var OrderReview = function OrderReview(props) {
               service: stars.service,
               package: stars.packaging,
               comment: stars.comments,
-              user_id: session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id
+              user_id: session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id
             };
             _context3.prev = 3;
-            if (!((order === null || order === void 0 ? void 0 : (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.length) > 1)) {
+            if (!((order === null || order === void 0 || (_order$business = order.business) === null || _order$business === void 0 ? void 0 : _order$business.length) > 1)) {
               _context3.next = 8;
               break;
             }
             // eslint-disable-next-line no-unused-expressions
-            order === null || order === void 0 ? void 0 : (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.forEach( /*#__PURE__*/function () {
+            order === null || order === void 0 || (_order$business2 = order.business) === null || _order$business2 === void 0 ? void 0 : _order$business2.forEach( /*#__PURE__*/function () {
               var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_business, i) {
                 var _order$business3;
                 var body, _yield$reviewOrder, result, error;
@@ -167,7 +167,7 @@ var OrderReview = function OrderReview(props) {
                       if (!error) handleUpdateOrderList && handleUpdateOrderList(order.id[i], {
                         review: result
                       });
-                      if ((order === null || order === void 0 ? void 0 : (_order$business3 = order.business) === null || _order$business3 === void 0 ? void 0 : _order$business3.length) - 1 === i) {
+                      if ((order === null || order === void 0 || (_order$business3 = order.business) === null || _order$business3 === void 0 ? void 0 : _order$business3.length) - 1 === i) {
                         setFormState({
                           loading: false,
                           result: result,

@@ -104,7 +104,7 @@ var OrderVerticalList = function OrderVerticalList(props) {
   var requestsState = {};
   var getOrders = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref) {
-      var page, _ref$pageSize, pageSize, orderStatus, options, _ordersGroup, _ordersGroup$all, _ordersGroup$all$orde, source, functionFetch;
+      var page, _ref$pageSize, pageSize, orderStatus, options, _ordersGroup, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -126,7 +126,7 @@ var OrderVerticalList = function OrderVerticalList(props) {
                 attribute: 'id',
                 value: {
                   condition: '!=',
-                  value: (_ordersGroup = ordersGroup) === null || _ordersGroup === void 0 ? void 0 : (_ordersGroup$all = _ordersGroup.all) === null || _ordersGroup$all === void 0 ? void 0 : (_ordersGroup$all$orde = _ordersGroup$all.orders) === null || _ordersGroup$all$orde === void 0 ? void 0 : _ordersGroup$all$orde.map(function (o) {
+                  value: (_ordersGroup = ordersGroup) === null || _ordersGroup === void 0 || (_ordersGroup = _ordersGroup.all) === null || _ordersGroup === void 0 || (_ordersGroup = _ordersGroup.orders) === null || _ordersGroup === void 0 ? void 0 : _ordersGroup.map(function (o) {
                     return o.id;
                   })
                 }
@@ -407,7 +407,7 @@ var OrderVerticalList = function OrderVerticalList(props) {
   (0, _react.useEffect)(function () {
     if (ordersGroup.loading) return;
     var handleUpdateOrder = function handleUpdateOrder(order) {
-      var _orderFound, _orderFound$driver, _order$driver, _session$user;
+      var _orderFound, _order$driver, _session$user;
       events.emit('order_updated', order);
       var orderFound = null;
       for (var i = 0; i < ordersStatusArray.length; i++) {
@@ -427,7 +427,7 @@ var OrderVerticalList = function OrderVerticalList(props) {
         actionOrderToTab(order, getStatusById(order === null || order === void 0 ? void 0 : order.status), 'add');
         return;
       }
-      if (orderFound.id === order.id && ((_orderFound = orderFound) === null || _orderFound === void 0 ? void 0 : (_orderFound$driver = _orderFound.driver) === null || _orderFound$driver === void 0 ? void 0 : _orderFound$driver.id) !== (order === null || order === void 0 ? void 0 : (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) && (session === null || session === void 0 ? void 0 : (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
+      if (orderFound.id === order.id && ((_orderFound = orderFound) === null || _orderFound === void 0 || (_orderFound = _orderFound.driver) === null || _orderFound === void 0 ? void 0 : _orderFound.id) !== (order === null || order === void 0 || (_order$driver = order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) && (session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.level) === 4) {
         actionOrderToTab(orderFound, getStatusById(orderFound.status), 'remove');
       }
       if (orderFound.id === order.id) {
@@ -473,10 +473,10 @@ var OrderVerticalList = function OrderVerticalList(props) {
     if (!session.user) return;
     socket.on('disconnect', function () {
       var _session$user2, _session$user3;
-      var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
+      var ordersRoom = (session === null || session === void 0 || (_session$user2 = session.user) === null || _session$user2 === void 0 ? void 0 : _session$user2.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user3 = session.user) === null || _session$user3 === void 0 ? void 0 : _session$user3.id);
       socket.join(ordersRoom);
     });
-    var ordersRoom = (session === null || session === void 0 ? void 0 : (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 ? void 0 : (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id);
+    var ordersRoom = (session === null || session === void 0 || (_session$user4 = session.user) === null || _session$user4 === void 0 ? void 0 : _session$user4.level) === 0 ? 'orders' : "orders_".concat(session === null || session === void 0 || (_session$user5 = session.user) === null || _session$user5 === void 0 ? void 0 : _session$user5.id);
     socket.join(ordersRoom);
     return function () {
       socket.leave(ordersRoom);

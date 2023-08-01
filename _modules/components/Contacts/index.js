@@ -496,7 +496,7 @@ var Contacts = function Contacts(props) {
                     delete order.total;
                     delete order.subtotal;
                     Object.assign(_order, order);
-                  } else if ((_order === null || _order === void 0 ? void 0 : (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (driver === null || driver === void 0 ? void 0 : driver.id) && (user === null || user === void 0 ? void 0 : user.level) === 4) {
+                  } else if ((_order === null || _order === void 0 || (_order$driver = _order.driver) === null || _order$driver === void 0 ? void 0 : _order$driver.id) !== (driver === null || driver === void 0 ? void 0 : driver.id) && (user === null || user === void 0 ? void 0 : user.level) === 4) {
                     data.splice(index, 1);
                   }
                   return true;

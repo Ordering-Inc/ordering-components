@@ -113,14 +113,14 @@ var Cart = function Cart(props) {
    * Catering preorder
    */
   var cateringTypes = [7, 8];
-  var cateringTypeString = (orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) === 7 ? 'catering_delivery' : (orderState === null || orderState === void 0 ? void 0 : (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 8 ? 'catering_pickup' : null;
+  var cateringTypeString = (orderState === null || orderState === void 0 || (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.type) === 7 ? 'catering_delivery' : (orderState === null || orderState === void 0 || (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.type) === 8 ? 'catering_pickup' : null;
   var splitCateringValue = function splitCateringValue(configName) {
-    var _businessConfigs$find, _businessConfigs$find2, _businessConfigs$find3, _businessConfigs$find4;
+    var _businessConfigs$find;
     return (_businessConfigs$find = businessConfigs.find(function (config) {
       return config.key === configName;
-    })) === null || _businessConfigs$find === void 0 ? void 0 : (_businessConfigs$find2 = _businessConfigs$find.value) === null || _businessConfigs$find2 === void 0 ? void 0 : (_businessConfigs$find3 = _businessConfigs$find2.split('|')) === null || _businessConfigs$find3 === void 0 ? void 0 : (_businessConfigs$find4 = _businessConfigs$find3.find(function (val) {
+    })) === null || _businessConfigs$find === void 0 || (_businessConfigs$find = _businessConfigs$find.value) === null || _businessConfigs$find === void 0 || (_businessConfigs$find = _businessConfigs$find.split('|')) === null || _businessConfigs$find === void 0 || (_businessConfigs$find = _businessConfigs$find.find(function (val) {
       return val === null || val === void 0 ? void 0 : val.includes(cateringTypeString);
-    })) === null || _businessConfigs$find4 === void 0 ? void 0 : _businessConfigs$find4.split(',')[1];
+    })) === null || _businessConfigs$find === void 0 ? void 0 : _businessConfigs$find.split(',')[1];
   };
   var preorderSlotInterval = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_slot_interval'));
   var preorderLeadTime = businessConfigs && cateringTypeString && parseInt(splitCateringValue('preorder_lead_time'));
