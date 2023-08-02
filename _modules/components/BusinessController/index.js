@@ -175,7 +175,7 @@ var BusinessController = function BusinessController(props) {
     var maxOffer = offers.reduce(function (acc, cur) {
       return acc.rate > cur.rate ? acc : cur;
     });
-    return (maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate_type) === 1 ? "".concat(maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate, "%") : parsePrice(maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate);
+    return maxOffer.rate !== 0 ? (maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate_type) === 1 ? "".concat(maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate, "%") : parsePrice(maxOffer === null || maxOffer === void 0 ? void 0 : maxOffer.rate) : null;
   };
   /**
    * Method to return business max offer to show
