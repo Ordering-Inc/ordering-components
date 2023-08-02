@@ -731,7 +731,7 @@ var OrderProvider = function OrderProvider(_ref) {
                 events.emit('wishlist_product_added_to_cart', product, result);
               }
               events.emit('cart_updated', result);
-              events.emit('product_added', product);
+              events.emit('product_added', product, result);
               isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name));
             } else {
               setAlert({

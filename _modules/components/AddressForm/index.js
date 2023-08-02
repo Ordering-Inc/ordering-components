@@ -69,6 +69,7 @@ var AddressForm = function AddressForm(props) {
   var requestsState = {};
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
+    options = _useOrder2[0].options,
     changeAddress = _useOrder2[1].changeAddress;
   var userId = props.userId || (user === null || user === void 0 ? void 0 : user.id);
   var accessToken = props.accessToken || token;
@@ -79,6 +80,14 @@ var AddressForm = function AddressForm(props) {
     _useState6 = _slicedToArray(_useState5, 2),
     isEdit = _useState6[0],
     _setIsEdit = _useState6[1];
+  var _useState7 = (0, _react.useState)({
+      businesses: [],
+      loading: true,
+      error: null
+    }),
+    _useState8 = _slicedToArray(_useState7, 2),
+    businessesList = _useState8[0],
+    setBusinessesList = _useState8[1];
 
   /**
    * Load an address by id
@@ -248,6 +257,82 @@ var AddressForm = function AddressForm(props) {
       return _ref2.apply(this, arguments);
     };
   }();
+  var getBusinessDeliveryZones = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(location) {
+      var where, conditions, parameters, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.prev = 0;
+            setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+              loading: true,
+              businesses: []
+            }));
+            where = null;
+            conditions = [];
+            parameters = {
+              location: location,
+              type: options === null || options === void 0 ? void 0 : options.type
+            };
+            conditions.push({
+              attribute: 'types',
+              conditions: [{
+                attribute: 'id',
+                value: options === null || options === void 0 ? void 0 : options.type
+              }]
+            });
+            where = {
+              conditions: conditions,
+              conector: 'AND'
+            };
+            source = {};
+            requestsState.businesses = source;
+            fetchEndpoint = ordering.businesses().select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones']).parameters(parameters).where(where).asDashboard();
+            _context3.next = 12;
+            return fetchEndpoint.get({
+              cancelToken: source
+            });
+          case 12:
+            _yield$fetchEndpoint$ = _context3.sent;
+            _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
+            error = _yield$fetchEndpoint$2.error;
+            result = _yield$fetchEndpoint$2.result;
+            setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+              loading: false,
+              error: error,
+              businesses: result.map(function (business) {
+                return _objectSpread(_objectSpread({}, business === null || business === void 0 ? void 0 : business.location), {}, {
+                  icon: business === null || business === void 0 ? void 0 : business.logo,
+                  slug: business === null || business === void 0 ? void 0 : business.slug,
+                  zones: business === null || business === void 0 ? void 0 : business.zones
+                });
+              }),
+              result: result,
+              fetched: true
+            }));
+            _context3.next = 22;
+            break;
+          case 19:
+            _context3.prev = 19;
+            _context3.t0 = _context3["catch"](0);
+            if (_context3.t0.constructor.name !== 'Cancel') {
+              setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
+                loading: false,
+                error: true,
+                fetched: true,
+                result: [_context3.t0.message]
+              }));
+            }
+          case 22:
+          case "end":
+            return _context3.stop();
+        }
+      }, _callee3, null, [[0, 19]]);
+    }));
+    return function getBusinessDeliveryZones(_x6) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
   (0, _react.useEffect)(function () {
     setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
       address: address || {}
@@ -265,6 +350,16 @@ var AddressForm = function AddressForm(props) {
       }
     };
   }, []);
+
+  /**
+  * Cancel businesses request
+  */
+  (0, _react.useEffect)(function () {
+    var request = requestsState.businesses;
+    return function () {
+      request && request.cancel();
+    };
+  }, [requestsState.businesses]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     formState: formState,
     showField: showField,
@@ -275,7 +370,9 @@ var AddressForm = function AddressForm(props) {
     addressState: addressState,
     setIsEdit: function setIsEdit(val) {
       return _setIsEdit(val);
-    }
+    },
+    businessesList: businessesList,
+    getBusinessDeliveryZones: getBusinessDeliveryZones
   })));
 };
 exports.AddressForm = AddressForm;

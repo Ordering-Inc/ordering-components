@@ -39,7 +39,9 @@ var GoogleMaps = function GoogleMaps(props) {
     setNearBusinessList = props.setNearBusinessList,
     noDistanceValidation = props.noDistanceValidation,
     businessZones = props.businessZones,
-    fillStyle = props.fillStyle;
+    fillStyle = props.fillStyle,
+    useLocationPin = props.useLocationPin,
+    deactiveAlerts = props.deactiveAlerts;
   var _useUtils = (0, _UtilsContext.useUtils)(),
     _useUtils2 = _slicedToArray(_useUtils, 1),
     optimizeImage = _useUtils2[0].optimizeImage;
@@ -87,7 +89,7 @@ var GoogleMaps = function GoogleMaps(props) {
     var businessesNear = 0;
     var locationMarkers = [];
     var _loop = function _loop(i) {
-      var _locations$i2, _locations$i3, _locations$i4, _locations$i5;
+      var _locations$i2, _locations$i3, _locations$i4, _locations$i5, _locations$i6;
       var formatUrl = null;
       if (i === 1 || businessMap) {
         var _locations$i;
@@ -98,7 +100,7 @@ var GoogleMaps = function GoogleMaps(props) {
         map: map,
         title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
         icon: (_locations$i5 = locations[i]) !== null && _locations$i5 !== void 0 && _locations$i5.icon ? {
-          url: formatUrl || locations[i].icon,
+          url: formatUrl || ((_locations$i6 = locations[i]) === null || _locations$i6 === void 0 ? void 0 : _locations$i6.icon),
           scaledSize: new window.google.maps.Size(35, 35)
         } : null
       });
@@ -114,15 +116,15 @@ var GoogleMaps = function GoogleMaps(props) {
             markerRef.current = infowindow;
           }
           marker.addListener('click', function () {
-            var _locations$i6;
-            if ((_locations$i6 = locations[i]) !== null && _locations$i6 !== void 0 && _locations$i6.markerPopup) {
-              var _locations$i7;
+            var _locations$i7;
+            if ((_locations$i7 = locations[i]) !== null && _locations$i7 !== void 0 && _locations$i7.markerPopup) {
+              var _locations$i8;
               var _infowindow = new window.google.maps.InfoWindow();
-              _infowindow.setContent((_locations$i7 = locations[i]) === null || _locations$i7 === void 0 ? void 0 : _locations$i7.markerPopup);
+              _infowindow.setContent((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.markerPopup);
               _infowindow.open(map, marker);
             } else {
-              var _locations$i8;
-              onBusinessClick((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.slug);
+              var _locations$i9;
+              onBusinessClick((_locations$i9 = locations[i]) === null || _locations$i9 === void 0 ? void 0 : _locations$i9.slug);
             }
           });
           bounds.extend(marker.position);
@@ -158,7 +160,9 @@ var GoogleMaps = function GoogleMaps(props) {
       }
       setNearBusinessList(franchiseSlugs);
     }
-    businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
+    if (!deactiveAlerts) {
+      businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
+    }
     map.fitBounds(bounds);
     setBoundMap(bounds);
   };
@@ -249,6 +253,52 @@ var GoogleMaps = function GoogleMaps(props) {
       setErrors && setErrors('ERROR_MAX_LIMIT_LOCATION');
     }
   };
+  var createDeliveryZone = function createDeliveryZone(deliveryZone, map, bounds) {
+    var _deliveryZone$data, _deliveryZone$data2, _deliveryZone$data3;
+    if (deliveryZone.type === 1 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data = deliveryZone.data) !== null && _deliveryZone$data !== void 0 && _deliveryZone$data.center && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data2 = deliveryZone.data) !== null && _deliveryZone$data2 !== void 0 && _deliveryZone$data2.radio) {
+      var newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
+        editable: false,
+        center: deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.center,
+        radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.radio) * 1000
+      }));
+      newCircleZone.setMap(map);
+      bounds.union(newCircleZone.getBounds());
+      map.fitBounds(bounds);
+    }
+    if (deliveryZone.type === 5 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data3 = deliveryZone.data) !== null && _deliveryZone$data3 !== void 0 && _deliveryZone$data3.distance) {
+      var _deliveryZone$data4;
+      var _newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
+        editable: false,
+        center: center,
+        radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.distance) * units[deliveryZone === null || deliveryZone === void 0 || (_deliveryZone$data4 = deliveryZone.data) === null || _deliveryZone$data4 === void 0 ? void 0 : _deliveryZone$data4.unit]
+      }));
+      _newCircleZone.setMap(map);
+      bounds.union(_newCircleZone.getBounds());
+      map.fitBounds(bounds);
+    }
+    if ((deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.type) === 2 && Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
+      var newPolygonZone = new window.google.maps.Polygon(_objectSpread(_objectSpread({}, fillStyle), {}, {
+        editable: false,
+        paths: deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data
+      }));
+      newPolygonZone.setMap(map);
+      if (Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
+        var _iterator3 = _createForOfIteratorHelper(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data),
+          _step3;
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var position = _step3.value;
+            bounds.extend(position);
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+        map.fitBounds(bounds);
+      }
+    }
+  };
   (0, _react.useEffect)(function () {
     if (googleReady) {
       var _location$zoom;
@@ -278,11 +328,12 @@ var GoogleMaps = function GoogleMaps(props) {
           });
           map.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
         } else {
+          var _locations$3;
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
             map: map,
-            icon: {
-              url: locations[0].icon,
+            icon: useLocationPin ? undefined : {
+              url: (_locations$3 = locations[0]) === null || _locations$3 === void 0 ? void 0 : _locations$3.icon,
               scaledSize: new window.google.maps.Size(35, 35)
             }
           });
@@ -298,64 +349,36 @@ var GoogleMaps = function GoogleMaps(props) {
       }
       if ((businessZones === null || businessZones === void 0 ? void 0 : businessZones.length) > 0) {
         var bounds = new window.google.maps.LatLngBounds();
-        var _iterator3 = _createForOfIteratorHelper(businessZones),
-          _step3;
+        var _iterator4 = _createForOfIteratorHelper(businessZones),
+          _step4;
         try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var _deliveryZone$data, _deliveryZone$data2, _deliveryZone$data3;
-            var deliveryZone = _step3.value;
-            if (deliveryZone.type === 1 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data = deliveryZone.data) !== null && _deliveryZone$data !== void 0 && _deliveryZone$data.center && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data2 = deliveryZone.data) !== null && _deliveryZone$data2 !== void 0 && _deliveryZone$data2.radio) {
-              var newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
-                editable: false,
-                center: deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.center,
-                radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.radio) * 1000
-              }));
-              newCircleZone.setMap(map);
-              bounds.union(newCircleZone.getBounds());
-              map.fitBounds(bounds);
-            }
-            if (deliveryZone.type === 5 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data3 = deliveryZone.data) !== null && _deliveryZone$data3 !== void 0 && _deliveryZone$data3.distance) {
-              var _deliveryZone$data4;
-              var _newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
-                editable: false,
-                center: center,
-                radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.distance) * units[deliveryZone === null || deliveryZone === void 0 || (_deliveryZone$data4 = deliveryZone.data) === null || _deliveryZone$data4 === void 0 ? void 0 : _deliveryZone$data4.unit]
-              }));
-              _newCircleZone.setMap(map);
-              bounds.union(_newCircleZone.getBounds());
-              map.fitBounds(bounds);
-            }
-            if ((deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.type) === 2 && Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
-              var newPolygonZone = new window.google.maps.Polygon(_objectSpread(_objectSpread({}, fillStyle), {}, {
-                editable: false,
-                paths: deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data
-              }));
-              newPolygonZone.setMap(map);
-              if (Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
-                var _iterator4 = _createForOfIteratorHelper(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data),
-                  _step4;
-                try {
-                  for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-                    var position = _step4.value;
-                    bounds.extend(position);
-                  }
-                } catch (err) {
-                  _iterator4.e(err);
-                } finally {
-                  _iterator4.f();
+          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+            var deliveryZone = _step4.value;
+            if (deliveryZone !== null && deliveryZone !== void 0 && deliveryZone.id) {
+              createDeliveryZone(deliveryZone, map, bounds);
+            } else if ((deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.length) > 0) {
+              var _iterator5 = _createForOfIteratorHelper(deliveryZone),
+                _step5;
+              try {
+                for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+                  var deliveryZoneBusiness = _step5.value;
+                  createDeliveryZone(deliveryZoneBusiness, map, bounds);
                 }
-                map.fitBounds(bounds);
+              } catch (err) {
+                _iterator5.e(err);
+              } finally {
+                _iterator5.f();
               }
             }
           }
         } catch (err) {
-          _iterator3.e(err);
+          _iterator4.e(err);
         } finally {
-          _iterator3.f();
+          _iterator4.f();
         }
       }
     }
-  }, [googleReady]);
+  }, [googleReady, locations]);
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       if (googleReady && googleMap && googleMapMarker) {
