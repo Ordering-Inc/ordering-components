@@ -21,7 +21,8 @@ export const GoogleMaps = (props) => {
     noDistanceValidation,
     businessZones,
     fillStyle,
-    isCallcenterAddressMap
+    useLocationPin,
+    deactiveAlerts
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -103,7 +104,7 @@ export const GoogleMaps = (props) => {
       }
       setNearBusinessList(franchiseSlugs)
     }
-    if (!isCallcenterAddressMap) {
+    if (!deactiveAlerts) {
       businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES')
     }
     map.fitBounds(bounds)
@@ -185,7 +186,6 @@ export const GoogleMaps = (props) => {
 
   const createDeliveryZone = (deliveryZone, map, bounds) => {
     if (deliveryZone.type === 1 && deliveryZone?.data?.center && deliveryZone?.data?.radio) {
-      console.log('entra')
       const newCircleZone = new window.google.maps.Circle({
         ...fillStyle,
         editable: false,
@@ -197,7 +197,6 @@ export const GoogleMaps = (props) => {
       map.fitBounds(bounds)
     }
     if (deliveryZone.type === 5 && deliveryZone?.data?.distance) {
-      console.log('entra 2')
       const newCircleZone = new window.google.maps.Circle({
         ...fillStyle,
         editable: false,
@@ -209,7 +208,6 @@ export const GoogleMaps = (props) => {
       map.fitBounds(bounds)
     }
     if (deliveryZone?.type === 2 && Array.isArray(deliveryZone?.data)) {
-      console.log('entra 3')
       const newPolygonZone = new window.google.maps.Polygon({
         ...fillStyle,
         editable: false,
@@ -259,7 +257,7 @@ export const GoogleMaps = (props) => {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center?.lat, center?.lng),
             map,
-            icon: isCallcenterAddressMap ? undefined : {
+            icon: useLocationPin ? undefined : {
               url: locations[0]?.icon,
               scaledSize: new window.google.maps.Size(35, 35)
             }
@@ -276,15 +274,12 @@ export const GoogleMaps = (props) => {
       }
 
       if (businessZones?.length > 0) {
-        console.log(businessZones)
         const bounds = new window.google.maps.LatLngBounds()
         for (const deliveryZone of businessZones) {
           if (deliveryZone?.id) {
-            console.log('zone', deliveryZone)
             createDeliveryZone(deliveryZone, map, bounds)
-          } else if (isCallcenterAddressMap) {
+          } else if (deliveryZone?.length > 0) {
             for (const deliveryZoneBusiness of deliveryZone) {
-              console.log('zone 2', deliveryZoneBusiness)
               createDeliveryZone(deliveryZoneBusiness, map, bounds)
             }
           }
@@ -346,7 +341,7 @@ export const GoogleMaps = (props) => {
   }, [location, locations])
 
   useEffect(() => {
-    if (!businessMap && !isCallcenterAddressMap) {
+    if (!businessMap) {
       const interval = setInterval(() => {
         if (googleReady && !userActivity) {
           const driverLocation = locations?.[0]
