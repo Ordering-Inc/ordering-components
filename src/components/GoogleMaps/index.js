@@ -20,7 +20,9 @@ export const GoogleMaps = (props) => {
     setNearBusinessList,
     noDistanceValidation,
     businessZones,
-    fillStyle
+    fillStyle,
+    useLocationPin,
+    deactiveAlerts
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -59,7 +61,7 @@ export const GoogleMaps = (props) => {
         map,
         title: locations[i]?.slug,
         icon: locations[i]?.icon ? {
-          url: formatUrl || locations[i].icon,
+          url: formatUrl || locations[i]?.icon,
           scaledSize: new window.google.maps.Size(35, 35)
         } : null
       })
@@ -102,7 +104,9 @@ export const GoogleMaps = (props) => {
       }
       setNearBusinessList(franchiseSlugs)
     }
-    businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES')
+    if (!deactiveAlerts) {
+      businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES')
+    }
     map.fitBounds(bounds)
     setBoundMap(bounds)
   }
@@ -180,6 +184,45 @@ export const GoogleMaps = (props) => {
     }
   }
 
+  const createDeliveryZone = (deliveryZone, map, bounds) => {
+    if (deliveryZone.type === 1 && deliveryZone?.data?.center && deliveryZone?.data?.radio) {
+      const newCircleZone = new window.google.maps.Circle({
+        ...fillStyle,
+        editable: false,
+        center: deliveryZone?.data.center,
+        radius: deliveryZone?.data.radio * 1000
+      })
+      newCircleZone.setMap(map)
+      bounds.union(newCircleZone.getBounds())
+      map.fitBounds(bounds)
+    }
+    if (deliveryZone.type === 5 && deliveryZone?.data?.distance) {
+      const newCircleZone = new window.google.maps.Circle({
+        ...fillStyle,
+        editable: false,
+        center: center,
+        radius: deliveryZone?.data.distance * units[deliveryZone?.data?.unit]
+      })
+      newCircleZone.setMap(map)
+      bounds.union(newCircleZone.getBounds())
+      map.fitBounds(bounds)
+    }
+    if (deliveryZone?.type === 2 && Array.isArray(deliveryZone?.data)) {
+      const newPolygonZone = new window.google.maps.Polygon({
+        ...fillStyle,
+        editable: false,
+        paths: deliveryZone?.data
+      })
+      newPolygonZone.setMap(map)
+      if (Array.isArray(deliveryZone?.data)) {
+        for (const position of deliveryZone?.data) {
+          bounds.extend(position)
+        }
+        map.fitBounds(bounds)
+      }
+    }
+  }
+
   useEffect(() => {
     if (googleReady) {
       const map = new window.google.maps.Map(divRef.current, {
@@ -214,8 +257,8 @@ export const GoogleMaps = (props) => {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center?.lat, center?.lng),
             map,
-            icon: {
-              url: locations[0].icon,
+            icon: useLocationPin ? undefined : {
+              url: locations[0]?.icon,
               scaledSize: new window.google.maps.Size(35, 35)
             }
           })
@@ -233,46 +276,17 @@ export const GoogleMaps = (props) => {
       if (businessZones?.length > 0) {
         const bounds = new window.google.maps.LatLngBounds()
         for (const deliveryZone of businessZones) {
-          if (deliveryZone.type === 1 && deliveryZone?.data?.center && deliveryZone?.data?.radio) {
-            const newCircleZone = new window.google.maps.Circle({
-              ...fillStyle,
-              editable: false,
-              center: deliveryZone?.data.center,
-              radius: deliveryZone?.data.radio * 1000
-            })
-            newCircleZone.setMap(map)
-            bounds.union(newCircleZone.getBounds())
-            map.fitBounds(bounds)
-          }
-          if (deliveryZone.type === 5 && deliveryZone?.data?.distance) {
-            const newCircleZone = new window.google.maps.Circle({
-              ...fillStyle,
-              editable: false,
-              center: center,
-              radius: deliveryZone?.data.distance * units[deliveryZone?.data?.unit]
-            })
-            newCircleZone.setMap(map)
-            bounds.union(newCircleZone.getBounds())
-            map.fitBounds(bounds)
-          }
-          if (deliveryZone?.type === 2 && Array.isArray(deliveryZone?.data)) {
-            const newPolygonZone = new window.google.maps.Polygon({
-              ...fillStyle,
-              editable: false,
-              paths: deliveryZone?.data
-            })
-            newPolygonZone.setMap(map)
-            if (Array.isArray(deliveryZone?.data)) {
-              for (const position of deliveryZone?.data) {
-                bounds.extend(position)
-              }
-              map.fitBounds(bounds)
+          if (deliveryZone?.id) {
+            createDeliveryZone(deliveryZone, map, bounds)
+          } else if (deliveryZone?.length > 0) {
+            for (const deliveryZoneBusiness of deliveryZone) {
+              createDeliveryZone(deliveryZoneBusiness, map, bounds)
             }
           }
         }
       }
     }
-  }, [googleReady])
+  }, [googleReady, locations])
 
   useEffect(() => {
     if (!businessMap) {
