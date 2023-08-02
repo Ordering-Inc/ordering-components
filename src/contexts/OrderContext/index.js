@@ -438,7 +438,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           events.emit('wishlist_product_added_to_cart', product, result)
         }
         events.emit('cart_updated', result)
-        events.emit('product_added', product)
+        events.emit('product_added', product, result)
         isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_ADDED_NOTIFICATION', 'Product _PRODUCT_ added succesfully').replace('_PRODUCT_', product.name))
       } else {
         setAlert({ show: true, content: result })
