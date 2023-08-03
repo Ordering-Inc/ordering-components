@@ -130,9 +130,13 @@ export const ConfigProvider = ({ children, strategy }) => {
       }
       let data = null
       try {
-        const response = await fetch('https://ipapi.co/json/')
+        const response = await fetch('https://api.ipregistry.co/?key=tryout')
         if (response.status === 200) {
           data = await response.json()
+          data = {
+            country_code: data?.location?.country?.code,
+            country_calling_code:  `+${data?.location?.country?.calling_code}`
+          }
         }
       } catch (error) {
         data = null
