@@ -22,6 +22,7 @@ export const AddressForm = (props) => {
   const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {} })
   const [formState, setFormState] = useState({ loading: false, changes: {}, error: null })
   const [{ auth, user, token }] = useSession()
+  const [, { refreshUserInfo }] = useSession()
   const requestsState = {}
   const [{ options }, { changeAddress }] = useOrder()
   const userId = props.userId || user?.id
@@ -149,6 +150,7 @@ export const AddressForm = (props) => {
           })
         }
       }
+      refreshUserInfo()
     } catch (err) {
       setFormState({
         ...formState,
