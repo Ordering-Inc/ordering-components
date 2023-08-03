@@ -162,9 +162,7 @@ var ConfigProvider = function ConfigProvider(_ref) {
         _result4,
         _result5,
         _result6,
-        _data3,
         _result7,
-        _data4,
         countryCode,
         options,
         error,
@@ -172,9 +170,6 @@ var ConfigProvider = function ConfigProvider(_ref) {
         _yield$ordering$confi,
         content,
         data,
-        response,
-        _data,
-        _data2,
         conditionalConfigs,
         configsResult,
         _args = arguments;
@@ -221,32 +216,18 @@ var ConfigProvider = function ConfigProvider(_ref) {
             result = content.result;
             handleUpdateOptimizationState('configs', result);
           case 23:
-            data = null;
-            _context.prev = 24;
-            _context.next = 27;
-            return fetch('https://api.ipregistry.co/?key=tryout');
-          case 27:
-            response = _context.sent;
-            if (!(response.status === 200)) {
-              _context.next = 33;
-              break;
-            }
-            _context.next = 31;
-            return response.json();
-          case 31:
-            data = _context.sent;
-            data = {
-              country_code: (_data = data) === null || _data === void 0 || (_data = _data.location) === null || _data === void 0 || (_data = _data.country) === null || _data === void 0 ? void 0 : _data.code,
-              country_calling_code: "+".concat((_data2 = data) === null || _data2 === void 0 || (_data2 = _data2.location) === null || _data2 === void 0 || (_data2 = _data2.country) === null || _data2 === void 0 ? void 0 : _data2.calling_code)
-            };
-          case 33:
-            _context.next = 38;
-            break;
-          case 35:
-            _context.prev = 35;
-            _context.t1 = _context["catch"](24);
-            data = null;
-          case 38:
+            data = null; // try {
+            //   const response = await fetch('https://api.ipregistry.co/?key=tryout')
+            //   if (response.status === 200) {
+            //     data = await response.json()
+            //     data = {
+            //       country_code: data?.location?.country?.code,
+            //       country_calling_code:  `+${data?.location?.country?.calling_code}`
+            //     }
+            //   }
+            // } catch (error) {
+            //   data = null
+            // }
             conditionalConfigs = {
               dates_moment_format: {
                 key: 'dates_moment_format',
@@ -259,27 +240,27 @@ var ConfigProvider = function ConfigProvider(_ref) {
             };
             configsResult = _objectSpread(_objectSpread(_objectSpread({}, customConfigs), result), {}, {
               default_country_code: _objectSpread(_objectSpread({}, (_result5 = result) === null || _result5 === void 0 ? void 0 : _result5.default_country_code), {}, {
-                value: ((_result6 = result) === null || _result6 === void 0 || (_result6 = _result6.default_country_code) === null || _result6 === void 0 ? void 0 : _result6.value) || data && ((_data3 = data) === null || _data3 === void 0 ? void 0 : _data3.country_code) || 'US',
-                calling_number: ((_result7 = result) === null || _result7 === void 0 || (_result7 = _result7.default_country_code) === null || _result7 === void 0 ? void 0 : _result7.calling_number) || data && ((_data4 = data) === null || _data4 === void 0 ? void 0 : _data4.country_calling_code) || '+1'
+                value: ((_result6 = result) === null || _result6 === void 0 || (_result6 = _result6.default_country_code) === null || _result6 === void 0 ? void 0 : _result6.value) || data && (data === null || data === void 0 ? void 0 : data.country_code) || 'US',
+                calling_number: ((_result7 = result) === null || _result7 === void 0 || (_result7 = _result7.default_country_code) === null || _result7 === void 0 ? void 0 : _result7.calling_number) || data && (data === null || data === void 0 ? void 0 : data.country_calling_code) || '+1'
               })
             }, conditionalConfigs);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               configs: error ? {} : configsResult
             }));
-            _context.next = 46;
+            _context.next = 32;
             break;
-          case 43:
-            _context.prev = 43;
-            _context.t2 = _context["catch"](1);
+          case 29:
+            _context.prev = 29;
+            _context.t1 = _context["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false
             }));
-          case 46:
+          case 32:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 43], [24, 35]]);
+      }, _callee, null, [[1, 29]]);
     }));
     return function refreshConfigs(_x2) {
       return _ref2.apply(this, arguments);
