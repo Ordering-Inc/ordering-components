@@ -21,8 +21,7 @@ export const AddressForm = (props) => {
   const [validationFields] = useValidationFields()
   const [addressState, setAddressState] = useState({ loading: false, error: null, address: address || {} })
   const [formState, setFormState] = useState({ loading: false, changes: {}, error: null })
-  const [{ auth, user, token }] = useSession()
-  const [, { refreshUserInfo }] = useSession()
+  const [{ auth, user, token }, { refreshUserInfo }] = useSession()
   const requestsState = {}
   const [{ options }, { changeAddress }] = useOrder()
   const userId = props.userId || user?.id
