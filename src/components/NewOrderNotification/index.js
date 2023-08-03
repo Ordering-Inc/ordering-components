@@ -83,6 +83,11 @@ export const NewOrderNotification = (props) => {
       {UIComponent && (
         <UIComponent
           {...props}
+          orderStatus={
+            props.isBusinessApp
+              ? configs?.notification_business_states?.value.split('|').map(value => Number(value)) || []
+              : configs?.notification_driver_states?.value.split('|').map(value => Number(value)) || []
+          }
         />
       )}
     </>
