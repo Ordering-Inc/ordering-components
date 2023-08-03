@@ -61,11 +61,12 @@ var AddressForm = function AddressForm(props) {
     formState = _useState4[0],
     setFormState = _useState4[1];
   var _useSession = (0, _SessionContext.useSession)(),
-    _useSession2 = _slicedToArray(_useSession, 1),
+    _useSession2 = _slicedToArray(_useSession, 2),
     _useSession2$ = _useSession2[0],
     auth = _useSession2$.auth,
     user = _useSession2$.user,
-    token = _useSession2$.token;
+    token = _useSession2$.token,
+    refreshUserInfo = _useSession2[1].refreshUserInfo;
   var requestsState = {};
   var _useOrder = (0, _OrderContext.useOrder)(),
     _useOrder2 = _slicedToArray(_useOrder, 2),
@@ -237,21 +238,22 @@ var AddressForm = function AddressForm(props) {
                 });
               }
             }
-            _context2.next = 21;
+            refreshUserInfo();
+            _context2.next = 22;
             break;
-          case 18:
-            _context2.prev = 18;
+          case 19:
+            _context2.prev = 19;
             _context2.t0 = _context2["catch"](9);
             setFormState(_objectSpread(_objectSpread({}, formState), {}, {
               loading: false,
               error: [_context2.t0.message],
               address: {}
             }));
-          case 21:
+          case 22:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[9, 18]]);
+      }, _callee2, null, [[9, 19]]);
     }));
     return function saveAddress(_x4, _x5) {
       return _ref2.apply(this, arguments);
