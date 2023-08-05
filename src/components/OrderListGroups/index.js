@@ -822,10 +822,22 @@ export const OrderListGroups = (props) => {
     loadOrders({ newFetch: true })
   }, [filtered])
 
+  const handleActionEvent = (event, value) => {
+    const evts = {
+      order_added: 'order_added_notification',
+      update_order: 'order_updated_notification',
+      messages: 'message_added_notification',
+      request_register: 'request_register_notification',
+      request_update: 'request_update_notification'
+    }
+    events.emit(evts[event], value)
+  }
+
   useEffect(() => {
     if (ordersGroup[currentTabSelected]?.loading || !socket?.socket) return
 
     const handleUpdateOrder = (order) => {
+      handleActionEvent('update_order', order)
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
       events.emit('order_updated', order)
       let orderFound = null
@@ -908,6 +920,7 @@ export const OrderListGroups = (props) => {
 
     const handleAddNewOrder = (order) => {
       events.emit('order_added', order)
+      handleActionEvent('order_added', order)
       showToast(
         ToastType.Info,
         t('SPECIFIC_ORDER_ORDERED', 'Order _NUMBER_ has been ordered').replace('_NUMBER_', order.id),
@@ -922,6 +935,7 @@ export const OrderListGroups = (props) => {
 
     socket.on('orders_register', handleAddNewOrder)
     socket.on('update_order', handleUpdateOrder)
+    socket.off('message', (e) => handleActionEvent('messages', e))
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
     socket.socket.on('connect', () => {
@@ -931,11 +945,13 @@ export const OrderListGroups = (props) => {
     return () => {
       socket.off('orders_register', handleAddNewOrder)
       socket.off('update_order', handleUpdateOrder)
+      socket.off('message', (e) => handleActionEvent('messages', e))
     }
   }, [ordersGroup, socket?.socket, session])
 
   const handleAddAssignRequest = useCallback(
     (order) => {
+      handleActionEvent('request_register', order)
       setlogisticOrders({ ...logisticOrders, orders: sortOrders([...logisticOrders?.orders, order]) })
       showToast(
         ToastType.Info,
@@ -960,6 +976,7 @@ export const OrderListGroups = (props) => {
 
   const handleUpdateAssignRequest = useCallback(
     (order) => {
+      handleActionEvent('request_update', order)
       setlogisticOrders(prevState => ({
         ...prevState,
         orders: prevState?.orders?.some(_order => _order?.id === order?.id)
@@ -997,19 +1014,23 @@ export const OrderListGroups = (props) => {
       socket.join(requestsRoom)
       const groupsRoom = `ordergroups_${session?.user?.id}`
       socket.join(groupsRoom)
+      socket.join(session?.user?.level === 0 ? 'messages_orders' : `messages_orders_${session?.user?.id}`)
     })
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
+    const messagesOrdersRoom = session?.user?.level === 0 ? 'messages_orders' : `messages_orders_${session?.user?.id}`
     const requestsRoom = `requests_${session?.user?.id}`
     const groupsRoom = `ordergroups_${session?.user?.id}`
 
     socket.join(ordersRoom)
     socket.join(requestsRoom)
     socket.join(groupsRoom)
+    socket.join(messagesOrdersRoom)
 
     return () => {
       socket.leave(ordersRoom)
       socket.leave(requestsRoom)
       socket.leave(groupsRoom)
+      socket.leave(messagesOrdersRoom)
     }
   }, [socket, session])
 

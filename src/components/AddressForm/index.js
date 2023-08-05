@@ -186,7 +186,7 @@ export const AddressForm = (props) => {
       }
       const source = {}
       requestsState.businesses = source
-      const fetchEndpoint = ordering.businesses().select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones']).parameters(parameters).where(where).asDashboard()
+      const fetchEndpoint = ordering.businesses().select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones']).parameters(parameters).where(where)
       const { content: { error, result } } = await fetchEndpoint.get({ cancelToken: source })
       setBusinessesList({
         ...businessesList,
