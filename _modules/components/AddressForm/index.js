@@ -289,7 +289,7 @@ var AddressForm = function AddressForm(props) {
             };
             source = {};
             requestsState.businesses = source;
-            fetchEndpoint = ordering.businesses().select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones']).parameters(parameters).where(where).asDashboard();
+            fetchEndpoint = ordering.businesses().select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones']).parameters(parameters).where(where);
             _context3.next = 12;
             return fetchEndpoint.get({
               cancelToken: source
