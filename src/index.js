@@ -92,6 +92,7 @@ import { BusinessesMap } from './components/BusinessesMap'
 import { MapView } from './components/MapView'
 import { ConfigContext, ConfigProvider, useConfig } from './contexts/ConfigContext'
 import { SiteContext, SiteProvider, useSite } from './contexts/SiteContext'
+import { ValidationFieldsBySiteContext, ValidationFieldsBySiteProvider, useValidationFieldsBySite } from './contexts/ValidationFieldsBySiteContext'
 import { LanguageContext, LanguageProvider, useLanguage } from './contexts/LanguageContext'
 import { OrderContext, OrderProvider, useOrder } from './contexts/OrderContext'
 import { BusinessContext, BusinessProvider, useBusiness } from './contexts/BusinessContext'
@@ -318,6 +319,9 @@ export {
   SiteContext,
   SiteProvider,
   useSite,
+  ValidationFieldsBySiteContext,
+  ValidationFieldsBySiteProvider,
+  useValidationFieldsBySite,
   LanguageContext,
   LanguageProvider,
   useLanguage,
