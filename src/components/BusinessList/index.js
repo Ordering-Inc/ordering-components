@@ -56,7 +56,7 @@ export const BusinessList = (props) => {
   const [orderingTheme] = useOrderingTheme()
   const [ordering] = useApi()
   const socket = useWebsocket()
-  const [{ auth, token }] = useSession()
+  const [{ auth, token }, { refreshUserInfo }] = useSession()
   const [requestsState, setRequestsState] = useState({})
   const [citiesState, setCitiesState] = useState({ loading: false, cities: [], error: null })
   const [{ configs }] = useConfig()
@@ -598,6 +598,11 @@ export const BusinessList = (props) => {
       businesses: updatedBusinesses
     })
   }
+
+  useEffect(() => {
+    if(!token) return
+    refreshUserInfo()
+  }, [auth])
 
   return (
     <>
