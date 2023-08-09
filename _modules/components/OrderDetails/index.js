@@ -104,10 +104,12 @@ var OrderDetails = function OrderDetails(props) {
 
   var _useOrder = (0, _OrderContext.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 2),
-      carts = _useOrder2[0].carts,
-      _useOrder2$ = _useOrder2[1],
-      reorder = _useOrder2$.reorder,
-      clearCart = _useOrder2$.clearCart;
+      _useOrder2$ = _useOrder2[0],
+      carts = _useOrder2$.carts,
+      options = _useOrder2$.options,
+      _useOrder2$2 = _useOrder2[1],
+      reorder = _useOrder2$2.reorder,
+      clearCart = _useOrder2$2.clearCart;
 
   var _useState = (0, _react.useState)({
     order: (_props$order = props.order) !== null && _props$order !== void 0 ? _props$order : null,
@@ -189,6 +191,7 @@ var OrderDetails = function OrderDetails(props) {
       cartState = _useState20[0],
       setCartState = _useState20[1];
 
+  var isAlsea = ordering.project === 'alsea';
   var propsToFetch = ['header', 'slug'];
   var deliveryMessages = {
     delivery: {
@@ -784,7 +787,7 @@ var OrderDetails = function OrderDetails(props) {
 
   var handleReorder = /*#__PURE__*/function () {
     var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(orderId) {
-      var _yield$reorder, error, result;
+      var response, _yield$response$json3, error, result;
 
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) {
@@ -803,13 +806,29 @@ var OrderDetails = function OrderDetails(props) {
                 loading: true
               }));
               _context9.next = 6;
-              return reorder(orderId);
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/reorder.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  order_id: orderId,
+                  address_id: options === null || options === void 0 ? void 0 : options.address_id
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId
+                }
+              });
 
             case 6:
-              _yield$reorder = _context9.sent;
-              error = _yield$reorder.error;
-              result = _yield$reorder.result;
+              response = _context9.sent;
+              _context9.next = 9;
+              return response.json();
 
+            case 9:
+              _yield$response$json3 = _context9.sent;
+              error = _yield$response$json3.error;
+              result = _yield$response$json3.result;
+
+              // const { error, result } = await reorder(orderId)
               if (!error) {
                 setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
                   loading: false,
@@ -823,11 +842,11 @@ var OrderDetails = function OrderDetails(props) {
                 }));
               }
 
-              _context9.next = 15;
+              _context9.next = 18;
               break;
 
-            case 12:
-              _context9.prev = 12;
+            case 15:
+              _context9.prev = 15;
               _context9.t0 = _context9["catch"](2);
               setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
                 loading: false,
@@ -835,12 +854,12 @@ var OrderDetails = function OrderDetails(props) {
                 result: [_context9.t0 === null || _context9.t0 === void 0 ? void 0 : _context9.t0.message]
               }));
 
-            case 15:
+            case 18:
             case "end":
               return _context9.stop();
           }
         }
-      }, _callee9, null, [[2, 12]]);
+      }, _callee9, null, [[2, 15]]);
     }));
 
     return function handleReorder(_x5) {
