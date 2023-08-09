@@ -1,35 +1,45 @@
 import React, { useEffect, useState, useContext, createContext } from 'react'
 import { useApi } from '../ApiContext'
+import { useSite } from '../SiteContext'
 
 export const ValidationFieldsContext = createContext()
 
 export const ValidationFieldsProvider = ({ children }) => {
   const [ordering] = useApi()
+  const [{ site }] = useSite()
   const [state, setState] = useState({ loading: true, fields: {}, error: false })
 
   const convertArrayToObject = (result, fields) => {
     result.forEach((field) => {
-      fields[field.code === 'mobile_phone' ? 'cellphone' : field.code] = field
+      fields[field?.validation_field?.code === 'mobile_phone' ? 'cellphone' : field?.validation_field?.code] = field
     })
   }
 
   const loadValidationFields = async () => {
     try {
-      const { content: { result, error } } = await ordering.validationFields().get()
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      const response = await fetch(`${ordering.root}/validation_field_sites`, requestOptions)
+      const { result, error } = await response.json()
       const checkout = {}
       const address = {}
       const card = {}
       if (!error) {
+        const checkoutFields = result.filter(field => field?.site_id === site?.id)
         convertArrayToObject(
-          result.filter(field => field.validate === 'checkout'),
+          checkoutFields.filter(field => field?.validation_field?.validate === 'checkout'),
           checkout
         )
         convertArrayToObject(
-          result.filter(field => field.validate === 'address'),
+          checkoutFields.filter(field => field?.validation_field?.validate === 'address'),
           address
         )
         convertArrayToObject(
-          result.filter(field => field.validate === 'card'),
+          checkoutFields.filter(field => field?.validation_field?.validate === 'card'),
           card
         )
       }
@@ -51,8 +61,8 @@ export const ValidationFieldsProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    loadValidationFields()
-  }, [])
+    if (site?.id) loadValidationFields()
+  }, [site?.id])
 
   return (
     <ValidationFieldsContext.Provider value={[state, functions]}>

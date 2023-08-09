@@ -15,7 +15,6 @@ import { ToastProvider } from '../ToastContext'
 import { WebStrategy } from '../../webStrategy'
 import { OrderingThemeProvider } from '../OrderingThemeContext'
 import { OptimizationLoadProvider } from '../OptimizationLoadContext'
-import { ValidationFieldsBySiteProvider } from '../ValidationFieldsBySiteContext'
 
 /**
  * Create OrderingContext
@@ -48,28 +47,26 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
                     <UtilsProviders>
                       <ToastProvider>
                         <ValidationFieldsProvider>
-                          <ValidationFieldsBySiteProvider>
-                            <SessionProvider strategy={webStrategy}>
-                              <WebsocketProvider
-                                strategy={webStrategy}
-                                settings={Object.assign(settings.socket, restOfSettings)}
-                              >
-                                <CustomerProvider strategy={webStrategy}>
-                                  <OrderProvider
-                                    strategy={webStrategy}
-                                    Alert={Alert}
-                                    isAlsea={isAlsea}
-                                    franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
-                                    businessSlug={settings?.businessSlug}
-                                  >
-                                    <BusinessProvider>
-                                      {children}
-                                    </BusinessProvider>
-                                  </OrderProvider>
-                                </CustomerProvider>
-                              </WebsocketProvider>
-                            </SessionProvider>
-                          </ValidationFieldsBySiteProvider>
+                          <SessionProvider strategy={webStrategy}>
+                            <WebsocketProvider
+                              strategy={webStrategy}
+                              settings={Object.assign(settings.socket, restOfSettings)}
+                            >
+                              <CustomerProvider strategy={webStrategy}>
+                                <OrderProvider
+                                  strategy={webStrategy}
+                                  Alert={Alert}
+                                  isAlsea={isAlsea}
+                                  franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                                  businessSlug={settings?.businessSlug}
+                                >
+                                  <BusinessProvider>
+                                    {children}
+                                  </BusinessProvider>
+                                </OrderProvider>
+                              </CustomerProvider>
+                            </WebsocketProvider>
+                          </SessionProvider>
                         </ValidationFieldsProvider>
                       </ToastProvider>
                     </UtilsProviders>

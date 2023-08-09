@@ -1041,18 +1041,6 @@ Object.defineProperty(exports, "UtilsProviders", {
     return _UtilsContext.UtilsProviders;
   }
 });
-Object.defineProperty(exports, "ValidationFieldsBySiteContext", {
-  enumerable: true,
-  get: function get() {
-    return _ValidationFieldsBySiteContext.ValidationFieldsBySiteContext;
-  }
-});
-Object.defineProperty(exports, "ValidationFieldsBySiteProvider", {
-  enumerable: true,
-  get: function get() {
-    return _ValidationFieldsBySiteContext.ValidationFieldsBySiteProvider;
-  }
-});
 Object.defineProperty(exports, "ValidationFieldsContext", {
   enumerable: true,
   get: function get() {
@@ -1191,12 +1179,6 @@ Object.defineProperty(exports, "useValidationFields", {
     return _ValidationsFieldsContext.useValidationFields;
   }
 });
-Object.defineProperty(exports, "useValidationFieldsBySite", {
-  enumerable: true,
-  get: function get() {
-    return _ValidationFieldsBySiteContext.useValidationFieldsBySite;
-  }
-});
 Object.defineProperty(exports, "useWebsocket", {
   enumerable: true,
   get: function get() {
@@ -1297,7 +1279,6 @@ var _BusinessesMap = require("./components/BusinessesMap");
 var _MapView = require("./components/MapView");
 var _ConfigContext = require("./contexts/ConfigContext");
 var _SiteContext = require("./contexts/SiteContext");
-var _ValidationFieldsBySiteContext = require("./contexts/ValidationFieldsBySiteContext");
 var _LanguageContext = require("./contexts/LanguageContext");
 var _OrderContext = require("./contexts/OrderContext");
 var _BusinessContext = require("./contexts/BusinessContext");
