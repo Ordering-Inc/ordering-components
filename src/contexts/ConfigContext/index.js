@@ -129,18 +129,12 @@ export const ConfigProvider = ({ children, strategy }) => {
         handleUpdateOptimizationState('configs', result)
       }
       let data = null
-      // try {
-      //   const response = await fetch('https://api.ipregistry.co/?key=tryout')
-      //   if (response.status === 200) {
-      //     data = await response.json()
-      //     data = {
-      //       country_code: data?.location?.country?.code,
-      //       country_calling_code:  `+${data?.location?.country?.calling_code}`
-      //     }
-      //   }
-      // } catch (error) {
-      //   data = null
-      // }
+      try {
+        const response = await fetch('https://ipapi.co/json/')
+        data = await response.json()
+      } catch (error) {
+        data = null
+      }
       const conditionalConfigs = {
         dates_moment_format: {
           key: 'dates_moment_format',
