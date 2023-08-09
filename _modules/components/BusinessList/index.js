@@ -117,10 +117,11 @@ var BusinessList = function BusinessList(props) {
     ordering = _useApi2[0];
   var socket = (0, _WebsocketContext.useWebsocket)();
   var _useSession = (0, _SessionContext.useSession)(),
-    _useSession2 = _slicedToArray(_useSession, 1),
+    _useSession2 = _slicedToArray(_useSession, 2),
     _useSession2$ = _useSession2[0],
     auth = _useSession2$.auth,
-    token = _useSession2$.token;
+    token = _useSession2$.token,
+    refreshUserInfo = _useSession2[1].refreshUserInfo;
   var _useState17 = (0, _react.useState)({}),
     _useState18 = _slicedToArray(_useState17, 2),
     requestsState = _useState18[0],
@@ -700,6 +701,10 @@ var BusinessList = function BusinessList(props) {
       businesses: updatedBusinesses
     }));
   };
+  (0, _react.useEffect)(function () {
+    if (!token) return;
+    refreshUserInfo();
+  }, [auth]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     businessesList: businessesList,
     paginationProps: paginationProps,
