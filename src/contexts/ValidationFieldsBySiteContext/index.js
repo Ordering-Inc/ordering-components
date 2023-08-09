@@ -9,6 +9,12 @@ export const ValidationFieldsBySiteProvider = ({ children }) => {
   const [{ site }] = useSite()
   const [state, setState] = useState({ loading: true, fields: {}, error: false })
 
+  const convertArrayToObject = (result, fields) => {
+    result.forEach((field) => {
+      fields[field?.validation_field?.code === 'mobile_phone' ? 'cellphone' : field?.validation_field?.code] = field
+    })
+  }
+
   const loadValidationFields = async () => {
     try {
       const requestOptions = {
@@ -18,11 +24,33 @@ export const ValidationFieldsBySiteProvider = ({ children }) => {
         }
       }
       const response = await fetch(`${ordering.root}/validation_field_sites`, requestOptions)
-      const content = await response.json()
-      if (!content.error) {
-        const checkoutFields = content.result.filter(field => field?.site_id === site?.id)
-        setState({ fields: checkoutFields, loading: false })
+      const { result, error } = await response.json()
+      const checkout = {}
+      const address = {}
+      const card = {}
+      if (!error) {
+        const checkoutFields = result.filter(field => field?.site_id === site?.id)
+        convertArrayToObject(
+          checkoutFields.filter(field => field?.validation_field?.validate === 'checkout'),
+          checkout
+        )
+        convertArrayToObject(
+          checkoutFields.filter(field => field?.validation_field?.validate === 'address'),
+          address
+        )
+        convertArrayToObject(
+          checkoutFields.filter(field => field?.validation_field?.validate === 'card'),
+          card
+        )
       }
+      setState({
+        loading: false,
+        fields: {
+          checkout,
+          address,
+          card
+        }
+      })
     } catch (err) {
       setState({ ...state, loading: false, error: [err.message] })
     }

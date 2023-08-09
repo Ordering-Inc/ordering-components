@@ -42,9 +42,15 @@ var ValidationFieldsBySiteProvider = function ValidationFieldsBySiteProvider(_re
     _useState2 = _slicedToArray(_useState, 2),
     state = _useState2[0],
     setState = _useState2[1];
+  var convertArrayToObject = function convertArrayToObject(result, fields) {
+    result.forEach(function (field) {
+      var _field$validation_fie, _field$validation_fie2;
+      fields[(field === null || field === void 0 ? void 0 : (_field$validation_fie = field.validation_field) === null || _field$validation_fie === void 0 ? void 0 : _field$validation_fie.code) === 'mobile_phone' ? 'cellphone' : field === null || field === void 0 ? void 0 : (_field$validation_fie2 = field.validation_field) === null || _field$validation_fie2 === void 0 ? void 0 : _field$validation_fie2.code] = field;
+    });
+  };
   var loadValidationFields = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var requestOptions, response, content, checkoutFields;
+      var requestOptions, response, _yield$response$json, result, error, checkout, address, card, checkoutFields;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -62,30 +68,51 @@ var ValidationFieldsBySiteProvider = function ValidationFieldsBySiteProvider(_re
             _context.next = 7;
             return response.json();
           case 7:
-            content = _context.sent;
-            if (!content.error) {
-              checkoutFields = content.result.filter(function (field) {
+            _yield$response$json = _context.sent;
+            result = _yield$response$json.result;
+            error = _yield$response$json.error;
+            checkout = {};
+            address = {};
+            card = {};
+            if (!error) {
+              checkoutFields = result.filter(function (field) {
                 return (field === null || field === void 0 ? void 0 : field.site_id) === (site === null || site === void 0 ? void 0 : site.id);
               });
-              setState({
-                fields: checkoutFields,
-                loading: false
-              });
+              convertArrayToObject(checkoutFields.filter(function (field) {
+                var _field$validation_fie3;
+                return (field === null || field === void 0 ? void 0 : (_field$validation_fie3 = field.validation_field) === null || _field$validation_fie3 === void 0 ? void 0 : _field$validation_fie3.validate) === 'checkout';
+              }), checkout);
+              convertArrayToObject(checkoutFields.filter(function (field) {
+                var _field$validation_fie4;
+                return (field === null || field === void 0 ? void 0 : (_field$validation_fie4 = field.validation_field) === null || _field$validation_fie4 === void 0 ? void 0 : _field$validation_fie4.validate) === 'address';
+              }), address);
+              convertArrayToObject(checkoutFields.filter(function (field) {
+                var _field$validation_fie5;
+                return (field === null || field === void 0 ? void 0 : (_field$validation_fie5 = field.validation_field) === null || _field$validation_fie5 === void 0 ? void 0 : _field$validation_fie5.validate) === 'card';
+              }), card);
             }
-            _context.next = 14;
+            setState({
+              loading: false,
+              fields: {
+                checkout: checkout,
+                address: address,
+                card: card
+              }
+            });
+            _context.next = 20;
             break;
-          case 11:
-            _context.prev = 11;
+          case 17:
+            _context.prev = 17;
             _context.t0 = _context["catch"](0);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
-          case 14:
+          case 20:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[0, 11]]);
+      }, _callee, null, [[0, 17]]);
     }));
     return function loadValidationFields() {
       return _ref2.apply(this, arguments);
