@@ -26,7 +26,7 @@ export const OrderDetails = (props) => {
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const [events] = useEvent()
-  const [{ carts }, { reorder, clearCart }] = useOrder()
+  const [{ carts, options }, { reorder, clearCart }] = useOrder()
 
   const [orderState, setOrderState] = useState({ order: props.order ?? null, businessData: {}, loading: !props.order, error: null })
   const [drivers, setDrivers] = useState({ drivers: [], loadingDriver: false, error: null })
@@ -39,6 +39,8 @@ export const OrderDetails = (props) => {
   const [forceUpdate, setForceUpdate] = useState(null)
   const [reorderState, setReorderState] = useState({ loading: false, result: [], error: null })
   const [cartState, setCartState] = useState({ loading: false, error: null })
+
+  const isAlsea = ordering.project === 'alsea'
 
   const propsToFetch = ['header', 'slug']
 
@@ -324,7 +326,19 @@ export const OrderDetails = (props) => {
         ...reorderState,
         loading: true
       })
-      const { error, result } = await reorder(orderId)
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/reorder.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          order_id: orderId,
+          address_id: options?.address_id
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-APP-X': ordering.appId
+        }
+      })
+      const { error, result } = await response.json()
+      // const { error, result } = await reorder(orderId)
       if (!error) {
         setReorderState({
           ...reorderState,
