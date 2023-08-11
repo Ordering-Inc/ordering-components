@@ -1163,12 +1163,12 @@ var BusinessAndProductList = function BusinessAndProductList(props) {
     if (!orderState.loading && orderOptions && !languageState.loading && !props.avoidBusinessLoading) {
       getBusiness();
     }
-  }, [orderOptions, languageState.loading, slug, filterByMenus, professionalSelected]);
+  }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected]);
   (0, _react.useEffect)(function () {
     if (!orderState.loading && orderOptions && !languageState.loading && !businessState.loading && props.avoidBusinessLoading) {
       getBusiness();
     }
-  }, [orderOptions, languageState.loading, slug, filterByMenus, professionalSelected]);
+  }, [JSON.stringify(orderOptions), languageState.loading, slug, filterByMenus, professionalSelected]);
 
   /**
    * getBusiness if orderState is loading the first time when is rendered
