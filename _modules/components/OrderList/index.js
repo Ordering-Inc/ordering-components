@@ -184,9 +184,11 @@ var OrderList = function OrderList(props) {
     return _dayjs.default.utc(date, format).format(format) === date;
   };
 
+  var isAlsea = ordering.project === 'alsea';
+
   var handleReorder = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(orderId) {
-      var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, choosedOrder, _businessId, _businessData, _businessSlug;
+      var _orderState$options, response, _yield$response$json, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, _businessData$content2, choosedOrder, _businessId, _businessData, _businessSlug;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -205,15 +207,30 @@ var OrderList = function OrderList(props) {
                 loading: true
               }));
               _context.next = 6;
-              return reorder(orderId);
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/reorder.php"), {
+                method: 'POST',
+                body: JSON.stringify({
+                  order_id: orderId,
+                  address_id: orderState === null || orderState === void 0 ? void 0 : (_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : _orderState$options.address_id
+                }),
+                headers: {
+                  Authorization: "Bearer ".concat(session === null || session === void 0 ? void 0 : session.token),
+                  'X-APP-X': ordering.appId
+                }
+              });
 
             case 6:
-              _yield$reorder = _context.sent;
-              error = _yield$reorder.error;
-              result = _yield$reorder.result;
+              response = _context.sent;
+              _context.next = 9;
+              return response.json();
+
+            case 9:
+              _yield$response$json = _context.sent;
+              error = _yield$response$json.error;
+              result = _yield$response$json.result;
 
               if (error) {
-                _context.next = 13;
+                _context.next = 16;
                 break;
               }
 
@@ -223,23 +240,23 @@ var OrderList = function OrderList(props) {
                   orderId: orderId
                 })
               }));
-              _context.next = 22;
+              _context.next = 25;
               break;
 
-            case 13:
+            case 16:
               choosedOrder = orderList.orders.find(function (_order) {
                 return (_order === null || _order === void 0 ? void 0 : _order.id) === orderId;
               });
               _businessId = (_choosedOrder$busines = choosedOrder === null || choosedOrder === void 0 ? void 0 : choosedOrder.business_id) !== null && _choosedOrder$busines !== void 0 ? _choosedOrder$busines : choosedOrder === null || choosedOrder === void 0 ? void 0 : (_choosedOrder$origina = choosedOrder.original) === null || _choosedOrder$origina === void 0 ? void 0 : _choosedOrder$origina.business_id;
-              _context.next = 17;
+              _context.next = 20;
               return ordering.businesses(_businessId).select(['slug']).get();
 
-            case 17:
+            case 20:
               _businessData = _context.sent;
-              _context.next = 20;
+              _context.next = 23;
               return _businessData === null || _businessData === void 0 ? void 0 : (_businessData$content = _businessData.content) === null || _businessData$content === void 0 ? void 0 : (_businessData$content2 = _businessData$content.result) === null || _businessData$content2 === void 0 ? void 0 : _businessData$content2.slug;
 
-            case 20:
+            case 23:
               _businessSlug = _context.sent;
               setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
                 loading: false,
@@ -253,12 +270,12 @@ var OrderList = function OrderList(props) {
                 })
               }));
 
-            case 22:
-              _context.next = 27;
+            case 25:
+              _context.next = 30;
               break;
 
-            case 24:
-              _context.prev = 24;
+            case 27:
+              _context.prev = 27;
               _context.t0 = _context["catch"](2);
               setReorderState(_objectSpread(_objectSpread({}, reorderState), {}, {
                 loading: false,
@@ -266,12 +283,12 @@ var OrderList = function OrderList(props) {
                 result: [_context.t0 === null || _context.t0 === void 0 ? void 0 : _context.t0.message]
               }));
 
-            case 27:
+            case 30:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 24]]);
+      }, _callee, null, [[2, 27]]);
     }));
 
     return function handleReorder(_x) {
@@ -521,7 +538,7 @@ var OrderList = function OrderList(props) {
 
   var loadMessages = /*#__PURE__*/function () {
     var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(orderId) {
-      var url, response, _yield$response$json, error, result;
+      var url, response, _yield$response$json2, error, result;
 
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) {
@@ -548,9 +565,9 @@ var OrderList = function OrderList(props) {
               return response.json();
 
             case 8:
-              _yield$response$json = _context4.sent;
-              error = _yield$response$json.error;
-              result = _yield$response$json.result;
+              _yield$response$json2 = _context4.sent;
+              error = _yield$response$json2.error;
+              result = _yield$response$json2.result;
 
               if (!error) {
                 setMessages({
@@ -591,7 +608,7 @@ var OrderList = function OrderList(props) {
 
   var getBusinesses = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(businessIds) {
-      var _orderState$options, _orderState$options$a, _orderState$options$a2, _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options4, parameters, _orderState$options5, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
+      var _orderState$options2, _orderState$options2$, _orderState$options2$2, _orderState$options3, _orderState$options3$, _orderState$options3$2, _orderState$options4, _orderState$options5, parameters, _orderState$options6, moment, where, conditions, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
@@ -599,11 +616,11 @@ var OrderList = function OrderList(props) {
             case 0:
               _context5.prev = 0;
               parameters = {
-                location: "".concat((_orderState$options = orderState.options) === null || _orderState$options === void 0 ? void 0 : (_orderState$options$a = _orderState$options.address) === null || _orderState$options$a === void 0 ? void 0 : (_orderState$options$a2 = _orderState$options$a.location) === null || _orderState$options$a2 === void 0 ? void 0 : _orderState$options$a2.lat, ",").concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lng)
+                location: "".concat((_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 ? void 0 : (_orderState$options2$ = _orderState$options2.address) === null || _orderState$options2$ === void 0 ? void 0 : (_orderState$options2$2 = _orderState$options2$.location) === null || _orderState$options2$2 === void 0 ? void 0 : _orderState$options2$2.lat, ",").concat((_orderState$options3 = orderState.options) === null || _orderState$options3 === void 0 ? void 0 : (_orderState$options3$ = _orderState$options3.address) === null || _orderState$options3$ === void 0 ? void 0 : (_orderState$options3$2 = _orderState$options3$.location) === null || _orderState$options3$2 === void 0 ? void 0 : _orderState$options3$2.lng)
               };
 
-              if ((_orderState$options3 = orderState.options) !== null && _orderState$options3 !== void 0 && _orderState$options3.moment && isValidMoment((_orderState$options4 = orderState.options) === null || _orderState$options4 === void 0 ? void 0 : _orderState$options4.moment, 'YYYY-MM-DD HH:mm:ss')) {
-                moment = _dayjs.default.utc((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
+              if ((_orderState$options4 = orderState.options) !== null && _orderState$options4 !== void 0 && _orderState$options4.moment && isValidMoment((_orderState$options5 = orderState.options) === null || _orderState$options5 === void 0 ? void 0 : _orderState$options5.moment, 'YYYY-MM-DD HH:mm:ss')) {
+                moment = _dayjs.default.utc((_orderState$options6 = orderState.options) === null || _orderState$options6 === void 0 ? void 0 : _orderState$options6.moment, 'YYYY-MM-DD HH:mm:ss').local().unix();
                 parameters.timestamp = moment;
               }
 
