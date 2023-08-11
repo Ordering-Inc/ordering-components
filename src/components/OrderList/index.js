@@ -62,6 +62,8 @@ export const OrderList = props => {
   const requestsState = {}
   const isValidMoment = (date, format) => dayjs.utc(date, format).format(format) === date
 
+  const isAlsea = ordering.project === 'alsea'
+
   const handleReorder = async (orderId) => {
     if (!orderId) return
     try {
@@ -69,7 +71,19 @@ export const OrderList = props => {
         ...reorderState,
         loading: true
       })
-      const { error, result } = await reorder(orderId)
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/reorder.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+          order_id: orderId,
+          address_id: orderState?.options?.address_id
+        }),
+        headers: {
+          Authorization: `Bearer ${session?.token}`,
+          'X-APP-X': ordering.appId
+        }
+      })
+      const { error, result } = await response.json()
+      // const { error, result } = await reorder(orderId)
       if (!error) {
         setReorderState({
           ...reorderState,
