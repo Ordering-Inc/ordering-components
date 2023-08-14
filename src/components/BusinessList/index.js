@@ -600,7 +600,7 @@ export const BusinessList = (props) => {
   }
 
   useEffect(() => {
-    if(!token) return
+    if (!token) return
     refreshUserInfo()
   }, [auth])
 
@@ -629,6 +629,7 @@ export const BusinessList = (props) => {
             franchiseEnabled={franchiseEnabled}
             handleUpdateBusinessList={handleUpdateBusinessList}
             getCities={getCities}
+            setPaginationProps={setPaginationProps}
             citiesState={citiesState}
           />
         )
