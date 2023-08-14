@@ -90,6 +90,9 @@ export const GoogleMaps = (props) => {
           marker.setMap(null)
         }
       } else {
+        marker.addListener('click', () => {
+          onBusinessClick && onBusinessClick(locations[i]?.slug)
+        })
         bounds.extend(marker.position)
         locationMarkers.push(marker)
       }
@@ -286,7 +289,7 @@ export const GoogleMaps = (props) => {
         }
       }
     }
-  }, [googleReady, locations])
+  }, [googleReady, JSON.stringify(locations)])
 
   useEffect(() => {
     if (!businessMap) {
@@ -338,7 +341,7 @@ export const GoogleMaps = (props) => {
       markers?.[0] && markers[0].setPosition(newPos)
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
     }
-  }, [location, locations])
+  }, [location, JSON.stringify(locations)])
 
   useEffect(() => {
     if (!businessMap) {
@@ -356,7 +359,7 @@ export const GoogleMaps = (props) => {
       }, 5000)
       return () => clearInterval(interval)
     }
-  }, [locations, userActivity])
+  }, [JSON.stringify(locations), userActivity])
 
   useEffect(() => {
     if (boundMap && businessMap) {
