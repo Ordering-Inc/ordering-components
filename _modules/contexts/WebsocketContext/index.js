@@ -39,6 +39,7 @@ var WebsocketContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.WebsocketContext = WebsocketContext;
 var WebsocketProvider = function WebsocketProvider(_ref) {
+  var _session$user;
   var settings = _ref.settings,
     children = _ref.children,
     strategy = _ref.strategy;
@@ -61,7 +62,7 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
       }));
       setSocket(_socket);
     }
-  }, [session, configs]);
+  }, [session, JSON.stringify(configs)]);
   (0, _react.useEffect)(function () {
     if (socket) {
       socket.connect();
@@ -69,7 +70,7 @@ var WebsocketProvider = function WebsocketProvider(_ref) {
     return function () {
       socket && socket.close();
     };
-  }, [socket]);
+  }, [socket, session === null || session === void 0 || (_session$user = session.user) === null || _session$user === void 0 ? void 0 : _session$user.id]);
   (0, _react.useEffect)(function () {
     if (session.auth) return;
     var projectInputInterval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {

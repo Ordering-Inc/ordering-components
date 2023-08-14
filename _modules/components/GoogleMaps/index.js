@@ -134,6 +134,10 @@ var GoogleMaps = function GoogleMaps(props) {
           marker.setMap(null);
         }
       } else {
+        marker.addListener('click', function () {
+          var _locations$i10;
+          onBusinessClick && onBusinessClick((_locations$i10 = locations[i]) === null || _locations$i10 === void 0 ? void 0 : _locations$i10.slug);
+        });
         bounds.extend(marker.position);
         locationMarkers.push(marker);
       }
@@ -378,7 +382,7 @@ var GoogleMaps = function GoogleMaps(props) {
         }
       }
     }
-  }, [googleReady, locations]);
+  }, [googleReady, JSON.stringify(locations)]);
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       if (googleReady && googleMap && googleMapMarker) {
@@ -425,7 +429,7 @@ var GoogleMaps = function GoogleMaps(props) {
       (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newPos);
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
-  }, [location, locations]);
+  }, [location, JSON.stringify(locations)]);
   (0, _react.useEffect)(function () {
     if (!businessMap) {
       var interval = setInterval(function () {
@@ -446,7 +450,7 @@ var GoogleMaps = function GoogleMaps(props) {
         return clearInterval(interval);
       };
     }
-  }, [locations, userActivity]);
+  }, [JSON.stringify(locations), userActivity]);
   (0, _react.useEffect)(function () {
     if (boundMap && businessMap) {
       boundMap.extend(center);

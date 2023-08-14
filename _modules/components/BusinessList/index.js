@@ -725,6 +725,7 @@ var BusinessList = function BusinessList(props) {
     franchiseEnabled: franchiseEnabled,
     handleUpdateBusinessList: handleUpdateBusinessList,
     getCities: getCities,
+    setPaginationProps: setPaginationProps,
     citiesState: citiesState
   })));
 };
