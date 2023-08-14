@@ -26,7 +26,7 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
       const _socket = new Socket({ ...configs, accessToken: session.token })
       setSocket(_socket)
     }
-  }, [session, configs])
+  }, [session, JSON.stringify(configs)])
 
   useEffect(() => {
     if (socket) {
@@ -35,7 +35,7 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
     return () => {
       socket && socket.close()
     }
-  }, [socket])
+  }, [socket, session?.user?.id])
 
   useEffect(() => {
     if (session.auth) return
