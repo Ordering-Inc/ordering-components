@@ -11,7 +11,8 @@ export const ValidationFieldsProvider = ({ children }) => {
 
   const convertArrayToObject = (result, fields) => {
     result.forEach((field) => {
-      fields[field?.validation_field?.code === 'mobile_phone' ? 'cellphone' : field?.validation_field?.code] = field
+      const fieldCode = !siteState?.site?.id ? field?.code : field?.validation_field?.code
+      fields[fieldCode === 'mobile_phone' ? 'cellphone' : fieldCode] = field
     })
   }
 
