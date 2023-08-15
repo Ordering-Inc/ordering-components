@@ -76,8 +76,8 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
             card = {};
             if (!error) {
               checkoutFields = result.filter(function (field) {
-                var _site;
-                return (field === null || field === void 0 ? void 0 : field.site_id) === ((_site = site) === null || _site === void 0 ? void 0 : _site.id);
+                var _siteState$site;
+                return (field === null || field === void 0 ? void 0 : field.site_id) === (siteState === null || siteState === void 0 ? void 0 : (_siteState$site = siteState.site) === null || _siteState$site === void 0 ? void 0 : _siteState$site.id);
               });
               convertArrayToObject(checkoutFields.filter(function (field) {
                 var _field$validation_fie3;
@@ -178,9 +178,9 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
     loadValidationFields: loadValidationFields
   };
   (0, _react.useEffect)(function () {
-    var _siteState$site;
+    var _siteState$site2;
     if (siteState !== null && siteState !== void 0 && siteState.loading) return;
-    if (siteState !== null && siteState !== void 0 && (_siteState$site = siteState.site) !== null && _siteState$site !== void 0 && _siteState$site.id) loadValidationFields();else loadOriginalValidationFields();
+    if (siteState !== null && siteState !== void 0 && (_siteState$site2 = siteState.site) !== null && _siteState$site2 !== void 0 && _siteState$site2.id) loadValidationFields();else loadOriginalValidationFields();
   }, [siteState]);
   return /*#__PURE__*/_react.default.createElement(ValidationFieldsContext.Provider, {
     value: [state, functions]

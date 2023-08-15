@@ -29,7 +29,7 @@ export const ValidationFieldsProvider = ({ children }) => {
       const address = {}
       const card = {}
       if (!error) {
-        const checkoutFields = result.filter(field => field?.site_id === site?.id)
+        const checkoutFields = result.filter(field => field?.site_id === siteState?.site?.id)
         convertArrayToObject(
           checkoutFields.filter(field => field?.validation_field?.validate === 'checkout'),
           checkout
