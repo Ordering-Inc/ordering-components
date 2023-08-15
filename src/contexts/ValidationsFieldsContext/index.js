@@ -6,7 +6,7 @@ export const ValidationFieldsContext = createContext()
 
 export const ValidationFieldsProvider = ({ children }) => {
   const [ordering] = useApi()
-  const [{ site }] = useSite()
+  const [siteState] = useSite()
   const [state, setState] = useState({ loading: true, fields: {}, error: false })
 
   const convertArrayToObject = (result, fields) => {
@@ -56,13 +56,48 @@ export const ValidationFieldsProvider = ({ children }) => {
     }
   }
 
+  const loadOriginalValidationFields = async () => {
+    try {
+      const { content: { result, error } } = await ordering.validationFields().get()
+      const checkout = {}
+      const address = {}
+      const card = {}
+      if (!error) {
+        convertArrayToObject(
+          result.filter(field => field.validate === 'checkout'),
+          checkout
+        )
+        convertArrayToObject(
+          result.filter(field => field.validate === 'address'),
+          address
+        )
+        convertArrayToObject(
+          result.filter(field => field.validate === 'card'),
+          card
+        )
+      }
+      setState({
+        loading: false,
+        fields: {
+          checkout,
+          address,
+          card
+        }
+      })
+    } catch (err) {
+      setState({ ...state, loading: false, error: [err.message] })
+    }
+  }
+
   const functions = {
     loadValidationFields
   }
 
   useEffect(() => {
-    if (site?.id) loadValidationFields()
-  }, [site?.id])
+    if (siteState?.loading) return
+    if (siteState?.site?.id) loadValidationFields()
+    else loadOriginalValidationFields()
+  }, [siteState])
 
   return (
     <ValidationFieldsContext.Provider value={[state, functions]}>
