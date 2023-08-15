@@ -14,6 +14,7 @@ import { CustomerProvider } from '../../../../src/contexts/CustomerContext'
 import { OptimizationLoadProvider } from '../../../../src/contexts/OptimizationLoadContext'
 import { OrderingThemeProvider } from '../../../../src/contexts/OrderingThemeContext'
 import { NativeStrategy } from '../../NativeStrategy'
+import { SiteProvider } from '../../../../src/contexts/SiteContext'
 
 /**
  * Create OrderingContext
@@ -43,33 +44,35 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast, is
             <LanguageProvider strategy={nativeStrategy}>
               <ConfigProvider strategy={nativeStrategy}>
                 <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
-                  <UtilsProviders>
-                    <ToastProvider>
-                      <ValidationFieldsProvider>
-                        <SessionProvider strategy={nativeStrategy}>
-                          <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, restOfSettings)}>
-                            <CustomerProvider strategy={nativeStrategy}>
-                              <OrderProvider
-                                isDisabledDefaultOpts={isDisabledDefaultOpts}
-                                strategy={nativeStrategy}
-                                Alert={Alert}
-                                isDisableToast={isDisableToast}
-                                franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
-                                businessSlug={settings?.businessSlug}
-                                userAgent={settings?.userAgent}
-                              >
-                                <BusinessProvider
-                                  businessId={settings?.businessSlug ?? settings?.businessId}
+                  <SiteProvider appId={settings.app_id}>
+                    <UtilsProviders>
+                      <ToastProvider>
+                        <ValidationFieldsProvider>
+                          <SessionProvider strategy={nativeStrategy}>
+                            <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, restOfSettings)}>
+                              <CustomerProvider strategy={nativeStrategy}>
+                                <OrderProvider
+                                  isDisabledDefaultOpts={isDisabledDefaultOpts}
+                                  strategy={nativeStrategy}
+                                  Alert={Alert}
+                                  isDisableToast={isDisableToast}
+                                  franchiseId={settings?.franchiseSlug ?? settings?.franchiseId}
+                                  businessSlug={settings?.businessSlug}
+                                  userAgent={settings?.userAgent}
                                 >
-                                  {children}
-                                </BusinessProvider>
-                              </OrderProvider>
-                            </CustomerProvider>
-                          </WebsocketProvider>
-                        </SessionProvider>
-                      </ValidationFieldsProvider>
-                    </ToastProvider>
-                  </UtilsProviders>
+                                  <BusinessProvider
+                                    businessId={settings?.businessSlug ?? settings?.businessId}
+                                  >
+                                    {children}
+                                  </BusinessProvider>
+                                </OrderProvider>
+                              </CustomerProvider>
+                            </WebsocketProvider>
+                          </SessionProvider>
+                        </ValidationFieldsProvider>
+                      </ToastProvider>
+                    </UtilsProviders>
+                  </SiteProvider>
                 </OrderingThemeProvider>
               </ConfigProvider>
             </LanguageProvider>

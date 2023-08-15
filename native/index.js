@@ -95,6 +95,7 @@ import { WebsocketStatus } from '../src/components/WebsocketStatus'
 import { ApiContext, ApiProvider, useApi } from '../src/contexts/ApiContext'
 import { BusinessContext, BusinessProvider, useBusiness } from '../src/contexts/BusinessContext'
 import { ConfigContext, ConfigProvider, useConfig } from '../src/contexts/ConfigContext'
+import { SiteContext, SiteProvider, useSite } from '../src/contexts/SiteContext'
 import { CustomerContext, CustomerProvider, useCustomer } from '../src/contexts/CustomerContext'
 import { EventContext, EventProvider, useEvent } from '../src/contexts/EventContext'
 import { LanguageContext, LanguageProvider, useLanguage } from '../src/contexts/LanguageContext'
@@ -213,6 +214,9 @@ export {
   ConfigContext,
   ConfigProvider,
   useConfig,
+  SiteContext,
+  SiteProvider,
+  useSite,
   CustomerContext,
   CustomerProvider,
   useCustomer,
