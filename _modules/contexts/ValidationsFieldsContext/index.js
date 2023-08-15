@@ -33,7 +33,7 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
     ordering = _useApi2[0];
   var _useSite = (0, _SiteContext.useSite)(),
     _useSite2 = _slicedToArray(_useSite, 1),
-    site = _useSite2[0].site;
+    siteState = _useSite2[0];
   var _useState = (0, _react.useState)({
       loading: true,
       fields: {},
@@ -44,8 +44,9 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
     setState = _useState2[1];
   var convertArrayToObject = function convertArrayToObject(result, fields) {
     result.forEach(function (field) {
-      var _field$validation_fie, _field$validation_fie2;
-      fields[(field === null || field === void 0 || (_field$validation_fie = field.validation_field) === null || _field$validation_fie === void 0 ? void 0 : _field$validation_fie.code) === 'mobile_phone' ? 'cellphone' : field === null || field === void 0 || (_field$validation_fie2 = field.validation_field) === null || _field$validation_fie2 === void 0 ? void 0 : _field$validation_fie2.code] = field;
+      var _siteState$site, _field$validation_fie;
+      var fieldCode = !(siteState !== null && siteState !== void 0 && (_siteState$site = siteState.site) !== null && _siteState$site !== void 0 && _siteState$site.id) ? field === null || field === void 0 ? void 0 : field.code : field === null || field === void 0 || (_field$validation_fie = field.validation_field) === null || _field$validation_fie === void 0 ? void 0 : _field$validation_fie.code;
+      fields[fieldCode === 'mobile_phone' ? 'cellphone' : fieldCode] = field;
     });
   };
   var loadValidationFields = /*#__PURE__*/function () {
@@ -76,19 +77,20 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
             card = {};
             if (!error) {
               checkoutFields = result.filter(function (field) {
-                return (field === null || field === void 0 ? void 0 : field.site_id) === (site === null || site === void 0 ? void 0 : site.id);
+                var _siteState$site2;
+                return (field === null || field === void 0 ? void 0 : field.site_id) === (siteState === null || siteState === void 0 || (_siteState$site2 = siteState.site) === null || _siteState$site2 === void 0 ? void 0 : _siteState$site2.id);
               });
               convertArrayToObject(checkoutFields.filter(function (field) {
-                var _field$validation_fie3;
-                return (field === null || field === void 0 || (_field$validation_fie3 = field.validation_field) === null || _field$validation_fie3 === void 0 ? void 0 : _field$validation_fie3.validate) === 'checkout';
+                var _field$validation_fie2;
+                return (field === null || field === void 0 || (_field$validation_fie2 = field.validation_field) === null || _field$validation_fie2 === void 0 ? void 0 : _field$validation_fie2.validate) === 'checkout';
               }), checkout);
               convertArrayToObject(checkoutFields.filter(function (field) {
-                var _field$validation_fie4;
-                return (field === null || field === void 0 || (_field$validation_fie4 = field.validation_field) === null || _field$validation_fie4 === void 0 ? void 0 : _field$validation_fie4.validate) === 'address';
+                var _field$validation_fie3;
+                return (field === null || field === void 0 || (_field$validation_fie3 = field.validation_field) === null || _field$validation_fie3 === void 0 ? void 0 : _field$validation_fie3.validate) === 'address';
               }), address);
               convertArrayToObject(checkoutFields.filter(function (field) {
-                var _field$validation_fie5;
-                return (field === null || field === void 0 || (_field$validation_fie5 = field.validation_field) === null || _field$validation_fie5 === void 0 ? void 0 : _field$validation_fie5.validate) === 'card';
+                var _field$validation_fie4;
+                return (field === null || field === void 0 || (_field$validation_fie4 = field.validation_field) === null || _field$validation_fie4 === void 0 ? void 0 : _field$validation_fie4.validate) === 'card';
               }), card);
             }
             setState({
@@ -118,12 +120,69 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
+  var loadOriginalValidationFields = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+      var _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address, card;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return ordering.validationFields().get();
+          case 3:
+            _yield$ordering$valid = _context2.sent;
+            _yield$ordering$valid2 = _yield$ordering$valid.content;
+            result = _yield$ordering$valid2.result;
+            error = _yield$ordering$valid2.error;
+            checkout = {};
+            address = {};
+            card = {};
+            if (!error) {
+              convertArrayToObject(result.filter(function (field) {
+                return field.validate === 'checkout';
+              }), checkout);
+              convertArrayToObject(result.filter(function (field) {
+                return field.validate === 'address';
+              }), address);
+              convertArrayToObject(result.filter(function (field) {
+                return field.validate === 'card';
+              }), card);
+            }
+            setState({
+              loading: false,
+              fields: {
+                checkout: checkout,
+                address: address,
+                card: card
+              }
+            });
+            _context2.next = 17;
+            break;
+          case 14:
+            _context2.prev = 14;
+            _context2.t0 = _context2["catch"](0);
+            setState(_objectSpread(_objectSpread({}, state), {}, {
+              loading: false,
+              error: [_context2.t0.message]
+            }));
+          case 17:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2, null, [[0, 14]]);
+    }));
+    return function loadOriginalValidationFields() {
+      return _ref3.apply(this, arguments);
+    };
+  }();
   var functions = {
     loadValidationFields: loadValidationFields
   };
   (0, _react.useEffect)(function () {
-    if (site !== null && site !== void 0 && site.id) loadValidationFields();
-  }, [site === null || site === void 0 ? void 0 : site.id]);
+    var _siteState$site3;
+    if (siteState !== null && siteState !== void 0 && siteState.loading) return;
+    if (siteState !== null && siteState !== void 0 && (_siteState$site3 = siteState.site) !== null && _siteState$site3 !== void 0 && _siteState$site3.id) loadValidationFields();else loadOriginalValidationFields();
+  }, [siteState]);
   return /*#__PURE__*/_react.default.createElement(ValidationFieldsContext.Provider, {
     value: [state, functions]
   }, children);
@@ -131,14 +190,14 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
 exports.ValidationFieldsProvider = ValidationFieldsProvider;
 var useValidationFields = function useValidationFields() {
   var validationFieldsManager = (0, _react.useContext)(ValidationFieldsContext);
-  return validationFieldsManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+  return validationFieldsManager || [{}, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
-    }, _callee2);
+    }, _callee3);
   }))];
 };
 exports.useValidationFields = useValidationFields;
