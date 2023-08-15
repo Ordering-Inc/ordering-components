@@ -6,12 +6,13 @@ export const ValidationFieldsContext = createContext()
 
 export const ValidationFieldsProvider = ({ children }) => {
   const [ordering] = useApi()
-  const [{ site }] = useSite()
+  const [siteState] = useSite()
   const [state, setState] = useState({ loading: true, fields: {}, error: false })
 
   const convertArrayToObject = (result, fields) => {
     result.forEach((field) => {
-      fields[field?.validation_field?.code === 'mobile_phone' ? 'cellphone' : field?.validation_field?.code] = field
+      const fieldCode = !siteState?.site?.id ? field?.code : field?.validation_field?.code
+      fields[fieldCode === 'mobile_phone' ? 'cellphone' : fieldCode] = field
     })
   }
 
@@ -29,7 +30,7 @@ export const ValidationFieldsProvider = ({ children }) => {
       const address = {}
       const card = {}
       if (!error) {
-        const checkoutFields = result.filter(field => field?.site_id === site?.id)
+        const checkoutFields = result.filter(field => field?.site_id === siteState?.site?.id)
         convertArrayToObject(
           checkoutFields.filter(field => field?.validation_field?.validate === 'checkout'),
           checkout
@@ -56,13 +57,48 @@ export const ValidationFieldsProvider = ({ children }) => {
     }
   }
 
+  const loadOriginalValidationFields = async () => {
+    try {
+      const { content: { result, error } } = await ordering.validationFields().get()
+      const checkout = {}
+      const address = {}
+      const card = {}
+      if (!error) {
+        convertArrayToObject(
+          result.filter(field => field.validate === 'checkout'),
+          checkout
+        )
+        convertArrayToObject(
+          result.filter(field => field.validate === 'address'),
+          address
+        )
+        convertArrayToObject(
+          result.filter(field => field.validate === 'card'),
+          card
+        )
+      }
+      setState({
+        loading: false,
+        fields: {
+          checkout,
+          address,
+          card
+        }
+      })
+    } catch (err) {
+      setState({ ...state, loading: false, error: [err.message] })
+    }
+  }
+
   const functions = {
     loadValidationFields
   }
 
   useEffect(() => {
-    if (site?.id) loadValidationFields()
-  }, [site?.id])
+    if (siteState?.loading) return
+    if (siteState?.site?.id) loadValidationFields()
+    else loadOriginalValidationFields()
+  }, [siteState])
 
   return (
     <ValidationFieldsContext.Provider value={[state, functions]}>
