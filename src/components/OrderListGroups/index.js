@@ -496,7 +496,6 @@ export const OrderListGroups = (props) => {
   }
 
   const loadLogisticOrders = async (isAlreadyFetched) => {
-    if (isAlreadyFetched) return
     try {
       setlogisticOrders({ ...logisticOrders, loading: true })
       const url = `${ordering.root}/drivers/${session.user?.id}/assign_requests`
@@ -837,8 +836,8 @@ export const OrderListGroups = (props) => {
     if (ordersGroup[currentTabSelected]?.loading || !socket?.socket) return
 
     const handleUpdateOrder = (order) => {
-      handleActionEvent('update_order', order)
       if (session?.user?.level === 2 && businessIDs.length > 0 && !businessIDs.includes(order.business_id)) return
+      handleActionEvent('update_order', order)
       events.emit('order_updated', order)
       let orderFound = null
       for (let i = 0; i < ordersStatusArray.length; i++) {
@@ -938,7 +937,7 @@ export const OrderListGroups = (props) => {
     socket.off('message', (e) => handleActionEvent('messages', e))
     const ordersRoom = session?.user?.level === 0 ? 'orders' : `orders_${session?.user?.id}`
     socket.join(ordersRoom)
-    socket.socket.on('connect', () => {
+    socket.socket && socket.socket.on('connect', () => {
       socket.join(ordersRoom)
     })
     return () => {
@@ -951,14 +950,22 @@ export const OrderListGroups = (props) => {
   const handleAddAssignRequest = useCallback(
     (order) => {
       handleActionEvent('request_register', order)
-      setlogisticOrders({ ...logisticOrders, orders: sortOrders([...logisticOrders?.orders, order]) })
+      setlogisticOrders((prevState) => ({
+        ...prevState,
+        orders: sortOrders([...prevState?.orders, order].filter((order, index, hash) => { // remove possibles duplicates
+          const val = JSON.stringify(order)
+          return index === hash.findIndex(_order => {
+            return JSON.stringify(_order) === val
+          })
+        }))
+      }))
       showToast(
         ToastType.Info,
         t('SPECIFIC_LOGISTIC_ORDER_ORDERED', 'Logisitc order _NUMBER_ has been ordered').replace('_NUMBER_', order?.order?.id ?? order.id),
         1000
       )
     },
-    []
+    [logisticOrders]
   )
 
   const handleDeleteAssignRequest = useCallback(
@@ -970,7 +977,7 @@ export const OrderListGroups = (props) => {
           : sortOrders(prevState?.orders)
       }))
     },
-    []
+    [logisticOrders]
   )
 
   const handleUpdateAssignRequest = useCallback(
@@ -988,7 +995,7 @@ export const OrderListGroups = (props) => {
         1000
       )
     },
-    []
+    [logisticOrders]
   )
 
   useEffect(() => {
