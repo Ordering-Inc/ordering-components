@@ -30,13 +30,13 @@ var SmartAppBanner = function SmartAppBanner(props) {
     if (!configs) return;
     var metas = [{
       name: 'google-play-app',
-      id: storeAndroidId || (configs === null || configs === void 0 || (_configs$android_app_ = configs.android_app_id) === null || _configs$android_app_ === void 0 ? void 0 : _configs$android_app_.value)
+      id: storeAndroidId || (configs === null || configs === void 0 ? void 0 : (_configs$android_app_ = configs.android_app_id) === null || _configs$android_app_ === void 0 ? void 0 : _configs$android_app_.value)
     }, {
       name: 'apple-itunes-app',
-      id: storeAppleId || (configs === null || configs === void 0 || (_configs$ios_app_id = configs.ios_app_id) === null || _configs$ios_app_id === void 0 ? void 0 : _configs$ios_app_id.value)
+      id: storeAppleId || (configs === null || configs === void 0 ? void 0 : (_configs$ios_app_id = configs.ios_app_id) === null || _configs$ios_app_id === void 0 ? void 0 : _configs$ios_app_id.value)
     }, {
       name: 'kindle-fire-app',
-      id: storeKindleId || (configs === null || configs === void 0 || (_configs$kindle_app_i = configs.kindle_app_id) === null || _configs$kindle_app_i === void 0 ? void 0 : _configs$kindle_app_i.value)
+      id: storeKindleId || (configs === null || configs === void 0 ? void 0 : (_configs$kindle_app_i = configs.kindle_app_id) === null || _configs$kindle_app_i === void 0 ? void 0 : _configs$kindle_app_i.value)
     }];
     metas.filter(function (meta) {
       return meta === null || meta === void 0 ? void 0 : meta.id;
