@@ -21,6 +21,7 @@ var _CustomerContext = require("../../../../src/contexts/CustomerContext");
 var _OptimizationLoadContext = require("../../../../src/contexts/OptimizationLoadContext");
 var _OrderingThemeContext = require("../../../../src/contexts/OrderingThemeContext");
 var _NativeStrategy = require("../../NativeStrategy");
+var _SiteContext = require("../../../../src/contexts/SiteContext");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 /**
@@ -60,6 +61,8 @@ var OrderingProvider = function OrderingProvider(_ref) {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_OrderingThemeContext.OrderingThemeProvider, {
     settings: Object.assign(settings.api, restOfSettings)
+  }, /*#__PURE__*/_react.default.createElement(_SiteContext.SiteProvider, {
+    appId: settings.app_id
   }, /*#__PURE__*/_react.default.createElement(_UtilsContext.UtilsProviders, null, /*#__PURE__*/_react.default.createElement(_ToastContext.ToastProvider, null, /*#__PURE__*/_react.default.createElement(_ValidationsFieldsContext.ValidationFieldsProvider, null, /*#__PURE__*/_react.default.createElement(_SessionContext.SessionProvider, {
     strategy: nativeStrategy
   }, /*#__PURE__*/_react.default.createElement(_WebsocketContext.WebsocketProvider, {
@@ -77,6 +80,6 @@ var OrderingProvider = function OrderingProvider(_ref) {
     userAgent: settings === null || settings === void 0 ? void 0 : settings.userAgent
   }, /*#__PURE__*/_react.default.createElement(_BusinessContext.BusinessProvider, {
     businessId: (_settings$businessSlu = settings === null || settings === void 0 ? void 0 : settings.businessSlug) !== null && _settings$businessSlu !== void 0 ? _settings$businessSlu : settings === null || settings === void 0 ? void 0 : settings.businessId
-  }, children)))))))))))))));
+  }, children))))))))))))))));
 };
 exports.OrderingProvider = OrderingProvider;
