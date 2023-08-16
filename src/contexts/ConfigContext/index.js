@@ -137,6 +137,16 @@ export const ConfigProvider = ({ children, strategy }) => {
       } catch (error) {
         data = null
       }
+      if(!data) {
+        try {
+          const response = await fetch('https://ipapi.co/8.8.8.8/json/')
+          if (response.status === 200) {
+            data = await response.json()
+          }
+        } catch (error) {
+          data = null
+        }
+      }
       const conditionalConfigs = {
         dates_moment_format: {
           key: 'dates_moment_format',
