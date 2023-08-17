@@ -2459,7 +2459,7 @@ var OrderProvider = function OrderProvider(_ref) {
     value: [copyState, functions]
   }, Alert && /*#__PURE__*/_react.default.createElement(Alert, {
     open: alert.show,
-    title: alert.title || t('ERROR', 'Error'),
+    title: alert.title || t('ATENTION', 'Atención'),
     content: alert.content,
     acceptText: alert.acceptText || null,
     onAccept: alert.onAccept || function () {

@@ -922,7 +922,7 @@ var SignupForm = function SignupForm(props) {
               } else {
                 setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                   result: {
-                    error: t('ERROR', 'Error')
+                    error: t('ATENTION', 'Atención')
                   },
                   loading: false
                 }));
