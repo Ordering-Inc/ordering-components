@@ -149,9 +149,9 @@ var PageBanner = function PageBanner(props) {
     };
   }();
   (0, _react.useEffect)(function () {
-    if (!position) return;
+    if (!position || orderState !== null && orderState !== void 0 && orderState.loading) return;
     handleGetPageBanner();
-  }, [position, businessId, JSON.stringify((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 || (_orderState$options8 = _orderState$options8.address) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.location), orderState === null || orderState === void 0 || (_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.type, (_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.moment]);
+  }, [position, businessId, JSON.stringify((_orderState$options8 = orderState.options) === null || _orderState$options8 === void 0 || (_orderState$options8 = _orderState$options8.address) === null || _orderState$options8 === void 0 ? void 0 : _orderState$options8.location), orderState === null || orderState === void 0 || (_orderState$options9 = orderState.options) === null || _orderState$options9 === void 0 ? void 0 : _orderState$options9.type, (_orderState$options10 = orderState.options) === null || _orderState$options10 === void 0 ? void 0 : _orderState$options10.moment, orderState === null || orderState === void 0 ? void 0 : orderState.loading]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     pageBannerState: pageBannerState
   })));
