@@ -81,9 +81,9 @@ export const PageBanner = (props) => {
   }
 
   useEffect(() => {
-    if (!position) return
+    if (!position || orderState?.loading) return
     handleGetPageBanner()
-  }, [position, businessId, JSON.stringify(orderState.options?.address?.location), orderState?.options?.type, orderState.options?.moment])
+  }, [position, businessId, JSON.stringify(orderState.options?.address?.location), orderState?.options?.type, orderState.options?.moment, orderState?.loading])
 
   return (
     <>
