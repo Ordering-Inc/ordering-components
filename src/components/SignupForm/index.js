@@ -434,7 +434,7 @@ export const SignupForm = (props) => {
           setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: type === 'email' ? t('EMAIL_ALREADY_TAKEN', 'Email already taken') : t('CELLPHONE_ALREADY_EXISTS', 'The cellphone already exists') }, loading: false })
           setOpenOtpOptions(false)
         } else {
-          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('ERROR', 'Error') }, loading: false })
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('ATENTION', 'Atención') }, loading: false })
         }
       }
       return text

@@ -1141,7 +1141,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         Alert && (
           <Alert
             open={alert.show}
-            title={alert.title || t('ERROR', 'Error')}
+            title={alert.title || t('ATENTION', 'Atención')}
             content={alert.content}
             acceptText={alert.acceptText || null}
             onAccept={alert.onAccept || (() => setAlert({ show: false }))}
