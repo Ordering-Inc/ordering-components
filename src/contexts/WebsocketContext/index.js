@@ -15,7 +15,7 @@ export const WebsocketContext = createContext()
  * This provider has a reducer for manage session state
  * @param {props} props
  */
-export const WebsocketProvider = ({ settings, children, strategy }) => {
+export const WebsocketProvider = ({ settings, children, strategy, isAlsea }) => {
   const [session] = useSession()
   const [socket, setSocket] = useState()
   const [configs, setConfigs] = useState(settings)
@@ -23,7 +23,7 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
   useEffect(() => {
     if (session.loading) return
     if (configs.project) {
-      const _socket = new Socket({ ...configs, accessToken: session.token, url: 'https://socket-v3.ordering.co' })
+      const _socket = new Socket({ ...configs, accessToken: session.token, url: isAlsea ? configs.url : 'https://socket-v3.ordering.co' })
       setSocket(_socket)
     }
   }, [session, JSON.stringify(configs)])
@@ -64,10 +64,11 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
       disconnectTimeout = setTimeout(() => socket.socket.connect(), 1000)
     })
 
-    socket.socket.on('connect_error', () => {
-      connectionErrorTimeout = setTimeout(() => socket.socket.connect(), 1000)
+    socket.socket.on('connect_error', (error) => {
+      if (error.message !== 'invalid signature') {
+        connectionErrorTimeout = setTimeout(() => socket.socket.connect(), 1000)
+      }
     })
-
     return () => {
       clearInterval(disconnectTimeout)
       clearInterval(connectionErrorTimeout)
