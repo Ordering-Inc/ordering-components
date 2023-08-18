@@ -22,8 +22,8 @@ export const WebsocketProvider = ({ settings, children, strategy }) => {
 
   useEffect(() => {
     if (session.loading) return
-    if (configs.project && configs.url) {
-      const _socket = new Socket({ ...configs, accessToken: session.token })
+    if (configs.project) {
+      const _socket = new Socket({ ...configs, accessToken: session.token, url: 'https://socket-v3.ordering.co' })
       setSocket(_socket)
     }
   }, [session, JSON.stringify(configs)])
