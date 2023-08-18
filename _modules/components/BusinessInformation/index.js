@@ -43,10 +43,10 @@ var BusinessInformation = function BusinessInformation(props) {
   };
   (0, _react.useEffect)(function () {
     var _business$gallery, _business$gallery2;
-    var photos = business === null || business === void 0 ? void 0 : (_business$gallery = business.gallery) === null || _business$gallery === void 0 ? void 0 : _business$gallery.filter(function (item) {
+    var photos = business === null || business === void 0 || (_business$gallery = business.gallery) === null || _business$gallery === void 0 ? void 0 : _business$gallery.filter(function (item) {
       return item.file;
     });
-    var videos = business === null || business === void 0 ? void 0 : (_business$gallery2 = business.gallery) === null || _business$gallery2 === void 0 ? void 0 : _business$gallery2.filter(function (item) {
+    var videos = business === null || business === void 0 || (_business$gallery2 = business.gallery) === null || _business$gallery2 === void 0 ? void 0 : _business$gallery2.filter(function (item) {
       return item.video;
     });
     var location = {

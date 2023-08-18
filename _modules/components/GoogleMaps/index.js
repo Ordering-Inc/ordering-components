@@ -274,7 +274,7 @@ var GoogleMaps = function GoogleMaps(props) {
       var _newCircleZone = new window.google.maps.Circle(_objectSpread(_objectSpread({}, fillStyle), {}, {
         editable: false,
         center: center,
-        radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.distance) * units[deliveryZone === null || deliveryZone === void 0 ? void 0 : (_deliveryZone$data4 = deliveryZone.data) === null || _deliveryZone$data4 === void 0 ? void 0 : _deliveryZone$data4.unit]
+        radius: (deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data.distance) * units[deliveryZone === null || deliveryZone === void 0 || (_deliveryZone$data4 = deliveryZone.data) === null || _deliveryZone$data4 === void 0 ? void 0 : _deliveryZone$data4.unit]
       }));
       _newCircleZone.setMap(map);
       bounds.union(_newCircleZone.getBounds());
@@ -415,7 +415,7 @@ var GoogleMaps = function GoogleMaps(props) {
       if (businessMap && googleMap) {
         if (markerRef !== null && markerRef !== void 0 && markerRef.current) {
           var _markerRef$current;
-          (markerRef === null || markerRef === void 0 ? void 0 : (_markerRef$current = markerRef.current) === null || _markerRef$current === void 0 ? void 0 : _markerRef$current.close) && markerRef.current.close();
+          (markerRef === null || markerRef === void 0 || (_markerRef$current = markerRef.current) === null || _markerRef$current === void 0 ? void 0 : _markerRef$current.close) && markerRef.current.close();
         }
         markers.forEach(function (marker) {
           marker.setMap(null);
