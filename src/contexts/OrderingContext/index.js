@@ -33,7 +33,9 @@ export const OrderingProvider = ({ Alert, settings, isAlsea, children }) => {
     project: settings.project,
     appId: settings.app_id,
     countryCode: settings.countryCode,
-    useOptimizeLoad: settings.useOptimizeLoad
+    useOptimizeLoad: settings.useOptimizeLoad,
+    use_root_point: settings.use_root_point,
+    isAlsea
   }
   return (
     <OrderingContext.Provider>
