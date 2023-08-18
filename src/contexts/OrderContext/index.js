@@ -1252,7 +1252,6 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
           state.carts[`businessId:${newBusinessId}`] = cart
         }
       }
-      setState({ ...state, loading: false })
     }
     const handleOrderOptionUpdate = ({ carts, ...options }) => {
       if (!isDisableToast) {
