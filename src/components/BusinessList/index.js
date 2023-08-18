@@ -36,7 +36,8 @@ export const BusinessList = (props) => {
     businessId,
     cityId,
     actualSlug,
-    searchValueCustom
+    searchValueCustom,
+    isKiosk
   } = props
 
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -600,7 +601,7 @@ export const BusinessList = (props) => {
   }
 
   useEffect(() => {
-    if (!token) return
+    if (!token || isKiosk) return
     refreshUserInfo()
   }, [auth])
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useOrder } from '../../contexts/OrderContext'
 import { useApi } from '../../contexts/ApiContext'
 import { useEvent } from '../../contexts/EventContext'
+import { useSession } from '../../contexts/SessionContext'
 
 const paymethodsExisting = ['stripe', 'stripe_direct', 'stripe_connect', 'paypal', 'square']
 const paymethodsNotAllowed = ['paypal_express', 'authorize']
@@ -19,12 +20,14 @@ export const PaymentOptions = (props) => {
     isCustomerMode,
     onPaymentChange,
     paymethodsCustom,
-    UIComponent
+    UIComponent,
+    isKiosk
   } = props
 
   const [events] = useEvent()
   const [ordering] = useApi()
   const [orderState, { changePaymethod }] = useOrder()
+  const [{device_code}] = useSession()
   const orderTotal = orderState.carts?.[`businessId:${businessId}`]?.total || 0
 
   const [paymethodsList, setPaymethodsList] = useState({ paymethods: [], loading: true, error: null })
@@ -53,8 +56,13 @@ export const PaymentOptions = (props) => {
    */
   const getPaymentOptions = async () => {
     setPaymethodsList({ ...paymethodsList, loading: true })
+
+    const headers = {
+      'X-Physical-Device-Code-X': `${device_code}`
+    }
+
     try {
-      const { content: { error, result } } = await ordering.businesses(businessId).get()
+      const { content: { error, result } } = await ordering.businesses(businessId).get(device_code ? {headers} : {})
       if (!error) {
         paymethodsList.paymethods = parsePaymethods(result.paymethods)
       }
@@ -156,6 +164,10 @@ export const PaymentOptions = (props) => {
   }, [paymethodSelected])
 
   useEffect(() => {
+    if(isKiosk){
+      getPaymentOptions()
+      return
+    }
     if (paymethods) {
       setPaymethodsList({
         ...paymethodsList,

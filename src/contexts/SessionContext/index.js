@@ -18,6 +18,7 @@ export const SessionProvider = ({ children, strategy }) => {
     auth: null,
     token: null,
     user: null,
+    device_code: null,
     loading: true
   })
   const [ordering] = useApi()
@@ -30,6 +31,7 @@ export const SessionProvider = ({ children, strategy }) => {
       auth,
       token,
       user,
+      device_code,
       loading: false
     })
   }
@@ -44,11 +46,13 @@ export const SessionProvider = ({ children, strategy }) => {
   const login = async (values) => {
     await strategy.setItem('token', values.token)
     await strategy.setItem('user', values.user, true)
+    await strategy.setItem('device_code', values?.device_code)
     setState({
       ...state,
       auth: true,
       user: values.user,
       token: values.token,
+      device_code: values?.device_code || null,
       loading: false
     })
   }
