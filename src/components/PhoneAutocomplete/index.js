@@ -8,7 +8,7 @@ import { CODES } from '../../constants/code-numbers'
 import { TIMEZONES } from '../../constants/timezones'
 
 export const PhoneAutocomplete = (props) => {
-  const { UIComponent, isIos, businessSlug } = props
+  const { UIComponent, isIos, businessSlug, urlPhone } = props
 
   const [ordering] = useApi()
   const [{ user, token }] = useSession()
@@ -16,9 +16,9 @@ export const PhoneAutocomplete = (props) => {
   const [businessState] = useBusiness()
 
   const [phone, setPhone] = useState('')
-  const [openModal, setOpenModal] = useState({ customer: false, signup: false })
+  const [openModal, setOpenModal] = useState({ customer: false, signup: false, error: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: false, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: true, error: null })
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
   const [optionsState, setOptionsState] = useState({ loading: false })
@@ -149,6 +149,7 @@ export const PhoneAutocomplete = (props) => {
   }
 
   useEffect(() => {
+    if (urlPhone) return
     if (
       phone &&
       phone.length >= 7 &&
@@ -160,6 +161,16 @@ export const PhoneAutocomplete = (props) => {
       setCustomersPhones({ ...customersPhones, users: [] })
     }
   }, [phone])
+
+  useEffect(() => {
+    if (urlPhone) {
+      getUsers()
+      return
+    }
+    if ((urlPhone && urlPhone.length < 7) || !urlPhone) {
+      setCustomersPhones({ ...customersPhones, users: [] })
+    }
+  }, [urlPhone])
 
   useEffect(() => {
     if (businessSlug && !businessState?.business?.id) {
