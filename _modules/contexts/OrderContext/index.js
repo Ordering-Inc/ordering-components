@@ -2213,9 +2213,6 @@ var OrderProvider = function OrderProvider(_ref) {
           state.carts["businessId:".concat(newBusinessId)] = cart;
         }
       }
-      setState(_objectSpread(_objectSpread({}, state), {}, {
-        loading: false
-      }));
     };
     var handleOrderOptionUpdate = function handleOrderOptionUpdate(_ref26) {
       var carts = _ref26.carts,

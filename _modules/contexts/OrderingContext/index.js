@@ -47,7 +47,9 @@ var OrderingProvider = function OrderingProvider(_ref) {
     project: settings.project,
     appId: settings.app_id,
     countryCode: settings.countryCode,
-    useOptimizeLoad: settings.useOptimizeLoad
+    useOptimizeLoad: settings.useOptimizeLoad,
+    use_root_point: settings.use_root_point,
+    isAlsea: isAlsea
   };
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, restOfSettings)
