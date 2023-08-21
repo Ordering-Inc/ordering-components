@@ -74,7 +74,7 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
     setCustomerState = _useState6[1];
   var _useState7 = (0, _react.useState)({
       users: [],
-      loading: true,
+      loading: urlPhone ? true : false,
       error: null
     }),
     _useState8 = _slicedToArray(_useState7, 2),
@@ -357,10 +357,15 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
       getUsers();
       return;
     }
-    if (urlPhone && urlPhone.length < 7 || !urlPhone) {
-      setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
-        users: []
+    if (urlPhone && urlPhone.length < 7) {
+      setOpenModal(_objectSpread(_objectSpread({}, openModal), {}, {
+        error: true
       }));
+      setCustomersPhones(_objectSpread(_objectSpread({}, customersPhones), {}, {
+        users: [],
+        loading: false
+      }));
+      return;
     }
   }, [urlPhone]);
   (0, _react.useEffect)(function () {
