@@ -18,7 +18,7 @@ export const PhoneAutocomplete = (props) => {
   const [phone, setPhone] = useState('')
   const [openModal, setOpenModal] = useState({ customer: false, signup: false, error: false })
   const [customerState, setCustomerState] = useState({ loading: false, result: { error: false } })
-  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: true, error: null })
+  const [customersPhones, setCustomersPhones] = useState({ users: [], loading: urlPhone ? true : false, error: null })
   const [businessAddress, setBusinessAddress] = useState(null)
   const [alertState, setAlertState] = useState({ open: true, content: [] })
   const [optionsState, setOptionsState] = useState({ loading: false })
@@ -167,8 +167,10 @@ export const PhoneAutocomplete = (props) => {
       getUsers()
       return
     }
-    if ((urlPhone && urlPhone.length < 7) || !urlPhone) {
-      setCustomersPhones({ ...customersPhones, users: [] })
+    if ((urlPhone && urlPhone.length < 7)) {
+      setOpenModal({ ...openModal, error: true })
+      setCustomersPhones({ ...customersPhones, users: [], loading: false })
+      return
     }
   }, [urlPhone])
 
