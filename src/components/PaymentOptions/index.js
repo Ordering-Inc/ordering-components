@@ -24,6 +24,7 @@ export const PaymentOptions = (props) => {
     isKiosk
   } = props
 
+  const fetchPaymethods = isKiosk
   const [events] = useEvent()
   const [ordering] = useApi()
   const [orderState, { changePaymethod }] = useOrder()
@@ -164,7 +165,7 @@ export const PaymentOptions = (props) => {
   }, [paymethodSelected])
 
   useEffect(() => {
-    if(isKiosk){
+    if(fetchPaymethods){
       getPaymentOptions()
       return
     }

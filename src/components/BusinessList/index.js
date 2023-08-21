@@ -40,6 +40,7 @@ export const BusinessList = (props) => {
     isKiosk
   } = props
 
+  const avoidFetchData = !token || isKiosk
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
   const [paginationProps, setPaginationProps] = useState({
     currentPage: (paginationSettings.controlType === 'pages' && paginationSettings.initialPage && paginationSettings.initialPage >= 1) ? paginationSettings.initialPage - 1 : 0,
@@ -601,7 +602,7 @@ export const BusinessList = (props) => {
   }
 
   useEffect(() => {
-    if (!token || isKiosk) return
+    if (avoidFetchData) return
     refreshUserInfo()
   }, [auth])
 
