@@ -44,7 +44,8 @@ var SessionProvider = function SessionProvider(_ref) {
       auth: null,
       token: null,
       user: null,
-      loading: true
+      loading: true,
+      device_code: null
     }),
     _useState2 = _slicedToArray(_useState, 2),
     state = _useState2[0],
@@ -60,7 +61,7 @@ var SessionProvider = function SessionProvider(_ref) {
     t = _useLanguage2[1];
   var setValuesFromLocalStorage = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _yield$getValuesFromL, auth, token, user;
+      var _yield$getValuesFromL, auth, token, user, device_code;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -71,13 +72,15 @@ var SessionProvider = function SessionProvider(_ref) {
             auth = _yield$getValuesFromL.auth;
             token = _yield$getValuesFromL.token;
             user = _yield$getValuesFromL.user;
+            device_code = _yield$getValuesFromL.device_code;
             setState(_objectSpread(_objectSpread({}, state), {}, {
               auth: auth,
               token: token,
               user: user,
-              loading: false
+              loading: false,
+              device_code: device_code
             }));
-          case 7:
+          case 8:
           case "end":
             return _context.stop();
         }
@@ -89,7 +92,7 @@ var SessionProvider = function SessionProvider(_ref) {
   }();
   var getValuesFromLocalStorage = /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var auth, token, user;
+      var auth, token, user, device_code;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -105,12 +108,17 @@ var SessionProvider = function SessionProvider(_ref) {
             return strategy.getItem('user', true);
           case 8:
             user = _context2.sent;
+            _context2.next = 11;
+            return strategy.getItem('device_code');
+          case 11:
+            device_code = _context2.sent;
             return _context2.abrupt("return", {
               auth: auth,
               token: token,
-              user: user
+              user: user,
+              device_code: device_code
             });
-          case 10:
+          case 13:
           case "end":
             return _context2.stop();
         }
@@ -131,13 +139,17 @@ var SessionProvider = function SessionProvider(_ref) {
             _context3.next = 4;
             return strategy.setItem('user', values.user, true);
           case 4:
+            _context3.next = 6;
+            return strategy.setItem('device_code', values === null || values === void 0 ? void 0 : values.device_code);
+          case 6:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               auth: true,
               user: values.user,
               token: values.token,
-              loading: false
+              loading: false,
+              device_code: values === null || values === void 0 ? void 0 : values.device_code
             }));
-          case 5:
+          case 7:
           case "end":
             return _context3.stop();
         }

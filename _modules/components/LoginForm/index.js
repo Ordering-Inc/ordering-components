@@ -139,7 +139,7 @@ var LoginForm = function LoginForm(props) {
    */
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var _credentials4, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, accessToken, _yield$ordering$setAc, logoutResp;
+      var _credentials4, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, level, session, accessToken, _yield$ordering$setAc, logoutResp, _result$session, _result$session2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -261,10 +261,18 @@ var LoginForm = function LoginForm(props) {
           case 42:
             return _context.abrupt("return");
           case 43:
-            login({
-              user: result,
-              token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
-            });
+            if (values !== null && values !== void 0 && values.device_code) {
+              login({
+                user: result,
+                token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token,
+                device_code: values === null || values === void 0 ? void 0 : values.device_code
+              });
+            } else {
+              login({
+                user: result,
+                token: (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
+              });
+            }
           case 44:
             events.emit('userLogin', result);
             if (handleSuccessLogin) {
@@ -553,7 +561,7 @@ var LoginForm = function LoginForm(props) {
   }();
   var handleLoginSpoonity = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-      var _result$session2, response, _yield$response$json2, result, error;
+      var _result$session3, response, _yield$response$json2, result, error;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
           case 0:
@@ -595,7 +603,7 @@ var LoginForm = function LoginForm(props) {
           case 13:
             login({
               user: result,
-              token: result === null || result === void 0 || (_result$session2 = result.session) === null || _result$session2 === void 0 ? void 0 : _result$session2.access_token
+              token: result === null || result === void 0 || (_result$session3 = result.session) === null || _result$session3 === void 0 ? void 0 : _result$session3.access_token
             });
             setFormState({
               result: {

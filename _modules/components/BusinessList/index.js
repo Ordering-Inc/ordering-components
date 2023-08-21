@@ -64,7 +64,9 @@ var BusinessList = function BusinessList(props) {
     businessId = props.businessId,
     cityId = props.cityId,
     actualSlug = props.actualSlug,
-    searchValueCustom = props.searchValueCustom;
+    searchValueCustom = props.searchValueCustom,
+    isKiosk = props.isKiosk;
+  var avoidFetchData = !token || isKiosk;
   var _useState = (0, _react.useState)({
       businesses: [],
       loading: true,
@@ -702,7 +704,7 @@ var BusinessList = function BusinessList(props) {
     }));
   };
   (0, _react.useEffect)(function () {
-    if (!token) return;
+    if (avoidFetchData) return;
     refreshUserInfo();
   }, [auth]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
