@@ -154,10 +154,18 @@ export const LoginForm = (props) => {
               return
             }
           }
-          login({
-            user: result,
-            token: result.session?.access_token
-          })
+          if(values?.device_code) {
+            login({
+              user: result,
+              token: result.session?.access_token,
+              device_code: values?.device_code
+            })
+          } else {
+            login({
+              user: result,
+              token: result.session?.access_token
+            })
+          }
         }
         events.emit('userLogin', result)
         if (handleSuccessLogin) {

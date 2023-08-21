@@ -18,19 +18,21 @@ export const SessionProvider = ({ children, strategy }) => {
     auth: null,
     token: null,
     user: null,
-    loading: true
+    loading: true,
+    device_code: null
   })
   const [ordering] = useApi()
   const [, { showToast }] = useToast()
   const [, t] = useLanguage()
   const setValuesFromLocalStorage = async () => {
-    const { auth, token, user } = await getValuesFromLocalStorage()
+    const { auth, token, user, device_code } = await getValuesFromLocalStorage()
     setState({
       ...state,
       auth,
       token,
       user,
-      loading: false
+      loading: false,
+      device_code,
     })
   }
 
@@ -38,18 +40,21 @@ export const SessionProvider = ({ children, strategy }) => {
     const auth = await strategy.getItem('token')
     const token = await strategy.getItem('token')
     const user = await strategy.getItem('user', true)
-    return { auth, token, user }
+    const device_code = await strategy.getItem('device_code')
+    return { auth, token, user, device_code }
   }
 
   const login = async (values) => {
     await strategy.setItem('token', values.token)
     await strategy.setItem('user', values.user, true)
+    await strategy.setItem('device_code', values?.device_code)
     setState({
       ...state,
       auth: true,
       user: values.user,
       token: values.token,
-      loading: false
+      loading: false,
+      device_code: values?.device_code,
     })
   }
 
