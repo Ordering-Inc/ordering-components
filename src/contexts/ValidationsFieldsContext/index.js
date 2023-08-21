@@ -57,8 +57,14 @@ export const ValidationFieldsProvider = ({ children }) => {
     }
   }
 
-  const loadOriginalValidationFields = async () => {
+  const loadOriginalValidationFields = async (forceLoading) => {
     try {
+      if (forceLoading) {
+        setState({
+          ...state,
+          loading: true
+        })
+      }
       const { content: { result, error } } = await ordering.validationFields().get()
       const checkout = {}
       const address = {}
@@ -91,7 +97,8 @@ export const ValidationFieldsProvider = ({ children }) => {
   }
 
   const functions = {
-    loadValidationFields
+    loadValidationFields,
+    loadOriginalValidationFields
   }
 
   useEffect(() => {
@@ -109,5 +116,5 @@ export const ValidationFieldsProvider = ({ children }) => {
 
 export const useValidationFields = () => {
   const validationFieldsManager = useContext(ValidationFieldsContext)
-  return validationFieldsManager || [{}, async () => {}]
+  return validationFieldsManager || [{}, async () => { }]
 }
