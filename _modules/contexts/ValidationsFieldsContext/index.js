@@ -121,12 +121,12 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
     };
   }();
   var loadOriginalValidationFields = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref3) {
-      var _ref3$forceLoading, forceLoading, _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address, card;
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(options) {
+      var forceLoading, _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address, card;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            _ref3$forceLoading = _ref3.forceLoading, forceLoading = _ref3$forceLoading === void 0 ? false : _ref3$forceLoading;
+            forceLoading = options === null || options === void 0 ? void 0 : options.forceLoading;
             _context2.prev = 1;
             if (forceLoading) {
               setState(_objectSpread(_objectSpread({}, state), {}, {
@@ -178,7 +178,7 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
       }, _callee2, null, [[1, 16]]);
     }));
     return function loadOriginalValidationFields(_x2) {
-      return _ref4.apply(this, arguments);
+      return _ref3.apply(this, arguments);
     };
   }();
   var functions = {
