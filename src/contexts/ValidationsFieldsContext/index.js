@@ -57,7 +57,8 @@ export const ValidationFieldsProvider = ({ children }) => {
     }
   }
 
-  const loadOriginalValidationFields = async ({ forceLoading = false }) => {
+  const loadOriginalValidationFields = async (options) => {
+    const forceLoading = options?.forceLoading
     try {
       if (forceLoading) {
         setState({
