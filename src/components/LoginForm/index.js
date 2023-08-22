@@ -407,7 +407,7 @@ export const LoginForm = (props) => {
 
   const alseaOtpConsult = async (params) => {
     try {
-      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/wow_search_recover.php?${params}`, {
+      const response = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/wow_search_recover.php?${params}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       })
@@ -540,6 +540,10 @@ export const LoginForm = (props) => {
         user,
         token: user?.session?.access_token
       })
+      events.emit('userLogin', user)
+      if (handleSuccessLogin) {
+        handleSuccessLogin(user)
+      }
     }
   }
 
