@@ -866,7 +866,7 @@ var LoginForm = function LoginForm(props) {
             case 0:
               _context6.prev = 0;
               _context6.next = 3;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/wow_search_recover.php?").concat(params), {
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/wow_search_recover.php?").concat(params), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
@@ -1138,6 +1138,11 @@ var LoginForm = function LoginForm(props) {
                   user: user,
                   token: user === null || user === void 0 ? void 0 : (_user$session2 = user.session) === null || _user$session2 === void 0 ? void 0 : _user$session2.access_token
                 });
+                events.emit('userLogin', user);
+
+                if (handleSuccessLogin) {
+                  handleSuccessLogin(user);
+                }
               }
 
             case 7:
