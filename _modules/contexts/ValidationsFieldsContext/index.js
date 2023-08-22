@@ -121,15 +121,21 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
     };
   }();
   var loadOriginalValidationFields = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address, card;
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref3) {
+      var forceLoading, _yield$ordering$valid, _yield$ordering$valid2, result, error, checkout, address, card;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
+            forceLoading = _ref3.forceLoading;
+            _context2.prev = 1;
+            if (forceLoading) {
+              setState(_objectSpread(_objectSpread({}, state), {}, {
+                loading: true
+              }));
+            }
+            _context2.next = 5;
             return ordering.validationFields().get();
-          case 3:
+          case 5:
             _yield$ordering$valid = _context2.sent;
             _yield$ordering$valid2 = _yield$ordering$valid.content;
             result = _yield$ordering$valid2.result;
@@ -156,27 +162,28 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
                 card: card
               }
             });
-            _context2.next = 17;
+            _context2.next = 19;
             break;
-          case 14:
-            _context2.prev = 14;
-            _context2.t0 = _context2["catch"](0);
+          case 16:
+            _context2.prev = 16;
+            _context2.t0 = _context2["catch"](1);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: [_context2.t0.message]
             }));
-          case 17:
+          case 19:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[0, 14]]);
+      }, _callee2, null, [[1, 16]]);
     }));
-    return function loadOriginalValidationFields() {
-      return _ref3.apply(this, arguments);
+    return function loadOriginalValidationFields(_x2) {
+      return _ref4.apply(this, arguments);
     };
   }();
   var functions = {
-    loadValidationFields: loadValidationFields
+    loadValidationFields: loadValidationFields,
+    loadOriginalValidationFields: loadOriginalValidationFields
   };
   (0, _react.useEffect)(function () {
     var _siteState$site3;
