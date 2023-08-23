@@ -451,6 +451,31 @@ export const UserFormDetails = (props) => {
     )
   }, [notificationsGroup?.loading, singleNotifications?.loading])
 
+  useEffect(() => {
+    const handleUpdateDriver = (data) => {
+      const changes = {}
+      data.changes?.map(change => (
+        changes[change.attribute] = change.new
+      ))
+      setUserState({
+        ...userState,
+        result: {
+          ...userState?.result,
+          ...changes
+        }
+      })
+      changeUser({
+        ...session.user,
+        ...changes
+      })
+    }
+
+    socket.on('drivers_changes', handleUpdateDriver)
+    return () => {
+      socket.off('drivers_changes', handleUpdateDriver)
+    }
+  }, [socket?.socket])
+
   return (
     <>
       {UIComponent && (
