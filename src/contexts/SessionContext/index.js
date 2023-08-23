@@ -64,9 +64,9 @@ export const SessionProvider = ({ children, strategy }) => {
     await strategy.removeItem('token')
     await strategy.removeItem('user')
     const countryCodeFromLocalStorage = await strategy.getItem('country-code')
-    if (countryCodeFromLocalStorage) {
-      await strategy.removeItem('country-code')
-    }
+    if (countryCodeFromLocalStorage) await strategy.removeItem('country-code')
+    const languague = await strategy.getItem('language')
+    if(languague) await strategy.removeItem('language')
     setState({
       ...state,
       auth: false,
