@@ -47,14 +47,16 @@ export const SessionProvider = ({ children, strategy }) => {
   const login = async (values) => {
     await strategy.setItem('token', values.token)
     await strategy.setItem('user', values.user, true)
-    await strategy.setItem('device_code', values?.device_code)
+    if (values?.device_code) {
+      await strategy.setItem('device_code', values?.device_code)
+    }
     setState({
       ...state,
       auth: true,
       user: values.user,
       token: values.token,
       loading: false,
-      device_code: values?.device_code,
+      device_code: values?.device_code || null
     })
   }
 
