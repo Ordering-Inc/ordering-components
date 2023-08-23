@@ -47,7 +47,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   }
 
   const loadDefaultLanguage = async () => {
-    const _language = await strategy.getItem('language', true)
+const _language = await strategy.getItem('language', true)
     try {
       const { content: { error, result } } = await ordering.languages().where([{ attribute: _language ? _language?.code : 'default', value: true }]).get()
       if (error) {
@@ -59,7 +59,7 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
         return
       }
       const language = { id: result[0].id, code: result[0].code, rtl: result[0].rtl }
-      apiHelper.setLanguage(result[0].code)
+            apiHelper.setLanguage(result[0].code)
       setState({
         ...state,
         language
@@ -77,6 +77,12 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     setState({ ...state, loading: true, language: _language })
   }
 
+  const checkLocalStorageLanguage = async() => {
+    const language = await strategy.getItem('language', true)
+    if(!language) return
+    setLanguageFromLocalStorage(language)
+  }
+
   /**
    * Refresh translation when change language from ordering
    */
@@ -86,10 +92,8 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
     }
   }, [state.language?.code, ordering])
 
-  useEffect(async() => {
-    const language = await strategy.getItem('language', true)
-    if(!language) return
-    setLanguageFromLocalStorage(language)
+  useEffect(() => {
+    checkLocalStorageLanguage()
   }, [])
 
   useEffect(() => {
