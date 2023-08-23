@@ -139,17 +139,21 @@ var SessionProvider = function SessionProvider(_ref) {
             _context3.next = 4;
             return strategy.setItem('user', values.user, true);
           case 4:
-            _context3.next = 6;
+            if (!(values !== null && values !== void 0 && values.device_code)) {
+              _context3.next = 7;
+              break;
+            }
+            _context3.next = 7;
             return strategy.setItem('device_code', values === null || values === void 0 ? void 0 : values.device_code);
-          case 6:
+          case 7:
             setState(_objectSpread(_objectSpread({}, state), {}, {
               auth: true,
               user: values.user,
               token: values.token,
               loading: false,
-              device_code: values === null || values === void 0 ? void 0 : values.device_code
+              device_code: (values === null || values === void 0 ? void 0 : values.device_code) || null
             }));
-          case 7:
+          case 8:
           case "end":
             return _context3.stop();
         }
