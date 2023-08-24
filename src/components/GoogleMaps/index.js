@@ -21,7 +21,7 @@ export const GoogleMaps = (props) => {
     noDistanceValidation,
     businessZones,
     fillStyle,
-    useLocationPin,
+    useMapWithBusinessZones,
     deactiveAlerts
   } = props
 
@@ -106,6 +106,9 @@ export const GoogleMaps = (props) => {
     }
     if (!deactiveAlerts) {
       businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES')
+    }
+    if (useMapWithBusinessZones) {
+      bounds.extend(center)
     }
     map.fitBounds(bounds)
     setBoundMap(bounds)
@@ -257,7 +260,9 @@ export const GoogleMaps = (props) => {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center?.lat, center?.lng),
             map,
-            icon: useLocationPin ? undefined : {
+            draggable: useMapWithBusinessZones,
+            zIndex: 9999,
+            icon: useMapWithBusinessZones ? undefined : {
               url: locations[0]?.icon,
               scaledSize: new window.google.maps.Size(35, 35)
             }
@@ -299,7 +304,7 @@ export const GoogleMaps = (props) => {
           events.emit('map_is_dragging', true)
         })
 
-        if (mapControls?.isMarkerDraggable) {
+        if (mapControls?.isMarkerDraggable && !useMapWithBusinessZones) {
           window.google.maps.event.addListener(googleMap, 'drag', () => {
             googleMapMarker.setPosition(googleMap.getCenter())
             events.emit('map_is_dragging', true)
@@ -335,7 +340,7 @@ export const GoogleMaps = (props) => {
       center.lng = location?.lng
       const newPos = new window.google.maps.LatLng(center?.lat, center?.lng)
       googleMapMarker && googleMapMarker.setPosition(newPos)
-      markers?.[0] && markers[0].setPosition(newPos)
+      !useMapWithBusinessZones && markers?.[0] && markers[0].setPosition(newPos)
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center?.lat, center?.lng))
     }
   }, [location, locations])
@@ -344,10 +349,10 @@ export const GoogleMaps = (props) => {
     if (!businessMap) {
       const interval = setInterval(() => {
         if (googleReady && !userActivity) {
-          const driverLocation = locations?.[0]
+          const driverLocation = useMapWithBusinessZones ? center : locations?.[0]
           if (driverLocation) {
             const newLocation = new window.google.maps.LatLng(driverLocation?.lat, driverLocation?.lng)
-            markers?.[0] && markers[0].setPosition(newLocation)
+            useMapWithBusinessZones ? boundMap.extend(newLocation) : markers?.[0] && markers[0].setPosition(newLocation)
             markers?.length > 0 && markers.forEach(marker => boundMap.extend(marker.position))
             googleMap.fitBounds(boundMap)
           }
