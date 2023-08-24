@@ -79,7 +79,6 @@ const _language = await strategy.getItem('language', true)
 
   const checkLocalStorageLanguage = async() => {
     const language = await strategy.getItem('language', true)
-    if(!language) return
     setLanguageFromLocalStorage(language)
   }
 
