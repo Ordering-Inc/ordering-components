@@ -104,8 +104,7 @@ export const ValidationFieldsProvider = ({ children }) => {
 
   useEffect(() => {
     if (siteState?.loading) return
-    if (siteState?.site?.id) loadValidationFields()
-    else loadOriginalValidationFields()
+    loadOriginalValidationFields()
   }, [siteState])
 
   return (
