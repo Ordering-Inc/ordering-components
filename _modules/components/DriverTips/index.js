@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -18,7 +18,7 @@ function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArra
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 /**
  * Component to manage driver tips behavior without UI component
@@ -90,10 +90,10 @@ var DriverTips = function DriverTips(props) {
     props.handlerChangeDriverOption && props.handlerChangeDriverOption(driverTip);
   };
   (0, _react.useEffect)(function () {
-    var _orderState$carts, _orderState$carts2, _configs$driver_tip_t, _configs$driver_tip_u;
-    var orderDriverTipRate = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 || (_orderState$carts = _orderState$carts["businessId:".concat(businessId !== null && businessId !== void 0 ? businessId : businessIds === null || businessIds === void 0 ? void 0 : businessIds[0])]) === null || _orderState$carts === void 0 ? void 0 : _orderState$carts.driver_tip_rate) || 0;
-    var orderDriverTip = ((_orderState$carts2 = orderState.carts) === null || _orderState$carts2 === void 0 || (_orderState$carts2 = _orderState$carts2["businessId:".concat(businessId !== null && businessId !== void 0 ? businessId : businessIds === null || businessIds === void 0 ? void 0 : businessIds[0])]) === null || _orderState$carts2 === void 0 ? void 0 : _orderState$carts2.driver_tip) || 0;
-    var isFixedPrice = parseInt(configs === null || configs === void 0 || (_configs$driver_tip_t = configs.driver_tip_type) === null || _configs$driver_tip_t === void 0 ? void 0 : _configs$driver_tip_t.value, 10) === 1 || !!parseInt(configs === null || configs === void 0 || (_configs$driver_tip_u = configs.driver_tip_use_custom) === null || _configs$driver_tip_u === void 0 ? void 0 : _configs$driver_tip_u.value, 10); // 1 - fixed, 2 - percentage
+    var _orderState$carts, _orderState$carts2, _orderState$carts3, _orderState$carts4, _configs$driver_tip_t, _configs$driver_tip_u;
+    var orderDriverTipRate = ((_orderState$carts = orderState.carts) === null || _orderState$carts === void 0 ? void 0 : (_orderState$carts2 = _orderState$carts["businessId:".concat(businessId !== null && businessId !== void 0 ? businessId : businessIds === null || businessIds === void 0 ? void 0 : businessIds[0])]) === null || _orderState$carts2 === void 0 ? void 0 : _orderState$carts2.driver_tip_rate) || 0;
+    var orderDriverTip = ((_orderState$carts3 = orderState.carts) === null || _orderState$carts3 === void 0 ? void 0 : (_orderState$carts4 = _orderState$carts3["businessId:".concat(businessId !== null && businessId !== void 0 ? businessId : businessIds === null || businessIds === void 0 ? void 0 : businessIds[0])]) === null || _orderState$carts4 === void 0 ? void 0 : _orderState$carts4.driver_tip) || 0;
+    var isFixedPrice = parseInt(configs === null || configs === void 0 ? void 0 : (_configs$driver_tip_t = configs.driver_tip_type) === null || _configs$driver_tip_t === void 0 ? void 0 : _configs$driver_tip_t.value, 10) === 1 || !!parseInt(configs === null || configs === void 0 ? void 0 : (_configs$driver_tip_u = configs.driver_tip_use_custom) === null || _configs$driver_tip_u === void 0 ? void 0 : _configs$driver_tip_u.value, 10); // 1 - fixed, 2 - percentage
 
     setOptionSelected(isFixedPrice ? orderDriverTip : orderDriverTipRate);
     setDriverTipAmount(orderDriverTip);
