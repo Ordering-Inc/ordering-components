@@ -71,7 +71,7 @@ var MenuControl = function MenuControl(props) {
   /**
    * Have a list of business schedules disabled
    */
-  var disableDays = (menuSelected === null || menuSelected === void 0 || (_menuSelected$schedul = menuSelected.schedule) === null || _menuSelected$schedul === void 0 ? void 0 : _menuSelected$schedul.map(function (item, i) {
+  var disableDays = (menuSelected === null || menuSelected === void 0 ? void 0 : (_menuSelected$schedul = menuSelected.schedule) === null || _menuSelected$schedul === void 0 ? void 0 : _menuSelected$schedul.map(function (item, i) {
     return !item.enabled && i;
   })) || [];
 
@@ -93,7 +93,7 @@ var MenuControl = function MenuControl(props) {
   var onDateSelected = function onDateSelected(date) {
     var _menuSelected$schedul2;
     var day = (0, _dayjs.default)(date, 'YYYY-MM-DD').day();
-    var lapses = menuSelected === null || menuSelected === void 0 || (_menuSelected$schedul2 = menuSelected.schedule[day]) === null || _menuSelected$schedul2 === void 0 ? void 0 : _menuSelected$schedul2.lapses;
+    var lapses = menuSelected === null || menuSelected === void 0 ? void 0 : (_menuSelected$schedul2 = menuSelected.schedule[day]) === null || _menuSelected$schedul2 === void 0 ? void 0 : _menuSelected$schedul2.lapses;
     setScheduleSelected(_objectSpread(_objectSpread({}, scheduleSelected), {}, {
       lapses: lapses
     }));
@@ -124,7 +124,7 @@ var MenuControl = function MenuControl(props) {
     setMenuSelected(menu);
     var today = (0, _dayjs.default)().day();
     return {
-      lapses: menu === null || menu === void 0 || (_menu$schedule$today = menu.schedule[today]) === null || _menu$schedule$today === void 0 ? void 0 : _menu$schedule$today.lapses,
+      lapses: menu === null || menu === void 0 ? void 0 : (_menu$schedule$today = menu.schedule[today]) === null || _menu$schedule$today === void 0 ? void 0 : _menu$schedule$today.lapses,
       menuId: menu.id
     };
   };
@@ -153,9 +153,9 @@ var MenuControl = function MenuControl(props) {
     var timesList = [];
     var lapses = (scheduleSelected === null || scheduleSelected === void 0 ? void 0 : scheduleSelected.lapses) || [];
     for (var i = 0; i < lapses.length; i++) {
-      var _lapses$i, _lapses$i2, _lapses$i3, _lapses$i4;
-      var start = "".concat((_lapses$i = lapses[i]) === null || _lapses$i === void 0 || (_lapses$i = _lapses$i.open) === null || _lapses$i === void 0 ? void 0 : _lapses$i.hour, ":").concat((_lapses$i2 = lapses[i]) === null || _lapses$i2 === void 0 || (_lapses$i2 = _lapses$i2.open) === null || _lapses$i2 === void 0 ? void 0 : _lapses$i2.minute);
-      var end = "".concat((_lapses$i3 = lapses[i]) === null || _lapses$i3 === void 0 || (_lapses$i3 = _lapses$i3.close) === null || _lapses$i3 === void 0 ? void 0 : _lapses$i3.hour, ":").concat((_lapses$i4 = lapses[i]) === null || _lapses$i4 === void 0 || (_lapses$i4 = _lapses$i4.close) === null || _lapses$i4 === void 0 ? void 0 : _lapses$i4.minute);
+      var _lapses$i, _lapses$i$open, _lapses$i2, _lapses$i2$open, _lapses$i3, _lapses$i3$close, _lapses$i4, _lapses$i4$close;
+      var start = "".concat((_lapses$i = lapses[i]) === null || _lapses$i === void 0 ? void 0 : (_lapses$i$open = _lapses$i.open) === null || _lapses$i$open === void 0 ? void 0 : _lapses$i$open.hour, ":").concat((_lapses$i2 = lapses[i]) === null || _lapses$i2 === void 0 ? void 0 : (_lapses$i2$open = _lapses$i2.open) === null || _lapses$i2$open === void 0 ? void 0 : _lapses$i2$open.minute);
+      var end = "".concat((_lapses$i3 = lapses[i]) === null || _lapses$i3 === void 0 ? void 0 : (_lapses$i3$close = _lapses$i3.close) === null || _lapses$i3$close === void 0 ? void 0 : _lapses$i3$close.hour, ":").concat((_lapses$i4 = lapses[i]) === null || _lapses$i4 === void 0 ? void 0 : (_lapses$i4$close = _lapses$i4.close) === null || _lapses$i4$close === void 0 ? void 0 : _lapses$i4$close.minute);
       var diff = (0, _dayjs.default)(end, 'HH:mm').diff((0, _dayjs.default)(start, 'HH:mm'), 'hour', true);
       while (diff > 0) {
         var day = start;

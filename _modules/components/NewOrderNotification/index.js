@@ -22,9 +22,9 @@ var NewOrderNotification = function NewOrderNotification(props) {
     _useConfig2 = _slicedToArray(_useConfig, 1),
     configs = _useConfig2[0].configs;
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
-    orderStatus: props.isBusinessApp ? (configs === null || configs === void 0 || (_configs$notification = configs.notification_business_states) === null || _configs$notification === void 0 ? void 0 : _configs$notification.value.split('|').map(function (value) {
+    orderStatus: props.isBusinessApp ? (configs === null || configs === void 0 ? void 0 : (_configs$notification = configs.notification_business_states) === null || _configs$notification === void 0 ? void 0 : _configs$notification.value.split('|').map(function (value) {
       return Number(value);
-    })) || [] : (configs === null || configs === void 0 || (_configs$notification2 = configs.notification_driver_states) === null || _configs$notification2 === void 0 ? void 0 : _configs$notification2.value.split('|').map(function (value) {
+    })) || [] : (configs === null || configs === void 0 ? void 0 : (_configs$notification2 = configs.notification_driver_states) === null || _configs$notification2 === void 0 ? void 0 : _configs$notification2.value.split('|').map(function (value) {
       return Number(value);
     })) || []
   })));
