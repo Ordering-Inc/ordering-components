@@ -103,8 +103,8 @@ export const ValidationFieldsProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    loadOriginalValidationFields()
-  }, [])
+    !siteState?.loading && loadOriginalValidationFields()
+  }, [siteState])
 
   return (
     <ValidationFieldsContext.Provider value={[state, functions]}>
