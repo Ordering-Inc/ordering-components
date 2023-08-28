@@ -1,20 +1,29 @@
 import React, { useEffect, useState, useContext, createContext } from 'react'
+import { useOptimizationLoad } from '../OptimizationLoadContext'
 import { useApi } from '../ApiContext'
 
 export const ValidationFieldsContext = createContext()
 
 export const ValidationFieldsProvider = ({ children, appId }) => {
   const [ordering] = useApi()
+  const [optimizationLoad] = useOptimizationLoad()
   const [state, setState] = useState({ loading: true, fields: {}, error: false })
 
-  const loadValidationFields = async (options) => {
+  const loadOriginalValidationFields = async (options, fields = null) => {
     const forceLoading = options?.forceLoading
     try {
       if (forceLoading) {
         setState({ ...state, loading: true })
       }
-      const { content: { result, error } } = await ordering.validationFields().get({ headers: { 'X-APP-X': appId } })
-      const fields = {
+      let error = fields?.error ?? null
+      let result = fields?.result ?? null
+      if (!fields) {
+        const response = await ordering.validationFields().get({ headers: { 'X-APP-X': appId } })
+        const res = await response.json()
+        error = res?.error
+        result = res?.result
+      }
+      const fieldsObj = {
         checkout: {},
         address: {},
         card: {}
@@ -22,22 +31,27 @@ export const ValidationFieldsProvider = ({ children, appId }) => {
       if (!error) {
         result.forEach(item => {
           const code = item.code === 'mobile_phone' ? 'cellphone' : item.code
-          fields[item.validate][code] = item
+          fieldsObj[item.validate][code] = item
         })
       }
-      setState({ loading: false, fields })
+      setState({ loading: false, fields: fieldsObj })
     } catch (err) {
       setState({ ...state, loading: false, error: [err.message] })
     }
   }
 
   const functions = {
-    loadValidationFields
+    loadOriginalValidationFields
   }
 
   useEffect(() => {
-    loadValidationFields()
-  }, [])
+    if (optimizationLoad.loading) return
+    const _fields = optimizationLoad.result ? {
+      error: optimizationLoad.error,
+      result: optimizationLoad.result?.validation_fields
+    } : null
+    loadOriginalValidationFields(null, _fields)
+  }, [optimizationLoad])
 
   return (
     <ValidationFieldsContext.Provider value={[state, functions]}>
