@@ -51,9 +51,10 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
         _fields$result,
         error,
         result,
-        response,
-        res,
         fieldsObj,
+        _response$content,
+        _response$content2,
+        response,
         _args = arguments;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -68,30 +69,26 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
             }
             error = (_fields$error = fields === null || fields === void 0 ? void 0 : fields.error) !== null && _fields$error !== void 0 ? _fields$error : null;
             result = (_fields$result = fields === null || fields === void 0 ? void 0 : fields.result) !== null && _fields$result !== void 0 ? _fields$result : null;
-            if (fields) {
-              _context.next = 15;
-              break;
-            }
-            _context.next = 9;
-            return ordering.validationFields().get({
-              headers: {
-                'X-APP-X': appId
-              }
-            });
-          case 9:
-            response = _context.sent;
-            _context.next = 12;
-            return response.json();
-          case 12:
-            res = _context.sent;
-            error = res === null || res === void 0 ? void 0 : res.error;
-            result = res === null || res === void 0 ? void 0 : res.result;
-          case 15:
             fieldsObj = {
               checkout: {},
               address: {},
               card: {}
             };
+            if (result) {
+              _context.next = 13;
+              break;
+            }
+            _context.next = 10;
+            return ordering.validationFields().get({
+              headers: {
+                'X-APP-X': appId
+              }
+            });
+          case 10:
+            response = _context.sent;
+            error = response === null || response === void 0 || (_response$content = response.content) === null || _response$content === void 0 ? void 0 : _response$content.error;
+            result = response === null || response === void 0 || (_response$content2 = response.content) === null || _response$content2 === void 0 ? void 0 : _response$content2.result;
+          case 13:
             if (!error) {
               result.forEach(function (item) {
                 var code = item.code === 'mobile_phone' ? 'cellphone' : item.code;
@@ -102,20 +99,20 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
               loading: false,
               fields: fieldsObj
             });
-            _context.next = 23;
+            _context.next = 20;
             break;
-          case 20:
-            _context.prev = 20;
+          case 17:
+            _context.prev = 17;
             _context.t0 = _context["catch"](2);
             setState(_objectSpread(_objectSpread({}, state), {}, {
               loading: false,
               error: [_context.t0.message]
             }));
-          case 23:
+          case 20:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[2, 20]]);
+      }, _callee, null, [[2, 17]]);
     }));
     return function loadOriginalValidationFields(_x) {
       return _ref2.apply(this, arguments);
