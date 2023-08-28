@@ -47,7 +47,7 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast, is
                   <SiteProvider appId={settings.app_id}>
                     <UtilsProviders>
                       <ToastProvider>
-                        <ValidationFieldsProvider>
+                        <ValidationFieldsProvider appId={settings.app_id}>
                           <SessionProvider strategy={nativeStrategy}>
                             <WebsocketProvider strategy={nativeStrategy} settings={Object.assign(settings.socket, restOfSettings)}>
                               <CustomerProvider strategy={nativeStrategy}>
