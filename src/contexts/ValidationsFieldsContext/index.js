@@ -17,16 +17,15 @@ export const ValidationFieldsProvider = ({ children, appId }) => {
       }
       let error = fields?.error ?? null
       let result = fields?.result ?? null
-      if (!fields) {
-        const response = await ordering.validationFields().get({ headers: { 'X-APP-X': appId } })
-        const res = await response.json()
-        error = res?.error
-        result = res?.result
-      }
       const fieldsObj = {
         checkout: {},
         address: {},
         card: {}
+      }
+      if (!result) {
+        const response = await ordering.validationFields().get({ headers: { 'X-APP-X': appId } })
+        error = response?.content?.error
+        result = response?.content?.result
       }
       if (!error) {
         result.forEach(item => {
