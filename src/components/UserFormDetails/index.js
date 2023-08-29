@@ -158,6 +158,7 @@ export const UserFormDetails = (props) => {
       }
 
       if (!response.content.error) {
+        localStorage.removeItem('user-info-required')
         setUserState({
           ...userState,
           result: {
