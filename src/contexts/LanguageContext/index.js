@@ -21,7 +21,8 @@ export const LanguageProvider = ({ settings, children, strategy }) => {
   /**
    * Load language from localstorage and set state or load default language
    */
-  const setLanguageFromLocalStorage = async (language) => {
+  const setLanguageFromLocalStorage = async () => {
+    const language = await strategy.getItem('language', true)
     if (!language) {
       loadDefaultLanguage()
     } else {
@@ -77,11 +78,6 @@ const _language = await strategy.getItem('language', true)
     setState({ ...state, loading: true, language: _language })
   }
 
-  const checkLocalStorageLanguage = async() => {
-    const language = await strategy.getItem('language', true)
-    setLanguageFromLocalStorage(language)
-  }
-
   /**
    * Refresh translation when change language from ordering
    */
@@ -92,7 +88,7 @@ const _language = await strategy.getItem('language', true)
   }, [state.language?.code, ordering])
 
   useEffect(() => {
-    checkLocalStorageLanguage()
+    setLanguageFromLocalStorage()
   }, [])
 
   useEffect(() => {
