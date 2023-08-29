@@ -302,6 +302,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
             case 25:
               if (!response.content.error) {
+                localStorage.removeItem('user-info-required');
                 setUserState(_objectSpread(_objectSpread({}, userState), {}, {
                   result: _objectSpread(_objectSpread({}, userState.result), response.content)
                 }));
