@@ -40,7 +40,7 @@ export const OrderingProvider = ({ Alert, settings, children, isDisableToast, is
     <OrderingContext.Provider>
       <EventProvider>
         <ApiProvider settings={Object.assign(settings.api, restOfSettings)}>
-          <OptimizationLoadProvider settings={Object.assign(settings.api, restOfSettings)}>
+          <OptimizationLoadProvider strategy={nativeStrategy} settings={Object.assign(settings.api, restOfSettings)}>
             <LanguageProvider strategy={nativeStrategy}>
               <ConfigProvider strategy={nativeStrategy}>
                 <OrderingThemeProvider settings={Object.assign(settings.api, restOfSettings)}>
