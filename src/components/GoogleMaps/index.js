@@ -197,7 +197,6 @@ export const GoogleMaps = (props) => {
       })
       newCircleZone.setMap(map)
       bounds.union(newCircleZone.getBounds())
-      map.fitBounds(bounds)
     }
     if (deliveryZone.type === 5 && deliveryZone?.data?.distance) {
       const newCircleZone = new window.google.maps.Circle({
@@ -208,7 +207,6 @@ export const GoogleMaps = (props) => {
       })
       newCircleZone.setMap(map)
       bounds.union(newCircleZone.getBounds())
-      map.fitBounds(bounds)
     }
     if (deliveryZone?.type === 2 && Array.isArray(deliveryZone?.data)) {
       const newPolygonZone = new window.google.maps.Polygon({
@@ -221,7 +219,6 @@ export const GoogleMaps = (props) => {
         for (const position of deliveryZone?.data) {
           bounds.extend(position)
         }
-        map.fitBounds(bounds)
       }
     }
   }
