@@ -52,10 +52,15 @@ var LanguageProvider = function LanguageProvider(_ref) {
    * Load language from localstorage and set state or load default language
    */
   var setLanguageFromLocalStorage = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(language) {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var language;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
+            _context.next = 2;
+            return strategy.getItem('language', true);
+          case 2:
+            language = _context.sent;
             if (!language) {
               loadDefaultLanguage();
             } else {
@@ -64,13 +69,13 @@ var LanguageProvider = function LanguageProvider(_ref) {
               }));
               apiHelper.setLanguage(language === null || language === void 0 ? void 0 : language.code);
             }
-          case 1:
+          case 4:
           case "end":
             return _context.stop();
         }
       }, _callee);
     }));
-    return function setLanguageFromLocalStorage(_x) {
+    return function setLanguageFromLocalStorage() {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -207,29 +212,8 @@ var LanguageProvider = function LanguageProvider(_ref) {
         }
       }, _callee4);
     }));
-    return function setLanguage(_x2) {
+    return function setLanguage(_x) {
       return _ref5.apply(this, arguments);
-    };
-  }();
-  var checkLocalStorageLanguage = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-      var language;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
-          case 0:
-            _context5.next = 2;
-            return strategy.getItem('language', true);
-          case 2:
-            language = _context5.sent;
-            setLanguageFromLocalStorage(language);
-          case 4:
-          case "end":
-            return _context5.stop();
-        }
-      }, _callee5);
-    }));
-    return function checkLocalStorageLanguage() {
-      return _ref6.apply(this, arguments);
     };
   }();
 
@@ -243,7 +227,7 @@ var LanguageProvider = function LanguageProvider(_ref) {
     }
   }, [(_state$language4 = state.language) === null || _state$language4 === void 0 ? void 0 : _state$language4.code, ordering]);
   (0, _react.useEffect)(function () {
-    checkLocalStorageLanguage();
+    setLanguageFromLocalStorage();
   }, []);
   (0, _react.useEffect)(function () {
     var _state$language5, _state$language6;
@@ -268,7 +252,15 @@ var useLanguage = function useLanguage() {
   return languageManager || [{}, function (key) {
     var fallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     return fallback || key;
-  }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+  }, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5);
+  })), /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
         case 0:
@@ -276,14 +268,6 @@ var useLanguage = function useLanguage() {
           return _context6.stop();
       }
     }, _callee6);
-  })), /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-      while (1) switch (_context7.prev = _context7.next) {
-        case 0:
-        case "end":
-          return _context7.stop();
-      }
-    }, _callee7);
   }))];
 };
 exports.useLanguage = useLanguage;

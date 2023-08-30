@@ -270,7 +270,6 @@ var GoogleMaps = function GoogleMaps(props) {
       }));
       newCircleZone.setMap(map);
       bounds.union(newCircleZone.getBounds());
-      map.fitBounds(bounds);
     }
     if (deliveryZone.type === 5 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data3 = deliveryZone.data) !== null && _deliveryZone$data3 !== void 0 && _deliveryZone$data3.distance) {
       var _deliveryZone$data4;
@@ -281,7 +280,6 @@ var GoogleMaps = function GoogleMaps(props) {
       }));
       _newCircleZone.setMap(map);
       bounds.union(_newCircleZone.getBounds());
-      map.fitBounds(bounds);
     }
     if ((deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.type) === 2 && Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
       var newPolygonZone = new window.google.maps.Polygon(_objectSpread(_objectSpread({}, fillStyle), {}, {
@@ -302,7 +300,6 @@ var GoogleMaps = function GoogleMaps(props) {
         } finally {
           _iterator3.f();
         }
-        map.fitBounds(bounds);
       }
     }
   };

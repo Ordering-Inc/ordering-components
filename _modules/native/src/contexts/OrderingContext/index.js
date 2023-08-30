@@ -54,6 +54,7 @@ var OrderingProvider = function OrderingProvider(_ref) {
   return /*#__PURE__*/_react.default.createElement(OrderingContext.Provider, null, /*#__PURE__*/_react.default.createElement(_EventContext.EventProvider, null, /*#__PURE__*/_react.default.createElement(_ApiContext.ApiProvider, {
     settings: Object.assign(settings.api, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_OptimizationLoadContext.OptimizationLoadProvider, {
+    strategy: nativeStrategy,
     settings: Object.assign(settings.api, restOfSettings)
   }, /*#__PURE__*/_react.default.createElement(_LanguageContext.LanguageProvider, {
     strategy: nativeStrategy
