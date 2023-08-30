@@ -605,6 +605,23 @@ var UserFormDetails = function UserFormDetails(props) {
   (0, _react.useEffect)(function () {
     updatePromotions(singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.changes : notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.changes, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? setSingleNotifications : setNotificationsGroup, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications : notificationsGroup);
   }, [notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.loading, singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.loading]);
+  (0, _react.useEffect)(function () {
+    var handleUpdateDriver = function handleUpdateDriver(data) {
+      var _data$changes;
+      var changes = {};
+      (_data$changes = data.changes) === null || _data$changes === void 0 || _data$changes.map(function (change) {
+        return changes[change.attribute] = change.new;
+      });
+      setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+        result: _objectSpread(_objectSpread({}, userState === null || userState === void 0 ? void 0 : userState.result), changes)
+      }));
+      changeUser(_objectSpread(_objectSpread({}, session.user), changes));
+    };
+    socket.on('drivers_changes', handleUpdateDriver);
+    return function () {
+      socket.off('drivers_changes', handleUpdateDriver);
+    };
+  }, [socket === null || socket === void 0 ? void 0 : socket.socket]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     isEdit: isEdit,
     cleanFormState: cleanFormState,
