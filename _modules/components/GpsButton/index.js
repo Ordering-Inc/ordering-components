@@ -105,16 +105,21 @@ var GpsButton = function GpsButton(props) {
             }
 
             if (status === 'OK') {
-              onAddress({
+              var params = {
                 address: results[0].formatted_address,
                 location: location,
                 utc_offset: new Date().getTimezoneOffset(),
-                zipcode: postalCode,
                 map_data: {
                   library: 'google',
                   place_id: results[0].place_id
                 }
-              });
+              };
+
+              if (postalCode) {
+                params.zipcode = postalCode;
+              }
+
+              onAddress(params);
             } else {
               onError && onError(t('ERROR_GPS_BUTTON', 'Error to get result with gps button'));
             }
