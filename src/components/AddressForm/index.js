@@ -14,7 +14,8 @@ export const AddressForm = (props) => {
     useValidationFileds,
     onSaveAddress,
     isSelectedAfterAdd,
-    onSaveCustomAddress
+    onSaveCustomAddress,
+    franchiseId
   } = props
 
   const [ordering] = useApi()
@@ -170,16 +171,12 @@ export const AddressForm = (props) => {
       let where = null
       const conditions = []
       const parameters = {
-        location,
+        location: `${location?.lat},${location?.lng}`,
         type: options?.type
       }
-      conditions.push({
-        attribute: 'types',
-        conditions: [{
-          attribute: 'id',
-          value: options?.type
-        }]
-      })
+      if (franchiseId) {
+        conditions.push({ attribute: 'franchise_id', value: franchiseId })
+      }
       where = {
         conditions,
         conector: 'AND'
