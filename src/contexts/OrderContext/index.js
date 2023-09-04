@@ -561,7 +561,7 @@ export const OrderProvider = ({ Alert, children, strategy, isAlsea, isDisableToa
         state.carts[`businessId:${result.business_id}`] = result
         events.emit('cart_product_updated', product, result)
         events.emit('cart_updated', result)
-        isQuickAddProduct && showToast(ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name))
+        isQuickAddProduct && !isDisableToast && showToast(ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name))
       } else {
         setAlert({ show: true, content: result })
       }
