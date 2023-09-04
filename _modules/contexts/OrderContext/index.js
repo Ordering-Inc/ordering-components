@@ -980,7 +980,7 @@ var OrderProvider = function OrderProvider(_ref) {
               state.carts["businessId:".concat(result.business_id)] = result;
               events.emit('cart_product_updated', product, result);
               events.emit('cart_updated', result);
-              isQuickAddProduct && showToast(_ToastContext.ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name));
+              isQuickAddProduct && !isDisableToast && showToast(_ToastContext.ToastType.Success, t('PRODUCT_UPDATED_NOTIFICATION', 'Product _PRODUCT_ updated succesfully').replace('_PRODUCT_', product.name));
             } else {
               setAlert({
                 show: true,
