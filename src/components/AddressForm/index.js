@@ -28,7 +28,6 @@ export const AddressForm = (props) => {
   const userId = props.userId || user?.id
   const accessToken = props.accessToken || token
   const [, { setUserCustomer }] = useCustomer()
-  const defaultCenter = { lat: 40.77473399999999, lng: -73.9653844 }
 
   const [isEdit, setIsEdit] = useState(false)
   const [businessesList, setBusinessesList] = useState({ businesses: [], loading: true, error: null })
@@ -163,6 +162,7 @@ export const AddressForm = (props) => {
   }
 
   const getBusinessDeliveryZones = async (location) => {
+    if(!location) return
     try {
       setBusinessesList({
         ...businessesList,
@@ -172,7 +172,7 @@ export const AddressForm = (props) => {
       let where = null
       const conditions = []
       const parameters = {
-        location: location ? `${location?.lat},${location?.lng}` : `${defaultCenter?.lat},${defaultCenter?.lng}`,
+        location: `${location?.lat},${location?.lng}`,
         type: options?.type
       }
       if (franchiseId) {
