@@ -140,6 +140,7 @@ var UserFormDetails = function UserFormDetails(props) {
       }).then(function (response) {
         setUserState({
           loading: false,
+          loadingDriver: false,
           result: response.content
         });
         if (response.content.result) {
@@ -152,6 +153,7 @@ var UserFormDetails = function UserFormDetails(props) {
       }).catch(function (err) {
         if (err.constructor.name !== 'Cancel') {
           setUserState({
+            loadingDriver: false,
             loading: false,
             result: {
               error: true,
@@ -163,6 +165,7 @@ var UserFormDetails = function UserFormDetails(props) {
     } else {
       setUserState({
         loading: false,
+        loadingDriver: false,
         result: {
           error: false,
           result: useSessionUser && !refreshSessionUser ? session.user : user
@@ -240,6 +243,7 @@ var UserFormDetails = function UserFormDetails(props) {
           case 17:
             if (!response.content.error) {
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loadingDriver: false,
                 result: _objectSpread(_objectSpread({}, userState.result), response.content)
               }));
               if (!isCustomerMode) {
@@ -469,6 +473,7 @@ var UserFormDetails = function UserFormDetails(props) {
             }));
             if (!response.content.error) {
               setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                loadingDriver: false,
                 result: _objectSpread(_objectSpread({}, userState.result), response.content)
               }));
               if (!isCustomerMode) {
@@ -613,6 +618,7 @@ var UserFormDetails = function UserFormDetails(props) {
         return changes[change.attribute] = change.new;
       });
       setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+        loadingDriver: false,
         result: _objectSpread(_objectSpread({}, userState === null || userState === void 0 ? void 0 : userState.result), changes)
       }));
       changeUser(_objectSpread(_objectSpread({}, session.user), changes));
