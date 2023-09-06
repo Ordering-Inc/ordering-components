@@ -55,14 +55,14 @@ export const GoogleMaps = (props) => {
     for (let i = 0; i < locations.length; i++) {
       let formatUrl = null
       if (i === 1 || businessMap) {
-        formatUrl = optimizeImage(locations[i]?.icon, 'r_max')
+        formatUrl = optimizeImage(locations[i]?.icon, 'r_max', fallbackIcon)
       }
       const marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng(locations[i]?.lat, locations[i]?.lng),
         map,
         title: locations[i]?.slug,
         icon: {
-          url: formatUrl || locations[i]?.icon || optimizeImage(fallbackIcon, 'r_max'),
+          url: formatUrl || locations[i]?.icon,
           scaledSize: new window.google.maps.Size(35, 35)
         }
       })
