@@ -22,7 +22,8 @@ export const GoogleMaps = (props) => {
     businessZones,
     fillStyle,
     useMapWithBusinessZones,
-    deactiveAlerts
+    deactiveAlerts,
+    fallbackIcon
   } = props
 
   const [{ optimizeImage }] = useUtils()
@@ -60,10 +61,10 @@ export const GoogleMaps = (props) => {
         position: new window.google.maps.LatLng(locations[i]?.lat, locations[i]?.lng),
         map,
         title: locations[i]?.slug,
-        icon: locations[i]?.icon ? {
-          url: formatUrl || locations[i]?.icon,
+        icon: {
+          url: formatUrl || locations[i]?.icon || optimizeImage(fallbackIcon, 'r_max'),
           scaledSize: new window.google.maps.Size(35, 35)
-        } : null
+        }
       })
       if (businessMap && !noDistanceValidation) {
         const isNear = validateResult(googleMap, marker, marker.getPosition())
