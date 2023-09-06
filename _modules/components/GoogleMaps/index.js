@@ -41,7 +41,8 @@ var GoogleMaps = function GoogleMaps(props) {
     businessZones = props.businessZones,
     fillStyle = props.fillStyle,
     useMapWithBusinessZones = props.useMapWithBusinessZones,
-    deactiveAlerts = props.deactiveAlerts;
+    deactiveAlerts = props.deactiveAlerts,
+    fallbackIcon = props.fallbackIcon;
   var _useUtils = (0, _UtilsContext.useUtils)(),
     _useUtils2 = _slicedToArray(_useUtils, 1),
     optimizeImage = _useUtils2[0].optimizeImage;
@@ -89,20 +90,20 @@ var GoogleMaps = function GoogleMaps(props) {
     var businessesNear = 0;
     var locationMarkers = [];
     var _loop = function _loop(i) {
-      var _locations$i2, _locations$i3, _locations$i4, _locations$i5, _locations$i6;
+      var _locations$i2, _locations$i3, _locations$i4, _locations$i5;
       var formatUrl = null;
       if (i === 1 || businessMap) {
         var _locations$i;
-        formatUrl = optimizeImage((_locations$i = locations[i]) === null || _locations$i === void 0 ? void 0 : _locations$i.icon, 'r_max');
+        formatUrl = optimizeImage((_locations$i = locations[i]) === null || _locations$i === void 0 ? void 0 : _locations$i.icon, 'r_max', fallbackIcon);
       }
       var marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng((_locations$i2 = locations[i]) === null || _locations$i2 === void 0 ? void 0 : _locations$i2.lat, (_locations$i3 = locations[i]) === null || _locations$i3 === void 0 ? void 0 : _locations$i3.lng),
         map: map,
         title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
-        icon: (_locations$i5 = locations[i]) !== null && _locations$i5 !== void 0 && _locations$i5.icon ? {
-          url: formatUrl || ((_locations$i6 = locations[i]) === null || _locations$i6 === void 0 ? void 0 : _locations$i6.icon),
+        icon: {
+          url: formatUrl || ((_locations$i5 = locations[i]) === null || _locations$i5 === void 0 ? void 0 : _locations$i5.icon),
           scaledSize: new window.google.maps.Size(35, 35)
-        } : null
+        }
       });
       if (businessMap && !noDistanceValidation) {
         var isNear = validateResult(googleMap, marker, marker.getPosition());
@@ -116,15 +117,15 @@ var GoogleMaps = function GoogleMaps(props) {
             markerRef.current = infowindow;
           }
           marker.addListener('click', function () {
-            var _locations$i7;
-            if ((_locations$i7 = locations[i]) !== null && _locations$i7 !== void 0 && _locations$i7.markerPopup) {
-              var _locations$i8;
+            var _locations$i6;
+            if ((_locations$i6 = locations[i]) !== null && _locations$i6 !== void 0 && _locations$i6.markerPopup) {
+              var _locations$i7;
               var _infowindow = new window.google.maps.InfoWindow();
-              _infowindow.setContent((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.markerPopup);
+              _infowindow.setContent((_locations$i7 = locations[i]) === null || _locations$i7 === void 0 ? void 0 : _locations$i7.markerPopup);
               _infowindow.open(map, marker);
             } else {
-              var _locations$i9;
-              onBusinessClick((_locations$i9 = locations[i]) === null || _locations$i9 === void 0 ? void 0 : _locations$i9.slug);
+              var _locations$i8;
+              onBusinessClick((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.slug);
             }
           });
           bounds.extend(marker.position);
@@ -135,8 +136,8 @@ var GoogleMaps = function GoogleMaps(props) {
         }
       } else {
         marker.addListener('click', function () {
-          var _locations$i10;
-          onBusinessClick && onBusinessClick((_locations$i10 = locations[i]) === null || _locations$i10 === void 0 ? void 0 : _locations$i10.slug);
+          var _locations$i9;
+          onBusinessClick && onBusinessClick((_locations$i9 = locations[i]) === null || _locations$i9 === void 0 ? void 0 : _locations$i9.slug);
         });
         bounds.extend(marker.position);
         locationMarkers.push(marker);
