@@ -37,7 +37,8 @@ var AddressForm = function AddressForm(props) {
     useValidationFileds = props.useValidationFileds,
     onSaveAddress = props.onSaveAddress,
     isSelectedAfterAdd = props.isSelectedAfterAdd,
-    onSaveCustomAddress = props.onSaveCustomAddress;
+    onSaveCustomAddress = props.onSaveCustomAddress,
+    franchiseId = props.franchiseId;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
     ordering = _useApi2[0];
@@ -265,7 +266,13 @@ var AddressForm = function AddressForm(props) {
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            _context3.prev = 0;
+            if (location) {
+              _context3.next = 2;
+              break;
+            }
+            return _context3.abrupt("return");
+          case 2:
+            _context3.prev = 2;
             setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
               loading: true,
               businesses: []
@@ -273,16 +280,15 @@ var AddressForm = function AddressForm(props) {
             where = null;
             conditions = [];
             parameters = {
-              location: location,
+              location: "".concat(location === null || location === void 0 ? void 0 : location.lat, ",").concat(location === null || location === void 0 ? void 0 : location.lng),
               type: options === null || options === void 0 ? void 0 : options.type
             };
-            conditions.push({
-              attribute: 'types',
-              conditions: [{
-                attribute: 'id',
-                value: options === null || options === void 0 ? void 0 : options.type
-              }]
-            });
+            if (franchiseId) {
+              conditions.push({
+                attribute: 'franchise_id',
+                value: franchiseId
+              });
+            }
             where = {
               conditions: conditions,
               conector: 'AND'
@@ -290,11 +296,11 @@ var AddressForm = function AddressForm(props) {
             source = {};
             requestsState.businesses = source;
             fetchEndpoint = ordering.businesses().select(['delivery_zone', 'name', 'id', 'location', 'logo', 'slug', 'zones']).parameters(parameters).where(where);
-            _context3.next = 12;
+            _context3.next = 14;
             return fetchEndpoint.get({
               cancelToken: source
             });
-          case 12:
+          case 14:
             _yield$fetchEndpoint$ = _context3.sent;
             _yield$fetchEndpoint$2 = _yield$fetchEndpoint$.content;
             error = _yield$fetchEndpoint$2.error;
@@ -312,11 +318,11 @@ var AddressForm = function AddressForm(props) {
               result: result,
               fetched: true
             }));
-            _context3.next = 22;
+            _context3.next = 24;
             break;
-          case 19:
-            _context3.prev = 19;
-            _context3.t0 = _context3["catch"](0);
+          case 21:
+            _context3.prev = 21;
+            _context3.t0 = _context3["catch"](2);
             if (_context3.t0.constructor.name !== 'Cancel') {
               setBusinessesList(_objectSpread(_objectSpread({}, businessesList), {}, {
                 loading: false,
@@ -325,11 +331,11 @@ var AddressForm = function AddressForm(props) {
                 result: [_context3.t0.message]
               }));
             }
-          case 22:
+          case 24:
           case "end":
             return _context3.stop();
         }
-      }, _callee3, null, [[0, 19]]);
+      }, _callee3, null, [[2, 21]]);
     }));
     return function getBusinessDeliveryZones(_x5) {
       return _ref3.apply(this, arguments);

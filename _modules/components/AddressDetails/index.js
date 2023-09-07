@@ -28,7 +28,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage address details behavior without UI component
  */
 var AddressDetails = function AddressDetails(props) {
-  var _configs$google_maps_, _Object$values$find$b, _Object$values$find;
+  var _configs$google_maps_, _Object$values$find$b, _Object$values$find, _orderState$options2;
   var apiKey = props.apiKey,
     UIComponent = props.UIComponent,
     mapConfigs = props.mapConfigs,
@@ -136,7 +136,7 @@ var AddressDetails = function AddressDetails(props) {
   (0, _react.useEffect)(function () {
     if (!logo || !location) return;
     setFormatUrl(formatUrlMethod(location));
-  }, [logo, location]);
+  }, [logo, JSON.stringify(location), JSON.stringify(orderState === null || orderState === void 0 || (_orderState$options2 = orderState.options) === null || _orderState$options2 === void 0 || (_orderState$options2 = _orderState$options2.address) === null || _orderState$options2 === void 0 ? void 0 : _orderState$options2.address)]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     googleMapsUrl: isMultiCheckout ? formatUrlMethod() : formatUrl
   })));

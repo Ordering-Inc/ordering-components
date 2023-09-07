@@ -40,8 +40,9 @@ var GoogleMaps = function GoogleMaps(props) {
     noDistanceValidation = props.noDistanceValidation,
     businessZones = props.businessZones,
     fillStyle = props.fillStyle,
-    useLocationPin = props.useLocationPin,
-    deactiveAlerts = props.deactiveAlerts;
+    useMapWithBusinessZones = props.useMapWithBusinessZones,
+    deactiveAlerts = props.deactiveAlerts,
+    fallbackIcon = props.fallbackIcon;
   var _useUtils = (0, _UtilsContext.useUtils)(),
     _useUtils2 = _slicedToArray(_useUtils, 1),
     optimizeImage = _useUtils2[0].optimizeImage;
@@ -89,7 +90,7 @@ var GoogleMaps = function GoogleMaps(props) {
     var businessesNear = 0;
     var locationMarkers = [];
     var _loop = function _loop(i) {
-      var _locations$i2, _locations$i3, _locations$i4, _locations$i5, _locations$i6;
+      var _locations$i2, _locations$i3, _locations$i4, _locations$i5;
       var formatUrl = null;
       if (i === 1 || businessMap) {
         var _locations$i;
@@ -99,10 +100,10 @@ var GoogleMaps = function GoogleMaps(props) {
         position: new window.google.maps.LatLng((_locations$i2 = locations[i]) === null || _locations$i2 === void 0 ? void 0 : _locations$i2.lat, (_locations$i3 = locations[i]) === null || _locations$i3 === void 0 ? void 0 : _locations$i3.lng),
         map: map,
         title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
-        icon: (_locations$i5 = locations[i]) !== null && _locations$i5 !== void 0 && _locations$i5.icon ? {
-          url: formatUrl || ((_locations$i6 = locations[i]) === null || _locations$i6 === void 0 ? void 0 : _locations$i6.icon),
+        icon: {
+          url: formatUrl || ((_locations$i5 = locations[i]) === null || _locations$i5 === void 0 ? void 0 : _locations$i5.icon) || fallbackIcon,
           scaledSize: new window.google.maps.Size(35, 35)
-        } : null
+        }
       });
       if (businessMap && !noDistanceValidation) {
         var isNear = validateResult(googleMap, marker, marker.getPosition());
@@ -116,15 +117,15 @@ var GoogleMaps = function GoogleMaps(props) {
             markerRef.current = infowindow;
           }
           marker.addListener('click', function () {
-            var _locations$i7;
-            if ((_locations$i7 = locations[i]) !== null && _locations$i7 !== void 0 && _locations$i7.markerPopup) {
-              var _locations$i8;
+            var _locations$i6;
+            if ((_locations$i6 = locations[i]) !== null && _locations$i6 !== void 0 && _locations$i6.markerPopup) {
+              var _locations$i7;
               var _infowindow = new window.google.maps.InfoWindow();
-              _infowindow.setContent((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.markerPopup);
+              _infowindow.setContent((_locations$i7 = locations[i]) === null || _locations$i7 === void 0 ? void 0 : _locations$i7.markerPopup);
               _infowindow.open(map, marker);
             } else {
-              var _locations$i9;
-              onBusinessClick((_locations$i9 = locations[i]) === null || _locations$i9 === void 0 ? void 0 : _locations$i9.slug);
+              var _locations$i8;
+              onBusinessClick((_locations$i8 = locations[i]) === null || _locations$i8 === void 0 ? void 0 : _locations$i8.slug);
             }
           });
           bounds.extend(marker.position);
@@ -162,6 +163,9 @@ var GoogleMaps = function GoogleMaps(props) {
     }
     if (!deactiveAlerts) {
       businessesNear === 0 && setErrors && setErrors('ERROR_NOT_FOUND_BUSINESSES');
+    }
+    if (useMapWithBusinessZones) {
+      bounds.extend(center);
     }
     map.fitBounds(bounds);
     setBoundMap(bounds);
@@ -263,7 +267,6 @@ var GoogleMaps = function GoogleMaps(props) {
       }));
       newCircleZone.setMap(map);
       bounds.union(newCircleZone.getBounds());
-      map.fitBounds(bounds);
     }
     if (deliveryZone.type === 5 && deliveryZone !== null && deliveryZone !== void 0 && (_deliveryZone$data3 = deliveryZone.data) !== null && _deliveryZone$data3 !== void 0 && _deliveryZone$data3.distance) {
       var _deliveryZone$data4;
@@ -274,7 +277,6 @@ var GoogleMaps = function GoogleMaps(props) {
       }));
       _newCircleZone.setMap(map);
       bounds.union(_newCircleZone.getBounds());
-      map.fitBounds(bounds);
     }
     if ((deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.type) === 2 && Array.isArray(deliveryZone === null || deliveryZone === void 0 ? void 0 : deliveryZone.data)) {
       var newPolygonZone = new window.google.maps.Polygon(_objectSpread(_objectSpread({}, fillStyle), {}, {
@@ -295,7 +297,6 @@ var GoogleMaps = function GoogleMaps(props) {
         } finally {
           _iterator3.f();
         }
-        map.fitBounds(bounds);
       }
     }
   };
@@ -332,7 +333,9 @@ var GoogleMaps = function GoogleMaps(props) {
           marker = new window.google.maps.Marker({
             position: new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng),
             map: map,
-            icon: useLocationPin ? undefined : {
+            draggable: useMapWithBusinessZones,
+            zIndex: 9999,
+            icon: useMapWithBusinessZones ? undefined : {
               url: (_locations$3 = locations[0]) === null || _locations$3 === void 0 ? void 0 : _locations$3.icon,
               scaledSize: new window.google.maps.Size(35, 35)
             }
@@ -388,7 +391,7 @@ var GoogleMaps = function GoogleMaps(props) {
         window.google.maps.event.addListener(googleMapMarker, 'drag', function () {
           events.emit('map_is_dragging', true);
         });
-        if (mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable) {
+        if (mapControls !== null && mapControls !== void 0 && mapControls.isMarkerDraggable && !useMapWithBusinessZones) {
           window.google.maps.event.addListener(googleMap, 'drag', function () {
             googleMapMarker.setPosition(googleMap.getCenter());
             events.emit('map_is_dragging', true);
@@ -422,7 +425,7 @@ var GoogleMaps = function GoogleMaps(props) {
       center.lng = location === null || location === void 0 ? void 0 : location.lng;
       var newPos = new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng);
       googleMapMarker && googleMapMarker.setPosition(newPos);
-      (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newPos);
+      !useMapWithBusinessZones && (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newPos);
       googleMap && googleMap.panTo(new window.google.maps.LatLng(center === null || center === void 0 ? void 0 : center.lat, center === null || center === void 0 ? void 0 : center.lng));
     }
   }, [location, locations]);
@@ -430,10 +433,10 @@ var GoogleMaps = function GoogleMaps(props) {
     if (!businessMap) {
       var interval = setInterval(function () {
         if (googleReady && !userActivity) {
-          var driverLocation = locations === null || locations === void 0 ? void 0 : locations[0];
+          var driverLocation = useMapWithBusinessZones ? center : locations === null || locations === void 0 ? void 0 : locations[0];
           if (driverLocation) {
             var newLocation = new window.google.maps.LatLng(driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lat, driverLocation === null || driverLocation === void 0 ? void 0 : driverLocation.lng);
-            (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newLocation);
+            useMapWithBusinessZones ? boundMap.extend(newLocation) : (markers === null || markers === void 0 ? void 0 : markers[0]) && markers[0].setPosition(newLocation);
             (markers === null || markers === void 0 ? void 0 : markers.length) > 0 && markers.forEach(function (marker) {
               return boundMap.extend(marker.position);
             });
