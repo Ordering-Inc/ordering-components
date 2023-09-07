@@ -94,14 +94,14 @@ var GoogleMaps = function GoogleMaps(props) {
       var formatUrl = null;
       if (i === 1 || businessMap) {
         var _locations$i;
-        formatUrl = optimizeImage((_locations$i = locations[i]) === null || _locations$i === void 0 ? void 0 : _locations$i.icon, 'r_max', fallbackIcon);
+        formatUrl = optimizeImage((_locations$i = locations[i]) === null || _locations$i === void 0 ? void 0 : _locations$i.icon, 'r_max');
       }
       var marker = new window.google.maps.Marker({
         position: new window.google.maps.LatLng((_locations$i2 = locations[i]) === null || _locations$i2 === void 0 ? void 0 : _locations$i2.lat, (_locations$i3 = locations[i]) === null || _locations$i3 === void 0 ? void 0 : _locations$i3.lng),
         map: map,
         title: (_locations$i4 = locations[i]) === null || _locations$i4 === void 0 ? void 0 : _locations$i4.slug,
         icon: {
-          url: formatUrl || ((_locations$i5 = locations[i]) === null || _locations$i5 === void 0 ? void 0 : _locations$i5.icon),
+          url: formatUrl || ((_locations$i5 = locations[i]) === null || _locations$i5 === void 0 ? void 0 : _locations$i5.icon) || fallbackIcon,
           scaledSize: new window.google.maps.Size(35, 35)
         }
       });

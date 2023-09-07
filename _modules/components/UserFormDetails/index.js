@@ -613,7 +613,9 @@ var UserFormDetails = function UserFormDetails(props) {
   (0, _react.useEffect)(function () {
     var handleUpdateDriver = function handleUpdateDriver(data) {
       var _data$changes;
-      var changes = {};
+      var changes = {
+        availableFromDashboardOnly: true
+      };
       (_data$changes = data.changes) === null || _data$changes === void 0 || _data$changes.map(function (change) {
         return changes[change.attribute] = change.new;
       });
