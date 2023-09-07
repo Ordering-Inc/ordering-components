@@ -17,7 +17,7 @@ export const UserFormDetails = (props) => {
     useDefualtSessionManager,
     userId,
     user,
-    useValidationFields,
+    useValidationFields, 
     handleButtonUpdateClick,
     handleSuccessUpdate,
     isCustomerMode,
@@ -457,7 +457,9 @@ export const UserFormDetails = (props) => {
 
   useEffect(() => {
     const handleUpdateDriver = (data) => {
-      const changes = {}
+      const changes = {
+        isFromDashboard: true
+      }
       data.changes?.map(change => (
         changes[change.attribute] = change.new
       ))
