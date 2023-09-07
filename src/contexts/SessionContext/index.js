@@ -94,7 +94,7 @@ export const SessionProvider = ({ children, strategy }) => {
       })
     }
 
-    if ((!token && state.token) || (!user?.enabled) || (user?.isFromDashboard && !user?.available)) {
+    if ((!token && state.token) || (!user?.enabled) || (user?.availableFromDashboardOnly && !user?.available)) {
       logout()
     }
   }
