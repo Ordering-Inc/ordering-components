@@ -212,7 +212,7 @@ var SessionProvider = function SessionProvider(_ref) {
                 token: token
               });
             }
-            if (!token && state.token) {
+            if (!token && state.token || !(user !== null && user !== void 0 && user.enabled)) {
               logout();
             }
           case 7:
