@@ -457,9 +457,7 @@ export const UserFormDetails = (props) => {
 
   useEffect(() => {
     const handleUpdateDriver = (data) => {
-      const changes = {
-        availableFromDashboardOnly: true
-      }
+      const changes = {}
       data.changes?.map(change => (
         changes[change.attribute] = change.new
       ))
