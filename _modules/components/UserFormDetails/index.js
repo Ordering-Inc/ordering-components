@@ -137,6 +137,11 @@ var UserFormDetails = function UserFormDetails(props) {
       removeAccountState = _useState10[0],
       setAccountState = _useState10[1];
 
+  var _useState11 = (0, _react.useState)(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      willVerifyOtpState = _useState12[0],
+      setWillVerifyOtpState = _useState12[1];
+
   var isAlsea = ordering.project === 'alsea';
   var requestsState = {};
   var accessToken = useDefualtSessionManager ? session.token : props.accessToken;
@@ -203,7 +208,7 @@ var UserFormDetails = function UserFormDetails(props) {
 
   var handleUpdateClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
-      var response, _props$userData, consult, _formState$changes, photo, _changes, _props$userData2, _consult, _changes$setCustomerI;
+      var response, _props$userData, consult, _formState$changes, photo, _changes, _props$userData2, _consult, _changes$setCustomerI, _response, _response$content, _response2, _response2$content;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -265,7 +270,7 @@ var UserFormDetails = function UserFormDetails(props) {
                 result: response.content,
                 loading: false
               }));
-              _context.next = 25;
+              _context.next = 24;
               break;
 
             case 17:
@@ -291,42 +296,61 @@ var UserFormDetails = function UserFormDetails(props) {
               response = {
                 content: _context.t1
               };
-              // response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
-              //   accessToken: accessToken
-              // })
+
+            case 24:
+              if (response.content.error) {
+                _context.next = 33;
+                break;
+              }
+
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 changes: response.content.error ? formState.changes : {},
                 result: response.content,
                 loading: false
               }));
+              localStorage.removeItem('user-info-required');
+              setUserState(_objectSpread(_objectSpread({}, userState), {}, {
+                result: _objectSpread(_objectSpread({}, userState.result), response.content)
+              }));
 
-            case 25:
-              if (!response.content.error) {
-                localStorage.removeItem('user-info-required');
-                setUserState(_objectSpread(_objectSpread({}, userState), {}, {
-                  result: _objectSpread(_objectSpread({}, userState.result), response.content)
-                }));
-
-                if (!isCustomerMode) {
-                  changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
-                } else {
-                  setUserCustomer(_objectSpread(_objectSpread({}, customer.user), response.content.result), (_changes$setCustomerI = changes === null || changes === void 0 ? void 0 : changes.setCustomerInLocal) !== null && _changes$setCustomerI !== void 0 ? _changes$setCustomerI : true);
-                }
-
-                if (handleSuccessUpdate) {
-                  handleSuccessUpdate(response.content.result);
-                }
-
-                if (!image) {
-                  setIsEdit(!isEdit);
-                }
+              if (!isCustomerMode) {
+                changeUser(_objectSpread(_objectSpread({}, session.user), response.content.result));
+              } else {
+                setUserCustomer(_objectSpread(_objectSpread({}, customer.user), response.content.result), (_changes$setCustomerI = changes === null || changes === void 0 ? void 0 : changes.setCustomerInLocal) !== null && _changes$setCustomerI !== void 0 ? _changes$setCustomerI : true);
               }
 
-              _context.next = 31;
+              if (handleSuccessUpdate) {
+                handleSuccessUpdate(response.content.result);
+              }
+
+              if (!image) {
+                setIsEdit(!isEdit);
+              }
+
+              _context.next = 39;
               break;
 
-            case 28:
-              _context.prev = 28;
+            case 33:
+              setFormState(_objectSpread(_objectSpread({}, formState), {}, {
+                loading: false
+              }));
+
+              if (!(Array.isArray((_response = response) === null || _response === void 0 ? void 0 : (_response$content = _response.content) === null || _response$content === void 0 ? void 0 : _response$content.result) && ((_response2 = response) === null || _response2 === void 0 ? void 0 : (_response2$content = _response2.content) === null || _response2$content === void 0 ? void 0 : _response2$content.result[0]) === 'CHANGE_PHONE_REQUIRE_VERIFICATION')) {
+                _context.next = 39;
+                break;
+              }
+
+              localStorage.setItem('user-info-required', JSON.stringify(true));
+              changeUser(_objectSpread(_objectSpread({}, session.user), formState.changes));
+              setWillVerifyOtpState(true);
+              return _context.abrupt("return");
+
+            case 39:
+              _context.next = 44;
+              break;
+
+            case 41:
+              _context.prev = 41;
               _context.t2 = _context["catch"](2);
               setFormState(_objectSpread(_objectSpread({}, formState), {}, {
                 result: {
@@ -336,12 +360,12 @@ var UserFormDetails = function UserFormDetails(props) {
                 loading: false
               }));
 
-            case 31:
+            case 44:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 28]]);
+      }, _callee, null, [[2, 41]]);
     }));
 
     return function handleUpdateClick(_x, _x2, _x3) {
@@ -645,7 +669,9 @@ var UserFormDetails = function UserFormDetails(props) {
     handleSendVerifyCode: sendVerifyPhoneCode,
     verifyPhoneState: verifyPhoneState,
     handleChangePromotions: handleChangePromotions,
-    handleRemoveAccount: handleRemoveAccount
+    handleRemoveAccount: handleRemoveAccount,
+    willVerifyOtpState: willVerifyOtpState,
+    setWillVerifyOtpState: setWillVerifyOtpState
   })));
 };
 

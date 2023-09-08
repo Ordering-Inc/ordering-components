@@ -169,9 +169,12 @@ var LoginForm = function LoginForm(props) {
 
   var _useSession = (0, _SessionContext.useSession)(),
       _useSession2 = _slicedToArray(_useSession, 2),
-      _useSession2$ = _useSession2[1],
-      login = _useSession2$.login,
-      logout = _useSession2$.logout;
+      _useSession2$ = _useSession2[0],
+      userSession = _useSession2$.user,
+      token = _useSession2$.token,
+      _useSession2$2 = _useSession2[1],
+      login = _useSession2$2.login,
+      logout = _useSession2$2.logout;
 
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
       _useLanguage2 = _slicedToArray(_useLanguage, 2),
@@ -184,7 +187,7 @@ var LoginForm = function LoginForm(props) {
 
   var handleLoginClick = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
-      var _credentials4, _credentials4$cellpho, _window, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, _yield$ordering$users, _yield$ordering$users2, error, result, _result$session, level, session, accessToken, _yield$ordering$setAc, logoutResp;
+      var _credentials4, _credentials4$cellpho, _credentials, _credentials2, _credentials3, parsedNumber, cellphone, localUserInfoRequired, resultInfo, _credentials5, _credentials6, _credentials7, _props$userData, form, consult, _yield$consult$json, result, error, _window, _yield$ordering$users, _yield$ordering$users2, _result, _error, _result$session, level, session, accessToken, _yield$ordering$setAc, logoutResp;
 
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -252,14 +255,71 @@ var LoginForm = function LoginForm(props) {
                 _credentials.notification_token = notificationState.notification_token;
               }
 
-              _context.next = 18;
+              localUserInfoRequired = JSON.parse(window.localStorage.getItem('user-info-required'));
+              resultInfo = null;
+
+              if (!localUserInfoRequired) {
+                _context.next = 32;
+                break;
+              }
+
+              form = {
+                cellphone: (_credentials5 = _credentials) === null || _credentials5 === void 0 ? void 0 : _credentials5.cellphone,
+                country_phone_code: (_credentials6 = _credentials) === null || _credentials6 === void 0 ? void 0 : _credentials6.country_phone_code,
+                verification_code: (_credentials7 = _credentials) === null || _credentials7 === void 0 ? void 0 : _credentials7.one_time_password
+              };
+              _context.next = 22;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging', ".ordering.co/alseaplatform/api_update_user.php?user=").concat((props === null || props === void 0 ? void 0 : (_props$userData = props.userData) === null || _props$userData === void 0 ? void 0 : _props$userData.id) || (userSession === null || userSession === void 0 ? void 0 : userSession.id)), {
+                method: 'POST',
+                body: JSON.stringify(form),
+                headers: {
+                  Authorization: "Bearer ".concat(token),
+                  'X-APP-X': ordering.appId,
+                  'Content-Type': 'application/json;charset=UTF-8',
+                  accept: 'application/json, text/plain'
+                }
+              });
+
+            case 22:
+              consult = _context.sent;
+              _context.next = 25;
+              return consult.json();
+
+            case 25:
+              _yield$consult$json = _context.sent;
+              result = _yield$consult$json.result;
+              error = _yield$consult$json.error;
+              resultInfo = {
+                result: result,
+                error: error
+              };
+
+              if (!error) {
+                events.emit('userLogin', result);
+
+                if (handleSuccessLogin) {
+                  handleSuccessLogin(result);
+                }
+
+                localStorage.removeItem('user-info-required');
+              }
+
+              _context.next = 63;
+              break;
+
+            case 32:
+              _context.next = 34;
               return ordering.users().auth(_credentials);
 
-            case 18:
+            case 34:
               _yield$ordering$users = _context.sent;
               _yield$ordering$users2 = _yield$ordering$users.content;
-              error = _yield$ordering$users2.error;
-              result = _yield$ordering$users2.result;
+              _result = _yield$ordering$users2.result;
+              _error = _yield$ordering$users2.error;
+              resultInfo = {
+                result: _result,
+                error: _error
+              };
 
               if (isReCaptchaEnable && (_window = window) !== null && _window !== void 0 && _window.grecaptcha) {
                 _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset();
@@ -269,34 +329,34 @@ var LoginForm = function LoginForm(props) {
                 });
               }
 
-              if (error) {
-                _context.next = 46;
+              if (_error) {
+                _context.next = 63;
                 break;
               }
 
               if (!useDefualtSessionManager) {
-                _context.next = 43;
+                _context.next = 60;
                 break;
               }
 
               if (!(allowedLevels && (allowedLevels === null || allowedLevels === void 0 ? void 0 : allowedLevels.length) > 0)) {
-                _context.next = 42;
+                _context.next = 59;
                 break;
               }
 
-              level = result.level, session = result.session;
+              level = _result.level, session = _result.session;
               accessToken = session === null || session === void 0 ? void 0 : session.access_token;
 
               if (allowedLevels.includes(level)) {
-                _context.next = 42;
+                _context.next = 59;
                 break;
               }
 
-              _context.prev = 29;
-              _context.next = 32;
+              _context.prev = 46;
+              _context.next = 49;
               return ordering.setAccessToken(accessToken).users().logout();
 
-            case 32:
+            case 49:
               _yield$ordering$setAc = _context.sent;
               logoutResp = _yield$ordering$setAc.content;
 
@@ -311,12 +371,12 @@ var LoginForm = function LoginForm(props) {
                 },
                 loading: false
               });
-              _context.next = 41;
+              _context.next = 58;
               break;
 
-            case 38:
-              _context.prev = 38;
-              _context.t0 = _context["catch"](29);
+            case 55:
+              _context.prev = 55;
+              _context.t0 = _context["catch"](46);
               setFormState({
                 result: {
                   error: true,
@@ -325,40 +385,37 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 41:
+            case 58:
               return _context.abrupt("return");
 
-            case 42:
+            case 59:
               login({
-                user: result,
-                token: (_result$session = result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
+                user: _result,
+                token: (_result$session = _result.session) === null || _result$session === void 0 ? void 0 : _result$session.access_token
               });
 
-            case 43:
-              events.emit('userLogin', result);
+            case 60:
+              events.emit('userLogin', _result);
 
               if (handleSuccessLogin) {
-                handleSuccessLogin(result);
+                handleSuccessLogin(_result);
               }
 
               if (urlToRedirect) {
                 window.location.href = "".concat(window.location.origin).concat(urlToRedirect);
               }
 
-            case 46:
+            case 63:
               setFormState({
-                result: {
-                  error: error,
-                  result: result
-                },
+                result: _objectSpread({}, resultInfo),
                 loading: false
               });
-              events.emit('general_errors', result);
-              _context.next = 54;
+              events.emit('general_errors', resultInfo);
+              _context.next = 71;
               break;
 
-            case 50:
-              _context.prev = 50;
+            case 67:
+              _context.prev = 67;
               _context.t1 = _context["catch"](3);
               events.emit('general_errors', _context.t1 === null || _context.t1 === void 0 ? void 0 : _context.t1.message);
               setFormState({
@@ -369,12 +426,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               });
 
-            case 54:
+            case 71:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[3, 50], [29, 38]]);
+      }, _callee, null, [[3, 67], [46, 55]]);
     }));
 
     return function handleLoginClick(_x) {
@@ -671,7 +728,7 @@ var LoginForm = function LoginForm(props) {
 
   var alseaOtpInitialize = /*#__PURE__*/function () {
     var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(values, type, social) {
-      var body, requestParams, params, result, responseOtp, resultOtp, _responseOtp, _resultOtp;
+      var body, requestParams, params, result, localUserInfoRequired, responseOtp, resultOtp, _responseOtp, _resultOtp, _responseOtp2, _resultOtp2;
 
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) {
@@ -722,29 +779,31 @@ var LoginForm = function LoginForm(props) {
               return _context5.abrupt("return");
 
             case 14:
+              localUserInfoRequired = JSON.parse(window.localStorage.getItem('user-info-required'));
+
               if (!(result === 'new_user')) {
-                _context5.next = 34;
+                _context5.next = 50;
                 break;
               }
 
-              if (!(otpType === 'cellphone')) {
-                _context5.next = 30;
+              if (!localUserInfoRequired) {
+                _context5.next = 31;
                 break;
               }
 
-              _context5.next = 18;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/cellphone_new_user_code.php"), requestParams);
+              _context5.next = 19;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
 
-            case 18:
+            case 19:
               responseOtp = _context5.sent;
-              _context5.next = 21;
+              _context5.next = 22;
               return responseOtp.json();
 
-            case 21:
+            case 22:
               resultOtp = _context5.sent;
 
               if (!resultOtp.error) {
-                _context5.next = 25;
+                _context5.next = 26;
                 break;
               }
 
@@ -756,48 +815,37 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 25:
+            case 26:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   result: resultOtp.result
                 },
                 loading: false
               }));
-              setCreateOtpUser(true);
+              setCredentials(_objectSpread(_objectSpread({}, credentials), {}, {
+                country_phone_code: body.country_code
+              }));
               return _context5.abrupt("return", true);
 
-            case 30:
-              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
-                result: {
-                  error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist')
-                },
-                loading: false
-              }));
-              setOtpType('cellphone');
-
-            case 32:
-              _context5.next = 51;
-              break;
-
-            case 34:
-              if (!(result === 'existing_user')) {
-                _context5.next = 49;
+            case 31:
+              if (!(otpType === 'cellphone')) {
+                _context5.next = 46;
                 break;
               }
 
-              _context5.next = 37;
-              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
+              _context5.next = 34;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/cellphone_new_user_code.php"), requestParams);
 
-            case 37:
+            case 34:
               _responseOtp = _context5.sent;
-              _context5.next = 40;
+              _context5.next = 37;
               return _responseOtp.json();
 
-            case 40:
+            case 37:
               _resultOtp = _context5.sent;
 
               if (!_resultOtp.error) {
-                _context5.next = 44;
+                _context5.next = 41;
                 break;
               }
 
@@ -809,10 +857,78 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 44:
+            case 41:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   result: _resultOtp.result
+                },
+                loading: false
+              }));
+              setCreateOtpUser(true);
+              return _context5.abrupt("return", true);
+
+            case 46:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist')
+                },
+                loading: false
+              }));
+              setOtpType('cellphone');
+
+            case 48:
+              _context5.next = 71;
+              break;
+
+            case 50:
+              if (!(result === 'existing_user')) {
+                _context5.next = 69;
+                break;
+              }
+
+              if (!localUserInfoRequired) {
+                _context5.next = 55;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: t('', 'The email doesn\'t exist')
+                },
+                loading: false
+              }));
+              _context5.next = 67;
+              break;
+
+            case 55:
+              _context5.next = 57;
+              return fetch("https://alsea-plugins".concat(isAlsea ? '' : '-staging-development', ".ordering.co/alseaplatform/otp_create.php"), requestParams);
+
+            case 57:
+              _responseOtp2 = _context5.sent;
+              _context5.next = 60;
+              return _responseOtp2.json();
+
+            case 60:
+              _resultOtp2 = _context5.sent;
+
+              if (!_resultOtp2.error) {
+                _context5.next = 64;
+                break;
+              }
+
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  error: _resultOtp2.result
+                },
+                loading: false
+              }));
+              return _context5.abrupt("return", false);
+
+            case 64:
+              setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
+                result: {
+                  result: _resultOtp2.result
                 },
                 loading: false
               }));
@@ -821,7 +937,11 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", true);
 
-            case 49:
+            case 67:
+              _context5.next = 71;
+              break;
+
+            case 69:
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
                   error: result.result
@@ -830,12 +950,12 @@ var LoginForm = function LoginForm(props) {
               }));
               return _context5.abrupt("return", false);
 
-            case 51:
-              _context5.next = 56;
+            case 71:
+              _context5.next = 76;
               break;
 
-            case 53:
-              _context5.prev = 53;
+            case 73:
+              _context5.prev = 73;
               _context5.t0 = _context5["catch"](0);
               setCheckPhoneCodeState(_objectSpread(_objectSpread({}, checkPhoneCodeState), {}, {
                 result: {
@@ -844,12 +964,12 @@ var LoginForm = function LoginForm(props) {
                 loading: false
               }));
 
-            case 56:
+            case 76:
             case "end":
               return _context5.stop();
           }
         }
-      }, _callee5, null, [[0, 53]]);
+      }, _callee5, null, [[0, 73]]);
     }));
 
     return function alseaOtpInitialize(_x5, _x6, _x7) {
