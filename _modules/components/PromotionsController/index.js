@@ -28,7 +28,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PromotionsController = function PromotionsController(props) {
-  var _options$address;
+  var _options$address, _ref, _ref2;
   var UIComponent = props.UIComponent,
     paramsToFetch = props.paramsToFetch,
     franchiseId = props.franchiseId;
@@ -59,8 +59,8 @@ var PromotionsController = function PromotionsController(props) {
     offersState = _useState6[0],
     setOffersState = _useState6[1];
   var location = JSON.stringify(options === null || options === void 0 || (_options$address = options.address) === null || _options$address === void 0 ? void 0 : _options$address.location);
-  var getOffers = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getOffers = function getOffers() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var params, url, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -91,13 +91,10 @@ var PromotionsController = function PromotionsController(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getOffers() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var loadOffers = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var loadOffers = function loadOffers() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$getOffers, error, result, _err$message;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -131,11 +128,8 @@ var PromotionsController = function PromotionsController(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 10]]);
-    }));
-    return function loadOffers() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleSearchValue = function handleSearchValue(value) {
     setSearchValue(value);
   };

@@ -32,6 +32,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage payment option stripe behavior without UI component
  */
 var PaymentOptionStripe = function PaymentOptionStripe(props) {
+  var _ref, _ref2, _ref3, _ref4;
   var businessId = props.businessId,
     UIComponent = props.UIComponent,
     setCardList = props.setCardList,
@@ -86,8 +87,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
   /**
    * method to get cards from API
    */
-  var getCards = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getCards = function getCards() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var source, _yield$ordering$setAc, result, defaultCard;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -162,17 +163,14 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
             return _context.stop();
         }
       }, _callee, null, [[5, 18]]);
-    }));
-    return function getCards() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * method to get cards from API
    */
-  var deleteCard = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(card) {
+  var deleteCard = function deleteCard(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(card) {
       var _yield$ordering$payme, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -222,16 +220,13 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 13]]);
-    }));
-    return function deleteCard(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * method to set card as default
    */
-  var setDefaultCard = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(card) {
+  var setDefaultCard = function setDefaultCard(_x2) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(card) {
       var requestOptions, functionFetch, response, content;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -303,16 +298,13 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 15]]);
-    }));
-    return function setDefaultCard(_x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Method to get stripe credentials from API
    */
-  var getCredentials = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+  var getCredentials = function getCredentials() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var _yield$ordering$setAc2, result;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -341,11 +333,8 @@ var PaymentOptionStripe = function PaymentOptionStripe(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[2, 10]]);
-    }));
-    return function getCredentials() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleCardClick = function handleCardClick(card) {
     if (paymethodsWithoutSaveCards.includes(gateway)) {
       setCardSelected(card);

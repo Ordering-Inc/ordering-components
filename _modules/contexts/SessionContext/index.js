@@ -38,6 +38,7 @@ var SessionContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.SessionContext = SessionContext;
 var SessionProvider = function SessionProvider(_ref) {
+  var _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8;
   var children = _ref.children,
     strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
@@ -58,8 +59,8 @@ var SessionProvider = function SessionProvider(_ref) {
   var _useLanguage = (0, _LanguageContext.useLanguage)(),
     _useLanguage2 = _slicedToArray(_useLanguage, 2),
     t = _useLanguage2[1];
-  var setValuesFromLocalStorage = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var setValuesFromLocalStorage = function setValuesFromLocalStorage() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _yield$getValuesFromL, auth, token, user;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -82,13 +83,10 @@ var SessionProvider = function SessionProvider(_ref) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function setValuesFromLocalStorage() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var getValuesFromLocalStorage = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var getValuesFromLocalStorage = function getValuesFromLocalStorage() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var auth, token, user;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -115,13 +113,10 @@ var SessionProvider = function SessionProvider(_ref) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function getValuesFromLocalStorage() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var login = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+    }))).apply(this, arguments);
+  };
+  var login = function login(_x) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -142,13 +137,10 @@ var SessionProvider = function SessionProvider(_ref) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function login(_x) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var logout = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    }))).apply(this, arguments);
+  };
+  var logout = function logout() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var countryCodeFromLocalStorage;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -181,13 +173,10 @@ var SessionProvider = function SessionProvider(_ref) {
             return _context4.stop();
         }
       }, _callee4);
-    }));
-    return function logout() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-  var changeUser = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(user) {
+    }))).apply(this, arguments);
+  };
+  var changeUser = function changeUser(_x2) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(user) {
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
           case 0:
@@ -203,13 +192,10 @@ var SessionProvider = function SessionProvider(_ref) {
             return _context5.stop();
         }
       }, _callee5);
-    }));
-    return function changeUser(_x2) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  var checkLocalStorage = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    }))).apply(this, arguments);
+  };
+  var checkLocalStorage = function checkLocalStorage() {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var _yield$getValuesFromL2, token, user;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -234,13 +220,10 @@ var SessionProvider = function SessionProvider(_ref) {
             return _context6.stop();
         }
       }, _callee6);
-    }));
-    return function checkLocalStorage() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  var refreshUserInfo = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    }))).apply(this, arguments);
+  };
+  var refreshUserInfo = function refreshUserInfo() {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var requestOptions, response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -288,11 +271,8 @@ var SessionProvider = function SessionProvider(_ref) {
             return _context7.stop();
         }
       }, _callee7, null, [[0, 19]]);
-    }));
-    return function refreshUserInfo() {
-      return _ref8.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var interval = setInterval(function () {
       checkLocalStorage();

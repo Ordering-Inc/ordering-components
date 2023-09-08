@@ -33,6 +33,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var SingleOrderCard = function SingleOrderCard(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     order = props.order,
     handleReorder = props.handleReorder,
@@ -74,8 +75,8 @@ var SingleOrderCard = function SingleOrderCard(props) {
   /**
    * Method to add, remove favorite info for user from API
    */
-  var handleFavoriteOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var handleFavoriteOrder = function handleFavoriteOrder() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var isAdd,
         changes,
         requestOptions,
@@ -152,17 +153,14 @@ var SingleOrderCard = function SingleOrderCard(props) {
             return _context.stop();
         }
       }, _callee, null, [[3, 18]]);
-    }));
-    return function handleFavoriteOrder() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to remove products from cart
    */
-  var handleRemoveCart = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_order) {
+  var handleRemoveCart = function handleRemoveCart(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_order) {
       var _businessIds$map;
       var _businessIds, orderIds, uuids, errors, _iterator, _step, item, _error, _yield$clearCart, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -245,11 +243,8 @@ var SingleOrderCard = function SingleOrderCard(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[5, 36], [9, 26, 29, 32]]);
-    }));
-    return function handleRemoveCart(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     handleFavoriteOrder: handleFavoriteOrder,
     actionState: actionState,

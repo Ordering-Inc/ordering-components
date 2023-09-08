@@ -31,6 +31,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var AddressForm = function AddressForm(props) {
+  var _ref, _ref2, _ref3;
   var UIComponent = props.UIComponent,
     addressId = props.addressId,
     address = props.address,
@@ -96,8 +97,8 @@ var AddressForm = function AddressForm(props) {
    * @param {number} userId User id for address user
    * @param {number} addressId Address id for address
    */
-  var loadAddress = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(userId, addressId) {
+  var loadAddress = function loadAddress(_x, _x2) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(userId, addressId) {
       var source, _yield$ordering$users, content;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -138,11 +139,8 @@ var AddressForm = function AddressForm(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 11]]);
-    }));
-    return function loadAddress(_x, _x2) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Update address data
@@ -184,8 +182,8 @@ var AddressForm = function AddressForm(props) {
    * Function to save current changes
    * Update if address id exist or create if not
    */
-  var saveAddress = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values, userCustomerSetup) {
+  var saveAddress = function saveAddress(_x3, _x4) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(values, userCustomerSetup) {
       var _values$country_code, _formState$changes, _addressState$address, _yield$ordering$users2, content, _content$result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -255,13 +253,10 @@ var AddressForm = function AddressForm(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[9, 19]]);
-    }));
-    return function saveAddress(_x3, _x4) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var getBusinessDeliveryZones = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(location) {
+    }))).apply(this, arguments);
+  };
+  var getBusinessDeliveryZones = function getBusinessDeliveryZones(_x5) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(location) {
       var where, conditions, parameters, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -336,11 +331,8 @@ var AddressForm = function AddressForm(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 21]]);
-    }));
-    return function getBusinessDeliveryZones(_x5) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     setAddressState(_objectSpread(_objectSpread({}, addressState), {}, {
       address: address || {}

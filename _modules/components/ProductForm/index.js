@@ -39,7 +39,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ProductForm = function ProductForm(props) {
-  var _props$productCart, _orderState$carts, _product$product, _product$product2, _product$product3, _product$product4;
+  var _props$productCart, _orderState$carts, _product$product, _product$product2, _product$product3, _product$product4, _ref, _ref2, _ref4, _ref5, _ref6;
   var UIComponent = props.UIComponent,
     useOrderContext = props.useOrderContext,
     onSave = props.onSave,
@@ -280,8 +280,8 @@ var ProductForm = function ProductForm(props) {
   /**
    * Method to add, remove favorite info for user from API
    */
-  var handleFavoriteProduct = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(productFav) {
+  var handleFavoriteProduct = function handleFavoriteProduct(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(productFav) {
       var isAdd,
         productId,
         changes,
@@ -358,17 +358,14 @@ var ProductForm = function ProductForm(props) {
             return _context.stop();
         }
       }, _callee, null, [[4, 19]]);
-    }));
-    return function handleFavoriteProduct(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Load product from API
    */
-  var loadProductWithOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var loadProductWithOptions = function loadProductWithOptions() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var source, _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -416,11 +413,8 @@ var ProductForm = function ProductForm(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 16]]);
-    }));
-    return function loadProductWithOptions() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Remove related option by respect_to
@@ -613,8 +607,8 @@ var ProductForm = function ProductForm(props) {
   /**
    * Handle when click on save product
    */
-  var handleSave = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+  var handleSave = function handleSave(_x2) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var errors, successful, _values$professional, _values$serviceTime, _orderState$options, _props$productCart6, changes, currentProduct, _props$productCart7, _product$product9, updatedProfessional, duration;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -678,13 +672,10 @@ var ProductForm = function ProductForm(props) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function handleSave(_x2) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var handleCreateGuestUser = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
+    }))).apply(this, arguments);
+  };
+  var handleCreateGuestUser = function handleCreateGuestUser(_x3) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(values) {
       var _yield$ordering$users, _yield$ordering$users2, error, result, _result$session;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -729,11 +720,8 @@ var ProductForm = function ProductForm(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[0, 11]]);
-    }));
-    return function handleCreateGuestUser(_x3) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var increment = function increment() {
     if (maxProductQuantity <= 0 || productCart.quantity >= maxProductQuantity) {
       return;
@@ -789,8 +777,8 @@ var ProductForm = function ProductForm(props) {
   /**
    * Load professionals from API
    */
-  var getProfessionalList = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+  var getProfessionalList = function getProfessionalList() {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _yield$ordering$busin3, _yield$ordering$busin4, result, error, _result$professionals;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -834,11 +822,8 @@ var ProductForm = function ProductForm(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[0, 14]]);
-    }));
-    return function getProfessionalList() {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Init product cart when product changed

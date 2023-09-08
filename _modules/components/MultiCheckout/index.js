@@ -39,7 +39,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Multi businesses checkout page behavior without UI component
  */
 var MultiCheckout = function MultiCheckout(props) {
-  var _cartGroup$result, _cartGroup$result2, _openCarts$filter;
+  var _cartGroup$result, _cartGroup$result2, _openCarts$filter, _ref, _ref2, _ref3, _ref4, _ref6, _ref7, _ref8;
   var UIComponent = props.UIComponent,
     onPlaceOrderClick = props.onPlaceOrderClick,
     cartUuid = props.cartUuid,
@@ -137,8 +137,8 @@ var MultiCheckout = function MultiCheckout(props) {
   })) === null || _openCarts$filter === void 0 ? void 0 : _openCarts$filter.reduce(function (total, cart) {
     return total + (cart === null || cart === void 0 ? void 0 : cart.delivery_price_with_discount);
   }, 0));
-  var handleGroupPlaceOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(confirmPayment) {
+  var handleGroupPlaceOrder = function handleGroupPlaceOrder(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(confirmPayment) {
       var _paymethodSelected$pa, _cartGroup$result3, _result$paymethod_dat;
       var paymethodData, _paymethodSelected$pa2, payload, _paymethodSelected$pa3, _yield$placeMultiCart, error, result, _result$payment_event, _paymentEvent$data, paymentEvent, _paymentEvent$data2, _yield$confirmPayment, confirmApplePayError;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -224,18 +224,15 @@ var MultiCheckout = function MultiCheckout(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function handleGroupPlaceOrder(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleSelectPaymethod = function handleSelectPaymethod(paymethod) {
     setPaymethodSelected(paymethod === null ? {} : _objectSpread(_objectSpread(_objectSpread({}, paymethodSelected), paymethod), {}, {
       paymethod_data: paymethod === null || paymethod === void 0 ? void 0 : paymethod.paymethod_data
     }));
   };
-  var handleSelectWallet = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(isChecked, wallet) {
+  var handleSelectWallet = function handleSelectWallet(_x2, _x3) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(isChecked, wallet) {
       var _cartGroup$result4, _cartGroup$result5;
       var url, response, _yield$response$json, error, result, _err$message;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -297,18 +294,15 @@ var MultiCheckout = function MultiCheckout(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[2, 15]]);
-    }));
-    return function handleSelectWallet(_x2, _x3) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handlePaymethodDataChange = function handlePaymethodDataChange(data) {
     setPaymethodSelected(_objectSpread(_objectSpread({}, paymethodSelected), {}, {
       paymethod_data: data
     }));
   };
-  var getDeliveryOptions = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var getDeliveryOptions = function getDeliveryOptions() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var response, _yield$response$json2, result, error;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -364,21 +358,19 @@ var MultiCheckout = function MultiCheckout(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 16]]);
-    }));
-    return function getDeliveryOptions() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var multiHandleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value, cartUuidArr) {
+    }))).apply(this, arguments);
+  };
+  var multiHandleChangeDeliveryOption = function multiHandleChangeDeliveryOption(_x4, _x5) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(value, cartUuidArr) {
       var allPromise;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
           case 0:
             _context5.prev = 0;
             allPromise = cartUuidArr.map(function (cartId) {
-              return new Promise( /*#__PURE__*/function () {
-                var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(resolve, reject) {
+              var _ref5;
+              return new Promise(function (_x6, _x7) {
+                return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(resolve, reject) {
                   var body, response, _yield$response$json3, result, error;
                   return _regeneratorRuntime().wrap(function _callee4$(_context4) {
                     while (1) switch (_context4.prev = _context4.next) {
@@ -416,11 +408,8 @@ var MultiCheckout = function MultiCheckout(props) {
                         return _context4.stop();
                     }
                   }, _callee4);
-                }));
-                return function (_x6, _x7) {
-                  return _ref5.apply(this, arguments);
-                };
-              }());
+                }))).apply(this, arguments);
+              });
             });
             _context5.next = 4;
             return Promise.all(allPromise);
@@ -443,13 +432,10 @@ var MultiCheckout = function MultiCheckout(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[0, 9]]);
-    }));
-    return function multiHandleChangeDeliveryOption(_x4, _x5) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var handleChangeDeliveryOption = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(value) {
+    }))).apply(this, arguments);
+  };
+  var handleChangeDeliveryOption = function handleChangeDeliveryOption(_x8) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(value) {
       var cartUuidArr;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -463,13 +449,10 @@ var MultiCheckout = function MultiCheckout(props) {
             return _context6.stop();
         }
       }, _callee6);
-    }));
-    return function handleChangeDeliveryOption(_x8) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  var getMultiCart = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    }))).apply(this, arguments);
+  };
+  var getMultiCart = function getMultiCart() {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var response, _yield$response$json4, result, error;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -521,13 +504,10 @@ var MultiCheckout = function MultiCheckout(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[0, 15]]);
-    }));
-    return function getMultiCart() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  var getLoyaltyPlans = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    }))).apply(this, arguments);
+  };
+  var getLoyaltyPlans = function getLoyaltyPlans() {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var _result$find$accumula, _result$find, req, _yield$req$json, error, result;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -572,11 +552,8 @@ var MultiCheckout = function MultiCheckout(props) {
             return _context8.stop();
         }
       }, _callee8, null, [[0, 12]]);
-    }));
-    return function getLoyaltyPlans() {
-      return _ref8.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (deliveryOptionSelected === undefined) {
       setDeliveryOptionSelected(null);

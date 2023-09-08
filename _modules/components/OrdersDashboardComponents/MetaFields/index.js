@@ -31,6 +31,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var MetaFields = function MetaFields(props) {
+  var _ref, _ref2, _ref3;
   var orderId = props.orderId,
     UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -67,8 +68,8 @@ var MetaFields = function MetaFields(props) {
   /**
    * Method to get meta fields from API
    */
-  var getMetaFields = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getMetaFields = function getMetaFields() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, response, _yield$response$json, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -111,17 +112,14 @@ var MetaFields = function MetaFields(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 13]]);
-    }));
-    return function getMetaFields() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to delete meta fields from API
    */
-  var handleDeleteMetaField = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(metaFieldId) {
+  var handleDeleteMetaField = function handleDeleteMetaField(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(metaFieldId) {
       var requestOptions, response, metaFields;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -172,17 +170,14 @@ var MetaFields = function MetaFields(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 9]]);
-    }));
-    return function handleDeleteMetaField(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to add meta fields from API
    */
-  var handeAddMetaField = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+  var handeAddMetaField = function handeAddMetaField(_x2) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var requestOptions, response, _yield$response$json2, error, result, metafields;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -247,11 +242,8 @@ var MetaFields = function MetaFields(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 14]]);
-    }));
-    return function handeAddMetaField(_x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getMetaFields();
   }, []);

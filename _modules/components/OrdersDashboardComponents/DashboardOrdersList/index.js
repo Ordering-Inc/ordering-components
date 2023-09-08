@@ -33,7 +33,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var DashboardOrdersList = function DashboardOrdersList(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _ref, _ref2, _ref3, _ref4, _ref5, _ref8;
   var UIComponent = props.UIComponent,
     propsToFetch = props.propsToFetch,
     orders = props.orders,
@@ -120,8 +120,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
    * Method to change order status from API
    * @param {object} order orders id and new status
    */
-  var handleUpdateOrderStatus = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(order) {
+  var handleUpdateOrderStatus = function handleUpdateOrderStatus(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(order) {
       var source, _yield$ordering$setAc, content, _orders2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -167,18 +167,15 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 12]]);
-    }));
-    return function handleUpdateOrderStatus(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get orders from API
    * @param {number} page page number
    */
-  var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(pageSize, page) {
+  var getOrders = function getOrders(_x2, _x3) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(pageSize, page) {
       var where, conditions, options, getFilterStatusInOrderStatus, searchConditions, _filterValues$metafie, filterConditons, metafieldConditions, source, functionFetch;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -489,11 +486,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function getOrders(_x2, _x3) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to detect if incoming order and update order belong to filter.
@@ -528,8 +522,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     }
     return filterCheck;
   };
-  var loadOrders = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var loadOrders = function loadOrders() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var response;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -579,13 +573,10 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 11]]);
-    }));
-    return function loadOrders() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var loadMoreOrders = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    }))).apply(this, arguments);
+  };
+  var loadMoreOrders = function loadMoreOrders() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var response;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -629,13 +620,10 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[1, 9]]);
-    }));
-    return function loadMoreOrders() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var getPageOrders = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(pageSize, page) {
+    }))).apply(this, arguments);
+  };
+  var getPageOrders = function getPageOrders(_x4, _x5) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(pageSize, page) {
       var response;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -679,11 +667,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[1, 9]]);
-    }));
-    return function getPageOrders(_x4, _x5) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
   * Method to handle drag drop
@@ -716,8 +701,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
     saveUserSettings(_allowColumnsUpdated);
     setAllowColumns(_allowColumnsUpdated);
   };
-  var saveUserSettings = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(allowColumnsUpdated) {
+  var saveUserSettings = function saveUserSettings(_x6) {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(allowColumnsUpdated) {
       var _session$user, _session$user2, _session$user3, _settings, _allowColumnsUpdated;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -755,11 +740,8 @@ var DashboardOrdersList = function DashboardOrdersList(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 9]]);
-    }));
-    return function saveUserSettings(_x6) {
-      return _ref8.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Listening order id to update for unread_count parameter
    */

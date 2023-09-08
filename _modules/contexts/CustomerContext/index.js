@@ -25,6 +25,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var CustomerContext = /*#__PURE__*/(0, _react.createContext)();
 exports.CustomerContext = CustomerContext;
 var CustomerProvider = function CustomerProvider(_ref) {
+  var _ref2, _ref3, _ref4;
   var children = _ref.children,
     strategy = _ref.strategy;
   var _useState = (0, _react.useState)({
@@ -34,8 +35,8 @@ var CustomerProvider = function CustomerProvider(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     state = _useState2[0],
     setState = _useState2[1];
-  var getUserCustomerFromLocalStorage = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getUserCustomerFromLocalStorage = function getUserCustomerFromLocalStorage() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var user;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -65,13 +66,10 @@ var CustomerProvider = function CustomerProvider(_ref) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getUserCustomerFromLocalStorage() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var setUserCustomer = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(user, isFromLocalStorage) {
+    }))).apply(this, arguments);
+  };
+  var setUserCustomer = function setUserCustomer(_x, _x2) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(user, isFromLocalStorage) {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -94,13 +92,10 @@ var CustomerProvider = function CustomerProvider(_ref) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function setUserCustomer(_x, _x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var deleteUserCustomer = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(isFromLocalStorage) {
+    }))).apply(this, arguments);
+  };
+  var deleteUserCustomer = function deleteUserCustomer(_x3) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(isFromLocalStorage) {
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
@@ -123,11 +118,8 @@ var CustomerProvider = function CustomerProvider(_ref) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function deleteUserCustomer(_x3) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var setLoadingCustomer = function setLoadingCustomer(value) {
     setState(_objectSpread(_objectSpread({}, state), {}, {
       loading: value

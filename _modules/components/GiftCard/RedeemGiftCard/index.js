@@ -32,6 +32,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage redeem gift card behavior without UI component
  */
 var RedeemGiftCard = function RedeemGiftCard(props) {
+  var _ref;
   var UIComponent = props.UIComponent;
   var _useSession = (0, _SessionContext.useSession)(),
     _useSession2 = _slicedToArray(_useSession, 1),
@@ -53,8 +54,8 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
     _useState4 = _slicedToArray(_useState3, 2),
     redeemedGiftCard = _useState4[0],
     setRedeemedGiftCard = _useState4[1];
-  var handleApply = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
+  var handleApply = function handleApply(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(values) {
       var requestOptions, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -103,11 +104,8 @@ var RedeemGiftCard = function RedeemGiftCard(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 15]]);
-    }));
-    return function handleApply(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, UIComponent && /*#__PURE__*/_react.default.createElement(UIComponent, _extends({}, props, {
     actionState: actionState,
     redeemedGiftCard: redeemedGiftCard,

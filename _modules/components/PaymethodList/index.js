@@ -32,6 +32,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage paymethods behavior without UI component
  */
 var PaymethodList = function PaymethodList(props) {
+  var _ref;
   var paymethods = props.paymethods,
     UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -59,8 +60,8 @@ var PaymethodList = function PaymethodList(props) {
   /**
    * Method to get paymethods from API
    */
-  var getPaymethods = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getPaymethods = function getPaymethods() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, functionFetch, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -120,11 +121,8 @@ var PaymethodList = function PaymethodList(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 17]]);
-    }));
-    return function getPaymethods() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (paymethods) {
       setPaymethodList(_objectSpread(_objectSpread({}, paymethodList), {}, {

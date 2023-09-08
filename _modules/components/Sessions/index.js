@@ -29,6 +29,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Sessions = function Sessions(props) {
+  var _ref, _ref2, _ref3;
   var UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -61,8 +62,8 @@ var Sessions = function Sessions(props) {
   /**
    * Method to get the sessions from API
    */
-  var handleGetSessions = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var handleGetSessions = function handleGetSessions() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -115,18 +116,15 @@ var Sessions = function Sessions(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 13]]);
-    }));
-    return function handleGetSessions() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to delete the session from API
    * @param {number} sessionId session id
    */
-  var handleDeleteSession = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(session) {
+  var handleDeleteSession = function handleDeleteSession(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(session) {
       var response, _yield$response$json2, result, error, sessions;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -187,17 +185,14 @@ var Sessions = function Sessions(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 13]]);
-    }));
-    return function handleDeleteSession(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to delete all sessions
    */
-  var handleDeleteAllSessions = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var handleDeleteAllSessions = function handleDeleteAllSessions() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var deleteCurrent,
         response,
         _yield$response$json3,
@@ -278,11 +273,8 @@ var Sessions = function Sessions(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[1, 14]]);
-    }));
-    return function handleDeleteAllSessions() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if ((user === null || user === void 0 ? void 0 : user.session_strategy) === 'jwt_session') {
       handleGetSessions();

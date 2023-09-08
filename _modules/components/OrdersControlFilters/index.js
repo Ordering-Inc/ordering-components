@@ -29,6 +29,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage controls behavior without UI component functionality
  */
 var OrdersControlFilters = function OrdersControlFilters(props) {
+  var _ref;
   var UIComponent = props.UIComponent;
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 1),
@@ -55,8 +56,8 @@ var OrdersControlFilters = function OrdersControlFilters(props) {
   /**
    * Method to get controls from API
    */
-  var getControls = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getControls = function getControls() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _controlsState$error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -93,11 +94,8 @@ var OrdersControlFilters = function OrdersControlFilters(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 11]]);
-    }));
-    return function getControls() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getControls();
   }, []);

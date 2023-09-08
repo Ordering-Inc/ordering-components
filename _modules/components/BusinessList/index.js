@@ -39,7 +39,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 var BusinessList = function BusinessList(props) {
-  var _paginationSettings$p, _configs$advanced_bus, _ref, _orderingTheme$busine, _orderState$options, _configs$unaddressed_, _orderState$options2, _orderState$options20, _orderState$options21, _orderState$options22, _orderState$options23, _orderState$options24, _orderState$options25;
+  var _paginationSettings$p, _configs$advanced_bus, _ref, _orderingTheme$busine, _orderState$options, _configs$unaddressed_, _orderState$options2, _ref2, _ref3, _ref4, _orderState$options20, _orderState$options21, _orderState$options22, _orderState$options23, _orderState$options24, _orderState$options25;
   var UIComponent = props.UIComponent,
     initialBuisnessType = props.initialBuisnessType,
     initialOrderType = props.initialOrderType,
@@ -163,8 +163,8 @@ var BusinessList = function BusinessList(props) {
    * Get businesses by params, order options and filters
    * @param {boolean} newFetch Make a new request or next page
    */
-  var getBusinesses = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, specificPagination, prev) {
+  var getBusinesses = function getBusinesses(_x, _x2, _x3) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, specificPagination, prev) {
       var _configs$location_def, _configs$location_def2, _orderState$options3, _orderState$options4, _orderState$options5, _orderState$options6, _orderState$options11, _orderState$options12, _orderState$options16, defaultLatitude, defaultLongitude, isInvalidDefaultLocation, defaultLocation, parameters, _orderState$options7, _orderState$options8, _orderState$options9, _orderState$options10, paginationParams, _orderState$options13, moment, where, conditions, _orderState$options14, _orderState$options15, searchConditions, isSpecialCharacter, _orderState$options17, _paginationParams, source, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result, pagination, _result, offerBuesinesses, nextPageItems, remainingItems, businesses, fromIndex, toIndex, element;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -395,17 +395,14 @@ var BusinessList = function BusinessList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 41]]);
-    }));
-    return function getBusinesses(_x, _x2, _x3) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Get franchise info from API
    */
-  var getFranchise = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getFranchise = function getFranchise() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var requestOptions, functionFetch, response, _yield$response$json, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -447,13 +444,10 @@ var BusinessList = function BusinessList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 14]]);
-    }));
-    return function getFranchise() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var getCities = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    }))).apply(this, arguments);
+  };
+  var getCities = function getCities() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var requestOptions, response, _yield$response$json2, result, error, pagination;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -495,11 +489,8 @@ var BusinessList = function BusinessList(props) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function getCities() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Cancel businesses request

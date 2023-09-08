@@ -29,6 +29,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage drivers behavior without UI component
  */
 var DriverList = function DriverList(props) {
+  var _ref;
   var drivers = props.drivers,
     UIComponent = props.UIComponent,
     propsToFetch = props.propsToFetch;
@@ -51,8 +52,8 @@ var DriverList = function DriverList(props) {
   /**
    * Method to get drivers from API
    */
-  var getDriverList = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getDriverList = function getDriverList() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var where, _yield$ordering$users, _yield$ordering$users2, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -97,11 +98,8 @@ var DriverList = function DriverList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 12]]);
-    }));
-    return function getDriverList() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (drivers) {
       setDriverList(_objectSpread(_objectSpread({}, driverList), {}, {

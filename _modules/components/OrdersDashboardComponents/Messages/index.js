@@ -36,7 +36,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var Messages = function Messages(props) {
-  var _configState$configs;
+  var _configState$configs, _ref, _ref2, _ref3;
   var UIComponent = props.UIComponent,
     orderId = props.orderId,
     customHandleSend = props.customHandleSend,
@@ -188,8 +188,8 @@ var Messages = function Messages(props) {
   /**
    * Method to send message
    */
-  var handleSend = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var handleSend = function handleSend() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _canRead, body, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -273,17 +273,14 @@ var Messages = function Messages(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 23]]);
-    }));
-    return function handleSend() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to Load message for first time
    */
-  var loadMessages = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var loadMessages = function loadMessages() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var functionFetch, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -336,18 +333,15 @@ var Messages = function Messages(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 14]]);
-    }));
-    return function loadMessages() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to Load message for first time
    * @param {number} messageId order message Id
    */
-  var handleReadMessages = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(messageId) {
+  var handleReadMessages = function handleReadMessages(_x) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(messageId) {
       var functionFetch, response, _yield$response$json3, error, result, _messages;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -418,11 +412,8 @@ var Messages = function Messages(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 16]]);
-    }));
-    return function handleReadMessages(_x) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (orderMessages && setOrderMessages) return;
     loadMessages();

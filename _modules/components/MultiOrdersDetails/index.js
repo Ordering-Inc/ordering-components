@@ -35,7 +35,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Multi orders page behavior without UI component
  */
 var MultiOrdersDetails = function MultiOrdersDetails(props) {
-  var _ordersList$orders$;
+  var _ref2, _ordersList$orders$;
   var orderId = props.orderId,
     userId = props.userId,
     onRedirectPage = props.onRedirectPage,
@@ -77,8 +77,8 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
   /**
    * Get orders from API
    */
-  var getOrders = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getOrders = function getOrders() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var options, _yield$ordering$setAc, _yield$ordering$setAc2, error, result, _total, _subtotal, _tax;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -144,11 +144,8 @@ var MultiOrdersDetails = function MultiOrdersDetails(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 14]]);
-    }));
-    return function getOrders() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (orderId) {
       getOrders();

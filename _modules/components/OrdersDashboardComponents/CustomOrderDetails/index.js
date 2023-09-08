@@ -34,6 +34,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage custom order details behavior without UI component
  */
 var CustomOrderDetails = function CustomOrderDetails(props) {
+  var _ref, _ref2, _ref3, _ref4;
   var UIComponent = props.UIComponent,
     businessPropsToFetch = props.businessPropsToFetch;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -96,8 +97,8 @@ var CustomOrderDetails = function CustomOrderDetails(props) {
   /**
    * Get users from API
    */
-  var getUsers = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getUsers = function getUsers() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var conditions, _yield$ordering$setAc, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -151,17 +152,14 @@ var CustomOrderDetails = function CustomOrderDetails(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 10]]);
-    }));
-    return function getUsers() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get business list from API
    */
-  var getBusinessList = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(location) {
+  var getBusinessList = function getBusinessList(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(location) {
       var parameters, conditions, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -213,17 +211,14 @@ var CustomOrderDetails = function CustomOrderDetails(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 14]]);
-    }));
-    return function getBusinessList(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get products list from API
    */
-  var getProducts = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(searchValue) {
+  var getProducts = function getProducts(_x2) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(searchValue) {
       var where, searchConditions, _yield$ordering$busin, _yield$ordering$busin2, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -279,17 +274,14 @@ var CustomOrderDetails = function CustomOrderDetails(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 15]]);
-    }));
-    return function getProducts(_x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to update product cart
    */
-  var handeUpdateProductCart = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(product, increament) {
+  var handeUpdateProductCart = function handeUpdateProductCart(_x3, _x4) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(product, increament) {
       var successful, cartProduct;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -311,11 +303,8 @@ var CustomOrderDetails = function CustomOrderDetails(props) {
             return _context4.stop();
         }
       }, _callee4);
-    }));
-    return function handeUpdateProductCart(_x3, _x4) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (phone && phone.length >= 7) {
       getUsers();

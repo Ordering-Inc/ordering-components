@@ -13,14 +13,14 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var WebStrategy = /*#__PURE__*/function () {
+var WebStrategy = /*#__PURE__*/function (_getItem, _setItem, _removeItem) {
   function WebStrategy() {
     _classCallCheck(this, WebStrategy);
   }
   _createClass(WebStrategy, [{
     key: "getItem",
-    value: function () {
-      var _getItem = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(storageKey, isJson) {
+    value: function getItem(_x, _x2) {
+      return (_getItem = _getItem || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(storageKey, isJson) {
         var value;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
@@ -41,16 +41,12 @@ var WebStrategy = /*#__PURE__*/function () {
               return _context.stop();
           }
         }, _callee);
-      }));
-      function getItem(_x, _x2) {
-        return _getItem.apply(this, arguments);
-      }
-      return getItem;
-    }()
+      }))).apply(this, arguments);
+    }
   }, {
     key: "setItem",
-    value: function () {
-      var _setItem = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(key, val, isJson) {
+    value: function setItem(_x3, _x4, _x5) {
+      return (_setItem = _setItem || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(key, val, isJson) {
         var value;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
@@ -63,16 +59,12 @@ var WebStrategy = /*#__PURE__*/function () {
               return _context2.stop();
           }
         }, _callee2);
-      }));
-      function setItem(_x3, _x4, _x5) {
-        return _setItem.apply(this, arguments);
-      }
-      return setItem;
-    }()
+      }))).apply(this, arguments);
+    }
   }, {
     key: "removeItem",
-    value: function () {
-      var _removeItem = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(key) {
+    value: function removeItem(_x6) {
+      return (_removeItem = _removeItem || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(key) {
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
@@ -83,12 +75,8 @@ var WebStrategy = /*#__PURE__*/function () {
               return _context3.stop();
           }
         }, _callee3);
-      }));
-      function removeItem(_x6) {
-        return _removeItem.apply(this, arguments);
-      }
-      return removeItem;
-    }()
+      }))).apply(this, arguments);
+    }
   }]);
   return WebStrategy;
 }();

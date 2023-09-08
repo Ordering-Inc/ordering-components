@@ -28,7 +28,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var LanguageSelector = function LanguageSelector(props) {
-  var _languageState$langua3;
+  var _ref, _languageState$langua3;
   var currentLanguage = props.currentLanguage,
     languages = props.languages,
     UIComponent = props.UIComponent;
@@ -72,8 +72,8 @@ var LanguageSelector = function LanguageSelector(props) {
   /**
    * this method is used for load languages from API
    */
-  var loadLanguages = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var loadLanguages = function loadLanguages() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var source, _yield$ordering$langu, _yield$ordering$langu2, error, result, language;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -123,11 +123,8 @@ var LanguageSelector = function LanguageSelector(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 15]]);
-    }));
-    return function loadLanguages() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if ((languages === null || languages === void 0 ? void 0 : languages.length) > 0) {
       setLanguageState(_objectSpread(_objectSpread({}, languagesState), {}, {

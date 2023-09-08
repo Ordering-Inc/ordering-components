@@ -33,7 +33,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var StoreProductList = function StoreProductList(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _ref, _ref2, _ref3, _ref4;
   var isSearchByName = props.isSearchByName,
     isSearchByDescription = props.isSearchByDescription,
     UIComponent = props.UIComponent,
@@ -92,8 +92,8 @@ var StoreProductList = function StoreProductList(props) {
   /**
    * Method to get products from API
    */
-  var getCategoryProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch) {
+  var getCategoryProducts = function getCategoryProducts(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch) {
       var _productsList$paginat, _productsList$paginat2, _businessState$busine, _businessState$busine2, parameters, where, conditions, searchConditions, fetchEndpoint, _yield$fetchEndpoint$, _yield$fetchEndpoint$2, result, error, pagination;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -174,13 +174,10 @@ var StoreProductList = function StoreProductList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 18]]);
-    }));
-    return function getCategoryProducts(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var getBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var getBusiness = function getBusiness() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var fetchEndpoint, _yield$fetchEndpoint$3, _yield$fetchEndpoint$4, result, error;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -216,11 +213,8 @@ var StoreProductList = function StoreProductList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 12]]);
-    }));
-    return function getBusiness() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var updateCategories = function updateCategories(categories, result) {
     return categories.map(function (category) {
       if (category.id === result.id) {
@@ -234,8 +228,8 @@ var StoreProductList = function StoreProductList(props) {
       return category;
     });
   };
-  var updateStoreProduct = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(categoryId, productId) {
+  var updateStoreProduct = function updateStoreProduct(_x2, _x3) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(categoryId, productId) {
       var updateParams,
         _businessState$busine3,
         _yield$ordering$busin,
@@ -281,13 +275,10 @@ var StoreProductList = function StoreProductList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[1, 11]]);
-    }));
-    return function updateStoreProduct(_x2, _x3) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var updateStoreCategory = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(categoryId) {
+    }))).apply(this, arguments);
+  };
+  var updateStoreCategory = function updateStoreCategory(_x4) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(categoryId) {
       var updateParams,
         _businessState$busine4,
         _yield$ordering$busin3,
@@ -332,11 +323,8 @@ var StoreProductList = function StoreProductList(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[1, 11]]);
-    }));
-    return function updateStoreCategory(_x4) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var validCategory = function validCategory(cat, searchVal) {
     var _cat$subcategories, _cat$name, _cat$subcategories2;
     if ((cat === null || cat === void 0 || (_cat$subcategories = cat.subcategories) === null || _cat$subcategories === void 0 ? void 0 : _cat$subcategories.length) === 0) return;

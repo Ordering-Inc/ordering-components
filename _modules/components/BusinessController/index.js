@@ -42,6 +42,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_timezone.default);
 _dayjs.default.extend(_isBetween.default);
 var BusinessController = function BusinessController(props) {
+  var _ref, _ref2, _ref3;
   var business = props.business,
     businessId = props.businessId,
     businessAttributes = props.businessAttributes,
@@ -118,8 +119,8 @@ var BusinessController = function BusinessController(props) {
   /**
    * Method to get business from SDK
    */
-  var getBusiness = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getBusiness = function getBusiness() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _yield$ordering$busin, _yield$ordering$busin2, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -161,11 +162,8 @@ var BusinessController = function BusinessController(props) {
             return _context.stop();
         }
       }, _callee, null, [[1, 11]]);
-    }));
-    return function getBusiness() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Method to return business offert to show
    * @param {object} offer
@@ -209,8 +207,8 @@ var BusinessController = function BusinessController(props) {
   /**
    * Method to add, remove favorite info for user from API
    */
-  var handleFavoriteBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var handleFavoriteBusiness = function handleFavoriteBusiness() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var isAdd,
         _businessState$busine,
         _businessState$busine2,
@@ -308,11 +306,8 @@ var BusinessController = function BusinessController(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[4, 18]]);
-    }));
-    return function handleFavoriteBusiness() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (!isDisabledInterval) {
       var _businessState$busine7, _businessState$busine8, _businessState$busine9;
@@ -374,8 +369,8 @@ var BusinessController = function BusinessController(props) {
       getBusiness();
     }
   }, [business]);
-  var updateBusiness = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(businessId) {
+  var updateBusiness = function updateBusiness(_x) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(businessId) {
       var updateParams,
         _yield$ordering$busin3,
         _yield$ordering$busin4,
@@ -423,11 +418,8 @@ var BusinessController = function BusinessController(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 12]]);
-    }));
-    return function updateBusiness(_x) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var _businessState$busine11;
     if (!favoriteIds) return;

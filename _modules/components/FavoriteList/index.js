@@ -34,7 +34,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var FavoriteList = function FavoriteList(props) {
-  var _paginationSettings$p;
+  var _paginationSettings$p, _ref, _ref2, _ref3;
   var UIComponent = props.UIComponent,
     paginationSettings = props.paginationSettings,
     favoriteURL = props.favoriteURL,
@@ -99,8 +99,8 @@ var FavoriteList = function FavoriteList(props) {
   /**
    * Function to get favorite list from API
    */
-  var getFavoriteList = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page) {
+  var getFavoriteList = function getFavoriteList(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(page) {
       var pageSize,
         requestOptions,
         fetchEndpoint,
@@ -233,17 +233,14 @@ var FavoriteList = function FavoriteList(props) {
             return _context.stop();
         }
       }, _callee, null, [[3, 37]]);
-    }));
-    return function getFavoriteList(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Function to get business, product, order list from API
    */
-  var getOriginalList = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
+  var getOriginalList = function getOriginalList(_x2) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(ids) {
       var _orderStatus$options;
       var where, conditions, requestOptions, fetchEndpoint, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -287,13 +284,10 @@ var FavoriteList = function FavoriteList(props) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function getOriginalList(_x2) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var handleReorder = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(orderId) {
+    }))).apply(this, arguments);
+  };
+  var handleReorder = function handleReorder(_x3) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(orderId) {
       var _yield$reorder, error, result, _choosedOrder$busines, _choosedOrder$origina, _businessData$content, choosedOrder, _businessId, _businessData, _businessSlug;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -366,11 +360,8 @@ var FavoriteList = function FavoriteList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 24]]);
-    }));
-    return function handleReorder(_x3) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getFavoriteList(1);
   }, []);

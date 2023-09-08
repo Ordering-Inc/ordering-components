@@ -27,6 +27,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var ValidationFieldsContext = /*#__PURE__*/(0, _react.createContext)();
 exports.ValidationFieldsContext = ValidationFieldsContext;
 var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
+  var _ref2;
   var children = _ref.children,
     appId = _ref.appId;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -43,8 +44,8 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     state = _useState2[0],
     setState = _useState2[1];
-  var loadOriginalValidationFields = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(options) {
+  var loadOriginalValidationFields = function loadOriginalValidationFields(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(options) {
       var fields,
         forceLoading,
         _fields$error,
@@ -113,11 +114,8 @@ var ValidationFieldsProvider = function ValidationFieldsProvider(_ref) {
             return _context.stop();
         }
       }, _callee, null, [[2, 17]]);
-    }));
-    return function loadOriginalValidationFields(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var functions = {
     loadOriginalValidationFields: loadOriginalValidationFields
   };

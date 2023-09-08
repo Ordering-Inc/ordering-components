@@ -36,7 +36,7 @@ var LanguageContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.LanguageContext = LanguageContext;
 var LanguageProvider = function LanguageProvider(_ref) {
-  var _state$language4;
+  var _ref2, _ref3, _ref4, _ref5, _state$language4;
   var settings = _ref.settings,
     children = _ref.children,
     strategy = _ref.strategy;
@@ -51,8 +51,8 @@ var LanguageProvider = function LanguageProvider(_ref) {
   /**
    * Load language from localstorage and set state or load default language
    */
-  var setLanguageFromLocalStorage = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var setLanguageFromLocalStorage = function setLanguageFromLocalStorage() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var language;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -74,17 +74,14 @@ var LanguageProvider = function LanguageProvider(_ref) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function setLanguageFromLocalStorage() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var _useApi = (0, _ApiContext.useApi)(),
     _useApi2 = _slicedToArray(_useApi, 2),
     ordering = _useApi2[0],
     apiHelper = _useApi2[1];
-  var refreshTranslations = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var refreshTranslations = function refreshTranslations() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$ordering$trans, _yield$ordering$trans2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -117,13 +114,10 @@ var LanguageProvider = function LanguageProvider(_ref) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 11]]);
-    }));
-    return function refreshTranslations() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var loadDefaultLanguage = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    }))).apply(this, arguments);
+  };
+  var loadDefaultLanguage = function loadDefaultLanguage() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var _yield$ordering$langu, _yield$ordering$langu2, error, result, language;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -174,13 +168,10 @@ var LanguageProvider = function LanguageProvider(_ref) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 17]]);
-    }));
-    return function loadDefaultLanguage() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var setLanguage = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(language) {
+    }))).apply(this, arguments);
+  };
+  var setLanguage = function setLanguage(_x) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(language) {
       var _state$language;
       var _language;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
@@ -210,11 +201,8 @@ var LanguageProvider = function LanguageProvider(_ref) {
             return _context4.stop();
         }
       }, _callee4);
-    }));
-    return function setLanguage(_x) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Refresh translation when change language from ordering

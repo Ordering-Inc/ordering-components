@@ -34,6 +34,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage query login behavior without UI component
  */
 var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
+  var _ref;
   var UIComponent = props.UIComponent,
     token = props.token;
   var _useApi = (0, _ApiContext.useApi)(),
@@ -79,8 +80,8 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
   /**
    * Method to get the user from token
    */
-  var handleGetUser = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var handleGetUser = function handleGetUser() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, response, _yield$response$json, error, result, _result$session;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -139,11 +140,8 @@ var QueryLoginSpoonity = function QueryLoginSpoonity(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 14]]);
-    }));
-    return function handleGetUser() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to redirect login page

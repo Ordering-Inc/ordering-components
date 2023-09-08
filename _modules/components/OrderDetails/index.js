@@ -37,7 +37,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderDetails = function OrderDetails(props) {
-  var _props$order, _props$order2, _orderState$order, _orderState$order11, _orderState$order12, _orderState$order13, _orderState$order20, _orderState$order21, _orderState$order22;
+  var _props$order, _props$order2, _orderState$order, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref8, _ref9, _ref10, _ref11, _ref12, _orderState$order11, _orderState$order12, _orderState$order13, _orderState$order20, _orderState$order21, _orderState$order22;
   var orderId = props.orderId,
     orderAssingId = props.orderAssingId,
     hashKey = props.hashKey,
@@ -146,8 +146,8 @@ var OrderDetails = function OrderDetails(props) {
    * Method to accept or reject a logistic order
    */
 
-  var handleClickLogisticOrder = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(status, orderId, orders) {
+  var handleClickLogisticOrder = function handleClickLogisticOrder(_x, _x2, _x3) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(status, orderId, orders) {
       var response, _yield$response$json, result, error;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -196,11 +196,8 @@ var OrderDetails = function OrderDetails(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 15]]);
-    }));
-    return function handleClickLogisticOrder(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var propsToFetch = ['header', 'slug'];
   var deliveryMessages = {
     delivery: {
@@ -225,8 +222,8 @@ var OrderDetails = function OrderDetails(props) {
   /**
    * Method to Load message for first time
    */
-  var loadMessages = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var loadMessages = function loadMessages() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _orderState$order2, _orderState$order3, url, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -280,18 +277,15 @@ var OrderDetails = function OrderDetails(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 14]]);
-    }));
-    return function loadMessages() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to send a message
    * @param {string} spot
    */
-  var sendMessage = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(spot) {
+  var sendMessage = function sendMessage(_x4) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(spot) {
       var _orderState$order4, _orderState$order5, _yield$fetch, status;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -343,17 +337,14 @@ var OrderDetails = function OrderDetails(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 11]]);
-    }));
-    return function sendMessage(_x4) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to update differents orders status
   */
-  var handleChangeOrderStatus = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(status) {
+  var handleChangeOrderStatus = function handleChangeOrderStatus(_x5) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(status) {
       var isAcceptOrReject,
         _orderState$order$id,
         _orderState$order6,
@@ -430,13 +421,10 @@ var OrderDetails = function OrderDetails(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[1, 19]]);
-    }));
-    return function handleChangeOrderStatus(_x5) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var updateDriverPosition = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    }))).apply(this, arguments);
+  };
+  var updateDriverPosition = function updateDriverPosition() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var newLocation,
         _yield$ordering$setAc3,
         _yield$ordering$setAc4,
@@ -483,17 +471,14 @@ var OrderDetails = function OrderDetails(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[1, 12]]);
-    }));
-    return function updateDriverPosition() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
      * Method to assign a driver for order
   */
-  var handleAssignDriver = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(driverId) {
+  var handleAssignDriver = function handleAssignDriver(_x6) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(driverId) {
       var _orderState$order$id2, _orderState$order7, bodyToSend, _yield$ordering$setAc5, _yield$ordering$setAc6, error, result, _drivers$error;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -531,11 +516,8 @@ var OrderDetails = function OrderDetails(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 12]]);
-    }));
-    return function handleAssignDriver(_x6) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * handler send message with spot info
@@ -549,8 +531,8 @@ var OrderDetails = function OrderDetails(props) {
   /**
    * Method to get order from API
    */
-  var getOrder = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+  var getOrder = function getOrder() {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var source, options, _result, result, error, response, res, _yield$ordering$setAc7, content, order, err, businessData, _err, _yield$ordering$setAc8, _content, _e$message, _order$id, _e$message2;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -657,13 +639,10 @@ var OrderDetails = function OrderDetails(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[6, 46], [30, 39]]);
-    }));
-    return function getOrder() {
-      return _ref8.apply(this, arguments);
-    };
-  }();
-  var readMessages = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+    }))).apply(this, arguments);
+  };
+  var readMessages = function readMessages() {
+    return (_ref9 = _ref9 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var _messages$messages, _messages$messages2;
       var messageId, _orderState$order8, _orderState$order9, response, _yield$response$json3, result;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
@@ -707,13 +686,10 @@ var OrderDetails = function OrderDetails(props) {
             return _context8.stop();
         }
       }, _callee8, null, [[3, 15]]);
-    }));
-    return function readMessages() {
-      return _ref9.apply(this, arguments);
-    };
-  }();
-  var getDrivers = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(orderId) {
+    }))).apply(this, arguments);
+  };
+  var getDrivers = function getDrivers(_x7) {
+    return (_ref10 = _ref10 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(orderId) {
       var _yield$ordering$setAc9, _yield$ordering$setAc10, error, result, _drivers$error2;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -748,13 +724,10 @@ var OrderDetails = function OrderDetails(props) {
             return _context9.stop();
         }
       }, _callee9, null, [[0, 11]]);
-    }));
-    return function getDrivers(_x7) {
-      return _ref10.apply(this, arguments);
-    };
-  }();
-  var handleReorder = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(orderId) {
+    }))).apply(this, arguments);
+  };
+  var handleReorder = function handleReorder(_x8) {
+    return (_ref11 = _ref11 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(orderId) {
       var _yield$reorder, error, result;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -802,17 +775,14 @@ var OrderDetails = function OrderDetails(props) {
             return _context10.stop();
         }
       }, _callee10, null, [[2, 12]]);
-    }));
-    return function handleReorder(_x8) {
-      return _ref11.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
   * Method to remove products from cart
   */
-  var handleRemoveCart = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+  var handleRemoveCart = function handleRemoveCart() {
+    return (_ref12 = _ref12 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
       var _carts;
       var uuid, content, _orderState$order10;
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {
@@ -859,11 +829,8 @@ var OrderDetails = function OrderDetails(props) {
             return _context11.stop();
         }
       }, _callee11, null, [[3, 11]]);
-    }));
-    return function handleRemoveCart() {
-      return _ref12.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     !orderState.loading && loadMessages();
   }, [orderState === null || orderState === void 0 || (_orderState$order11 = orderState.order) === null || _orderState$order11 === void 0 ? void 0 : _orderState$order11.id, orderState === null || orderState === void 0 || (_orderState$order12 = orderState.order) === null || _orderState$order12 === void 0 ? void 0 : _orderState$order12.status, orderState.loading]);

@@ -32,7 +32,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var BusinessProductsListing = function BusinessProductsListing(props) {
-  var _businessState$busine8;
+  var _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _businessState$busine8, _ref7;
   var isSearchByName = props.isSearchByName,
     isSearchByDescription = props.isSearchByDescription,
     slug = props.slug,
@@ -205,8 +205,8 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
     if (!searchValue) return true;
     return name && name.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByName || description && description.toLowerCase().includes(searchValue.toLowerCase()) && isSearchByDescription;
   };
-  var getProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, currentPage, currentPageSize) {
+  var getProducts = function getProducts(_x, _x2, _x3) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, currentPage, currentPageSize) {
       var _businessState$busine;
       var _categoryState, _businessState$busine2, _categoryFinded, _categoryFinded2, _productsFinded, categoryFinded, _categories, productsFinded, productsFiltered, _categorySelected$pro, _businessState$busine3, _productsFiltered, categoryKey, categoryState, pagination, parameters, where, searchConditions, _businessState$busine4, _businessState$busine5, functionFetch, source, productEndpoint, _yield$productEndpoin, _yield$productEndpoin2, error, result, _pagination, newcategoryState;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -347,13 +347,10 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
             return _context.stop();
         }
       }, _callee, null, [[14, 30]]);
-    }));
-    return function getProducts(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var getProduct = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    }))).apply(this, arguments);
+  };
+  var getProduct = function getProduct() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _businessState$busine6;
       var _businessState$busine7, source, _yield$ordering$busin, result, product;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -395,13 +392,10 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[1, 13]]);
-    }));
-    return function getProduct() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var getTaxes = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    }))).apply(this, arguments);
+  };
+  var getTaxes = function getTaxes() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var taxesObject, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -448,13 +442,10 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function getTaxes() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var getFees = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+    }))).apply(this, arguments);
+  };
+  var getFees = function getFees() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var feesObject, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -501,17 +492,14 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
             return _context4.stop();
         }
       }, _callee4);
-    }));
-    return function getFees() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get the themes from API
    */
-  var getSites = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+  var getSites = function getSites() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var requestOptions, response, _yield$response$json3, error, result, site;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -565,13 +553,10 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[0, 14]]);
-    }));
-    return function getSites() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-  var getBusinessTypes = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    }))).apply(this, arguments);
+  };
+  var getBusinessTypes = function getBusinessTypes() {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var response, _yield$response$json4, error, result;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -606,11 +591,8 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 12]]);
-    }));
-    return function getBusinessTypes() {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (isInitialRender) {
       getProduct();
@@ -619,8 +601,8 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
   (0, _react.useEffect)(function () {
     setBusinessSlug(slug);
   }, [slug]);
-  var getBusiness = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+  var getBusiness = function getBusiness() {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
       var _result$categories, source, _yield$ordering$busin2, result;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -658,11 +640,8 @@ var BusinessProductsListing = function BusinessProductsListing(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[0, 13]]);
-    }));
-    return function getBusiness() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to update the business

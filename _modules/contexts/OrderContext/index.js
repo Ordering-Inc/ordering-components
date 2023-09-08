@@ -53,7 +53,7 @@ var OrderContext = /*#__PURE__*/(0, _react.createContext)();
  */
 exports.OrderContext = OrderContext;
 var OrderProvider = function OrderProvider(_ref) {
-  var _configState$configs, _configState$configs2, _customerState$user5;
+  var _configState$configs, _configState$configs2, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref9, _ref10, _ref11, _ref12, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref20, _ref21, _ref22, _ref23, _ref24, _ref25, _customerState$user5;
   var Alert = _ref.Alert,
     children = _ref.children,
     strategy = _ref.strategy,
@@ -132,8 +132,8 @@ var OrderProvider = function OrderProvider(_ref) {
   /**
    * Refresh order options and carts from API
    */
-  var refreshOrderOptions = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var refreshOrderOptions = function refreshOrderOptions() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _state$options, _state$options2, _res$content, _res$content2, countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, options, countryCode, res, error, result, _options2$address, carts, _options2, _options2$address2, localOptions, _options3, _localOptions$address, conditions, userId, addressesResponse, address, _yield$ordering$setAc, _yield$ordering$setAc2, _error, _result, _err$message, message;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -309,11 +309,8 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context.stop();
         }
       }, _callee, null, [[0, 66]]);
-    }));
-    return function refreshOrderOptions() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var checkAddress = function checkAddress(address) {
     var props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number'];
     var values = [];
@@ -339,8 +336,8 @@ var OrderProvider = function OrderProvider(_ref) {
   /**
    * Change order address
    */
-  var changeAddress = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(addressId, params) {
+  var changeAddress = function changeAddress(_x, _x2) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(addressId, params) {
       var _state$options8;
       var isCountryCodeChanged, optionsStorage, options, _state$options9, _params$address;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
@@ -419,17 +416,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context2.stop();
         }
       }, _callee2);
-    }));
-    return function changeAddress(_x, _x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Change order type
    */
-  var changeType = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(type) {
+  var changeType = function changeType(_x3) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(type) {
       var _state$options10;
       var options, cityId, params, _options;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
@@ -469,17 +463,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function changeType(_x3) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Change order moment
    */
-  var changeMoment = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(moment) {
+  var changeMoment = function changeMoment(_x4) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(moment) {
       var momentUnix, momentFormatted, options;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -514,17 +505,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context4.stop();
         }
       }, _callee4);
-    }));
-    return function changeMoment(_x4) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Change order city
    */
-  var changeCityFilter = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(id) {
+  var changeCityFilter = function changeCityFilter(_x5) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(id) {
       var options;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -557,17 +545,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context5.stop();
         }
       }, _callee5);
-    }));
-    return function changeCityFilter(_x5) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Update order option data
    * @param {object} changes Changes to update order options
    */
-  var updateOrderOptions = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(changes) {
+  var updateOrderOptions = function updateOrderOptions(_x6) {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(changes) {
       var countryCodeFromLocalStorage, customerFromLocalStorage, userCustomerId, body, _state$options11, _ref8, _state$options12, options, countryCode, _yield$ordering$setAc3, _yield$ordering$setAc4, error, result, carts, _options4, _err$message2, message;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -660,11 +645,8 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context6.stop();
         }
       }, _callee6, null, [[9, 33]]);
-    }));
-    return function updateOrderOptions(_x6) {
-      return _ref7.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Add product to cart
@@ -672,8 +654,8 @@ var OrderProvider = function OrderProvider(_ref) {
    * @param {object} cart cart of the product
    * @param {boolean} isQuickAddProduct option to add product when clicks
    */
-  var addProduct = /*#__PURE__*/function () {
-    var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart, isQuickAddProduct) {
+  var addProduct = function addProduct(_x7, _x8, _x9) {
+    return (_ref9 = _ref9 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(product, cart, isQuickAddProduct) {
       var isPlatformProduct,
         countryCode,
         customerFromLocalStorage,
@@ -776,17 +758,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context7.stop();
         }
       }, _callee7, null, [[1, 26]]);
-    }));
-    return function addProduct(_x7, _x8, _x9) {
-      return _ref9.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Remove product to cart
    */
-  var removeProduct = /*#__PURE__*/function () {
-    var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(product, cart) {
+  var removeProduct = function removeProduct(_x10, _x11) {
+    return (_ref10 = _ref10 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(product, cart) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc7, _yield$ordering$setAc8, error, result;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -852,17 +831,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context8.stop();
         }
       }, _callee8, null, [[0, 21]]);
-    }));
-    return function removeProduct(_x10, _x11) {
-      return _ref10.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Clear products of cart
    */
-  var clearCart = /*#__PURE__*/function () {
-    var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(uuid) {
+  var clearCart = function clearCart(_x12) {
+    return (_ref11 = _ref11 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee9(uuid) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee9$(_context9) {
         while (1) switch (_context9.prev = _context9.next) {
@@ -931,17 +907,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context9.stop();
         }
       }, _callee9, null, [[0, 23]]);
-    }));
-    return function clearCart(_x12) {
-      return _ref11.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Update product to cart
    */
-  var updateProduct = /*#__PURE__*/function () {
-    var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(product, cart, isQuickAddProduct) {
+  var updateProduct = function updateProduct(_x13, _x14, _x15) {
+    return (_ref12 = _ref12 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee10(product, cart, isQuickAddProduct) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc9, _yield$ordering$setAc10, error, result;
       return _regeneratorRuntime().wrap(function _callee10$(_context10) {
         while (1) switch (_context10.prev = _context10.next) {
@@ -1003,17 +976,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context10.stop();
         }
       }, _callee10, null, [[0, 21]]);
-    }));
-    return function updateProduct(_x13, _x14, _x15) {
-      return _ref12.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Apply coupon to cart
    */
-  var applyCoupon = /*#__PURE__*/function () {
-    var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(couponData, customParams) {
+  var applyCoupon = function applyCoupon(_x16, _x17) {
+    return (_ref13 = _ref13 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee11(couponData, customParams) {
       var _state$carts;
       var countryCode, response, _result2, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc11, content, result;
       return _regeneratorRuntime().wrap(function _callee11$(_context11) {
@@ -1132,13 +1102,10 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context11.stop();
         }
       }, _callee11, null, [[6, 37]]);
-    }));
-    return function applyCoupon(_x16, _x17) {
-      return _ref13.apply(this, arguments);
-    };
-  }();
-  var applyOffer = /*#__PURE__*/function () {
-    var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(offerData) {
+    }))).apply(this, arguments);
+  };
+  var applyOffer = function applyOffer(_x18) {
+    return (_ref14 = _ref14 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee12(offerData) {
       var _offerData$force, countryCode, response, result;
       return _regeneratorRuntime().wrap(function _callee12$(_context12) {
         while (1) switch (_context12.prev = _context12.next) {
@@ -1215,13 +1182,10 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context12.stop();
         }
       }, _callee12, null, [[4, 20]]);
-    }));
-    return function applyOffer(_x18) {
-      return _ref14.apply(this, arguments);
-    };
-  }();
-  var removeOffer = /*#__PURE__*/function () {
-    var _ref15 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(offerData) {
+    }))).apply(this, arguments);
+  };
+  var removeOffer = function removeOffer(_x19) {
+    return (_ref15 = _ref15 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee13(offerData) {
       var countryCode, offerRemoveData, response, result;
       return _regeneratorRuntime().wrap(function _callee13$(_context13) {
         while (1) switch (_context13.prev = _context13.next) {
@@ -1295,17 +1259,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context13.stop();
         }
       }, _callee13, null, [[4, 22]]);
-    }));
-    return function removeOffer(_x19) {
-      return _ref15.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Apply coupon to cart
    */
-  var changeDriverTip = /*#__PURE__*/function () {
-    var _ref16 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId) {
+  var changeDriverTip = function changeDriverTip(_x20) {
+    return (_ref16 = _ref16 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee14(businessId) {
       var _state$carts2;
       var driverTipRate,
         isFixedPrice,
@@ -1395,17 +1356,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context14.stop();
         }
       }, _callee14, null, [[8, 29]]);
-    }));
-    return function changeDriverTip(_x20) {
-      return _ref16.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Change payment method
    */
-  var changePaymethod = /*#__PURE__*/function () {
-    var _ref17 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(businessId, paymethodId, paymethodData) {
+  var changePaymethod = function changePaymethod(_x21, _x22, _x23) {
+    return (_ref17 = _ref17 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee15(businessId, paymethodId, paymethodData) {
       var _state$carts3;
       var countryCode, customerFromLocalStorage, userCustomerId, body, _yield$ordering$setAc14, _yield$ordering$setAc15, error, result;
       return _regeneratorRuntime().wrap(function _callee15$(_context15) {
@@ -1483,17 +1441,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context15.stop();
         }
       }, _callee15, null, [[8, 29]]);
-    }));
-    return function changePaymethod(_x21, _x22, _x23) {
-      return _ref17.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Place cart
    */
-  var placeCart = /*#__PURE__*/function () {
-    var _ref18 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(cardId, data) {
+  var placeCart = function placeCart(_x24, _x25) {
+    return (_ref18 = _ref18 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee16(cardId, data) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, headers, _yield$ordering$setAc16, _yield$ordering$setAc17, error, result, orderObject;
       return _regeneratorRuntime().wrap(function _callee16$(_context16) {
         while (1) switch (_context16.prev = _context16.next) {
@@ -1588,17 +1543,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context16.stop();
         }
       }, _callee16, null, [[0, 29]]);
-    }));
-    return function placeCart(_x24, _x25) {
-      return _ref18.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Place multi carts
    */
-  var placeMultiCarts = /*#__PURE__*/function () {
-    var _ref19 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(data, cartUuid) {
+  var placeMultiCarts = function placeMultiCarts(_x26, _x27) {
+    return (_ref19 = _ref19 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee17(data, cartUuid) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, requestOptions, response, _yield$response$json2, error, result;
       return _regeneratorRuntime().wrap(function _callee17$(_context17) {
         while (1) switch (_context17.prev = _context17.next) {
@@ -1683,17 +1635,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context17.stop();
         }
       }, _callee17, null, [[0, 24]]);
-    }));
-    return function placeMultiCarts(_x26, _x27) {
-      return _ref19.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Confirm cart
    */
-  var confirmCart = /*#__PURE__*/function () {
-    var _ref20 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(cardId, data) {
+  var confirmCart = function confirmCart(_x28, _x29) {
+    return (_ref20 = _ref20 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee18(cardId, data) {
       var countryCode, customerFromLocalStorage, userCustomerId, body, fetchurl, _fetchurl, _fetchurl$content, error, result, cart;
       return _regeneratorRuntime().wrap(function _callee18$(_context18) {
         while (1) switch (_context18.prev = _context18.next) {
@@ -1776,17 +1725,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context18.stop();
         }
       }, _callee18, null, [[0, 25]]);
-    }));
-    return function confirmCart(_x28, _x29) {
-      return _ref20.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
   * Confirm multi carts
   */
-  var confirmMultiCarts = /*#__PURE__*/function () {
-    var _ref21 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(cartUuid) {
+  var confirmMultiCarts = function confirmMultiCarts(_x30) {
+    return (_ref21 = _ref21 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee19(cartUuid) {
       var countryCode, requestOptions, response, _yield$response$json3, result, error;
       return _regeneratorRuntime().wrap(function _callee19$(_context19) {
         while (1) switch (_context19.prev = _context19.next) {
@@ -1851,17 +1797,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context19.stop();
         }
       }, _callee19, null, [[0, 19]]);
-    }));
-    return function confirmMultiCarts(_x30) {
-      return _ref21.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Reorder an order and get cart
    */
-  var reorder = /*#__PURE__*/function () {
-    var _ref22 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20(orderId, offAlert) {
+  var reorder = function reorder(_x31, _x32) {
+    return (_ref22 = _ref22 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee20(orderId, offAlert) {
       var countryCode, customerFromLocalStorage, userCustomerId, query, options, _yield$ordering$setAc18, _yield$ordering$setAc19, error, result;
       return _regeneratorRuntime().wrap(function _callee20$(_context20) {
         while (1) switch (_context20.prev = _context20.next) {
@@ -1930,13 +1873,10 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context20.stop();
         }
       }, _callee20, null, [[0, 23]]);
-    }));
-    return function reorder(_x31, _x32) {
-      return _ref22.apply(this, arguments);
-    };
-  }();
-  var setOptionFromLocalStorage = /*#__PURE__*/function () {
-    var _ref23 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
+    }))).apply(this, arguments);
+  };
+  var setOptionFromLocalStorage = function setOptionFromLocalStorage() {
+    return (_ref23 = _ref23 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee21() {
       var _configState$configs3, _state$options13;
       var optionsLocalStorage;
       return _regeneratorRuntime().wrap(function _callee21$(_context21) {
@@ -1963,17 +1903,14 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context21.stop();
         }
       }, _callee21);
-    }));
-    return function setOptionFromLocalStorage() {
-      return _ref23.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
   * get Latest past Order that has no review
   */
-  var getLastOrderHasNoReview = /*#__PURE__*/function () {
-    var _ref24 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
+  var getLastOrderHasNoReview = function getLastOrderHasNoReview() {
+    return (_ref24 = _ref24 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee22() {
       var pastOrderTypes, where, options, _yield$ordering$setAc20, _yield$ordering$setAc21, result, error, _noRviewOrder, _options5, _yield$ordering$setAc22, _yield$ordering$setAc23, _result3, _error2, noReviewOrders;
       return _regeneratorRuntime().wrap(function _callee22$(_context22) {
         while (1) switch (_context22.prev = _context22.next) {
@@ -2121,16 +2058,13 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context22.stop();
         }
       }, _callee22);
-    }));
-    return function getLastOrderHasNoReview() {
-      return _ref24.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var setStateValues = function setStateValues(values) {
     setState(_objectSpread(_objectSpread({}, state), values));
   };
-  var setUserCustomerOptions = /*#__PURE__*/function () {
-    var _ref25 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23(params) {
+  var setUserCustomerOptions = function setUserCustomerOptions(_x33) {
+    return (_ref25 = _ref25 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee23(params) {
       var _params$options, _params$customer;
       var options;
       return _regeneratorRuntime().wrap(function _callee23$(_context23) {
@@ -2154,11 +2088,8 @@ var OrderProvider = function OrderProvider(_ref) {
             return _context23.stop();
         }
       }, _callee23);
-    }));
-    return function setUserCustomerOptions(_x33) {
-      return _ref25.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (session.loading || languageState.loading) return;
     if (session.auth) {

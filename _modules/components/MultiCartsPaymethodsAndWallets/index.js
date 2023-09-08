@@ -36,6 +36,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Multi carts paymethods and wallets behavior without UI component
  */
 var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     openCarts = props.openCarts,
     loyaltyPlansState = props.loyaltyPlansState,
@@ -102,8 +103,8 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
   /**
    * Method to get available wallets and paymethods from API
    */
-  var getPaymethodsAndWallets = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getPaymethodsAndWallets = function getPaymethodsAndWallets() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var requestOptions, response, content, _content$result, _content$result2;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -156,17 +157,14 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
             return _context.stop();
         }
       }, _callee, null, [[0, 12]]);
-    }));
-    return function getPaymethodsAndWallets() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get user wallets from API
    */
-  var getUserWallets = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getUserWallets = function getUserWallets() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -249,11 +247,8 @@ var MultiCartsPaymethodsAndWallets = function MultiCartsPaymethodsAndWallets(pro
             return _context2.stop();
         }
       }, _callee2, null, [[0, 22]]);
-    }));
-    return function getUserWallets() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     var _cartsUuids = openCarts.reduce(function (uuids, cart) {
       return [].concat(_toConsumableArray(uuids), [cart.uuid]);

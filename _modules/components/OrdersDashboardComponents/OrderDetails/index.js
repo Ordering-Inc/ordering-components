@@ -35,6 +35,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var OrderDetails = function OrderDetails(props) {
+  var _ref, _ref2, _ref4, _ref5, _ref6, _ref7, _ref8;
   var orderId = props.orderId,
     propsToFetch = props.propsToFetch,
     asDashboard = props.asDashboard,
@@ -109,8 +110,8 @@ var OrderDetails = function OrderDetails(props) {
   /**
    * Method to Load message for first time
    */
-  var loadMessages = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var loadMessages = function loadMessages() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var url, response, _yield$response$json, error, result;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -162,18 +163,15 @@ var OrderDetails = function OrderDetails(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 14]]);
-    }));
-    return function loadMessages() {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to send a message
    * @param {string} spot
    */
-  var sendMessage = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(spot) {
+  var sendMessage = function sendMessage(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(spot) {
       var _yield$fetch, status;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -217,11 +215,8 @@ var OrderDetails = function OrderDetails(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 9]]);
-    }));
-    return function sendMessage(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * handler send message with spot info
@@ -235,8 +230,8 @@ var OrderDetails = function OrderDetails(props) {
   /**
    * Method to get order from API
    */
-  var getOrder = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var getOrder = function getOrder() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var options, functionFetch, _yield$functionFetch$, result, order;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -285,17 +280,14 @@ var OrderDetails = function OrderDetails(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[3, 14]]);
-    }));
-    return function getOrder() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   /**
    * Method to change order status from API
    * @param {object} order orders id and new status
    */
-  var handleUpdateOrderStatus = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(order) {
+  var handleUpdateOrderStatus = function handleUpdateOrderStatus(_x2) {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(order) {
       var response, content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -339,13 +331,10 @@ var OrderDetails = function OrderDetails(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[0, 11]]);
-    }));
-    return function handleUpdateOrderStatus(_x2) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-  var readMessages = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    }))).apply(this, arguments);
+  };
+  var readMessages = function readMessages() {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var _messages$messages, _messages$messages2;
       var messageId, response, _yield$response$json2, result;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
@@ -380,13 +369,10 @@ var OrderDetails = function OrderDetails(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[1, 12]]);
-    }));
-    return function readMessages() {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-  var handleRefundPaymentsStripe = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    }))).apply(this, arguments);
+  };
+  var handleRefundPaymentsStripe = function handleRefundPaymentsStripe() {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var _orderState$order, _orderState$order2, _orderState$order3, requestOption, response, content;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -442,13 +428,10 @@ var OrderDetails = function OrderDetails(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[0, 14]]);
-    }));
-    return function handleRefundPaymentsStripe() {
-      return _ref7.apply(this, arguments);
-    };
-  }();
-  var handleOrderRefund = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(data) {
+    }))).apply(this, arguments);
+  };
+  var handleOrderRefund = function handleOrderRefund(_x3) {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(data) {
       var _orderState$order4, requestOption, response, content, _orderState$order6, refundData, _orderState$order5, stripeEvent, updatedPaymentEvents;
       return _regeneratorRuntime().wrap(function _callee7$(_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -515,11 +498,8 @@ var OrderDetails = function OrderDetails(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[0, 14]]);
-    }));
-    return function handleOrderRefund(_x3) {
-      return _ref8.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (props.order) {
       setOrderState(_objectSpread(_objectSpread({}, orderState), {}, {

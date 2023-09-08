@@ -28,6 +28,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var PaymentOptionWallet = function PaymentOptionWallet(props) {
+  var _ref, _ref2, _ref3;
   var cart = props.cart,
     UIComponent = props.UIComponent,
     loyaltyPlansState = props.loyaltyPlansState;
@@ -73,8 +74,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
     var redemptionRate = (_businessLoyaltyPlan$ = businessLoyaltyPlan === null || businessLoyaltyPlan === void 0 ? void 0 : businessLoyaltyPlan.redemption_rate) !== null && _businessLoyaltyPlan$ !== void 0 ? _businessLoyaltyPlan$ : loyaltyPlan === null || loyaltyPlan === void 0 ? void 0 : loyaltyPlan.redemption_rate;
     return redemptionRate;
   };
-  var getWallets = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var getWallets = function getWallets() {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var _resLoyalty, _resLoyalty2, response, _yield$response$json, error, result, resLoyalty, reqLoyalty, wallets, loyaltyPlans;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -157,13 +158,10 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 22]]);
-    }));
-    return function getWallets() {
-      return _ref.apply(this, arguments);
-    };
-  }();
-  var selectWallet = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(wallet) {
+    }))).apply(this, arguments);
+  };
+  var selectWallet = function selectWallet(_x) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(wallet) {
       var response, _yield$response$json2, error, result, carts;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -213,13 +211,10 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 17]]);
-    }));
-    return function selectWallet(_x) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-  var deletetWalletSelected = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(wallet) {
+    }))).apply(this, arguments);
+  };
+  var deletetWalletSelected = function deletetWalletSelected(_x2) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(wallet) {
       var response, _yield$response$json3, error, result, carts;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -266,11 +261,8 @@ var PaymentOptionWallet = function PaymentOptionWallet(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[0, 17]]);
-    }));
-    return function deletetWalletSelected(_x2) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (loyaltyPlansState && loyaltyPlansState !== null && loyaltyPlansState !== void 0 && loyaltyPlansState.loading) return;
     getWallets();

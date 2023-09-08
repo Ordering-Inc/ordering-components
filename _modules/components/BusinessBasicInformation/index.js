@@ -26,6 +26,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var BusinessBasicInformation = function BusinessBasicInformation(props) {
+  var _ref, _ref2;
   var UIComponent = props.UIComponent,
     business = props.business,
     businessId = props.businessId,
@@ -46,8 +47,8 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
   /**
    * Method to get business from SDK
    */
-  var getBusiness = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
+  var getBusiness = function getBusiness(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(id) {
       var source;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -68,17 +69,14 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getBusiness(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to call business get method
    */
-  var loadBusiness = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var loadBusiness = function loadBusiness() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$getBusiness, result;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -110,11 +108,8 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 9]]);
-    }));
-    return function loadBusiness() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     if (business) {
       setBusinessState(_objectSpread(_objectSpread({}, businessState), {}, {

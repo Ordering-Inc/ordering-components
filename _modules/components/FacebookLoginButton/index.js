@@ -30,6 +30,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage Facebook login behavior without UI component
  */
 var FacebookLoginButton = function FacebookLoginButton(props) {
+  var _ref;
   var UIComponent = props.UIComponent,
     appId = props.appId,
     debug = props.debug,
@@ -100,8 +101,8 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
    * Default fuction for login/signup with Facebook workflow
    * @param {object} Result from facebook
    */
-  var handleFacebookLoginClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(facebookResponse) {
+  var handleFacebookLoginClick = function handleFacebookLoginClick(_x) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(facebookResponse) {
       var _facebookResponse$aut, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -151,11 +152,8 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
             return _context.stop();
         }
       }, _callee, null, [[3, 12]]);
-    }));
-    return function handleFacebookLoginClick(_x) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Start Facebook login

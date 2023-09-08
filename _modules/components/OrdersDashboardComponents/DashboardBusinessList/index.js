@@ -38,7 +38,7 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 _dayjs.default.extend(_utc.default);
 var DashboardBusinessList = function DashboardBusinessList(props) {
-  var _paginationSettings$p, _businessList$busines;
+  var _paginationSettings$p, _ref, _ref2, _ref3, _ref4, _ref5, _ref6, _ref7, _ref8, _businessList$busines;
   var asDashboard = props.asDashboard,
     UIComponent = props.UIComponent,
     paginationSettings = props.paginationSettings,
@@ -128,8 +128,8 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
    * Method to get businesses from API
    * @param {number, number} pageSize page
    */
-  var getBusinesses = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(pageSize, page, isInactive) {
+  var getBusinesses = function getBusinesses(_x, _x2, _x3) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(pageSize, page, isInactive) {
       var where, conditions, options, searchConditions, _filterValues$availab, _filterValues$menus, filterConditons, _filterValues$availab2, _filterValues$availab3, _filterValues$menus2, _filterValues$menus3, functionFetch;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -270,17 +270,14 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context.stop();
         }
       }, _callee);
-    }));
-    return function getBusinesses(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get the countries from API
    */
-  var getCountries = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getCountries = function getCountries() {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var _yield$ordering$count, _yield$ordering$count2, error, result, enabled, cities, _iterator, _step, country;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -343,17 +340,14 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 11]]);
-    }));
-    return function getCountries() {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to load businesses
    */
-  var loadBusinesses = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+  var loadBusinesses = function loadBusinesses() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var response, _err$constructor;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -403,17 +397,14 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[2, 11]]);
-    }));
-    return function loadBusinesses() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get businesses
    */
-  var getInActiveBusinesses = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+  var getInActiveBusinesses = function getInActiveBusinesses() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var response, _response$content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -443,17 +434,14 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[2, 9]]);
-    }));
-    return function getInActiveBusinesses() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get businesses more
    */
-  var loadMoreBusinesses = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+  var loadMoreBusinesses = function loadMoreBusinesses() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
       var response;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -497,17 +485,14 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[1, 9]]);
-    }));
-    return function loadMoreBusinesses() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to get businesses for page and pageSize
    */
-  var getPageBusinesses = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(pageSize, page) {
+  var getPageBusinesses = function getPageBusinesses(_x4, _x5) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(pageSize, page) {
       var response;
       return _regeneratorRuntime().wrap(function _callee6$(_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -551,19 +536,16 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context6.stop();
         }
       }, _callee6, null, [[1, 9]]);
-    }));
-    return function getPageBusinesses(_x4, _x5) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to change businesses enable/disable
    * @param {Boolean} enabled businesses enable state
    * @param {Boolean} isFeatured flag to check if featured or enabled
    */
-  var handleEnableAllBusiness = /*#__PURE__*/function () {
-    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(enabled) {
+  var handleEnableAllBusiness = function handleEnableAllBusiness(_x6) {
+    return (_ref7 = _ref7 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(enabled) {
       var isFeatured,
         changes,
         requestOptions,
@@ -627,17 +609,14 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context7.stop();
         }
       }, _callee7, null, [[1, 14]]);
-    }));
-    return function handleEnableAllBusiness(_x6) {
-      return _ref7.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to delete business list
    */
-  var handleDeleteMultiBusinesses = /*#__PURE__*/function () {
-    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+  var handleDeleteMultiBusinesses = function handleDeleteMultiBusinesses() {
+    return (_ref8 = _ref8 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
       var requestOptions, response, content, updatedBusinessList;
       return _regeneratorRuntime().wrap(function _callee8$(_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -685,11 +664,8 @@ var DashboardBusinessList = function DashboardBusinessList(props) {
             return _context8.stop();
         }
       }, _callee8, null, [[0, 12]]);
-    }));
-    return function handleDeleteMultiBusinesses() {
-      return _ref8.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Method to change user active state for filter

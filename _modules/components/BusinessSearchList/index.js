@@ -35,7 +35,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var BusinessSearchList = function BusinessSearchList(props) {
-  var _paginationSettings$p, _orderingTheme$theme, _orderState$options2;
+  var _paginationSettings$p, _orderingTheme$theme, _orderState$options2, _ref, _ref3, _ref4, _ref5;
   var UIComponent = props.UIComponent,
     paginationSettings = props.paginationSettings,
     lazySearch = props.lazySearch,
@@ -183,8 +183,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
       })
     }));
   };
-  var handleSearchbusinessAndProducts = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, options, val) {
+  var handleSearchbusinessAndProducts = function handleSearchbusinessAndProducts(_x, _x2, _x3) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(newFetch, options, val) {
       var _orderState$options3, _orderState$options4, _orderState$options5, _orderState$options6, _ref2, filtParams, where, requestOptions, location, response, _yield$response$json, result, error, pagination, nextPageItems, remainingItems;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -284,17 +284,14 @@ var BusinessSearchList = function BusinessSearchList(props) {
             return _context.stop();
         }
       }, _callee, null, [[0, 29]]);
-    }));
-    return function handleSearchbusinessAndProducts(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
   * Function to get brand list from API
   */
-  var getBrandList = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  var getBrandList = function getBrandList() {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -346,13 +343,10 @@ var BusinessSearchList = function BusinessSearchList(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 12]]);
-    }));
-    return function getBrandList() {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var getCities = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+    }))).apply(this, arguments);
+  };
+  var getCities = function getCities() {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
       var requestOptions, response, _yield$response$json2, result, error, pagination;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -394,17 +388,14 @@ var BusinessSearchList = function BusinessSearchList(props) {
             return _context3.stop();
         }
       }, _callee3);
-    }));
-    return function getCities() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
   * Function to get tag list from API
   */
-  var getTagList = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+  var getTagList = function getTagList() {
+    return (_ref5 = _ref5 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
       var requestOptions, response, content;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -455,11 +446,8 @@ var BusinessSearchList = function BusinessSearchList(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[0, 12]]);
-    }));
-    return function getTagList() {
-      return _ref5.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     getBrandList();
   }, []);

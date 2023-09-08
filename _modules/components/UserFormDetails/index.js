@@ -37,6 +37,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
  * Component to manage user form details behavior without UI component
  */
 var UserFormDetails = function UserFormDetails(props) {
+  var _ref, _ref2, _ref3, _ref4, _ref6;
   var UIComponent = props.UIComponent,
     useSessionUser = props.useSessionUser,
     refreshSessionUser = props.refreshSessionUser,
@@ -189,8 +190,8 @@ var UserFormDetails = function UserFormDetails(props) {
   /**
    * Default fuction for user profile workflow
    */
-  var handleUpdateClick = /*#__PURE__*/function () {
-    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
+  var handleUpdateClick = function handleUpdateClick(_x, _x2, _x3) {
+    return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(changes, isImage, image) {
       var response, _props$userData, _formState$changes, photo, _changes2, _props$userData2, _changes$setCustomerI;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -276,11 +277,8 @@ var UserFormDetails = function UserFormDetails(props) {
             return _context.stop();
         }
       }, _callee, null, [[2, 20]]);
-    }));
-    return function handleUpdateClick(_x, _x2, _x3) {
-      return _ref.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * Update credential data
@@ -336,8 +334,8 @@ var UserFormDetails = function UserFormDetails(props) {
     var _validationFields$fie4, _validationFields$fie5, _validationFields$fie6;
     return useValidationFields && !validationFields.loading && ((_validationFields$fie4 = validationFields.fields) === null || _validationFields$fie4 === void 0 || (_validationFields$fie4 = _validationFields$fie4.checkout) === null || _validationFields$fie4 === void 0 ? void 0 : _validationFields$fie4[fieldName]) && ((_validationFields$fie5 = validationFields.fields) === null || _validationFields$fie5 === void 0 || (_validationFields$fie5 = _validationFields$fie5.checkout) === null || _validationFields$fie5 === void 0 || (_validationFields$fie5 = _validationFields$fie5[fieldName]) === null || _validationFields$fie5 === void 0 ? void 0 : _validationFields$fie5.enabled) && ((_validationFields$fie6 = validationFields.fields) === null || _validationFields$fie6 === void 0 || (_validationFields$fie6 = _validationFields$fie6.checkout) === null || _validationFields$fie6 === void 0 || (_validationFields$fie6 = _validationFields$fie6[fieldName]) === null || _validationFields$fie6 === void 0 ? void 0 : _validationFields$fie6.required);
   };
-  var handleToggleAvalaibleStatusDriver = /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(newValue) {
+  var handleToggleAvalaibleStatusDriver = function handleToggleAvalaibleStatusDriver(_x4) {
+    return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(newValue) {
       var _props$userData3, response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -388,18 +386,15 @@ var UserFormDetails = function UserFormDetails(props) {
             return _context2.stop();
         }
       }, _callee2, null, [[0, 9]]);
-    }));
-    return function handleToggleAvalaibleStatusDriver(_x4) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
 
   /**
    * function to send verify code with twilio
    * @param {Object} values object with cellphone and country code values
    */
-  var sendVerifyPhoneCode = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
+  var sendVerifyPhoneCode = function sendVerifyPhoneCode(_x5) {
+    return (_ref3 = _ref3 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(values) {
       var body, response, res;
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -448,13 +443,10 @@ var UserFormDetails = function UserFormDetails(props) {
             return _context3.stop();
         }
       }, _callee3, null, [[1, 12]]);
-    }));
-    return function sendVerifyPhoneCode(_x5) {
-      return _ref3.apply(this, arguments);
-    };
-  }();
-  var updatePromotions = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(change, setState, state) {
+    }))).apply(this, arguments);
+  };
+  var updatePromotions = function updatePromotions(_x6, _x7, _x8) {
+    return (_ref4 = _ref4 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(change, setState, state) {
       var _props$userData4, response, _change$setCustomerIn;
       return _regeneratorRuntime().wrap(function _callee4$(_context4) {
         while (1) switch (_context4.prev = _context4.next) {
@@ -502,11 +494,8 @@ var UserFormDetails = function UserFormDetails(props) {
             return _context4.stop();
         }
       }, _callee4, null, [[0, 8]]);
-    }));
-    return function updatePromotions(_x6, _x7, _x8) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   var handleChangePromotions = function handleChangePromotions(enabled) {
     var _ref5;
     var isSingle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -556,8 +545,8 @@ var UserFormDetails = function UserFormDetails(props) {
       })
     }));
   };
-  var handleRemoveAccount = /*#__PURE__*/function () {
-    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(userId) {
+  var handleRemoveAccount = function handleRemoveAccount(_x9) {
+    return (_ref6 = _ref6 || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(userId) {
       var idToDelete, response, res;
       return _regeneratorRuntime().wrap(function _callee5$(_context5) {
         while (1) switch (_context5.prev = _context5.next) {
@@ -602,11 +591,8 @@ var UserFormDetails = function UserFormDetails(props) {
             return _context5.stop();
         }
       }, _callee5, null, [[1, 12]]);
-    }));
-    return function handleRemoveAccount(_x9) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
+    }))).apply(this, arguments);
+  };
   (0, _react.useEffect)(function () {
     updatePromotions(singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.changes : notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.changes, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? setSingleNotifications : setNotificationsGroup, singleNotifications !== null && singleNotifications !== void 0 && singleNotifications.loading ? singleNotifications : notificationsGroup);
   }, [notificationsGroup === null || notificationsGroup === void 0 ? void 0 : notificationsGroup.loading, singleNotifications === null || singleNotifications === void 0 ? void 0 : singleNotifications.loading]);
