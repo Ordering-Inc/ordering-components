@@ -32,6 +32,7 @@ export const UserFormDetails = (props) => {
   const [formState, setFormState] = useState({ loading: false, changes: {}, result: { error: false } })
   const [verifyPhoneState, setVerifyPhoneState] = useState({ loading: false, result: { error: false } })
   const [removeAccountState, setAccountState] = useState({ loading: false, error: null, result: null })
+  const [willVerifyOtpState, setWillVerifyOtpState] = useState(false)
 
   const isAlsea = ordering.project === 'alsea'
 
@@ -149,15 +150,15 @@ export const UserFormDetails = (props) => {
         // response = await ordering.users(props?.userData?.id || userState.result.result.id).save(formState.changes, {
         //   accessToken: accessToken
         // })
+      }
+
+      if (!response.content.error) {
         setFormState({
           ...formState,
           changes: response.content.error ? formState.changes : {},
           result: response.content,
           loading: false
         })
-      }
-
-      if (!response.content.error) {
         localStorage.removeItem('user-info-required')
         setUserState({
           ...userState,
@@ -184,6 +185,20 @@ export const UserFormDetails = (props) => {
 
         if (!image) {
           setIsEdit(!isEdit)
+        }
+      } else {
+        setFormState({
+          ...formState,
+          loading: false
+        })
+        if (Array.isArray(response?.content?.result) && response?.content?.result[0] === 'CHANGE_PHONE_REQUIRE_VERIFICATION') {
+          localStorage.setItem('user-info-required', JSON.stringify(true))
+          changeUser({
+            ...session.user,
+            ...formState.changes
+          })
+          setWillVerifyOtpState(true)
+          return
         }
       }
     } catch (err) {
@@ -404,6 +419,8 @@ export const UserFormDetails = (props) => {
           verifyPhoneState={verifyPhoneState}
           handleChangePromotions={handleChangePromotions}
           handleRemoveAccount={handleRemoveAccount}
+          willVerifyOtpState={willVerifyOtpState}
+          setWillVerifyOtpState={setWillVerifyOtpState}
         />
       )}
     </>

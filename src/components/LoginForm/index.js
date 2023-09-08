@@ -50,7 +50,7 @@ export const LoginForm = (props) => {
   const [otpType, setOtpType] = useState(((!useLoginOtpEmail && useLoginOtpCellphone) || isPFChangsLayout) ? 'cellphone' : 'email')
   const [otpState, setOtpState] = useState('')
   const [createOtpUser, setCreateOtpUser] = useState(false)
-  const [, { login, logout }] = useSession()
+  const [{ user: userSession, token }, { login, logout }] = useSession()
   const [, t] = useLanguage()
 
   /**
@@ -112,65 +112,94 @@ export const LoginForm = (props) => {
         _credentials.notification_token = notificationState.notification_token
       }
 
-      const { content: { error, result } } = await ordering.users().auth(_credentials)
-
-      if (isReCaptchaEnable && window?.grecaptcha) {
-        _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset()
-        setReCaptchaValue({ code: '', version: '' })
-      }
-
-      if (!error) {
-        if (useDefualtSessionManager) {
-          if (allowedLevels && allowedLevels?.length > 0) {
-            const { level, session } = result
-            const accessToken = session?.access_token
-            if (!allowedLevels.includes(level)) {
-              try {
-                const { content: logoutResp } = await ordering.setAccessToken(accessToken).users().logout()
-                if (!logoutResp.error) {
-                  logout()
-                }
-                setFormState({
-                  result: {
-                    error: true,
-                    result: ['YOU_DO_NOT_HAVE_PERMISSION']
-                  },
-                  loading: false
-                })
-              } catch (error) {
-                setFormState({
-                  result: {
-                    error: true,
-                    result: error.message
-                  },
-                  loading: false
-                })
-              }
-              return
-            }
+      const localUserInfoRequired = JSON.parse(window.localStorage.getItem('user-info-required'))
+      let resultInfo = null
+      if (localUserInfoRequired) {
+        const form = {
+          cellphone: _credentials?.cellphone,
+          country_phone_code: _credentials?.country_phone_code,
+          verification_code: _credentials?.one_time_password
+        }
+        const consult = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging'}.ordering.co/alseaplatform/api_update_user.php?user=${props?.userData?.id || userSession?.id}`, {
+          method: 'POST',
+          body: JSON.stringify(form),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-APP-X': ordering.appId,
+            'Content-Type': 'application/json;charset=UTF-8',
+            accept: 'application/json, text/plain'
           }
-          login({
-            user: result,
-            token: result.session?.access_token
-          })
+        })
+        const { result, error } = await consult.json()
+        resultInfo = { result, error }
+        if (!error) {
+          events.emit('userLogin', result)
+          if (handleSuccessLogin) {
+            handleSuccessLogin(result)
+          }
+          localStorage.removeItem('user-info-required')
         }
-        events.emit('userLogin', result)
-        if (handleSuccessLogin) {
-          handleSuccessLogin(result)
+      } else {
+        const { content: { result, error } } = await ordering.users().auth(_credentials)
+        resultInfo = { result, error }
+        if (isReCaptchaEnable && window?.grecaptcha) {
+          _credentials.recaptcha_type === 'v2' && window.grecaptcha.reset()
+          setReCaptchaValue({ code: '', version: '' })
         }
 
-        if (urlToRedirect) {
-          window.location.href = `${window.location.origin}${urlToRedirect}`
+        if (!error) {
+          if (useDefualtSessionManager) {
+            if (allowedLevels && allowedLevels?.length > 0) {
+              const { level, session } = result
+              const accessToken = session?.access_token
+              if (!allowedLevels.includes(level)) {
+                try {
+                  const { content: logoutResp } = await ordering.setAccessToken(accessToken).users().logout()
+                  if (!logoutResp.error) {
+                    logout()
+                  }
+                  setFormState({
+                    result: {
+                      error: true,
+                      result: ['YOU_DO_NOT_HAVE_PERMISSION']
+                    },
+                    loading: false
+                  })
+                } catch (error) {
+                  setFormState({
+                    result: {
+                      error: true,
+                      result: error.message
+                    },
+                    loading: false
+                  })
+                }
+                return
+              }
+            }
+            login({
+              user: result,
+              token: result.session?.access_token
+            })
+          }
+          events.emit('userLogin', result)
+          if (handleSuccessLogin) {
+            handleSuccessLogin(result)
+          }
+
+          if (urlToRedirect) {
+            window.location.href = `${window.location.origin}${urlToRedirect}`
+          }
         }
       }
+
       setFormState({
         result: {
-          error,
-          result
+          ...resultInfo
         },
         loading: false
       })
-      events.emit('general_errors', result)
+      events.emit('general_errors', resultInfo)
     } catch (err) {
       events.emit('general_errors', err?.message)
       setFormState({
@@ -371,31 +400,49 @@ export const LoginForm = (props) => {
         setCheckPhoneCodeState({ ...checkPhoneCodeState, loading: false })
         return
       }
+      const localUserInfoRequired = JSON.parse(window.localStorage.getItem('user-info-required'))
+
       if (result === 'new_user') {
-        if (otpType === 'cellphone') {
-          const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
+        if (localUserInfoRequired) {
+          const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/otp_create.php`, requestParams)
           const resultOtp = await responseOtp.json()
           if (resultOtp.error) {
             setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
             return false
           }
           setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
-          setCreateOtpUser(true)
+          setCredentials({ ...credentials, country_phone_code: body.country_code })
           return true
         } else {
-          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist') }, loading: false })
-          setOtpType('cellphone')
+          if (otpType === 'cellphone') {
+            const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/cellphone_new_user_code.php`, requestParams)
+            const resultOtp = await responseOtp.json()
+            if (resultOtp.error) {
+              setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
+              return false
+            }
+            setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
+            setCreateOtpUser(true)
+            return true
+          } else {
+            setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('EMAIL_DOES_NOT_EXIST', 'The email doesn\'t exist') }, loading: false })
+            setOtpType('cellphone')
+          }
         }
       } else if (result === 'existing_user') {
-        const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/otp_create.php`, requestParams)
-        const resultOtp = await responseOtp.json()
-        if (resultOtp.error) {
-          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
-          return false
+        if (localUserInfoRequired) {
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: t('', 'The email doesn\'t exist') }, loading: false })
+        } else {
+          const responseOtp = await fetch(`https://alsea-plugins${isAlsea ? '' : '-staging-development'}.ordering.co/alseaplatform/otp_create.php`, requestParams)
+          const resultOtp = await responseOtp.json()
+          if (resultOtp.error) {
+            setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: resultOtp.result }, loading: false })
+            return false
+          }
+          setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
+          setCredentials({ ...credentials, country_phone_code: body.country_code })
+          return true
         }
-        setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { result: resultOtp.result }, loading: false })
-        setCredentials({ ...credentials, country_phone_code: body.country_code })
-        return true
       } else {
         setCheckPhoneCodeState({ ...checkPhoneCodeState, result: { error: result.result }, loading: false })
         return false
